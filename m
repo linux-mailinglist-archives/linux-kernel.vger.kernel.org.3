@@ -2,153 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070F451DC3F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF96C51DC41
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442976AbiEFPi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S1443035AbiEFPjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbiEFPiz (ORCPT
+        with ESMTP id S1442989AbiEFPjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:38:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F397F66;
-        Fri,  6 May 2022 08:35:12 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246Dmvbl019354;
-        Fri, 6 May 2022 15:35:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=blLD599xWM8TsoqnVdATsyQkk63uresPs9SegCqqIJ8=;
- b=L/flva3qm311tXx/sh/kPxNxZSVMAyo8Shoq8uE+GtfAaIg2PRK2yTDmGRyIO+IygEa6
- +Ds2Z1c8Zh5Ocrh+lFb0+t1hs3rymY/O8xlwEXmdnR1JMJBZhOj/S347NL1BE82hXzvz
- 70md7lrOiuqjx/YsqzIOW/4mp2wcHTHW09uZkc7Sd1mITrw9M8RvB34kRVVOzlCwQnHG
- OzeWAOO0hHyeCaEb8TrgyUKaftfO65wre7A3xUDUkkWXbjpNS+dr/Dh/HTeJ5x659jrf
- tiJJurRAAMi8fykICZzoI7C6oFvs/BE0QMiWSY1c73xlhrJ6yZwy+A6CDKOCmNWVetCr hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw4w1jfm0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:35:09 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246FKSM1025004;
-        Fri, 6 May 2022 15:35:09 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw4w1jfk3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:35:09 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246FHbY9032762;
-        Fri, 6 May 2022 15:35:06 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwpaj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:35:06 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246FYtpC32702734
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 15:34:55 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 67D87A405B;
-        Fri,  6 May 2022 15:35:03 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 588FFA4060;
-        Fri,  6 May 2022 15:35:02 +0000 (GMT)
-Received: from [9.171.60.83] (unknown [9.171.60.83])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 15:35:02 +0000 (GMT)
-Message-ID: <28395b98-3489-342a-970a-5358e4405f22@linux.ibm.com>
-Date:   Fri, 6 May 2022 17:35:01 +0200
+        Fri, 6 May 2022 11:39:06 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300B1218D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:35:22 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e24so10528319wrc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KRk0FMwd5CWvO2i8JuaQngK+sbgTIYr5RynUulYPdFk=;
+        b=oRRBna5pTLYdWiR6CpC75sOZ4EbDiWTH1blFW3aOFujvYk8lOIlKOFqkWEutKSdriX
+         W72ioFGefj12SD5L09o0VScA+fpLNE16FiLiUlOZGbT6T6RdL1rtwJ4RWmp6IAdgA8T5
+         SGFRRT/Jtfz+RzCI/G6bef2uAouVqKrSYPN1AdTZERTmcVYVxC4CgRgX4miEyHOJ0NTR
+         d7ii1Krncj8IQkt3ep+uMWZ3/2G5ArfnCPt6tZ/0q9B9rpa9zaZpK6AnfcYUrWpCMqxd
+         a3Q0eOU2qTz5fts3Fi4wfcEt15GKRu+NB71gtUHQbJPnvOMEvl6Vpx+3A3zU3eUpL5Ld
+         GZNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KRk0FMwd5CWvO2i8JuaQngK+sbgTIYr5RynUulYPdFk=;
+        b=cHwuGxUnXMdnUAbTi9dNzAZ9pWx3SAalFtZ51M8I9OBI0MyHS7jRky5ZWtn1bvcTix
+         BnCZSQ26+bscwiU7ryaSwJIfolsE5shPuR8gjtMa+3dp990MiIewp0M4klwhplr9j0DS
+         CdEA4kQIRdotxkoG14L1Mb9R7juCbhfxSgW7UnCxFxM8Gywd6M0k1HNWFrV9nwi1/BIr
+         W0c22Vnvwdj2R36KSXt0YQbdMFfCAKBbIupegIVw1A3+buhh7aB24oFQnN8Ysg3IH2b1
+         5qM4gYM9HjFTTfDpbrDj6VgJC0GBaQ8A3VbWgV1r3Rh2S98h3d8X77yQakkqLwvUYGbO
+         f7bQ==
+X-Gm-Message-State: AOAM530e8DkpSzY/nVre5MD0f0ee2BG/OX2MTrJhGgBnL3xcupOfJru3
+        x7hVuaYchH/J08ni4hqP5mz+lgYFJEbn1+A+Do9wWw==
+X-Google-Smtp-Source: ABdhPJxshzu3Dlm2wtaGAOl/ocRvaV0GEY1nVucb9j2HYZgg3W/1rL/z/3SC+Xy3uIupSM1jY1ikfsqP66I+WKQF8JE=
+X-Received: by 2002:adf:d1e9:0:b0:20c:6c76:14d5 with SMTP id
+ g9-20020adfd1e9000000b0020c6c7614d5mr3244583wrd.375.1651851320542; Fri, 06
+ May 2022 08:35:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v6 14/21] KVM: s390: pci: provide routines for
- enabling/disabling interrupt forwarding
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
- <20220426200842.98655-15-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220426200842.98655-15-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NrU3OZfGBe5iOJbw7gkh1V-3ysVy0Ku8
-X-Proofpoint-GUID: SQ06wbn3n7KXqve90ckpJdnRS_Tu02T4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
- mlxlogscore=950 lowpriorityscore=0 suspectscore=0 mlxscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060082
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-14-adrian.hunter@intel.com> <CAP-5=fV3SWDb8uTsUmdkweRrO9t9OZXzP=9GWqKxTYn0bdfriw@mail.gmail.com>
+ <078c3b3a-9976-9ee4-0cd2-11ff6599dbd2@intel.com>
+In-Reply-To: <078c3b3a-9976-9ee4-0cd2-11ff6599dbd2@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 6 May 2022 08:35:08 -0700
+Message-ID: <CAP-5=fWWHeFN1UeyFU=HS39kQNXHcu74JTdOmw0Nar_ztFG-uw@mail.gmail.com>
+Subject: Re: [PATCH V2 13/23] perf evlist: Add evlist__add_dummy_on_all_cpus()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 6, 2022 at 8:08 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 6/05/22 16:47, Ian Rogers wrote:
+> > On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>
+> >> Add evlist__add_dummy_on_all_cpus() to enable creating a system-wide dummy
+> >> event that sets up the system-wide maps before map propagation.
+> >>
+> >> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+> >> whether or not the event needs to be system-wide.
+> >>
+> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> >> ---
+> >>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+> >>  tools/perf/util/evlist.h |  5 +++++
+> >>  2 files changed, 45 insertions(+)
+> >>
+> >> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> >> index 78c47cbafbc2..c16bd4836314 100644
+> >> --- a/tools/perf/util/evlist.c
+> >> +++ b/tools/perf/util/evlist.c
+> >> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+> >>         return 0;
+> >>  }
+> >>
+> >> +static void evlist__add_on_all_cpus(struct evlist *evlist, struct evsel *evsel)
+> >> +{
+> >> +       evsel->core.system_wide = true;
+> >> +
+> >> +       /* All CPUs */
+> >> +       perf_cpu_map__put(evsel->core.own_cpus);
+> >> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+> >> +       perf_cpu_map__put(evsel->core.cpus);
+> >> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+> >> +
+> >> +       /* No threads */
+> >> +       perf_thread_map__put(evsel->core.threads);
+> >> +       evsel->core.threads = perf_thread_map__new_dummy();
+> >> +
+> >> +       evlist__add(evlist, evsel);
+> >> +}
+> >> +
+> >> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+> >> +{
+> >> +       struct evsel *evsel = evlist__dummy_event(evlist);
+> >> +
+> >> +       if (!evsel)
+> >> +               return NULL;
+> >> +
+> >> +       evsel->core.attr.exclude_kernel = 1;
+> >> +       evsel->core.attr.exclude_guest = 1;
+> >> +       evsel->core.attr.exclude_hv = 1;
+> >> +       evsel->core.attr.freq = 0;
+> >> +       evsel->core.attr.sample_period = 1;
+> >> +       evsel->no_aux_samples = true;
+> >> +       evsel->name = strdup("dummy:u");
+> >> +
+> >> +       if (system_wide)
+> >> +               evlist__add_on_all_cpus(evlist, evsel);
+> >> +       else
+> >> +               evlist__add(evlist, evsel);
+> >> +
+> >> +       return evsel;
+> >> +}
+> >> +
+> >>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+> >>  {
+> >>         struct evsel *evsel, *n;
+> >> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+> >> index 4062f5aebfc1..1bde9ccf4e7d 100644
+> >> --- a/tools/perf/util/evlist.h
+> >> +++ b/tools/perf/util/evlist.h
+> >> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+> >>  struct evsel *arch_evlist__leader(struct list_head *list);
+> >>
+> >>  int evlist__add_dummy(struct evlist *evlist);
+> >> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+> >> +static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlist *evlist)
+> >
+> > Sorry to be a language lawyer. What I hope to clean up with CPU maps is that:
+> >
+> > empty == dummy == any CPU
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n279
+> >
+> > Given every CPU map should be empty or contain any CPU then it seems
+> > they all meet the definition of empty - so something is wrong.
+>
+> Nothing is wrong.  I am not against clarifying things, but stop assuming
+> natural language has to mean anything exactly.  That is what computer
+> languages are for.
+>
+> Sometimes more abstract language is used, precisely to stop people
+> making assumptions about the details.
+>
+> >
+> > The cpu map here is explicitly opened so that it gets all online CPUs:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n174
+> >
+> > From:
+> > https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/cputopology.rst
+> > there are example topologies like:
+> > kernel_max: 31
+> >    offline: 2,4-31,32-63
+> >     online: 0-1,3
+> >   possible: 0-31
+> >    present: 0-31
+> >
+> > all_cpus could mean the union of offline and online CPUs, possible
+> > CPUs or present CPUs. You are saying that in the perf code all_cpus
+> > should be the same as all online cpus as only those CPUs are valid
+> > with perf_event_open. That's true but offline CPUs can be made online.
+> > If that happens here then the dummy events will have a CPU map that
+> > rather than being for all CPUs will be for all online CPUs at the
+> > point it was opened. Having online in the function name I think
+> > captures the time dependent nature of this - but if you think that's
+> > too much could we add a comment?
+>
+> If you ask me it does the exact opposite.  The function of the code
+> is to put the event on all CPUS without having to know the details
+> of: well actually perf doesn't automagically retain or restore events
+> across enabling or disabling CPUs so in fact we deal only in online
+> CPUs.
 
+But 'any CPU' (-1) could map to an offline CPU brought online. Calling
+this function twice could also result in this behavior. Via the
+topology documentation we have language to describe exactly the
+scenario that's happening and I'd prefer not to muddy that by making
+all and online synonyms.
 
-Am 26.04.22 um 22:08 schrieb Matthew Rosato:
-[...]
-> +static inline void unaccount_mem(unsigned long nr_pages)
-> +{
-> +	struct user_struct *user = get_uid(current_user());
-> +
-> +	if (user)
-> +		atomic_long_sub(nr_pages, &user->locked_vm);
-> +	if (current->mm)
-> +		atomic64_sub(nr_pages, &current->mm->pinned_vm);
-> +}
-> +
-> +static inline int account_mem(unsigned long nr_pages)
-> +{
-> +	struct user_struct *user = get_uid(current_user());
-> +	unsigned long page_limit, cur_pages, new_pages;
-> +
-> +	page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
-> +
-> +	do {
-> +		cur_pages = atomic_long_read(&user->locked_vm);
-> +		new_pages = cur_pages + nr_pages;
-> +		if (new_pages > page_limit)
-> +			return -ENOMEM;
-> +	} while (atomic_long_cmpxchg(&user->locked_vm, cur_pages,
-> +					new_pages) != cur_pages);
-> +
-> +	atomic64_add(nr_pages, &current->mm->pinned_vm);
-> +
-> +	return 0;
+> > too much could we add a comment? I'm trying to avoid a situation, like
+> > with the CPU map code, where all and online are interchangeable
+> > leading to the code being unnecessarily confusing unless you read
+> > every line.
+>
+> It is normal to have to read the details of code, and, in my
+> experience at least, normal for the code not to work exactly the
+> way I'd imagined.
 
-user->locked_vm is not available unconditionally. Shall we add
+:-) The problem is that we all need to work with abstractions at some
+point, abstraction is pretty much the whole point of computer science.
+We need to fix CPU maps empty function, it is just a fundamental level
+of contradiction. As with the CPU map index being often mistaken for
+the CPU leading to bugs and crashes, I suspect remedying empty will
+fix existing and future bugs. With function naming the point is to be
+short and succinct, but also to be intention revealing for the sake of
+abstraction. Yes you need to read the code, but as with CPU map empty
+even that isn't enough and trying to infer behavior from usage can be
+a long and painful process.
 
-CONFIG_S390 && CONFIG_KVM here?
+Thanks,
+Ian
 
-include/linux/sched/user.h
-#if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
-     defined(CONFIG_NET) || defined(CONFIG_IO_URING)
-         atomic_long_t locked_vm;
-#endif
-Or we could get rid of the user memlock checking for now until this is more ubiquitous.
-
-
-Otherwise this looks sane
-
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> >
+> > Thanks,
+> > Ian
+> >
+> >> +{
+> >> +       return evlist__add_aux_dummy(evlist, true);
+> >> +}
+> >>
+> >>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+> >>                          evsel__sb_cb_t cb, void *data);
+> >> --
+> >> 2.25.1
+> >>
+>

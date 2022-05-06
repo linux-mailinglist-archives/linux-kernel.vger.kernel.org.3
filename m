@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9EE51D8EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217DD51D8E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392450AbiEFN0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S1392414AbiEFN0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392424AbiEFN02 (ORCPT
+        with ESMTP id S1392417AbiEFN0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:26:28 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF94C69711
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651843364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ntfBkmjNjhrxvA8xhvwrtXUPZhy6WpJ5yDdT5A+/C00=;
-        b=Wtk74G+V7aYi6mde13y1K7Fa8NuxGF0Hyf731kBLC7M2YKnml3AvC1mXkIUeofmlOzFPmE
-        LfJo3q/yMVR8D2N6cZXjkfjbgMMnNYAClohUQp2YVR23vtAw8NYmeoyyssHLL6wZdrccQW
-        qptb008pMC8Y+307xBhxDRoyT+tqnmM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-ypFVaWaVNYqy1yIqEEoILA-1; Fri, 06 May 2022 09:22:43 -0400
-X-MC-Unique: ypFVaWaVNYqy1yIqEEoILA-1
-Received: by mail-wr1-f70.google.com with SMTP id w11-20020adf8bcb000000b0020c550ba8d7so2582389wra.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:22:43 -0700 (PDT)
+        Fri, 6 May 2022 09:26:21 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B20694AF;
+        Fri,  6 May 2022 06:22:37 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w4so9998911wrg.12;
+        Fri, 06 May 2022 06:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xnE/wFgLIRN0jlfgB48rKqRGVy1eNhP4yxVMqJbknj0=;
+        b=FjZdAY2wnuHAS93BTXhJAPrZAaWaHRy79IjcTfCUeBH/Kunt+OVla7vvHK1nHIXqFc
+         weecEfU3K7auHBasZj5B/NC2ADNC/mh9HnZ5D8JJxhPKkNFloU0XaLUelAm9ooe+yxFt
+         BYDzLYKqeV2to6dMADxt3oBSPk16AFQOYSJBKqaiyOYpkdcqbAzhzO6VjxOxGheB+cIm
+         CA7vB/laPzLTh1/gyaLOKS22x32weAsUDZ3EyKZtPsSv8UascwFzbqgjbLpfKA8KN5fZ
+         bbPkFsDM140FIRKsNzcYOY9iENIKFEbhuWTubSiuH3I9UUJSOKcCSMpFiwMShCcf+6MW
+         MviQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ntfBkmjNjhrxvA8xhvwrtXUPZhy6WpJ5yDdT5A+/C00=;
-        b=wy4LGJ+M1ecrJUPUDus+xcBwP5L8UWWgtnMiz7zAyKAmHNqzSkZYA/+AZiV2/vQInQ
-         M5VWj6szW8iyA8gfWqZ2eeiw8XCcaUPHKfSEIh24MeLUo67qIIQkjAihOzHMJtMeBTHQ
-         jtBHy5kdz/PDCLGcVE0ptXX8T9uQjUk5zZWvvw3MMMRBAAAvBZrAwpHhVLbIjIl8jSwc
-         qk5A+W5iCpq9FJOt5K5h6okusgcUihuwWCdb06J2xjYsg9+o6zYhQw9azOBtM/zniaMn
-         bZMiIzdzMk8CD/8HoYkRTnEg0M+7mZMoOrnreWuy8doMtnjGjk1HJnQIdtWdxjerpcei
-         WFHg==
-X-Gm-Message-State: AOAM533v6cQLTBfET1tPW9mEfLofSCU9MQL/5xrJcn2c2CJZZr1w1AYG
-        IhwvBE2H75COqN188fwxZBg4YWsCyq1aSwtMGebM+r0MVvse4sn3kcvzLBxWoJLglv9V9n2wNLn
-        C95o5WWZq6KdxUBUpO97mpW3EXp/io/fzinYwvJ8ZXavBuWeT8OjCLC9TLLVM3wYkgmKmEdPgVE
-        s=
-X-Received: by 2002:a05:600c:20e:b0:394:2985:6d0c with SMTP id 14-20020a05600c020e00b0039429856d0cmr9784124wmi.106.1651843362262;
-        Fri, 06 May 2022 06:22:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxoBGIqiXlxsybVbyUOYtj+ac6M3xoMutesjNKS5Waxldl///9zmVAj4E/EHzyx2X+CmF9+Qw==
-X-Received: by 2002:a05:600c:20e:b0:394:2985:6d0c with SMTP id 14-20020a05600c020e00b0039429856d0cmr9784085wmi.106.1651843361915;
-        Fri, 06 May 2022 06:22:41 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l16-20020a7bcf10000000b003942a244f54sm10378255wmg.45.2022.05.06.06.22.40
+        bh=xnE/wFgLIRN0jlfgB48rKqRGVy1eNhP4yxVMqJbknj0=;
+        b=PIoFfRa8dpks3tNnQTpVc1t72WSImZik5TFUhk5jIOCaxq0etonH3/TDNJwnvs58PR
+         sJcBpexz1mg4M41a8Xc0gb1xv4mlO73K9ey2o3VjM/80sttUrsLtFQlnRibOqulyDXHG
+         Qu1Pd+s/dpxY2eCv2NRSGfNnbKXi6hgmtANYeS8AjIYv4d948x3c4Z7fAMMAoRj8tZX9
+         T7X8Ed9IDpoO9ZlW862YjrsfX6WxtDyliRAobG+tdegF9FbIZwxeFKaypFgw7tV4SZSo
+         GOx2ft43yzvJcDlj5cV3uZabu38G5DUf7GSVlWJMRTwm74105PDY1ZpmJWgV/UDlOtSj
+         XA0A==
+X-Gm-Message-State: AOAM530yJ2x/zkOcJ7pLe+lQvwBwBBcvjw5Uoq1CHRTblZyeHIZHceSE
+        RJqWS01wI/7jsrAlEKM0QkIytGqRQZs=
+X-Google-Smtp-Source: ABdhPJwkVFy1RIZuE8dDzKw9CHw0QD8uVDl3jH0vijBWoEoDBCzWo5pHNhstsX7sTNjoHykZsCoIcw==
+X-Received: by 2002:adf:dc0e:0:b0:20c:8a3f:b523 with SMTP id t14-20020adfdc0e000000b0020c8a3fb523mr2715293wri.201.1651843355959;
+        Fri, 06 May 2022 06:22:35 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id l12-20020a05600012cc00b0020c5253d8b9sm3635379wrx.5.2022.05.06.06.22.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 06:22:41 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, intel-gfx@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, Peter Jones <pjones@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH] fbdev: efifb: Fix a use-after-free due early fb_info cleanup
+        Fri, 06 May 2022 06:22:34 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] memory: tegra: Tegra234 and error logging support
 Date:   Fri,  6 May 2022 15:22:25 +0200
-Message-Id: <20220506132225.588379-1-javierm@redhat.com>
+Message-Id: <20220506132230.3910539-1-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather
-than .remove") attempted to fix a use-after-free error due driver freeing
-the fb_info in the .remove handler instead of doing it in .fb_destroy.
+From: Thierry Reding <treding@nvidia.com>
 
-But ironically that change introduced yet another use-after-free since the
-fb_info was still used after the free.
+Hi Krzysztof,
 
-This should fix for good by freeing the fb_info at the end of the handler.
+here's the set of patches that add the initial Tegra234 support with
+Ashish's error logging support applied on top. This should all apply
+cleanly onto v5.18-rc1 (and consequently to your tree).
 
-Fixes: d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove")
-Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Reported-by: Andrzej Hajda <andrzej.hajda@intel.com>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+Thierry
 
- drivers/video/fbdev/efifb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ashish Mhetre (2):
+  memory: tegra: Add memory controller channels support
+  memory: tegra: Add MC error logging on Tegra186 onward
 
-diff --git a/drivers/video/fbdev/efifb.c b/drivers/video/fbdev/efifb.c
-index cfa3dc0b4eee..b3d5f884c544 100644
---- a/drivers/video/fbdev/efifb.c
-+++ b/drivers/video/fbdev/efifb.c
-@@ -259,12 +259,12 @@ static void efifb_destroy(struct fb_info *info)
- 			memunmap(info->screen_base);
- 	}
- 
--	framebuffer_release(info);
--
- 	if (request_mem_succeeded)
- 		release_mem_region(info->apertures->ranges[0].base,
- 				   info->apertures->ranges[0].size);
- 	fb_dealloc_cmap(&info->cmap);
-+
-+	framebuffer_release(info);
- }
- 
- static const struct fb_ops efifb_ops = {
+Sameer Pujar (1):
+  memory: tegra: Add APE memory clients for Tegra234
+
+Thierry Reding (1):
+  memory: tegra: Add Tegra234 support
+
+ drivers/memory/tegra/Makefile       |   2 +
+ drivers/memory/tegra/mc.c           | 137 ++++++++++++++++++++++++----
+ drivers/memory/tegra/mc.h           |  50 +++++++++-
+ drivers/memory/tegra/tegra186-emc.c |   3 +
+ drivers/memory/tegra/tegra186.c     |  39 ++++++++
+ drivers/memory/tegra/tegra194.c     |   9 ++
+ drivers/memory/tegra/tegra234.c     | 110 ++++++++++++++++++++++
+ include/soc/tegra/mc.h              |   8 +-
+ 8 files changed, 339 insertions(+), 19 deletions(-)
+ create mode 100644 drivers/memory/tegra/tegra234.c
+
 -- 
 2.35.1
 

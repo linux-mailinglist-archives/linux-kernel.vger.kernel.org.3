@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC93951DC22
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4705F51DC1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442905AbiEFPdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S1443042AbiEFPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442911AbiEFPcz (ORCPT
+        with ESMTP id S1442893AbiEFPcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 11:32:55 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369C16D3AD;
-        Fri,  6 May 2022 08:29:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E70F6D380;
+        Fri,  6 May 2022 08:29:12 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MRSm1-1nPfjz0fmH-00NSFR;
- Fri, 06 May 2022 17:28:58 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MPXEU-1nRb9K2qZO-00Md2A;
+ Fri, 06 May 2022 17:29:01 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -31,30 +31,30 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 12/24] ARM: dts: imx7-colibri: move rtc node
-Date:   Fri,  6 May 2022 17:27:57 +0200
-Message-Id: <20220506152809.295409-13-marcel@ziswiler.com>
+Subject: [PATCH v1 13/24] ARM: dts: imx7d-colibri-emmc: add cpu1 supply
+Date:   Fri,  6 May 2022 17:27:58 +0200
+Message-Id: <20220506152809.295409-14-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506152809.295409-1-marcel@ziswiler.com>
 References: <20220506152809.295409-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:xjSlamvLAi6Uw+RHd6U7taVRuhpg5MGJ0CqVYOoEcJK0tG/8mnh
- dlWDNmWtpbQG/hrJb5pTWgqDuSVfUHy7QJgUNI1tYBukX6ON0WmhTWqCqTkjK3vxEoXT2Z+
- 1qeSl82wRRlZ5up5aIJgWoOqoTJ5FprcmbUcuEUmqT/zgJTDn04ii9HbAwys3quN9/nUEju
- VJeorvkTZIkz0dCw0WJsg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:A5chbVZ63TA=:RUoK36KABzWuVZd1KXUPNH
- 4AvDavS2YQ75WjH3nkYKEGrxhzcle/FYYKlC05Hv52oGxFALJYaUyhwL5MXlmueP+hzpXoxQd
- oDRiJ1y/MdFXjpsd+dpmNAA3A/zc2Vp/FIXOSPd/TJ8drV8IApfWnUQcGKntm5iPV5RVtzEXv
- RkkEn7SEbPr92g1pFEPySGQ92Di8NShlzukAZGO/jwW3z2wdxxT0W5yr51Poyho5umO+AD4y3
- fNZR9fEJz1qL1Masl6X9uo1WYgpVqXMvlaBnRHaeVAJzAZ78ZZpqvQsnRhY7H15gL5o+I7pLb
- PMe6Ht9s3AHgbIBiNRACtI+nRvW3EWrtB5zIPRLbz5qwdW2ebJ0cuOZHBUP9b2i3Kag0OYd/u
- Pm4IxtF4BRYVqoDCf8SaahrsU6I/f1864moQlQvEysTOqp4vF16V9LZ9ncXj/ob4roNtbv8ZF
- l1lsCms64q4YuXIaCVSzTfPfXOqkEntw1ir8xyR6LtQDZ/B3Ke8MOLz6FZ3mPJYQ22vGUZjfG
- tGSDeSxjxt16bawhL+0ounImbvi85L8yjDmM7ZOaeB9CIaIbtN0440/8QgWrTo32Xl26GsK1y
- jnU/mxTE3aUvd7XOwAj8XfECLiWgirk1HqDqoJTfOLTOUPcA+lECPt3WB8CdNh3tfc+wPVBv1
- Gbb1BqN76oQUszATbIZuMNiSkZT4W7pez8sPqxgmWhx0wmtMzglAsuzwhu8ociQZGpzrWf2BB
- rIBWvo47wOKV03Ra
+X-Provags-ID: V03:K1:ZtdpBUcyBrED0IOtOgVJiS9oS5aSbP7SDlhYFVsFE6DikhNiP6E
+ 0g6OAwT5E7pnEAhOLvXzZyBZMgZDGZmUmVnKvWYrr4XSSIMLT005AxRdPcCanq7PLxd6UZV
+ mqQGvwQ0kHsnmqGPTFaQC16tfiuGux/OiwrPwBxpp2r8COEXrvURs6D7Ucqy72BcSY1R1xZ
+ 9ZkekBrxs5zON/5wLXN0g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iIYxQciHq+4=:fwqSBlTFa1RWexWqZLkYfX
+ BH0ry8N0A+rKuZWxib6dGjbsdWoMwsWcASs05j0WMiPG2KWDogUce8zZNXuW9V8A2UGwLImUA
+ w0i5V1OilbUGPJkSzfigUtm5693NIHgakp84WUZ7EsCl8mBnICmKJqj1F24ZYEBfrMvq1vYqR
+ YfrT8RLMc3rBEmCRukA65jkzYeXSuevsb84LdYdzctlliZbNnIT1PBvZ1F05OzveG1wz051Wg
+ XGWv4pWjHI2QQsUk3MwajiFAjdoPRtiA59b8faUCXwaeAZNBG9fK9tiW3+2//OsICmZOIl2H0
+ HRGfwFCCs7fMCkm6jPEtcwYLhItaWyD/V6gvcsnA52ODbMq7x2xOwZgoJr3MdHK5iEm6pEKxS
+ SB68UysYvs2DfGdkWRPI/F8YOvLzPfEirGt2vSd0LC+q+wvDDRNi+rDxZdEMphhI2UgojqmrY
+ cxwNfDdLFq3owVq2bG3xQ3YuDmImUHXRmgDuoiyc51w3f0DbY7C6+QXOGoGecQlxczB8SuHPF
+ xv/TTumANgOsvciqflDONz1hkH6cEoImw6vL3dJrF6LPmO81fc6Pf8pVFqIsG6WW5UsQaE3GO
+ os3OW25R1ZARyXwvoxl67xQ4FohhlJtEbt/IvDbrKOtWWQKdhqVxwMJ5qWsjGA2r3wywmTQtH
+ inWzDzfBRoFm3LaneZH3411YFXALNkYb5ExawKIaNmBupO0cXRHeq8emPJHLphn4WT6UWwBQ6
+ /YYtqiv5qNrl9PMS
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,92 +66,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Move I2C RTC to module-level to be enabled on carrier board-level.
+Each cpu-core is supposed to list its supply separately, add supply for
+cpu1.
 
+Fixes: 2d7401f8632f ("ARM: dts: imx7d: Add cpu1 supply")
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm/boot/dts/imx7-colibri-aster.dtsi   | 11 +++++------
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi | 11 +++++------
- arch/arm/boot/dts/imx7-colibri.dtsi         |  7 +++++++
- 3 files changed, 17 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/imx7d-colibri-emmc.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-index f3a5cb7d6a0c..9796bfabe241 100644
---- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
-@@ -21,12 +21,6 @@ &fec1 {
- 
- &i2c4 {
- 	status = "okay";
--
--	/* M41T0M6 real time clock on carrier board */
--	rtc: rtc@68 {
--		compatible = "st,m41t0";
--		reg = <0x68>;
--	};
- };
- 
- &pwm1 {
-@@ -45,6 +39,11 @@ &pwm4 {
- 	status = "okay";
- };
- 
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
- &uart1 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-index 618831e89ce8..e3aac56aece8 100644
---- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-@@ -56,12 +56,6 @@ &fec1 {
- 
- &i2c4 {
- 	status = "okay";
--
--	/* M41T0M6 real time clock on carrier board */
--	rtc: rtc@68 {
--		compatible = "st,m41t0";
--		reg = <0x68>;
--	};
- };
- 
- &pwm1 {
-@@ -80,6 +74,11 @@ &pwm4 {
- 	status = "okay";
- };
- 
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
- &uart1 {
- 	status = "okay";
- };
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 3da9ddc06aae..da3df00c7d67 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -507,6 +507,13 @@ atmel_mxt_ts: touchscreen@4a {
- 		reset-gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;      /* SODIMM 106 / RST */
- 		status = "disabled";
+diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+index 45b12b0d8710..2b4be7646631 100644
+--- a/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
++++ b/arch/arm/boot/dts/imx7d-colibri-emmc.dtsi
+@@ -19,6 +19,10 @@ memory@80000000 {
  	};
-+
-+	/* M41T0M6 real time clock on carrier board */
-+	rtc: rtc@68 {
-+		compatible = "st,m41t0";
-+		reg = <0x68>;
-+		status = "disabled";
-+	};
  };
  
- &lcdif {
++&cpu1 {
++	cpu-supply = <&reg_DCDC2>;
++};
++
+ &gpio6 {
+ 	gpio-line-names = "",
+ 			  "",
 -- 
 2.35.1
 

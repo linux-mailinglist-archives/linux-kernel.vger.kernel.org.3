@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354A651D28C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65D151D290
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389707AbiEFHvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S1387617AbiEFHyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389679AbiEFHvs (ORCPT
+        with ESMTP id S1389728AbiEFHyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:51:48 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D60674F8;
-        Fri,  6 May 2022 00:48:06 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bv19so12893072ejb.6;
-        Fri, 06 May 2022 00:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ft3fc9QL1+iQ008reNvM/ifI2x+9VqujLjdVk3BAeKE=;
-        b=OZk+O/7KtBby4smjTuDPTjrl3oDJTDhPtG5EGl8/TXE5iHBSCTMIv4DRcnawTyo5dv
-         tdYP82kIiXUngTkDdS2y1NofcKP4v/2S1CHtAksTdkCqrHFp1DCbT1v9aoXXIB6vzaCo
-         mm6hPQatzFU8dQ1Uca2EkRR7VQAaXdk5IY+JJlVTxktUE+ofK/3BDkRpsL8MBhmNOub2
-         Z0IYw6QW1sW8pCmY73iaRLLTu6FJETywMGthz52s6RtQ6kuRpQAurIAYF3zMbCFnrpEn
-         zjTd2qO99mmDTGE618ALE3847Y74DtMdLlEO80jFvIXKWHSY4kWT2Lz+pPTzM5oLCEds
-         4mhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ft3fc9QL1+iQ008reNvM/ifI2x+9VqujLjdVk3BAeKE=;
-        b=fKsXpu8ue8QVJO+amlLP0E/pdnu2rYaGljq6JUSRJX5IXTPRELlIJO/INV5kzSerIt
-         hZ7+uB2jKjvKVm35mTENMnwDQ8Ja2wLKoMUdu7d92CcEfCwzqsvF5szP8Gj9W+g8nXuh
-         ssCZtOt2GomD5TwFyCHV7uk+hgz4R3r9Fc84kdVhOUNNXUB/aK29CuoNNBd0ZqpPZHfY
-         SplLM783gSwpnO7tM5sM139OwHkkoxLgwEvSMWjM1UOY5ocSlE3sS8xzA9YdIEHybDaO
-         Eq6Ix42BFAock/23VoKpED2CAaOLJNmv0jtL0yl5IfBZOCeZobeetGgiil3lwiobKklx
-         a1MA==
-X-Gm-Message-State: AOAM532gSMtbfFQ1EbAE1Kw/MMKmYIBl60CgE5IW6yPgxviT8jeIln7i
-        vWh+Fam6RvghK5TcUfolqDY=
-X-Google-Smtp-Source: ABdhPJxT5lhpMaFwTxXFJilaqKfKKUZHKY6ygUe4sfy0YWuUtl3iNp7QH09j+YPPh1tnTwimBcK+2Q==
-X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id nd41-20020a17090762a900b006da79534df0mr1858291ejc.316.1651823284534;
-        Fri, 06 May 2022 00:48:04 -0700 (PDT)
-Received: from anparri (host-2-117-178-169.business.telecomitalia.it. [2.117.178.169])
-        by smtp.gmail.com with ESMTPSA id gz12-20020a170906f2cc00b006f3ef214de8sm1602215ejb.78.2022.05.06.00.48.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 00:48:04 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:47:55 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] PCI: hv: Add validation for untrusted Hyper-V values
-Message-ID: <20220506074755.GA239213@anparri>
-References: <20220504125039.2598-1-parri.andrea@gmail.com>
- <20220504125039.2598-2-parri.andrea@gmail.com>
- <PH0PR21MB302509DA8BE0B347E1916F00D7C29@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Fri, 6 May 2022 03:54:17 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01ECB186F5;
+        Fri,  6 May 2022 00:50:30 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 98185E000D;
+        Fri,  6 May 2022 07:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651823429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mL7sWko/zEY1GKDqcFPw+UFI+rxOeH7QwJrlHZfz4xY=;
+        b=AK/nPydJipqNR7/LTq0Oh0NBKO5Xpwgy2vPit48NwT+fXefQVBBFNbZBGu4uzLX8zh+R8E
+        l98COuBzajZ62Ma6Yr5qHS/RX4ZT8dZi/0iPa8gISwhl1IOLq0wDl7vPK5+S5tBrSfRS3S
+        Vv2WvRTuOMcQTvHJypbz5lwne8EUK1namBL6Gs2g4GaZFwUhWTnlfdYmUIUcoflzQpL7cL
+        khQVgoVMxc2hCLixlzDABxy8HT9C5JOVX6lPD9DPuYSjZBuRY034T15iZ/T3TDzEpc+dz8
+        rvQLkCKD31v8tVr0jpiVApbQ24Az7LAY0Df5s4RFgvRx4l6bBKQoM1j2DTRUfw==
+Date:   Fri, 6 May 2022 09:49:05 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Ohhoon Kwon <ohoono.kwon@samsung.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/3] of: dynamic: add of_property_alloc() and
+ of_property_free()
+Message-ID: <20220506094905.27bc99aa@fixe.home>
+In-Reply-To: <YnQnayouXw9/jp/E@robh.at.kernel.org>
+References: <20220504154033.750511-1-clement.leger@bootlin.com>
+        <20220504154033.750511-2-clement.leger@bootlin.com>
+        <YnQnayouXw9/jp/E@robh.at.kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB302509DA8BE0B347E1916F00D7C29@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I don't see any issues with the code here.  But check the function
-> q_resource_requirements().  Doesn't it need the same treatment as you've
-> done above with hv_pci_compose_compl()?   For completeness, the
-> fix for q_resource_requirements() should be included in this patch as well.
+Le Thu, 5 May 2022 14:37:15 -0500,
+Rob Herring <robh@kernel.org> a =C3=A9crit :
 
-Yes, indeed.  Will do for v2.
 
-Thanks,
-  Andrea
+> > +
+> > +/**
+> > + * of_property_alloc - Allocate a property dynamically.
+> > + * @name:	Name of the new property
+> > + * @value:	Value that will be copied into the new property value
+> > + * @value_len:	length of @value to be copied into the new property val=
+ue
+> > + * @len:	Length of new property value, must be greater than @value_len=
+ =20
+>=20
+> What's the usecase for the lengths being different? That doesn't seem=20
+> like a common case, so perhaps handle it with a NULL value and=20
+> non-zero length. Then the caller has to deal with populating=20
+> prop->value.
+
+That was actually something used by powerpc code but agreed, letting
+the user recopy it's values seems fine to me and the usage will be more
+clear.
+
+> >  	/*
+> > -	 * NOTE: There is no check for zero length value.
+> > -	 * In case of a boolean property, this will allocate a value
+> > -	 * of zero bytes. We do this to work around the use
+> > -	 * of of_get_property() calls on boolean values.
+> > +	 * Even if the property has no value, it must be set to a
+> > +	 * non-null value since of_get_property() is used to check
+> > +	 * some values that might or not have a values (ranges for
+> > +	 * instance). Moreover, when the node is released, prop->value
+> > +	 * is kfreed so the memory must come from kmalloc. =20
+>=20
+> Allowing for NULL value didn't turn out well...
+>=20
+> We know that we can do the kfree because OF_DYNAMIC is set IIRC...
+>=20
+> If we do 1 allocation for prop and value, then we can test=20
+> for "prop->value =3D=3D prop + 1" to determine if we need to free or not.
+
+Sounds like a good idea.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

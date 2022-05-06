@@ -2,131 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BD551D642
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE1A51D643
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391174AbiEFLLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S1348136AbiEFLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385128AbiEFLLP (ORCPT
+        with ESMTP id S1391181AbiEFLLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:11:15 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D183252B08;
-        Fri,  6 May 2022 04:07:32 -0700 (PDT)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvnkp1P18z67DYv;
-        Fri,  6 May 2022 19:04:18 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 13:07:29 +0200
-Received: from [10.47.86.119] (10.47.86.119) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
- 2022 12:07:27 +0100
-Message-ID: <7b8d7c1a-58c3-4ba9-a4f0-d0e051f3ffdc@huawei.com>
-Date:   Fri, 6 May 2022 12:07:26 +0100
+        Fri, 6 May 2022 07:11:39 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A65916833C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651835267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2HuLCNJx05zSHUlmMHT6S4qU45txmydxhGQw118xWYA=;
+        b=J/gBGU1JU9cndh2UZNwRXPhdspvt7SEWS0ZmlttkWmbTH6x5yrAasGMNqpz8FwYDXpWzzL
+        tOjVB6FfA3n6m3GpvW+ZgFURdIHfsfzSPip1TnEVnmzbrsh3m3z+rDm5/cT4760zIH+Rn5
+        SghJlCb+Fmsge507aFGGEqJRA2mTYIU=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-DIl5JVsaPuGr1-aZpcB71w-1; Fri, 06 May 2022 07:07:46 -0400
+X-MC-Unique: DIl5JVsaPuGr1-aZpcB71w-1
+Received: by mail-ed1-f69.google.com with SMTP id dk9-20020a0564021d8900b00425a9c3d40cso3839438edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 04:07:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=2HuLCNJx05zSHUlmMHT6S4qU45txmydxhGQw118xWYA=;
+        b=xXd5UlI6OsLEunqLk0KTLlhfZsVrS9tM+tFNSatN7VR2opkLnGmsYekFbvNCmRIjHq
+         iFhCXa1QIjYaH0Y5vcUa01n8/jVASzhoX44hCi4B6Sy+6UeSXU/xAGIIpvbzLeUwACHc
+         ep5aHME64hB2jOHNj2IEIvKEPFKXuC8CJz07s+AZJ7fqZUuvzdBwdiCluS0Av3uWAC+Z
+         afScEvvJqbV/LYA7ox4HzHbVofWrMrA0l8ORyBgdl4N6dsmD76qz0Hn1KigXd0WR2j/u
+         erjhWK8UQ92clXnKGijmJqzrhaF6Z2niQArU76XNrUHB0YxCC2KZn6Aaj/DyDpNErAKV
+         9paQ==
+X-Gm-Message-State: AOAM5315rIz6ZT4Ivs8GUndVw5gMHB32x1ZRt3jcJn1VWvHW3nHlCv3B
+        oW5+oGBq5VSA2sw9O1pFcgThBJtEvXFCoID3/5T/0DVsxcXB2AlfySpxWGEref55P75VYbqf4ys
+        tXrjezNF27h45epY1HQEkYvnS
+X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr2426216ejc.665.1651835265100;
+        Fri, 06 May 2022 04:07:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtt/k2RqUCTLzZmSJ4UcadrnPC2p2no+9LACk99FJ0/KvCTo6d0VDn6NtS0MTVYVpgZY2MQQ==
+X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr2426195ejc.665.1651835264887;
+        Fri, 06 May 2022 04:07:44 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042617ba63a8sm2205496edu.50.2022.05.06.04.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 04:07:44 -0700 (PDT)
+Message-ID: <565fd863-49b2-5dca-8271-579a94b3b860@redhat.com>
+Date:   Fri, 6 May 2022 13:07:43 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
- as necessary
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-References: <20220505195342.GA509942@bhelgaas>
- <157602011a72061dd31f92bd699e8c1f9a81c988.camel@linux.ibm.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <157602011a72061dd31f92bd699e8c1f9a81c988.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC PATCH pdx86-platform-drivers-x86] platform/x86:
+ thinkpad_acpi: quirk_btusb_bug can be static
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <202205031944.EP1ElC1B-lkp@intel.com>
+ <YnEPbSO2rBJq37Ez@74ccfaeec2ea>
+ <BL1PR12MB5157478736D9C5E82B4D9B1DE2C09@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <69b622c0-550b-f562-eb1e-7614e97acc25@redhat.com>
+In-Reply-To: <69b622c0-550b-f562-eb1e-7614e97acc25@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.86.119]
-X-ClientProxiedBy: lhreml726-chm.china.huawei.com (10.201.108.77) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 10:38, Niklas Schnelle wrote:
-> Another argument I see is that as shown by POWER9 we might start to see
-> more platforms that just can't do I/O port access. E.g. I would also be
-> surprised if Apple's M1 has I/O port access. Sooner or later I expect
-> distributions on some platforms to only support such systems. For
-> example on ppc a server distribution might only support IBM POWER
-> without I/O port support before too long. Then having HAS_IOPORT allows
-> to get rid of drivers that won't work anyway.
+Hi,
+
+On 5/6/22 12:09, Hans de Goede wrote:
+> Hi,
 > 
-> There are also reports of probing a driver with I/O ports causing a
-> system crash on systems without I/O port support. For example in this
-> answer by John Garry (added so he may supply more information):
+> On 5/3/22 15:07, Limonciello, Mario wrote:
+>> [Public]
+>>
+>>
+>>
+>>> -----Original Message-----
+>>> From: kernel test robot <lkp@intel.com>
+>>> Sent: Tuesday, May 3, 2022 06:18
+>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+>>> Cc: kbuild-all@lists.01.org; Andy Shevchenko
+>>> <andriy.shevchenko@linux.intel.com>; Hans de Goede
+>>> <hdegoede@redhat.com>; linux-kernel@vger.kernel.org
+>>> Subject: [RFC PATCH pdx86-platform-drivers-x86] platform/x86:
+>>> thinkpad_acpi: quirk_btusb_bug can be static
+>>>
+>>> drivers/platform/x86/thinkpad_acpi.c:317:20: warning: symbol
+>>> 'quirk_btusb_bug' was not declared. Should it be static?
+>>>
+>>> Fixes: 25eecc2ff6cc ("platform/x86: thinkpad_acpi: Convert btusb DMI list to
+>>> quirks")
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Signed-off-by: kernel test robot <lkp@intel.com>
+>>
+>> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> https://lore.kernel.org/lkml/db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com/
+> Thanks, since the original patch was still in my review-hans
+> branch (and not yet in for-next) I've squashed this fix into
+> the original patch.
+
+I've just realized there is another issue with this
+("platform/x86: thinkpad_acpi: Convert btusb DMI list to quirks")
+
+Patch, it only sets tp_features.quirks after bluetooth_init()
+has already run, so the:
+
+	if (tp_features.quirks && tp_features.quirks->btusb_bug && ...
+
+check will never be true since tp_features.quirks is being set
+too late.
+
+I'll squash in a change moving the:
+
+        dmi_id = dmi_first_match(fwbug_list);
+        if (dmi_id)
+                tp_features.quirks = dmi_id->driver_data;
+
+to higher inside thinkpad_acpi_module_init() to fix this,
+while keeping the:
+
+#ifdef CONFIG_SUSPEND
+       if (tp_features.quirks && tp_features.quirks->s2idle_bug_mmio) {
+               if (!acpi_register_lps0_dev(&thinkpad_acpi_s2idle_dev_ops))
+                       pr_info("Using s2idle quirk to avoid %s platform firmware bug\n",
+                               (dmi_id && dmi_id->ident) ? dmi_id->ident : "");
+       }
+#endif
+
+block at then end of thinkpad_acpi_module_init() so as to not change
+the ordering wrt registering the lps0_dev.
+
+Regards,
+
+Hans
+
+
+
+
+
 > 
-> .
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+> 
+>>
+>>> ---
+>>>  drivers/platform/x86/thinkpad_acpi.c |    2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/platform/x86/thinkpad_acpi.c
+>>> b/drivers/platform/x86/thinkpad_acpi.c
+>>> index aed17d32ed84b..eefa22e86ae10 100644
+>>> --- a/drivers/platform/x86/thinkpad_acpi.c
+>>> +++ b/drivers/platform/x86/thinkpad_acpi.c
+>>> @@ -314,7 +314,7 @@ struct quirk_entry {
+>>>  	bool btusb_bug;
+>>>  };
+>>>
+>>> -struct quirk_entry quirk_btusb_bug = {
+>>> +static struct quirk_entry quirk_btusb_bug = {
+>>>  	.btusb_bug = true,
+>>>  };
+>>>
+>>
 
-That issue is that drivers like hwmon f71805f use inb/outb accessors 
-with hardcoded IO port addresses to probe the driver. On archs like 
-arm64 or powerpc - which do not natively support inb et al - this may 
-crash the system when no PCI IO space is mapped [0]. Indeed, when PCI IO 
-space is mapped, it is preferable these those drivers still would not 
-access these ports.
-
-So this series from Niklas could be used as a basis to solve that 
-problem, in that we could also introduce something like HARDCODED_IOPORT 
-[1] to stop those drivers being built at all for arm64.
-
-[0] 
-https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
-[1] 
-https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
-
-Thanks,
-John

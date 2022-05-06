@@ -2,75 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE0651E024
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9606E51E027
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442973AbiEFUdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
+        id S1442925AbiEFUfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359144AbiEFUdj (ORCPT
+        with ESMTP id S1344781AbiEFUe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:33:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673276A057;
-        Fri,  6 May 2022 13:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14174B83966;
-        Fri,  6 May 2022 20:29:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D722BC385AC;
-        Fri,  6 May 2022 20:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651868992;
-        bh=h4uCns5ki6S/wrApp5nDjfg+emucPIYdb4o/8ayvsUc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OG2m7kHs6aDn6pevDY0sC+dflU/HCL7MelU13tqY8/Aksod/S+IG7JANUhtTkeX5B
-         mOtE9EPEvK2h+x8UKdtiY2fWExMwKARr/lnz/0ogxtTTdTWv3XLpnwnrM9Gr9JL+wH
-         t3P1gtwp5io7CMWpT+j5i5s38TBlw/Ldfh1aaSUg78AF2RyWeLkDuEJ7BzZd09JYWg
-         aCXC4OFz/6fTWOqzk300fiP8RekG9aj16pHGrarkFIpHuTFAKo4dbFbHdfbWETluy7
-         CpF0PVWCMfQj78wTW80YbnNc29YWgvnmAltVgHNm4O0pckSN0luD92LbGJH3rFa0Lu
-         zSUVjTAxZITtw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3F2EF03876;
-        Fri,  6 May 2022 20:29:52 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull NFS client fixes for 5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <cdd6481d128894041e6251218a309ae9cfa15f0b.camel@hammerspace.com>
-References: <cdd6481d128894041e6251218a309ae9cfa15f0b.camel@hammerspace.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <cdd6481d128894041e6251218a309ae9cfa15f0b.camel@hammerspace.com>
-X-PR-Tracked-Remote: git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-5.18-3
-X-PR-Tracked-Commit-Id: a3d0562d4dc039bca39445e1cddde7951662e17d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: adcffc1716f875610ba57195ec979a4ef655ddd3
-Message-Id: <165186899279.14783.9764930667103287068.pr-tracker-bot@kernel.org>
-Date:   Fri, 06 May 2022 20:29:52 +0000
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 16:34:59 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE496D3A9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:31:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p6so7987199pjm.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=i3Ntzrv5FDfp2eYpZMiopVYr18OlFo4VdjXUK7cfBPU=;
+        b=O85NYqjWtDow9jeD3TU4kt+F6nWSDZskBn/bCqCnzjrY0EvFfS6+VN0I/1Ug/g1LlB
+         2DVu+gjTG6VequvguY9OTwOg7lx0M0Xei4zmUF4J4To6SZXF6OW0pjPQW5tz+1JziBPu
+         oAJNATpkVHBP2oxE9oggwFfFpeNIqI32ZBDazGe4aKFySi23y67jZQdGZ6KpNArR7aoZ
+         0i6l0s63jE1++BzSxYYsV+zeDutL3ni1k8+8pceZ20jUE70PsJEd49T6CNzTWMAJwSHr
+         kUxbtMyHSumwabqi2UDYAMg4eCWPDRMdgx9HLIxktjj1lcJKVf9rUGHfqG/aHVsWek4T
+         TcLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=i3Ntzrv5FDfp2eYpZMiopVYr18OlFo4VdjXUK7cfBPU=;
+        b=WRV85Otao8yOpB+N2k6GC/dy/iq16M9hlSkZCQzEWtTjoKTdZBOntTEjaEFunzpnw4
+         UUzvHN/JsWh7lXETqstFTrmoVy7Ou/YY003wdJg2uiGCk2um3x+dYIklW2+6GoozuZJ9
+         fFv/ln8XU4/l7GmXYmhdexWj02i6dEFcFsqoKYa3+rnF6kXdaAabMYArfxv3EgjtIl0u
+         qFatOEi0b7ofY/i8afUgC/zA+6b7NTQBbELX87mO0v+AOd9ox21KlWRfpdQLO5xgGIHb
+         8NiKoHz6EUoAh4s3mUrgh9cmcDhEHjWJGH9/GTYNxEm5qEIaWdDPD6k4PfxeicZ+snk2
+         RlDw==
+X-Gm-Message-State: AOAM531b6LjWywzAspNWrwSV/Z4DBD1UQaJHOEmZznYPLrVBUV+wnzBj
+        6PXjpHQc2VlfEwcnz2oAzwFQKVf6BR8zzw==
+X-Google-Smtp-Source: ABdhPJyUnf/2IAy1zjU8UQe87XfdGkBcgm1RleycVg7wfOu86v/fVUxrm5PQSkosijGggjbgCRfX4w==
+X-Received: by 2002:a17:902:c952:b0:15e:89be:49ea with SMTP id i18-20020a170902c95200b0015e89be49eamr5571513pla.32.1651869074157;
+        Fri, 06 May 2022 13:31:14 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id b7-20020aa79507000000b0050dc7628163sm3822221pfp.61.2022.05.06.13.31.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 13:31:13 -0700 (PDT)
+Date:   Fri, 6 May 2022 13:31:11 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC v1 net-next 1/4] net: Introduce Qdisc backpressure
+ infrastructure
+Message-ID: <20220506133111.1d4bebf3@hermes.local>
+In-Reply-To: <f4090d129b685df72070f708294550fbc513f888.1651800598.git.peilin.ye@bytedance.com>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
+        <f4090d129b685df72070f708294550fbc513f888.1651800598.git.peilin.ye@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 6 May 2022 20:09:29 +0000:
+On Fri,  6 May 2022 12:44:22 -0700
+Peilin Ye <yepeilin.cs@gmail.com> wrote:
 
-> git://git.linux-nfs.org/projects/trondmy/linux-nfs.git tags/nfs-for-5.18-3
+> +static inline void qdisc_backpressure_overlimit(struct Qdisc *sch, struct sk_buff *skb)
+> +{
+> +	struct sock *sk = skb->sk;
+> +
+> +	if (!sk || !sk_fullsock(sk))
+> +		return;
+> +
+> +	if (cmpxchg(&sk->sk_backpressure_status, SK_UNTHROTTLED, SK_OVERLIMIT) == SK_UNTHROTTLED) {
+> +		sock_hold(sk);
+> +		list_add_tail(&sk->sk_backpressure_node, &sch->backpressure_list);
+> +	}
+> +}
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/adcffc1716f875610ba57195ec979a4ef655ddd3
+What if socket is closed? You are holding reference but application maybe gone.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Or if output is stalled indefinitely?

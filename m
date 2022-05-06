@@ -2,105 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4B851DE64
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F5351DE6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444227AbiEFRhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S1444242AbiEFRqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbiEFRhV (ORCPT
+        with ESMTP id S1444236AbiEFRp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:37:21 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A311451E70
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:33:37 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bu29so13800550lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 10:33:37 -0700 (PDT)
+        Fri, 6 May 2022 13:45:58 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBA353717
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:42:14 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id s30so14099575ybi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 10:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=TrheegTAcQ3N+NlErxWYk+mECiW+V/jPorPK228U0NB5VOOYxEJuOyLczZt41CvZbG
-         IiNhBzQfeGCKcl+tNvoWWW25ntMY6J040Z54jQwfj22fj28f+hnb+5eCFvRIPicjJANq
-         ++uneqe3uownIq/LpZq6IOPZY/u+112vkrsblj4ZUg4XQWQsmRY4MFYRkwd1BgbJD03t
-         P13nFbb0Rx8jqVT29GFyWl6L8YMTtFqN0Cg7eaT9zX5YPnRvJ6p5Stp/3TQQZWbLoLyh
-         Ru9bsD9SLDq3AokXsHbkpIqVoRboZv9h86oOHkNbas5RuKQwnAUlESZnR/RmLBTESmq1
-         YMww==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YKfnJFHuOviCdMg0UB5UffT9B/WVcObEOxiRN5y2Kug=;
+        b=emmUN3k1bPN4J6n6aBe2FemprgUT+FF6VAYxV6ekMwnHvd4yMg9T5KGYmUYmFa9oAe
+         l8wgj8tdCP2FJPIShfAg2Fk/rOBVcSKoqvKeqjnUKen1LIajvaEdZt/TPfqzH6t/XrSo
+         syM1kjCv3gSDfacEuEc3EgG0lwGjeC2hWNg5U2El7kqEz+o0tsjk8MjpqNijR6o+XqPs
+         q3onvlApQgHZ5xOXxhHzjSgk18UOnvT+GgtT76x6XFC/llE4jgVQddy0F0CFkFJAkHTB
+         0S9hvZkV7X0lPAIZLLytf/7qjnZXN3mz9RqswI5f966807Geg/q/71UbscP2MlkhGUSo
+         7bxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=UnkAPQtoZ1YmF+7WswQAOvdarSWFPF1cTpSQOzug16SC2yMNdkOkTioFuYdIi9REqf
-         US8CORQZJaGZ1kOOwb8g48UI8QAeURTC0pbg8ISqbVnm1o3MACSCotJrVMZaFIEEKWDk
-         LPp74oFnH8DmcFzdVGGP7HVOgUf5yFh59+gOV3oSFpwUZJbeFQT5lKtQTLYLWfBaVyq2
-         4pAwLlNwUd/h0Qq4TQQl4OYlztN74QiZMvTAMl608WMfgKbGWzHJaHxwGnU0+K0ChWsu
-         4gZhRxgHblDSBc3e4Zc8SkU1PvR8ldt4eUZUN85diJ1/vyMZrpj4K5I5FWrL15nje+1o
-         Hinw==
-X-Gm-Message-State: AOAM531cySMdgn9iY09ucMx4Lg0/BAvXwVzAQQbqWAE7qYYAXd2h/mko
-        6LuOFLStIxxIDzqWQSp8tO9PRUknXbOGs1mcMSY=
-X-Google-Smtp-Source: ABdhPJwb2di7DmbAynLcvVcyrDAwD/qAr+uJAQ3xu/EqJRNubI4tS8MU2FqNFTk6VjD7DhUy7tfCiVMELMhlHYcplTw=
-X-Received: by 2002:a05:6512:25ab:b0:472:6041:d39b with SMTP id
- bf43-20020a05651225ab00b004726041d39bmr3138581lfb.40.1651858416009; Fri, 06
- May 2022 10:33:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YKfnJFHuOviCdMg0UB5UffT9B/WVcObEOxiRN5y2Kug=;
+        b=GMnNev09V0zakOmDaz8vN6vtmn2Gj3z8u8XJ4MhttvAi2UQHXRj6ZCk88vbc1F/JJI
+         AYy7HnFs39wTvjI5qf6DWacY3oBWFMJU6uJXR5iZ2qr1kxwkRIJ1339GpCw+4CCWikhT
+         +RgK+6Z9vJP02ZOG536Ux5TIuDd/bwjLIkyWRJgvqhv/YX2WtQs5m1d+433I+4nnMEpw
+         J4KDUd7bOzdu7wOXoyiLHAEBQAYOut1u0C4h/OFHEEP0eUoXajKyuWTHGzsWbBq68x4J
+         ExBmDcKf+AqiFocWxT2aFha4OrI07e4LsKnyJ6BkF5qwam14ca1/ofq6iVDIZ6/zDFQ6
+         zGEQ==
+X-Gm-Message-State: AOAM532VAhmTrjg4ueCGKjkctKauTkvWNgt3dftCV95eAS0EOelw4yhb
+        Rq+76G/av/yG+ox/zz7NnwdqmQNa2slpypzkGOlEJw==
+X-Google-Smtp-Source: ABdhPJws5njwDWJ9xDpRYMne8cwuzMbwVAp2MzFRAKHvjVIKPSom5y1drK/dJlbHrWExYpCexhrZLlT5LtJ6/fdqUbo=
+X-Received: by 2002:a25:bb0f:0:b0:61d:60f9:aaf9 with SMTP id
+ z15-20020a25bb0f000000b0061d60f9aaf9mr3038082ybg.199.1651858933696; Fri, 06
+ May 2022 10:42:13 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab3:6591:0:0:0:0:0 with HTTP; Fri, 6 May 2022 10:33:35 -0700 (PDT)
-Reply-To: richardbowles844@gmail.com
-From:   richard bowles <zamba19999@gmail.com>
-Date:   Fri, 6 May 2022 17:33:35 +0000
-Message-ID: <CAMsQSZm5jt4TYBmSDxrVQKQ9cC6s9V0XFjg2jBsoZOYjbEub4Q@mail.gmail.com>
-Subject: My name is Richard Bowles; I am a partner at Friedman LLP, in Toronto
- Canada, I am contacting you because of my deceased client who died leaving
- Payable on Death (POD) Life insurance valued at the sum of ($11,550,300.00) I
- want to announce you as an heir/beneficiary to the policy since both of you
- are bearing similar surnames, For more details please contact me via: Your
- earliest response to this matter would be highly appreciated. Richard Bowles Partner
-To:     undisclosed-recipients:;
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+ <87k0ayhc43.ffs@tglx>
+In-Reply-To: <87k0ayhc43.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 6 May 2022 19:41:37 +0200
+Message-ID: <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [zamba19999[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [richardbowles844[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [zamba19999[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.3 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *******
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 6, 2022 at 6:14 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Fri, May 06 2022 at 16:52, Alexander Potapenko wrote:
+> > On Thu, May 5, 2022 at 11:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >> @@ -452,6 +455,7 @@ irqentry_state_t noinstr irqentry_nmi_en
+> >>         rcu_nmi_enter();
+> >>
+> >>         instrumentation_begin();
+> >> +       unpoison(regs);
+> >>         trace_hardirqs_off_finish();
+> >>         ftrace_nmi_enter();
+> >>         instrumentation_end();
+> >>
+> >> As I said: 4 places :)
+> >
+> > These four instances still do not look sufficient.
+> > Right now I am seeing e.g. reports with the following stack trace:
+> >
+> > BUG: KMSAN: uninit-value in irqtime_account_process_tick+0x255/0x580
+> > kernel/sched/cputime.c:382
+> >  irqtime_account_process_tick+0x255/0x580 kernel/sched/cputime.c:382
+> >  account_process_tick+0x98/0x450 kernel/sched/cputime.c:476
+> >  update_process_times+0xe4/0x3e0 kernel/time/timer.c:1786
+> >  tick_sched_handle kernel/time/tick-sched.c:243
+> >  tick_sched_timer+0x83e/0x9e0 kernel/time/tick-sched.c:1473
+> >  __run_hrtimer+0x518/0xe50 kernel/time/hrtimer.c:1685
+> >  __hrtimer_run_queues kernel/time/hrtimer.c:1749
+> >  hrtimer_interrupt+0x838/0x15a0 kernel/time/hrtimer.c:1811
+> >  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086
+> >  __sysvec_apic_timer_interrupt+0x1ae/0x680 arch/x86/kernel/apic/apic.c:1103
+> >  sysvec_apic_timer_interrupt+0x95/0xc0 arch/x86/kernel/apic/apic.c:1097
+> > ...
+> > (uninit creation stack trace is irrelevant here, because it is some
+> > random value from the stack)
+> >
+> > sysvec_apic_timer_interrupt() receives struct pt_regs from
+> > uninstrumented code, so regs can be partially uninitialized.
+> > They are not passed down the call stack directly, but are instead
+> > saved by set_irq_regs() in sysvec_apic_timer_interrupt() and loaded by
+> > get_irq_regs() in tick_sched_timer().
+>
+> sysvec_apic_timer_interrupt() invokes irqentry_enter() _before_
+> set_irq_regs() and irqentry_enter() unpoisons @reg.
+>
+> Confused...
 
+As far as I can tell in this case sysvect_apic_timer_interrupt() is
+called by the following code in arch/x86/kernel/idt.c:
+
+  INTG(LOCAL_TIMER_VECTOR,                asm_sysvec_apic_timer_interrupt),
+
+, which does not use IDTENTRY_SYSVEC framework and thus does not call
+irqentry_enter().
+
+I guess handling those will require wrapping every interrupt gate into
+a function that performs register unpoisoning?
+
+By the way, if it helps, I think we don't necessarily have to call
+kmsan_unpoison_memory() from within the
+instrumentation_begin()/instrumentation_end() region?
+We could move the call to the beginning of irqentry_enter(), removing
+unnecessary duplication.

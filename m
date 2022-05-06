@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C8651D750
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77DA51D754
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391651AbiEFMKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S1391648AbiEFMO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346868AbiEFMKG (ORCPT
+        with ESMTP id S1344601AbiEFMO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:10:06 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE87964BC0
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:06:21 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g20so8456326edw.6
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 05:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xFmHe5bkQAJ5aCJTsLWLd98BK2vXyR0AnmNa1zUXsdw=;
-        b=gq7RAY9Wzf/338Lts4ds4xDAELCJptxV8Yk3X3fNOhrOHPa3qKF8LtdJ10PD0dhPjJ
-         NJ9yrVqjapiTCTD5kjOXwrCn0MS8LNTy4s/CLZKCYq30426fAHVVVl2HzvlL05+ZpXm7
-         zMHgITwWstk63cxeYCanKM3oZiwfMhpwP0OaDnozVgIrjOAJ/SMc7a6tl93/8r9BCRDI
-         Y4BFqRc40fmatvjYCVkVvR3y7Zf602m8XKTNdpi/xpvtVXjRjZ4ZqH6x/pJl7SaQOakG
-         BVk/6QfDzvn0HzR41ot1srtwzQwolRSFPZQkwElcgspNZbSnvn2fGzS1YoOGBw1rYmBZ
-         4DVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xFmHe5bkQAJ5aCJTsLWLd98BK2vXyR0AnmNa1zUXsdw=;
-        b=AWhwyy89lBwVpdNO3TkBlDXxh8AkutpXYIQZK0LH1ZI3Z/8TNwUbeexGNIEjl2ws6E
-         0eJ+XzuqBPTrbz1TuSbhgb1c+kAvP2L1B4NbLUzWX4913LmLSChu2QR5K7DvK1gQvKQ8
-         WTUMd1mns4GkfnofYrgivH2dmgtfk4qGxWqc4x3HGEdVdV9KGBDxRNlgzX6WyYKLP0Wu
-         0JB8ZIZc2ugL9tAfURC8ukjSfkR+PQuM0SnYpC/7VKM829kjFYIDN434bDLx5RfVqYot
-         H0yUxh5lJmtINT0Ei9DenE0ZkCuhdLjnUTZttWyRkKWesa2TEuyTD0WBEDEAlf4dPRrb
-         IXjw==
-X-Gm-Message-State: AOAM530s1TiMn4CCq8dxwIrDIstN/MWAErPFVpm/Z9lJDiclTMFbbMe1
-        WB9rLOCu9UMS2glgxdsPFB+1PQ00owYpUe9T
-X-Google-Smtp-Source: ABdhPJx7ciama2+XwGOT9X7qW1ScXEtcrEsU/0JJXqlPqFpvUwHFs4XzAO2ER/pXKoHhGXX+ZU7i9A==
-X-Received: by 2002:aa7:ce87:0:b0:425:d88c:bc92 with SMTP id y7-20020aa7ce87000000b00425d88cbc92mr3167564edv.147.1651838780324;
-        Fri, 06 May 2022 05:06:20 -0700 (PDT)
-Received: from [192.168.0.227] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 9-20020a508749000000b00426488dce1dsm2173209edv.25.2022.05.06.05.06.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 05:06:19 -0700 (PDT)
-Message-ID: <5f862222-b3ea-ac7d-2c82-92aaad56ad3e@linaro.org>
-Date:   Fri, 6 May 2022 14:06:18 +0200
+        Fri, 6 May 2022 08:14:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F123D24F03;
+        Fri,  6 May 2022 05:10:42 -0700 (PDT)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvqBy0Dl1zhYvJ;
+        Fri,  6 May 2022 20:10:18 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 20:10:40 +0800
+Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
+ (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
+ 2022 20:10:40 +0800
+Subject: Re: [PATCH net-next 3/5] net: hns3: add byte order conversion for PF
+ to VF mailbox message
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
+        <chenhao288@hisilicon.com>
+References: <20220505124444.2233-1-huangguangbin2@huawei.com>
+ <20220505124444.2233-4-huangguangbin2@huawei.com>
+ <20220505184746.122aea96@kernel.org>
+From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
+Message-ID: <e504e07c-dff1-8d66-448d-0ccc30c4e87e@huawei.com>
+Date:   Fri, 6 May 2022 20:10:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] i2c: s3c2410: change return type of
- 'i2c_s3c_irq_nextbyte' from 'int' to 'void'
-Content-Language: en-US
-To:     Yihao Han <hanyihao@vivo.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-References: <20220506113415.10462-1-hanyihao@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220506113415.10462-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220505184746.122aea96@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 13:34, Yihao Han wrote:
-> Since ret is a redundant variable, and none of the callers check
-> for return, so remove ret variable and change return type of 
-> 'i2c_s3c_irq_nextbyte' from 'int' to 'void'
+
+
+On 2022/5/6 9:47, Jakub Kicinski wrote:
+> On Thu, 5 May 2022 20:44:42 +0800 Guangbin Huang wrote:
+>> From: Jie Wang <wangjie125@huawei.com>
+>>
+>> Currently, hns3 mailbox processing between PF and VF missed to convert
+>> message byte order and use data type u16 instead of __le16 for mailbox
+>> data process. These processes may cause problems between different
+>> architectures.
+>>
+>> So this patch uses __le16/__le32 data type to define mailbox data
+>> structures. To be compatible with old hns3 driver, these structures use
+>> one-byte alignment. Then byte order conversions are added to mailbox
+>> messages from PF to VF.
 > 
-> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->  drivers/i2c/busses/i2c-s3c2410.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+> This adds a few sparse [1] warnings, you must have missed a few
+> conversions.
 > 
-> diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
-> index b49a1b170bb2..75ddf7ffb028 100644
-> --- a/drivers/i2c/busses/i2c-s3c2410.c
-> +++ b/drivers/i2c/busses/i2c-s3c2410.c
-> @@ -381,17 +381,15 @@ static inline int is_msgend(struct s3c24xx_i2c *i2c)
->  /*
->   * process an interrupt and work out what to do
->   */
-> -static int i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
-> +static void i2c_s3c_irq_nextbyte(struct s3c24xx_i2c *i2c, unsigned long iicstat)
->  {
->  	unsigned long tmp;
->  	unsigned char byte;
-> -	int ret = 0;
->  
->  	switch (i2c->state) {
->  
->  	case STATE_IDLE:
->  		dev_err(i2c->dev, "%s: called in STATE_IDLE\n", __func__);
-> -		goto out;
-
-This does not look equivalent. Should be a return here.
-
-
-Best regards,
-Krzysztof
+> Please wait at least 24h for additional feedback before reposting.
+> 
+> [1] https://www.kernel.org/doc/html/latest/dev-tools/sparse.html
+> 
+> .
+> 
+Ok, thanks

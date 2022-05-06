@@ -2,107 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767E551E114
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4142A51E116
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444462AbiEFVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S1444479AbiEFVdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344521AbiEFVdN (ORCPT
+        with ESMTP id S1444464AbiEFVdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:33:13 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041046F4A8
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:29:29 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id p8so7250870pfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 14:29:28 -0700 (PDT)
+        Fri, 6 May 2022 17:33:16 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F7D6F4AB;
+        Fri,  6 May 2022 14:29:32 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c9so7930569plh.2;
+        Fri, 06 May 2022 14:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=N1UhE90kw7eZKOYH701CqkEpipu4X6Khp12ykHwyDEg=;
-        b=k00gdPq2HnCTH01gmR2exswNoAGEKizY6tgRHeIKF5Mr2EilFTePHuYedBdp8dLD0E
-         a20dNsh8kTTsFTUaCmPp2J3yVng+Atu6hsY33ljETSxP1aWm/LSpPgOyUdYYzI55cXt7
-         xI0jf9fSDR6Q9QtvZmr8g+W6w8bQIiDsxFX7XrCoXwiDJnP++/H7tulJnvHVXrRLveFU
-         dgt6RYQldSybimwmhUdi3Pk/8tW/lpPBo3FGMWb091Dtcf5LM5OXfStm1okzFRDXaEF1
-         y3luTFIufV4bn1PA0vCQskZHMQ85d7fyhX6YCoRM6N7pHjfbBengi2GN72kvr3Co4m3I
-         0HDQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6qT9B79QXkLWw17UF4jXkgLnzsIOvLk4zlsmk1fzfpA=;
+        b=GvND7ulvJ0NlO8EOj5vYXO3AtWWcVqs0iZMXTw0tKe5MktIsJXcjT9wDj+TMCSW9Li
+         RBPsDcKG4kR1+fAkhLTmfqFxdFFxxI/GywIqM3uqDHktjpW3N4l55OExoVNeu0vYDmy1
+         XUzIVOq+ghsC7rX3iE3RJTcmDbce9Lhb4vHntWS7Ty8WXzUtymUNgjdXBycqV2t7Qa1W
+         jk4wz36U1WMeXLLKjcJoz3kblEc1opFCk0ZtMxiX3KbvxDooJXRhb86ZCw4ovGBx5Y/a
+         iRKW2QJLnCLCUIN6CHzM3CUTtzgeQ1igX0UoYIMXbSXDUyY3QvqecA7WDNbLHS69r8Df
+         DuGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=N1UhE90kw7eZKOYH701CqkEpipu4X6Khp12ykHwyDEg=;
-        b=EjUUmLi7+v/15ddyy/nIvkhZk86SSh+AebnJyIpC1gLw4uGhVGu05wXYWfM/M6Qib6
-         fGnOw6alHjVY/h+fuY/amN3yKft+kuCo/EgJjlM5NtSJnAfVjqR/yIIPshwsQ3KvLmdu
-         M1KgwGaW2Q47GTwJV058b4md66Btxi0RZ9JEQvxfOOyaAWKF7FohEK0gu8M4CwI24G0a
-         lmYyzVzjSTyZjb0vlG1VKA/CVABRcJEvb68wUMb65pzI+aEHD90JgdPmHInY+uNFKxBv
-         1FaCvwEbsdi4mS6OkLaLpL3BYQUTFov8NBTrOTyW2dpCUgWBVoC92yT3dKyUg51cRC5j
-         q6yA==
-X-Gm-Message-State: AOAM532uWmt2keJKCC+C/Hog0nq8ZJ3ORAmaZXEexASJyKliG4UAEAQ+
-        bptSvQmJ5r+BlDXmrP9JU+/KBA==
-X-Google-Smtp-Source: ABdhPJySrRnB5vcgVacNSmmJabqKLfFQtmtEqtQ6no8yHvK2BoEaOPrdDqhN/RqXAzVDkArKeW2oGA==
-X-Received: by 2002:aa7:962e:0:b0:50d:5ed8:aa23 with SMTP id r14-20020aa7962e000000b0050d5ed8aa23mr5421341pfg.43.1651872568458;
-        Fri, 06 May 2022 14:29:28 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902a50700b0015e8d4eb206sm2264597plq.80.2022.05.06.14.29.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 14:29:27 -0700 (PDT)
-Message-ID: <8e9bf420-0405-fd71-826d-7924528f2d09@kernel.dk>
-Date:   Fri, 6 May 2022 15:29:26 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6qT9B79QXkLWw17UF4jXkgLnzsIOvLk4zlsmk1fzfpA=;
+        b=2v5h8H02tB9Xmc4yMgMvFSsWLR4Yaf+khTw99HhVLMSjKtnHuXiFvUZvY0oaM3crjn
+         2OiXsDFbGa9O1nANZ92sKGoOJiDOM0dJWBOndsCjDAFmkMWwcdp2fpMC0iee1uxQliYl
+         ofJqhdHBjshgiX1U/sQGynqg2WxVOBT2DXMDBxTC1vF3LFDU4XXgJzussPDnZsup4PQq
+         oF3tBYKUuKoNSIhobYaUaZE8e1y4rF3TacPuSIGk6iaAsec6NqPTpCGUNPEnj3T0bxMQ
+         ZvQ/s3Jjcy72xKmoe5OH1OAB95w7tC8eW+fY5tcL8LyhvKHvDK3flqrTquAhoyVEubk2
+         M92g==
+X-Gm-Message-State: AOAM5312T5XyssIht7o4E54+3sXGHg3ktR68dxDOGM3SYBeILy9LijHG
+        9VWfhBLV331sAs+p+Yb8BDW9KfJb0n0=
+X-Google-Smtp-Source: ABdhPJycAKGNm73Ipl+cKSsvVHi+P4RQBndDHDv8gxThLv0xO+9931Wl1u2TGJ//LxrHRhAhoeR4PA==
+X-Received: by 2002:a17:902:7104:b0:15e:ddb8:199 with SMTP id a4-20020a170902710400b0015eddb80199mr5728782pll.80.1651872571978;
+        Fri, 06 May 2022 14:29:31 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id s66-20020a637745000000b003c25a7581d9sm3739161pgc.52.2022.05.06.14.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 14:29:31 -0700 (PDT)
+Date:   Fri, 6 May 2022 14:29:30 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [RFC PATCH v6 011/104] KVM: TDX: Initialize TDX module when
+ loading kvm_intel.ko
+Message-ID: <20220506212930.GA2145958@private.email.ne.jp>
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <752bc449e13cb3e6874ba2d82f790f6f6018813c.1651774250.git.isaku.yamahata@intel.com>
+ <c7c1f8d1-081a-d543-bdb4-6895292c7077@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-6-haoxu.linux@gmail.com>
- <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
-In-Reply-To: <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7c1f8d1-081a-d543-bdb4-6895292c7077@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 2:50 PM, Jens Axboe wrote:
-> On 5/6/22 1:01 AM, Hao Xu wrote:
->> @@ -5748,8 +5758,12 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
->>  		if (!fixed)
->>  			put_unused_fd(fd);
->>  		ret = PTR_ERR(file);
->> -		if (ret == -EAGAIN && force_nonblock)
->> -			return -EAGAIN;
->> +		if (ret == -EAGAIN && force_nonblock) {
->> +			if ((req->flags & REQ_F_APOLL_MULTI_POLLED) ==
->> +			    REQ_F_APOLL_MULTI_POLLED)
->> +				ret = 0;
->> +			return ret;
-> 
-> FWIW, this
-> 
-> 	if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == REQ_F_APOLL_MULTI_POLLED)
-> 
-> is identical to
-> 
-> 	if (req->flags & REQ_F_APOLL_MULTI_POLLED)
-> 
-> but I suspect this used to check more flags (??), because as it stands
-> it seems a bit nonsensical.
+On Fri, May 06, 2022 at 09:57:09PM +0800,
+Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 
-Looking deeper, it is indeed a mask and not a single flag! So the check
-looks fine.
+> On 5/6/2022 2:14 AM, isaku.yamahata@intel.com wrote:
+> > +int __init tdx_module_setup(void)
+> > +{
+> > +	const struct tdsysinfo_struct *tdsysinfo;
+> > +	int ret = 0;
+> > +
+> > +	BUILD_BUG_ON(sizeof(*tdsysinfo) != 1024);
+> > +	BUILD_BUG_ON(TDX_MAX_NR_CPUID_CONFIGS != 37);
+> > +
+> > +	ret = tdx_detect();
+> > +	if (ret) {
+> > +		pr_info("Failed to detect TDX module.\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = tdx_init();
+> > +	if (ret) {
+> > +		pr_info("Failed to initialize TDX module.\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	tdsysinfo = tdx_get_sysinfo();
+> > +	if (tdx_caps.nr_cpuid_configs > TDX_MAX_NR_CPUID_CONFIGS)
+> > +		return -EIO;
+> 
+> It needs to check tdsysinfo->num_cpuid_config against
+> TDX_MAX_NR_CPUID_CONFIG
+> 
+> or move the check down after tdx_caps is initialized.
+
+Thanks for catching it. I'll replace it with tdsysinfo->num_cpuid_config.
 
 -- 
-Jens Axboe
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

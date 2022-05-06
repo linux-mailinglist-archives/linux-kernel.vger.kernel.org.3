@@ -2,75 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D07A51D00C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5F751D00F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388933AbiEFEYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 00:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S1388945AbiEFEZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 00:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388928AbiEFEXw (ORCPT
+        with ESMTP id S1388928AbiEFEZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 00:23:52 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52B55DD1C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 21:20:06 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id j14so6292937plx.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 21:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nYgHnNqlChNguPe7Q9G6D1OpvFbxYV1H4WdQcw7evEQ=;
-        b=jLR8HEc8Nd75VZ5BMZ3GFNPR4EBWnhsK1Gi4HmhTScy0L2VXovvTvzt48ouC2ztuEV
-         7UYwmbT6BD4//p9E+ex5zIrc17dCWgz3tLKNizpJe19Nz6F5XFBwK0tvGE26hUn8R0lK
-         uX9vGEPo+nxqhfdwjJ+oa+wbNS2nQSwZfv1l6YfEnWpT+UosFMNdKC1IGwDveVzC2LDL
-         rCt2EwbKegxPsGYnr0NycqAp2AQfRjSzGLLCun1sLFgq575fPTYXe1nchL45VMOOrirL
-         QStI9DRPJ5ceSGkX+OI571GoMhgA1rcltzY2JMyysNZPiYWzUqD/7/OKTAp17VsyxVk4
-         8G2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nYgHnNqlChNguPe7Q9G6D1OpvFbxYV1H4WdQcw7evEQ=;
-        b=i/EeIUMa7B3GjNSAI4P6fLBOmXs/8r5h9TmGrDikrvS2TnNe9ObrpCGpz5jd33Vmum
-         cQuRjiTmPgtmDwlDzEa9An0rYnpf51OjiWkDifgDW2o3n44YcuOgRF4UhRSYubKO5u1X
-         AF6EZTJzUnNHjsjfWEJh5aFzeE4u6TZ/dUVXYo9KspVk8IB4u6OaOFNuXWbslEJtTYys
-         aeeHjnsXqPXBa50ZR45HVFKcwCw6rvmwgQVbmh+dkra0rhYuD5NozsAHy+IegMNLUO6Z
-         nxG3aP5HfR9uQ+hUamYhHJ2PHjp6TrLh5E8SawIshZ+3K46C2DAowQI6O7PI7+l+/VEe
-         9KOg==
-X-Gm-Message-State: AOAM53011SMuZkqNvegpnoPjCc9IlZRUtABxPmkhAAnYRPU6GTdTVe69
-        ixJZPOW34dY78cyRV4z+qleb0Q==
-X-Google-Smtp-Source: ABdhPJwPdeAVQ0kgtN+QPRoWNHRxFzCt8kSKOwhyA+hqhpV5DQjikmiK5c4CLYCslM6zf1SeGOCrug==
-X-Received: by 2002:a17:90a:9483:b0:1dc:5fb2:9b89 with SMTP id s3-20020a17090a948300b001dc5fb29b89mr9937153pjo.235.1651810806236;
-        Thu, 05 May 2022 21:20:06 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id z189-20020a6365c6000000b003c14af50620sm2156741pgb.56.2022.05.05.21.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 21:20:05 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:50:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-Message-ID: <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 6 May 2022 00:25:23 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AA605E759;
+        Thu,  5 May 2022 21:21:40 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id CDC6A1E80CF6;
+        Fri,  6 May 2022 12:16:59 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JCRLcAwG6jDT; Fri,  6 May 2022 12:16:57 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.193.128.65])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 11A4C1E80C9B;
+        Fri,  6 May 2022 12:16:57 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] x86: The return type of the function could be void
+Date:   Fri,  6 May 2022 12:21:05 +0800
+Message-Id: <20220506042105.6245-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-05-22, 19:52, Rex-BC Chen wrote:
-> Cpufreq is a DVFS driver used for power saving to scale the clock frequency
-> and supply the voltage for CPUs. This series do some cleanup for MediaTek
-> cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
-> devfreq[3] which are supported in MT8183 and MT8186.
+Perhaps the return value of the function is not used.
+It may be possible to optimize the execution instructions.
 
-Applied 2-5, rest of them depend on the binding and dts patches to be
-Acked.
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/x86/kvm/hyperv.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 46f9dfb60469..64c0d1f54258 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -608,7 +608,7 @@ static enum hrtimer_restart stimer_timer_callback(struct hrtimer *timer)
+  * a) stimer->count is not equal to 0
+  * b) stimer->config has HV_STIMER_ENABLE flag
+  */
+-static int stimer_start(struct kvm_vcpu_hv_stimer *stimer)
++static void stimer_start(struct kvm_vcpu_hv_stimer *stimer)
+ {
+ 	u64 time_now;
+ 	ktime_t ktime_now;
+@@ -638,7 +638,7 @@ static int stimer_start(struct kvm_vcpu_hv_stimer *stimer)
+ 			      ktime_add_ns(ktime_now,
+ 					   100 * (stimer->exp_time - time_now)),
+ 			      HRTIMER_MODE_ABS);
+-		return 0;
++		return;
+ 	}
+ 	stimer->exp_time = stimer->count;
+ 	if (time_now >= stimer->count) {
+@@ -649,7 +649,7 @@ static int stimer_start(struct kvm_vcpu_hv_stimer *stimer)
+ 		 * the past, it will expire immediately."
+ 		 */
+ 		stimer_mark_pending(stimer, false);
+-		return 0;
++		return;
+ 	}
+ 
+ 	trace_kvm_hv_stimer_start_one_shot(hv_stimer_to_vcpu(stimer)->vcpu_id,
+@@ -659,7 +659,6 @@ static int stimer_start(struct kvm_vcpu_hv_stimer *stimer)
+ 	hrtimer_start(&stimer->timer,
+ 		      ktime_add_ns(ktime_now, 100 * (stimer->count - time_now)),
+ 		      HRTIMER_MODE_ABS);
+-	return 0;
+ }
+ 
+ static int stimer_set_config(struct kvm_vcpu_hv_stimer *stimer, u64 config,
 -- 
-viresh
+2.18.2
+

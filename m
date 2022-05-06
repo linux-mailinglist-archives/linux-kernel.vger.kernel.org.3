@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE17D51E214
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02E751E220
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441999AbiEFXBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
+        id S1444880AbiEFXEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444733AbiEFXBD (ORCPT
+        with ESMTP id S1444915AbiEFXD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:01:03 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D737C5C667;
-        Fri,  6 May 2022 15:57:13 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id ke5so6428180qvb.5;
-        Fri, 06 May 2022 15:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BGM4e8dlW2rnY5tjhs9oiiib3imBRnPsRxxY6qM+kZ4=;
-        b=Cv7nqR/tLqVTBsytmAQLGkwrOSuyqjm9iJALV8wRpxzyMxwLGuvaxVOBblpzJdiQkr
-         lCI6oDGbUiipN5u9wBh/WD5G3ZEVmbbk/NuaoAczXPucBVI/Q3/81679OvLoGosOn0Ms
-         6w+j96cFj08P6QyRK264+FYtPJZ+6b9HgAhOw5AJTysJudS+l1FZGCdcLUfxMCnCtVn0
-         OqDLaqgEFe189lgdb34G6dDmobZ0BtWgqv/HopPqRApa/OBc+bA2nM3l2JZfLkIqbPF5
-         tFQY+kx3Ji5mBO7mKOd1zNS+/3LeTKjkUSSA8r0bZA07+d0pM2JeJdOTA7gdXboJsey9
-         cAEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BGM4e8dlW2rnY5tjhs9oiiib3imBRnPsRxxY6qM+kZ4=;
-        b=MT0k+aNYlV7xaH+nhxi7xIFGueJqZ1Z15E9cIE6XDVBr/imvdXp/klgGpEYwqj/1EP
-         P1xPnl5BvUjf9hHtDtTA/fx41L3bojpZvOVZT01ixdifH8z5OgJUgYGiZZx09STGxbiZ
-         H3FQXAiOwm6CNG0z+71/dcNnJ7cEVeuSQ2vc/54pQX33yKUC0d1Mv2EpYSQsLXxMPaIo
-         HscahI9QmP1h4kqYn7jsR67t5+QShjPb2JWnRZ+hsEyWSCHrKlfiu8xZt0/K4b0fdgiY
-         Jmb+TFWUSdRrCW5DdyigP67bju1odsVkvoJltXi9Xwf2IQP9DZPpqdnODPIu/0LuB2et
-         y7Eg==
-X-Gm-Message-State: AOAM530Ag6u7nDR/jpX0/7TgvGRSSMgWBDR2Ad4E5MSxchL/vEWLShki
-        fvmxgFPx9PNrsyAXbeWBJfU=
-X-Google-Smtp-Source: ABdhPJyA6WWf4fVWUYojRIP+BmLp52WJkFjnyvtqNqoebTb6GRjKlflgRAV3EUUYrS3J1hQsfNXsxA==
-X-Received: by 2002:a05:6214:b94:b0:456:38b2:2d76 with SMTP id fe20-20020a0562140b9400b0045638b22d76mr4403222qvb.70.1651877833036;
-        Fri, 06 May 2022 15:57:13 -0700 (PDT)
-Received: from grrm.lan (bras-base-mtrlpq4809w-grc-17-70-53-205-21.dsl.bell.ca. [70.53.205.21])
-        by smtp.gmail.com with ESMTPSA id q188-20020a37a7c5000000b0069fc13ce208sm3187880qke.57.2022.05.06.15.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 15:57:12 -0700 (PDT)
-From:   Yannick Brosseau <yannick.brosseau@gmail.com>
-To:     jic23@kernel.org, lars@metafoo.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
-        olivier.moysan@foss.st.com
-Cc:     paul@crapouillou.net, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [PATCH 2/2] iio: adc: stm32: Fix check for spurious IRQs on STM32F4
-Date:   Fri,  6 May 2022 18:56:17 -0400
-Message-Id: <20220506225617.1774604-3-yannick.brosseau@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
-References: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
+        Fri, 6 May 2022 19:03:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A7C2127A;
+        Fri,  6 May 2022 16:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE170619BD;
+        Fri,  6 May 2022 23:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B596C385AE;
+        Fri,  6 May 2022 23:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651878012;
+        bh=MrL/xlZXbQCHOLcrOHVeYm6Mzr+lMG9w01S/LPD9Ij8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ahhh2SLOWwSBAvNbcv1YVB1jy9Z7m2K0257VVsYEfMzZENURD6400AH0rIKqqnblW
+         lhptmKI+EX3WCZsW+/doT+bwf08IjDNMJSMG+UC/iB7e2KDBVaRx/TJi5H1veAmPk+
+         3L1N9mLXcOCsZYBME/OZ74Wz+uqX9o8TTnt5xSvOSbqGizHb5xqsT6XldQQf2vDl2W
+         4feeV4xtOv6l5VtSgjYD8KQlmIpK0rboaJn7+DGQhPfQby8xZol5opMG9WjJ5hgxA2
+         F7ICxxTV26paqmSmKimK8wTuokwJKXTrIp25tMH6VEfIhszeOmO0sOuSO92AWJ66mh
+         qjHsMa2+dbxsw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F304F03912;
+        Fri,  6 May 2022 23:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] net: chelsio: cxgb4: Avoid potential negative array offset
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165187801205.26496.17417977061407998485.git-patchwork-notify@kernel.org>
+Date:   Fri, 06 May 2022 23:00:12 +0000
+References: <20220505233101.1224230-1-keescook@chromium.org>
+In-Reply-To: <20220505233101.1224230-1-keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     rajur@chelsio.com, lkp@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        bhelgaas@google.com, hkallweit1@gmail.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check for spurious IRQs introduced in 695e2f5c289bb assumed that the bits
-in the control and status registers are aligned. This is true for the H7 and MP1
-version, but not the F4.
+Hello:
 
-Instead of comparing both registers bitwise, we check the bit in the status and control
-for each interrupt we are interested in.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
----
- drivers/iio/adc/stm32-adc.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On Thu,  5 May 2022 16:31:01 -0700 you wrote:
+> Using min_t(int, ...) as a potential array index implies to the compiler
+> that negative offsets should be allowed. This is not the case, though.
+> Replace "int" with "unsigned int". Fixes the following warning exposed
+> under future CONFIG_FORTIFY_SOURCE improvements:
+> 
+> In file included from include/linux/string.h:253,
+>                  from include/linux/bitmap.h:11,
+>                  from include/linux/cpumask.h:12,
+>                  from include/linux/smp.h:13,
+>                  from include/linux/lockdep.h:14,
+>                  from include/linux/rcupdate.h:29,
+>                  from include/linux/rculist.h:11,
+>                  from include/linux/pid.h:5,
+>                  from include/linux/sched.h:14,
+>                  from include/linux/delay.h:23,
+>                  from drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:35:
+> drivers/net/ethernet/chelsio/cxgb4/t4_hw.c: In function 't4_get_raw_vpd_params':
+> include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 29 and size [2147483648, 4294967295] [-Warray-bounds]
+>    46 | #define __underlying_memcpy     __builtin_memcpy
+>       |                                 ^
+> include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+>   388 |         __underlying_##op(p, q, __fortify_size);                        \
+>       |         ^~~~~~~~~~~~~
+> include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+>   433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+>       |                          ^~~~~~~~~~~~~~~~~~~~
+> drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2796:9: note: in expansion of macro 'memcpy'
+>  2796 |         memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+>       |         ^~~~~~
+> include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [2147483648, 4294967295] [-Warray-bounds]
+>    46 | #define __underlying_memcpy     __builtin_memcpy
+>       |                                 ^
+> include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+>   388 |         __underlying_##op(p, q, __fortify_size);                        \
+>       |         ^~~~~~~~~~~~~
+> include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+>   433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+>       |                          ^~~~~~~~~~~~~~~~~~~~
+> drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2798:9: note: in expansion of macro 'memcpy'
+>  2798 |         memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
+>       |         ^~~~~~
+> 
+> [...]
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index a68ecbda6480..5b0f138333ee 100644
---- a/drivers/iio/adc/stm32-adc.c
-+++ b/drivers/iio/adc/stm32-adc.c
-@@ -1422,9 +1422,10 @@ static irqreturn_t stm32_adc_threaded_isr(int irq, void *data)
- 		return IRQ_HANDLED;
- 	}
- 
--	if (!(status & mask))
-+	if(!((status & regs->isr_eoc.mask) && (mask & regs->ier_eoc.mask)) ||
-+           ((status & regs->isr_ovr.mask) && (mask & regs->ier_ovr.mask)))
- 		dev_err_ratelimited(&indio_dev->dev,
--				    "Unexpected IRQ: IER=0x%08x, ISR=0x%08x\n",
-+				    "Unexpected IRQ: CR1/IER=0x%08x, SR/ISR=0x%08x\n",
- 				    mask, status);
- 
- 	return IRQ_NONE;
-@@ -1438,7 +1439,9 @@ static irqreturn_t stm32_adc_isr(int irq, void *data)
- 	u32 status = stm32_adc_readl(adc, regs->isr_eoc.reg);
- 	u32 mask = stm32_adc_readl(adc, regs->ier_eoc.reg);
- 
--	if (!(status & mask))
-+	/* Check that we have the interrupt we care about are enabled and active */
-+        if(!((status & regs->isr_eoc.mask) && (mask & regs->ier_eoc.mask)) ||
-+           ((status & regs->isr_ovr.mask) && (mask & regs->ier_ovr.mask)))
- 		return IRQ_WAKE_THREAD;
- 
- 	if (status & regs->isr_ovr.mask) {
+Here is the summary with links:
+  - [v2] net: chelsio: cxgb4: Avoid potential negative array offset
+    https://git.kernel.org/netdev/net/c/1c7ab9cd98b7
+
+You are awesome, thank you!
 -- 
-2.36.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

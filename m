@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E3D51E031
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE2251E030
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443159AbiEFUjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S1443197AbiEFUjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443128AbiEFUjG (ORCPT
+        with ESMTP id S1443204AbiEFUjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:39:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C984B2AD;
-        Fri,  6 May 2022 13:35:21 -0700 (PDT)
+        Fri, 6 May 2022 16:39:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8602BEB3;
+        Fri,  6 May 2022 13:35:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8A8C60AF6;
-        Fri,  6 May 2022 20:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A25C385A9;
-        Fri,  6 May 2022 20:35:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2054460B07;
+        Fri,  6 May 2022 20:35:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD7CC385A8;
+        Fri,  6 May 2022 20:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651869320;
-        bh=S2VlxsKlNheP/UaljF4jK7i69JWNXtFiU1ZWtep/VvM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ixIpy0yI+Knnbo5XqC13m/OPL0fJ+UK5oFisnjQWarBYeyI4STVtAaSI/K6q9qY6r
-         RlZq6HL3qzTFcA5qBRU6/ebWZLXpOYDM8BjroQj0Q64/fu9dbQujWndT7ZKC1nSZqj
-         LdRQCFIVBm13N9oJNa/osmgaA2iDMvTaeKck/mZUU5pcD+GYiN0d//6aXmpNR4InxI
-         x/0a/2JTllqzfBng0Y5wIej51LvYUQr+TXNc3linvBH9dzyIAAfbeR/abUXfBOAnWM
-         6O9B8yEu7bj9+jGcQpRZfDr1c0Wc0y6/CFmbv3fdhHb/l7y8rNPu4NR6564FcXsoq6
-         1b2ATuR2JdTWA==
+        s=k20201202; t=1651869324;
+        bh=65ko2VgV4hklZgR4OxvVNIdExSe/uakUcSdJsONNAww=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WbdUXGkAtWpHCKf0pJ9f44irXNKgkwGL/vSSu7EhqpaEr1EAZSqdwDUOvtagzrM6j
+         fJJIHezSbfv0TnxsDShnCwU/nLIfU50bTnQh3R48nX0NnGrQ2dQCBLupkySMeGyAY2
+         3pdPAdU8UV40zh16yPZWhkqBLu8vTThFHLq0thAKqynF5C7AiE06bP6NPPVMCWMByF
+         /zHYTxJaGu4hXdzqQo/zJnrBz5VFR8/HejGH8gcmqFzYmMvZNBvqufADUb+A/YbIYo
+         1P9s9NrVKIDSYrKL2pLlvz3eAwYuSnAbfkXKItYQMPyA+6iXkWl602Eupk19DPG1Dm
+         dUFxCqft/b1Dg==
 From:   Miguel Ojeda <ojeda@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        David Vernet <void@manifault.com>, Gary Guo <gary@garyguo.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Kosina <jikos@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+To:     Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        live-patching@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-kernel@vger.kernel.org
 Cc:     rust-for-linux@vger.kernel.org
-Subject: [PATCH v2 0/3] kallsyms: Rust requirements
-Date:   Fri,  6 May 2022 22:34:21 +0200
-Message-Id: <20220506203443.24721-1-ojeda@kernel.org>
+Subject: [PATCH v2 1/3] kallsyms: avoid hardcoding the buffer size
+Date:   Fri,  6 May 2022 22:34:22 +0200
+Message-Id: <20220506203443.24721-2-ojeda@kernel.org>
+In-Reply-To: <20220506203443.24721-1-ojeda@kernel.org>
+References: <20220506203443.24721-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -74,38 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are the kallsyms patches we carry on the Rust patch series as
-prerequisites. We were requested to submit them independently, so
-here they are!
+From: Boqun Feng <boqun.feng@gmail.com>
 
-  - The first one is an improvement that may be applied even without
-    the big symbol support.
+This makes it easier to update the size later on.
 
-  - The second adds support for "big" symbols without actually
-    increasing the limit.
+Furthermore, a static assert is added to ensure both are updated
+when that happens. The relationship used is one that keeps the new
+size (512+1) close to the original buffer size (500).
 
-  - The third performs the actual increase.
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+v2:
+  - Collected Reviewed-by.
+  - Use `sizeof(name)` in one instance, suggested by Kees Cook.
 
-Thanks!
+ scripts/kallsyms.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Boqun Feng (1):
-  kallsyms: avoid hardcoding the buffer size
-
-Miguel Ojeda (2):
-  kallsyms: support "big" kernel symbols
-  kallsyms: increase maximum kernel symbol length to 512
-
- include/linux/kallsyms.h            |  2 +-
- kernel/kallsyms.c                   | 26 +++++++++++++---
- kernel/livepatch/core.c             |  4 +--
- scripts/kallsyms.c                  | 47 ++++++++++++++++++++++++-----
- tools/include/linux/kallsyms.h      |  2 +-
- tools/lib/perf/include/perf/event.h |  2 +-
- tools/lib/symbol/kallsyms.h         |  2 +-
- 7 files changed, 68 insertions(+), 17 deletions(-)
-
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 8caabddf817c..82d6508bdf29 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -27,8 +27,18 @@
+ 
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+ 
++#define _stringify_1(x)	#x
++#define _stringify(x)	_stringify_1(x)
++
+ #define KSYM_NAME_LEN		128
+ 
++/* A substantially bigger size than the current maximum. */
++#define KSYM_NAME_LEN_BUFFER	512
++_Static_assert(
++	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
++	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
++);
++
+ struct sym_entry {
+ 	unsigned long long addr;
+ 	unsigned int len;
+@@ -197,15 +207,15 @@ static void check_symbol_range(const char *sym, unsigned long long addr,
+ 
+ static struct sym_entry *read_symbol(FILE *in)
+ {
+-	char name[500], type;
++	char name[KSYM_NAME_LEN_BUFFER+1], type;
+ 	unsigned long long addr;
+ 	unsigned int len;
+ 	struct sym_entry *sym;
+ 	int rc;
+ 
+-	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
++	rc = fscanf(in, "%llx %c %" _stringify(KSYM_NAME_LEN_BUFFER) "s\n", &addr, &type, name);
+ 	if (rc != 3) {
+-		if (rc != EOF && fgets(name, 500, in) == NULL)
++		if (rc != EOF && fgets(name, sizeof(name), in) == NULL)
+ 			fprintf(stderr, "Read error or end of file.\n");
+ 		return NULL;
+ 	}
 -- 
 2.35.3
 

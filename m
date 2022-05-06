@@ -2,120 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E53451D188
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D67651D18C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350575AbiEFGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S1345263AbiEFGqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235721AbiEFGm5 (ORCPT
+        with ESMTP id S232774AbiEFGqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:42:57 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C794466220
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651819154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xb5hsCR6vYhEn6zB3BaM7s+6s3NgLuWsFQFQ8PP7p2o=;
-        b=dxunkiyNi5YBtnYne6r2s9X3VJTLdMfBxqNU4lLH4Ogd7PXI4psEjDCPeG8h12xUO5x8OC
-        OqWYum8jWqxvlr721J3zOFAtvL6zwsMoBulIhfi+a1x2ChiZjgWF9Spy7lr0FwdVdi9WSV
-        lqXRRQ2oOUEMdPtfMBfYNRW8DABOrgs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-156-MMEcz8QbMauv4T_PH7qIZA-1; Fri, 06 May 2022 02:39:11 -0400
-X-MC-Unique: MMEcz8QbMauv4T_PH7qIZA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18123833961;
-        Fri,  6 May 2022 06:39:11 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 46E1E2166B2D;
-        Fri,  6 May 2022 06:39:09 +0000 (UTC)
-Received: by samus.usersys.redhat.com (Postfix, from userid 1000)
-        id 30EE960A; Fri,  6 May 2022 08:39:08 +0200 (CEST)
-Date:   Fri, 6 May 2022 08:39:08 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] net: make tcp keepalive timer upper bound
-Message-ID: <YnTCjFE2+/JEgglV@samus.usersys.redhat.com>
-Mail-Followup-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <87zgkwjtq2.ffs@tglx>
- <20220505131811.3744503-1-asavkov@redhat.com>
- <20220505131811.3744503-3-asavkov@redhat.com>
- <20220505175654.jhu3zldboxdcjifr@treble>
+        Fri, 6 May 2022 02:46:49 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF4366216
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:43:06 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220506064304euoutp02a4d0353be6679c8b21af4cecd63816dd~scPppVwz-2171821718euoutp02S
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:43:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220506064304euoutp02a4d0353be6679c8b21af4cecd63816dd~scPppVwz-2171821718euoutp02S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651819384;
+        bh=hjoiNwTZmjBErobwlkOZRpzJDBfEyeEsA1fWNSkgy3g=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=vHlMcrW2EMNdRKjbznD6ycqUtiVgbNmAD+iZ3rBvJBFhyNOq3Q6Vb/m149AxjjxBl
+         B3R2iAhJ1hECh4w2opvAA7fMIr0hfLGIoyNWeI6sMMx1JiAi2EWyThOTtd53VqrAfW
+         0ombFRW/SC3r+9Nn4/tcv8U6azBXf1HeBU+0aRsQ=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220506064303eucas1p13ae9527f6e3a6e308b33abeda4da2e7e~scPpFbc1h2851628516eucas1p1U;
+        Fri,  6 May 2022 06:43:03 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 82.05.09887.773C4726; Fri,  6
+        May 2022 07:43:03 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220506064303eucas1p2d3b8b554e34a95c3e00b35a439f18f55~scPotQIBf1239712397eucas1p2Z;
+        Fri,  6 May 2022 06:43:03 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220506064303eusmtrp1020d4f62294cdb215f2698f784ec69bb~scPosU5OU0717607176eusmtrp1B;
+        Fri,  6 May 2022 06:43:03 +0000 (GMT)
+X-AuditID: cbfec7f4-471ff7000000269f-bc-6274c37761b1
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id A0.E4.09522.673C4726; Fri,  6
+        May 2022 07:43:02 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220506064302eusmtip16a6d6fa73bb6f1688da79a920562ee87~scPoJlYMy1425014250eusmtip10;
+        Fri,  6 May 2022 06:43:02 +0000 (GMT)
+Message-ID: <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
+Date:   Fri, 6 May 2022 08:43:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220505175654.jhu3zldboxdcjifr@treble>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+Content-Language: en-US
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <87zgjvd2zb.fsf@jogness.linutronix.de>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7rlh0uSDC7slLFoXryezWLblfmM
+        Fgtmc1tc3jWHzeL/46+sFvs6HjBZ7N64iM1i86apzA4cHrMbLrJ4tOy7xe7x7tw5do/9c9ew
+        e2xeUu+xfstVFo/Pm+QC2KO4bFJSczLLUov07RK4Mrbdf8Bc8JO9YvXsZuYGxt1sXYwcHBIC
+        JhLnPhp1MXJxCAmsYJR40byIBcL5wihx6N0WKOczo8SyZa3sXYycYB0ft31jhEgsZ5TY+qCb
+        CcL5yChx8vsZJpAqXgE7iWervzOD2CwCKhI/N56GigtKnJz5hAXEFhVIknjz5iozyB3CAhES
+        bXtDQcLMAuISt57MBysXEfCWWPV6LzvIfGaBr4wSkyf/ZwRJsAkYSnS97WIDsTkFjCXOX93D
+        DNEsL7H97RxmkAYJgS8cEpsfHWeBONtF4uL381AvCEu8Or4FypaROD25hwUSGPkSf2cYQ4Qr
+        JK69XsMMYVtL3Dn3CxxezAKaEut36UOEHSWm/Opjh+jkk7jxVhDiAj6JSdumM0OEeSU62oQg
+        qtUkZh1fB7fz4IVLzBMYlWYhhcksJM/PQvLLLIS9CxhZVjGKp5YW56anFhvlpZbrFSfmFpfm
+        pesl5+duYgQmptP/jn/Zwbj81Ue9Q4xMHIyHGCU4mJVEeIVnlSQJ8aYkVlalFuXHF5XmpBYf
+        YpTmYFES503O3JAoJJCeWJKanZpakFoEk2Xi4JRqYGLIWJRy8Pzj6ila1e8mbD1+yj5Cwm7+
+        sjsTBVeespykP/1nNU/nF92kILmJ/713M4c+XuKjvHu+8s55JfWSculGr8TPCX4KrTHf8qt+
+        q6m2kelPlfadujYO295NEOTb1+a4RGKFz59mwY4ls1rZbNSbhe072rbURvTnq3+oPWtdtbJW
+        cNtnnnfiObFndxzy/1h64PFdlYiUmkTn7qTXe4wlr/4um/9I+4rj9puvgtQWMwR680e5vXT5
+        vjj/xonHrmve1kjc+Bqaon82irvW+U3M7V8Sk6/PKarQEJLUmP0r61ls1VnNny+mbSg/z6/w
+        qrR0h/HzrOqIF4cOH3K5fo07vPflyecnbG3nzp3yN0KJpTgj0VCLuag4EQDKIV3KuwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsVy+t/xu7plh0uSDBqf21g0L17PZrHtynxG
+        iwWzuS0u75rDZvH/8VdWi30dD5gsdm9cxGaxedNUZgcOj9kNF1k8WvbdYvd4d+4cu8f+uWvY
+        PTYvqfdYv+Uqi8fnTXIB7FF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2
+        NimpOZllqUX6dgl6GdvuP2Au+MlesXp2M3MD4262LkZODgkBE4mP274xgthCAksZJZ5NEIGI
+        y0icnNbACmELS/y51gVUzwVU855R4vflH0wgCV4BO4lnq78zg9gsAioSPzeehooLSpyc+YSl
+        i5GDQ1QgSeLIYX4QU1ggQuJ9LwtIBbOAuMStJ/PBqkUEvCVWvd7LDjKeWeAro8TaD88YIXZN
+        Z5V4OOM1O0gVm4ChRNfbLrCjOQWMJc5f3cMMMclMomtrFyOELS+x/e0c5gmMQrOQnDELycJZ
+        SFpmIWlZwMiyilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzAatx37uXkH47xXH/UOMTJxMB5i
+        lOBgVhLhFZ5VkiTEm5JYWZValB9fVJqTWnyI0RQYFhOZpUST84HpIK8k3tDMwNTQxMzSwNTS
+        zFhJnNezoCNRSCA9sSQ1OzW1ILUIpo+Jg1OqgSk4Ky3zchaz0ymRDad/dQvyhoUX5r+5sDzt
+        44K//ael5rovCVrT28n+7+eboOVMNzp9HNzY+honsc/vMf+2bXJ3CMfWoOMZyUsuMf6qvSUn
+        ZP1/ys9VMpz7Hwnvb5gl+Cx10s3Vl264eJ77u5nhr2mD1X3OTv+FmysWCn1tj/ulIXo6qvKm
+        dV+D5K+p6aL9ntv3dDk1ezlf9r02/8b0S6YRi4WmWM9f9rDiW+napwfY2hd8eLHs0nzTy58F
+        cpbstJ6Q5b/x2Ewr27qdLr+vKf6sC+iO3hf7dlWWx4nwpZxNa+dIqa5897Dw6evasLWaFRsX
+        MzH9XbIxOlnp4tHkBYXpbMtC1KS2KdSlCpt3iTsosRRnJBpqMRcVJwIAb6N4I08DAAA=
+X-CMS-MailID: 20220506064303eucas1p2d3b8b554e34a95c3e00b35a439f18f55
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
+        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+        <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
+        <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+        <87fslyv6y3.fsf@jogness.linutronix.de>
+        <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+        <87k0b6blz2.fsf@jogness.linutronix.de>
+        <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com> <Ym/Z7PYPqvWPEjuL@alley>
+        <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+        <87pmktm2a9.fsf@jogness.linutronix.de>
+        <87a6bwapij.fsf@jogness.linutronix.de>
+        <87zgjvd2zb.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:56:54AM -0700, Josh Poimboeuf wrote:
-> On Thu, May 05, 2022 at 03:18:11PM +0200, Artem Savkov wrote:
-> > Make sure TCP keepalive timer does not expire late. Switching to upper
-> > bound timers means it can fire off early but in case of keepalive
-> > tcp_keepalive_timer() handler checks elapsed time and resets the timer
-> > if it was triggered early. This results in timer "cascading" to a
-> > higher precision and being just a couple of milliseconds off it's
-> > original mark.
-> > This adds minimal overhead as keepalive timers are never re-armed and
-> > are usually quite long.
-> > 
-> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > ---
-> >  net/ipv4/inet_connection_sock.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-> > index 1e5b53c2bb26..bb2dbfb6f5b5 100644
-> > --- a/net/ipv4/inet_connection_sock.c
-> > +++ b/net/ipv4/inet_connection_sock.c
-> > @@ -589,7 +589,7 @@ EXPORT_SYMBOL(inet_csk_delete_keepalive_timer);
-> >  
-> >  void inet_csk_reset_keepalive_timer(struct sock *sk, unsigned long len)
-> >  {
-> > -	sk_reset_timer(sk, &sk->sk_timer, jiffies + len);
-> > +	sk_reset_timer(sk, &sk->sk_timer, jiffies + upper_bound_timeout(len));
-> >  }
-> >  EXPORT_SYMBOL(inet_csk_reset_keepalive_timer);
-> 
-> As I mentioned before, there might be two sides to the same coin,
-> depending on whether the keepalive is detecting vs preventing the
-> disconnect.  So this might possibly fix one case, while breaking
-> another.
+Hi John,
 
-But cascading is still there in the handler so it will fire off quite
-close to original timer in any case.
+On 06.05.2022 00:33, John Ogness wrote:
+> On 2022-05-05, John Ogness <john.ogness@linutronix.de> wrote:
+>> I will go through and check if all access to AML_UART_CONTROL is
+>> protected by port->lock.
+> The startup() callback of the uart_ops is not called with the port
+> locked. I'm having difficulties identifying if the startup() callback
+> can occur after the console was already registered via meson_uart_init()
+> and could be actively printing, but I see other serial drivers are
+> protecting their registers in the startup() callback with the
+> port->lock.
+>
+> Could you try booting the meson hardware with the following change? (And
+> removing any previous debug changes I posted?)
 
+Bingo! It looks that the startup() is called when getty initializes 
+console. This fixed the issues observed on the Amlogic Meson based boards.
 
+Feel free to add:
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+Best regards
 -- 
- Artem
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

@@ -2,320 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04CB51D04C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64DF51D04F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389012AbiEFE2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 00:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S1357490AbiEFEcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 00:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388955AbiEFE1w (ORCPT
+        with ESMTP id S233200AbiEFEca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 00:27:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095360075
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 21:24:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmpVY-0001Xs-Pr; Fri, 06 May 2022 06:24:00 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmpVY-000ddX-O6; Fri, 06 May 2022 06:23:59 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmpVV-003s9X-W2; Fri, 06 May 2022 06:23:57 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v4 7/7] net: phy: dp83td510: Add support for the DP83TD510 Ethernet PHY
-Date:   Fri,  6 May 2022 06:23:57 +0200
-Message-Id: <20220506042357.923026-8-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220506042357.923026-1-o.rempel@pengutronix.de>
-References: <20220506042357.923026-1-o.rempel@pengutronix.de>
+        Fri, 6 May 2022 00:32:30 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B31B13A;
+        Thu,  5 May 2022 21:28:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvcyM6Cjmz4xR1;
+        Fri,  6 May 2022 14:28:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1651811324;
+        bh=kPmBrmNZRI4k4ASBVGcaxanjDSU0xGdjd9PCFOJYtKU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VRYLyktyEbBTVMln6AL6zD9QNUWfb4mauaOnmx31I2SGV10dKbGbEg4YMxgEoOd5u
+         lBTYUprHkM36PGPopTZ0ExHzCGb+ANY9PTnv+Lwg5JlP8IWQ/yQkzeeeNIVbuyKUoE
+         bRO1rTdA1wTizwM+sqaAg+Z0OtP6CmgpsXXCNuuXfn7gV7r7bLI4IvZh5XFsJ4U26i
+         3bvZKOA9nMzWavUkkfRzwWNtbY8UqqvSvnFmbH4l35aC8Hk7272rJNiFHb/dRYOnWC
+         4XYqVqSNO09Rv2/6rvNh5tVUshPJiQcczQ5VwHsoucl8OkuBWHLMLtmgVP6OBHy6Ww
+         Ig7dnNUeJIY2A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Julia Lawall <julia.lawall@inria.fr>, Joel Stanley <joel@jms.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: fix typos in comments
+In-Reply-To: <alpine.DEB.2.22.394.2205050949150.2425@hadrien>
+References: <20220430185654.5855-1-Julia.Lawall@inria.fr>
+ <CACPK8XdT3MNnArMhdz4X1GcSvXwnV9gLOrxJ8ZKRkT03LahW_A@mail.gmail.com>
+ <alpine.DEB.2.22.394.2205050949150.2425@hadrien>
+Date:   Fri, 06 May 2022 14:28:39 +1000
+Message-ID: <87o80bthc8.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DP83TD510E is an ultra-low power Ethernet physical layer transceiver
-that supports 10M single pair cable.
+Julia Lawall <julia.lawall@inria.fr> writes:
+> On Thu, 5 May 2022, Joel Stanley wrote:
+>> On Sat, 30 Apr 2022 at 18:58, Julia Lawall <Julia.Lawall@inria.fr> wrote:
+>> > Various spelling mistakes in comments.
+>> > Detected with the help of Coccinelle.
+>> >
+>> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+>>
+>> I read the patch and it appears that all of the corrections are good.
+>> Thanks for sending it Julia.
+>>
+>> I'm not sure that one mega patch is the right way to go or not, so
+>> I'll leave that to mpe.
+>
+> I tried some other options, but wasn't satisfied with any of them.  But
+> just let me know if you want something else (by file? by subdirectory?)
 
-This driver was tested with NXP SJA1105, STMMAC and ASIX AX88772B USB Ethernet
-controller.
+This was fine, I've picked it up (in my next-test branch).
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/Kconfig     |   6 ++
- drivers/net/phy/Makefile    |   1 +
- drivers/net/phy/dp83td510.c | 209 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 216 insertions(+)
- create mode 100644 drivers/net/phy/dp83td510.c
+There were a few conflicts, but I fixed them up, and there would still
+be a few conflicts even if it was split into multiple patches.
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index bbbf6c07ea53..9fee639ee5c8 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -342,6 +342,12 @@ config DP83869_PHY
- 	  Currently supports the DP83869 PHY.  This PHY supports copper and
- 	  fiber connections.
- 
-+config DP83TD510_PHY
-+	tristate "Texas Instruments DP83TD510 Ethernet 10Base-T1L PHY"
-+	help
-+	  Support for the DP83TD510 Ethernet 10Base-T1L PHY. This PHY supports
-+	  a 10M single pair Ethernet connection for up to 1000 meter cable.
-+
- config VITESSE_PHY
- 	tristate "Vitesse PHYs"
- 	help
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index b82651b57043..b12b1d86fc99 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_DP83848_PHY)	+= dp83848.o
- obj-$(CONFIG_DP83867_PHY)	+= dp83867.o
- obj-$(CONFIG_DP83869_PHY)	+= dp83869.o
- obj-$(CONFIG_DP83TC811_PHY)	+= dp83tc811.o
-+obj-$(CONFIG_DP83TD510_PHY)	+= dp83td510.o
- obj-$(CONFIG_FIXED_PHY)		+= fixed_phy.o
- obj-$(CONFIG_ICPLUS_PHY)	+= icplus.o
- obj-$(CONFIG_INTEL_XWAY_PHY)	+= intel-xway.o
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-new file mode 100644
-index 000000000000..1ae792b0daaa
---- /dev/null
-+++ b/drivers/net/phy/dp83td510.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Driver for the Texas Instruments DP83TD510 PHY
-+ * Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/phy.h>
-+
-+#define DP83TD510E_PHY_ID			0x20000181
-+
-+/* MDIO_MMD_VEND2 registers */
-+#define DP83TD510E_PHY_STS			0x10
-+#define DP83TD510E_STS_MII_INT			BIT(7)
-+#define DP83TD510E_LINK_STATUS			BIT(0)
-+
-+#define DP83TD510E_GEN_CFG			0x11
-+#define DP83TD510E_GENCFG_INT_POLARITY		BIT(3)
-+#define DP83TD510E_GENCFG_INT_EN		BIT(1)
-+#define DP83TD510E_GENCFG_INT_OE		BIT(0)
-+
-+#define DP83TD510E_INTERRUPT_REG_1		0x12
-+#define DP83TD510E_INT1_LINK			BIT(13)
-+#define DP83TD510E_INT1_LINK_EN			BIT(5)
-+
-+#define DP83TD510E_AN_STAT_1			0x60c
-+#define DP83TD510E_MASTER_SLAVE_RESOL_FAIL	BIT(15)
-+
-+static int dp83td510_config_intr(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1,
-+				    DP83TD510E_INT1_LINK_EN);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_set_bits_mmd(phydev, MDIO_MMD_VEND2,
-+				       DP83TD510E_GEN_CFG,
-+				       DP83TD510E_GENCFG_INT_POLARITY |
-+				       DP83TD510E_GENCFG_INT_EN |
-+				       DP83TD510E_GENCFG_INT_OE);
-+	} else {
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1, 0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2,
-+					 DP83TD510E_GEN_CFG,
-+					 DP83TD510E_GENCFG_INT_EN);
-+		if (ret)
-+			return ret;
-+
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+	}
-+
-+	return ret;
-+}
-+
-+static irqreturn_t dp83td510_handle_interrupt(struct phy_device *phydev)
-+{
-+	int  ret;
-+
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_STS_MII_INT)) {
-+		return IRQ_NONE;
-+	}
-+
-+	/* Read the current enabled interrupts */
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_INTERRUPT_REG_1);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_INT1_LINK_EN) ||
-+		   !(ret & DP83TD510E_INT1_LINK)) {
-+		return IRQ_NONE;
-+	}
-+
-+	phy_trigger_machine(phydev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dp83td510_read_status(struct phy_device *phydev)
-+{
-+	u16 phy_sts;
-+	int ret;
-+
-+	phydev->speed = SPEED_UNKNOWN;
-+	phydev->duplex = DUPLEX_UNKNOWN;
-+	phydev->pause = 0;
-+	phydev->asym_pause = 0;
-+	linkmode_zero(phydev->lp_advertising);
-+
-+	phy_sts = phy_read(phydev, DP83TD510E_PHY_STS);
-+
-+	phydev->link = !!(phy_sts & DP83TD510E_LINK_STATUS);
-+	if (phydev->link) {
-+		/* This PHY supports only one link mode: 10BaseT1L_Full */
-+		phydev->duplex = DUPLEX_FULL;
-+		phydev->speed = SPEED_10;
-+
-+		if (phydev->autoneg == AUTONEG_ENABLE) {
-+			ret = genphy_c45_read_lpa(phydev);
-+			if (ret)
-+				return ret;
-+
-+			phy_resolve_aneg_linkmode(phydev);
-+		}
-+	}
-+
-+	if (phydev->autoneg == AUTONEG_ENABLE) {
-+		ret = genphy_c45_baset1_read_status(phydev);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = phy_read_mmd(phydev, MDIO_MMD_VEND2,
-+				   DP83TD510E_AN_STAT_1);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret & DP83TD510E_MASTER_SLAVE_RESOL_FAIL)
-+			phydev->master_slave_state = MASTER_SLAVE_STATE_ERR;
-+	} else {
-+		return genphy_c45_pma_baset1_read_master_slave(phydev);
-+	}
-+
-+	return 0;
-+}
-+
-+static int dp83td510_config_aneg(struct phy_device *phydev)
-+{
-+	bool changed = false;
-+	int ret;
-+
-+	ret = genphy_c45_pma_baset1_setup_master_slave(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (phydev->autoneg == AUTONEG_DISABLE)
-+		return genphy_c45_an_disable_aneg(phydev);
-+
-+	ret = genphy_c45_an_config_aneg(phydev);
-+	if (ret < 0)
-+		return ret;
-+	if (ret > 0)
-+		changed = true;
-+
-+	return genphy_c45_check_and_restart_aneg(phydev, changed);
-+}
-+
-+static int dp83td510_get_features(struct phy_device *phydev)
-+{
-+	/* This PHY can't respond on MDIO bus if no RMII clock is enabled.
-+	 * In case RMII mode is used (most meaningful mode for this PHY) and
-+	 * the PHY do not have own XTAL, and CLK providing MAC is not probed,
-+	 * we won't be able to read all needed ability registers.
-+	 * So provide it manually.
-+	 */
-+
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1L_Full_BIT,
-+			 phydev->supported);
-+
-+	return 0;
-+}
-+
-+static struct phy_driver dp83td510_driver[] = {
-+{
-+	PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID),
-+	.name		= "TI DP83TD510E",
-+
-+	.config_aneg	= dp83td510_config_aneg,
-+	.read_status	= dp83td510_read_status,
-+	.get_features	= dp83td510_get_features,
-+	.config_intr	= dp83td510_config_intr,
-+	.handle_interrupt = dp83td510_handle_interrupt,
-+
-+	.suspend	= genphy_suspend,
-+	.resume		= genphy_resume,
-+} };
-+module_phy_driver(dp83td510_driver);
-+
-+static struct mdio_device_id __maybe_unused dp83td510_tbl[] = {
-+	{ PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(mdio, dp83td510_tbl);
-+
-+MODULE_DESCRIPTION("Texas Instruments DP83TD510E PHY driver");
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
-
+cheers

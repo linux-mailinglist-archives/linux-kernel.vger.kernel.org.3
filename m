@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA8251DFBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBDF51DFBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344924AbiEFTrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S1391323AbiEFTsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiEFTrd (ORCPT
+        with ESMTP id S1388813AbiEFTsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:47:33 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A46C694A0;
-        Fri,  6 May 2022 12:43:48 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id e128so6635261qkd.7;
-        Fri, 06 May 2022 12:43:48 -0700 (PDT)
+        Fri, 6 May 2022 15:48:30 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9065B6A04A;
+        Fri,  6 May 2022 12:44:46 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id y3so6776604qtn.8;
+        Fri, 06 May 2022 12:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0HWmjiJkkkSZoWs+nRs4IjoAjfqyEw+awjwhSy9A+nU=;
-        b=LdAB/oHtRm4fmxdRKGYP9Vw6X/5QF1KouuVyXRrJw5m2EwFB/8Cynlnqi9zRG0N7Dr
-         Cn9E6ER804o//m6v34s/gvwdtIfOl1upJKdEh5Xb0mxtm6gWlWJtPyhejmirKql8wySj
-         3fN0XUdGr+fAww8sktOc2Ttk1ySXo5KLqrEhgKbPMQWpFZo2jXRVd//O6OQ2LsUOOIq3
-         MGcTd9Y1vyWOfb+1aPu03EAZ/HEz5iEf3UE2HKw7DS2LvHgxapSsw/oW/qeXKDUvA0sU
-         kgpFPNfa09KNgJAoE/bFFOsU6TCeysvpwsYHDDkiKhbZd+dFl6NVFYhAdRLEiE+CbPlH
-         eemw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cXiQMICJP3bxY1/QE8ewT+olGQfAupwoldLomWdcXI4=;
+        b=DHjktLcZ00A5m18JehZWYxviKPezFv0NNgEVI40vV2zf+mEVtMM2RFwlV4czW8Vbk5
+         HkgwHVFU8WT4Bs34NRF+b8B5uH+UhfXGgl6JssfI+TtBce+3vRHsPoN7F6ufk8PgZKt1
+         uKe0Pg1Z1MZ4Uem0T92rHGHx5jawDWJRgg9ZUbEPgL5JLeIjTrF9UA2Hc+XjlXzUv8gF
+         e62Mqq0qWe1v7NbzaxeL4+4F5OUHFetNkhcwYnNf3m9Y56+NB9SHWiih8dVqJUupNTlN
+         4etfLdHmu3aj0um/UPzYTJ0Ody6BFxYipuG7Q8qTxnK/IWmHHOiLFiRXMNx8UDUBZEaD
+         YRgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0HWmjiJkkkSZoWs+nRs4IjoAjfqyEw+awjwhSy9A+nU=;
-        b=coYYPX0HcQjUVzavEhoRU8CF/3R4mFQMk6wZAUuShy0N4W95TSvOW7zZfzm4PNDSvI
-         4qss0cFaNCyKUjR790gnqQK+7nq/qj8QL43k/07bPDJdVDBlsk3J6iKh5SMaq65HXXV3
-         SMNlCD6g+7QxZvFZKVqwyyZJdqG7Ji39Zdjh8SpwYNdBAkWD3a8GeodO+Chd3g+hL7dG
-         +R05Dk/Ir+hdsUhF5gUTBikDvXAHJnvM8qtJ3Zm5uyAkvf/eItjvR+nr/T5hn08Js8Ud
-         8/BDKFgdvskuHxbopIj0XyFHZasT+0FnBKUJ+mHy6V5SYPGlKtjfLMjMIjfmXvmDAOmq
-         o5pw==
-X-Gm-Message-State: AOAM5334sBzbdqN5wKaTYa/iWelwF9zREkCI5kOoWOSwJh1QwoiPkPYn
-        VqHJ5ej/k1FU7NfEY6e8Qg==
-X-Google-Smtp-Source: ABdhPJwoFze27JlE7q4bXE2Xpa8B1YayscyEUBRQegPbpZxDSohboc+vzI7NbdDGMwuglUw1fAmRTg==
-X-Received: by 2002:ae9:edd5:0:b0:69f:d773:5327 with SMTP id c204-20020ae9edd5000000b0069fd7735327mr3615677qkg.481.1651866227652;
-        Fri, 06 May 2022 12:43:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cXiQMICJP3bxY1/QE8ewT+olGQfAupwoldLomWdcXI4=;
+        b=Uv+/JTJuu4xdWDJhgR05draA0SuLqOCYXgAyNVGGFSm9ekR/kZRwfC0DdaL12kOI97
+         GjtggZkn0K+4MDMwuJ7jJ6e6sKG4h577ctTMKo/67NvZhKUXQXhCzdgYkV5JlTFUj5lY
+         7eJnrPsB2xCg15laskXZ4wDJyRew1qmd3jRK8NIzF72nPPlNRE/NllwEH22BaTvUiucn
+         cQrpF6SAZbnctndPR5fJpc3I9rwpZyHKEm8ZQO8TVijfhAZRNHtnqoj7iPf8AAeBUgmP
+         kER9XyO8pD7whew+aMgpAMs8PfO2SM2mGJtEqHuCPomp+5NUSpZVVNtoWlSZlu0JT9TF
+         bajQ==
+X-Gm-Message-State: AOAM533DtJWjlLKO+shoo5VEyQnjTmDGR3dXkc7cVbZsmQCwuUh6Yw1O
+        fuzjadTBViCZ7n0DG7xkPA==
+X-Google-Smtp-Source: ABdhPJwJuyS5vbPmqZSAtTzTUVPVw8K2A2rWFl+k295aS7kdAos3n2zR5GOzWDnlzxzqB4tIKG2ZQg==
+X-Received: by 2002:a05:622a:1b8d:b0:2f2:f4a6:d9dd with SMTP id bp13-20020a05622a1b8d00b002f2f4a6d9ddmr4432083qtb.242.1651866285599;
+        Fri, 06 May 2022 12:44:45 -0700 (PDT)
 Received: from bytedance.attlocal.net (ec2-52-72-174-210.compute-1.amazonaws.com. [52.72.174.210])
-        by smtp.gmail.com with ESMTPSA id p185-20020a37bfc2000000b0069fc13ce24fsm2942310qkf.128.2022.05.06.12.43.45
+        by smtp.gmail.com with ESMTPSA id bj32-20020a05620a192000b0069fc2a7e7a5sm2744121qkb.75.2022.05.06.12.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 12:43:47 -0700 (PDT)
+        Fri, 06 May 2022 12:44:45 -0700 (PDT)
 From:   Peilin Ye <yepeilin.cs@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <eric.dumazet@gmail.com>,
@@ -61,10 +61,12 @@ To:     "David S. Miller" <davem@davemloft.net>,
 Cc:     Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
         Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH RFC v1 net-next 0/4] net: Qdisc backpressure infrastructure
-Date:   Fri,  6 May 2022 12:43:12 -0700
-Message-Id: <cover.1651800598.git.peilin.ye@bytedance.com>
+Subject: [PATCH RFC v1 net-next 1/4] net: Introduce Qdisc backpressure infrastructure
+Date:   Fri,  6 May 2022 12:44:22 -0700
+Message-Id: <f4090d129b685df72070f708294550fbc513f888.1651800598.git.peilin.ye@bytedance.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1651800598.git.peilin.ye@bytedance.com>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -80,217 +82,275 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peilin Ye <peilin.ye@bytedance.com>
 
-Hi all,
+Currently sockets (especially UDP ones) can drop a lot of traffic at TC
+egress when rate limited by shaper Qdiscs like HTB.  Improve it by
+implementing the following state machine for sockets (currently only
+support UDP and TCP ones):
 
-Currently sockets (especially UDP ones) can drop a lot of skbs at TC
-egress when rate limited by shaper Qdiscs like HTB.  This experimental
-patchset tries to improve this by introducing a backpressure mechanism, so
-that sockets are temporarily throttled when they "send too much".
-
-For now it takes care of TBF, HTB and CBQ, for UDP and TCP sockets.  Any
-comments, suggestions would be much appreciated.  Thanks!
-
-Contents
-     [I] Background
-    [II] Design Overview
-   [III] Performance Numbers & Issues
-    [IV] Synchronization
-     [V] Test Setup
-
-______________
-[I] Background
-
-Imagine 2 UDP iperf2 clients, both wish to send at 1 GByte/sec from veth0.
-veth0's egress root Qdisc is a TBF Qdisc, with a configured rate of 200
-Mbits/sec.  I tested this setup [V]:
-
-[  3] 10.0-10.5 sec  25.9 MBytes   434 Mbits/sec
-[  3] 10.0-10.5 sec  22.0 MBytes   369 Mbits/sec
-[  3] 10.5-11.0 sec  24.3 MBytes   407 Mbits/sec
-[  3] 10.5-11.0 sec  21.7 MBytes   363 Mbits/sec
-<...>                              ^^^^^^^^^^^^^
-
-[  3]  0.0-30.0 sec   358 MBytes   100 Mbits/sec   0.030 ms 702548/958104 (73%)
-[  3]  0.0-30.0 sec   347 MBytes  96.9 Mbits/sec   0.136 ms 653610/900810 (73%)
-                                                            ^^^^^^^^^^^^^ ^^^^^
-
-On average, both clients try to send at 389.82 Mbits/sec.  TBF drops 74.7%
-of the traffic, in order to keep veth0's egress rate (196.93 Mbits/sec)
-under the configured 200 Mbits/sec.
-
-Why is this happening?  Consider sk->sk_wmem_alloc, number of bytes of
-skbs that a socket has currently "committed" to the "transmit queue":
-
-         ┌─────┐         ┌───────────┐     ┌──────────────┐
-    ─ ─ >│ UDP │─ ... ─ >│ TBF Qdisc │─ ─ >│ device queue │─ ┬ >
-         └───┬─┘         └───────────┘     └──────────────┘ [b]
-            [a]
-
-Normally, sk_wmem_alloc is increased right before an skb leaves UDP [a],
-and decreased when an skb is consumed upon TX completion [b].
-
-However, when TBF becomes full, and starts to drop skbs (assuming a
-simple taildrop inner Qdisc like bfifo for brevity):
-
-         ┌─────┐         ┌───────────┐     ┌──────────────┐
-    ─ ─ >│ UDP │─ ... ─ >│ TBF Qdisc │─ ─ >│ device queue │─ ┬ >
-         └───┬─┘         ├───────────┘     └──────────────┘ [b]
-            [a]         [c]
-
-For those dropped skbs, sk_wmem_alloc is decreased right before TBF [c].
-This is problematic: since the (a,c) "interval" does not cover TBF,
-whenever UDP starts to send faster, TBF simply drops faster, keeping
-sk_wmem_alloc balanced, and tricking UDP into thinking "it is okay to send
-more".
-
-Similar thing happens to other shapers as well.  TCP behaves much better
-than UDP, since TCP slows down itself when TC egress fails to enqueue an
-skb.
-
-____________________
-[II] Design Overview
-
-Hacking sk_wmem_alloc turned out to be tricky.  Instead, introduce the
-following state machine for sockets:
-
-  ┌────────────────┐  [d]  ┌────────────────┐  [e]  ┌────────────────┐
+  ┌────────────────┐  [a]  ┌────────────────┐  [b]  ┌────────────────┐
   │ SK_UNTHROTTLED │─ ─ ─ >│  SK_OVERLIMIT  │─ ─ ─ >│  SK_THROTTLED  │
   └────────────────┘       └────────────────┘       └────────────────┘
            └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ < ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
-                                   [f]
+                                   [c]
 
-Take TBF as an example:
+Take TBF as an example,
 
-  [d] qdisc_backpressure_overlimit()
-      When TBF fails to enqueue an skb belonging to an UNTHROTTLED socket,
-      the socket is marked as OVERLIMIT, and added to TBF's
-      "backpressure_list";
+  [a] When TBF's inner Qdisc (e.g. bfifo) becomes full, TBF fails to
+      enqueue an skb belonging to UNTHROTTLED socket A.  socket A is
+      marked as OVERLIMIT, and added to TBF's "backpressure_list";
 
-  [e] qdisc_backpressure_throttle()
-      Later, when TBF runs out of tokens, it marks all OVERLIMIT sockets
-      on its backpressure_list as THROTTLED, and schedules a Qdisc
-      watchdog to wait for more tokens;
+  [b] When TBF runs out of tokens, it marks all OVERLIMIT sockets
+      (including A) on its backpressure_list as THROTTLED, and schedules
+      a Qdisc watchdog timer to wait for more tokens;
 
-    * TCP and UDP sleeps on THROTTLED sockets
-    * epoll() and friends should not report EPOLL{OUT,WRNORM} for
-      THROTTLED sockets
+  [c] After the timer expires, all THROTTLED sockets (including A) are
+      removed from TBF's backpressure_list, and marked as UNTHROTTLED.
 
-  [f] qdisc_backpressure_unthrottle()
-      When the timer expires, all THROTTLED sockets are removed from TBF's
-      backpressure_list, and marked back as UNTHROTTLED.
+UDP and TCP sleep on THROTTLED sockets in sock_wait_for_wmem() and
+sk_stream_wait_memory() respectively.  epoll() and friends should not
+report EPOLL{OUT,WRNORM} for THROTTLED sockets.  When unthrottling in [c],
+call ->sk_write_space() to wake up UDP and/or TCP waiters, and notify
+SOCKWQ_ASYNC_NOSPACE subscribers.
 
-    * Also call ->sk_write_space(), so that all TCP and UDP waiters are
-      woken up, and all SOCKWQ_ASYNC_NOSPACE subscribers are notified
+For each device, backpressure_list operations are always serialized by
+Qdisc root_lock.
 
-This should work for all Qdisc watchdog-based shapers (as pointed out by
-Cong though, ETF seems like a special one, I haven't looked into it yet).
+When marking a socket as OVERLIMIT in [a], use a cmpxchg() to make sure
+that multiple CPUs do not try to add this socket to different
+backpressure_lists (on different devices) concurrently.
 
-(As discussed with Cong, a slightly different design would be: only
- mark OVERLIMIT sockets as THROTTLED when:
- 
- 1. TBF is full, AND
- 2. TBF is out of tokens i.e. Qdisc watchdog timer is active
+After removing a THROTTLED socket from backpressure_list in [c], use a
+smp_store_release() to make sure changes have been committed to memory
+before marking the socket as UNTHROTTLED.
 
- This approach seems to have a slightly lower drop rate under heavy load,
- at least for TBF.  I'm still working on it.)
-
-__________________________________
-[III] Performance Numbers & Issues
-
-I tested the same setup [V] after applying this patchset:
-
-[  3] 10.0-10.5 sec  6.29 MBytes   106 Mbits/sec
-[  3] 10.0-10.5 sec  5.84 MBytes  98.0 Mbits/sec
-[  3] 10.5-11.0 sec  6.31 MBytes   106 Mbits/sec
-[  3] 10.5-11.0 sec  6.01 MBytes   101 Mbits/sec
-<...>                              ^^^^^^^^^^^^^
-
-[  3]  0.0-30.0 sec   358 MBytes   100 Mbits/sec  62.444 ms 8500/263825 (3.2%)
-[  3]  0.0-30.0 sec   357 MBytes  99.9 Mbits/sec   0.217 ms 8411/263310 (3.2%)
-                                                            ^^^^^^^^^^^ ^^^^^^
-
-On average, drop rate decreased from 74.7% to 3.2%.  No significant
-affects on throughput (196.93 Mbits/sec becomes 197.46 Mbits/sec).
-
-However, drop rate starts to increase when we add more iperf2 clients.
-For example, 3 clients (also UDP -b 1G):
-
-[  3]  0.0-30.0 sec   232 MBytes  65.0 Mbits/sec   0.092 ms 104961/270765 (39%)
-[  3]  0.0-30.0 sec   232 MBytes  64.8 Mbits/sec   0.650 ms 102493/267769 (38%)
-[  3]  0.0-30.1 sec   239 MBytes  66.8 Mbits/sec   0.045 ms 99234/269987 (37%)
-                                                            ^^^^^^^^^^^^ ^^^^^
-
-38% of the traffic is dropped.  This is still a lot better than current
-(87%), but not ideal.  There is a thundering herd problem: when the Qdisc
-watchdog timer expires, we wake up all THROTTLED sockets at once in [f],
-so all of them just resume sending (and dropping...).  We probably need a
-better algorithm here, please advise, thanks!
-
-One "workaround" is making TBF's queue larger (the "limit" parameter).  In
-the above 3-client example, raising "limit" from 200k to 300k decreases
-drop rate from 38% back to 3.1%.  Without this patchset, it requires about
-a 400k "limit" for the same setup to drop less than 5% of the traffic.
-
-____________________
-[IV] Synchronization
-
-1. For each device, all backpressure_list operations are serialized by
-   Qdisc root_lock:
-
-   [d] and [e] happen in shaper's ->enqueue() and ->dequeue()
-   respectively; in both cases we hold root_lock.
-
-   [f] happens in TX softirq, right after grabbing root_lock.  Scheduling
-   Qdisc watchdog is not the only way to wait for more tokens, see
-   htb_work_func() for an example.  However, they all end up raising TX
-   softirq, so run [f] there.
-
-2. Additionally, we should prevent 2 CPUs from trying to add the same
-   socket to 2 different backpressure_lists (on 2 different devices).  Use
-   memory barriers to make sure this will not happen.  Please see [1/4]
-   commit message for details.
-
-______________
-[V] Test Setup
-
-    # setup network namespace
-    ip netns add red
-    ip link add name veth0 type veth peer name veth1
-    ip link set veth1 netns red
-    ip addr add 10.0.0.1/24 dev veth0
-    ip -n red addr add 10.0.0.2/24 dev veth1
-    ip link set veth0 up
-    ip -n red link set veth1 up
-
-    tc qdisc replace dev veth0 handle 1: root \
-        tbf rate 200mbit burst 20kb limit 200k
-
-    # servers
-    ip netns exec red iperf -u -s -p 5555 -i 0.5 -t 1000 &
-    ip netns exec red iperf -u -s -p 6666 -i 0.5 -t 1000 &
-
-    # clients
-    iperf -u -c 10.0.0.2 -p 5555 -i 0.5 -t 30 -b 1G &
-    iperf -u -c 10.0.0.2 -p 6666 -i 0.5 -t 30 -b 1G &
-
-Thanks,
-Peilin Ye (4):
-  net: Introduce Qdisc backpressure infrastructure
-  net/sched: sch_tbf: Use Qdisc backpressure infrastructure
-  net/sched: sch_htb: Use Qdisc backpressure infrastructure
-  net/sched: sch_cbq: Use Qdisc backpressure infrastructure
-
+Suggested-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
  include/net/sch_generic.h | 43 +++++++++++++++++++++++++++++++++++++++
  include/net/sock.h        | 18 +++++++++++++++-
  net/core/dev.c            |  1 +
  net/core/sock.c           |  6 ++++--
  net/ipv4/tcp_ipv4.c       | 11 +++++++---
- net/sched/sch_cbq.c       |  6 +++++-
  net/sched/sch_generic.c   |  4 ++++
- net/sched/sch_htb.c       |  5 +++++
- net/sched/sch_tbf.c       |  2 ++
- 9 files changed, 89 insertions(+), 7 deletions(-)
+ 6 files changed, 77 insertions(+), 6 deletions(-)
 
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index 9bab396c1f3b..5ddbe0b65cb6 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -19,6 +19,7 @@
+ #include <net/gen_stats.h>
+ #include <net/rtnetlink.h>
+ #include <net/flow_offload.h>
++#include <net/sock.h>
+ 
+ struct Qdisc_ops;
+ struct qdisc_walker;
+@@ -108,6 +109,7 @@ struct Qdisc {
+ 	struct gnet_stats_queue	__percpu *cpu_qstats;
+ 	int			pad;
+ 	refcount_t		refcnt;
++	struct list_head	backpressure_list;
+ 
+ 	/*
+ 	 * For performance sake on SMP, we put highly modified fields at the end
+@@ -1221,6 +1223,47 @@ static inline int qdisc_drop_all(struct sk_buff *skb, struct Qdisc *sch,
+ 	return NET_XMIT_DROP;
+ }
+ 
++static inline void qdisc_backpressure_overlimit(struct Qdisc *sch, struct sk_buff *skb)
++{
++	struct sock *sk = skb->sk;
++
++	if (!sk || !sk_fullsock(sk))
++		return;
++
++	if (cmpxchg(&sk->sk_backpressure_status, SK_UNTHROTTLED, SK_OVERLIMIT) == SK_UNTHROTTLED) {
++		sock_hold(sk);
++		list_add_tail(&sk->sk_backpressure_node, &sch->backpressure_list);
++	}
++}
++
++static inline void qdisc_backpressure_throttle(struct Qdisc *sch)
++{
++	struct list_head *pos;
++	struct sock *sk;
++
++	list_for_each(pos, &sch->backpressure_list) {
++		sk = list_entry(pos, struct sock, sk_backpressure_node);
++
++		WRITE_ONCE(sk->sk_backpressure_status, SK_THROTTLED);
++	}
++}
++
++static inline void qdisc_backpressure_unthrottle(struct Qdisc *sch)
++{
++	struct list_head *pos, *next;
++	struct sock *sk;
++
++	list_for_each_safe(pos, next, &sch->backpressure_list) {
++		sk = list_entry(pos, struct sock, sk_backpressure_node);
++
++		list_del_init(pos);
++		smp_store_release(&sk->sk_backpressure_status, SK_UNTHROTTLED);
++		sk->sk_write_space(sk);
++
++		sock_put(sk);
++	}
++}
++
+ /* Length to Time (L2T) lookup in a qdisc_rate_table, to determine how
+    long it will take to send a packet given its size.
+  */
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 73063c88a249..6ed2de43dc98 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -315,6 +315,8 @@ struct sk_filter;
+   *	@sk_rcvtimeo: %SO_RCVTIMEO setting
+   *	@sk_sndtimeo: %SO_SNDTIMEO setting
+   *	@sk_txhash: computed flow hash for use on transmit
++  *	@sk_backpressure_status: Qdisc backpressure status
++  *	@sk_backpressure_node: linkage for Qdisc backpressure list
+   *	@sk_txrehash: enable TX hash rethink
+   *	@sk_filter: socket filtering instructions
+   *	@sk_timer: sock cleanup timer
+@@ -468,6 +470,8 @@ struct sock {
+ 	unsigned int		sk_gso_max_size;
+ 	gfp_t			sk_allocation;
+ 	__u32			sk_txhash;
++	u32			sk_backpressure_status; /* see enum sk_backpressure */
++	struct list_head	sk_backpressure_node;
+ 
+ 	/*
+ 	 * Because of non atomicity rules, all
+@@ -548,6 +552,12 @@ enum sk_pacing {
+ 	SK_PACING_FQ		= 2,
+ };
+ 
++enum sk_backpressure {
++	SK_UNTHROTTLED	= 0,
++	SK_OVERLIMIT	= 1,
++	SK_THROTTLED	= 2,
++};
++
+ /* Pointer stored in sk_user_data might not be suitable for copying
+  * when cloning the socket. For instance, it can point to a reference
+  * counted object. sk_user_data bottom bit is set if pointer must not
+@@ -2522,12 +2532,18 @@ static inline struct page_frag *sk_page_frag(struct sock *sk)
+ 
+ bool sk_page_frag_refill(struct sock *sk, struct page_frag *pfrag);
+ 
++static inline bool sk_is_throttled(const struct sock *sk)
++{
++	return READ_ONCE(sk->sk_backpressure_status) == SK_THROTTLED;
++}
++
+ /*
+  *	Default write policy as shown to user space via poll/select/SIGIO
+  */
+ static inline bool sock_writeable(const struct sock *sk)
+ {
+-	return refcount_read(&sk->sk_wmem_alloc) < (READ_ONCE(sk->sk_sndbuf) >> 1);
++	return !sk_is_throttled(sk) &&
++	       refcount_read(&sk->sk_wmem_alloc) < (READ_ONCE(sk->sk_sndbuf) >> 1);
+ }
+ 
+ static inline gfp_t gfp_any(void)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c2d73595a7c3..7c3d136725b9 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5013,6 +5013,7 @@ static __latent_entropy void net_tx_action(struct softirq_action *h)
+ 			if (!(q->flags & TCQ_F_NOLOCK)) {
+ 				root_lock = qdisc_lock(q);
+ 				spin_lock(root_lock);
++				qdisc_backpressure_unthrottle(q);
+ 			} else if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED,
+ 						     &q->state))) {
+ 				/* There is a synchronize_net() between
+diff --git a/net/core/sock.c b/net/core/sock.c
+index be20a1af20e5..7ed9d2bd991f 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2034,6 +2034,7 @@ struct sock *sk_alloc(struct net *net, int family, gfp_t priority,
+ 
+ 		sock_net_set(sk, net);
+ 		refcount_set(&sk->sk_wmem_alloc, 1);
++		INIT_LIST_HEAD(&sk->sk_backpressure_node);
+ 
+ 		mem_cgroup_sk_alloc(sk);
+ 		cgroup_sk_alloc(&sk->sk_cgrp_data);
+@@ -2589,7 +2590,8 @@ static long sock_wait_for_wmem(struct sock *sk, long timeo)
+ 			break;
+ 		set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+ 		prepare_to_wait(sk_sleep(sk), &wait, TASK_INTERRUPTIBLE);
+-		if (refcount_read(&sk->sk_wmem_alloc) < READ_ONCE(sk->sk_sndbuf))
++		if (!sk_is_throttled(sk) &&
++		    refcount_read(&sk->sk_wmem_alloc) < READ_ONCE(sk->sk_sndbuf))
+ 			break;
+ 		if (sk->sk_shutdown & SEND_SHUTDOWN)
+ 			break;
+@@ -2624,7 +2626,7 @@ struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
+ 		if (sk->sk_shutdown & SEND_SHUTDOWN)
+ 			goto failure;
+ 
+-		if (sk_wmem_alloc_get(sk) < READ_ONCE(sk->sk_sndbuf))
++		if (!sk_is_throttled(sk) && sk_wmem_alloc_get(sk) < READ_ONCE(sk->sk_sndbuf))
+ 			break;
+ 
+ 		sk_set_bit(SOCKWQ_ASYNC_NOSPACE, sk);
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 918816ec5dd4..6e905995bfa2 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -3006,9 +3006,14 @@ void tcp4_proc_exit(void)
+  */
+ bool tcp_stream_memory_free(const struct sock *sk, int wake)
+ {
+-	const struct tcp_sock *tp = tcp_sk(sk);
+-	u32 notsent_bytes = READ_ONCE(tp->write_seq) -
+-			    READ_ONCE(tp->snd_nxt);
++	const struct tcp_sock *tp;
++	u32 notsent_bytes;
++
++	if (sk_is_throttled(sk))
++		return false;
++
++	tp = tcp_sk(sk);
++	notsent_bytes = READ_ONCE(tp->write_seq) - READ_ONCE(tp->snd_nxt);
+ 
+ 	return (notsent_bytes << wake) < tcp_notsent_lowat(tp);
+ }
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index dba0b3e24af5..9ab314b874a7 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -674,6 +674,7 @@ struct Qdisc noop_qdisc = {
+ 		.qlen = 0,
+ 		.lock = __SPIN_LOCK_UNLOCKED(noop_qdisc.skb_bad_txq.lock),
+ 	},
++	.backpressure_list =	LIST_HEAD_INIT(noop_qdisc.backpressure_list),
+ };
+ EXPORT_SYMBOL(noop_qdisc);
+ 
+@@ -947,6 +948,7 @@ struct Qdisc *qdisc_alloc(struct netdev_queue *dev_queue,
+ 	qdisc_skb_head_init(&sch->q);
+ 	gnet_stats_basic_sync_init(&sch->bstats);
+ 	spin_lock_init(&sch->q.lock);
++	INIT_LIST_HEAD(&sch->backpressure_list);
+ 
+ 	if (ops->static_flags & TCQ_F_CPUSTATS) {
+ 		sch->cpu_bstats =
+@@ -1025,6 +1027,8 @@ void qdisc_reset(struct Qdisc *qdisc)
+ 	if (ops->reset)
+ 		ops->reset(qdisc);
+ 
++	qdisc_backpressure_unthrottle(qdisc);
++
+ 	__skb_queue_purge(&qdisc->gso_skb);
+ 	__skb_queue_purge(&qdisc->skb_bad_txq);
+ 
 -- 
 2.20.1
 

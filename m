@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE5B51D0EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D0F51D0F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381212AbiEFF7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 01:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S1389288AbiEFGAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241386AbiEFF7I (ORCPT
+        with ESMTP id S1389281AbiEFGAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 01:59:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891CB14080
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:55:24 -0700 (PDT)
+        Fri, 6 May 2022 02:00:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92FE13D6A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651816524; x=1683352524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nBcSQ+bH6N1ZIWtxa+y19KMySwpFva4ce5UPpYGkOxY=;
-  b=IhTQ82MzQO7qEYYoVX8sp5tve3rkFX9jCLIwckEZcm8EuIVoguD32CU4
-   mAh1bqGerAVmSPACcr6jxkBDkFrGaXyNomfvc7B6BH9XmRwyIvUTxZeGQ
-   mFWz4z4S/MwTE6bGMSlkT85aj1Ggtv+fFJgc4hy3Tj1ZmWv5+kvwoXSdm
-   uBQvgymjguxyf54yL1NHI8LPEPLQ+qyIiEHQAlMOIHB1GXl+PJ8ns1NJc
-   j1tSKSWTSnNBzDyG6XUCymk6+XVE7B9Tze8BXH5Jn+T1jdofpukLYZgIr
-   iAzRiuF7hFGs3r4rwIKz9l90p+f5CK7Yj3phregO42CDqOnK4F5/A0MNe
+  t=1651816626; x=1683352626;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OL2oJRFDVdmovflg5mLwCF3EJPwhcMaRX4sx8VlaeHk=;
+  b=X52JVryAMvnvRfaWeMNi1zUiqVBv+uiKD+qrAlrlqxw04XNdMWD+R5Ys
+   3swrniKZN9OFyT1PrdBm7MYzUWYGd/b2Uapm01GQypcCy8DH7CapErYX3
+   StsetQABdczgTl64qQwK03Z9AnfOimCqHOrKduqqC1TfSLeMJKi7nVmx1
+   gI/h/W6/E+B145lYN2Argm7uNvlGV1swVia24My4Yr35iaTBSBLf8Mv28
+   /gUKLLE8YzQmoxVdogLt3pfxMbnderPzrU2TtCc3kz2ExeWf2a8hSeMaf
+   p35saZAm+CNmfVGD4LqAUhSeA1Y24OWAXBYh/BpGahT0PREY+f6Vg+zj3
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331349397"
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255843240"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="331349397"
+   d="scan'208";a="255843240"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:55:24 -0700
-X-ExtLoop1: 1
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:57:05 -0700
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="735415204"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 05 May 2022 22:55:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmqvy-000DBl-7q;
-        Fri, 06 May 2022 05:55:22 +0000
-Date:   Fri, 6 May 2022 13:54:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Emil Renner Berthing <kernel@esmil.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [esmil:visionfive 50/55]
- drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of
- function 'writeq'; did you mean 'writeb'?
-Message-ID: <202205061336.GeLV3Aeo-lkp@intel.com>
+   d="scan'208";a="735415841"
+Received: from sunyanwa-mobl1.ccr.corp.intel.com (HELO [10.255.31.183]) ([10.255.31.183])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:57:02 -0700
+Message-ID: <e2afd89c-b1cf-9fde-4ce2-4be3c1fdaf07@linux.intel.com>
+Date:   Fri, 6 May 2022 13:57:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] iommu/vt-d: Increase DMAR_UNITS_SUPPORTED
+Content-Language: en-US
+To:     Steve Wahl <steve.wahl@hpe.com>, Joerg Roedel <jroedel@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        linux-kernel@vger.kernel.org
+References: <20220505194658.246121-1-steve.wahl@hpe.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220505194658.246121-1-steve.wahl@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Emil,
+On 2022/5/6 03:46, Steve Wahl wrote:
+> Increase DMAR_UNITS_SUPPORTED to support 64 sockets with 10 DMAR units
+> each, for a total of 640.
+> 
+> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
+> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
+> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
+> remapping doesn't support X2APIC mode x2apic disabled"; and the system
+> fails to boot.
+> 
+> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
+> Reviewed-by: Mike Travis <mike.travis@hpe.com>
+> ---
+> 
+> Note that we could not find a reason for connecting
+> DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
+> it seemed like the two would continue to match on earlier processors.
+> There doesn't appear to be kernel code that assumes that the value of
+> one is related to the other.
 
-First bad commit (maybe != root cause):
++Kevin
 
-tree:   https://github.com/esmil/linux visionfive
-head:   f568ecc24aebec8ce1c59b86f2a85098675a4091
-commit: d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5 [50/55] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
-config: riscv-randconfig-r024-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061336.GeLV3Aeo-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
+This maximum value was introduced by below commit. And I don't see any
+hardware/software restrictions that we can't enlarge it after ten years.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+commit 1b198bb04ad72669d4bd6575fc9945ed595bfee0
+Author: Mike Travis <travis@sgi.com>
+Date:   Mon Mar 5 15:05:16 2012 -0800
 
-All errors (new ones prefixed by >>):
+     x86/iommu/intel: Increase the number of iommus supported to 
+MAX_IO_APICS
 
-   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
->> drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of function 'writeq'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
-     158 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-         |                 ^~~~~~
-         |                 writeb
-   cc1: some warnings being treated as errors
+     The number of IOMMUs supported should be the same as the number
+     of IO APICS.  This limit comes into play when the IOMMUs are
+     identity mapped, thus the number of possible IOMMUs in the
+     "static identity" (si) domain should be this same number.
+[...]
 
+> 
+>   include/linux/dmar.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/dmar.h b/include/linux/dmar.h
+> index 45e903d84733..9d4867b8f42e 100644
+> --- a/include/linux/dmar.h
+> +++ b/include/linux/dmar.h
+> @@ -19,7 +19,7 @@
+>   struct acpi_dmar_header;
+>   
+>   #ifdef	CONFIG_X86
+> -# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
+> +# define	DMAR_UNITS_SUPPORTED	640
+>   #else
+>   # define	DMAR_UNITS_SUPPORTED	64
+>   #endif
 
-vim +158 drivers/soc/sifive/sifive_l2_cache.c
-
-a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
-9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
-9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
-9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
-0725139bb25fb2 drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
-7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
-
-:::::: The code at line 158 was first introduced by commit
-:::::: 7fa12d2f832a42a37ff0d8f4dd7569cee4b0b82f sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
-
-:::::: TO: Tom <support@vamrs.com>
-:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+baolu

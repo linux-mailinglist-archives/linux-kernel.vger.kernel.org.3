@@ -2,120 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2CF51DAFE
+	by mail.lfdr.de (Postfix) with ESMTP id 24B8451DAFC
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350182AbiEFOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S1442509AbiEFOss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442401AbiEFOsF (ORCPT
+        with ESMTP id S1442394AbiEFOsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:48:05 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30F626AA6D;
-        Fri,  6 May 2022 07:44:21 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id AEF9F9200BF; Fri,  6 May 2022 16:44:19 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id AAE6792009B;
-        Fri,  6 May 2022 15:44:19 +0100 (BST)
-Date:   Fri, 6 May 2022 15:44:19 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     Arnd Bergmann <arnd@kernel.org>, Rich Felker <dalias@libc.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Helge Deller <deller@gmx.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: RE: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-In-Reply-To: <3669a28a055344a792b51439c953fd30@AcuMS.aculab.com>
-Message-ID: <alpine.DEB.2.21.2205061440260.52331@angie.orcam.me.uk>
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com> <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
- <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com> <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <5239892986c94239a122ab2f7a18a7a5@AcuMS.aculab.com> <alpine.DEB.2.21.2205061412080.52331@angie.orcam.me.uk>
- <3669a28a055344a792b51439c953fd30@AcuMS.aculab.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 6 May 2022 10:48:19 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB5E6B088;
+        Fri,  6 May 2022 07:44:30 -0700 (PDT)
+X-UUID: ac51c7546f844c78bb582eaf6b6d5eed-20220506
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:d056bac4-58f8-475e-8c50-f6724f5579b2,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:503fdcb2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ac51c7546f844c78bb582eaf6b6d5eed-20220506
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 252527924; Fri, 06 May 2022 22:44:25 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 6 May 2022 22:44:24 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 6 May 2022 22:44:23 +0800
+Message-ID: <21a51ce08e44d325e0682409e181f178b2689517.camel@mediatek.com>
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
+ properties
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>, <kernel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 6 May 2022 22:44:23 +0800
+In-Reply-To: <20220506140959.ldy32lyf5jbkkqj2@notapiano>
+References: <20220429203039.2207848-1-nfraprado@collabora.com>
+         <20220429203039.2207848-2-nfraprado@collabora.com>
+         <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
+         <cbf2fcbae25408b95875278eb37e829bf4671430.camel@mediatek.com>
+         <d1c548bb-8a36-79bf-498d-c909bf7e7679@collabora.com>
+         <20220505162537.byiwfe2ghomxhezl@notapiano>
+         <559a1e189613484b8528dc4eaf19099e9162fcc6.camel@mediatek.com>
+         <20220506140959.ldy32lyf5jbkkqj2@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 May 2022, David Laight wrote:
-
-> >  It was retrofitted in that x86 systems already existed for ~15 years when
-> > PCI came into picture.  Therefore the makers of the CPU ISA couldn't have
-> > envisaged the need for config access instructions like they did for memory
-> > and port access.
+On Fri, 2022-05-06 at 10:09 -0400, Nícolas F. R. A. Prado wrote:
+> On Fri, May 06, 2022 at 01:45:24PM +0800, Jiaxin Yu wrote:
+> > On Thu, 2022-05-05 at 12:25 -0400, Nícolas F. R. A. Prado wrote:
+> > > > 
+> > > On Thu, May 05, 2022 at 10:52:45AM +0200, AngeloGioacchino Del
+> > > Regno
+> > > wrote:
+> > > > Il 05/05/22 10:48, Jiaxin Yu ha scritto:
+> > > > > On Thu, 2022-05-05 at 10:08 +0200, AngeloGioacchino Del Regno
+> > > > > wrote:
+> > > > > > Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
+> > > > > > > The Mediatek AFE PCM controller for MT8192 allows sharing
+> > > > > > > of
+> > > > > > > an I2S
+> > > > > > > bus
+> > > > > > > between two busses. Add a pattern for these properties in
+> > > > > > > the
+> > > > > > > dt-binding.
+> > > > > > > 
+> > > > > > > Signed-off-by: Nícolas F. R. A. Prado <
+> > > > > > > nfraprado@collabora.com>
+> > > > > > > ---
+> > > > > > > 
+> > > > > > >    Documentation/devicetree/bindings/sound/mt8192-afe-
+> > > > > > > pcm.yaml | 5
+> > > > > > > +++++
+> > > > > > >    1 file changed, 5 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git
+> > > > > > > a/Documentation/devicetree/bindings/sound/mt8192-
+> > > > > > > afe-
+> > > > > > > pcm.yaml
+> > > > > > > b/Documentation/devicetree/bindings/sound/mt8192-
+> > > > > > > afe-
+> > > > > > > pcm.yaml
+> > > > > > > index 7a25bc9b8060..5b03c8dbf318 100644
+> > > > > > > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-
+> > > > > > > pcm.yaml
+> > > > > > > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-
+> > > > > > > pcm.yaml
+> > > > > > > @@ -54,6 +54,11 @@ properties:
+> > > > > > >          - const: aud_infra_clk
+> > > > > > >          - const: aud_infra_26m_clk
+> > > > > > > +patternProperties:
+> > > > > > > +  "^i2s[0-35-9]-share$":
+> > > > > > > +    description: Name of the I2S bus that is shared with
+> > > > > > > this bus
+> > > > > > > +    pattern: "^I2S[0-35-9]$"
+> > > > > > > +
+> > > > > > >    required:
+> > > > > > >      - compatible
+> > > > > > >      - interrupts
+> > > > > > > 
+> > > > > > 
+> > > > > > The only other way of doing this would be to complicate
+> > > > > > this in
+> > > > > > the
+> > > > > > driver
+> > > > > > so that we can do something like
+> > > > > > 
+> > > > > > "i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
+> > > > > > 
+> > > > > > ...and I don't think that this would be any more
+> > > > > > straightforward than
+> > > > > > the
+> > > > > > provided way.
+> > > > > > 
+> > > > > > There's an improvement that we can do to that pattern
+> > > > > > description
+> > > > > > though,
+> > > > > > which would be explaining that declaring 'i2s0-share =
+> > > > > > "I2S2"'
+> > > > > > means
+> > > > > > that
+> > > > > > I2S2's data pin will be used as DATA-OUT, while i2s0 is
+> > > > > > DATA-
+> > > > > > IN.
+> > > > > > 
+> > > > > > Another thing that comes to mind here is that this is a
+> > > > > > MediaTek
+> > > > > > specific
+> > > > > > property and *not* a generic one, which means that both the
+> > > > > > driver
+> > > > > > and
+> > > > > > this binding should be fixed to get a "mediatek," prefix,
+> > > > > > so,
+> > > > > > this
+> > > > > > property
+> > > > > > should - in reality - be "mediatek,i2s[0-35-9]-share"
+> > > > > > instead.
+> > > > > > 
+> > > > > > I think that everyone agrees about that, but let's see what
+> > > > > > the
+> > > > > > others say.
+> > > > > > 
+> > > > > > Cheers,
+> > > > > > Angelo
+> > > > > 
+> > > > > Hi Angelo,
+> > > > > 
+> > > > > 'i2s0-share = "I2S2"' means that if we want use I2S0, there
+> > > > > need
+> > > > > open
+> > > > > I2S2 to provide clock. Conversely, if we want to use I2S2, we
+> > > > > don't
+> > > > > need to open I2S0. However, MediaTek I2S0 and I2S2 hardware
+> > > > > are
+> > > > > generally designed as input. So usually we use 'i2s0-share =
+> > > > > "I2S1"'.
+> > > > > Even numbers represent input, odd numbers represent output.
+> > > > > 
+> > > > > Yes, I think adding the "mediatek," prefix is the right way
+> > > > > to
+> > > > > define a
+> > > > > non-generic property.
+> > > > > 
+> > > 
+> > > Hi Jiaxin,
+> > > 
+> > > thank you for the insights.
+> > > 
+> > > > 
+> > > > Hello Jiaxin,
+> > > > 
+> > > > if I get this correctly, i2s0-share = "I2S2" would be
+> > > > *invalid*...
+> > > > as you
+> > > > just explained, i2sX, where:
+> > > > 
+> > > > X = even number -> always DATA IN
+> > > > X = odd number  -> always DATA OUT
+> > > > 
+> > > > ...this means that the dt-binding needs a pattern to specify
+> > > > that
+> > > > only odd
+> > > > can be assigned to only even.
+> > > 
+> > > So, the situation seems different at least on mt8192-asurada-
+> > > spherion.
+> > > Here, I2S8 is used for the headset microphone and I2S9 for the
+> > > headset audio.
+> > > Even for input and odd for output agree with Jiaxin's
+> > > description.
+> > > However, the
+> > > input bus seems to be the main one, that is, disabling I2S8:
+> > > 
+> > > 	amixer cset name='UL2_CH1 I2S8_CH1' 0
+> > > 	amixer cset name='UL2_CH2 I2S8_CH2' 0
+> > > 
+> > > not only disables the microphone but also the audio on the
+> > > headset.
+> > > If I add 
+> > > 
+> > > 	i2s9-share = "I2S8";
+> > > 
+> > > on the DT, then everything works, I can disable I2S8 without
+> > > impacting the
+> > > headset audio. So the pattern for the property on this platform
+> > > is
+> > > the opposite
+> > > that Jiaxin mentioned. This tells me that we should keep the
+> > > binding
+> > > more
+> > > generic (not assume where odds and evens go). I will still apply
+> > > the
+> > > other
+> > > suggestions mentioned though.
+> > > 
+> > > Thanks,
+> > > Nícolas
+> > > 
+> > 
+> > Hi Nícolas,
+> > 
+> > From software point, I2S8 and I2S9 belong to different hardware, so
+> > if
+> > you turn off I2S8 with CMD1, of course it will not affect I2S9.
+> > 
+> > CMD1:
+> > amixer cset name='UL2_CH1 I2S8_CH1' 0
+> > amixer cset name='UL2_CH2 I2S8_CH2' 0
+> > 
+> > Frome hardware point, I2S9 will use(share) I2S8's clock. If we
+> > don't
+> > want the user to perceive this, the driver need to help do
+> > something.
+> > So this property 'i2s9-share = "I2S8";' will be added to inform the
+> > driver.
 > 
-> Rev 2.0 of the PCI spec (1993) defines two mechanisms for config cycles.
-> #2 is probably the first one and maps all of PCI config space into
-> 4k of IO space (PCI bridges aren't supported).
-
- This one is even more horrid than #1 in that it requires two separate 
-preparatory I/O writes rather than just one, one to the Forward Register 
-(at 0xcfa) to set the bus number, and another to the Configuration Space 
-Enable Register (at 0xcf8) to set the function number, before you can 
-issue a configuration read or write to a device.  So you need MP locking 
-too.
-
- NB only peer bridges aren't supported with this mechanism, normal PCI-PCI 
-bridges are, via the Forward Register.
-
-> #1 requires a pair of accesses (and SMP locking).
+> Hi Jiaxin,
 > 
-> Neither is really horrid.
+> yes, that's what I figured. What I was saying is that for the
+> binding, your
+> example was
+> 
+> i2s0-share = "I2S1"
+>    ^ even,input  ^ odd,output
+> 
+> while on mt8192-asurada-spherion the use case is
+> 
+> i2s9-share = "I2S8";
+>    ^ odd,output  ^ even,input
+> 
+> So Angelo's idea to require in the dt-binding that the left side is
+> always even
+> (input) and the right side always odd (based on your example),
+> wouldn't work for
+> my use case.
+> 
+> Basically it's a question of whether the input always shares the
+> clock from an
+> output (your example), or if output always shares the clock from an
+> input (my
+> use case), or if both are valid. I'm taking from this that both are
+> valid, so I
+> won't add any such restriction in the dt-binding in the following
+> version, but
+> do let me know if this is not the case.
+> 
+> Thanks,
+> Nícolas
 
- Both are.  First neither is MP-safe and second both are indirect in that 
-you need to poke at some chipset registers before you can issue the actual 
-read or write.
+Hi Nícolas,
 
- Sane access would require a single CPU instruction to read or write from 
-the configuration space.  To access the conventional PCI configuration 
-space in a direct linear manner you need 256 * 21 * 8 * 256 = 10.5MiB of 
-address space.  Such amount of address space seems affordable even with 
-32-bit systems.
+Yes, you are right. They completely depend on which set of I2S clock
+are used on the platform hardware.
 
-  Maciej
+ i2s9-share = "I2S8"
+ ==> The I2S8 and the I2S9 combine into one set of standard I2S, and
+use I2S8's clock.
+
+ i2s8-share = "I2S9"
+ ==> The I2S8 and the I2S9 combine into one set of standard I2S, and
+use I2S9's clock.
+
+Best Regards,
+Jiaxin Yu
+

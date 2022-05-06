@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8656051E26D
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9346051E278
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376458AbiEFXBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S1444849AbiEFXBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445068AbiEFXAt (ORCPT
+        with ESMTP id S1351249AbiEFXBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:00:49 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C70D7F;
-        Fri,  6 May 2022 15:56:56 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id p3so4937802qvi.7;
-        Fri, 06 May 2022 15:56:56 -0700 (PDT)
+        Fri, 6 May 2022 19:01:01 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14875A2F4;
+        Fri,  6 May 2022 15:57:08 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id l1so4042293qvh.1;
+        Fri, 06 May 2022 15:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jiMx1KNAzuMIgpn6LqdJi2ADhn7OHgQMCNsj9Mwa3ZA=;
-        b=c/5NIlXsr1gsCXmvQZIu/ByrkSBvSPA+5yIMedNUlzuk0MlGc4OaZfDOL1mNTAOxlG
-         kUR+qWhdKmBqEsad++XyNSmPXNZINRJLp/aTCcX4fwqnOurEq1imV3EQJJQTBuNxqHtX
-         GE6jQqe/c/M8+QxdNfKZe26Gu1GvyqLT3fdgzRTn1wo6hx8UodL0REqq8g2YqCXaEzb3
-         p85wKzLzRDYEJirBjxl8wueyU07H2uKTQLC4SASiotQOubBiMc8aRw9mDisu4UY5y/Yi
-         UxyEF8F5a0q4ihRGht34Y65uVdkB+4Y8slAKx15y19kq/f7mq8hPaUn63xGxHISKcdBZ
-         GcEw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5Sxt7bLTssTeYGgR+I7SCEoY9oG9Ye7EjzwX7GHS4YA=;
+        b=FyEpzqzMqKKRkhENJXzIx1SKNfuiDwTDe2hZnG9S3tlEf6FZtTCZRNgI4vwteFBePZ
+         WK6lOvZ++KV0FS/HZmCxW6uotvBBVbSrt2rl54OwhQK6AbLwk3gcoBzDDnvpl8znNvOM
+         h1fu7FodgNlfedOQZuSdmBIM5Ag1QXpzUrmpT0T/Gk8i3fKHcQBvKj5nmVYkETgpv+ah
+         XdnEsCQ6p+9SGQWmH/fBS9GSsgVPdGBgXPG9V2jkiBSsMFl0T9/vkbJuf3wCc+UuhtPb
+         oQbK7yBwXqT+fQywZQRi+nCglvl4ERdIRtuXmnE78W4U+kxZQoVi7EbtKnISfMXzTRj5
+         Kjvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jiMx1KNAzuMIgpn6LqdJi2ADhn7OHgQMCNsj9Mwa3ZA=;
-        b=gMUSNYpJzqdhJnn/xNcwGrpBjiG3oxZI889uDJyIHrj9la4ARdx3NBgxe0v6m46yXJ
-         mA9HYy45sKOT0aSBVxzY2Ra4sq1kqLYvSU+mPc8N7yjPzdXEGb1Qzj3rgHGADyPFRa9o
-         8a1sDa0vG0lkMHiGICagKk7iyBWy+8wr+ceYCj7shuLrBQNk8WJgEulQE59nCiu/G2HW
-         F7WhWohXvCyMygol0H0sOSTohtIVlfm7nQ9eewh6cNcy4hlbrcJO/rH1TbbVz4zPLum7
-         6aZF+y7VRmc/Znsxc6/wheS58okRP5b+6wbp4yUaMl+vU3yGZHUj8R9oyOjIW4nR62HJ
-         gGgA==
-X-Gm-Message-State: AOAM531YjYGAHuSfQIXPL9DeTDjM96wRL2a7cdbo5VCDTWdnFShMvOnr
-        KM1nxELvc9JkgWUpX8LK/cadATa2i+fVpw==
-X-Google-Smtp-Source: ABdhPJxrDUwu4Z10IRKqRVGhaH8iLkEjQy2GN2YKD3abQzhKTiYSjD2JqGul25opJn2AVjn8yU3jhA==
-X-Received: by 2002:a05:6214:1d08:b0:45a:a692:3bb2 with SMTP id e8-20020a0562141d0800b0045aa6923bb2mr4501663qvd.24.1651877815661;
-        Fri, 06 May 2022 15:56:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5Sxt7bLTssTeYGgR+I7SCEoY9oG9Ye7EjzwX7GHS4YA=;
+        b=OIYvdlRfRkYXaOpVTP5Lxw+gHtITxrRJZvgDREUUBk75sNwkSAQjF8Vle2FoKzA0NZ
+         Uw+IqPhyZy4xpxG/V4iNzQAS8IkCecyUZHRcXcWBn8RPVtZ/wEc7IQ54ixZxQG5xZANl
+         c2T9IVdgX5pWNkmleAYHXPQAHgEzVg3GHuWCaB+/hAJTA9cjvLAqANn/yo1vX9/UyekR
+         8v16px0LfXQiH0vL3Lof9m7g1c5btIL8xgHuCfK5/0bBkFmTK0mIHeTmo6oZApKxArm3
+         xDh7CAOJe90zz75fwwE/j9XuPlrvWkBHA3v+pWf6MoPGPguCEW7yp+ees7EmlvQxsSp3
+         XqKA==
+X-Gm-Message-State: AOAM531a1J4ArzSdSKwNAcEJzfs5zWc/SX8kOkbWUNlb4jGMD8gE50JI
+        8ZmJhFeuyEbm3QWeABTYMp4=
+X-Google-Smtp-Source: ABdhPJyJUB99trwp20kwsbY6BLjfTSeFKbSoXp/o/cHRlk5ZjsS/u1oU3NXwrW8evzZn2PRvwCJ+uQ==
+X-Received: by 2002:ad4:5c4b:0:b0:45a:8cc9:bdfd with SMTP id a11-20020ad45c4b000000b0045a8cc9bdfdmr4440496qva.1.1651877827789;
+        Fri, 06 May 2022 15:57:07 -0700 (PDT)
 Received: from grrm.lan (bras-base-mtrlpq4809w-grc-17-70-53-205-21.dsl.bell.ca. [70.53.205.21])
-        by smtp.gmail.com with ESMTPSA id q188-20020a37a7c5000000b0069fc13ce208sm3187880qke.57.2022.05.06.15.56.54
+        by smtp.gmail.com with ESMTPSA id q188-20020a37a7c5000000b0069fc13ce208sm3187880qke.57.2022.05.06.15.57.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 15:56:54 -0700 (PDT)
+        Fri, 06 May 2022 15:57:07 -0700 (PDT)
 From:   Yannick Brosseau <yannick.brosseau@gmail.com>
 To:     jic23@kernel.org, lars@metafoo.de, mcoquelin.stm32@gmail.com,
         alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
@@ -56,10 +56,12 @@ Cc:     paul@crapouillou.net, linux-iio@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [PATCH 0/2] iio: adc: stm32: Fix ADC IRQ handling on STM32F4
-Date:   Fri,  6 May 2022 18:56:15 -0400
-Message-Id: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
+Subject: [PATCH 1/2] iio: adc: stm32: Iterate through all ADCs in irq handler
+Date:   Fri,  6 May 2022 18:56:16 -0400
+Message-Id: <20220506225617.1774604-2-yannick.brosseau@gmail.com>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
+References: <20220506225617.1774604-1-yannick.brosseau@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,17 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent changes to the STM32 ADC irq handling broke the STM32F4 platforms
-These two patches bring it back to a working state.
+The irq handler was only checking the mask for the first ADCs in the case of the
+F4 and H7 generation, since it was using the num_irq value. This patch add
+the number of ADC in the common register, which map to the number of entries of
+eoc_msk and ovr_msk in stm32_adc_common_regs.
 
-Yannick Brosseau (2):
-  iio: adc: stm32: Iterate through all ADCs in irq handler
-  iio: adc: stm32: Fix check for spurious IRQs on STM32F4
+Tested on a STM32F429NIH6
 
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
  drivers/iio/adc/stm32-adc-core.c | 7 ++++++-
- drivers/iio/adc/stm32-adc.c      | 9 ++++++---
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
+index 142656232157..11c08c56acb0 100644
+--- a/drivers/iio/adc/stm32-adc-core.c
++++ b/drivers/iio/adc/stm32-adc-core.c
+@@ -64,6 +64,7 @@ struct stm32_adc_priv;
+  * @max_clk_rate_hz: maximum analog clock rate (Hz, from datasheet)
+  * @has_syscfg: SYSCFG capability flags
+  * @num_irqs:	number of interrupt lines
++ * @num_adcs:   number of ADC instances in the common registers
+  */
+ struct stm32_adc_priv_cfg {
+ 	const struct stm32_adc_common_regs *regs;
+@@ -71,6 +72,7 @@ struct stm32_adc_priv_cfg {
+ 	u32 max_clk_rate_hz;
+ 	unsigned int has_syscfg;
+ 	unsigned int num_irqs;
++	unsigned int num_adcs;
+ };
+ 
+ /**
+@@ -352,7 +354,7 @@ static void stm32_adc_irq_handler(struct irq_desc *desc)
+ 	 * before invoking the interrupt handler (e.g. call ISR only for
+ 	 * IRQ-enabled ADCs).
+ 	 */
+-	for (i = 0; i < priv->cfg->num_irqs; i++) {
++	for (i = 0; i < priv->cfg->num_adcs; i++) {
+ 		if ((status & priv->cfg->regs->eoc_msk[i] &&
+ 		     stm32_adc_eoc_enabled(priv, i)) ||
+ 		     (status & priv->cfg->regs->ovr_msk[i]))
+@@ -792,6 +794,7 @@ static const struct stm32_adc_priv_cfg stm32f4_adc_priv_cfg = {
+ 	.clk_sel = stm32f4_adc_clk_sel,
+ 	.max_clk_rate_hz = 36000000,
+ 	.num_irqs = 1,
++	.num_adcs = 3,
+ };
+ 
+ static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+@@ -800,6 +803,7 @@ static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+ 	.max_clk_rate_hz = 36000000,
+ 	.has_syscfg = HAS_VBOOSTER,
+ 	.num_irqs = 1,
++	.num_adcs = 2,
+ };
+ 
+ static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+@@ -808,6 +812,7 @@ static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+ 	.max_clk_rate_hz = 40000000,
+ 	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
+ 	.num_irqs = 2,
++	.num_adcs = 2,
+ };
+ 
+ static const struct of_device_id stm32_adc_of_match[] = {
 -- 
 2.36.0
 

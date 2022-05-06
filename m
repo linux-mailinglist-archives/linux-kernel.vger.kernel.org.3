@@ -2,75 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E318A51DE00
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58E051DE03
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444012AbiEFRCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S1444025AbiEFRDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444005AbiEFRCn (ORCPT
+        with ESMTP id S1444022AbiEFRDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:02:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594516A40E;
-        Fri,  6 May 2022 09:59:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DE1CB8366B;
-        Fri,  6 May 2022 16:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B15F5C385A9;
-        Fri,  6 May 2022 16:58:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651856337;
-        bh=49ozkdixZYMrL9E3p3xV0UqZRaaTer52aw1l9SSwIFE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=r5B2eS0c6mMKSgL9b5luKtoYV1KTQhBcsXdv7VlX3DQBRq3ApBErNIyhjvFVa+93s
-         ZgnxE/CzQ2v+c6pXvHMghTsgecOI0p1D0X/4CGKoSgUQd3IQ6ORabkQaH7rJC0kMRa
-         NE9MyO34+QCIur+XJr2q7dbZPWYrACnX6RBxydVTWL0Rz+IJFruNN4vMOVrBFd+FJ8
-         QhgT8forSN+xaG70zNMAqTb3kewpcWmhGOUmcC/5qstWgpsiO+q/2Iu5hGOJIfF25R
-         /FLporD7NDXI2qr1ily+TztNItAFNJUDnpv87qub/NZ+WBocRbWFe32dTT730eHprb
-         wz2xsA3IrUDxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9CD22F0389E;
-        Fri,  6 May 2022 16:58:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220506160151.GA596656@nvidia.com>
-References: <20220506160151.GA596656@nvidia.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220506160151.GA596656@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: bfdc0edd11f9501b891a069b5bbd3b16731941e1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4df22ca85d3d73f9822b1a354bb56dd1872180cd
-Message-Id: <165185633763.7534.15072230294670244258.pr-tracker-bot@kernel.org>
-Date:   Fri, 06 May 2022 16:58:57 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 13:03:42 -0400
+Received: from wrqvvpks.outbound-mail.sendgrid.net (wrqvvpks.outbound-mail.sendgrid.net [149.72.131.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B16A40E
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=catern.com;
+        h=from:subject:in-reply-to:references:mime-version:to:cc:content-type:
+        content-transfer-encoding;
+        s=s1; bh=0kv8Y+pw6sAthOMznHqH5eVjKXOt00qV9e4yFDnt+Es=;
+        b=JyGuBIUDLSg4VXtCtO+PrvbRjlHlYCWKmbwjPwbfXPEBx5aN/PKoexTCq249YbDPbeWO
+        PtA9yI37NUqajl8TtUDOxJPsJZPdoZc0f4BOyHJFEAs0+N9Tgzn7WSTF6w34GdGlRK3ob2
+        5p/SWiyqSLmOjpS6RNmfIFjcrKAJPbAI5SKDW6vMnhbSFhV/CQEh9vYF+z8JcFodjYuKWY
+        Y00pZ52/0HprIoV4nG7CtUVXPI8/E0+l+HHsNgm+dbPZspoWc6fj/dS8vHormThs86lRO9
+        07IIi4OMbFj5tYdnOsI2sPYXUvofIHnKPSQZGiy7cDj541Uwh0WpDUk6w5w4AhyA==
+Received: by filterdrecv-77df7bffc9-b2j5p with SMTP id filterdrecv-77df7bffc9-b2j5p-1-627553ED-5E
+        2022-05-06 16:59:25.839025366 +0000 UTC m=+2574812.774299640
+Received: from earth.catern.com (unknown)
+        by geopod-ismtpd-2-2 (SG)
+        with ESMTP
+        id lPNwAp36QO6WuhyWBDuI8g
+        Fri, 06 May 2022 16:59:25.688 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=::1; helo=localhost; envelope-from=sbaugh@catern.com; receiver=<UNKNOWN> 
+Received: from localhost (localhost [IPv6:::1])
+        by earth.catern.com (Postfix) with ESMTPSA id 966DA60040;
+        Fri,  6 May 2022 12:59:24 -0400 (EDT)
+From:   Spencer Baugh <sbaugh@catern.com>
+Subject: Re: Explicitly defining the userspace API
+In-Reply-To: <YmA/jFztk5GkjIr2@kroah.com>
+References: <874k2nhgtg.fsf@catern.com> <YmA/jFztk5GkjIr2@kroah.com>
+Date:   Fri, 06 May 2022 16:59:26 +0000 (UTC)
+Message-ID: <87levefvgz.fsf@catern.com>
+MIME-Version: 1.0
+X-SG-EID: =?us-ascii?Q?GW3oCMoYnalRiojMOuLzE6x2H5kORXvlCdz1UwQVRMVT4fbh9ODEfCogOe74cO?=
+ =?us-ascii?Q?rI4e0V+MFZgakz9Re5a6=2FCgloGF35IKSfipc2eg?=
+ =?us-ascii?Q?gco3jvfFNeZBoapduVGgMA+K=2F4SfxXcosVfTDgq?=
+ =?us-ascii?Q?NVbZkA6JzG4eHrV1fet9KMsG2zjt1m1jpbhM4+s?=
+ =?us-ascii?Q?j0szgyOzQfAJPXrmqWpxOgRDAsoCI0TRPkt2yvN?=
+ =?us-ascii?Q?jgLmkm7A9=2FPAh1t2R0K3L1PRg9Og=2Ff0bU5gZHM?=
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcin@juszkiewicz.com.pl, torvalds@linux-foundation.org,
+        arnd@arndb.de
+X-Entity-ID: d/0VcHixlS0t7iB1YKCv4Q==
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 6 May 2022 13:01:51 -0300:
+Greg KH <gregkh@linuxfoundation.org> writes:
+> On Wed, Apr 20, 2022 at 04:15:25PM +0000, Spencer Baugh wrote:
+>> 
+>> Linux guarantees the stability of its userspace API, but the API
+>> itself is only informally described, primarily with English prose.  I
+>> want to add an explicit, authoritative machine-readable definition of
+>> the Linux userspace API.
+>> 
+>> As background, in a conventional libc like glibc, read(2) calls the
+>> Linux system call read, passing arguments in an architecture-specific
+>> way according to the specific details of read.
+>> 
+>> The details of these syscalls are at best documented in manpages, and
+>> often defined only by the implementation.  Anyone else who wants to
+>> work with a syscall, in any way, needs to duplicate all those details.
+>> 
+>> So the most basic definition of the API would just represent the
+>> information already present in SYSCALL_DEFINE macros: the C types of
+>> arguments and return values.  More usefully, it would describe the
+>> formats of those arguments and return values: that the first argument
+>> to read is a file descriptor rather than an arbitrary integer, and
+>> what flags are valid in the flags argument of openat, and that open
+>> returns a file descriptor.  A step beyond that would be describing, in
+>> some limited way, the effects of syscalls; for example, that read
+>> writes into the passed buffer the number of bytes that it returned.
+>
+> So how would you define read() in this format in a way that has not
+> already been attempted in the past?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+I don't know about any attempts at doing this in the past (other than
+what's already been mentioned in this thread - e.g. SYSCALL_DEFINE),
+what do you have in mind?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4df22ca85d3d73f9822b1a354bb56dd1872180cd
+> How are you going to define a format that explains functionality in a
+> way that is not just the implementation in the end?
+
+Lots of information can be expressed just with more specific types on
+the function signature, even with regular C types.  No need to expose
+the implementation in any way.
+
+For example, accept4's signature is:
+
+SYSCALL_DEFINE4(accept4, int, fd, struct sockaddr __user *, upeer_sockaddr,
+		int __user *, upeer_addrlen, int, flags)
+
+Here, fd and flags are the same type and have nothing to distinguish
+them.  But, purely as an example, not suggesting exactly this, but one
+could have:
+
+typedef int user_fd_t;
+typedef int accept_flags_t;
+
+SYSCALL_DEFINE4(accept4, user_fd_t, fd, struct sockaddr __user *, upeer_sockaddr,
+		int __user *, upeer_addrlen, accept_flags_t, flags)
+
+Then a user could parse this SYSCALL_DEFINE and know that fd and flags
+have different types with different possible valid values. user_fd_t
+would be used by many different syscalls, accept_flags_t just by this.
+
+With just this, the user of this information would still need to know
+what user_fd and accept_flags are.  The next step would be describing
+the valid values for accept_flags.  Unfortunately that's not something
+that the C type system alone can express, but again purely as an
+example, but one could have something like:
+
+FLAGS_DEFINE(accept_flags, int,
+  SOCK_CLOEXEC,
+  SOCK_NONBLOCK)
+
+Then a user could parse this FLAGS_DEFINE and know what the range of
+valid values for accept_flags_t is.  This could also be used in the
+kernel; for example, FLAGS_DEFINE could generate an accept_flags_valid
+function, usable in accept4 as:
+
+if (!accept_flags_valid(flags))
+	return -EINVAL;
+
+As for describing the buffer-writing behavior of read like I mentioned
+before, here's a sketch of what that maybe could look like.  The current
+signature of read is:
+
+SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count)
+
+One could imagine adding a type to the return value and changing this to
+something like:
+
+#define bytes_written_or_error(written_buffer) int
+#define writable_user_buf(size_of_buffer) char __user *
+
+SYSCALL_DEFINE3_RET(bytes_written_or_error(buf),
+                    read, unsigned int, fd,
+                    writable_user_buf(count), buf, size_t, count)
+
+A user could parse this and know at least partially how read uses the
+passed-in buffer, without having to look at the implementation.
+
+Just for the sake of mentioning it, one could also imagine static
+analysis which checks the kernel implementation against these
+more-detailed types, which could catch bugs.  But I'm not necessarily
+proposing doing that - this is useful on its own even if it's not
+checked by static analysis.
+
+>> One step in this direction is Documentation/ABI, which specifies the
+>> stability guarantees for different userspace APIs in a semi-formal
+>> way.  But it doesn't specify the actual content of those APIs, and it
+>> doesn't cover individual syscalls at all.
+>
+> The content is described in Documentation/ABI/ entries, where do you see
+> that missing?
+
+I meant that it doesn't describe the content of the APIs in a
+machine-readable way.  (It's still very useful of course!)
+
+> And you are correct, that place does not describe syscalls, or other
+> user/kernel interfaces that predate sysfs.
+>
+> good luck!
 
 Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html

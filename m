@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A0951D52C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB5251D51F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354841AbiEFKJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S1390780AbiEFKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390796AbiEFKIv (ORCPT
+        with ESMTP id S1358846AbiEFKGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:08:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F07C5BD22;
-        Fri,  6 May 2022 03:05:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 091F51F8BD;
-        Fri,  6 May 2022 10:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651831508;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vOduMzov7LmnmWKc/9KVSmPz2a6N3lKrkrPH5TFQYIc=;
-        b=K4zZmj4v1fjdFM/RKx8Duu++qZaOr1W8AzpQcYAtGPMwOhjBprORx356zQus6XFWACBCQF
-        3q93GJMPIcNCGWf1Vqdj2ZqZfWSjk620OnmXjshIrIxUny7uRwTMBMu7qq+LU2Z1neP7Gi
-        IxTCtYC1flVRKGnh7NdXeIwsoAPvC6c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651831508;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vOduMzov7LmnmWKc/9KVSmPz2a6N3lKrkrPH5TFQYIc=;
-        b=emRyEKwz+9oRLLb8JPuF4fBjvsI2XyZaLLPkrB+CWkH8TWcBmagnWsk9b9EaOudwzxzjsW
-        uIsIGyYYtdhQ2ODA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6321513A1B;
-        Fri,  6 May 2022 10:05:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uw3nFtPydGJYbwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 06 May 2022 10:05:07 +0000
-Date:   Fri, 6 May 2022 12:00:55 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     jaegeuk@kernel.org, hare@suse.de, dsterba@suse.com,
-        axboe@kernel.dk, hch@lst.de, damien.lemoal@opensource.wdc.com,
-        snitzer@kernel.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, bvanassche@acm.org,
-        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
-        Jens Axboe <axboe@fb.com>, gost.dev@samsung.com,
-        jonathan.derrick@linux.dev, jiangbo.365@bytedance.com,
-        linux-nvme@lists.infradead.org, dm-devel@redhat.com,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        linux-kernel@vger.kernel.org, Johannes Thumshirn <jth@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Alasdair Kergon <agk@redhat.com>, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Keith Busch <kbusch@kernel.org>, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] support non power of 2 zoned devices
-Message-ID: <20220506100054.GZ18596@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        jaegeuk@kernel.org, hare@suse.de, dsterba@suse.com, axboe@kernel.dk,
-        hch@lst.de, damien.lemoal@opensource.wdc.com, snitzer@kernel.org,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        bvanassche@acm.org, linux-fsdevel@vger.kernel.org,
-        matias.bjorling@wdc.com, Jens Axboe <axboe@fb.com>,
-        gost.dev@samsung.com, jonathan.derrick@linux.dev,
-        jiangbo.365@bytedance.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, Naohiro Aota <naohiro.aota@wdc.com>,
-        linux-kernel@vger.kernel.org, Johannes Thumshirn <jth@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>, Alasdair Kergon <agk@redhat.com>,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Keith Busch <kbusch@kernel.org>, linux-btrfs@vger.kernel.org
-References: <CGME20220506081106eucas1p181e83ef352eb8bfb1752bee0cf84020f@eucas1p1.samsung.com>
- <20220506081105.29134-1-p.raghav@samsung.com>
+        Fri, 6 May 2022 06:06:19 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDFF5AA59;
+        Fri,  6 May 2022 03:02:35 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2467Y07k015868;
+        Fri, 6 May 2022 12:02:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=3m0mw1nBjzDm+VBX3E2ez2EscVLtrOMj3hZ9LGKIYvI=;
+ b=av6DvpN0ABdk6r6R1R3POxkZs1JjpU1qKDY6IVVoUtipgGWLu3IWroKgeKaibkNUkhm6
+ tf5JhMUURsISmllmKZBUAFGI9eli6oACSW6j24CyLlqeMyL+h8tPe01kChPyan3uAXzo
+ +50DjdH+BGUyjGu7Uy1qyZp8ppFy/BP15C20844nfXnxgiKBHy6jRNxyFjU+X5CC3Bni
+ SuCO1/QMmJY/hML6CkG7sXNF8oUhQDxSA/VbPt27DDNlXlcywQmHO17KfBjCq4n/pjKN
+ Cl05PfULMFHYUXVccloj/xSOXGUB129kSzEB+POJzMpjF9uKTe9DYtKatbQtgD/2GqZX +g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frvf104sc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 12:02:13 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7421E100034;
+        Fri,  6 May 2022 12:02:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5BD7A2171E1;
+        Fri,  6 May 2022 12:02:12 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 6 May
+ 2022 12:02:11 +0200
+Message-ID: <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com>
+Date:   Fri, 6 May 2022 12:02:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506081105.29134-1-p.raghav@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
+ "st,stm32mp1-rcc-secure"
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        SoC Team <soc@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Etienne Carriere <etienne.carriere@st.com>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com>
+ <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_03,2022-05-05_01,2022-02-23_01
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,46 +85,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 10:10:54AM +0200, Pankaj Raghav wrote:
-> - Open issue:
-> * btrfs superblock location for zoned devices is expected to be in 0,
->   512GB(mirror) and 4TB(mirror) in the device. Zoned devices with po2
->   zone size will naturally align with these superblock location but non
->   po2 devices will not align with 512GB and 4TB offset.
+Hi Rob
+
+On 5/5/22 16:11, Rob Herring wrote:
+> On Fri, Apr 22, 2022 at 10:10 AM Alexandre Torgue
+> <alexandre.torgue@foss.st.com> wrote:
+>>
+>> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+>> security support hardened), "clocks" and "clock-names" describe oscillators
+>> and are required.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 > 
->   The current approach for npo2 devices is to place the superblock mirror
->   zones near   512GB and 4TB that is **aligned to the zone size**.
+> This is now failing in linux-next:
+> 
+> make[1]: *** Deleting file
+> 'Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts'
+> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml: found
+> duplicate key "clocks" with value "{}" (original value: "True")
+> make[1]: *** [Documentation/devicetree/bindings/Makefile:26:
+> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts]
+> Error 1
+> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:64:3:
+> [error] duplication of key "clocks" in mapping (key-duplicates)
+> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:69:3:
+> [error] duplication of key "clock-names" in mapping (key-duplicates)
+> Traceback (most recent call last):
+>    File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+>      testtree = dtschema.load(filename, line_number=line_number)
+>    File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line
+> 914, in load
+>      return yaml.load(f.read())
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py",
+> line 434, in load
+>      return constructor.get_single_data()
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 121, in get_single_data
+>      return self.construct_document(node)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 131, in construct_document
+>      for _dummy in generator:
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 674, in construct_yaml_map
+>      value = self.construct_mapping(node)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 445, in construct_mapping
+>      return BaseConstructor.construct_mapping(self, node, deep=deep)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 263, in construct_mapping
+>      if self.check_mapping_key(node, key_node, mapping, key, value):
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 294, in check_mapping_key
+>      raise DuplicateKeyError(*args)
+> ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+>    in "<unicode string>", line 49, column 3
+> found duplicate key "clocks" with value "{}" (original value: "True")
+>    in "<unicode string>", line 64, column 3
+> To suppress this check see:
+>      http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+> During handling of the above exception, another exception occurred:
+> Traceback (most recent call last):
+>    File "/usr/local/bin/dt-doc-validate", line 74, in <module>
+>      ret = check_doc(f)
+>    File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+>      print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+> AttributeError: 'DuplicateKeyError' object has no attribute 'path'
 
-I don't like that, the offsets have been chosen so the values are fixed
-and also future proof in case the zone size increases significantly. The
-natural alignment of the pow2 zones makes it fairly trivial.
+It seems that we have a merge issue between:
 
-If I understand correctly what you suggest, it would mean that if zone
-is eg. 5G and starts at 510G then the superblock should start at 510G,
-right? And with another device that has 7G zone size the nearest
-multiple is 511G. And so on.
+patch "dt-bindings: rcc: Add optional external ethernet RX clock properties"
+https://lore.kernel.org/r/20220410220514.21779-1-marex@denx.de
 
-That makes it all less predictable, depending on the physical device
-constraints that are affecting the logical data structures of the
-filesystem. We tried to avoid that with pow2, the only thing that
-depends on the device is that the range from the super block offsets is
-always 2 zones.
+and this one (dt-bindings: clock: stm32mp1: describes clocks if 
+"st,stm32mp1-rcc-secure)
 
-I really want to keep the offsets for all zoned devices the same and
-adapt the code that's handling the writes. This is possible with the
-non-pow2 too, the first write is set to the expected offset, leaving the
-beginning of the zone unused.
+On linux-next following part remains and creates issue above:
 
->   This
->   is of no issue for normal operation as we keep track where the superblock
->   mirror are placed but this can cause an issue with recovery tools for
->   zoned devices as they expect mirror superblock to be in 512GB and 4TB.
+   clocks:
+     description:
+       Specifies the external RX clock for ethernet MAC.
+     maxItems: 1
 
-Yeah the tools need to be updated, btrfs-progs and suite of blk* in
-util-linux.
+   clock-names:
+     const: ETH_RX_CLK/ETH_REF_CLK
 
->   Note that ATM, recovery tools such as `btrfs check` does not work for
->   image dumps for zoned devices even for po2 zone sizes.
+I don't know why this part is remaining. In my tree, I took care to take 
+Marek patch first to avoid this kind of issue.
 
-I thought this worked, but if you find something that does not please
-report that to Johannes or Naohiro.
+Btw, how to fix that ?
+
+Note, that as soon as we will fix this point I'll send a fix to avoid 
+issue in example build.
+
+cheers
+Alex
+
+
+
+
+
+
+

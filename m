@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B2551DB95
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FB551DB93
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442703AbiEFPMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S1442689AbiEFPMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiEFPMp (ORCPT
+        with ESMTP id S1344140AbiEFPMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 11:12:45 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734A96D185;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738A76D186;
         Fri,  6 May 2022 08:09:02 -0700 (PDT)
-Date:   Fri, 06 May 2022 15:08:58 -0000
+Date:   Fri, 06 May 2022 15:08:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1651849740;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wc2bzqI42oIckbUmFpKNjycPjcAyrjA3sg0Rb2QcJts=;
-        b=Wqdhb52Ai+U0KWwyxU/wWUfVqzJgQxXp5XYqh1WA95BIXQrZ0Qf1ShdDOWa4JGhlAJEFxz
-        9mxuCEUWkEwAhUX6OeTRYl8t+WA4zIuZmLccT+ZNOllYSBPtky27F4syrhF00BRVILU6RV
-        f7qLGoiALPbZ0221h58kP9IeQuDj0/56f5igsVQi9RatEJgNzXnVlp5aSsiW3Gr1b4iFyw
-        tOdPWa/Fp8y0iDUkWNMXTHlsGL9fH4+xR5ULVSjqMsDPUL6EKabEGg3pDUAfDDCRadC6HF
-        DholtdF2roUQg7pE6EUoKrpPiVtM/YA7tP5lSXs7MlqwgG4WLotndxpstwJxdA==
+        bh=3/qm1Bgbdk5jyG9MGcq9sDGLukQ9iArUnuXSvy4egIc=;
+        b=m+Qo+sBTPmjaGhb60phEr1893lTkuNvKMQPAFBWm6TJL8yAs3mcM8WWtfWDLY5Gqx4Ekhu
+        crPkhjHPlNuiqkxq5sbfP6pH8pUHs0wvh6DWstpR9FmOhO++wH9lrUf1W6bU8SnZ0du/Fl
+        Wf9dCTncffObBQkQjEuTa59RvbDN3c5joVsbsDxqSoFx/zrVRLWie3TTjwerIcWf5/EEu1
+        N1pg/eJ+ZQS0sLQqWh0WVDo4JcCEmaYfRD903Hsy62mIHl9gUczc1/BtsHCN7BgcXb/1kz
+        2nq7NgM2vpTxm6PIS3LXdwiGHb4Uw8HvKUchSAqb1345o2p84Cj8c+cODeUe7A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1651849740;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wc2bzqI42oIckbUmFpKNjycPjcAyrjA3sg0Rb2QcJts=;
-        b=nqo6nFxwc0dBI0+fNBv4wYkjWtSZI05tBoJ6KRRD4Eo3jCXKFPLjVg9zMsYLfPqwPOd568
-        /q2ownWBMKCnaVDw==
+        bh=3/qm1Bgbdk5jyG9MGcq9sDGLukQ9iArUnuXSvy4egIc=;
+        b=Idx+gpsAKxtbuSf+OATzFnsUzpu/J/U2nj9ZQDUuiq5GIo/CJu+Zy2hQ0tCbnp2qZ/jMjr
+        FQq3FD0YHtONTdCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+Subject: [tip: x86/asm] linkage: Fix issue with missing symbol size
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220506121631.508692613@infradead.org>
-References: <20220506121631.508692613@infradead.org>
+In-Reply-To: <20220506121631.437480085@infradead.org>
+References: <20220506121631.437480085@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165184973857.4207.8156849772792716816.tip-bot2@tip-bot2>
+Message-ID: <165184973961.4207.4733734646878690141.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,75 +69,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/asm branch of tip:
 
-Commit-ID:     38f3803fb4fa588ef7645048285493efbe264d79
-Gitweb:        https://git.kernel.org/tip/38f3803fb4fa588ef7645048285493efbe264d79
+Commit-ID:     3ff5f7840979aa36d47a6a00694826c78d63bf3c
+Gitweb:        https://git.kernel.org/tip/3ff5f7840979aa36d47a6a00694826c78d63bf3c
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 06 May 2022 14:14:37 +02:00
+AuthorDate:    Fri, 06 May 2022 14:14:36 +02:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 06 May 2022 16:07:06 +02:00
+CommitterDate: Fri, 06 May 2022 15:59:39 +02:00
 
-objtool: Fix STACK_FRAME_NON_STANDARD reloc type
+linkage: Fix issue with missing symbol size
 
-STACK_FRAME_NON_STANDARD results in inconsistent relocation types
-depending on .c or .S usage:
+Occasionally, typically when a function doesn't end with 'ret', an
+alias on that function will have 0 size.
 
-  Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
-  Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
-  0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
-  0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
-  0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
-  0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
+The difference between what GCC generates and our linkage magic, is
+that GCC doesn't appear to provide .size for the alias'ed symbol at
+all. And indeed, removing this directive cures the issue.
 
+Additionally, GCC also doesn't emit .type for alias symbols either, so
+also omit that.
+
+Fixes: e0891269a8c2 ("linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()")
+Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220506121631.508692613@infradead.org
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220506121631.437480085@infradead.org
 ---
- include/linux/objtool.h       | 4 +++-
- tools/include/linux/objtool.h | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ include/linux/linkage.h | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 586d357..c68d81d 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -2,6 +2,8 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index acb1ad2..1feab61 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -171,12 +171,9 @@
  
-+#include <asm/asm.h>
-+
- #ifndef __ASSEMBLY__
+ /* SYM_ALIAS -- use only if you have to */
+ #ifndef SYM_ALIAS
+-#define SYM_ALIAS(alias, name, sym_type, linkage)			\
+-	linkage(alias) ASM_NL						\
+-	.set alias, name ASM_NL						\
+-	.type alias sym_type ASM_NL					\
+-	.set .L__sym_size_##alias, .L__sym_size_##name ASM_NL		\
+-	.size alias, .L__sym_size_##alias
++#define SYM_ALIAS(alias, name, linkage)			\
++	linkage(alias) ASM_NL				\
++	.set alias, name ASM_NL
+ #endif
  
- #include <linux/types.h>
-@@ -137,7 +139,7 @@ struct unwind_hint {
+ /* === code annotations === */
+@@ -261,7 +258,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS
+ #define SYM_FUNC_ALIAS(alias, name)					\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_GLOBAL)
++	SYM_ALIAS(alias, name, SYM_L_GLOBAL)
+ #endif
  
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
--		.long \func - .
-+	_ASM_PTR \func
- 	.popsection
- .endm
+ /*
+@@ -269,7 +266,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS_LOCAL
+ #define SYM_FUNC_ALIAS_LOCAL(alias, name)				\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_LOCAL)
++	SYM_ALIAS(alias, name, SYM_L_LOCAL)
+ #endif
  
-diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
-index 586d357..c68d81d 100644
---- a/tools/include/linux/objtool.h
-+++ b/tools/include/linux/objtool.h
-@@ -2,6 +2,8 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
+ /*
+@@ -277,7 +274,7 @@
+  */
+ #ifndef SYM_FUNC_ALIAS_WEAK
+ #define SYM_FUNC_ALIAS_WEAK(alias, name)				\
+-	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_WEAK)
++	SYM_ALIAS(alias, name, SYM_L_WEAK)
+ #endif
  
-+#include <asm/asm.h>
-+
- #ifndef __ASSEMBLY__
- 
- #include <linux/types.h>
-@@ -137,7 +139,7 @@ struct unwind_hint {
- 
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
--		.long \func - .
-+	_ASM_PTR \func
- 	.popsection
- .endm
- 
+ /* SYM_CODE_START -- use for non-C (special) functions */

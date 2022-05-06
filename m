@@ -2,79 +2,672 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D8651D35A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E8F51D368
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390091AbiEFI1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1390103AbiEFI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390103AbiEFI1l (ORCPT
+        with ESMTP id S1389909AbiEFI3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:27:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5705B68F9C;
-        Fri,  6 May 2022 01:23:56 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651825434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=770rOCEglJcTn6tOCmhg2DWqxE2dENlNOc6UvMrWrn0=;
-        b=SWdlPTx50Sth51PvJ895RJTrT4U24BL4jUAFpr4iLPHiAGZqSnszudzX19JIt0rBwORvW3
-        ln9dKTaD7e5bdN9HhwZW5AuVU8kpBDN/Zf+Qp2D7P//NP0vxRiLhfrB55uXMNnMk95IQST
-        RZzjuDfS3O3YMH65RtEkxPX821YxIClVWuMvwbBt494vVZ00B+wyWbJ/Jkv2llZsm7jDeC
-        V8YIzlYWLaA5aW2RAgVsM3OMkER8elfU/FqfdJcq5hQxoo1jutEacwxDQO1JalB9NFvS05
-        JWSaPxdmnw01ddtTlx+F6tx2EkpZaV5YGyXadPsrOYGJX2PC481JPpEhAYoj5g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651825434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=770rOCEglJcTn6tOCmhg2DWqxE2dENlNOc6UvMrWrn0=;
-        b=UhQ+wS469qIUvvXkeMoQ2z5tuJDuxrtHGkFcCGrgMQ8u1/Wh2cDAchumGeta7jwV0+SXE0
-        j/73GWMjRB3BwWCA==
-To:     Tony Luck <tony.luck@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        jithu.joseph@intel.com, ashok.raj@intel.com, tony.luck@intel.com,
-        rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v6 04/11] platform/x86/intel/ifs: Add stub driver for
- In-Field Scan
-In-Reply-To: <20220506014035.1173578-5-tony.luck@intel.com>
-References: <20220428153849.295779-1-tony.luck@intel.com>
- <20220506014035.1173578-1-tony.luck@intel.com>
- <20220506014035.1173578-5-tony.luck@intel.com>
-Date:   Fri, 06 May 2022 10:23:54 +0200
-Message-ID: <87tua3gjc5.ffs@tglx>
+        Fri, 6 May 2022 04:29:55 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08AF1C138
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:26:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j15so9039352wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mYwIzNoMi321fc6+LFvWiqKKnlid1m02QLQ+k5Rhfi8=;
+        b=FoZz1VNajao5NtajXZjq05AbQy6dvqXMKX7S7Fk9uCFUBEibsqo6kl87ZjSgUnV2/Y
+         /WAETgetvyiHNx1ZQ2dJQmHZHFcCJ9SyS9oBGxUH9ZgSTxUwnBHP3w5aF3LiYP37BdgN
+         S4VIeYyE2AMSCnt33J6CfLxkCxVMMnAUPAhE6Myq9oAAOWE8gy3xQHIGyR7Ns94f59UG
+         3PzzNhjKErLOdiwNIcQkCX6Hp/WRuYfemhLcX+Y1Yiqd0bVAZ/SdPMa2ohjd0rCOV4Dq
+         0MpMjS8TKc4wIv7ZQnDEmZOa1FGlh0x/gtZUJRlOctWuEaRUPL9nGYLTRfg9/uLU4Mpn
+         xx9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mYwIzNoMi321fc6+LFvWiqKKnlid1m02QLQ+k5Rhfi8=;
+        b=EYydixD/+7D9wGDZUgMFljySPbft+sG56sAkS5I37vC8hU5pbZf34GuezhXONkZzfg
+         YHagYge3jismj6h2j9kgU/XxibvX2EnF4M0PR+TWBvkzN9zcm7OQ7JCv6OBBq+V2uhQG
+         oibhGqt8p+6beqs5bsjl2xRK3gBxgq/Q2HPKnTnIw0QkEDPRg7ZsJSeiVINH5Fb4bRq/
+         cXYmB61sN47fkCPYVpzHuvjsg92AXUGwfqjfjHIyK7ztekeVP0NGm+DQLHbks1p2MCQq
+         QVNdHjP+NUm+VlR2WUf9U8Cz9b3BLTVTz68MxC1zc4A3+crPfYrBip+OOyZvq3RLwMTK
+         +qQA==
+X-Gm-Message-State: AOAM532IAPR2c+9+LAP3L3GhflggFtXT93geiKrzKAopkHRs1v9aObfx
+        dijUT4WjeRLZWU2VT9I4EpUyn0Suf/XaevKwZj3gEA==
+X-Google-Smtp-Source: ABdhPJyYMjfawUFWHrVjsxf7lIylSBXc511b6FLIoGQq2IKDhXmwya/3OMx8iJkPIbj0MTPflcmub1tHmu+ndAa3I+4=
+X-Received: by 2002:adf:f30a:0:b0:20a:e193:6836 with SMTP id
+ i10-20020adff30a000000b0020ae1936836mr1727271wro.654.1651825570093; Fri, 06
+ May 2022 01:26:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+In-Reply-To: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 6 May 2022 01:25:55 -0700
+Message-ID: <CAP-5=fVAPGqbQigSDvvgzPap2shLJ=QPT4GE9oeGv-N0Awz5cA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] perf stat: Support metrics with hybrid events
+To:     zhengjun.xing@linux.intel.com
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05 2022 at 18:40, Tony Luck wrote:
-> +#include <asm/cpu_device_id.h>
-> +
-> +#define X86_MATCH(model)				\
-> +	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,	\
-> +		INTEL_FAM6_##model, X86_FEATURE_CORE_CAPABILITIES, NULL)
-> +
-> +static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
-> +	X86_MATCH(SAPPHIRERAPIDS_X),
+ and should be beefor eit.
+On Thu, Apr 21, 2022 at 11:56 PM <zhengjun.xing@linux.intel.com> wrote:
+>
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>
+> One metric such as 'Kernel_Utilization' may be from different PMUs and
+> consists of different events.
+>
+> For core,
+> Kernel_Utilization = cpu_clk_unhalted.thread:k / cpu_clk_unhalted.thread
+>
+> For atom,
+> Kernel_Utilization = cpu_clk_unhalted.core:k / cpu_clk_unhalted.core
+>
+> The metric group string for core is:
+> '{cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W'
+> It's internally expanded to:
+> '{cpu_clk_unhalted.thread_p/metric-id=cpu_clk_unhalted.thread_p:k/k,cpu_clk_unhalted.thread/metric-id=cpu_clk_unhalted.thread/}:W#cpu_core'
+>
+> The metric group string for atom is:
+> '{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W'
+> It's internally expanded to:
+> '{cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core:k/k,cpu_clk_unhalted.core/metric-id=cpu_clk_unhalted.core/}:W#cpu_atom'
+>
+> That means the group "{cpu_clk_unhalted.thread:k,cpu_clk_unhalted.thread}:W"
+> is from cpu_core PMU and the group "{cpu_clk_unhalted.core:k,cpu_clk_unhalted.core}"
+> is from cpu_atom PMU. And then next, check if the events in the group are
+> valid on that PMU. If one event is not valid on that PMU, the associated
+> group would be removed internally.
+>
+> In this example, cpu_clk_unhalted.thread is valid on cpu_core and
+> cpu_clk_unhalted.core is valid on cpu_atom. So the checks for these two
+> groups are passed.
+>
+> Before:
+>
+>   # ./perf stat -M Kernel_Utilization -a sleep 1
+> WARNING: events in group from different hybrid PMUs!
+> WARNING: grouped events cpus do not match, disabling group:
+>   anon group { CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD_P:k, CPU_CLK_UNHALTED.THREAD, CPU_CLK_UNHALTED.THREAD }
+>
+>  Performance counter stats for 'system wide':
+>
+>         17,639,501      cpu_atom/CPU_CLK_UNHALTED.CORE/ #     1.00 Kernel_Utilization
+>         17,578,757      cpu_atom/CPU_CLK_UNHALTED.CORE:k/
+>      1,005,350,226 ns   duration_time
+>         43,012,352      cpu_core/CPU_CLK_UNHALTED.THREAD_P:k/ #     0.99 Kernel_Utilization
+>         17,608,010      cpu_atom/CPU_CLK_UNHALTED.THREAD_P:k/
+>         43,608,755      cpu_core/CPU_CLK_UNHALTED.THREAD/
+>         17,630,838      cpu_atom/CPU_CLK_UNHALTED.THREAD/
+>      1,005,350,226 ns   duration_time
+>
+>        1.005350226 seconds time elapsed
+>
+> After:
+>
+>   # ./perf stat -M Kernel_Utilization -a sleep 1
+>
+>  Performance counter stats for 'system wide':
+>
+>         17,981,895      CPU_CLK_UNHALTED.CORE [cpu_atom] #     1.00 Kernel_Utilization
+>         17,925,405      CPU_CLK_UNHALTED.CORE:k [cpu_atom]
+>      1,004,811,366 ns   duration_time
+>         41,246,425      CPU_CLK_UNHALTED.THREAD_P:k [cpu_core] #     0.99 Kernel_Utilization
+>         41,819,129      CPU_CLK_UNHALTED.THREAD [cpu_core]
+>      1,004,811,366 ns   duration_time
+>
+>        1.004811366 seconds time elapsed
+>
+> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-I still hate this with a passion. Nevertheless:
+Sorry for the late review, this arrived April 21st and was added to
+acme/perf/core on April 22nd - I was on vacation those days. There is
+substantial complexity added here and I'm confused by the all too
+frequent is_hybrid paths. There is nothing wrong in my eyes with
+making the metric code sensitive to a PMU type, why does hybrid need
+to be special? More comments below.
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  tools/perf/util/metricgroup.c  | 263 ++++++++++++++++++++++++++++++---
+>  tools/perf/util/stat-display.c |   8 +-
+>  2 files changed, 249 insertions(+), 22 deletions(-)
+>
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index d8492e339521..126a43a8917e 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -141,6 +141,11 @@ struct metric {
+>          * output.
+>          */
+>         const char *metric_unit;
+> +       /**
+> +        * The name of the CPU such as "cpu_core" or "cpu_atom" in hybrid systems
+> +        * and "NULL" in non-hybrid systems.
+> +        */
+> +       const char *pmu_name;
+
+Thanks for the comment. CPU and PMU don't align, but I think PMU is
+the better name. I think this is an optional PMU name used for opening
+the metric's events. For example, on hybrid it can be cpu_core or
+cpu_atom. This is confusing when we have a metric that mixes say core
+and uncore events.
+
+>         /** Optional null terminated array of referenced metrics. */
+>         struct metric_ref *metric_refs;
+>         /**
+> @@ -215,6 +220,7 @@ static struct metric *metric__new(const struct pmu_event *pe,
+>         }
+>         m->metric_expr = pe->metric_expr;
+>         m->metric_unit = pe->unit;
+> +       m->pmu_name = pe->pmu;
+
+Well this explains why we have a pmu_name. I'm not a fan of metrics
+being the same as events. Reading the PMU here feels a bit of a hack.
+
+>         m->pctx->runtime = runtime;
+>         m->has_constraint = metric_no_group || metricgroup__has_constraint(pe);
+>         m->metric_refs = NULL;
+> @@ -250,10 +256,12 @@ static bool contains_metric_id(struct evsel **metric_events, int num_events,
+>   * @ids: the metric IDs to match.
+>   * @metric_evlist: the list of perf events.
+>   * @out_metric_events: holds the created metric events array.
+> + * @pmu_name: the name of the CPU.
+
+Could pmu_name just be an optional PMU to be used for the events? We
+don't need to be specific it is a CPU here?
+
+>   */
+>  static int setup_metric_events(struct hashmap *ids,
+>                                struct evlist *metric_evlist,
+> -                              struct evsel ***out_metric_events)
+> +                              struct evsel ***out_metric_events,
+> +                              const char *pmu_name)
+>  {
+>         struct evsel **metric_events;
+>         const char *metric_id;
+> @@ -286,6 +294,10 @@ static int setup_metric_events(struct hashmap *ids,
+>                  * about this event.
+>                  */
+>                 if (hashmap__find(ids, metric_id, (void **)&val_ptr)) {
+> +                       if (evsel__is_hybrid(ev) && pmu_name &&
+
+The evsel__is_hybrid looks unnecessary here.
+
+> +                           strcmp(pmu_name, ev->pmu_name)) {
+> +                               continue;
+> +                       }
+>                         metric_events[matched_events++] = ev;
+>
+>                         if (matched_events >= ids_size)
+> @@ -724,7 +736,8 @@ static int decode_all_metric_ids(struct evlist *perf_evlist, const char *modifie
+>  static int metricgroup__build_event_string(struct strbuf *events,
+>                                            const struct expr_parse_ctx *ctx,
+>                                            const char *modifier,
+> -                                          bool has_constraint)
+> +                                          bool has_constraint,
+> +                                          const char *pmu_name)
+>  {
+>         struct hashmap_entry *cur;
+>         size_t bkt;
+> @@ -806,12 +819,18 @@ static int metricgroup__build_event_string(struct strbuf *events,
+>                 if (no_group) {
+>                         /* Strange case of a metric of just duration_time. */
+>                         ret = strbuf_addf(events, "duration_time");
+> -               } else if (!has_constraint)
+> -                       ret = strbuf_addf(events, "}:W,duration_time");
+> -               else
+> +               } else if (!has_constraint) {
+> +                       ret = strbuf_addf(events, "}:W");
+> +                       if (pmu_name)
+> +                               ret = strbuf_addf(events, "#%s", pmu_name);
+>                         ret = strbuf_addf(events, ",duration_time");
+> -       } else if (!no_group && !has_constraint)
+> +               } else
+> +                       ret = strbuf_addf(events, ",duration_time");
+> +       } else if (!no_group && !has_constraint) {
+>                 ret = strbuf_addf(events, "}:W");
+> +               if (pmu_name)
+> +                       ret = strbuf_addf(events, "#%s", pmu_name);
+> +       }
+
+Why add the # and then expand it when you could just expand here?
+
+>         return ret;
+>  #undef RETURN_IF_NON_ZERO
+> @@ -1150,11 +1169,13 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
+>   * @metric_list: The list that the metric or metric group are added to.
+>   * @map: The map that is searched for metrics, most commonly the table for the
+>   *       architecture perf is running upon.
+> + * @pmu_name: the name of the CPU.
+>   */
+> -static int metricgroup__add_metric(const char *metric_name, const char *modifier,
+> -                                  bool metric_no_group,
+> +static int metricgroup__add_metric(const char *metric_name,
+> +                                  const char *modifier, bool metric_no_group,
+
+This is a whitespace only change.
+
+>                                    struct list_head *metric_list,
+> -                                  const struct pmu_events_map *map)
+> +                                  const struct pmu_events_map *map,
+> +                                  const char *pmu_name)
+>  {
+>         const struct pmu_event *pe;
+>         LIST_HEAD(list);
+> @@ -1167,6 +1188,8 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+>          */
+>         map_for_each_metric(pe, i, map, metric_name) {
+>                 has_match = true;
+> +               if (pmu_name && pe->pmu && strcmp(pmu_name, pe->pmu))
+> +                       continue;
+>                 ret = add_metric(&list, pe, modifier, metric_no_group,
+>                                  /*root_metric=*/NULL,
+>                                  /*visited_metrics=*/NULL, map);
+> @@ -1215,10 +1238,12 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+>   * @metric_list: The list that metrics are added to.
+>   * @map: The map that is searched for metrics, most commonly the table for the
+>   *       architecture perf is running upon.
+> + * @pmu_name: the name of the CPU.
+>   */
+>  static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+>                                         struct list_head *metric_list,
+> -                                       const struct pmu_events_map *map)
+> +                                       const struct pmu_events_map *map,
+> +                                       const char *pmu_name)
+>  {
+>         char *list_itr, *list_copy, *metric_name, *modifier;
+>         int ret, count = 0;
+> @@ -1235,7 +1260,7 @@ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+>
+>                 ret = metricgroup__add_metric(metric_name, modifier,
+>                                               metric_no_group, metric_list,
+> -                                             map);
+> +                                             map, pmu_name);
+>                 if (ret == -EINVAL)
+>                         pr_err("Cannot find metric or group `%s'\n", metric_name);
+>
+> @@ -1310,6 +1335,183 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
+>         return ret;
+>  }
+>
+> +static char *get_metric_pmus(char *orig_str, struct strbuf *metric_pmus)
+
+Could you add an example here. A metric is coming with an associated
+PMU so what are we pulling out here? Why are the events modified? What
+is the metric_pmus out argument doing?
+
+> +{
+> +       char *llist, *nlist, *p1, *p2, *new_str = NULL;
+> +       int ret;
+> +       struct strbuf new_events;
+> +
+> +       if (!strchr(orig_str, '#')) {
+> +               /*
+> +                * pmu name is added after '#'. If no '#' found,
+> +                * don't need to process pmu.
+> +                */
+> +               return strdup(orig_str);
+> +       }
+> +
+> +       nlist = strdup(orig_str);
+> +       if (!nlist)
+> +               return new_str;
+> +
+> +       ret = strbuf_init(&new_events, 100);
+> +       if (ret)
+> +               goto err_out;
+> +
+> +       ret = strbuf_grow(metric_pmus, 100);
+> +       if (ret)
+> +               goto err_out;
+> +
+> +       llist = nlist;
+> +       while ((p1 = strsep(&llist, ",")) != NULL) {
+> +               p2 = strchr(p1, '#');
+> +               if (p2) {
+> +                       *p2 = 0;
+> +                       ret = strbuf_addf(&new_events, "%s,", p1);
+> +                       if (ret)
+> +                               goto err_out;
+> +
+> +                       ret = strbuf_addf(metric_pmus, "%s,", p2 + 1);
+> +                       if (ret)
+> +                               goto err_out;
+> +
+> +               } else {
+> +                       ret = strbuf_addf(&new_events, "%s,", p1);
+> +                       if (ret)
+> +                               goto err_out;
+> +               }
+> +       }
+> +
+> +       new_str = strdup(new_events.buf);
+> +       if (new_str) {
+> +               /* Remove last ',' */
+> +               new_str[strlen(new_str) - 1] = 0;
+> +       }
+> +err_out:
+> +       free(nlist);
+> +       strbuf_release(&new_events);
+> +       return new_str;
+> +}
+> +
+> +static void set_pmu_unmatched_events(struct evlist *evlist, int group_idx,
+> +                                    char *pmu_name,
+> +                                    unsigned long *evlist_removed)
+> +{
+> +       struct evsel *evsel, *pos;
+> +       int i = 0, j = 0;
+> +
+> +       /*
+> +        * Move to the first evsel of a given group
+> +        */
+> +       evlist__for_each_entry(evlist, evsel) {
+> +               if (evsel__is_group_leader(evsel) &&
+> +                   evsel->core.nr_members >= 1) {
+> +                       if (i < group_idx) {
+> +                               j += evsel->core.nr_members;
+> +                               i++;
+> +                               continue;
+> +                       }
+> +               }
+> +       }
+> +
+> +       i = 0;
+> +       evlist__for_each_entry(evlist, evsel) {
+> +               if (i < j) {
+> +                       i++;
+> +                       continue;
+> +               }
+> +
+> +               /*
+> +                * Now we are at the first evsel in the group
+> +                */
+> +               for_each_group_evsel(pos, evsel) {
+> +                       if (evsel__is_hybrid(pos) &&
+> +                           strcmp(pos->pmu_name, pmu_name)) {
+> +                               set_bit(pos->core.idx, evlist_removed);
+> +                       }
+> +               }
+> +               break;
+> +       }
+> +}
+> +
+> +static void remove_pmu_umatched_events(struct evlist *evlist, char *metric_pmus)
+
+Is it possible here that we have an evlist being used by >1 metric.
+We've decided one of the metrics is invalid and set about removing the
+events thereby breaking the other metric? In general this code treads
+lightly around the evlist as previously it has been the source of
+bugs:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/tools/perf/util/metricgroup.c?h=perf/core&id=5ecd5a0c7d1cca79f1431093d12e4cd9893b0331
+
+> +{
+> +       struct evsel *evsel, *tmp, *new_leader = NULL;
+> +       unsigned long *evlist_removed;
+> +       char *llist, *nlist, *p1;
+
+Is there a better name than nlist and llist? Could you explain what they mean?
+
+> +       bool need_new_leader = false;
+> +       int i = 0, new_nr_members = 0;
+> +
+> +       nlist = strdup(metric_pmus);
+> +       if (!nlist)
+> +               return;
+> +
+> +       evlist_removed = bitmap_zalloc(evlist->core.nr_entries);
+> +       if (!evlist_removed) {
+> +               free(nlist);
+> +               return;
+> +       }
+> +
+> +       llist = nlist;
+> +       while ((p1 = strsep(&llist, ",")) != NULL) {
+> +               if (strlen(p1) > 0) {
+> +                       /*
+> +                        * p1 points to the string of pmu name, e.g. "cpu_atom".
+> +                        * The metric group string has pmu suffixes, e.g.
+> +                        * "{inst_retired.any,cpu_clk_unhalted.thread}:W#cpu_core,
+> +                        *  {cpu_clk_unhalted.core,inst_retired.any_p}:W#cpu_atom"
+> +                        * By counting the pmu name, we can know the index of
+> +                        * group.
+> +                        */
+> +                       set_pmu_unmatched_events(evlist, i++, p1,
+> +                                                evlist_removed);
+> +               }
+> +       }
+> +
+> +       evlist__for_each_entry_safe(evlist, tmp, evsel) {
+> +               if (test_bit(evsel->core.idx, evlist_removed)) {
+> +                       if (!evsel__is_group_leader(evsel)) {
+> +                               if (!need_new_leader) {
+> +                                       if (new_leader)
+> +                                               new_leader->core.leader->nr_members--;
+> +                                       else
+> +                                               evsel->core.leader->nr_members--;
+> +                               } else
+> +                                       new_nr_members--;
+> +                       } else {
+> +                               /*
+> +                                * If group leader is to remove, we need to
+> +                                * prepare a new leader and adjust all group
+> +                                * members.
+> +                                */
+> +                               need_new_leader = true;
+> +                               new_nr_members =
+> +                                   evsel->core.leader->nr_members - 1;
+> +                       }
+> +
+> +                       evlist__remove(evlist, evsel);
+> +                       evsel__delete(evsel);
+> +               } else {
+> +                       if (!evsel__is_group_leader(evsel)) {
+> +                               if (need_new_leader) {
+> +                                       need_new_leader = false;
+> +                                       new_leader = evsel;
+> +                                       new_leader->core.leader =
+> +                                           &new_leader->core;
+> +                                       new_leader->core.nr_members =
+> +                                           new_nr_members;
+> +                               } else if (new_leader)
+> +                                       evsel->core.leader = &new_leader->core;
+> +                       } else {
+> +                               need_new_leader = false;
+> +                               new_leader = NULL;
+> +                       }
+> +               }
+> +       }
+> +
+> +       bitmap_free(evlist_removed);
+> +       free(nlist);
+> +}
+> +
+>  /**
+>   * parse_ids - Build the event string for the ids and parse them creating an
+>   *             evlist. The encoded metric_ids are decoded.
+> @@ -1319,14 +1521,18 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
+>   * @modifier: any modifiers added to the events.
+>   * @has_constraint: false if events should be placed in a weak group.
+>   * @out_evlist: the created list of events.
+> + * @pmu_name: the name of the CPU.
+>   */
+>  static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+>                      struct expr_parse_ctx *ids, const char *modifier,
+> -                    bool has_constraint, struct evlist **out_evlist)
+> +                    bool has_constraint, struct evlist **out_evlist,
+> +                    const char *pmu_name)
+>  {
+>         struct parse_events_error parse_error;
+>         struct evlist *parsed_evlist;
+>         struct strbuf events = STRBUF_INIT;
+> +       struct strbuf metric_pmus = STRBUF_INIT;
+> +       char *nlist = NULL;
+>         int ret;
+>
+>         *out_evlist = NULL;
+> @@ -1353,7 +1559,7 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+>                 ids__insert(ids->ids, tmp);
+>         }
+>         ret = metricgroup__build_event_string(&events, ids, modifier,
+> -                                             has_constraint);
+> +                                             has_constraint, pmu_name);
+>         if (ret)
+>                 return ret;
+>
+> @@ -1364,11 +1570,20 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+>         }
+>         pr_debug("Parsing metric events '%s'\n", events.buf);
+>         parse_events_error__init(&parse_error);
+> -       ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu);
+> +       nlist = get_metric_pmus(events.buf, &metric_pmus);
+> +       if (!nlist) {
+> +               ret = -ENOMEM;
+> +               goto err_out;
+> +       }
+> +       ret = __parse_events(parsed_evlist, nlist, &parse_error, fake_pmu);
+>         if (ret) {
+>                 parse_events_error__print(&parse_error, events.buf);
+>                 goto err_out;
+>         }
+> +
+> +       if (metric_pmus.alloc)
+> +               remove_pmu_umatched_events(parsed_evlist, metric_pmus.buf);
+> +
+>         ret = decode_all_metric_ids(parsed_evlist, modifier);
+>         if (ret)
+>                 goto err_out;
+> @@ -1376,9 +1591,12 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
+>         *out_evlist = parsed_evlist;
+>         parsed_evlist = NULL;
+>  err_out:
+> +       if (nlist)
+> +               free(nlist);
+>         parse_events_error__exit(&parse_error);
+>         evlist__delete(parsed_evlist);
+>         strbuf_release(&events);
+> +       strbuf_release(&metric_pmus);
+>         return ret;
+>  }
+>
+> @@ -1397,7 +1615,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+>         if (metric_events_list->nr_entries == 0)
+>                 metricgroup__rblist_init(metric_events_list);
+>         ret = metricgroup__add_metric_list(str, metric_no_group,
+> -                                          &metric_list, map);
+> +                                          &metric_list, map,
+> +                                          perf_evlist->hybrid_pmu_name);
+
+This confuses me. perf_evlist is an out argument that we build the
+list of evsels for the metrics into, yet here you are reading it for
+the hybrid_pmu_name. Why is this? What values can hybrid_pmu_name be
+here?
+
+>         if (ret)
+>                 goto out;
+>
+> @@ -1413,7 +1632,8 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+>                         ret = parse_ids(metric_no_merge, fake_pmu, combined,
+>                                         /*modifier=*/NULL,
+>                                         /*has_constraint=*/true,
+> -                                       &combined_evlist);
+> +                                       &combined_evlist,
+> +                                       perf_evlist->hybrid_pmu_name);
+
+I don't understand this. combined is a set of event names, it seems
+now we need to combine the event name with the PMU to form an id.
+
+>                 }
+>                 if (combined)
+>                         expr__ctx_free(combined);
+> @@ -1450,6 +1670,9 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+>                                         continue;
+>
+>                                 if (expr__subset_of_ids(n->pctx, m->pctx)) {
+> +                                       if (m->pmu_name && n->pmu_name
+> +                                           && strcmp(m->pmu_name, n->pmu_name))
+> +                                               continue;
+
+This test is cheaper than expr__subset_of_ids and should be before it.
+
+>                                         pr_debug("Events in '%s' fully contained within '%s'\n",
+>                                                  m->metric_name, n->metric_name);
+>                                         metric_evlist = n->evlist;
+> @@ -1459,14 +1682,16 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+>                         }
+>                 }
+>                 if (!metric_evlist) {
+> -                       ret = parse_ids(metric_no_merge, fake_pmu, m->pctx, m->modifier,
+> -                                       m->has_constraint, &m->evlist);
+> +                       ret = parse_ids(metric_no_merge, fake_pmu, m->pctx,
+> +                                     m->modifier, m->has_constraint,
+> +                                     &m->evlist, m->pmu_name);
+>                         if (ret)
+>                                 goto out;
+>
+>                         metric_evlist = m->evlist;
+>                 }
+> -               ret = setup_metric_events(m->pctx->ids, metric_evlist, &metric_events);
+> +               ret = setup_metric_events(m->pctx->ids, metric_evlist,
+> +                                         &metric_events, m->pmu_name);
+>                 if (ret) {
+>                         pr_debug("Cannot resolve IDs for %s: %s\n",
+>                                 m->metric_name, m->metric_expr);
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index 138e3ab9d638..46b3dd134656 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -539,7 +539,8 @@ static void aggr_update_shadow(struct perf_stat_config *config,
+>         }
+>  }
+>
+> -static void uniquify_event_name(struct evsel *counter)
+> +static void uniquify_event_name(struct evsel *counter,
+> +                               struct perf_stat_config *stat_config)
+>  {
+>         char *new_name;
+>         char *config;
+> @@ -558,7 +559,8 @@ static void uniquify_event_name(struct evsel *counter)
+>                         counter->name = new_name;
+>                 }
+>         } else {
+> -               if (perf_pmu__has_hybrid()) {
+> +               if (perf_pmu__has_hybrid() &&
+> +                   stat_config->metric_events.nr_entries == 0) {
+>                         ret = asprintf(&new_name, "%s/%s/",
+>                                        counter->pmu_name, counter->name);
+>                 } else {
+> @@ -619,7 +621,7 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+>                 return false;
+>         cb(config, counter, data, true);
+>         if (config->no_merge || hybrid_uniquify(counter))
+> -               uniquify_event_name(counter);
+> +               uniquify_event_name(counter, config);
+>         else if (counter->auto_merge_stats)
+>                 collect_all_aliases(config, counter, cb, data);
+>         return true;
+> --
+> 2.25.1
+>

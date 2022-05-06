@@ -2,184 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58E051DE03
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DEE51DE0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444025AbiEFRDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S1444047AbiEFRHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444022AbiEFRDm (ORCPT
+        with ESMTP id S1347594AbiEFRHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:03:42 -0400
-Received: from wrqvvpks.outbound-mail.sendgrid.net (wrqvvpks.outbound-mail.sendgrid.net [149.72.131.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B16A40E
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=catern.com;
-        h=from:subject:in-reply-to:references:mime-version:to:cc:content-type:
-        content-transfer-encoding;
-        s=s1; bh=0kv8Y+pw6sAthOMznHqH5eVjKXOt00qV9e4yFDnt+Es=;
-        b=JyGuBIUDLSg4VXtCtO+PrvbRjlHlYCWKmbwjPwbfXPEBx5aN/PKoexTCq249YbDPbeWO
-        PtA9yI37NUqajl8TtUDOxJPsJZPdoZc0f4BOyHJFEAs0+N9Tgzn7WSTF6w34GdGlRK3ob2
-        5p/SWiyqSLmOjpS6RNmfIFjcrKAJPbAI5SKDW6vMnhbSFhV/CQEh9vYF+z8JcFodjYuKWY
-        Y00pZ52/0HprIoV4nG7CtUVXPI8/E0+l+HHsNgm+dbPZspoWc6fj/dS8vHormThs86lRO9
-        07IIi4OMbFj5tYdnOsI2sPYXUvofIHnKPSQZGiy7cDj541Uwh0WpDUk6w5w4AhyA==
-Received: by filterdrecv-77df7bffc9-b2j5p with SMTP id filterdrecv-77df7bffc9-b2j5p-1-627553ED-5E
-        2022-05-06 16:59:25.839025366 +0000 UTC m=+2574812.774299640
-Received: from earth.catern.com (unknown)
-        by geopod-ismtpd-2-2 (SG)
-        with ESMTP
-        id lPNwAp36QO6WuhyWBDuI8g
-        Fri, 06 May 2022 16:59:25.688 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=::1; helo=localhost; envelope-from=sbaugh@catern.com; receiver=<UNKNOWN> 
-Received: from localhost (localhost [IPv6:::1])
-        by earth.catern.com (Postfix) with ESMTPSA id 966DA60040;
-        Fri,  6 May 2022 12:59:24 -0400 (EDT)
-From:   Spencer Baugh <sbaugh@catern.com>
-Subject: Re: Explicitly defining the userspace API
-In-Reply-To: <YmA/jFztk5GkjIr2@kroah.com>
-References: <874k2nhgtg.fsf@catern.com> <YmA/jFztk5GkjIr2@kroah.com>
-Date:   Fri, 06 May 2022 16:59:26 +0000 (UTC)
-Message-ID: <87levefvgz.fsf@catern.com>
+        Fri, 6 May 2022 13:07:16 -0400
+Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2E12AC65;
+        Fri,  6 May 2022 10:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1651856612; x=1683392612;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XBwL5EqutJuz135iSTYcExDfblLw5oCCKqwGUbyYDhk=;
+  b=d1V0lf9l0Dkp7QQeXDRa2oijWKs6A7TjEiJ5BUp8SFFIYg8b6ImIq79o
+   E6bL3IKie48JPsGnbA3DANkBADJGGHHRVMORscd6wVgw7azj3ljE0HHc9
+   0rfEvi1IeYaTdfH6vZkS91oECVdpQxV8fpfkTG9FQS/6aoQELIUCji6QF
+   s=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="176373153"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647298800"; 
+   d="scan'208";a="176373153"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:03:26 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Fri,  6 May 2022 19:03:26 +0200 (CEST)
+Received: from ISCN5CG1067W80.agb.infineon.com (172.23.8.247) by
+ MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 6 May 2022 19:03:25 +0200
+From:   Johannes Holland <johannes.holland@infineon.com>
+To:     <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Alexander Steffen <alexander.steffen@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v2 1/4] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Date:   Fri, 6 May 2022 19:00:11 +0200
+Message-ID: <20220506170013.22598-1-johannes.holland@infineon.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?GW3oCMoYnalRiojMOuLzE6x2H5kORXvlCdz1UwQVRMVT4fbh9ODEfCogOe74cO?=
- =?us-ascii?Q?rI4e0V+MFZgakz9Re5a6=2FCgloGF35IKSfipc2eg?=
- =?us-ascii?Q?gco3jvfFNeZBoapduVGgMA+K=2F4SfxXcosVfTDgq?=
- =?us-ascii?Q?NVbZkA6JzG4eHrV1fet9KMsG2zjt1m1jpbhM4+s?=
- =?us-ascii?Q?j0szgyOzQfAJPXrmqWpxOgRDAsoCI0TRPkt2yvN?=
- =?us-ascii?Q?jgLmkm7A9=2FPAh1t2R0K3L1PRg9Og=2Ff0bU5gZHM?=
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcin@juszkiewicz.com.pl, torvalds@linux-foundation.org,
-        arnd@arndb.de
-X-Entity-ID: d/0VcHixlS0t7iB1YKCv4Q==
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> writes:
-> On Wed, Apr 20, 2022 at 04:15:25PM +0000, Spencer Baugh wrote:
->> 
->> Linux guarantees the stability of its userspace API, but the API
->> itself is only informally described, primarily with English prose.  I
->> want to add an explicit, authoritative machine-readable definition of
->> the Linux userspace API.
->> 
->> As background, in a conventional libc like glibc, read(2) calls the
->> Linux system call read, passing arguments in an architecture-specific
->> way according to the specific details of read.
->> 
->> The details of these syscalls are at best documented in manpages, and
->> often defined only by the implementation.  Anyone else who wants to
->> work with a syscall, in any way, needs to duplicate all those details.
->> 
->> So the most basic definition of the API would just represent the
->> information already present in SYSCALL_DEFINE macros: the C types of
->> arguments and return values.  More usefully, it would describe the
->> formats of those arguments and return values: that the first argument
->> to read is a file descriptor rather than an arbitrary integer, and
->> what flags are valid in the flags argument of openat, and that open
->> returns a file descriptor.  A step beyond that would be describing, in
->> some limited way, the effects of syscalls; for example, that read
->> writes into the passed buffer the number of bytes that it returned.
->
-> So how would you define read() in this format in a way that has not
-> already been attempted in the past?
+Implement the TCG I2C Interface driver, as specified in the TCG PC
+Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
+revision 14, section 8, I2C Interface Definition.
 
-I don't know about any attempts at doing this in the past (other than
-what's already been mentioned in this thread - e.g. SYSCALL_DEFINE),
-what do you have in mind?
+This driver supports Guard Times. That is, if required by the TPM, the
+driver has to wait by a vendor-specific time after each I2C read/write.
+The specific time is read from the TPM_I2C_INTERFACE_CAPABILITY register.
 
-> How are you going to define a format that explains functionality in a
-> way that is not just the implementation in the end?
+Unfortunately, the TCG specified almost but not quite compatible
+register addresses. Therefore, the TIS register addresses need to be
+mapped to I2C ones. The locality is stripped because for now, only
+locality 0 is supported.
 
-Lots of information can be expressed just with more specific types on
-the function signature, even with regular C types.  No need to expose
-the implementation in any way.
+Add a sanity check to I2C reads of e.g. TPM_ACCESS and TPM_STS. This is
+to detect communication errors and issues due to non-standard behaviour
+(E.g. the clock stretching quirk in the BCM2835, see 4dbfb5f4401f). In
+case the sanity check fails, attempt a retry.
 
-For example, accept4's signature is:
+The CRC over the FIFO register is not implemented here since a new call
+has to be added to the API (tpm_tis_phy_ops).
 
-SYSCALL_DEFINE4(accept4, int, fd, struct sockaddr __user *, upeer_sockaddr,
-		int __user *, upeer_addrlen, int, flags)
+Co-developed-by: Alexander Steffen <alexander.steffen@infineon.com>
+Signed-off-by: Alexander Steffen <alexander.steffen@infineon.com>
+Co-developed-by: Amir Mizinski <amirmizi6@gmail.com>
+Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+---
+Changelog:
+ * v2:
+   * move CCs from copyright comment to commit message
+   * fix an unchecked return code
+ 
+As discussed, kselftest runs successfully. However, it can time out.
+I will fix this in a subsequent patch. Basically:
 
-Here, fd and flags are the same type and have nothing to distinguish
-them.  But, purely as an example, not suggesting exactly this, but one
-could have:
+echo timeout=1500 > tools/testing/selftests/tpm2/settings
 
-typedef int user_fd_t;
-typedef int accept_flags_t;
+The line coverage for tpm_tis_i2c.c is 98.1%.
 
-SYSCALL_DEFINE4(accept4, user_fd_t, fd, struct sockaddr __user *, upeer_sockaddr,
-		int __user *, upeer_addrlen, accept_flags_t, flags)
+ drivers/char/tpm/Kconfig       |  12 ++
+ drivers/char/tpm/Makefile      |   1 +
+ drivers/char/tpm/tpm_tis_i2c.c | 359 +++++++++++++++++++++++++++++++++
+ 3 files changed, 372 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
 
-Then a user could parse this SYSCALL_DEFINE and know that fd and flags
-have different types with different possible valid values. user_fd_t
-would be used by many different syscalls, accept_flags_t just by this.
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 4a5516406c22..927088b2c3d3 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
+ 	  If you have a H1 secure module running Cr50 firmware on SPI bus,
+ 	  say Yes and it will be accessible from within Linux.
+ 
++config TCG_TIS_I2C
++	tristate "TPM Interface Specification 1.3 Interface / TPM 2.0 FIFO Interface - (I2C - generic)"
++	depends on I2C
++	select CRC_CCITT
++	select TCG_TIS_CORE
++	help
++	  If you have a TPM security chip, compliant with the TCG TPM PTP
++	  (I2C interface) specification and connected to an I2C bus master,
++	  say Yes and it will be accessible from within Linux.
++	  To compile this driver as a module, choose M here;
++	  the module will be called tpm_tis_i2c.
++
+ config TCG_TIS_SYNQUACER
+ 	tristate "TPM Interface Specification 1.2 Interface / TPM 2.0 FIFO Interface (MMIO - SynQuacer)"
+ 	depends on ARCH_SYNQUACER || COMPILE_TEST
+diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+index 66d39ea6bd10..0222b1ddb310 100644
+--- a/drivers/char/tpm/Makefile
++++ b/drivers/char/tpm/Makefile
+@@ -29,6 +29,7 @@ tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+ 
+ obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+ 
++obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
+ obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+ obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+ obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+new file mode 100644
+index 000000000000..34d12f78e7ab
+--- /dev/null
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -0,0 +1,359 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2014-2021 Nuvoton Technology corporation
++ * Copyright (C) 2019-2022 Infineon Technologies AG
++ *
++ * This device driver implements the TPM interface as defined in the TCG PC
++ * Client Platform TPM Profile (PTP) Specification for TPM 2.0 v1.04
++ * Revision 14.
++ *
++ * It is based on the tpm_tis_spi device driver.
++ */
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/slab.h>
++#include <linux/interrupt.h>
++#include <linux/wait.h>
++#include <linux/acpi.h>
++#include <linux/freezer.h>
++
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/gpio.h>
++#include <linux/of_irq.h>
++#include <linux/of_gpio.h>
++#include <linux/tpm.h>
++#include "tpm_tis_core.h"
++
++/* TPM registers */
++#define TPM_I2C_LOC_SEL 0x00
++#define TPM_I2C_ACCESS 0x04
++#define TPM_I2C_INTERFACE_CAPABILITY 0x30
++#define TPM_I2C_DEVICE_ADDRESS 0x38
++#define TPM_I2C_DATA_CSUM_ENABLE 0x40
++#define TPM_I2C_DID_VID 0x48
++#define TPM_I2C_RID 0x4C
++
++/* TIS-compatible register address to avoid clash with TPM_ACCESS (0x00) */
++#define TPM_LOC_SEL 0x0FFF
++
++/* Mask to extract the I2C register from TIS register addresses */
++#define TPM_TIS_REGISTER_MASK 0x0FFF
++
++/*
++ * Guard Time:
++ * After each I2C operation, the TPM might require the master to wait.
++ * The time period is vendor-specific and must be read from the
++ * TPM_I2C_INTERFACE_CAPABILITY register.
++ *
++ * Before the Guard Time is read (or after the TPM failed to send an I2C NACK),
++ * a Guard Time of 250µs applies.
++ *
++ * Various flags in the same register indicate if a guard time is needed:
++ *  - SR: <I2C read with repeated start> <guard time> <I2C read>
++ *  - RR: <I2C read> <guard time> <I2C read>
++ *  - RW: <I2C read> <guard time> <I2C write>
++ *  - WR: <I2C write> <guard time> <I2C read>
++ *  - WW: <I2C write> <guard time> <I2C write>
++ *
++ * See TCG PC Client PTP Specification v1.04, 8.1.10 GUARD_TIME
++ */
++
++/* Default Guard Time until interface capability register is read */
++#define GUARD_TIME_DEFAULT_MIN 250
++#define GUARD_TIME_DEFAULT_MAX 300
++
++/* Guard Time after I2C slave NACK */
++#define GUARD_TIME_ERR_MIN 250
++#define GUARD_TIME_ERR_MAX 300
++
++/* Guard Time bit masks; SR is repeated start, RW is read then write, etc. */
++#define TPM_GUARD_TIME_SR_MASK 0x40000000
++#define TPM_GUARD_TIME_RR_MASK 0x00100000
++#define TPM_GUARD_TIME_RW_MASK 0x00080000
++#define TPM_GUARD_TIME_WR_MASK 0x00040000
++#define TPM_GUARD_TIME_WW_MASK 0x00020000
++#define TPM_GUARD_TIME_MIN_MASK 0x0001FE00
++#define TPM_GUARD_TIME_MIN_SHIFT 9
++
++/* Masks with bits that must be read zero */
++#define TPM_ACCESS_READ_ZERO 0x48
++#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
++#define TPM_STS_READ_ZERO 0x23
++#define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
++#define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
++
++struct tpm_tis_i2c_phy {
++	struct tpm_tis_data priv;
++	struct i2c_client *i2c_client;
++	bool guard_time_read;
++	bool guard_time_write;
++	u16 guard_time_min;
++	u16 guard_time_max;
++	u8 *io_buf;
++};
++
++static inline struct tpm_tis_i2c_phy *
++to_tpm_tis_i2c_phy(struct tpm_tis_data *data)
++{
++	return container_of(data, struct tpm_tis_i2c_phy, priv);
++}
++
++static u8 address_to_register(u32 addr)
++{
++	addr &= TPM_TIS_REGISTER_MASK;
++
++	switch (addr) {
++	case TPM_ACCESS(0):
++		return TPM_I2C_ACCESS;
++	case TPM_LOC_SEL:
++		return TPM_I2C_LOC_SEL;
++	case TPM_DID_VID(0):
++		return TPM_I2C_DID_VID;
++	case TPM_RID(0):
++		return TPM_I2C_RID;
++	default:
++		return addr;
++	}
++}
++
++static int retry_i2c_transfer_until_ack(struct tpm_tis_data *data,
++					struct i2c_msg *msg)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	bool guard_time;
++	int i = 0;
++	int ret;
++
++	if (msg->flags & I2C_M_RD)
++		guard_time = phy->guard_time_read;
++	else
++		guard_time = phy->guard_time_write;
++
++	do {
++		ret = i2c_transfer(phy->i2c_client->adapter, msg, 1);
++		if (ret < 0)
++			usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
++		else if (guard_time)
++			usleep_range(phy->guard_time_min, phy->guard_time_max);
++		/* retry on TPM NACK */
++	} while (ret < 0 && i++ < TPM_RETRY);
++
++	return ret;
++}
++
++/* Check that bits which must be read zero are not set */
++static int sanity_check_read(u8 reg, u16 len, u8 *buf)
++{
++	u32 value;
++	u32 zero_mask;
++
++	switch (len) {
++	case sizeof(u8):
++		value = buf[0];
++		break;
++	case sizeof(u16):
++		value = le16_to_cpup((__le16 *)buf);
++		break;
++	case sizeof(u32):
++		value = le32_to_cpup((__le32 *)buf);
++		break;
++	default:
++		return 0;
++	}
++
++	switch (reg) {
++	case TPM_I2C_ACCESS:
++		zero_mask = TPM_ACCESS_READ_ZERO;
++		break;
++	case TPM_INT_ENABLE(0) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_INT_ENABLE_ZERO;
++		break;
++	case TPM_STS(1) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_STS_READ_ZERO;
++		break;
++	case TPM_INTF_CAPS(0) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_INTF_CAPABILITY_ZERO;
++		break;
++	case TPM_I2C_INTERFACE_CAPABILITY:
++		zero_mask = TPM_I2C_INTERFACE_CAPABILITY_ZERO;
++		break;
++	default:
++		return 0;
++	}
++
++	if (unlikely((value & zero_mask) != 0x00)) {
++		pr_debug("TPM I2C read of register 0x%02x failed sanity check: 0x%x\n", reg, value);
++		return -EIO;
++	}
++
++	return 0;
++}
++
++static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
++				  u8 *result, enum tpm_tis_io_mode io_mode)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
++	u8 reg = address_to_register(addr);
++	int i = 0;
++	int ret;
++
++	do {
++		/* write register */
++		msg.len = sizeof(reg);
++		msg.buf = &reg;
++		msg.flags = 0;
++		ret = retry_i2c_transfer_until_ack(data, &msg);
++		if (ret < 0)
++			return ret;
++
++		/* read data */
++		msg.buf = result;
++		msg.len = len;
++		msg.flags = I2C_M_RD;
++		ret = retry_i2c_transfer_until_ack(data, &msg);
++		if (ret < 0)
++			return ret;
++
++		ret = sanity_check_read(reg, len, result);
++		if (ret == 0)
++			return 0;
++
++		usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
++	} while (i++ < TPM_RETRY);
++
++	return ret;
++}
++
++static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
++				   const u8 *value,
++				   enum tpm_tis_io_mode io_mode)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
++	u8 reg = address_to_register(addr);
++	int ret;
++
++	if (len > TPM_BUFSIZE - 1)
++		return -EIO;
++
++	/* write register and data in one go */
++	phy->io_buf[0] = reg;
++	memcpy(phy->io_buf + sizeof(reg), value, len);
++
++	msg.len = sizeof(reg) + len;
++	msg.buf = phy->io_buf;
++	ret = retry_i2c_transfer_until_ack(data, &msg);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int init_guard_time(struct tpm_tis_i2c_phy *phy)
++{
++	u32 i2c_caps;
++	int ret;
++
++	phy->guard_time_read = true;
++	phy->guard_time_write = true;
++	phy->guard_time_min = GUARD_TIME_DEFAULT_MIN;
++	phy->guard_time_max = GUARD_TIME_DEFAULT_MAX;
++
++	ret = tpm_tis_i2c_read_bytes(&phy->priv, TPM_I2C_INTERFACE_CAPABILITY,
++				     sizeof(i2c_caps), (u8 *)&i2c_caps,
++				     TPM_TIS_PHYS_32);
++	if (ret)
++		return ret;
++
++	phy->guard_time_read = (i2c_caps & TPM_GUARD_TIME_RR_MASK) ||
++			       (i2c_caps & TPM_GUARD_TIME_RW_MASK);
++	phy->guard_time_write = (i2c_caps & TPM_GUARD_TIME_WR_MASK) ||
++				(i2c_caps & TPM_GUARD_TIME_WW_MASK);
++	phy->guard_time_min = (i2c_caps & TPM_GUARD_TIME_MIN_MASK) >>
++			      TPM_GUARD_TIME_MIN_SHIFT;
++	/* guard_time_max = guard_time_min * 1.2 */
++	phy->guard_time_max = phy->guard_time_min + phy->guard_time_min / 5;
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
++
++static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
++	.read_bytes = tpm_tis_i2c_read_bytes,
++	.write_bytes = tpm_tis_i2c_write_bytes,
++};
++
++static int tpm_tis_i2c_probe(struct i2c_client *dev,
++			     const struct i2c_device_id *id)
++{
++	struct tpm_tis_i2c_phy *phy;
++	const u8 locality = 0;
++	int ret;
++
++	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
++			   GFP_KERNEL);
++	if (!phy)
++		return -ENOMEM;
++
++	phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
++	if (!phy->io_buf)
++		return -ENOMEM;
++
++	phy->i2c_client = dev;
++
++	/* must precede all communication with the tpm */
++	ret = init_guard_time(phy);
++	if (ret)
++		return ret;
++
++	ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, sizeof(locality),
++				      &locality, TPM_TIS_PHYS_8);
++	if (ret)
++		return ret;
++
++	return tpm_tis_core_init(&dev->dev, &phy->priv, -1, &tpm_i2c_phy_ops,
++				 NULL);
++}
++
++static int tpm_tis_i2c_remove(struct i2c_client *client)
++{
++	struct tpm_chip *chip = i2c_get_clientdata(client);
++
++	tpm_chip_unregister(chip);
++	tpm_tis_remove(chip);
++	return 0;
++}
++
++static const struct i2c_device_id tpm_tis_i2c_id[] = {
++	{ "tpm_tis_i2c", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
++
++static const struct of_device_id of_tis_i2c_match[] = {
++	{ .compatible = "infineon,slb9673", },
++	{ .compatible = "tcg,tpm-tis-i2c", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
++
++static struct i2c_driver tpm_tis_i2c_driver = {
++	.driver = {
++		.owner = THIS_MODULE,
++		.name = "tpm_tis_i2c",
++		.pm = &tpm_tis_pm,
++		.of_match_table = of_match_ptr(of_tis_i2c_match),
++	},
++	.probe = tpm_tis_i2c_probe,
++	.remove = tpm_tis_i2c_remove,
++	.id_table = tpm_tis_i2c_id,
++};
++module_i2c_driver(tpm_tis_i2c_driver);
++
++MODULE_DESCRIPTION("TPM Driver for native I2C access");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
 
-With just this, the user of this information would still need to know
-what user_fd and accept_flags are.  The next step would be describing
-the valid values for accept_flags.  Unfortunately that's not something
-that the C type system alone can express, but again purely as an
-example, but one could have something like:
-
-FLAGS_DEFINE(accept_flags, int,
-  SOCK_CLOEXEC,
-  SOCK_NONBLOCK)
-
-Then a user could parse this FLAGS_DEFINE and know what the range of
-valid values for accept_flags_t is.  This could also be used in the
-kernel; for example, FLAGS_DEFINE could generate an accept_flags_valid
-function, usable in accept4 as:
-
-if (!accept_flags_valid(flags))
-	return -EINVAL;
-
-As for describing the buffer-writing behavior of read like I mentioned
-before, here's a sketch of what that maybe could look like.  The current
-signature of read is:
-
-SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count)
-
-One could imagine adding a type to the return value and changing this to
-something like:
-
-#define bytes_written_or_error(written_buffer) int
-#define writable_user_buf(size_of_buffer) char __user *
-
-SYSCALL_DEFINE3_RET(bytes_written_or_error(buf),
-                    read, unsigned int, fd,
-                    writable_user_buf(count), buf, size_t, count)
-
-A user could parse this and know at least partially how read uses the
-passed-in buffer, without having to look at the implementation.
-
-Just for the sake of mentioning it, one could also imagine static
-analysis which checks the kernel implementation against these
-more-detailed types, which could catch bugs.  But I'm not necessarily
-proposing doing that - this is useful on its own even if it's not
-checked by static analysis.
-
->> One step in this direction is Documentation/ABI, which specifies the
->> stability guarantees for different userspace APIs in a semi-formal
->> way.  But it doesn't specify the actual content of those APIs, and it
->> doesn't cover individual syscalls at all.
->
-> The content is described in Documentation/ABI/ entries, where do you see
-> that missing?
-
-I meant that it doesn't describe the content of the APIs in a
-machine-readable way.  (It's still very useful of course!)
-
-> And you are correct, that place does not describe syscalls, or other
-> user/kernel interfaces that predate sysfs.
->
-> good luck!
-
-Thank you!

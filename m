@@ -2,172 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1F551D3C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B7051D3C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344235AbiEFI5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S1344559AbiEFI5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343537AbiEFI5C (ORCPT
+        with ESMTP id S1344336AbiEFI5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:57:02 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365D5D181
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:53:19 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bu29so11522135lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eaAW8uOFlvAinrao426R7OuE0ao2r8O8NVXKwXYnVX8=;
-        b=wiZCB9DfTEPaFeiCnFgmB2CMBEwD1hiSVCRgnYecxvdZrzapfyCMHuRA+Akq1WGcti
-         8nRPJu1TSpgG4pluut8jdfE8esvQySd6wQbmbcay8cEYT1bzLm7LA8zy8F75Jbxfp4pZ
-         f/beuZ6yv2MyOyv2VmZNofKX16Xmem55e9R1qS2x1Yr73BBWuWncF7t52BXwz0QDoC2n
-         X2artWPbeGuIYD3wcrm0yYFcyZaKpaUPpTP/Pdd4oMl4N2DXSmu7Zq1XJ/vWh3Z/R9fw
-         xtRv0+bnymfvkVIqIwxqi6RYfy0D/4GsluTdhzOd/CPP5jl56ear2+Ul8mrxsY7pZyXm
-         8ulw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eaAW8uOFlvAinrao426R7OuE0ao2r8O8NVXKwXYnVX8=;
-        b=bhnzzXbGswTgu7tWumJaJvIhwk5h+aRIwDOVJ4xQAwzaTHoXiVkAKneVA2mYVIyUyp
-         53wDcokpqaPmDuB6nBnEmEutxNACeyk1KpTSZl8pIwb98UglsdRjHYM2hbmm/n/Sov2p
-         cq8EZ1MJ7GibFERtEeCkhBev6Y4QloFKb9XP9u5BdlBICuYO3qPXfG1WESutwpWGc0Lx
-         P2N9FAlBpwU86ynJOJoBDbZZBfRvnJlVhERFd3rD2uNtp6PUKe9kD9g1prMvvVASrheC
-         roBNa8GyKg9X1wP3C2BgLvETxB+qy2ySgnuOL4fsQFggpIhaWPIeZy5oBMp0ob75EBpX
-         cFjQ==
-X-Gm-Message-State: AOAM5309AMxxpTTuM//+tOgky80H9Rnz5gGwlRUJP/cm6Z8mHTDSnC3y
-        icF7MUbK8v9XOMUU+xDNTVEfrcpLKmf2TdQx8lqW2w==
-X-Google-Smtp-Source: ABdhPJw0PTzOmg/+CrYgh09I3H2knLnkp9taoJl4RWlutgW8GPm+L9ti1Bep2tow/W7F5VNwFE8BOvnjE2bvwfCFMhQ=
-X-Received: by 2002:ac2:4e98:0:b0:448:3039:d170 with SMTP id
- o24-20020ac24e98000000b004483039d170mr1889783lfr.233.1651827198179; Fri, 06
- May 2022 01:53:18 -0700 (PDT)
+        Fri, 6 May 2022 04:57:32 -0400
+Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A349F5D5D2;
+        Fri,  6 May 2022 01:53:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 64CF7FB03;
+        Fri,  6 May 2022 10:53:45 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pWt2Bo0FRgjE; Fri,  6 May 2022 10:53:44 +0200 (CEST)
+Date:   Fri, 6 May 2022 10:53:39 +0200
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Liu Ying <victor.liu@nxp.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        vkoul@kernel.org, robh@kernel.org, krzk@kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        robert.chiras@nxp.com, martin.kepplinger@puri.sm
+Subject: Re: [PATCH resend v8 1/5] drm/bridge: nwl-dsi: Set PHY mode in
+ nwl_dsi_mode_set()
+Message-ID: <YnTiEw5Drg4uHHJw@qwark.sigxcpu.org>
+References: <20220419010852.452169-1-victor.liu@nxp.com>
+ <20220419010852.452169-2-victor.liu@nxp.com>
+ <YmLkv4PYsi+XiFr5@qwark.sigxcpu.org>
+ <538339829534d8ef10c68198016d198a9ec037fc.camel@nxp.com>
 MIME-Version: 1.0
-References: <20220504213251.264819-1-sebastian.reichel@collabora.com> <20220504213251.264819-10-sebastian.reichel@collabora.com>
-In-Reply-To: <20220504213251.264819-10-sebastian.reichel@collabora.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 6 May 2022 10:52:42 +0200
-Message-ID: <CAPDyKFqLn4LfPRbhoWw_9BF26Lgmzq_1j=RB31NDGn9YvMnB5w@mail.gmail.com>
-Subject: Re: [PATCHv2 09/21] mmc: sdhci-of-dwcmshc: add reset call back for
- rockchip Socs
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <538339829534d8ef10c68198016d198a9ec037fc.camel@nxp.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 at 23:33, Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
->
-> The reset function build in the SDHCI will not reset the logic
-> circuit related to the tuning function, which may cause data
-> reading errors. Resetting the complete SDHCI controller through
-> the reset controller fixes the issue.
->
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> [rebase, use optional variant of reset getter]
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Hi Liu,
+On Fri, Apr 29, 2022 at 08:30:43PM +0800, Liu Ying wrote:
+> Hi,
+> 
+> On Fri, 2022-04-22 at 19:24 +0200, Guido Günther wrote:
+> > Hi,
+> > On Tue, Apr 19, 2022 at 09:08:48AM +0800, Liu Ying wrote:
+> > > The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
+> > > works with a Mixel MIPI DPHY + LVDS PHY combo to support either
+> > > a MIPI DSI display or a LVDS display.  So, this patch calls
+> > > phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
+> > > explicitly.
+> > > 
+> > > Cc: Guido Günther <agx@sigxcpu.org>
+> > > Cc: Robert Chiras <robert.chiras@nxp.com>
+> > > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> > > Cc: Neil Armstrong <narmstrong@baylibre.com>
+> > > Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> > > Cc: Jonas Karlman <jonas@kwiboo.se>
+> > > Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > > Cc: David Airlie <airlied@linux.ie>
+> > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > Cc: NXP Linux Team <linux-imx@nxp.com>
+> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> 
+> Hope this patch won't fall through the cracks.
+> Can someone please apply it to drm-misc-next? Robert?
 
-I think this needs a corresponding update of the DT docs. Otherwise
-this looks good to me.
+Applied to drm-misc-next.
+Cheers,
+ -- Guido
 
-Kind regards
-Uffe
-
-> ---
->  drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index bac874ab0b33..3a1b5ba36405 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -15,6 +15,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/reset.h>
->  #include <linux/sizes.h>
->
->  #include "sdhci-pltfm.h"
-> @@ -63,6 +64,7 @@
->  struct rk3568_priv {
->         /* Rockchip specified optional clocks */
->         struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
-> +       struct reset_control *reset;
->         u8 txclk_tapnum;
->  };
->
-> @@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
->         sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
->  }
->
-> +static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
-> +{
-> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +       struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
-> +       struct rk35xx_priv *priv = dwc_priv->priv;
-> +
-> +       if (mask & SDHCI_RESET_ALL && priv->reset) {
-> +               reset_control_assert(priv->reset);
-> +               udelay(1);
-> +               reset_control_deassert(priv->reset);
-> +       }
-> +
-> +       sdhci_reset(host, mask);
-> +}
-> +
->  static const struct sdhci_ops sdhci_dwcmshc_ops = {
->         .set_clock              = sdhci_set_clock,
->         .set_bus_width          = sdhci_set_bus_width,
-> @@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
->         .set_bus_width          = sdhci_set_bus_width,
->         .set_uhs_signaling      = dwcmshc_set_uhs_signaling,
->         .get_max_clock          = sdhci_pltfm_clk_get_max_clock,
-> -       .reset                  = sdhci_reset,
-> +       .reset                  = rk35xx_sdhci_reset,
->         .adma_write_desc        = dwcmshc_adma_write_desc,
->  };
->
-> @@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
->         int err;
->         struct rk3568_priv *priv = dwc_priv->priv;
->
-> +       priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
-> +       if (IS_ERR(priv->reset)) {
-> +               err = PTR_ERR(priv->reset);
-> +               dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
-> +               return err;
-> +       }
-> +
->         priv->rockchip_clks[0].id = "axi";
->         priv->rockchip_clks[1].id = "block";
->         priv->rockchip_clks[2].id = "timer";
-> --
-> 2.35.1
->
+> 
+> Thanks,
+> Liu Ying
+> 
+> > > ---
+> > > v7->v8:
+> > > * Resend with Andrzej's and Jernej's mail addressed updated.
+> > > 
+> > > v6->v7:
+> > > * No change.
+> > > 
+> > > v5->v6:
+> > > * Rebase the series upon v5.17-rc1.
+> > > * Set PHY mode in ->mode_set() instead of ->pre_enable() in the
+> > > nwl-dsi
+> > >   bridge driver due to the rebase.
+> > > * Drop Guido's R-b tag due to the rebase.
+> > > 
+> > > v4->v5:
+> > > * No change.
+> > > 
+> > > v3->v4:
+> > > * No change.
+> > > 
+> > > v2->v3:
+> > > * No change.
+> > > 
+> > > v1->v2:
+> > > * Add Guido's R-b tag.
+> > > 
+> > >  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c
+> > > b/drivers/gpu/drm/bridge/nwl-dsi.c
+> > > index d5945501a5ee..85bab7372af1 100644
+> > > --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> > > +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> > > @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi
+> > > *dsi)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > +	ret = phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
+> > > +	if (ret < 0) {
+> > > +		DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n",
+> > > ret);
+> > > +		goto uninit_phy;
+> > > +	}
+> > > +
+> > >  	ret = phy_configure(dsi->phy, phy_cfg);
+> > >  	if (ret < 0) {
+> > >  		DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n",
+> > > ret);
+> > 
+> > I can't currently test this but it still looks good so
+> > 
+> > Reviewed-by: Guido Günther <agx@sigxcpu.org>
+> > 
+> > Cheers,
+> >  -- Guido
+> > 
+> > > -- 
+> > > 2.25.1
+> > > 
+> 

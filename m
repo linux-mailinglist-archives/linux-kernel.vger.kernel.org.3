@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C60951D32E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3549451D332
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390036AbiEFIUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S1390082AbiEFIU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390048AbiEFIUE (ORCPT
+        with ESMTP id S1390058AbiEFIUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:20:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5731368333
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:16:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 96AD01F910;
-        Fri,  6 May 2022 08:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651824974; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vMtR9RH4hTYIsMANbyKvgkBZPC808rHyRFlpC3fYLRo=;
-        b=BDN/cKlwvO99GE7qhWLk8USYXX45YH1F8Sy30e3vxmtG4E3B6lAp9+pe0VDCuA3jQJXAq8
-        09OWYYPDLZtCK3iTfGb2Fr9k6sgJbBQOKNa4REs7Bb455QeO8QWOXXKAOAHBnojDeb5esX
-        P70Rn/O1tBYx6sw0icRrV5yH/BLX1Wg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3A0D22C142;
-        Fri,  6 May 2022 08:16:13 +0000 (UTC)
-Date:   Fri, 6 May 2022 10:16:13 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-Message-ID: <YnTZTQv/oGwMiXud@alley>
-References: <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
- <87k0b6blz2.fsf@jogness.linutronix.de>
- <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
- <Ym/Z7PYPqvWPEjuL@alley>
- <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
- <87pmktm2a9.fsf@jogness.linutronix.de>
- <87a6bwapij.fsf@jogness.linutronix.de>
- <87zgjvd2zb.fsf@jogness.linutronix.de>
- <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
+        Fri, 6 May 2022 04:20:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C3E689AA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:16:58 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kvk146pqTzhYmL;
+        Fri,  6 May 2022 16:16:24 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 16:16:56 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 16:16:56 +0800
+Subject: Re: [PATCH v3] arm64: add the printing of tpidr_elx in __show_regs()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220505095640.312-1-thunder.leizhen@huawei.com>
+ <YnPLQJhu5B1Cxvoh@FVFF77S0Q05N.cambridge.arm.com>
+ <c6c22386-af37-1acc-63e9-2bb85028aa8c@huawei.com>
+ <307e4def-1e4a-1110-e644-d485b9959ab1@huawei.com>
+Message-ID: <7c1207fa-56aa-1b33-31fd-3ec395b08f2b@huawei.com>
+Date:   Fri, 6 May 2022 16:16:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <307e4def-1e4a-1110-e644-d485b9959ab1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-05-06 08:43:02, Marek Szyprowski wrote:
-> Hi John,
-> 
-> On 06.05.2022 00:33, John Ogness wrote:
-> > On 2022-05-05, John Ogness <john.ogness@linutronix.de> wrote:
-> >> I will go through and check if all access to AML_UART_CONTROL is
-> >> protected by port->lock.
-> > The startup() callback of the uart_ops is not called with the port
-> > locked. I'm having difficulties identifying if the startup() callback
-> > can occur after the console was already registered via meson_uart_init()
-> > and could be actively printing, but I see other serial drivers are
-> > protecting their registers in the startup() callback with the
-> > port->lock.
 
-I guess that it is used by the early console before the racy
-code is called.
 
-> > Could you try booting the meson hardware with the following change? (And
-> > removing any previous debug changes I posted?)
+On 2022/5/5 21:34, Leizhen (ThunderTown) wrote:
 > 
-> Bingo! It looks that the startup() is called when getty initializes 
-> console. This fixed the issues observed on the Amlogic Meson based boards.
 > 
-> Feel free to add:
+> On 2022/5/5 21:26, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/5/5 21:04, Mark Rutland wrote:
+>>> On Thu, May 05, 2022 at 05:56:40PM +0800, Zhen Lei wrote:
+>>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
+>>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
+>>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
+>>>> pcpu access. However, when performing reverse execution based on the
+>>>> registers and the memory contents in kdump, this information is sometimes
+>>>> required if there is a pcpu access.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>> ---
+>>>>  arch/arm64/kernel/process.c | 5 +++++
+>>>>  1 file changed, 5 insertions(+)
+>>>>
+>>>> v2 --> v3:
+>>>> 1) Relace "switch (read_sysreg(CurrentEL))" statement with
+>>>>    "if (is_kernel_in_hyp_mode())" statement.
+>>>> 2) Change the register name to lowercase.
+>>>>
+>>>> v1 --> v2:
+>>>> Directly print the tpidr_elx register of the current exception level.
+>>>> Avoid coupling with the implementation of 'my_cpu_offset'.
+>>>>
+>>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+>>>> index 7fa97df55e3ad3f..7b6bccce9721c36 100644
+>>>> --- a/arch/arm64/kernel/process.c
+>>>> +++ b/arch/arm64/kernel/process.c
+>>>> @@ -216,6 +216,11 @@ void __show_regs(struct pt_regs *regs)
+>>>>  	show_regs_print_info(KERN_DEFAULT);
+>>>>  	print_pstate(regs);
+>>>>  
+>>>> +	if (is_kernel_in_hyp_mode())
+>>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(tpidr_el2));
+>>>> +	else
+>>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(tpidr_el1));
+>>>
+>>> If we care about the offset specifically, this would be simpler as:
+>>>
+>>> 	printk("cpu offset : 0x%016lx\n", __my_cpu_offset());
+>>
+>> The function name is __show_regs(), so not using register name may not be good.
+>> In fact, some other architectures may also have this problem. If we use my_cpu_offset,
+>> we may need to put it in a public.
 > 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> The other idea is to back up each my_cpu_offset in an array. In this way, the offset can
+> be queried through vmcore even if it is not printed.
 
-Uff, it is a huge relief that it has got fixed.
+Sorry, __per_cpu_offset[NR_CPUS] is always defined.
 
-Best Regards,
-Petr
+> 
+>>
+>>>
+>>> ... which should do the right thing even if we repurpose the TPIDRs and move the offset elsewhere.
+>>>
+>>> As Will says, we should only log this for !user_mode(regs), so it could
+>>> be placed in the block below, immediately before we print the kernel PC, i.e.
+>>>
+>>> 	if (!user_mode_regs) {
+>>> 		printk("cpu offset : %016lx\n", __my_cpu_offset());
+>>> 		printk("pc : %pS\n", (void *)regs->pc);
+>>> 		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
+>>> 		...
+>>> 	}
+>>>
+>>> ... or in a separate block which checks the same condition.
+>>>
+>>> Thanks,
+>>> Mark.
+>>>
+>>>> +
+>>>>  	if (!user_mode(regs)) {
+>>>>  		printk("pc : %pS\n", (void *)regs->pc);
+>>>>  		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
+>>>> -- 
+>>>> 2.25.1
+>>>>
+>>> .
+>>>
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei

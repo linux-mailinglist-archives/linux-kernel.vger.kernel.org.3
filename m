@@ -2,165 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B0051E173
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DE251E16A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444617AbiEFV7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S1444589AbiEFV60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388588AbiEFV73 (ORCPT
+        with ESMTP id S234286AbiEFV6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:59:29 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106BCFD2E;
-        Fri,  6 May 2022 14:55:45 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:51392)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn5vI-002qGu-RE; Fri, 06 May 2022 15:55:40 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37284 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn5vH-009fTk-Lj; Fri, 06 May 2022 15:55:40 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-arch@vger.kernel.org, kbuild-all@lists.01.org,
-        Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220506141512.516114-2-ebiederm@xmission.com>
-        <202205070451.wstjDYm7-lkp@intel.com>
-Date:   Fri, 06 May 2022 16:52:14 -0500
-In-Reply-To: <202205070451.wstjDYm7-lkp@intel.com> (kernel test robot's
-        message of "Sat, 7 May 2022 04:38:03 +0800")
-Message-ID: <87r156z5v5.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 6 May 2022 17:58:21 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C98A6FA15;
+        Fri,  6 May 2022 14:54:37 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id hf18so7030857qtb.0;
+        Fri, 06 May 2022 14:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RwE9cq9p0Nlb5WXcx6miQbDi/yCUsV/mHE4B3DAunEQ=;
+        b=XBjKjnmoAxI4U0zjITutiDy4hvb6gAkXbGpivr33VkTd3yXk046a9ztdGeEmoM8xmq
+         viKWdYYQfgz/9kE4Yg3VViyBRWrngMQ+CYisgxaF7Yy07Hm3KEs0CMQ3wAgV0y/jgMbw
+         hl0m2eg+knwyjh8UOWlDRShpxjXdFrw/zwBADtcDL51HoarIoYBNvfrvg6Fvq8owwl6I
+         03Kj+u1smm7ys8OGB+uymtUOQOY/zU6Oy7idBZl5LsucdrsafoofLKL4QmvpNdPjAYMG
+         a+M81ZX3QL10EVljZXaEtEP2ngXk0DRgDvME1Qrmr88QSHjs23rooxoYa+cgE7svNIBx
+         4pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RwE9cq9p0Nlb5WXcx6miQbDi/yCUsV/mHE4B3DAunEQ=;
+        b=mcJVlRBXAKTqbmyGm/FppKgicHopPS7wVy9p15czdTYVpBtyGyQ2Jkj1dO9qFFSGbP
+         e+beocbA6ExEMBHufts2tv6sa/1ooQXxoMCB2LX5GfAdd3agaYzACxhd4m2Uud8Mo/WJ
+         x5GOOOdOu7ElAoBW+cPgYVWfLNdXXuxwqwSQw1z2v+wJVYfvqQr1wf09q3I6sirGhCaw
+         nf6l6RttoN+/CNnW0CCEZ1fX3ecq4ERLHUkcNZZj4EF/rThVkU9VuRRuv6ob2NyTShJE
+         fRyqf7giJe+MukCGtd+fAmM4MfdVKUBJULH2aO+fYiGf8UQwl/6WhtUtVB+pyVFsBVMI
+         LhUA==
+X-Gm-Message-State: AOAM533NFRpzSJC5lkCAkA52b4GNpK03/b2lvYgQFB/uJxgl6gZ7/1mk
+        I41PKmtun2n2HD3Gz3pvOHH5wGAVLOi4hZnq/II=
+X-Google-Smtp-Source: ABdhPJwxY/50SN1+xVwy4AdOMSL/WvUMQPV+2K5V61Yi3kCKeGyqxkZqly9+WDBG/E9q8eqf/qN7lNQrTbZltStTOzE=
+X-Received: by 2002:a05:622a:155:b0:2f3:9484:c38e with SMTP id
+ v21-20020a05622a015500b002f39484c38emr4801986qtw.494.1651874076599; Fri, 06
+ May 2022 14:54:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nn5vH-009fTk-Lj;;;mid=<87r156z5v5.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18wpx3bMD1y5ayFn901iqPauFSXlIozA08=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220425182249.2753690-1-robimarko@gmail.com> <20220425182249.2753690-2-robimarko@gmail.com>
+ <YnSW+mNgAp17e/YE@builder.lan>
+In-Reply-To: <YnSW+mNgAp17e/YE@builder.lan>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Fri, 6 May 2022 23:54:25 +0200
+Message-ID: <CAOX2RU4B6hqQtJCW3ifXfxd9dMCGE+FygDimGQOP49PRjp_y3g@mail.gmail.com>
+Subject: Re: [PATCH 2/7] clk: qcom: ipq8074: disable USB GDSC-s SW_COLLAPSE
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Abhishek Sahu <absahu@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;kernel test robot <lkp@intel.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 597 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 13 (2.2%), b_tie_ro: 12 (1.9%), parse: 1.14
-        (0.2%), extract_message_metadata: 31 (5.1%), get_uri_detail_list: 2.9
-        (0.5%), tests_pri_-1000: 24 (4.0%), tests_pri_-950: 1.61 (0.3%),
-        tests_pri_-900: 1.21 (0.2%), tests_pri_-90: 190 (31.9%), check_bayes:
-        171 (28.7%), b_tokenize: 11 (1.8%), b_tok_get_all: 13 (2.1%),
-        b_comp_prob: 3.1 (0.5%), b_tok_touch_all: 139 (23.3%), b_finish: 1.29
-        (0.2%), tests_pri_0: 319 (53.4%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 6 (0.9%), poll_dns_idle: 0.28 (0.0%), tests_pri_10:
-        2.1 (0.4%), tests_pri_500: 9 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 2/7] fork: Pass struct kernel_clone_args into copy_thread
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot <lkp@intel.com> writes:
+On Fri, 6 May 2022 at 05:33, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 25 Apr 13:22 CDT 2022, Robert Marko wrote:
+>
+> > Like in IPQ6018 Qualcomm intentionally disables the SW_COLLAPSE on the USB
+> > GDSC-s in the downstream 5.4 kernel.
+> >
+> > This could potentially be better handled by utilizing the GDSC driver, but
+> > I am not familiar with it nor do I have datasheets.
+>
+> Could you please give it a try before we pick this up?
+> Look at e.g. drivers/clk/qcom/gcc-sdm845.c how usb30_prim_gdsc and
+> usb30_sec_gdsc are defined, the offsets in specified in .gdscr should be
+> the same offsets you give below.
+>
+> Then you specify an array of struct gdsc *, associating the two gdscs
+> you have specified to some identifier (USB30_PRIM_GDSC and
+> USB30_SEC_GDSC is used in sdm845) and reference this list as .gdscs and
+> num_gdscs in the gcc_ipq8074_desc.
+>
+> The last part is to tie the USB controllers to the two GDSCs, this is
+> done by simply specifying:
+>
+>         power-domains = <&gcc USB30_PRIM_GDSC>;
+>
+> and USB30_SEC_GDSC, in the two USB nodes in DeviceTree. SW_COLLAPSE will
+> be toggled by the PM state of the USB driver, like it's done on e.g.
+> sdm845.
 
-> Hi "Eric,
->
-> Thank you for the patch! Yet something to improve:
+Hi Bjorn, thanks for the tips, it makes more sense now.
+The only thing I am not sure about are the feature flags for these GDSCs,
+how to figure out which ones are correct as I dont have datasheets and QCA
+does not use GDSCs in the downstream kernel?
+POLL_CFG_GDSCR will cause the GDSC not to get enabled, while VOTABLE
+seems to work.
 
-Fixed in my tree now.  Thank you.
+Regards,
+Robert
 
-Eric
-
 >
-> [auto build test ERROR on deller-parisc/for-next]
-> [also build test ERROR on linus/master v5.18-rc5]
-> [cannot apply to tip/x86/core next-20220506]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> Regards,
+> Bjorn
 >
-> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
-> config: h8300-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070451.wstjDYm7-lkp@intel.com/config)
-> compiler: h8300-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/22689080e2beece6919f918620e4c780cf7320eb
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
->         git checkout 22689080e2beece6919f918620e4c780cf7320eb
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    arch/h8300/kernel/process.c:58:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
->       58 | void arch_cpu_idle(void)
->          |      ^~~~~~~~~~~~~
->>> arch/h8300/kernel/process.c:108:46: error: unknown type name 'kernel_cloen_args'
->      108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
->          |                                              ^~~~~~~~~~~~~~~~~
->>> arch/h8300/kernel/process.c:108:5: error: conflicting types for 'copy_thread'; have 'int(struct task_struct *, const int *)'
->      108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
->          |     ^~~~~~~~~~~
->    In file included from arch/h8300/kernel/process.c:30:
->    include/linux/sched/task.h:71:12: note: previous declaration of 'copy_thread' with type 'int(struct task_struct *, const struct kernel_clone_args *)'
->       71 | extern int copy_thread(struct task_struct *, const struct kernel_clone_args *);
->          |            ^~~~~~~~~~~
->    arch/h8300/kernel/process.c: In function 'copy_thread':
->>> arch/h8300/kernel/process.c:110:33: error: request for member 'stack' in something not a structure or union
->      110 |         unsigned long usp = args->stack;
->          |                                 ^~
->    arch/h8300/kernel/process.c:111:36: error: request for member 'stack_size' in something not a structure or union
->      111 |         unsigned long topstk = args->stack_size;
->          |                                    ^~
->    arch/h8300/kernel/process.c: At top level:
->    arch/h8300/kernel/process.c:153:16: warning: no previous prototype for 'sys_clone' [-Wmissing-prototypes]
->      153 | asmlinkage int sys_clone(unsigned long __user *args)
->          |                ^~~~~~~~~
->
->
-> vim +/kernel_cloen_args +108 arch/h8300/kernel/process.c
->
->    107	
->  > 108	int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
->    109	{
->  > 110		unsigned long usp = args->stack;
->    111		unsigned long topstk = args->stack_size;
->    112		struct pt_regs *childregs;
->    113	
->    114		childregs = (struct pt_regs *) (THREAD_SIZE + task_stack_page(p)) - 1;
->    115	
->    116		if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
->    117			memset(childregs, 0, sizeof(struct pt_regs));
->    118			childregs->retpc = (unsigned long) ret_from_kernel_thread;
->    119			childregs->er4 = topstk; /* arg */
->    120			childregs->er5 = usp; /* fn */
->    121		}  else {
->    122			*childregs = *current_pt_regs();
->    123			childregs->er0 = 0;
->    124			childregs->retpc = (unsigned long) ret_from_fork;
->    125			p->thread.usp = usp ?: rdusp();
->    126		}
->    127		p->thread.ksp = (unsigned long)childregs;
->    128	
->    129		return 0;
->    130	}
->    131	
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> >  drivers/clk/qcom/gcc-ipq8074.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+> > index 2ebd1462db78..65249a03a672 100644
+> > --- a/drivers/clk/qcom/gcc-ipq8074.c
+> > +++ b/drivers/clk/qcom/gcc-ipq8074.c
+> > @@ -4806,6 +4806,11 @@ static int gcc_ipq8074_probe(struct platform_device *pdev)
+> >       if (IS_ERR(regmap))
+> >               return PTR_ERR(regmap);
+> >
+> > +     /* Disable SW_COLLAPSE for USB0 GDSCR */
+> > +     regmap_update_bits(regmap, 0x3e078, BIT(0), 0x0);
+> > +     /* Disable SW_COLLAPSE for USB1 GDSCR */
+> > +     regmap_update_bits(regmap, 0x3f078, BIT(0), 0x0);
+> > +
+> >       clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
+> >       clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
+> >                               &nss_crypto_pll_config);
+> > --
+> > 2.35.1
+> >

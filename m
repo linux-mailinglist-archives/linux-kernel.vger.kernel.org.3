@@ -2,102 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6263051D1F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C46B51D1FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389140AbiEFHMO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 6 May 2022 03:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S1389205AbiEFHOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiEFHML (ORCPT
+        with ESMTP id S1389397AbiEFHOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:12:11 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB0366F91
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:08:27 -0700 (PDT)
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MmDAW-1oDAOw1KDo-00iFcl for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022
- 09:08:26 +0200
-Received: by mail-wr1-f47.google.com with SMTP id j15so8797537wrb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:08:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531/9RJcscNm/LRQYFtWTq7xzfoBRrcKGUPwmsaVYrVomEeglH5F
-        nb3Fco+wbwykUU0XQWt25hJGSbG0gB6PNYrskoU=
-X-Google-Smtp-Source: ABdhPJyxQL7zXUvqc8Kd4IsKQ8DDXXLoN0a7JzRoOljSaWzZBetR0EfL9eTA1FbUSvR8gVY1EVpw67HhWtjipCJXf7Q=
-X-Received: by 2002:a5d:5986:0:b0:20c:5844:820d with SMTP id
- n6-20020a5d5986000000b0020c5844820dmr1442079wri.192.1651820906011; Fri, 06
- May 2022 00:08:26 -0700 (PDT)
+        Fri, 6 May 2022 03:14:36 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6107B66F83
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:10:54 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2464HLCa004338;
+        Fri, 6 May 2022 07:10:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=neMvv5rHRBpMvbDM07sFvuxo2q7ZdyOyEAf4cYg4wjc=;
+ b=O9e9ANTMCpnFxD1w+xeUMeuHoUW4M+iwPXTVAxCyIkdcp63twUD7jaCSlVffoJHMBFRz
+ tu0Io9FSlz68TXNkRtwshHHnwRbwDtR/ImzDItufFpnRE7QT5/b8IJ5kakRoklEsdlpQ
+ l7vc5Ea62ds0D5zY0zqbc1GWFQzZFNKUIZEhqLL9NucDszQEI9odTZCw9e2cFObZ8mqx
+ Z/tUJ0JASG9Txhg4b17DFVejCVEfIqcg/hp9/4MqATQ8MZ4BsLyDG2Cmzi1wQy/8IM2D
+ rvXg0Q4Jgd6SJis/ULzslTNBtkic6U9m4RkA7I/AZbZ/fs3jDRwLffiMjhlu5OeEwTHA Yw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0ncnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 May 2022 07:10:44 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24676bqU015935;
+        Fri, 6 May 2022 07:10:43 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2049.outbound.protection.outlook.com [104.47.73.49])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fus900pwj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 May 2022 07:10:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SdZV9XH6K4ydO3r0YMeP9MV+phJud646HnsfX44DmYuW3ErfnenyWu+4IoJvoS7+GutEEbCm7Z5f7YzeGlhcJFQ4pJnWwTqnng5u2MpoP47H+xFKFoWF2zHGTFNW0QbjKS3BLDHbpnLcD3lo6BOLZsqBl7ujcnaesqnSKVCbvR8sKxzOl/avt6eeCmLpM6MDxgHSDZs10Cc7jpKNPU942hhlaprkrcPEaNkHfISBhOx6kMwTZ3Ahsqta0kXDAD2RWUNKbzUni3ExD1pgoKVV8pRQLiEf4+/WG1+CYmw0qSNkycT5ex3eZ65gsvzmit4dvc6mV63ISpWN2KhqEH8QxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=neMvv5rHRBpMvbDM07sFvuxo2q7ZdyOyEAf4cYg4wjc=;
+ b=MmaE66Ke+2bDup6DEyyzh1GNpDcU38yNG7henCdeVjzIzNfmgE2DvnLeHmTe3vf57JIA0rM+EijgqbYcdIwTXv/JeGwpJUmxFJbtQITf/RL/X0yay0Vqfrp2FTBVIbguBaOMIxrnHnQ6NoPlTlNGHSrxAmRwtYJPg1QHCtOEJC4oRKZwt8YgdkZmSQpaAvm8i3BMN/6Gi7pAFLucYtM/SDLKcdDr/vmoiHpuxjmMlvswkt+2p05fwzIrRyZfY8Fnn674aIV9a6lOAMOCKK6URRvwcaftaI1+qfLK4EBTCQ0tEldt1zFQw8FuALkNSpzNwVGgny4n0pOtb6NBHNbAug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=neMvv5rHRBpMvbDM07sFvuxo2q7ZdyOyEAf4cYg4wjc=;
+ b=ORoYfaDURGzDPGPJRpIcm6XtXRLsZjTg3yh1zTDMSyUDeRz/mNNN3N8bmG+Ca2sDWrzOrL8GR/cppICst9sbky6k7dHKf1zi/hJ4Lam6zVSaAci/CeWtlHfxxxHNiBp1MNnB+RbTQhfPHCJN7gZnXiaUYv7xDdQPvSltSELQ80A=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB2022.namprd10.prod.outlook.com
+ (2603:10b6:903:123::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Fri, 6 May
+ 2022 07:10:41 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba%5]) with mapi id 15.20.5206.027; Fri, 6 May 2022
+ 07:10:41 +0000
+Date:   Fri, 6 May 2022 10:10:23 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Wang Cheng <wanngchenng@gmail.com>
+Cc:     paskripkin@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] staging: rtl8712: fix uninit-value in usb_read8()
+ and friends
+Message-ID: <20220506071023.GB4031@kadam>
+References: <cover.1651760402.git.wanngchenng@gmail.com>
+ <b9b7a6ee02c02aa28054f5cf16129977775f3cd9.1651760402.git.wanngchenng@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9b7a6ee02c02aa28054f5cf16129977775f3cd9.1651760402.git.wanngchenng@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0011.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::23)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220506022638.15864-1-yuehaibing@huawei.com>
-In-Reply-To: <20220506022638.15864-1-yuehaibing@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 6 May 2022 09:08:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2iPwOaRgrW6gw+8ZvxwKDROWFtoCz2LLF9RFDuDrEcJQ@mail.gmail.com>
-Message-ID: <CAK8P3a2iPwOaRgrW6gw+8ZvxwKDROWFtoCz2LLF9RFDuDrEcJQ@mail.gmail.com>
-Subject: Re: [PATCH -next] ASoC: mediatek: mt8195: Fix build warning without CONFIG_OF
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:CNiqlD/xUWb4ReQRrIpAB3nFbgvHzIzdacbOuXOTOWu3XApThwU
- ve8R52qBZnzuhc0zXsmvrJDiIkJ6PelWR5nAWpTWrV92PbT8M4RadB14zX/NL4ooAXM9nlu
- ptFXqUW7rFkTma2ggpUllGqhvJpOMWS/IsNcFWwawPhEh0Zm799aZJRrHazek5cLSsodqyD
- jpXjGwIp8QrQGkLy9W+zQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xq5bWTpBw9E=:cwyDe8LkUmcOy3ThB0PWbV
- r4zNRg5WHNN5SvQVXtdP3uYVhnRgyGcx3Yr2+ChtexUnqZ3sulzSXZQGtkIJ9sUoKB4nzTW5b
- v9DpMX9MBBf8n5iRqC18LKayCJjOebf6c1svte2Epj2mz+zj5su+xYu2AAGwMf1wHnz/LR8Yz
- Z+QEXkL//gqlmr3btBR1+3hXEnlm+LGFNQfPcozOdxzErvyYTqoNXfPAZStnLks0EStVNGks+
- lZmDtWbSdURKIEQ9CJowUhG5YV8k+E1l+a/RpClNYyVzf2PtyzPa1KROEEu7MNBpnCEeIwC0m
- dzFJ8BoPDuw7K2zQSKQmXMkytKN1CPsPL3+I7Yx7RdmnX69q2YGJeaUg1OiQ7LJ6gd1NJOz40
- 87+BJu58lYtxcOh6ugvMQ8wyTErjRf/sN4M63+V7uKq0Xsp3QZySZDO6FAtBLeVsoEVl69V1D
- dOZPqkhb+pFByNy/awT1rm70350bEB3kyJwdOLIJY+ptbs2N8waI3i62wukfBwNcc1T3oShry
- 1Ta7kuuZ18ZZcqfIs9EZ4+USreKHGN21oO32GhbA1kbt0Pl283aNpijl+ZdhCL8AGcaXtl3/B
- zXJTQd10IPGaESNYHJEpI4WtHYm0OQarwlxsCRZLZRQJbTD1Yxs98wS2rGpNFq8EG2ZELdYrL
- MhFlWdEXNx5FLZht3FgH5m2CHJZ09fywxptERfvqwwN0tlp+3CBDJF3SfMXoXBwG++pA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ab8d8ceb-a5b0-40d0-a8a1-08da2f2f875d
+X-MS-TrafficTypeDiagnostic: CY4PR10MB2022:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB20224CE6D4C4FA4F28594C178EC59@CY4PR10MB2022.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NpZ1Ue9SjkyTheiBXu0F/+EsO/hCPnq5+W3zQPoVOTO1Vp9+vADlLTF3r04k8W0N+14tsOFRwkHPdIZipNRh7PYK3TtfVm7t7NsNSFSAtBIEnH+N8pL2KdzMWRpHDbJ7bYx7uW3nIXLu3v76jbi6qSr/FmG4DmAgB/E6WEH2wni6rmRH8+IWqU7s50S0O+TMi4/jwuFKeSBcQvCruot2kj39d7HmaNv3fydFA2zXikocEpfvyXfpm3eM/KFMj5k4JFlf89xpalszlB8+wKWqk1+oyuGy0C+7gNMPwujLYbPR+XdO7XaWUFpS5KcPJ11b46VOslHjQEcdGSlAi/tWr6KGxGAd1C2JKE00okbfIBEiY4UsGd0uLEzEKGESfzbf3MOYXefK+DnE90QbGjZkY54nN7gtHHe7eGLlaXlXQwfzg/7sqg9z2w1k/G4MH1ofC/CUhY6ImuAZSMWX3/eUm1ghe06V43TsFRo9ZIA3VdIo8m5YPnKuyYIenrIphCm1klNtbW2XKvYPDUIHJUIqien1gEkYMCWJ7FteJCM73lYZS6+Dv4rdC8G9Pq50vdoxrT+7Vj1tEDejhllWBlx3OzJRgsJq5gqmD/dICScegQq33e+JcEG6QUD517M6KjTqS9AhrRuK+y4bg3BITUdGbhNs+LPCX4/FO8Be3+1/s6JdgKLrxnoOuI1dNakpyRCLxudqaYU4uLty73XNlNsvEw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(9686003)(26005)(33716001)(6506007)(66946007)(186003)(6512007)(83380400001)(8676002)(1076003)(86362001)(66476007)(66556008)(4326008)(4744005)(6486002)(2906002)(316002)(44832011)(508600001)(6916009)(38350700002)(38100700002)(52116002)(8936002)(33656002)(6666004)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4XPeRCukjnVVJwr4Pw8HQ1c3zbNziXjJeF4G0Wccrgbj8xLT9aI77j3jUTQO?=
+ =?us-ascii?Q?0gHFRDU0KNPbVyhtS6iArLhfTCpvXvnvq0NG8rDApppEGEGOMH9pUM3mU8ot?=
+ =?us-ascii?Q?U0pshqeCs1aHiDWxiAL0Z9AUDuAjSg/kvzb3io9AjtTJfIyg/6zeG2ytZoI/?=
+ =?us-ascii?Q?EVKvz1SOD2U73qB6RpYM6M8UUWdgtV5tKahJMbetBH9h6pEp+GTi5d9+hC5a?=
+ =?us-ascii?Q?oecz8y1tGNv+5FFcrJxLfMPXW4dDvPhnu153Llje77h78yon4+d7Rtaj0h/b?=
+ =?us-ascii?Q?xMEaCBEczHRcM7XI1QxtWu2IPIAKY/s+upGWfr0yHLRrF+50R0JW/AhQRZyO?=
+ =?us-ascii?Q?Xnn+EfwW9Avp8NuCcSDlLCWLeuOQGMP1fAQ7y1WcZxhR+NyN0sWEhmEY7Spg?=
+ =?us-ascii?Q?CBtVJ4tBMK14ZM2XVj8Mby+Ldld571P8GOD9maIeeLj9A4b9Dt0jBEXw52AX?=
+ =?us-ascii?Q?pG1LmnpEQqofuI6PmCI5mpWF925Oa3BW0t77i/d0zoudPEP31mJI4NkqQs9K?=
+ =?us-ascii?Q?34ZiZnVbvXSyEWXImq6L/8eLrsAXZ8GIYlfu+tzHL+XyxvmZm8jY4uYz+/4J?=
+ =?us-ascii?Q?G0vP1r0wHNNY4rc8QYUEebwuUCyBnycBVjMoBdCcoIQrk95AdlSB+VnBTdjj?=
+ =?us-ascii?Q?JaBlVlvjYUYOPOM8WYUzm/5zlxcJowFczUKfP69ZXMRk/F2WV81HfjgOXpNI?=
+ =?us-ascii?Q?jXawa/F/CAOYUEncpEAJAilJbzGyngH/jzLQKG4I/7ORHXo6jUAc07JhTdSl?=
+ =?us-ascii?Q?x1rjw2ddiHew8Wsx0PsbPCvOxjF8w70A+u39qFNrwo0AyYhapaZLtTCJ/Qsr?=
+ =?us-ascii?Q?ewy4Ox+0hPoSi6gp5FBGCe/YjxREoT4EKma9vmaac+lTzzF94NvB7VOm45n1?=
+ =?us-ascii?Q?bTE2NCbs3Y6rLn9tvSHxAtoWGVC1wk3FAAClXr7EJrqjHg4TabzTdjG2rIjX?=
+ =?us-ascii?Q?oKMv/nYkXeZP0qSXGAY3Bs7BfKaWkScv9GTToxtWt93BpeMVlkXyW/nczYDc?=
+ =?us-ascii?Q?YH4GK3xgQGoL+8HZRllR0KMxoLHsqV+n1w5ymWnw6dIdVW5Xxc6Zjr03NJkI?=
+ =?us-ascii?Q?O4cQE0gUEw90XW9+DiX6CNHP9ZXgwYJsNY8ONVyOpx9YB0jE/n5agGa8ZwKV?=
+ =?us-ascii?Q?LNQZPsk7apqt01pmQSB2R5Fh1RmmfGGGz9mKcjfiK1egFkVE/YggQRTitinr?=
+ =?us-ascii?Q?iaNGm7vRob0VPWrp3AWfCLijJ19hQmSVQUbG15IPhMe5VPXugXIeB7gildpR?=
+ =?us-ascii?Q?MpRJXUycjDXTyztmQMxyqAHJMw4pzLIj/g/p+l6fqawFpZ6m9ECLXdfdLe3W?=
+ =?us-ascii?Q?g4qwY5FJSC61ePJP8tIaIn42Sl7IEnYyLyhhNAwaIVw5sRKyRSZmvewc4yOa?=
+ =?us-ascii?Q?Snt/fJfWGD/AF+XkCtIMFxZ93NyFU1rboCqCyh53xnKgFT+UXM6cM2YLiPjg?=
+ =?us-ascii?Q?N9P13TowIVAj2IXNE8BfiYW2ynagvWfVQUdRkgf91cditD2Pw/+gtvwgssil?=
+ =?us-ascii?Q?12e+tpy3CH1xa6LVy/C0zjeT+hnsT1lxowN21p0RLeV7s+d9x8Icpt1+bfKy?=
+ =?us-ascii?Q?WVjvNsX6O8SI9ltoGnd4t1+p1fHgrUbY/t9ZO1M2UooqwQuuc0TffKg0nX2V?=
+ =?us-ascii?Q?KHAOG64qglJtYt4k3eMabqaHkQcvkWPK3O5CC63Ml5uBqIIutYxQ1r2cDGXg?=
+ =?us-ascii?Q?v05NSkhMGJHeUD8lZ2FmC31fVG2QkdgUBZGIpotqKYPV456h6ZBh6XpJKOE/?=
+ =?us-ascii?Q?WjaCzX5rtvNC6dBUuvef0+r+R48cSsc=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab8d8ceb-a5b0-40d0-a8a1-08da2f2f875d
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 07:10:40.9564
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qJTDVQOsGwxg2rv3zOfRfP8rCscaOBc5nv+wKHhbIgdc5Hn3NXu3tbPI9O88oOApqLwMu8q2BUqC3z5yG4utI2qh57Wsj6oWhKSn2zU68O8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB2022
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-06_02:2022-05-05,2022-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ mlxlogscore=956 adultscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205060037
+X-Proofpoint-ORIG-GUID: hGQoGcPA8nMYWgoxIn3TDR2GGDOTdnkJ
+X-Proofpoint-GUID: hGQoGcPA8nMYWgoxIn3TDR2GGDOTdnkJ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 4:26 AM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1639:32: warning: ‘mt8195_mt6359_max98390_rt5682_card’ defined but not used [-Wunused-variable]
->  1639 | static struct mt8195_card_data mt8195_mt6359_max98390_rt5682_card = {
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1634:32: warning: ‘mt8195_mt6359_rt1011_rt5682_card’ defined but not used [-Wunused-variable]
->  1634 | static struct mt8195_card_data mt8195_mt6359_rt1011_rt5682_card = {
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1629:32: warning: ‘mt8195_mt6359_rt1019_rt5682_card’ defined but not used [-Wunused-variable]
->  1629 | static struct mt8195_card_data mt8195_mt6359_rt1019_rt5682_card = {
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> These variables is only used with CONFIG_OF, move it into the ifdef block.
->
-> Fixes: 86a6b9c9dfff ("ASoC: mediatek: mt8195: add machine support for max98390 and rt5682")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Setting "data = 0" will silence the KMSAN warnings but it doesn't fix
+the bug which is that r8712_usbctrl_vendorreq() treats partial reads
+as success.
 
-It's generally better to remove the #ifdef rather than expanding it,
-there is no need to
-save a few bytes on kernel builds of this driver that disable
-CONFIG_OF. Just drop
-the of_match_ptr() macro as well.
+The usb_control_msg() returns negatives on total failure and it returns
+small positives on partial failure.  So take the code that I gave you
+before and put that into r8712_usbctrl_vendorreq().  That's patch 1.
+These patches become 2 and 3.
 
+        status = usb_control_msg();
+        if (status < 0)
+                goto free;
+        if (status != len) {
+                status = -EREMOTEIO;
+                goto free;
+        }
+        if (requesttype == 0x01)
+                memcpy(pdata, pIo_buf, status);
 
-        Arnd
+regards,
+dan carpenter
+

@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2511851DD87
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE251DD88
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443738AbiEFQ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S1443753AbiEFQ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443742AbiEFQ1C (ORCPT
+        with ESMTP id S1443746AbiEFQ12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:27:02 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C306B0BD;
-        Fri,  6 May 2022 09:23:18 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b19so10691352wrh.11;
-        Fri, 06 May 2022 09:23:18 -0700 (PDT)
+        Fri, 6 May 2022 12:27:28 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A676B097
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:23:44 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e189so7981029oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bWltGt189d1ui9+bM0zr/qzUPbT+8oyFW3d+tpI0+NM=;
-        b=OKYt/UD0am+VdaKsjdKBseXyhdIlfZuvW5HZvH2b5jBPfMYS4uDskjY9WiltAslVT2
-         hTYU6jMfRUvcM/IOaKgaF8FLYIXMrjClrX+YjtRo1BKtLSvzKknmQxOpvjRnt3adyjaC
-         M9J+862hX23eoSGMGA06X2qv0zSFHntQOZmF/8WrGUacYyzAmorGr3q2wq/usf20IyBn
-         HAOUoADiDFWs/3vs+UAYYBtNnFEkaiXUx6p/31oQGap6I/zm5V69mOu3Mtf9VvQtzpq9
-         d11GdYms2SHqOh3z3LUXNr0uKuow2085u5mzUwJuQD+jdoncd5hQZvk2ChB0xuEbG/96
-         DTXg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YKR1p2XpapTkYTRRGdf56YSSJBMEPrgZBznxidBKLms=;
+        b=FifVGujk5CYZw9INUWSaYsjuguzlc6FVqyvGQxK+CXMFIAj34CHTH4MURITWp/780b
+         hpvkAYUtMaF6Y+GzmxmlMQgIa1gomt5iALx1LC0Z1BlYpyETqLgXJ3PoIz6nVH7f2OlB
+         f3NTsF3hqDCdqtrJbaeOGeV+xAb4SKTXTKGG0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=bWltGt189d1ui9+bM0zr/qzUPbT+8oyFW3d+tpI0+NM=;
-        b=N00wTFpepH6IDOhuuB4vOrLOqqwNhoCGcW133+KpBA4SxniY1Y51bK3/NodSNNzfu5
-         COv4tgbZwKAJa5JjFGH1Y6hLJ/D3QPBoS8dMyW9lNtJdi93wfBDV+I6qsGPtos9C/LMH
-         FwBwqqTIIb9BrJq80jJbNqMAA4ZIyXd01NprPeOM4bOTWCQ1yda8yYa2Z5PiQ3MdZ3x2
-         BAA5MC6AjNycW6ct1trJ7aUABZJF/L71xghOW/QGl5R+q6fLZ5VOMWml7gFMAm3grhe4
-         o0B52Itt4NMqfMSYap3mzmBxTBZBygRMVy74hxj0nURf6wYQabIXlupvz8LTuX1NFZhn
-         TvmA==
-X-Gm-Message-State: AOAM530/2nlsuxsUutNXHnxL2WXKoDh0AsonyeaK890/SPZzVWjnbZks
-        Ws7Snm77rA5rhA12O0kymGywb+ebBDw=
-X-Google-Smtp-Source: ABdhPJzwg4JahEHEGHDrJzroiLhHqAhfxsotfridXw3Yepz7Sjk9FqmzuvG9qgsk7lRzk9KF1cR8lA==
-X-Received: by 2002:a5d:4148:0:b0:20a:d2de:d960 with SMTP id c8-20020a5d4148000000b0020ad2ded960mr3372721wrq.61.1651854197268;
-        Fri, 06 May 2022 09:23:17 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.237.75])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1cf216000000b003942a244ee9sm4448695wmc.46.2022.05.06.09.23.16
+        bh=YKR1p2XpapTkYTRRGdf56YSSJBMEPrgZBznxidBKLms=;
+        b=c+lpQrL92e9APLi5/Ql79j6Y8TpXqIAaf5tuiQ80dL1uDVlH4AubGQzkROv9R7x8xL
+         1xy2Z/1yJME1UYk7cGg4GDFov6KTiQorlcoj9FPTxWR6r45/Vniu56QTzJ96Y1m3F2wi
+         BJqAuAWiNceSUXzeMmr3P8h2jW3LKLC+uTUvWCZpIvtwfZbyWHoMC5iAJh26OXj6RWhW
+         kEBZvFnaXg8nr/+xoskObyA4Izuv1HsbJ2dFEzVd9xbueAjcnSgFhYLpKmT52BnSWCBj
+         jhGqYVtU6BqIXj241lKti6ejR/7NE8oq9pI6K6o37ZFFiSJXLhEnanHNxCTmAJIwgwA8
+         5V7A==
+X-Gm-Message-State: AOAM533Wh3oqTyRzzFGi3dUBWp4uiEgkrdQRmhgd+/K+Jhif42VMGK9q
+        bdqZYgb88MssYdYBiY0HLdyCPg==
+X-Google-Smtp-Source: ABdhPJzqYzGLNGpOMnI0vx6E0reoKjwmACMdIM1kV7RuedYut8iUJNPgJ5XCkhsQQDKfxu4zrzrGQg==
+X-Received: by 2002:a05:6808:180f:b0:326:60a9:501b with SMTP id bh15-20020a056808180f00b0032660a9501bmr5147973oib.91.1651854224289;
+        Fri, 06 May 2022 09:23:44 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id p11-20020a4ab38b000000b0035eb4e5a6c2sm1981364ooo.24.2022.05.06.09.23.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 09:23:16 -0700 (PDT)
-Message-ID: <28b1901e-3eb2-2a50-525c-62e1aa39eaac@gmail.com>
-Date:   Fri, 6 May 2022 17:22:49 +0100
+        Fri, 06 May 2022 09:23:43 -0700 (PDT)
+Subject: Re: [Ksummit-discuss] uninitialized variables bugs
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>, kbuild@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ksummit <ksummit-discuss@lists.linuxfoundation.org>,
+        kbuild test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220506091338.GE4031@kadam>
+ <CAK8P3a0DY2b15yyzpwsjOCqOALfTbsmYf1kTnQZF5wPW8mtFbQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <dc58c60e-a92c-92b8-ae5e-d7cf2ef5f051@linuxfoundation.org>
+Date:   Fri, 6 May 2022 10:23:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
+In-Reply-To: <CAK8P3a0DY2b15yyzpwsjOCqOALfTbsmYf1kTnQZF5wPW8mtFbQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-5-haoxu.linux@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220506070102.26032-5-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,73 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 08:01, Hao Xu wrote:
-> From: Hao Xu <howeyxu@tencent.com>
+On 5/6/22 5:56 AM, Arnd Bergmann wrote:
+> On Fri, May 6, 2022 at 11:13 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 > 
-> Add a helper for poll clean, it will be used in the multishot accept in
-> the later patches.
+>>
+>> It's frustrating.  Sometimes the false positives are hard to analyse
+>> because I have to read through multiple functions.  A lot of times
+>> when I write a patch and a commit message Nathan has already fixed it
+>> so it's just a waste of time.
 > 
-> Signed-off-by: Hao Xu <howeyxu@tencent.com>
-> ---
->   fs/io_uring.c | 23 ++++++++++++++++++-----
->   1 file changed, 18 insertions(+), 5 deletions(-)
+> Agreed. I'm not actually checking for those warnings on gcc any more,
+> but just the clang warnings point to a bigger problem.
 > 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index d33777575faf..0a83ecc457d1 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -5711,6 +5711,23 @@ static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->   	return 0;
->   }
->   
-> +static inline void __io_poll_clean(struct io_kiocb *req)
-> +{
-> +	struct io_ring_ctx *ctx = req->ctx;
-> +
-> +	io_poll_remove_entries(req);
-> +	spin_lock(&ctx->completion_lock);
-> +	hash_del(&req->hash_node);
-> +	spin_unlock(&ctx->completion_lock);
-> +}
-> +
-> +#define REQ_F_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
-> +static inline void io_poll_clean(struct io_kiocb *req)
-> +{
-> +	if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == REQ_F_APOLL_MULTI_POLLED)
+>> It's risky as well.  The Smatch check for uninitialized variables was
+>> broken for most of 2021.  Nathan sometimes goes on vacation.
+>>
+>> I guess I would hope that one day we can turn on the GCC uninitialized
+>> variable warnings again.  That would mean silencing false positives
+>> which a lot of people don't want to do...  Maybe Clang has fewer false
+>> positives than GCC?
+> 
 
-So it triggers for apoll multishot only when REQ_F_POLLED is _not_ set,
-but if it's not set it did never go through arm_poll / etc. and there is
-nothing to clean up. What is the catch?
+I would like to throw resource leak bugs in the mix. I am finding cppcheck
+has been effective in finding them.
 
-btw, don't see the function used in this patch, better to add it later
-or at least mark with attribute unused, or some may get build failures.
+I am seeing a lot of file pointer leaks  in error legs in kselftest code error
+paths. I have a few fixes in the works to send out.
+
+We could discuss this topic at the LPC Kernel Testing and Dependability mini-conf
+as well.
+
+thanks,
+-- Shuah
 
 
-> +		__io_poll_clean(req);
-> +}
-> +
->   static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
->   {
->   	struct io_accept *accept = &req->accept;
-> @@ -6041,17 +6058,13 @@ static void io_poll_task_func(struct io_kiocb *req, bool *locked)
->   
->   static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
->   {
-> -	struct io_ring_ctx *ctx = req->ctx;
->   	int ret;
->   
->   	ret = io_poll_check_events(req, locked);
->   	if (ret > 0)
->   		return;
->   
-> -	io_poll_remove_entries(req);
-> -	spin_lock(&ctx->completion_lock);
-> -	hash_del(&req->hash_node);
-> -	spin_unlock(&ctx->completion_lock);
-> +	__io_poll_clean(req);
->   
->   	if (!ret)
->   		io_req_task_submit(req, locked);
 
--- 
-Pavel Begunkov

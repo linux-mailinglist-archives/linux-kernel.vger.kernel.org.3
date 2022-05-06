@@ -2,142 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1624F51DCA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D33251DCA4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443222AbiEFQAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S1443231AbiEFQA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242211AbiEFQAT (ORCPT
+        with ESMTP id S242211AbiEFQA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:00:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B990F6A41C;
-        Fri,  6 May 2022 08:56:35 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246FNOwM009394;
-        Fri, 6 May 2022 15:56:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=KhmnJeFSyRF4LtoXVy47PTVBdagm8XSy/kBl/ANo8hU=;
- b=ZOA7jZzjf7S57v+PLpk2JcawivlF+GwJoCz7MK6MrqWEGpXjK+/stS37+cLp/1RnGcR5
- sOOk7T75hA6KoB9knJCKGzOmOzeA/Zmw6yftAyNQX+D1k4wgnyQt8S3sczpzM7TkXMLq
- 0MeHFR2MGBzpJ3tSJI+LPtUtvlh1xixH9dP5VNBrVHhEqcg5MlzfHEoeyDFrp3bSCo2b
- NsO1Wgwp4y48iVeu8VyBlqVs3dN4Nj8uSYHBySilRJvJi2+QCjMdvG438lPkRCBOev+A
- gWY//fxDNvnrEoVD9CNfxrb9wT/IKQBi6/R58WOuD2g0S4uskHYYu0r1xBqQL5/HFQiu VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw699rk1w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:56:32 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246FqR8d015392;
-        Fri, 6 May 2022 15:56:32 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw699rk15-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:56:32 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246FdPBd021558;
-        Fri, 6 May 2022 15:56:30 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwpys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:56:30 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246FuRiB59113872
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 15:56:27 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19527A4054;
-        Fri,  6 May 2022 15:56:27 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14B6EA405C;
-        Fri,  6 May 2022 15:56:26 +0000 (GMT)
-Received: from [9.171.60.83] (unknown [9.171.60.83])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 15:56:26 +0000 (GMT)
-Message-ID: <8c48614a-4e93-a575-1a08-ead955ad2a91@linux.ibm.com>
-Date:   Fri, 6 May 2022 17:56:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v6 16/21] vfio-pci/zdev: add open/close device hooks
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
- <20220426200842.98655-17-mjrosato@linux.ibm.com>
- <20220427140410.GX2125828@nvidia.com>
- <f6c78792-9cf7-0cde-f760-76166f9b7eb7@linux.ibm.com>
- <20220427150138.GA2512703@nvidia.com>
- <1bca5de9-88aa-6abc-88b7-cbd2a11e5c85@linux.ibm.com>
- <20220427153924.GZ2125828@nvidia.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220427153924.GZ2125828@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U5wlWa-tosuxYXfAN6YtnIWo1GItx_tq
-X-Proofpoint-ORIG-GUID: zBZHDZW7t4jg2L8cmt_0T_sg0WGos1B8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 6 May 2022 12:00:56 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB596A41C;
+        Fri,  6 May 2022 08:57:13 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MLeLd-1nnHR63tLf-000ujU;
+ Fri, 06 May 2022 17:56:48 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 23/24] dt-bindings: arm: fsl: add toradex,colibri-imx7s/d/d-emmc-iris/-v2
+Date:   Fri,  6 May 2022 17:56:41 +0200
+Message-Id: <20220506155641.297635-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220506152809.295409-1-marcel@ziswiler.com>
+References: <20220506152809.295409-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 adultscore=0
- phishscore=0 spamscore=0 mlxlogscore=971 malwarescore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060082
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:MIBq7VmBWdumJlhEmmFZ9pFOrRTLHXH6JSSHx3/t+CQEcsT2SnQ
+ VILaYSB4teWeca3P1jB4iw/Wq+2IjELA/IqUEGprZDEDD8HXXrMV26wW6hx73/XJqF6pOyc
+ N4hc/J+u7pLenRGlEs1+Hfcu+PAXpBqrRakwLYJzZKXj8Bd9PUvTg70giQaXmYMJ2c+NkqA
+ t4zpPWQC20CVcrSGXaNlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dCfLu27PQ+Y=:c7NneQq96GlxozMB52Zibj
+ b0E4VroDzijPwuwg7esJtIeUG/h0e/S4uEkG36WwMkGZizz7utrRrFtoNr2vBqqWZ8CR1YXXx
+ qjXBtEJl2Qa6IRO7HwjhOH7mwLHidudzErR8vBrZI3DQ/rMzZZYpLzcQMNXp7icJMvp4z4kT3
+ KFoIWuUtLCLuZvAc4PYzQOFHT7z4g0xHFUC33eD2bPqU5aR0RZ+/iuThwDhnXHIju+hL1oSxX
+ pUYoa3ur1qfUZhni4rU9wpxIhnOyEC8t188zGWHOrltJQflCuYTNPlbY8iLW7cWKUtEpNPoyE
+ cVyF4TdibVweo+8p5hzrFRJMtzLxupN0+1yi0Q0mH1gD1igPfehyp57nzzd/Oz/Ie8WXaf10F
+ JvcinSFMzKAb3DbVXAYe6HgTdAIPecEy8WyUkj9H9RyK3CIPlnzjxVngFrXGgB3PNjKG0XlnQ
+ 1vn3jqdY5CTm2E2ogXWPIEQnpIRhfP2DvCc8Z299FdH5OeToutXISHqLiay2IbkIiVWSCodQK
+ 6knnGD9acTy8vt0AYEWG7tje3hf4/vWqAeSaM6S21l5Gy3VfQNtKEbaBUtb2FAFchYh60PvDd
+ ZSvEodxgpqIZwN/I3EBLU2ehdOx3wDYe2EAkQ04bLba1tNd2QJjxW52SDctvMSnj/W5jbF/V5
+ rnTn/vaz3F32HFiRh9oESn8z6RGIsVt8y/YC3rAg9otGGiotCglVE9MKB/UOdfIE6OWsgEhAl
+ l+Wf+f3R+g6H9B3CXRUCA1K7/uEcZnu4JN0b6HETnX8MeuTcxGYH7sAyL+q4yzA5I7awE+WI5
+ 3GuDA96HmBmHUiPDFSPvnqshOSD/Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
+Based on toradex,colibri-imx7s, toradex,colibri-imx7d and
+toradex,colibri-imx7d-emmc module device trees add iris and iris-v2 for
+carrier board dts.
 
-Am 27.04.22 um 17:39 schrieb Jason Gunthorpe:
-> On Wed, Apr 27, 2022 at 11:26:40AM -0400, Matthew Rosato wrote:
->>>> zPCI devices (zpci_dev) exist regardless of whether kvm is configured or
->>>> not, and you can e.g. bind the associated PCI device to vfio-pci when KVM is
->>>> not configured (or module not loaded) and get the existing vfio-pci-zdev
->>>> extensions for that device (extra VFIO_DEVICE_INFO response data).  Making a
->>>> direct dependency on KVM would remove that; this was discussed in a prior
->>>> version because this extra info is not used today outside of a KVM usecase
->>>> are not specific to kvm that need vfio-pci-zdev).
->>>
->>> I'm a bit confused, what is the drawback of just having a direct
->>> symbol dependency here? It means vfio loads a little extra kernel
->>> module code, but is that really a big worry given almost all vfio
->>> users on s390 will be using it with kvm?
->>
->> It's about trying to avoid loading unnecessary code (or at least giving a
->> way to turn it off).
->>
->> Previously I did something like....
->>
->> https://lore.kernel.org/kvm/20220204211536.321475-15-mjrosato@linux.ibm.com/
->>
->> And could do so again; as discussed in the thread there, I can use e.g.
->> CONFIG_VFIO_PCI_ZDEV_KVM and make vfio-pci-zdev depend on KVM in this
->> series.  You only get the vfio-pci-zdev extensions when you configure KVM.
-> 
-> That make sense to me, I'd rather see that then the symbol_get/put here
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
 
-I agree with Jason here.
+ Documentation/devicetree/bindings/arm/fsl.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 08bdd30e511c..3494a3f2a587 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -687,6 +687,8 @@ properties:
+           - enum:
+               - toradex,colibri-imx7s-aster     # Module on Aster Carrier Board
+               - toradex,colibri-imx7s-eval-v3   # Module on Colibri Evaluation Board V3
++              - toradex,colibri-imx7s-iris      # Module on Iris Carrier Board
++              - toradex,colibri-imx7s-iris-v2   # Module on Iris Carrier Board V2
+           - const: toradex,colibri-imx7s
+           - const: fsl,imx7s
+ 
+@@ -739,6 +741,8 @@ properties:
+           - enum:
+               - toradex,colibri-imx7d-aster   # Colibri iMX7D Module on Aster Carrier Board
+               - toradex,colibri-imx7d-eval-v3 # Colibri iMX7D Module on Colibri Evaluation Board V3
++              - toradex,colibri-imx7d-iris    # Colibri iMX7D Module on Iris Carrier Board
++              - toradex,colibri-imx7d-iris-v2 # Colibri iMX7D Module on Iris Carrier Board V2
+           - const: toradex,colibri-imx7d
+           - const: fsl,imx7d
+ 
+@@ -747,6 +751,8 @@ properties:
+           - enum:
+               - toradex,colibri-imx7d-emmc-aster    # Module on Aster Carrier Board
+               - toradex,colibri-imx7d-emmc-eval-v3  # Module on Colibri Evaluation Board V3
++              - toradex,colibri-imx7d-emmc-iris     # Module on Iris Carrier Board
++              - toradex,colibri-imx7d-emmc-iris-v2  # Module on Iris Carrier Board V2
+           - const: toradex,colibri-imx7d-emmc
+           - const: fsl,imx7d
+ 
+-- 
+2.35.1
+

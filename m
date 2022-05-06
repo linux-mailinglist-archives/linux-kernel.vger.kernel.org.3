@@ -2,121 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456DE51CDA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5CA51CDA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387431AbiEFAOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S1387442AbiEFAO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236541AbiEFAOa (ORCPT
+        with ESMTP id S1387439AbiEFAOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:14:30 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE733A199
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:10:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id D9EA71F45E0A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651795847;
-        bh=8HWc5okoCATXQtSjnHcBZ94vd08tA8gZnAW7NIzIUzc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E69M8Dpbytxm+liBztEXWxOxgJF11w/CzN4vstE4Ks1/CK+R54ymWAG8WhQ11Z3it
-         UTIE6yFWtxaLarXDEtc1FXzyvLjbznINeNlstPpA/8NTxjU+0cl6o7qv4HCz9h8i2o
-         YM3d+HYGQ09TSTZDF+orUvlE6/iycVSKZ98/O8I54xjCdcd8/z5KAFanNwPBZIRDQq
-         QDCWPKlrh/drnIXxITfMDB+g+ErN5tUhFyTcnvdRojYEy1/dguLfyKPtPIXA7ynU7a
-         5af+OKmMvexH7qR6EjSif8Bdmzw4QMIXr7cl/RyeaX8mvcbPPS7sASgtcr6r7aQrRL
-         bjxSeX9NGH/gQ==
-Message-ID: <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
-Date:   Fri, 6 May 2022 03:10:43 +0300
+        Thu, 5 May 2022 20:14:51 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C4B41FAE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651795870; x=1683331870;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RFEl9WyoihfOLeIXmrJDk/Di5IhT3On96S43fPdKlGw=;
+  b=OMcHFfyHizp55ahnP64e+JxypKrkGVHeZD8cIl/+pl8yggViVfAWYZWV
+   JCNrcO/wn5DZ6IC2XtzLR6MbzWHJ69r3Ng+P06ieVqDNsg6I9DXexbJ5e
+   wwFx1YL/r96nuWYyza0dGoK+dspl0ykz7V6VzndYfLcSXSYdk//fPf6Ea
+   ifpDXSDrlGs+Jp8iE4iL9ggTOPL/eWYTwGp5RVReiGCGJLiBlIvsFxkpf
+   oMq8MH1pGx2ZSCJE6cNObIovP5Oht5YPCLYRaZ2cwzVqGeCBKSoBN+h2e
+   4eC+rzYqCvUiqPfafu6By7hSGRTJaLX8U9+G+mw6W2PSBL/IAdsOXDIUS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255775419"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255775419"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:11:09 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="665213920"
+Received: from anthienn-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.4.139])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:11:05 -0700
+Message-ID: <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 06 May 2022 12:11:03 +1200
+In-Reply-To: <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
+         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
+         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
+         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-12-dmitry.osipenko@collabora.com>
- <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 11:34, Thomas Zimmermann wrote:
-> Hi
+On Thu, 2022-05-05 at 16:06 -0700, Dave Hansen wrote:
+> On 5/5/22 15:15, Kai Huang wrote:
+> > set_memory_xx()  is supposedly only for direct-mapping.  Please use my
+> > suggestion above.
 > 
-> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
->> Introduce a common DRM SHMEM shrinker. It allows to reduce code
->> duplication among DRM drivers that implement theirs own shrinkers.
->> This is initial version of the shrinker that covers basic needs of
->> GPU drivers, both purging and eviction of shmem objects are supported.
->>
->> This patch is based on a couple ideas borrowed from Rob's Clark MSM
->> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
->>
->> In order to start using DRM SHMEM shrinker drivers should:
->>
->> 1. Implement new purge(), evict() + swap_in() GEM callbacks.
->> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
->> 3. Use drm_gem_shmem_set_purgeable_and_evictable(shmem) and alike API
->>     functions to activate shrinking of GEMs.
+> Kai, please take a look at some of the other users, especially
+> set_memory_x().  See how long the "supposed" requirement holds up.
+
+Right I should not have used "supposed".  My bad.  I got the impression by
+roughly looking at set_memory_{uc|wc..}().  Looks they can only work on direct
+mapaping as they internally uses __pa():
+
+int set_memory_wc(unsigned long addr, int numpages)                            
+{
+        int ret;                                                               
+
+        ret = memtype_reserve(__pa(addr), __pa(addr) + numpages * PAGE_SIZE,   
+                _PAGE_CACHE_MODE_WC, NULL);                                    
+        if (ret)
+                return ret;                                                    
+
+        ret = _set_memory_wc(addr, numpages);                                  
+        if (ret)
+                memtype_free(__pa(addr), __pa(addr) + numpages * PAGE_SIZE);   
+
+        return ret;                                                            
+}
+
+Don't all set_memory_xxx() functions have the same schematic?
+
 > 
-> Honestly speaking, after reading the patch and the discussion here I
-> really don't like where all tis is going. The interfaces and
-> implementation are overengineered.  Descisions about evicting and
-> purging should be done by the memory manager. For the most part, it's
-> none of the driver's business.
+> That said, I've forgotten by now if this _could_ have used vmalloc() or
+> vmap() or vmap_pfn().  None of the logic about why or how the allocator
+> and mapping design decisions were made.  Could that be be rectified for
+> the next post?
 
-Daniel mostly suggesting to make interface more flexible for future
-drivers, so we won't need to re-do it later on. My version of the
-interface is based on what drivers need today.
+Looking at set_memory_{encrypted|decrypted}() again, it seems they currently
+only works on direct mapping for TDX (as sathya's code has showed).  For AMD it
+appears they can work on any virtual address as AMD uses lookup_address() to
+find the PFN. 
 
-Why do you think it's a problem to turn shmem helper into the simple
-generic memory manager? I don't see how it's better to have drivers
-duplicating the exactly same efforts and making different mistakes.
+So if the two are supposed to work on any virtual address, then it makes sense
+to fix at TDX side.
 
-The shmem shrinker implementation is mostly based on the freedreno's
-shrinker and it's very easy to enable generic shrinker for VirtIO and
-Panfrost drivers. I think in the future freedreno and other drivers
-could switch to use drm shmem instead of open coding the memory management.
+Btw, regarding to my suggestion of using vmap() with prot_decrypted() +
+MapGPA(), after thinking again, I think there is also a problem -- the TLB for
+private mapping and the cache are not flushed.  So looks we should fix
+set_memory_decrypted() to work on any virtual address and use it for vmap().
 
-> I'd like to ask you to reduce the scope of the patchset and build the
-> shrinker only for virtio-gpu. I know that I first suggested to build
-> upon shmem helpers, but it seems that it's easier to do that in a later
-> patchset.
+Back to the "why and how the allocator and mapping design decisions were made",
+let me summarize options and my preference below:
 
-The first version of the VirtIO shrinker didn't support memory eviction.
-Memory eviction support requires page fault handler to be aware of the
-evicted pages, what should we do about it? The page fault handling is a
-part of memory management, hence to me drm-shmem is already kinda a MM.
+1) Using DMA API.  This guarantees for TDX1.0 the allocated buffer is shared
+(set_memory_decrypted() is called for swiotlb).  But this may not guarantee the
+buffer is shared in future generation of TDX.  This of course depends on how we
+are going to change those DMA API implementations for future TDX but
+conceptually using DMA API is more like for convenience purpose.  Also, in order
+to use DMA API, we need more code to handle additional 'platform device' which
+is not mandatory for attestation driver.
+
+2) Using vmap() + set_memory_decrypted().  This requires to change the latter to
+support any virtual address for TDX.  But now I guess it's the right way since
+it's better to have some infrastructure to convert private page to shared
+besides DMA API anyway.
+
+3) Using vmap() + MapGPA().  This requires additional work on TLB flush and
+cache flush.  Now I think we should not use this.
+
+Given above, I personally think 2) is better.
+
+Kirill, what's your opinion?

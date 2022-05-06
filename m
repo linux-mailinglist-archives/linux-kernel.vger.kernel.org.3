@@ -2,75 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E521951D9B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7FF51D9B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441947AbiEFOCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S1441954AbiEFOGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349347AbiEFOCk (ORCPT
+        with ESMTP id S1349347AbiEFOGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:02:40 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42C5DBEE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:58:56 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so4444829wmz.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=7NQi7Z+MZ52ekr9qbB30etuO5d+uXm02093D4Ar3iUY=;
-        b=izUwHl+6O1fYAkEKEALbECwguy+X/j89VkQigILj0y7jZ3pMSEPYxFvNwEuT/KmgwI
-         bkV2OIpaed4d9FwqjSEqOc4X52rijGwEdv6lZ8VpWajtsnMqYNxRCZitn8IFW40jlR1Q
-         ruIxNx1wEMHcu+LZVbzldi3qGIUG5LymSTKwOMpj7Nm6bgRHyUBOuneq6bJmvTuuqHeG
-         k+XBU9L4yifEydIeTYZhc2swKzu8ZhWXdF3cBuDSZwLj1sE2dgWYzxxKIhmItldknsN1
-         ETp4qs/P7rp0yHv8c2dc75lCM/rBIZ7YUf+fHwBSe/xXiYADn5p130nZMv5j67dAK27Y
-         L8WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=7NQi7Z+MZ52ekr9qbB30etuO5d+uXm02093D4Ar3iUY=;
-        b=2hv+B9jQZXr/Phzg+iiptC6MPEf6vJ5vZ0u1Re6Fy0dFmjKTCoawcVUJuk37900XU0
-         OtUX5ERzqDOd7sjdKTRbkqBc1O3MxmarDaxeQ468x2lQPNASY++x6GvRxJyaZ9jTq/PW
-         vEB4bahwbhgtWcQshKIHDZT70enKoCGKiAvFJ3MLM5O8OpSa5RjZYM2Eiho3P8lVSu6P
-         EChs84cPtTCXQhRbpAWWWQEN4Yi3Zz1nechAGZs6PNyPLcLfs8gQPEMSOeAMcXXbmJT2
-         84K4xKePl91hcmRQ9WGLdpO0YsA9kn8Cv8pFg76QScyNVYYBJ4BI2ZeRH1JyL1gnOsxN
-         X6iA==
-X-Gm-Message-State: AOAM5305VGFv0RK0kYm4EvwK/RfsMHCP+LREIuZL7ngdWaF87ApH3XaH
-        mePxMcio7+Wafobm3za68PekBaRTsZ0UuA==
-X-Google-Smtp-Source: ABdhPJyS7SDb8cfXhEFwryu2L62y7sr8nqg3z2w7oVctIccmu3jA/QytEMpnBUe3ad/UHI63kieDDQ==
-X-Received: by 2002:a05:600c:1d95:b0:394:5d0d:6f70 with SMTP id p21-20020a05600c1d9500b003945d0d6f70mr3511520wms.48.1651845535398;
-        Fri, 06 May 2022 06:58:55 -0700 (PDT)
-Received: from vingu-book ([2a01:e0a:f:6020:c5b3:7af9:c7ac:f42])
-        by smtp.gmail.com with ESMTPSA id y9-20020adfdf09000000b0020c5253d90dsm3740765wrl.89.2022.05.06.06.58.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 May 2022 06:58:54 -0700 (PDT)
-Date:   Fri, 6 May 2022 15:58:52 +0200
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
-Subject: Re: [PATCH v8 2/7] sched/fair: Decay task PELT values during wakeup
- migration
-Message-ID: <20220506135852.GA3444@vingu-book>
-References: <20220429141148.181816-1-vincent.donnefort@arm.com>
- <20220429141148.181816-3-vincent.donnefort@arm.com>
- <YmwbxQ83RnbXYwgZ@geo.homenetwork>
+        Fri, 6 May 2022 10:06:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E37B541AC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:02:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27532B835D5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB84C385A9;
+        Fri,  6 May 2022 14:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651845751;
+        bh=ufq3bjZ09clzli8bz1S9ydGwiX1f3vkPaLVKdGK2X38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AIjyiK3LJEYMh9u5riG/w+6W71FZWhm9GwiLzD/PqHGj7+n4YWf2Zt2LwxlR7nZrZ
+         dJyKt4cp0+BXZX7LnpYIEYoEUm6BZYuoUwla82J0ffo08XoLcyln0C8TSgu+p3Uhlf
+         NNIHVq9JXan2diQ7g4s2arh2usiYD2k0RZIAF92U=
+Date:   Fri, 6 May 2022 16:02:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, akpm@linux-foundation.org,
+        keescook@chromium.org, andriy.shevchenko@linux.intel.com,
+        geert@linux-m68k.org, linux@roeck-us.net, adobriyan@gmail.com
+Subject: Re: [PATCH] kobject: Refactor kobject_set_name_vargs()
+Message-ID: <YnUqdBuxy7MofDoR@kroah.com>
+References: <20220506133309.36794-1-jvgediya@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmwbxQ83RnbXYwgZ@geo.homenetwork>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220506133309.36794-1-jvgediya@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,225 +53,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le samedi 30 avril 2022 à 01:09:25 (+0800), Tao Zhou a écrit :
-> On Fri, Apr 29, 2022 at 03:11:43PM +0100, Vincent Donnefort wrote:
+On Fri, May 06, 2022 at 07:03:09PM +0530, Jagdish Gediya wrote:
+> Setting name as per the format is not only useful for kobjects.
+> It can also be used to set name for other things for e.g. setting
+> the name of the struct attribute when multiple same kind of attributes
+> need to be created with some identifier in name, instead of managing
+> memory for names at such places case by case, it would be good if
+> something like current kobject_set_name_vargs() can be utilized.
+> 
+> Refactor kobject_set_name_vargs(), Create a new generic function
+> set_name_vargs() which can be used for kobjects as well as at
+> other places.
+> 
+> This patch doesn't introduce any functionality change.
+> 
+> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> ---
+>  include/linux/string.h |  1 +
+>  lib/kobject.c          | 30 +-----------------------------
+>  mm/util.c              | 40 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index b6572aeca2f5..f329962e5ae9 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/stdarg.h>
+>  #include <uapi/linux/string.h>
+>  
+> +int set_name_vargs(const char **name, const char *fmt, va_list vargs);
+>  extern char *strndup_user(const char __user *, long);
+>  extern void *memdup_user(const void __user *, size_t);
+>  extern void *vmemdup_user(const void __user *, size_t);
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index 5f0e71ab292c..870d05971e3a 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -249,35 +249,7 @@ static int kobject_add_internal(struct kobject *kobj)
+>  int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
+>  				  va_list vargs)
+>  {
+> -	const char *s;
+> -
+> -	if (kobj->name && !fmt)
+> -		return 0;
+> -
+> -	s = kvasprintf_const(GFP_KERNEL, fmt, vargs);
+> -	if (!s)
+> -		return -ENOMEM;
+> -
+> -	/*
+> -	 * ewww... some of these buggers have '/' in the name ... If
+> -	 * that's the case, we need to make sure we have an actual
+> -	 * allocated copy to modify, since kvasprintf_const may have
+> -	 * returned something from .rodata.
+> -	 */
+> -	if (strchr(s, '/')) {
+> -		char *t;
+> -
+> -		t = kstrdup(s, GFP_KERNEL);
+> -		kfree_const(s);
+> -		if (!t)
+> -			return -ENOMEM;
+> -		strreplace(t, '/', '!');
+> -		s = t;
+> -	}
+> -	kfree_const(kobj->name);
+> -	kobj->name = s;
+> -
+> -	return 0;
+> +	return set_name_vargs(&kobj->name, fmt, vargs);
+>  }
+>  
+>  /**
+> diff --git a/mm/util.c b/mm/util.c
+> index 54e5e761a9a9..808d29b17ea7 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -112,6 +112,46 @@ char *kstrndup(const char *s, size_t max, gfp_t gfp)
+>  }
+>  EXPORT_SYMBOL(kstrndup);
+>  
+> +/**
+> + * set_name_vargs() - Set the name as per format
+> + * @name: pointer to point to the name as per format
+> + * @fmt: format string used to build the name
+> + * @vargs: vargs to format the string.
+> + */
+> +int set_name_vargs(const char **name, const char *fmt, va_list vargs)
 
-[..]
+Why is this a mm/ thing and not a lib/ thing?
 
-> >  
-> > -static inline u64 rq_clock_pelt(struct rq *rq)
-> > +#ifdef CONFIG_CFS_BANDWIDTH
-> > +static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-> >  {
-> > -	lockdep_assert_rq_held(rq);
-> > -	assert_clock_updated(rq);
-> > -
-> > -	return rq->clock_pelt - rq->lost_idle_time;
-> > +	/*
-> > +	 * Make sure that pending update of rq->clock_pelt_idle and
-> > +	 * rq->enter_idle are visible during update_blocked_average() before
-> > +	 * updating cfs_rq->throttled_pelt_idle.
-> > +	 */
-> 
-> Two places to call update_idle_cfs_rq_clock_pelt():
-> 
-> 1 dequeue_entity()
->     (no pending update before. and this is fast path)
->     update_idle_cfs_rq_clock_pelt
-> 
-> 2 update_blocked_averages()
->     update_clock_rq() -> pending update here.
->     __update_blocked_fair()
->       update_idle_cfs_rq_clock_pelt
-> 
-> Another way will be to move the smp_wmb() to _update_idle_rq_clock_pelt()
-> 
-> static inline void _update_idle_rq_clock_pelt(struct rq *rq)
-> {
-> 	rq->clock_pelt  = rq_clock_task(rq);
-> 
-> 	u64_u32_store(rq->enter_idle, rq_clock(rq));
-> 	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
->     smp_wmb();
-> }
-> 
-> But does this function called more often enough than dequeue_entity(), 
-> 
-> pick_next_task_fair()
->   (rq will be idle)
->   update_idle_rq_clock_pelt()
-> 
-> update_rq_clock_pelt()
->   (curr is idle)
->   _update_idle_rq_clock_pelt()
-> 
-> The condition is they are all idle.
-> And the migrate_se_pelt_lag() is for idle also.
-> 
-> If smp_wmb() is here like the patch, smp_rmb() place in 
-> migrate_se_pelt_lag() here:
->   
-> #ifdef CONFIG_CFS_BANDWIDTH
-> 	throttled = u64_u32_load(cfs_rq->throttled_pelt_idle);
->     smp_rmb();
-> 	/* The clock has been stopped for throttling */
-> 	if (throttled == U64_MAX)
-> 		return;
-> #endif
-> 
-> If smp_wmb() is in _update_idle_rq_clock_pelt(), smp_rmb() place in
-> migrate_se_pelt_lag() here:
-> 
-> #ifdef CONFIG_CFS_BANDWIDTH
-> 	throttled = u64_u32_load(cfs_rq->throttled_pelt_idle);
-> 	/* The clock has been stopped for throttling */
-> 	if (throttled == U64_MAX)
-> 		return;
-> #endif
->     smp_rmb();
-> 	now = u64_u32_load(rq->clock_pelt_idle);
-> 	now -= throttled;
-> 
-> Sorry for these noise words.
+And who else will be needing to use this?  Why the churn for no
+actual users?
 
-I thought a bit more on this and the memory barrier should be put as below.
-This will ensure that we will not over estimate the lag but only under estimate
-it if an update happens in the middle of the computation of the lag.
+> +{
+> +	const char *s;
+> +
+> +	if (*name && !fmt)
+> +		return 0;
+> +
+> +	s = kvasprintf_const(GFP_KERNEL, fmt, vargs);
+> +	if (!s)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * ewww... some of these buggers have '/' in the name ... If
+> +	 * that's the case, we need to make sure we have an actual
+> +	 * allocated copy to modify, since kvasprintf_const may have
+> +	 * returned something from .rodata.
+> +	 */
+> +	if (strchr(s, '/')) {
+> +		char *t;
+> +
+> +		t = kstrdup(s, GFP_KERNEL);
+> +		kfree_const(s);
+> +		if (!t)
+> +			return -ENOMEM;
+> +		strreplace(t, '/', '!');
+> +		s = t;
+> +	}
+> +	kfree_const(*name);
+> +	*name = s;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(set_name_vargs);
 
+No need to export this as there are no users in modules.
 
----
- kernel/sched/fair.c | 18 +++++++++++++-----
- kernel/sched/pelt.h | 11 +++++------
- 2 files changed, 18 insertions(+), 11 deletions(-)
+And if there was, shouldn't it be EXPORT_SYMBOL_GPL() as that's what the
+kobject functions are exported as (most of them at least.)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ce94df5a6df6..1aeca8d518a2 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3705,7 +3705,7 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
- #ifdef CONFIG_NO_HZ_COMMON
- static inline void migrate_se_pelt_lag(struct sched_entity *se)
- {
--	u64 throttled = 0, now;
-+	u64 throttled = 0, now, lut;
- 	struct cfs_rq *cfs_rq;
- 	struct rq *rq;
- 	bool is_idle;
-@@ -3761,13 +3761,21 @@ static inline void migrate_se_pelt_lag(struct sched_entity *se)
- 		return;
- #endif
- 	now = u64_u32_load(rq->clock_pelt_idle);
-+	smp_rmb();
- 	now -= throttled;
- 
--	/* An update happened while computing lag */
--	if (now < cfs_rq_last_update_time(cfs_rq))
--		return;
-+	lut = cfs_rq_last_update_time(cfs_rq);
- 
--	now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
-+	if (now < lut)
-+		/*
-+		 * cfs_rq->avg.last_update_time is more recent than our
-+		 * estimation which means that an update happened while
-+		 * computing the lag. LUT is the most up to date value so use
-+		 * it instead of trying to estimate what it should be
-+		 */
-+		now = lut;
-+	else
-+		now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
- 
- 	__update_load_avg_blocked_se(now, se);
- }
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 9aed92262bd9..330d582efafe 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -75,6 +75,11 @@ static inline void _update_idle_rq_clock_pelt(struct rq *rq)
- 	rq->clock_pelt  = rq_clock_task(rq);
- 
- 	u64_u32_store(rq->enter_idle, rq_clock(rq));
-+	/*
-+	 * Make sure that pending update of rq->enter_idle is visible before
-+	 * rq->clock_pelt_idle so we will never overestimate the lag.
-+	 */
-+	smp_wmb();
- 	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
- }
- 
-@@ -153,12 +158,6 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
- #ifdef CONFIG_CFS_BANDWIDTH
- static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
--	/*
--	 * Make sure that pending update of rq->clock_pelt_idle and
--	 * rq->enter_idle are visible during update_blocked_average() before
--	 * updating cfs_rq->throttled_pelt_idle.
--	 */
--	smp_wmb();
- 	if (unlikely(cfs_rq->throttle_count))
- 		u64_u32_store(cfs_rq->throttled_pelt_idle, U64_MAX);
- 	else
--- 
-2.17.1
+But again, why is this needed at all?
 
+thanks,
 
-
-> > +	smp_wmb();
-> > +	if (unlikely(cfs_rq->throttle_count))
-> > +		u64_u32_store(cfs_rq->throttled_pelt_idle, U64_MAX);
-> > +	else
-> > +		u64_u32_store(cfs_rq->throttled_pelt_idle,
-> > +			      cfs_rq->throttled_clock_pelt_time);
-> >  }
-> >  
-> > -#ifdef CONFIG_CFS_BANDWIDTH
-> >  /* rq->task_clock normalized against any time this cfs_rq has spent throttled */
-> >  static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-> >  {
-> > @@ -150,6 +175,7 @@ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-> >  	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
-> >  }
-> >  #else
-> > +static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
-> >  static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-> >  {
-> >  	return rq_clock_pelt(rq_of(cfs_rq));
-> > @@ -204,6 +230,7 @@ update_rq_clock_pelt(struct rq *rq, s64 delta) { }
-> >  static inline void
-> >  update_idle_rq_clock_pelt(struct rq *rq) { }
-> >  
-> > +static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
-> >  #endif
-> >  
-> >  
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index e2cf6e48b165..ea9365e1a24e 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -641,6 +641,10 @@ struct cfs_rq {
-> >  	int			runtime_enabled;
-> >  	s64			runtime_remaining;
-> >  
-> > +	u64			throttled_pelt_idle;
-> > +#ifndef CONFIG_64BIT
-> > +	u64                     throttled_pelt_idle_copy;
-> > +#endif
-> >  	u64			throttled_clock;
-> >  	u64			throttled_clock_pelt;
-> >  	u64			throttled_clock_pelt_time;
-> > @@ -1013,6 +1017,12 @@ struct rq {
-> >  	u64			clock_task ____cacheline_aligned;
-> >  	u64			clock_pelt;
-> >  	unsigned long		lost_idle_time;
-> > +	u64			clock_pelt_idle;
-> > +	u64			enter_idle;
-> > +#ifndef CONFIG_64BIT
-> > +	u64			clock_pelt_idle_copy;
-> > +	u64			enter_idle_copy;
-> > +#endif
-> >  
-> >  	atomic_t		nr_iowait;
-> >  
-> > -- 
-> > 2.25.1
+greg k-h

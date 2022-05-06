@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D73051DB52
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61CF51DB56
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442555AbiEFPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1442563AbiEFPFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347628AbiEFPCw (ORCPT
+        with ESMTP id S1344485AbiEFPFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:02:52 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6A5D5CE;
-        Fri,  6 May 2022 07:59:08 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 84F631B00252;
-        Fri,  6 May 2022 17:59:06 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1651849146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
-        b=ZA1zp990cio1fHuBQ9fC/CLwgqo25zcAH+WW22ifRC7j2nOx/mcU21o+2eFjFToBZl3YYB
-        Nnii/SpZz7WGRmRsj6Er3PDJhkAO8JZvXcUfgOp3bpj+V/V70v+0BnQO2EABlQiLVFvpYh
-        AMiL+3lXQhTZ/phFbaiOBqlQdl1wk2hAfCHF0PN9BRDpGgU705coS6iIIozI7GwddzxmMq
-        81KSAupC93VEwi9ga3b5E3onrsmvAjt0/5V/KaT8iSQ+9I06W8j4F7/Kaf9kT5ZRli25I5
-        XgMHNQMAjPaEPTB6rd7QsDWS/jJh0y1ZGOTtSTiG7psP/yWEYt9Zuv1iZCnyXw==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 293F8634C91;
-        Fri,  6 May 2022 17:59:06 +0300 (EEST)
-Date:   Fri, 6 May 2022 17:59:06 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: ov5675: add device-tree support
-Message-ID: <YnU3umQnJxvYFmCg@valkosipuli.retiisi.eu>
-References: <20220504135543.59522-1-foss+kernel@0leil.net>
- <20220504135543.59522-2-foss+kernel@0leil.net>
- <20220505074725.4aabembd4uh4tt23@uno.localdomain>
- <YnOKuGqQ74rGUz6q@valkosipuli.retiisi.eu>
- <1344ed86-1505-a1af-1671-67106a4b9cf7@theobroma-systems.com>
- <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
+        Fri, 6 May 2022 11:05:13 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E277237BE2
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:01:29 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id d6so9003504ede.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dh9Sqbyn13sjjoIAw04mQl+yZsrs+e88nMF1+Rj3nhg=;
+        b=C4ATGoLFGKHoQUaNmVja0AuY75V9kVbt6sh1BucMgbLBchNG6EiNl9CjYsTM30+Lce
+         841iy/LOcDklFSR7lXyrAb2kDr7XeysXBK9NAa+YZH58esrE9NqFAOtEop4rIet6HoRl
+         NlKOsWQMRK9GyDjOktjQJRrerF4TAOfWH56jX/Zrle6kg5K/clVcuRkVx50nO1JFkHD9
+         jupSzTkXpGrGrMjw7W6A7XPoUoYVGojC/Uaupr667yG89VEjR3iUTYfICz7zishBnfRU
+         uN2rVGel5QhrV0yHANYswR2/BcIBbB7MhBMUpO0qlgvNCFIZYjNkD6yaoVOaYTGCH4U+
+         kk5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dh9Sqbyn13sjjoIAw04mQl+yZsrs+e88nMF1+Rj3nhg=;
+        b=GuEGjg1qDCXDaP570MDfKmQpNz7+zaTd9S28i0dpSEoaV8Uvg3cVpX/Jnng7x8tbT9
+         fsHVApvu3r6m3hUQPlBTt2Y9zmQVMx35z/D8hafdj9C3BPhj2sqvLr68kP758v4w5X9Y
+         jbFGRJrFtZxHbRS6bihbD7XSERVTIcIRPDvue/afjrAZ8PWeak7ybhPZOOZ2k+e5ZKYB
+         W/bNic/OrUUEiv6c+pOA39lYfEdd/wGC0n3LtfTb+Ya6WCDmhj8l19Qruk1FyXbm75bU
+         TUHMfLUHasSXdbrVKJ/jgDJUnAry9S4TypLXv0lJxcsAjAkjsDUIWlBdTe5kw7SJX1iB
+         2UxQ==
+X-Gm-Message-State: AOAM532Cd2OmX5lK3OfC2V+Mqyo8Y1XzECNHKasvbAEBsezbq6ApELLA
+        A68INcGkxq+58uQXdf2VPj5j5SRZaamMhGRKiKt+LA==
+X-Google-Smtp-Source: ABdhPJyxpIefbpZt8xqFwsIPVrDZUzq9eCOh4xzY0qOduedsNRrKFFyrpnpLyMHr3IyWYdi7CZEaoFDy9QtWy8PMRbE=
+X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id
+ ec12-20020a0564020d4c00b00410a415fd95mr3855937edb.288.1651849288453; Fri, 06
+ May 2022 08:01:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651849146; a=rsa-sha256;
-        cv=none;
-        b=r7V0iWsvz7F/pm/x1tWejtH6MaAyyOlX+c5HeCcAurpqigfnSy10qXT4xmpbPSgxnlwXHf
-        oCOkN7+QeKuJaYq6DaNoYZmicXau/Hacmx8ZWwRaRQiTb3ieUteJQFnPoR+3dukvSiOUgI
-        TbOTjqqM8CkEnE9VcyTQ5n31OtBj6foObfTZhXAY/bV3IKFV1hqy15+b5QQXhmXy80EVzL
-        8uPCjrtaePG5t2x2t54BDCYfgZMNuw25IMWH/PNGXMvOTXrDhVRacD4sUJz4PzDifEKqH4
-        8BXeNBUAepkKf9/7rsIfxJson0JemVNXm6pjCfVOzQevFDGeyOTBPVmeUHSRHA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1651849146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
-        b=uAsp9WyJrf5qEO97HiEWR8T2oJNtC7D4sAJNl0JvL50ILDoY89whjuuZX4rAGUTRzvOJPY
-        FTTX9TAobCeRgLFzfLje3gSqr3JeXO92uYPucku+uNI+Jc3MSwEDzyLzVl5bR2f7/6cYfn
-        SFDByxt1OIQHwK9ReeIBYxnb6PMxcRULwvVd0vUTNw5GR0E5Vh0bXOvS4zDjJttcl3FtUy
-        Ch2t39+MUPGdIPCmP0SpCckbgdFU0v1p54uY5u212tBt+0QkV5W3ZPScVzJcezpF7QGazO
-        EcnaDMQwuJnItK74lXl7rcMB0Zn+KOj7oNvbAr+CoCGofwuhShw9AgphOwoAog==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220506080630.4151-1-puyou.lu@gmail.com>
+In-Reply-To: <20220506080630.4151-1-puyou.lu@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 6 May 2022 17:01:17 +0200
+Message-ID: <CAMRc=MfGNH9LTscsBHqL05PQHLO9tFNxBZ9H_381MrWszL0hJg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: pca953x: fix irq_stat not updated when irq is
+ disabled (irq_mask not set)
+To:     Puyou Lu <puyou.lu@gmail.com>
+Cc:     stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@misterjones.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
+On Fri, May 6, 2022 at 10:06 AM Puyou Lu <puyou.lu@gmail.com> wrote:
+>
+> When one port's input state get inverted (eg. from low to hight) after
+> pca953x_irq_setup but before setting irq_mask (by some other driver such as
+> "gpio-keys"), the next inversion of this port (eg. from hight to low) will not
+> be triggered any more (because irq_stat is not updated at the first time). Issue
+> should be fixed after this commit.
+>
+> Fixes: 89ea8bbe9c3e ("gpio: pca953x.c: add interrupt handling capability")
+> Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
+>
+> ---
+>
+> Change since v1:
+> add fixes tag and commit message https://lore.kernel.org/lkml/20220501092201.16411-1-puyou.lu@gmail.com/
+>
+> ---
+>  drivers/gpio/gpio-pca953x.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+> index d2fe76f3f34f..8726921a1129 100644
+> --- a/drivers/gpio/gpio-pca953x.c
+> +++ b/drivers/gpio/gpio-pca953x.c
+> @@ -762,11 +762,11 @@ static bool pca953x_irq_pending(struct pca953x_chip *chip, unsigned long *pendin
+>         bitmap_xor(cur_stat, new_stat, old_stat, gc->ngpio);
+>         bitmap_and(trigger, cur_stat, chip->irq_mask, gc->ngpio);
+>
+> +       bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
+> +
+>         if (bitmap_empty(trigger, gc->ngpio))
+>                 return false;
+>
+> -       bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
+> -
+>         bitmap_and(cur_stat, chip->irq_trig_fall, old_stat, gc->ngpio);
+>         bitmap_and(old_stat, chip->irq_trig_raise, new_stat, gc->ngpio);
+>         bitmap_or(new_stat, old_stat, cur_stat, gc->ngpio);
+> --
+> 2.17.1
+>
 
-On Fri, May 06, 2022 at 04:43:00PM +0200, Jacopo Mondi wrote:
-> My understanding is that "clock-frequency" is
-> an ACPI leftover that has been brought into some DT bindings as an
-> historical mistake. OF can work well with the common clock framework,
-> there's no need to introduce a property for the same purpose.
+Queued for fixes, thanks!
 
-The other way around actually. It was first used on DT but it's no longer
-the perferred way to set the frequency there. On ACPI it simply indicates
-the frequency without an ability to set it.
-
--- 
-Sakari Ailus
+Bart

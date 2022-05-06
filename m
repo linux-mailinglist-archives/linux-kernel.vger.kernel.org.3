@@ -2,192 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2944851D2A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FD251D2A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389738AbiEFH51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S1389749AbiEFH66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389750AbiEFH5V (ORCPT
+        with ESMTP id S1386640AbiEFH6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:57:21 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56F067D1D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:53:35 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id g28so11510172ybj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:53:35 -0700 (PDT)
+        Fri, 6 May 2022 03:58:52 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB267D0B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:55:09 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso4856290wmq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:55:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WaBl9pAWGWFlLK9nV+267TWCL6dZ06A/NoNmIhWgBMM=;
-        b=Su5V0nbXIO7rEtZnbMRp6hT4/ABpQJrp77PFoY9EtWOQEiTO3IVqGoF+Aa1fmBbLE8
-         sV5G5fS9H0cy10W9/iTLIJ7MbO4JOEUT53M5bbO0n4IqbE0l1jEOckYtTcTSDQ2jQi5p
-         DpGRkL6dF5eI0pWynFjtyuja8/CSpi9bcOwko=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=fGiYCF2iw5t4VtH5jxb71hCLielghGLBGlvL9ckdnuk=;
+        b=HDf5cH9w7G+JBlziGdc4NZXV/Bl8VMVD4v/0jrGsIwWz5NYvLAQiFnPEmBoFsefeYO
+         sztyl5l3CnuKRyfgcmlntK3uO2Uh9qRQ2WVhIS+x3SMuT64wNnk7r/pLCTYNUSYIfyUa
+         GgQS6XxeKpAkTkvg1zvrVI7ngmX6YfRKyw9eWZ1eoi5BD2v5M+HqyipHoAE26Y48TGAE
+         oujwYlhZJBPJYX1VZP3NZZd0iizRFCD5qGVVtvr++gjmvLLoYFZUqq5+5xVj8iixhKGO
+         46xpw2wOlxEc0haZbvZ9x3LUU3d1/MiRGsHt6zDrTSugr6+ECDUHhI4Lg0cYDE7T9MT2
+         RI8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WaBl9pAWGWFlLK9nV+267TWCL6dZ06A/NoNmIhWgBMM=;
-        b=kMvU5qcPAKGT24TnCqf9TLuHZ37l5SPz8xEtIHUluXbOASg+F69uFcXzZQexyiG2II
-         VX3vpy78icZXFKJzvuGZWrIquZFXw6yctFvh/0hnPQOuKrQNoGGzx63qVW78CRoH41jv
-         CAfkhkNw0aBPNZDZXzmmxbuQWRdQG2EbTN1sOrF3AUOQA385Op+ldEcGh0xuaXQ35zx9
-         9DAcvUQEjtqCO0lB7w2v5T5Ae1ZtLKeqM2miQ2+pDFk8Tpd5YSIAuPnECP0CamI0zMEy
-         C8TA7ZdcCy5Q+yom12Pwu5OcDAWzz2IJ+sGuFxgFG81NSTj1KmBFyPAbVu0kwy+Tt3rE
-         moeg==
-X-Gm-Message-State: AOAM5329FrNv1M+CA6oznft9VStwc3IYHd9KfzdzqV6AEoM79+ohRsOC
-        4V7RUjkcFVBqG3RNeYCRtLTL+0ikAF7+6aAAIgbb
-X-Google-Smtp-Source: ABdhPJwLmmtcS8FQJVNzNqzWudxH3m+YT2z9bUzShy4WAKlZZxjAcINcyDUphEUReozdZ5z0y0OYdz6OJW5aQIP9RRc=
-X-Received: by 2002:a5b:803:0:b0:633:749f:9acd with SMTP id
- x3-20020a5b0803000000b00633749f9acdmr1437126ybp.236.1651823615080; Fri, 06
- May 2022 00:53:35 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=fGiYCF2iw5t4VtH5jxb71hCLielghGLBGlvL9ckdnuk=;
+        b=qVEqTosD4EAYZTmBy6K7m1CUVFDKW+XF8GrSs8+UZzhu0RVSGelMS9opIXYokZ85s5
+         Ns0+rTt6apSGNbNloH4rAfkOtXXytpWiBmYJGJrlrzBD2N04EeeIlxASzJw7LG3vQZja
+         XN1IqGURz5QAwe9/9GrhXaiu1vb406AHoOUf5wAVdGFzmhz4yXTmbE5fHsqFQrHo2AeZ
+         y0mrWlISePMk3VNAihrHQcxn9O+AqA6RotyqmNd2P6Szb2b4tJ3vfFEF45EEdZfCw8I6
+         Gd+7gnomoloWXaNjBftTgxsa7aSc0GTGthwRUULwAir4PTldVzo0BUQHWICN1fFjAwtU
+         jm1g==
+X-Gm-Message-State: AOAM532UGGNNELR3B5Xmob9I6HXhpPXExYjpN8A+MqLr0H7xK1g1vbe+
+        7Jmw+IFMPMosRTASshYQYtIrMw==
+X-Google-Smtp-Source: ABdhPJxXUWYFj9gN67iP4+AdZg3KlNlbI6sMi3eGWQ9KfpsoSreGWKSf6vkbdnNjGdQ1YfZ1QGmKqA==
+X-Received: by 2002:a05:600c:3b24:b0:394:7b59:dfd9 with SMTP id m36-20020a05600c3b2400b003947b59dfd9mr1343514wms.129.1651823707491;
+        Fri, 06 May 2022 00:55:07 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:56b7:4b6b:7ed:112a? ([2001:861:44c0:66c0:56b7:4b6b:7ed:112a])
+        by smtp.gmail.com with ESMTPSA id l13-20020a7bc34d000000b003942a244ebfsm3373135wmj.4.2022.05.06.00.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 00:55:06 -0700 (PDT)
+Message-ID: <ca6b70a2-9bcc-fb86-200c-e1714c9d53be@baylibre.com>
+Date:   Fri, 6 May 2022 09:55:05 +0200
 MIME-Version: 1.0
-References: <20220420112450.155624-1-apatel@ventanamicro.com> <20220420112450.155624-8-apatel@ventanamicro.com>
-In-Reply-To: <20220420112450.155624-8-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 6 May 2022 00:53:24 -0700
-Message-ID: <CAOnJCUKPTwjGr9Lg1XRMVTCMswg0E+4VvknBQ0p+Qo6EHL3M5A@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] RISC-V: KVM: Cleanup stale TLB entries when host
- CPU changes
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for per-console
+ locking
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com> <Ym/Z7PYPqvWPEjuL@alley>
+ <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+ <87pmktm2a9.fsf@jogness.linutronix.de> <87a6bwapij.fsf@jogness.linutronix.de>
+ <87zgjvd2zb.fsf@jogness.linutronix.de>
+ <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> On RISC-V platforms with hardware VMID support, we share same
-> VMID for all VCPUs of a particular Guest/VM. This means we might
-> have stale G-stage TLB entries on the current Host CPU due to
-> some other VCPU of the same Guest which ran previously on the
-> current Host CPU.
->
-> To cleanup stale TLB entries, we simply flush all G-stage TLB
-> entries by VMID whenever underlying Host CPU changes for a VCPU.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_host.h |  5 +++++
->  arch/riscv/kvm/tlb.c              | 23 +++++++++++++++++++++++
->  arch/riscv/kvm/vcpu.c             | 11 +++++++++++
->  3 files changed, 39 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index a40e88a9481c..94349a5ffd34 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -166,6 +166,9 @@ struct kvm_vcpu_arch {
->         /* VCPU ran at least once */
->         bool ran_atleast_once;
->
-> +       /* Last Host CPU on which Guest VCPU exited */
-> +       int last_exit_cpu;
-> +
->         /* ISA feature bits (similar to MISA) */
->         unsigned long isa;
->
-> @@ -256,6 +259,8 @@ void kvm_riscv_local_hfence_vvma_gva(unsigned long vmid,
->                                      unsigned long order);
->  void kvm_riscv_local_hfence_vvma_all(unsigned long vmid);
->
-> +void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu);
-> +
->  void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu);
->  void kvm_riscv_hfence_gvma_vmid_all_process(struct kvm_vcpu *vcpu);
->  void kvm_riscv_hfence_vvma_all_process(struct kvm_vcpu *vcpu);
-> diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-> index c0f86d09c41d..1a76d0b1907d 100644
-> --- a/arch/riscv/kvm/tlb.c
-> +++ b/arch/riscv/kvm/tlb.c
-> @@ -215,6 +215,29 @@ void kvm_riscv_local_hfence_vvma_all(unsigned long vmid)
->         csr_write(CSR_HGATP, hgatp);
->  }
->
-> +void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
-> +{
-> +       unsigned long vmid;
-> +
-> +       if (!kvm_riscv_gstage_vmid_bits() ||
-> +           vcpu->arch.last_exit_cpu == vcpu->cpu)
-> +               return;
-> +
-> +       /*
-> +        * On RISC-V platforms with hardware VMID support, we share same
-> +        * VMID for all VCPUs of a particular Guest/VM. This means we might
-> +        * have stale G-stage TLB entries on the current Host CPU due to
-> +        * some other VCPU of the same Guest which ran previously on the
-> +        * current Host CPU.
-> +        *
-> +        * To cleanup stale TLB entries, we simply flush all G-stage TLB
-> +        * entries by VMID whenever underlying Host CPU changes for a VCPU.
-> +        */
-> +
-> +       vmid = READ_ONCE(vcpu->kvm->arch.vmid.vmid);
-> +       kvm_riscv_local_hfence_gvma_vmid_all(vmid);
-> +}
-> +
->  void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu)
->  {
->         local_flush_icache_all();
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 9cd8f6e91c98..a86710fcd2e0 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -67,6 +67,8 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
->         if (loaded)
->                 kvm_arch_vcpu_put(vcpu);
->
-> +       vcpu->arch.last_exit_cpu = -1;
-> +
->         memcpy(csr, reset_csr, sizeof(*csr));
->
->         memcpy(cntx, reset_cntx, sizeof(*cntx));
-> @@ -735,6 +737,7 @@ static void noinstr kvm_riscv_vcpu_enter_exit(struct kvm_vcpu *vcpu)
->  {
->         guest_state_enter_irqoff();
->         __kvm_riscv_switch_to(&vcpu->arch);
-> +       vcpu->arch.last_exit_cpu = vcpu->cpu;
->         guest_state_exit_irqoff();
->  }
->
-> @@ -829,6 +832,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->                         continue;
->                 }
->
-> +               /*
-> +                * Cleanup stale TLB enteries
-> +                *
-> +                * Note: This should be done after G-stage VMID has been
-> +                * updated using kvm_riscv_gstage_vmid_ver_changed()
-> +                */
-> +               kvm_riscv_local_tlb_sanitize(vcpu);
-> +
->                 guest_timing_enter_irqoff();
->
->                 kvm_riscv_vcpu_enter_exit(vcpu);
-> --
-> 2.25.1
->
+Hi,
 
+On 06/05/2022 08:43, Marek Szyprowski wrote:
+> Hi John,
+> 
+> On 06.05.2022 00:33, John Ogness wrote:
+>> On 2022-05-05, John Ogness <john.ogness@linutronix.de> wrote:
+>>> I will go through and check if all access to AML_UART_CONTROL is
+>>> protected by port->lock.
+>> The startup() callback of the uart_ops is not called with the port
+>> locked. I'm having difficulties identifying if the startup() callback
+>> can occur after the console was already registered via meson_uart_init()
+>> and could be actively printing, but I see other serial drivers are
+>> protecting their registers in the startup() callback with the
+>> port->lock.
+>>
+>> Could you try booting the meson hardware with the following change? (And
+>> removing any previous debug changes I posted?)
+> 
+> Bingo! It looks that the startup() is called when getty initializes
+> console. This fixed the issues observed on the Amlogic Meson based boards.
+> 
+> Feel free to add:
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Best regards
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
--- 
-Regards,
-Atish
+Thanks all for figuring out the issue, perhaps other uart drivers could fall
+in the same issue if startup code isn't protected with lock ?
+
+Neil

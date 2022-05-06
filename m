@@ -2,190 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23B651D61A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D86251D61D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391120AbiEFLEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S1391123AbiEFLFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391101AbiEFLEU (ORCPT
+        with ESMTP id S1350709AbiEFLFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:04:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF55237EE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651834836; x=1683370836;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ot650wBvADBiyGWniBkj5JCKLPqmissAdNNsxn0wrgI=;
-  b=inkDt/+Zj2sVkfJLdcL0wIC/SaIx8TRFhaA8QdoA8YapiYECbztxrl7O
-   cYS6dWCWLtIsN0YAHbIwVEdjAtAxPpom4pvOUSn9ui5scR9Ko3I7yVa6F
-   6Bwo0FCN4o8DTKZafkQ0fxyxJdeitAMOjfUzvmLj10RMQLXoNedaMHz1B
-   Dvr0FGuvg+0w3c2CFkfdkI+u4dkcUWKRoiigum/QaHQweP92SlyCnRcjB
-   dJ4XHB/FuBCNurLbpilLCEsLH2Mt8eFtEVr7OmDdPlgfpUDJiBnYKsNNK
-   V7xorZH9YcH7fyyVoXv7n1WK5ejp/VJR3w2Q9jdZhEpLAFJzBirYHC4TL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268040861"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268040861"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:00:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="549814353"
-Received: from selvaraj-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.3.239])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:00:31 -0700
-Message-ID: <c3003e378504d2cd034e54bca6cab4d6bb53e008.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 06 May 2022 23:00:29 +1200
-In-Reply-To: <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
-         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
-         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
-         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
-         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
-         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
-         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
-         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 07:05:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF456234;
+        Fri,  6 May 2022 04:01:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F296115F;
+        Fri,  6 May 2022 11:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F72C385AA;
+        Fri,  6 May 2022 11:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651834881;
+        bh=pdf513eRJRW8taCkPNHdL4n7nXwz1DwgB5iOGmyyegw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CHJ4Z1I7fAK7mH+hZ3eTM3ue3neDqcrBpSdEVJBd5blWySAWi1ICYgZ1XxQxLeSYv
+         0acmpZm5+uoijxVsH2sJSZDsOtllJRmwctnZqC734OUkyssQSRCTuP93g5FfwjKcUk
+         pBeOt6Oc/gSOpXZwqGa0o00LQHZQNtxsqVUgGonK35RYnBDaMDhlQP2meOmbh9PXkr
+         NDgxmbW6X/UDGY+Jek/xqeXtOtcIfWxqyULHLJJxB1Qid5d1BdO5bLX81zrXX6TdKY
+         7nxxwHULU6Vlsl/A6QR+QTpD93tdw6VAWxfFceWLkz8bJtSFqiyQvdL8tHJef75ISH
+         OQsB9Gb5mvY9w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmvi2-009RMa-Gz; Fri, 06 May 2022 12:01:18 +0100
+Date:   Fri, 06 May 2022 12:01:18 +0100
+Message-ID: <87sfpn6i2p.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        p.zabel@pengutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v14 7/9] irqchip: Add Sunplus SP7021 interrupt controller driver
+In-Reply-To: <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
+References: <cover.1651805790.git.qinjian@cqplus1.com>
+        <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qinjian@cqplus1.com, krzysztof.kozlowski@linaro.org, robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk, arnd@arndb.de, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 16:06 -0700, Dave Hansen wrote:
-> On 5/5/22 15:15, Kai Huang wrote:
-> > set_memory_xx()  is supposedly only for direct-mapping.  Please use my
-> > suggestion above.
+On Fri, 06 May 2022 04:23:21 +0100,
+Qin Jian <qinjian@cqplus1.com> wrote:
 > 
-> Kai, please take a look at some of the other users, especially
-> set_memory_x().  See how long the "supposed" requirement holds up.
+> Add interrupt controller driver for Sunplus SP7021 SoC.
 > 
-> That said, I've forgotten by now if this _could_ have used vmalloc() or
-> vmap() or vmap_pfn().  None of the logic about why or how the allocator
-> and mapping design decisions were made.  Could that be be rectified for
-> the next post?
+> This is the interrupt controller in P-chip which collects all interrupt
+> sources in P-chip and routes them to parent interrupt controller in C-chip.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
 
-Hi Dave,
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-(Sorry previous reply was too fast..)
+I expect this to go via the SoC tree with the rest of the platform
+stuff.
 
-I spent some time looking into how __change_page_attr_set_clr() is implemented,
-which is called by all set_memory_xxx() variants.  If my understanding is
-correct, __change_page_attr_set_clr() will work for vmap() variants, because it
-internally uses lookup_address(), which walks the page table directly, to find
-the actual PTE (and PFN).  So set_memory_decrypted() can be fixed to support
-vmap() mapping for TDX.
+Thanks,
 
-However, looking at the code, set_memory_decrypted() calls
-__change_page_attr_set_clr(&cpa, 1).  The second argument is 'checkalias', which
-means even we call set_memory_decrypted() against vmap() address, the aliasing
-mappings will be changed too.  And if I understand correctly, the aliasing
-mapping includes direct-mapping too:
-
-static int cpa_process_alias(struct cpa_data *cpa)                             
-{                                                                              
-        struct cpa_data alias_cpa;
-        unsigned long laddr = (unsigned long)__va(cpa->pfn << PAGE_SHIFT);     
-        unsigned long vaddr;
-        int ret;                                                               
-                                                                                                                                                   
-        if (!pfn_range_is_mapped(cpa->pfn, cpa->pfn + 1))                      
-                return 0;                                                      
-
-        /*
-         * No need to redo, when the primary call touched the direct           
-         * mapping already:                                                    
-         */
-        vaddr = __cpa_addr(cpa, cpa->curpage);                                 
-        if (!(within(vaddr, PAGE_OFFSET,
-                    PAGE_OFFSET + (max_pfn_mapped << PAGE_SHIFT)))) {
-                
-                alias_cpa = *cpa; 
-                alias_cpa.vaddr = &laddr;
-                alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);             
-                alias_cpa.curpage = 0;                                         
-                
-                cpa->force_flush_all = 1;                                      
-
-                ret = __change_page_attr_set_clr(&alias_cpa, 0);               
-                if (ret)                                                       
-                        return ret;
-        }                                                                      
-
-#ifdef CONFIG_X86_64                                                           
-        /*
-         * If the primary call didn't touch the high mapping already           
-         * and the physical address is inside the kernel map, we need          
-         * to touch the high mapped kernel as well:
-         */                                                                    
-        if (!within(vaddr, (unsigned long)_text, _brk_end) &&                  
-            __cpa_pfn_in_highmap(cpa->pfn)) {                                  
-                unsigned long temp_cpa_vaddr = (cpa->pfn << PAGE_SHIFT) +      
-                                               __START_KERNEL_map - phys_base; 
-                alias_cpa = *cpa;                                              
-                alias_cpa.vaddr = &temp_cpa_vaddr;                             
-                alias_cpa.flags &= ~(CPA_PAGES_ARRAY | CPA_ARRAY);
-                alias_cpa.curpage = 0;                                         
-
-                cpa->force_flush_all = 1;
-                /*
-                 * The high mapping range is imprecise, so ignore the
-                 * return value.
-                 */
-                __change_page_attr_set_clr(&alias_cpa, 0);
-        }
-#endif
-
-        return 0;
-}
-
-As you can see, the first chunk checks whether the virtual address is direct-
-mapping, and if it is not, direct mapping is changed too.
-
-The second chunk even changes the high kernel mapping.
-
-So, if we use set_memory_decrypted(), there's no difference whether the address
-is vmap() or direct mapping address.  The direct mapping will be changed anyway.
-
-(However, it seems if we call set_memory_decrypted() against direct mapping
-address, the vmap() mapping won't be impacted, because it seems
-cpa_process_alias() doesn't check vmap() area..).
-
-However I may have missed something.  Kirill please help to confirm if you see
-this.
+	M.
 
 -- 
-Thanks,
--Kai
-
-
+Without deviation from the norm, progress is not possible.

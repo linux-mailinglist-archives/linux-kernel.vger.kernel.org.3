@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC4D51CEF6
+	by mail.lfdr.de (Postfix) with ESMTP id 238FD51CEF5
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388313AbiEFCWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S1388312AbiEFCXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388305AbiEFCV6 (ORCPT
+        with ESMTP id S235604AbiEFCXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:21:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44160045;
-        Thu,  5 May 2022 19:18:16 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvZ2Z0Vtsz1JBmW;
-        Fri,  6 May 2022 10:17:10 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 10:18:15 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
- 2022 10:18:14 +0800
-Message-ID: <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
-Date:   Fri, 6 May 2022 10:18:10 +0800
+        Thu, 5 May 2022 22:23:42 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BC4633A1;
+        Thu,  5 May 2022 19:19:59 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id h10so10665476ybc.4;
+        Thu, 05 May 2022 19:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kqeaKt4VHSC0M6Q7xTIrEAfecmkELADSzjUpCKB9s4E=;
+        b=hxftpkK7H1BhuEkJMKp3T5iT7qVqTe6yWfanW9MMHeAY5I8Q3HqYuAManaLZW2aOtk
+         mZz4Ua8yc2IWXS1jn1cGawbcUvEng4uYgQXBKwWwPKDsvjcRTEFnTTcYV4r+ucj2Ev61
+         E7ZQEk1Ef4dGjyJOR4jn3QWtuYFbZef6u95i+9V4+chneKgtGB9HxpBbtGavLVBPVevh
+         3yq75CLogf7jiEibqcReZq2SC8Ydx9ndCSMhE2iw+w5zfHjkMSTEp/3sB2R6xks2RzGf
+         dNV30IwxoKzCuxR6e3LvYEimqurvOHlsFFr4sZNl/TY37UeiubrxjQ72rdXBfpxswvyf
+         E5rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kqeaKt4VHSC0M6Q7xTIrEAfecmkELADSzjUpCKB9s4E=;
+        b=cIdz2usn9e7eLATRCFlhJ1YtMrwN/4PklZy6dOmXH2Et2ooHDxOxLsLre6RNoTSN5s
+         nNtd0whFr1ABIvn5XdWU6K7NBQdZA9RM5/IJ65oGgV96AYdQF6ow/+7OCL5QNiEHhNe+
+         dYaQkw8bEH9scgIsvGlHSEH4F2v6t10v9tKWjYllP/7wfEZWbmk6Qir00SCdsEeQSqml
+         mTZpiqNEzAoN+C1BAjwIym5ur9j+E77QEB0dcCOx5bf95DHW2RkBm1JGWTWoVfXGNYOV
+         2a+iJKtZ0fvuYbCusc/YxMAyX3oQZBD/6wmLSXFs4pj07kOxORZ+NciJ602QKmaxUUON
+         3DaA==
+X-Gm-Message-State: AOAM532DDhBibjrogNPAnnW7vvo7mAY+mhia2a4w3H9kEpt25TSiDcHe
+        LJztUioZhaxJThcaHN93Z0Q/A7h7Mav54URZfAk=
+X-Google-Smtp-Source: ABdhPJxWMxRqJMwszC6ij/Lonrz/SOBQuzMp415ZfJ7BImUVq9Nl4xXNeCwom+1baZVS9TAARDAtSK19VpeVqy93vqc=
+X-Received: by 2002:a05:6902:709:b0:64a:99b:3594 with SMTP id
+ k9-20020a056902070900b0064a099b3594mr837242ybt.493.1651803599053; Thu, 05 May
+ 2022 19:19:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arch@vger.kernel.org>, <jthierry@redhat.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <jpoimboe@redhat.com>, <ycote@redhat.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <ardb@kernel.org>, <maz@kernel.org>, <tglx@linutronix.de>,
-        <luc.vanoostenryck@gmail.com>
-References: <20220429094355.122389-1-chenzhongjin@huawei.com>
- <20220429094355.122389-23-chenzhongjin@huawei.com>
- <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
- <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
- <20220505092448.GE2501@worktop.programming.kicks-ass.net>
- <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
+ <878rri2i6o.fsf@cjr.nz> <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
+ <87tua51550.fsf@cjr.nz> <df763cb0-83f2-35a5-a381-57cfd040becf@talpey.com> <87r15910c1.fsf@cjr.nz>
+In-Reply-To: <87r15910c1.fsf@cjr.nz>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Fri, 6 May 2022 12:19:48 +1000
+Message-ID: <CAN05THQYKRChdR_4T86dGtCO=xY+cWpfa6_fOVNh9WSB=RNE-A@mail.gmail.com>
+Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too long
+To:     Paulo Alcantara <pc@cjr.nz>
+Cc:     Tom Talpey <tom@talpey.com>, Steven French <sfrench@samba.org>,
+        Byron Stanoszek <gandalf@winds.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,61 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/5 18:56, Mark Rutland wrote:
-> On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
->> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
->>> Hi Peter,
->>>
->>> IIRC now the blacklist mechanisms all run on check stage, which after
->>> decoding, but the problem of kuser32.S happens in decoding stage. Other
->>> than that the assembly symbols in kuser32 is STT_NOTYPE and
->>> STACK_FRAME_NON_STANDARD will throw an error for this.
->>>
->>> OBJECT_FILES_NON_STANDARD works for the single file but as you said
->>> after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
->>> for kuser32 case at all.
->>>
->>> Now my strategy for undecodable instructions is: show an error message
->>> and mark insn->ignore = true, but do not stop anything so decoding work
->>> can going on.
->>>
->>> To totally solve this my idea is that applying blacklist before decode.
->>> However for this part objtool doesn't have any insn or func info, so we
->>> should add a new blacklist just for this case...
->>
->> OK, so Mark explained that this is 32bit userspace (VDSO) code.
->>
->> And as such there's really no point in running objtool on it. Does all
->> that live in it's own section? Should it?
-> 
-> It's placed in .rodata by a linker script:
-> 
-> * The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
->   and `vdso32_end` symbols, as raw bytes (via .incbin).
->   See arch/arm64/kernel/vdso32-wrap.S.
-> 
-> * The 64-bit vdso code is placed in .rodata, between the `vdso_start`
->   and `vdso32` symbols, as raw bytes (via .incbin).
->   See arch/arm64/kernel/vdso-wrap.S.
-> 
-> The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
-> and from userspace's PoV the existing secrtions within those objects are
-> correct, so I don't think those should change.
-> 
-> How does x86 deal with its vdso objects?
-> 
-> Thanks,
-> Mark.
-> .
+On Fri, 6 May 2022 at 11:59, Paulo Alcantara <pc@cjr.nz> wrote:
+>
+> Tom Talpey <tom@talpey.com> writes:
+>
+> > I think the most conservative and spec-compliant choice should be made.
+> > SMB1 should not be pushing the envelope of interoperability, in this day
+> > and age.
+>
+> OK.
+>
+> > I believe the NetBIOS name is a fixed array of 16 octets, right? So, if
+> > the nodename is shorter, it needs to be padded with 0's.
+>
+> Right.
+>
+> > Did this code change recently? Why???
+>
+> We used to not send the WorkstationName during NTLMSSP until recent
+> patch from Shyam:
+>
+>         commit 49bd49f983b5026e4557d31c5d737d9657c4113e
+>         Author: Shyam Prasad N <sprasad@microsoft.com>
+>         Date:   Fri Nov 5 19:03:57 2021 +0000
+>
+>             cifs: send workstation name during ntlmssp session setup
+>
+>             During the ntlmssp session setup (authenticate phases)
+>             send the client workstation info. This can make debugging easier on
+>             servers.
+>
+>             Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+>             Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+>             Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+>             Signed-off-by: Steve French <stfrench@microsoft.com>
+>
+> Unfortunately some servers did not seem to enforce it to be 16 bytes
+> long, so the reason why we didn't catch it earlier.
+>
+> Steve, Shyam, let me know if it does make sense to you and then I can
+> work on a patch to fix it properly.
 
-However for my build kuser32.o content is in .text and there is only
-`vdso` symbol in .rodata without `vdso32`. And for defconfig the
-CONFIG_KUSER_HELPERS=y is on.
+This regression should be easy to fix, but maybe we should not have
+done the initial change in the first place.
+If things is broken and do not work under SMB1, that is a good thing.
+Instead of adding features or fixing
+missing parts to SMB1 we should just tell people to switch to SMB2 instead.
 
-According to your description, it seems something wrong here?
-
-If all 32-bit asm is placed in .rodata it won't cause problem for
-objtool check.
-
-Thanks!
-
+I think if things do not work correctly or things are missing in smb1,
+that is a GOOD THING.
+:-)

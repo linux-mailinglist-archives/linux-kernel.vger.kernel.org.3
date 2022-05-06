@@ -2,71 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B35951D704
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2B751D70A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391562AbiEFLuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S1391512AbiEFLwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391508AbiEFLt6 (ORCPT
+        with ESMTP id S1390339AbiEFLwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:49:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE19694A1;
-        Fri,  6 May 2022 04:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651837566; x=1683373566;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t935uiHDr0FwSTZ51xfRHQyUrAV/YgeTPxzpxBGwWOI=;
-  b=CeUm8kye1Y6vhGAg7+U6lyeh6e4WgWiVLoNK6lTCz1TmFd0hZY8af0qz
-   jBzMZS8rLMpPQcatCqmEV6GQhwXz9CryoPMCKYpbjdVdLxJYKQNx33YvL
-   tFcoXmJ32XByJtrEWitaliFQuTiV3gNKlhaBMLWtJn8oYFFD5bec+gX3v
-   cDqSaHFOcb5hntykkBpwdVqbgpnfWyqRVGEE4rRudLM9v9zQabpkM1khc
-   lIScsAnt6sZ/7z2yHz8h0YX5IcGDK4E0wqvc6r9VCwu654bhdkFVduz/l
-   2so/LfzAJ65vs4oPAF5ujltrhXlddrx226KhWFOUTvruYBtUSag+fPbju
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268341203"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268341203"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:46:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="665448955"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 May 2022 04:46:00 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmwPI-000DQW-30;
-        Fri, 06 May 2022 11:46:00 +0000
-Date:   Fri, 6 May 2022 19:45:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paran Lee <p4ranlee@gmail.com>,
-        Christoph Lameter <cl@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Austin Kim <austindh.kim@gmail.com>
-Subject: Re: [PATCH] slub: kunit catch kmem_cache_alloc failed
-Message-ID: <202205061914.zGa4ozYg-lkp@intel.com>
-References: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
+        Fri, 6 May 2022 07:52:47 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E865D58E40;
+        Fri,  6 May 2022 04:49:03 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nmwSB-0005cn-TK; Fri, 06 May 2022 13:48:59 +0200
+Message-ID: <833f2574-daf6-1357-d865-3528436ba393@leemhuis.info>
+Date:   Fri, 6 May 2022 13:48:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Manuel Ullmann <labre@posteo.de>,
+        Igor Russkikh <irusskikh@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        regressions@lists.linux.dev, davem@davemloft.net,
+        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
+        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        koo5 <kolman.jindrich@gmail.com>
+References: <8735hniqcm.fsf@posteo.de>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH v3] net: atlantic: always deep reset on pm op, fixing null
+ deref regression
+In-Reply-To: <8735hniqcm.fsf@posteo.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651837744;143b143e;
+X-HE-SMSGID: 1nmwSB-0005cn-TK
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,97 +50,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paran,
+On 06.05.22 00:09, Manuel Ullmann wrote:
+>>From d24052938345d456946be0e9ccc337e24d771c79 Mon Sep 17 00:00:00 2001
+> Date: Wed, 4 May 2022 21:30:44 +0200
+> 
+> The impact of this regression is the same for resume that I saw on
+> thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+> 
+> The null deref occurs at the same position as on thaw.
+> BUG: kernel NULL pointer dereference
+> RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+> 
+> Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
+> par in pm functions, preventing null derefs"), where I disabled deep
+> pm resets in suspend and resume, trying to make sense of the
+> atl_resume_common deep parameter in the first place.
+> 
+> It turns out, that atlantic always has to deep reset on pm operations
+> and the parameter is useless. Even though I expected that and tested
+> resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
+> missing the breakage.
+> 
+> This fixup obsoletes the deep parameter of atl_resume_common, but I
+> leave the cleanup for the maintainers to post to mainline.
 
-Thank you for the patch! Perhaps something to improve:
+FWIW, this section starting here and...
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc5 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> PS: I'm very sorry for this regression.
+> 
+> Changes in v2:
+> Patch formatting fixes
+> - Fix Fixes tag
+> – Simplify stable Cc tag
+> – Fix Signed-off-by tag
+> 
+> Changes in v3:
+> – Prefixed commit reference with "commit" aka I managed to use
+>   checkpatch.pl.
+> - Added Tested-by tags for the testing reporters.
+> – People start to get annoyed by my patch revision spamming. Should be
+>   the last one.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paran-Lee/slub-kunit-catch-kmem_cache_alloc-failed/20220506-125540
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git fe27d189e3f42e31d3c8223d5daed7285e334c5e
-config: hexagon-randconfig-r014-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061914.zGa4ozYg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4827e156a14ba66c648125c98967c96178ca024d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paran-Lee/slub-kunit-catch-kmem_cache_alloc-failed/20220506-125540
-        git checkout 4827e156a14ba66c648125c98967c96178ca024d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
+...ending here needs should be below the "---" line you already have
+below. For details see:
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+BTW, same goes for any "#regzbot" commands (like you had in
+cbe6c3a8f8f4), as things otherwise get confused when a patch for example
+is posted as part of a stable/longterm -rc review.
 
-All warnings (new ones prefixed by >>):
+But don't worry, no big deal, I handled that :-D Many thx for actually
+directly getting regzbot involved and taking care of this regression!
 
->> lib/slub_kunit.c:40:16: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-           unsigned long tmp;
-                         ^
-   1 warning generated.
+> Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preventing null derefs")
+> Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=@protonmail.com/
+> Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+> Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
+> Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> Cc: <stable@vger.kernel.org> # 5.10+
+> Signed-off-by: Manuel Ullmann <labre@posteo.de>
+> ---
+>  drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-vim +40 lib/slub_kunit.c
-
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  28  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  29  #ifndef CONFIG_KASAN
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  30  static void test_next_pointer(struct kunit *test)
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  31  {
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  32  	struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  33  				SLAB_POISON, NULL);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  34  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
-4827e156a14ba6 Paran Lee     2022-05-06  35  	if (!p) {
-4827e156a14ba6 Paran Lee     2022-05-06  36  		kunit_err(test, "Allocation failed: %s\n", __func__);
-4827e156a14ba6 Paran Lee     2022-05-06  37  		kmem_cache_destroy(s);
-4827e156a14ba6 Paran Lee     2022-05-06  38  		return;
-4827e156a14ba6 Paran Lee     2022-05-06  39  	}
-1f9f78b1b376f8 Oliver Glitta 2021-06-28 @40  	unsigned long tmp;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  41  	unsigned long *ptr_addr;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  42  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  43  	kmem_cache_free(s, p);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  44  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  45  	ptr_addr = (unsigned long *)(p + s->offset);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  46  	tmp = *ptr_addr;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  47  	p[s->offset] = 0x12;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  48  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  49  	/*
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  50  	 * Expecting three errors.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  51  	 * One for the corrupted freechain and the other one for the wrong
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  52  	 * count of objects in use. The third error is fixing broken cache.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  53  	 */
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  54  	validate_slab_cache(s);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  55  	KUNIT_EXPECT_EQ(test, 3, slab_errors);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  56  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  57  	/*
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  58  	 * Try to repair corrupted freepointer.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  59  	 * Still expecting two errors. The first for the wrong count
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  60  	 * of objects in use.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  61  	 * The second error is for fixing broken cache.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  62  	 */
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  63  	*ptr_addr = tmp;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  64  	slab_errors = 0;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  65  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  66  	validate_slab_cache(s);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  67  	KUNIT_EXPECT_EQ(test, 2, slab_errors);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  68  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  69  	/*
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  70  	 * Previous validation repaired the count of objects in use.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  71  	 * Now expecting no error.
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  72  	 */
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  73  	slab_errors = 0;
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  74  	validate_slab_cache(s);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  75  	KUNIT_EXPECT_EQ(test, 0, slab_errors);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  76  
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  77  	kmem_cache_destroy(s);
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  78  }
-1f9f78b1b376f8 Oliver Glitta 2021-06-28  79  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ciao, Thorsten

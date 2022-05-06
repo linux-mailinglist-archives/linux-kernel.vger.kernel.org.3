@@ -2,264 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3660F51DF08
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDF051DF0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391515AbiEFSZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S1356616AbiEFSZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357923AbiEFSZK (ORCPT
+        with ESMTP id S1346024AbiEFSZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:25:10 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938EC289BA;
-        Fri,  6 May 2022 11:21:26 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso90248627b3.5;
-        Fri, 06 May 2022 11:21:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4eqHGxVTiC+aOYyLf5Hf3ZQlbjff/7JbxSC1u3k4i3I=;
-        b=dBWk/dp0NXUQsaZFkg8kwmIQaLS1QgzDX4+7jSSdE9Pq4LZsRneRbyj2L5gcU7ron1
-         VfWD/P4YN9XRB7OQ8pkWV6UvwuoUt6ytGibxrs/nruB0n8i8IhVO252lKn0k6ch1aJ6l
-         52Z68UUtSEEaI9USNB7nu8CJXrgKgAMLvNTkhkXYesums/7y1nYzdBKjonp0UFchIbsI
-         3mO4t9kYi5K/Y9BgFQrbhwM2NB7ZWjeFHVngxQqkKUU+T61qbD5d1W7MA6mo7dQWFVfH
-         wyCKvSuK6yWq/ruzkuaJx6KGxmAuxEt9F5UOKfjU1fEj+McKN2L42hjb0+vHs0CQtxdY
-         HT0g==
-X-Gm-Message-State: AOAM532Xop+ONypgdiN/tJqmO7ijcIp13120J3uDSD3/yzJ8/03FUKcI
-        iPEgmagTFxR48pTHPFCx90VxEX4+z9vWzxlXvuE=
-X-Google-Smtp-Source: ABdhPJxwEWPNBpCkkxsc+OW2EnhG0ybSKmz2h5QNQ80MYVe3xElHnV7PBsvP2u4Hwf++KNrbm4Ed3vR0FopXoyJxjKo=
-X-Received: by 2002:a0d:edc7:0:b0:2f8:f300:df2b with SMTP id
- w190-20020a0dedc7000000b002f8f300df2bmr3757397ywe.515.1651861285758; Fri, 06
- May 2022 11:21:25 -0700 (PDT)
+        Fri, 6 May 2022 14:25:43 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2088.outbound.protection.outlook.com [40.107.236.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED715289BA;
+        Fri,  6 May 2022 11:21:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HV5oLB1MZw9EraiN3hYhKCOG5KEqQ1fuiZaBeRRreljlfC034veF675Ru5e0kTCtWNCSGipHpDv1uEa3Gehw1IC5w2G4X6++3r8UkK8OPOJVHIvl/rQhn9wPTqE27jMUZxMmBjJPtDl12QvweQiZdeDxEWjvgwXtyrDH4ivapoGGRwSssRoBJl02Kkdr4rnwgIdpNL/If6hVpaHPcU7eAw4deGEHUxTliMB+J1gWGhSIgaDHU2jJUK/pg4HnUz7EU73gtTqkKBY77kUOd6Thbj6T8sii7c8j+x7hvhppF3YB5WedOcdeoQRtL957d9M3HeTBRbIYFUUAWF4Rs3KFiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5o6S7nFKlkU2yjIxILxPGroh2JFaA2FRk7RoI0UtD8Q=;
+ b=E4a7G3vMkaAMoXRz0HjJwwKX84I6x0gmyOujNXg+zUJoiYLaH0HzORBDB8lIl4DY6Jk3AcPVUlErNhOc52a5MNVbQImu7p8D7IxG2tlUKGatbVHtPZ6+IsSXoDtZ1OBmMx2eniuRn695B2YWBp9czubUokWsSUyxGsAElPGpYgxBN0eig9fxKXi1HqsdM9tuxYVeg7NYJYoUGalR7psoNxiX5cJUZfjRT5tmDX36WOL6uBw2KO4kW8/ls7ZekkMid3WA/+U5Gjx+mgVd8MmW3csIe4SR5lYPy58dqreAUgH6HZKm1nT6VmCczw/lDwg0xUwX+n09F8b+35rIFgCLRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5o6S7nFKlkU2yjIxILxPGroh2JFaA2FRk7RoI0UtD8Q=;
+ b=iYcLM0Y4iTzeeBOSgrWWcRKF6vZfd9roOQ60WvzVAuLnMYc7a5dznBHxC3Q4RcFtpRIm72uFm0m9A8mmpnIS8pKjqcrdWG7dK2Oml3l91tVMVOKGKoQjlswHKf+mC4T7+b5nqrLXfUju/0SkKUQ2xMQdAJkUbFXCZPC1oIAuspLm+C6Q0+QcO5GFhRwGx9iQfNMS32vD+XydJ4IT/L+FzfaN3xsT9uglpU41NbCQcMZaGNGSRNv7gzTBjl/auy96O8wuHODrZQ8gAuMhb3zqdkuud4qeWRiTswI/TvgrCy/aqtAm0ZrfIG0q3MqK6D4iBYoCtPFJgXKEPXTAPsWsgg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by CY4PR12MB1720.namprd12.prod.outlook.com (2603:10b6:903:121::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Fri, 6 May
+ 2022 18:21:58 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c%9]) with mapi id 15.20.5206.028; Fri, 6 May 2022
+ 18:21:58 +0000
+Message-ID: <6044d225-e794-3454-302a-320d0899ca27@nvidia.com>
+Date:   Fri, 6 May 2022 11:21:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] hte: uninitialized variable in hte_ts_get()
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <YnU2p2CoNkcxBUKN@kili>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <YnU2p2CoNkcxBUKN@kili>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR02CA0044.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::21) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
 MIME-Version: 1.0
-References: <20220422222351.1297276-1-bjorn.andersson@linaro.org>
- <20220422222351.1297276-2-bjorn.andersson@linaro.org> <CAHp75VdT7FYpoxV8RD6J-ujHuDnj0GWswDx6wCyCyz9cozkQ7Q@mail.gmail.com>
-In-Reply-To: <CAHp75VdT7FYpoxV8RD6J-ujHuDnj0GWswDx6wCyCyz9cozkQ7Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 May 2022 20:21:14 +0200
-Message-ID: <CAJZ5v0grpObZMb+C6ResOnmVMZmiHf9NYBtVQzsTRSP_Wn8t=g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] device property: Add helper to match multiple connections
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        USB <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2eac8eef-dbbf-4eaf-a73c-08da2f8d4e69
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1720:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB172023BE9D1209936765CF87AEC59@CY4PR12MB1720.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p0YKE3ydVP8xYpw395lweN+ughJIpQI/0K2wGL/iza/lyIuYEqRPRDZbUZOPFWWYQd8kyRe8+u+8Xn0bIPjCnSTQLkemJ0cTkVKitEGSwzjnDpH3MovymREpBYfRfkB+bEfghPJj/E7FH8fC1SORwyANLYDtQi+GupnvG4MdP6G12k5j86vWt5yNdUaEqkKUEukI3cHQIqeD9JsOuVQsGTF/E0x2b5xMKJEyTcS0DyfJVkNU4Du6nWK1SF7tIZHHQjtvNqs0V05z9yXFiCsF5xXCyeNDtzLYVPuYa0CkSkuYmPkz2MPG3mRQr2xYAU6sT+/DTVT4gr/mP/iVsmEnt4E7l6+wHKJuMo9cMWS2oIveAN1gywkL1XQiP7HIuFp3L1Ws0hfhnu3P3slDypChHkwcw92YX7CK2fIJONfdgqLo9q40V8NT9A4k2gBX8p/D7GuYOK90epSAXIW6OMydMDlCh+0DjiKg4m1xCDoKwO6iH9NQ5mPSzfyRJRAJTKthzDOGQDwoFRV8BRGohI8NCDrNi7TEVeod/aCLJfdAylrHZHRnGwdtaIXxIe7XeIhXkOdGsHExYnVBYKXpeWsrWKWg1x9YuVOxPw34ff4dMnE/fYYD2XQ6a206+8Vo8hGtFDAENc6nOD/7s4XBqVn7q5R5dJgjsBHK3NddmwNAVAvFs1ySuJlZMScQ3HZzCk8+cbEYMY8WVYDAEkz77nb4F3TjqJcQlmt8V6ZaXJtfNlUZzHZirzyf8vl9EgEGmnwm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(316002)(8676002)(4326008)(38100700002)(66946007)(66476007)(66556008)(36756003)(86362001)(186003)(26005)(4744005)(2616005)(6512007)(6506007)(8936002)(83380400001)(5660300002)(31696002)(2906002)(53546011)(31686004)(6486002)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0dKcnJqdlVncDVRekRBREJSQnFiLy9TUk5tcFQwb3VNK1RSZTFqTUNXU3RK?=
+ =?utf-8?B?WS9DWklnTnV0WURReElkRTdrZWdFdzRmbHN4N1g1WnJhQmFjZVBQRjcvSjgy?=
+ =?utf-8?B?cVM0VFNyN2lFb0NxQlVGMmpSbDMvYi84Z3VVb2FReFUvb05ISzgzNGxTaDU0?=
+ =?utf-8?B?U21kcUNJS0hPNmxxck0zaWtrMm93K2p1VTJidVVYc3Eyc2tCZ0xYRWlrSWpn?=
+ =?utf-8?B?VWR1WUwxRkZwbzFNZVJMMHJOQUhSL2JtRHpIYkhhY0RHUVBhMTFmem9lZ1Z3?=
+ =?utf-8?B?UDBjVlpEd29BQ2M3ODM0WkdDb2hNdmpXcjFqcE5WeHFMOE1jRnNwL3o0L2pF?=
+ =?utf-8?B?UGNDNkZUZy9hYm80RFRaOVNhSmkwL2s5Uk5ndXE4OTVlbnhONm5KcTBpOVVq?=
+ =?utf-8?B?T2ZjNXc3TXNobWRXUEdwU05mZ3kwTlFWalAvVGp1OTVYa3pUZDZLQmJZOWNs?=
+ =?utf-8?B?SFJQQnltZ1A1TCtqcTAxRjc0N2taQ2trS1djcFFvL01rU0lMaUZXRkM2TUc1?=
+ =?utf-8?B?TEFQYWRDY0c2UGpldUJmMkt2WWdVWEx5eG5lb0l4TFZMQUVveWNZMXloMFRH?=
+ =?utf-8?B?UmtYM0Z4N20xeVRVbjh5QTdSbkJFRXRVRXpTWWFaL0IzSzI4cDFMRUhwbk5J?=
+ =?utf-8?B?ajJ1ellaVTZKZS9wMDJybWp5UHRITjgwNmYzc2JHdUhBRGF6K1l3KzFCc2dy?=
+ =?utf-8?B?cGlYLzRZWlZEVHlsUDh5MjZIUEtDK0JRZHltUjBUYmFNdS9XR2hFaGRRaDF3?=
+ =?utf-8?B?MThKV0Z0SG5kUDByM1BmdnpRSnFBeEljTHlIL0VRMUdVcE1VMHU3TitTYnJu?=
+ =?utf-8?B?RHNuTjZQcEpjOGlHS3ZJRmhPVmU3YXJCSUpTZDROZXRoTWo0YUpNUjJ6aGZi?=
+ =?utf-8?B?QUVQOTRhQnFiak1vY3BqYzFsZzNqWnpsTXZ5ZWtYRWRrOG5QbGdsZDNDUXhU?=
+ =?utf-8?B?RHNaSjkzL2ZsazI1MzUxaXZ4ajdNQU5EeitrZ3B2eEVsSGtxWFhLM2FoSzlR?=
+ =?utf-8?B?TmFtTElpeXpFY1l1MFczRkFORnFkcGJqeU5aaStybmRtbGlCWjE5bGFCbmp6?=
+ =?utf-8?B?TU02OHB5azUwY2pHYlA0a1B4TU5tRGNTOGFHL3BKNDBVcHBlaEljTllpZFNN?=
+ =?utf-8?B?N2xaZXh5a1M1dWdXOVp3VjRqNzkvdmFTMkVMVkZtZ2dCbERYU0FWRGZXWm4w?=
+ =?utf-8?B?Y0tOOEZFTlBSWHlYbWovMnMrWWNHN3ArSmtDY0k4MDJRWnVlK3dmaEdjSFBo?=
+ =?utf-8?B?MEVTSW81WThYdE10Yk8xM1RZOTh4UEpuNTNaMitKeERmdXpUUk1WbFVxV284?=
+ =?utf-8?B?c3c0Y0hKTE9NTVlMcm8vdCtzUjhLSEEwVkpiangzcEJ5S1pBSEloeHcycjUv?=
+ =?utf-8?B?eXdpU2tQU2FrN2p1ZkdhdFRVTldYOXUzSXdjYjJsaWlqallFeFZWUnpYT1VZ?=
+ =?utf-8?B?bHB6c3RuYTNJYjlRKzdkTXRBV010akMwaXNUQis4Vit1Ri92MWxtWXZTN0Ev?=
+ =?utf-8?B?ajFIRG0xTUxlRzJwZUkwOTNNTW9rY2JLVXVlcTlTZUsyS1M1NUtZNWdyem41?=
+ =?utf-8?B?NWJxVlFiYXFVbFM4WGR3K2hvK0V5cWlsQXYycmVLMUgyb0ltWDcxU1V1MEVl?=
+ =?utf-8?B?R0lHNWRwWGN2bDUvRXhiUHp6Z0RBRXlzQ2trT1VCdHBYOHoyQUNCZlJubUdH?=
+ =?utf-8?B?aXFZKzRVaGtDbnJxLzE3T2pSYWF6N2xadkFQYjNZc05NU2tJamZQdG9UaFBv?=
+ =?utf-8?B?VGM3SElsVW8xeThkeHVSQStNMTlwODEyWkFSTm8vTFdvRDhHQ1ZMUWxsMEVn?=
+ =?utf-8?B?dVRCL1c4OFhJY3crS1EyZmEzZG05NWZxYjVuWkZlWXpaQnQyUjU0V0pHNkU2?=
+ =?utf-8?B?cTFhVUlWeHVKa0xKaW5mRGdvSEdHMFdvSHJSTmtJREVsZDJZZ3JzUzVQeXFx?=
+ =?utf-8?B?Q3VOczh2b01SVitiN1BuMFp6YUc3SHA2U3NVTDgyUmZ5ekw0eXNENzdGUTJr?=
+ =?utf-8?B?N1p5MnhLUFlJeTJGZ2MvQW10OE1pcU5HUlA5S1ZVWkdDZnBJMVpyNWtLM1RL?=
+ =?utf-8?B?QU1WUGhWcFE4N0pHSmJ3T3BZUncwaGlwMWdvS1dUNFVMMlRycGlWSGtJVG55?=
+ =?utf-8?B?VUY5SlNia1BCZEtqa1RiSVVKd2pIMit3U0N3bTEyMjFzSjEyV0VKcHphQ0ZM?=
+ =?utf-8?B?MHlpOGVhT1lMWGFsVHF0UGVINGhpZzFjcXV6cm5CVVJBWXBVZkdYYWlUNkRE?=
+ =?utf-8?B?UHdXUEdmYVdhL0JtT0lxc2QyWWd3b0VTY0FyaVp4SGQ4bWY2KzZHZ1o5Q1hm?=
+ =?utf-8?B?NTR1b3QycHZuR0tIVVgrOFVPUTBqWnE0TmdmWjY2cmNJNzhiMnk2UT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2eac8eef-dbbf-4eaf-a73c-08da2f8d4e69
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 18:21:58.0193
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bCK1tmz1jayqeT38oE/5WEDJJKxvnurXtSljQMofmvy1Vqpmlk7L86OV96aGFXSebym138mrqJetKiSJyf4swQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1720
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:15 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+Acked-by: Dipen Patel
+
+On 5/6/22 7:54 AM, Dan Carpenter wrote:
+> The "free_name" variable is sometimes used without being initialized.
 >
-> On Sat, Apr 23, 2022 at 1:25 AM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > In some cases multiple connections with the same connection id
-> > needs to be resolved from a fwnode graph.
-> >
-> > One such example is when separate hardware is used for performing muxing
-> > and/or orientation switching of the SuperSpeed and SBU lines in a USB
-> > Type-C connector. In this case the connector needs to belong to a graph
-> > with multiple matching remote endpoints, and the Type-C controller needs
-> > to be able to resolve them both.
-> >
-> > Add a new API that allows this kind of lookup.
+> 31ab09b42188 ("drivers: Add hardware timestamp engine (HTE) subsystem")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/hte/hte.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> LGTM now,
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> thanks!
-
-For this and the next patch in the series:
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-and please feel free to route the whole lot via USB.
-
-Thanks!
-
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >
-> > Changes since v4:
-> > - Added "Add" to patch subject
-> > - Added "(Optional)" kernel-doc of fwnode_connection_find_matches()
-> >
-> >  drivers/base/property.c  | 109 +++++++++++++++++++++++++++++++++++++++
-> >  include/linux/property.h |   5 ++
-> >  2 files changed, 114 insertions(+)
-> >
-> > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > index 36401cfe432c..babab8cec7a0 100644
-> > --- a/drivers/base/property.c
-> > +++ b/drivers/base/property.c
-> > @@ -1201,6 +1201,40 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> >         return NULL;
-> >  }
-> >
-> > +static unsigned int fwnode_graph_devcon_matches(struct fwnode_handle *fwnode,
-> > +                                               const char *con_id, void *data,
-> > +                                               devcon_match_fn_t match,
-> > +                                               void **matches,
-> > +                                               unsigned int matches_len)
-> > +{
-> > +       struct fwnode_handle *node;
-> > +       struct fwnode_handle *ep;
-> > +       unsigned int count = 0;
-> > +       void *ret;
-> > +
-> > +       fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > +               if (matches && count >= matches_len) {
-> > +                       fwnode_handle_put(ep);
-> > +                       break;
-> > +               }
-> > +
-> > +               node = fwnode_graph_get_remote_port_parent(ep);
-> > +               if (!fwnode_device_is_available(node)) {
-> > +                       fwnode_handle_put(node);
-> > +                       continue;
-> > +               }
-> > +
-> > +               ret = match(node, con_id, data);
-> > +               fwnode_handle_put(node);
-> > +               if (ret) {
-> > +                       if (matches)
-> > +                               matches[count] = ret;
-> > +                       count++;
-> > +               }
-> > +       }
-> > +       return count;
-> > +}
-> > +
-> >  static void *
-> >  fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> >                     void *data, devcon_match_fn_t match)
-> > @@ -1223,6 +1257,37 @@ fwnode_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> >         return NULL;
-> >  }
-> >
-> > +static unsigned int fwnode_devcon_matches(struct fwnode_handle *fwnode,
-> > +                                         const char *con_id, void *data,
-> > +                                         devcon_match_fn_t match,
-> > +                                         void **matches,
-> > +                                         unsigned int matches_len)
-> > +{
-> > +       struct fwnode_handle *node;
-> > +       unsigned int count = 0;
-> > +       unsigned int i;
-> > +       void *ret;
-> > +
-> > +       for (i = 0; ; i++) {
-> > +               if (matches && count >= matches_len)
-> > +                       break;
-> > +
-> > +               node = fwnode_find_reference(fwnode, con_id, i);
-> > +               if (IS_ERR(node))
-> > +                       break;
-> > +
-> > +               ret = match(node, NULL, data);
-> > +               fwnode_handle_put(node);
-> > +               if (ret) {
-> > +                       if (matches)
-> > +                               matches[count] = ret;
-> > +                       count++;
-> > +               }
-> > +       }
-> > +
-> > +       return count;
-> > +}
-> > +
-> >  /**
-> >   * fwnode_connection_find_match - Find connection from a device node
-> >   * @fwnode: Device node with the connection
-> > @@ -1250,3 +1315,47 @@ void *fwnode_connection_find_match(struct fwnode_handle *fwnode,
-> >         return fwnode_devcon_match(fwnode, con_id, data, match);
-> >  }
-> >  EXPORT_SYMBOL_GPL(fwnode_connection_find_match);
-> > +
-> > +/**
-> > + * fwnode_connection_find_matches - Find connections from a device node
-> > + * @fwnode: Device node with the connection
-> > + * @con_id: Identifier for the connection
-> > + * @data: Data for the match function
-> > + * @match: Function to check and convert the connection description
-> > + * @matches: (Optional) array of pointers to fill with matches
-> > + * @matches_len: Length of @matches
-> > + *
-> > + * Find up to @matches_len connections with unique identifier @con_id between
-> > + * @fwnode and other device nodes. @match will be used to convert the
-> > + * connection description to data the caller is expecting to be returned
-> > + * through the @matches array.
-> > + * If @matches is NULL @matches_len is ignored and the total number of resolved
-> > + * matches is returned.
-> > + *
-> > + * Return: Number of matches resolved, or negative errno.
-> > + */
-> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > +                                  const char *con_id, void *data,
-> > +                                  devcon_match_fn_t match,
-> > +                                  void **matches, unsigned int matches_len)
-> > +{
-> > +       unsigned int count_graph;
-> > +       unsigned int count_ref;
-> > +
-> > +       if (!fwnode || !match)
-> > +               return -EINVAL;
-> > +
-> > +       count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > +                                                 matches, matches_len);
-> > +
-> > +       if (matches) {
-> > +               matches += count_graph;
-> > +               matches_len -= count_graph;
-> > +       }
-> > +
-> > +       count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
-> > +                                         matches, matches_len);
-> > +
-> > +       return count_graph + count_ref;
-> > +}
-> > +EXPORT_SYMBOL_GPL(fwnode_connection_find_matches);
-> > diff --git a/include/linux/property.h b/include/linux/property.h
-> > index fc24d45632eb..a5b429d623f6 100644
-> > --- a/include/linux/property.h
-> > +++ b/include/linux/property.h
-> > @@ -451,6 +451,11 @@ static inline void *device_connection_find_match(struct device *dev,
-> >         return fwnode_connection_find_match(dev_fwnode(dev), con_id, data, match);
-> >  }
-> >
-> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > +                                  const char *con_id, void *data,
-> > +                                  devcon_match_fn_t match,
-> > +                                  void **matches, unsigned int matches_len);
-> > +
-> >  /* -------------------------------------------------------------------------- */
-> >  /* Software fwnode support - when HW description is incomplete or missing */
-> >
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+> diff --git a/drivers/hte/hte.c b/drivers/hte/hte.c
+> index a14c5bf290ff..7c3b4476f890 100644
+> --- a/drivers/hte/hte.c
+> +++ b/drivers/hte/hte.c
+> @@ -572,7 +572,7 @@ int hte_ts_get(struct device *dev, struct hte_ts_desc *desc, int index)
+>  	struct of_phandle_args args;
+>  	u32 xlated_id;
+>  	int ret;
+> -	bool free_name;
+> +	bool free_name = false;
+>  
+>  	if (!desc)
+>  		return -EINVAL;

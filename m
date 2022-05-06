@@ -2,142 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8A251CF49
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2735351CF52
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388462AbiEFDTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S1388484AbiEFDVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388465AbiEFDTt (ORCPT
+        with ESMTP id S234788AbiEFDVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:19:49 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F6C1705E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:16:08 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id c14so5212229pfn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nLavEAR5Aau9+5bXqJeGR1zfvkVlJijBBWww/pFaBdg=;
-        b=RHFW7PR2ybJs1cy+WdEB+4lpWd2eFOMHKJZmV0VPnQ3dOQti4MvfAH0xOn7GBQwjvS
-         YHzBwCTXh/ZMbjYw17lZW/f38S4m59xyaANd7N8pm/HSa+HuWReiLi19cEwVyr+nYMBt
-         XgduYTfzuSR4yxsrqf19hnfQNgXLlBzb5ztyalWYNSHe54H6HfOHurJMY30C0k0UiJH4
-         d+yxSdfJmMzKN+H4IGCBLgq+80EegYaNK6EMHUa0Ix8A0VwDZZEmRN3ZqIu5bK3/ci6Q
-         jYXXxillsD0hm0AOQ+uecBN9rBLVdjqXaVTPxH0FOGGJOxsPGivhEYmJxOZhjrPnFzBh
-         Dmfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nLavEAR5Aau9+5bXqJeGR1zfvkVlJijBBWww/pFaBdg=;
-        b=rsvmjC86sNRIKHo2Id3Nq1GdSajCqsSO0gUWGB4KggOUnw34fW6nHvOxRytwxU/N5F
-         grY5IBKO5iuNckTZQar94mC+LddO+OWBskMAf2+qQTNyZpzDiSvupFj4bp0JVt3T4Vc9
-         uWeSbTT7Sv+VY6oxWOcDBOdJJMwsB5ieeNAw2YXlQev/zGojMiXXZLByQtWqrCQciUc4
-         +I2/Us1JCaKeU7itdyEm6NXYsKfUoFXuz4DR4uk+x9mRJfEU0IfzBh85MXk84b5Zgpcs
-         TPCgfXaZBuPS6JD3SCTMI0UBxFy8WZk+w6Zf3xFFIQ18F7cvpoGbNFKcg/4unFv9RVAl
-         3Wbg==
-X-Gm-Message-State: AOAM530/sor9KB5xmBeXfduJNwZm7f7Ai9uXr14iW6f+Uu2UTXdcDMMC
-        ROhZj0lXaAeczSCiRigKdYyQiXRoCWU=
-X-Google-Smtp-Source: ABdhPJwAL9SNpzXTVp1tdxwwhH5G/VLDLEVuxCj8LbB+YdJbzhyKNyWGXs9xQgWc6JvYAu5gDUR13Q==
-X-Received: by 2002:a05:6a00:a94:b0:4fd:c14b:21cb with SMTP id b20-20020a056a000a9400b004fdc14b21cbmr1245258pfl.53.1651806967551;
-        Thu, 05 May 2022 20:16:07 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id q135-20020a632a8d000000b003c1c906048csm2084829pgq.88.2022.05.05.20.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:16:07 -0700 (PDT)
-Date:   Fri, 6 May 2022 11:16:02 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     dan.carpenter@oracle.com, paskripkin@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] staging: rtl8712: fix uninit-value in
- r871xu_drv_init()
-Message-ID: <14c3886173dfa4597f0704547c414cfdbcd11d16.1651760402.git.wanngchenng@gmail.com>
-References: <cover.1651760402.git.wanngchenng@gmail.com>
+        Thu, 5 May 2022 23:21:17 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3565524976
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:17:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651807055; x=1683343055;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kdeCz0yd4ZI6vM/JdgropWQDsZKYrG1FI8NeGzafxBs=;
+  b=QfcLyx7vrHKBf6yiowjx/r8m6O0QDj0NvMFNZpHlejj6nSk3X278AuwG
+   0/G1Obk0DWSICfKo2CB51VeLQr0ly1OLjxGYZaHO8v7itZYwmNNu4BGJy
+   KuVbocfFWptRR9FJ6yDlvzYXweqOvBb+uixGPVtsUHniEBbF7K/sKhrZ0
+   tUpwJsVLQBy/czCummafQruhZNjwgaSq7rZbg5UuygI1mYI7TkrQOEZYP
+   IYihdgOc3LMC0SOWSINEysGrDoar7QX/nPoSe9C1Ya62gDAdrgICDRtGA
+   iBMELwKIb521C0EvZ1E1DDc6PH5nLQtRpKH79Kevv+a5uuETFyDhuCRnx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248868559"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="248868559"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:17:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="709256079"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 May 2022 20:17:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmoSa-000D21-Vk;
+        Fri, 06 May 2022 03:16:52 +0000
+Date:   Fri, 6 May 2022 11:16:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Allison Henderson <allison.henderson@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dave Chinner <dchinner@redhat.com>
+Subject: [allisonhenderson-xfs-work:xfs-5.19-compose_pptrs 25/32]
+ fs/xfs/libxfs/xfs_attr.c:571:44: warning: this statement may fall through
+Message-ID: <202205061123.lsXtfPqy-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1651760402.git.wanngchenng@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When 'tmpU1b' returns from r8712_read8(padapter, EE_9346CR) is 0,
-'mac[6]' will not be initialized.
+tree:   https://github.com/allisonhenderson/xfs_work.git xfs-5.19-compose_pptrs
+head:   74ecccf0e89a132c2490f3a63661c535974c6a08
+commit: 7a5d447970de2d3b003b9015e2bce3bf0d15e3db [25/32] xfs: parent pointer attribute creation
+config: arc-randconfig-r001-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061123.lsXtfPqy-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/allisonhenderson/xfs_work/commit/7a5d447970de2d3b003b9015e2bce3bf0d15e3db
+        git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
+        git fetch --no-tags allisonhenderson-xfs-work xfs-5.19-compose_pptrs
+        git checkout 7a5d447970de2d3b003b9015e2bce3bf0d15e3db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/xfs/
 
-BUG: KMSAN: uninit-value in r871xu_drv_init+0x2d54/0x3070 drivers/staging/rtl8712/usb_intf.c:541
- r871xu_drv_init+0x2d54/0x3070 drivers/staging/rtl8712/usb_intf.c:541
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Local variable mac created at:
- r871xu_drv_init+0x1771/0x3070 drivers/staging/rtl8712/usb_intf.c:394
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+All warnings (new ones prefixed by >>):
 
-Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
----
- drivers/staging/rtl8712/usb_intf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+   fs/xfs/libxfs/xfs_attr.c: In function 'xfs_attr_set_iter':
+   fs/xfs/libxfs/xfs_attr.c:559:42: warning: unused variable 'mp' [-Wunused-variable]
+     559 |         struct xfs_mount                *mp = args->dp->i_mount;
+         |                                          ^~
+   fs/xfs/libxfs/xfs_attr.c:558:50: warning: unused variable 'forkoff' [-Wunused-variable]
+     558 |         int                             sf_size, forkoff, error = 0;
+         |                                                  ^~~~~~~
+   fs/xfs/libxfs/xfs_attr.c:557:42: warning: unused variable 'bp' [-Wunused-variable]
+     557 |         struct xfs_buf                  *bp = NULL;
+         |                                          ^~
+   fs/xfs/libxfs/xfs_attr.c:556:42: warning: unused variable 'dp' [-Wunused-variable]
+     556 |         struct xfs_inode                *dp = args->dp;
+         |                                          ^~
+   fs/xfs/libxfs/xfs_attr.c: In function 'xfs_attr_set':
+   fs/xfs/libxfs/xfs_attr.c:824:72: warning: bitwise comparison always evaluates to true [-Wtautological-compare]
+     824 |         rsvd = ((args->attr_filter & XFS_ATTR_ROOT) | XFS_ATTR_PARENT) != 0;
+         |                                                                        ^~
+   fs/xfs/libxfs/xfs_attr.c: In function 'xfs_attr_set_iter':
+>> fs/xfs/libxfs/xfs_attr.c:571:44: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     571 |                 args->dp->i_afp->if_format = XFS_DINODE_FMT_EXTENTS;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_attr.c:572:9: note: here
+     572 |         case XFS_DAS_SF_ADD:
+         |         ^~~~
+   At top level:
+   fs/xfs/libxfs/xfs_attr.c:1477:1: warning: 'xfs_attr_refillstate' defined but not used [-Wunused-function]
+    1477 | xfs_attr_refillstate(xfs_da_state_t *state)
+         | ^~~~~~~~~~~~~~~~~~~~
+--
+>> fs/xfs/libxfs/xfs_parent.c:55:1: warning: no previous prototype for 'xfs_init_parent_name_rec' [-Wmissing-prototypes]
+      55 | xfs_init_parent_name_rec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/libxfs/xfs_parent.c:70:1: warning: no previous prototype for 'xfs_init_parent_name_irec' [-Wmissing-prototypes]
+      70 | xfs_init_parent_name_irec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-index ee4c61f85a07..50dcd3ecb685 100644
---- a/drivers/staging/rtl8712/usb_intf.c
-+++ b/drivers/staging/rtl8712/usb_intf.c
-@@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
- 		} else {
- 			AutoloadFail = false;
- 		}
--		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
-+		if ((!AutoloadFail) ||
-+		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
- 		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
- 		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
- 		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
- 		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
--		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
--		     (!AutoloadFail)) {
-+		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
- 			mac[0] = 0x00;
- 			mac[1] = 0xe0;
- 			mac[2] = 0x4c;
+
+vim +571 fs/xfs/libxfs/xfs_attr.c
+
+   542	
+   543	/*
+   544	 * Run the attribute operation specified in @attr.
+   545	 *
+   546	 * This routine is meant to function as a delayed operation and will set the
+   547	 * state to XFS_DAS_DONE when the operation is complete.  Calling functions will
+   548	 * need to handle this, and recall the function until either an error or
+   549	 * XFS_DAS_DONE is detected.
+   550	 */
+   551	int
+   552	xfs_attr_set_iter(
+   553		struct xfs_attr_item		*attr)
+   554	{
+   555		struct xfs_da_args              *args = attr->xattri_da_args;
+   556		struct xfs_inode		*dp = args->dp;
+   557		struct xfs_buf			*bp = NULL;
+   558		int				sf_size, forkoff, error = 0;
+   559		struct xfs_mount		*mp = args->dp->i_mount;
+   560	
+   561	
+   562		/* State machine switch */
+   563	next_state:
+   564		switch (attr->xattri_dela_state) {
+   565		case XFS_DAS_UNINIT:
+   566			sf_size = sizeof(struct xfs_attr_sf_hdr) +
+   567				  xfs_attr_sf_entsize_byname(args->namelen,
+   568								     args->valuelen);
+   569			xfs_bmap_set_attrforkoff(args->dp, sf_size, NULL);
+   570			args->dp->i_afp = kmem_cache_zalloc(xfs_ifork_cache, 0);
+ > 571			args->dp->i_afp->if_format = XFS_DINODE_FMT_EXTENTS;
+   572		case XFS_DAS_SF_ADD:
+   573			return xfs_attr_sf_addname(attr);
+   574		case XFS_DAS_LEAF_ADD:
+   575			return xfs_attr_leaf_addname(attr);
+   576		case XFS_DAS_NODE_ADD:
+   577			return xfs_attr_node_addname(attr);
+   578	
+   579		case XFS_DAS_SF_REMOVE:
+   580			error = xfs_attr_sf_removename(args);
+   581			attr->xattri_dela_state = xfs_attr_complete_op(attr,
+   582							xfs_attr_init_add_state(args));
+   583			break;
+   584		case XFS_DAS_LEAF_REMOVE:
+   585			error = xfs_attr_leaf_removename(args);
+   586			attr->xattri_dela_state = xfs_attr_complete_op(attr,
+   587							xfs_attr_init_add_state(args));
+   588			break;
+   589		case XFS_DAS_NODE_REMOVE:
+   590			error = xfs_attr_node_removename_setup(attr);
+   591			if (error)
+   592				return error;
+   593			attr->xattri_dela_state = XFS_DAS_NODE_REMOVE_RMT;
+   594			if (args->rmtblkno == 0)
+   595				attr->xattri_dela_state++;
+   596			break;
+   597	
+   598		case XFS_DAS_LEAF_SET_RMT:
+   599		case XFS_DAS_NODE_SET_RMT:
+   600			error = xfs_attr_rmtval_find_space(attr);
+   601			if (error)
+   602				return error;
+   603			attr->xattri_dela_state++;
+   604			fallthrough;
+   605	
+   606		case XFS_DAS_LEAF_ALLOC_RMT:
+   607		case XFS_DAS_NODE_ALLOC_RMT:
+   608			error = xfs_attr_rmtval_alloc(attr);
+   609			if (error)
+   610				return error;
+   611			/*
+   612			 * If there is still more to allocate we need to roll the
+   613			 * transaction so we have a full transaction reservation for
+   614			 * the next allocation.
+   615			 */
+   616			if (attr->xattri_blkcnt > 0)
+   617				break;
+   618			if (attr->xattri_dela_state == XFS_DAS_DONE)
+   619				break;
+   620	
+   621			goto next_state;
+   622	
+   623		case XFS_DAS_LEAF_REPLACE:
+   624		case XFS_DAS_NODE_REPLACE:
+   625			/*
+   626			 * We must "flip" the incomplete flags on the "new" and "old"
+   627			 * attribute/value pairs so that one disappears and one appears
+   628			 * atomically.
+   629			 */
+   630			error = xfs_attr3_leaf_flipflags(args);
+   631			if (error)
+   632				return error;
+   633			/*
+   634			 * We must commit the flag value change now to make it atomic
+   635			 * and then we can start the next trans in series at REMOVE_OLD.
+   636			 */
+   637			attr->xattri_dela_state++;
+   638			break;
+   639	
+   640		case XFS_DAS_LEAF_REMOVE_OLD:
+   641		case XFS_DAS_NODE_REMOVE_OLD:
+   642			/*
+   643			 * If we have a remote attr, start the process of removing it
+   644			 * by invalidating any cached buffers.
+   645			 *
+   646			 * If we don't have a remote attr, we skip the remote block
+   647			 * removal state altogether with a second state increment.
+   648			 */
+   649			xfs_attr_restore_rmt_blk(args);
+   650			if (args->rmtblkno) {
+   651				error = xfs_attr_rmtval_invalidate(args);
+   652				if (error)
+   653					return error;
+   654			} else {
+   655				attr->xattri_dela_state++;
+   656			}
+   657	
+   658			attr->xattri_dela_state++;
+   659			goto next_state;
+   660	
+   661		case XFS_DAS_LEAF_REMOVE_RMT:
+   662		case XFS_DAS_NODE_REMOVE_RMT:
+   663			error = xfs_attr_rmtval_remove(attr);
+   664			if (error == -EAGAIN) {
+   665				error = 0;
+   666				break;
+   667			}
+   668			if (error)
+   669				return error;
+   670	
+   671			/*
+   672			 * We've finished removing the remote attr blocks, so commit the
+   673			 * transaction and move on to removing the attr name from the
+   674			 * leaf/node block. Removing the attr might require a full
+   675			 * transaction reservation for btree block freeing, so we
+   676			 * can't do that in the same transaction where we removed the
+   677			 * remote attr blocks.
+   678			 */
+   679			attr->xattri_dela_state++;
+   680			break;
+   681	
+   682		case XFS_DAS_LEAF_REMOVE_ATTR:
+   683			error = xfs_attr_leaf_remove_attr(attr);
+   684			attr->xattri_dela_state = xfs_attr_complete_op(attr,
+   685							xfs_attr_init_add_state(args));
+   686			break;
+   687	
+   688		case XFS_DAS_NODE_REMOVE_ATTR:
+   689			error = xfs_attr_node_remove_attr(attr);
+   690			attr->xattri_dela_state = xfs_attr_complete_op(attr,
+   691							xfs_attr_init_add_state(args));
+   692			break;
+   693		default:
+   694			ASSERT(0);
+   695			break;
+   696		}
+   697	
+   698		trace_xfs_attr_set_iter_return(attr->xattri_dela_state, args->dp);
+   699		return error;
+   700	}
+   701	
+
 -- 
-2.33.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

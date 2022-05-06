@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1D151CF39
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7087B51CF3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388415AbiEFDGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S1388431AbiEFDHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiEFDGX (ORCPT
+        with ESMTP id S1345055AbiEFDHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:06:23 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6508063BC5;
-        Thu,  5 May 2022 20:02:42 -0700 (PDT)
+        Thu, 5 May 2022 23:07:47 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02A63BC8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:04:05 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id m11so6279137oib.11
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651806162; x=1683342162;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UwxBXbDbn02kQFasQ1SH6bPlx2zViOnP3ih2arb8lVM=;
-  b=hXhTCczIfAGnZHcysSPwKM7UuLCntGBIkmbAdvQ5nPOqvQj61KKi7cek
-   45og1kU6qjjsJsJtjvwj5YsPRgp879idf5Sp8pgUnjZ5x44NcrtNuzZ9U
-   bO0yHvQWaYdT7NDTP2bbKoXA/WZVHm8J9jJBBP9+Gms/6fB+91KPj+Jj7
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 May 2022 20:02:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:02:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 20:02:41 -0700
-Received: from [10.50.57.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
- 20:02:36 -0700
-Message-ID: <b44a0e0b-ee86-3b08-0103-3ccee94e3270@quicinc.com>
-Date:   Fri, 6 May 2022 08:32:31 +0530
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T++gZ2GI7rq41AMjJrvK3co4NPdoI+yV6w7aO84fVJk=;
+        b=VuqvPsHxP9tDS82aa7pO4+SreMiPD6SY4GAOI9HhlashyhESlXufqa2tFCTofCaEMn
+         b3sRfxVJoypGDNDf1wLRw4Ej8lDn5c8WBbuthGMJPSBztmg661hcSw6xxC0mH1PJmjQC
+         0icl6ft+6DhZxiR8yqT21jkrI+c+AmQfHXb2GPN/mdk5SjSg1BH2rcoecyIATmlCMxKS
+         1cBpPhjXH5DBxOzUIZ07Nm/8es4FCdPSKa6xDqesXNFNoq4j2X3yC/AJF30EttGmjimz
+         b5EBkv8dmQjs6IOXmROdN586Z0XAVxXNsd8qSmCgpYLBRPPbvsJzZz+Fzlh5MefQAes+
+         9ldg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T++gZ2GI7rq41AMjJrvK3co4NPdoI+yV6w7aO84fVJk=;
+        b=7V19+3CPEavbdcyPWW4FnbF3aHZJMDHm14i/Bnv7Zgm4IC7vKQoXx9suXyg2i22eoF
+         yROOrHUJQ35hEP48fiX3eGU0wyteDxfV/kE/YDMlaTLrFBOLkKW2RJoZyxrEcU4/RvUy
+         GY8OsWOpiTH/5Cq1EhYbsJ5w2XGGgJWVjAWmCoL1o1S92GjBC9/57IbDJDpliF/1Kpwg
+         H43tNrmgRF+e6zPCpz9XTMaZYlCbiQyBzq6e+3Ri0OGEqahhiTVWek/5Bg1JXh6O2Gc6
+         e/R7osUiRjFamDEwfyF+iPrXrvqhoOVF/UVnwsZFGM2uXcsuRj7GpZBCgV6xx9ypixPy
+         DT1A==
+X-Gm-Message-State: AOAM530ksJBztqWjEl3hbzo+0/agiX6yuKzRBNNoQDLPpYRA+AJuGrbt
+        e2a8ZfQ8JIW7Az3dYMjQtFIf2Q==
+X-Google-Smtp-Source: ABdhPJy74g37LCcwt+8/1z9SyKM1QQtosMJIVHLs8RT7vbfXrKpL4PQ3bb+tUbcjg26/ZZguL1eolw==
+X-Received: by 2002:a05:6808:1244:b0:2f9:e450:4bc4 with SMTP id o4-20020a056808124400b002f9e4504bc4mr607932oiv.290.1651806244880;
+        Thu, 05 May 2022 20:04:04 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 42-20020a9d012d000000b006060322124dsm1217775otu.29.2022.05.05.20.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 20:04:04 -0700 (PDT)
+Date:   Thu, 5 May 2022 20:06:39 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        quic_rohkumar@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v12 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
+ pinmux properties for CRD 3.0/3.1
+Message-ID: <YnSQvyAN3v69an8k@ripper>
+References: <1651079383-7665-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651079383-7665-5-git-send-email-quic_srivasam@quicinc.com>
+ <YmsrB6Q89II5w1+9@google.com>
+ <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
+ <YnKyzxPEolSVUhqD@builder.lan>
+ <CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com>
+ <YnRvyICa9kxFc/nE@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv14 2/9] coresight: etm4x: Use asm-generic IO memory
- barriers
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>, <arnd@arndb.de>,
-        <catalin.marinas@arm.com>, <rostedt@goodmis.org>
-CC:     <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <cover.1651663123.git.quic_saipraka@quicinc.com>
- <0d76de0ecc0aa7cb01fd8b8863a8e567abd4410b.1651663123.git.quic_saipraka@quicinc.com>
- <483bb401-13e6-8c52-4b5f-f3c635b9ad46@arm.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <483bb401-13e6-8c52-4b5f-f3c635b9ad46@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnRvyICa9kxFc/nE@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,126 +87,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+On Thu 05 May 17:46 PDT 2022, Matthias Kaehlcke wrote:
 
-On 5/6/2022 5:14 AM, Suzuki K Poulose wrote:
-> Hi,
->
-> On 04/05/2022 12:28, Sai Prakash Ranjan wrote:
->> Per discussion in [1], it was decided to move to using architecture
->> independent/asm-generic IO memory barriers to have just one set of
->> them and deprecate use of arm64 specific IO memory barriers in driver
->> code. So replace current usage of __io_rmb()/__iowmb() in drivers to
->> __io_ar()/__io_bw().
->>
->> [1] https://lore.kernel.org/lkml/CAK8P3a0L2tLeF1Q0+0ijUxhGNaw+Z0fyPC1oW6_ELQfn0=i4iw@mail.gmail.com/
->>
->
-> Looking at the dis-assembly it looks like in effect they are slightly
-> different for arm64.
->
-> i.e., before this patch we had
->
-> "dmb osh{ld/st}"
->
-> and after the patch we have :
->
-> "dsb {ld/st}"
->
-> Is this really what we want ? I don't think this is desirable.
->
-> Suzuki
->
+> On Thu, May 05, 2022 at 05:06:08PM -0700, Doug Anderson wrote:
+> > Hi,
+> > 
+> > On Wed, May 4, 2022 at 10:07 AM Bjorn Andersson
+> > <bjorn.andersson@linaro.org> wrote:
+> > >
+> > > On Fri 29 Apr 11:10 CDT 2022, Doug Anderson wrote:
+> > >
+> > > > Hi,
+> > > >
+> > > > On Thu, Apr 28, 2022 at 5:02 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > > > >
+> > > > > On Wed, Apr 27, 2022 at 10:39:43PM +0530, Srinivasa Rao Mandadapu wrote:
+> > > > > > Add LPASS LPI pinctrl properties, which are required for Audio
+> > > > > > functionality on herobrine based platforms of rev5+
+> > > > > > (aka CRD 3.0/3.1) boards.
+> > > > > >
+> > > > > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > > > > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > > > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > > >
+> > > > > I'm not super firm in pinctrl territory, a few maybe silly questions
+> > > > > below.
+> > > > >
+> > > > > >  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 84 +++++++++++++++++++++++
+> > > > > >  1 file changed, 84 insertions(+)
+> > > > > >
+> > > > > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > > index deaea3a..dfc42df 100644
+> > > > > > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > > @@ -111,6 +111,90 @@ ap_ts_pen_1v8: &i2c13 {
+> > > > > >   * - If a pin is not hooked up on Qcard, it gets no name.
+> > > > > >   */
+> > > > > >
+> > > > > > +&lpass_dmic01 {
+> > > > > > +     clk {
+> > > > > > +             drive-strength = <8>;
+> > > > > > +     };
+> > > >
+> > > > Ugh, I've been distracted and I hadn't realized we were back to the
+> > > > two-level syntax. Definitely not my favorite for all the reasons I
+> > > > talked about [1]. I guess you took Bjorn's silence to my response to
+> > > > mean that you should switch back to this way? :(
+> > > >
+> > > > Bjorn: can you clarify?
+> > > >
+> > >
+> > > I didn't think through the fact that &mi2s0_state was specified in the
+> > > .dtsi and as such will be partially be overridden by the baord dts.
+> > >
+> > >
+> > > I do prefer the two level style and describing full "states", but as you
+> > > say whenever we provide something that will have to be overwritten it's
+> > > suboptimal.
+> > >
+> > > As such, I think your flattened model is preferred in this case
+> > 
+> > How about for future patches we just provided labels at both levels
+> > (I'm not suggesting we churn this patch series more):
+> > 
+> > lpass_dmic01_sleep: dmic01-sleep {
+> 
+> is the outer label ('lpass_dmic01_sleep') actually needed if we don't
+> intend to replicate the hierarchy?
+> 
 
-No, this is not supposed to happen and I do not see how it could happen.
-__io_ar() is defined as __iormb() and __io_bw() is __iowmb().
+Yes, that's what we put in the pinctrl-N reference from the device node.
 
-I checked the disassembly in both case with MMIO trace off/on with __etm4_cpu_save()
-as below and saw the same number of "dmb"s.
+> >   lpass_dmic01_sleep_clk: clk {
+> >     pins = "gpio6";
+> >     function = "dmic1_clk";
+> >   };
+> > 
+> >   lpass_dmic01_sleep_data: data {
+> >     pins = "gpio7";
+> >     function = "dmic1_data";
+> >   };
+> > };
+> > 
 
-aarch64-linux-gnu-gdb -batch -ex "disassemble/rs __etm4_cpu_save" vmlinux-without-mmio
-aarch64-linux-gnu-gdb -batch -ex "disassemble/rs __etm4_cpu_save" vmlinux-with-mmio
+I like this suggestion.
 
-Can you tell me how are you validating if I am missing something?
+> > Then you can in your pinctrl reference you can just reference the
+> > top-level node but boards can override without having to replicate
+> > hierarchy...
+> > 
+> > > but it
+> > > makes me dislike the partial definition between the dtsi and dts even
+> > > more (but I don't have any better suggestion).
+> > 
+> > One other proposal I'd make is that maybe we should change the rules
+> > about never putting drive strength in the soc.dtsi file. While it
+> > should still be OK for boards to override the drive strength, it seems
+> > like a whole lot of biolerplate code to have every board override
+> > every pin and say that its drive strength is 2. Similarly, if there's
+> > a high speed interface (like eMMC) where a drive strength of 2 is
+> > nonsense for any board, it doesn't seem ridiculous to specify a
+> > default drive strength of something higher in the soc.dtsi file.
+> 
+> Indeed, that could make sense.
+> 
 
-Thanks,
-Sai
+Sounds good to me.
 
->
->> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
->> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 8 ++++----
->>   drivers/hwtracing/coresight/coresight-etm4x.h      | 8 ++++----
->>   2 files changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index 7f416a12000e..81c0faf45b28 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -98,7 +98,7 @@ u64 etm4x_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
->>       }
->>         if (!_relaxed)
->> -        __iormb(res);    /* Imitate the !relaxed I/O helpers */
->> +        __io_ar(res);    /* Imitate the !relaxed I/O helpers */
->>         return res;
->>   }
->> @@ -106,7 +106,7 @@ u64 etm4x_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
->>   void etm4x_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
->>   {
->>       if (!_relaxed)
->> -        __iowmb();    /* Imitate the !relaxed I/O helpers */
->> +        __io_bw();    /* Imitate the !relaxed I/O helpers */
->>       if (!_64bit)
->>           val &= GENMASK(31, 0);
->>   @@ -130,7 +130,7 @@ static u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
->>       }
->>         if (!_relaxed)
->> -        __iormb(res);    /* Imitate the !relaxed I/O helpers */
->> +        __io_ar(res);    /* Imitate the !relaxed I/O helpers */
->>         return res;
->>   }
->> @@ -138,7 +138,7 @@ static u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
->>   static void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
->>   {
->>       if (!_relaxed)
->> -        __iowmb();    /* Imitate the !relaxed I/O helpers */
->> +        __io_bw();    /* Imitate the !relaxed I/O helpers */
->>       if (!_64bit)
->>           val &= GENMASK(31, 0);
->>   diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
->> index 3c4d69b096ca..f54698731582 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
->> @@ -448,14 +448,14 @@
->>   #define etm4x_read32(csa, offset)                    \
->>       ({                                \
->>           u32 __val = etm4x_relaxed_read32((csa), (offset)); \
->> -        __iormb(__val);                        \
->> +        __io_ar(__val);                        \
->>           __val;                            \
->>        })
->>     #define etm4x_read64(csa, offset)                    \
->>       ({                                \
->>           u64 __val = etm4x_relaxed_read64((csa), (offset)); \
->> -        __iormb(__val);                        \
->> +        __io_ar(__val);                        \
->>           __val;                            \
->>        })
->>   @@ -479,13 +479,13 @@
->>     #define etm4x_write32(csa, val, offset)                    \
->>       do {                                \
->> -        __iowmb();                        \
->> +        __io_bw();                        \
->>           etm4x_relaxed_write32((csa), (val), (offset)); \
->>       } while (0)
->>     #define etm4x_write64(csa, val, offset)                    \
->>       do {                                \
->> -        __iowmb();                        \
->> +        __io_bw();                        \
->>           etm4x_relaxed_write64((csa), (val), (offset)); \
->>       } while (0)
->
+> > I would like to say the same thing goes for for pulls, but it's
+> > unfortunately uglier for pulls. :( For instance, nearly everyone has
+> > an external pullup for i2c busses. The strength of the pullup needs to
+> > be tuned for the i2c bus speed and the impedance of the line. Thus, it
+> > would ideally make sense to specify this in the soc.dtsi file.
+> > Unfortunately, if we do that and some board _wants_ to use the
+> > internal pulls (maybe they're running at a really low speed and/or
+> > forgot to add external pulls) then they have to do an ugly
+> > "/delete-property/ bias-disable" because adding the "bias-pull-up"
+> > doesn't delete the other property and you end up with both. :( That
+> > seems bad, so I guess I'd vote to keep banning bias definitions in the
+> > soc.dtsi file.
+> 
+> I agree, having to use 'delete-property' to change a pull setting
+> doesn't seem a good idea.
 
+Same.
+
+Regards,
+Bjorn

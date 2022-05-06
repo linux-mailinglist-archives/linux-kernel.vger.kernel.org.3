@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F36D51E03A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C4A51E03D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiEFUmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S244023AbiEFUmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbiEFUmI (ORCPT
+        with ESMTP id S1443211AbiEFUmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:42:08 -0400
+        Fri, 6 May 2022 16:42:10 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7721FA72;
-        Fri,  6 May 2022 13:38:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9112D1F1;
+        Fri,  6 May 2022 13:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651869501; x=1683405501;
+  t=1651869503; x=1683405503;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V3gecEvBeha7AK4YfA881Q0ULGviX1PIT7PEfBImIRM=;
-  b=PUZ2Tm57i9QBABfGVIxJyNPmK9dAdN2YLpTz7Ikn8JsQq7SQAughrEkc
-   n8qE35KtJ+iLv9Wy/GH1GUl4b3VBp0kW6OK3atVPLzIsmeYdIPcOA8IW8
-   ROyoFHUZial4PaBuoNSzQFD8TlkXyi3fX7zSscI46EPSDoGqUUnz4hH2c
-   G0GQG/dzNNNUKOsjmSN+OVXzxoA3vWxvDNd77E13VM2M/geY/e2CtI2r8
-   KVGPvmqnkzu9X5c6oKAvkIdub+aBCF7PU47HTGfG863VK/Spen7zdEGMO
-   BcmuVesw95sPpmrUrYLbhUK+6+25NEZThNLTK+oN9GWS8KYaIr3xsc2LQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="248474796"
+  bh=2b+dWfxndlwKVu8r56BjaXCpV9WofllYiBZQXaA0tCY=;
+  b=FdtiNxtxPPI7oayfk7MZSOfzKi6uV/5pJlzpqtJksnsObAAS3DMnn4Qo
+   VTzIZ9V7E2v+gIbJ5H/ke4mjrwWJtXfnANFJAf7hUU+SHvyWkGgeqNp7H
+   IH9p/5Byw64Fan43xSC9JlSyQkVzHdf93C5gIJxSwXl2NxSoI2/2jJNjX
+   ahTJMD2s672iPNpeUlUKPGFlwwv286z5Xu7wZZqxG0z9hzZut1153gkUw
+   CFQpAwWqGRv3YPTVHo8FyyyYBAtt4VkMvFu5hlrz+bOMDtnS5lKkI/ASk
+   lEtTnCMix2Jce0Ts0IlJ8jNI9SuOehqtjBg5tFN/mLKJqyadNGl56CIVU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="248474801"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="248474796"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:38:21 -0700
+   d="scan'208";a="248474801"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:38:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="586191905"
+   d="scan'208";a="564011788"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 May 2022 13:38:18 -0700
+  by orsmga007.jf.intel.com with ESMTP; 06 May 2022 13:38:18 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nn4iQ-000DsI-3h;
+        id 1nn4iQ-000DsG-38;
         Fri, 06 May 2022 20:38:18 +0000
-Date:   Sat, 7 May 2022 04:38:03 +0800
+Date:   Sat, 7 May 2022 04:38:04 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-arch@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Vasily Averin <vvs@openvz.org>, Shakeel Butt <shakeelb@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     kbuild-all@lists.01.org, kernel@openvz.org,
         linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH 2/7] fork: Pass struct kernel_clone_args into copy_thread
-Message-ID: <202205070451.wstjDYm7-lkp@intel.com>
-References: <20220506141512.516114-2-ebiederm@xmission.com>
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux-foundation.org>
+Subject: Re: [PATCH] percpu: improve percpu_alloc_percpu event trace
+Message-ID: <202205070420.aAhuqpYk-lkp@intel.com>
+References: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506141512.516114-2-ebiederm@xmission.com>
+In-Reply-To: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,90 +73,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Eric,
+Hi Vasily,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on deller-parisc/for-next]
-[also build test ERROR on linus/master v5.18-rc5]
-[cannot apply to tip/x86/core next-20220506]
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on hnaz-mm/master v5.18-rc5]
+[cannot apply to dennis-percpu/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
-config: h8300-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070451.wstjDYm7-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/22689080e2beece6919f918620e4c780cf7320eb
+url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/percpu-improve-percpu_alloc_percpu-event-trace/20220506-124742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220507/202205070420.aAhuqpYk-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/dee6876db0a7a4715516e673f9edaca2ba40677c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
-        git checkout 22689080e2beece6919f918620e4c780cf7320eb
+        git fetch --no-tags linux-review Vasily-Averin/percpu-improve-percpu_alloc_percpu-event-trace/20220506-124742
+        git checkout dee6876db0a7a4715516e673f9edaca2ba40677c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
 
-   arch/h8300/kernel/process.c:58:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
-      58 | void arch_cpu_idle(void)
-         |      ^~~~~~~~~~~~~
->> arch/h8300/kernel/process.c:108:46: error: unknown type name 'kernel_cloen_args'
-     108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
-         |                                              ^~~~~~~~~~~~~~~~~
->> arch/h8300/kernel/process.c:108:5: error: conflicting types for 'copy_thread'; have 'int(struct task_struct *, const int *)'
-     108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
-         |     ^~~~~~~~~~~
-   In file included from arch/h8300/kernel/process.c:30:
-   include/linux/sched/task.h:71:12: note: previous declaration of 'copy_thread' with type 'int(struct task_struct *, const struct kernel_clone_args *)'
-      71 | extern int copy_thread(struct task_struct *, const struct kernel_clone_args *);
-         |            ^~~~~~~~~~~
-   arch/h8300/kernel/process.c: In function 'copy_thread':
->> arch/h8300/kernel/process.c:110:33: error: request for member 'stack' in something not a structure or union
-     110 |         unsigned long usp = args->stack;
-         |                                 ^~
-   arch/h8300/kernel/process.c:111:36: error: request for member 'stack_size' in something not a structure or union
-     111 |         unsigned long topstk = args->stack_size;
-         |                                    ^~
-   arch/h8300/kernel/process.c: At top level:
-   arch/h8300/kernel/process.c:153:16: warning: no previous prototype for 'sys_clone' [-Wmissing-prototypes]
-     153 | asmlinkage int sys_clone(unsigned long __user *args)
-         |                ^~~~~~~~~
+sparse warnings: (new ones prefixed by >>)
+   mm/percpu.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/percpu.h):
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long flags @@     got restricted gfp_t [usertype] gfp_flags @@
+   include/trace/events/percpu.h:11:1: sparse:     expected unsigned long flags
+   include/trace/events/percpu.h:11:1: sparse:     got restricted gfp_t [usertype] gfp_flags
+   mm/percpu.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/percpu.h):
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast to restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: cast to restricted gfp_t
+>> include/trace/events/percpu.h:11:1: sparse: sparse: restricted gfp_t degrades to integer
+>> include/trace/events/percpu.h:11:1: sparse: sparse: restricted gfp_t degrades to integer
+   mm/percpu.c:2012:24: sparse: sparse: context imbalance in 'pcpu_balance_free' - unexpected unlock
 
+vim +11 include/trace/events/percpu.h
 
-vim +/kernel_cloen_args +108 arch/h8300/kernel/process.c
-
-   107	
- > 108	int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
-   109	{
- > 110		unsigned long usp = args->stack;
-   111		unsigned long topstk = args->stack_size;
-   112		struct pt_regs *childregs;
-   113	
-   114		childregs = (struct pt_regs *) (THREAD_SIZE + task_stack_page(p)) - 1;
-   115	
-   116		if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
-   117			memset(childregs, 0, sizeof(struct pt_regs));
-   118			childregs->retpc = (unsigned long) ret_from_kernel_thread;
-   119			childregs->er4 = topstk; /* arg */
-   120			childregs->er5 = usp; /* fn */
-   121		}  else {
-   122			*childregs = *current_pt_regs();
-   123			childregs->er0 = 0;
-   124			childregs->retpc = (unsigned long) ret_from_fork;
-   125			p->thread.usp = usp ?: rdusp();
-   126		}
-   127		p->thread.ksp = (unsigned long)childregs;
-   128	
-   129		return 0;
-   130	}
-   131	
+df95e795a72289 Dennis Zhou   2017-06-19  10  
+df95e795a72289 Dennis Zhou   2017-06-19 @11  TRACE_EVENT(percpu_alloc_percpu,
+df95e795a72289 Dennis Zhou   2017-06-19  12  
+df95e795a72289 Dennis Zhou   2017-06-19  13  	TP_PROTO(bool reserved, bool is_atomic, size_t size,
+dee6876db0a7a4 Vasily Averin 2022-05-06  14  		 size_t align, void *base_addr, int off,
+dee6876db0a7a4 Vasily Averin 2022-05-06  15  		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
+df95e795a72289 Dennis Zhou   2017-06-19  16  
+dee6876db0a7a4 Vasily Averin 2022-05-06  17  	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr,
+dee6876db0a7a4 Vasily Averin 2022-05-06  18  		bytes_alloc, gfp_flags),
+df95e795a72289 Dennis Zhou   2017-06-19  19  
+df95e795a72289 Dennis Zhou   2017-06-19  20  	TP_STRUCT__entry(
+df95e795a72289 Dennis Zhou   2017-06-19  21  		__field(	bool,			reserved	)
+df95e795a72289 Dennis Zhou   2017-06-19  22  		__field(	bool,			is_atomic	)
+df95e795a72289 Dennis Zhou   2017-06-19  23  		__field(	size_t,			size		)
+df95e795a72289 Dennis Zhou   2017-06-19  24  		__field(	size_t,			align		)
+df95e795a72289 Dennis Zhou   2017-06-19  25  		__field(	void *,			base_addr	)
+df95e795a72289 Dennis Zhou   2017-06-19  26  		__field(	int,			off		)
+df95e795a72289 Dennis Zhou   2017-06-19  27  		__field(	void __percpu *,	ptr		)
+dee6876db0a7a4 Vasily Averin 2022-05-06  28  		__field(	size_t,			bytes_alloc	)
+dee6876db0a7a4 Vasily Averin 2022-05-06  29  		__field(	gfp_t,			gfp_flags	)
+df95e795a72289 Dennis Zhou   2017-06-19  30  	),
+df95e795a72289 Dennis Zhou   2017-06-19  31  	TP_fast_assign(
+df95e795a72289 Dennis Zhou   2017-06-19  32  		__entry->reserved	= reserved;
+df95e795a72289 Dennis Zhou   2017-06-19  33  		__entry->is_atomic	= is_atomic;
+df95e795a72289 Dennis Zhou   2017-06-19  34  		__entry->size		= size;
+df95e795a72289 Dennis Zhou   2017-06-19  35  		__entry->align		= align;
+df95e795a72289 Dennis Zhou   2017-06-19  36  		__entry->base_addr	= base_addr;
+df95e795a72289 Dennis Zhou   2017-06-19  37  		__entry->off		= off;
+df95e795a72289 Dennis Zhou   2017-06-19  38  		__entry->ptr		= ptr;
+dee6876db0a7a4 Vasily Averin 2022-05-06  39  		__entry->bytes_alloc	= bytes_alloc;
+dee6876db0a7a4 Vasily Averin 2022-05-06  40  		__entry->gfp_flags	= gfp_flags;
+df95e795a72289 Dennis Zhou   2017-06-19  41  	),
+df95e795a72289 Dennis Zhou   2017-06-19  42  
+dee6876db0a7a4 Vasily Averin 2022-05-06  43  	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p bytes_alloc=%zu gfp_flags=%s",
+df95e795a72289 Dennis Zhou   2017-06-19  44  		  __entry->reserved, __entry->is_atomic,
+df95e795a72289 Dennis Zhou   2017-06-19  45  		  __entry->size, __entry->align,
+dee6876db0a7a4 Vasily Averin 2022-05-06  46  		  __entry->base_addr, __entry->off, __entry->ptr,
+dee6876db0a7a4 Vasily Averin 2022-05-06  47  		  __entry->bytes_alloc, show_gfp_flags(__entry->gfp_flags))
+df95e795a72289 Dennis Zhou   2017-06-19  48  );
+df95e795a72289 Dennis Zhou   2017-06-19  49  
 
 -- 
 0-DAY CI Kernel Test Service

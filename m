@@ -2,182 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7140551D507
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E674951D4FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390722AbiEFJ7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 05:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S1390741AbiEFJwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 05:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbiEFJ7l (ORCPT
+        with ESMTP id S242864AbiEFJwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:59:41 -0400
-X-Greylist: delayed 433 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 02:55:57 PDT
-Received: from rosa.stappers.it (rosa.stappers.it [77.72.145.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E3B24754F;
-        Fri,  6 May 2022 02:55:56 -0700 (PDT)
-Received: by rosa.stappers.it (Postfix, from userid 1000)
-        id 5B06F2014; Fri,  6 May 2022 11:45:36 +0200 (CEST)
-Date:   Fri, 6 May 2022 11:45:36 +0200
-From:   Geert Stappers <stappers@stappers.nl>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Helge Deller <deller@gmx.de>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v1 3/3] kallsyms: increase maximum kernel symbol length
- to 512
-Message-ID: <20220506094536.GL1551@rosa.stappers.it>
-References: <20220505191704.22812-1-ojeda@kernel.org>
- <20220505191704.22812-4-ojeda@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505191704.22812-4-ojeda@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 05:52:11 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E00323BE4;
+        Fri,  6 May 2022 02:48:29 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d22so6889419plr.9;
+        Fri, 06 May 2022 02:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=UlQ9fS0XFblBSDhDz8WGXl8//XRj+LMFbWdmJ5ZdaYA=;
+        b=UIPpl2UeldmDHnpBs9VvwDTvnYeCCu8Ju5B7HQauUY6Zj2Sg8VuWYcw5DPx4Hlwjbd
+         A3wykhqotE/ofFgSSUCZ/pvjckJ05spAr2ph/VSqfpuGDy/AGyF1IIal+z/IiOyiNjR+
+         n8lX6TPlvpF3vmBHxOyanZZttb0VTLpgYS2V5BQKtZSh7ncx5iWzr2I7zRkmm/mwPIko
+         yd4yiCkuJ2B9GKc0Xd2+8kwF/vS5aqSzOFgTqR98y/3n9lalK4yhfRH2ocf/IhjX25HQ
+         +82x+dIf+gQTZ7Ro9Ak25ti3vd+G/7I2OpwwO1ToG0wk2unmFI/oxKh+jncLyKFxXmGx
+         NMow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=UlQ9fS0XFblBSDhDz8WGXl8//XRj+LMFbWdmJ5ZdaYA=;
+        b=eDOz8Wpxa+lpcb0nevnrao0DapPQnxQIHW1Jtm9Wf7w2mEs/sczj8ItHZg6/DoRvDl
+         AMZQOCx8Ap7k/WBmdKHnW+fJEIx8Km+sxamZCjkil2EkBhdx+Eo2fwBuHSJgzNILWOel
+         bbIzV8/nm6KgnOjUZVa6fpQUOCdNIQU2S1x1bugMznQkdb/rPUtZ4/ZLDMkp8r6mrIoP
+         t8CkGxakriJK3XWPTK9ZROkAbQtXG/VQMBeAk9DxZO2VTMtvJDIpyq2GiOxm9vlVOZnV
+         mJKXgDf5BeWuyLu8Vp4KnszlFAKKMVwvI4hTrlGVmPV9+s69xpa7VSrIU/dq6rXyHF9n
+         6U3A==
+X-Gm-Message-State: AOAM531Jnnt+CkVEgQiWJUVZFVoATOjkwD0bv3NpPynDZwF1orlV72da
+        kyMa1ZXjD/Ib3oIn7GUjVFLFpfLv8BU=
+X-Google-Smtp-Source: ABdhPJy/WIot2HAfxHlNdNRBXGMQmcEOB4QwkDJIVJrUejNXE2Cp7r47SJGyCxpai6eSYiUmGBrouA==
+X-Received: by 2002:a17:902:a9ca:b0:15e:f017:91b5 with SMTP id b10-20020a170902a9ca00b0015ef01791b5mr962508plr.27.1651830508636;
+        Fri, 06 May 2022 02:48:28 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.110])
+        by smtp.googlemail.com with ESMTPSA id w4-20020a17090aaf8400b001d5f22845bdsm1456284pjq.1.2022.05.06.02.48.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 May 2022 02:48:28 -0700 (PDT)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] KVM: LAPIC: Narrow down the timer fastpath to tscdeadline timer
+Date:   Fri,  6 May 2022 02:47:37 -0700
+Message-Id: <1651830457-11284-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 09:16:45PM +0200, Miguel Ojeda wrote:
-> 
-> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
-> 
->     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
-> 
-> At the moment, Rust symbols may reach up to 300 in length.
-> Setting 512 as the maximum seems like a reasonable choice to
-> keep some headroom.
-> 
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index ce1bd2fbf23e..e5ad6e31697d 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -15,7 +15,7 @@
->  
->  #include <asm/sections.h>
->  
-> -#define KSYM_NAME_LEN 128
-> +#define KSYM_NAME_LEN 512
+From: Wanpeng Li <wanpengli@tencent.com>
 
-multiplication factor is four
+The original timer fastpath is developed for tscdeadline timer, however,
+the apic timer periodic/oneshot mode which is emulated by vmx preemption
+timer goes to preemption timer vmexit fastpath quietly, let's leave the 
+complex recompute periodic timer's target expiration and restart apic 
+timer to the slowpath vm-exit. Narrow down the timer fastpath to tscdeadline
+timer mode.
 
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+---
+ arch/x86/kvm/lapic.c   |  6 ++++++
+ arch/x86/kvm/lapic.h   |  1 +
+ arch/x86/kvm/vmx/vmx.c | 14 +++++++++++---
+ 3 files changed, 18 insertions(+), 3 deletions(-)
 
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -213,7 +213,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  	 * we use the smallest/strictest upper bound possible (56, based on
->  	 * the current definition of MODULE_NAME_LEN) to prevent overflows.
->  	 */
-> -	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 128);
-> +	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 512);
-
-factor four
-
-
-> @@ -227,7 +227,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  
->  		/* Format: .klp.sym.sym_objname.sym_name,sympos */
->  		cnt = sscanf(strtab + sym->st_name,
-> -			     ".klp.sym.%55[^.].%127[^,],%lu",
-> +			     ".klp.sym.%55[^.].%511[^,],%lu",
-
-4 * ( 127 + 1 )  =  511 + 1
-
-
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -30,10 +30,10 @@
->  #define _stringify_1(x)	#x
->  #define _stringify(x)	_stringify_1(x)
->  
-> -#define KSYM_NAME_LEN		128
-> +#define KSYM_NAME_LEN		512
-
-factor four
-
-
-> --- a/tools/include/linux/kallsyms.h
-> +++ b/tools/include/linux/kallsyms.h
-> @@ -6,7 +6,7 @@
->  #include <stdio.h>
->  #include <unistd.h>
->  
-> -#define KSYM_NAME_LEN 128
-> +#define KSYM_NAME_LEN 512
-
-factor four
-
-
-> --- a/tools/lib/perf/include/perf/event.h
-> +++ b/tools/lib/perf/include/perf/event.h
-> @@ -95,7 +95,7 @@ struct perf_record_throttle {
->  };
->  
->  #ifndef KSYM_NAME_LEN
-> -#define KSYM_NAME_LEN 256
-> +#define KSYM_NAME_LEN 512
-
-Here is the multiplication factor  two.
-
-
-> --- a/tools/lib/symbol/kallsyms.h
-> +++ b/tools/lib/symbol/kallsyms.h
-> @@ -7,7 +7,7 @@
->  #include <linux/types.h>
->  
->  #ifndef KSYM_NAME_LEN
-> -#define KSYM_NAME_LEN 256
-> +#define KSYM_NAME_LEN 512
-
-Another  "factor two"
-
-
-
-It feels good to unify all the KSYM_NAME_LEN to 512.
-
-Thing that feels less good is doubling 256 versus quadrupling 128.
-
-I felt the need to report that.
-
-
-Feel free to ignore this remark.
-
-
-
-Groeten
-Geert Stappers
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 137c3a2f5180..3e6cb2bf56dc 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2459,6 +2459,12 @@ static bool lapic_is_periodic(struct kvm_lapic *apic)
+ 	return apic_lvtt_period(apic);
+ }
+ 
++bool lapic_is_tscdeadline(struct kvm_lapic *apic)
++{
++	return apic_lvtt_tscdeadline(apic);
++}
++EXPORT_SYMBOL_GPL(lapic_is_tscdeadline);
++
+ int apic_has_pending_timer(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+index 4e4f8a22754f..6e1b2f349237 100644
+--- a/arch/x86/kvm/lapic.h
++++ b/arch/x86/kvm/lapic.h
+@@ -241,6 +241,7 @@ void kvm_lapic_expired_hv_timer(struct kvm_vcpu *vcpu);
+ bool kvm_lapic_hv_timer_in_use(struct kvm_vcpu *vcpu);
+ void kvm_lapic_restart_hv_timer(struct kvm_vcpu *vcpu);
+ bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu);
++bool lapic_is_tscdeadline(struct kvm_lapic *apic);
+ 
+ static inline enum lapic_mode kvm_apic_mode(u64 apic_base)
+ {
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index bb09fc9a7e55..2a8f4253df35 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5713,22 +5713,30 @@ static int handle_pml_full(struct kvm_vcpu *vcpu)
+ 	return 1;
+ }
+ 
+-static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
++static bool __handle_preemption_timer(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 
+ 	if (!vmx->req_immediate_exit &&
+ 	    !unlikely(vmx->loaded_vmcs->hv_timer_soft_disabled)) {
+ 		kvm_lapic_expired_hv_timer(vcpu);
+-		return EXIT_FASTPATH_REENTER_GUEST;
++		return true;
+ 	}
+ 
++	return false;
++}
++
++static fastpath_t handle_fastpath_preemption_timer(struct kvm_vcpu *vcpu)
++{
++	if (lapic_is_tscdeadline(vcpu->arch.apic) && __handle_preemption_timer(vcpu))
++		return EXIT_FASTPATH_REENTER_GUEST;
++
+ 	return EXIT_FASTPATH_NONE;
+ }
+ 
+ static int handle_preemption_timer(struct kvm_vcpu *vcpu)
+ {
+-	handle_fastpath_preemption_timer(vcpu);
++	__handle_preemption_timer(vcpu);
+ 	return 1;
+ }
+ 
 -- 
-Silence is hard to parse
+2.25.1
+

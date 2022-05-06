@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B41D51D94B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF1A51D988
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392613AbiEFNln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S241773AbiEFNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237300AbiEFNll (ORCPT
+        with ESMTP id S240638AbiEFNqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:41:41 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1105766FB7;
-        Fri,  6 May 2022 06:37:58 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id fv2so7050563pjb.4;
-        Fri, 06 May 2022 06:37:58 -0700 (PDT)
+        Fri, 6 May 2022 09:46:08 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6C224942
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:42:25 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a191so6168357pge.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xpUwgl4aDlBvgfFaUzZZ4RtkgUszldjbiZ0FW6duKQE=;
-        b=F3k+r7LmfI5yB6/WMwrvPKq3VhYjXOXQut0WJRNSXP81M/iZDb1DGL1CyvccvuQCB4
-         5RANE1wp92MuvyKP8bGC0C1b58jg5yzn0UE4uSkJKFruDXbq0mqbSZWd7+jFwRu3e0ft
-         bt491lGqJjWy9O0LGB/LlogMfNrJtWJQZRltanTYu1dY1sq0ytMz2Jdta05DC2LzdCdY
-         vXrjwgUo9FvfsIgC9f0vrk5qy+39a9MBQWSdcsVDQfoMbtQRVRpmSFrc9gzrjdGRX9VI
-         jyEhT3SRILAqeP/IP0WFq5FYBObOPxE5GXesp+P14woeRhnQVaHg+PbtaWcyj+VYK+aS
-         cdYw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PfUI54DC+Rd4JhaHhM79SH7hCQA6BnGmIDFJn3u5zLM=;
+        b=aKsXfyC6aHrcUWOwO7G7UYAV68+b8gHqoJddnLu0t/IA7s7HawCsFCGO/Kujg873Y6
+         KVD3LFFVeuekk+wEAOPy1Y6U1hO5gUa0jLOw8Bvc5N02CNRvkanaEg2w/JG5wka+Oslx
+         ydesijDYApsY+LM85LShGfEnGycGRv/VEdWYUy9FfhhdzljJFiBXPOyi/Pa35WArWkKX
+         BhCl/GlGG23ObBA0eoXzfYFXawe6ko9nCA940pYhFh0G0ZTDtWM5vfpTM+6JW1Njun30
+         ZsFjAFyFgMjFBHj+GWTjf33CG4KH/W+9w3UtvRGjoUgC8vdqfTBth8M1FRYVYh8Z+xd5
+         8xFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xpUwgl4aDlBvgfFaUzZZ4RtkgUszldjbiZ0FW6duKQE=;
-        b=vD4UQdduII7qOyJWTicLrT7cyJrEOfvWY4fymrdYSTlGglrAHPrlgfllIYoJd7XBAD
-         dTIbGgmHn5xhpxJvNSwNNYbnUq3ISXin1aneOG/tDYDdR8MPsL9hiMqLAUdwPV3bhGok
-         8VNAhhmLi4Jg9A5d4c7B44ssfN1rU2fF1wsV8mwpVQ4/z3PGmugsGqc4y9zU9L5jMJDX
-         4/U1imgx085n8wA2ruXxpSqIa6S6HwLf9DbpEl1iLNIIVYdn0MEoGfaObwWXIEyMgqrP
-         2R4MgeXWYR9RoCve459dF1Hvm8HqtEabwi17LVOptZjV13f4qaKZjVdnSxVYK4ZbzBIh
-         2kGQ==
-X-Gm-Message-State: AOAM5316Y0JEM9YJJvmbHt09P2mU31JV5JC4cs2OUUFSZi2tShW76QTM
-        uhUj4WSJsXciCcGDdfW7rdk=
-X-Google-Smtp-Source: ABdhPJzIaN+YCVs9SoYiT+GtQpw5HvZZa9Zv3Cfx9JL1Nm9ck9LOBYoJmU07Ko3CitO4/pwiOaO8dA==
-X-Received: by 2002:a17:903:22cb:b0:15e:d715:1bd8 with SMTP id y11-20020a17090322cb00b0015ed7151bd8mr3643431plg.159.1651844277633;
-        Fri, 06 May 2022 06:37:57 -0700 (PDT)
-Received: from localhost ([166.111.139.123])
-        by smtp.gmail.com with ESMTPSA id ot16-20020a17090b3b5000b001dc4d22c0a7sm3643256pjb.10.2022.05.06.06.37.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 06:37:57 -0700 (PDT)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     doshir@vmware.com, pv-drivers@vmware.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH] drivers: net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
-Date:   Fri,  6 May 2022 21:37:48 +0800
-Message-Id: <20220506133748.2799853-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=PfUI54DC+Rd4JhaHhM79SH7hCQA6BnGmIDFJn3u5zLM=;
+        b=hFITML5VZ7J46R49GXa01JiiWbfGTGhK7JqwXH4ga+UgzSxrmNcGGNfGmiA2/V6TvM
+         jEfr0PYrB0lUifj94Ksv0wKgsk+VZlivblJ3F7fwz8zp5PvVBvrMMGkfYeAwSY6W5UtS
+         NKdZuKHm49xFepqq6B6JJaI7XHOICYM2iJeXUd/VM0ZkLZI8HmcG8a6oPt3wcvkN5pQ4
+         BUPIB+mKKHu3qb3stTmXznITBOVBQvHaozObN0h/LAMkTP9013HR6YT8LeqGQ3OOPpvH
+         0Lma1a7nD7QjaF3W2m7fcKx/ysPEa7cYC9Ue2ya2HuEk6gv2kujjlsF09K60Ld7dHvFc
+         2n2A==
+X-Gm-Message-State: AOAM533TzilbPUBUmGhnRLyEPdq5FDWrFTTgifVv4xa1sJfLiO40e4P4
+        FQwSD663lyYVEhH7O7JqzEYPC3PzIIRuZA==
+X-Google-Smtp-Source: ABdhPJySJILodY6XqJPjPbH87bJIVRNRr+CgOPpU7dPLFadY++HIHQRCjgCYnQukNaA1I2A/cUztMg==
+X-Received: by 2002:a63:8449:0:b0:3c6:4145:6a1c with SMTP id k70-20020a638449000000b003c641456a1cmr2839205pgd.590.1651844544773;
+        Fri, 06 May 2022 06:42:24 -0700 (PDT)
+Received: from [10.255.89.252] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id s14-20020a056a001c4e00b0050dc76281fesm3333258pfw.216.2022.05.06.06.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 06:42:24 -0700 (PDT)
+Message-ID: <3c0e25fb-695d-4a29-6de4-c892f89cea7a@bytedance.com>
+Date:   Fri, 6 May 2022 21:38:29 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Re: [PATCH 3/4] mm/memofy-failure.c: optimize hwpoison_filter
+Content-Language: en-US
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Wu Fengguang <fengguang.wu@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220429142206.294714-1-pizhenwei@bytedance.com>
+ <20220429142206.294714-4-pizhenwei@bytedance.com>
+ <20220506085920.GC1356094@u2004>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20220506085920.GC1356094@u2004>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,98 +81,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vmxnet3_rq_create(), when dma_alloc_coherent() fails, 
-vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
-vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
--> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls 
-vmxnet3_force_close() -> dev_close() in error handling code. And the driver
-calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
--> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(), 
-rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
-a NULL pointer dereference.
-
-To fix this possible bug, an if statement is added to check whether 
-rq->rx_ring[ring_idx].base is NULL in vmxnet3_rq_cleanup().
-
-The error log in our fault-injection testing is shown as follows:
-
-[   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
-...
-[   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
-...
-[   65.227977] Call Trace:
-...
-[   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
-[   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
-[   65.228866]  __dev_close_many+0x288/0x350
-[   65.229607]  dev_close_many+0xa4/0x480
-[   65.231124]  dev_close+0x138/0x230
-[   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
-[   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
-...
 
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
----
- drivers/net/vmxnet3/vmxnet3_drv.c | 42 ++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
+On 5/6/22 16:59, Naoya Horiguchi wrote:
+> On Fri, Apr 29, 2022 at 10:22:05PM +0800, zhenwei pi wrote:
+>> In the memory failure procedure, hwpoison_filter has higher priority,
+>> if memory_filter() filters the error event, there is no need to do
+>> the further work.
+> 
+> Could you clarify what problem you are trying to solve (what does
+> "optimize" mean in this context or what is the benefit)?
+> 
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index d9d90baac72a..247fbdfe834a 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -1667,28 +1667,30 @@ vmxnet3_rq_cleanup(struct vmxnet3_rx_queue *rq,
- 	struct Vmxnet3_RxDesc *rxd;
- 
- 	for (ring_idx = 0; ring_idx < 2; ring_idx++) {
--		for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
--#ifdef __BIG_ENDIAN_BITFIELD
--			struct Vmxnet3_RxDesc rxDesc;
--#endif
--			vmxnet3_getRxDesc(rxd,
--				&rq->rx_ring[ring_idx].base[i].rxd, &rxDesc);
--
--			if (rxd->btype == VMXNET3_RXD_BTYPE_HEAD &&
--					rq->buf_info[ring_idx][i].skb) {
--				dma_unmap_single(&adapter->pdev->dev, rxd->addr,
--						 rxd->len, DMA_FROM_DEVICE);
--				dev_kfree_skb(rq->buf_info[ring_idx][i].skb);
--				rq->buf_info[ring_idx][i].skb = NULL;
--			} else if (rxd->btype == VMXNET3_RXD_BTYPE_BODY &&
--					rq->buf_info[ring_idx][i].page) {
--				dma_unmap_page(&adapter->pdev->dev, rxd->addr,
--					       rxd->len, DMA_FROM_DEVICE);
--				put_page(rq->buf_info[ring_idx][i].page);
--				rq->buf_info[ring_idx][i].page = NULL;
-+		if (rq->rx_ring[ring_idx].base) {
-+			for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
-+	#ifdef __BIG_ENDIAN_BITFIELD
-+				struct Vmxnet3_RxDesc rxDesc;
-+	#endif
-+				vmxnet3_getRxDesc(rxd,
-+					&rq->rx_ring[ring_idx].base[i].rxd, &rxDesc);
-+
-+				if (rxd->btype == VMXNET3_RXD_BTYPE_HEAD &&
-+						rq->buf_info[ring_idx][i].skb) {
-+					dma_unmap_single(&adapter->pdev->dev, rxd->addr,
-+							 rxd->len, DMA_FROM_DEVICE);
-+					dev_kfree_skb(rq->buf_info[ring_idx][i].skb);
-+					rq->buf_info[ring_idx][i].skb = NULL;
-+				} else if (rxd->btype == VMXNET3_RXD_BTYPE_BODY &&
-+						rq->buf_info[ring_idx][i].page) {
-+					dma_unmap_page(&adapter->pdev->dev, rxd->addr,
-+						       rxd->len, DMA_FROM_DEVICE);
-+					put_page(rq->buf_info[ring_idx][i].page);
-+					rq->buf_info[ring_idx][i].page = NULL;
-+				}
- 			}
- 		}
--
-+
- 		rq->rx_ring[ring_idx].gen = VMXNET3_INIT_GEN;
- 		rq->rx_ring[ring_idx].next2fill =
- 					rq->rx_ring[ring_idx].next2comp = 0;
+OK. The background of this work:
+As well known, the memory failure mechanism handles memory corrupted 
+event, and try to send SIGBUS to the user process which uses this 
+corrupted page.
+
+For the virtualization case, QEMU catches SIGBUS and tries to inject MCE 
+into the guest, and the guest handles memory failure again. Thus the 
+guest gets the minimal effect from hardware memory corruption.
+
+The further step I'm working on:
+1, try to modify code to decrease poisoned pages in a single place 
+(mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
+
+2, try to use page_handle_poison() to handle SetPageHWPoison() and 
+num_poisoned_pages_inc() together. It would be best to call 
+num_poisoned_pages_inc() in a single place too. I'm not sure if this is 
+possible or not, please correct me if I misunderstand.
+
+3, introduce memory failure notifier list in memory-failure.c: notify 
+the corrupted PFN to someone who registers this list.
+If I can complete [1] and [2] part, [3] will be quite easy(just call 
+notifier list after increasing poisoned page).
+
+4, introduce memory recover VQ for memory balloon device, and registers 
+memory failure notifier list. During the guest kernel handles memory 
+failure, balloon device gets notified by memory failure notifier list, 
+and tells the host to recover the corrupted PFN(GPA) by the new VQ.
+
+5, host side remaps the corrupted page(HVA), and tells the guest side to 
+unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA) 
+dynamically.
+
+Because [4] and [5] are related to balloon device, also CC Michael, 
+David and Jason.
+
+> Now hwpoison_filter() can be called both with *and* without taking page refcount.
+> It's mainly called *with* taking page refcount in order to make sure that the
+> actual handling process is executed only for pages that meet a given condition.
+> IOW, it's important to prevent pages which do not meet the condition from going
+> ahead to further steps (false-positive is not permitted).  So this type of
+> callsite should not be omittable.
+> 
+> As for the other case, hwpoison_filter() is also called in hwpoison_inject()
+> *without* taking page refcount.  This actually has a different nuance and
+> intended to speculatively filter the injection events before setting
+> PageHWPoison flag to reduce the noise due to setting PG_hwpoison temporary.
+> The point is that it's not intended here to filter precisely and this callsite
+> is omittable.
+> 
+> So in my understanding, we need keep hwpoison_filter() after taking page
+> refcount as we do now.  Maybe optionally and additionally calling
+> hwpoison_filter() at the beginning of memory_failure() might be possible,
+> but I'm not sure yet how helpful...
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
+>>
+>> Cc: Wu Fengguang <fengguang.wu@intel.com>
+>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+>> ---
+>>   mm/memory-failure.c | 14 +++++---------
+>>   1 file changed, 5 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index ece05858568f..a6a27c8b800f 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1800,6 +1800,11 @@ int memory_failure(unsigned long pfn, int flags)
+>>   		goto unlock_mutex;
+>>   	}
+>>   
+>> +	if (hwpoison_filter(p)) {
+>> +		res = -EOPNOTSUPP;
+>> +		goto unlock_mutex;
+>> +	}
+>> +
+>>   try_again:
+>>   	res = try_memory_failure_hugetlb(pfn, flags, &hugetlb);
+>>   	if (hugetlb)
+>> @@ -1937,15 +1942,6 @@ int memory_failure(unsigned long pfn, int flags)
+>>   	 */
+>>   	page_flags = p->flags;
+>>   
+>> -	if (hwpoison_filter(p)) {
+>> -		if (TestClearPageHWPoison(p))
+>> -			num_poisoned_pages_dec();
+>> -		unlock_page(p);
+>> -		put_page(p);
+>> -		res = -EOPNOTSUPP;
+>> -		goto unlock_mutex;
+>> -	}
+>> -
+>>   	/*
+>>   	 * __munlock_pagevec may clear a writeback page's LRU flag without
+>>   	 * page_lock. We need wait writeback completion for this page or it
+>> -- 
+>> 2.20.1
+>>
+
 -- 
-2.25.1
-
+zhenwei pi

@@ -2,294 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D08251DB88
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4599251DB8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442640AbiEFPJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S1442670AbiEFPLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiEFPJn (ORCPT
+        with ESMTP id S229797AbiEFPLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:09:43 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05656D186;
-        Fri,  6 May 2022 08:05:59 -0700 (PDT)
-Date:   Fri, 6 May 2022 23:06:42 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651849557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/3ekuKZOOhzHGdEsgCtkzT0f+hOvNMhiaHYzc4lREdA=;
-        b=XAu3lJ+Rtfg37oaCKzpl1BjK7JvI4xOROc0D7xe++hJ2zoHPyinSmHwH+nEwv2AhafYXYp
-        hecKk4SFQ3wlJcCRBdIA4KyYmSrpNNlaprtuLqH/y5/KR2eNZLYIq0YzxN+EIwvNJDHMi2
-        aeWmT+EaF5eZkUFGfFryeVmnBYLAOe4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Kacur <jkacur@redhat.com>, Daniel Wagner <dwagner@suse.de>
-Subject: Re: [PATCH v2] rtla: Remove procps-ng dependency
-Message-ID: <YnU5gtSFW8Wl54iv@geo.homenetwork>
-References: <a0f9f8c1030c66305c9b921057c3d483064d5529.1651220820.git.bristot@kernel.org>
+        Fri, 6 May 2022 11:11:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15C36D185
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651849685; x=1683385685;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CsffPHYIov/sWzB4QS7E4FfuHVbqA20mLYih/R9NXYY=;
+  b=bd8zwtK5+vrUT7FhQL7Ao2sFIy+M4ehfdQZ+Izel9L6jP+jr9cxhklyp
+   tD1+BuTjM9h+FB3/jqR+3TAI3crxQUEihhq9G4sATRU48n4BhnJDEujeS
+   yfwVNehPlBP91L/VDl5U5ZW+qwy/4318BZF5lpNO8QulZdBw9VaTYMIvw
+   rH8BpFJMaTdgH02UDGk/klV/QAulc19jvrs0JM1nS7JjpmVoazFl+abFK
+   zB5+M5HScPukYUWMzuzPTfnsJKywSK103TJohc1qpaRBLQwk/90+1mvtm
+   dTnNn0Cft5R8mMBYAckmBhY2asnll2R7zBOkKNqeQ1zK5PlJX471E4gh6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="266082628"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="266082628"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:08:05 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="563852865"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.152])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:08:02 -0700
+Message-ID: <078c3b3a-9976-9ee4-0cd2-11ff6599dbd2@intel.com>
+Date:   Fri, 6 May 2022 18:07:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0f9f8c1030c66305c9b921057c3d483064d5529.1651220820.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 13/23] perf evlist: Add evlist__add_dummy_on_all_cpus()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-14-adrian.hunter@intel.com>
+ <CAP-5=fV3SWDb8uTsUmdkweRrO9t9OZXzP=9GWqKxTYn0bdfriw@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fV3SWDb8uTsUmdkweRrO9t9OZXzP=9GWqKxTYn0bdfriw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:01:48PM +0200,
-Daniel Bristot de Oliveira wrote:
-
-> Daniel Wagner reported to me that readproc.h got deprecated. Also,
-> while the procps-ng library was available on Fedora, it was not available
-> on RHEL, which is a piece of evidence that it was not that used.
+On 6/05/22 16:47, Ian Rogers wrote:
+> On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Add evlist__add_dummy_on_all_cpus() to enable creating a system-wide dummy
+>> event that sets up the system-wide maps before map propagation.
+>>
+>> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+>> whether or not the event needs to be system-wide.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>>  tools/perf/util/evlist.h |  5 +++++
+>>  2 files changed, 45 insertions(+)
+>>
+>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+>> index 78c47cbafbc2..c16bd4836314 100644
+>> --- a/tools/perf/util/evlist.c
+>> +++ b/tools/perf/util/evlist.c
+>> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+>>         return 0;
+>>  }
+>>
+>> +static void evlist__add_on_all_cpus(struct evlist *evlist, struct evsel *evsel)
+>> +{
+>> +       evsel->core.system_wide = true;
+>> +
+>> +       /* All CPUs */
+>> +       perf_cpu_map__put(evsel->core.own_cpus);
+>> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+>> +       perf_cpu_map__put(evsel->core.cpus);
+>> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+>> +
+>> +       /* No threads */
+>> +       perf_thread_map__put(evsel->core.threads);
+>> +       evsel->core.threads = perf_thread_map__new_dummy();
+>> +
+>> +       evlist__add(evlist, evsel);
+>> +}
+>> +
+>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+>> +{
+>> +       struct evsel *evsel = evlist__dummy_event(evlist);
+>> +
+>> +       if (!evsel)
+>> +               return NULL;
+>> +
+>> +       evsel->core.attr.exclude_kernel = 1;
+>> +       evsel->core.attr.exclude_guest = 1;
+>> +       evsel->core.attr.exclude_hv = 1;
+>> +       evsel->core.attr.freq = 0;
+>> +       evsel->core.attr.sample_period = 1;
+>> +       evsel->no_aux_samples = true;
+>> +       evsel->name = strdup("dummy:u");
+>> +
+>> +       if (system_wide)
+>> +               evlist__add_on_all_cpus(evlist, evsel);
+>> +       else
+>> +               evlist__add(evlist, evsel);
+>> +
+>> +       return evsel;
+>> +}
+>> +
+>>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+>>  {
+>>         struct evsel *evsel, *n;
+>> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+>> index 4062f5aebfc1..1bde9ccf4e7d 100644
+>> --- a/tools/perf/util/evlist.h
+>> +++ b/tools/perf/util/evlist.h
+>> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+>>  struct evsel *arch_evlist__leader(struct list_head *list);
+>>
+>>  int evlist__add_dummy(struct evlist *evlist);
+>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+>> +static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlist *evlist)
 > 
-> rtla uses procps-ng only to find the PID of the tracers' workload.
+> Sorry to be a language lawyer. What I hope to clean up with CPU maps is that:
 > 
-> I used the procps-ng library to avoid reinventing the wheel. But in this
-> case, reinventing the wheel took me less time than the time we already
-> took trying to work around problems.
+> empty == dummy == any CPU
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n279
 > 
-> Implement a function that reads /proc/ entries, checking if:
-> 	- the entry is a directory
-> 	- the directory name is composed only of digits (PID)
-> 	- the directory contains the comm file
-> 	- the comm file contains a comm that matches the tracers'
-> 	  workload prefix.
-> 	- then return true; otherwise, return false.
+> Given every CPU map should be empty or contain any CPU then it seems
+> they all meet the definition of empty - so something is wrong.
+
+Nothing is wrong.  I am not against clarifying things, but stop assuming
+natural language has to mean anything exactly.  That is what computer
+languages are for.
+
+Sometimes more abstract language is used, precisely to stop people
+making assumptions about the details.
+
 > 
-> And use it instead of procps-ng.
+> The cpu map here is explicitly opened so that it gets all online CPUs:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n174
 > 
-> Changes from V1:
->   - Use a single buffer for comm and comm_path
->   - Cause an error in case of a too long command prefix
->   - Do a close_dir()
->   - Improve log messages
+> From:
+> https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/cputopology.rst
+> there are example topologies like:
+> kernel_max: 31
+>    offline: 2,4-31,32-63
+>     online: 0-1,3
+>   possible: 0-31
+>    present: 0-31
 > 
-> Cc: John Kacur <jkacur@redhat.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Fixes: b1696371d865 ("rtla: Helper functions for rtla")
-> Reported-by: Daniel Wagner <dwagner@suse.de>
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  tools/tracing/rtla/Makefile    |   2 +-
->  tools/tracing/rtla/README.txt  |   1 -
->  tools/tracing/rtla/src/utils.c | 102 ++++++++++++++++++++++++++-------
->  tools/tracing/rtla/src/utils.h |   3 +-
->  4 files changed, 84 insertions(+), 24 deletions(-)
+> all_cpus could mean the union of offline and online CPUs, possible
+> CPUs or present CPUs. You are saying that in the perf code all_cpus
+> should be the same as all online cpus as only those CPUs are valid
+> with perf_event_open. That's true but offline CPUs can be made online.
+> If that happens here then the dummy events will have a CPU map that
+> rather than being for all CPUs will be for all online CPUs at the
+> point it was opened. Having online in the function name I think
+> captures the time dependent nature of this - but if you think that's
+> too much could we add a comment?
+
+If you ask me it does the exact opposite.  The function of the code
+is to put the event on all CPUS without having to know the details
+of: well actually perf doesn't automagically retain or restore events
+across enabling or disabling CPUs so in fact we deal only in online
+CPUs.
+
+> too much could we add a comment? I'm trying to avoid a situation, like
+> with the CPU map code, where all and online are interchangeable
+> leading to the code being unnecessarily confusing unless you read
+> every line.
+
+It is normal to have to read the details of code, and, in my
+experience at least, normal for the code not to work exactly the
+way I'd imagined.
+
 > 
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index 5a3226e436ef..523f0a8c38c2 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -32,7 +32,7 @@ TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
->  
->  CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
->  LDFLAGS	:=	-ggdb
-> -LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs) -lprocps
-> +LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
->  
->  SRC	:=	$(wildcard src/*.c)
->  HDR	:=	$(wildcard src/*.h)
-> diff --git a/tools/tracing/rtla/README.txt b/tools/tracing/rtla/README.txt
-> index 0fbad2640b8c..4af3fd40f171 100644
-> --- a/tools/tracing/rtla/README.txt
-> +++ b/tools/tracing/rtla/README.txt
-> @@ -11,7 +11,6 @@ RTLA depends on the following libraries and tools:
->  
->   - libtracefs
->   - libtraceevent
-> - - procps
->  
->  It also depends on python3-docutils to compile man pages.
->  
-> diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-> index 3bd6f64780cf..f3d562f7f14c 100644
-> --- a/tools/tracing/rtla/src/utils.c
-> +++ b/tools/tracing/rtla/src/utils.c
-> @@ -3,7 +3,7 @@
->   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
->   */
->  
-> -#include <proc/readproc.h>
-> +#include <dirent.h>
->  #include <stdarg.h>
->  #include <stdlib.h>
->  #include <string.h>
-> @@ -262,43 +262,103 @@ int __set_sched_attr(int pid, struct sched_attr *attr)
->  
->  	return 0;
->  }
-> +
->  /*
-> - * set_comm_sched_attr - set sched params to threads starting with char *comm
-> + * procfs_is_workload_pid - check if a procfs entry contains a comm_prefix* comm
-> + *
-> + * Check if the procfs entry is a directory of a process, and then check if the
-> + * process has a comm with the prefix set in char *comm_prefix. As the
-> + * current users of this function only check for kernel threads, there is no
-> + * need to check for the threads for the process.
->   *
-> - * This function uses procps to list the currently running threads and then
-> - * set the sched_attr *attr to the threads that start with char *comm. It is
-> + * Return: True if the proc_entry contains a comm file with comm_prefix*.
-> + * Otherwise returns false.
-> + */
-> +static int procfs_is_workload_pid(const char *comm_prefix, struct dirent *proc_entry)
-> +{
-> +	char buffer[MAX_PATH];
-> +	int comm_fd, retval;
-> +	char*t_name;
-
-Need a blank..
-char *t_name;
-
-> +
-> +	if (proc_entry->d_type != DT_DIR)
-> +		return 0;
-> +
-> +	if (*proc_entry->d_name == '.')
-> +		return 0;
-> +
-> +	/* check if the string is a pid */
-> +	for (t_name = proc_entry->d_name; t_name; t_name++) {
-> +		if (!isdigit(*t_name))
-> +			break;
-> +	}
-> +
-> +	if (*t_name != '\0')
-> +		return 0;
-> +
-> +	snprintf(buffer, MAX_PATH, "/proc/%s/comm", proc_entry->d_name);
-> +	comm_fd = open(buffer, O_RDONLY);
-> +	if (comm_fd < 0)
-> +		return 0;
-> +
-> +	memset(buffer, 0, MAX_PATH);
-> +	retval = read(comm_fd, buffer, MAX_PATH);
-> +
-> +	close(comm_fd);
-> +
-> +	if (retval <= 0)
-> +		return 0;
-> +
-> +	retval = strncmp(comm_prefix, buffer, strlen(comm_prefix));
-> +	if (retval)
-> +		return 0;
-
-
-Confused.
-
-For example:
-comm_prefix is "osnoise/", buffer is "osnoise\n"(as said by comment below),
-strlen_prefix is 8. The return value of strncmp() is 1 and not set sched attr.
-Or use "osnoise" as the comm_prefix. Or am I miss something here.
-
-> +	/* comm already have \n */
-> +	debug_msg("Found workload pid:%s comm:%s", proc_entry->d_name, buffer);
-> +
-> +	return 1;
-> +}
-> +
-> +/*
-> + * set_comm_sched_attr - set sched params to threads starting with char *comm_prefix
-> + *
-> + * This function uses procps to list the currently running threads and then set the
-
-s/procps/procfs/
-
-Thanks,
-Tao
-> + * sched_attr *attr to the threads that start with char *comm_prefix. It is
->   * mainly used to set the priority to the kernel threads created by the
->   * tracers.
->   */
-> -int set_comm_sched_attr(const char *comm, struct sched_attr *attr)
-> +int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr)
->  {
-> -	int flags = PROC_FILLCOM | PROC_FILLSTAT;
-> -	PROCTAB *ptp;
-> -	proc_t task;
-> +	struct dirent *proc_entry;
-> +	DIR *procfs;
->  	int retval;
->  
-> -	ptp = openproc(flags);
-> -	if (!ptp) {
-> -		err_msg("error openproc()\n");
-> -		return -ENOENT;
-> +	if (strlen(comm_prefix) >= MAX_PATH) {
-> +		err_msg("Command prefix is too long: %d < strlen(%s)\n",
-> +			MAX_PATH, comm_prefix);
-> +		exit(EINVAL);
->  	}
->  
-> -	memset(&task, 0, sizeof(task));
-> +	procfs = opendir("/proc");
-> +
-> +	while ((proc_entry = readdir(procfs))) {
->  
-> -	while (readproc(ptp, &task)) {
-> -		retval = strncmp(comm, task.cmd, strlen(comm));
-> -		if (retval)
-> +		retval = procfs_is_workload_pid(comm_prefix, proc_entry);
-> +		if (!retval)
->  			continue;
-> -		retval = __set_sched_attr(task.tid, attr);
-> -		if (retval)
-> +
-> +		/* procfs_is_workload_pid confirmed it is a pid */
-> +		retval = __set_sched_attr(atoi(proc_entry->d_name), attr);
-> +		if (retval) {
-> +			err_msg("Error setting sched attributes for pid:%s\n", proc_entry->d_name);
->  			goto out_err;
-> -	}
-> +		}
->  
-> -	closeproc(ptp);
-> +		debug_msg("Set sched attributes for pid:%s\n", proc_entry->d_name);
-> +	}
->  	return 0;
->  
->  out_err:
-> -	closeproc(ptp);
-> +	closedir(procfs);
->  	return 1;
->  }
->  
-> diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
-> index fa08e374870a..5571afd3b549 100644
-> --- a/tools/tracing/rtla/src/utils.h
-> +++ b/tools/tracing/rtla/src/utils.h
-> @@ -6,6 +6,7 @@
->   * '18446744073709551615\0'
->   */
->  #define BUFF_U64_STR_SIZE	24
-> +#define MAX_PATH		1024
->  
->  #define container_of(ptr, type, member)({			\
->  	const typeof(((type *)0)->member) *__mptr = (ptr);	\
-> @@ -53,5 +54,5 @@ struct sched_attr {
->  };
->  
->  int parse_prio(char *arg, struct sched_attr *sched_param);
-> -int set_comm_sched_attr(const char *comm, struct sched_attr *attr);
-> +int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
->  int set_cpu_dma_latency(int32_t latency);
-> -- 
-> 2.32.0
+> Thanks,
+> Ian
 > 
+>> +{
+>> +       return evlist__add_aux_dummy(evlist, true);
+>> +}
+>>
+>>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+>>                          evsel__sb_cb_t cb, void *data);
+>> --
+>> 2.25.1
+>>
+

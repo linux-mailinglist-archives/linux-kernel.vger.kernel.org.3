@@ -2,115 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0263D51DE3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947F051DE4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444140AbiEFRUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S1444156AbiEFRYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbiEFRUf (ORCPT
+        with ESMTP id S237371AbiEFRYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:20:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DC784F465
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651857411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1g+2xBYEm0OXHS/CQXNuLjQdFiP+UTDj3yuwqdtdFQE=;
-        b=Xa6NxylZsDSF+O9CsfgbldVSRpHEr5P+lD0AvsDH4dPr9g7T6sUaILy+uAc6RpWX+ijSJ7
-        HxrhmGHD0n2ftzljwrN6pyws/uqxCZwaPWzvYBZLmEU9P6RVO+h5bPcWSaA6bPR5zMIZsc
-        5Cc2ZxjgsnrhzWBlZ/zyNDe7cWxNR1I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-jPBn9JSVOte3qHUnX52gUA-1; Fri, 06 May 2022 13:16:50 -0400
-X-MC-Unique: jPBn9JSVOte3qHUnX52gUA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF22D2999B55;
-        Fri,  6 May 2022 17:16:49 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B34D014C2A1E;
-        Fri,  6 May 2022 17:16:49 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.18-rc6
-Date:   Fri,  6 May 2022 13:16:49 -0400
-Message-Id: <20220506171649.1426392-1-pbonzini@redhat.com>
+        Fri, 6 May 2022 13:24:07 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1BBBC35;
+        Fri,  6 May 2022 10:20:21 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so4747527wme.4;
+        Fri, 06 May 2022 10:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WUxbNWTLni10lJjuJKJhKbb9v83zEQhRp5eBEL96koM=;
+        b=GkIrv3mzT75Qub63q/lxL4l/qsbAtTc6bey39A77NKKwdKDr66+pqkJKYFhIlswFGl
+         5hX0kglY89GXZNy6MoAAQpy/gJBhMi2yGVVsNMh4gUmoKFbReu8B7eaK9esWgGrXWpfJ
+         QU2GINJJr4xvfY4kQI5P5kEFM+m78dthKOuI8cOiP7rzkZaYkabF0pouynJHvk4/n+BL
+         kPGasrMnyPbqYCqxLyzzcM2WRhH4KBWFkV1Pw3IehEN0d/aENH9MGRs35zL8JVNNhoEQ
+         4JQ4mMLJAJ/oGQJft/0bnm0i1dP84fbIDEGhcfPT6yFjjwDQ0Xfc9sYP5M5dtqz+/bfB
+         b0yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WUxbNWTLni10lJjuJKJhKbb9v83zEQhRp5eBEL96koM=;
+        b=Rrb9iyQeq9qltGX/IARUnyVRVh2JbxnOYn4y8Dg68wd6IKi4vO8gF4RsaArQt8abMe
+         rddpFm7wMCXPID2ZfU48jKNVOs13gunQB8W6mhUoLsZFssogHr/7HbXJqKx/cHmCa2uB
+         GbB6e114IeTuGTwsb7aTdx0JjqITjF6K5N0xIIaNMrmiU6f5pTteR/8loOPe7Z82b7/l
+         VnHJl9FARr+oG1urcy2lofISCmiRjlvAL3yhrsdwPGomGBWo2XTRTgWsgcje2UJMl2rJ
+         cAh6t/UqD8PyLD6ratj000HSAyYLpmWFe5zLD2sGKYyFWzgNI6mhzLLYAqTn5o43FvfP
+         fHNQ==
+X-Gm-Message-State: AOAM532jiPCuR0f6m869JPgs1QQde65yqXcDKROBCiWCGiR0wQvmJL9Z
+        MZA5TzE2gNh2/ARknvm6wwQ=
+X-Google-Smtp-Source: ABdhPJzBE5WGIiKr8hh0XhehyriBLlbcS+nn9cmXFMkw5iwducWe9VtTfC97AnS2rDg1b438hvKf2w==
+X-Received: by 2002:a05:600c:ad1:b0:394:1585:a164 with SMTP id c17-20020a05600c0ad100b003941585a164mr10837341wmr.101.1651857620015;
+        Fri, 06 May 2022 10:20:20 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.237.75])
+        by smtp.gmail.com with ESMTPSA id x5-20020a05600c2d0500b003942a244f45sm4971966wmf.30.2022.05.06.10.20.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 10:20:19 -0700 (PDT)
+Message-ID: <d68381cf-a9fc-33b8-8a9c-ff8485ba8d19@gmail.com>
+Date:   Fri, 6 May 2022 18:19:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/5] io_uring: let fast poll support multishot
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-4-haoxu.linux@gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20220506070102.26032-4-haoxu.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 5/6/22 08:01, Hao Xu wrote:
+> From: Hao Xu <howeyxu@tencent.com>
+> 
+> For operations like accept, multishot is a useful feature, since we can
+> reduce a number of accept sqe. Let's integrate it to fast poll, it may
+> be good for other operations in the future.
+> 
+> Signed-off-by: Hao Xu <howeyxu@tencent.com>
+> ---
+>   fs/io_uring.c | 41 ++++++++++++++++++++++++++---------------
+>   1 file changed, 26 insertions(+), 15 deletions(-)
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 8ebb1a794e36..d33777575faf 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -5952,7 +5952,7 @@ static void io_poll_remove_entries(struct io_kiocb *req)
+>    * either spurious wakeup or multishot CQE is served. 0 when it's done with
+>    * the request, then the mask is stored in req->cqe.res.
+>    */
+> -static int io_poll_check_events(struct io_kiocb *req, bool locked)
+> +static int io_poll_check_events(struct io_kiocb *req, bool *locked)
+>   {
+>   	struct io_ring_ctx *ctx = req->ctx;
+>   	int v;
+> @@ -5981,17 +5981,26 @@ static int io_poll_check_events(struct io_kiocb *req, bool locked)
+>   
+>   		/* multishot, just fill an CQE and proceed */
+>   		if (req->cqe.res && !(req->apoll_events & EPOLLONESHOT)) {
+> -			__poll_t mask = mangle_poll(req->cqe.res & req->apoll_events);
+> -			bool filled;
+> -
+> -			spin_lock(&ctx->completion_lock);
+> -			filled = io_fill_cqe_aux(ctx, req->cqe.user_data, mask,
+> -						 IORING_CQE_F_MORE);
+> -			io_commit_cqring(ctx);
+> -			spin_unlock(&ctx->completion_lock);
+> -			if (unlikely(!filled))
+> -				return -ECANCELED;
+> -			io_cqring_ev_posted(ctx);
+> +			if (req->flags & REQ_F_APOLL_MULTISHOT) {
+> +				io_tw_lock(req->ctx, locked);
+> +				if (likely(!(req->task->flags & PF_EXITING)))
+> +					io_queue_sqe(req);
 
-The following changes since commit f751d8eac17692905cdd6935f72d523d8adf3b65:
+That looks dangerous, io_queue_sqe() usually takes the request ownership
+and doesn't expect that someone, i.e. io_poll_check_events(), may still be
+actively using it.
 
-  KVM: x86: work around QEMU issue with synthetic CPUID leaves (2022-04-29 15:24:58 -0400)
+E.g. io_accept() fails on fd < 0, return an error,
+io_queue_sqe() -> io_queue_async() -> io_req_complete_failed()
+kills it. Then io_poll_check_events() and polling in general
+carry on using the freed request => UAF. Didn't look at it
+too carefully, but there might other similar cases.
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+> +				else
+> +					return -EFAULT;
+> +			} else {
+> +				__poll_t mask = mangle_poll(req->cqe.res &
+> +							    req->apoll_events);
+> +				bool filled;
+> +
+> +				spin_lock(&ctx->completion_lock);
+> +				filled = io_fill_cqe_aux(ctx, req->cqe.user_data,
+> +							 mask, IORING_CQE_F_MORE);
+> +				io_commit_cqring(ctx);
+> +				spin_unlock(&ctx->completion_lock);
+> +				if (unlikely(!filled))
+> +					return -ECANCELED;
+> +				io_cqring_ev_posted(ctx);
+> +			}
+>   		} else if (req->cqe.res) {
+>   			return 0;
+>   		}
+> @@ -6010,7 +6019,7 @@ static void io_poll_task_func(struct io_kiocb *req, bool *locked)
+>   	struct io_ring_ctx *ctx = req->ctx;
+>   	int ret;
+>   
+> -	ret = io_poll_check_events(req, *locked);
+> +	ret = io_poll_check_events(req, locked);
+>   	if (ret > 0)
+>   		return;
+>   
+> @@ -6035,7 +6044,7 @@ static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+>   	struct io_ring_ctx *ctx = req->ctx;
+>   	int ret;
+>   
+> -	ret = io_poll_check_events(req, *locked);
+> +	ret = io_poll_check_events(req, locked);
+>   	if (ret > 0)
+>   		return;
+>   
+> @@ -6275,7 +6284,7 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
+>   	struct io_ring_ctx *ctx = req->ctx;
+>   	struct async_poll *apoll;
+>   	struct io_poll_table ipt;
+> -	__poll_t mask = EPOLLONESHOT | POLLERR | POLLPRI;
+> +	__poll_t mask = POLLERR | POLLPRI;
+>   	int ret;
+>   
+>   	if (!def->pollin && !def->pollout)
+> @@ -6284,6 +6293,8 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
+>   		return IO_APOLL_ABORTED;
+>   	if ((req->flags & (REQ_F_POLLED|REQ_F_PARTIAL_IO)) == REQ_F_POLLED)
+>   		return IO_APOLL_ABORTED;
+> +	if (!(req->flags & REQ_F_APOLL_MULTISHOT))
+> +		mask |= EPOLLONESHOT;
+>   
+>   	if (def->pollin) {
+>   		mask |= POLLIN | POLLRDNORM;
 
-for you to fetch changes up to 053d2290c0307e3642e75e0185ddadf084dc36c1:
-
-  KVM: VMX: Exit to userspace if vCPU has injected exception and invalid state (2022-05-06 13:08:06 -0400)
-
-----------------------------------------------------------------
-x86:
-
-* Account for family 17h event renumberings in AMD PMU emulation
-
-* Remove CPUID leaf 0xA on AMD processors
-
-* Fix lockdep issue with locking all vCPUs
-
-* Fix loss of A/D bits in SPTEs
-
-* Fix syzkaller issue with invalid guest state
-
-----------------------------------------------------------------
-Kyle Huey (1):
-      KVM: x86/svm: Account for family 17h event renumberings in amd_pmc_perf_hw_id
-
-Paolo Bonzini (2):
-      Merge branch 'kvm-tdp-mmu-atomicity-fix' into HEAD
-      Merge branch 'kvm-amd-pmu-fixes' into HEAD
-
-Peter Gonda (1):
-      KVM: SEV: Mark nested locking of vcpu->lock
-
-Sandipan Das (1):
-      kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
-
-Sean Christopherson (4):
-      KVM: x86/mmu: Don't treat fully writable SPTEs as volatile (modulo A/D)
-      KVM: x86/mmu: Move shadow-present check out of spte_has_volatile_bits()
-      KVM: x86/mmu: Use atomic XCHG to write TDP MMU SPTEs with volatile bits
-      KVM: VMX: Exit to userspace if vCPU has injected exception and invalid state
-
- arch/x86/kvm/cpuid.c        |  5 +++
- arch/x86/kvm/mmu/mmu.c      | 34 +++----------------
- arch/x86/kvm/mmu/spte.c     | 28 ++++++++++++++++
- arch/x86/kvm/mmu/spte.h     |  4 ++-
- arch/x86/kvm/mmu/tdp_iter.h | 34 +++++++++++++++++--
- arch/x86/kvm/mmu/tdp_mmu.c  | 82 +++++++++++++++++++++++++++++----------------
- arch/x86/kvm/svm/pmu.c      | 28 ++++++++++++++--
- arch/x86/kvm/svm/sev.c      | 42 ++++++++++++++++++++---
- arch/x86/kvm/vmx/vmx.c      |  2 +-
- 9 files changed, 190 insertions(+), 69 deletions(-)
-
+-- 
+Pavel Begunkov

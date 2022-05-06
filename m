@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF52C51D749
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB12151D74F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391638AbiEFMIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S1391641AbiEFMKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344614AbiEFMIG (ORCPT
+        with ESMTP id S1344614AbiEFMKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:08:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A839C64BCE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:04:20 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nmwgn-0006Fu-Kp; Fri, 06 May 2022 14:04:05 +0200
-Message-ID: <3a70f1d8-468f-3292-2ddb-7ae4cdc07e6d@pengutronix.de>
-Date:   Fri, 6 May 2022 14:04:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V2] nvmem: add driver handling U-Boot environment
- variables
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
+        Fri, 6 May 2022 08:10:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE9664BC0;
+        Fri,  6 May 2022 05:06:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DCFAB83565;
+        Fri,  6 May 2022 12:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4215CC385A8;
+        Fri,  6 May 2022 12:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651838777;
+        bh=J1BFnOrZCOSHrGx0h+sxgmQe0zh5fq+PoLA/EaqvKIU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MBysmdTypb1LnzcGZ4cJXPF/zQ4aNjd8kO7ekgkF+E5LCDWrQDRbLjkjhZYHjI3VL
+         Kgtq29zORPPwf/ZFbLnq5hw9X9eTFaDAYKao1/IhuBDlhfW6wLdzgKa1pj4YD7fWap
+         nC9DqOef+XuGtLVm6rzS4Si2jwNSQiS6q3GM/vfP8vWQOWqty3wxo2Ayv13cKE/VoP
+         MIQBhBSodm195bXu8Ha3DFijUYQdkXun6oSWnL10mHoGFqWZ53PqqtMQKMWPqAWLWq
+         NfWNVktB2+7dNyeP3Ke1qQ1J381R4470NYJfxDsO9WiMnMtXW1CW+KpVD7mCVUof/i
+         XQZRyUpDnuZCw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmwis-009S7X-Oz; Fri, 06 May 2022 13:06:14 +0100
+Date:   Fri, 06 May 2022 13:06:14 +0100
+Message-ID: <87pmkq7tmx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220503165658.13932-1-zajec5@gmail.com>
- <79c7891a-9a68-a111-094d-be9804071a9e@pengutronix.de>
- <318c0814-7f0b-9798-6998-5039094b010d@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <318c0814-7f0b-9798-6998-5039094b010d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct
+In-Reply-To: <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+References: <20220421074204.1284072-1-hch@lst.de>
+        <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, hch@lst.de, linux@armlinux.org.uk, arnd@kernel.org, andre.przywara@arm.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, gregkh@linuxfoundation.org, stern@rowland.harvard.edu, laurentiu.tudor@nxp.com, m.szyprowski@samsung.com, robin.murphy@arm.com, iommu@lists.linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rafał,
-
-On 05.05.22 07:46, Rafał Miłecki wrote:
-> On 4.05.2022 11:23, Ahmad Fatoum wrote:
->> Hello Rafał,
->>
->> On 03.05.22 18:56, Rafał Miłecki wrote:
->>> From: Rafał Miłecki <rafal@milecki.pl>
->>>
->>> U-Boot stores its setup as environment variables. It's a list of
->>> key-value pairs stored on flash device with a custom header.
->>>
->>> This commit adds an NVMEM driver that:
->>> 1. Provides NVMEM access to environment vars binary data
->>> 2. Extracts variables as NVMEM cells
->>>
->>> It can be used for:
->>> 1. Accessing env variables from user-space
->>
->> Is this already possible? The only interface I know of is the /nvmem
->> file in sysfs, but that one is not per cell, but per device.
+On Fri, 22 Apr 2022 22:17:20 +0100,
+Linus Walleij <linus.walleij@linaro.org> wrote:
 > 
-> Maybe that wasn't precise enough, I should probably write:
-> 1. Parsing binary data from user-space
+> On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
 > 
-> In future I'd like to extend U-Boot's "printenv" tool to support reading
-> env variables blob using Linux's sysfs as documented in the
-> Documentation/ABI/stable/sysfs-bus-nvmem
-
-So, would you use this interface just to save fw_printenv the hassle
-of finding the environment (but redoing parsing) or do you intend
-to preprocess the data too? (e.g. only show the active environment) 
-
-For your use case, it sound like teaching NVMEM core to export
-cells as binary sysfs files would be very useful.
-
->>> +    label = of_get_property(np->parent, "label", NULL);
->>> +    if (!label)
->>> +        label = np->parent->name;
->>> +
->>> +    priv->mtd = get_mtd_device_nm(label);
->>> +    if (IS_ERR(priv->mtd)) {
->>> +        dev_err(dev, "Failed to find \"%s\" MTD device: %ld\n", label, PTR_ERR(priv->mtd));
->>> +        return PTR_ERR(priv->mtd);
->>> +    }
->>
->> I am trying to make sense of this using the binding, but I can't.
->> Do you have an example device tree fragment?
+> > arm is the last platform not using the dma-direct code for directly
+> > mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+> > arm to always use dma-direct now (it already does for LPAE configs
+> > and nommu).  I'd love to merge this series through the dma-mapping tree
+> > as it gives us the opportunity for additional core dma-mapping
+> > improvements.
+> (...)
 > 
-> This comes from unreleased yet board I'm working on.
+> >  b/arch/arm/mach-footbridge/Kconfig                   |    1
+> >  b/arch/arm/mach-footbridge/common.c                  |   19
+> >  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8
+> >  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4
 > 
-> It stores U-Boot env variables in the middle of U-Boot binary.
+> I think Marc Z has a Netwinder that he can test this on. Marc?
+> I have one too, just not much in my office because of parental leave.
 
-Huh, that's an odd layout. I am not sure whether of_get_property to
-arrive at the parent is such a good idea though. Doesn't it enforce
-a limitation that there must not exist two partitions with the same label?
+Finally found some time to hook the machine up and throw a new kernel
+at it. Booted at its usual glacial speed, so FWIW:
 
-Some systems can have a second recovery bootloader for example.
-Given that these are device tree nodes, wouldn't it be possible
-to find the MTD by device tree parent instead of via its label?
-
-> partitions {
->     compatible = "fixed-partitions";
->     #address-cells = <1>;
->     #size-cells = <1>;
-> 
->     partition@0 {
->         label = "loader";
->         reg = <0x0 0x100000>;
-> 
->         partition@40000 {
->             compatible = "u-boot,env";
->             label = "u-boot-env";
->             reg = <0x40000 0x4000>;
->         };
->     };
-> 
->     partition@100000 {
->         label = "image";
->         reg = <0x100000 0x1fe00000>;
->     };
-> };
-
+Tested-by: Marc Zyngier <maz@kernel.org>
 
 Thanks,
-Ahmad
 
+	M.
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Without deviation from the norm, progress is not possible.

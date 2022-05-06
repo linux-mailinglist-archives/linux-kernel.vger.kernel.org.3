@@ -2,190 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35AE51CE1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B268651CEA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387920AbiEFBbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 21:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S1387927AbiEFBbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 21:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386721AbiEFBbL (ORCPT
+        with ESMTP id S1352523AbiEFBbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 21:31:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EA75A593;
-        Thu,  5 May 2022 18:27:28 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvXwl4Ck0zhYpn;
-        Fri,  6 May 2022 09:27:03 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 09:27:25 +0800
-Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_writepages
-To:     Jan Kara <jack@suse.cz>
-References: <20220505135708.2629657-1-yebin10@huawei.com>
- <20220505154713.nig6rj76p2gl5mm7@quack3.lan>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lczerner@redhat.com>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <6274797D.6050303@huawei.com>
-Date:   Fri, 6 May 2022 09:27:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Thu, 5 May 2022 21:31:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D3E5AA40;
+        Thu,  5 May 2022 18:27:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF2C61FDA;
+        Fri,  6 May 2022 01:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C60C385A8;
+        Fri,  6 May 2022 01:27:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651800476;
+        bh=cAQOYpc/BEuhdKQNkv+uO9klIjSDcos54VSXN3Bdukc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rWKsLO0QcrSt83NQ1T1YLZz8Li0i5s2WmCn5oA0rg94MpMAoHyJ9Mh2Hm15iVZQ8G
+         CqZp6MkRGMh1soC1erACMyQ/SHoPhFyCuJUiwQZuInVTNhrCH6KY6pXx7Y4cJ5NgaB
+         nP8Fh8AfsFGkUrArR8pcLjs+08PlnTVoHfPAS+o3Eo1yUkl6P1haNxcaoq9B2ozKaX
+         FQuXPttB6lSZ32Ydp5JDTdwFP+6n13LmOxNs1bOXRVIi2puy05SHdGushwRhpfa9Bc
+         FbdxfR8nXPLZCqcIHxc7fbf6YmPxhgZJatNKGf4JXgT2To3mrvwSdoKP8k+KBwII2L
+         qa2QZOIceX6Nw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v3] f2fs: fix to do sanity check on total_data_blocks
+Date:   Fri,  6 May 2022 09:27:51 +0800
+Message-Id: <20220506012751.3547772-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220505154713.nig6rj76p2gl5mm7@quack3.lan>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As Yanming reported in bugzilla:
 
+https://bugzilla.kernel.org/show_bug.cgi?id=215916
 
-On 2022/5/5 23:47, Jan Kara wrote:
-> On Thu 05-05-22 21:57:08, Ye Bin wrote:
->> we got issue as follows:
->> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
->> ------------[ cut here ]------------
->> kernel BUG at fs/ext4/inode.c:2708!
->> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
->> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
->> RIP: 0010:ext4_writepages+0x1977/0x1c10
->> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
->> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
->> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
->> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
->> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
->> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
->> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>   <TASK>
->>   do_writepages+0x130/0x3a0
->>   filemap_fdatawrite_wbc+0x83/0xa0
->>   filemap_flush+0xab/0xe0
->>   ext4_alloc_da_blocks+0x51/0x120
->>   __ext4_ioctl+0x1534/0x3210
->>   __x64_sys_ioctl+0x12c/0x170
->>   do_syscall_64+0x3b/0x90
->>
->> It may happen as follows:
->> 1. write inline_data inode
->> vfs_write
->>    new_sync_write
->>      ext4_file_write_iter
->>        ext4_buffered_write_iter
->>          generic_perform_write
->> 	  ext4_da_write_begin
->> 	    ext4_da_write_inline_data_begin -> If inline data size too
->> 	    small will allocate block to write, then mapping will has
->> 	    dirty page
->> 	    	ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
->> 2. fallocate
->> do_vfs_ioctl
->>    ioctl_preallocate
->>      vfs_fallocate
->>        ext4_fallocate
->>          ext4_convert_inline_data
->> 	  ext4_convert_inline_data_nolock
->> 	    ext4_map_blocks -> fail will goto restore data
->> 	    ext4_restore_inline_data
->> 	      ext4_create_inline_data
->> 	      ext4_write_inline_data
->> 	      ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
->> 3. writepages
->> __ext4_ioctl
->>    ext4_alloc_da_blocks
->>      filemap_flush
->>        filemap_fdatawrite_wbc
->>          do_writepages
->> 	  ext4_writepages
->> 	    if (ext4_has_inline_data(inode))
->> 	      BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
->>
->> To solved this issue, record origin 'EXT4_STATE_MAY_INLINE_DATA' flag, then pass
->> value to 'ext4_restore_inline_data', 'ext4_restore_inline_data' will
->> decide to if recovery 'EXT4_STATE_MAY_INLINE_DATA' flag according to parameter.
->>
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> I think this will get also fixed by a patch from your colleague I've
-> reviewed here [1], won't it?
->
-> [1] https://lore.kernel.org/all/20220428165725.mvjh6mx7gr5vekqe@quack3.lan
->
-> 								Honza
-The issue I fixed is not the same as the isuue my colleague fixed.
->> ---
->>   fs/ext4/inline.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
->> index 9c076262770d..407061c79adc 100644
->> --- a/fs/ext4/inline.c
->> +++ b/fs/ext4/inline.c
->> @@ -1125,8 +1125,8 @@ static int ext4_update_inline_dir(handle_t *handle, struct inode *dir,
->>   }
->>   
->>   static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
->> -				     struct ext4_iloc *iloc,
->> -				     void *buf, int inline_size)
->> +				     struct ext4_iloc *iloc, void *buf,
->> +				     int inline_size, bool has_data)
->>   {
->>   	int ret;
->>   
->> @@ -1138,7 +1138,8 @@ static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
->>   		return;
->>   	}
->>   	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
->> -	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->> +	if (has_data)
->> +		ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->>   }
->>   
->>   static int ext4_finish_convert_inline_dir(handle_t *handle,
->> @@ -1194,6 +1195,7 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->>   	struct buffer_head *data_bh = NULL;
->>   	struct ext4_map_blocks map;
->>   	int inline_size;
->> +	bool has_data;
->>   
->>   	inline_size = ext4_get_inline_size(inode);
->>   	buf = kmalloc(inline_size, GFP_NOFS);
->> @@ -1222,6 +1224,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->>   	if (error)
->>   		goto out;
->>   
->> +	has_data = !!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->> +
->>   	map.m_lblk = 0;
->>   	map.m_len = 1;
->>   	map.m_flags = 0;
->> @@ -1262,7 +1266,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->>   	unlock_buffer(data_bh);
->>   out_restore:
->>   	if (error)
->> -		ext4_restore_inline_data(handle, inode, iloc, buf, inline_size);
->> +		ext4_restore_inline_data(handle, inode, iloc, buf,
->> +					 inline_size, has_data);
->>   
->>   out:
->>   	brelse(data_bh);
->> -- 
->> 2.31.1
->>
+The kernel message is shown below:
+
+kernel BUG at fs/f2fs/segment.c:2560!
+Call Trace:
+ allocate_segment_by_default+0x228/0x440
+ f2fs_allocate_data_block+0x13d1/0x31f0
+ do_write_page+0x18d/0x710
+ f2fs_outplace_write_data+0x151/0x250
+ f2fs_do_write_data_page+0xef9/0x1980
+ move_data_page+0x6af/0xbc0
+ do_garbage_collect+0x312f/0x46f0
+ f2fs_gc+0x6b0/0x3bc0
+ f2fs_balance_fs+0x921/0x2260
+ f2fs_write_single_data_page+0x16be/0x2370
+ f2fs_write_cache_pages+0x428/0xd00
+ f2fs_write_data_pages+0x96e/0xd50
+ do_writepages+0x168/0x550
+ __writeback_single_inode+0x9f/0x870
+ writeback_sb_inodes+0x47d/0xb20
+ __writeback_inodes_wb+0xb2/0x200
+ wb_writeback+0x4bd/0x660
+ wb_workfn+0x5f3/0xab0
+ process_one_work+0x79f/0x13e0
+ worker_thread+0x89/0xf60
+ kthread+0x26a/0x300
+ ret_from_fork+0x22/0x30
+RIP: 0010:new_curseg+0xe8d/0x15f0
+
+The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
+stat info indicates filesystem has free blocks, but SIT table indicates
+filesystem has no free segment.
+
+So that during garbage colloection, it triggers panic when LFS allocator
+fails to find free segment.
+
+This patch tries to fix this issue by checking consistency in between
+ckpt.valid_block_count and block accounted from SIT.
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v3:
+- clean up codes.
+ fs/f2fs/segment.c | 36 +++++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
+
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 3a3e2cec2ac4..cf466b84500d 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4461,7 +4461,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	unsigned int i, start, end;
+ 	unsigned int readed, start_blk = 0;
+ 	int err = 0;
+-	block_t total_node_blocks = 0;
++	block_t sit_valid_blocks[2] = {0, 0};
++	int type;
+ 
+ 	do {
+ 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
+@@ -4486,8 +4487,9 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 			if (err)
+ 				return err;
+ 			seg_info_from_raw_sit(se, &sit);
+-			if (IS_NODESEG(se->type))
+-				total_node_blocks += se->valid_blocks;
++
++			type = IS_NODESEG(se->type) ? NODE : DATA;
++			sit_valid_blocks[type] += se->valid_blocks;
+ 
+ 			if (f2fs_block_unit_discard(sbi)) {
+ 				/* build discard map only one time */
+@@ -4527,15 +4529,16 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 		sit = sit_in_journal(journal, i);
+ 
+ 		old_valid_blocks = se->valid_blocks;
+-		if (IS_NODESEG(se->type))
+-			total_node_blocks -= old_valid_blocks;
++
++		type = IS_NODESEG(se->type) ? NODE : DATA;
++		sit_valid_blocks[type] -= old_valid_blocks;
+ 
+ 		err = check_block_count(sbi, start, &sit);
+ 		if (err)
+ 			break;
+ 		seg_info_from_raw_sit(se, &sit);
+-		if (IS_NODESEG(se->type))
+-			total_node_blocks += se->valid_blocks;
++
++		sit_valid_blocks[type] += se->valid_blocks;
+ 
+ 		if (f2fs_block_unit_discard(sbi)) {
+ 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
+@@ -4557,13 +4560,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	}
+ 	up_read(&curseg->journal_rwsem);
+ 
+-	if (!err && total_node_blocks != valid_node_count(sbi)) {
++	if (err)
++		return err;
++
++	if (sit_valid_blocks[NODE] != valid_node_count(sbi)) {
+ 		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
+-			 total_node_blocks, valid_node_count(sbi));
+-		err = -EFSCORRUPTED;
++			 sit_valid_blocks[NODE], valid_node_count(sbi));
++		return -EFSCORRUPTED;
+ 	}
+ 
+-	return err;
++	if (sit_valid_blocks[DATA] + sit_valid_blocks[NODE] >
++				valid_user_blocks(sbi)) {
++		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
++			 sit_valid_blocks[DATA], sit_valid_blocks[NODE],
++			 valid_user_blocks(sbi));
++		return -EFSCORRUPTED;
++	}
++
++	return 0;
+ }
+ 
+ static void init_free_segmap(struct f2fs_sb_info *sbi)
+-- 
+2.25.1
 

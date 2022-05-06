@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175F151DBA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79FE51DB98
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442803AbiEFPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S1442719AbiEFPM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442745AbiEFPNO (ORCPT
+        with ESMTP id S1384705AbiEFPMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:13:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508626D1AD;
-        Fri,  6 May 2022 08:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651849771; x=1683385771;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=ozT16fP9uZM5368h+nOi7loe0DpIGRiHdi5VvAV0IK0=;
-  b=ixlA1t7lhVSKaLRBZ2tkL+gkRCScTiCGL6gtkn/AnoXOgYwsNT2qM1Wp
-   S2Ufn4+WDykSy+TlYbSCH/LAm+oiUCeET7KUnWeux4dmwYQExpPFCqtrT
-   pFjHa2Aw0ZEtj0b7xlxipWfauMUJZc6rnBSsHfpcQ1DcupWt5Ydq8ucwm
-   wt06347UjV9lVgeoVwc1bhu6NDTFffbhJHPlYsxRZsyqmVYX7dSwF20sQ
-   TuSgqIQgIcfR0w198pvwZmjHzhB27TCPrNOZfN4QRiw3slYIGp6bz0AW0
-   AOuu9k6kAQ2DXLBxIbhYbjZ8RvLSHMbJZikEkUPicNjy0gGFFfuPB5HAk
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="250492651"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250492651"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:09:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="654731889"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 May 2022 08:09:02 -0700
-Received: from [10.252.212.236] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 9FD8558093E;
-        Fri,  6 May 2022 08:09:00 -0700 (PDT)
-Message-ID: <d2d17aa4-58fc-3621-59bb-0c9ce751ebd1@linux.intel.com>
-Date:   Fri, 6 May 2022 11:08:59 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v11 14/16] KVM: x86/vmx: Flip Arch LBREn bit on guest
- state change
-Content-Language: en-US
-To:     Yang Weijiang <weijiang.yang@intel.com>, pbonzini@redhat.com,
-        jmattson@google.com, seanjc@google.com, like.xu.linux@gmail.com,
-        vkuznets@redhat.com, wei.w.wang@intel.com, kvm@vger.kernel.org,
+        Fri, 6 May 2022 11:12:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18296D18A;
+        Fri,  6 May 2022 08:09:02 -0700 (PDT)
+Date:   Fri, 06 May 2022 15:09:00 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651849741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U+sm8uFM7FbDhHcUsqKlMjO2L9gyZokheSMjZgtSp+U=;
+        b=wRDIGubs7mI17xtYSS0mLs6KbAY4NBlRX16QMExtxFuMtxX5tqPN6d/gr23dmn7cpZsDM9
+        p8oWgBOdibD9FQ3DXKiFDm/slsglbmyXTdoEh9oU2PXla2jA5KaRdoBWOggNivTGLUx+xI
+        K6QyQnjpBrTQvq0C+gs6ucAOrdXcQEE2kxmzNX/pf0nmGw6D5qONtDlPYC5aP49ua2nZ0R
+        WkB89YctWQkJUlP3gRj9C8F5UIlwhUCfNSlS0PiIUD8GpmYEXcdpqagxQGsNVcMDrhcGhi
+        08o+tH8UQOg90Iqx0ujyeVlO49MlxRetPV8xlpJ4+8kYcsOi+axVvpknuH/G0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651849741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U+sm8uFM7FbDhHcUsqKlMjO2L9gyZokheSMjZgtSp+U=;
+        b=MmYkwjCGJ9cT+OwLFXVCugTA+GwUgYytuVR4CV54sXbBve/aZK/PVrFLiwiu/KgmPG92AU
+        yeZcEOV2l0XaCmAw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/asm] x86/entry: Remove skip_r11rcx
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220506033305.5135-1-weijiang.yang@intel.com>
- <20220506033305.5135-15-weijiang.yang@intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220506033305.5135-15-weijiang.yang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220506121631.365070674@infradead.org>
+References: <20220506121631.365070674@infradead.org>
+MIME-Version: 1.0
+Message-ID: <165184974055.4207.14612212537129433465.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +65,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/asm branch of tip:
 
+Commit-ID:     1b331eeea7b8676fc5dbdf80d0a07e41be226177
+Gitweb:        https://git.kernel.org/tip/1b331eeea7b8676fc5dbdf80d0a07e41be226177
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 06 May 2022 14:14:35 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 06 May 2022 15:58:19 +02:00
 
-On 5/5/2022 11:33 PM, Yang Weijiang wrote:
-> Per spec:"IA32_LBR_CTL.LBREn is saved and cleared on #SMI, and restored
-> on RSM. On a warm reset, all LBR MSRs, including IA32_LBR_DEPTH, have their
-> values preserved. However, IA32_LBR_CTL.LBREn is cleared to 0, disabling
-> LBRs." So clear Arch LBREn bit on #SMI and restore it on RSM manully, also
-> clear the bit when guest does warm reset.
-> 
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+x86/entry: Remove skip_r11rcx
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Yes, r11 and rcx have been restored previously, but since they're being
+popped anyway (into rsi) might as well pop them into their own regs --
+setting them to the value they already are.
 
-> ---
->   arch/x86/kvm/vmx/vmx.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 6d6ee9cf82f5..b38f58868905 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4593,6 +4593,8 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->   	if (!init_event) {
->   		if (static_cpu_has(X86_FEATURE_ARCH_LBR))
->   			vmcs_write64(GUEST_IA32_LBR_CTL, 0);
-> +	} else {
-> +		flip_arch_lbr_ctl(vcpu, false);
->   	}
->   }
->   
-> @@ -7704,6 +7706,7 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
->   	vmx->nested.smm.vmxon = vmx->nested.vmxon;
->   	vmx->nested.vmxon = false;
->   	vmx_clear_hlt(vcpu);
-> +	flip_arch_lbr_ctl(vcpu, false);
->   	return 0;
->   }
->   
-> @@ -7725,6 +7728,7 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
->   		vmx->nested.nested_run_pending = 1;
->   		vmx->nested.smm.guest_mode = false;
->   	}
-> +	flip_arch_lbr_ctl(vcpu, true);
->   	return 0;
->   }
->   
+Less magical code.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220506121631.365070674@infradead.org
+---
+ arch/x86/entry/calling.h  | 10 +---------
+ arch/x86/entry/entry_64.S |  3 +--
+ 2 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+index debbe94..a97cc78 100644
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -120,27 +120,19 @@ For 32-bit we have the following conventions - kernel is built with
+ 	CLEAR_REGS
+ .endm
+ 
+-.macro POP_REGS pop_rdi=1 skip_r11rcx=0
++.macro POP_REGS pop_rdi=1
+ 	popq %r15
+ 	popq %r14
+ 	popq %r13
+ 	popq %r12
+ 	popq %rbp
+ 	popq %rbx
+-	.if \skip_r11rcx
+-	popq %rsi
+-	.else
+ 	popq %r11
+-	.endif
+ 	popq %r10
+ 	popq %r9
+ 	popq %r8
+ 	popq %rax
+-	.if \skip_r11rcx
+-	popq %rsi
+-	.else
+ 	popq %rcx
+-	.endif
+ 	popq %rdx
+ 	popq %rsi
+ 	.if \pop_rdi
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 3121866..3a1e3f2 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -191,8 +191,7 @@ SYM_INNER_LABEL(entry_SYSCALL_64_after_hwframe, SYM_L_GLOBAL)
+ 	 * perf profiles. Nothing jumps here.
+ 	 */
+ syscall_return_via_sysret:
+-	/* rcx and r11 are already restored (see code above) */
+-	POP_REGS pop_rdi=0 skip_r11rcx=1
++	POP_REGS pop_rdi=0
+ 
+ 	/*
+ 	 * Now all regs are restored except RSP and RDI.

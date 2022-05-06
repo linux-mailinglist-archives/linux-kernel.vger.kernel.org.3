@@ -2,209 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24EE51DFA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C01051DFA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390848AbiEFTdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S1390729AbiEFTcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiEFTdN (ORCPT
+        with ESMTP id S236285AbiEFTc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:33:13 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF57F6D868
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:29:28 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id m23so10387642ljb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 12:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=KWAb658hWnEyrNgr/yyrfE4nucb98F+3qRmQt1CMXNA=;
-        b=G/TjzTQMF1GsQTZOCwfujliBF5HfJ5GxX8JkT7vDeyvg5KUQUOMV7XEtC6MmaPQGPx
-         vhCqL1NN0ajISS2f5/HLS0G4JOZ6J0ehLRpNWgpeo3/byghb7omWCXJKirrgPdRi4h+G
-         elmvcOwiVB0KrZMyC6FV+JiyRVKQY667j3Vl70wZnt6RZJwD7IIHdFX0mrzOo/FuDgz5
-         /ViZkoq02gVCwy3ERveiYb6XZe0GEe1DdKy2aiPGKGAUo38kAuG+rBL50vxkpDyaMyos
-         G9bVpgU0U8+7maS6R2RLUVPa1mK/ghZnh2yhqf+bP6IvFBrl9Ll2C1tJYNMQDzvMvr82
-         tMrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=KWAb658hWnEyrNgr/yyrfE4nucb98F+3qRmQt1CMXNA=;
-        b=NTTsTdmSl79WcN5XkXDeAvl+mz+ckwPQxzp7m66+zenaiDYUkRCCfRf29cJ2tsAece
-         yWKErHvKmIWY1tSGgzNgJc41uisYEMUcpS6/tloI33sqfwod4k+VG90wGMJ/QcWdsXcg
-         6DfjQkwRUgyef5h/+eaCXf3/bNke/s9xafmuOMr7jA03HiervOkFF6RL173knwAE+6PV
-         bMvE4HFPetPpWMztFZN65pouVKDfWzZ2VPwXgrqFnnlEBgxc4pAL8EKNXhXVDEmsXoJk
-         41EdNVKEQQS1UDrH0X9hAVU0o2ACqZVZcpqCQa0mF4n7VLNow6pQrPoNDlyoVPS/wplI
-         FTXw==
-X-Gm-Message-State: AOAM533p3X3rnZTOpgduw6qjj43W6699wNGSzikLA8YTwNDcGTNfprnJ
-        rAS7BFbUuqbTL3ANINrDPEAH4PFf+JUBc8Dz
-X-Google-Smtp-Source: ABdhPJyWWGiCkdIxMCIxqsLpBldxBZhSAlwBUjCRBsmjDFAzoM8XzNWYWeUahljwmbUXpjrOAeyuEg==
-X-Received: by 2002:a2e:a794:0:b0:250:5de1:1ec5 with SMTP id c20-20020a2ea794000000b002505de11ec5mr2859520ljf.270.1651865367120;
-        Fri, 06 May 2022 12:29:27 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id u24-20020a196a18000000b0047255d21180sm791507lfu.175.2022.05.06.12.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 12:29:26 -0700 (PDT)
-Message-ID: <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org>
-Date:   Fri, 6 May 2022 22:29:25 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
-To:     Shakeel Butt <shakeelb@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
-References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
-Content-Language: en-US
-In-Reply-To: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 15:32:29 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8846D859
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:28:45 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246EW43t016894;
+        Fri, 6 May 2022 19:28:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=fQjOyeeu4rCXpd/WBXik1+WaR4zHHSl96tEv2uvVn40=;
+ b=Oi1Oazhgi0ZyaSf+NXLnYW9uXb7J4hkH4g/8Isd1rDjKUpx7siizzOrtj0bJJw2Iqz2Y
+ hGj9CRbRaTBaEjwbfT5TElm4hrKgnnzmO8m+/D2kfBKyhLIJB63NuzXCGyKk6mgqfKrp
+ OEF8C0uLgocdRMV1pBmraPeujtPsZy484HPljEkUhvdig1nWSAaR1oJm5VUay/x0MlHN
+ pHaQbOSqvYY/rygLgEub8viEFkyc3uHj79DQyCwaicRF5M9OIAXMxMXOjD2WpRvq/onF
+ 7BR/bpSqn1vYpppq84hfwirI9bGgQ9Sl+c2Q3mHJG1yha7tpLrzlt8dtU2UTVIriGPDT bQ== 
+Received: from g4t3425.houston.hpe.com (g4t3425.houston.hpe.com [15.241.140.78])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3fvys9d591-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 19:28:23 +0000
+Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
+        by g4t3425.houston.hpe.com (Postfix) with ESMTP id CCD4C8D;
+        Fri,  6 May 2022 19:28:22 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 25E9645;
+        Fri,  6 May 2022 19:28:22 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     nick.hawkins@hpe.com, verdun@hpe.com, linux@armlinux.org.uk,
+        will@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, joel@jms.id.au
+Subject: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
+Date:   Fri,  6 May 2022 14:29:57 -0500
+Message-Id: <20220506192957.24889-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: Ih6rWAvulyXm1s6NV2OpzpRd42sWzueQ
+X-Proofpoint-ORIG-GUID: Ih6rWAvulyXm1s6NV2OpzpRd42sWzueQ
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_07,2022-05-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 mlxscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=939 adultscore=0 impostorscore=0 bulkscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205060097
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added call_site, bytes_alloc and gfp_flags fields to the output
-of the percpu_alloc_percpu ftrace event:
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-mkdir-4393  [001]   169.334788: percpu_alloc_percpu:
- call_site=mem_cgroup_css_alloc+0xa6 reserved=0 is_atomic=0 size=2408 align=8
-  base_addr=0xffffc7117fc00000 off=402176 ptr=0x3dc867a62300 bytes_alloc=14448
-   gfp_flags=GFP_KERNEL_ACCOUNT
+Enable the workaround for the 764319 Cortex A-9 erratum.
+CP14 read accesses to the DBGPRSR and DBGOSLSR registers generate an
+unexpected Undefined Instruction exception when the DBGSWENABLE external
+pin is set to 0, even when the CP14 accesses are performed from a
+privileged mode. The work around catches the exception in a way
+the kernel does not stop execution with the use of undef_hook. This
+has been found to effect the HPE GXP SoC.
 
-This is required to track memcg-accounted percpu allocations.
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 ---
-v2: added call_site, improved patch description
----
- include/trace/events/percpu.h | 23 +++++++++++++++++------
- mm/percpu-internal.h          |  8 ++++----
- mm/percpu.c                   |  5 +++--
- 3 files changed, 24 insertions(+), 12 deletions(-)
+ arch/arm/Kconfig                | 11 +++++++++++
+ arch/arm/kernel/hw_breakpoint.c | 26 ++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/include/trace/events/percpu.h b/include/trace/events/percpu.h
-index df112a64f6c9..e989cefc0def 100644
---- a/include/trace/events/percpu.h
-+++ b/include/trace/events/percpu.h
-@@ -6,15 +6,20 @@
- #define _TRACE_PERCPU_H
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 13f77eec7c40..6944adfb0fae 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -974,6 +974,17 @@ config ARM_ERRATA_764369
+ 	  relevant cache maintenance functions and sets a specific bit
+ 	  in the diagnostic control register of the SCU.
  
- #include <linux/tracepoint.h>
-+#include <trace/events/mmflags.h>
- 
- TRACE_EVENT(percpu_alloc_percpu,
- 
--	TP_PROTO(bool reserved, bool is_atomic, size_t size,
--		 size_t align, void *base_addr, int off, void __percpu *ptr),
-+	TP_PROTO(unsigned long call_site,
-+		 bool reserved, bool is_atomic, size_t size,
-+		 size_t align, void *base_addr, int off,
-+		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
- 
--	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr),
-+	TP_ARGS(call_site, reserved, is_atomic, size, align, base_addr, off,
-+		ptr, bytes_alloc, gfp_flags),
- 
- 	TP_STRUCT__entry(
-+		__field(	unsigned long,		call_site	)
- 		__field(	bool,			reserved	)
- 		__field(	bool,			is_atomic	)
- 		__field(	size_t,			size		)
-@@ -22,9 +27,11 @@ TRACE_EVENT(percpu_alloc_percpu,
- 		__field(	void *,			base_addr	)
- 		__field(	int,			off		)
- 		__field(	void __percpu *,	ptr		)
-+		__field(	size_t,			bytes_alloc	)
-+		__field(	gfp_t,			gfp_flags	)
- 	),
--
- 	TP_fast_assign(
-+		__entry->call_site	= call_site;
- 		__entry->reserved	= reserved;
- 		__entry->is_atomic	= is_atomic;
- 		__entry->size		= size;
-@@ -32,12 +39,16 @@ TRACE_EVENT(percpu_alloc_percpu,
- 		__entry->base_addr	= base_addr;
- 		__entry->off		= off;
- 		__entry->ptr		= ptr;
-+		__entry->bytes_alloc	= bytes_alloc;
-+		__entry->gfp_flags	= gfp_flags;
- 	),
- 
--	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p",
-+	TP_printk("call_site=%pS reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p bytes_alloc=%zu gfp_flags=%s",
-+		  (void *)__entry->call_site,
- 		  __entry->reserved, __entry->is_atomic,
- 		  __entry->size, __entry->align,
--		  __entry->base_addr, __entry->off, __entry->ptr)
-+		  __entry->base_addr, __entry->off, __entry->ptr,
-+		  __entry->bytes_alloc, show_gfp_flags(__entry->gfp_flags))
- );
- 
- TRACE_EVENT(percpu_free_percpu,
-diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
-index 411d1593ef23..70b1ea23f4d2 100644
---- a/mm/percpu-internal.h
-+++ b/mm/percpu-internal.h
-@@ -113,7 +113,6 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
- 	return pcpu_nr_pages_to_map_bits(chunk->nr_pages);
++config ARM_ERRATA_764319
++	bool "ARM errata: Read to DBGPRSR and DBGOSLSR may generate Undefined instruction"
++	depends on CPU_V7
++	help
++	  This option enables the workaround for the 764319 Cortex A-9 erratum.
++	  CP14 read accesses to the DBGPRSR and DBGOSLSR registers generate an
++	  unexpected Undefined Instruction exception when the DBGSWENABLE
++	  external pin is set to 0, even when the CP14 accesses are performed
++	  from a privileged mode. This work around catches the exception in a
++	  way the kernel does not stop execution.
++
+ config ARM_ERRATA_775420
+        bool "ARM errata: A data cache maintenance operation which aborts, might lead to deadlock"
+        depends on CPU_V7
+diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoint.c
+index b1423fb130ea..c41a8436a796 100644
+--- a/arch/arm/kernel/hw_breakpoint.c
++++ b/arch/arm/kernel/hw_breakpoint.c
+@@ -941,6 +941,23 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
+ 	return ret;
  }
  
--#ifdef CONFIG_MEMCG_KMEM
- /**
-  * pcpu_obj_full_size - helper to calculate size of each accounted object
-  * @size: size of area to allocate in bytes
-@@ -123,13 +122,14 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
-  */
- static inline size_t pcpu_obj_full_size(size_t size)
- {
--	size_t extra_size;
-+	size_t extra_size = 0;
- 
--	extra_size = size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
-+#ifdef CONFIG_MEMCG_KMEM
-+	extra_size += size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
++#ifdef CONFIG_ARM_ERRATA_764319
++int oslsr_fault;
++
++static int debug_oslsr_trap(struct pt_regs *regs, unsigned int instr)
++{
++	oslsr_fault = 1;
++	instruction_pointer(regs) += 4;
++	return 0;
++}
++
++static struct undef_hook debug_oslsr_hook = {
++	.instr_mask  = 0xffffffff,
++	.instr_val = 0xee115e91,
++	.fn = debug_oslsr_trap,
++};
 +#endif
- 
- 	return size * num_possible_cpus() + extra_size;
- }
--#endif /* CONFIG_MEMCG_KMEM */
- 
- #ifdef CONFIG_PERCPU_STATS
- 
-diff --git a/mm/percpu.c b/mm/percpu.c
-index ea28db283044..3633eeefaa0d 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -1884,8 +1884,9 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
- 	ptr = __addr_to_pcpu_ptr(chunk->base_addr + off);
- 	kmemleak_alloc_percpu(ptr, size, gfp);
- 
--	trace_percpu_alloc_percpu(reserved, is_atomic, size, align,
--			chunk->base_addr, off, ptr);
-+	trace_percpu_alloc_percpu(_RET_IP_, reserved, is_atomic, size, align,
-+				  chunk->base_addr, off, ptr,
-+				  pcpu_obj_full_size(size), gfp);
- 
- 	pcpu_memcg_post_alloc_hook(objcg, chunk, off, size);
- 
++
+ /*
+  * One-time initialisation.
+  */
+@@ -974,7 +991,16 @@ static bool core_has_os_save_restore(void)
+ 	case ARM_DEBUG_ARCH_V7_1:
+ 		return true;
+ 	case ARM_DEBUG_ARCH_V7_ECP14:
++#ifdef CONFIG_ARM_ERRATA_764319
++		oslsr_fault = 0;
++		register_undef_hook(&debug_oslsr_hook);
+ 		ARM_DBG_READ(c1, c1, 4, oslsr);
++		unregister_undef_hook(&debug_oslsr_hook);
++		if (oslsr_fault)
++			return false;
++#else
++		ARM_DBG_READ(c1, c1, 4, oslsr);
++#endif
+ 		if (oslsr & ARM_OSLSR_OSLM0)
+ 			return true;
+ 		fallthrough;
 -- 
-2.31.1
+2.17.1
 

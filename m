@@ -2,113 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D247C51CF6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450DB51CF95
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388552AbiEFDcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S1388607AbiEFDgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388539AbiEFDcC (ORCPT
+        with ESMTP id S1346609AbiEFDgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:32:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B15644C0;
-        Thu,  5 May 2022 20:28:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 219B5B832C4;
-        Fri,  6 May 2022 03:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685DEC385AC;
-        Fri,  6 May 2022 03:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651807698;
-        bh=/Busav/MercVn3U7qos3BeCdpeFW+y8S+aaQ9UEgLOg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jsBG26qh+s213Ai58L/c76nzSly7WUrMn1CW1KN9i9Ky51OURpsDA8Sue2D1CJ9Sq
-         D8CjECh08aUOh24sOOD33Rszb5HqzS3oCrMHt7J9QZ5KK7ThbTIN8fWjSxQGvAxN6Q
-         wdSWi/aFNzQ4Fsh/B+YFmhpQTvm3gFaA7Eu/Kznm3H/n3c1g3DKxwrUj8NDa4bbkUr
-         dTaDkNqV1drIVgG1E8DYViBhnnKaMxvcP6cr9gNLtlfs6p8gtWeqONXKRInUx3IuES
-         matYNYW+DmzRSrK9oWJeilQ6ahPS2ea5Mt7yGypTxX+HYFgfWH2LN7Lpta8o7j2xya
-         hf/isN0EBWRXQ==
-Message-ID: <366d529e-6149-423a-e012-dbfd9c41baac@kernel.org>
-Date:   Thu, 5 May 2022 20:28:16 -0700
+        Thu, 5 May 2022 23:36:09 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BC03FBCC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:32:27 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id i1so6196411plg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=asq1GsK2iP60zPURDoJiaqZrj1b/oRYrh2NIL66ASXY=;
+        b=A5R+QgbkQY/b9pt/zpN4FQSLdc75DJtMIayyn5WIe1M8RAn5/H92sELF5NQSRbYwaP
+         h0KnGXdji5cdjXEl9Yeo1eDyfPEoc99H3bfSd+F2l1ihlR0cRc7LocmA+Y34+hwQK+jD
+         HS3mTrHBIyHs+ZjqKGJOW5PhD31HK0S5UWooJflZSS6AFdyPyOJBx6bB9btEWOO6itiy
+         /vB8Ko49CwAQdUxK2/kXLOTaBNOg0l6Y2hRBXFaKs/NKtibrZF3z/ExqnnKwe4jXlAXX
+         QAhuM9HqDlFQUeQX+3+N0zz9U6TNDtN5J8MmqWLNa7xUSBLFpBitD68Kx81P7nKR445K
+         ETQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=asq1GsK2iP60zPURDoJiaqZrj1b/oRYrh2NIL66ASXY=;
+        b=3azAW9SkeNATUntF76pw2W7t9ghcFp2SCWyp+BJsAnFIQ/yDz11RJStiViX6aZPpI4
+         P0w0DmTdN7cQdWHAEVJYsaJ6lX6NND4QIYrYK3g7WMJEdTT2R/2ITh9RGnBF0BEvmyrv
+         KSwSysFaWmrXT2LxgD4FOz1nr8il5pkBW/de/jqK3o9Do/l2SFK4ck74JbZFogzO1gT3
+         f7ymGBqegQi0h1vkUGeTHwbWgwAm/ANF3ZICUmII09BTLBt+Wjy+hBA4mtHyqVgZTrhN
+         YcuAGn7o12I2SF/l7SnCMAOvctKZIWu+dvlsIwYXxO2WZHiE4nHNuE87L4uPvAAu/ZAQ
+         y7vA==
+X-Gm-Message-State: AOAM53306kGAev2EO3ouvW+sFye2ysxr98oFFDhaSv1sEQPSba3VtYqs
+        EcB43k2n8SONSIG5ecROakpMtzA0On8qaA==
+X-Google-Smtp-Source: ABdhPJzUQR4zLt0S+U3opN35Ejwzugn4AwM70j+cIKNxj/BkVwRUQvHT3NOFZ9B0ZDH+yZ1YttAyDw==
+X-Received: by 2002:a17:903:110c:b0:14d:8859:5c8 with SMTP id n12-20020a170903110c00b0014d885905c8mr1578557plh.156.1651807947447;
+        Thu, 05 May 2022 20:32:27 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b0015e8d4eb2a3sm383395pls.237.2022.05.05.20.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 20:32:26 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:02:23 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
+Message-ID: <20220506033223.6ixlse3psixfeec7@vireshk-i7>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+ <20220505115226.20130-6-rex-bc.chen@mediatek.com>
+ <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
+ <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [net PATCH] ipv4: drop dst in multicast routing path
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, tgraf@suug.ch,
-        lokesh.dhoundiyal@alliedtelesis.co.nz
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 7:00 PM, Chris Packham wrote:
-> From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-> 
-> kmemleak reports the following when routing multicast traffic over an
-> ipsec tunnel.
-> 
-> Kmemleak output:
-> unreferenced object 0x8000000044bebb00 (size 256):
->   comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
->     80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000f83947e0>] __kmalloc+0x1e8/0x300
->     [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
->     [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
->     [<00000000824f6cf1>] gre_rcv+0x178/0x540
->     [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
->     [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
->     [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
->     [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
->     [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
->     [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
->     [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
->     [<00000000013d7914>] irq_exit+0xc4/0xe0
->     [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
->     [<000000000751eb8e>] handle_int+0x16c/0x178
->     [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
-> 
-> The metadata dst is leaked when ip_route_input_mc() updates the dst for
-> the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
-> handled dropping the dst in ip_route_input_slow() but missed the
-> multicast case which is handled by ip_route_input_mc(). Drop the dst in
-> ip_route_input_mc() avoiding the leak.
-> 
-> Fixes: f38a9eb1f77b ("dst: Metadata destinations")
-> Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     We started seeing this leak in our scenario after commit c0d59da79534
->     ("ip_gre: Make none-tun-dst gre tunnel store tunnel info as metadat_dst
->     in recv") but there may be other paths that hit the leak so I've set the
->     fixes tag as f38a9eb1f77b ("dst: Metadata destinations").
-> 
->  net/ipv4/route.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
++Konstantin
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+On 06-05-22, 11:22, Chen-Yu Tsai wrote:
+> On Fri, May 6, 2022 at 9:56 AM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+> >
+> > On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
+> > > From this opp notifier, cpufreq should listen to opp notification and
+> > > do
+> >
+> > Hello Viresh,
+> >
+> > There is still ">" in this patch...
+> > I think the root cause could be the "From" word in the beginning of
+> > this message.
+> > I will not use "From" in next version..
+> 
+> Could this be a bug in lore?
+> 
+> I'm not seeing this extra ">" in either the email in my inbox, viewed
+> raw, nor the patch downloaded from patchwork [1].
+> 
+> 
+> ChenYu
+> 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220505115226.20130-6-rex-bc.chen@mediatek.com/mbox/
 
+Interesting.
 
+Konstantin, we are witnessing an additional ">" symbol in the first
+line of the commit log for this particular patch for some reason.
+
+https://lore.kernel.org/lkml/20220505115226.20130-6-rex-bc.chen@mediatek.com/raw
+
+Any idea ?
+
+-- 
+viresh

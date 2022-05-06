@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782F651D37A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8A451D382
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244639AbiEFIjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S1390189AbiEFIl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390195AbiEFIjN (ORCPT
+        with ESMTP id S233691AbiEFIlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:39:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7489AF21;
-        Fri,  6 May 2022 01:35:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B066A21A32;
-        Fri,  6 May 2022 08:35:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651826125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLTw3J5HqlJGXaem/7/GBVpCJVJMfm3k1q3z73ZMkPw=;
-        b=1Yy/gjrYQLm4DghIDFhD/IrLawONoyxXP5fOdpWyFVG4MSJevaI5r46X34PjzhRQ8GDjJ0
-        eIo/wkkeVpmBxFTPWOi5XkpXYNGx+tQQBEF6QIRloZ2cfaf/2ELMa8SyrummqomKCkpYaJ
-        aiakOCQQYpN+Slsuwruruoq1Uc8N6Rk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651826125;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLTw3J5HqlJGXaem/7/GBVpCJVJMfm3k1q3z73ZMkPw=;
-        b=l0VFkJAOc+cqSSLs18nzyG9/resunTOXRHoe0KSkn9/d64u9N6r2B5secCGatv/Bk+14Fm
-        M3NdS/OdqZ7Bc+CA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2B9D12C142;
-        Fri,  6 May 2022 08:35:25 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D0378A0629; Fri,  6 May 2022 10:35:23 +0200 (CEST)
-Date:   Fri, 6 May 2022 10:35:23 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>
-Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <20220506083523.drdj2ahjw6abimus@quack3.lan>
-References: <cover.1651174324.git.rgb@redhat.com>
- <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
- <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com>
- <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
- <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
- <CAOQ4uxjkJ37Nzke4YN_se4ztr-yZgm6SK_LhmBQ-ckWutOwWrQ@mail.gmail.com>
+        Fri, 6 May 2022 04:41:25 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B08124BCA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:37:43 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s27so8448868ljd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aBTMT471I9stUbpF2UehdHUpsXmRCKk3eSoYzUSJuAk=;
+        b=CzymT0keOAYq12hGiC9tdUPQ+0cbAR90o88Qaqegg+N9B43VyAFIxespm3LzMUVyio
+         buGgFfOdndcJv+JlqyjTo6csz3qIr8IrXGbque9gxX6eB/WwKvysxFqnIsSJ3+n1txdw
+         oqttcvlX/H50Jy+OQp2sk9DjEjxmPYusG9gOF+uwE74MXlduAS5Uh0GNTguObFy+l+M7
+         Rw3tdHe2g/k5IljLNqdhHU90r92CBV7/v5jJa6X0G5EM4agu91pZoDdGy9R9bQKawB+f
+         dKCYNoJyk+PeBe6AmMQ+3xnKwiddLgAQaCUCZUYf+duZb7t5B+m2+ubZ1xnHvsUjLAZT
+         iMqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aBTMT471I9stUbpF2UehdHUpsXmRCKk3eSoYzUSJuAk=;
+        b=NZoc8B/SF/RVGDujl2xoxTdYAVs0wtVh0B3gnX/Io3392f56+cC6Uz15AGCAnBo7Cs
+         PV8la+YoRB7f6X67qJ/w30g8xsn8zJ7Rsg6aLjWhyOgHSPcYeXW4JtftocggPgSpQQE3
+         GjjX5tPnaJWzrKQttxS/SV7gcy3lXEinXEf4MRhkd60a2VS4+GQ/exLjnusUCcrQT5vh
+         1DfVhwi33Ba72HTAWqiO65XidF0SSfFF/HZ1V8usn07R+qJB1yxzEcdeDWcG/LFK9bae
+         Uea/h9pt9hPfJiXtahL/pLLEw81pcJbWCrXmoOgSttoYnatOhIDRvhR9KG+oC9R0LjZj
+         u3Yw==
+X-Gm-Message-State: AOAM530LoR87e0g4644Q8pSAT6xs4IZ3p6fVFmgY3pRmaNduEYOcaGc9
+        F383uSgT93DsTjJ1/RURXuvosA==
+X-Google-Smtp-Source: ABdhPJzMuT19wgcsc6rd68Jx5RXNq7aryoQ/BwgKtYwBkrQmhjany5+obcXU2zmzKrWTjcPv40Whbg==
+X-Received: by 2002:a2e:8692:0:b0:24f:c81:5d63 with SMTP id l18-20020a2e8692000000b0024f0c815d63mr1377913lji.517.1651826261838;
+        Fri, 06 May 2022 01:37:41 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id g20-20020a056512119400b0047255d211fesm585120lfr.301.2022.05.06.01.37.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 01:37:41 -0700 (PDT)
+Message-ID: <1aa4cd22-fcb6-0e8d-a1c6-23661d618864@openvz.org>
+Date:   Fri, 6 May 2022 11:37:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjkJ37Nzke4YN_se4ztr-yZgm6SK_LhmBQ-ckWutOwWrQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: kernfs memcg accounting
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>
+References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
+ <20220427140153.GC9823@blackbody.suse.cz>
+ <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
+ <YnBLge4ZQNbbxufc@blackbook>
+ <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
+ <20220504141001.GA10890@blackbody.suse.cz>
+ <65244222-02c5-6e8d-7f4b-83651f378ce2@openvz.org>
+ <20220505094704.GB10890@blackbody.suse.cz>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220505094704.GB10890@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +86,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 05-05-22 20:34:06, Amir Goldstein wrote:
-> > One open question I have is what should the kernel do with 'info_type' in
-> > response it does not understand (in the future when there are possibly more
-> > different info types). It could just skip it because this should be just
-> > additional info for introspection (the only mandatory part is in
-> > fanotify_response, however it could surprise userspace that passed info is
-> > just getting ignored. To solve this we would have to somewhere report
-> > supported info types (maybe in fanotify fdinfo in proc). I guess we'll
-> > cross that bridge when we get to it.
-> >
-> > Amir, what do you think?
+On 5/5/22 12:47, Michal Koutný wrote:
+> On Thu, May 05, 2022 at 12:16:12AM +0300, Vasily Averin <vvs@openvz.org> wrote:
+>> I think it should allocate at least 2 pages.
 > 
-> Regardless if and how we provide a way to enumerate supported info types,
-> I would prefer to reject (EINVAL) unknown info types.
+> After decoding kmalloc_type(), I agree this falls into a global
+> (unaccouted) kmalloc_cache.
+> 
+>> However if cgroup_mkdir() calls mem_cgroup_alloc() it correctly account huge percpu
+>> allocations but ignores neighbour multipage allocation.
+> 
+> So, the spillover is bound and proportional to memcg limit (same ration
+> like these two sizes).
+> But it may be better to account it properly, especially if it's
+> contribution form an offlined mem_cgroup.
 
-OK, agreed. I will be also calmer when we do that because then we can be
-certain userspace does not pass bogus data for unknown info types.
+I've traced mkdir /sys/fs/cgroup/vvs.test on 4cpu VM with Fedora 
+and self-complied upstream kernel, see table with results below.
+These calculations are not precise, it depends on kernel config options,
+number of cpus, enabled controllers, ignores possible page allocations etc
+However I think this is enough to clarify the general situation.
 
-> We can provide a command FAN_RESPONSE_TEST to write a test response with
-> FAN_NOFD and some extra info so the program can test if certain info
-> types are supported.
+Results:
+- Total sum of accounted memory is ~60Kb.
+- Accounted only 2 huge percpu allocation marked '=', ~18Kb.
+  (and can be 0 without memory controller)
+- kernfs nodes and iattrs are among the main memory consumers.
+   they are marked '++' to be accounted first
+- cgroup_mkdir always allocates 4Kb,
+   so I think it should be accounted first too.
+- mem_cgroup_css_alloc allocations consumes 10K,
+   it's enough to be accounted, especially for VMs with 1-2 CPUs
+- Almost all other allocations are quite small and can be ignored.
+  Exceptions are percpu allocations in alloc_fair_sched_group(),
+   this can consume a significant amount of memory on nodes
+   with multiple processors.
+   marked by '+', can be accounted later.
+- kernfs nodes consumes ~6Kb memory inside simple_xattr_set() 
+   and simple_xattr_alloc(). This is quite high numbers,
+   but is not critical, and I think we can ignore it at the moment.
+- If all proposed memory will be accounted it gives us ~47Kb, 
+   or ~75% of all allocated memory.
 
-Hum, that would be an option as well. We don't even need the
-FAN_RESPONSE_TEST command, do we? The write to fanotify fd for FAN_NOFD fd
-would just perform validation of the response and either accept it (do
-nothing) or return EINVAL.
+Any comments are welcome.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thank you,
+	Vasily Averin
+
+number	bytes	$1*$2	sum	note	call_site
+of	alloc
+allocs
+------------------------------------------------------------
+1       14448   14448   14448   =       percpu_alloc_percpu:
+1       8192    8192    22640   ++      (mem_cgroup_css_alloc+0x54)
+49      128     6272    28912   ++      (__kernfs_new_node+0x4e)
+49      96      4704    33616   ?       (simple_xattr_alloc+0x2c)
+49      88      4312    37928   ++      (__kernfs_iattrs+0x56)
+1       4096    4096    42024   ++      (cgroup_mkdir+0xc7)
+1       3840    3840    45864   =       percpu_alloc_percpu:
+4       512     2048    47912   +       (alloc_fair_sched_group+0x166)
+4       512     2048    49960   +       (alloc_fair_sched_group+0x139)
+1       2048    2048    52008   ++      (mem_cgroup_css_alloc+0x109)
+49      32      1568    53576   ?       (simple_xattr_set+0x5b)
+2       584     1168    54744           (radix_tree_node_alloc.constprop.0+0x8d)
+1       1024    1024    55768           (cpuset_css_alloc+0x30)
+1       1024    1024    56792           (alloc_shrinker_info+0x79)
+1       768     768     57560           percpu_alloc_percpu:
+1       640     640     58200           (sched_create_group+0x1c)
+33      16      528     58728           (__kernfs_new_node+0x31)
+1       512     512     59240           (pids_css_alloc+0x1b)
+1       512     512     59752           (blkcg_css_alloc+0x39)
+9       48      432     60184           percpu_alloc_percpu:
+13      32      416     60600           (__kernfs_new_node+0x31)
+1       384     384     60984           percpu_alloc_percpu:
+1       256     256     61240           (perf_cgroup_css_alloc+0x1c)
+1       192     192     61432           percpu_alloc_percpu:
+1       64      64      61496           (mem_cgroup_css_alloc+0x363)
+1       32      32      61528           (ioprio_alloc_cpd+0x39)
+1       32      32      61560           (ioc_cpd_alloc+0x39)
+1       32      32      61592           (blkcg_css_alloc+0x6b)
+1       32      32      61624           (alloc_fair_sched_group+0x52)
+1       32      32      61656           (alloc_fair_sched_group+0x2e)
+3       8       24      61680           (__kernfs_new_node+0x31)
+3       8       24      61704           (alloc_cpumask_var_node+0x1b)
+1       24      24      61728           percpu_alloc_percpu:

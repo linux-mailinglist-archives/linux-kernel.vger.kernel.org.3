@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E05751DC9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BCE51DCB7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443209AbiEFP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S1443279AbiEFQEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391204AbiEFP5m (ORCPT
+        with ESMTP id S1392246AbiEFQEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:57:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFB868F93;
-        Fri,  6 May 2022 08:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651852439; x=1683388439;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=b8YvVwwiHGF9H0n+2KLSOuiyjG1C33LqDP8DdORMsgM=;
-  b=Dfv4058Dm0bIA9jdRy2EAvB3cr1I/kr4GR52QjVqxj+EBOInarRrjnoY
-   kVBdxMGWW0wy+ZxmH671XXDFG3n1TFxNTx4VDYRW+A/5DpuWMxR/lCO7z
-   jM9H6ThHteUzDzWZqc7xr0UX4Erv3RXbSnOx0JfdyZLxdBsVhnLX123fL
-   CJIJ7Q4ScK1V1Ajjf2oBrOG62F+yc/lobvku7KVFPxhzc0s6/NtLbYiZ+
-   VpR4EZ+ONlE4NTHYjPw8w3TO69TXSCy/h81K9ZHpn5vpYQPMivpbRecwt
-   wHDYh8Q2tFSyK8q+gyX6Ob8wRbgoOxUczDvdaqlyLRnRo02TpjSQhYwBs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="331492319"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="331492319"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:53:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="549916619"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga002.jf.intel.com with ESMTP; 06 May 2022 08:53:58 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 6 May 2022 08:53:57 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 6 May 2022 08:53:57 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Fri, 6 May 2022 08:53:57 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>, Borislav Petkov <bp@alien8.de>
-CC:     "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Topic: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Index: AQHYWxYVdsKdZt61BUSHj1qB1cqAT60MLiKAgAGW8wCABKLQAP//o/BA
-Date:   Fri, 6 May 2022 15:53:56 +0000
-Message-ID: <15cca88b82cd46a3a2a98b7cf336a6ed@intel.com>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com>
- <13054c5c-ed48-b7a2-a800-25b9b1b1ab0d@redhat.com> <YnFK+gXFx0jQB1dz@zn.tnic>
- <b18234d7-a1f4-d5a4-e59b-f5439c38c2d0@redhat.com>
-In-Reply-To: <b18234d7-a1f4-d5a4-e59b-f5439c38c2d0@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 6 May 2022 12:04:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB624D636;
+        Fri,  6 May 2022 09:00:49 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246FeEnw028532;
+        Fri, 6 May 2022 16:00:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=bRmWHothJ44idqRxRc2b4VvG+NnDl/cNT8TjtLNF0oA=;
+ b=qj1uWR9hKfdHIXUpYuovn0sRaVNrm0WqBoQwyDIBr9xYlP46hgM9ZrPKbjxUysPrV2p0
+ NZ9z5uQ0KdeTKyvr5SduHtYvEJx0DodtNVtjtkkQdA0wUAR4uwq2FjkllkX14b01EyiF
+ T+sP4EAKOwo9XMebeVwbQ6Xz6jrSiYhmWsOPRUVbVeOUW27erfz+NPs3JYWU6m4Cf+DQ
+ Fns15BFUbiWlvFi4T4zjU4rJgxmJh410mde+wLJbZl9/niOjaQyJmrTsSD8/cfI8CWVA
+ TPzkvaYqChyU7HrN1oOy+Srj36LNDs/lKTb0Lwq5ppsnHOA+edwOyuwzpraMyw0WP+21 Sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw5b4a1kh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 16:00:44 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246FxA5I007140;
+        Fri, 6 May 2022 16:00:43 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw5b4a1k8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 16:00:43 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246FeR5F018164;
+        Fri, 6 May 2022 15:55:39 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04dal.us.ibm.com with ESMTP id 3frvrabh39-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 15:55:39 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246FtcBB34800094
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 May 2022 15:55:38 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A5AB78060;
+        Fri,  6 May 2022 15:55:38 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 080DA7805F;
+        Fri,  6 May 2022 15:55:36 +0000 (GMT)
+Received: from [9.211.41.182] (unknown [9.211.41.182])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  6 May 2022 15:55:35 +0000 (GMT)
+Message-ID: <6e3f4d81-dcb5-9a64-a9f8-2c9b319574ef@linux.ibm.com>
+Date:   Fri, 6 May 2022 11:55:35 -0400
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 14/21] KVM: s390: pci: provide routines for
+ enabling/disabling interrupt forwarding
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
+ <20220426200842.98655-15-mjrosato@linux.ibm.com>
+ <28395b98-3489-342a-970a-5358e4405f22@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <28395b98-3489-342a-970a-5358e4405f22@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZYJdC1IPRRb3XJnAspOlOwIp7kSxSB3-
+X-Proofpoint-ORIG-GUID: 1Tvfo-boab2yO5F4ca5zEB0e4uWca6Lx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205060082
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBJJ2xsIGdpdmUgaXQgc29tZSBtb3JlIHRpbWUgZm9yIHJldmlldyBmb3IgdjYgYW5kIHRoZW4g
-cGljayB1cCB2Ng0KPiAob3IgdjcgaWYgcmV2aWV3IGxlYWRzIHRvIG1vcmUgY2hhbmdlcykuDQoN
-CkhhbnMsDQoNClRob21hcyBoYXMgZm91bmQgb25lIHN1YnN0YW50aXZlIHByb2JsZW0sIGFuZCBh
-IGZldyBtaW5vciB0aGluZ3MgKHNvIGZhciAuLi4gaGUNCnN0aWxsIHNlZW1zIHRvIGJlIHdvcmtp
-bmcgdGhyb3VnaCB2NikuIA0KDQpTbyB0aGVyZSB3aWxsIGJlIGEgdjcuIExpa2VseSBlYXJseSBu
-ZXh0IHdlZWsuIElzIHRoYXQgT0s/IERvIHlvdSBzdGlsbCB0YWtlIHBhdGNoZXMgYWZ0ZXIgLXJj
-Nj8NCg0KLVRvbnkNCg==
+On 5/6/22 11:35 AM, Christian Borntraeger wrote:
+> 
+> 
+> Am 26.04.22 um 22:08 schrieb Matthew Rosato:
+> [...]
+>> +static inline void unaccount_mem(unsigned long nr_pages)
+>> +{
+>> +    struct user_struct *user = get_uid(current_user());
+>> +
+>> +    if (user)
+>> +        atomic_long_sub(nr_pages, &user->locked_vm);
+>> +    if (current->mm)
+>> +        atomic64_sub(nr_pages, &current->mm->pinned_vm);
+>> +}
+>> +
+>> +static inline int account_mem(unsigned long nr_pages)
+>> +{
+>> +    struct user_struct *user = get_uid(current_user());
+>> +    unsigned long page_limit, cur_pages, new_pages;
+>> +
+>> +    page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+>> +
+>> +    do {
+>> +        cur_pages = atomic_long_read(&user->locked_vm);
+>> +        new_pages = cur_pages + nr_pages;
+>> +        if (new_pages > page_limit)
+>> +            return -ENOMEM;
+>> +    } while (atomic_long_cmpxchg(&user->locked_vm, cur_pages,
+>> +                    new_pages) != cur_pages);
+>> +
+>> +    atomic64_add(nr_pages, &current->mm->pinned_vm);
+>> +
+>> +    return 0;
+> 
+> user->locked_vm is not available unconditionally. Shall we add
+> 
+> CONFIG_S390 && CONFIG_KVM here?
+> 
+> include/linux/sched/user.h
+> #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
+>      defined(CONFIG_NET) || defined(CONFIG_IO_URING)
+>          atomic_long_t locked_vm;
+> #endif
+> Or we could get rid of the user memlock checking for now until this is 
+> more ubiquitous.
+
+Oh, good catch.  Per my conversation with Jason in a thread on patch 16, 
+we will end up with a CONFIG_VFIO_PCI_ZDEV_KVM (or something like that) 
+-- this could be used instead of CONFIG_S390 && CONFIG_KVM and would 
+imply both of those anyway
+
+> 
+> 
+> Otherwise this looks sane
+> 
+> Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+

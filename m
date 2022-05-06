@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7FB51E228
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9080151E251
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444861AbiEFW6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 18:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S1444863AbiEFW6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 18:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444521AbiEFW6D (ORCPT
+        with ESMTP id S1444542AbiEFW6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 18:58:03 -0400
+        Fri, 6 May 2022 18:58:04 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4896D384;
-        Fri,  6 May 2022 15:54:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B606D387;
+        Fri,  6 May 2022 15:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651877659; x=1683413659;
+  t=1651877660; x=1683413660;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=caep34WgZSvPyz713lBbhCJDWIsKpnx2psF2WpckZJs=;
-  b=jJst+hgZp4Pw/pYbeQutuj6KdweELVJhrZI6of/sFzdWDwO/vX+ktjZi
-   A4FA2gzmRFLTjGondK0QfBlbDWUFtqDG9UgyjpaHNmHtdH+OtO84z6ngY
-   OwV8xX+g2AB27c7BDKPbpJg0XDXGBTc9YC6+J11J/+kYg3SEBcpHjjwaX
-   7TKSaJ4lvVUx1GhRV4F0A0oDUDDiSLHzLSeyHTp3k5gA7ywAyhOcfHy+j
-   IKa+ATENmy5bAca1yqPz+3lOAtCTbsDhf28wO2bFoRogANE1tF0AODVuU
-   ePkY3CArA+BcLNqZZqalG8y5/iiOHNi5QrM9BYJrsGzwawhXY4TEFcPfW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256080786"
+  bh=A3OTv2UkJBxyJkDp92fBqHhvTH56nfQMMMkIYq+yRZw=;
+  b=aro3M58sV7sbls/iLGVWBO/SWTaAD1iuyd7GgJfEhbPvlfYldDPaqkHs
+   LKipsupJcOG3s1l0wDPRbeIbc2RJ8fshV/shRxIpdIoHwzc6fR2LzVPsE
+   /iea6s1J0Gh8Ndbrv3lKd7IVp8rZVcj/DvD/2OocnkZd5ZPubljk3sJmQ
+   gLR8jFTeUFD8rqMEgYwALbwXH8lJl6Ywcfi27TBJAKElfa9AfqxxlT6Vj
+   3mEO8xl9DRSsvHdvVYQ9zNVBk083Yv1ybXVEiPQK0Tduxy3ogWPeWHCvE
+   nTk8BxhWWINH3Usr+TauEUFzZuswgvjsBHifx40tYT5VR9LKtMBYHRn3Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256080792"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="256080786"
+   d="scan'208";a="256080792"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:18 -0700
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="695383623"
+   d="scan'208";a="695383627"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
   by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:18 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -46,11 +46,10 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
         dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v7 03/12] stop_machine: Add stop_core_cpuslocked() for per-core operations
-Date:   Fri,  6 May 2022 15:54:01 -0700
-Message-Id: <20220506225410.1652287-4-tony.luck@intel.com>
+        patches@lists.linux.dev, ravi.v.shankar@intel.com
+Subject: [PATCH v7 04/12] platform/x86/intel/ifs: Add stub driver for In-Field Scan
+Date:   Fri,  6 May 2022 15:54:02 -0700
+Message-Id: <20220506225410.1652287-5-tony.luck@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506225410.1652287-1-tony.luck@intel.com>
 References: <20220506014035.1173578-1-tony.luck@intel.com>
@@ -67,80 +66,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+Cloud Service Providers that operate fleets of servers have reported
+[1] occasions where they can detect that a CPU has gone bad due to
+effects like electromigration, or isolated manufacturing defects.
+However, that detection method is A/B testing seemingly random
+application failures looking for a pattern. In-Field Scan (IFS) is
+a driver for a platform capability to load a crafted 'scan image'
+to run targeted low level diagnostics outside of the CPU's architectural
+error detection capabilities.
 
-Hardware core level testing features require near simultaneous execution
-of WRMSR instructions on all threads of a core to initiate a test.
+Stub version of driver just does initial part of check for the IFS
+feature. MSR_IA32_CORE_CAPS must enumerate the presence of the
+MSR_INTEGRITY_CAPS MSR.
 
-Provide a customized cut down version of stop_machine_cpuslocked() that
-just operates on the threads of a single core.
+[1]: https://www.youtube.com/watch?v=QMF3rqhjYuM
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/stop_machine.h | 16 ++++++++++++++++
- kernel/stop_machine.c        | 19 +++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ MAINTAINERS                             |  7 ++++
+ drivers/platform/x86/intel/Kconfig      |  1 +
+ drivers/platform/x86/intel/Makefile     |  1 +
+ drivers/platform/x86/intel/ifs/Kconfig  | 13 +++++++
+ drivers/platform/x86/intel/ifs/Makefile |  3 ++
+ drivers/platform/x86/intel/ifs/core.c   | 48 +++++++++++++++++++++++++
+ 6 files changed, 73 insertions(+)
+ create mode 100644 drivers/platform/x86/intel/ifs/Kconfig
+ create mode 100644 drivers/platform/x86/intel/ifs/Makefile
+ create mode 100644 drivers/platform/x86/intel/ifs/core.c
 
-diff --git a/include/linux/stop_machine.h b/include/linux/stop_machine.h
-index 46fb3ebdd16e..ea7a74ea7389 100644
---- a/include/linux/stop_machine.h
-+++ b/include/linux/stop_machine.h
-@@ -124,6 +124,22 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
-  */
- int stop_machine_cpuslocked(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index edc96cdb85e8..bb0c4ff25942 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9862,6 +9862,13 @@ B:	https://bugzilla.kernel.org
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git
+ F:	drivers/idle/intel_idle.c
  
-+/**
-+ * stop_core_cpuslocked: - stop all threads on just one core
-+ * @cpu: any cpu in the targeted core
-+ * @fn: the function to run
-+ * @data: the data ptr for @fn()
-+ *
-+ * Same as above, but instead of every CPU, only the logical CPUs of a
-+ * single core are affected.
-+ *
-+ * Context: Must be called from within a cpus_read_lock() protected region.
-+ *
-+ * Return: 0 if all executions of @fn returned 0, any non zero return
-+ * value if any returned non zero.
-+ */
-+int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data);
++INTEL IN FIELD SCAN (IFS) DEVICE
++M:	Jithu Joseph <jithu.joseph@intel.com>
++R:	Ashok Raj <ashok.raj@intel.com>
++R:	Tony Luck <tony.luck@intel.com>
++S:	Maintained
++F:	drivers/platform/x86/intel/ifs
 +
- int stop_machine_from_inactive_cpu(cpu_stop_fn_t fn, void *data,
- 				   const struct cpumask *cpus);
- #else	/* CONFIG_SMP || CONFIG_HOTPLUG_CPU */
-diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
-index cbc30271ea4d..579761729836 100644
---- a/kernel/stop_machine.c
-+++ b/kernel/stop_machine.c
-@@ -633,6 +633,25 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
- }
- EXPORT_SYMBOL_GPL(stop_machine);
+ INTEL INTEGRATED SENSOR HUB DRIVER
+ M:	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+ M:	Jiri Kosina <jikos@kernel.org>
+diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+index 1f01a8a23c57..794968bda115 100644
+--- a/drivers/platform/x86/intel/Kconfig
++++ b/drivers/platform/x86/intel/Kconfig
+@@ -4,6 +4,7 @@
+ #
  
-+int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
+ source "drivers/platform/x86/intel/atomisp2/Kconfig"
++source "drivers/platform/x86/intel/ifs/Kconfig"
+ source "drivers/platform/x86/intel/int1092/Kconfig"
+ source "drivers/platform/x86/intel/int3472/Kconfig"
+ source "drivers/platform/x86/intel/pmc/Kconfig"
+diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
+index c61bc3e97121..717933dd0cfd 100644
+--- a/drivers/platform/x86/intel/Makefile
++++ b/drivers/platform/x86/intel/Makefile
+@@ -5,6 +5,7 @@
+ #
+ 
+ obj-$(CONFIG_INTEL_ATOMISP2_PDX86)	+= atomisp2/
++obj-$(CONFIG_INTEL_IFS)			+= ifs/
+ obj-$(CONFIG_INTEL_SAR_INT1092)		+= int1092/
+ obj-$(CONFIG_INTEL_SKL_INT3472)		+= int3472/
+ obj-$(CONFIG_INTEL_PMC_CORE)		+= pmc/
+diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
+new file mode 100644
+index 000000000000..d84491cfb0db
+--- /dev/null
++++ b/drivers/platform/x86/intel/ifs/Kconfig
+@@ -0,0 +1,13 @@
++config INTEL_IFS
++	tristate "Intel In Field Scan"
++	depends on X86 && 64BIT && SMP
++	select INTEL_IFS_DEVICE
++	help
++	  Enable support for the In Field Scan capability in select
++	  CPUs. The capability allows for running low level tests via
++	  a scan image distributed by Intel via Github to validate CPU
++	  operation beyond baseline RAS capabilities. To compile this
++	  support as a module, choose M here. The module will be called
++	  intel_ifs.
++
++	  If unsure, say N.
+diff --git a/drivers/platform/x86/intel/ifs/Makefile b/drivers/platform/x86/intel/ifs/Makefile
+new file mode 100644
+index 000000000000..af904880e959
+--- /dev/null
++++ b/drivers/platform/x86/intel/ifs/Makefile
+@@ -0,0 +1,3 @@
++obj-$(CONFIG_INTEL_IFS)		+= intel_ifs.o
++
++intel_ifs-objs			:= core.o
+diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
+new file mode 100644
+index 000000000000..e3623ac691b5
+--- /dev/null
++++ b/drivers/platform/x86/intel/ifs/core.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright(c) 2022 Intel Corporation. */
++
++#include <linux/module.h>
++#include <linux/kdev_t.h>
++
++#include <asm/cpu_device_id.h>
++
++#define X86_MATCH(model)				\
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,	\
++		INTEL_FAM6_##model, X86_FEATURE_CORE_CAPABILITIES, NULL)
++
++static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
++	X86_MATCH(SAPPHIRERAPIDS_X),
++	{}
++};
++MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
++
++static int __init ifs_init(void)
 +{
-+	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
++	const struct x86_cpu_id *m;
++	u64 msrval;
 +
-+	struct multi_stop_data msdata = {
-+		.fn = fn,
-+		.data = data,
-+		.num_threads = cpumask_weight(smt_mask),
-+		.active_cpus = smt_mask,
-+	};
++	m = x86_match_cpu(ifs_cpu_ids);
++	if (!m)
++		return -ENODEV;
 +
-+	lockdep_assert_cpus_held();
++	if (rdmsrl_safe(MSR_IA32_CORE_CAPS, &msrval))
++		return -ENODEV;
 +
-+	/* Set the initial state and stop all online cpus. */
-+	set_state(&msdata, MULTI_STOP_PREPARE);
-+	return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
++	if (!(msrval & MSR_IA32_CORE_CAPS_INTEGRITY_CAPS))
++		return -ENODEV;
++
++	if (rdmsrl_safe(MSR_INTEGRITY_CAPS, &msrval))
++		return -ENODEV;
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
 +
- /**
-  * stop_machine_from_inactive_cpu - stop_machine() from inactive CPU
-  * @fn: the function to run
++static void __exit ifs_exit(void)
++{
++}
++
++module_init(ifs_init);
++module_exit(ifs_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Intel In Field Scan (IFS) device");
 -- 
 2.35.1
 

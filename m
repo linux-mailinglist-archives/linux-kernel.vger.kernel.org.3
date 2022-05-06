@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D2151CEF4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC4D51CEF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388303AbiEFCUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S1388313AbiEFCWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355450AbiEFCUf (ORCPT
+        with ESMTP id S1388305AbiEFCV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:20:35 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B3F60057
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 19:16:54 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id r9so5797396pjo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 19:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SobKQmbF1fKCHMmPWDVkqQstRTu1KoW1l73xQAN+d9Y=;
-        b=SjeuZvQM+koWskDGbzXd+jrXvXy0jpIOlPb97l9XjeAkAFMEtUOic95cMKkp9wsqDL
-         IbSzfdLMoQ37iDRd0NINzkquwRClLL9Y8ffnl8N2BvuqB3/b8avdqGxR6tTGJ0BT+p2X
-         jZmJ5eZGF1LtWXvXJMrloG3WS3AVUhGXi/yd1kd8KrZ93mDRtL9+U7hEqYocYnYZwSmI
-         I8gDkvO6lRXAHRU6Umufvq0UIhbrmqi3XRkqRe1yvC589+6NxzSs6tNPHoJuKPEVXTxG
-         qceY8a2QqsOW4ywTpVTcJkmZrphT+IuMcPfm1bqoqKF13pL75VQQiclvYjRZPxHZl4Bn
-         nE4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SobKQmbF1fKCHMmPWDVkqQstRTu1KoW1l73xQAN+d9Y=;
-        b=YvXx481N+4ZTpgeisXsT4oFf/v/rHDJG9QcD1zbRNfDS/gjUp2KWQ/QFj3db2u5Fbq
-         2me3D1vbtl2m87y4aNPeaPo3KK2OgBTyR/EZ8a4Qd7wzyr0EjsNIuhsXC+X31QgI2anc
-         OvUz234G01LN4MvnEZPOi/O0tESQjrJA84LoXWJVzz1U+bQVQ651FC+O6py4i72zF0BI
-         UobRrvvnOv3xzhulXmr0SLC9K9ltcIp7SWPbOdkKACWrdjZ15Vi43tkcn7+FtNp2v8lN
-         KBndeh1WosN6Cdci8GdZFAOoI5Fy1i+Zr9shQyWHwFfolmsvvxLpNy1Qai944lFsrcir
-         tCBw==
-X-Gm-Message-State: AOAM532x3xwthXoGTaC9ADRw43gHQZ7rTuPQiJOKpKNgJvtydBI0Ysl2
-        NW4BUZeI0OR85kT6ZEr+DiX3Cg==
-X-Google-Smtp-Source: ABdhPJyvxeWW6xAMVmfxkAArQMbJYLnVVM4g+5G/bs+5RVlqE8t9aXu0LinrUmSITFrmDwVHNxizFQ==
-X-Received: by 2002:a17:902:c24c:b0:15c:fa6f:263c with SMTP id 12-20020a170902c24c00b0015cfa6f263cmr1234139plg.66.1651803413500;
-        Thu, 05 May 2022 19:16:53 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id mu6-20020a17090b388600b001d960eaed66sm2227957pjb.42.2022.05.05.19.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 19:16:52 -0700 (PDT)
-Message-ID: <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
-Date:   Thu, 5 May 2022 20:16:51 -0600
+        Thu, 5 May 2022 22:21:58 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44160045;
+        Thu,  5 May 2022 19:18:16 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvZ2Z0Vtsz1JBmW;
+        Fri,  6 May 2022 10:17:10 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 10:18:15 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
+ 2022 10:18:14 +0800
+Message-ID: <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
+Date:   Fri, 6 May 2022 10:18:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
 Content-Language: en-US
-To:     Guo Xuenan <guoxuenan@huawei.com>, asml.silence@gmail.com
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
-References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
- <20220505141159.3182874-1-guoxuenan@huawei.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220505141159.3182874-1-guoxuenan@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>, <jthierry@redhat.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <masahiroy@kernel.org>, <jpoimboe@redhat.com>, <ycote@redhat.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <ardb@kernel.org>, <maz@kernel.org>, <tglx@linutronix.de>,
+        <luc.vanoostenryck@gmail.com>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
+ <20220429094355.122389-23-chenzhongjin@huawei.com>
+ <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
+ <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
+ <20220505092448.GE2501@worktop.programming.kicks-ass.net>
+ <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 8:11 AM, Guo Xuenan wrote:
-> Hi, Pavel & Jens
+On 2022/5/5 18:56, Mark Rutland wrote:
+> On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
+>> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
+>>> Hi Peter,
+>>>
+>>> IIRC now the blacklist mechanisms all run on check stage, which after
+>>> decoding, but the problem of kuser32.S happens in decoding stage. Other
+>>> than that the assembly symbols in kuser32 is STT_NOTYPE and
+>>> STACK_FRAME_NON_STANDARD will throw an error for this.
+>>>
+>>> OBJECT_FILES_NON_STANDARD works for the single file but as you said
+>>> after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
+>>> for kuser32 case at all.
+>>>
+>>> Now my strategy for undecodable instructions is: show an error message
+>>> and mark insn->ignore = true, but do not stop anything so decoding work
+>>> can going on.
+>>>
+>>> To totally solve this my idea is that applying blacklist before decode.
+>>> However for this part objtool doesn't have any insn or func info, so we
+>>> should add a new blacklist just for this case...
+>>
+>> OK, so Mark explained that this is 32bit userspace (VDSO) code.
+>>
+>> And as such there's really no point in running objtool on it. Does all
+>> that live in it's own section? Should it?
 > 
-> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
-> it is not enough only apply [2] to stable-5.10. 
-> Io_uring is very valuable and active module of linux kernel.
-> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
-> found my understanding of io_uring is not enough to resolve all conflicts.
+> It's placed in .rodata by a linker script:
 > 
-> Since 5.10 is an important stable branch of linux, we would appreciate
-> your help in solving this problem.
+> * The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
+>   and `vdso32_end` symbols, as raw bytes (via .incbin).
+>   See arch/arm64/kernel/vdso32-wrap.S.
+> 
+> * The 64-bit vdso code is placed in .rodata, between the `vdso_start`
+>   and `vdso32` symbols, as raw bytes (via .incbin).
+>   See arch/arm64/kernel/vdso-wrap.S.
+> 
+> The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
+> and from userspace's PoV the existing secrtions within those objects are
+> correct, so I don't think those should change.
+> 
+> How does x86 deal with its vdso objects?
+> 
+> Thanks,
+> Mark.
+> .
 
-Yes, this really needs to get buttoned up for 5.10. I seem to recall
-there was a reproducer for this that was somewhat saner than the
-syzbot one (which doesn't do anything for me). Pavel, do you have one?
+However for my build kuser32.o content is in .text and there is only
+`vdso` symbol in .rodata without `vdso32`. And for defconfig the
+CONFIG_KUSER_HELPERS=y is on.
 
--- 
-Jens Axboe
+According to your description, it seems something wrong here?
+
+If all 32-bit asm is placed in .rodata it won't cause problem for
+objtool check.
+
+Thanks!
 

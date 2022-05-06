@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FA951DAAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD2C51DAB0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442266AbiEFOmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S1442281AbiEFOms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442261AbiEFOmO (ORCPT
+        with ESMTP id S1442284AbiEFOmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:42:14 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C127E6A41F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:38:30 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso5047523otj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:38:30 -0700 (PDT)
+        Fri, 6 May 2022 10:42:40 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3D16AA46
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:38:49 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id r185so2854558oih.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:38:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
          :subject:to:cc;
-        bh=iky+2DSYqv2Gw83+fUdec0P6CD5G2yXukPaUGpyxX6E=;
-        b=SymezlUM2zDLS9ItKEh8Tw9JXBO690esOf0mPiAj5TSYPuxIqmFLN1TiHIAhNkzAT5
-         0s+c6p4FLMwPCF/WZMwDnLc8TLFJeUjBkekH3kTQay1i2msU34YYwuLIzzhNERZ6Jnap
-         eddyooibtoTQHvCZmfeDjLIUYfg83zCOY+bUs=
+        bh=cB9ZCuVuahLmpF6pofX3h+no54YYEypOmQHJlUOz5K8=;
+        b=GL8hyS2FGDXBjm+SHhoR461YRKq7ho9wpxyLIDmYxlg/kzeg9Fv3zv46XR1ANz3sqk
+         9aVF+pDJV8sESH1nCmmbvOnl5DnpGQBmDxuXbHR4Ck6iFkkSfmG8HlhF9pDgX1W46oCC
+         UkHNYX6AYriqe85qlmGIovPgsPOKrg4+rkAbE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
          :user-agent:date:message-id:subject:to:cc;
-        bh=iky+2DSYqv2Gw83+fUdec0P6CD5G2yXukPaUGpyxX6E=;
-        b=Fr70P+W5gPZsul9TJzoc5Qs9geFrtuuQv/HeNW02H64R40c/f4Cqp1EwMnhYPdkgXM
-         5riQEUVbdBaM2q0tIOVP6VDLHD+8VA22mqSdbBhe2n29bFwlCwhX/Ww+77qNrFuoXbCn
-         4T17dCLG//7U8FmktKYLwDmM4cwgR3StFQUlGa/cSzcbLU4f498UZQc0T5fX9qitCJtB
-         gpOhNWn/v4q79yJpqRbWLJbsIhcRGVoWHM49/bjoSmL8xkhWCrtiLg2UBnw1QAnGGjl3
-         C7a7LmzLjcA+fgupNCg7FS4AG4kxFVfrazdN0jGIn6D84aXEy6kSRvEDCS/2N/TysTKf
-         awJg==
-X-Gm-Message-State: AOAM530UblV4W01oqCoM1EmV1Rt8F7tVRxP04//UyhPkgmQMYAckJvib
-        dloNNL4T//nmwdkLB7T0N5Q8rir8nHEXYfhI+T4QGw==
-X-Google-Smtp-Source: ABdhPJyGXk5/9A2xbuYzjjU+Qgz+l2qZMYFFTHj6EvEgRIee763d/CoZ4dDksxQO6mI8HSUj8GSqFqiHSa80y7p4SOU=
-X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
- x30-20020a9d20a1000000b005e8d2b6f63fmr1078941ota.159.1651847910486; Fri, 06
- May 2022 07:38:30 -0700 (PDT)
+        bh=cB9ZCuVuahLmpF6pofX3h+no54YYEypOmQHJlUOz5K8=;
+        b=5dv/C/TvkQtIpgMdXCTC6rbxwMHJM7+A8JLHGmlDG7XnonSXEINTVmEc/NL6W3jnXW
+         79/5nGtO9hPv3CVbaYk7QpUFpBSHi7u3YvUz/3Krtg3lG9TlMQNUM1x9O+nvJ4+ol/ht
+         rpiLHU7LRAgCpNMoSEs3m+hWtx38iB0ev9Xjk/h6a/TJqa0YVRUDJIP5QNYGcK658TJU
+         NSN4wrjvuJ6L20PaD0G+wxtGOVzN1nLndDl/P0bOBqTVTzTHwmANdhPl8SZDz+dLJlwk
+         CQmqN/P9BMZrB97iCbHDTl+GwzpcoaTGZDyNgBIgU+6gMw26N5cynKnwO88b93tz4ty0
+         55hA==
+X-Gm-Message-State: AOAM5311fzHHcmkEYld0Vlv2hm+3VXSa3AoY5pdjTTDViIZWGSI0D4xl
+        VV6vw4uYJh2ZAJgv7ZwkfVSOSgjeS5PT9hEBvWdtdA==
+X-Google-Smtp-Source: ABdhPJz76yFzp2gDcKwnVNH1wIr3RsCoOICVyiedCXHmMDJuQW2+wl9pA4RkmCSmIZxUvWt6tqB+SfcHp56U/IJY7No=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr1613561oif.63.1651847929242; Fri, 06
+ May 2022 07:38:49 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 May 2022 10:38:30 -0400
+ HTTPREST; Fri, 6 May 2022 10:38:48 -0400
 MIME-Version: 1.0
-In-Reply-To: <1651742739-12338-6-git-send-email-quic_c_skakit@quicinc.com>
-References: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com> <1651742739-12338-6-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <1651742739-12338-5-git-send-email-quic_c_skakit@quicinc.com>
+References: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com> <1651742739-12338-5-git-send-email-quic_c_skakit@quicinc.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Fri, 6 May 2022 10:38:30 -0400
-Message-ID: <CAE-0n50Ysr_BTUCZ0Wd6mJVaDf9PXspzuzuoL79dij-iOc9nVA@mail.gmail.com>
-Subject: Re: [PATCH V11 5/9] mfd: pm8008: Remove the regmap member from
- pm8008_data struct
+Date:   Fri, 6 May 2022 10:38:48 -0400
+Message-ID: <CAE-0n51i9+JPMR91EzXtCXQdL__TWanWwJ3Y4H=ip-POb=a=vw@mail.gmail.com>
+Subject: Re: [PATCH V11 4/9] mfd: pm8008: Add reset-gpios
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Satya Priya <quic_c_skakit@quicinc.com>
@@ -73,11 +72,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-05-05 02:25:35)
-> Remove the regmap member from pm8008_data struct as it is
-> not used outside of probe. Add a local variable for regmap
-> and pass it to the pm8008_probe_irq_peripherals()
-> API in pm8008_probe.
+Quoting Satya Priya (2022-05-05 02:25:34)
+> Add the reset-gpio toggling in the pm8008_probe() to bring
+> pm8008 chip out of reset instead of doing it in DT node using
+> "output-high" property.
 >
 > Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 > ---

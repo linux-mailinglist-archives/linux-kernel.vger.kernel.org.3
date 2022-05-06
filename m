@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEFB51D569
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C27C51D575
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390838AbiEFKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
+        id S1390844AbiEFKUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345998AbiEFKP4 (ORCPT
+        with ESMTP id S245457AbiEFKUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:15:56 -0400
+        Fri, 6 May 2022 06:20:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12CB50067;
-        Fri,  6 May 2022 03:12:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236E25A5A5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:16:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D398CB834C4;
-        Fri,  6 May 2022 10:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5933AC385AA;
-        Fri,  6 May 2022 10:12:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Az7pofcI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651831927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NAoAz+/NOez2wGCZnQTdc84GHGEoenuNAoJcJZeRVQQ=;
-        b=Az7pofcI41WEDQEkaDFKsyK/l+H5K035XX1Zlw7cVmGSiWp1sw7iHY6RTHd0bXlluRFZ0S
-        VP71J/0tLE6/dPmlFU3Wh3cel6YX/4H655NDAmEkqAy03x4QfKYUvBRHCg09dE76/d3hB2
-        VJDBa7Lz/XODxHu/OjVsqYI963BzDRs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0c0eb92d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 6 May 2022 10:12:07 +0000 (UTC)
-Date:   Fri, 6 May 2022 12:12:04 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        0day robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Theodore Ts'o <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        linux-crypto@vger.kernel.org, nathan@kernel.org
-Subject: Re: [timekeeping]  3aeaac747d: PANIC:early_exception
-Message-ID: <YnT0dDFtq7HnRC7n@zx2c4.com>
-References: <20220506032023.GA23061@xsang-OptiPlex-9020>
- <8735hnhz1q.ffs@tglx>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D440BB834B0
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4A7C385AA;
+        Fri,  6 May 2022 10:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651832179;
+        bh=eNp+UUNZui7u6coUNS7PNxrxe2tkL04eKOUXm9fKysc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aG2fTzMLcidijec70O3RMF7AS8kQV2M3M/Ncl+vS0Of2b+6zzOrHH/lHZshuQPpaw
+         yHiHvpJaR15aodDq0leNa4Eb37VQ8zcrg1Em3n5ZeZilprPRTX8x2Uq0z0z2wlmITb
+         4gX1lTugGTY0oOdgfmS6JwPfe0fN5cN9pjMZF0YX6czmtLC1DM3MexqYlJmXdxfqRj
+         xD5hGbrK2o1IFDk+0Qwsz56xLWLGQ8B+i4YBIBGwv80RcXpDyz1LAEaOPjQONWaz8t
+         +CF3qbKaOx9StUbG7amB8MhLytSzvo98I6DdUHp+Ho8LfIuoWBCGxaRmNoSUcNfc34
+         pdpZZqMw/KRiA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmv0T-009Qtg-5m; Fri, 06 May 2022 11:16:17 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     kvmarm@lists.cs.columbia.edu,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        David Brazdil <dbrazdil@google.com>,
+        Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH] KVM: arm64: nvhe: eliminate kernel-doc warnings
+Date:   Fri,  6 May 2022 11:16:14 +0100
+Message-Id: <165183215982.192247.17735807567998554164.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220430050123.2844-1-rdunlap@infradead.org>
+References: <20220430050123.2844-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8735hnhz1q.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, rdunlap@infradead.org, kvmarm@lists.cs.columbia.edu, alexandru.elisei@arm.com, suzuki.poulose@arm.com, james.morse@arm.com, lkp@intel.com, linux-arm-kernel@lists.infradead.org, dbrazdil@google.com, tabba@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Fri, 29 Apr 2022 22:01:23 -0700, Randy Dunlap wrote:
+> Don't use begin-kernel-doc notation (/**) for comments that are not in
+> kernel-doc format.
+> 
+> This prevents these kernel-doc warnings:
+> 
+> arch/arm64/kvm/hyp/nvhe/switch.c:126: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Disable host events, enable guest events
+> arch/arm64/kvm/hyp/nvhe/switch.c:146: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Disable guest events, enable host events
+> arch/arm64/kvm/hyp/nvhe/switch.c:164: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Handler for protected VM restricted exceptions.
+> arch/arm64/kvm/hyp/nvhe/switch.c:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Handler for protected VM MSR, MRS or System instruction execution in AArch64.
+> arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'vcpu' not described in 'kvm_handle_pvm_fpsimd'
+> arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'exit_code' not described in 'kvm_handle_pvm_fpsimd'
+> arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype for Handler for protected floating(). Prototype was for kvm_handle_pvm_fpsimd() instead
 
-On Fri, May 06, 2022 at 09:59:13AM +0200, Thomas Gleixner wrote:
-> +/**
-> + * random_get_entropy_fallback - Returns the raw clock source value,
-> + * used by random.c for platforms with no valid random_get_entropy().
-> + */
-> +unsigned long random_get_entropy_fallback(void)
-> +{
-> +	struct tk_read_base *tkr = &tk_core.timekeeper.tkr_mono;
-> +	struct clocksource *clock = READ_ONCE(tkr->clock);
-> +
-> +	if (!timekeeping_suspended && clock)
-> +		return clock->read(clock);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(random_get_entropy_fallback);
+Applied to next, thanks!
 
-I tried to address this already in
-<https://lore.kernel.org/lkml/20220505002910.IAcnpEOE2zR2ibERl4Lh3Y_PMmtb0Rf43lVevgztJiM@z/>,
-though yours looks better with the READ_ONCE() around clock, and I'll
-send a v8 doing it that way. I didn't realize that clock could become
-NULL again after becoming non-NULL.
+[1/1] KVM: arm64: nvhe: eliminate kernel-doc warnings
+      commit: bd61395ae8393f28f4b084702acd6f5f02b1f7c0
 
-I'm not quite sure I understand the purpose of !timekeeping_suspended
-there, though. I'm not seeing the path where reading with it suspended
-negatively affects things. I'll take your word for it though.
+Cheers,
 
-Jason
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
+

@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B6151D1E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508E451D21E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388118AbiEFHHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S1389477AbiEFHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388060AbiEFHG4 (ORCPT
+        with ESMTP id S1352865AbiEFHVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:06:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9161366F83
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:03:12 -0700 (PDT)
-Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvhMJ31qBzfb1c;
-        Fri,  6 May 2022 15:02:04 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 15:03:10 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
- 2022 15:03:09 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
-        <s.hauer@pengutronix.de>, <arne.edholm@axis.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>
-Subject: [PATCH v2 2/2] ubi: fastmap: Check wl_pool for free peb before wear leveling
-Date:   Fri, 6 May 2022 15:17:04 +0800
-Message-ID: <20220506071704.222501-3-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220506071704.222501-1-chengzhihao1@huawei.com>
-References: <20220506071704.222501-1-chengzhihao1@huawei.com>
+        Fri, 6 May 2022 03:21:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A827566FA3;
+        Fri,  6 May 2022 00:18:02 -0700 (PDT)
+Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MtfVx-1o6BQU0OUh-00v8Wd; Fri, 06 May 2022 09:18:01 +0200
+Received: by mail-wr1-f46.google.com with SMTP id j15so8825770wrb.2;
+        Fri, 06 May 2022 00:18:01 -0700 (PDT)
+X-Gm-Message-State: AOAM530UXeyQH1I2fmrx7p793ELh0PDDWac3A8S6+5ZgUs+THa2G4Lef
+        JqXFqiy95L2unMfzNajzPs9LhMYMIdm+nXa+4Kc=
+X-Google-Smtp-Source: ABdhPJxk5kmKl/NuJo2Kw6gbDMmUHBC9PzM37HJ0IpduByOSpYwlVh3nYidBN6G2ViFW9sJzR1YaV0REdELOtYll4hY=
+X-Received: by 2002:a5d:5986:0:b0:20c:5844:820d with SMTP id
+ n6-20020a5d5986000000b0020c5844820dmr1472517wri.192.1651821480693; Fri, 06
+ May 2022 00:18:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <202205031017.4TwMan3l-lkp@intel.com> <YnCXTPrbLhvfRVDm@e3a974050dc4>
+ <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com>
+ <8704209d-d487-a297-b05a-5db99f5f808c@intel.com> <YnR1OTpYADQy6Xa8@rli9-dbox>
+In-Reply-To: <YnR1OTpYADQy6Xa8@rli9-dbox>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 6 May 2022 09:17:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1fjHnLg774-CfSPaWY16PtS56RgsRuEVA8JRrh+ZoY=g@mail.gmail.com>
+Message-ID: <CAK8P3a1fjHnLg774-CfSPaWY16PtS56RgsRuEVA8JRrh+ZoY=g@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
+To:     Philip Li <philip.li@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uuYCo+mphVTnNPmhY2lL8Z/svpjDh2VmUZwvOUg2KeF6q7B2hR6
+ ahh2Wi2f44fThQPEpHBS1G10VRuffKDpyJVvBJtMQAUoDq14lcymApepGtgJGwq5MRrt4b0
+ ARboxp2s8SGXLg5ZGxY7lIQUxMnsFpjxDj7aw9jII6MXNxTXpcpcNSMnc7asz+ZL4J413Eg
+ xQGvDgVgJw1NIAv0oGrfA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dkUaghogZJM=:fgkZdwjbvnrIqyBPzeiSjz
+ HgyTO2hBQvZUfzDHe0ED0kRf29FVprwbJ+XQldh07PFTsN0RqDuCjgCo1FUE+QtRJGp2i6n5X
+ IfOxc7KIsfR/p0TQRrH/o2lkVhBkOpv83bvmlYH8Dnv1/2KCY+AxSwKLJripbyw4bV4TngiJ9
+ js2eoF+AIjwXUY/ejgxxOCImjbiJYlvWYTNyqJKZA+67HAhLT6y/XhJX68WPlvO7J0ziWT2c/
+ GY4GFSRkE1F3UOwM7a4F4BBJfoDQ6gZKShnS5giCnc7NWi8HcCE8LNoR5aNgPjT8ukGJvMJ5t
+ oeMROoKazKBAOt9RgG83o36eyOz7MPwce+0iNiI5b72IuBymTeF4xzmI4dUBRz9pzhAkCVG0Q
+ gtPKLLZJ8NjzhK2tYh7n4c2MFfpneLQU/a3+ZTbNmvPvjLrPJh9gY+L2MtLZAqpfWb0v+TJ8P
+ TWQHgkrpCeFI+CAAf/8VY2BDOS5y5X54Eq4TSes8EGL3oa9UcZK++JljegvmwsG+MU9YHmryc
+ kpwo1tpr3cLlyq4yaVvXejqkLflaa3RxPnQ+YOdCTSj/LIjg6bHJlyqVkZUg57Zb/3fDK3VEi
+ 2VTLfZXkXrghn1yZMqRldSxZvGmgnTd/si6VCaW2XdOr18r3viGDZljrxjH4rbU21ZC8dOhhe
+ e8EVzHP3IBTp83K4KUdLbDMfBUQk9Oy+W4YUXa7oD3ZetaKb18XtFUSQ7jFtYyiywfAR7e+DH
+ YArJPNioFggKGweNy2pEOKt6JHchOXIaFl6gboG0u6xMo4sUTnGYyDA+d76QvYAGaW+7s78I6
+ 1uAIERe1JuJYDM+n2mDgFReBi/Wx7oWd1vAoVtKAK7bj9K8UoA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,140 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBI fetches free peb from wl_pool during wear leveling, so UBI should
-check wl_pool's empty status before wear leveling. Otherwise, UBI will
-miss wear leveling chances when free pebs are run out.
+On Fri, May 6, 2022 at 3:09 AM Philip Li <philip.li@intel.com> wrote:
+> On Thu, May 05, 2022 at 09:31:37AM -0700, Dave Hansen wrote:
+> > On 5/3/22 00:21, Arnd Bergmann wrote:
+> > > On Tue, May 3, 2022 at 4:45 AM kernel test robot <lkp@intel.com> wrote:
+> > >> From: kernel test robot <lkp@intel.com>
+> > >>
+> > >> arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
+> > >>
+> > >>  Remove unneeded variable used to store return value.
+> > >>
+> > >> Generated by: scripts/coccinelle/misc/returnvar.cocci
+> > >>
+> > >> Reported-by: kernel test robot <lkp@intel.com>
+> > >> Signed-off-by: kernel test robot <lkp@intel.com>
+> > > I checked the patch, and unfortunately it is wrong, the current code
+> > > needs to stay.
+> > > The problem is the SET_DMA_ERRATA() macro that accesses the
+> > > local 'errata' variable.
+> >
+> > 0day folks, do we have humans looking over these before they're going
+> > out to the list?  If not, can we add some?  If so, can the humans get a
+> > little more discerning? ;)
+>
+> Sorry all for the bad patch. So far, we pick up several cocci warnings that
+> we have confidence based on early result analysis and feedback, for these
+> warnings, 0day sends out patch automatically.
+>
+> Thanks for the suggestion Dave, We will change current process to be more
+> conservative and to avoid false patch by adding human analysis.
 
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- drivers/mtd/ubi/fastmap-wl.c | 52 ++++++++++++++++++++++++++++++++++++
- drivers/mtd/ubi/wl.c         | 14 ++++++++--
- drivers/mtd/ubi/wl.h         |  2 ++
- 3 files changed, 66 insertions(+), 2 deletions(-)
+For the returnvar.cocci false-positives, I wonder if it's possible to find them
+using another coccinelle helper that detects badly formed macros which
+access variables out of scope. I can't think of how this would be expressed,
+but maybe someone has an idea.
 
-diff --git a/drivers/mtd/ubi/fastmap-wl.c b/drivers/mtd/ubi/fastmap-wl.c
-index 21ea5ca8270b..15c286546d28 100644
---- a/drivers/mtd/ubi/fastmap-wl.c
-+++ b/drivers/mtd/ubi/fastmap-wl.c
-@@ -269,6 +269,58 @@ int ubi_wl_get_peb(struct ubi_device *ubi)
- 	return ret;
- }
- 
-+/**
-+ * next_peb_for_wl - returns next PEB to be used internally by the
-+ * WL sub-system.
-+ *
-+ * @ubi: UBI device description object
-+ */
-+static struct ubi_wl_entry *next_peb_for_wl(struct ubi_device *ubi)
-+{
-+	struct ubi_fm_pool *pool = &ubi->fm_wl_pool;
-+	int pnum;
-+
-+	if (pool->used == pool->size)
-+		return NULL;
-+
-+	pnum = pool->pebs[pool->used];
-+	return ubi->lookuptbl[pnum];
-+}
-+
-+/**
-+ * need_wear_leveling - checks whether to trigger a wear leveling work.
-+ * UBI fetches free PEB from wl_pool, we check free PEBs from both 'wl_pool'
-+ * and 'ubi->free', because free PEB in 'ubi->free' tree maybe moved into
-+ * 'wl_pool' by ubi_refill_pools().
-+ *
-+ * @ubi: UBI device description object
-+ */
-+static bool need_wear_leveling(struct ubi_device *ubi)
-+{
-+	int ec;
-+	struct ubi_wl_entry *e;
-+
-+	if (!ubi->used.rb_node)
-+		return false;
-+
-+	e = next_peb_for_wl(ubi);
-+	if (!e) {
-+		if (!ubi->free.rb_node)
-+			return false;
-+		e = find_wl_entry(ubi, &ubi->free, WL_FREE_MAX_DIFF);
-+		ec = e->ec;
-+	} else {
-+		ec = e->ec;
-+		if (ubi->free.rb_node) {
-+			e = find_wl_entry(ubi, &ubi->free, WL_FREE_MAX_DIFF);
-+			ec = max(ec, e->ec);
-+		}
-+	}
-+	e = rb_entry(rb_first(&ubi->used), struct ubi_wl_entry, u.rb);
-+
-+	return ec - e->ec >= UBI_WL_THRESHOLD;
-+}
-+
- /* get_peb_for_wl - returns a PEB to be used internally by the WL sub-system.
-  *
-  * @ubi: UBI device description object
-diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
-index afcdacb9d0e9..55bae06cf408 100644
---- a/drivers/mtd/ubi/wl.c
-+++ b/drivers/mtd/ubi/wl.c
-@@ -670,7 +670,11 @@ static int wear_leveling_worker(struct ubi_device *ubi, struct ubi_work *wrk,
- 	ubi_assert(!ubi->move_from && !ubi->move_to);
- 	ubi_assert(!ubi->move_to_put);
- 
-+#ifdef CONFIG_MTD_UBI_FASTMAP
-+	if (!next_peb_for_wl(ubi) ||
-+#else
- 	if (!ubi->free.rb_node ||
-+#endif
- 	    (!ubi->used.rb_node && !ubi->scrub.rb_node)) {
- 		/*
- 		 * No free physical eraseblocks? Well, they must be waiting in
-@@ -1003,8 +1007,6 @@ static int wear_leveling_worker(struct ubi_device *ubi, struct ubi_work *wrk,
- static int ensure_wear_leveling(struct ubi_device *ubi, int nested)
- {
- 	int err = 0;
--	struct ubi_wl_entry *e1;
--	struct ubi_wl_entry *e2;
- 	struct ubi_work *wrk;
- 
- 	spin_lock(&ubi->wl_lock);
-@@ -1017,6 +1019,13 @@ static int ensure_wear_leveling(struct ubi_device *ubi, int nested)
- 	 * the WL worker has to be scheduled anyway.
- 	 */
- 	if (!ubi->scrub.rb_node) {
-+#ifdef CONFIG_MTD_UBI_FASTMAP
-+		if (!need_wear_leveling(ubi))
-+			goto out_unlock;
-+#else
-+		struct ubi_wl_entry *e1;
-+		struct ubi_wl_entry *e2;
-+
- 		if (!ubi->used.rb_node || !ubi->free.rb_node)
- 			/* No physical eraseblocks - no deal */
- 			goto out_unlock;
-@@ -1032,6 +1041,7 @@ static int ensure_wear_leveling(struct ubi_device *ubi, int nested)
- 
- 		if (!(e2->ec - e1->ec >= UBI_WL_THRESHOLD))
- 			goto out_unlock;
-+#endif
- 		dbg_wl("schedule wear-leveling");
- 	} else
- 		dbg_wl("schedule scrubbing");
-diff --git a/drivers/mtd/ubi/wl.h b/drivers/mtd/ubi/wl.h
-index c93a53293786..5ebe374a08ae 100644
---- a/drivers/mtd/ubi/wl.h
-+++ b/drivers/mtd/ubi/wl.h
-@@ -5,6 +5,8 @@
- static void update_fastmap_work_fn(struct work_struct *wrk);
- static struct ubi_wl_entry *find_anchor_wl_entry(struct rb_root *root);
- static struct ubi_wl_entry *get_peb_for_wl(struct ubi_device *ubi);
-+static struct ubi_wl_entry *next_peb_for_wl(struct ubi_device *ubi);
-+static bool need_wear_leveling(struct ubi_device *ubi);
- static void ubi_fastmap_close(struct ubi_device *ubi);
- static inline void ubi_fastmap_init(struct ubi_device *ubi, int *count)
- {
--- 
-2.31.1
+Something else went wrong in this particular patch,  and I can't explain
+how this happened: the subject line contains the name of the wrong platform,
+"dove" rather than "omap2". My guess is that this was human error copying
+the subject line from another patch, but if this came from a script, you
+may want to check how this gets generated.
 
+       Arnd

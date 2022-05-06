@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61F951DD5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FDF51DD51
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443658AbiEFQRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S1443697AbiEFQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443610AbiEFQR2 (ORCPT
+        with ESMTP id S1443743AbiEFQRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:17:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5886FA3F;
-        Fri,  6 May 2022 09:13:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC7B8CE377B;
-        Fri,  6 May 2022 16:13:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B578EC385A9;
-        Fri,  6 May 2022 16:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651853604;
-        bh=RNXYPpzzqTC2kkQ/NsqO9QLdya4gsEDpth7e/HPVT+E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LT4wRNGj/d9pk/wbLYfrZDYgHSM0i1N7zd6BMTvTZ1ta0NhbLRdJsG7Qu0WV4TPAR
-         6wLXugpRfuV2N7fxJFJj8VxNEmXmmFfWe2DMGVa85SOpxQMMsp6Z6dPdFOUJ/J4rFP
-         U/FuaDF/jo8D9gWOoj3DIomtcrU3enEv1ndNvNWfN8V9ba4kp34ek25GcrksW1BeKZ
-         byd4+8KA2RD1yjz/T109mx2Qih/XKiMmiEtJdewHdqGwdWzPEtRoCss6XMVjHuQ46d
-         TIBqgHNkDyyQFMn8xkyuHnoSxo30HwSJNJkpbyqk7xWMhrHVj69bbhG40RIj9ozUds
-         9+kMDmkypfgpA==
-Date:   Fri, 6 May 2022 09:13:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maximilian Heyne <mheyne@amazon.de>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] drivers, ixgbe: show VF statistics
-Message-ID: <20220506091322.1be7ee6e@kernel.org>
-In-Reply-To: <20220506064440.57940-1-mheyne@amazon.de>
-References: <20220504201632.2a41a3b9@kernel.org>
-        <20220506064440.57940-1-mheyne@amazon.de>
+        Fri, 6 May 2022 12:17:10 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F327092D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:12:15 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id v4so9804827ljd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3LVCF+EC61p3SRHqy5+HBfYg8g8sBVA6E2RSjLMm3ic=;
+        b=71gELqa8e3JZdAR40f88qYRAendRWwJy32RDkq6jbbgAR1oFpqUnUAh7JDtx9eVM4b
+         hXnwylvyfzfwO1l5pR5a8tj6McjLg1BgMlPCXYajEuS9KSDUdhDD4IEadqjiXDqkc5MN
+         jgRnaEFuE4vFyEl8fmIM9iQXW9RSsk/YvT+UGEyx56ucVrRD6B9KQ/k3MQeUHryYIjuD
+         6HSmA9SD2cmqfM/Rtv+U/n0Ew972cSEgHdE7tNtlrRWpD4u3DVdtKECy53If23SgbnzR
+         xej7+9vB9kXXhnte6xgRsD1WPNIKMmy+MI5P0vF2w3FABpNop43zQpwmMAvrts8IUo6u
+         Ay6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3LVCF+EC61p3SRHqy5+HBfYg8g8sBVA6E2RSjLMm3ic=;
+        b=ekI7FLX72cEUxJflVKzfUfla3NGr3Rh6BlvIWiS3ZsnEvOsFhjhKtvgsj3lrzfuX+l
+         rPHdRqzSzwvMk54NP5GTdYnVsKG2ZD+RXAjkY2eEhKWaJGj8Qbqzr5mMMTldX8ceZwA8
+         40ntm+IXOc8rWFhj8xITsTLXXZaB9bIBGUjDJZkBAURQDE8F2GEpF1LRSBAbfV/zhIrQ
+         FulZehrpj8z3rMqYhe33q0jepiXjC7YDU2BaoZtTV6AoZrdVhF9JMaAleTQJ7bbjsBAN
+         c6mjZy0FjL5vwgqugASHeTyCVjwZ8CAn9JXBosAlrt9u/70VfOZS+MSXEBWMEGNobhxQ
+         vBlw==
+X-Gm-Message-State: AOAM531E/9wnLKniGyU/BnV1KfqhKeb+xv9XCISqTXdJhNN2KpnaAN2F
+        xsDpTk0KgmaKnMELK8HxF8M6kg==
+X-Google-Smtp-Source: ABdhPJxcoFt3N3AtHGRW62qNedg2H/hvHQ56BxLep0ct05gnPOlLMPFLw3EGV7t5IJpESnjqgxaHQQ==
+X-Received: by 2002:a2e:b6c6:0:b0:24f:3919:5923 with SMTP id m6-20020a2eb6c6000000b0024f39195923mr2365023ljo.398.1651853533664;
+        Fri, 06 May 2022 09:12:13 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id v17-20020a2e9611000000b0024f3d1daed9sm680999ljh.97.2022.05.06.09.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 09:12:13 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 27825104AFD; Fri,  6 May 2022 19:13:59 +0300 (+03)
+Date:   Fri, 6 May 2022 19:13:59 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 08/12] x86/mm: Provide helpers for unaccepted memory
+Message-ID: <20220506161359.4j5j5fxrw53fdbyr@box.shutemov.name>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-9-kirill.shutemov@linux.intel.com>
+ <YnJfhiiHn+48H2vb@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnJfhiiHn+48H2vb@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 May 2022 06:44:40 +0000 Maximilian Heyne wrote:
-> On 2022-05-04T20:16:32-07:00   Jakub Kicinski <kuba@kernel.org> wrote:
+On Wed, May 04, 2022 at 01:12:06PM +0200, Borislav Petkov wrote:
+> On Mon, Apr 25, 2022 at 06:39:30AM +0300, Kirill A. Shutemov wrote:
+> > +	unaccepted_memory = __va(boot_params.unaccepted_memory);
+> > +	range_start = start / PMD_SIZE;
+> > +
+> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+> > +	for_each_set_bitrange_from(range_start, range_end, unaccepted_memory,
+> > +				   DIV_ROUND_UP(end, PMD_SIZE)) {
+> > +		unsigned long len = range_end - range_start;
+> > +
+> > +		/* Platform-specific memory-acceptance call goes here */
+> > +		panic("Cannot accept memory");
 > 
-> > On Tue, 3 May 2022 15:00:17 +0000 Maximilian Heyne wrote:  
-> > > +		for (i = 0; i < adapter->num_vfs; i++) {
-> > > +			ethtool_sprintf(&p, "VF %u Rx Packets", i);
-> > > +			ethtool_sprintf(&p, "VF %u Rx Bytes", i);
-> > > +			ethtool_sprintf(&p, "VF %u Tx Packets", i);
-> > > +			ethtool_sprintf(&p, "VF %u Tx Bytes", i);
-> > > +			ethtool_sprintf(&p, "VF %u MC Packets", i);
-> > > +		}  
-> > 
-> > Please drop the ethtool stats. We've been trying to avoid duplicating
-> > the same stats in ethtool and iproute2 for a while now.
+> Yeah, no, WARN_ON_ONCE() pls.
+
+Failure to accept the memory is fatal. Why pretend it is not?
+
+For TDX it will result in a crash on the first access. Prolonging the
+suffering just make it harder to understand what happened.
+
+> > +	unsigned long flags;
+> > +	bool ret = false;
+> > +
+> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+> > +	while (start < end) {
+> > +		if (test_bit(start / PMD_SIZE, unaccepted_memory)) {
+> > +			ret = true;
 > 
-> I can see the point that standard metrics should only be reported via the
-> iproute2 interface. However, in this special case this patch was
-> intended to converge the out-of-tree driver with the in-tree version.
-> These missing stats were breaking our userspace. If we now switch
-> solely to iproute2 based statistics both driver versions would
-> diverge even more. So depending on where a user gets the ixgbe driver
-> from, they have to work-around.
+> Wait, what?
 > 
-> I can change the patch as requested, but it will contradict the inital
-> intention. At least Intel should then port this change to the
-> external driver as well. Let's get a statement from them.
+> That thing is lying: it'll return true for *some* PMD which is accepted
+> but not the whole range of [start, end].
 
-Ack, but we really want people to move towards using standard stats.
+That's true. Note also that the check is inherently racy. Other CPU can
+get the range or subrange accepted just after spin_unlock().
 
-Can you change the user space to first try reading the stats via
-iproute2/rtnetlink? And fallback to random ethtool strings if not
-available? That way it will work with any driver implementing the
-standard API. Long term that'll make everyone's life easier.
+The check indicates that accept_memory() has to be called on the range
+before first access.
 
-Out-of-tree code cannot be an argument upstream, otherwise we'd
-completely lose control over our APIs. Vendors could ship whatever
-in their out of tree repo and then force us to accept it upstream.
+Do you have problem with a name? Maybe has_unaccepted_memory()?
 
-It's disappointing to see the vendor letting the uAPI of the out of
-tree driver diverge from upstream, especially a driver this mature.
+-- 
+ Kirill A. Shutemov

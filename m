@@ -2,244 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAC251D43A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7A151D451
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390452AbiEFJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 05:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S1390494AbiEFJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 05:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389893AbiEFJYn (ORCPT
+        with ESMTP id S1390476AbiEFJ3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:24:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0887664BE8;
-        Fri,  6 May 2022 02:20:38 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2469BvA0004753;
-        Fri, 6 May 2022 09:20:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=zgRFUssgjQGCem1D9ajuF6ScwcVLPWvHtW8B60B/npA=;
- b=PLtFdaTYeDuBI4IbMaG4cbebp9ZlYds0FCkXxD/mYqINXcZ9eFBQhL4WFUYC6Dx3rktf
- QCLdx5evWIUkcyRF3oxpP/WVobsijCL7B5MxuSxjHRUTLAkPgvWvX+M0wShoUlXJDEW8
- qp77YymJ5dNHdGxaMKhZNl3ljr3gF7V/eQqrLLT0LWdOrKcBuAv31CtgLhwArEYaX28d
- RQQl0ERfB6fnXnsbU5clRYoa7DGWe1d13ubtXQ7SaRRgVRJC95MSNnOmESc/gmO/9RF4
- j0eyEPe0W+B+ni9Heh6t/9SOtFrsl6E8J7Mn6cIMm2GTk1L6dagSfQ2HmTs9P0Sh6t8Z XQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw0tx85du-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 09:20:37 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2469Kb3Q030228;
-        Fri, 6 May 2022 09:20:37 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw0tx85dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 09:20:37 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2469DCOG003016;
-        Fri, 6 May 2022 09:20:34 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3fvm08gkw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 09:20:34 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2469KVHE45810170
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 09:20:31 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C162111C050;
-        Fri,  6 May 2022 09:20:31 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09FCE11C04A;
-        Fri,  6 May 2022 09:20:31 +0000 (GMT)
-Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.62.79])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 09:20:30 +0000 (GMT)
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, pmorel@linux.ibm.com,
-        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
-Subject: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
-Date:   Fri,  6 May 2022 11:24:03 +0200
-Message-Id: <20220506092403.47406-4-pmorel@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220506092403.47406-1-pmorel@linux.ibm.com>
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+        Fri, 6 May 2022 05:29:08 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E8915A09;
+        Fri,  6 May 2022 02:25:24 -0700 (PDT)
+X-UUID: 688f16e3e7ce450caa638f2f752d7331-20220506
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:ae87eca7-1d53-429e-b0c1-b7b473cea55d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:54
+X-CID-INFO: VERSION:1.1.4,REQID:ae87eca7-1d53-429e-b0c1-b7b473cea55d,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACTI
+        ON:release,TS:54
+X-CID-META: VersionHash:faefae9,CLOUDID:3aced3b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:adb1611c2d41,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 688f16e3e7ce450caa638f2f752d7331-20220506
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 911729712; Fri, 06 May 2022 17:25:20 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 6 May 2022 17:25:18 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 6 May 2022 17:25:18 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 6 May 2022 17:25:17 +0800
+Message-ID: <18560bd9efbcf77bc6b2dc6d2956d7993fcdde85.camel@mediatek.com>
+Subject: Re: [PATCH v10, 16/17] media: mediatek: vcodec: support stateless
+ VP9 decoding
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 6 May 2022 17:25:17 +0800
+In-Reply-To: <20220505222034.fxw6y7wdf7wy3qi4@notapiano>
+References: <20220426100828.13429-1-yunfei.dong@mediatek.com>
+         <20220426100828.13429-17-yunfei.dong@mediatek.com>
+         <20220505222034.fxw6y7wdf7wy3qi4@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VtUrtVgR6yM3XUQHsCrjz3y0_-8teZO9
-X-Proofpoint-GUID: ZGMZWuL-90XVg9WkE3HNaosDkAGucPlK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_03,2022-05-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- adultscore=0 clxscore=1015 bulkscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a subsystem reset the Topology-Change-Report is cleared.
-Let's give userland the possibility to clear the MTCR in the case
-of a subsystem reset.
+Hi Nicolas,
 
-To migrate the MTCR, let's give userland the possibility to
-query the MTCR state.
+Thanks for your suggestion.
 
-Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
----
- arch/s390/include/uapi/asm/kvm.h |  5 ++
- arch/s390/kvm/kvm-s390.c         | 79 ++++++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+)
+On Thu, 2022-05-05 at 18:20 -0400, Nícolas F. R. A. Prado wrote:
+> On Tue, Apr 26, 2022 at 06:08:27PM +0800, Yunfei Dong wrote:
+> > Add support for VP9 decoding using the stateless API,
+> > as supported by MT8192. And the drivers is lat and core
+> > architecture.
+> > 
+> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> > Signed-off-by: George Sun <george.sun@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  .../media/platform/mediatek/vcodec/Makefile   |    1 +
+> >  .../vcodec/mtk_vcodec_dec_stateless.c         |   26 +-
+> >  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |    1 +
+> >  .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 2031
+> > +++++++++++++++++
+> >  .../platform/mediatek/vcodec/vdec_drv_if.c    |    4 +
+> >  .../platform/mediatek/vcodec/vdec_drv_if.h    |    1 +
+> >  6 files changed, 2061 insertions(+), 3 deletions(-)
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> > 
+> 
+> ...
+> 
+> > +		use_128 = !frame_is_intra && !vsi-
+> > >frame.uh.last_frame_type;
+> > +		v4l2_vp9_adapt_coef_probs(pre_frame_ctx_helper,
+> > +					  counts_helper,
+> > +					  use_128,
+> > +					  frame_is_intra);
+> 
+> Hi Yunfei,
+> 
+> I'm getting
+> 
+> ERROR: modpost: "v4l2_vp9_adapt_noncoef_probs"
+> [drivers/media/platform/mediatek/vcodec/mtk-vcodec-dec.ko] undefined!
+> ERROR: modpost: "v4l2_vp9_adapt_coef_probs"
+> [drivers/media/platform/mediatek/vcodec/mtk-vcodec-dec.ko] undefined!
+> 
+> when building this series.
+> 
+> Adding
+> 	select V4L2_VP9
+> to
+> 	config VIDEO_MEDIATEK_VCODEC
+> solved the issue.
+> 
+> Thanks,
+> Nícolas
+I will fix it in next patch
 
-diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
-index 7a6b14874d65..abdcf4069343 100644
---- a/arch/s390/include/uapi/asm/kvm.h
-+++ b/arch/s390/include/uapi/asm/kvm.h
-@@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
- #define KVM_S390_VM_CRYPTO		2
- #define KVM_S390_VM_CPU_MODEL		3
- #define KVM_S390_VM_MIGRATION		4
-+#define KVM_S390_VM_CPU_TOPOLOGY	5
- 
- /* kvm attributes for mem_ctrl */
- #define KVM_S390_VM_MEM_ENABLE_CMMA	0
-@@ -171,6 +172,10 @@ struct kvm_s390_vm_cpu_subfunc {
- #define KVM_S390_VM_MIGRATION_START	1
- #define KVM_S390_VM_MIGRATION_STATUS	2
- 
-+/* kvm attributes for cpu topology */
-+#define KVM_S390_VM_CPU_TOPO_MTR_CLEAR	0
-+#define KVM_S390_VM_CPU_TOPO_MTR_SET	1
-+
- /* for KVM_GET_REGS and KVM_SET_REGS */
- struct kvm_regs {
- 	/* general purpose regs for s390 */
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index c8bdce31464f..80a1244f0ead 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -1731,6 +1731,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
- 	ipte_unlock(kvm);
- }
- 
-+/**
-+ * kvm_s390_sca_clear_mtcr
-+ * @kvm: guest KVM description
-+ *
-+ * Is only relevant if the topology facility is present,
-+ * the caller should check KVM facility 11
-+ *
-+ * Updates the Multiprocessor Topology-Change-Report to signal
-+ * the guest with a topology change.
-+ */
-+static void kvm_s390_sca_clear_mtcr(struct kvm *kvm)
-+{
-+	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-+
-+	ipte_lock(kvm);
-+	sca->utility  &= ~SCA_UTILITY_MTCR;
-+	ipte_unlock(kvm);
-+}
-+
-+static int kvm_s390_set_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-+{
-+	if (!test_kvm_facility(kvm, 11))
-+		return -ENXIO;
-+
-+	switch (attr->attr) {
-+	case KVM_S390_VM_CPU_TOPO_MTR_SET:
-+		kvm_s390_sca_set_mtcr(kvm);
-+		break;
-+	case KVM_S390_VM_CPU_TOPO_MTR_CLEAR:
-+		kvm_s390_sca_clear_mtcr(kvm);
-+		break;
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * kvm_s390_sca_get_mtcr
-+ * @kvm: guest KVM description
-+ *
-+ * Is only relevant if the topology facility is present,
-+ * the caller should check KVM facility 11
-+ *
-+ * reports to QEMU the Multiprocessor Topology-Change-Report.
-+ */
-+static int kvm_s390_sca_get_mtcr(struct kvm *kvm)
-+{
-+	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-+	int val;
-+
-+	ipte_lock(kvm);
-+	val = !!(sca->utility & SCA_UTILITY_MTCR);
-+	ipte_unlock(kvm);
-+
-+	return val;
-+}
-+
-+static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
-+{
-+	int mtcr;
-+
-+	if (!test_kvm_facility(kvm, 11))
-+		return -ENXIO;
-+
-+	mtcr = kvm_s390_sca_get_mtcr(kvm);
-+	if (copy_to_user((void __user *)attr->addr, &mtcr, sizeof(mtcr)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- {
- 	int ret;
-@@ -1751,6 +1821,9 @@ static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = kvm_s390_vm_set_migration(kvm, attr);
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = kvm_s390_set_topology(kvm, attr);
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
-@@ -1776,6 +1849,9 @@ static int kvm_s390_vm_get_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = kvm_s390_vm_get_migration(kvm, attr);
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = kvm_s390_get_topology(kvm, attr);
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
-@@ -1849,6 +1925,9 @@ static int kvm_s390_vm_has_attr(struct kvm *kvm, struct kvm_device_attr *attr)
- 	case KVM_S390_VM_MIGRATION:
- 		ret = 0;
- 		break;
-+	case KVM_S390_VM_CPU_TOPOLOGY:
-+		ret = test_kvm_facility(kvm, 11) ? 0 : -ENXIO;
-+		break;
- 	default:
- 		ret = -ENXIO;
- 		break;
--- 
-2.27.0
+Best Regards,
+Yunfei Dong
 

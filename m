@@ -2,133 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B5E51DAAD
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FA951DAAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442274AbiEFOmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S1442266AbiEFOmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442261AbiEFOmU (ORCPT
+        with ESMTP id S1442261AbiEFOmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:42:20 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4467E6A42A;
-        Fri,  6 May 2022 07:38:37 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:59348)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmz6G-001ZSP-LU; Fri, 06 May 2022 08:38:32 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37214 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmz6E-007LHT-AD; Fri, 06 May 2022 08:38:32 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <20220506141403.GA16084@redhat.com>
-Date:   Fri, 06 May 2022 09:38:21 -0500
-In-Reply-To: <20220506141403.GA16084@redhat.com> (Oleg Nesterov's message of
-        "Fri, 6 May 2022 16:14:30 +0200")
-Message-ID: <87fslm3ew2.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 6 May 2022 10:42:14 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C127E6A41F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:38:30 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso5047523otj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=iky+2DSYqv2Gw83+fUdec0P6CD5G2yXukPaUGpyxX6E=;
+        b=SymezlUM2zDLS9ItKEh8Tw9JXBO690esOf0mPiAj5TSYPuxIqmFLN1TiHIAhNkzAT5
+         0s+c6p4FLMwPCF/WZMwDnLc8TLFJeUjBkekH3kTQay1i2msU34YYwuLIzzhNERZ6Jnap
+         eddyooibtoTQHvCZmfeDjLIUYfg83zCOY+bUs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=iky+2DSYqv2Gw83+fUdec0P6CD5G2yXukPaUGpyxX6E=;
+        b=Fr70P+W5gPZsul9TJzoc5Qs9geFrtuuQv/HeNW02H64R40c/f4Cqp1EwMnhYPdkgXM
+         5riQEUVbdBaM2q0tIOVP6VDLHD+8VA22mqSdbBhe2n29bFwlCwhX/Ww+77qNrFuoXbCn
+         4T17dCLG//7U8FmktKYLwDmM4cwgR3StFQUlGa/cSzcbLU4f498UZQc0T5fX9qitCJtB
+         gpOhNWn/v4q79yJpqRbWLJbsIhcRGVoWHM49/bjoSmL8xkhWCrtiLg2UBnw1QAnGGjl3
+         C7a7LmzLjcA+fgupNCg7FS4AG4kxFVfrazdN0jGIn6D84aXEy6kSRvEDCS/2N/TysTKf
+         awJg==
+X-Gm-Message-State: AOAM530UblV4W01oqCoM1EmV1Rt8F7tVRxP04//UyhPkgmQMYAckJvib
+        dloNNL4T//nmwdkLB7T0N5Q8rir8nHEXYfhI+T4QGw==
+X-Google-Smtp-Source: ABdhPJyGXk5/9A2xbuYzjjU+Qgz+l2qZMYFFTHj6EvEgRIee763d/CoZ4dDksxQO6mI8HSUj8GSqFqiHSa80y7p4SOU=
+X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
+ x30-20020a9d20a1000000b005e8d2b6f63fmr1078941ota.159.1651847910486; Fri, 06
+ May 2022 07:38:30 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 6 May 2022 10:38:30 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmz6E-007LHT-AD;;;mid=<87fslm3ew2.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+j4tyNBNO0MDOlgRiPNBZzf/o1+r5DdvI=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <1651742739-12338-6-git-send-email-quic_c_skakit@quicinc.com>
+References: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com> <1651742739-12338-6-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 6 May 2022 10:38:30 -0400
+Message-ID: <CAE-0n50Ysr_BTUCZ0Wd6mJVaDf9PXspzuzuoL79dij-iOc9nVA@mail.gmail.com>
+Subject: Re: [PATCH V11 5/9] mfd: pm8008: Remove the regmap member from
+ pm8008_data struct
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1750 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 11 (0.6%), b_tie_ro: 9 (0.5%), parse: 1.00 (0.1%),
-         extract_message_metadata: 3.5 (0.2%), get_uri_detail_list: 1.39
-        (0.1%), tests_pri_-1000: 4.3 (0.2%), tests_pri_-950: 1.27 (0.1%),
-        tests_pri_-900: 1.05 (0.1%), tests_pri_-90: 276 (15.8%), check_bayes:
-        274 (15.7%), b_tokenize: 11 (0.6%), b_tok_get_all: 10 (0.6%),
-        b_comp_prob: 4.1 (0.2%), b_tok_touch_all: 245 (14.0%), b_finish: 0.98
-        (0.1%), tests_pri_0: 1430 (81.7%), check_dkim_signature: 0.79 (0.0%),
-        check_dkim_adsp: 3.3 (0.2%), poll_dns_idle: 0.92 (0.1%), tests_pri_10:
-        3.1 (0.2%), tests_pri_500: 9 (0.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
-
-> On 05/05, Eric W. Biederman wrote:
->>
->> Eric W. Biederman (11): signal: Rename send_signal send_signal_locked
->> signal: Replace __group_send_sig_info with send_signal_locked
->> ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP ptrace/xtensa:
->> Replace PT_SINGLESTEP with TIF_SINGLESTEP ptrace: Remove
->> arch_ptrace_attach signal: Use lockdep_assert_held instead of
->> assert_spin_locked ptrace: Reimplement PTRACE_KILL by always sending
->> SIGKILL ptrace: Document that wait_task_inactive can't fail ptrace:
->> Admit ptrace_stop can generate spuriuos SIGTRAPs ptrace: Don't change
->> __state ptrace: Always take siglock in ptrace_resume
->>
->> Peter Zijlstra (1):
->>       sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
+Quoting Satya Priya (2022-05-05 02:25:35)
+> Remove the regmap member from pm8008_data struct as it is
+> not used outside of probe. Add a local variable for regmap
+> and pass it to the pm8008_probe_irq_peripherals()
+> API in pm8008_probe.
 >
-> I can't comment 5/12. to be honest I didn't even try to look into
-> arch/ia64/.
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> ---
 
-I just looked at arch_ptrace_attach again and I spotted what looks like
-a fairly easy analysis that is mostly arch-generic code that shows this
-is dead code on ia64.
-
-On ia64 arch_ptrace_attach is ptrace_attach_sync_user_rbs, and does
-nothing if __state is not TASK_STOPPED.
-
-When arch_ptrace_attach is called after ptrace_traceme __state is
-TASK_RUNNING pretty much by definition as we are running in the
-child.  Therefore ptrace_attach_sync_user_rbs does nothing in that case.
-
-When arch_ptrace_attach is called after ptrace_attach __state there
-are two possibilities.  If the tracee was already in TASK_STOPPED
-before the ptrace_attach, the tracee will be in TASK_TRACED.
-Otherwise the tracee will be in TASK_TRACED or on it's way to stopping
-in TASK_TRACED.
-
-Unless I totally misread ptrace_attach.  There is no way that after
-a successful ptrace_attach for the tracee to be in TASK_STOPPED.
-This makes ptrace_attach_sync_user_rbs a big noop, AKA dead code.
-So it can be removed.
-
-> But other than that I see no problems in this version. However, I'd
-> like to actually apply the whole series and read the changed code
-> carefully, but sorry, I don't think I can do this before Monday.
-
-No rush.  I don't expect the merge window will open for a while yet.
-
-Eric
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

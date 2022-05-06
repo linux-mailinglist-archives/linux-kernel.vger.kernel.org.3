@@ -2,242 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3A551D1D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D195151D1DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387921AbiEFHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S1387897AbiEFHGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387662AbiEFHF3 (ORCPT
+        with ESMTP id S1387510AbiEFHGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:05:29 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2E95159D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:01:47 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id bg25so3860711wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:01:46 -0700 (PDT)
+        Fri, 6 May 2022 03:06:18 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E2666CAA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:02:36 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 6so5404703pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gpE0GpoyUkqJLGQFOoxzYDTM2n2W9a36FAzgG28lSq0=;
-        b=SiWpBVEXdIYek3QKsrB5xlbbA+J/rHHVyqUvJMAPCX183/MWzY2JckN8U4LzHsGZ4q
-         z2atZWuhQpdZ2io1ZSQyAKGDu0U/D69O6VAx+DdwU8+oyEYKG82sOLH60MAODpVX6jk4
-         AiUWUgZ9EfAGS439JWuLTub/GhuEC977H3Rae9j6npFAXh99igJtiySDHBRyrNyM2DKA
-         z9/q1nEvSD0MltXaMiJCApX4aaMi6dEP5Qrk0JpeMdrb91y7wzcFTmM+ChkTmZK38N6a
-         PE5pYAaZ6EKTHcKwstmfZcpQqUpqWHeE5wr5DXFiIPDX55dFznRZFZnW/Bguy9dIXWW/
-         10WA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=13k3PBLqNjSNAheQGYeJGSc/vGgqstggAS/MUUkmnNo=;
+        b=ovO+GtGRnthGiYn9dClvWnTfzAhT4SsoGNH8Ctg3gmnFuAiadmwrRUPosYDyXpUfge
+         +zcNLImoDpQmpVG4P3wuLzJxEzpL5JrezqHZKvDPEJ5PAiaP0esJcNRYWY1NSAVZZCtw
+         bG6u/5kGZ6PpdZHmaw9nQNDkpN4P3Te0YjyaTQK+1iM9RU8JjLW9I+2TeS1U1NjPdaM6
+         9PUhsMJSX81N66uHd6/AU9S+1ZlQvd9YQHwZFj7YOoK3LKiHgYYZUm6TfAignMSnVjJL
+         kHD6KQzrpnCi540o+cTBb3i7HSVGmqcepOlysSn3mL3Q0OuIwdzI05tqLQKDC44bDyGz
+         LiQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gpE0GpoyUkqJLGQFOoxzYDTM2n2W9a36FAzgG28lSq0=;
-        b=DD1jW6GDHmaxTjDfEeno71VlK46jUMhhVutnZdBm1JGdcFNlwYhR4ETqWq84CN1KoE
-         KbsiTfmSsHFd+fNss0F7ub6s36ffrz++TcLSjYO9xT7LUVtbFmVA7d+9VmKeUtZ9m9Ho
-         OarGyoRto9aAVRX1V3AGB+9FGoSqT2iR9gvm2GRPddan3auhnntU+fyV8m0XgNEM9o7g
-         5UdSaKaqd/cupIloZ5bHoKmX79ciSG0ziwLxQYcT5SEIG6IWCf59ziTbajgBdQZvuJka
-         05AUxOuCaf1a4eAlo7wwpZvi6iVcXU+kajreQrENJitejt4/F7/h2U0vAOVAQJgIEkKl
-         XEbQ==
-X-Gm-Message-State: AOAM532gGopqwYSUKHxDDZImnGoCvoqDj8xjp6dvh7wPJ08P5e4B4pf9
-        3SXFiEdRKlFauUHf+fVCOC4wgM9Irq05sbMJ65YGBA==
-X-Google-Smtp-Source: ABdhPJxgiYvcpDl5iIQO0WW2jhx5CW4NvSGAj1yQeUK6OqNF1Z6M/1hngPglCSRdiQp6dzFREoSS6qG4PV+b5nu2+X0=
-X-Received: by 2002:a05:600c:12c9:b0:394:54ab:52c5 with SMTP id
- v9-20020a05600c12c900b0039454ab52c5mr8566186wmd.141.1651820505351; Fri, 06
- May 2022 00:01:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=13k3PBLqNjSNAheQGYeJGSc/vGgqstggAS/MUUkmnNo=;
+        b=q1nBJEUPNg/nHZOVGQm01yCannTrjCSyNCG2TSBvyFKX4yT1nSsgaGMt1vx/OFvid4
+         e0n4Kju757HWCbydVnUskI5QQdtBoTpQMq5DsMEYPsxdY64ksDJ/xGeyU3QkKdZidgNu
+         WyMMC+gLWd4wIrI9nLALGxhF89/4fKKjpH0XTSuhqWna4wGrjPH8YiCxDwzeyOjvVSNS
+         IzZ/Xzvzg4AWLCzVcnUTDaNxzj7mu30Gyw7FLS9wLrW5Se68PyTHB7bLLf4+nUbCOBcg
+         cFbhjn7pJpqFx3RdpoDBAL8gszN5FuRvCQ42j34ZGYu8GUpLTGgB3NnkQhtUvNkN2sFc
+         S1FA==
+X-Gm-Message-State: AOAM532+PPghaMQMQxedT36r0RQb4n1Yss3NefrdHEET5ZkKbBNDgBoV
+        p1zKAtRPxGHrDcUNpWFdjrYx
+X-Google-Smtp-Source: ABdhPJwTJUXc4jIEmdkZV2TR1zmpuViWfbET6q7Y2wkf6pw4cmZrF6UvnObA0qGCFbBlmfri/fA4Mg==
+X-Received: by 2002:a63:43c2:0:b0:3c1:829a:5602 with SMTP id q185-20020a6343c2000000b003c1829a5602mr1682995pga.252.1651820555533;
+        Fri, 06 May 2022 00:02:35 -0700 (PDT)
+Received: from thinkpad ([117.207.26.33])
+        by smtp.gmail.com with ESMTPSA id w5-20020a1709029a8500b0015e8d4eb1ddsm868303plp.39.2022.05.06.00.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 00:02:34 -0700 (PDT)
+Date:   Fri, 6 May 2022 12:32:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] ARM: dts: qcom: sdx65: Add interconnect nodes
+Message-ID: <20220506070229.GB17659@thinkpad>
+References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1651482395-29443-2-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org> <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
- <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
- <YnKS3MwNxvEi73OP@bombadil.infradead.org> <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
- <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org> <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
- <YnLsPgbQ7CHiannN@bombadil.infradead.org> <YnNnLIZDxkNwECv+@bombadil.infradead.org>
-In-Reply-To: <YnNnLIZDxkNwECv+@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 6 May 2022 15:01:34 +0800
-Message-ID: <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007a37b005de526eed"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1651482395-29443-2-git-send-email-quic_rohiagar@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000007a37b005de526eed
-Content-Type: text/plain; charset="UTF-8"
+On Mon, May 02, 2022 at 02:36:32PM +0530, Rohit Agarwal wrote:
+> Add interconnect devicetree nodes in SDX65 platform.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  arch/arm/boot/dts/qcom-sdx65.dtsi | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> index 57bda62..d989837 100644
+> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
+> @@ -139,6 +139,26 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		system_noc: interconnect@1620000 {
+> +			compatible = "qcom,sdx65-system-noc";
+> +			reg = <0x1620000 0x31200>;
+> +			#interconnect-cells = <1>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+> +		mem_noc: interconnect@9680000 {
+> +			compatible = "qcom,sdx65-mem-noc";
+> +			reg = <0x9680000 0x27200>;
+> +			#interconnect-cells = <1>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+> +		mc_virt: interconnect {
 
-On Thu, May 5, 2022 at 1:57 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
-> > On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
-> > > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > OK so, we can just skip tainting considerations for selftests which
-> > > > don't use modules for now. There may be selftests which do wonky
-> > > > things in userspace but indeed I agree the userspace taint would
-> > > > be better for those but I don't think it may be worth bother
-> > > > worrying about those at this point in time.
-> > > >
-> > > > But my point in that sharing a taint between kunit / selftests modules
-> > > > does make sense and is easily possible. The unfortunate aspect is just
-> > >
-> > > Yes, I 100% agree that we should share a taint for kernelspace testing
-> > > from both kunit/kselftest.
-> > > Someone running the system won't care what framework was used.
-> >
-> > OK do you mind doing the nasty work of manually adding the new
-> > MODULE_TAINT() to the selftests as part of your effort?
-> >
-> > *Alternatively*, if we *moved* all sefltests modules to a new
-> > lib/debug/selftests/ directory or something like that then t would
-> > seem modpost *could* add the taint flag automagically for us without
-> > having to edit or require it on new drivers. We have similar type of
-> > taint for staging, see add_staging_flag().
-> >
-> > I would *highly* prefer this approach, event though it is more work,
-> > because I think this is a step we should take anyway.
-> >
-> > However, I just checked modules on lib/ and well, some of them are
-> > already in their own directory, like lib/math/test_div64.c. So not
-> > sure, maybe just move a few modules which are just in lib/*.c for now
-> > and then just sprinkle the MODULE_TAINT() to the others?
->
-> I *think* we could just pull this off with a much easier approach,
-> simply looking for the substrings in the module name in modpost.c:
->
->   * "_test." || "-test."
->   * ^"test_" || ^"test-"
->
-> An issue with this of course is a vendor $FOO with an out of tree
-> test driver may end up with the taint. Perhaps we don't care.
->
-> That means moving selftests to its own directory is not needed at this
-> point in time.
+If there is no "reg" property then this virtual node should be moved outside of
+"soc" node. Please refer sm8450.dtsi.
 
-I can't say I'm thrilled with the idea of just doing name comparisons,
-particularly since not all of them match this pattern, for example:
-bpf_testmod.ko. (Though, frankly, more of them do than I'd've
-guessed.)
+Also the rest of the interconnect nodes should be sorted. I know that you are
+following sdx55, but the nodes were not fully sorted there :/
 
-Maybe adding a taint call to the selftest helper module framework in
-kselftest_module.h, though again, there are several tests which don't
-use it.
+So please fix it too.
 
-I _suspect_ we'd be able to hit most of them by tainting in frameworks
-like the above, and patch the remaining modules manually. There's also
-definitely a grey area with things like netdevsim, which are used a
-lot as helper modules by selftests, but may have other uses as well.
+Thanks,
+Mani
 
-(The advantage of the KUnit tainting is that, due to KUnit's
-centralised executor, we can be sure all KUnit tests will correctly
-trigger the taint. But maybe it doesn't matter as much if one or two
-selftests miss out.)
+> +			compatible = "qcom,sdx65-mc-virt";
+> +			#interconnect-cells = <1>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+>  		tcsr_mutex: hwlock@1f40000 {
+>  			compatible = "qcom,tcsr-mutex";
+>  			reg = <0x01f40000 0x40000>;
+> @@ -401,6 +421,11 @@
+>  					};
+>  				};
+>  			};
+> +
+> +			apps_bcm_voter: bcm-voter {
+> +				compatible = "qcom,bcm-voter";
+> +			};
+> +
+>  		};
+>  	};
+>  
+> -- 
+> 2.7.4
+> 
 
--- David
-
---0000000000007a37b005de526eed
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBr
-X/PN1i5F2zIL242HU4GqsEFET+G6b/STy3yckg7VuTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA1MDYwNzAxNDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYDUZutewvAsTjHXMgVEQ
-On7tpvC/sM+F49kXBC3mN+dn/xITeI7m47iTK6X+Ct5E9qGYkLDpN1d6LOUGC8DYAM0+YIfNNBn8
-aHnuU6qetQUfkRDDhWw95HajkWpb477ny8XEnIUuALqDHB0K7RghabJhdBiA7q0GuVshOqNO6Bmt
-lUV2xwQnDZ+SCkQ31O/icMGdFwY01JvvTx+XDR2jUHz2jOGAFR1ib96DuLG2sR6SASxR3MshuJsz
-13a1zVVdu52JXd1CFyaLcqcyo9h0ykggX1NINTclSrw7EaQVP0Rziil/K422cAncptvuChRN5JCo
-qugllBI5OPHAGbQmag==
---0000000000007a37b005de526eed--
+-- 
+மணிவண்ணன் சதாசிவம்

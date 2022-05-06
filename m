@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D53551E02C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF5451E02D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442993AbiEFUgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S1443074AbiEFUhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344781AbiEFUgb (ORCPT
+        with ESMTP id S235709AbiEFUhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:36:31 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3E6D3A9;
-        Fri,  6 May 2022 13:32:47 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 176FF103201C2;
-        Fri,  6 May 2022 22:32:43 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id EB2B611944B; Fri,  6 May 2022 22:32:42 +0200 (CEST)
-Date:   Fri, 6 May 2022 22:32:42 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mark Rutland <mark.rutland@arm.com>, maz@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
-        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
-        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vgupta@kernel.org,
-        vladimir.murzin@arm.com, will@kernel.org
-Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
-Message-ID: <20220506203242.GA1855@wunner.de>
-References: <20211026092504.27071-1-mark.rutland@arm.com>
- <20211026092504.27071-18-mark.rutland@arm.com>
+        Fri, 6 May 2022 16:37:50 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC16D4CD
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:34:06 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q76so6947324pgq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MZ19ALwGfeHS9iaFuA2ZzP6YyLhWOKvVYrp4nK5KLQc=;
+        b=lNEBKjnJDvy0Hq6IRt/ElaWOnKrUKBijImtjmZvZ+t52bUZK5rVDUYNZs2jIL570cZ
+         d5DhsEboJAVF0FSgiSit8wLlXX3iqQ4ZTfOJF8tMcVIY+C/6cuswORY6BHHbw1ygSXf9
+         pY1c/DTpFr4HMU+MBQJiHMsNZYzok9T5A3WBE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MZ19ALwGfeHS9iaFuA2ZzP6YyLhWOKvVYrp4nK5KLQc=;
+        b=dtQ3cRFpv1pVv7rJSOrbuR/M38GwyEs0Oknce3xwfyi0shEz1RM1DARIkapNqfWGy9
+         DPiDmlP7QvBsTFDnMxxsNn7gy37QR5gA2G1aaEUnr5VEKxBqDdv+YF04kpruigd6PI7y
+         vti2d0kKcl5sCC8PCXqvAlLvHsc42GmY8Mt4AzWquTYMEUt494qUbo/pqnFDds3UXO7V
+         SRnrg8oWJzYTWnxYLWdHUEapIDrrGGeLjgKmW6K99/UVehhDLQ9YX8Hi76MhyGYiWx+O
+         T4cZbtzAgzPdBWbOi+Gb4bCoca949lNOhi1xK7CF3DVIOYMYOMrwOs6rKjkFhYH4SOTZ
+         seww==
+X-Gm-Message-State: AOAM5315V3XjJkY4X40uCIqhRIGgRzR3xyMO8pfXsrJipnBHuQYG3S0Q
+        hieS2EL2lYt36YWsMNQEvdxVzQ==
+X-Google-Smtp-Source: ABdhPJyAdgaXQye+VmOz2DpnHDLexYJOYwdCsJIjFfTv8l/nHNJH8My91Ib5HYnU4z9MgFeU+lnc+A==
+X-Received: by 2002:a65:694c:0:b0:398:fd64:7422 with SMTP id w12-20020a65694c000000b00398fd647422mr4055208pgq.503.1651869246197;
+        Fri, 06 May 2022 13:34:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id hf21-20020a17090aff9500b001dbe7ccdd4dsm7783441pjb.10.2022.05.06.13.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 13:34:05 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Kees Cook <keescook@chromium.org>, alex.popov@linux.com
+Subject: Re: [PATCH] lkdtm/stackleak: fix CONFIG_GCC_PLUGIN_STACKLEAK=n
+Date:   Fri,  6 May 2022 13:33:59 -0700
+Message-Id: <165186923712.2156651.13479757595045860724.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220506121145.1162908-1-mark.rutland@arm.com>
+References: <20220506121145.1162908-1-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211026092504.27071-18-mark.rutland@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 10:25:04AM +0100, Mark Rutland wrote:
-> Now that entry code handles IRQ entry (including setting the IRQ regs)
-> before calling irqchip code, irqchip code can safely call
-> generic_handle_domain_irq(), and there's no functional reason for it to
-> call handle_domain_irq().
+On Fri, 6 May 2022 13:11:45 +0100, Mark Rutland wrote:
+> Recent rework broke building LKDTM when CONFIG_GCC_PLUGIN_STACKLEAK=n.
+> This patch fixes that breakage.
 > 
-> Let's cement this split of responsibility and remove handle_domain_irq()
-> entirely, updating irqchip drivers to call generic_handle_domain_irq().
+> Prior to recent stackleak rework, the LKDTM STACKLEAK_ERASING code could
+> be built when the kernel was not built with stackleak support, and would
+> run a test that would almost certainly fail (or pass by sheer cosmic
+> coincidence), e.g.
 > 
-> For consistency, handle_domain_nmi() is similarly removed and replaced
-> with a generic_handle_domain_nmi() function which also does not perform
-> any entry logic.
-> 
-> Previously handle_domain_{irq,nmi}() had a WARN_ON() which would fire
-> when they were called in an inappropriate context. So that we can
-> identify similar issues going forward, similar WARN_ON_ONCE() logic is
-> added to the generic_handle_*() functions, and comments are updated for
-> clarity and consistency.
-[...]
->  int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
->  {
-> +	WARN_ON_ONCE(!in_irq());
->  	return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
->  }
->  EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+> [...]
 
-Why isn't the WARN_ON_ONCE() conditional on handle_enforce_irqctx()?
-(See handle_irq_desc() and c16816acd086.)
+Applied to for-next/hardening, thanks!
 
-I believe the above change causes a regression in drivers/gpio/gpio-dln2.c
-such that a gratuitous WARN splat is now emitted.
+[1/1] lkdtm/stackleak: fix CONFIG_GCC_PLUGIN_STACKLEAK=n
+      https://git.kernel.org/kees/c/932c12ae7963
 
-Thanks,
+-- 
+Kees Cook
 
-Lukas

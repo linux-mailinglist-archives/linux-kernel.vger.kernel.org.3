@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAAA51D5EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB21951D5FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391074AbiEFKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S1344999AbiEFK4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391076AbiEFKsv (ORCPT
+        with ESMTP id S231966AbiEFK4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:48:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE3367D04
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:45:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 6 May 2022 06:56:04 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF65C362;
+        Fri,  6 May 2022 03:52:19 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E609D21A8A;
-        Fri,  6 May 2022 10:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651833905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by ssl.serverraum.org (Postfix) with ESMTPSA id EE63522246;
+        Fri,  6 May 2022 12:52:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651834336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JBwOt1RF8EsTJcYBYl+0GNWlwHFwIOlw9+R5hnEyELE=;
-        b=eSPSjotpfRcOWk0jZW9qANamWjseFdMATaSNtU3/M/YzCU8f/1EGO32s1kLoMfwMEd7sJs
-        SfYKP9rKZm6yNSUYyqwgRjwLu3n1ihRt7/hCRH2HPhyapKVhq3NdcJKuPYBCEq0VweOoCY
-        TrDMoyMTrCpnqtdUFKxFUtZaTLeapIs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651833905;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JBwOt1RF8EsTJcYBYl+0GNWlwHFwIOlw9+R5hnEyELE=;
-        b=8mDMrK8Nueh1reSSRQTYjwoLgqHT8TZPnSaw/2hxkXI2CzfTBgdzkbsenoKH3ZLkLpJoGp
-        ui8lVBkXF0GPJfAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B56813AA2;
-        Fri,  6 May 2022 10:45:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iWjCIzH8dGImAwAAMHmgww
-        (envelope-from <jroedel@suse.de>); Fri, 06 May 2022 10:45:05 +0000
-Date:   Fri, 6 May 2022 12:45:04 +0200
-From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <jroedel@suse.de>
-To:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BUG] Warning and NULL-ptr dereference in amdgpu driver with 5.18
-Message-ID: <YnT8MAjb/jW4ENVS@suse.de>
-References: <YnTAc96Uv0CXcGhD@suse.de>
+        bh=hBTLRDXX7HYWGSCeHSGr2YftxW57WhXM3Qvb9yVkUQk=;
+        b=hAWKHoWNoWZfeKBbrvLwwZUOCIaV0Huaxz+PHJqpLVZdnH/5+RDd/z4htrynCe85SCOmNw
+        Jgv/BprTb1DY6+XBz0tjeqOTmMSU13D8llXKPYwvLrHE98OCaqSFNuaY24kEjvMFVy68h1
+        NH7Id3QryZVY5LUiKPbvxjEB004JDC4=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnTAc96Uv0CXcGhD@suse.de>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 06 May 2022 12:52:13 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v9 0/7] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+In-Reply-To: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <49e1738c55c73819ee0e2cac0be74d81@walle.cc>
+X-Sender: michael@walle.cc
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -74,16 +77,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 08:30:13AM +0200, Jörg Rödel wrote:
-> [81829.087101] ------------[ cut here ]------------
-> [81829.087105] WARNING: CPU: 4 PID: 644 at drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dce110/dce110_clk_mgr.c:140 dce110_fill_display_configs+0x4a/0x150 [amdgpu]
+Am 2022-05-06 08:25, schrieb Ahmad Fatoum:
+> Series applies on top of v5.18-rc5. Would be great if this could make 
+> it
+> into v5.19.
+> 
+> v8 was here:
+> https://lore.kernel.org/linux-integrity/09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de
+> 
+> Changelog is beneath each individual patch. Compared to v8, only code
+> change is checking whether CAAM can support blobbing at init-time as
+> apparently some Layerscape SoCs are available in a non-E(ncryption)
+> variant that doesn't do AES. Previously, adding trusted keys on such
+> SoCs would return an error with a cryptic error message.
+> 
+> 
+> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP 
+> core
+> built into many newer i.MX and QorIQ SoCs by NXP.
+> 
+> Its blob mechanism can AES encrypt/decrypt user data using a unique
+> never-disclosed device-specific key.
+> 
+> There has been multiple discussions on how to represent this within the 
+> kernel:
+> 
+> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP 
+> core
+> built into many newer i.MX and QorIQ SoCs by NXP.
+> 
+> Its blob mechanism can AES encrypt/decrypt user data using a unique
+> never-disclosed device-specific key. There has been multiple
+> discussions on how to represent this within the kernel:
+> 
+>  - [RFC] crypto: caam - add red blobifier
+>    Steffen implemented[1] a PoC sysfs driver to start a discussion on 
+> how to
+>    best integrate the blob mechanism.
+>    Mimi suggested that it could be used to implement trusted keys.
+>    Trusted keys back then were a TPM-only feature.
+> 
+>  - security/keys/secure_key: Adds the secure key support based on CAAM.
+>    Udit Agarwal added[2] a new "secure" key type with the CAAM as 
+> backend.
+>    The key material stays within the kernel only.
+>    Mimi and James agreed that this needs a generic interface, not 
+> specific
+>    to CAAM. Mimi suggested trusted keys. Jan noted that this could 
+> serve as
+>    basis for TEE-backed keys.
+> 
+>  - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+>    Franck added[3] a new "caam_tk" key type based on Udit's work. This 
+> time
+>    it uses CAAM "black blobs" instead of "red blobs", so key material 
+> stays
+>    within the CAAM and isn't exposed to kernel in plaintext.
+>    James voiced the opinion that there should be just one user-facing 
+> generic
+>    wrap/unwrap key type with multiple possible handlers.
+>    David suggested trusted keys.
+> 
+>  - Introduce TEE based Trusted Keys support
+>    Sumit reworked[4] trusted keys to support multiple possible backends 
+> with
+>    one chosen at boot time and added a new TEE backend along with TPM.
+>    This now sits in Jarkko's master branch to be sent out for v5.13
+> 
+> This patch series builds on top of Sumit's rework to have the CAAM as
+> yet another
+> trusted key backend.
+> 
+> The CAAM bits are based on Steffen's initial patch from 2015. His work 
+> had been
+> used in the field for some years now, so I preferred not to deviate
+> too much from it.
+> 
+> This series has been tested with dmcrypt[5] on an i.MX6Q/DL and an 
+> i.MX8M[6].
+> 
+> Looking forward to your feedback.
 
-Same just happened with a kernel built from latest upstream, based on
-commit fe27d189e3f42e31d3c8223d5daed7285e334c5e. So it's at least not
-the iommu changes causing it :)
+For the whole series:
 
-Please let me know if I can be of any help debugging this further.
+Tested-by: Michael Walle <michael@walle.cc> # on ls1028a (non-E and E)
 
-Thanks,
-
-	Joerg
+-michael

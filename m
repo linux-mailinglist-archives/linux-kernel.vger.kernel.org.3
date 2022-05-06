@@ -2,80 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450DB51CF95
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0894951CF9C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388607AbiEFDgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S1388706AbiEFDh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346609AbiEFDgJ (ORCPT
+        with ESMTP id S1388624AbiEFDhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:36:09 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BC03FBCC
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:32:27 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id i1so6196411plg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=asq1GsK2iP60zPURDoJiaqZrj1b/oRYrh2NIL66ASXY=;
-        b=A5R+QgbkQY/b9pt/zpN4FQSLdc75DJtMIayyn5WIe1M8RAn5/H92sELF5NQSRbYwaP
-         h0KnGXdji5cdjXEl9Yeo1eDyfPEoc99H3bfSd+F2l1ihlR0cRc7LocmA+Y34+hwQK+jD
-         HS3mTrHBIyHs+ZjqKGJOW5PhD31HK0S5UWooJflZSS6AFdyPyOJBx6bB9btEWOO6itiy
-         /vB8Ko49CwAQdUxK2/kXLOTaBNOg0l6Y2hRBXFaKs/NKtibrZF3z/ExqnnKwe4jXlAXX
-         QAhuM9HqDlFQUeQX+3+N0zz9U6TNDtN5J8MmqWLNa7xUSBLFpBitD68Kx81P7nKR445K
-         ETQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=asq1GsK2iP60zPURDoJiaqZrj1b/oRYrh2NIL66ASXY=;
-        b=3azAW9SkeNATUntF76pw2W7t9ghcFp2SCWyp+BJsAnFIQ/yDz11RJStiViX6aZPpI4
-         P0w0DmTdN7cQdWHAEVJYsaJ6lX6NND4QIYrYK3g7WMJEdTT2R/2ITh9RGnBF0BEvmyrv
-         KSwSysFaWmrXT2LxgD4FOz1nr8il5pkBW/de/jqK3o9Do/l2SFK4ck74JbZFogzO1gT3
-         f7ymGBqegQi0h1vkUGeTHwbWgwAm/ANF3ZICUmII09BTLBt+Wjy+hBA4mtHyqVgZTrhN
-         YcuAGn7o12I2SF/l7SnCMAOvctKZIWu+dvlsIwYXxO2WZHiE4nHNuE87L4uPvAAu/ZAQ
-         y7vA==
-X-Gm-Message-State: AOAM53306kGAev2EO3ouvW+sFye2ysxr98oFFDhaSv1sEQPSba3VtYqs
-        EcB43k2n8SONSIG5ecROakpMtzA0On8qaA==
-X-Google-Smtp-Source: ABdhPJzUQR4zLt0S+U3opN35Ejwzugn4AwM70j+cIKNxj/BkVwRUQvHT3NOFZ9B0ZDH+yZ1YttAyDw==
-X-Received: by 2002:a17:903:110c:b0:14d:8859:5c8 with SMTP id n12-20020a170903110c00b0014d885905c8mr1578557plh.156.1651807947447;
-        Thu, 05 May 2022 20:32:27 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b0015e8d4eb2a3sm383395pls.237.2022.05.05.20.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:32:26 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:02:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
-Message-ID: <20220506033223.6ixlse3psixfeec7@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
- <20220505115226.20130-6-rex-bc.chen@mediatek.com>
- <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
- <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
+        Thu, 5 May 2022 23:37:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2F734B89;
+        Thu,  5 May 2022 20:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651808010; x=1683344010;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jWl1D5slKk6w7g0PrJ06g4GuOXgOsDIIVfKaaFlJcrU=;
+  b=AY5pqZSX7/qfGtmXbYqGT9kzZP8XT4X8b2HHHI0xh76DWSrH71dbzHOA
+   NaflWsb3Ucyr27+rEuMD1UK5UUuM9f4s0HrhTSwG+3+PW2oPU7OlJ+tf7
+   hFbjogcVSLAZlWfi0qvlcZeAXoGI0+fa1VRVA1FJhMduphRlGfOKGvMMX
+   jgTd/kx/dxTmmMWVL7c1fNqNCAd/xivwDSM2DpqotD611gqQzg58AE7PO
+   XMN1gu0CalBd/iccAQ4OFGU7og6ByK73YBZoPt6RPc9odwhkB/4hNh+oi
+   GxRD8bY9i4Tdjs4n9/AwZ9425zQBZZr077gBYwfgKTug8S4/9IZxndYfq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248241398"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="248241398"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:33:30 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="632745146"
+Received: from embargo.jf.intel.com ([10.165.9.183])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:33:30 -0700
+From:   Yang Weijiang <weijiang.yang@intel.com>
+To:     pbonzini@redhat.com, jmattson@google.com, seanjc@google.com,
+        kan.liang@linux.intel.com, like.xu.linux@gmail.com,
+        vkuznets@redhat.com, wei.w.wang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yang Weijiang <weijiang.yang@intel.com>
+Subject: [PATCH v11 00/16] Introduce Architectural LBR for vPMU
+Date:   Thu,  5 May 2022 23:32:49 -0400
+Message-Id: <20220506033305.5135-1-weijiang.yang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,40 +59,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Konstantin
+Intel CPU model-specific LBR(Legacy LBR) evolved into Architectural
+LBR(Arch LBR[0]), it's the replacement of legacy LBR on new platforms.
+The native support patches were merged into 5.9 kernel tree, and this
+patch series is to enable Arch LBR in vPMU so that guest can benefit
+from the merits of the feature.
 
-On 06-05-22, 11:22, Chen-Yu Tsai wrote:
-> On Fri, May 6, 2022 at 9:56 AM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
-> >
-> > On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
-> > > From this opp notifier, cpufreq should listen to opp notification and
-> > > do
-> >
-> > Hello Viresh,
-> >
-> > There is still ">" in this patch...
-> > I think the root cause could be the "From" word in the beginning of
-> > this message.
-> > I will not use "From" in next version..
-> 
-> Could this be a bug in lore?
-> 
-> I'm not seeing this extra ">" in either the email in my inbox, viewed
-> raw, nor the patch downloaded from patchwork [1].
-> 
-> 
-> ChenYu
-> 
-> [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220505115226.20130-6-rex-bc.chen@mediatek.com/mbox/
+The main advantages of Arch LBR are [1]:
+- Faster context switching due to XSAVES support and faster reset of
+  LBR MSRs via the new DEPTH MSR
+- Faster LBR read for a non-PEBS event due to XSAVES support, which
+  lowers the overhead of the NMI handler.
+- Linux kernel can support the LBR features without knowing the model
+  number of the current CPU.
 
-Interesting.
+From end user's point of view, the usage of Arch LBR is the same as
+the Legacy LBR that has been merged in the mainline.
 
-Konstantin, we are witnessing an additional ">" symbol in the first
-line of the commit log for this particular patch for some reason.
+Note, in this series, we impose one restriction for guest Arch LBR:
+Guest can only set the same LBR record depth as host, this is due to
+the special behavior of MSR_ARCH_LBR_DEPTH: 1) On write to the MSR,
+it'll reset all Arch LBR recording MSRs to 0s. 2) XRSTORS resets all
+record MSRs to 0s if the saved depth mismatches MSR_ARCH_LBR_DEPTH.
+Enforcing the restriction keeps the KVM enabling patch simple and
+straightforward.
 
-https://lore.kernel.org/lkml/20220505115226.20130-6-rex-bc.chen@mediatek.com/raw
+[0] https://software.intel.com/sites/default/files/managed/c5/15/architecture-instruction-set-extensions-programming-reference.pdf
+[1] https://lore.kernel.org/lkml/1593780569-62993-1-git-send-email-kan.liang@linux.intel.com/
 
-Any idea ?
+Qemu patch:
+https://patchwork.ozlabs.org/project/qemu-devel/cover/20220215195258.29149-1-weijiang.yang@intel.com/
 
+Previous version:
+v10: https://lore.kernel.org/all/20220422075509.353942-1-weijiang.yang@intel.com/
+
+Changes in v11:
+1. Moved MSR_ARCH_LBR_DEPTH/CTL check code to a unified function.[Kan]
+2. Modified some commit messages per Kan's feedback.
+3. Rebased the patch series to 5.18-rc5.
+
+Like Xu (6):
+  perf/x86/intel: Fix the comment about guest LBR support on KVM
+  perf/x86/lbr: Simplify the exposure check for the LBR_INFO registers
+  KVM: vmx/pmu: Emulate MSR_ARCH_LBR_DEPTH for guest Arch LBR
+  KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for guest Arch LBR
+  KVM: x86: Refine the matching and clearing logic for supported_xss
+  KVM: x86: Add XSAVE Support for Architectural LBR
+
+Sean Christopherson (1):
+  KVM: x86: Report XSS as an MSR to be saved if there are supported
+    features
+
+Yang Weijiang (9):
+  KVM: x86: Refresh CPUID on writes to MSR_IA32_XSS
+  KVM: x86: Add Arch LBR MSRs to msrs_to_save_all list
+  KVM: x86/pmu: Refactor code to support guest Arch LBR
+  KVM: x86/vmx: Check Arch LBR config when return perf capabilities
+  KVM: nVMX: Add necessary Arch LBR settings for nested VM
+  KVM: x86/vmx: Clear Arch LBREn bit before inject #DB to guest
+  KVM: x86/vmx: Flip Arch LBREn bit on guest state change
+  KVM: x86: Add Arch LBR data MSR access interface
+  KVM: x86/cpuid: Advertise Arch LBR feature in CPUID
+
+ arch/x86/events/intel/core.c     |   3 +-
+ arch/x86/events/intel/lbr.c      |   6 +-
+ arch/x86/include/asm/kvm_host.h  |   3 +
+ arch/x86/include/asm/msr-index.h |   1 +
+ arch/x86/include/asm/vmx.h       |   4 +
+ arch/x86/kvm/cpuid.c             |  49 +++++++++-
+ arch/x86/kvm/vmx/capabilities.h  |   8 ++
+ arch/x86/kvm/vmx/nested.c        |   7 +-
+ arch/x86/kvm/vmx/pmu_intel.c     | 157 ++++++++++++++++++++++++++++---
+ arch/x86/kvm/vmx/vmcs12.c        |   1 +
+ arch/x86/kvm/vmx/vmcs12.h        |   3 +-
+ arch/x86/kvm/vmx/vmx.c           |  65 ++++++++++++-
+ arch/x86/kvm/x86.c               |  23 ++++-
+ 13 files changed, 295 insertions(+), 35 deletions(-)
+
+
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
 -- 
-viresh
+2.27.0
+

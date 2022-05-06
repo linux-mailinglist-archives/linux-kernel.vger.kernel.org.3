@@ -2,164 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9ED51DDA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8F151DDA9
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443809AbiEFQdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S1443826AbiEFQgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiEFQdi (ORCPT
+        with ESMTP id S1443819AbiEFQgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:33:38 -0400
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0344A6E8F3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:29:54 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwyT4LLBzMpt82;
-        Fri,  6 May 2022 18:29:53 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwyS25M7zlhRVT;
-        Fri,  6 May 2022 18:29:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651854593;
-        bh=5oj7hdI4Rj2ExwGYaOYEvvUzEy2tnYUuMitHlfxtsZs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=eti4l+QSiv/912WPo99HWiKwdLRXF7I+vnsJ8P71DmSJkPUK5qdYZjhpVZ2qHvkWp
-         QOF62IJbqEhi3Lyi46H0spdGplVO0Xhch7bo/QNYPYA8KQ6BDy2XX1JhhLMFVxp5Sn
-         lg1uCApeKQEZBKS/+hAkimmuhDoHbgik4Alg1eKU=
-Message-ID: <d6a6d963-a8d3-0f21-c35e-9d430c6f19ea@digikod.net>
-Date:   Fri, 6 May 2022 18:31:19 +0200
+        Fri, 6 May 2022 12:36:53 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796014EF6B;
+        Fri,  6 May 2022 09:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651854790; x=1683390790;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NUSDpDYK9LHoRDYP/GAG5zI9+n9lXCiukOajpSWRp7U=;
+  b=SCMfjvm7IPTy3aeW2103g5sLBIX2xC9SxjzYQQkcDoKpJnNW/H59zZd+
+   ZbdPuR+s3/HfqWCQEF2R8mG22kOyX7zbvK/mReS4+9lnhlImX8L27Wb8L
+   mKb/f3AR6w9wcDDXgKNE/opK3ZRvUzQWE4DK1jcRPxqW84WM/j8btgpAZ
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 May 2022 09:33:10 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 09:33:09 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 6 May 2022 09:33:09 -0700
+Received: from [10.111.168.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 6 May 2022
+ 09:33:04 -0700
+Message-ID: <8ea03441-b835-f5db-5cc3-85e5330dfe3f@quicinc.com>
+Date:   Fri, 6 May 2022 09:33:02 -0700
 MIME-Version: 1.0
-User-Agent: 
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
+ resolution as preferred
 Content-Language: en-US
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20220506161102.525323-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v3 00/12] Landlock: file linking and renaming support
-In-Reply-To: <20220506161102.525323-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Doug Anderson <dianders@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
+ <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
+ <874k22lxmh.fsf@intel.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <874k22lxmh.fsf@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The four related patch series are available here: 
-https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/log/?h=landlock-wip
+Hi Jani
 
-On 06/05/2022 18:10, Mickaël Salaün wrote:
-> Hi,
+On 5/6/2022 4:16 AM, Jani Nikula wrote:
+> On Thu, 05 May 2022, Doug Anderson <dianders@chromium.org> wrote:
+>> Ville,
+>>
+>> On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
+>>>
+>>> If we're unable to read the EDID for a display because it's corrupt /
+>>> bogus / invalid then we'll add a set of standard modes for the
+>>> display. When userspace looks at these modes it doesn't really have a
+>>> good concept for which mode to pick and it'll likely pick the highest
+>>> resolution one by default. That's probably not ideal because the modes
+>>> were purely guesses on the part of the Linux kernel.
+>>>
+>>> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
+>>>
+>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>> ---
+>>>
+>>>   drivers/gpu/drm/drm_edid.c | 9 +++++++++
+>>>   1 file changed, 9 insertions(+)
+>>
+>> Someone suggested that you might have an opinion on this patch and
+>> another one I posted recently [1]. Do you have any thoughts on it?
+>> Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
+>> don't have an opinion, that's OK too.
+>>
+>> [1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
 > 
-> This third patch series is mostly a rebase with some whitespace changes
-> because of clang-format.  There is also some new "unlikely()" calls and
-> minor code cleanup.
+> There are a number of drivers with combos:
 > 
-> Test coverage for security/landlock was 94.4% of 504 lines (with the
-> previous patch series), and it is now 95.4% of 604 lines according to
-> gcc/gcov-11.
+> 	drm_add_modes_noedid()
+> 	drm_set_preferred_mode()
 > 
-> Problem
-> =======
+> which I think would be affected by the change. Perhaps you should just
+> call drm_set_preferred_mode() in your referenced patch?
+> So it seems like many drivers handle the !edid case within their 
+respective get_modes() call which probably is because they know the max 
+capability of their connector and because they know which mode should be 
+set as preferred. But at the same time, perhaps the code below which 
+handles the count == 0 case should be changed like below to make sure we 
+are within the max_width/height of the connector (to handle the first 
+condition)?
+
+diff --git a/drivers/gpu/drm/drm_probe_helper.c 
+b/drivers/gpu/drm/drm_probe_helper.c
+index 682359512996..6eb89d90777b 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -517,7 +517,8 @@ int drm_helper_probe_single_connector_modes(struct 
+drm_connector *connector,
+
+         if (count == 0 && (connector->status == 
+connector_status_connected ||
+                            connector->status == connector_status_unknown))
+-               count = drm_add_modes_noedid(connector, 1024, 768);
++               count = drm_add_modes_noedid(connector, 
+connector->dev->mode_config.max_width,
++                               connector->dev->mode_config.max_height);
+         count += drm_helper_probe_add_cmdline_mode(connector);
+         if (count == 0)
+                 goto prune;
+
+
+> Alternatively, perhaps drm_set_preferred_mode() should erase the
+> previous preferred mode(s) if it finds a matching new preferred mode.
 > 
-> One of the most annoying limitations of Landlock is that sandboxed
-> processes can only link and rename files to the same directory (i.e.
-> file reparenting is always denied).  Indeed, because of the unprivileged
-> nature of Landlock, file hierarchy are identified thanks to ephemeral
-> inode tagging, which may cause arbitrary renaming and linking to change
-> the security policy in an unexpected way.
+
+But still yes, even if we change it like above perhaps for other non-DP 
+cases its still better to allow individual drivers to pick their 
+preferred modes.
+
+If we call drm_set_preferred_mode() in the referenced patch, it will not 
+address the no EDID cases because the patch comes into picture when 
+there was a EDID with some modes but not with 640x480.
+
+So i think the second proposal is a good one. It will cover existing 
+users of drm_set_preferred_mode() as typically its called after 
+drm_add_modes_noedid() which means the existing users want to "override" 
+their preferred mode.
+
 > 
-> Solution
-> ========
+> BR,
+> Jani.
 > 
-> This patch series brings a new access right, LANDLOCK_ACCESS_FS_REFER,
-> which enables to allow safe file linking and renaming.  In a nutshell,
-> Landlock checks that the inherited access rights of a moved or renamed
-> file cannot increase but only reduce.  Eleven new test suits cover file
-> renaming and linking, which improves test coverage.
-> 
-> The documentation and the tutorial is extended with this new access
-> right, along with more explanations about backward and forward
-> compatibility, good practices, and a bit about the current access
-> rights rational.
-> 
-> While developing this new feature, I also found an issue with the
-> current implementation of Landlock.  In some (rare) cases, sandboxed
-> processes may be more restricted than intended.  Indeed, because of the
-> current way to check file hierarchy access rights, composition of rules
-> may be incomplete when requesting multiple accesses at the same time.
-> This is fixed with a dedicated patch involving some refactoring.  A new
-> test suite checks relevant new edge cases.
-> 
-> As a side effect, and to limit the increased use of the stack, I reduced
-> the number of Landlock nested domains from 64 to 16.  I think this
-> should be more than enough for legitimate use cases, but feel free to
-> challenge this decision with real and legitimate use cases.
-> 
-> Additionally, a new dedicated syzkaller test has been developed to cover
-> new paths.
-> 
-> This patch series is based on and was developed with some complementary
-> new tests sent in a standalone patch series:
-> https://lore.kernel.org/r/20220506160820.524344-1-mic@digikod.net
-> 
-> Previous versions:
-> v2: https://lore.kernel.org/r/20220329125117.1393824-1-mic@digikod.net
-> v1: https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
-> 
-> Regards,
-> 
-> Mickaël Salaün (12):
->    landlock: Define access_mask_t to enforce a consistent access mask
->      size
->    landlock: Reduce the maximum number of layers to 16
->    landlock: Create find_rule() from unmask_layers()
->    landlock: Fix same-layer rule unions
->    landlock: Move filesystem helpers and add a new one
->    LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
->    landlock: Add support for file reparenting with
->      LANDLOCK_ACCESS_FS_REFER
->    selftests/landlock: Add 11 new test suites dedicated to file
->      reparenting
->    samples/landlock: Add support for file reparenting
->    landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
->    landlock: Document good practices about filesystem policies
->    landlock: Add design choices documentation for filesystem access
->      rights
-> 
->   Documentation/security/landlock.rst          |   17 +-
->   Documentation/userspace-api/landlock.rst     |  151 ++-
->   include/linux/lsm_hook_defs.h                |    2 +-
->   include/linux/lsm_hooks.h                    |    1 +
->   include/uapi/linux/landlock.h                |   27 +-
->   samples/landlock/sandboxer.c                 |   40 +-
->   security/apparmor/lsm.c                      |   30 +-
->   security/landlock/fs.c                       |  771 ++++++++++---
->   security/landlock/fs.h                       |    2 +-
->   security/landlock/limits.h                   |    6 +-
->   security/landlock/ruleset.c                  |    6 +-
->   security/landlock/ruleset.h                  |   22 +-
->   security/landlock/syscalls.c                 |    2 +-
->   security/security.c                          |    9 +-
->   security/tomoyo/tomoyo.c                     |   11 +-
->   tools/testing/selftests/landlock/base_test.c |    2 +-
->   tools/testing/selftests/landlock/fs_test.c   | 1039 ++++++++++++++++--
->   17 files changed, 1853 insertions(+), 285 deletions(-)
-> 
-> 
-> base-commit: 4b0cdb0cf6eefa7521322007931ccfb7edc96c53

@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FBA51DCB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127D851DCBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355739AbiEFQEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S1443314AbiEFQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443267AbiEFQDj (ORCPT
+        with ESMTP id S1392246AbiEFQFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:03:39 -0400
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAD96D3AF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:59:56 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwHr6bv2zMqSHG;
-        Fri,  6 May 2022 17:59:52 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwHq1CRGzljsTN;
-        Fri,  6 May 2022 17:59:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651852792;
-        bh=wXt5V32MOkd3JJdPG9GwDCkPTH/BF8OWATmyHyUQ6Gs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lRc3SrWTV3AmR/r28718FJBdJMqWCLH3epIPUkeDPP5Fvsxo0yTfsoSPEIx8a41Y3
-         eD6qhRb2ozK76zekD+h18j4KhJ0cqak1Vg21qn/w3LrH6g6XnjHr5Ez123dytbMtSe
-         g6zCe59CnX4hyrlxED8pwmtjPGgn6C06qu7PKqFk=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Moore <paul@paul-moore.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2 5/5] clang-format: Fix space after for_each macros
-Date:   Fri,  6 May 2022 18:01:06 +0200
-Message-Id: <20220506160106.522341-6-mic@digikod.net>
-In-Reply-To: <20220506160106.522341-1-mic@digikod.net>
-References: <20220506160106.522341-1-mic@digikod.net>
+        Fri, 6 May 2022 12:05:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104CD2F005;
+        Fri,  6 May 2022 09:01:31 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651852889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wJBPtOUuNGrHC5/SIZntmXtYnpjE0lXfTrqYkqCo5pQ=;
+        b=CBRYzpdKZZWT8ytV6rdLyCTJAwiIN2rDkMGzmpPv6H/tLdWpFMd0OVu51xFn2g+pD0JXff
+        nn9WCQx/GgXK4oaq3X7ULoHpGW0qtqJS/meB2ZCxtbkYbiXeru1XCrcqzJXOMTiaLtx78I
+        DhLroSR+vkZsqD7zlSvvm2j236SioBZu+QS0eeJB5nfPZ6BiGkjxvNdXGMBO/RanCr7iKa
+        35Tx4Eig/PIVdZ4o1vXWx0YQhY1usKFh4bOyQXHJn5tnTiq3JNNTNnlMUIWkIcJdJ+qAAn
+        cyFSF54QcGwIuSHnDq7xRaCTkb6ysRFJ/SWrCNOmYirRbgWiqF6PCJHBFUEsGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651852889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wJBPtOUuNGrHC5/SIZntmXtYnpjE0lXfTrqYkqCo5pQ=;
+        b=AXBihZhZn5hV8VcQ9uLilDw48pxRojGFGEGM7trGpG072E3p97DGWqIo6FNwOcqlKrzLrW
+        ZOOhrNn/8XuZybCQ==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        0day robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        Theodore Ts'o <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        linux-crypto@vger.kernel.org, nathan@kernel.org
+Subject: Re: [timekeeping]  3aeaac747d: PANIC:early_exception
+In-Reply-To: <YnT0dDFtq7HnRC7n@zx2c4.com>
+References: <20220506032023.GA23061@xsang-OptiPlex-9020>
+ <8735hnhz1q.ffs@tglx> <YnT0dDFtq7HnRC7n@zx2c4.com>
+Date:   Fri, 06 May 2022 18:01:29 +0200
+Message-ID: <87o80ahcpy.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,48 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set SpaceBeforeParens to ControlStatementsExceptForEachMacros to not add
-space between a for_each macro and the following parenthesis.  This
-option is available since clang-format-11 [1] and is in line with the
-checkpatch.pl rules [2].
+On Fri, May 06 2022 at 12:12, Jason A. Donenfeld wrote:
+> On Fri, May 06, 2022 at 09:59:13AM +0200, Thomas Gleixner wrote:
+>> +/**
+>> + * random_get_entropy_fallback - Returns the raw clock source value,
+>> + * used by random.c for platforms with no valid random_get_entropy().
+>> + */
+>> +unsigned long random_get_entropy_fallback(void)
+>> +{
+>> +	struct tk_read_base *tkr = &tk_core.timekeeper.tkr_mono;
+>> +	struct clocksource *clock = READ_ONCE(tkr->clock);
+>> +
+>> +	if (!timekeeping_suspended && clock)
+>> +		return clock->read(clock);
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(random_get_entropy_fallback);
+>
+> I tried to address this already in
+> <https://lore.kernel.org/lkml/20220505002910.IAcnpEOE2zR2ibERl4Lh3Y_PMmtb0Rf43lVevgztJiM@z/>,
+> though yours looks better with the READ_ONCE() around clock, and I'll
+> send a v8 doing it that way. I didn't realize that clock could become
+> NULL again after becoming non-NULL.
 
-I found that this patch has also been sent by Brian Norris some weeks
-ago [3].
+This happens at early boot where clock is NULL.
 
-Link: https://clang.llvm.org/docs/ClangFormatStyleOptions.html [1]
-Link: https://lore.kernel.org/r/8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net [2]
-Link: https://lore.kernel.org/lkml/YmHuZjmP9MxkgJ0R@google.com/ [3]
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Tom Rix <trix@redhat.com>
-Co-developed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20220506160106.522341-6-mic@digikod.net
----
- .clang-format | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> I'm not quite sure I understand the purpose of !timekeeping_suspended
+> there, though. I'm not seeing the path where reading with it suspended
+> negatively affects things. I'll take your word for it though.
 
-diff --git a/.clang-format b/.clang-format
-index 235f7bb8f84a..1e083df1a689 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #
--# clang-format configuration file. Intended for clang-format >= 6.
-+# clang-format configuration file. Intended for clang-format >= 11.
- #
- # For more information, see:
- #
-@@ -667,7 +667,7 @@ SpaceAfterTemplateKeyword: true
- SpaceBeforeAssignmentOperators: true
- SpaceBeforeCtorInitializerColon: true
- SpaceBeforeInheritanceColon: true
--SpaceBeforeParens: ControlStatements
-+SpaceBeforeParens: ControlStatementsExceptForEachMacros
- SpaceBeforeRangeBasedForLoopColon: true
- SpaceInEmptyParentheses: false
- SpacesBeforeTrailingComments: 1
--- 
-2.35.1
+Some clocks are not accessible during suspend.
 
+Thanks,
+
+        tglx

@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D3A51D1B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E974951D1C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387330AbiEFG7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1358380AbiEFHCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385364AbiEFG7f (ORCPT
+        with ESMTP id S242356AbiEFHB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:59:35 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD51FA69
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:55:53 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id a191so5421464pge.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 23:55:53 -0700 (PDT)
+        Fri, 6 May 2022 03:01:59 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C872C10C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:58:16 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so3812838wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 23:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=D4NXdd3YqkdO3IMXdjbzk+SiXyDFtdTRliIhRaIF0uU=;
-        b=csOcQIqCeppAw0bnbA0PAK/KLSkBNEXJGvbbRFUL5u1FD8EeshJ8vsm100ssR6Ppxn
-         usAcP8u5hf++Ngp/PQREyHwtTO1BXYNFWbPhngnUM5A7eYKdOxSqyxRYDf4yMnDC/8NM
-         ij7hJ/5HT+HSdWf/+sNGuOS5UEvbAIu00uFL7dGUbAKptzl/2/7aMt5b9n+BggK+0n5E
-         a6NEub1mlV0DxGT5mVJxfUZ1rvWIVQVJK1R9UspPKKAZrXXjJMlImCJB5TvpKyb9IdM+
-         aaR5Lro6szV2wpztncRzcZLhUGBOd2xR1lxDeN17+mqBaLt70aw0kMBFWLa9/rM2UTcg
-         +ing==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7NQDxom4Md+SF3JBtM9QM8HwZJZp3wgsQ5x/9kk1ouI=;
+        b=ILMjHHtNQzWa0xh6HeDP/oqVu8poke5Qmvml6hgYLwBv9S6AStdzgPSlHRycqiVJzx
+         MiL4dH66H0RPPg1YXuiNVRiO0loo/IJjOmwKpqa+CgLN8PfyloRIak1uFaesy1HpsHXX
+         Q2+JXk7xnaj/+mZn1yMIR8jHivMBl4fRYJMnsS1JEr8i88TYGzPJchcqnSyuirlOarRD
+         Nn3C8GN2aklDdd1ZTsEFzfkocbCgQ9QcZzCZFFwjl+20W9Qzp9pbAHWZlPuTA0b7olED
+         M1nuzZxsiswK3fTwH+PksmxBvZdlVnyGT1dcUvTjkCpnbMQj56J7Uiju9vaLqVRkhXcJ
+         BUbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=D4NXdd3YqkdO3IMXdjbzk+SiXyDFtdTRliIhRaIF0uU=;
-        b=b/3XciwOU3CP3CAOo3kXTgXw5PkM+Fc9RtUPQMBPu/BtRLwnPDrmksNCpLAe2pMj2K
-         AGNX962xoB8nS3BJmzso01rMeAa5VVGXg79ZBvFDSHNKMgX+8ktxdh8NDH4L7rFlqQcf
-         4WP8V+GNvy2mbHZjG4NQESteOUbeMeBJDd65iLKGwNte6dEwAa1+UwepkeorqsjhAtWg
-         JNF3IyHu+bNmewIB3s+35a8+B/ww1mWUw1C8eSxCGYvOWi5XNSRus6GEAd+Ar8h9Srkr
-         H2NWLih/zKjc5uJq5vU1u0FFTXVwQjmM4tYxgwlKQd/DLZTnyz0X2WfUcM038cU60OnH
-         pqLA==
-X-Gm-Message-State: AOAM530IrrAT4Z0abD9og0MdgtFTQtVaFSZ+oEFyJEBFTaJCplZK1pzp
-        JfCX/whq7KQ7HaCTHoTD+7JZ
-X-Google-Smtp-Source: ABdhPJwtcPALIBrmTItLjcphWrDRFNx0TIk+f7DOIPALma//Tvoi/Vyk1N3h9fQS2zZjkCfYSZ8U4g==
-X-Received: by 2002:a65:6a4c:0:b0:39c:f169:b54a with SMTP id o12-20020a656a4c000000b0039cf169b54amr1651752pgu.384.1651820152757;
-        Thu, 05 May 2022 23:55:52 -0700 (PDT)
-Received: from thinkpad ([117.207.26.33])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa78f33000000b0050dc76281b0sm2568308pfr.138.2022.05.05.23.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 23:55:52 -0700 (PDT)
-Date:   Fri, 6 May 2022 12:25:46 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] ARM: dts: qcom: sdx65: Add USB3 and PHY support
-Message-ID: <20220506065546.GA17659@thinkpad>
-References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
- <1651482395-29443-4-git-send-email-quic_rohiagar@quicinc.com>
- <YnQtQ7Il95bfrif9@kroah.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7NQDxom4Md+SF3JBtM9QM8HwZJZp3wgsQ5x/9kk1ouI=;
+        b=U74FVY9g1pmr2u0YBTBIjtkiJpZm1PIu/oZGj65T3dDf/eluq/hE9mL4Arbk9f4HR0
+         GbmROVVUkHmyuIHb5FKga6v1THQPeFn1D5DlFzQ1WpqAUtqnEL6b1JFW/GoHoTY94CKF
+         9taVhwOTYn4xIlKmnWumpGUylaGrnUaTg0NEejWgj94Bfso/Q6COEJK70gSV3ZaSW3wa
+         US+2cdAAni0Cs/nMdAOYTgyviZDKA8NBeoL0ptp/1TInHrRtc1r6x/QZ++bg0j8gnkmB
+         jltu/DlWrX7dByMZb9T2w2hlUv+loIwlm8Y2h8q85mW/phgJLuhzPictypVf9qsU3aWF
+         dayA==
+X-Gm-Message-State: AOAM532gIJebuG8aHdA/g7B6/d1td5Z2tjhEOSlisH/OoM3KyHiUFonz
+        A3CNxGtYoqQYn4hNUHbdcGgibg==
+X-Google-Smtp-Source: ABdhPJwfhheblu+SZxAuxaecE30axXh+1ZOJYealHB6pGee+YSp7i0i+25+At+988imSp2kBp2CFew==
+X-Received: by 2002:a05:600c:4e93:b0:394:e58:c446 with SMTP id f19-20020a05600c4e9300b003940e58c446mr1834067wmq.21.1651820294700;
+        Thu, 05 May 2022 23:58:14 -0700 (PDT)
+Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id 67-20020a1c1946000000b003942a244f2csm9408328wmz.5.2022.05.05.23.58.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 23:58:14 -0700 (PDT)
+Message-ID: <921b8df5-bd01-1ca5-cbe9-4a4e48acdab8@linaro.org>
+Date:   Fri, 6 May 2022 08:58:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnQtQ7Il95bfrif9@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH RFC v5 5/6] usb: host: add xhci-exynos driver
+Content-Language: en-US
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "open list:DESIGNWARE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+References: <1651818679-10594-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220506063339epcas2p41de479fb6b2d11012a45ac50ccc19a26@epcas2p4.samsung.com>
+ <1651818679-10594-6-git-send-email-dh10.jung@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1651818679-10594-6-git-send-email-dh10.jung@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,23 +90,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:02:11PM +0200, Greg KH wrote:
-> On Mon, May 02, 2022 at 02:36:34PM +0530, Rohit Agarwal wrote:
-> > Add devicetree nodes for enabling USB3 controller, Qcom QMP PHY and
-> > SNPS HS PHY on SDX65.
-> > 
-> > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> > ---
-> >  arch/arm/boot/dts/qcom-sdx65.dtsi | 83 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 83 insertions(+)
+On 06/05/2022 08:31, Daehwan Jung wrote:
+> This driver is for Samsung Exynos xHCI host conroller. It works based on
+
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+> xhci platform driver and extends functions by xhci hooks and overrides.
+> Vendor ops(xhci hooks) should be mapped before probing driver.
+> It overrides functions of hc driver on vendor init.
 > 
-> Does not apply to my tree :(
+> It supports USB Audio offload with Co-processor. It only cares DCBAA,
+> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
+> on specific address with xhci hooks. Co-processor could use them directly
+> without xhci driver after then.
+> 
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/host/Kconfig       |   8 +
+>  drivers/usb/host/Makefile      |   1 +
+>  drivers/usb/host/xhci-exynos.c | 775 +++++++++++++++++++++++++++++++++
 
-DTS patches are supposed to go through ARCH trees. So Bjorn will pick it
-through linux-qcom.
+This is your fifth version and *it still does not compile*. Can you
+compile your changes before sending them? It saves reviewer's time.
 
-Thanks,
-Mani
+/usr/bin/aarch64-linux-gnu-ld: drivers/usb/dwc3/dwc3-exynos.o: in
+function `dwc3_exynos_probe':
 
--- 
-மணிவண்ணன் சதாசிவம்
+dwc3-exynos.c:(.text+0x470): undefined reference to
+`xhci_exynos_register_vendor_ops'
+
+
+
+>  3 files changed, 784 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-exynos.c
+> 
+> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> index 682b3d2da623..ccafcd9b4212 100644
+> --- a/drivers/usb/host/Kconfig
+> +++ b/drivers/usb/host/Kconfig
+> @@ -104,6 +104,14 @@ config USB_XHCI_TEGRA
+>  	  Say 'Y' to enable the support for the xHCI host controller
+>  	  found in NVIDIA Tegra124 and later SoCs.
+>  
+> +config USB_XHCI_EXYNOS
+> +	tristate "xHCI support for Samsung Exynos SoC Series"
+
+XHCI was supported before, wasn't it? If yes, this title does not make
+really sense.
+
+You need to provide proper title explaining this option.
+
+> +	depends on USB_XHCI_PLATFORM
+> +	depends on ARCH_EXYNOS || COMPILE_TEST
+> +	help
+> +	  Say 'Y' to enable the support for the xHCI host controller
+> +	  found in Samsung Exynos SoCs.
+
+The same.
+
+> +
+>  endif # USB_XHCI_HCD
+>  
+>  config USB_EHCI_BRCMSTB
+> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> index 2948983618fb..300f22b6eb1b 100644
+> --- a/drivers/usb/host/Makefile
+> +++ b/drivers/usb/host/Makefile
+> @@ -86,3 +86,4 @@ obj-$(CONFIG_USB_HCD_SSB)	+= ssb-hcd.o
+>  obj-$(CONFIG_USB_FOTG210_HCD)	+= fotg210-hcd.o
+>  obj-$(CONFIG_USB_MAX3421_HCD)	+= max3421-hcd.o
+>  obj-$(CONFIG_USB_XEN_HCD)	+= xen-hcd.o
+> +obj-$(CONFIG_USB_XHCI_EXYNOS)	+= xhci-exynos.o
+> diff --git a/drivers/usb/host/xhci-exynos.c b/drivers/usb/host/xhci-exynos.c
+> new file mode 100644
+> index 000000000000..5318a51ac5ee
+> --- /dev/null
+> +++ b/drivers/usb/host/xhci-exynos.c
+> @@ -0,0 +1,775 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exynos.
+> + *
+> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.samsung.com
+> + * Author: Daehwan Jung <dh10.jung@samsung.com>
+> + *
+> + * A lot of code borrowed from the Linux xHCI driver.
+
+Then please keep original copyrights, as a derivative work.
+
+> + */
+> +#include <linux/pci.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "xhci.h"
+> +#include "xhci-plat.h"
+> +
+> +/* EXYNOS uram memory map */
+> +#define EXYNOS_URAM_ABOX_EVT_RING_ADDR	0x02a00000
+
+Are these SoC memory map addresses? If yes, they should not be
+hard-coded in the driver.
+
+> +#define EXYNOS_URAM_ISOC_OUT_RING_ADDR	0x02a01000
+> +#define EXYNOS_URAM_ISOC_IN_RING_ADDR	0x02a02000
+> +#define EXYNOS_URAM_DEVICE_CTX_ADDR	0x02a03000
+> +#define EXYNOS_URAM_DCBAA_ADDR		0x02a03880
+> +#define EXYNOS_URAM_ABOX_ERST_SEG_ADDR	0x02a03C80
+> +#define EXYNOS_URAM_CTX_SIZE		2112
+> +
+> +int xhci_exynos_register_vendor_ops(void);
+> +
+> +struct xhci_hcd_exynos {
+> +	struct	xhci_intr_reg __iomem *ir_set_audio;
+> +
+> +	struct xhci_ring	*event_ring_audio;
+> +	struct xhci_erst	erst_audio;
+
+Why "xHCI support for Samsung Exynos SoC Series" comes specific to
+audio? Isn't XHCI related to USB, so a Universal use? Cannot XHCI driver
+support mass storage?
+
+> +
+> +	struct device		*dev;
+> +	struct usb_hcd		*hcd;
+> +	struct usb_hcd		*shared_hcd;
+> +
+> +	struct wakeup_source *main_wakelock; /* Wakelock for HS HCD */
+> +	struct wakeup_source *shared_wakelock; /* Wakelock for SS HCD */
+
+None of other USB drivers use wakeloks so why is this one special?
+
+> +
+> +	u32 in_ep;
+> +	u32 out_ep;
+> +	u32 in_deq;
+> +	u32 out_deq;
+> +
+> +	/* This flag is used to check first allocation for URAM */
+> +	bool			exynos_uram_ctx_alloc;
+> +	bool			exynos_uram_isoc_out_alloc;
+> +	bool			exynos_uram_isoc_in_alloc;
+
+This indentation is really troubling me - just few lines above, you
+don't indent variables. Here you indent. You need to clean up your
+driver before submitting. Run checkpatch --strict and fix all the
+issues. Add const to all static variables and most of pointed memory.
+Remove any inconsistencies. Remove double blank lines. Fix indentation.
+
+Best regards,
+Krzysztof

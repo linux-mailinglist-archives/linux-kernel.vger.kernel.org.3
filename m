@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26C351DB9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632A251DB9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442721AbiEFPND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S1359768AbiEFPNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442691AbiEFPMs (ORCPT
+        with ESMTP id S1442695AbiEFPMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 11:12:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C306A6D186;
-        Fri,  6 May 2022 08:09:04 -0700 (PDT)
-Date:   Fri, 06 May 2022 15:09:02 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B000C6D18E;
+        Fri,  6 May 2022 08:09:05 -0700 (PDT)
+Date:   Fri, 06 May 2022 15:09:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651849743;
+        s=2020; t=1651849744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oHHTLxZ0y3dDL8rZhZ0/4b2CMBU/c9ZY1ilj9VRJaos=;
-        b=LoeSJ032In6KMScpHQq6yZRpwF5AP+JvaJ2XMCadWu30u331Fj5TXDlNFF1XMfruzCOnO/
-        3R0M1k9I1HYRQycigmK8rPHxeTLnVPlZdJfRn7dE7ctrQO5qzEtSng0Z5SfrQoHeOuPUYE
-        0AzLOo0V7rnFw1n3XQ15TFVbhTZiD8pHterB7VHUhhx/g2706CtcVCG5ONrxGJLUCPv9wU
-        KqoY+mlB0K/GiYyyuE8Up9HaYRHe7AGvvzjeCj8VkaLZCpP8sWvwqpvWkjo/DNbs4U7phP
-        90ad6DnQPXyoIQYU5QNXO0BkS1sbljkkzjSyyvlC40iN1xivW9M6qvwFXjR9Fg==
+        bh=6EPjCxQti1gT9Rl7reFvr/8P2eXzoNeLa9Vvtum+Gr0=;
+        b=2NDqpw7Mivgwn6mCbyrT1BrzO8qOvlAojbBjAhCaL29GynVH2Hd/Bh195BqkRXUaJmJ58L
+        TnMzUO8wCOO72DcNxIKGpD70b24LOI6jx+YPVUnfxR5qczdaGUl9fpGZLq0VkHf+2KTGgF
+        H4tOCSUqMgWy1PTrlcR/GZSmHA4qA1Qb+HV18S+eiuVY4FexPu0pvkX5D+c6t5TudgC8NI
+        82ush/t4OsMjOq1da1Z5PHgaswg83RUXcs8rNstvOB0VP7BxrdPHlEz/rDU+lfdaOMDD60
+        lASWvViErw97pXk5hPHki3fezpcIcNRxywDCL3KC7udUc+Aja+4gveIhgYyeVQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651849743;
+        s=2020e; t=1651849744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oHHTLxZ0y3dDL8rZhZ0/4b2CMBU/c9ZY1ilj9VRJaos=;
-        b=SwSUFw6zCztrGFPyGHAse8e/nYFTz9NVHTqeTbO2FO1yi2czSk9+n1rXbQXNs8xNXdu6u+
-        ZJckcvHVauHA3/Cw==
-From:   "tip-bot2 for Linus Torvalds" <tip-bot2@linutronix.de>
+        bh=6EPjCxQti1gT9Rl7reFvr/8P2eXzoNeLa9Vvtum+Gr0=;
+        b=4KnvgdPzoprA13aGy/wDGbUQ21Mcy+8JIeNdUSCDKMZTN+ARP+Xr/rC7RxQLwJ4vQtjD6D
+        pKaVITONz2kAo3DQ==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/entry: Simplify entry_INT80_compat()
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+Subject: [tip: x86/asm] x86/mm: Simplify RESERVE_BRK()
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220506121631.221072885@infradead.org>
-References: <20220506121631.221072885@infradead.org>
+In-Reply-To: <20220506121631.133110232@infradead.org>
+References: <20220506121631.133110232@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165184974237.4207.13398999270463525244.tip-bot2@tip-bot2>
+Message-ID: <165184974325.4207.14003566040747100498.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,64 +68,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/asm branch of tip:
 
-Commit-ID:     d205222eb6a8e5e70c21200beb81c6e19ec211d6
-Gitweb:        https://git.kernel.org/tip/d205222eb6a8e5e70c21200beb81c6e19ec211d6
-Author:        Linus Torvalds <torvalds@linux-foundation.org>
-AuthorDate:    Fri, 06 May 2022 14:14:33 +02:00
+Commit-ID:     a1e2c031ec3949b8c039b739c0b5bf9c30007b00
+Gitweb:        https://git.kernel.org/tip/a1e2c031ec3949b8c039b739c0b5bf9c30007b00
+Author:        Josh Poimboeuf <jpoimboe@redhat.com>
+AuthorDate:    Fri, 06 May 2022 14:14:32 +02:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 06 May 2022 15:49:51 +02:00
+CommitterDate: Fri, 06 May 2022 15:26:33 +02:00
 
-x86/entry: Simplify entry_INT80_compat()
+x86/mm: Simplify RESERVE_BRK()
 
-Instead of playing silly games with rdi, use rax for simpler and more
-consistent code.
+RESERVE_BRK() reserves data in the .brk_reservation section.  The data
+is initialized to zero, like BSS, so the macro specifies 'nobits' to
+prevent the data from taking up space in the vmlinux binary.  The only
+way to get the compiler to do that (without putting the variable in .bss
+proper) is to use inline asm.
 
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+The macro also has a hack which encloses the inline asm in a discarded
+function, which allows the size to be passed (global inline asm doesn't
+allow inputs).
+
+Remove the need for the discarded function hack by just stringifying the
+size rather than supplying it as an input to the inline asm.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220506121631.221072885@infradead.org
+Link: https://lore.kernel.org/r/20220506121631.133110232@infradead.org
 ---
- arch/x86/entry/entry_64_compat.S | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/setup.h | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index c5aeb08..d743eaa 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -362,26 +362,25 @@ SYM_CODE_START(entry_INT80_compat)
+diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
+index 896e48d..bec5ff4 100644
+--- a/arch/x86/include/asm/setup.h
++++ b/arch/x86/include/asm/setup.h
+@@ -109,27 +109,19 @@ extern unsigned long _brk_end;
+ void *extend_brk(size_t size, size_t align);
  
- 	/* switch to thread stack expects orig_ax and rdi to be pushed */
- 	pushq	%rax			/* pt_regs->orig_ax */
--	pushq	%rdi			/* pt_regs->di */
+ /*
+- * Reserve space in the brk section.  The name must be unique within
+- * the file, and somewhat descriptive.  The size is in bytes.  Must be
+- * used at file scope.
++ * Reserve space in the brk section.  The name must be unique within the file,
++ * and somewhat descriptive.  The size is in bytes.
+  *
+- * (This uses a temp function to wrap the asm so we can pass it the
+- * size parameter; otherwise we wouldn't be able to.  We can't use a
+- * "section" attribute on a normal variable because it always ends up
+- * being @progbits, which ends up allocating space in the vmlinux
+- * executable.)
++ * The allocation is done using inline asm (rather than using a section
++ * attribute on a normal variable) in order to allow the use of @nobits, so
++ * that it doesn't take up any space in the vmlinux file.
+  */
+-#define RESERVE_BRK(name,sz)						\
+-	static void __section(".discard.text") __noendbr __used notrace	\
+-	__brk_reservation_fn_##name##__(void) {				\
+-		asm volatile (						\
+-			".pushsection .brk_reservation,\"aw\",@nobits;" \
+-			".brk." #name ":"				\
+-			" 1:.skip %c0;"					\
+-			" .size .brk." #name ", . - 1b;"		\
+-			" .popsection"					\
+-			: : "i" (sz));					\
+-	}
++#define RESERVE_BRK(name, size)						\
++	asm(".pushsection .brk_reservation,\"aw\",@nobits\n\t"		\
++	    ".brk." #name ":\n\t"					\
++	    ".skip " __stringify(size) "\n\t"				\
++	    ".size .brk." #name ", " __stringify(size) "\n\t"		\
++	    ".popsection\n\t")
  
- 	/* Need to switch before accessing the thread stack. */
--	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdi
-+	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
- 
- 	/* In the Xen PV case we already run on the thread stack. */
- 	ALTERNATIVE "", "jmp .Lint80_keep_stack", X86_FEATURE_XENPV
- 
--	movq	%rsp, %rdi
-+	movq	%rsp, %rax
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
- 
--	pushq	6*8(%rdi)		/* regs->ss */
--	pushq	5*8(%rdi)		/* regs->rsp */
--	pushq	4*8(%rdi)		/* regs->eflags */
--	pushq	3*8(%rdi)		/* regs->cs */
--	pushq	2*8(%rdi)		/* regs->ip */
--	pushq	1*8(%rdi)		/* regs->orig_ax */
--	pushq	(%rdi)			/* pt_regs->di */
-+	pushq	5*8(%rax)		/* regs->ss */
-+	pushq	4*8(%rax)		/* regs->rsp */
-+	pushq	3*8(%rax)		/* regs->eflags */
-+	pushq	2*8(%rax)		/* regs->cs */
-+	pushq	1*8(%rax)		/* regs->ip */
-+	pushq	0*8(%rax)		/* regs->orig_ax */
- .Lint80_keep_stack:
- 
-+	pushq	%rdi			/* pt_regs->di */
- 	pushq	%rsi			/* pt_regs->si */
- 	xorl	%esi, %esi		/* nospec   si */
- 	pushq	%rdx			/* pt_regs->dx */
+ extern void probe_roms(void);
+ #ifdef __i386__

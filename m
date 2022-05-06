@@ -2,113 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D463851DF99
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE8851DF97
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390696AbiEFTTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S1390523AbiEFTTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389906AbiEFTSs (ORCPT
+        with ESMTP id S1390395AbiEFTSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:18:48 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A226D384;
-        Fri,  6 May 2022 12:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=Ku2H0dVFHWUXAOXQaFLrRey8keVDfRjwZFcZZ6wIpDs=; b=N/Pp2hwpFN7sAM2zS2K/pZ3EpJ
-        Qk+IfyuXvAryDmhQjt1fr/IdKfckpAoDFPqGRy5lYW+TDiWD7iy+e9toVR/R+TtFrkJ1CYoSHaLAe
-        6oGUT05exbMUYvpSwisbtxboW+ciDzCYIDdV+MVHO/NK7WkCr2TYRibxqEO9rHxeLBX8wHEd5UUYX
-        /Z/BJGT3PsEXBSugervKTMytMynlSn4W4FXMSWLredYU+r0X840dnqcHEiHuq/NuMNtt5QlQIZEo0
-        OC5Q8L4LqVtzqNqVwGmP5ZCgfilXTpa+91IBqbHHyzj4cM4kux2mVRJtuV/zAH/kmdw+7+YsvJlb+
-        gDqThM4cAHZ6VuDBFiEY90QIxPAIEIkGOWkmMQEJxLIEgTMj0cmyfJlaJikkmwnberzYByblebhF+
-        8Tcexi7nF8naAYKpb1aQpzue5P6u4kSI0Ve3aIDj/LoXrSsEktdaviEl0n2cOomTvBiJOAbS8AJ34
-        8h9ozbb0Y+plpt43JUTwppAhi5CCY8MjbnFwC/HlqJJwAzNb+uUzKUCzo5Wo0dgWQrSsaQHhPjOr6
-        xGusBwbWn/de3G8RB3wd4zRCtJR+U5j3on4y/6hFuIj+1OXw/+AmpfUsWJFLvhAr4W9ZT6cE1cFQR
-        5dF9YfcStw9CrFhYlpivmpUSdPM7vjNTbIXj9BbgU=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     asmadeus@codewreck.org
-Cc:     David Howells <dhowells@redhat.com>,
-        David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p EBADF with cache enabled (Was: 9p fs-cache tests/benchmark (was: 9p
- fscache Duplicate cookie detected))
-Date:   Fri, 06 May 2022 21:14:52 +0200
-Message-ID: <7091002.4ErQJAuLzZ@silver>
-In-Reply-To: <YnL0vzcdJjgyq8rQ@codewreck.org>
-References: <YmKp68xvZEjBFell@codewreck.org> <6688504.ZJKUV3z3ry@silver>
- <YnL0vzcdJjgyq8rQ@codewreck.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 15:18:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC9E6F48E
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:14:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7697062193
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 19:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DAA41C385A8;
+        Fri,  6 May 2022 19:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651864493;
+        bh=9izC6voEokk5hZqLjo1Prxi7Rfhs3FZIxAhsffdcD0A=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kqsK2oc+VtM1VqpoVU/2qEgRevrIEfXgxdJVFNs6BuH4/aJJPgTnmelxYYmYCWfGF
+         8UEUOAg785tt4vJJh+f1u8b6YlJ7jDlxhHvb+LZMQJ66cCuUsyGgQErX3u/I9Kfh8J
+         ywPW96MnY2ND0CNQyf2JAYijURqxHx17sdP55MfGh1MYlAAoEptPDcd8FH7klC1Z99
+         Unvx6C+P9nHK1krB/TNKAmz5Uyubf5uW3Zq9ws6TELHYUI3XqMlJ5USWb79AZmLiGk
+         rKPFC7/u0CR/mY9syf0LjjgzT0Ysc2MzzVgO2CXN90r2ig5FDTFEEuAeZXQ2aTtXLv
+         tUZWQG+scrrSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C73DAEAC081;
+        Fri,  6 May 2022 19:14:53 +0000 (UTC)
+Subject: Re: [GIT PULL] RISC-V Fix for 5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <mhng-93e651e7-8975-4f60-8fab-31f695d9af2b@palmer-mbp2014>
+References: <mhng-93e651e7-8975-4f60-8fab-31f695d9af2b@palmer-mbp2014>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <mhng-93e651e7-8975-4f60-8fab-31f695d9af2b@palmer-mbp2014>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.18-rc6
+X-PR-Tracked-Commit-Id: c6fe81191bd74f7e6ae9ce96a4837df9485f3ab8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 497fe3bb196de7249723ba1496fb72ca63ce14e2
+Message-Id: <165186449380.13372.12860414235856776719.pr-tracker-bot@kernel.org>
+Date:   Fri, 06 May 2022 19:14:53 +0000
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mittwoch, 4. Mai 2022 23:48:47 CEST asmadeus@codewreck.org wrote:
-> Christian Schoenebeck wrote on Wed, May 04, 2022 at 08:33:36PM +0200:
-> > On Dienstag, 3. Mai 2022 12:21:23 CEST asmadeus@codewreck.org wrote:
-> > >  - add some complex code to track the exact byte range that got updated
-> > > 
-> > > in some conditions e.g. WRONLY or read fails?
-> > > That'd still be useful depending on how the backend tracks file mode,
-> > > qemu as user with security_model=mapped-file keeps files 600 but with
-> > > passthrough or none qemu wouldn't be able to read the file regardless of
-> > > what we do on client...
-> > > Christian, if you still have an old kernel around did that use to work?
-> > 
-> > Sorry, what was the question, i.e. what should I test / look for
-> > precisely? :)
-> I was curious if older kernel does not issue read at all, or issues read
-> on writeback fid correctly opened as root/RDRW
-> 
-> You can try either the append.c I pasted a few mails back or the dd
-> commands, as regular user.
-> 
-> $ dd if=/dev/zero of=test bs=1M count=1
-> $ chmod 400 test
-> # drop cache or remount
-> $ dd if=/dev/urandom of=test bs=102 seek=2 count=1 conv=notrunc
-> dd: error writing 'test': Bad file descriptor
+The pull request you sent on Fri, 06 May 2022 09:36:51 -0700 (PDT):
 
-Seems you were right, the old kernel opens the file with O_RDWR.
+> git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.18-rc6
 
-The following was taken with cache=loose, pre-netfs kernel version, using your
-append code and file to be appended already containing 34 bytes, relevant file is fid 7:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/497fe3bb196de7249723ba1496fb72ca63ce14e2
 
-  v9fs_open tag 0 id 12 fid 7 mode 2
-  v9fs_open_return tag 0 id 12 qid={type 0 version 1651854932 path 3108899} iounit 4096
-  v9fs_xattrwalk tag 0 id 30 fid 5 newfid 8 name security.capability
-  v9fs_rerror tag 0 id 30 err 95
-  v9fs_read tag 0 id 116 fid 7 off 0 max_count 4096
-  v9fs_read_return tag 0 id 116 count 34 err 45
-  v9fs_read tag 0 id 116 fid 7 off 34 max_count 4062
-  v9fs_read_return tag 0 id 116 count 0 err 11
-  v9fs_clunk tag 0 id 120 fid 6
-  v9fs_clunk tag 0 id 120 fid 4
-  [delay]
-  v9fs_write tag 0 id 118 fid 7 off 0 count 39 cnt 1
-  v9fs_write_return tag 0 id 118 total 39 err 11
-  v9fs_fsync tag 0 id 50 fid 7 datasync 0
+Thank you!
 
-BTW to see this protocol debug output with QEMU:
-
-  cd qemu/build
-  ../configure --enable-trace-backends=log ...
-  make -jN
-  ./qemu-system-x86_64 -trace 'v9fs*' ...
-
-Best regards,
-Christian Schoenebeck
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

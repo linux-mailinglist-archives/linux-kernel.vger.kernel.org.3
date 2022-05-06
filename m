@@ -2,262 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86C051DFDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8096851E110
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392311AbiEFUBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S1444450AbiEFVcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376965AbiEFUBC (ORCPT
+        with ESMTP id S1444427AbiEFVb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:01:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D274F45B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651867037; x=1683403037;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uYRkZxq284hBgLYVBBOMExlEwOFRqIM06/cOZnkT7fg=;
-  b=csNxO+t1CYkZukQYvNnELqcDN758fgwJEvuWyg2lWL6lYTBlTUDR28K1
-   nDlJA+2Nc8dDe0MpDlA9OGMwhKzP1NgG9uH5vUrACL5+dzoFQDyvFlUkk
-   HNwTXPXVhNPT0QGLcgC8CJiFrTraPLtRifLz2Fc7UwV+4MSty2gXdZ8XA
-   qyrnwQdqW2QLdYnhzZBiO6aJo/MCC5/gnMRk2F2II0ZaNDo4jaqRIOS8t
-   WX+p1YRpRydWiptd5Ain/e7P4LnJPyQ8Ry6lNppExUkHy0xYL0y7W5GAp
-   pxHZ2ZTJdcrQQNxALsquHsx367pUfVSzGEb3Ao738tpVVBASG0m4Iku9Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267401014"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="267401014"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:57:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="621960221"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 May 2022 12:57:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nn44g-000DpV-Ud;
-        Fri, 06 May 2022 19:57:14 +0000
-Date:   Sat, 7 May 2022 03:57:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-cleanups-v2-drv-owner-wip 7/7]
- drivers/scsi/hosts.c:380: warning: expecting prototype for
- scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
-Message-ID: <202205070318.9CFPkpJP-lkp@intel.com>
+        Fri, 6 May 2022 17:31:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7733463BE4;
+        Fri,  6 May 2022 14:28:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3A7E61225;
+        Fri,  6 May 2022 21:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2BAC385AE;
+        Fri,  6 May 2022 21:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651872491;
+        bh=vuKmchvYMiIAdcHRKjUL3If/sLibZifSzK86MojhD6M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GuRRbQRyvE+UFF98aNKuoeXr1hc8IGvdds38g27OaW/US+DJyktjsmZCc4VPsHqiB
+         syVj+4k8NpmgCypj5VT6OdliX4woCgWLQGZ9XMQkjRn/c4hAZc63ZHy/QFIypdr1ZD
+         wqTr5cn4qkRzFq9cQSfJFySoiNUMdZWL2h3Fg5s8brxVsCmJQkyT8ACL6I7FVr8buS
+         JKz6rrGOssSMMbscDcCC/s9tXMaiwTJ4hqRRfasP5c4ercoBbKqL58vCuRS7hD6AmH
+         1mzrmUpX62VjFbqFCbU0lP4c20IWIitIQz2mHrRHPtzjDtQ3LwL/ucfhn/81atDODi
+         CacH7ma+mFVxg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 04F4D5C0640; Fri,  6 May 2022 11:24:26 -0700 (PDT)
+Date:   Fri, 6 May 2022 11:24:25 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        bigeasy@linutronix.de
+Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
+ context
+Message-ID: <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220505101641.28472-1-urezki@gmail.com>
+ <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnVLQozNFvgk3olP@pc638.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnVLQozNFvgk3olP@pc638.lan>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
-head:   17609caecd53df20f631703ea084a70e7735b5d7
-commit: 17609caecd53df20f631703ea084a70e7735b5d7 [7/7] WIP
-config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20220507/202205070318.9CFPkpJP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/krzk/linux/commit/17609caecd53df20f631703ea084a70e7735b5d7
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
-        git checkout 17609caecd53df20f631703ea084a70e7735b5d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
+On Fri, May 06, 2022 at 06:22:26PM +0200, Uladzislau Rezki wrote:
+> > On Thu, May 05, 2022 at 12:16:41PM +0200, Uladzislau Rezki (Sony) wrote:
+> > > Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
+> > > decide if an offloading has to be done in a high-prio context or
+> > > not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
+> > > parameters and by default it is off.
+> > > 
+> > > This patch splits the boosting preempted RCU readers and those
+> > > kthreads which directly responsible for driving expedited grace
+> > > periods forward with enabling/disabling the offloading from/to
+> > > SCHED_FIFO/SCHED_OTHER contexts.
+> > > 
+> > > The main reason of such split is, for example on Android there
+> > > are some workloads which require fast expedited grace period to
+> > > be done whereas offloading in RT context can lead to starvation
+> > > and hogging a CPU for a long time what is not acceptable for
+> > > latency sensitive environment. For instance:
+> > > 
+> > > <snip>
+> > > <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
+> > > <snip>
+> > > 
+> > > invoking 34 619 callbacks will take time thus making other CFS
+> > > tasks waiting in run-queue to be starved due to such behaviour.
+> > > 
+> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > 
+> > All good points!
+> > 
+> > Some questions and comments below.
+> > 
+> > Adding Sebastian on CC for his perspective.
+> > 
+> > 						Thanx, Paul
+> > 
+> > > ---
+> > >  kernel/rcu/Kconfig     | 14 ++++++++++++++
+> > >  kernel/rcu/tree.c      |  5 ++++-
+> > >  kernel/rcu/tree_nocb.h |  3 ++-
+> > >  3 files changed, 20 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > > index 27aab870ae4c..074630b94902 100644
+> > > --- a/kernel/rcu/Kconfig
+> > > +++ b/kernel/rcu/Kconfig
+> > > @@ -275,6 +275,20 @@ config RCU_NOCB_CPU_DEFAULT_ALL
+> > >  	  Say Y here if you want offload all CPUs by default on boot.
+> > >  	  Say N here if you are unsure.
+> > >  
+> > > +config RCU_NOCB_CPU_CB_BOOST
+> > > +	bool "Perform offloading from real-time kthread"
+> > > +	depends on RCU_NOCB_CPU && RCU_BOOST
+> > > +	default n
+> > 
+> > I understand that you need this to default to "n" on your systems.
+> > However, other groups already using callback offloading should not see
+> > a sudden change.  I don't see an Android-specific defconfig file, but
+> > perhaps something in drivers/android/Kconfig?
+> > 
+> > One easy way to make this work would be to invert the sense of this
+> > Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
+> > "n", but then select it somewhere in drivers/android/Kconfig.  But I
+> > would not be surprised if there is a better way.
+> > 
+> It was done deliberately, i mean off by default. Because the user has to
+> think before enabling it for its workloads. It is not a big issue for
+> kthreads which drive a grace period forward, because their context runtime
+> i find pretty short. Whereas an offloading callback kthread can stuck
+> for a long time depending on workloads.
+> 
+> Also, i put it that way because initially those kthreads were staying
+> as SCHED_NORMAL even though the RCU_BOOST was set in kernel config.
+> 
+> <snip>
+> commit c8b16a65267e35ecc5621dbc81cbe7e5b0992fce
+> Author: Alison Chaiken <achaiken@aurora.tech>
+> Date:   Tue Jan 11 15:32:52 2022 -0800
+> 
+>     rcu: Elevate priority of offloaded callback threads
+>     
+>     When CONFIG_PREEMPT_RT=y, the rcutree.kthread_prio command-line
+>     parameter signals initialization code to boost the priority of rcuc
+>     callbacks to the designated value.  With the additional
+>     CONFIG_RCU_NOCB_CPU=y configuration and an additional rcu_nocbs
+>     command-line parameter, the callbacks on the listed cores are
+>     offloaded to new rcuop kthreads that are not pinned to the cores whose
+>     post-grace-period work is performed.  While the rcuop kthreads perform
+>     the same function as the rcuc kthreads they offload, the kthread_prio
+>     parameter only boosts the priority of the rcuc kthreads.  Fix this
+>     inconsistency by elevating rcuop kthreads to the same priority as the rcuc
+>     kthreads.
+>     
+>     Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> <snip>
+> 
+> I have a doubt that it is needed for CONFIG_PREEMPT_RT=y. The reason i mentioned
+> above it is a source of extra latency. That is why i have made it inactive by default.
+> 
+> Any thoughts?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My first thought is that Alison does real RT work.  Let's please therefore
+avoid assuming that she doesn't know what she is doing.  ;-)
 
-All warnings (new ones prefixed by >>):
+One thing that she knows is that RT workloads usually run the most
+latency-sensitive parts of their application at far higher priority
+than they do the rcuo[ps] kthreads.  This means that they do not have
+the same issues with these kthreads that you see.
 
-   drivers/scsi/hosts.c:380: warning: Function parameter or member 'owner' not described in '__scsi_host_alloc'
->> drivers/scsi/hosts.c:380: warning: expecting prototype for scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
+> > > +	help
+> > > +	  Use this option to offload callbacks from the SCHED_FIFO context
+> > > +	  to make the process faster. As a side effect of this approach is
+> > > +	  a latency especially for the SCHED_OTHER tasks which will not be
+> > > +	  able to preempt an offloading kthread. That latency depends on a
+> > > +	  number of callbacks to be invoked.
+> > > +
+> > > +	  Say Y here if you want to set RT priority for offloading kthreads.
+> > > +	  Say N here if you are unsure.
+> > > +
+> > >  config TASKS_TRACE_RCU_READ_MB
+> > >  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+> > >  	depends on RCU_EXPERT && TASKS_TRACE_RCU
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 9dc4c4e82db6..d769a15bc0e3 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -154,7 +154,10 @@ static void sync_sched_exp_online_cleanup(int cpu);
+> > >  static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);
+> > >  static bool rcu_rdp_is_offloaded(struct rcu_data *rdp);
+> > >  
+> > > -/* rcuc/rcub/rcuop kthread realtime priority */
+> > > +/*
+> > > + * rcuc/rcub/rcuop kthread realtime priority. The former
+> > > + * depends on if CONFIG_RCU_NOCB_CPU_CB_BOOST is set.
+> > 
+> > Aren't the rcuo[ps] kthreads controlled by the RCU_NOCB_CPU_CB_BOOST
+> > Kconfig option?  (As opposed to the "former", which is "rcuc".)
+> > 
+> The CONFIG_RCU_NOCB_CPU_CB_BOOST controls only the last what is
+> the rcuo CB kthread or "rcuo%c/%d" name. Sorry it is not "former"
+> it is the last in the rcuc/rcub/rcuop sequence. It was a typo :)
 
+I do know that feeling!  Absolutely not a problem, please just fix it
+in the next version.
 
-vim +380 drivers/scsi/hosts.c
+> > > + */
+> > >  static int kthread_prio = IS_ENABLED(CONFIG_RCU_BOOST) ? 1 : 0;
+> > >  module_param(kthread_prio, int, 0444);
+> > >  
+> > > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > > index 60cc92cc6655..a2823be9b1d0 100644
+> > > --- a/kernel/rcu/tree_nocb.h
+> > > +++ b/kernel/rcu/tree_nocb.h
+> > > @@ -1315,8 +1315,9 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+> > >  	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
+> > >  		goto end;
+> > >  
+> > > -	if (kthread_prio)
+> > > +	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST))
+> > 
+> > Don't we need both non-zero kthread_prio and the proper setting of the
+> > new Kconfig option before we run it at SCHED_FIFO?
+> > 
+> > Yes, we could rely on sched_setscheduler_nocheck() erroring out in
+> > that case, but that sounds like an accident waiting to happen.
+> > 
+> As far as i see it is odd, because the "kthread_prio" is verified so
+> there is a sanity check to check if the value is correct for SCHED_FIFO
+> case and does some adjustment if not. There is sanitize_kthread_prio()
+> that does all trick.
 
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  364  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  365  /**
-^1da177e4c3f41 Linus Torvalds      2005-04-16  366   * scsi_host_alloc - register a scsi host adapter instance.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  367   * @sht:	pointer to scsi host template
-^1da177e4c3f41 Linus Torvalds      2005-04-16  368   * @privsize:	extra bytes to allocate for driver
-^1da177e4c3f41 Linus Torvalds      2005-04-16  369   *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  370   * Note:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  371   * 	Allocate a new Scsi_Host and perform basic initialization.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  372   * 	The host is not published to the scsi midlayer until scsi_add_host
-^1da177e4c3f41 Linus Torvalds      2005-04-16  373   * 	is called.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  374   *
-^1da177e4c3f41 Linus Torvalds      2005-04-16  375   * Return value:
-^1da177e4c3f41 Linus Torvalds      2005-04-16  376   * 	Pointer to a new Scsi_Host
-^1da177e4c3f41 Linus Torvalds      2005-04-16  377   **/
-17609caecd53df Krzysztof Kozlowski 2022-05-06  378  struct Scsi_Host *__scsi_host_alloc(struct scsi_host_template *sht, int privsize,
-17609caecd53df Krzysztof Kozlowski 2022-05-06  379  				    struct module *owner)
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @380  {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  381  	struct Scsi_Host *shost;
-0a84486d6c1da1 Bart Van Assche     2021-11-16  382  	int index;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  383  
-aaff5ebaa2694f Christoph Hellwig   2021-03-31  384  	shost = kzalloc(sizeof(struct Scsi_Host) + privsize, GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  385  	if (!shost)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  386  		return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  387  
-4f777ed2608645 Christoph Hellwig   2006-11-04  388  	shost->host_lock = &shost->default_lock;
-4f777ed2608645 Christoph Hellwig   2006-11-04  389  	spin_lock_init(shost->host_lock);
-d3301874083874 Mike Anderson       2005-06-16  390  	shost->shost_state = SHOST_CREATED;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  391  	INIT_LIST_HEAD(&shost->__devices);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  392  	INIT_LIST_HEAD(&shost->__targets);
-5ae17501bc62a4 Ewan D. Milne       2021-10-29  393  	INIT_LIST_HEAD(&shost->eh_abort_list);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  394  	INIT_LIST_HEAD(&shost->eh_cmd_q);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  395  	INIT_LIST_HEAD(&shost->starved_list);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  396  	init_waitqueue_head(&shost->host_wait);
-0b9506723826c6 Arjan van de Ven    2006-01-11  397  	mutex_init(&shost->scan_mutex);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  398  
-126a4fe010fd86 Lee Duncan          2016-01-20  399  	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
-66a834d092930c Ming Lei            2021-06-02  400  	if (index < 0) {
-66a834d092930c Ming Lei            2021-06-02  401  		kfree(shost);
-66a834d092930c Ming Lei            2021-06-02  402  		return NULL;
-66a834d092930c Ming Lei            2021-06-02  403  	}
-126a4fe010fd86 Lee Duncan          2016-01-20  404  	shost->host_no = index;
-126a4fe010fd86 Lee Duncan          2016-01-20  405  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  406  	shost->dma_channel = 0xff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  407  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  408  	/* These three are default values which can be overridden */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  409  	shost->max_channel = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  410  	shost->max_id = 8;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  411  	shost->max_lun = 8;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  412  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  413  	/* Give each shost a default transportt */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  414  	shost->transportt = &blank_transport_template;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  415  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  416  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  417  	 * All drivers right now should be able to handle 12 byte
-^1da177e4c3f41 Linus Torvalds      2005-04-16  418  	 * commands.  Every so often there are requests for 16 byte
-^1da177e4c3f41 Linus Torvalds      2005-04-16  419  	 * commands, but individual low-level drivers need to certify that
-^1da177e4c3f41 Linus Torvalds      2005-04-16  420  	 * they actually do something sensible with such commands.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  421  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  422  	shost->max_cmd_len = 12;
-17609caecd53df Krzysztof Kozlowski 2022-05-06  423  	shost->owner = owner;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  424  	shost->hostt = sht;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  425  	shost->this_id = sht->this_id;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  426  	shost->can_queue = sht->can_queue;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  427  	shost->sg_tablesize = sht->sg_tablesize;
-13f05c8d8e98bb Martin K. Petersen  2010-09-10  428  	shost->sg_prot_tablesize = sht->sg_prot_tablesize;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  429  	shost->cmd_per_lun = sht->cmd_per_lun;
-54b2b50c20a61b Martin K. Petersen  2013-10-23  430  	shost->no_write_same = sht->no_write_same;
-bdb01301f3ea51 Hannes Reinecke     2020-08-19  431  	shost->host_tagset = sht->host_tagset;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  432  
-ad469a57643b32 Hannes Reinecke     2014-01-17  433  	if (shost_eh_deadline == -1 || !sht->eh_host_reset_handler)
-bb3b621a33d60f Ren Mingxin         2013-11-11  434  		shost->eh_deadline = -1;
-bb3b621a33d60f Ren Mingxin         2013-11-11  435  	else if ((ulong) shost_eh_deadline * HZ > INT_MAX) {
-bb3b621a33d60f Ren Mingxin         2013-11-11  436  		shost_printk(KERN_WARNING, shost,
-bb3b621a33d60f Ren Mingxin         2013-11-11  437  			     "eh_deadline %u too large, setting to %u\n",
-bb3b621a33d60f Ren Mingxin         2013-11-11  438  			     shost_eh_deadline, INT_MAX / HZ);
-bb3b621a33d60f Ren Mingxin         2013-11-11  439  		shost->eh_deadline = INT_MAX;
-bb3b621a33d60f Ren Mingxin         2013-11-11  440  	} else
-bb3b621a33d60f Ren Mingxin         2013-11-11  441  		shost->eh_deadline = shost_eh_deadline * HZ;
-bb3b621a33d60f Ren Mingxin         2013-11-11  442  
-7a39ac3f25bef0 James Bottomley     2007-09-25  443  	if (sht->supported_mode == MODE_UNKNOWN)
-7a39ac3f25bef0 James Bottomley     2007-09-25  444  		/* means we didn't set it ... default to INITIATOR */
-7a39ac3f25bef0 James Bottomley     2007-09-25  445  		shost->active_mode = MODE_INITIATOR;
-7a39ac3f25bef0 James Bottomley     2007-09-25  446  	else
-7a39ac3f25bef0 James Bottomley     2007-09-25  447  		shost->active_mode = sht->supported_mode;
-7a39ac3f25bef0 James Bottomley     2007-09-25  448  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  449  	if (sht->max_host_blocked)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  450  		shost->max_host_blocked = sht->max_host_blocked;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  451  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  452  		shost->max_host_blocked = SCSI_DEFAULT_HOST_BLOCKED;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  453  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  454  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  455  	 * If the driver imposes no hard sector transfer limit, start at
-^1da177e4c3f41 Linus Torvalds      2005-04-16  456  	 * machine infinity initially.
-^1da177e4c3f41 Linus Torvalds      2005-04-16  457  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  458  	if (sht->max_sectors)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  459  		shost->max_sectors = sht->max_sectors;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  460  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  461  		shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  462  
-50c2e9107f176a Christoph Hellwig   2018-12-13  463  	if (sht->max_segment_size)
-50c2e9107f176a Christoph Hellwig   2018-12-13  464  		shost->max_segment_size = sht->max_segment_size;
-50c2e9107f176a Christoph Hellwig   2018-12-13  465  	else
-50c2e9107f176a Christoph Hellwig   2018-12-13  466  		shost->max_segment_size = BLK_MAX_SEGMENT_SIZE;
-50c2e9107f176a Christoph Hellwig   2018-12-13  467  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  468  	/*
-^1da177e4c3f41 Linus Torvalds      2005-04-16  469  	 * assume a 4GB boundary, if not set
-^1da177e4c3f41 Linus Torvalds      2005-04-16  470  	 */
-^1da177e4c3f41 Linus Torvalds      2005-04-16  471  	if (sht->dma_boundary)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  472  		shost->dma_boundary = sht->dma_boundary;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  473  	else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  474  		shost->dma_boundary = 0xffffffff;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  475  
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  476  	if (sht->virt_boundary_mask)
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  477  		shost->virt_boundary_mask = sht->virt_boundary_mask;
-7ad388d8e4c703 Christoph Hellwig   2019-06-17  478  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  479  	device_initialize(&shost->shost_gendev);
-71610f55fa4db6 Kay Sievers         2008-12-03  480  	dev_set_name(&shost->shost_gendev, "host%d", shost->host_no);
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  481  	shost->shost_gendev.bus = &scsi_bus_type;
-b0ed43360fdca2 Hannes Reinecke     2008-03-18  482  	shost->shost_gendev.type = &scsi_host_type;
-a19a93e4c6a98c Bart Van Assche     2021-10-06  483  	scsi_enable_async_suspend(&shost->shost_gendev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  484  
-ee959b00c335d7 Tony Jones          2008-02-22  485  	device_initialize(&shost->shost_dev);
-ee959b00c335d7 Tony Jones          2008-02-22  486  	shost->shost_dev.parent = &shost->shost_gendev;
-ee959b00c335d7 Tony Jones          2008-02-22  487  	shost->shost_dev.class = &shost_class;
-71610f55fa4db6 Kay Sievers         2008-12-03  488  	dev_set_name(&shost->shost_dev, "host%d", shost->host_no);
-0a84486d6c1da1 Bart Van Assche     2021-11-16  489  	shost->shost_dev.groups = sht->shost_groups;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  490  
-c5478def7a3a2d Christoph Hellwig   2005-09-06  491  	shost->ehandler = kthread_run(scsi_error_handler, shost,
-c5478def7a3a2d Christoph Hellwig   2005-09-06  492  			"scsi_eh_%d", shost->host_no);
-c5478def7a3a2d Christoph Hellwig   2005-09-06  493  	if (IS_ERR(shost->ehandler)) {
-91921e016a2199 Hannes Reinecke     2014-06-25  494  		shost_printk(KERN_WARNING, shost,
-91921e016a2199 Hannes Reinecke     2014-06-25  495  			"error handler thread failed to spawn, error = %ld\n",
-91921e016a2199 Hannes Reinecke     2014-06-25  496  			PTR_ERR(shost->ehandler));
-93aa71ad737990 Tyrel Datwyler      2021-07-01  497  		shost->ehandler = NULL;
-66a834d092930c Ming Lei            2021-06-02  498  		goto fail;
-c5478def7a3a2d Christoph Hellwig   2005-09-06  499  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  500  
-e494f6a728394a Hannes Reinecke     2013-11-11  501  	shost->tmf_work_q = alloc_workqueue("scsi_tmf_%d",
-6292130093c5d1 Bob Liu             2020-07-01  502  					WQ_UNBOUND | WQ_MEM_RECLAIM | WQ_SYSFS,
-e494f6a728394a Hannes Reinecke     2013-11-11  503  					   1, shost->host_no);
-e494f6a728394a Hannes Reinecke     2013-11-11  504  	if (!shost->tmf_work_q) {
-a222b1e2fe4299 Hannes Reinecke     2014-10-24  505  		shost_printk(KERN_WARNING, shost,
-a222b1e2fe4299 Hannes Reinecke     2014-10-24  506  			     "failed to create tmf workq\n");
-66a834d092930c Ming Lei            2021-06-02  507  		goto fail;
-e494f6a728394a Hannes Reinecke     2013-11-11  508  	}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  509  	scsi_proc_hostdir_add(shost->hostt);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  510  	return shost;
-66a834d092930c Ming Lei            2021-06-02  511   fail:
-66a834d092930c Ming Lei            2021-06-02  512  	/*
-66a834d092930c Ming Lei            2021-06-02  513  	 * Host state is still SHOST_CREATED and that is enough to release
-66a834d092930c Ming Lei            2021-06-02  514  	 * ->shost_gendev. scsi_host_dev_release() will free
-66a834d092930c Ming Lei            2021-06-02  515  	 * dev_name(&shost->shost_dev).
-66a834d092930c Ming Lei            2021-06-02  516  	 */
-66a834d092930c Ming Lei            2021-06-02  517  	put_device(&shost->shost_gendev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  518  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  519  	return NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  520  }
-17609caecd53df Krzysztof Kozlowski 2022-05-06  521  EXPORT_SYMBOL(__scsi_host_alloc);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  522  
+Agreed, and like I said, we could rely on sched_setscheduler_nocheck()
+erroring out in that case.  But people do sometimes turn error cases
+into some other functionality.  Keeping the check of kthread_prio makes
+it clear to people reading the code what our intent is and also avoids
+strange breakage should someone find a use for SCHED_FIFO priority zero.
 
-:::::: The code at line 380 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+So please put the check of kthread_prio back in for the next version.
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+> Looking at the kthread_prio variable. If it is set all the code that
+> takes into account of it switches to SCHED_FIFO class. Maybe rename it
+> to something kthread_rt_prio? It might be a bad idea though because of
+> former dependencies of distros and so on :)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Where were you when the kthread_prio patch was first submitted?  ;-)
+
+But agreed, last I checked there were some tens of billions of Linux
+kernel instances running out there.  If such a change affected only
+0.1% of that total, we could be ruining tens of millions of system's
+days with such a name change.  There would thus need to be a very good
+reason to change the name, and we don't have one.
+
+							Thanx, Paul

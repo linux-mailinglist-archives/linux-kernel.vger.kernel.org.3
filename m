@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B126A51DE4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294CD51DE54
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444165AbiEFRZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S1444176AbiEFR1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbiEFRZD (ORCPT
+        with ESMTP id S1444167AbiEFR1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:25:03 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84551C108;
-        Fri,  6 May 2022 10:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:To:From:Subject:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=43kcznkYN7qQFRn/kPo5/kdRJTMc0RSw2xjGrooZhmk=;
-        t=1651857680; x=1653067280; b=Ry/QahONelDt6m7dk9iRwsNCrRt12H8P7a95fCj+Pt/KgmE
-        IFWE4EPlxTxTLjn0zfqMURCYt5MjrLvW1EZE6+PWoLp5n+stRApgQweOZ/hCcZdk7aBCEeJj/dQx8
-        ubKGFwv3GaLzoNzZqNeS/ZreaEfHFPy3YL2rsIGI/NXR1VdNyFgcX6rETT4wdp4SJzAPtzW0kOZQc
-        7L6tdQVfBZoR2gDlHTMkF7ABYNGdF15jXVNJaS+kOQv84b1HLK+bjz8t1VwzwY9Q7c1xes24oV+Ny
-        1+dhPtXL6f0DXikpbhsPo0wdFCH5hLwB7iJu/6ew2CLoLGYY8QruGi+DOfQ1eGAQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nn1dh-004JpF-8j;
-        Fri, 06 May 2022 19:21:13 +0200
-Message-ID: <c66b3c0ba5d6076b00718f6df53f37ec8b099a04.camel@sipsolutions.net>
-Subject: Re: [PATCH] rfkill: uapi: fix RFKILL_IOCTL_MAX_SIZE ioctl request
- definition
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 06 May 2022 19:21:11 +0200
-In-Reply-To: <20220506171534.99509-1-glebfm@altlinux.org>
-References: <20220506171534.99509-1-glebfm@altlinux.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 6 May 2022 13:27:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E5123BD2;
+        Fri,  6 May 2022 10:23:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C92A3620B2;
+        Fri,  6 May 2022 17:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6385C385A8;
+        Fri,  6 May 2022 17:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651857831;
+        bh=nXZ3Q1jTbaZ/sK8x9V920nhEF4T7dJ3ktr0gnhCZATw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OfYs4mRhp6lLGqo13sQacwVW9iittAZ7SAI7kb+r6hxxdi/apElxndNV2zhleIjOa
+         R19ikT+HJLadc/9Ye9/w48Cbh2j2zDiXP1448RufOjTjoKrwQLOpaYs7svQda8uNHl
+         1yp0T2hge2QaBesrUXtuFaOu7mz+e+agAvK9ixsfGkCLNaHFlC3+EC8Cd5CNeCOX3J
+         v498ZxqcSIobrgKGg/YVtjgFYXl3l/djT+e/iwLJwUmjgvQDs6QaZFv0sqApMzlbYU
+         uRHapzwdExq7H7WLMD+rjjwqt1kgyHR0gJHvZWb9+1I3CwwnqPnicF0+eHdFs1YRp5
+         atMpv+P/D1hUQ==
+Date:   Fri, 6 May 2022 12:23:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Peng Liu <liupeng256@huawei.com>
+Cc:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
+        sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
+        akpm@linux-foundation.org, logang@deltatee.com,
+        martin.oliveira@eideticom.com, thunder.leizhen@huawei.com,
+        axboe@kernel.dk, kch@nvidia.com, ming.lei@redhat.com,
+        shinichiro.kawasaki@wdc.com, mcgrof@kernel.org,
+        jiangguoqing@kylinos.cn, jpittman@redhat.com, dave@stgolabs.net,
+        wangkefeng.wang@huawei.com, linux-block@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] include/linux/nodemask.h: create node_available()
+ helper
+Message-ID: <20220506172348.GA543299@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506015801.757918-2-liupeng256@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 17:15 +0000, Gleb Fotengauer-Malinovskiy wrote:
-> Fixes: 54f586a91532 ("rfkill: make new event layout opt-in")
-> ---
->  include/uapi/linux/rfkill.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/rfkill.h b/include/uapi/linux/rfkill.h
-> index 283c5a7b3f2c..db6c8588c1d0 100644
-> --- a/include/uapi/linux/rfkill.h
-> +++ b/include/uapi/linux/rfkill.h
-> @@ -184,7 +184,7 @@ struct rfkill_event_ext {
->  #define RFKILL_IOC_NOINPUT	1
->  #define RFKILL_IOCTL_NOINPUT	_IO(RFKILL_IOC_MAGIC, RFKILL_IOC_NOINPUT)
->  #define RFKILL_IOC_MAX_SIZE	2
-> -#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_EXT_SIZE, __u32)
-> +#define RFKILL_IOCTL_MAX_SIZE	_IOW(RFKILL_IOC_MAGIC, RFKILL_IOC_MAX_SIZE, __u32)
-> 
+Subject line convention looks like "numa: ..."
 
-Oops. But I still need your Signed-off-by (see the documentation), and a
-commit message would be nice :)
+On Fri, May 06, 2022 at 01:58:00AM +0000, Peng Liu wrote:
+> Lots of code dose
+               does
 
-johannes
+> 	node != NUMA_NO_NODE && !node_online(node)
+> or
+> 	node == NUMA_NO_NODE || node_online(node)
+> so create node_available to do this to simplify code.
+            node_available()
+
+I'm not really sure what meaning "node_available" conveys, though.
+Probably just because I don't understand NUMA.
+
+Should the test for NUMA_NO_NODE be folded into node_state() or
+node_online() directly instead of adding a new node_available()
+interface?
+
+NUMA_NO_NODE is -1.  It's not clear to me that node_state()/
+node_isset()/test_bit() would do the right thing given -1.  I doubt
+all node_online() callers ensure they don't pass NUMA_NO_NODE.
+
+> --- a/include/linux/nodemask.h
+> +++ b/include/linux/nodemask.h
+> @@ -70,6 +70,7 @@
+>   *
+>   * int node_online(node)		Is some node online?
+>   * int node_possible(node)		Is some node possible?
+> + * int node_available(node)		Is some node available(online or NUMA_NO_NODE)?
+
+Existing file generally fits in 80 columns; follow that lead unless
+you have a really good reason.  E.g., maybe this?
+
+  + * int node_available(node)		Node online or NUMA_NO_NODE

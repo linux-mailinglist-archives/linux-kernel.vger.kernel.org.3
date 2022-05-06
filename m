@@ -2,284 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD8E51D131
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0198651D132
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbiEFGZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S233408AbiEFG3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344394AbiEFGZV (ORCPT
+        with ESMTP id S230000AbiEFG3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:25:21 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD045D64F;
-        Thu,  5 May 2022 23:21:38 -0700 (PDT)
-X-UUID: d194de0b74c44e938bf32a4977e67d19-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:e680e7d3-17b0-4994-817c-56cfbf628e55,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:12056b16-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: d194de0b74c44e938bf32a4977e67d19-20220506
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1183143553; Fri, 06 May 2022 14:21:33 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 6 May 2022 14:21:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 14:21:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 14:21:31 +0800
-Message-ID: <507cf3d3df72923f96e142a74e0ef5fe5b8171e1.camel@mediatek.com>
-Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Date:   Fri, 6 May 2022 14:21:31 +0800
-In-Reply-To: <20220506041518.5j5rfakayur64y7e@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220505115226.20130-6-rex-bc.chen@mediatek.com>
-         <20220506041518.5j5rfakayur64y7e@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 02:29:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D72513CF7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:25:31 -0700 (PDT)
+Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvgXV3m3WzhYs5;
+        Fri,  6 May 2022 14:24:58 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 14:25:29 +0800
+Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
+ (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
+ 2022 14:25:29 +0800
+Subject: Re: [PATCH v5 2/2] Documentation: Add document for UltraSoc SMB
+ drivers
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        <mathieu.poirier@linaro.org>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+        <Jonathan_Lucas@mentor.com>
+References: <20220416083953.52610-1-liuqi115@huawei.com>
+ <20220416083953.52610-3-liuqi115@huawei.com>
+ <2c5761ce-6520-9101-e7de-69731114eea0@arm.com>
+From:   "liuqi (BA)" <liuqi115@huawei.com>
+Message-ID: <ce4e4fe6-fe20-22de-2443-d0d199a973c4@huawei.com>
+Date:   Fri, 6 May 2022 14:25:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2c5761ce-6520-9101-e7de-69731114eea0@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.67]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 09:45 +0530, Viresh Kumar wrote:
-> On 05-05-22, 19:52, Rex-BC Chen wrote:
-> > > From this opp notifier, cpufreq should listen to opp notification
-> > > and do
-> > 
-> > proper actions when receiving events of disable and voltage
-> > adjustment.
-> > 
-> > One of the user for this opp notifier is MediaTek SVS.
-> > The MediaTek Smart Voltage Scaling (SVS) is a hardware which
-> > calculates
-> > suitable SVS bank voltages to OPP voltage table.
-> > 
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/cpufreq/mediatek-cpufreq.c | 91
-> > +++++++++++++++++++++++++++---
-> >  1 file changed, 83 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > b/drivers/cpufreq/mediatek-cpufreq.c
-> > index fe205eca657d..06d80ee06bbf 100644
-> > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> > @@ -46,6 +46,11 @@ struct mtk_cpu_dvfs_info {
-> >  	int intermediate_voltage;
-> >  	bool need_voltage_tracking;
-> >  	int pre_vproc;
-> > +	/* Avoid race condition for regulators between notify and
-> > policy */
-> > +	struct mutex reg_lock;
-> > +	struct notifier_block opp_nb;
-> > +	unsigned int opp_cpu;
-> > +	unsigned long opp_freq;
-> 
-> The name opp_freq doesn't fit well, I renamed it to current_freq.
-> 
-> >  	const struct mtk_cpufreq_platform_data *soc_data;
-> >  	int vtrack_max;
-> >  };
-> > @@ -182,6 +187,8 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  
-> >  	pre_freq_hz = clk_get_rate(cpu_clk);
-> >  
-> > +	mutex_lock(&info->reg_lock);
-> > +
-> >  	if (unlikely(info->pre_vproc <= 0))
-> >  		pre_vproc = regulator_get_voltage(info->proc_reg);
-> >  	else
-> > @@ -214,7 +221,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  			dev_err(cpu_dev,
-> >  				"cpu%d: failed to scale up voltage!\n",
-> > policy->cpu);
-> >  			mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -			return ret;
-> > +			goto out;
-> >  		}
-> >  	}
-> >  
-> > @@ -224,8 +231,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  		dev_err(cpu_dev,
-> >  			"cpu%d: failed to re-parent cpu clock!\n",
-> > policy->cpu);
-> >  		mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -		WARN_ON(1);
-> > -		return ret;
-> > +		goto out;
-> >  	}
-> >  
-> >  	/* Set the original PLL to target rate. */
-> > @@ -235,7 +241,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  			"cpu%d: failed to scale cpu clock rate!\n",
-> > policy->cpu);
-> >  		clk_set_parent(cpu_clk, armpll);
-> >  		mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -		return ret;
-> > +		goto out;
-> >  	}
-> >  
-> >  	/* Set parent of CPU clock back to the original PLL. */
-> > @@ -244,8 +250,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  		dev_err(cpu_dev,
-> >  			"cpu%d: failed to re-parent cpu clock!\n",
-> > policy->cpu);
-> >  		mtk_cpufreq_set_voltage(info, inter_vproc);
-> > -		WARN_ON(1);
-> > -		return ret;
-> > +		goto out;
-> >  	}
-> >  
-> >  	/*
-> > @@ -260,15 +265,72 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >  			clk_set_parent(cpu_clk, info->inter_clk);
-> >  			clk_set_rate(armpll, pre_freq_hz);
-> >  			clk_set_parent(cpu_clk, armpll);
-> > -			return ret;
-> > +			goto out;
-> >  		}
-> >  	}
-> >  
-> > -	return 0;
-> > +	info->opp_freq = freq_hz;
-> > +
-> > +out:
-> > +	mutex_unlock(&info->reg_lock);
-> > +
-> > +	return ret;
-> >  }
-> >  
-> >  #define DYNAMIC_POWER "dynamic-power-coefficient"
-> >  
-> > +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
-> > +				    unsigned long event, void *data)
-> > +{
-> > +	struct dev_pm_opp *opp = data;
-> > +	struct dev_pm_opp *new_opp;
-> > +	struct mtk_cpu_dvfs_info *info;
-> > +	unsigned long freq, volt;
-> > +	struct cpufreq_policy *policy;
-> > +	int ret = 0;
-> > +
-> > +	info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
-> > +
-> > +	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
-> > +		freq = dev_pm_opp_get_freq(opp);
-> > +
-> > +		mutex_lock(&info->reg_lock);
-> > +		if (info->opp_freq == freq) {
-> > +			volt = dev_pm_opp_get_voltage(opp);
-> > +			ret = mtk_cpufreq_set_voltage(info, volt);
-> > +			if (ret)
-> > +				dev_err(info->cpu_dev,
-> > +					"failed to scale voltage:
-> > %d\n", ret);
-> > +		}
-> > +		mutex_unlock(&info->reg_lock);
-> > +	} else if (event == OPP_EVENT_DISABLE) {
-> > +		freq = dev_pm_opp_get_freq(opp);
-> > +
-> > +		/* case of current opp item is disabled */
-> > +		if (info->opp_freq == freq) {
-> > +			freq = 1;
-> > +			new_opp = dev_pm_opp_find_freq_ceil(info-
-> > >cpu_dev,
-> > +							    &freq);
-> > +			if (IS_ERR(new_opp)) {
-> > +				dev_err(info->cpu_dev,
-> > +					"all opp items are
-> > disabled\n");
-> > +				ret = PTR_ERR(new_opp);
-> > +				return notifier_from_errno(ret);
-> > +			}
-> > +
-> > +			dev_pm_opp_put(new_opp);
-> > +			policy = cpufreq_cpu_get(info->opp_cpu);
-> > +			if (policy) {
-> > +				cpufreq_driver_target(policy, freq /
-> > 1000,
-> > +						      CPUFREQ_RELATION_
-> > L);
-> > +				cpufreq_cpu_put(policy);
-> > +			}
-> > +		}
-> > +	}
-> > +
-> > +	return notifier_from_errno(ret);
-> > +}
-> > +
-> >  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info,
-> > int cpu)
-> >  {
-> >  	struct device *cpu_dev;
-> > @@ -357,6 +419,18 @@ static int mtk_cpu_dvfs_info_init(struct
-> > mtk_cpu_dvfs_info *info, int cpu)
-> >  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
-> >  	dev_pm_opp_put(opp);
-> >  
-> > +	mutex_init(&info->reg_lock);
-> > +
-> > +	info->opp_cpu = cpu;
-> > +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
-> > +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
-> > +	if (ret) {
-> > +		dev_err(cpu_dev, "cpu%d: failed to register opp
-> > notifier\n", cpu);
-> > +		goto out_disable_inter_clock;
-> > +	}
-> > +
-> > +	info->opp_freq = clk_get_rate(info->cpu_clk);
-> 
-> This is a resource as well, which should have been initialized before
-> registering notifier.
-> 
-> Applied with above changes. Thanks.
-> 
 
-Hello Viresh,
+Hi Suzuki,
 
-Thanks for your help!
+thanks for your review, some replies inline.
 
-BRs,
-Rex
+On 2022/5/6 0:22, Suzuki K Poulose wrote:
+> On 16/04/2022 09:39, Qi Liu wrote:
+>> This patch bring in a documentation for UltraSoc SMB drivers.
+>> It simple descripts the device, sysfs interface and the
+>> firmware bindings.
+>>
+>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>> ---
+>>   .../trace/coresight/ultrasoc-smb.rst          | 79 +++++++++++++++++++
+>>   1 file changed, 79 insertions(+)
+>>   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+>>
+>> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst 
+>> b/Documentation/trace/coresight/ultrasoc-smb.rst
+>> new file mode 100644
+>> index 000000000000..024fa4492f42
+>> --- /dev/null
+>> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
+>> @@ -0,0 +1,79 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +======================================
+>> +UltraSoc - HW Assisted Tracing on SoC
+>> +======================================
+>> +   :Author:   Qi Liu <liuqi115@huawei.com>
+>> +   :Date:     March 2022
+>> +
+>> +Introduction
+>> +------------
+>> +
+>> +UltraSoc SMB is a per SCCL hardware, and it provides a way to buffer 
+>> and store
+> 
+> nit: what is SCCL ?
 
+SCCL is super CPU cluster, I'll add the full name next time.
+
+> 
+>> +CPU trace messages in a region of shared system memory. SMB is 
+>> plugged as
+>> +a coresight sink device and the corresponding trace generators (ETM) are
+>> +plugged in as source devices.
+>> +
+>> +Sysfs files and directories
+>> +---------------------------
+>> +
+>> +The SMB devices appear on the existing coresight bus alongside the other
+>> +coresight devices::
+>> +
+>> +    $# ls /sys/bus/coresight/devices/
+>> +    ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
+>> +
+>> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
+>> +
+>> +    $# ls /sys/bus/coresight/devices/ultra_smb0
+>> +    enable_sink   mgmt
+>> +    $# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
+>> +    buf_size  buf_status  read_pos  write_pos
+>> +
+>> +*Key file items are:-*
+>> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer 
+>> register.
+>> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write 
+>> Pointer register.
+>> +   * ``buf_status``: Shows the value held by UltraSoc SMB status 
+>> register.
+>> +             BIT(0) is zero means buffer is empty.
+>> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
+>> +
+>> +Firmware Bindings
+>> +---------------------------
+>> +
+>> +Firmware binding of SMB device describes SMB device indentifier, 
+>> resource
+>> +information and graph structure.
+>> +
+>> +SMB is platform device and device id is "HISI03A1", resource of 
+>> device is
+>> +declared using the _CRS method. Each SMB must present two base address,
+>> +the first one is the configuration base address of SMB device, the 
+>> second
+>> +one is the base address of shared system memory.
+>> +
+>> +examples::
+>> +
+>> +    Device(USMB) {                                               \
+>> +      Name(_HID, "HISI03A1")                                     \
+>> +      Name(_CRS, ResourceTemplate() {                            \
+>> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
+>> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
+>> +      })                                                         \
+> 
+> 
+>> +      Name(_DSD, Package() {                                     \
+>> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
+> 
+> nit: May be add a comment here to explain, use Arm CoreSight Graph
+> ACPI bindings to describe the connections.
+
+got it, will add a comment above, thanks.
+> 
+>> +        Package() {                                              \
+>> +          0,                                                     \
+>> +          1,                                                     \
+>> +          Package() {                                            \
+>> +            1,                                                   \
+>> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
+>> +            8,                                                   \
+>> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
+>> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
+>> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
+>> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
+>> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
+>> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
+>> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
+>> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
+>> +          }                                                      \
+> 
+> Interesting, are there multiple input ports for the SMB ? We haven't
+> seen an instance of a "sink" that supports this. So, would be
+> interesting to see how the driver copes with that scenario.
+> 
+> Suzuki
+> 
+> yes, as there are 8 clusters in a SCCL, and each cluster use one funnel 
+device to transmit core trace data, so SMB has 8 input funnel ports.
+
+Thanks,
+Qi
+> 
+>> +        }                                                        \
+>> +      })                                                         \
+>> +    }
+> 
+> .

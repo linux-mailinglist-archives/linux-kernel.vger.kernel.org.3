@@ -2,199 +2,460 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C4A51E03D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4A051E040
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244023AbiEFUmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
+        id S233143AbiEFUq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443211AbiEFUmK (ORCPT
+        with ESMTP id S1443408AbiEFUqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:42:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9112D1F1;
-        Fri,  6 May 2022 13:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651869503; x=1683405503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2b+dWfxndlwKVu8r56BjaXCpV9WofllYiBZQXaA0tCY=;
-  b=FdtiNxtxPPI7oayfk7MZSOfzKi6uV/5pJlzpqtJksnsObAAS3DMnn4Qo
-   VTzIZ9V7E2v+gIbJ5H/ke4mjrwWJtXfnANFJAf7hUU+SHvyWkGgeqNp7H
-   IH9p/5Byw64Fan43xSC9JlSyQkVzHdf93C5gIJxSwXl2NxSoI2/2jJNjX
-   ahTJMD2s672iPNpeUlUKPGFlwwv286z5Xu7wZZqxG0z9hzZut1153gkUw
-   CFQpAwWqGRv3YPTVHo8FyyyYBAtt4VkMvFu5hlrz+bOMDtnS5lKkI/ASk
-   lEtTnCMix2Jce0Ts0IlJ8jNI9SuOehqtjBg5tFN/mLKJqyadNGl56CIVU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="248474801"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="248474801"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 13:38:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="564011788"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 06 May 2022 13:38:18 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nn4iQ-000DsG-38;
-        Fri, 06 May 2022 20:38:18 +0000
-Date:   Sat, 7 May 2022 04:38:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vasily Averin <vvs@openvz.org>, Shakeel Butt <shakeelb@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     kbuild-all@lists.01.org, kernel@openvz.org,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Fri, 6 May 2022 16:46:25 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF0A69CF6
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:42:40 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id q130so10571128ljb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WtV9FrLQYyZtXe46LaQb9LPuwmtg8D3WYzq8Ywi2Rkc=;
+        b=N4Sy3cr417X7gTyi/jzF4jbOx1PdALBB1qmNLFKVM655vPRoBDb/dDru9J6w4iCmSt
+         e5yzvKDqlVR0Kh/trkPl8sV7cNAAO7Kfd+CaddS4/N7LGANiX0FfytiCxquqreuy2IXe
+         Hf63lAEMZtEntPmPSim7HL/SQH7O4Wf0jpRM/a++KmYKrwsWiuKMcc9BPDRxIIow6PK1
+         aIOnk9acK4ruSjRVwxXOncEu2UFzk7LCzbpGjxBa2GKJxXw4hxHLVOufLQKM9WgYBBYx
+         unkUb0o6uRuGNNMTEfYH/nsxdqagfyA1AKjVLqTdt2mNZ8CaMjVrQS2CP18doR+kGA5F
+         /ziA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WtV9FrLQYyZtXe46LaQb9LPuwmtg8D3WYzq8Ywi2Rkc=;
+        b=4QSkxk5bQ1Skd7HGukhRonIP+M7csklgTSL130Ntmelz3XZ2Vattjmwcd6DMI8bf9y
+         X1L2OoB5dBmSzfx23ySNXfmSLJRUjTn3PC7Mf0b2DcaapzIs3E1MtrlgosWq/qwtPr+M
+         pamQ0meeiicETcz4w3hM/m0IN8GN0cBKnIaYrhfrTvOetTqhQnf9NNTiHs4zJJVLblKH
+         t3WhGa2u/7z5r3RqyDWjgKqHpy/6euDAFzS537c1xKq9mPq22Bch8FJ7Fk8zvlLYjYP1
+         73YDUWzP3ozi/Fbr1T+6CS4zfwv79wgGiCog4vep2fRHkgJW3FXGCxhrtcx0LNZgx7eT
+         Ye+w==
+X-Gm-Message-State: AOAM532BEcWUFnNZ7qfsqPiZplIxwY3qNLmetJLPfC6J64fEzKdHxuyI
+        OZZJPGfK9NfWgop6YyzbvfRWlw==
+X-Google-Smtp-Source: ABdhPJxm6aGfrziXHLhrP7hFj3fqkgrHGeEILn849GvvYrO0IDonOm3YYXUizUV/au4Ng8QSFyCIvg==
+X-Received: by 2002:a05:651c:510:b0:24f:545c:9362 with SMTP id o16-20020a05651c051000b0024f545c9362mr3062343ljp.263.1651869758424;
+        Fri, 06 May 2022 13:42:38 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id k15-20020a2e920f000000b002502e691b05sm743637ljg.136.2022.05.06.13.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 13:42:37 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 07B9C104AFD; Fri,  6 May 2022 23:44:24 +0300 (+03)
+Date:   Fri, 6 May 2022 23:44:23 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux-foundation.org>
-Subject: Re: [PATCH] percpu: improve percpu_alloc_percpu event trace
-Message-ID: <202205070420.aAhuqpYk-lkp@intel.com>
-References: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 10/12] x86/tdx: Unaccepted memory support
+Message-ID: <20220506204423.gu6jrb53kmuxze5r@box.shutemov.name>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-11-kirill.shutemov@linux.intel.com>
+ <YnOjJB8h3ZUR9sLX@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnOjJB8h3ZUR9sLX@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasily,
+On Thu, May 05, 2022 at 12:12:52PM +0200, Borislav Petkov wrote:
+> On Mon, Apr 25, 2022 at 06:39:32AM +0300, Kirill A. Shutemov wrote:
+> > Subject: [PATCHv5 10/12] x86/tdx: Unaccepted memory support
+> 
+> Patch subject needs a verb:
+> 
+> "Add ... "
+> 
+> > All preparations are complete.
+> 
+> Drop this sentence.
+> 
+> > Hookup TDX-specific code to accept memory.
+> > 
+> > Accepting the memory is the same process as converting memory from
+> > shared to private: kernel notifies VMM with MAP_GPA hypercall and then
+> > accept pages with ACCEPT_PAGE module call.
+> > 
+> > The implementation in core kernel uses tdx_enc_status_changed(). It
+> > already used for converting memory to shared and back for I/O
+> > transactions.
+> > 
+> > Boot stub provides own implementation of tdx_accept_memory(). It is
+> > similar in structure to tdx_enc_status_changed(), but only cares about
+> > converting memory to private.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/Kconfig                  |  1 +
+> >  arch/x86/boot/compressed/mem.c    | 24 ++++++++-
+> >  arch/x86/boot/compressed/tdx.c    | 85 +++++++++++++++++++++++++++++++
+> >  arch/x86/coco/tdx/tdx.c           | 31 +++++++----
+> >  arch/x86/include/asm/shared/tdx.h |  2 +
+> >  arch/x86/mm/unaccepted_memory.c   |  9 +++-
+> >  6 files changed, 141 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 7021ec725dd3..e4c31dbea6d7 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -885,6 +885,7 @@ config INTEL_TDX_GUEST
+> >  	select ARCH_HAS_CC_PLATFORM
+> >  	select X86_MEM_ENCRYPT
+> >  	select X86_MCE
+> > +	select UNACCEPTED_MEMORY
+> 
+> WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+>   Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+>   Selected by [y]:
+>   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+> 
+> WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+>   Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+>   Selected by [y]:
+>   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
 
-Thank you for the patch! Perhaps something to improve:
+Ughh. Any ideas how to get around it? (Except for implementing kexec
+support right away?)
+> 
+> 
+> > diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> > index b5058c975d26..539fff27de49 100644
+> > --- a/arch/x86/boot/compressed/mem.c
+> > +++ b/arch/x86/boot/compressed/mem.c
+> > @@ -5,6 +5,8 @@
+> >  #include "error.h"
+> >  #include "find.h"
+> >  #include "math.h"
+> > +#include "tdx.h"
+> > +#include <asm/shared/tdx.h>
+> >  
+> >  #define PMD_SHIFT	21
+> >  #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
+> > @@ -12,10 +14,30 @@
+> >  
+> >  extern struct boot_params *boot_params;
+> >  
+> > +static bool is_tdx_guest(void)
+> 
+> There is arch/x86/boot/compressed/tdx.c which already looks at that leaf
+> and detects crap. Why is that hastily slapped here too?
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on hnaz-mm/master v5.18-rc5]
-[cannot apply to dennis-percpu/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I'm not happhy with this too.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vasily-Averin/percpu-improve-percpu_alloc_percpu-event-trace/20220506-124742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220507/202205070420.aAhuqpYk-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/dee6876db0a7a4715516e673f9edaca2ba40677c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vasily-Averin/percpu-improve-percpu_alloc_percpu-event-trace/20220506-124742
-        git checkout dee6876db0a7a4715516e673f9edaca2ba40677c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+process_unaccepted_memory() called form EFI stub that called before
+decompression code.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I'm not sure how to structure code that it makes sense.
 
+Call early_tdx_detect() from efi_main() in libstub/x86-stub.c?
+It would require to include tdx.h from decompression code there which is
+non-sense.
 
-sparse warnings: (new ones prefixed by >>)
-   mm/percpu.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/percpu.h):
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast from restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long flags @@     got restricted gfp_t [usertype] gfp_flags @@
-   include/trace/events/percpu.h:11:1: sparse:     expected unsigned long flags
-   include/trace/events/percpu.h:11:1: sparse:     got restricted gfp_t [usertype] gfp_flags
-   mm/percpu.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/percpu.h):
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast to restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: cast to restricted gfp_t
->> include/trace/events/percpu.h:11:1: sparse: sparse: restricted gfp_t degrades to integer
->> include/trace/events/percpu.h:11:1: sparse: sparse: restricted gfp_t degrades to integer
-   mm/percpu.c:2012:24: sparse: sparse: context imbalance in 'pcpu_balance_free' - unexpected unlock
+I would appreciate an idea.
 
-vim +11 include/trace/events/percpu.h
+> > +{
+> > +	static bool once;
+> > +	static bool is_tdx;
+> > +
+> > +	if (!once) {
+> > +		u32 eax, sig[3];
+> > +
+> > +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
+> > +			    &sig[0], &sig[2],  &sig[1]);
+> > +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
+> > +		once = true;
+> > +	}
+> > +
+> > +	return is_tdx;
+> > +}
+> > +
+> >  static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
+> >  {
+> >  	/* Platform-specific memory-acceptance call goes here */
+> > -	error("Cannot accept memory");
+> > +	if (is_tdx_guest())
+> > +		tdx_accept_memory(start, end);
+> > +	else
+> > +		error("Cannot accept memory");
+> 
+> What is that supposed to catch?
 
-df95e795a72289 Dennis Zhou   2017-06-19  10  
-df95e795a72289 Dennis Zhou   2017-06-19 @11  TRACE_EVENT(percpu_alloc_percpu,
-df95e795a72289 Dennis Zhou   2017-06-19  12  
-df95e795a72289 Dennis Zhou   2017-06-19  13  	TP_PROTO(bool reserved, bool is_atomic, size_t size,
-dee6876db0a7a4 Vasily Averin 2022-05-06  14  		 size_t align, void *base_addr, int off,
-dee6876db0a7a4 Vasily Averin 2022-05-06  15  		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
-df95e795a72289 Dennis Zhou   2017-06-19  16  
-dee6876db0a7a4 Vasily Averin 2022-05-06  17  	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr,
-dee6876db0a7a4 Vasily Averin 2022-05-06  18  		bytes_alloc, gfp_flags),
-df95e795a72289 Dennis Zhou   2017-06-19  19  
-df95e795a72289 Dennis Zhou   2017-06-19  20  	TP_STRUCT__entry(
-df95e795a72289 Dennis Zhou   2017-06-19  21  		__field(	bool,			reserved	)
-df95e795a72289 Dennis Zhou   2017-06-19  22  		__field(	bool,			is_atomic	)
-df95e795a72289 Dennis Zhou   2017-06-19  23  		__field(	size_t,			size		)
-df95e795a72289 Dennis Zhou   2017-06-19  24  		__field(	size_t,			align		)
-df95e795a72289 Dennis Zhou   2017-06-19  25  		__field(	void *,			base_addr	)
-df95e795a72289 Dennis Zhou   2017-06-19  26  		__field(	int,			off		)
-df95e795a72289 Dennis Zhou   2017-06-19  27  		__field(	void __percpu *,	ptr		)
-dee6876db0a7a4 Vasily Averin 2022-05-06  28  		__field(	size_t,			bytes_alloc	)
-dee6876db0a7a4 Vasily Averin 2022-05-06  29  		__field(	gfp_t,			gfp_flags	)
-df95e795a72289 Dennis Zhou   2017-06-19  30  	),
-df95e795a72289 Dennis Zhou   2017-06-19  31  	TP_fast_assign(
-df95e795a72289 Dennis Zhou   2017-06-19  32  		__entry->reserved	= reserved;
-df95e795a72289 Dennis Zhou   2017-06-19  33  		__entry->is_atomic	= is_atomic;
-df95e795a72289 Dennis Zhou   2017-06-19  34  		__entry->size		= size;
-df95e795a72289 Dennis Zhou   2017-06-19  35  		__entry->align		= align;
-df95e795a72289 Dennis Zhou   2017-06-19  36  		__entry->base_addr	= base_addr;
-df95e795a72289 Dennis Zhou   2017-06-19  37  		__entry->off		= off;
-df95e795a72289 Dennis Zhou   2017-06-19  38  		__entry->ptr		= ptr;
-dee6876db0a7a4 Vasily Averin 2022-05-06  39  		__entry->bytes_alloc	= bytes_alloc;
-dee6876db0a7a4 Vasily Averin 2022-05-06  40  		__entry->gfp_flags	= gfp_flags;
-df95e795a72289 Dennis Zhou   2017-06-19  41  	),
-df95e795a72289 Dennis Zhou   2017-06-19  42  
-dee6876db0a7a4 Vasily Averin 2022-05-06  43  	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p bytes_alloc=%zu gfp_flags=%s",
-df95e795a72289 Dennis Zhou   2017-06-19  44  		  __entry->reserved, __entry->is_atomic,
-df95e795a72289 Dennis Zhou   2017-06-19  45  		  __entry->size, __entry->align,
-dee6876db0a7a4 Vasily Averin 2022-05-06  46  		  __entry->base_addr, __entry->off, __entry->ptr,
-dee6876db0a7a4 Vasily Averin 2022-05-06  47  		  __entry->bytes_alloc, show_gfp_flags(__entry->gfp_flags))
-df95e795a72289 Dennis Zhou   2017-06-19  48  );
-df95e795a72289 Dennis Zhou   2017-06-19  49  
+Booting on a platform that uses unaccepted memory, but kernel doesn't not
+support it.
+
+> > diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+> > index 918a7606f53c..57fd2bf28484 100644
+> > --- a/arch/x86/boot/compressed/tdx.c
+> > +++ b/arch/x86/boot/compressed/tdx.c
+> > @@ -3,12 +3,14 @@
+> >  #include "../cpuflags.h"
+> >  #include "../string.h"
+> >  #include "../io.h"
+> > +#include "align.h"
+> >  #include "error.h"
+> >  
+> >  #include <vdso/limits.h>
+> >  #include <uapi/asm/vmx.h>
+> >  
+> >  #include <asm/shared/tdx.h>
+> > +#include <asm/page_types.h>
+> >  
+> >  /* Called from __tdx_hypercall() for unrecoverable failure */
+> >  void __tdx_hypercall_failed(void)
+> > @@ -75,3 +77,86 @@ void early_tdx_detect(void)
+> >  	pio_ops.f_outb = tdx_outb;
+> >  	pio_ops.f_outw = tdx_outw;
+> >  }
+> > +
+> > +enum pg_level {
+> > +	PG_LEVEL_4K,
+> > +	PG_LEVEL_2M,
+> > +	PG_LEVEL_1G,
+> > +};
+> > +
+> > +#define PTE_SHIFT 9
+> 
+> At least stick those in a header.
+> 
+> > +static bool try_accept_one(phys_addr_t *start, unsigned long len,
+> > +			  enum pg_level pg_level)
+> 
+> No need to break that line.
+> 
+> Also, it doesn't need to be bool - you can simply return accept_size on
+> success and 0 on error so that you don't have an I/O argument.
+
+So on the calling side it would look like:
+
+	accepted = try_accept_one(start, len, PG_LEVEL_1G)
+	if (accepted) {
+		start += accepted;
+		continue;
+	}
+
+And the similar for other levels. Is it really better?
+
+> 
+> Ditto for the copy in coco/tdx/tdx.c
+> 
+> > +{
+> > +	unsigned long accept_size = PAGE_SIZE << (pg_level * PTE_SHIFT);
+> > +	u64 tdcall_rcx;
+> > +	u8 page_size;
+> > +
+> > +	if (!IS_ALIGNED(*start, accept_size))
+> > +		return false;
+> > +
+> > +	if (len < accept_size)
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * Pass the page physical address to the TDX module to accept the
+> > +	 * pending, private page.
+> > +	 *
+> > +	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
+> > +	 */
+> > +	switch (pg_level) {
+> > +	case PG_LEVEL_4K:
+> > +		page_size = 0;
+> > +		break;
+> > +	case PG_LEVEL_2M:
+> > +		page_size = 1;
+> > +		break;
+> > +	case PG_LEVEL_1G:
+> > +		page_size = 2;
+> > +		break;
+> > +	default:
+> > +		return false;
+> > +	}
+> > +
+> > +	tdcall_rcx = *start | page_size;
+> > +	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
+> > +		return false;
+> > +
+> > +	*start += accept_size;
+> > +	return true;
+> > +}
+> > +
+> > +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> > +{
+> > +	/*
+> > +	 * Notify the VMM about page mapping conversion. More info about ABI
+> > +	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> > +	 * section "TDG.VP.VMCALL<MapGPA>"
+> > +	 */
+> > +	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> > +		error("Accepting memory failed\n");
+> > +	/*
+> > +	 * For shared->private conversion, accept the page using
+> > +	 * TDX_ACCEPT_PAGE TDX module call.
+> > +	 */
+> > +	while (start < end) {
+> > +		unsigned long len = end - start;
+> > +
+> > +		/*
+> > +		 * Try larger accepts first. It gives chance to VMM to keep
+> > +		 * 1G/2M SEPT entries where possible and speeds up process by
+> 
+> "SEPT"?
+
+Secure EPT. EPT for private memory in TDX.
+
+> > +		 * cutting number of hypercalls (if successful).
+> > +		 */
+> > +
+> > +		if (try_accept_one(&start, len, PG_LEVEL_1G))
+> > +			continue;
+> > +
+> > +		if (try_accept_one(&start, len, PG_LEVEL_2M))
+> > +			continue;
+> > +
+> > +		if (!try_accept_one(&start, len, PG_LEVEL_4K))
+> > +			error("Accepting memory failed\n");
+> > +	}
+> > +}
+> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> > index ddb60a87b426..ab4deb897942 100644
+> > --- a/arch/x86/coco/tdx/tdx.c
+> > +++ b/arch/x86/coco/tdx/tdx.c
+> > @@ -580,16 +580,9 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+> >  	return true;
+> >  }
+> >  
+> > -/*
+> > - * Inform the VMM of the guest's intent for this physical page: shared with
+> > - * the VMM or private to the guest.  The VMM is expected to change its mapping
+> > - * of the page in response.
+> > - */
+> > -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> > +static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
+> 
+> Why? is tdx_enc_status_changed_virt() coming too?
+
+tdx_enc_status_changed() deals with virtual addresses.
+
+> > +					bool enc)
+> >  {
+> > -	phys_addr_t start = __pa(vaddr);
+> > -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> > -
+> >  	if (!enc) {
+> >  		/* Set the shared (decrypted) bits: */
+> >  		start |= cc_mkdec(0);
+> > @@ -634,6 +627,25 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> >  	return true;
+> >  }
+> >  
+> > +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> > +{
+> > +	if (!tdx_enc_status_changed_phys(start, end, true))
+> > +		panic("Accepting memory failed\n");
+> > +}
+> > +
+> > +/*
+> > + * Inform the VMM of the guest's intent for this physical page: shared with
+> > + * the VMM or private to the guest.  The VMM is expected to change its mapping
+> > + * of the page in response.
+> > + */
+> > +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> > +{
+> > +	phys_addr_t start = __pa(vaddr);
+> > +	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
+> > +
+> > +	return tdx_enc_status_changed_phys(start, end, enc);
+> > +}
+> > +
+> >  void __init tdx_early_init(void)
+> >  {
+> >  	u64 cc_mask;
+> > @@ -645,6 +657,7 @@ void __init tdx_early_init(void)
+> >  		return;
+> >  
+> >  	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+> > +	setup_clear_cpu_cap(X86_FEATURE_MCE);
+> 
+> What, no comment? Why does TDX need to disable MCE?
+
+It doesn't not suppose to be here. Sorry.
+
+> 
+> >  	cc_set_vendor(CC_VENDOR_INTEL);
+> >  	cc_mask = get_cc_mask();
+> > diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> > index 956ced04c3be..97534c334473 100644
+> > --- a/arch/x86/include/asm/shared/tdx.h
+> > +++ b/arch/x86/include/asm/shared/tdx.h
+> > @@ -81,5 +81,7 @@ struct tdx_module_output {
+> >  u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> >  		      struct tdx_module_output *out);
+> >  
+> > +void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
+> > +
+> >  #endif /* !__ASSEMBLY__ */
+> >  #endif /* _ASM_X86_SHARED_TDX_H */
+> > diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+> > index 1327f64d5205..de0790af1824 100644
+> > --- a/arch/x86/mm/unaccepted_memory.c
+> > +++ b/arch/x86/mm/unaccepted_memory.c
+> > @@ -6,6 +6,7 @@
+> >  
+> >  #include <asm/io.h>
+> >  #include <asm/setup.h>
+> > +#include <asm/shared/tdx.h>
+> >  #include <asm/unaccepted_memory.h>
+> >  
+> >  /* Protects unaccepted memory bitmap */
+> > @@ -29,7 +30,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
+> >  		unsigned long len = range_end - range_start;
+> >  
+> >  		/* Platform-specific memory-acceptance call goes here */
+> > -		panic("Cannot accept memory");
+> > +		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> > +			tdx_accept_memory(range_start * PMD_SIZE,
+> > +					  range_end * PMD_SIZE);
+> > +		} else {
+> > +			panic("Cannot accept memory");
+> 
+> Why panic here? A WARN_ONCE() should suffice, methinks.
+
+As I said before, memory accept failure is fatal.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ Kirill A. Shutemov

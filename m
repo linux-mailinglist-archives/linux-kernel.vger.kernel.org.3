@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176D051D533
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C049E51D532
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390822AbiEFKNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S1390826AbiEFKNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390809AbiEFKNd (ORCPT
+        with ESMTP id S1390817AbiEFKNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:13:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5411A5DA7F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:09:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B96714BF;
-        Fri,  6 May 2022 03:09:51 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.65.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AD5F3FA31;
-        Fri,  6 May 2022 03:09:50 -0700 (PDT)
-Date:   Fri, 6 May 2022 11:09:46 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] arm64: add the printing of tpidr_elx in __show_regs()
-Message-ID: <YnTz6oFEQGDBrIpi@FVFF77S0Q05N>
-References: <20220505095640.312-1-thunder.leizhen@huawei.com>
- <YnPLQJhu5B1Cxvoh@FVFF77S0Q05N.cambridge.arm.com>
- <c6c22386-af37-1acc-63e9-2bb85028aa8c@huawei.com>
- <307e4def-1e4a-1110-e644-d485b9959ab1@huawei.com>
- <7c1207fa-56aa-1b33-31fd-3ec395b08f2b@huawei.com>
+        Fri, 6 May 2022 06:13:34 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28A6D5DA4B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651831791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tLarrquML4Z2ntTSehBWvAuy0Iv5TWWpsEPFkNYG2Uk=;
+        b=EsoYFGSMsucGaKbcc9kVHvnGF+Te45h8aR4OCRMJYd/0FXFXaoS0GKhlGmTO3KUUT0T8a7
+        NwuHfZa5mmIcEXeqQ09JDse9Pug0V30gS3GiDy5ANz1+nHTw90J8HDKJ9SFa3GuFMBoCJd
+        tmlNobfve6iYm10IknYN1CpAgwWbNYo=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-IhyBaBOYPtyPUD09vlwh4w-1; Fri, 06 May 2022 06:09:50 -0400
+X-MC-Unique: IhyBaBOYPtyPUD09vlwh4w-1
+Received: by mail-ed1-f69.google.com with SMTP id c23-20020a50d657000000b00425d5162a0dso3755076edj.16
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:09:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tLarrquML4Z2ntTSehBWvAuy0Iv5TWWpsEPFkNYG2Uk=;
+        b=j+sf8jUcvp8C4b1JuTa1KW10Ue7mZcnzWPnBpcrMhMjE1TRN336cayRJcMzMwDvpmw
+         j2DBXLFDe84ewZ41rIkj8rC8DVlDTWSDvA8H4aBGraLDE/bN/ZYEclGyjWroCYdQNX7d
+         Ts0+lMrZ2aFmCfyS7v6mqaPPvbNnZIyH+DGJ77nG7GaWUfYROskiDraUY4asPYffVt0j
+         QpWxB28UYHH17sHZ9J24+OIgA93Mev1+DAMufLx55ic9+MLthWTuJFy6xN9vHTplfV09
+         TBEL7s9s+Yr/Rb2dPkpTD6RlihEzGDUbd0Z6PdWDouu/hGEgAzj9c7cegLQqIbuP7XYS
+         BduQ==
+X-Gm-Message-State: AOAM532f5BWYzPzN9JA4SsLXHP/x1jO6diaov7r2WNLiBhwF/Ozt+x6u
+        Ey43cbhN6jb8L9oJ/TKAmDZ3Tb9aKd93oxg5EMWwlOqBdfUfju/WrpPjW3w5AsO/qw32ybdI6Kx
+        lC/yDTuQjbOboxnBE8NGXOtnI
+X-Received: by 2002:a05:6402:298c:b0:41d:6b63:aa67 with SMTP id eq12-20020a056402298c00b0041d6b63aa67mr2700624edb.42.1651831788993;
+        Fri, 06 May 2022 03:09:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwBFzu6xrB6D3RxqpRHkjC2nvxP0O0etd0yBB+wtSAq72a4+fJbgUlH00ZVSEP9Mw+wncftLw==
+X-Received: by 2002:a05:6402:298c:b0:41d:6b63:aa67 with SMTP id eq12-20020a056402298c00b0041d6b63aa67mr2700604edb.42.1651831788792;
+        Fri, 06 May 2022 03:09:48 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id ze11-20020a170906ef8b00b006f3ef214e43sm1771125ejb.169.2022.05.06.03.09.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 03:09:48 -0700 (PDT)
+Message-ID: <a07ef5c8-8b6c-f9da-ecff-f58316218f23@redhat.com>
+Date:   Fri, 6 May 2022 12:09:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c1207fa-56aa-1b33-31fd-3ec395b08f2b@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC PATCH pdx86-platform-drivers-x86] platform/x86:
+ thinkpad_acpi: quirk_s2idle_bug can be static
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <202205040241.QemV1sMH-lkp@intel.com>
+ <YnFyjKyfnPnfpHgW@74ccfaeec2ea>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YnFyjKyfnPnfpHgW@74ccfaeec2ea>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 04:16:55PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/5/5 21:34, Leizhen (ThunderTown) wrote:
-> > On 2022/5/5 21:26, Leizhen (ThunderTown) wrote:
-> >> On 2022/5/5 21:04, Mark Rutland wrote:
-> >>> On Thu, May 05, 2022 at 05:56:40PM +0800, Zhen Lei wrote:
-> >>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
-> >>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
-> >>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
-> >>>> pcpu access. However, when performing reverse execution based on the
-> >>>> registers and the memory contents in kdump, this information is sometimes
-> >>>> required if there is a pcpu access.
-> >>>>
-> >>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >>>> ---
-> >>>>  arch/arm64/kernel/process.c | 5 +++++
-> >>>>  1 file changed, 5 insertions(+)
-> >>>>
-> >>>> v2 --> v3:
-> >>>> 1) Relace "switch (read_sysreg(CurrentEL))" statement with
-> >>>>    "if (is_kernel_in_hyp_mode())" statement.
-> >>>> 2) Change the register name to lowercase.
-> >>>>
-> >>>> v1 --> v2:
-> >>>> Directly print the tpidr_elx register of the current exception level.
-> >>>> Avoid coupling with the implementation of 'my_cpu_offset'.
-> >>>>
-> >>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> >>>> index 7fa97df55e3ad3f..7b6bccce9721c36 100644
-> >>>> --- a/arch/arm64/kernel/process.c
-> >>>> +++ b/arch/arm64/kernel/process.c
-> >>>> @@ -216,6 +216,11 @@ void __show_regs(struct pt_regs *regs)
-> >>>>  	show_regs_print_info(KERN_DEFAULT);
-> >>>>  	print_pstate(regs);
-> >>>>  
-> >>>> +	if (is_kernel_in_hyp_mode())
-> >>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(tpidr_el2));
-> >>>> +	else
-> >>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(tpidr_el1));
-> >>>
-> >>> If we care about the offset specifically, this would be simpler as:
-> >>>
-> >>> 	printk("cpu offset : 0x%016lx\n", __my_cpu_offset());
-> >>
-> >> The function name is __show_regs(), so not using register name may not be good.
-> >> In fact, some other architectures may also have this problem. If we use my_cpu_offset,
-> >> we may need to put it in a public.
-> > 
-> > The other idea is to back up each my_cpu_offset in an array. In this way, the offset can
-> > be queried through vmcore even if it is not printed.
-> 
-> Sorry, __per_cpu_offset[NR_CPUS] is always defined.
+Hi,
 
-Surely that's in the vmcore already? It's just data in memory.
+On 5/3/22 20:21, kernel test robot wrote:
+> drivers/platform/x86/thinkpad_acpi.c:322:20: warning: symbol 'quirk_s2idle_bug' was not declared. Should it be static?
+> 
+> Fixes: a50dfa903391 ("platform/x86: thinkpad_acpi: Add a s2idle resume quirk for a number of laptops")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Mark.
+Thanks, since the original patch was still in my review-hans
+branch (and not yet in for-next) I've squashed this fix into
+the original patch.
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index f385450af8647..d5431d3d4246f 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -319,7 +319,7 @@ struct quirk_entry quirk_btusb_bug = {
+>  	.btusb_bug = true,
+>  };
+>  
+> -struct quirk_entry quirk_s2idle_bug = {
+> +static struct quirk_entry quirk_s2idle_bug = {
+>  	.s2idle_bug_mmio = 0xfed80380,
+>  };
+>  
+> 
+

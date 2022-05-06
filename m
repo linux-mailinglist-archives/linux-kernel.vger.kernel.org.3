@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEE251D36F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FFF51D36E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390152AbiEFIcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S1390151AbiEFIcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390146AbiEFIcj (ORCPT
+        with ESMTP id S1386333AbiEFIch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:32:39 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44B27522D8
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651825736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z6z7gc/drMhEeRJp39wQIA1kBqGj2H/sPubOogLgDhI=;
-        b=XK4fmhaCuKmrpfvflKc0dDzeTCnPc91l9AXvFfrT8TkjvzArGGrjT2av4Zo8JVaiqv4cWP
-        ftNKE8NLmttCqwisioebA9VZd90kWuX4EBBPkL9N32r8e3eB0Ptl4rTylugn6aR4D+qc2B
-        51dwzEowxEaUSg/vQxBPWyTq6SxyHNY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-52-YPUZiyGDMOWmGfUE-_G9qw-1; Fri, 06 May 2022 04:28:53 -0400
-X-MC-Unique: YPUZiyGDMOWmGfUE-_G9qw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CEBB804199;
-        Fri,  6 May 2022 08:28:52 +0000 (UTC)
-Received: from rh (vpn2-54-181.bne.redhat.com [10.64.54.181])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2C9F62166B2D;
-        Fri,  6 May 2022 08:28:52 +0000 (UTC)
-Received: from localhost ([::1] helo=rh)
-        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <dchinner@redhat.com>)
-        id 1nmtKT-005kR5-Fc; Fri, 06 May 2022 18:28:49 +1000
-Date:   Fri, 6 May 2022 18:28:47 +1000
-From:   Dave Chinner <dchinner@redhat.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Chandan Babu R <chandan.babu@oracle.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, lkp@intel.com
-Subject: Re: [xfs]  83a21c1844: xfstests.xfs.533.fail
-Message-ID: <YnTcP86M0NV6lkfB@rh>
-References: <20220506080341.GF23061@xsang-OptiPlex-9020>
+        Fri, 6 May 2022 04:32:37 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4B963522
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:28:55 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kq17so13085667ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:cc:from:in-reply-to:content-transfer-encoding;
+        bh=k8gw4JD+CVD/evHIacbhoTM1UmIlcjVCNQ+9z7oYUtI=;
+        b=dDZs4xRsI+XJt34onMwmAZtEAGas5P7kna23XXUg06Y/gztAxn8a54iuBWXYNHBmCX
+         bc9omCyYTSnmd4wyPVEQaM3fJ9qeBaAWNqvOqOrhHgltpmko5+rjky0VeGWALW6WwdqR
+         X8j95OnDoOceNHT0SEmSr/ABL3waSGRPacAK4vCWkbGL4jqK94qZCzk20EvvtfS9e2ek
+         bClBIbWgydbg+7AxUw2bTZhxtAsJwRDiWDDECmrJ1Npw9K8xbMKzewaoC76r4daDMsSa
+         QM5Xf6k4repo+cmcKUjz0K2GGYKSydY1YVPjwyMhtNJK56a6oPnmwgeSIZbwL0ODJwEI
+         f4jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:cc:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k8gw4JD+CVD/evHIacbhoTM1UmIlcjVCNQ+9z7oYUtI=;
+        b=huyvv6QEoRJH/zPdJQ4pRQOCYKXurGExMmmoiKEUGSJBA1tUF+1QnZdMdS0rykHeQz
+         P48XyiCDinMdv9f83+05YzXJLOf2ZbXn3N1kKWmNWUKoh1VoRk7X6r4mbFNaP6YzVoj4
+         kaHeeZdejzeU1vo4XpzmmKIwrBtQeLzgH7yekdD41hgPv2O2j4rYwcQscGMGSLj6yNHm
+         M6NjGaOx0Ew/N34OEXfAi6oAdDhI427qbOjG6E1aKPjYTIknRQ2Wzso/kswCVjTJWZ5m
+         KEGp0/1ejqZEI/cvMGnNP7vK3nomaMNjTqBF5Z0mdl2ZsvmFONXqaTFuFscFJoQOvI0L
+         3jWA==
+X-Gm-Message-State: AOAM532uL8kVXcb/R4VNnzCfZ11YU5hsAFjr6e0iYrZsnwwOQPHyD3of
+        NmkJ1TkzCN7SDsj7AEJRIZFOJQ==
+X-Google-Smtp-Source: ABdhPJz8nMRZdChtZYB1x22twKxHKUjq6qOsvsEKiRI3qcGnDs0ehoq2wpfQpANDDl8kg3ZNcHVoEw==
+X-Received: by 2002:a17:906:54c3:b0:6ef:d07b:c8ec with SMTP id c3-20020a17090654c300b006efd07bc8ecmr1859082ejp.687.1651825733978;
+        Fri, 06 May 2022 01:28:53 -0700 (PDT)
+Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r2-20020aa7d582000000b0042617ba6396sm1997301edq.32.2022.05.06.01.28.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 01:28:53 -0700 (PDT)
+Message-ID: <d6ead111-e2f8-c098-42ff-cda30a1d72bc@linaro.org>
+Date:   Fri, 6 May 2022 10:28:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506080341.GF23061@xsang-OptiPlex-9020>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: timer: cdns,ttc: drop unneeded minItems
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220424150333.75172-1-krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220424150333.75172-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,70 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 04:03:41PM +0800, kernel test robot wrote:
+On 24/04/2022 17:03, Krzysztof Kozlowski wrote:
+> There is no need to add minItems when it is equal to maxItems.
 > 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 83a21c18441f75aec64548692b52d34582b98a6a ("xfs: Directory's data fork extent counter can never overflow")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
-> 
-> in testcase: xfstests
-> version: xfstests-x86_64-46e1b83-1_20220414
-> with following parameters:
-> 
-> 	disk: 4HDD
-> 	fs: xfs
-> 	test: xfs-group-53
-> 	ucode: 0x21
-> 
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> 
-> 
-> on test machine: 4 threads 1 sockets Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> 
-> xfs/533	[failed, exit status 1]- output mismatch (see /lkp/benchmarks/xfstests/results//xfs/533.out.bad)
->     --- tests/xfs/533.out	2022-04-14 12:51:49.000000000 +0000
->     +++ /lkp/benchmarks/xfstests/results//xfs/533.out.bad	2022-05-03 06:24:37.310381846 +0000
->     @@ -6,12 +6,4 @@
->      Inject bmap_alloc_minlen_extent error tag
->      * Create directory entries
->      Verify directory's extent count
->     -* Rename: Populate destination directory
->     -Populate $dstdir by moving new directory entries
->     -Verify $dstdir's extent count
->     -* Create multiple hard links to a single file
->     ...
->     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/533.out /lkp/benchmarks/xfstests/results//xfs/533.out.bad'  to see the entire diff)
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/timer/cdns,ttc.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+Hi Daniel, Thomas,
 
-Not a regression. This is testing directory data fork extent count
-overflow using error injection, but you might notice that the title
-of the commit is "Directory's data fork extent counter can never
-overflow".
+The patchset was acked by Rob, so he expects you will pick it up. Could
+you let me know if there is anything stopping or you expect the other
+way (via DT-tree)?
 
-IOWs, we changed fine grained directory extent count overflow
-from a runtime check (on every dir op) to an inode verifier
-check that is only run when the directory inode is read from or
-written to disk.
-
-The test probably should be removed. Chandan?
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-dchinner@redhat.com
-
+Best regards,
+Krzysztof

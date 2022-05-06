@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D0C51DF98
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF00851DF9A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390793AbiEFTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S1390311AbiEFTTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390660AbiEFTS6 (ORCPT
+        with ESMTP id S1385702AbiEFTTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:18:58 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22CE6D4E2;
-        Fri,  6 May 2022 12:15:14 -0700 (PDT)
-Received: from [192.168.1.30] (097-089-247-249.biz.spectrum.com [97.89.247.249])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id A85273F616;
-        Fri,  6 May 2022 19:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1651864512;
-        bh=AhY6XnbZGCaa4rZcAy/QJhv0KQphb6EX3UBpmJcYre4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=IBsLG3MhrwhXcPHusLcHwEq1Qz0eU34L4OZe52BXOlw2nZXsjl456W8pvNW3AP6nA
-         r5y9ej4AwjYpB7jgKCVKQ3GeALz9KeKvxdxmxXzBILE5AVekW++Xj1Zk4fOKZTMwtm
-         9GK3100drIvlvEoS0qDLJosthdohnHwDg66yLFlWeN8lhZB8by9m2CrMGIrEoEcU++
-         zQeRjnGbABdFyZUAqQT3nt0Of7RbBhUZZadHrjhGkCdei+Awjeo34uI41QsW0trray
-         5tQY3xpOqFqs8B90+pxlJ9ncCU9IZBZCqzx/LUws2MsnNiByvonYRcnyoTWIvxf+RZ
-         Kgbx3TdYi7teA==
-Message-ID: <29829c01-f31e-2c4f-06e9-fc15c0261f93@canonical.com>
-Date:   Fri, 6 May 2022 15:15:09 -0400
+        Fri, 6 May 2022 15:19:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778BA237F5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651864561; x=1683400561;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GAs5M9aaPMAmYtox6cAb0wycfcacPCY61CJ/1Zh7f1s=;
+  b=NRVKHuLSV3rGIOqZpicGtYJHqMHvYxTKnG6yALDrOK2ufLs3olWaw0R/
+   OYUz+DfzRfMEAxrQACG4XFuguBOimzrwFeZDTJVzDS81aUVE6ZAm1rWkV
+   SIkMZYDdvl6aTElRq4X8KexZ3DwO0Hqq0yzLObTgRI9B2iQkXWix4U3ix
+   emRETk1rKMcFoJuCKzRxGaiO0csWyYQomOdzwr2OGccNz9tI24ITLJwEC
+   wrb9iJMf2JHd04hTJP2e78SfNy4Mt6BL98zS4B8g6SBmDSrZkwlZ7efdN
+   fIoyxzX8/GxGX6fF6ucEwqdsDjmu3EvOnTGdi5CJZQ3ySrr8wq+9d1s36
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="354989206"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="354989206"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:16:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="654830294"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 May 2022 12:15:59 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nn3Qk-000DnY-Nb;
+        Fri, 06 May 2022 19:15:58 +0000
+Date:   Sat, 7 May 2022 03:15:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [tip:x86/asm 12/12] include/linux/objtool.h:5:10: fatal error:
+ asm/asm.h: No such file or directory
+Message-ID: <202205070302.5S7yoOTI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Issue With real-time patches on 5.15.y
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        linux-rt-users@vger.kernel.org
-References: <bdb23fe5-51ae-8873-a3d7-85f377877c79@canonical.com>
- <32803e0b-8ff6-ae8d-f9cb-ce2d3fd37229@intel.com>
-From:   Joseph Salisbury <joseph.salisbury@canonical.com>
-In-Reply-To: <32803e0b-8ff6-ae8d-f9cb-ce2d3fd37229@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/asm
+head:   38f3803fb4fa588ef7645048285493efbe264d79
+commit: 38f3803fb4fa588ef7645048285493efbe264d79 [12/12] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
+config: arc-randconfig-r043-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070302.5S7yoOTI-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=38f3803fb4fa588ef7645048285493efbe264d79
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/asm
+        git checkout 38f3803fb4fa588ef7645048285493efbe264d79
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bpf/core.c:28:
+>> include/linux/objtool.h:5:10: fatal error: asm/asm.h: No such file or directory
+       5 | #include <asm/asm.h>
+         |          ^~~~~~~~~~~
+   compilation terminated.
 
 
-On 5/5/22 19:35, Dave Hansen wrote:
-> On 5/5/22 16:18, Joseph Salisbury wrote:
->> The real-time kernel build failure can be resolved by reverting commit
->> b50854eca0e0.  The failure seems to be due to the removal of an include
->> of xstate.h from pkru.h and caused spinlock_t to not be defined.  The
->> commit would only be reverted for the real-time kernel and not any other
->> kernels.  I wanted to see if reverting the commit is the proper
->> approach, or if cherry-picking additional commits might be a better
->> solution in preparation for additional changes that might be coming in
->> the future?
->>
->> Any suggestions would be greatly appreciated.
-> I thought you distro folks were the franenkernel experts. :)
->
-> But, seriously...  This isn't rocket science.  Just look at the pkru.h
-> in your tree and figure out what includes it needs.  If it needs FPU
-> gunk, include the FPU header.  If you get a compile error for spinlock_t
-> ...  well ...  find the code using spinlock_t and make sure it includes
-> spinlock.h.
->
-Thanks for the advice, Dave.
+vim +5 include/linux/objtool.h
 
-Your suggestion will probably be the easiest approach.  I was just 
-trying to limit the amount of frankenkernel changes, since there are 
-already so many  :-)  It's always best to stay as close to mainline as 
-possible.
+     4	
+   > 5	#include <asm/asm.h>
+     6	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

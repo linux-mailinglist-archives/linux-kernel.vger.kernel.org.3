@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910D651CE15
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB5C51CEC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388195AbiEFB7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 21:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S1388204AbiEFCB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349212AbiEFB7m (ORCPT
+        with ESMTP id S1349212AbiEFCBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 21:59:42 -0400
-Received: from mail.meizu.com (edge01.meizu.com [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7957F62E0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 18:56:00 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 6 May 2022
- 09:56:03 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 6 May
- 2022 09:55:58 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/rockchip: Remove unneeded semicolon
-Date:   Fri, 6 May 2022 09:55:57 +0800
-Message-ID: <1651802157-25092-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 5 May 2022 22:01:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4016615D;
+        Thu,  5 May 2022 18:57:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 495C561B96;
+        Fri,  6 May 2022 01:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DDC3C385AC;
+        Fri,  6 May 2022 01:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651802263;
+        bh=GeHdkr2ZO4kmGx/9U2bw97L/SWe5YfhsVGtl0N4MQus=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NhqDevJKpqzSnUuqL/tpGdvIFH11cZzDNm5Hm500j1Wo0EVqgV37EO4yHfCAgyjQ5
+         2k+mh9p8Kq2G/n5Scg+2++7nS69cctsbfozfwkaVabsRskVhOSYM4RTZ+pOaExpnRd
+         g6FpeWxeuBufeVTDsh+9dq6EU4iZWBt5GAyO5H7dliy2LaFHMuKUUL4Mxz6oPImxLP
+         iyxvVwgqN+GN1plq9fT2fId8SKcyFIqFl2teJsgh+mbnUWAPaDakv4rrsx+B23QCcp
+         hAb7ljc6jM9LzLviskcnArIlz/FcFgYOJJ+hzVIsXsxe+R29Vju/eZ8PMUc8bxhQBP
+         ktRJocE9mHXEQ==
+Date:   Thu, 5 May 2022 18:57:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Min Li <min.li.xe@renesas.com>
+Cc:     richardcochran@gmail.com, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net v4 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
+ support
+Message-ID: <20220505185742.1246d738@kernel.org>
+In-Reply-To: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
+References: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,28 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes coccicheck warning:
+On Wed,  4 May 2022 16:50:54 -0400 Min Li wrote:
+> Use TOD_READ_SECONDARY for extts to keep TOD_READ_PRIMARY
+> for gettime and settime exclusively
 
-drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:1476:2-3: Unneeded semicolon
+Can you fill in more details about what the user visible problem is?
+Judging by the fact that you haven't tagged the patch as 
+[PATCH net-next] after my previous explanation you do think this 
+is a fix. But "Add xyz support" sounds like a feature, not a fix.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Min Li <min.li.xe@renesas.com>
+> Acked-by: Richard Cochran <richardcochran@gmail.com>
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-index 0b49fed16535..7f9d88634a77 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-@@ -1473,7 +1473,7 @@ static void rk3568_set_intf_mux(struct vop2_video_port *vp, int id,
- 	default:
- 		drm_err(vop2->drm, "Invalid interface id %d on vp%d\n", id, vp->id);
- 		return;
--	};
-+	}
- 
- 	dip |= RK3568_DSP_IF_POL__CFG_DONE_IMD;
- 
--- 
-2.7.4
+> -	err = char_array_to_timespec(buf, sizeof(buf), ts);
+> -
+> -	return err;
+> +	return char_array_to_timespec(buf, sizeof(buf), ts);
+
+I don't think you were modifying this code, so no need to clean it up
+in this commit. It's unrelated to the change you're making now.
+
+>  }
+
+> -	/* Re-enable extts */
+> -	if (extts_mask)
+> -		idtcm_enable_extts_mask(channel, extts_mask, true);
+> +	err = _idtcm_gettime(channel, ts, 10);
+>  
+>  	return err;
+>  }
+
+Here, tho, you are changing the code, and yet you haven't done what 
+I asked.
 

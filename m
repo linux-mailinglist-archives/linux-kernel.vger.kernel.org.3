@@ -2,58 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D97A51D633
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BD551D642
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391159AbiEFLKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S1391174AbiEFLLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiEFLKO (ORCPT
+        with ESMTP id S1385128AbiEFLLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:10:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6274051E57;
-        Fri,  6 May 2022 04:06:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF96161DEC;
-        Fri,  6 May 2022 11:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA7FC385AA;
-        Fri,  6 May 2022 11:06:26 +0000 (UTC)
-Date:   Fri, 6 May 2022 12:06:22 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
-Message-ID: <YnUBLgUiZDhRPMzU@arm.com>
-References: <20220505091845.167-1-thunder.leizhen@huawei.com>
- <20220505091845.167-4-thunder.leizhen@huawei.com>
- <YnQC44KVKirH0vyB@arm.com>
- <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+        Fri, 6 May 2022 07:11:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D183252B08;
+        Fri,  6 May 2022 04:07:32 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kvnkp1P18z67DYv;
+        Fri,  6 May 2022 19:04:18 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 13:07:29 +0200
+Received: from [10.47.86.119] (10.47.86.119) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
+ 2022 12:07:27 +0100
+Message-ID: <7b8d7c1a-58c3-4ba9-a4f0-d0e051f3ffdc@huawei.com>
+Date:   Fri, 6 May 2022 12:07:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
+ as necessary
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "Rich Felker" <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+References: <20220505195342.GA509942@bhelgaas>
+ <157602011a72061dd31f92bd699e8c1f9a81c988.camel@linux.ibm.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <157602011a72061dd31f92bd699e8c1f9a81c988.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.86.119]
+X-ClientProxiedBy: lhreml726-chm.china.huawei.com (10.201.108.77) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,110 +95,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 11:22:51AM +0800, Leizhen (ThunderTown) wrote:
-> On 2022/5/6 1:01, Catalin Marinas wrote:
-> > On Thu, May 05, 2022 at 05:18:42PM +0800, Zhen Lei wrote:
-> >> From: Chen Zhou <chenzhou10@huawei.com>
-> >>
-> >> There are following issues in arm64 kdump:
-> >> 1. We use crashkernel=X to reserve crashkernel in DMA zone, which
-> >> will fail when there is not enough low memory.
-> >> 2. If reserving crashkernel above DMA zone, in this case, crash dump
-> >> kernel will fail to boot because there is no low memory available
-> >> for allocation.
-> >>
-> >> To solve these issues, introduce crashkernel=X,[high,low].
-> >> The "crashkernel=X,high" is used to select a region above DMA zone, and
-> >> the "crashkernel=Y,low" is used to allocate specified size low memory.
-> > 
-> > Thanks for posting the simplified version, though the discussion with
-> > Baoquan is still ongoing. AFAICT there is no fallback if crashkernel=
-> > fails. The advantage with this series is cleaner code, we set the limits
-> > during parsing and don't have to adjust them if some of the first
-> > allocation failed.
+On 06/05/2022 10:38, Niklas Schnelle wrote:
+> Another argument I see is that as shown by POWER9 we might start to see
+> more platforms that just can't do I/O port access. E.g. I would also be
+> surprised if Apple's M1 has I/O port access. Sooner or later I expect
+> distributions on some platforms to only support such systems. For
+> example on ppc a server distribution might only support IBM POWER
+> without I/O port support before too long. Then having HAS_IOPORT allows
+> to get rid of drivers that won't work anyway.
 > 
-> Yes, I'm currently implementing it in the simplest version, providing only
-> the most basic functions. Because the conclusions of this part of the discussion
-> are clear. I think I can send the fallback, default low size, and mapping optimization
-> patches separately after this basic version is merged. These three functions can
-> be discussed separately.
-
-This works for me. If we decide to go for fallbacks, it can be done as a
-separate patch.
-
-> >> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
-> >> +		if (ret || !crash_size)
-> >> +			return;
-> >> +
-> >> +		/*
-> >> +		 * crashkernel=Y,low can be specified or not, but invalid value
-> >> +		 * is not allowed.
-> >> +		 */
-> >> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
-> >> +		if (ret && (ret != -ENOENT))
-> >> +			return;
-> >> +
-> >> +		crash_max = CRASH_ADDR_HIGH_MAX;
-> >> +	}
-> >>  
-> >>  	crash_size = PAGE_ALIGN(crash_size);
-> >>  
-> >> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
-> >>  	if (crash_base)
-> >>  		crash_max = crash_base + crash_size;
-> >>  
-> >> -	/* Current arm64 boot protocol requires 2MB alignment */
-> >> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
-> >> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
-> >>  					       crash_base, crash_max);
-> >>  	if (!crash_base) {
-> >>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> > 
-> > I personally like this but let's see how the other thread goes. I guess
+> There are also reports of probing a driver with I/O ports causing a
+> system crash on systems without I/O port support. For example in this
+> answer by John Garry (added so he may supply more information):
 > 
-> Me too. This fallback complicates code logic more than just a little.
-> I'm not sure why someone would rather add fallback than change the bootup
-> options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
-> compatible and extended mode when crashkernel=X fails to reserve memory. And
-> the code logic will be much clearer.
+> https://lore.kernel.org/lkml/db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com/
 > 
-> //parse crashkernel=X		//To simplify the discussion, Ignore [@offset]
-> crash_base = memblock_phys_alloc_range()
-> if (!crash_base || /* crashkernel=X is not specified */) {
-> 	//parse crashkernel=X,[high,low]
-> 	//reserve high/low memory
-> }
-> 
-> So that, the following three modes are supported:
-> 1) crashkernel=X[@offset]
-> 2) crashkernel=X,high crashkernel=X,low
-> 3) crashkernel=X[@offset] crashkernel=X,high [crashkernel=Y,low]
+> .
 
-The whole interface isn't great but if we add fall-back options, I'd
-rather stick close to what x86 does. IOW, if crashkernel=X is provided,
-ignore explicit high/low (so 3 does not exist).
+That issue is that drivers like hwmon f71805f use inb/outb accessors 
+with hardcoded IO port addresses to probe the driver. On archs like 
+arm64 or powerpc - which do not natively support inb et al - this may 
+crash the system when no PCI IO space is mapped [0]. Indeed, when PCI IO 
+space is mapped, it is preferable these those drivers still would not 
+access these ports.
 
-(if I had added it from the beginning, I'd have removed 'high'
-completely and allow crashkernel=X to fall-back to 'high' with an
-optional explicit 'low' or 'dma' if the default is not sufficient; but I
-think there's too much bikeshedding already)
+So this series from Niklas could be used as a basis to solve that 
+problem, in that we could also introduce something like HARDCODED_IOPORT 
+[1] to stop those drivers being built at all for arm64.
 
-> > if we want a fallback, it would come just before the check the above:
-> > 
-> > 	if (!crash_base && crash_max != CRASH_ADDR_HIGH_MAX) {
-> > 		/* attempt high allocation with default low */
-> > 		if (!crash_low_size)
-> > 			crash_low_size = some default;
-> > 		crash_max = CRASH_ADDR_LOW_MAX;
-> 
-> crash_max = CRASH_ADDR_HIGH_MAX; We should fallback to high memory now.
+[0] 
+https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
+[1] 
+https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
 
-Yes, that's the idea.
-
-Anyway, please post the current series with the minor updates I
-mentioned and we can add a fallback patch (or two) on top.
-
-Thanks.
-
--- 
-Catalin
+Thanks,
+John

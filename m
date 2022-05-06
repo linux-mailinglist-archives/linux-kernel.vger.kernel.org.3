@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F6551D8B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4534751D8C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392333AbiEFNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S1392352AbiEFNWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239008AbiEFNVW (ORCPT
+        with ESMTP id S1343556AbiEFNWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA7563524
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:17:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 291CE62001
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93933C385A9;
-        Fri,  6 May 2022 13:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651843058;
-        bh=8051614L8Sll2Zr5aA68WUcaidhoMT52a/Hv54vHn7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AKNofkHd+W5jZB2AZzS3JakpjcYUdwsJ5lhSMaMPr/jsNkKgriuq/16GKNXj/9KhL
-         942ryDnREYmhsCWZvckdyD/dsAFlWLWPXAsMrVTLxjWRfa6ROVUh2AG/C5PdrW6HeC
-         v6wU5qRy9GRzaoIqZyfvw53Q3A8XKHgYXkC4wNbLb6bNMpwMWZkKpQEDEGpywhHIb3
-         mWc8rolzOAoRq5fHsRTDcEYIeQybA/RALUKHKmDcmRQJDdLtne4kAupY0vA9rlVTsG
-         6K16alpLhGktu1kfepH05hJPkSZMZApv3RS8Qw65vUe/enrX38ojZg52LuZB5ChdiM
-         /nRPAUsZ0tcuw==
-Date:   Fri, 6 May 2022 14:17:33 +0100
-From:   Will Deacon <will@kernel.org>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64,trace: Add page fault traceponits
-Message-ID: <20220506131733.GE22892@willie-the-truck>
-References: <20220420070109.1010257-1-sunliming@kylinos.cn>
+        Fri, 6 May 2022 09:22:32 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30B5363516
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651843128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6eR4SrDmEoANuYmWC0BJSoz/4Iidosis2CSmMHpx9dc=;
+        b=afmGy/yaKbVWbsmokn/UBFB721WxvN2NmZFYNONmm5UjEfQmND9C0k0ADiV5EP5ciZgI8S
+        eprrY2akuvJHhY1zDFpbOyQcQ8r/eGdkw195v1i1uHtaU1tRCV7We6kLcGLM7pdLnTL5fs
+        ZWGi3Qdig4omzfluN3tmaOXQFmZcO1Q=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-34-quDK5d2-Nc-GMZaeACiuqQ-1; Fri, 06 May 2022 09:18:47 -0400
+X-MC-Unique: quDK5d2-Nc-GMZaeACiuqQ-1
+Received: by mail-wm1-f70.google.com with SMTP id p24-20020a1c5458000000b003945d2ffc6eso2840744wmi.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:18:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6eR4SrDmEoANuYmWC0BJSoz/4Iidosis2CSmMHpx9dc=;
+        b=MTsJyT5rZMWpEtIxmmT1wMPgJqMoC/9Z+eCDBWXZqMXTNBsmuhMF+yTtB90h6oCAXD
+         KFnPet3MdNyYvB+WIAFd+ilDU+dppJGfsGTR+07SWkYC12y+tlYiib1UmRBRdCP44GSn
+         6wJgq8m0bOOrPd2wudNdO1sWEuSfWbxs9zGb2vvu0oQvnnTpxiSJ53B34DbvTZYjfenf
+         REGoooV1+LRSbjsqefgJYR9slt71CJ8qxTh4fh5lpFxYkRW0VJxGodkEAqnGwTjLJ4F7
+         AtxWW7FbWBOxdYkUN74J4d4F8Z0ltNolnA0T/KFh4iB4Iv3DtI7xPxxch2H6zQi2JeCA
+         vKKw==
+X-Gm-Message-State: AOAM533B7AyBDc3K1UxXssbN8ataw0VaEgrTXWvdW2Ce8PuiyZCesJJt
+        4QdGxrqhDKO6dd6Eb3roIj4m9I6A0SBtQ5YCYKUFKh9I3W7ucvTyIOAtgzGIqSCzJDI+lZijZCn
+        zJS4g+ANPMiL70IczH0uxgiNO
+X-Received: by 2002:a5d:6d83:0:b0:20c:7329:7c36 with SMTP id l3-20020a5d6d83000000b0020c73297c36mr2784658wrs.518.1651843125834;
+        Fri, 06 May 2022 06:18:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzFmPqHpFl7IQ0p8a3cDOwPVFVGGBUGfQCaOkK4J9z39w72XOntceMZPP2+b4IAbt9zNBVruA==
+X-Received: by 2002:a5d:6d83:0:b0:20c:7329:7c36 with SMTP id l3-20020a5d6d83000000b0020c73297c36mr2784632wrs.518.1651843125512;
+        Fri, 06 May 2022 06:18:45 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id s6-20020adfea86000000b0020c5253d907sm3671710wrm.83.2022.05.06.06.18.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 06:18:45 -0700 (PDT)
+Message-ID: <00117d58-2a47-4e2b-225b-952e0e98df2f@redhat.com>
+Date:   Fri, 6 May 2022 15:18:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420070109.1010257-1-sunliming@kylinos.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 3/4] fbdev: efifb: Cleanup fb_info in .fb_destroy
+ rather than .remove
+Content-Language: en-US
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        Peter Jones <pjones@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220540.366218-1-javierm@redhat.com>
+ <ed57ca49-f80e-9bf5-4dc3-59fb62ca4315@intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <ed57ca49-f80e-9bf5-4dc3-59fb62ca4315@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 03:01:09PM +0800, sunliming wrote:
-> The arm64 architecture lacks some tracepoints support, this patch
-> adds page fault tracepoints. The code and arch policy is mainly
-> inherited  from x86.
-> 
-> Experimented on my centos8 virtual machine:
-> 	dracut:/# echo 1 > /sys/kernel/tracing/events/exceptions/enable
-> 	dracut:/# cat /sys/kernel/tracing/trace
-> 
-> The results:
->               sh-6098    [001] .....  1186.024675: page_fault_user: addr=0xffffe153cc00 pc=0xffffa4117338 esr=0xffffe153cc00
->              cat-6126    [000] .....  1186.024677: page_fault_kernel: addr=0xffffa4323740 pc=schedule_tail esr=0xffffa4323740
->               sh-6098    [001] .....  1186.026085: page_fault_user: addr=0xaaaad23fae34 pc=0xaaaad231c0fc esr=0xaaaad23fae34
->              cat-6126    [000] .....  1186.026106: page_fault_user: addr=0xffffa414565c pc=0xffffa414565c esr=0xffffa414565c
->              cat-6126    [000] .....  1186.026222: page_fault_user: addr=0xffffa4214e10 pc=0xffffa4145670 esr=0xffffa4214e10
->              cat-6126    [000] .....  1186.026243: page_fault_user: addr=0xffffa420fd88 pc=0xffffa41456ac esr=0xffffa420fd88
->              cat-6126    [000] .....  1186.026282: page_fault_user: addr=0xffffa4117338 pc=0xffffa4117338 esr=0xffffa4117338
->              cat-6126    [000] .....  1186.026308: page_fault_user: addr=0xffffe153cc00 pc=0xffffa4117338 esr=0xffffe153cc00
->              cat-6126    [000] .....  1186.026365: page_fault_user: addr=0xaaaad231bd84 pc=0xaaaad231bd84 esr=0xaaaad231bd84
->               sh-6098    [001] .....  1186.026372: page_fault_user: addr=0xaaab04330098 pc=0xffffa411be68 esr=0xaaab04330098
->              cat-6126    [000] .....  1186.026394: page_fault_user: addr=0xaaaad22ef420 pc=0xaaaad22ef420 esr=0xaaaad22ef420
->              cat-6126    [000] .....  1186.026414: page_fault_user: addr=0xaaaad23ee9b0 pc=0xaaaad22ef424 esr=0xaaaad23ee9b0
->              cat-6126    [000] .....  1186.026426: page_fault_user: addr=0xffffa40c3110 pc=0xffffa40c3110 esr=0xffffa40c3110
->              cat-6126    [000] .....  1186.026450: page_fault_user: addr=0xaaaad22f23f8 pc=0xaaaad22f23f8 esr=0xaaaad22f23f8
->              cat-6126    [000] .....  1186.026467: page_fault_user: addr=0xaaaad23f0030 pc=0xaaaad22f240c esr=0xaaaad23f0030
->              cat-6126    [000] .....  1186.026481: page_fault_user: addr=0xaaaad23fae3c pc=0xaaaad231be40 esr=0xaaaad23fae3c
->              cat-6126    [000] .....  1186.026530: page_fault_user: addr=0xffffa40d63d8 pc=0xffffa40d63d8 esr=0xffffa40d63d8
->              cat-6126    [000] .....  1186.026554: page_fault_user: addr=0xffffa431f650 pc=0xffffa40d63f8 esr=0xffffa431f650
->               sh-6098    [001] .....  1186.026556: page_fault_user: addr=0xaaab04358d28 pc=0xffffa411be70 esr=0xaaab04358d28
->              cat-6126    [000] .....  1186.026571: page_fault_user: addr=0xaaaad24015d0 pc=0xffffa40d640c esr=0xaaaad24015d0
->              cat-6126    [000] .....  1186.026600: page_fault_user: addr=0xaaaad2332be8 pc=0xaaaad2332be8 esr=0xaaaad2332be8
->              cat-6126    [000] .....  1186.026703: page_fault_user: addr=0xffffa416c438 pc=0xffffa416c438 esr=0xffffa416c438
->               sh-6098    [001] .....  1186.026749: page_fault_user: addr=0xaaab04369d70 pc=0xffffa41193d8 esr=0xaaab04369d70
->              cat-6126    [000] .....  1186.027610: page_fault_user: addr=0xaaaad2307754 pc=0xaaaad2307754 esr=0xaaaad2307754
->              cat-6126    [000] .....  1186.027711: page_fault_user: addr=0xaaaad24014c4 pc=0xaaaad23310e4 esr=0xaaaad24014c4
->              cat-6126    [000] .....  1186.027892: page_fault_user: addr=0xaaab04359a80 pc=0xaaaad23052f0 esr=0xaaab04359a80
->              cat-6126    [000] .....  1186.027916: page_fault_user: addr=0xaaaad236cf80 pc=0xaaaad236cf80 esr=0xaaaad236cf80
-> 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  arch/arm64/include/asm/trace/common.h     | 12 +++++
->  arch/arm64/include/asm/trace/exceptions.h | 54 +++++++++++++++++++++++
->  arch/arm64/kernel/Makefile                |  1 +
->  arch/arm64/kernel/tracepoint.c            | 24 ++++++++++
->  arch/arm64/mm/Makefile                    |  3 ++
->  arch/arm64/mm/fault.c                     | 19 ++++++++
+Hello Andrzej,
 
-We already report page faults via perf (see the calls to perf_sw_event()),
-so why isn't that sufficient?
+On 5/6/22 15:07, Andrzej Hajda wrote:
+> On 06.05.2022 00:05, Javier Martinez Canillas wrote:
 
-Will
+[snip]
+
+>> +
+>> +	framebuffer_release(info);
+>> +
+>>   	if (request_mem_succeeded)
+>>   		release_mem_region(info->apertures->ranges[0].base,
+>>   				   info->apertures->ranges[0].size);
+> 
+> You are releasing info, then you are using it.
+> 
+> I suspect it is responsible for multiple failures of Intel CI [1].
+>
+
+Yes, it is :( sorry about the mess. Ville already reported this to me.
+I'll post a patch in a minute.
+ 
+I wonder how this didn't happen before since .remove() happens before
+.fb_destroy() AFAIU...
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

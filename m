@@ -2,278 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7280551D405
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C4151D43C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390354AbiEFJPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 05:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S1390462AbiEFJZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 05:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiEFJPT (ORCPT
+        with ESMTP id S1390401AbiEFJYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:15:19 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FB463385;
-        Fri,  6 May 2022 02:11:31 -0700 (PDT)
-X-UUID: 7ec90e02d7174affa5478d16998bcd79-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b11e263e-5739-4ce0-a49f-a69c5d786999,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:883cd3b2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 7ec90e02d7174affa5478d16998bcd79-20220506
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1845255351; Fri, 06 May 2022 17:11:26 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 6 May 2022 17:11:25 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 17:11:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 17:11:24 +0800
-Message-ID: <6f4aba72d8224223685bca4c03599281878ae1ab.camel@mediatek.com>
-Subject: Re: [PATCH 5/7] arm64: dts: mediatek: mt8195-demo: enable ethernet
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Fri, 6 May 2022 17:11:25 +0800
-In-Reply-To: <20220429152203.ppuimwcka5d6rvq4@radium>
-References: <20220426134106.242353-1-fparent@baylibre.com>
-         <20220426134106.242353-6-fparent@baylibre.com>
-         <c0cf89c05ee708ec3648b267c1c0a0baa1331836.camel@mediatek.com>
-         <f4256b5e-e6b8-f9de-fe97-3e9c6cdcb00c@gmail.com>
-         <20220429152203.ppuimwcka5d6rvq4@radium>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 05:24:43 -0400
+X-Greylist: delayed 517 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 02:20:58 PDT
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0866564BE7;
+        Fri,  6 May 2022 02:20:53 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 93A8D2B0562D;
+        Fri,  6 May 2022 05:12:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 06 May 2022 05:12:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651828333; x=
+        1651835533; bh=G6gyLdn77rvfE254bKTLUge+Op3KXd37yTLdohreqqM=; b=v
+        QKeAQx1x9oi9rnTQnxWzQZ3vTa1sCKU3qAfK8BUdnTNglj/iKAYlugS8ZO/zk5fZ
+        DfF7J1EiEgVn1bVYrjCqLYS3iirT+M/yZbaX7X/uei2Gb3LNEQ7gNa/6aO4lyi6K
+        Tt7s1lCuwd/NrqgJIxoWaYMl29GOUzitCCOr5c2z9gRbiPjvVQLp/zABVxIqq2ZK
+        AaY9nkTVzG/mRRGYLVAR8bBcR5nX8PaiHT4MAiZq+H0Xwj5TbLVla4dy88/3+1AN
+        1wI0EAxFufJY3W8/p05bkAWVyXVer+YeXe+Ib7meLr1qgWB/FfkXpkAKjyHMQsJ3
+        7g4mWCiNAG2aqihJux0IA==
+X-ME-Sender: <xms:YuZ0YjLV7ehbq11Iew8UcQGjF5dzNVZmWTCB44jSQAUnrEzMUanDNw>
+    <xme:YuZ0YnLO3AhBi-8UDTh2IshOkP29SbDuTpdLzRv7EABfM46yVxKyoWYDYhcgeRQCS
+    77vC9WxTNt6pMrOhv0>
+X-ME-Received: <xmr:YuZ0Yruq9kszH8K6PStFW0G6vBqLXoDlJzZGTzPxfq_14sas55UK-gUHN-Zh2nfpt0s4gg2KHxVH05i8KORm6pMmTETF2ks5atM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefgdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
+    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
+    htvghrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueeh
+    ueelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
+    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:YuZ0YsYfsshGe5L3c7ZGNomVPUHUMo_s6qgakvJ4OzSu-3gGhre-ZQ>
+    <xmx:YuZ0YqYvL7cbpdbLSaNh38uTGj9Rc92MFhzYVkQe0DbODJiFYPgAcA>
+    <xmx:YuZ0YgAK1cXBpunCnPwlHEy_DcU5yqhXavJmM9Za0lR2vtG4vS6RVA>
+    <xmx:beZ0YvPqIgZVZC0ItH0ne5dg6_12BUITfxVdxuoceofiAb6SMND9K6LMeBg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 6 May 2022 05:11:59 -0400 (EDT)
+Date:   Fri, 6 May 2022 19:12:06 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     Arnd Bergmann <arnd@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+In-Reply-To: <20220505195342.GA509942@bhelgaas>
+Message-ID: <22bec167-241f-2cbe-829f-a3f65e40e71@linux-m68k.org>
+References: <20220505195342.GA509942@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 17:22 +0200, Fabien Parent wrote:
-> On Fri, Apr 29, 2022 at 04:00:32PM +0200, Matthias Brugger wrote:
-> > 
-> > 
-> > On 27/04/2022 08:25, Macpaul Lin wrote:
-> > > On Tue, 2022-04-26 at 15:41 +0200, Fabien Parent wrote:
-> > > > Enable ethernet on the MT8195 demo board.
-> > > > 
-> > > > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > > > ---
-> > > >   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 108
-> > > > +++++++++++++++++++
-> > > >   1 file changed, 108 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> > > > b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> > > > index 08cab3b3943b..0b7985486e2a 100644
-> > > > --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> > > > +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> > > > @@ -80,6 +80,30 @@ optee_reserved: optee@43200000 {
-> > > >   	};
-> > > >   };
-> > > > +&eth {
-> > > > +	phy-mode = "rgmii-rxid";
-> > > > +	phy-handle = <&eth_phy>;
-> > > > +	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
-> > > > +	snps,reset-delays-us = <0 10000 10000>;
-> > > > +	mediatek,tx-delay-ps = <2030>;
-> > > > +	pinctrl-names = "default", "sleep";
-> > > > +	pinctrl-0 = <&eth_default_pins>;
-> > > > +	pinctrl-1 = <&eth_sleep_pins>;
-> > > > +	status = "okay";
-> > > > +
-> > > > +	mdio {
-> > > > +		compatible = "snps,dwmac-mdio";
-> > > > +		#address-cells = <1>;
-> > > > +		#size-cells = <0>;
-> > > > +
-> > > > +		eth_phy: phy@1 {
-> > > > +			compatible = "ethernet-phy-
-> > > > id001c.c916";
-> > > > +			#phy-cells = <0>;
-> > > > +			reg = <0x1>;
-> > > > +		};
-> > > > +	};
-> > > > +};
-> > > > +
-> > > >   &i2c6 {
-> > > >   	clock-frequency = <400000>;
-> > > >   	pinctrl-0 = <&i2c6_pins>;
-> > > > @@ -260,6 +284,90 @@ &mt6359_vsram_others_ldo_reg {
-> > > >   };
-> > > >   &pio {
-> > > > +	eth_default_pins: eth-default-pins {
-> > > > +		pins-cc {
-> > > > +			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
-> > > > +				 <PINMUX_GPIO88__FUNC_GBE_TXEN>
-> > > > ,
-> > > > +				 <PINMUX_GPIO87__FUNC_GBE_RXDV>
-> > > > ,
-> > > > +				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
-> > > > +			drive-strength = <MTK_DRIVE_8mA>;
-> > > > +		};
-> > > > +
-> > > > +		pins-mdio {
-> > > > +			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
-> > > > +				 <PINMUX_GPIO90__FUNC_GBE_MDIO>
-> > > > ;
-> > > > +			input-enable;
-> > > > +		};
-> > > > +
-> > > > +		pins-phy-reset {
-> > > > +			pinmux = <PINMUX_GPIO93__FUNC_GPIO93>;
-> > > > +		};
-> > > > +
-> > > > +		pins-power {
-> > > > +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-> > > > +				 <PINMUX_GPIO92__FUNC_GPIO92>;
-> > > > +			output-high;
-> > > > +		};
-> > > > +
-> > > > +		pins-rxd {
-> > > > +			pinmux =
-> > > > <PINMUX_GPIO81__FUNC_GBE_RXD3>,
-> > > > +				 <PINMUX_GPIO82__FUNC_GBE_RXD2>
-> > > > ,
-> > > > +				 <PINMUX_GPIO83__FUNC_GBE_RXD1>
-> > > > ,
-> > > > +				 <PINMUX_GPIO84__FUNC_GBE_RXD0>
-> > > > ;
-> > > > +		};
-> > > > +
-> > > > +		pins-txd {
-> > > > +			pinmux =
-> > > > <PINMUX_GPIO77__FUNC_GBE_TXD3>,
-> > > > +				 <PINMUX_GPIO78__FUNC_GBE_TXD2>
-> > > > ,
-> > > > +				 <PINMUX_GPIO79__FUNC_GBE_TXD1>
-> > > > ,
-> > > > +				 <PINMUX_GPIO80__FUNC_GBE_TXD0>
-> > > > ;
-> > > > +			drive-strength = <MTK_DRIVE_8mA>;
-> > > > +		};
-> > > > +	};
-> > > > +
-> > > > +	eth_sleep_pins: eth-sleep-pins {
-> > > > +		pins-cc {
-> > > > +			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
-> > > > +				 <PINMUX_GPIO88__FUNC_GPIO88>,
-> > > > +				 <PINMUX_GPIO87__FUNC_GPIO87>,
-> > > > +				 <PINMUX_GPIO86__FUNC_GPIO86>;
-> > > > +		};
-> > > > +
-> > > > +		pins-mdio {
-> > > > +			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
-> > > > +				 <PINMUX_GPIO90__FUNC_GPIO90>;
-> > > > +			input-disable;
-> > > > +			bias-disable;
-> > > > +		};
-> > > > +
-> > > > +		pins-phy-reset {
-> > > > +			pinmux = <PINMUX_GPIO93__FUNC_GPIO93>;
-> > > > +			input-disable;
-> > > > +			bias-disable;
-> > > > +		};
-> > > > +
-> > > > +		pins-power {
-> > > > +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-> > > > +				 <PINMUX_GPIO92__FUNC_GPIO92>;
-> > > > +			input-disable;
-> > > > +			bias-disable;
-> > > > +		};
-> > > > +
-> > > > +		pins-rxd {
-> > > > +			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
-> > > > +				 <PINMUX_GPIO82__FUNC_GPIO82>,
-> > > > +				 <PINMUX_GPIO83__FUNC_GPIO83>,
-> > > > +				 <PINMUX_GPIO84__FUNC_GPIO84>;
-> > > > +		};
-> > > > +
-> > > > +		pins-txd {
-> > > > +			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
-> > > > +				 <PINMUX_GPIO78__FUNC_GPIO78>,
-> > > > +				 <PINMUX_GPIO79__FUNC_GPIO79>,
-> > > > +				 <PINMUX_GPIO80__FUNC_GPIO80>;
-> > > > +		};
-> > > > +	};
-> > > > +
-> > > >   	gpio_keys_pins: gpio-keys-pins {
-> > > >   		pins {
-> > > >   			pinmux =
-> > > > <PINMUX_GPIO106__FUNC_GPIO106>;
-> > > 
-> > > Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> > > 
-> > 
-> > I get the following error:
-> > Error: arch/arm64/boot/dts/mediatek/mt8195.dtsi:582.26-27 syntax
-> > error
-> 
-> I think he used my upstreaming branch where I store the patches I
-> sent
-> and will send to the mailing list: [0].
-> 
-> I forgot there is a dependency between this patch and [1], and I
-> forgot
-> to test this patch serie independenly from the other commits from my
-> branch. I will make sure to not forget next time.
-> 
-> So from this patch serie, only patch 1-2, 6-7 can be applied since
-> they
-> don't have any hidden dependency:
->   dt-bindings: usb: mediatek,mtu3: add binding for MT8195 SoC
->   arm64: dts: mediatek: mt8195: add ssusb support
->   arm64: dts: mediatek: mt8195-demo: Remove input-name property
->   arm64: dts: mediatek: mt8195-demo: enable uart1
-> 
-> [0] https://github.com/Fabo/linux/tree/mt8195-demo
-> [1] 
-> https://lore.kernel.org/all/20210615173233.26682-7-tinghan.shen@mediatek.com/
-> 
-> > 
-> > 
-> > 
-> > How did you test?
-> > 
-> > Regards,
-> > Matthias
 
-Sorry for replying the mail late.
 
-Actually, I've maintained a working tree based on 5.18-rc1 with minimum
-changeset support booting to UART. Then pickup required patches for
-testing individaul drivers. I should add the patch dependencies in
-previous mail if there were a dependency list. However, attach a
-dependency list might still be confusing since there is lots of patches
-keep updating everyday for mediatek tree. I guess the best practice for
-avoiding this kind of mess is using for-next tree to verify new patches
-instead of using 5.18-rc1 tree since some of the dependencies were
-already merged. Sorry for wasting your time.
+On Thu, 5 May 2022, Bjorn Helgaas wrote:
 
-I'll replace my local
-working tree to Matthias's working tree for verifing these kind of
-patches.
+> On Thu, May 05, 2022 at 07:39:42PM +0200, Arnd Bergmann wrote:
+> > On Thu, May 5, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Wed, May 04, 2022 at 11:31:28PM +0200, Arnd Bergmann wrote:
+> > > >
+> > > > The main goal is to avoid c), which is what happens on s390, but
+> > > > can also happen elsewhere. Catching b) would be nice as well,
+> > > > but is much harder to do from generic code as you'd need an
+> > > > architecture specific inline asm statement to insert a ex_table
+> > > > fixup, or a runtime conditional on each access.
+> > >
+> > > Or s390 could implement its own inb().
+> > >
+> > > I'm hearing that generic powerpc kernels have to run both on machines
+> > > that have I/O port space and those that don't.  That makes me think
+> > > s390 could do something similar.
+> > 
+> > No, this is actually the current situation, and it makes absolutely no
+> > sense. s390 has no way of implementing inb()/outb() because there
+> > are no instructions for it and it cannot tunnel them through a virtual
+> > address mapping like on most of the other architectures. (it has special
+> > instructions for accessing memory space, which is not the same as
+> > a pointer dereference here).
+> > 
+> > The existing implementation gets flagged as a NULL pointer dereference
+> > by a compiler warning because it effectively is.
+> 
+> I think s390 currently uses the inb() in asm-generic/io.h, i.e.,
+> "__raw_readb(PCI_IOBASE + addr)".  I understand that's a NULL pointer
+> dereference because the default PCI_IOBASE is 0.
+> 
+> I mooted a s390 inb() implementation like "return ~0" because that's
+> what happens on most arches when there's no device to respond to the
+> inb().
+> 
+> The HAS_IOPORT dependencies are fairly ugly IMHO, and they clutter
+> drivers that use I/O ports in some cases but not others.  But maybe
+> it's the most practical way.
+> 
 
-Thanks!
-Macpaul Lin
-
+Do you mean, "the most practical way to avoid a compiler warning on s390"? 
+What about "#pragma GCC diagnostic ignored"?

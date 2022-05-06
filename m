@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8053751CEBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFB051CE72
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387947AbiEFBgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 21:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S1387965AbiEFBhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 21:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351319AbiEFBgC (ORCPT
+        with ESMTP id S1387974AbiEFBhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 21:36:02 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C781EEC7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 18:32:21 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-edeb6c3642so5925141fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 18:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mdaverde-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=068F+h8RQfUvOVO1t4k8OZXqnvKUCyKIVv9Y/xDcfUE=;
-        b=X5LjzzrJPRILUj2wePdckLtkz/yTAOqqlWhNuos29HgZKVERn5uPygdpkEd7Or71yL
-         elGUCzpyV/JjsRz0SAB2nmrME7scMN0yoWb0QEG26w+WM3A0fx5DwIKj7ZDatndOD/rU
-         csRJ3qwoP/K+yJK1Abk6vIZCVNLHDfqqKe0sJlcZfpXpnHYo2uzpR9EHZRgL9q7Kmzwk
-         sr/vSoRnWjKthofCIScEFvjnCb0C4h4xMDEj34gmd7bhr5dFigfK5nwGjqayrUogWgUy
-         SZf8NU6wAlv9Sysds9a2iEZ+hUy6pcLCFgY7L0+WotCDwALnOEDjqLcaiAqPSuQI6j7K
-         XYqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=068F+h8RQfUvOVO1t4k8OZXqnvKUCyKIVv9Y/xDcfUE=;
-        b=fsbyLLMa8K8zunxs2GAXSmHnEIRwNEN8tDdikBLZ3jli6dk0voxeYQrWfuKIi+SP8t
-         MStDmvOT1NpD3eC3G2Gfm7WJrDPP9y2Dd751MMawEFDGTQTJMUoGPtle8LC7na3l/Rg5
-         m2GiZticL3MB39VwxdQ9cfgc9lpTpOd/nfo3Mp2VnZnQzqmhanz5pkX9628+iUNFzr81
-         Up5iM48SLjuAP0ZmrafgbNd8ZtQW0O4M/BjfNjeJm3ckNq1+1d2v4PfUDB1tmcuXNz69
-         e4e6Ru6SQn0PVC4VSIeosuLjlX1FGvCQG9VNokPxcYFPW8fqr6IWzvn3/A1m960RapWp
-         k3vQ==
-X-Gm-Message-State: AOAM533q06bIoDvqqtSBTbfQZB5AePtvkVyAdIvuBVvq03tf6WpUg/jA
-        +gR36aHYbG6mfoaeUpeQGnP7Tg==
-X-Google-Smtp-Source: ABdhPJw7EpOD9gz0ff27qFrh6p53w00QVueh6ajPyfZRMU6f46uyyPmO+pPTTLpC3Ni/FuWHCI8UPA==
-X-Received: by 2002:a05:6870:d0cf:b0:ec:4559:86e1 with SMTP id k15-20020a056870d0cf00b000ec455986e1mr373763oaa.225.1651800740991;
-        Thu, 05 May 2022 18:32:20 -0700 (PDT)
-Received: from pop-os.localdomain ([2600:1700:1d10:5830:1761:845b:ca10:1b4d])
-        by smtp.gmail.com with ESMTPSA id x4-20020a9d2084000000b006060322127csm1133944ota.76.2022.05.05.18.32.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 18:32:20 -0700 (PDT)
-Date:   Thu, 5 May 2022 21:32:17 -0400
-From:   Milan Landaverde <milan@mdaverde.com>
-To:     Larysa Zaremba <larysa.zaremba@intel.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>
-Subject: Re: [PATCH] bpftool: Use sysfs vmlinux when dumping BTF by ID
-Message-ID: <YnR6oWaoUkEGW1iV@pop-os.localdomain>
-References: <20220428110839.111042-1-larysa.zaremba@intel.com>
+        Thu, 5 May 2022 21:37:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF1B62134;
+        Thu,  5 May 2022 18:33:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E121FB83219;
+        Fri,  6 May 2022 01:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87574C385A4;
+        Fri,  6 May 2022 01:33:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651800793;
+        bh=jMRV6olJyBYv8iv039xz+xRblr+veqvj9hxwcdJ9uEU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BZEcob0+Hhw3fJiKkLL5pQsIEe2p/mlUjC8gUQhkqcaZVhfCMRZcNWgBNHzloGRRT
+         Gn5nyp2UTnk6SbdxrcySTt4DE9flw+mT9rI1xwVxpjO13ERs7gGKZsLNntA2iMAFnz
+         +UErJn2VIMAj/iWu6t/uZ70aJobQEwUUS7sgvmeDeU1qdU8f3BY+HrMyTOQCpNdW3J
+         NLPWl+mW7dNnCn7lHviARSpGp/Z0e+Af6FpHcPZpf8Ky47Jrvc3YRnZQLh2ZeVBDYH
+         3QxtK04FflxKDqvqx61GPawW48NEnVO4wATH6uoWpcRUjObLDENGjR75NE/u1ox3do
+         3AN3La+et1IFA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v4] f2fs: fix to do sanity check on total_data_blocks
+Date:   Fri,  6 May 2022 09:33:06 +0800
+Message-Id: <20220506013306.3563504-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428110839.111042-1-larysa.zaremba@intel.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +54,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello! Just ran into this. I think we also need to pass in errno
-here to strerror instead of err:
+As Yanming reported in bugzilla:
 
-On Thu, Apr 28, 2022 at 01:08:40PM +0200, Larysa Zaremba wrote:
->  		if (err) {
->  			p_err("get btf by id (%u): %s", btf_id, strerror(err));
->  			goto done;
->
+https://bugzilla.kernel.org/show_bug.cgi?id=215916
 
-Currently, the error output without a base btf reads:
+The kernel message is shown below:
 
-$ bpftool btf dump id 816
-Error: get btf by id (816): Unknown error -22
+kernel BUG at fs/f2fs/segment.c:2560!
+Call Trace:
+ allocate_segment_by_default+0x228/0x440
+ f2fs_allocate_data_block+0x13d1/0x31f0
+ do_write_page+0x18d/0x710
+ f2fs_outplace_write_data+0x151/0x250
+ f2fs_do_write_data_page+0xef9/0x1980
+ move_data_page+0x6af/0xbc0
+ do_garbage_collect+0x312f/0x46f0
+ f2fs_gc+0x6b0/0x3bc0
+ f2fs_balance_fs+0x921/0x2260
+ f2fs_write_single_data_page+0x16be/0x2370
+ f2fs_write_cache_pages+0x428/0xd00
+ f2fs_write_data_pages+0x96e/0xd50
+ do_writepages+0x168/0x550
+ __writeback_single_inode+0x9f/0x870
+ writeback_sb_inodes+0x47d/0xb20
+ __writeback_inodes_wb+0xb2/0x200
+ wb_writeback+0x4bd/0x660
+ wb_workfn+0x5f3/0xab0
+ process_one_work+0x79f/0x13e0
+ worker_thread+0x89/0xf60
+ kthread+0x26a/0x300
+ ret_from_fork+0x22/0x30
+RIP: 0010:new_curseg+0xe8d/0x15f0
 
-When it should (or at least intends to) read:
+The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
+stat info indicates filesystem has free blocks, but SIT table indicates
+filesystem has no free segment.
 
-$ bpftool btf dump id 816
-Error: get btf by id (816): Invalid argument
+So that during garbage colloection, it triggers panic when LFS allocator
+fails to find free segment.
 
-I was going to send this patch but if a v2 is going to be sent, figured
-I mention it. Thanks!
+This patch tries to fix this issue by checking consistency in between
+ckpt.valid_block_count and block accounted from SIT.
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v4:
+- fix to set data/node type correctly.
+ fs/f2fs/segment.c | 37 ++++++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
+
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 3a3e2cec2ac4..4735d477059d 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4461,7 +4461,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	unsigned int i, start, end;
+ 	unsigned int readed, start_blk = 0;
+ 	int err = 0;
+-	block_t total_node_blocks = 0;
++	block_t sit_valid_blocks[2] = {0, 0};
++	int type;
+ 
+ 	do {
+ 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
+@@ -4486,8 +4487,9 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 			if (err)
+ 				return err;
+ 			seg_info_from_raw_sit(se, &sit);
+-			if (IS_NODESEG(se->type))
+-				total_node_blocks += se->valid_blocks;
++
++			type = IS_NODESEG(se->type) ? NODE : DATA;
++			sit_valid_blocks[type] += se->valid_blocks;
+ 
+ 			if (f2fs_block_unit_discard(sbi)) {
+ 				/* build discard map only one time */
+@@ -4527,15 +4529,17 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 		sit = sit_in_journal(journal, i);
+ 
+ 		old_valid_blocks = se->valid_blocks;
+-		if (IS_NODESEG(se->type))
+-			total_node_blocks -= old_valid_blocks;
++
++		type = IS_NODESEG(se->type) ? NODE : DATA;
++		sit_valid_blocks[type] -= old_valid_blocks;
+ 
+ 		err = check_block_count(sbi, start, &sit);
+ 		if (err)
+ 			break;
+ 		seg_info_from_raw_sit(se, &sit);
+-		if (IS_NODESEG(se->type))
+-			total_node_blocks += se->valid_blocks;
++
++		type = IS_NODESEG(se->type) ? NODE : DATA;
++		sit_valid_blocks[type] += se->valid_blocks;
+ 
+ 		if (f2fs_block_unit_discard(sbi)) {
+ 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
+@@ -4557,13 +4561,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	}
+ 	up_read(&curseg->journal_rwsem);
+ 
+-	if (!err && total_node_blocks != valid_node_count(sbi)) {
++	if (err)
++		return err;
++
++	if (sit_valid_blocks[NODE] != valid_node_count(sbi)) {
+ 		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
+-			 total_node_blocks, valid_node_count(sbi));
+-		err = -EFSCORRUPTED;
++			 sit_valid_blocks[NODE], valid_node_count(sbi));
++		return -EFSCORRUPTED;
+ 	}
+ 
+-	return err;
++	if (sit_valid_blocks[DATA] + sit_valid_blocks[NODE] >
++				valid_user_blocks(sbi)) {
++		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
++			 sit_valid_blocks[DATA], sit_valid_blocks[NODE],
++			 valid_user_blocks(sbi));
++		return -EFSCORRUPTED;
++	}
++
++	return 0;
+ }
+ 
+ static void init_free_segmap(struct f2fs_sb_info *sbi)
+-- 
+2.25.1
+

@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4958351E18E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 00:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FBC51E191
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 00:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444678AbiEFWJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 18:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S1444685AbiEFWSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 18:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344976AbiEFWJk (ORCPT
+        with ESMTP id S241939AbiEFWSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 18:09:40 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BBB28E14
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 15:05:55 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j4so14728037lfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 15:05:55 -0700 (PDT)
+        Fri, 6 May 2022 18:18:39 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5C06540F;
+        Fri,  6 May 2022 15:14:54 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id e3so9521370ios.6;
+        Fri, 06 May 2022 15:14:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6I8c/3sjcv2rRvb+sL+FxHH9fs1JGy16b0GIZuP3wpc=;
-        b=XnMeCJGqpk0Xpw7/SSxwqELTSfonBs9GyEpYKwzeDgLkw0ssNvrbW5lXfRwA4h+XkZ
-         aPBG8ba4rQP3w6GzY97RHdV6yNRfl+f/CzckKgGus4/zoCTq8RkcG9qCi7Ui+byiaUp7
-         Xrc+89nAjoRc26ApOtqjJs6z1h9auoFak1d7CeKJLxyGjLdnrIo4OV9/g+bww2LeOqS9
-         bGCm9cKTTzL47dMZhLAk7UhUAAtH60n5reuIQroav25e2qCglm187D944ZFU1VumOrsx
-         jB4cWLLhGnYt2GMgaIr0e/7BReBftRMR210xKANamzjyW68szHMRt+ACrO0HnMFr3j1C
-         v3BA==
+        bh=rCTLTbLP/HCPwEyRHnS4Xntt1B1zffntB8D6OmsmIYM=;
+        b=pg0/Yt3QJEJeyRkqIy1cKjUnl4Q5IC5OVFEgPVFVI9uYOt7Xmm7edvsl6gBEjCELEg
+         SnFEiHqFqtJNoimavdRivrQjd4ET896Y+7gS9WthGdnonHoggAlP9MkvbgbP6KcJMIQl
+         YiQ0o0q2L55cEB6cjE892PJ3+EiEAMxf9ocexcwjUGMYC//ZCMkg/ArE9S/uU5/bN94+
+         zToBvUNywhFlS719I9+9aq7K/fkCLLnebbKWxol21h11RibuL5bzBKeS/i2GsyXDmcIk
+         rBHYqK3W9jk/APsnpp+ivf6nQ8PcPYp76lKw6ULV4lYD7s1gQQ+RYnIi8T821cOhijoG
+         bRAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6I8c/3sjcv2rRvb+sL+FxHH9fs1JGy16b0GIZuP3wpc=;
-        b=Ag/LMESXStRA+hw4RdhgRaxdu32dWDvYC6mNxRncoVo+rAKdyrgZAe7D3lgDLOGoDu
-         UAR6EF91hd3KJ8Mnf3C+K1dWDYmzbmOnwIw9YI4pQrZb/msc5ujzNwAE+VReofp2BCFm
-         YlYh/Lmy9F/nlp1jeNI4FWhIyt50W8IBJ8utxttFMEWkDoFHUyqGCRc+2C/P8IX+hy8o
-         vzhnOCtLBB+MUGguKHQ1Q6zeiANj4yfFOyYrFiLJOWN6DmYkb0UyzeStcSwjWZ5S4eXo
-         kBwCqfkw8d+7zYZU6b8MHokXPig29v5iUnKYLLiB6iV1/uA5ILonrh6VD2lWQLpWBwkU
-         R86g==
-X-Gm-Message-State: AOAM530EBIwM60kBaPLBcROEbWT+3tMgLKbAzosVl++QtgOsl6EkQFyA
-        dWO3GefzwtyxJ2zc581vqqINNnf2HbzqOrOoizaIPw==
-X-Google-Smtp-Source: ABdhPJxmVhZJlQifLIRkvtG0fE2FauaNFoDOamiDV2heBOr2VXuNiyZh26eJx3wqfXD7spbHZplF8886mVdeS23Z3O8=
-X-Received: by 2002:a05:6512:3b87:b0:473:9e36:5f0d with SMTP id
- g7-20020a0565123b8700b004739e365f0dmr3936219lfv.424.1651874753928; Fri, 06
- May 2022 15:05:53 -0700 (PDT)
+        bh=rCTLTbLP/HCPwEyRHnS4Xntt1B1zffntB8D6OmsmIYM=;
+        b=QE1ZPlHhmfmfyaUe41Zlp99F0TlYN5cqXwHXfxtk1cWEPrvMul4AMQr1kZ/bFK0D+q
+         RBsRgwxZO8Ydrs+Rc/NCdgGLOT7RwMOJH72Pa7Df+nKwNRRTGaKbo/at2/bhtUubhIJD
+         LSuuFT9OM2Feu7BZa2Lwy9WkcJT1RL+32+txfq5S5JHVaSCrThhDs5uwb0vWTQpJ4jnc
+         Afq+DOz83nXufHY3Nbb88h7O8/iNDTpXDYY4rfEp6s0jgt+08m0Zg8qsxF6ca0v91M7J
+         xr5y8dh0s+kXomn2D1YG9BiRgUf7cFEs6A5mWt1KZNbB4nWTLTU5Yw6SYmOwBW1jzVFX
+         xjUw==
+X-Gm-Message-State: AOAM5332SyDtiWvYTLnVv2Au1cdbR5oiox3VIDj4HJC5xQcWDTVyODht
+        qDDBr/1nUF+yFKnWMwH80AK7+xKjm7jV8h+a+QC9goWp
+X-Google-Smtp-Source: ABdhPJx6cH8/kFAVuNSsKGTXPt73jPWXP1ujELpoKsSM82Mr15WnMzNVpnAQdo4BtqYozrL8n+V7/jh3uk/FDntTVvk=
+X-Received: by 2002:a05:6638:33a1:b0:32b:8e2b:f9ba with SMTP id
+ h33-20020a05663833a100b0032b8e2bf9bamr2370798jav.93.1651875293774; Fri, 06
+ May 2022 15:14:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429235644.697372-1-cmllamas@google.com> <20220429235644.697372-4-cmllamas@google.com>
-In-Reply-To: <20220429235644.697372-4-cmllamas@google.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Fri, 6 May 2022 15:05:42 -0700
-Message-ID: <CAHRSSEynz6S-XPPrY92TewdVGW+rJ1=mHmHNMhb+aNrHtgM7Rw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] binderfs: add extended_error feature entry
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220503150410.2d9e88aa@rorschach.local.home>
+In-Reply-To: <20220503150410.2d9e88aa@rorschach.local.home>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 6 May 2022 15:14:43 -0700
+Message-ID: <CAEf4BzYJan2c0oy-eww++VC57ak=+QOt6a9SWUT1M__AKF8VSA@mail.gmail.com>
+Subject: Re: : [PATCH] ftrace/x86: Add FTRACE_MCOUNT_MAX_OFFSET to avoid
+ adding weak functions
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,66 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:57 PM Carlos Llamas <cmllamas@google.com> wrote:
+On Tue, May 3, 2022 at 12:04 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> Add extended_error to the binderfs feature list, to help userspace
-> determine whether the BINDER_GET_EXTENDED_ERROR ioctl is supported by
-> the binder driver.
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 >
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-
-Acked-by: Todd Kjos <tkjos@google.com>
-
+> If an unused weak function was traced, it's call to fentry will still
+> exist, which gets added into the __mcount_loc table. Ftrace will use
+> kallsyms to retrieve the name for each location in __mcount_loc to display
+> it in the available_filter_functions and used to enable functions via the
+> name matching in set_ftrace_filter/notrace. Enabling these functions do
+> nothing but enable an unused call to ftrace_caller. If a traced weak
+> function is overridden, the symbol of the function would be used for it,
+> which will either created duplicate names, or if the previous function was
+> not traced, it would be incorrectly listed in available_filter_functions
+> as a function that can be traced.
+>
+> This became an issue with BPF[1] as there are tooling that enables the
+> direct callers via ftrace but then checks to see if the functions were
+> actually enabled. The case of one function that was marked notrace, but
+> was followed by an unused weak function that was traced. The unused
+> function's call to fentry was added to the __mcount_loc section, and
+> kallsyms retrieved the untraced function's symbol as the weak function was
+> overridden. Since the untraced function would not get traced, the BPF
+> check would detect this and fail.
+>
+> The real fix would be to fix kallsyms to not show address of weak
+> functions as the function before it. But that would require adding code in
+> the build to add function size to kallsyms so that it can know when the
+> function ends instead of just using the start of the next known symbol.
+>
+> In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
+> macro that if defined, ftrace will ignore any function that has its call
+> to fentry/mcount that has an offset from the symbol that is greater than
+> FTRACE_MCOUNT_MAX_OFFSET.
+>
+> If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
+> to zero, which will have ftrace ignore all locations that are not at the
+> start of the function.
+>
+> [1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
+>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  drivers/android/binderfs.c                                | 8 ++++++++
->  .../selftests/filesystems/binderfs/binderfs_test.c        | 1 +
->  2 files changed, 9 insertions(+)
+>  arch/x86/include/asm/ftrace.h |  5 ++++
+>  kernel/trace/ftrace.c         | 50 +++++++++++++++++++++++++++++++++--
+>  2 files changed, 53 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
-> index e3605cdd4335..6c5e94f6cb3a 100644
-> --- a/drivers/android/binderfs.c
-> +++ b/drivers/android/binderfs.c
-> @@ -60,6 +60,7 @@ enum binderfs_stats_mode {
->
->  struct binder_features {
->         bool oneway_spam_detection;
-> +       bool extended_error;
->  };
->
->  static const struct constant_table binderfs_param_stats[] = {
-> @@ -75,6 +76,7 @@ static const struct fs_parameter_spec binderfs_fs_parameters[] = {
->
->  static struct binder_features binder_features = {
->         .oneway_spam_detection = true,
-> +       .extended_error = true,
->  };
->
->  static inline struct binderfs_info *BINDERFS_SB(const struct super_block *sb)
-> @@ -615,6 +617,12 @@ static int init_binder_features(struct super_block *sb)
->         if (IS_ERR(dentry))
->                 return PTR_ERR(dentry);
->
-> +       dentry = binderfs_create_file(dir, "extended_error",
-> +                                     &binder_features_fops,
-> +                                     &binder_features.extended_error);
-> +       if (IS_ERR(dentry))
-> +               return PTR_ERR(dentry);
-> +
->         return 0;
->  }
->
-> diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> index 0315955ff0f4..9409bb136d95 100644
-> --- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> +++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> @@ -64,6 +64,7 @@ static int __do_binderfs_test(struct __test_metadata *_metadata)
->                 device_path[sizeof(P_tmpdir "/binderfs_XXXXXX/") + BINDERFS_MAX_NAME];
->         static const char * const binder_features[] = {
->                 "oneway_spam_detection",
-> +               "extended_error",
->         };
->
->         change_mountns(_metadata);
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->
+
+Thanks for investigating and fixing this! I guess we'll need ENDBR
+handling, but otherwise it looks good to me!

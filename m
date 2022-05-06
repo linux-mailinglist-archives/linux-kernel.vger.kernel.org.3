@@ -2,88 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6100051D0A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9675351D0BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378069AbiEFFaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 01:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S1346681AbiEFFeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 01:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389208AbiEFFaW (ORCPT
+        with ESMTP id S1347742AbiEFFeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 01:30:22 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4BB66ACB;
-        Thu,  5 May 2022 22:26:24 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i22so4188923ila.1;
-        Thu, 05 May 2022 22:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=btRfdC3/ebasVHvh6uBMVKIVD47Na90nsM4/u+AC2ZM=;
-        b=csQ7RZUtRH6jQJGzwUTsP8YRSCyTNZYFEEs5nHcuj27V2/BbiCk22oZe28NzwdR5Y6
-         /+icHCwD+cPSuiC5HXHZdW2ufqsDeIvtMO9bgJ8mdYI45dusdxQimS3BV7wHCzUO1RL8
-         40aIWruIi6OuClhmuetnsCyV1nKDBV0Jt0r/7BzpOrZp1JR6zzGa4oMJ8eUy3HvTxIea
-         d2KEntj7H2lcf/5fCxonDp5ZlPphExdTd/vLOvA0WX5infw2wPeOYxn0t86Jzdj37b1y
-         Tdr9HQrrz4domCTJaqWB+k0JHbRJDhtfkEa+Ma+Qn5JtOtIPBVxv/whExZHUXAE60GAI
-         GLaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=btRfdC3/ebasVHvh6uBMVKIVD47Na90nsM4/u+AC2ZM=;
-        b=g8fRmnHwUBYmuOcyUGe7+AisMiea1Hmt1nIhu7TvZCCtfhtaaZBsxRP4A9rqzK+U1h
-         HnuX9vslN1W46bs0DHm1LVQ5NAXHYN6B8KTVx01vNBnarEZWY7jByzoB0P/enFLLc044
-         F2L39Jhj0kKEctYGqAC0DUIbp6S6l/5HoQIGdxlqvuifdxfRxBiYRC3RxfARTFzUHqRw
-         /1lHvek52+QfxE1IXan6PWEoKJZE0ws+FdSRfiFrueta0cOervaJKcQZaVE8AETXwt5S
-         UCiNJwz1h7H+MxiAvjVr4Bj9H94UzLBtZJ2bUYSYuRMsVqYRSYuJ0KuZjF9IQ9x9rAvy
-         0oHg==
-X-Gm-Message-State: AOAM5326TYhmLlsZAv5cZ7FGEXXUkhYl5rOa2YOTgdhNeaIaHFPgZHSa
-        ozypv8IVwZiohmPdd3Z6R8YGOneNYxA4AmymhpU=
-X-Google-Smtp-Source: ABdhPJyeIUrhz3EpREFg1AsHHMUf4LhxfAFGKKfYPJemYWqV0jWB1mOS4wrsMq7C8VUTYVLdfmaDY3VDmVi0y+nojG0=
-X-Received: by 2002:a05:6e02:152e:b0:2cf:548d:a400 with SMTP id
- i14-20020a056e02152e00b002cf548da400mr715860ilu.72.1651814783766; Thu, 05 May
- 2022 22:26:23 -0700 (PDT)
+        Fri, 6 May 2022 01:34:11 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5593819008
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651815027; x=1683351027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5UPUZjJVdMzrW2rShCCX+WFC3SvhnCk41EqWtRxsWIE=;
+  b=JItjtE5h2SaXLKCLYHuxSb7eMMsfPGYba+keTLnWcYdCS9kbVSEWwwrr
+   jYoldxBFF3VMuSwV5GpqqSKbD1YW9cEbilSzx//SXUGzytJkAma134QTk
+   +kLQYU9cf2HU84Dy65l6fXzt1pDpQ22/WYBbE7NSm0eaavcDzNIQ2Fgsk
+   BTE/bGwAUxouEjoADGWeKNvAXh2wSzjBlKUnK+CBQLUe9mXv1wwfz9r2c
+   oqpX7YKaLSQO4zRJSVi/cp4FvATSfTfcSjiv7ptzcuAwFZeVM7Q+keXTs
+   JaNtKxMyMW3Tr/TJ4/G3EEBVQqYvMoAV/6UzAPV2+XmW09iSuGpc83AXv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255838457"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255838457"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:30:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="695011041"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga004.jf.intel.com with ESMTP; 05 May 2022 22:30:24 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Cc:     Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v3 0/4] iommu/vt-d: Force snooping improvement
+Date:   Fri,  6 May 2022 13:27:23 +0800
+Message-Id: <20220506052727.1689687-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220505191704.22812-1-ojeda@kernel.org> <20220505191704.22812-2-ojeda@kernel.org>
- <202205051643.1A8E38C7F2@keescook>
-In-Reply-To: <202205051643.1A8E38C7F2@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 6 May 2022 07:26:12 +0200
-Message-ID: <CANiq72n+g_=QQcSuE13+58j+PCuqLEyCusEUqMKFywR8UKHK6g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] kallsyms: avoid hardcoding the buffer size
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 1:46 AM Kees Cook <keescook@chromium.org> wrote:
->
-> No need to repeat the sizing:
->
->         fgets(name, sizeof(name), in)
+Hi folks,
 
-Definitely.
+Previously, the IOMMU capability of enforcing cache coherency was queried
+through iommu_capable(IOMMU_CAP_CACHE_COHERENCY). This is a global
+capability, hence the IOMMU driver reports support for this capability
+only when all IOMMUs in the system has this support.
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+Commit 6043257b1de06 ("iommu: Introduce the domain op
+enforce_cache_coherency()") converts this into a per-domain test-and-set
+option, and the previous iommu_capable(IOMMU_CAP_CACHE_COHERENCY) is
+deprecated.
 
-Thanks for the three reviews!
+This is a follow-up series which improves the Intel IOMMU driver to
+support the per-domain scheme better.
 
-Cheers,
-Miguel
+Best regards,
+baolu
+
+Change log:
+v3:
+ - Hold the device_domain_lock when check and set force snooping.
+ - Refind the commit messages.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220505010710.1477739-1-baolu.lu@linux.intel.com/
+ - Check whether force_snooping has already been set in
+   intel_iommu_enforce_cache_coherency().
+ - Set PGSNP pasid bit field during domain attaching if forcing_snooping
+   is set.
+ - Remove redundant list_empty() checks.
+ - Add dmar_domain->set_pte_snp and set it if force snooping is enforced
+   on a domain with 2nd-level translation.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220501112434.874236-1-baolu.lu@linux.intel.com
+ - Initial post.
+
+Lu Baolu (4):
+  iommu/vt-d: Block force-snoop domain attaching if no SC support
+  iommu/vt-d: Check domain force_snooping against attached devices
+  iommu/vt-d: Remove domain_update_iommu_snooping()
+  iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
+
+ include/linux/intel-iommu.h |  1 +
+ drivers/iommu/intel/pasid.h |  2 +
+ drivers/iommu/intel/iommu.c | 90 ++++++++++++++++++++++---------------
+ drivers/iommu/intel/pasid.c | 26 +++++++++--
+ 4 files changed, 80 insertions(+), 39 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF1251D699
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A9951D69A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391305AbiEFL3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S1391317AbiEFL3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239272AbiEFL27 (ORCPT
+        with ESMTP id S1391300AbiEFL3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:28:59 -0400
+        Fri, 6 May 2022 07:29:00 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C505469C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:25:16 -0700 (PDT)
-Date:   Fri, 06 May 2022 11:25:13 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A08A56436;
+        Fri,  6 May 2022 04:25:17 -0700 (PDT)
+Date:   Fri, 06 May 2022 11:25:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1651836315;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yEEiGomcOYhMnteRAbtxxaEBfAek9bdMMc4yXKiUfs4=;
-        b=NLTyj2t/tpMdbbWHvhlX5Eo/nRj4d3GxMkZBs9poDhRWRhPb3yqvZYpVe9+R+EdcxwxaGv
-        WuLCD9Uzjur8vguxhF0Xk2EcnLR0MJx6bPnflteiE68jQeVUTALXDu2ZInQzqzXvtD+Sck
-        1r48g8aju3q/Air3XHu2K5ul2BzzYKpciipeMgClFGXayJ1kaEXsDYzThO3Hb37GCUagon
-        yCUDH+V2APYL1DjYdiuEl0uhokfsyB/rjR8cK444qfmAullqe+hQSLL+IrgZKOxkZSEWIH
-        PB0pscdHUtP8sTyoWnMnWZ1VUZNGmu55U1lJGYSGynW6eytApc0Q+esnK/PT1A==
+        bh=SG0xDhrYsbMTMZvnzqXVgARUAputX5grlXdQ0OVHVvE=;
+        b=DD+kHIJZoXWfHCrN5D77ljx51RKs2RDD/jhZAopstvLMd99jSeIPosaDt5u2ll5W9sIuUF
+        BR89nLr5LInoFMtS50oJaNGnvoWYCEI/kwWmBAIWbLOmHZ5vpm5FeryluWhZc1kaHuWtxW
+        xjUoMfqNVH8nTSckZbxeDrqfD2M7UZkyyi4tNX7fjSrKlSYghMVT4dbBSQhDxQ5Rcateci
+        atpJc8lffpuyvSoOr/3VQXRypERA0bHFGuJbE9RscKBb7S4sg09SGejb0yfFSqRzsNOEFi
+        uP40zJ660/8vOjpVy6cvRtmvRRCj8uc8bHgA9baGyUgdoCRbxnhM3rJ6pOE64A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1651836315;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yEEiGomcOYhMnteRAbtxxaEBfAek9bdMMc4yXKiUfs4=;
-        b=jRqUjnmE9C8PV8vpYxKccRHUvoUMYw5ZjhqJa5/N1O9geX6fyMkcTtXFhOe7YmRtCixEHr
-        KFvF6kosKR7yo/CQ==
+        bh=SG0xDhrYsbMTMZvnzqXVgARUAputX5grlXdQ0OVHVvE=;
+        b=8lRHAhOL0TucH6Xz8iMQtm9VNUEeUw4y5OdZLv4r14sFQvrGsvhA/52vH6sXZJ++QSz3yD
+        P4k4Ila8PJqDtgDQ==
 From:   irqchip-bot for Pali =?utf-8?q?Roh=C3=A1r?= 
         <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/armada-370-xp: Do not allow
- mapping IRQ 0 and 1
-Cc:     pali@kernel.org, Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220425113706.29310-2-pali@kernel.org>
-References: <20220425113706.29310-2-pali@kernel.org>
+Subject: [irqchip: irq/irqchip-next] irqchip/armada-370-xp: Do not touch
+ Performance Counter Overflow on A375, A38x, A39x
+Cc:     pali@kernel.org, stable@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20220425113706.29310-1-pali@kernel.org>
+References: <20220425113706.29310-1-pali@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165183631358.4207.11410029183803941850.tip-bot2@tip-bot2>
+Message-ID: <165183631461.4207.8890709509221089065.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,41 +70,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The following commit has been merged into the irq/irqchip-next branch of irqc=
 hip:
 
-Commit-ID:     baf78c1078b474aed18864796a8161784dd81fc2
+Commit-ID:     a3d66a76348daf559873f19afc912a2a7c2ccdaf
 Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
-rms/baf78c1078b474aed18864796a8161784dd81fc2
+rms/a3d66a76348daf559873f19afc912a2a7c2ccdaf
 Author:        Pali Roh=C3=A1r <pali@kernel.org>
-AuthorDate:    Mon, 25 Apr 2022 13:37:06 +02:00
+AuthorDate:    Mon, 25 Apr 2022 13:37:05 +02:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 06 May 2022 12:20:27 +01:00
+CommitterDate: Fri, 06 May 2022 12:18:37 +01:00
 
-irqchip/armada-370-xp: Do not allow mapping IRQ 0 and 1
+irqchip/armada-370-xp: Do not touch Performance Counter Overflow on A375, A38=
+x, A39x
 
-IRQs 0 and 1 cannot be mapped, they are handled internally by this driver
-and this driver does not call generic_handle_domain_irq() for these IRQs.
-So do not allow mapping these IRQs and correctly propagate error from the
-.irq_map callback.
+Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
+and on new Armada platforms it has different meaning. It does not configure
+Performance Counter Overflow interrupt masking. So do not touch this
+register on non-A370/XP platforms (A375, A38x and A39x).
 
 Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 28da06dfd9e4 ("irqchip: armada-370-xp: Enable the PMU interrupts")
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220425113706.29310-2-pali@kernel.org
+Link: https://lore.kernel.org/r/20220425113706.29310-1-pali@kernel.org
 ---
- drivers/irqchip/irq-armada-370-xp.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/irqchip/irq-armada-370-xp.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/irq-armada=
 -370-xp.c
-index ee18eb3..ab02b44 100644
+index c877285..ee18eb3 100644
 --- a/drivers/irqchip/irq-armada-370-xp.c
 +++ b/drivers/irqchip/irq-armada-370-xp.c
-@@ -567,6 +567,10 @@ static struct irq_chip armada_370_xp_irq_chip =3D {
- static int armada_370_xp_mpic_irq_map(struct irq_domain *h,
- 				      unsigned int virq, irq_hw_number_t hw)
+@@ -327,7 +327,16 @@ static inline int armada_370_xp_msi_init(struct device_n=
+ode *node,
+=20
+ static void armada_xp_mpic_perf_init(void)
  {
-+	/* IRQs 0 and 1 cannot be mapped, they are handled internally */
-+	if (hw <=3D 1)
-+		return -EINVAL;
+-	unsigned long cpuid =3D cpu_logical_map(smp_processor_id());
++	unsigned long cpuid;
 +
- 	armada_370_xp_irq_mask(irq_get_irq_data(virq));
- 	if (!is_percpu_irq(hw))
- 		writel(hw, per_cpu_int_base +
++	/*
++	 * This Performance Counter Overflow interrupt is specific for
++	 * Armada 370 and XP. It is not available on Armada 375, 38x and 39x.
++	 */
++	if (!of_machine_is_compatible("marvell,armada-370-xp"))
++		return;
++
++	cpuid =3D cpu_logical_map(smp_processor_id());
+=20
+ 	/* Enable Performance Counter Overflow interrupts */
+ 	writel(ARMADA_370_XP_INT_CAUSE_PERF(cpuid),

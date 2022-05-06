@@ -2,115 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C5351D9F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7577051D9FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442001AbiEFOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1442005AbiEFOMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiEFOLn (ORCPT
+        with ESMTP id S1391048AbiEFOMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:11:43 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD7C5A2DF;
-        Fri,  6 May 2022 07:07:56 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id 126so5939014qkm.4;
-        Fri, 06 May 2022 07:07:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HLS1owR3CUUM/pxIukdO3Yvx2ZZOeSpZS2VuYEsMpRM=;
-        b=Z247zpROugve+xccj1mnDqoSRDmWrS7IWjEOtk9VS9GM5cLRjoubnC0NSdY93eDmX4
-         q4KzWOLYKwHChJ/R4FsGLq2i7+zhI5MrUk8JIpNpxHG0z5SWS5BQqFsOitZwr3bVdFe5
-         SC3W8p3GtmHHsGSmcJQt+D3GEAwjN2n0L36wH6SKonwNiQ3SMkqUtKCZ6ZjZVL8fYdKY
-         AtLPCn8WEtmQjqlDpavK2Wad8InHJassoAvR8eHhF7ciB/2HAdNQusnsbCz6Havq/kg6
-         0GXkomAaKuhQHC3cHM4Q7647YloD/eHKgomqdPnIrfvWt4fBw2rOAbHFEAOkiyVjyiD4
-         HYlQ==
-X-Gm-Message-State: AOAM531zVuJ0S+P7Rtk2XWvoJBMgSXM61gWTdyiyW8wOtPwMEFUhm9q9
-        +yfXauaZoOCPQUsqkY/7bdCq2ffMsrR5gg==
-X-Google-Smtp-Source: ABdhPJzmpBReCv37qqtfOf8Imzp9MGGDEq/Ufzp603XZWxvx5nIRaOd6RMNBNV8Y0JqOU/4mlOaHBw==
-X-Received: by 2002:a37:a743:0:b0:69f:e64c:74c9 with SMTP id q64-20020a37a743000000b0069fe64c74c9mr2455682qke.432.1651846075717;
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id u12-20020ac8750c000000b002f39b99f69csm2580370qtq.54.2022.05.06.07.07.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id w187so13077449ybe.2;
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr2392502ybb.202.1651846074895; Fri, 06
- May 2022 07:07:54 -0700 (PDT)
+        Fri, 6 May 2022 10:12:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC525A2DF;
+        Fri,  6 May 2022 07:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651846105;
+        bh=WgytZKjmiBQFX7uZ/jjhSIBiJAj8t5XglcXcRrxeF8Q=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=ZxddAxjw4ulOs6jvFgCz850BHQBqwBs2xNTCt3dcLrC9w5PnoSTdnQJ1L03hIwWHQ
+         pUuf0nkXavc93/GJW3DSgT40dOcGB7oJxiBTm166dhP0rV2y3rK5pH5s+SgoMwwikq
+         6V4CzMHxAHwRU0E5MRb1s6R531VcUhcE1Z6CAaJ0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from frank-s9 ([80.245.76.19]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAwbz-1ng3gO1qMD-00BMAI; Fri, 06
+ May 2022 16:08:25 +0200
+Date:   Fri, 06 May 2022 16:08:17 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ac70ae6d-7e1a-d6b9-e33e-793035d5606e@linaro.org>
+References: <20220505150008.126627-1-linux@fw-web.de> <6d45f060-85e6-f3ff-ef00-6c68a2ada7a1@linaro.org> <trinity-12061c77-38b6-4b56-bccd-3b54cf9dc0e8-1651819574078@3c-app-gmx-bs21> <ac70ae6d-7e1a-d6b9-e33e-793035d5606e@linaro.org>
 MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org>
-In-Reply-To: <Yib9F5SqKda/nH9c@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 May 2022 16:07:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
-Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Aw: Re: [RFC v2] dt-bindings: net: dsa: convert binding for mediatek switches
+Reply-to: frank-w@public-files.de
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Ungerer <gerg@kernel.org>,
+        =?ISO-8859-1?Q?Ren=E9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <04062F03-43DC-4B92-8C39-2F84ABDE2DE4@public-files.de>
+X-Provags-ID: V03:K1:T2On2gkE0ziiZBeVVFwz7HVvt6s28DOg5a5fA6wmtL/dbrZEuhj
+ Lc6jEaasYReZ2Th3WG9V3OdBFSGLkGFhxjMiEPCQvTEG1WRCcqaUTZMhy2NnvA9H34jRsa6
+ qFVirmd8FSVISD+xDX0OLaoJ58TUm8CgS26ZNmsFg6t9dgkRTpmDwPuiDVIGqnRkLnIACT+
+ I9AxXwRJo8n/w6uDoj2zg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wLNzKAt24Gs=:9cXTi89Mx1jhPI9X1MTGb5
+ 2FtlAU0g62zkWejjYg3duxYKExkF8b1BKvybOIwO5PCED+wMAkU0VUcld1JJ5W+o6RxK8rk3X
+ IY4IBtl/Haee4H1h/n2d6ouprEK1lAaQfGirHOihtyfKcWfYc9Q9M7g3iLDdSTpPusWvJh3Ow
+ 0cLYOxQcU4YzBzw3+RPuRv9LjXXb/6UlezyNZGKjCpVbNirIV39c6I6uSm58e5lvYBGibs1X0
+ rfgvE9Tux3JjJ9jtEOmCBD3lSkn5NsK167A6X3CpRUH9OEhKRTiQZpI4k/mvzCT31LStYNBcx
+ vWK/hw+5lG9W8th0sWDjSN9/CR23hYaOQUnwlHw2eJpKd5dlyaZztl9EbLRBne2eUUsNV9Ncd
+ 2IyLcYQXm6crYBI3L5gnrTDB6T4qbDv3PbPbWSF33moVo5WuopCgF+05MXVpRF4wSI2yGZERd
+ 60JKjqOz4fVYbD3UQGpA0TYjUfeSweEuvBIjZhhgLeRSwFIrUqsDfReWlt4JyfFAyewgqYd8N
+ SIUrgTwTeDc3rvPDPn6Bt5n7z/uW9m0gULvr/IPsjwy4kORCKDHKuQ8HX6u8Lif/q3iX5w2Uc
+ Aprol01yvwJ4e00aYhh64WS5G4PfE1Kh/x5tFkvSqpyRoCGpPmzx5X4J8dJxfJw3Jsxtl3qwt
+ d18BPoo1xDyLtYYZ8Fzk1GmuDQGJy5dpkGcbuUh1MzOsPFWA/UKNxwo/7O/TmUZwmQyrT5kFd
+ c9HihY7GMsBKO8BQR9G5Y+LYzuryLVPuj/exy5QSz9pMUR0kgiBCTpfhgLAdrWJhwanRB1G2t
+ swnQPpv5l1IvZOIG///twmFl91e5bACtQR1y1CDMc4Bo3Xcxu3g/zGqx6oXkuphm4ZEqKlXmA
+ FuW4fvoxNXAm2oXj2BbM9zF0te5Wc/hBafKPJMTe+G4NQ0sEaskKFmIXo49cwABeSFgH43mz/
+ zNch3CAozA0grXMaOGIHAYR8RCScF01TDR2WS1bWI1bno9hdxUSe2hL2PCUtxOdjbCHqCRt6o
+ qpLPtz4IavtR/x0mifFRSP07o6/Y2BcDiRXQsDxULMKEg537m0x+ATBus+Nc+BAAE/OC5J9bz
+ zYvdaugEn1ns7Y=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chrisoph,
+Am 6=2E Mai 2022 09:15:12 MESZ schrieb Krzysztof Kozlowski <krzysztof=2Ekoz=
+lowski@linaro=2Eorg>:
+>On 06/05/2022 08:46, Frank Wunderlich wrote:
+>>>> +    const: 1
+>>>> +
+>>>> +  "#size-cells":
+>>>> +    const: 0
+>>>> +
+>>>> +  core-supply:
+>>>> +    description: |
+>>>
+>>> Drop | everywhere where it is not needed (so in all places, AFAICT)
+>>=20
+>> is it necessary for multiline-descriptions or is indentation enough?
+>
+>It's necessary only when YAML syntax characters appear in description
+>or
+>when you want specific formatting=2E
+>
+>https://elixir=2Ebootlin=2Ecom/linux/v5=2E18-rc5/source/Documentation/dev=
+icetree/bindings/example-schema=2Eyaml#L97
+>
+>https://yaml-multiline=2Einfo/
 
-On Tue, Mar 8, 2022 at 12:04 PM Christoph Hellwig <hch@infradead.org> wrote:
-> h8300 hasn't been maintained for quite a while, with even years old
-> pull request lingering in the old repo.  Given that it always was
-> rather fringe to start with I'd suggest to go ahead and remove the
-> port:
->
-> The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
->
->   Merge branch 'for-5.17-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
->
-> are available in the Git repository at:
->
->   git://git.infradead.org/users/hch/misc.git remove-h8300
->
-> for you to fetch changes up to 1c4b5ecb7ea190fa3e9f9d6891e6c90b60e04f24:
->
->   remove the h8300 architecture (2022-02-23 08:52:50 +0100)
->
-> ----------------------------------------------------------------
-> Christoph Hellwig (1):
->       remove the h8300 architecture
->
->  .../bindings/clock/renesas,h8300-div-clock.txt     |  24 --
->  Documentation/devicetree/bindings/h8300/cpu.txt    |  13 -
->  .../interrupt-controller/renesas,h8300h-intc.txt   |  22 --
->  .../interrupt-controller/renesas,h8s-intc.txt      |  22 --
->  .../memory-controllers/renesas,h8300-bsc.yaml      |  35 --
+Ok then i drop all except on examples
 
-More DT bindings to garbage-collect:
-Documentation/devicetree/bindings/clock/renesas,h8s2678-pll-clock.txt
-Documentation/devicetree/bindings/timer/renesas,16bit-timer.txt
-Documentation/devicetree/bindings/timer/renesas,8bit-timer.txt
+>>>> +
+>>>> +patternProperties:
+>>>
+>>> patternProperties go before allOf, just after regular properties=2E
+>>=20
+>> after required, right?
+>
+>properties do not go after required, so neither patternProperties
+>should=2E Something like: propertes -> patternProperties -> dependencies
+>-> required -> allOf -> additionalProperties -> examples
 
-Gr{oetje,eeting}s,
+Thx for explanation
 
-                        Geert
+So i end up like this:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+https://github=2Ecom/frank-w/BPI-R2-4=2E14/blob/5=2E18-mt7531-mainline/Doc=
+umentation/devicetree/bindings/net/dsa/mediatek%2Cmt7530=2Eyaml
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Including followup (remove reset-gpios and add rgmii for mt7531)=2E
+
+>>=20
+>>>> +  "^(ethernet-)?ports$":
+>>>> +    type: object
+>>>
+>>> Also on this level:
+>>>     unevaluatedProperties: false
+>>=20
+>> this is imho a bit redundant because in dsa=2Eyaml (which is included
+>now after patternProperties)
+>> it is already set on both levels=2E
+>
+>dsa=2Eyaml does not set it on ethernet-ports=2E
+>
+>> Adding it here will fail in examples because of size/address-cells
+>which are already defined in dsa=2Eyaml=2E=2E=2E
+>> so i need to define them here again=2E
+>
+>You're right, it cannot be set here=2E
+
+So i make no change here,right?
+
+>Best regards,
+>Krzysztof
+
+
+regards Frank

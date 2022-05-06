@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF6B51DA94
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B86851DA9B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442216AbiEFOgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S1442235AbiEFOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343536AbiEFOgB (ORCPT
+        with ESMTP id S1385428AbiEFOiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:36:01 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D15B69291
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:32:18 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so10960734pjv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:32:18 -0700 (PDT)
+        Fri, 6 May 2022 10:38:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D040C69291
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:34:41 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id x52so6404204pfu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:34:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IKnXMed6jjWK05WYFoholdPPT2WTMXKXyNFJA5ty2Dk=;
-        b=0kcU7geC2AF508oHhQS9Aw5hC5iqBBoisB+DWdgDAmQYPIJ2O/4jUueZ78D02Yd2LQ
-         OUN1VDfPfgyoRSDtWDQK8jb3VfQXYCRR4IzNQYQ3ut427FFO7QTLye+05E9x9zEXhr2F
-         wlJ102s3dIPqTpCCTth4dsluVPd3FdGvhpJUl6NVrBAnEZIS1cwbij+kmqjxuab3grqE
-         ti4uAHJY1Gce2w08VRZb4Tug+1v1RNH5/X/e6Ib7dRPhvSyGY+9ta/Eja+uyQ67Mfv0h
-         K3XaKKIDr2asH+uZLMvaFbwmplP2XJCqIUDiFbqTtALM+5WISexAHhuyzz/kMigmsI5D
-         o0OA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7u3OwSkyFfQPtUMBSXJ+m0o3AIK+1qwz0/mjtmfCQB0=;
+        b=FdeTUfLPDw9k8X6pTEaLv52yUet9VfSQ7bi4HQ1t2xxaDysAJZFgQ7VRrYNlmPjTaj
+         2tZL8ukYEo7mNc766P4NQqVT9VU4xcQVvoq18pPjJEP+0zEMAny+6Y6R1wOkE1tgO1wN
+         uO8kog1rHC8+u41oS0ocTQzuT0i21hJ3Uz5f+CifLuIMIngaK02mJcE8pu1U5afhbLJI
+         DQvD2wdX+c/IHeRxzEhPxhM8zCujiWsHkyNF2bZlVm+qDJtsTHgLYuDntTJYuurXEomy
+         6N6H/Q1iuEHCKEfOxPpaFPLiJqifIcesYahJuQ4SUdI1fRp5qzJFzMshG8VThV3XD+0t
+         zf6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IKnXMed6jjWK05WYFoholdPPT2WTMXKXyNFJA5ty2Dk=;
-        b=u2ZEqCr4/diy93Zq79tlJD+aVN5v/YHV4NX4W77Fw/+Aldazv4Q9M8o1ZCh37+74+b
-         H59hy9OY5JXDMHBmXkicaM+mua1r3L2dkrdfAwOPK35AfriMfkVVdXYKdm4PpoMLyHkD
-         /tg32ypKu2g/zVOOsmVlroNCAGOYm1wK6ifeJpegluGNqdmqIGN8qbjomLPXQMco1m2r
-         L847rnjE94VmlOTFQ2e/m6sOnZq0j1NgNYYewEcI/tIOlZOR/JJhgUmXPg1xO9U+Oepy
-         WRpgXUtRanG33QDaXu+AIUMrDUItwLYCqSUgc8CBvpr9Sg3FlHksZb3QqT4e6Ofprt7X
-         x1fA==
-X-Gm-Message-State: AOAM533K5ZYrWEadbOOpR/CG0ccOKaCk3ma+AS1YQnoAmkkV41QG0PhM
-        FELP0qf5omgw0cHVzMRIpSJPWw==
-X-Google-Smtp-Source: ABdhPJwVyFybgmdHBomugJ71MT4xk5tQqyokCS5kc4G+IAjCk8YTvnuhoAqBC71a7VwwMtOibv+lAg==
-X-Received: by 2002:a17:903:2ca:b0:156:f1cc:7cb6 with SMTP id s10-20020a17090302ca00b00156f1cc7cb6mr3939764plk.174.1651847537881;
-        Fri, 06 May 2022 07:32:17 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902ca0500b0015e8d4eb285sm1773280pld.207.2022.05.06.07.32.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 07:32:17 -0700 (PDT)
-Message-ID: <b60eb1c5-4836-5f62-315e-211a0fe03362@kernel.dk>
-Date:   Fri, 6 May 2022 08:32:16 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/5] io_uring: add IORING_ACCEPT_MULTISHOT for accept
-Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-2-haoxu.linux@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220506070102.26032-2-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=7u3OwSkyFfQPtUMBSXJ+m0o3AIK+1qwz0/mjtmfCQB0=;
+        b=FhLRW7VZJNbGBjumf4CpFmUDXvHPoQdp3njd6cnh9YfasPm4+QcpwhVfUfmXKBt5GJ
+         K8NhdJ5995hLQErNCFJ09Y526duevEa0Xai7z0MTNJ/8fVggUstDXPseR8nASPXFe9HR
+         sPCyB06Mn0FhW1ppv/znXEUalMIR2a+4XuAGwj3GoxGT6T53wFq9Qo19FtRyWwG7rn8V
+         miD/ygw+CMwRz3mChtegUS6ME15M39ng2OEhm2+a/43FNCDjOZyK8rjFXGW1KUcXQF0u
+         m/oBAZiq3t3FTSOM1odEtWShdpyKRSCNd3tk416m9XF5HxPGP519nuNj0jvKi2Jr65K/
+         eOyA==
+X-Gm-Message-State: AOAM531NGVhuAFfPhXPJfWYHYCcW7HWiuKiv/7kHdA1J6flL/75HhovA
+        cY3dNK5lwhkdlqEsGawShFGn9A==
+X-Google-Smtp-Source: ABdhPJxRyjLgEf03HBpUE/mZuN6gq4KYh/avgT4q6TfXPSIwYir1NJqPKE0fyCteJUZc4c2jSgcLGw==
+X-Received: by 2002:a63:d00b:0:b0:3c1:6c87:2135 with SMTP id z11-20020a63d00b000000b003c16c872135mr2936313pgf.93.1651847681336;
+        Fri, 06 May 2022 07:34:41 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id a21-20020a170902ee9500b0015e8d4eb241sm1820885pld.139.2022.05.06.07.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 07:34:41 -0700 (PDT)
+Date:   Fri, 06 May 2022 07:34:41 -0700 (PDT)
+X-Google-Original-Date: Fri, 06 May 2022 07:34:18 PDT (-0700)
+Subject:     Re: [PATCH v4 0/7] Generic Ticket Spinlocks
+In-Reply-To: <CAK8P3a1VjunJE5zAm96pkQX7EvVDcN6VGT8usedeO709KQnB_g@mail.gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
+        peterz@infradead.org, mingo@redhat.com,
+        Will Deacon <will@kernel.org>, longman@redhat.com,
+        boqun.feng@gmail.com, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Greg KH <gregkh@linuxfoundation.org>,
+        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-2750a5d4-cb79-4142-a8c6-e7e0c80f8e85@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 1:00 AM, Hao Xu wrote:
-> From: Hao Xu <howeyxu@tencent.com>
-> 
-> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
-> support multishot.
-> 
-> Signed-off-by: Hao Xu <howeyxu@tencent.com>
-> ---
->  include/uapi/linux/io_uring.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-> index fad63564678a..73bc7e54ac18 100644
-> --- a/include/uapi/linux/io_uring.h
-> +++ b/include/uapi/linux/io_uring.h
-> @@ -213,6 +213,11 @@ enum {
->  #define IORING_ASYNC_CANCEL_FD	(1U << 1)
->  #define IORING_ASYNC_CANCEL_ANY	(1U << 2)
->  
-> +/*
-> + * accept flags stored in accept_flags
-> + */
-> +#define IORING_ACCEPT_MULTISHOT	(1U << 15)
+On Thu, 05 May 2022 04:09:46 PDT (-0700), Arnd Bergmann wrote:
+> On Sat, Apr 30, 2022 at 5:36 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> Comments on the v3 looked pretty straight-forward, essentially just that
+>> RCsc issue I'd missed from the v2 and some cleanups.  A part of the
+>> discussion some additional possible cleanups came up related to the
+>> qrwlock headers, but I hadn't looked at those yet and I had already
+>> handled everything else.  This went on the back burner, but given that
+>> LoongArch appears to want to use it for their new port I think it's best
+>> to just run with this and defer the other cleanups until later.
+>>
+>> I've placed the whole patch set at palmer/tspinlock-v4, and also tagged
+>> the asm-generic bits as generic-ticket-spinlocks-v4.  Ideally I'd like
+>> to take that, along with the RISC-V patches, into my tree as there's
+>> some RISC-V specific testing before things land in linux-next.  This
+>> passes all my testing, but I'll hold off until merging things anywhere
+>> else to make sure everyone has time to look.  There's no rush on my end
+>> for this one, but I don't want to block LoongArch so I'll try to stay a
+>> bit more on top of this one.
+>
+> I took another look as well and everything seems fine. I had expected
+> that I would merge it into the asm-generic tree first and did not bother
+> sending a separate Reviewed-by tag, but I agree that it's best if you
+> create the branch.
+>
+> Can you add 'Reviewed-by: Arnd Bergmann <arnd@arndb.de>'
+> to each patch and send me a pull request for a v5 tag so we can
+> merge that into both the riscv and the asm-generic trees?
 
-It isn't stored in accept_flags, is it? This is an io_uring private
-flag, and it's in ioprio. Which is honestly a good place for per-op
-private flags, since nobody really uses ioprio outside of read/write
-style requests. But the comment is wrong :-)
-
--- 
-Jens Axboe
-
+Yep.  There were some other minor comments, I'll clean those up as well 
+and send something soon.

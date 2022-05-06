@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8549051E132
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD93D51E13D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444534AbiEFVhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S1444544AbiEFVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444526AbiEFVhK (ORCPT
+        with ESMTP id S1444570AbiEFVjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:37:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74176F4A7;
-        Fri,  6 May 2022 14:33:26 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651872805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Jeq5X8rBctwhIa1PWWHIqsjYqzv8yFjidcBuzCv/foM=;
-        b=RxKlV8jfy3G27pBeNxf1ljB+JSQCw9i5bGNEezGrA2mf3fAcKm7klSuuxt/tdmJAznnGeq
-        r0Yc2iqrlvhYo6led263WaMFE2R3pRmJI/3dOyDx3rD373mKFqDxfnQ0uikXcjE/gqbQcS
-        qdUCHVhHDayc4UJKCqIPUZqPelEgnh6Ropi2KCSxHevhgrjETFb9pqD8BbcrtkXV/tLcud
-        sK6OsNbo9R5xfXtP/9Hv4Xt3x/zo3jjPh9MCqthFqy5HKOKB4AzZy1eqmeKPC1oBD4pS83
-        T48LQsmXGhFGaTLdNDnGIadjzEhBN/LVPbllbK2N3soNfn/bhb/FXByt2T9uLw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651872805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Jeq5X8rBctwhIa1PWWHIqsjYqzv8yFjidcBuzCv/foM=;
-        b=3Qs9mj50WwC4qI0K86sJbOxn9gMgDSusBkQmxzHDuSMsV7Wp11akMswqQfYcUxBBovfx/2
-        Dri4+jp9g7hT4SBQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH next v1] serial: msm_serial: disable interrupts in __msm_console_write()
-Date:   Fri,  6 May 2022 23:39:24 +0206
-Message-Id: <20220506213324.470461-1-john.ogness@linutronix.de>
+        Fri, 6 May 2022 17:39:06 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372F1290;
+        Fri,  6 May 2022 14:35:20 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so7937216pjf.0;
+        Fri, 06 May 2022 14:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=i4ODuIClhs3mPszvinEDNPwzFTB2SCM7aKWWSn8J0uI=;
+        b=ZobUQTJx+NEoOz7HvidPGdMS7pGKQYEvaMWHSkM0LrrT6xvFzsqRlO8aabdUfk5mzA
+         WAA2gQ7JSMyXLNUMRob2kQl5ERwLxOJ2TkuCeceApSb8CPToTX5+rYaOc+1tcw5gg1Br
+         7SVE3oSloMmZlo6LHAFw4xmpUoIo3tI/ITUkxK5fr1rV84MGytDKKoGyceW6oPKJpYzu
+         /roz5hcWkLX7E2Wm1fgGGypKwUltKCTWHToCeXoq5qEMdzN1UN5eWqvyC1KKII/boOsN
+         9XxfX8biWIIfNEmkVv2/GQ0CM3ODhwDpG3bBlExPQabUZdRprNM2RcKRAcEsCwuNKBdJ
+         vnxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i4ODuIClhs3mPszvinEDNPwzFTB2SCM7aKWWSn8J0uI=;
+        b=1CokWBJ4/UWZYRM7o7AbkoYHJqqb3kOQ/yhizM3BYvJuYi2Z/yt8XvkAkgEJovZZa/
+         MRtpVCzn9MWwc61abQ5nScsX64bvrkg2H1KQESu60/e451xYexv45+/365rMYraKrJ8j
+         rcknpiEEm01PddEpH+6fq4tUUxmN8fdUT6v9vCgTkhuTEohO+MVveUE6Np98g5XNz8MG
+         shCRg91GTqls8r5lHcY/GuZFPPUrlPAXziedYxzleDECdrrwYUqlW0jkyEUcsMYK6aAi
+         eIaVwlBw9XVIf3gwdReQwNBz6Aphh78cdNVy0HMYJZ6DNkpfqopFcu4lbG+IHMXV6LvM
+         1F9w==
+X-Gm-Message-State: AOAM533yzY4HsDvfPFULcwUmW34XgfU1ryVfetLJbcElxKWcrUGqmg3O
+        KkAWXQLbnzF5r5qMfvh8ODliwRjWlec=
+X-Google-Smtp-Source: ABdhPJxfE2Zwmmn+Pr9mn2jUdfULvWEfYj/0IErCyVgFBWuR1SqIzLe8Zj3cUVEiQ+lBKOLIVVylRQ==
+X-Received: by 2002:a17:90a:9ea:b0:1dc:1c48:eda with SMTP id 97-20020a17090a09ea00b001dc1c480edamr14473942pjo.38.1651872919617;
+        Fri, 06 May 2022 14:35:19 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id n3-20020a056a0007c300b0050e0dadb28dsm3846324pfu.205.2022.05.06.14.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 14:35:19 -0700 (PDT)
+Date:   Fri, 6 May 2022 14:35:18 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [RFC PATCH v6 017/104] KVM: TDX: Add C wrapper functions for
+ SEAMCALLs to the TDX module
+Message-ID: <20220506213518.GB2145958@private.email.ne.jp>
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <b4cfd2e1b4daf91899a95ab3e2a4e2ea1d25773c.1651774250.git.isaku.yamahata@intel.com>
+ <16632b27-7a0d-887b-c86e-9e1673840f55@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16632b27-7a0d-887b-c86e-9e1673840f55@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,54 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__msm_console_write() assumes that interrupts are disabled, but
-with threaded console printers it is possible that the write()
-callback of the console is called with interrupts enabled.
+On Fri, May 06, 2022 at 04:56:52PM +0800,
+Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 
-Explicitly disable interrupts using local_irq_save() to preserve
-the assumed context.
+> On 5/6/2022 2:14 AM, isaku.yamahata@intel.com wrote:
+> > diff --git a/arch/x86/virt/vmx/tdx/seamcall.S b/arch/x86/virt/vmx/tdx/seamcall.S
+> > index 8df7a16f7685..b4fc8182e1cf 100644
+> > --- a/arch/x86/virt/vmx/tdx/seamcall.S
+> > +++ b/arch/x86/virt/vmx/tdx/seamcall.S
+> > @@ -50,3 +50,4 @@ SYM_FUNC_START(__seamcall)
+> >   	FRAME_END
+> >   	ret
+> >   SYM_FUNC_END(__seamcall)
+> > +EXPORT_SYMBOL_GPL(__seamcall)
+> 
+> It cannot compile, we need
+> 
+> #include <asm/export.h>
 
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- Note: I checked the other serial drivers and this was the only
-       one that assumed interrupts off for write().
+Thanks, will fix it.
 
- drivers/tty/serial/msm_serial.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 23c94b927776..e676ec761f18 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -1599,6 +1599,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
- static void __msm_console_write(struct uart_port *port, const char *s,
- 				unsigned int count, bool is_uartdm)
- {
-+	unsigned long flags;
- 	int i;
- 	int num_newlines = 0;
- 	bool replaced = false;
-@@ -1616,6 +1617,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 			num_newlines++;
- 	count += num_newlines;
- 
-+	local_irq_save(flags);
-+
- 	if (port->sysrq)
- 		locked = 0;
- 	else if (oops_in_progress)
-@@ -1661,6 +1664,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 
- 	if (locked)
- 		spin_unlock(&port->lock);
-+
-+	local_irq_restore(flags);
- }
- 
- static void msm_console_write(struct console *co, const char *s,
-
-base-commit: 38a288f5941ef03752887ad86f2d85442358c99a
 -- 
-2.30.2
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

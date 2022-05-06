@@ -2,188 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B26C51D05D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAB951D060
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389020AbiEFEt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 00:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S1389029AbiEFExr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 00:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbiEFEtz (ORCPT
+        with ESMTP id S235116AbiEFExo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 00:49:55 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E286B64BDE
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 21:46:11 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id m23so7964482ljc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 21:46:11 -0700 (PDT)
+        Fri, 6 May 2022 00:53:44 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713AF64BDF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 21:50:01 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so5806005fac.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 21:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=ebHe35Gmk78WMJgIfckhHfMIdVOvsLMOAu74q+t4BFo=;
-        b=KYIakOzZUhch4ffbH6b7quOPssgj49bX0KU5QOiFBnElxbHq2FdwP3vT+3h5CcxPwX
-         IrixwIa75q2T+acquFnGzfIdts4a13ILh1TU87vipuJT/zbgQcpdDqgCFu0tnC5cpz6U
-         Y9+dMdFiT+jzafaqB6FpGOzcc4Z3a7vhJ2VOl8ItlzGx194twpwlWA7dyR24EkXKFnPB
-         zFT7GXJaHWZNWdZv7dpJ8UsvZjA67mhWtFEbSSN8OH20bsRBiduvCnEfZEAj+wGvDOo3
-         cOv1n4hJHPM42jtT8AG9DivNuYUg5sH8DJ2TZVNjmADImTQVCElvyU9y7swBwazZ+gPH
-         Cgfw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DbTzwaOIwGb0TT9g7l9scXPT5GJOJT3bNtMetNu/grc=;
+        b=eXe7FpyIvy/UsDfzb+KAq06m2NMeOXCv/ETzKBWhqS0aa07hSWrTl4DVQUOo6NKOY9
+         w0ZfIJlEWQv5Sl1b+pn0sCjhku04Us84QTUu5ijuCvP8heGKe+EG3bb30BjdTGV8stol
+         S4QZtWZfTmvzIdfdW+Knm8pXO9aUCfiSnSzomv+jqlqbDjKstPoNw4ONvn+jbgJsVsBD
+         PKh5+dxJ1RqKbvRvARQ6Wgb5y4GW4b7b5dppVER/XRm/EGGXv589hKLinRYmySy+5tBn
+         QMis9hgc7PMa4HI1D/Mcjz+FdygCrvXyshA2BLzOiSgnDjmyM1KbfG6ElxfznzR+LLVx
+         aTPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=ebHe35Gmk78WMJgIfckhHfMIdVOvsLMOAu74q+t4BFo=;
-        b=4EsggkhepNDW6AAg58mSFYTqVeEth8w2qSCKwsZKeJdvN2iD43/iVA2bZ+9YBd1yu4
-         u4ZpXCil/I8Na1emtjGy9aJrNlK9jO9X6AN0SCP7aRQIl+cz7Cc2/3o4CG6rTIunC+Vs
-         pf2+DDgv976zRvpAt3xMITSe3mdu7vF+MhdZVe5zmnHox+35htm4q5sn78IAnW+zoogI
-         V/KyQVrb/AVbhKixVlHhcLHxI65U1qEPmwQdre+Dwfrn0cVk+ibEo5qbky+jfsFgENL4
-         wbjgM3kj5EI/igBC1HvE55v6mi6e6mjsyg6qqDfrG/GtMAtcZx7kgB9q0RLGrUcrsbSL
-         7m4w==
-X-Gm-Message-State: AOAM5321JsqYDAGN9Q0hbCf90lSBOhPM1yPanWMQwla1T5F9Mse6aSEk
-        Tg929B6lFQVZlCHw6LsC7swDvg==
-X-Google-Smtp-Source: ABdhPJysZR7I61em7Nku7O7OMh143wwbx4uLJtwInXf9AfARWyaAi3ljUGgzzrWjTCGkldCsvVEqYA==
-X-Received: by 2002:a2e:bd86:0:b0:24f:16a6:8c0e with SMTP id o6-20020a2ebd86000000b0024f16a68c0emr919502ljq.450.1651812370252;
-        Thu, 05 May 2022 21:46:10 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id m10-20020a056512114a00b0047255d2117bsm509649lfg.170.2022.05.05.21.46.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 21:46:09 -0700 (PDT)
-Message-ID: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
-Date:   Fri, 6 May 2022 07:46:08 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DbTzwaOIwGb0TT9g7l9scXPT5GJOJT3bNtMetNu/grc=;
+        b=wRdW2XlqsKmXojjbBUbykE5FIxBz+QwJv0qheefo+nfhm9P1awnSPp8D4RYcbeCFij
+         j0Xjgnam/taRVBIZsXWo7AZ2HUaRHjENWGa5KlSnKKz7whRdAOp0cYbydyS93ZUIkEoK
+         wcGX9bM+e+fLxOCxKdb2ZHeGtgxE7gGw9xsMUzESa5gGTlVfOxsYHBNK6sspXYuzsSZ+
+         Qkpj5fytMjmPTuANFYli5aA2f9wCNl3G1zKV7CRQB8IfnBXc0WJJhUuXbakLX19nTZ6K
+         3UibYyyz8JE2DEU37pMweYbDsRtpIkXPNwWuy4NGffLSB4oq4MRjjwjQSUq7dB2jqc/b
+         /G2A==
+X-Gm-Message-State: AOAM530db91M07JneEzGjetC26mvq1N3L/8jzn2phaLOEP9C6psgbkB1
+        dBiJ+YeN8F3Rrt+xBsJwRUvo6997QsCpkChCWzfmHg==
+X-Google-Smtp-Source: ABdhPJxtggnbKMD7VEvQYkEJDSwVOJ5H+Z9F5ubmhLXSslQkDEcU50IdroxLWZO4nFbW3RNSQtfQJ/cxdPEDGtfzVTc=
+X-Received: by 2002:a05:6870:b50d:b0:ed:e8f5:b1cd with SMTP id
+ v13-20020a056870b50d00b000ede8f5b1cdmr565395oap.147.1651812600715; Thu, 05
+ May 2022 21:50:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] percpu: improve percpu_alloc_percpu event trace
-To:     Shakeel Butt <shakeelb@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
+ <20220429214420.854335-3-bhupesh.sharma@linaro.org> <YnSTFRuMDFYclHYh@builder.lan>
+In-Reply-To: <YnSTFRuMDFYclHYh@builder.lan>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Fri, 6 May 2022 10:19:45 +0530
+Message-ID: <CAH=2Ntz3eE2yFQjuqhSr-LZ3_Uqc8NwMyuH7HL1oqymyMkfsQA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: Fix node names for sdhci
+ 'opp-table' nodes (across dts files)
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added bytes_alloc and gfp_flags fields to the output of the
-percpu_alloc_percpu ftrace event. This is required to track
-memcg-accounted percpu allocations.
+Hi Bjorn,
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
- include/trace/events/percpu.h | 17 ++++++++++++-----
- mm/percpu-internal.h          |  8 ++++----
- mm/percpu.c                   |  3 ++-
- 3 files changed, 18 insertions(+), 10 deletions(-)
+On Fri, 6 May 2022 at 08:46, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Fri 29 Apr 16:44 CDT 2022, Bhupesh Sharma wrote:
+>
+> > Since the Qualcomm sdhci-msm device-tree binding has been converted
+> > to yaml format, 'make dtbs_check' reports a number of issues with
+> > node names for sdhci 'opp-table' nodes, as it doesn't seem to like
+> > any 'preceding text or numbers' before 'opp-table' pattern in the
+> > node names.
+> >
+> > Fix the same.
+> >
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 ++--
+> >  arch/arm64/boot/dts/qcom/sm6350.dtsi | 4 ++--
+> >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
+> >  arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
+> >  4 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > index 86175d257b1e..b6df3186e94c 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > @@ -725,7 +725,7 @@ sdhc_1: sdhci@7c4000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc1_opp_table: sdhc1-opp-table {
+> > +                     sdhc1_opp_table: opp-table-sdhc1 {
+>
+> There's only a single opp-table child node of &sdhc_1, so I would prefer
+> that these would just be:
+>
+>                         sdhc1_opp_table: opp-table {
+>
+> Like  what you did in the sm8150 and sm8250 case below.
+>
+> Can you please update this accordingly?
 
-diff --git a/include/trace/events/percpu.h b/include/trace/events/percpu.h
-index df112a64f6c9..a6d640d2cb8b 100644
---- a/include/trace/events/percpu.h
-+++ b/include/trace/events/percpu.h
-@@ -6,13 +6,16 @@
- #define _TRACE_PERCPU_H
- 
- #include <linux/tracepoint.h>
-+#include <trace/events/mmflags.h>
- 
- TRACE_EVENT(percpu_alloc_percpu,
- 
- 	TP_PROTO(bool reserved, bool is_atomic, size_t size,
--		 size_t align, void *base_addr, int off, void __percpu *ptr),
-+		 size_t align, void *base_addr, int off,
-+		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
- 
--	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr),
-+	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr,
-+		bytes_alloc, gfp_flags),
- 
- 	TP_STRUCT__entry(
- 		__field(	bool,			reserved	)
-@@ -22,8 +25,9 @@ TRACE_EVENT(percpu_alloc_percpu,
- 		__field(	void *,			base_addr	)
- 		__field(	int,			off		)
- 		__field(	void __percpu *,	ptr		)
-+		__field(	size_t,			bytes_alloc	)
-+		__field(	gfp_t,			gfp_flags	)
- 	),
--
- 	TP_fast_assign(
- 		__entry->reserved	= reserved;
- 		__entry->is_atomic	= is_atomic;
-@@ -32,12 +36,15 @@ TRACE_EVENT(percpu_alloc_percpu,
- 		__entry->base_addr	= base_addr;
- 		__entry->off		= off;
- 		__entry->ptr		= ptr;
-+		__entry->bytes_alloc	= bytes_alloc;
-+		__entry->gfp_flags	= gfp_flags;
- 	),
- 
--	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p",
-+	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p bytes_alloc=%zu gfp_flags=%s",
- 		  __entry->reserved, __entry->is_atomic,
- 		  __entry->size, __entry->align,
--		  __entry->base_addr, __entry->off, __entry->ptr)
-+		  __entry->base_addr, __entry->off, __entry->ptr,
-+		  __entry->bytes_alloc, show_gfp_flags(__entry->gfp_flags))
- );
- 
- TRACE_EVENT(percpu_free_percpu,
-diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
-index 411d1593ef23..70b1ea23f4d2 100644
---- a/mm/percpu-internal.h
-+++ b/mm/percpu-internal.h
-@@ -113,7 +113,6 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
- 	return pcpu_nr_pages_to_map_bits(chunk->nr_pages);
- }
- 
--#ifdef CONFIG_MEMCG_KMEM
- /**
-  * pcpu_obj_full_size - helper to calculate size of each accounted object
-  * @size: size of area to allocate in bytes
-@@ -123,13 +122,14 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
-  */
- static inline size_t pcpu_obj_full_size(size_t size)
- {
--	size_t extra_size;
-+	size_t extra_size = 0;
- 
--	extra_size = size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
-+#ifdef CONFIG_MEMCG_KMEM
-+	extra_size += size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
-+#endif
- 
- 	return size * num_possible_cpus() + extra_size;
- }
--#endif /* CONFIG_MEMCG_KMEM */
- 
- #ifdef CONFIG_PERCPU_STATS
- 
-diff --git a/mm/percpu.c b/mm/percpu.c
-index ea28db283044..cbeb380c359d 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -1885,7 +1885,8 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
- 	kmemleak_alloc_percpu(ptr, size, gfp);
- 
- 	trace_percpu_alloc_percpu(reserved, is_atomic, size, align,
--			chunk->base_addr, off, ptr);
-+			chunk->base_addr, off, ptr,
-+			pcpu_obj_full_size(size), gfp);
- 
- 	pcpu_memcg_post_alloc_hook(objcg, chunk, off, size);
- 
--- 
-2.31.1
+Sure, let me fix these in v2.
 
+Thanks,
+Bhupesh
+
+>
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-100000000 {
+> > @@ -2609,7 +2609,7 @@ sdhc_2: sdhci@8804000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc2_opp_table: sdhc2-opp-table {
+> > +                     sdhc2_opp_table: opp-table-sdhc2 {
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-100000000 {
+> > diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> > index fb1a0f662575..87a5d72b2ca0 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> > @@ -497,7 +497,7 @@ sdhc_1: sdhci@7c4000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc1_opp_table: sdhc1-opp-table {
+> > +                     sdhc1_opp_table: opp-table-sdhc1 {
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-19200000 {
+> > @@ -941,7 +941,7 @@ sdhc_2: sdhci@8804000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc2_opp_table: sdhc2-opp-table {
+> > +                     sdhc2_opp_table: opp-table-sdhc2 {
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-100000000 {
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > index 2700a8145cb9..e265d61f7c05 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > @@ -3563,7 +3563,7 @@ sdhc_2: sdhci@8804000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc2_opp_table: sdhc2-opp-table {
+> > +                     sdhc2_opp_table: opp-table {
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-19200000 {
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > index dc2562070336..5ca16f76ddeb 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > @@ -2937,7 +2937,7 @@ sdhc_2: sdhci@8804000 {
+> >
+> >                       status = "disabled";
+> >
+> > -                     sdhc2_opp_table: sdhc2-opp-table {
+> > +                     sdhc2_opp_table: opp-table {
+> >                               compatible = "operating-points-v2";
+> >
+> >                               opp-19200000 {
+> > --
+> > 2.35.1
+> >

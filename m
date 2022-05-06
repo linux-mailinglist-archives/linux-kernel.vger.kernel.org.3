@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3813051DDC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E22651DDC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443868AbiEFQqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S1443872AbiEFQrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349789AbiEFQqp (ORCPT
+        with ESMTP id S1443870AbiEFQrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:46:45 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3005A6D4D6
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:43:02 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id n10so15524002ejk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:43:02 -0700 (PDT)
+        Fri, 6 May 2022 12:47:42 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B056D4EE
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:43:58 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id x18so7961917plg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uXADz01AeFewV6iYhU+m/XHBp5vt6rj8FBguzHNht/w=;
-        b=naZPiE9y/1tBVgRCbc98NpZBEX2LMXBzApytnp9TzMwbwRNXK+tzub9jPsBFe5hq5X
-         WDLHxdINBwyNtCXfxLXl5MaU8MVJ5n8p6oMht4UJQg4HPCT89Ytq4nHHjVbX6WjJXqrh
-         TrubfMnrWO+eI+jRzS/ANPiGh2VOdXvMvsOXUf6V8Khdo1pM2WYNXnbwX122u6HlnNAr
-         Wbtzoq7QFNYRgqJOH9YbFKH70SrOoKEGKFpSzN0kiFDPbFNqrujUWZCEBhBilEjSeRas
-         x6kv+TfxBP+FW6lKcr2yDjIj6UbuCF71CPfNjr0tn9fyYMtHKSv5f3CX7vmq6DKNDHKM
-         zbrQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bh6CSxzg+6JEuytBMw9j2GAuoj8y6isr1C8LlTE1oj0=;
+        b=Wz5z/M4s4vEelC1rO7cvaON/5FHKnFmJUoy9cc/K0NCPWdiNWFx7lnSZCQI8WNZgRR
+         oU5QrhdRhNqo7EbI18EeYzFv9eBZvL/FWHQ386cV0Kqgw0omywbeyeU1VKkDnV1eSsxX
+         XkwwaphhHcbe5+IVaU1X4s7tc0XwptOkfXx0A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uXADz01AeFewV6iYhU+m/XHBp5vt6rj8FBguzHNht/w=;
-        b=q90LxDnGSB5hhFu4UZagJ2nIn3E9q7Tkg8xmc/1a6IolhMTj+vBirnmBkvzSY2SeJr
-         BfCF3uBmn51uZDdkjSPlqyQQFEApjzKMT8nHaUHJOInARCEqp2KJFFLi7ILidA34RAMu
-         gVBbiZHvzzi2BgCLGia4AXpcSQXQI2c7fgasCQQitcKV9XltDyXevzxOHl4xuI3kpuzL
-         d7lkriDwpajpjA04sCUD07hFryw1HBcn5zxSOdzf6ZcCiQAQ+ZgX6Tyiyb9TdpgPCBar
-         fgKRWo+1m8C91ahorGdKnwzXfYBpACwvn/bO/BVEGP6kyQKX6Gyqw+1H+P3jEttMjQ4O
-         BvHw==
-X-Gm-Message-State: AOAM531WxPUxdRMpFYeagcxUZ7Ww2t1rMvbh/PAIJM1hcsWsKFBvQrtO
-        w8u+cmANLlb5h35rhjt8WMtQWg==
-X-Google-Smtp-Source: ABdhPJwTnirkXiophxQdfZTgJxDwbQCMukkaJamT/JW2zZO9KNxKhPH6DgHhjHeJmHXyDDlbQnkE5Q==
-X-Received: by 2002:a17:907:7242:b0:6f5:2921:a89c with SMTP id ds2-20020a170907724200b006f52921a89cmr2583932ejc.445.1651855380805;
-        Fri, 06 May 2022 09:43:00 -0700 (PDT)
-Received: from [192.168.0.231] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y1-20020a50eb01000000b0042617ba6392sm2431843edp.28.2022.05.06.09.42.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bh6CSxzg+6JEuytBMw9j2GAuoj8y6isr1C8LlTE1oj0=;
+        b=rZydF6xoNPpZjf7IDUesiKRj1fgPIboOfQt8Z6EuCHhWe1btZHvPxxazY2PTyV56bz
+         4ShfcjWZx4AszritlnqYKIHcP6hAhIBCF4U5CccGrlfWIMbY2Ht1Am50nTnyd/WDQG2l
+         aBCK1oqrVG8VhFChkwXn1GfjVNsR0JNDeOundYQaXWo9DO//u62nC8M643jCj1Lhqw8h
+         H6BC70gvfHO6m9D+FznVKCmk1cqg32dZ6NAUa6vv1xbCxIRcA+uSOHiB/RSS/97Ubv7F
+         WT/X69fOWmD6axJYhIAmR7Xm0CQbulvhh4Z8ZXdnIRpDX1ROAv8rxlFre8O00G6ntvto
+         +sjA==
+X-Gm-Message-State: AOAM533i2XEvn2bfE0NNZJQqhbRj4qbsmj8aAK0RgkGV+6Ayg17xwCt1
+        ebr/IdwurPtOw13o9CZ/iX+kfQ==
+X-Google-Smtp-Source: ABdhPJxF4L/wGCp4qcxZiMgtimiFuwwc7nuYDpCZz76X/jycgdjKkXzFHiicexTd65Ug7W5tdFP2rQ==
+X-Received: by 2002:a17:903:94:b0:15c:f928:a373 with SMTP id o20-20020a170903009400b0015cf928a373mr4651954pld.26.1651855437956;
+        Fri, 06 May 2022 09:43:57 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
+        by smtp.gmail.com with UTF8SMTPSA id c14-20020a170902848e00b0015e8d4eb205sm1969908plo.79.2022.05.06.09.43.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 09:43:00 -0700 (PDT)
-Message-ID: <6f28acde-2177-0bc7-b06d-c704153489c0@linaro.org>
-Date:   Fri, 6 May 2022 18:42:59 +0200
+        Fri, 06 May 2022 09:43:57 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:43:55 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YnVQS5twzZ/q1iWu@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
+ <YnK79i3NiTdMmC98@google.com>
+ <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
+ <YnP/PZViq1u0f2yl@google.com>
+ <20220506030107.GD4640@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     "Ewan D. Milne" <emilne@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.smart@broadcom.com
-References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
- <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
- <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
- <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
- <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
- <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
- <Yl+wJ7xSHzWmR+bR@infradead.org>
- <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
- <24bfb681-faec-3567-3089-9cd5ee182710@linaro.org>
- <1bb53912-c5c3-7690-e82f-cf356ca87404@huawei.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1bb53912-c5c3-7690-e82f-cf356ca87404@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220506030107.GD4640@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,47 +85,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 15:04, John Garry wrote:
+On Fri, May 06, 2022 at 08:31:07AM +0530, Pavan Kondeti wrote:
+> On Thu, May 05, 2022 at 09:45:49AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, May 05, 2022 at 08:56:18AM +0530, Pavan Kondeti wrote:
+> > > On Wed, May 04, 2022 at 10:46:30AM -0700, Matthias Kaehlcke wrote:
+> > > > On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
+> > > > > During suspend read the status of all port and set hs phy mode
+> > > > > based on current speed. Use this hs phy mode to configure wakeup
+> > > > > interrupts in qcom glue driver.
+> > > > > 
+> > > > > Check wakeup-source property for dwc3 core node to set the
+> > > > > wakeup capability. Drop the device_init_wakeup call from
+> > > > > runtime suspend and resume.
+> > > > > 
+> > > > > Also check during suspend if any wakeup capable devices are
+> > > > > connected to the controller (directly or through hubs), if there
+> > > > > are none set a flag to indicate that the PHY is powered
+> > > > > down during suspend.
+> > > > > 
+> > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > > > ---
+> > > > > v14:
+> > > > > Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+> > > > > 
+> > > > > v13:
+> > > > > Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+> > > > > Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
+> > > > > as we have a new dt property wakeup-source.
+> > > > > 
+> > > > > 
+> > > > >  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+> > > > >  drivers/usb/dwc3/core.h |  4 ++++
+> > > > >  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+> > > > >  3 files changed, 48 insertions(+), 13 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > > > index 1170b80..898aa66 100644
+> > > > > --- a/drivers/usb/dwc3/core.c
+> > > > > +++ b/drivers/usb/dwc3/core.c
+> > > > > @@ -32,6 +32,7 @@
+> > > > >  #include <linux/usb/gadget.h>
+> > > > >  #include <linux/usb/of.h>
+> > > > >  #include <linux/usb/otg.h>
+> > > > > +#include <linux/usb/hcd.h>
+> > > > >  
+> > > > >  #include "core.h"
+> > > > >  #include "gadget.h"
+> > > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > > >  
+> > > > >  	platform_set_drvdata(pdev, dwc);
+> > > > >  	dwc3_cache_hwparams(dwc);
+> > > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > > >  
+> > > > >  	spin_lock_init(&dwc->lock);
+> > > > >  	mutex_init(&dwc->mutex);
+> > > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  {
+> > > > >  	unsigned long	flags;
+> > > > >  	u32 reg;
+> > > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> > > > >  
+> > > > >  	switch (dwc->current_dr_role) {
+> > > > >  	case DWC3_GCTL_PRTCAP_DEVICE:
+> > > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  		dwc3_core_exit(dwc);
+> > > > >  		break;
+> > > > >  	case DWC3_GCTL_PRTCAP_HOST:
+> > > > > -		if (!PMSG_IS_AUTO(msg)) {
+> > > > > -			dwc3_core_exit(dwc);
+> > > > > -			break;
+> > > > > -		}
+> > > > > +		dwc3_check_phy_speed_mode(dwc);
+> > > > >  
+> > > > >  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > > >  		if (dwc->dis_u2_susphy_quirk ||
+> > > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > > >  
+> > > > >  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > > >  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > > > +
+> > > > > +		if (!PMSG_IS_AUTO(msg)) {
+> > > > > +			if (device_may_wakeup(dwc->dev) &&
+> > > > > +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
+> > > > > +				dwc->phy_power_off = false;
+> > > > > +			} else {
+> > > > > +				dwc->phy_power_off = true;
+> > > > > +				dwc3_core_exit(dwc);
+> > > > 
+> > > > I found that shutting the PHYs down during suspend leads to high power
+> > > > consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
+> > > > not shut down).
+> > > > 
+> > > > It would be interesting to know if this also impacts other non-hub
+> > > > peripherals. Unfortunately I can't test that, the hub on my system is
+> > > > soldered to the board.
+> > > > 
+> > > > I understand that shutting the PHYs down might be beneficial in terms
+> > > > of power on some systems, however on those I'm looking at we'd strongly
+> > > > prefer to save the 65mW of power consumed by the hub, rather than
+> > > > whatever smaller amount of power that is saved by powering down the
+> > > > PHYs.
+> > > > 
+> > > > Could we introduce a sysfs attribute (or some other sort of knob) to
+> > > > allow the admin to configure whether the PHYs should remain on or off
+> > > > during suspend? That is assuming that it is actually desirable to power
+> > > > them off on some systems.
+> > > 
+> > > The result may vary across SoCs also. The current proposal is to keep PHY
+> > > powered during system suspend if any of the downstream USB devices are enabled
+> > > for wakeup. This also includes USB2/USB3 root hub. If one wants to keep PHY
+> > > always powered on even when no device is attached, they can do so by enabling
+> > > wakeup (echo enabled > /sys/bus/usb/devices/usbX/power/wakeup). This is anyway
+> > > needed if you want to detect a peripheral attach during system suspend.
+> > 
+> > My concern is that it is not evident for an admin what causes the high power
+> > consumption of the USB client (if they detect/localize it in the first place),
+> > and even less that wakeup needs to be enabled to mitigate it.
+> > 
+> > Why can't we just put the PHYs in suspend, rather than taking the controller
+> > down completely during suspend?
 > 
->> For example scsi_proc_hostdir_rm(): 'present' and 'proc_dir' members.
->> Where should they be stored? Should they be moved to the Scsi_Host?
->>
+> Agreed and I also have the same question.
 > 
-> I don't think scsi_Host is appropriate as this is per-scsi host 
-> template, unless you see a way to do it that way. Alternatively we could 
-> keep a separate list of registered sht, like this:
-> 
-> struct sht_proc_dir {
-> 	int cnt;
-> 	struct list_head list;
-> 	struct proc_dir_entry *proc_dir;
-> 	struct scsi_host_template *sht;
-> };
-> static LIST_HEAD(sht_proc_dir_list);
+> I don't know the background on why DWC3 chooses to power down the PHY(s)
+> during system suspend. Probably it is beneficial in some board designs.
+> Atleast this patch series provides a way to wakeup the USB from system
+> suspend, which also can be used not to power down the PHY(s). If all the users
+> of DWC3 agree that powering down the PHY is bad, then we can do something
+> about it.
 
-Hi everyone,
+I came across this commit while doing a bit of archeology:
 
-It took me some time to get back to this topic. I moved the proc_dir out
-of SHT, how John proposed. Patches do not look that bad:
-The commit:
-https://github.com/krzk/linux/commit/157eb2ee8867afbae9dac3836e4c0bedb542e5c1
+  commit c4a5153e87fdf6805f63ff57556260e2554155a5
+  Author: Manu Gautam <mgautam@codeaurora.org>
+  Date:   Thu Jan 18 16:54:30 2018 +0530
 
-Branch:
-https://github.com/krzk/linux/commits/n/qcom-ufs-opp-cleanups-v2
+  usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
 
-However this does not solve the problem. The SHT has "module" which gets
-incremented/decremented. Exactly like in case of other drivers
-(driver->owner).
+  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
+  host bus-suspend/resume") updated suspend/resume routines to not
+  power_off and reinit PHYs/core for host mode.
+  It broke platforms that rely on DWC3 core to power_off PHYs to
+  enter low power state on system suspend.
 
-I started moving the SHT->module to a new field scsi_host->owner and
-trying to use the parent's driver (so PCI, USB) owner.
-I am not sure if it is correct approach, so before implementing such big
-change affecting multiple subsystems (USB, ATA, SCSI) - can you share
-ideas/opinion?
+  Perform dwc3_core_exit/init only during host mode system_suspend/
+  resume to addresses power regression from above mentioned patch
+  and also allow USB session to stay connected across
+  runtime_suspend/resume in host mode. While at it also replace
+  existing checks for HOST only dr_mode with current_dr_role to
+  have similar core driver behavior for both Host-only and DRD+Host
+  configurations.
 
-The Work-in-Progress looks like this (last commit):
-https://github.com/krzk/linux/commit/17609caecd53df20f631703ea084a70e7735b5d7
+  Fixes: 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host bus-suspend/resume")
+  Reviewed-by: Roger Quadros <rogerq@ti.com>
+  Signed-off-by: Manu Gautam <mgautam@codeaurora.org>
+  Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 
 
-Best regards,
-Krzysztof
+So apparently powering off the core and PHYs is needed on some
+platforms.
+
+We could introduce a DT property that indicates that keeping the core/PHYs
+on is supported. Another hint could be the fact that the controller is
+marked as wakeup capable, however that would still power the core/PHYs
+down if the 'wakeup-source' property isn't set for a controller that is
+technically wakeup capable.

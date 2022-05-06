@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E3351CDA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456DE51CDA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387450AbiEFAPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S1387431AbiEFAOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387441AbiEFAOx (ORCPT
+        with ESMTP id S236541AbiEFAOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:14:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417D23A5DB
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651795872; x=1683331872;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PDsnw3ASTnR8ThsfVBTdSrYjKJCXtE4HRyK2jWA9t1s=;
-  b=K1Iu71Ggz2xxVpRg1du8fYPm3cwK4jof4vDob2kVE2NpCJ7t2xHcDQoj
-   RvVt65O1Bq4RA/TPHeXeJSLRBWnftgEQyVyyalBhD5nYI+460yLITC/C1
-   IX8kzinmdcNhUhdZUIKH+fM0+mh7K3TvtISOYX2U9tyxGvoMu5365pE1X
-   dj89mMQozGEGnPIiCh3B0gY6BkMu61DaZ01aPNQQSgxL1hzpbx2Ex1HZP
-   6N/fVoA9tOEq+eLCTrrguYaXmcm5sZF9IeZ3+TH7dn3PCBR4d9kNFSVKO
-   OV+6DRLmUSSieyElsbiTp795p62lAH21Q1/Kx1NwvNdXfb/gD89IgYfMm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331285498"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="331285498"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:11:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="585649802"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 May 2022 17:11:10 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmlYr-000Cru-GR;
-        Fri, 06 May 2022 00:11:09 +0000
-Date:   Fri, 6 May 2022 08:10:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [intel-tdx:kvm-upstream-workaround 99/361]
- arch/x86/kvm/vmx/vmx.c:4410:5: error: no previous prototype for function
- 'vmx_get_pid_table_order'
-Message-ID: <202205060807.LvZYGFIP-lkp@intel.com>
+        Thu, 5 May 2022 20:14:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE733A199
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:10:49 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id D9EA71F45E0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651795847;
+        bh=8HWc5okoCATXQtSjnHcBZ94vd08tA8gZnAW7NIzIUzc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=E69M8Dpbytxm+liBztEXWxOxgJF11w/CzN4vstE4Ks1/CK+R54ymWAG8WhQ11Z3it
+         UTIE6yFWtxaLarXDEtc1FXzyvLjbznINeNlstPpA/8NTxjU+0cl6o7qv4HCz9h8i2o
+         YM3d+HYGQ09TSTZDF+orUvlE6/iycVSKZ98/O8I54xjCdcd8/z5KAFanNwPBZIRDQq
+         QDCWPKlrh/drnIXxITfMDB+g+ErN5tUhFyTcnvdRojYEy1/dguLfyKPtPIXA7ynU7a
+         5af+OKmMvexH7qR6EjSif8Bdmzw4QMIXr7cl/RyeaX8mvcbPPS7sASgtcr6r7aQrRL
+         bjxSeX9NGH/gQ==
+Message-ID: <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
+Date:   Fri, 6 May 2022 03:10:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-12-dmitry.osipenko@collabora.com>
+ <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   3b5b338cdf10dca7a2435d1f86b2dd9f1a3ad833
-commit: 833404c859e4357ba656b2d19d5a405ba7bf4ec4 [99/361] KVM: VMX: enable IPI virtualization
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220506/202205060807.LvZYGFIP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/833404c859e4357ba656b2d19d5a405ba7bf4ec4
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 833404c859e4357ba656b2d19d5a405ba7bf4ec4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+On 5/5/22 11:34, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
+>> Introduce a common DRM SHMEM shrinker. It allows to reduce code
+>> duplication among DRM drivers that implement theirs own shrinkers.
+>> This is initial version of the shrinker that covers basic needs of
+>> GPU drivers, both purging and eviction of shmem objects are supported.
+>>
+>> This patch is based on a couple ideas borrowed from Rob's Clark MSM
+>> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
+>>
+>> In order to start using DRM SHMEM shrinker drivers should:
+>>
+>> 1. Implement new purge(), evict() + swap_in() GEM callbacks.
+>> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
+>> 3. Use drm_gem_shmem_set_purgeable_and_evictable(shmem) and alike API
+>>     functions to activate shrinking of GEMs.
+> 
+> Honestly speaking, after reading the patch and the discussion here I
+> really don't like where all tis is going. The interfaces and
+> implementation are overengineered.  Descisions about evicting and
+> purging should be done by the memory manager. For the most part, it's
+> none of the driver's business.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Daniel mostly suggesting to make interface more flexible for future
+drivers, so we won't need to re-do it later on. My version of the
+interface is based on what drivers need today.
 
-All errors (new ones prefixed by >>):
+Why do you think it's a problem to turn shmem helper into the simple
+generic memory manager? I don't see how it's better to have drivers
+duplicating the exactly same efforts and making different mistakes.
 
->> arch/x86/kvm/vmx/vmx.c:4410:5: error: no previous prototype for function 'vmx_get_pid_table_order' [-Werror,-Wmissing-prototypes]
-   int vmx_get_pid_table_order(struct kvm *kvm)
-       ^
-   arch/x86/kvm/vmx/vmx.c:4410:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vmx_get_pid_table_order(struct kvm *kvm)
-   ^
-   static 
-   1 error generated.
+The shmem shrinker implementation is mostly based on the freedreno's
+shrinker and it's very easy to enable generic shrinker for VirtIO and
+Panfrost drivers. I think in the future freedreno and other drivers
+could switch to use drm shmem instead of open coding the memory management.
 
+> I'd like to ask you to reduce the scope of the patchset and build the
+> shrinker only for virtio-gpu. I know that I first suggested to build
+> upon shmem helpers, but it seems that it's easier to do that in a later
+> patchset.
 
-vim +/vmx_get_pid_table_order +4410 arch/x86/kvm/vmx/vmx.c
-
-  4409	
-> 4410	int vmx_get_pid_table_order(struct kvm *kvm)
-  4411	{
-  4412		return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
-  4413	}
-  4414	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The first version of the VirtIO shrinker didn't support memory eviction.
+Memory eviction support requires page fault handler to be aware of the
+evicted pages, what should we do about it? The page fault handling is a
+part of memory management, hence to me drm-shmem is already kinda a MM.

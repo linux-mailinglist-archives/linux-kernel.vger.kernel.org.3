@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BA151DE1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E7251DE1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444082AbiEFRKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S1444075AbiEFRKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444052AbiEFRKm (ORCPT
+        with ESMTP id S1344061AbiEFRKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:10:42 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604876A076
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:06:58 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m62so4807718wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 10:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FBQ5hlnrPgvY98dCxQVZhYMqkwyj+NDrFVgpOGr6MV8=;
-        b=VQyoQu0KM6R/80GMq+jm98nrJ7+f9yVAZnmO7fzMOHJb+MBLhnGTD2GW3ZPBHgesHG
-         4ZPQJyVCUzrFZI8apzvoRUXKAN9EP5nO0SAnY76iyS2WEjJvzvPY8JhRRbXgF9hP6ev/
-         jgjCQjinKu7539EG4+YIg0rTBSUZbI0WfhAJRYVV6Nx8H4WLD2W/DJaDVuQm46iSp1m1
-         8/bRqk+9DRkUok/pNO/7DoNv/AevDFtQD8QcFDi/YuyDA4+NOPgz2dZjUimhnTvMqZHf
-         MsdWeiIRe/bL9ZIGPWG/gWWDYmWRM4efq9yGkl52EF3xF7fGMm6Ytxv3G0Co72sGXUAO
-         /VzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FBQ5hlnrPgvY98dCxQVZhYMqkwyj+NDrFVgpOGr6MV8=;
-        b=mo7njwC/XfxKT5VDtZ1PNXno3ersl0zfJpTyCAVaHjzEDG7S2SNoLrdRiHqz3dpzoJ
-         0VE5GZGFtR6WX3EBASPTZLl1bjonnUFY5NWVtdzPm5boBFneVY+4/I31CNfQnhfzpS3I
-         v4Th68lcVaWYNIDxGxs8PYR34FTcrh2krLcYmUQ5qEkbBYHM+acosqP0xd2cVLWMJtek
-         e60oJ6l267weAriiPtzvTjKhxDLYzpZF4R9qKNnRxuKgBZSCfRK9tbJu3qeB1qUIjpkU
-         f25hfCJ+8INh5oUZy/+MD76kcVPpnxJceV7z6Yg1bm/3wvkIm/hkuJwB5MyhD68Xbwut
-         gp6w==
-X-Gm-Message-State: AOAM531cukYhG1vU8UhcB9kn+ptiEVO27majqrNfOPhMrTtrduxVSMA0
-        ba0SbV2VsvCUayK9N8lsaC5B7jvXvqvirqj32oq5Kg==
-X-Google-Smtp-Source: ABdhPJwBXHUSv6ADnwsWRsDl9+SFc/pBZrb9mVPF0s4MK/FEF+vP0Nv32HPgY5DZASA/CYENlpFBOZ4HDNEAyWrOrY8=
-X-Received: by 2002:a1c:a301:0:b0:392:9bc5:203c with SMTP id
- m1-20020a1ca301000000b003929bc5203cmr4272578wme.67.1651856816754; Fri, 06 May
- 2022 10:06:56 -0700 (PDT)
+        Fri, 6 May 2022 13:10:38 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D036A076;
+        Fri,  6 May 2022 10:06:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XsYNJnergFJEeVJxVcfrGM/n0rSeAORaunQiHEjdykNSwq5gCwnlansOqOYSJWI4NNVukdzxW1FwOBvvQlaW46jNGFJd+5wXPmpe+uBUA+ygICTcEIMkyEzCC2rXe+PQ2IMiTtAH38ZYFHuWBDhoO19RnRlZ47WAZgKzignsVgzbABx/5VE3e0jQe7XfzTuBZX0IQ3gN4dJ3VIQYH+EiSEDvuPZ7/rJzZ82r2rLBmcUYQ45FJvcRzKOOidbkFC8fs+1y9i7JzAtBlBVB/7x/u94iT/L9MaFB461GuJPBhJH4K5DtqCAdKPvTo94lgAXSbrzchURzmzmcbe4sjcg3cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tJOS87KtLFwZivYb0dt5lBTdgIqE7icDBfC9w9CN15g=;
+ b=DrbByASXNCYp4u2O3i3pPEVz3wUt8h47tTiLnTbKG8bUTEhUwKJ4ZBPFtH3YmgNndPtxaOCQIBhUtNXw2Z1Uq9jqdnGhwqXbvnCCdfKk0iGMX/cLG0apEoPBtgtgH0HLuYPgTTq9bSMHk6Ga3YAvh/8BhTFYiGy5m8ns69XyPB3Th+y5fH/rXjtXxbRTOsNE0qkdMPGN15sYHDDvZ08kXaNe+KjqI9pGGm5bLbm2HNCqbfIGV1dE8cYsdBUVoKg/6yw7hr4l6PnKKFhHGfHZsHhbDCcWJNjqB+9VNhOLm8L1h2Wzt7hA2wiH61NoIJ+gcLvAA9pGJXIKhyTnvDmn5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tJOS87KtLFwZivYb0dt5lBTdgIqE7icDBfC9w9CN15g=;
+ b=rjhhgh6SSiOU78NA7h/58DBNKvgSX16XE8sr17dtVlv7pAmr2kBsikZJYTVkf321JkruHOPim/zgkWxegf0ixavbR6XttZaay9GeMTz/23poMuLoDDdAFabGKswiBj73M1xITL/pGLGHx4+cEDWGFJgzCs332yF1OM1/0i564SavFgSrb2QYYndDuFWUGOUgm6RaQhbUH4QMM5FGX2dlejsXMSjr7bpQPdkbfGZwJPAPeG7TBPmH8xgrm+kSp7VxrM6qcHp/KZ61t/HnEFzwDNxlXffRRQr7/oiLUWyzpzZ/zXwRy9SIkh2YKNGEkRJFm6JTUL6HP4EFF2y1FXPVFw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB3065.namprd12.prod.outlook.com (2603:10b6:5:3c::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Fri, 6 May
+ 2022 17:06:54 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5206.028; Fri, 6 May 2022
+ 17:06:54 +0000
+Date:   Fri, 6 May 2022 14:06:53 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <20220506170652.GE49344@nvidia.com>
+References: <20220506160151.GA596656@nvidia.com>
+ <CAHk-=whZZvzpMHPSWSUWV3tq7VEZW_m-SJqwEDMzYVHdYV_UDA@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whZZvzpMHPSWSUWV3tq7VEZW_m-SJqwEDMzYVHdYV_UDA@mail.gmail.com>
+X-ClientProxiedBy: MN2PR19CA0069.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::46) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220506122601.367589-1-adrian.hunter@intel.com> <20220506122601.367589-3-adrian.hunter@intel.com>
-In-Reply-To: <20220506122601.367589-3-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 6 May 2022 10:06:42 -0700
-Message-ID: <CAP-5=fWx7kL=d76eSznoz_phiaq=J3OhJEr3KJuYodM+QbTXkA@mail.gmail.com>
-Subject: Re: [PATCH V2 02/23] libperf evsel: Add perf_evsel__enable_thread()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4d992b8-77a0-414c-889f-08da2f82d1c9
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3065:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB306521AC0CF02B5DF48667FAC2C59@DM6PR12MB3065.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c+ggGHyaFi7kcUtJys0WyY97+f+zBOrJRgEfwmNfE/ZZQ842V7EEWrrVa36/O0DVsca6l/Qm4czXOTMs+UhJOr3JefdmdKSRQNWHc1zfZcMB7A91gLZPk57OKNR2iFNoiw5iZqDvWGS6kSSfbDpO5IJp008wvov6gO9s0nHHDS0o3RC3AIxDaWbMaO1g4077psRH/TpBMA7DY2RysDvazZ/+BZKPuJCq6nbK6aY9kWrPBpMewxSdUBtU77vtdcOEx3ZzeQ3KL0W8Ophq0W37mBRqejUi4YcmzpnE4eloZnwTdN596Is1CFbyYDoD9iGNOgmp/axjYXN00YV5+hGrws+BVZ+uwhGWEztkskijjb5tsmnXVGwKN/VbWJBqxgQYCgsaizXSRAQrgcrP2G1L7sg2bAi0xYchdiPHKV6DCQNPCfaMUCINXnWko88c6AaWVqWCPQmRPuf26reUdMjIPDZ92yQHU9DUkD6XwIHr0zzffmkz+Ob73z/L9q+jPvanfueMqSCM/tC4piYRepXsc2zB+DJ8Mq7Mg9vC4da83IMI6t9ic+VfpgsroqNvT0m3b17bbjUb+mQw/5GDQXFr41M0xyP/WlmWJgPIsY84jX+zIGzqa+mcc/CEwpzqkeF5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(2616005)(5660300002)(6512007)(26005)(186003)(36756003)(1076003)(107886003)(83380400001)(2906002)(53546011)(66476007)(6486002)(6506007)(66556008)(38100700002)(54906003)(6916009)(33656002)(508600001)(8676002)(4326008)(66946007)(4744005)(316002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dW+FOm76wMt/nhUFs9KEmJ6UZsODcBjV6V/ZgNeFCQ/S7E9RMNc3hDB0GZm5?=
+ =?us-ascii?Q?zLzKOUFU1L3PuycQjUqZ3Xf/Z9HiRtJb21L33VN8KzX0TkUQwmAyZHOvd6eq?=
+ =?us-ascii?Q?Akt3NsbNtaypba0HJOXSUXJrh4Zbtbp4w1eZBwU5zu3dR7s90Y/9174H94bf?=
+ =?us-ascii?Q?lQ3Gx09OCN3mIdip75IYZsrdHS8e1hEETffoCa/OFs7QoEXQ2yTs+hok2ax9?=
+ =?us-ascii?Q?BzLFykU2kJBHuYEDXMY11G12YiKmo2s02k4JI9eqzNF4nYFBWJIpsYD3M/nV?=
+ =?us-ascii?Q?c4xHKqXJ4LREyiZLIjPtFciSxR6PXW7UGJPfI9gixXat9FPVbImKz2Una3MO?=
+ =?us-ascii?Q?wD35ttrJxn4Jy3Pdhf12XOLkkEIYTFk4f40grLcdk0Py+4UJA/4gQVGLHzlC?=
+ =?us-ascii?Q?eU3GhZyDNnmfuZkfCAtsC/ZUU/geZTvm751b3C605FBlZFFATiTtd0BXrlfD?=
+ =?us-ascii?Q?UeH7RH7BTHFInKl3kjWlxV9vAZJC6MBqlxvNSH9OXSkO0SkdctvFdqWyjxEo?=
+ =?us-ascii?Q?fQWrpA00dfWRXVx9UGQvw266ayJVqjHnC+jCwKWH2ZDGWGcWfJ9VuBpUaQR3?=
+ =?us-ascii?Q?UUbf60mcm4geV/biyI2St9MK6DHBe5CZyF8P5msqHrGyM9AfeKJyeN3vQFuR?=
+ =?us-ascii?Q?UMNf8P8az0jCSPLFToHjNch/xZtN3kO0a/fL7ivhqv740LlfMvWgRERuyhkN?=
+ =?us-ascii?Q?Oxt7I+11zogId8nJU+5T/R5qLGrF3j/CzYqDCKAOBd+vL9B1i/GYgHd0Mhia?=
+ =?us-ascii?Q?+ik9OYjCxiu2ZR8l2NFuNCOrg1EUyAYlzK6TAlddGeIjL6N/R9wwDLu4jY3n?=
+ =?us-ascii?Q?W4JI6UThTwp3YMoDI58alu24f8CKNWs2UPQZzl4JZxT+pNDh7avnXudJ4qrI?=
+ =?us-ascii?Q?Jf9dlwaZfmiTrZnnOjljMTbMqm4hhnVU5hBhJ8u7UcF73Q/gMbAxpsCTes69?=
+ =?us-ascii?Q?r56uD89nNN/IB6n61iAFXdY4H2sTLUTfU1cQ1ZNZmGuxDkcurqYc+lI1YwAG?=
+ =?us-ascii?Q?mP8yyBIUx6y7BjgWEXpCln4hwEGM/QZtjTP0AKzX7ZV29ZvmKNCEtvR7Hr1w?=
+ =?us-ascii?Q?cg+HnuCj9q/mWuskA3V/dFgSdGdlNPIbfmvQKJqM6OL1s6Mv3M9frFgGV6BO?=
+ =?us-ascii?Q?JeMGkbcxqLqUriTV2ku2iVn7Zi3sm0625FI44MhPFmy5+SHUnaofGqixrP10?=
+ =?us-ascii?Q?DQCMFHlAzaZtklSeifbkyxdymQDpgcec5IPdo8jhOuqkofWMbYsdQuSgm76m?=
+ =?us-ascii?Q?2mfLvlwFyiDPJbg9P7B4mDDRSj182DoaF3JhWPY55CDLl1IGsrcausq0jnul?=
+ =?us-ascii?Q?fmKbyKAfy17PYohyH/0GQQZGvvi0AfxEGLovqHZEuSZsYT5EUAOYoChr/I+Z?=
+ =?us-ascii?Q?7deLztjEaxNlTSsfj+mK9Im8esN47TH8cXRa43xw6vd1iHd8w8cJ+1uxHENk?=
+ =?us-ascii?Q?Cza3zL2flBFPgqgMSbkOgnH96ZhZVi2eUtYr5JDjpglnZbGnEjbJnE4IDZl9?=
+ =?us-ascii?Q?ZkGVh9R7R4V2TynusRzEL/LdMMm/sz/Ef46cAcZ0alDeaNJSiUjrDFq/NWnv?=
+ =?us-ascii?Q?VtZtJ6jOqtv3OOQdmIYRxoub2gSR/JazqfI9KscJ7p6b0KoAetnWXP1oXCrR?=
+ =?us-ascii?Q?qIcaHx/lW7oDWBzSbS3StR8yT1+V675r6Dnz7YRg/VdSPtcAVQuanTZ52r/f?=
+ =?us-ascii?Q?99nyx61wGYXeF+bM/tcRD+Yqub1lLScgO2VZVNechkXb0rzAA/Q79z0DkFpg?=
+ =?us-ascii?Q?6Vx+0HuQqg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4d992b8-77a0-414c-889f-08da2f82d1c9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 17:06:53.9808
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xW40zfX5vWARpONAbCU4EGPneYc68xTWndSnqb22UgzMVL5akOignSosrIgYYR7g
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3065
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Add perf_evsel__enable_thread() as a counterpart to
-> perf_evsel__enable_cpu(), to enable all events for a thread.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Fri, May 06, 2022 at 09:57:07AM -0700, Linus Torvalds wrote:
+> On Fri, May 6, 2022 at 9:01 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> >  6 files changed, 92 insertions(+), 103 deletions(-)
+> 
+> I couldn't for the life of me understand how you got to that diffstat,
+> since everything I tried gave me
+> 
+>  6 files changed, 85 insertions(+), 96 deletions(-)
+> 
+> instead.
+> 
+> Until I realized that you must be using the '--histogram' flag to git
+> diff. It seems to give quite different results for rxe/rxe_mcast.c.
 
-Acked-by: Ian Rogers <irogers@google.com>
+Huh. That is surprising - I can't say why anymore, but yes this git
+tree did have the histrogram setting in the git config.
+
+I took it away
 
 Thanks,
-Ian
-
-> ---
->  tools/lib/perf/evsel.c              | 15 +++++++++++++++
->  tools/lib/perf/include/perf/evsel.h |  1 +
->  2 files changed, 16 insertions(+)
->
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index 20ae9f5f8b30..c1d58673f6ef 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -360,6 +360,21 @@ int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx)
->         return perf_evsel__run_ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, cpu_map_idx);
->  }
->
-> +int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread)
-> +{
-> +       struct perf_cpu cpu __maybe_unused;
-> +       int idx;
-> +       int err;
-> +
-> +       perf_cpu_map__for_each_cpu(cpu, idx, evsel->cpus) {
-> +               err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, idx, thread);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  int perf_evsel__enable(struct perf_evsel *evsel)
->  {
->         int i;
-> diff --git a/tools/lib/perf/include/perf/evsel.h b/tools/lib/perf/include/perf/evsel.h
-> index 2a9516b42d15..699c0ed97d34 100644
-> --- a/tools/lib/perf/include/perf/evsel.h
-> +++ b/tools/lib/perf/include/perf/evsel.h
-> @@ -36,6 +36,7 @@ LIBPERF_API int perf_evsel__read(struct perf_evsel *evsel, int cpu_map_idx, int
->                                  struct perf_counts_values *count);
->  LIBPERF_API int perf_evsel__enable(struct perf_evsel *evsel);
->  LIBPERF_API int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
-> +LIBPERF_API int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread);
->  LIBPERF_API int perf_evsel__disable(struct perf_evsel *evsel);
->  LIBPERF_API int perf_evsel__disable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
->  LIBPERF_API struct perf_cpu_map *perf_evsel__cpus(struct perf_evsel *evsel);
-> --
-> 2.25.1
->
+Jason

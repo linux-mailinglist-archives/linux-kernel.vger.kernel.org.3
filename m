@@ -2,93 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B999551E14F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2ED51E155
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444560AbiEFVpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S1444573AbiEFVse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444551AbiEFVo7 (ORCPT
+        with ESMTP id S1348985AbiEFVsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:44:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E236F4B6
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:41:15 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651873274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WEBD3i+RCMCV6ItWgJTNpoS5Qp50+5gg+1MUzDbcFWU=;
-        b=0gf5bTX4NIQykq3iPPRZunSuSvrZWoWSo2b1NIiTagpKSMaW3qdtrw7UmeRdrKArDQE/+S
-        Zy8ijWhMlujrmAIZPJRjxCHh90monbTV12KDhye6vQM/3CAQqw8JRQAdzQBwiG/t4sAVLj
-        VGlEJ6vxHVjRXIiYcdNdyHl9i3CHV9mgzff5fRJV7Md00WfSlsUarMqfVzZqx0g0/sFCEG
-        xHPKgvCjYezzLHm0ZxrVkOJkWlQ9+ITm9Ner24gSmKr1U37+vm+cp040VQJzXjfoPeTXFE
-        2Z1+E0/StooqcZKBaNaiZO9gcjhFy0aSijMrtLORg57UfwyNDwEREhdL85JJhg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651873274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WEBD3i+RCMCV6ItWgJTNpoS5Qp50+5gg+1MUzDbcFWU=;
-        b=EPFGmOCZQqvpMfXX+kTEn3pMBEYvOWTDsHxx4zzYwsn3Efr3jSRiPe+y2939MMnRZZC56U
-        K4PVioMmImoIJ3Dw==
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        x86@kernel.org
-Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
- hpet_set_comparator_periodic()
-In-Reply-To: <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
-Date:   Fri, 06 May 2022 23:41:13 +0200
-Message-ID: <87mtfufifa.ffs@tglx>
+        Fri, 6 May 2022 17:48:31 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E856FA1C;
+        Fri,  6 May 2022 14:44:47 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l18so16722278ejc.7;
+        Fri, 06 May 2022 14:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N3A1rf/Rj0PDegZIBfqZUEZZbtuVQj5afQJ+DdGLJXY=;
+        b=qIRoPoyIi9YUs2nECEBig8BQu3212ApJ192x/PT3kMGoYGdOdLgi4i/CpRitLS2c5Q
+         tR8aBD/U8y02V1Do3uwlRPKXizYTv0uL7qWSMEvP5UO3yhPCR6vYjRHr+gi32YQE415O
+         cTgbnS3ikd6RrO+hPDJc3+zcDE0Vtk/E+l5qf2hKFV+xpAAKmpcyHbmMplqWRjSIt3mb
+         aldH2gdqvT0FDDBx4XJYO6M3Szu3ig6UabTifk/hdSr8FRF5PeRgnUdgpF3B3i0jjhEt
+         jsxFTcGvFJtcYxIic4jEtB7hX3mtnva63X2s7cOyBCrMHiCOwDw4A99hJx/2KR7aemGd
+         OlwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N3A1rf/Rj0PDegZIBfqZUEZZbtuVQj5afQJ+DdGLJXY=;
+        b=FDbXa2FWTQP909yFKrqk5VukJnrqiff9oGFqidS/pA2zQVEURTzway7KtuVVdAgxcu
+         8+L9hniKsmfpX+8HWw9fsTOppzSa6QYItgTVJg/sFi6ScFoFc2TwNHHd8QfoEmkSEzmx
+         KzrY2ES1X6y8q3TVLJ6HDeoKPy2Nu30hLqi6F2Y7bobHx6DjEqQmZiAiOaO5vPx2k/Uf
+         DperEChh7F8C4lZ7nyGjZRpnoUgWE1+gDom7LMRN+TEE1JrZEAxekmhuCu5vhZmskMw7
+         BE37qHRmD34rCfyFQ1F99e9xgdqZUB4UdvDQSgsBQpHVH/tEKvClqIVM52q8vnrKQMdJ
+         +GDg==
+X-Gm-Message-State: AOAM532pk8oE5SbAaUUMqxPjnVbTA8K9Fx2+xpEhBmL/nCX039QttLsF
+        fUfK5rTxozcKjqPgQkXxbOTZCcBPhNN9O80wC0o=
+X-Google-Smtp-Source: ABdhPJxKnXTPN1rE0ELs3y3hDsepy+hk9ObUJpCYg5aHeKL8ddu3x4IdwKD6k5cRrp+Yu12tRGxgzdfBai7wdCKbXO4=
+X-Received: by 2002:a17:907:6d9d:b0:6da:7d4c:287f with SMTP id
+ sb29-20020a1709076d9d00b006da7d4c287fmr4633735ejc.741.1651873485631; Fri, 06
+ May 2022 14:44:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220429014240.3434866-1-pulehui@huawei.com> <20220429014240.3434866-3-pulehui@huawei.com>
+In-Reply-To: <20220429014240.3434866-3-pulehui@huawei.com>
+From:   Luke Nelson <luke.r.nels@gmail.com>
+Date:   Fri, 6 May 2022 14:44:34 -0700
+Message-ID: <CAB-e3NRn9VgdWfakom6Cbx-3btakEzvpNVmiQw7k-h_-EtOMng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] riscv, bpf: Support riscv jit to provide bpf_line_info
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Xi Wang <xi.wang@gmail.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
-> Programming an HPET channel as periodic requires setting the
-> HPET_TN_SETVAL bit in the channel configuration. Plus, the comparator
-> register must be written twice (once for the comparator value and once for
-> the periodic value). Since this programming might be needed in several
-> places (e.g., the HPET clocksource and the HPET-based hardlockup detector),
-> add a helper function for this purpose.
->
-> A helper function hpet_set_comparator_oneshot() could also be implemented.
-> However, such function would only program the comparator register and the
-> function would be quite small. Hence, it is better to not bloat the code
-> with such an obvious function.
+Thanks for the patch! I have a couple of notes written down below.
 
-This word salad above does not provide a single reason why the periodic
-programming function is required and better suited for the NMI watchdog
-case and then goes on and blurbs about why a function which is not
-required is not implemented. The argument about not bloating the code
-with an "obvious???" function which is quite small is slightly beyond my
-comprehension level.
+> +               ctx->prologue_offset = ctx->ninsns;
+> ...
+> +               prologue_len = ctx->epilogue_offset - ctx->prologue_offset;
+> +               for (i = 0; i < prog->len; i++)
+> +                       ctx->offset[i] = ninsns_rvoff(prologue_len + ctx->offset[i]);
 
-Thanks,
+The logic looks correct to me; my only nit is that the name
+prologue_offset might be a bit confusing. The prologue is always at
+the beginning of the final JITed program, it just happens to be that
+the prologue is emitted "out of order" on the initial/internal passes
+that compute offsets.
 
-        tglx
+What prologue_offset really measures in your code is the length of the
+body of the JITed program. What do you think about renaming
+prologue_offset to something like body_len? Then the line to compute
+prologue_len becomes:
+
+        prologue_len = ctx->epilogue_offset - ctx->body_len;
+
+This version makes more sense to me why it's correct. Curious what you think.
+
+
+> +               bpf_prog_fill_jited_linfo(prog, ctx->offset);
+
+Here's a quote from the comment that documents
+bpf_prog_fill_jited_linfo in kernel/bpf/core.c:
+
+/* The jit engine is responsible to provide an array
+ * for insn_off to the jited_off mapping (insn_to_jit_off).
+...
+ * jited_off is the byte off to the last byte of the jited insn.
+
+This comment says that ctx->offset (passed to this function as
+insn_to_jit_off) should map each instruction to the offset of the last
+byte of the JITed instructions, but as I understand it your patch sets
+ctx->offset[i] to be the offset _one past_ the last byte of the JITed
+instructions (i.e., the first byte of the next instruction). I'm not
+sure if this is a bug in your code, in this comment, or in my
+understanding :)
+
+As a concrete example, suppose the BPF instruction at index 0 compiles
+to 2 (non-compressed) RISC-V instructions, or 8 bytes. Then
+ctx->offset[0] will be 2 after the initial JIT passes, and your code
+would update ctx->offset[0] to be 4*prologue_len + 8. This offset
+corresponds to the first byte of insns[1], not the last byte of
+insn[0], which would be 4*prologue_len + 7.
+
+My guess would be that the comment is out of date and your code is
+doing the correct thing, since it seems in line with what other JITs
+are doing. If that's the case, maybe we can consider updating that
+comment at some point. I'm curious if the tests you ran would break if
+you changed your code to match what the comment says (i.e.,
+subtracting 1 byte from each element in ctx->offset before passing to
+bpf_prog_fill_jited_linfo).
+
+
+> ./test_progs -a btf
+> #19 btf:OK
+> Summary: 1/215 PASSED, 0 SKIPPED, 0 FAILED
+
+Last, did you have a chance to run any of the other tests with your
+change (e.g., test_verifier, test_bpf.ko, other tests in test_progs)?
+I don't expect this change to break any tests, but may as well run
+them if it's easy enough just to be sure.
+
+
+Thanks!
+- Luke

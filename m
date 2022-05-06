@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D25F51CEB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D2151CEF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388295AbiEFCUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S1388303AbiEFCUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355450AbiEFCUP (ORCPT
+        with ESMTP id S1355450AbiEFCUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:20:15 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE6FF5FF1A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 19:16:10 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24036:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Fri, 06 May 2022 10:11:01 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Fri, 6 May 2022 10:10:59 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2507.006; Fri, 6 May 2022 10:10:59 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] dt-bindings: arm: sunplus: Add bindings for Sunplus
- SP7021 SoC boards
-Thread-Topic: [PATCH] dt-bindings: arm: sunplus: Add bindings for Sunplus
- SP7021 SoC boards
-Thread-Index: AQHYYEvJxSJNIGo0mkK2E3PzgUGrA60QWceAgADB+hA=
-Date:   Fri, 6 May 2022 02:10:59 +0000
-Message-ID: <cb39f05e5f904360b1f88560252e7506@cqplus1.com>
-References: <20220505064430.124657-1-qinjian@cqplus1.com>
- <YnRQ4ya2trphqQuo@robh.at.kernel.org>
-In-Reply-To: <YnRQ4ya2trphqQuo@robh.at.kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 5 May 2022 22:20:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B3F60057
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 19:16:54 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id r9so5797396pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 19:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SobKQmbF1fKCHMmPWDVkqQstRTu1KoW1l73xQAN+d9Y=;
+        b=SjeuZvQM+koWskDGbzXd+jrXvXy0jpIOlPb97l9XjeAkAFMEtUOic95cMKkp9wsqDL
+         IbSzfdLMoQ37iDRd0NINzkquwRClLL9Y8ffnl8N2BvuqB3/b8avdqGxR6tTGJ0BT+p2X
+         jZmJ5eZGF1LtWXvXJMrloG3WS3AVUhGXi/yd1kd8KrZ93mDRtL9+U7hEqYocYnYZwSmI
+         I8gDkvO6lRXAHRU6Umufvq0UIhbrmqi3XRkqRe1yvC589+6NxzSs6tNPHoJuKPEVXTxG
+         qceY8a2QqsOW4ywTpVTcJkmZrphT+IuMcPfm1bqoqKF13pL75VQQiclvYjRZPxHZl4Bn
+         nE4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SobKQmbF1fKCHMmPWDVkqQstRTu1KoW1l73xQAN+d9Y=;
+        b=YvXx481N+4ZTpgeisXsT4oFf/v/rHDJG9QcD1zbRNfDS/gjUp2KWQ/QFj3db2u5Fbq
+         2me3D1vbtl2m87y4aNPeaPo3KK2OgBTyR/EZ8a4Qd7wzyr0EjsNIuhsXC+X31QgI2anc
+         OvUz234G01LN4MvnEZPOi/O0tESQjrJA84LoXWJVzz1U+bQVQ651FC+O6py4i72zF0BI
+         UobRrvvnOv3xzhulXmr0SLC9K9ltcIp7SWPbOdkKACWrdjZ15Vi43tkcn7+FtNp2v8lN
+         KBndeh1WosN6Cdci8GdZFAOoI5Fy1i+Zr9shQyWHwFfolmsvvxLpNy1Qai944lFsrcir
+         tCBw==
+X-Gm-Message-State: AOAM532x3xwthXoGTaC9ADRw43gHQZ7rTuPQiJOKpKNgJvtydBI0Ysl2
+        NW4BUZeI0OR85kT6ZEr+DiX3Cg==
+X-Google-Smtp-Source: ABdhPJyvxeWW6xAMVmfxkAArQMbJYLnVVM4g+5G/bs+5RVlqE8t9aXu0LinrUmSITFrmDwVHNxizFQ==
+X-Received: by 2002:a17:902:c24c:b0:15c:fa6f:263c with SMTP id 12-20020a170902c24c00b0015cfa6f263cmr1234139plg.66.1651803413500;
+        Thu, 05 May 2022 19:16:53 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id mu6-20020a17090b388600b001d960eaed66sm2227957pjb.42.2022.05.05.19.16.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 19:16:52 -0700 (PDT)
+Message-ID: <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
+Date:   Thu, 5 May 2022 20:16:51 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+Content-Language: en-US
+To:     Guo Xuenan <guoxuenan@huawei.com>, asml.silence@gmail.com
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
+References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <20220505141159.3182874-1-guoxuenan@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220505141159.3182874-1-guoxuenan@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzIGZvciB5b3VyIHJlcGx5LCBJJ2xsIGtlZXAgdXBkYXRpbmcgdGhlIG9yaWdpbmFsIHBh
-dGNoIHNlcmllcy4NClBsZWFzZSBpZ25vcmUgdGhpcyBwYXRjaC4NCg0KDQpCZXN0IHJlZ2FyZHMs
-DQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQropoPlgaUg
-UWluSmlhbg0KU3VuTWVkaWEgVGVjaG5vbG9neShDaGVuZ2R1KUNvLixMdGQNCuWHjOmYs+aIkOiK
-r+enkeaKgO+8iOaIkOmDve+8ieaciemZkOWFrOWPuA0KVGVsOjg2LTI4LTg3ODQ4Njg4IEVYVCA1
-NDc2DQpGYXg6ODYtMjgtODc4NDg2ODYNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0NCg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
-IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IEZyaWRheSwgTWF5IDYsIDIw
-MjIgNjozNCBBTQ0KPiBUbzogcWluamlhblvopoPlgaVdIDxxaW5qaWFuQGNxcGx1czEuY29tPg0K
-PiBDYzoga3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnOyBsaW51eC1hcm0ta2VybmVsQGxp
-c3RzLmluZnJhZGVhZC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGR0LWJpbmRpbmdzOiBh
-cm06IHN1bnBsdXM6IEFkZCBiaW5kaW5ncyBmb3IgU3VucGx1cyBTUDcwMjEgU29DIGJvYXJkcw0K
-PiANCj4gT24gVGh1LCBNYXkgMDUsIDIwMjIgYXQgMDI6NDQ6MzBQTSArMDgwMCwgUWluIEppYW4g
-d3JvdGU6DQo+ID4gVGhpcyBpbnRyb2R1Y2VzIGJpbmRpbmdzIGZvciBib2FyZHMgYmFzZWQgU3Vu
-cGx1cyBTUDcwMjEgU29DLg0KPiA+DQo+ID4gVGhpcyBwYXRjaCBpcyBzZXBhcmF0ZWQgZnJvbSB0
-aGUgcGF0Y2ggc2VyaWVzOg0KPiA+IEFkZCBTdW5wbHVzIFNQNzAyMSBTb0MgU3VwcG9ydC4gWzFd
-DQo+ID4gVG8gc2ltcGx5IHRoaW5nLCBJIGV4dHJhY3QgaXQgZnJvbSB0aGUgb3JpZ2luYWwgYW5k
-IHJlc2VuZCB0aGlzIHBhdGNoLg0KPiANCj4gVGhpcyBpbmZvcm1hdGlvbiBkb2Vzbid0IGJlbG9u
-ZyBpbiB0aGUgY29tbWl0IG1zZy4gWW91IHNob3VsZCBwdXQNCj4gY29udGV4dCBsaWtlIHRoaXMg
-YmVsb3cgdGhlICctLS0nLg0KPiANCj4gV2hvIHN1Z2dlc3RlZCBzcGxpdHRpbmcgdGhpcyBvdXQ/
-IE5vcm1hbGx5LCBuZXcgU29DIGZhbWlsaWVzIHNlcmllcyBhcmUNCj4gYXBwbGllZCBhcyBhIHdo
-b2xlIGJ5IHRoZSBTb0MgbWFpbnRhaW5lcnMgKEFybmQvT2xvZikuDQo+IA0KPiBSb2INCg==
+On 5/5/22 8:11 AM, Guo Xuenan wrote:
+> Hi, Pavel & Jens
+> 
+> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
+> it is not enough only apply [2] to stable-5.10. 
+> Io_uring is very valuable and active module of linux kernel.
+> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
+> found my understanding of io_uring is not enough to resolve all conflicts.
+> 
+> Since 5.10 is an important stable branch of linux, we would appreciate
+> your help in solving this problem.
+
+Yes, this really needs to get buttoned up for 5.10. I seem to recall
+there was a reproducer for this that was somewhat saner than the
+syzbot one (which doesn't do anything for me). Pavel, do you have one?
+
+-- 
+Jens Axboe
+

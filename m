@@ -2,25 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6065C51DC04
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AD151DBF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442890AbiEFPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S1442858AbiEFPcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442846AbiEFPch (ORCPT
+        with ESMTP id S1442844AbiEFPcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:32:37 -0400
+        Fri, 6 May 2022 11:32:32 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C246D1B1;
-        Fri,  6 May 2022 08:28:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E216D1B7;
+        Fri,  6 May 2022 08:28:47 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MpE2t-1oARSy3KZD-00qhR9;
- Fri, 06 May 2022 17:28:32 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mf0mU-1oKec41w30-00gUIs;
+ Fri, 06 May 2022 17:28:34 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc:     Stefan Agner <stefan.agner@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -31,29 +32,29 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 02/24] ARM: dts: imx7-colibri: add mdio phy node
-Date:   Fri,  6 May 2022 17:27:47 +0200
-Message-Id: <20220506152809.295409-3-marcel@ziswiler.com>
+Subject: [PATCH v1 03/24] ARM: dts: imx7-colibri: set lcdif clock source to video pll
+Date:   Fri,  6 May 2022 17:27:48 +0200
+Message-Id: <20220506152809.295409-4-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506152809.295409-1-marcel@ziswiler.com>
 References: <20220506152809.295409-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:oVrkLLgygwWKvFTplELyCAW33WTzbFbsXbnpKbLKnd1GGvNvLC4
- JQkrrOraOdfcZUwewFg/6ZUW/QB3bn1Qgf9gVZ0r+IdWaZ5go6lo6AXdAEQFymz29TaIF4G
- Bvv3oYI1HEIhoUowBsHaQ9VaCfdQxlrP2yukwLTUyAL6pAihNxiz2vyJ4q2iw2E27+uN07j
- cZLuKCZcd0M6Z1Ahm/SDw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oCyVUsQyThk=:mAtEvTMhBtv/d3XevJvliU
- DIbKP6Cs+mzoi7ntuMhr2EFVnmDN42cuyWc/hzerRwMemIm2b3ZQEAJf6fX6+8qJCKZd3+tw4
- 1XjF2deIOhjvecfv7IDCZOdwdMQvUOVQTb6pttyEz/PRfcgmGlFSlN/LawTZgDYzMFphx9F5J
- CCTTjPPksW/0G87rAnMCrtw2JHK3BNS7KvzSQNu3M75D5Bt4JzhLXKnDj783w4+1v/9oeDst4
- sgWr/4041TsF5x1gi1cHVSQH6HEck3jSNgnQGf7DLwdJAzzrLOKhGW4mjB+xn6rjbGAe0FmmQ
- zTEbpbJw/JQcfgWu/tVoS55+mKyi0V9aoXL8uDWaTG7BxM3UCunrnDiDuQL4oyiQActBtVx9z
- NWxTqCiLaUxTdlQcVzSiQto2ofEu5+AEjVpcW6RenyV80oneO8YCbnbasXHMIJP8qtLWx5BOD
- 350jro+MV2eVDCRYAZb/a849bmm76ygXTlouluMzNBRBe15gFp2wfNxXHFC5o8hhfSztoePV9
- qciiMDnUttkNHYjtgfPsamNRK4ovLLCptUgWnQPTRFOiBVfm5Pj/vmsE2RY2h9blonIB0bmjg
- ewA5leIVkgMveqUzYlpJOabmZI1iBITJLXsaAxnnLSvAVbkcilQuSahTWik34X6N6WMDd4HGE
- 1PlyAmqPKqsDrsSGsD1hVBjBZ070mqZ3CWUZLbZ1e7SmKnfNwQM05lWk0JeUXIGnHQYw=
+X-Provags-ID: V03:K1:vSCZ5YgcOnht+rU+P/yp5XZyFPki1/TnBDAr4rZvvxjZug1loKm
+ 947oYNZNiwSoDJcvYgd81ounf2xpYhPf7Hr1kVVI9KvXVl8vFxHkWC7PZctVo3K2/O22zPV
+ A1xHmesZSdkONkBslRYtqcoE4R0twLtP2EZuxDNX7by/07bZe6W5npUFCV5RPDjB4UGiN4D
+ 0ozs5iq03oamS8FRWiogA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lkBEgLpH6RM=:oRXdYnalGQzxW2RYQF7h0n
+ yA+gxkED7KBqgnTWGcd9/YOD2Cw44R5i7VgOQZ+LwWNGypbhRPG4/Pc9NuUx9yxKGnwB3KceF
+ 5ROitGnengQD77e6uGgYnKSD27djktNgx6sBCayPY7wCVY7F6rvzSQYn7xNpZKzZTU1RWptpE
+ Dywv8PZcLhh+P5gkxTEKxJiEZ4lIix068KirIz//j/McQkJWVhUtZtqCxz7ChMAQFojljLK4q
+ fCPM+uFSt1nmhgdT0rSvp6cSNs/uM2vmkxz3fbGGx1i634c+VNH3FLpjzwm7pUvKHeYQthdur
+ 4/a4yDthk9QCcsSXd/XThV1EjkPBRSFAMO/IDQYz/VgNbTSWy5M1C/j2Sxu1Z9wbfJW3gXzaX
+ zj26rYxthv7Apluuz0p5ijhaTX8Ae+LD0SsgHCKOxrA/eezf8qST8TeJLY7DIJRF5vFYJMQTi
+ JW2+AmCWbPsVdJYvHHEMX8TnZKTxZc6K+Lli6NEiBWfE31rDBRSIk9x2eNu3cxCP50XFGzfti
+ chtY85QTidK6OnxL2aBRXF9MOGXJefCJl2lXRc/jscBmK9KMRAsqe0RoaU2dudG4BURzAaW67
+ gmGOFHy13v/INgCOXfp3SyAt6f0sGdZcI46HOxeu/MXA0N7Wd3CUrFSzoKJ39LOIl3CRArbXp
+ 2rxZBL3KU01c/xFbLyCe5EVp8N4UPLa9epOJZRsfOo9JTrgTV1OPWkFQOajFGlpDa/M4=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,70 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Stefan Agner <stefan.agner@toradex.com>
 
-Add the MDIO bus with the respective PHY to allow for making changes to
-that easier.
+Use the video PLL as clock source to assure proper pixel clock
+generation.
 
-While at it also alphabetically re-order properties and improve
-indentation.
-
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm/boot/dts/imx7-colibri.dtsi | 35 ++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index e20b0977f38f..074ebb0f8001 100644
+index 074ebb0f8001..3c1cfd766645 100644
 --- a/arch/arm/boot/dts/imx7-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -83,21 +83,34 @@ &ecspi3 {
+@@ -441,6 +441,8 @@ atmel_mxt_ts: touchscreen@4a {
  };
  
- &fec1 {
--	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&pinctrl_enet1>;
--	pinctrl-1 = <&pinctrl_enet1_sleep>;
--	clocks = <&clks IMX7D_ENET_AXI_ROOT_CLK>,
--		<&clks IMX7D_ENET_AXI_ROOT_CLK>,
--		<&clks IMX7D_ENET1_TIME_ROOT_CLK>,
--		<&clks IMX7D_PLL_ENET_MAIN_50M_CLK>;
--	clock-names = "ipg", "ahb", "ptp", "enet_clk_ref";
--	assigned-clocks = <&clks IMX7D_ENET1_TIME_ROOT_SRC>,
--			  <&clks IMX7D_ENET1_TIME_ROOT_CLK>;
- 	assigned-clock-parents = <&clks IMX7D_PLL_ENET_MAIN_100M_CLK>;
- 	assigned-clock-rates = <0>, <100000000>;
-+	assigned-clocks = <&clks IMX7D_ENET1_TIME_ROOT_SRC>,
-+			  <&clks IMX7D_ENET1_TIME_ROOT_CLK>;
-+	clock-names = "ipg", "ahb", "ptp", "enet_clk_ref";
-+	clocks = <&clks IMX7D_ENET_AXI_ROOT_CLK>,
-+		 <&clks IMX7D_ENET_AXI_ROOT_CLK>,
-+		 <&clks IMX7D_ENET1_TIME_ROOT_CLK>,
-+		 <&clks IMX7D_PLL_ENET_MAIN_50M_CLK>;
-+	fsl,magic-packet;
-+	phy-handle = <&ethphy0>;
- 	phy-mode = "rmii";
- 	phy-supply = <&reg_LDO1>;
--	fsl,magic-packet;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&pinctrl_enet1>;
-+	pinctrl-1 = <&pinctrl_enet1_sleep>;
-+
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ethphy0: ethernet-phy@0 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			max-speed = <100>;
-+			micrel,led-mode = <0>;
-+			reg = <0>;
-+		};
-+	};
- };
- 
- &flexcan1 {
+ &lcdif {
++	assigned-clocks = <&clks IMX7D_LCDIF_PIXEL_ROOT_SRC>;
++	assigned-clock-parents = <&clks IMX7D_PLL_VIDEO_POST_DIV>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lcdif_dat
+ 		     &pinctrl_lcdif_ctrl>;
 -- 
 2.35.1
 

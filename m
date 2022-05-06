@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9B551D6FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B482551D6FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391514AbiEFLt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S1391483AbiEFLtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379127AbiEFLsz (ORCPT
+        with ESMTP id S1391395AbiEFLsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 07:48:55 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9D062BF7;
-        Fri,  6 May 2022 04:45:11 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvpZn3Fm1zGpP0;
-        Fri,  6 May 2022 19:42:25 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B4664725;
+        Fri,  6 May 2022 04:45:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kvpch6gf3zfb7R;
+        Fri,  6 May 2022 19:44:04 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 19:45:09 +0800
+ 15.1.2375.24; Fri, 6 May 2022 19:45:10 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 19:45:08 +0800
+ 15.1.2375.24; Fri, 6 May 2022 19:45:09 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -48,9 +48,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>,
         Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: [PATCH v24 1/6] kdump: return -ENOENT if required cmdline option does not exist
-Date:   Fri, 6 May 2022 19:43:57 +0800
-Message-ID: <20220506114402.365-2-thunder.leizhen@huawei.com>
+Subject: [PATCH v24 2/6] arm64: Use insert_resource() to simplify code
+Date:   Fri, 6 May 2022 19:43:58 +0800
+Message-ID: <20220506114402.365-3-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220506114402.365-1-thunder.leizhen@huawei.com>
 References: <20220506114402.365-1-thunder.leizhen@huawei.com>
@@ -70,39 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the current crashkernel=Y,low support in other ARCHes, it's
-an optional command-line option. When it doesn't exist, kernel will try
-to allocate minimum required memory below 4G automatically.
+insert_resource() traverses the subtree layer by layer from the root node
+until a proper location is found. Compared with request_resource(), the
+parent node does not need to be determined in advance.
 
-However, __parse_crashkernel() returns '-EINVAL' for all error cases. It
-can't distinguish the nonexistent option from invalid option.
-
-Change __parse_crashkernel() to return '-ENOENT' for the nonexistent option
-case. With this change, crashkernel,low memory will take the default
-value if crashkernel=,low is not specified; while crashkernel reservation
-will fail and bail out if an invalid option is specified.
+In addition, move the insertion of node 'crashk_res' into function
+reserve_crashkernel() to make the associated code close together.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Acked-by: John Donnelly  <john.p.donnelly@oracle.com>
 Acked-by: Baoquan He <bhe@redhat.com>
 ---
- kernel/crash_core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/kernel/setup.c | 17 +++--------------
+ arch/arm64/mm/init.c      |  1 +
+ 2 files changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 256cf6db573cd09..4d57c03714f4e13 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -243,9 +243,8 @@ static int __init __parse_crashkernel(char *cmdline,
- 	*crash_base = 0;
+diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+index 3505789cf4bd92a..fea3223704b6339 100644
+--- a/arch/arm64/kernel/setup.c
++++ b/arch/arm64/kernel/setup.c
+@@ -225,6 +225,8 @@ static void __init request_standard_resources(void)
+ 	kernel_code.end     = __pa_symbol(__init_begin - 1);
+ 	kernel_data.start   = __pa_symbol(_sdata);
+ 	kernel_data.end     = __pa_symbol(_end - 1);
++	insert_resource(&iomem_resource, &kernel_code);
++	insert_resource(&iomem_resource, &kernel_data);
  
- 	ck_cmdline = get_last_crashkernel(cmdline, name, suffix);
+ 	num_standard_resources = memblock.memory.cnt;
+ 	res_size = num_standard_resources * sizeof(*standard_resources);
+@@ -246,20 +248,7 @@ static void __init request_standard_resources(void)
+ 			res->end = __pfn_to_phys(memblock_region_memory_end_pfn(region)) - 1;
+ 		}
+ 
+-		request_resource(&iomem_resource, res);
 -
- 	if (!ck_cmdline)
--		return -EINVAL;
-+		return -ENOENT;
+-		if (kernel_code.start >= res->start &&
+-		    kernel_code.end <= res->end)
+-			request_resource(res, &kernel_code);
+-		if (kernel_data.start >= res->start &&
+-		    kernel_data.end <= res->end)
+-			request_resource(res, &kernel_data);
+-#ifdef CONFIG_KEXEC_CORE
+-		/* Userspace will find "Crash kernel" region in /proc/iomem. */
+-		if (crashk_res.end && crashk_res.start >= res->start &&
+-		    crashk_res.end <= res->end)
+-			request_resource(res, &crashk_res);
+-#endif
++		insert_resource(&iomem_resource, res);
+ 	}
+ }
  
- 	ck_cmdline += strlen(name);
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 1e7b1550e2fcebb..51863f1448c6989 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -137,6 +137,7 @@ static void __init reserve_crashkernel(void)
+ 	kmemleak_ignore_phys(crash_base);
+ 	crashk_res.start = crash_base;
+ 	crashk_res.end = crash_base + crash_size - 1;
++	insert_resource(&iomem_resource, &crashk_res);
+ }
  
+ /*
 -- 
 2.25.1
 

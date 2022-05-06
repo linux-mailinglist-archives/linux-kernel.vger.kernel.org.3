@@ -2,255 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C93651DB31
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7E551DB35
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442490AbiEFO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S1442499AbiEFO5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442484AbiEFO4x (ORCPT
+        with ESMTP id S229655AbiEFO5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:56:53 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55D56AA7E
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:53:10 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ef5380669cso83933287b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:53:10 -0700 (PDT)
+        Fri, 6 May 2022 10:57:51 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D026972E;
+        Fri,  6 May 2022 07:54:07 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246EeOxc032436;
+        Fri, 6 May 2022 14:54:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=8T+/6XoqNMduUbPJYyEpVb6X9u3ddE2U3YClGhuBphQ=;
+ b=uf6oDEQw2jaBDgCjCwlF8IDSrfTPyhwGprt3sHCWmiTZ8QHfgKHNo9i83CQ8biYlpMqu
+ +ZQAJ/w/rlAslgth0jE95wsMuykHucUgGLalQ0m4BackmTCf8MhV0Z3Fa3AZDoNiiqWw
+ BnTHVVhxm+KCPBK+QMHqfYUoo5dw8Nd3nw+GbjII+w6UWjV10r9MXzFZU8eRWKK/HhAk
+ cSPex3Df/9h0JUZsYsfgRPAIgNZLmwww2j5MebZXBukAwadyxGST2FL0qAOz8laAkuWN
+ smKfCoOuIjBVXqwDn+2XPAHOd7Ld92WwgBOwCMDWfxSdkU8UvT3Nnn1p2ccaiD0sl7cY lQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frw0awxn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 May 2022 14:54:05 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 246EVP6r024840;
+        Fri, 6 May 2022 14:54:04 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fs1a8dusn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 May 2022 14:54:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WFNb4KTH63jUXzBZOxHQM6HwwM36sxCI6lAbURCERWqx8777uozSwPkOSoix073zKLeu/A/dxNpE5/bdz4P7bA04lJ6x5PdIH6K7MlL24ymWVbt314VYOQtyrCAWk8adhxSmpfMcgwAnzt5NNjihI6AnyAA0N0CBrISuhPv37Jzvaxfbki2nG5X4fbVmyIiIunbf5TTFPZDSVSQ1Dsm+zDMG7xXsJSXnMxHdwFHG96/eqgE0MC+xRMupzDrEgKPH/4B6GL5i3OswBk0estf9x1z7XXogCZcpGDKsmZJnhLS8xfy+4oAY+swbvua0lu7d380jm9YZ7ith9B9GXXFHfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8T+/6XoqNMduUbPJYyEpVb6X9u3ddE2U3YClGhuBphQ=;
+ b=Si49khX1dQjtpasJSC5qZGTtEpVfAjcxUck6ROj7WXicmFSRT7tDFBknwquNyd3nTAy5cqeL+BgKjzZAvNQhZSqOrL9aPfVriI0zrZ03G+K+Cl1Y6agRVezG0eiGERwhMQDzYYWS/+3u76c4FJYTKvS9RlVcr1435MDiO78FC85HNPPg854Lrj0jJRQ5JNkoFP44wqhHdOglUYWki/mNuRfGw8oXzI0NFjbhYzHtiOiv/fUmmZT7q7Dvk3xKbAXtktCCbvK/uZoKJ7H5Kqx8skTWITMq21Lz7KDlWXbbt6VZz4rdsEZHCOm0zP9iLCi1nCarRAXkTLA3ubBPQX+2Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8x1ByB3JGKsEKA0yU+drp41tFZX/S/sAjt0JU8w8Oas=;
-        b=Hx3cfMOxgqSoLe0fsErpWQSiRrByO8vc44yk837SHe03vklIhl8eWrGDUOUlw+p69q
-         vmw8Jxql0io8n5hAV1ezTfvU7nnZIUvvc6obbMlTnkDBiB31i8hR51INscyHEtizxdTI
-         2WMMybr8QaCcewUFkZc0Cu0AIMenlG+0A/vkeckzDBa3slyunHrDjEG7Syi6s6lpStMJ
-         NLVFfVUogqjC9yEdt0ayVD9O7wEN1FxowV9ns1oG+BPbDQGg7PqSuEGGbcMjHkQBas8/
-         D+0L6eoK8jP+O5/xJ2XBbEi89ZyKj2/9eS6b3u8MRUPWqruEVMjKzRRXk4F1Dj5q8scF
-         hJCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8x1ByB3JGKsEKA0yU+drp41tFZX/S/sAjt0JU8w8Oas=;
-        b=jOO7WHkHfjC5gzw6iBCaVmxus+afnWKZWQ2fiLDO3wXGWnYKRDCf9knM9sD4PUzQsq
-         XHTLJzF5JlQGd3UWpvwHxoVft0Jc4VbiFaAxYHFO4Hfn8gvcoTBL52z8mJR1LTwV4JjG
-         0VEOMM0hetqWEX+5DN/CWB3Jyg5sGHIV6YO2ocfaDWjSOqWxpsTIQdsOfE4/FepOQwKJ
-         H0ygIlHzdbYWRz2fZILer/hbtlokigo8MjHsFQmL4ClBpVun1PDJEjpa3mh7cvuZHRrE
-         QeoSZ8u+6mx+iUa8q1Qn33M1tD6FQ6zzkpNW6TvRzZEI7ZYlfv34MCb5mVEqw/CH1/NZ
-         /Rog==
-X-Gm-Message-State: AOAM531gbFi0ZCOasdjA2LKlRSg3G2amtiEI0C9+Et+AXIv2htCkrQaT
-        AAJYUn2Ivj1PGt7uA+0bN9H6gWD9YuRrIsMiEVPw7g==
-X-Google-Smtp-Source: ABdhPJxKlsOV0ynPCCkwL4Y5Mf82DpFiTqXkmma8uCkly/j57cqXEb/p6HR+taiGyRcZf3rW5lGACwy5HDpUUiU1FrM=
-X-Received: by 2002:a81:19d2:0:b0:2f8:ad73:1f33 with SMTP id
- 201-20020a8119d2000000b002f8ad731f33mr2769528ywz.461.1651848789637; Fri, 06
- May 2022 07:53:09 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8T+/6XoqNMduUbPJYyEpVb6X9u3ddE2U3YClGhuBphQ=;
+ b=db3Cd9vZ9b83UkgSAi2vV3EaYqNOMstKkvxhDL6msMcKNUGBiS2caegU+bveaFv4mHMAlsrZAQzuX8M+XURorhhu8S1winhEz1hg32m6LhUJb4sFZkh/N6nMXZdIi2luYI9RXYIbTMv1frIQ+p4WiTLH/jhVDcOatCFzjtVKL5I=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1821.namprd10.prod.outlook.com
+ (2603:10b6:300:107::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Fri, 6 May
+ 2022 14:54:02 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c053:117c:bd99:89ba%5]) with mapi id 15.20.5227.020; Fri, 6 May 2022
+ 14:54:02 +0000
+Date:   Fri, 6 May 2022 17:53:52 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH 1/2] hte: fix off by one in hte_push_ts_ns()
+Message-ID: <YnU2gHe+QZOAuNyV@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: ZR0P278CA0162.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::13) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
- <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx>
-In-Reply-To: <878rrfiqyr.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 6 May 2022 16:52:33 +0200
-Message-ID: <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 83265724-abd0-4baf-3e3c-08da2f704264
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1821:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB18211D7F8814B9E63F42546F8EC59@MWHPR10MB1821.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C9r4SJFQnpDEorL4t4LMagDIn1wts6o1j9lR6wdlRG2HnNpmgmL0sZcQ6LSmlrQ9YWH9GK9sEDuTBGnoVDdI3qKBhfsNoZ0V/PWrXyUEuG//1a2v+wfJ6KtoM2R8xZS4CEUqNeJMtgPkJPEJbgE1b8XP8CLfnTBnIYIFw6f4p+u3p90NS/agQ2XWjAgYNTMJdI1xqB6eaidiZTFVYTxSBHmz/nC1lRcKrabToDFhvdKok42FAxnUVGh9+IlxRBsJSwhFsXCjskv4C9vVXW+Jw9Y7M5BsURCB0kepBlezjraslAtH7sU3YsAia4m/gX8Bhj+GM5iO9pLDq/E81X/9CO7wnN54LzxQI8HdU5fDTGT8hjt+ASLamYtDe5G+e+liXbTnZT3gLiQVslYPn9EYAIZ4edGxkzVj+YpQfKI/HJKDD6oagOOcSKditlKOx9hWV3oVVwuSXE+Fp1WNcWquthIm3kl8EVh7L0K41XIWUca1bx5YP+ArrNXmR6/C1lePp2RsIIHAFqROwYivsO7rzM88+WbaZaTfBDCxnC/wP7WMiS2Y41zBiYKEP71ooUObyXvZ83yn6nl2DXd+C0MAWvZXddIwcmFb0zwpZGobO5x6tSKbF8V58mw4zhjSnHJ8s7Qk7AgZs3R7hRbuDZgb5IJ/N0/26oGq0NfaXl4TigBaVDjguq1DOzXFnQ3RW6UJo5b2qK4GR993eMYaRVcsWE1B+YU29ZX9KCjAVw6MDAc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(5660300002)(66476007)(66556008)(66946007)(8936002)(33716001)(4744005)(86362001)(6916009)(44832011)(2906002)(4326008)(8676002)(316002)(38350700002)(9686003)(508600001)(186003)(26005)(52116002)(6512007)(6486002)(38100700002)(83380400001)(6506007)(6666004)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iJQm6ZxWq9AOfCh/x707TV1vP1GcZLbShEnqaUEfc/aIp9Lt2wWXw2fCAsNS?=
+ =?us-ascii?Q?UtmYQcMVSKfKBko0eg/6lVQsaUevV0jpSGQxyH7i8oSOcvoOCQ4zOe14bOww?=
+ =?us-ascii?Q?kPzaN7RP3qiku/BGHR31W4DkLbuOkjDH7l3BB3sW4R2xF8boDUFwcJ2u4Vzx?=
+ =?us-ascii?Q?HFy5VQxkhIvFUMG5189JUGtBgiXlAwg1HfAD9kM3Hj7DxTKIH/dQJTFWllW2?=
+ =?us-ascii?Q?VouVfZanvwBq9NzSt7execdfMLI1iiYbLdY44AQnOCSsSQh/2Rk7QXjAfNtW?=
+ =?us-ascii?Q?EsrPOweKqXvouSIYoZ0taPKwLcoigr8r6GqcWs68bzXJQrTJzm0v5jLNSEgs?=
+ =?us-ascii?Q?P+p8r5DdTr/Q28qGweTTxWUYhdT9Jbi2yYlq1uQdHq8caw0hzyWHHceTaVUw?=
+ =?us-ascii?Q?x64y2aDk06ArTTBKEi2n7D3mYgEv/7DBRSSkixBLin8jTPAJAa1myg9mA+qF?=
+ =?us-ascii?Q?1+mPk+klLYa0xL8RYBpyF1RboFGRsqHZhSnQgvcCNRFlFlpCzGvqdwURMre4?=
+ =?us-ascii?Q?QSHgCjj9LXjKcowoNSPfzv8PcU461elOCvK7NZEfaiGY0JMTLK2+zp6/IOhn?=
+ =?us-ascii?Q?Hp7polivzcym7XybU0A8GXM0kmC4+BcMLzwlMQWG/X2p49R1LdNOdGr4t2hC?=
+ =?us-ascii?Q?VXFEyEE9/KgwpKjjBfYlH6xpxeXK5IjRKmOKI9okPQUg5x1L5kkZNNKEv4wi?=
+ =?us-ascii?Q?HsK7u2oKmfQ0zRJHlLczvdDPIREi89OmVmuBUNjAsqVlwJS21Gc2vju0Oz13?=
+ =?us-ascii?Q?wBw5qVWEpalYypaksz1muAMYQHJ86SiIL7Io14E1Cm8rNBYdHIQ7PSqP59w7?=
+ =?us-ascii?Q?q2upkHyiThdqsXr5DNg55gWbmTM+1nUgC4un2Mw2fr6JYhr37cJYxORPAKtX?=
+ =?us-ascii?Q?E4tHx5fvOoUzLzQPxvKWaaTyclWt4cTA9i1FXMsfqN7r7cA895Ua3gmgBpn0?=
+ =?us-ascii?Q?gArYvwxks+vRITDiQpIVUoNewr5rZ8g9Aua4Wf9Wz1hOz2wDlD0XtFReI2hS?=
+ =?us-ascii?Q?m6P4Z7OM6EbUeKjWx3Gmalqs5lhsdgFGgOFGMTotbwtshRqJIG1gBYfERPP7?=
+ =?us-ascii?Q?x3deF/qkLeL7dPxeQH1/fza4YpLhc2t9JiUixfVTCIWGuaow6jQJB+Wy9sZx?=
+ =?us-ascii?Q?6bYLUmifa6ZLuNOKxY0VuB79ZB0tfK+PVcmqdRKE/aUfXNdV4BwtuJBPH6+C?=
+ =?us-ascii?Q?MWU70nJjTl87WJBgnESlvFKCOCTff0m52RI5zPrcv6V3EdDeoXrAgtBHQnG2?=
+ =?us-ascii?Q?0I+1XEW0sP+t0RZ2Q7dz7eE3KjYKeQK8u8D1HN4gcfZL5QlV4qcoZovT2rM9?=
+ =?us-ascii?Q?gahvzo0cxMuTMKWkOf3Qj2Sio49EMhrl3JlaPmOelRI+7xwVXWmiBAqgh8N8?=
+ =?us-ascii?Q?aY4a0FA+jBi9oS88NEwvxG1PDFMR0syy/fMJ88Sw+IiBiLpCEyj5dPAakEHO?=
+ =?us-ascii?Q?4d33g4KHADUFOKzYCGB+H2DgKddbdLWssJpVK75ls7BtUSpjFJTx1lhR2czp?=
+ =?us-ascii?Q?KYvPpxCgUMHlrcdXL0A0QacEx7yzBOGYO3ZjnjcGH32fVCcdIWfHV3x1NmGg?=
+ =?us-ascii?Q?QK/O1jMEnakLwUXjgVBxIoE7L5/lBTpvNENcVEU0rLuhWCuSHh06ZH2+2w6Y?=
+ =?us-ascii?Q?nhzPoqKJyTkdnoqQEbIJyfmFrmExZU9/V8M1Y8/CrpfN8dbXlErVTatyVXyM?=
+ =?us-ascii?Q?/MpjDNIEGZYLVF3WMQkAtqr9rKF7oJC8BVDAakM43bRBkeWt9tWnd+/3CoeS?=
+ =?us-ascii?Q?SG5CXqGC8nxV8PQXbuYRBYOv6p+VVjw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83265724-abd0-4baf-3e3c-08da2f704264
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 14:54:02.4929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K/u+U/FDOzUzCVw9XFysqZXGa+fBCtpcgt8aTl+DsXfgi64foBKtVG1WAjn+bABtUruGZ8ncxhpyFg6kOPwTzqdW6evu4Oj0MLKGkiBtkWo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1821
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-06_04:2022-05-05,2022-05-06 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205060080
+X-Proofpoint-GUID: 3VK4PClDEbyVZsqyvDCxRo37BT3kfOi-
+X-Proofpoint-ORIG-GUID: 3VK4PClDEbyVZsqyvDCxRo37BT3kfOi-
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 11:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Alexander,
->
-> On Thu, May 05 2022 at 20:04, Alexander Potapenko wrote:
-> > On Tue, May 3, 2022 at 12:00 AM Thomas Gleixner <tglx@linutronix.de> wr=
-ote:
-> >> > Regarding the regs, you are right. It should be enough to unpoison t=
-he
-> >> > regs at idtentry prologue instead.
-> >> > I tried that initially, but IIRC it required patching each of the
-> >> > DEFINE_IDTENTRY_XXX macros, which already use instrumentation_begin(=
-).
-> >>
-> >> Exactly 4 instances :)
-> >>
-> >
-> > Not really, I had to add a call to `kmsan_unpoison_memory(regs,
-> > sizeof(*regs));` to the following places in
-> > arch/x86/include/asm/idtentry.h:
-> > - DEFINE_IDTENTRY()
-> > - DEFINE_IDTENTRY_ERRORCODE()
-> > - DEFINE_IDTENTRY_RAW()
-> > - DEFINE_IDTENTRY_RAW_ERRORCODE()
-> > - DEFINE_IDTENTRY_IRQ()
-> > - DEFINE_IDTENTRY_SYSVEC()
-> > - DEFINE_IDTENTRY_SYSVEC_SIMPLE()
-> > - DEFINE_IDTENTRY_DF()
-> >
-> > , but even that wasn't enough. For some reason I also had to unpoison
-> > pt_regs directly in
-> > DEFINE_IDTENTRY_SYSVEC(sysvec_apic_timer_interrupt) and
-> > DEFINE_IDTENTRY_IRQ(common_interrupt).
-> > In the latter case, this could have been caused by
-> > asm_common_interrupt being entered from irq_entries_start(), but I am
-> > not sure what is so special about sysvec_apic_timer_interrupt().
-> >
-> > Ideally, it would be great to find that single point where pt_regs are
-> > set up before being passed to all IDT entries.
-> > I used to do that by inserting calls to kmsan_unpoison_memory right
-> > into arch/x86/entry/entry_64.S
-> > (https://github.com/google/kmsan/commit/3b0583f45f74f3a09f4c7e0e0588169=
-cef918026),
-> > but that required storing/restoring all GP registers. Maybe there's a
-> > better way?
->
-> Yes. Something like this should cover all exceptions and syscalls before
-> anything instrumentable can touch @regs. Anything up to those points is
-> either off-limit for instrumentation or does not deal with @regs.
->
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -24,6 +24,7 @@ static __always_inline void __enter_from
->         user_exit_irqoff();
->
->         instrumentation_begin();
-> +       unpoison(regs);
->         trace_hardirqs_off_finish();
->         instrumentation_end();
->  }
-> @@ -352,6 +353,7 @@ noinstr irqentry_state_t irqentry_enter(
->                 lockdep_hardirqs_off(CALLER_ADDR0);
->                 rcu_irq_enter();
->                 instrumentation_begin();
-> +               unpoison(regs);
->                 trace_hardirqs_off_finish();
->                 instrumentation_end();
->
-> @@ -367,6 +369,7 @@ noinstr irqentry_state_t irqentry_enter(
->          */
->         lockdep_hardirqs_off(CALLER_ADDR0);
->         instrumentation_begin();
-> +       unpoison(regs);
->         rcu_irq_enter_check_tick();
->         trace_hardirqs_off_finish();
->         instrumentation_end();
-> @@ -452,6 +455,7 @@ irqentry_state_t noinstr irqentry_nmi_en
->         rcu_nmi_enter();
->
->         instrumentation_begin();
-> +       unpoison(regs);
->         trace_hardirqs_off_finish();
->         ftrace_nmi_enter();
->         instrumentation_end();
->
-> As I said: 4 places :)
+The &chip->gdev->ei[] array has chip->nlines elements so this >
+comparison needs to be >= to prevent an out of bounds access. The
+gdev->ei[] array is allocated in hte_register_chip().
 
-These four instances still do not look sufficient.
-Right now I am seeing e.g. reports with the following stack trace:
+Fixes: 31ab09b42188 ("drivers: Add hardware timestamp engine (HTE) subsystem")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/hte/hte.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BUG: KMSAN: uninit-value in irqtime_account_process_tick+0x255/0x580
-kernel/sched/cputime.c:382
- irqtime_account_process_tick+0x255/0x580 kernel/sched/cputime.c:382
- account_process_tick+0x98/0x450 kernel/sched/cputime.c:476
- update_process_times+0xe4/0x3e0 kernel/time/timer.c:1786
- tick_sched_handle kernel/time/tick-sched.c:243
- tick_sched_timer+0x83e/0x9e0 kernel/time/tick-sched.c:1473
- __run_hrtimer+0x518/0xe50 kernel/time/hrtimer.c:1685
- __hrtimer_run_queues kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x838/0x15a0 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086
- __sysvec_apic_timer_interrupt+0x1ae/0x680 arch/x86/kernel/apic/apic.c:1103
- sysvec_apic_timer_interrupt+0x95/0xc0 arch/x86/kernel/apic/apic.c:1097
-...
-(uninit creation stack trace is irrelevant here, because it is some
-random value from the stack)
+diff --git a/drivers/hte/hte.c b/drivers/hte/hte.c
+index 891b98ad609e..a14c5bf290ff 100644
+--- a/drivers/hte/hte.c
++++ b/drivers/hte/hte.c
+@@ -811,7 +811,7 @@ int hte_push_ts_ns(const struct hte_chip *chip, u32 xlated_id,
+ 	if (!chip || !data || !chip->gdev)
+ 		return -EINVAL;
+ 
+-	if (xlated_id > chip->nlines)
++	if (xlated_id >= chip->nlines)
+ 		return -EINVAL;
+ 
+ 	ei = &chip->gdev->ei[xlated_id];
+-- 
+2.35.1
 
-sysvec_apic_timer_interrupt() receives struct pt_regs from
-uninstrumented code, so regs can be partially uninitialized.
-They are not passed down the call stack directly, but are instead
-saved by set_irq_regs() in sysvec_apic_timer_interrupt() and loaded by
-get_irq_regs() in tick_sched_timer().
-
-The remaining false positives can be fixed by unpoisoning the
-registers in set_irq_regs():
-
- static inline struct pt_regs *set_irq_regs(struct pt_regs *new_regs)
- {
-        struct pt_regs *old_regs;
-+       kmsan_unpoison_memory(new_regs, sizeof(*new_regs));
-
-        old_regs =3D __this_cpu_read(__irq_regs);
-        __this_cpu_write(__irq_regs, new_regs);
-
-Does that sound viable? Is it correct to assume that set_irq_regs() is
-always called for registers received from non-instrumented code?
-
-(It seems that just unpoisoning registers in set_irq_regs() is not
-enough, i.e. we still need to do what you suggest in
-kernel/entry/common.c)
---
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.

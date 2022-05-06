@@ -2,114 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61CF51DB56
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6305F51DB5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442563AbiEFPFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S1442578AbiEFPGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344485AbiEFPFN (ORCPT
+        with ESMTP id S1344485AbiEFPGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:05:13 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E277237BE2
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:01:29 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id d6so9003504ede.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dh9Sqbyn13sjjoIAw04mQl+yZsrs+e88nMF1+Rj3nhg=;
-        b=C4ATGoLFGKHoQUaNmVja0AuY75V9kVbt6sh1BucMgbLBchNG6EiNl9CjYsTM30+Lce
-         841iy/LOcDklFSR7lXyrAb2kDr7XeysXBK9NAa+YZH58esrE9NqFAOtEop4rIet6HoRl
-         NlKOsWQMRK9GyDjOktjQJRrerF4TAOfWH56jX/Zrle6kg5K/clVcuRkVx50nO1JFkHD9
-         jupSzTkXpGrGrMjw7W6A7XPoUoYVGojC/Uaupr667yG89VEjR3iUTYfICz7zishBnfRU
-         uN2rVGel5QhrV0yHANYswR2/BcIBbB7MhBMUpO0qlgvNCFIZYjNkD6yaoVOaYTGCH4U+
-         kk5A==
+        Fri, 6 May 2022 11:06:04 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA313396B6;
+        Fri,  6 May 2022 08:02:20 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id js14so5584893qvb.12;
+        Fri, 06 May 2022 08:02:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Dh9Sqbyn13sjjoIAw04mQl+yZsrs+e88nMF1+Rj3nhg=;
-        b=GuEGjg1qDCXDaP570MDfKmQpNz7+zaTd9S28i0dpSEoaV8Uvg3cVpX/Jnng7x8tbT9
-         fsHVApvu3r6m3hUQPlBTt2Y9zmQVMx35z/D8hafdj9C3BPhj2sqvLr68kP758v4w5X9Y
-         jbFGRJrFtZxHbRS6bihbD7XSERVTIcIRPDvue/afjrAZ8PWeak7ybhPZOOZ2k+e5ZKYB
-         W/bNic/OrUUEiv6c+pOA39lYfEdd/wGC0n3LtfTb+Ya6WCDmhj8l19Qruk1FyXbm75bU
-         TUHMfLUHasSXdbrVKJ/jgDJUnAry9S4TypLXv0lJxcsAjAkjsDUIWlBdTe5kw7SJX1iB
-         2UxQ==
-X-Gm-Message-State: AOAM532Cd2OmX5lK3OfC2V+Mqyo8Y1XzECNHKasvbAEBsezbq6ApELLA
-        A68INcGkxq+58uQXdf2VPj5j5SRZaamMhGRKiKt+LA==
-X-Google-Smtp-Source: ABdhPJyxpIefbpZt8xqFwsIPVrDZUzq9eCOh4xzY0qOduedsNRrKFFyrpnpLyMHr3IyWYdi7CZEaoFDy9QtWy8PMRbE=
-X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id
- ec12-20020a0564020d4c00b00410a415fd95mr3855937edb.288.1651849288453; Fri, 06
- May 2022 08:01:28 -0700 (PDT)
+        bh=T95DKyI860o0Ni6h4dJD+E7diEEpmm2y8EkaKK0YMZc=;
+        b=LIEt+Hj0vorrPId2XXAkIzYrafDHh4aGVFsTJERz19t6ZBEGg4QqxOeWZIiZm1IzdA
+         TP9/Gzt6OcBeCGJrc5ptrAoRAptT87/ed4fEOYP5rjMkxZ08BRCzZdUivGPaflqOrxid
+         UdUX9guNF636lqAAqf2X6uu7i5yfhqe2peiWMfrHN17BblyZntp85mXqSYolGtsOeahP
+         Bqhw8nXJb6yqqbGYgDVz49P6My1uYqB1fumdV7cjG5TbC6cor52Dz28WyGQi30JeLABb
+         BwvMlRhRT0caLQGmbZHgEmqY572uMTBhKKCF09qxgDuhQCaEESY+w7YTVJqhTkeqT76H
+         ghGQ==
+X-Gm-Message-State: AOAM532tB31TEiA294rcJNQ3ykT0zHFdc8p261lVpD/VsfCDQiBtEcEQ
+        J6moxrX2XxBrpszDFBVA1FtpGT0qW2d+VQ==
+X-Google-Smtp-Source: ABdhPJynUG3F533fte8dV60hdIv+ozcQx1diqhjWoKACMR0xOo9dFfthI5Vt9H+fq9TJ1Fj5nJKqwQ==
+X-Received: by 2002:a05:6214:29c1:b0:45a:e0e5:7b2b with SMTP id gh1-20020a05621429c100b0045ae0e57b2bmr2778900qvb.44.1651849339531;
+        Fri, 06 May 2022 08:02:19 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b0069fc13ce22asm2625608qkb.91.2022.05.06.08.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 08:02:19 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id w187so13355019ybe.2;
+        Fri, 06 May 2022 08:02:18 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr2817893ybu.604.1651849338111; Fri, 06
+ May 2022 08:02:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220506080630.4151-1-puyou.lu@gmail.com>
-In-Reply-To: <20220506080630.4151-1-puyou.lu@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 6 May 2022 17:01:17 +0200
-Message-ID: <CAMRc=MfGNH9LTscsBHqL05PQHLO9tFNxBZ9H_381MrWszL0hJg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: pca953x: fix irq_stat not updated when irq is
- disabled (irq_mask not set)
-To:     Puyou Lu <puyou.lu@gmail.com>
-Cc:     stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@misterjones.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+ <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
+ <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk> <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
+ <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <5239892986c94239a122ab2f7a18a7a5@AcuMS.aculab.com>
+ <CAMuHMdWj5rmrP941DF7bsUXbiiemE-o2=8XqnAS-chgmpFFPQg@mail.gmail.com> <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
+In-Reply-To: <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 6 May 2022 17:02:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
+Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
+ as necessary
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Arnd Bergmann <arnd@kernel.org>, Rich Felker <dalias@libc.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Helge Deller <deller@gmx.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 10:06 AM Puyou Lu <puyou.lu@gmail.com> wrote:
->
-> When one port's input state get inverted (eg. from low to hight) after
-> pca953x_irq_setup but before setting irq_mask (by some other driver such as
-> "gpio-keys"), the next inversion of this port (eg. from hight to low) will not
-> be triggered any more (because irq_stat is not updated at the first time). Issue
-> should be fixed after this commit.
->
-> Fixes: 89ea8bbe9c3e ("gpio: pca953x.c: add interrupt handling capability")
-> Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
->
-> ---
->
-> Change since v1:
-> add fixes tag and commit message https://lore.kernel.org/lkml/20220501092201.16411-1-puyou.lu@gmail.com/
->
-> ---
->  drivers/gpio/gpio-pca953x.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-> index d2fe76f3f34f..8726921a1129 100644
-> --- a/drivers/gpio/gpio-pca953x.c
-> +++ b/drivers/gpio/gpio-pca953x.c
-> @@ -762,11 +762,11 @@ static bool pca953x_irq_pending(struct pca953x_chip *chip, unsigned long *pendin
->         bitmap_xor(cur_stat, new_stat, old_stat, gc->ngpio);
->         bitmap_and(trigger, cur_stat, chip->irq_mask, gc->ngpio);
->
-> +       bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
-> +
->         if (bitmap_empty(trigger, gc->ngpio))
->                 return false;
->
-> -       bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
-> -
->         bitmap_and(cur_stat, chip->irq_trig_fall, old_stat, gc->ngpio);
->         bitmap_and(old_stat, chip->irq_trig_raise, new_stat, gc->ngpio);
->         bitmap_or(new_stat, old_stat, cur_stat, gc->ngpio);
-> --
-> 2.17.1
->
+Hi David
 
-Queued for fixes, thanks!
+On Fri, May 6, 2022 at 4:05 PM David Laight <David.Laight@aculab.com> wrote:
+> From: Geert Uytterhoeven
+> > Sent: 06 May 2022 14:09
+> > > The same is really true for other bus type - including ISA and EISA.
+> > > (Ignoring the horrid of probing ISI bus devices - hopefully they
+> > > are in the ACPI tables??_
+> > > If a driver is probed on a ISA bus there ought to be functions
+> > > equivalent to pci_ioremap() (for both memory and IO addresses)
+> > > that return tokens appropriate for the specific bus.
+> > >
+> > > That is all a different load of churn.
+> >
+> > A loooong time ago,  it was suggested to add register accessor
+> > functions to struct device, so e.g. readl(dev, offset) would call
+> > into these accessors, which would implement the bus-specific behavior.
+> > No more worries about readl(), __raw_readl(), ioread32b(), or whatever
+> > quirk is needed, at the (small on nowadays' machines) expense of
+> > some indirection...
+>
+> I was just thinking that the access functions might need a 'device'.
+> Although you also need the BAR (or equivalent).
+> So readl(dev, bar_token, offset) or readl(dev, bar_token + offset).
 
-Bart
+Note that we do have such a system: regmap.
+
+> Clearly the 'dev' parameter could be compiled out for non-DEBUG
+> build on x86 - leaving the current(ish) object code.
+
+Assumed all devices are PCI devices.
+E.g. USB devices would still need the indirection.
+
+> You don't want an indirect call (this year), but maybe real
+> function call and a few tests won't make that much difference.
+> They might affect PCIe writes, but PCIe reads are so slow you
+> need to avoid them whenever possible.
+> I've not timed reads into something like an ethernet chip,
+> but into our fpga they are probably 1000 clocks+.
+>
+> OTOH I wouldn't want any overhead on the PIO fifo reads
+> on one of our small ppc devices.
+> We push a lot of data though that fifo and anything extra
+> would kill performance.
+
+Right.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95ABE51E061
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2A551E08E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444026AbiEFU5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S1392488AbiEFVDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346231AbiEFU45 (ORCPT
+        with ESMTP id S1444310AbiEFVDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:56:57 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841DB6EB07;
-        Fri,  6 May 2022 13:53:13 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:37328)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn4wo-008Pnb-Qf; Fri, 06 May 2022 14:53:10 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37272 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn4wn-009MmH-Ri; Fri, 06 May 2022 14:53:10 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     chill <maximkabox13@gmail.com>
-Cc:     linux-arch@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
-        <20220506141512.516114-1-ebiederm@xmission.com>
-        <CANpfEhNAQvazzCSN-dVgYmwNSRjqOrqZF0_j7GPLbCdEkogzSg@mail.gmail.com>
-Date:   Fri, 06 May 2022 15:53:01 -0500
-In-Reply-To: <CANpfEhNAQvazzCSN-dVgYmwNSRjqOrqZF0_j7GPLbCdEkogzSg@mail.gmail.com>
-        (chill's message of "Fri, 6 May 2022 14:51:30 +0000")
-Message-ID: <8735hm1iz6.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 6 May 2022 17:03:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA50F6EC48;
+        Fri,  6 May 2022 13:59:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A0991F92C;
+        Fri,  6 May 2022 20:59:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651870759; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=zR674RhM0j/QUf3xPcIjeF4uS7iA8qT7AtuAdc1NKmY=;
+        b=K83Qfgc5Cy41wq2LTtRvX2cCbmsZiTYl0v3QttKD901o33lIPGZ1YakjXpIFn7FbYkPQfA
+        Ge9+p+NJp/yO9uG2Y7sXrN8RbVKFYG7laDV1eHf4jAUJebdxtGHmvVhkXxhzCzsjzpSqn3
+        aAgBWRB6O6Nh5r1xQaTw4kmEfKxL9hA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5200613A1B;
+        Fri,  6 May 2022 20:59:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CYAqEieMdWI1CAAAMHmgww
+        (envelope-from <dsterba@suse.com>); Fri, 06 May 2022 20:59:19 +0000
+Date:   Fri, 6 May 2022 22:55:06 +0200
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.18-rc6, part 2
+Message-ID: <cover.1651860315.git.dsterba@suse.com>
+Mail-Followup-To: David Sterba <dsterba@suse.com>,
+        torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nn4wn-009MmH-Ri;;;mid=<8735hm1iz6.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/0RPxEyql+RbzaQX8b404dYmxPbZsYufU=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;chill <maximkabox13@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 378 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 14 (3.8%), b_tie_ro: 12 (3.2%), parse: 1.08
-        (0.3%), extract_message_metadata: 3.4 (0.9%), get_uri_detail_list:
-        0.93 (0.2%), tests_pri_-1000: 4.1 (1.1%), tests_pri_-950: 1.50 (0.4%),
-        tests_pri_-900: 1.50 (0.4%), tests_pri_-90: 75 (19.8%), check_bayes:
-        72 (19.2%), b_tokenize: 6 (1.6%), b_tok_get_all: 7 (1.9%),
-        b_comp_prob: 2.3 (0.6%), b_tok_touch_all: 52 (13.7%), b_finish: 1.38
-        (0.4%), tests_pri_0: 256 (67.7%), check_dkim_signature: 0.75 (0.2%),
-        check_dkim_adsp: 4.0 (1.1%), poll_dns_idle: 1.33 (0.4%), tests_pri_10:
-        2.2 (0.6%), tests_pri_500: 8 (2.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/7] kthread: Don't allocate kthread_struct for init and
- umh
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-chill <maximkabox13@gmail.com> writes:
+Hi,
 
-> this looks like a real uaf vulnerability and can be executed by the user
+a few more regular fixes and regression fixes. Please pull, thanks.
 
-The potential to use memory after it has been freed appears completely
-real.  As such it is a bug and it should definitely be fixed.  That is
-as far as I can see.
+- regression fixes in zone activation:
+  - move a loop invariant out of the loop to avoid checking space status
 
-What I don't see, and I am very bad at this so I could be missing
-something, is what bad thing kthread_is_per_cpu could be tricked into
-doing.
+  - properly handle unlimited activation
 
-I see a window of a single instruction which reads a single bit
-that normally will return false.  If that bit instead reads true
-it looks like the scheduler will simply decide to not run the
-process on another cpu.
+- fixes:
+  - for subpage, force the free space v2 mount to avoid a warning and
+    make it easy to switch a filesystem on different page size systems
 
+  - export sysfs status of exclusive operation 'balance paused', so the
+    user space tools can recognize it and allow adding a device with
+    paused balance
 
-So I will put this change in linux-next.  It will be tested and I will
-send it to Linus when the merge window for v5.19 opens.  After Linus
-merges this I expect after a week or so it will be backported to the
-various stable kernels.  Not that it needs to go farther than about
-v5.17 where I introduced the bug.
+  - fix assertion failure when logging directory key range item
 
-Eric
+----------------------------------------------------------------
+The following changes since commit 4b73c55fdebd8939f0f6000921075f7f6fa41397:
+
+  btrfs: skip compression property for anything other than files and dirs (2022-04-27 22:20:21 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc5-tag
+
+for you to fetch changes up to 3e1ad196385c65c1454aceab1226d9a4baca27d5:
+
+  btrfs: sysfs: export the balance paused state of exclusive operation (2022-05-05 21:05:56 +0200)
+
+----------------------------------------------------------------
+David Sterba (1):
+      btrfs: sysfs: export the balance paused state of exclusive operation
+
+Filipe Manana (1):
+      btrfs: fix assertion failure when logging directory key range item
+
+Naohiro Aota (2):
+      btrfs: zoned: move non-changing condition check out of the loop
+      btrfs: zoned: activate block group properly on unlimited active zone device
+
+Qu Wenruo (1):
+      btrfs: force v2 space cache usage for subpage mount
+
+ fs/btrfs/disk-io.c  | 11 +++++++++++
+ fs/btrfs/sysfs.c    |  3 +++
+ fs/btrfs/tree-log.c | 39 +++++++++++++++++++++++++--------------
+ fs/btrfs/zoned.c    | 34 ++++++++++++++--------------------
+ 4 files changed, 53 insertions(+), 34 deletions(-)

@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F74851CFEF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EC551CFF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 06:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388857AbiEFEF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 00:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S1388874AbiEFEJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 00:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiEFEF0 (ORCPT
+        with ESMTP id S1381072AbiEFEJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 00:05:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2085DA27;
-        Thu,  5 May 2022 21:01:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E9C961E18;
-        Fri,  6 May 2022 04:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02D6C385AC;
-        Fri,  6 May 2022 04:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651809703;
-        bh=0VvDd2qLHOir3AGMSWjj9ZY4GCWoBH6pWQ+q4LN+xSM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NWPDyf3Zow4EUw8T8KAgFaveQGcDgO6/jFIgHxtFZyCcGN2+oDb4CbnvOT8991LJe
-         C+hDC//rp1aKJMAHzWAMJmxSCorR90GBos910FUBTWI35gP+Lb5SJ0yBdcTsC61EiY
-         KN3i+0I+AEKGDg1c6xbRmhYe9vfQH6K/n+f6UUf+YNAU7kQRdz0FLkZfKCRFgDNjaT
-         W26TIqx5YdPhn9HD5rwTwwI8PKgmH6rZkCXonQWwPJpoCvLFSY8AafxBYNfoElU0lE
-         HiM0QVMNqxUOQbQkXP+fP3pXAiZ8O75+4eTWcnKPWxj5o2o6/Nzj52iemfc0XqUTMj
-         WGywkyvP20aLQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7536C5C2CB7; Thu,  5 May 2022 21:01:41 -0700 (PDT)
-Date:   Thu, 5 May 2022 21:01:41 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Add rnp->cbovldmask check in
- rcutree_migrate_callbacks()
-Message-ID: <20220506040141.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220505155236.1559619-1-qiang1.zhang@intel.com>
- <20220505192956.GX1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880A25078A7D4DBAB1267C2DAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Fri, 6 May 2022 00:09:50 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B424CD56
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 21:06:07 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id iq10so5992179pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 21:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9xUjY/Sk1s4u2esh57fjrL6TCcB4aUwi+kflp6Fv2t8=;
+        b=vZPpQvL1o6mLIpHBQJcuUdaxxwP8V87v52/wrzRkz1TkrAtEJeHmq35SHTv+gTpD4L
+         5jEqB6oj8/EjqpJbaGYPu4NNdJ+74CEZF3uY3B/eoItBXf3iVh0vMFSJt0jwtSLKXdgl
+         4UX9q4yNJOBJeWC3troOuSVLKDokz5dqpZcltI2rqWktv6pPDY06w8+MfNAxsvwahhtt
+         eywjmHiTp8wPX3UELcHUxjhIJ/gvQaMMl9M7gGdScWSCXbuwP+YWAavvZwMJdrxQA9EU
+         SeVyi89aAr68/9g9uFXtPXO8xoiiQd6cl9ZVAhf/H+T7xegllLovV6AmICCfqR8szrf9
+         +FgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9xUjY/Sk1s4u2esh57fjrL6TCcB4aUwi+kflp6Fv2t8=;
+        b=ofF7oAKUJyqlsBrx39FIGawSYJvOZ80pwV14CWlQ3hVs98xlJaA6kARuKR41cVY8t9
+         iKu+SPZWfaTCuagAcMffEP+qsyc6CxNUTU7lENCtGH3iO/bfR6oW+hzfwza9eZn+laVc
+         +dMLysaPPdGyI75PqCYMWZpObpCavNKQCDpiGGpcwMdoJNWvXg8/g4udFXd+iDlmiSTZ
+         P/xa3eACz8aeCeyJ6Qz/q16R0wqkgTSAxLiHPo3vIYD+WkoPeCr/33+17kvjC6+FFFAW
+         ADqaS0FEO1fyIQNZU33DJWKRzTTc0CtW5OnBs1ZUaDyh5uyPQzDPa/LZZd58Y5Lqy+bQ
+         ERtg==
+X-Gm-Message-State: AOAM533qvTU5pHWbywfoYTI2AvmaFKhzuGPozbqzlvN3kwCSQDHaS3VY
+        +t5KHlFI+UbShcqyEym4UMYcmA==
+X-Google-Smtp-Source: ABdhPJzZ8j4w4qg6Gct1rEZ8SPcaL3UOakO/Qy/CAepj696EjjU/cEWU79AeqN+ilk56PGwCDQAu6g==
+X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id s23-20020a17090a441700b001caa8613fbfmr10164152pjg.80.1651809966534;
+        Thu, 05 May 2022 21:06:06 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id b10-20020a17090a550a00b001d954837197sm6072611pji.22.2022.05.05.21.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 21:06:05 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:36:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC v1] opp: add config option for debug
+Message-ID: <20220506040603.xumqemlcrlrolqmw@vireshk-i7>
+References: <20220504174823.156709-1-linux@fw-web.de>
+ <20220505055857.bqjm72qkzwcbuvuh@vireshk-i7>
+ <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880A25078A7D4DBAB1267C2DAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,106 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 12:40:09AM +0000, Zhang, Qiang1 wrote:
-> On Thu, May 05, 2022 at 11:52:36PM +0800, Zqiang wrote:
-> > Currently, the rnp's cbovlmask is set in call_rcu(). when CPU going 
-> > offline, the outgoing CPU's callbacks is migrated to target CPU, the 
-> > number of callbacks on the my_rdp may be overloaded, if overload and 
-> > there is no call_rcu() call on target CPU for a long time, the rnp's 
-> > cbovldmask is not set in time. in order to fix this situation, add
-> > check_cb_ovld_locked() in rcutree_migrate_callbacks() to help CPU more 
-> > quickly reach quiescent states.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+On 05-05-22, 17:54, Frank Wunderlich wrote:
+> you mean something like this:
 > 
-> >Doesn't this get set right at the end of the current grace period?
-> >Given that there is a callback overload, there should be a grace period in progress.
-> >
-> >See this code in rcu_gp_cleanup():
-> >
-> >		if (rcu_is_leaf_node(rnp))
-> >			for_each_leaf_node_cpu_mask(rnp, cpu, rnp->cbovldmask) {
-> >				rdp = per_cpu_ptr(&rcu_data, cpu);
-> >				check_cb_ovld_locked(rdp, rnp);
-> >			}
-> >
-> >So what am I missing here?  Or are you planning to remove the above code?
+> https://www.kernel.org/doc/html/v5.17/admin-guide/dynamic-debug-howto.html#debug-messages-during-boot-process
+
+Yes, though I haven't used it in a long time myself :)
+
+> so enabling debug only with cmdline-param...
+
+Yes and via debugfs file. You can basically control debug messages
+based on subsystems, files, functions, etc.
+
+> have you a simple example how to implement it? have not done anything with dynamic-debug yet...seems mighty but not trivial to implement.
 > 
-> We only checked the overloaded rdp at the end of current grace period, for
-> my_rdp overloaded cause by migration callbacks to it,  if the my_rdp overloaded,
-> and the my_rdp->mynode 's cbovldmask  is empty,  the my_rdp overloaded may be
-> not checked at end of the current grace period.
-
-Very good!
-
-> I have another question, why don't we call check_cb_ovld_locked() when rdp's n_cbs decreases.
-> for example call check_cb_ovld_locked() in rcu_do_bacth(), not at the end of grace period.
-
-The idea (as you noted above) is that it gets cleared at the end of each
-grace period.  We could also clear it in rcu_do_batch() as you suggest,
-but to make that change you would need to convince me that the extra
-overhead and complexity would provide a useful benefit.  This will not
-be easy.  ;-)
-
-> >If so, wouldn't you also need to clear the indication for the CPU that is going offline, being careful to handle the case where the two CPUs have different leaf rcu_node structures?
+> currently dev_dbg() is used for the messages that i try to disable...but show others from driver_debug at debug level.
 > 
-> Yes the offline CPU need to clear.
+> What needs to be changed to filter it via DYNAMIC_DEBUG?
 
-But again, the clearing happens at the end of the next grace period.
-Here we lose (almost) nothing by leaving the bit set because the other
-bit is set as well.
+Nothing, just enable the config for dynamic debug.
 
-Another question, as long as we brought up rcu_do_batch().
+> found this, but i'm not sure if i interpret it the right way...
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/acpi/utils.c#L495
+> defines __acpi_handle_debug
+> called via acpi_handle_debug macro
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/include/linux/acpi.h#L1136
+> 
+> so basicly convert dev_dbg to __dynamic_pr_debug
+> 
+> at least much more changed code because all dev_*/pr_* needs to be changed to own handler which does the switch based on CONFIG_DYNAMIC_DEBUG set or not.
 
-Why have the local variable "empty" given that the local variable "count"
-could be checked against zero?
+You aren't required to change anything there.
 
-In the meantime, I have queued your commit for v5.20, thank you and
-good eyes!  As always, I could not resist the urge to wordsmith the
-commit log, so could you please check it for errors?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 5c36f04bd460246dd28c178ce5dce6fb02f898e1
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Thu May 5 23:52:36 2022 +0800
-
-    rcu: Add rnp->cbovldmask check in rcutree_migrate_callbacks()
-    
-    Currently, the rcu_node structure's ->cbovlmask field is set in call_rcu()
-    when a given CPU is suffering from callback overload.  But if that CPU
-    goes offline, the outgoing CPU's callbacks is migrated to the running
-    CPU, which is likely to overload the running CPU.  However, that CPU's
-    bit in its leaf rcu_node structure's ->cbovlmask field remains zero.
-    
-    Initially, this is OK because the outgoing CPU's bit remains set.
-    However, that bit will be cleared at the next end of a grace period,
-    at which time it is quite possible that the running CPU will still
-    be overloaded.  If the running CPU invokes call_rcu(), then overload
-    will be checked for and the bit will be set.  Except that there is no
-    guarantee that the running CPU will invoke call_rcu(), in which case the
-    next grace period will fail to take the running CPU's overload condition
-    into account.  Plus, because the bit is not set, the end of the grace
-    period won't check for overload on this CPU.
-    
-    This commit therefore adds a call to check_cb_ovld_locked() in
-    check_cb_ovld_locked() to set the running CPU's ->cbovlmask bit
-    appropriately.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 9dc4c4e82db62..bcc5876c9753b 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4577,6 +4577,7 @@ void rcutree_migrate_callbacks(int cpu)
- 	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);
- 	rcu_segcblist_disable(&rdp->cblist);
- 	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) != !rcu_segcblist_n_cbs(&my_rdp->cblist));
-+	check_cb_ovld_locked(my_rdp, my_rnp);
- 	if (rcu_rdp_is_offloaded(my_rdp)) {
- 		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
- 		__call_rcu_nocb_wake(my_rdp, true, flags);
+-- 
+viresh

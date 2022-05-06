@@ -2,159 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A17051CDB7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CC851CDCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387453AbiEFARU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S1387409AbiEFA0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387500AbiEFARM (ORCPT
+        with ESMTP id S237705AbiEFA0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:17:12 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D135546A2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:13:28 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id 63so2233464uaw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 17:13:28 -0700 (PDT)
+        Thu, 5 May 2022 20:26:05 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662505DA6C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:22:23 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so5543634pjf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 17:22:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oLJ9FJ32m3bBcXwGOFaicCplk/peelZWNu/fkW2GFKc=;
-        b=IP/HfqSpU0+jYTEqaLVCKt5A5zpfAvfIlGjU0U9jQybjQIG3TrIDef08EqwJtodwjw
-         Jd5hgQfwOSKKwaegblUxfIOx6ol3yoej6QUNLkB4zt8torAmTe/wET+CbhAsB6nn3aQ3
-         X/pBTzG2+6+C3gMy2aRd4IOj89lDyhAbZrafu7nU4iiFK0D+6fcG99FMIL3iNw9By2EN
-         t8yU7/bGKuHe7lum3dLKPgxK1K77ZUJApU+M/kI0cnSZvO9lONkyOLwd0HJqzEI2qFU/
-         HHaIHwEIX4XN7h8EjMc+Jaypj2HSnJbImVH/cQI7BYygfhjiuHoTyGMAZB9xq10p1joj
-         729A==
+        bh=78OPiVHfntqnRbOd9M747x82Ue0+DetsVmv4PON/95U=;
+        b=zJdwUWEKBW78+NuXYF8y2nHSAnxLX7jPQLzHUIBL62jwfbrHF2xs++JGrtckXkxFxq
+         CJpHUuISe2baxKxRRGseBtXIFiyaoOEcFw4ysBcufDVCzA0qIpc4FP402/7ZM1P6C/F4
+         FjW0a4MBBcMW+VHiOKTNiV0JJq1WM1W61iUN44khJ0lhOpjkrZqGsDyrwvvb6p7mUVej
+         m9EUnxwXxiolGp1TCpG5nQOsIbJ6FDmCQaQSurQIiT0OklR9qNFBZAk5GsqfAldv0t18
+         2npuS5ccFS8a9tpRxlFaHL1+sG51E1eqMiCxUmpbemsdu8nt60IreiC4ibwblN2uxV03
+         2j2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oLJ9FJ32m3bBcXwGOFaicCplk/peelZWNu/fkW2GFKc=;
-        b=edfdHL52B3u3AkTyxMPQvdn7iZkePczmdJC93eHHWmtK8hzf1iglZcYs30Cmm6BXON
-         EiPvmdGIllKSSf47+IDIYRyzEY3yRWnf2MvEjWEcwJFpMbatTg2QBuY/WF8JSPnXTd3g
-         wZn47TRP3Fu/3baRPpT0FiK5vCAlJZlszcDQ9cMdkV0izJyia3yDegZzjBdYJ2EaMgXM
-         iL+TrRlGhBWyfVYhT/lOXp2a76bel72+CqtwySZFAOs0NZe4wy5GutlPys5A/gREYGbz
-         bminu1H8aWDUuJBqGTAyCaOBStA8u8UHjASy5b8lva6uGXqU1wbm61Y47/IpQtfnDrmo
-         aeUQ==
-X-Gm-Message-State: AOAM533DppTWALoeVy6v8YFKCuFuDfhs++qcrCHr3CHUln230LheV4yf
-        idlB1F2mmvT98mqn1PllYtNoRVqHu6l6HcElNPpXKw==
-X-Google-Smtp-Source: ABdhPJwxAKL8x7RCvjWu54CLInqqajTsKbdvD7+ivdbAzy9AWSKPYbQdwB2evhUAhzg8AZlLSWZj+TNdE5O3WkHy5lA=
-X-Received: by 2002:ab0:2a87:0:b0:362:9cdb:8b64 with SMTP id
- h7-20020ab02a87000000b003629cdb8b64mr201222uar.83.1651796007533; Thu, 05 May
- 2022 17:13:27 -0700 (PDT)
+        bh=78OPiVHfntqnRbOd9M747x82Ue0+DetsVmv4PON/95U=;
+        b=vcytoyXBCP3JbPgODlhAPOe0y+9C/MuWwSeqUxPoPoJvhRyy0emgR1LmncVLNYt3va
+         j2ZCWoxAv/fhQXSvSHACUtwZmly1au32U0Z07q42kRgeifnFEQ/P7uRxFyXH7kgZUxmW
+         f50dism5poYDrdLGYZqujZh+fdjITF4M8OuVd7BU1AkC4/W8EpvYgK2DvHaoLOvyhIeB
+         OJ919tWbUBbB3/hANDeXrX5PdDFJ+66X/5QuGE9JRVJR4wLv/Vk4lz1x0gPYc6Ksj7w7
+         WQmlLohq1VxWL/6umqsM/K7Gvsv0YoXrPr61wLCDOv/AGqKuCwiISyi0HoyV9N18og3q
+         hWHA==
+X-Gm-Message-State: AOAM531EDWC67839QBy0ZeWvvYxtmcWfFMnV6kP+FFTeN/XLQ9VmTD9s
+        V1C3V5tOOCi0hcFi7pn1f44pucpWBfnpF8LYJtFm/g==
+X-Google-Smtp-Source: ABdhPJzBWf/u1VdZiZTqpaAg2wWuN6pCvL4w34AITMKGTy+mt7a3urZiP6LJJbodclCm4CAOQ2PNrJCnVEr/JJdj+3w=
+X-Received: by 2002:a17:902:da8b:b0:15e:c0e8:d846 with SMTP id
+ j11-20020a170902da8b00b0015ec0e8d846mr871765plx.34.1651796542871; Thu, 05 May
+ 2022 17:22:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-20-adrian.hunter@intel.com>
-In-Reply-To: <20220505165639.361733-20-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 17:13:14 -0700
-Message-ID: <CAP-5=fUOomWXpd6we7DpNcJ7GpFCqN2Kf2AV9otvBaZ87UmpCA@mail.gmail.com>
-Subject: Re: [PATCH V1 19/23] libperf evlist: Check nr_mmaps is correct
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+ <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com> <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
+ <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com> <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+ <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+ <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+ <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com> <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
+ <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
+ <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com> <cbb2ea1343079aee546fb44cd59c82f66c875d76.camel@intel.com>
+In-Reply-To: <cbb2ea1343079aee546fb44cd59c82f66c875d76.camel@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 5 May 2022 17:22:11 -0700
+Message-ID: <CAPcyv4jNYqPA2HBaO+9a+ije4jnb6a3Sx_1knrmRF9HCCXQuqg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Mike Rapoport <rppt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 9:58 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Thu, May 5, 2022 at 3:14 PM Kai Huang <kai.huang@intel.com> wrote:
 >
-> Print an error message if the predetermined number of mmaps is
-> incorrect.
+> Thanks for feedback!
 >
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/lib/perf/evlist.c                | 11 +++++++++--
->  tools/lib/perf/include/internal/mmap.h |  5 +++++
->  2 files changed, 14 insertions(+), 2 deletions(-)
+> On Thu, 2022-05-05 at 06:51 -0700, Dan Williams wrote:
+> > [ add Mike ]
+> >
+> >
+> > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
+> > [..]
+> > >
+> > > Hi Dave,
+> > >
+> > > Sorry to ping (trying to close this).
+> > >
+> > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
+> > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
+> > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
+> > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
+> > > that no one should just use some random backend to run TD.
+> >
+> > The platform will already do this, right?
+> >
 >
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 0acf43946479..8a82b4b94b99 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -23,6 +23,7 @@
->  #include <perf/cpumap.h>
->  #include <perf/threadmap.h>
->  #include <api/fd/array.h>
-> +#include "internal.h"
->
->  void perf_evlist__init(struct perf_evlist *evlist)
->  {
-> @@ -424,7 +425,7 @@ static void perf_evlist__set_mmap_first(struct perf_evlist *evlist, struct perf_
->  static int
->  mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->                int idx, struct perf_mmap_param *mp, int cpu_idx,
-> -              int thread, int *_output, int *_output_overwrite)
-> +              int thread, int *_output, int *_output_overwrite, int *nr_mmaps)
->  {
->         struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->all_cpus, cpu_idx);
->         struct perf_evsel *evsel;
-> @@ -480,6 +481,8 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->                         if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
->                                 return -1;
->
-> +                       *nr_mmaps += 1;
-> +
->                         if (!idx)
->                                 perf_evlist__set_mmap_first(evlist, map, overwrite);
->                 } else {
-> @@ -514,6 +517,7 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->  {
->         int nr_threads = perf_thread_map__nr(evlist->threads);
->         int nr_cpus    = perf_cpu_map__nr(evlist->all_cpus);
-> +       int nr_mmaps = 0;
->         int cpu, thread;
->
->         for (cpu = 0; cpu < nr_cpus; cpu++) {
-> @@ -522,11 +526,14 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->
->                 for (thread = 0; thread < nr_threads; thread++) {
->                         if (mmap_per_evsel(evlist, ops, cpu, mp, cpu,
-> -                                          thread, &output, &output_overwrite))
-> +                                          thread, &output, &output_overwrite, &nr_mmaps))
->                                 goto out_unmap;
->                 }
->         }
->
-> +       if (nr_mmaps != evlist->nr_mmaps)
-> +               pr_err("Miscounted nr_mmaps %d vs %d\n", nr_mmaps, evlist->nr_mmaps);
-> +
->         return 0;
->
->  out_unmap:
-> diff --git a/tools/lib/perf/include/internal/mmap.h b/tools/lib/perf/include/internal/mmap.h
-> index 5a062af8e9d8..9b00828e70ef 100644
-> --- a/tools/lib/perf/include/internal/mmap.h
-> +++ b/tools/lib/perf/include/internal/mmap.h
-> @@ -56,4 +56,9 @@ u64 perf_mmap__read_head(struct perf_mmap *map);
->
->  int perf_mmap__read_self(struct perf_mmap *map, struct perf_counts_values *count);
->
-> +static inline bool perf_mmap__is_mmapped(struct perf_mmap *map)
-> +{
-> +       return map->base;
-> +}
-> +
+> In the current v3 implementation, we don't have any code to handle memory
+> hotplug, therefore nothing prevents people from adding legacy PMEMs as system
+> RAM using kmem driver.  In order to guarantee all pages managed by page
 
-This function is added here but not actually used by the patch.
+That's the fundamental question I am asking why is "guarantee all
+pages managed by page allocator are TDX memory". That seems overkill
+compared to indicating the incompatibility after the fact.
 
-Thanks,
-Ian
+> allocator are all TDX memory, the v3 implementation needs to always include
+> legacy PMEMs as TDX memory so that even people truly add  legacy PMEMs as system
+> RAM, we can still guarantee all pages in page allocator are TDX memory.
 
->  #endif /* __LIBPERF_INTERNAL_MMAP_H */
-> --
-> 2.25.1
+Why?
+
+> Of course, a side benefit of always including legacy PMEMs is people
+> theoretically can use them directly as TD guest backend, but this is just a
+> bonus but not something that we need to guarantee.
 >
+>
+> > I don't understand why this
+> > is trying to take proactive action versus documenting the error
+> > conditions and steps someone needs to take to avoid unconvertible
+> > memory. There is already the CONFIG_HMEM_REPORTING that describes
+> > relative performance properties between initiators and targets, it
+> > seems fitting to also add security properties between initiators and
+> > targets so someone can enumerate the numa-mempolicy that avoids
+> > unconvertible memory.
+>
+> I don't think there's anything related to performance properties here.  The only
+> goal here is to make sure all pages in page allocator are TDX memory pages.
+
+Please reconsider or re-clarify that goal.
+
+>
+> >
+> > No, special casing in hotplug code paths needed.
+> >
+> > >
+> > > I think w/o needing to include legacy PMEM, it's better to get all TDX memory
+> > > blocks based on memblock, but not e820.  The pages managed by page allocator are
+> > > from memblock anyway (w/o those from memory hotplug).
+> > >
+> > > And I also think it makes more sense to introduce 'tdx_memblock' and
+> > > 'tdx_memory' data structures to gather all TDX memory blocks during boot when
+> > > memblock is still alive.  When TDX module is initialized during runtime, TDMRs
+> > > can be created based on the 'struct tdx_memory' which contains all TDX memory
+> > > blocks we gathered based on memblock during boot.  This is also more flexible to
+> > > support other TDX memory from other sources such as CLX memory in the future.
+> > >
+> > > Please let me know if you have any objection?  Thanks!
+> >
+> > It's already the case that x86 maintains sideband structures to
+> > preserve memory after exiting the early memblock code.
+> >
+>
+> May I ask what data structures are you referring to?
+
+struct numa_meminfo.
+
+> Btw, the purpose of 'tdx_memblock' and 'tdx_memory' is not only just to preserve
+> memblock info during boot.  It is also used to provide a common data structure
+> that the "constructing TDMRs" code can work on.  If you look at patch 11-14, the
+> logic (create TDMRs, allocate PAMTs, sets up reserved areas) around how to
+> construct TDMRs doesn't have hard dependency on e820.  If we construct TDMRs
+> based on a common 'tdx_memory' like below:
+>
+>         int construct_tdmrs(struct tdx_memory *tmem, ...);
+>
+> It would be much easier to support other TDX memory resources in the future.
+
+"in the future" is a prompt to ask "Why not wait until that future /
+need arrives before adding new infrastructure?"
+
+> The thing I am not sure is Dave wants to keep the code minimal (as this series
+> is already very big in terms of LoC) to make TDX running, and for now in
+> practice there's only system RAM during boot is TDX capable, so I am not sure we
+> should introduce those structures now.
+>
+> > Mike, correct
+> > me if I am wrong, but adding more is less desirable than just keeping
+> > the memblock around?

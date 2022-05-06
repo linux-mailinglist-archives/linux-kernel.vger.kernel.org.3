@@ -2,150 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2ED51E155
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B1F51E15F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444573AbiEFVse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S1358144AbiEFVy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348985AbiEFVsb (ORCPT
+        with ESMTP id S1355238AbiEFVyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:48:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E856FA1C;
-        Fri,  6 May 2022 14:44:47 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l18so16722278ejc.7;
-        Fri, 06 May 2022 14:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N3A1rf/Rj0PDegZIBfqZUEZZbtuVQj5afQJ+DdGLJXY=;
-        b=qIRoPoyIi9YUs2nECEBig8BQu3212ApJ192x/PT3kMGoYGdOdLgi4i/CpRitLS2c5Q
-         tR8aBD/U8y02V1Do3uwlRPKXizYTv0uL7qWSMEvP5UO3yhPCR6vYjRHr+gi32YQE415O
-         cTgbnS3ikd6RrO+hPDJc3+zcDE0Vtk/E+l5qf2hKFV+xpAAKmpcyHbmMplqWRjSIt3mb
-         aldH2gdqvT0FDDBx4XJYO6M3Szu3ig6UabTifk/hdSr8FRF5PeRgnUdgpF3B3i0jjhEt
-         jsxFTcGvFJtcYxIic4jEtB7hX3mtnva63X2s7cOyBCrMHiCOwDw4A99hJx/2KR7aemGd
-         OlwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N3A1rf/Rj0PDegZIBfqZUEZZbtuVQj5afQJ+DdGLJXY=;
-        b=FDbXa2FWTQP909yFKrqk5VukJnrqiff9oGFqidS/pA2zQVEURTzway7KtuVVdAgxcu
-         8+L9hniKsmfpX+8HWw9fsTOppzSa6QYItgTVJg/sFi6ScFoFc2TwNHHd8QfoEmkSEzmx
-         KzrY2ES1X6y8q3TVLJ6HDeoKPy2Nu30hLqi6F2Y7bobHx6DjEqQmZiAiOaO5vPx2k/Uf
-         DperEChh7F8C4lZ7nyGjZRpnoUgWE1+gDom7LMRN+TEE1JrZEAxekmhuCu5vhZmskMw7
-         BE37qHRmD34rCfyFQ1F99e9xgdqZUB4UdvDQSgsBQpHVH/tEKvClqIVM52q8vnrKQMdJ
-         +GDg==
-X-Gm-Message-State: AOAM532pk8oE5SbAaUUMqxPjnVbTA8K9Fx2+xpEhBmL/nCX039QttLsF
-        fUfK5rTxozcKjqPgQkXxbOTZCcBPhNN9O80wC0o=
-X-Google-Smtp-Source: ABdhPJxKnXTPN1rE0ELs3y3hDsepy+hk9ObUJpCYg5aHeKL8ddu3x4IdwKD6k5cRrp+Yu12tRGxgzdfBai7wdCKbXO4=
-X-Received: by 2002:a17:907:6d9d:b0:6da:7d4c:287f with SMTP id
- sb29-20020a1709076d9d00b006da7d4c287fmr4633735ejc.741.1651873485631; Fri, 06
- May 2022 14:44:45 -0700 (PDT)
+        Fri, 6 May 2022 17:54:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D268613E9A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:50:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A75C611EE
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 21:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CB8C385A8;
+        Fri,  6 May 2022 21:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651873825;
+        bh=C1WgvDTrsdFQDpie7GvorQalkinTyCMq4IOsxxaE93s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H0vA0cSnSY8xX+24xCc0Gk0rX2+exhkFMnIoLQ1DWP3FgTGSMzx0YzRbHFS8jLRVG
+         HH8xcJ4lj7fg8p4fWH+3S8SuQbqTzvJmUrZmTN1BZVyLSLxjoLbX4S2c7hD22GY5Hb
+         059JfWfLHnfbcEJBxgK6/fxglazs7y55jlaYqnuG/tpSNJY4l/k+r8RrDt/p3sJEGc
+         zcansRzWIAHShUvhrwKs+8ezR4guqYk/AeQunHWS/Awlpg5Xoit+W463JYvLNVhOwm
+         u4qw34cRe1HaFmnfuhw6bSRU118Mc14GJ+1YvHp/XrFV3xVSxw3sltOMgMDAE2B4Dk
+         yPy/srrMTzVgg==
+Date:   Fri, 6 May 2022 14:50:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     ksummit-discuss@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, kbuild@lists.01.org, lkp@intel.com,
+        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Subject: Re: uninitialized variables bugs
+Message-ID: <YnWYHzQC4Y55sOsT@dev-arch.thelio-3990X>
+References: <20220506091338.GE4031@kadam>
 MIME-Version: 1.0
-References: <20220429014240.3434866-1-pulehui@huawei.com> <20220429014240.3434866-3-pulehui@huawei.com>
-In-Reply-To: <20220429014240.3434866-3-pulehui@huawei.com>
-From:   Luke Nelson <luke.r.nels@gmail.com>
-Date:   Fri, 6 May 2022 14:44:34 -0700
-Message-ID: <CAB-e3NRn9VgdWfakom6Cbx-3btakEzvpNVmiQw7k-h_-EtOMng@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] riscv, bpf: Support riscv jit to provide bpf_line_info
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Xi Wang <xi.wang@gmail.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506091338.GE4031@kadam>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the patch! I have a couple of notes written down below.
+Hi Dan,
 
-> +               ctx->prologue_offset = ctx->ninsns;
-> ...
-> +               prologue_len = ctx->epilogue_offset - ctx->prologue_offset;
-> +               for (i = 0; i < prog->len; i++)
-> +                       ctx->offset[i] = ninsns_rvoff(prologue_len + ctx->offset[i]);
+On Fri, May 06, 2022 at 12:13:38PM +0300, Dan Carpenter wrote:
+> Ever since commit 78a5255ffb6a ("Stop the ad-hoc games with
+> -Wno-maybe-initialized"), GCC's uninitialized variable warnings have
+> been disabled by default.  Now, you have to turn on W=1 or W=2 to see
+> the warnings which nobody except Arnd does.
 
-The logic looks correct to me; my only nit is that the name
-prologue_offset might be a bit confusing. The prologue is always at
-the beginning of the final JITed program, it just happens to be that
-the prologue is emitted "out of order" on the initial/internal passes
-that compute offsets.
+Thank you a lot for bringing this up; the situation does leave much to
+be desired from my side, as I am having to fix quite a number of these
+issues because people just are not seeing them and they break our builds
+because of CONFIG_WERROR (as they should).
 
-What prologue_offset really measures in your code is the length of the
-body of the JITed program. What do you think about renaming
-prologue_offset to something like body_len? Then the line to compute
-prologue_len becomes:
+> Disabling that has lead to a bunch of embarrassing bugs where variables
+> are *never* initialized.  Very unsubtle bugs.  The bugs doesn't reach
+> users because Nathan Chancellor and I review Clang and Smatch warnings
+> respectively.  Also the kbuild-bot reports uninitialized variables.
 
-        prologue_len = ctx->epilogue_offset - ctx->body_len;
+Thankfully, I believe the situation is a lot less worse than it could be
+because the kbuild test robot tests with clang and finds these before
+they make it into any tree:
 
-This version makes more sense to me why it's correct. Curious what you think.
+https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wuninitialized
+https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wsometimes-uninitialized
 
+> It's a lot to deal with.  Uninitialized variable bugs are probably the
+> most common bug I have to deal with.
 
-> +               bpf_prog_fill_jited_linfo(prog, ctx->offset);
+Agreed.
 
-Here's a quote from the comment that documents
-bpf_prog_fill_jited_linfo in kernel/bpf/core.c:
+> It's frustrating.  Sometimes the false positives are hard to analyse
+> because I have to read through multiple functions.  A lot of times
+> when I write a patch and a commit message Nathan has already fixed it
+> so it's just a waste of time.
 
-/* The jit engine is responsible to provide an array
- * for insn_off to the jited_off mapping (insn_to_jit_off).
-...
- * jited_off is the byte off to the last byte of the jited insn.
+Sorry :( I should be better about either cc'ing you directly or adding
+the kernel-janitors mailing list, as there are others who would benefit
+from seeing these patches fly by. I know that isn't really the point of
+the email but I'll try to make your life easier in the future.
 
-This comment says that ctx->offset (passed to this function as
-insn_to_jit_off) should map each instruction to the offset of the last
-byte of the JITed instructions, but as I understand it your patch sets
-ctx->offset[i] to be the offset _one past_ the last byte of the JITed
-instructions (i.e., the first byte of the next instruction). I'm not
-sure if this is a bug in your code, in this comment, or in my
-understanding :)
+> It's risky as well.  The Smatch check for uninitialized variables was
+> broken for most of 2021.  Nathan sometimes goes on vacation.
+> 
+> I guess I would hope that one day we can turn on the GCC uninitialized
+> variable warnings again.  That would mean silencing false positives
+> which a lot of people don't want to do...  Maybe Clang has fewer false
+> positives than GCC?
 
-As a concrete example, suppose the BPF instruction at index 0 compiles
-to 2 (non-compressed) RISC-V instructions, or 8 bytes. Then
-ctx->offset[0] will be 2 after the initial JIT passes, and your code
-would update ctx->offset[0] to be 4*prologue_len + 8. This offset
-corresponds to the first byte of insns[1], not the last byte of
-insn[0], which would be 4*prologue_len + 7.
+Yes, clang does have fewer false positives than GCC for a couple of
+reasons:
 
-My guess would be that the comment is out of date and your code is
-doing the correct thing, since it seems in line with what other JITs
-are doing. If that's the case, maybe we can consider updating that
-comment at some point. I'm curious if the tests you ran would break if
-you changed your code to match what the comment says (i.e.,
-subtracting 1 byte from each element in ctx->offset before passing to
-bpf_prog_fill_jited_linfo).
+1. As Arnd touched on, Clang's -Wuninitialized and
+-Wsometimes-uninitialized do not check for initializations across
+function boundaries. In your example below with 'read(&val)', clang will
+assume that read() initializes val. While that does mean that there is
+slightly less coverage, it does drives the false positive rate way down,
+almost to zero. There are occasionally times where clang fails to figure
+out certain conditions which will avoid an uninitialized use but I
+believe that means the code is not as clear as it could be. For example,
+commit 118de6106735 ("net: ethernet: rmnet: Restructure if checks to
+avoid uninitialized warning").
 
+2. clang used to only have these warnings under
+-Wconditional-uninitialized, which suffers from the same issue as
+-Wmaybe-uninitialized ("maybe it is uninitialized?").
+-Wsometimes-uninitialized was split off from that warning back in 2011
+to be more assertive ("this IS uninitialized if these conditions hold"):
 
-> ./test_progs -a btf
-> #19 btf:OK
-> Summary: 1/215 PASSED, 0 SKIPPED, 0 FAILED
+https://github.com/llvm/llvm-project/commit/4323bf8e2e5135c49f814940b2b546298c01ecbc
 
-Last, did you have a chance to run any of the other tests with your
-change (e.g., test_verifier, test_bpf.ko, other tests in test_progs)?
-I don't expect this change to break any tests, but may as well run
-them if it's easy enough just to be sure.
+Perhaps GCC could consider something to this?
 
+Clang's static analyzer, which Tom regularly runs, will check variables
+across function boundaries. I am not sure what the false positive rate
+on that check is but it does turn up issues like smatch does.
 
-Thanks!
-- Luke
+> The Smatch check for uninitialized variable was deliberately written to
+> be more strict than GCC because GCC was missing bugs.  So I think
+> leaving Smatch false positives is fine.  There is a trade off between
+> fewer false positives and missing bugs and Smatch is meant to err on the
+> side of finding bugs but with the cost of false positives.
+
+I would agree with this too.
+
+Cheers,
+Nathan

@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D584751DFD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C2F51DFD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392089AbiEFTyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S1392053AbiEFT5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392131AbiEFTx6 (ORCPT
+        with ESMTP id S1352249AbiEFT5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:53:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473B26A42F;
-        Fri,  6 May 2022 12:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E00B5B80E9E;
-        Fri,  6 May 2022 19:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65DDCC385AC;
-        Fri,  6 May 2022 19:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651866612;
-        bh=PYVzOsaqyIFnBW0vYPhJBYe8z0KWXMzyyEIw8eb7s3Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=j7e50OOPWY4QBsefK2HmKkaVW3t5lBTw0e4ErIx6d1vctqofZ/SdFXPSXpfjAVj9T
-         0wNAyWw1ICesH1eQRYdKtGy/Lyp4bvK4SHyOl+CaVQZ8SBD8lhWwNsgDOfrLyRQsbq
-         lv3qs3Zao0ygNzliLNbyKgSxDvkxLPCwvGiOLdpsS7ieSa1pK0zJJvZO2eL6NUruvK
-         odDyWsYFZURFe3APoqhtmbFgNag8npt+scpL9TLe15+PmrSDrFmnpcl1ENmMLjefkU
-         eJaPS9B5r2Q/dF8Xig93HajNlHgZ5h9z1gQv9+N2MAtyiXPGvBpyk7t154ICXceNNB
-         pM2ZDftmBmIGw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 495FFF03876;
-        Fri,  6 May 2022 19:50:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 6 May 2022 15:57:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB481E3C0
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:53:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651866834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPigNHr8wXW4Jsp9L+zcdiLLC2xp5wKYQoiAjHdLkb0=;
+        b=Xc8Vtd935tKSHJ4TItbPhom70GX4iR+XaOHyoZEbq2TCP4h9WjKpN0MVzmsUbMnujiBgnV
+        WXGzehvrucSX1BoXOdNpoMb3s0YNBoPdGbKtAB3wDRyptT25vNwG7QcC7LwRl3B15XR6VM
+        FhGG5jK12XCNGha0igmSaWXXc2p4A3H1NRfSABcL1Z3IwAXCO4O3qpx16YQ/THdTjg92ya
+        In409B3HY2BR55Mv7J/T3Np4Rdy7VMWpG58IDPN5+hY6NlLD7uyzePgQU6EvXGIFGFCODZ
+        3pB/pK2v3RdJoDZ1aaYSIcYs0qALgfVW7BGlvJCXH5N/7ExJVtGCxVmBC9jnxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651866834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPigNHr8wXW4Jsp9L+zcdiLLC2xp5wKYQoiAjHdLkb0=;
+        b=/4l7akvaVCpYSimscxE6emXgo2DDhYqJsbAjKJILCBQFs5NLOHNmvvAauEvq153gAwkORH
+        f5cYHMQqOtGE5zCA==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH v6 02/29] x86/apic: Add irq_cfg::delivery_mode
+In-Reply-To: <20220506000008.30892-3-ricardo.neri-calderon@linux.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-3-ricardo.neri-calderon@linux.intel.com>
+Date:   Fri, 06 May 2022 21:53:54 +0200
+Message-ID: <875ymih1yl.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net PATCH] ipv4: drop dst in multicast routing path
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165186661229.28900.13083700844153444313.git-patchwork-notify@kernel.org>
-Date:   Fri, 06 May 2022 19:50:12 +0000
-References: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        tgraf@suug.ch, lokesh.dhoundiyal@alliedtelesis.co.nz,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
+> Currently, the delivery mode of all interrupts is set to the mode of the
+> APIC driver in use. There are no restrictions in hardware to configure the
+> delivery mode of each interrupt individually. Also, certain IRQs need
+> to be
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+s/IRQ/interrupt/ Changelogs can do without acronyms.
 
-On Thu,  5 May 2022 14:00:17 +1200 you wrote:
-> From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-> 
-> kmemleak reports the following when routing multicast traffic over an
-> ipsec tunnel.
-> 
-> Kmemleak output:
-> unreferenced object 0x8000000044bebb00 (size 256):
->   comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
->     80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000f83947e0>] __kmalloc+0x1e8/0x300
->     [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
->     [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
->     [<00000000824f6cf1>] gre_rcv+0x178/0x540
->     [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
->     [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
->     [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
->     [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
->     [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
->     [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
->     [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
->     [<00000000013d7914>] irq_exit+0xc4/0xe0
->     [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
->     [<000000000751eb8e>] handle_int+0x16c/0x178
->     [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
-> 
-> [...]
+> configured with a specific delivery mode (e.g., NMI).
+>
+> Add a new member, delivery_mode, to struct irq_cfg. Subsequent changesets
+> will update every irq_domain to set the delivery mode of each IRQ to that
+> specified in its irq_cfg data.
+>
+> To keep the current behavior, when allocating an IRQ in the root
+> domain
 
-Here is the summary with links:
-  - [net] ipv4: drop dst in multicast routing path
-    https://git.kernel.org/netdev/net/c/9e6c6d17d1d6
+The root domain does not allocate an interrupt. The root domain
+allocates a vector for an interrupt. There is a very clear and technical
+destinction. Can you please be more careful about the wording?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> --- a/arch/x86/kernel/apic/vector.c
+> +++ b/arch/x86/kernel/apic/vector.c
+> @@ -567,6 +567,7 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
+>  		irqd->chip_data = apicd;
+>  		irqd->hwirq = virq + i;
+>  		irqd_set_single_target(irqd);
+> +
 
+Stray newline.
 
+>  		/*
+>  		 * Prevent that any of these interrupts is invoked in
+>  		 * non interrupt context via e.g. generic_handle_irq()
+> @@ -577,6 +578,14 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
+>  		/* Don't invoke affinity setter on deactivated interrupts */
+>  		irqd_set_affinity_on_activate(irqd);
+>  
+> +		/*
+> +		 * Initialize the delivery mode of this irq to match the
+
+s/irq/interrupt/
+
+> +		 * default delivery mode of the APIC. Children irq domains
+> +		 * may take the delivery mode from the individual irq
+> +		 * configuration rather than from the APIC driver.
+> +		 */
+> +		apicd->hw_irq_cfg.delivery_mode = apic->delivery_mode;
+> +
+>  		/*
+>  		 * Legacy vectors are already assigned when the IOAPIC
+>  		 * takes them over. They stay on the same vector. This is

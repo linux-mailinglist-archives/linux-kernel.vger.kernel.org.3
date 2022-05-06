@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC8751CF70
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D247C51CF6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388576AbiEFDcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S1388552AbiEFDcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388559AbiEFDco (ORCPT
+        with ESMTP id S1388539AbiEFDcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:32:44 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80EE644C9
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:29:02 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d22so6181063plr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ObGYuo/jzq0kKJukFUQR7QwaI4Kz9Z4PyfnQhlw6wC8=;
-        b=FH5bfMFwxWVOcCcK1H7vci7vjZllv7QZZuVaFyXVqPTdJUSlmaGKhReLpWEfoGgzqB
-         yGhrAFmvtly4AH1gcK716aGkF4RRIr5ik6iHxB/yFq/FYoiY9rkDljXeZYkU8u57GLoK
-         I/Axk1ELhvF8NVjmPopww1or1npjxaH2Tp3jQd/QsEOg05n40QAsyuF0nD+kN5B2aSUI
-         ADURSrK5W+VgR4KTZ2AZAmONT3B0wZ33ZF1h1skwAEaECwJv9kUfrEK8nxQmeC0ey7z6
-         RPnSkrzk4YuVb0P73S4Po3/IY3ftF8Ic6dOxuh4Ua8j7vaRGcI8rV+iKCh5bd+6f5L+L
-         L/7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ObGYuo/jzq0kKJukFUQR7QwaI4Kz9Z4PyfnQhlw6wC8=;
-        b=NXnPzF1Z7VN0PImZyyK58abYGut50Et8+6epyjYwyVjJn4VBYT3J5rfsU1SOGX+UQ/
-         YRkWW0R1YR9F0B3K/R0GDRzcHWW+/qG+O/BCubbDF0erdWfiEuxU6JeL6uBGlR06ElNW
-         Q8GTjQLxX3wfM17+lyLWeNIwBqDb//FoqEGbhjZSrMKXF8+4pLKiX29lrrMUUtTIzfd7
-         toR03cv0/PwzElcbkdjZ4PX3eTIZurWFTP63bniIbWX0LnIDACngyXPoi6hWUueFnwju
-         izApg65ZMHgP/5N0h/K/pNwqX5CaK/7JoSSwahlDdQIwYAi+4P6KsdylXaU0ikmGjQwd
-         8cFw==
-X-Gm-Message-State: AOAM533dZ4hyu93mm+JQGjLe7dwJsORAtVjvaFZoeRRdpzQKBdDfQJDQ
-        VPAtjtNgEzIF4mChvFQZWwzEEQ==
-X-Google-Smtp-Source: ABdhPJwIr4coEHbie1ZiXIT/MWIZue8W7Smk/8+HtWenFSnceXzzUfrw05O7OwocPT4aA/z+T637AQ==
-X-Received: by 2002:a17:90a:8d82:b0:1d8:a5a9:5489 with SMTP id d2-20020a17090a8d8200b001d8a5a95489mr1787634pjo.102.1651807742426;
-        Thu, 05 May 2022 20:29:02 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id j19-20020a634a53000000b003c14af50610sm2233048pgl.40.2022.05.05.20.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:29:01 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     rostedt@goodmis.org, mark.rutland@arm.com, catalin.marinas@arm.com
-Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
-        lkp@intel.com, zhouchengming@bytedance.com
-Subject: [PATCH] ftrace/fgraph: fix increased missing-prototypes warnings
-Date:   Fri,  6 May 2022 11:27:37 +0800
-Message-Id: <20220506032737.23375-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 5 May 2022 23:32:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B15644C0;
+        Thu,  5 May 2022 20:28:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 219B5B832C4;
+        Fri,  6 May 2022 03:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685DEC385AC;
+        Fri,  6 May 2022 03:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651807698;
+        bh=/Busav/MercVn3U7qos3BeCdpeFW+y8S+aaQ9UEgLOg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jsBG26qh+s213Ai58L/c76nzSly7WUrMn1CW1KN9i9Ky51OURpsDA8Sue2D1CJ9Sq
+         D8CjECh08aUOh24sOOD33Rszb5HqzS3oCrMHt7J9QZ5KK7ThbTIN8fWjSxQGvAxN6Q
+         wdSWi/aFNzQ4Fsh/B+YFmhpQTvm3gFaA7Eu/Kznm3H/n3c1g3DKxwrUj8NDa4bbkUr
+         dTaDkNqV1drIVgG1E8DYViBhnnKaMxvcP6cr9gNLtlfs6p8gtWeqONXKRInUx3IuES
+         matYNYW+DmzRSrK9oWJeilQ6ahPS2ea5Mt7yGypTxX+HYFgfWH2LN7Lpta8o7j2xya
+         hf/isN0EBWRXQ==
+Message-ID: <366d529e-6149-423a-e012-dbfd9c41baac@kernel.org>
+Date:   Thu, 5 May 2022 20:28:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [net PATCH] ipv4: drop dst in multicast routing path
+Content-Language: en-US
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, tgraf@suug.ch,
+        lokesh.dhoundiyal@alliedtelesis.co.nz
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit e999995c84c3 ("ftrace: cleanup ftrace_graph_caller enable
-and disable") merged into the linux-next tree, the kernel test robot
-(lkp@intel.com) has send out report that there are increased missing-prototypes
-warnings caused by that commit.
+On 5/4/22 7:00 PM, Chris Packham wrote:
+> From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+> 
+> kmemleak reports the following when routing multicast traffic over an
+> ipsec tunnel.
+> 
+> Kmemleak output:
+> unreferenced object 0x8000000044bebb00 (size 256):
+>   comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
+>     80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000f83947e0>] __kmalloc+0x1e8/0x300
+>     [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
+>     [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
+>     [<00000000824f6cf1>] gre_rcv+0x178/0x540
+>     [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
+>     [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
+>     [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
+>     [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
+>     [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
+>     [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
+>     [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
+>     [<00000000013d7914>] irq_exit+0xc4/0xe0
+>     [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
+>     [<000000000751eb8e>] handle_int+0x16c/0x178
+>     [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
+> 
+> The metadata dst is leaked when ip_route_input_mc() updates the dst for
+> the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
+> handled dropping the dst in ip_route_input_slow() but missed the
+> multicast case which is handled by ip_route_input_mc(). Drop the dst in
+> ip_route_input_mc() avoiding the leak.
+> 
+> Fixes: f38a9eb1f77b ("dst: Metadata destinations")
+> Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     We started seeing this leak in our scenario after commit c0d59da79534
+>     ("ip_gre: Make none-tun-dst gre tunnel store tunnel info as metadat_dst
+>     in recv") but there may be other paths that hit the leak so I've set the
+>     fixes tag as f38a9eb1f77b ("dst: Metadata destinations").
+> 
+>  net/ipv4/route.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 \
-	O=build_dir ARCH=sh SHELL=/bin/bash kernel/trace/
-warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
-warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
-warning: no previous prototype for 'ftrace_return_to_handler' [-Wmissing-prototypes]
-warning: no previous prototype for 'ftrace_graph_sleep_time_control' [-Wmissing-prototypes]
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-BTW there are so many missing-prototypes warnings if build kernel with "W=1".
-
-The increased warnings for 'ftrace_[enable,disable]_ftrace_graph_caller'
-is caused by CONFIG_FUNCTION_GRAPH_TRACER && !CONFIG_DYNAMIC_FTRACE,
-so the declarations in <linux/ftrace.h> can't be seen in fgraph.c.
-
-And this warning can't reproduce on x86_64 since x86_64 select
-HAVE_FUNCTION_GRAPH_TRACER only when DYNAMIC_FTRACE, so fgraph.c will
-always see the declarations in <linux/ftrace.h>.
-
-This patch fix the increased warnings by put the definitions in
-CONFIG_DYNAMIC_FTRACE although there are no real problems exist.
-
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/trace/fgraph.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 289311680c29..2cd374294be7 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -30,6 +30,7 @@ int ftrace_graph_active;
- /* Both enabled by default (can be cleared by function_graph tracer flags */
- static bool fgraph_sleep_time = true;
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE
- /*
-  * archs can override this function if they must do something
-  * to enable hook for graph tracer.
-@@ -47,6 +48,7 @@ int __weak ftrace_disable_ftrace_graph_caller(void)
- {
- 	return 0;
- }
-+#endif
- 
- /**
-  * ftrace_graph_stop - set to permanently disable function graph tracing
--- 
-2.36.0
 

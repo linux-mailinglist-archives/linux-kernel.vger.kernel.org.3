@@ -2,82 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1170751D264
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A0E51D267
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389633AbiEFHkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S1389623AbiEFHlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242343AbiEFHkZ (ORCPT
+        with ESMTP id S244672AbiEFHlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:40:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9713D5DA30;
-        Fri,  6 May 2022 00:36:43 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id s14so6645411plk.8;
-        Fri, 06 May 2022 00:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:from:to:cc
-         :references:in-reply-to:content-transfer-encoding;
-        bh=8XPOBsdw+QV6Az/8Hs9ZgR+OImDGXcVVxo2FYZtTPbg=;
-        b=P1S0v3DOHG9KQkfS3JlicspQRp9aEUOEn8BVNeKg163DNevoOxh/ryHXFrKaCGpAgz
-         gqKQEMcEq6BGoen5kEfR3QYZaZRokXTB6gFe+xMBNMmrBsh+G/xvjyOKAlDnIZQpseTz
-         1TB+cu8D2F1qqKMW3pAYgb7TB2TbJ+PbGZ9gIaKqd3lpPlETf9sbKjyomfv/GBhUCKYj
-         UA3bjywGrAefwYdU6du0D0RwjZnXCYEhxXuPJvPq1r9XfEbpaVwGaEanazRmsk+1L2Pv
-         lv6Gian1gowj4o1h6+nKZGVF2aQ32eyV+sQpUDDH6qi5ZG1x/1sjRYvlN9WVHUDtxbnP
-         ghSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=8XPOBsdw+QV6Az/8Hs9ZgR+OImDGXcVVxo2FYZtTPbg=;
-        b=H4oc9pYTQ0rIItj7WVV8sy/OoR0AdLhhWJlpcCf+c+C4pek9YvKmqMre2K1LIrCF8L
-         rnfqkYpXE+ZWEJo1zpujeyRGQQdD7526ORPvcaiBAXIo6UxgewUmT/hf/M6Dx0OD7/aS
-         gG8mRtPnzl66iF9jNZ8gJ5duFJnVHP0bhOtfEC4v6ROI8K9fs3Gsu6+D1Bx3L5xAbbdG
-         5A4CpGNaxkJ8E0aArLKylexhqLw4I2x/Z2FvCcEtcNrkUoeHxH2wkWFexixgv6I054ci
-         opVX2lRws2AJu4pQopjlfIgOkkTgURtS2IQ6oBjU7OQkqBhTtPERw5d8FoQteAgJYFl+
-         iYKg==
-X-Gm-Message-State: AOAM532wyt5XWnMZI4s2eokSLGPuBAcPvbII7UfEG/lH+tZ212z4HRmE
-        8BwxbtdCWfKUr5DaT3kxnuOJghgUE5I=
-X-Google-Smtp-Source: ABdhPJzapMuz6f9puPHher7Kzmhy/nGphBj3sdFcklDK0QFq8MPK62npQh8RK6egBYy6eRkQNpq6yQ==
-X-Received: by 2002:a17:902:e481:b0:15c:dc24:64e8 with SMTP id i1-20020a170902e48100b0015cdc2464e8mr2323004ple.35.1651822603054;
-        Fri, 06 May 2022 00:36:43 -0700 (PDT)
-Received: from [192.168.255.10] ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id x2-20020aa79a42000000b0050dc7628169sm2710321pfj.67.2022.05.06.00.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 00:36:42 -0700 (PDT)
-Message-ID: <b4d23f42-36f4-353a-1f44-c12178f0a2b3@gmail.com>
-Date:   Fri, 6 May 2022 15:36:49 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2 0/5] fast poll multishot mode
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
+        Fri, 6 May 2022 03:41:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D06213B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651822646; x=1683358646;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=toIf4riM0fUf3p8/OWQt28q5FFGojcylLaM+ORZAoXw=;
+  b=lk8fo/8zKw2WWa3n5a7AlxTb6dfQEu6r1kt7z8nj3f06UJGQgxE6IrMd
+   Qi3Y5jBUYgnL5EkbyW6xyTBUANkSjNz4TYkStlMNWVapXdqVO1g1Tw6cN
+   a7NTV8unrKzviRUGF/OmAUBx3AYKg9vjYm+EcKvV4SLR1lI4CKkVuUkY6
+   IWJTOzuCrTebWInswgAE5W1i3605v8dnqtoGHBRJZ3KbnGehEr567eMWR
+   aq7ejU4jcOsZBoaAq4IQ8JAHNLUVvBT5vxoMbkV3JaJPQ9ySdgzciXYSe
+   ZiZFCVpvNBoFCFXM9bOxam92J1XcoYPG80qklTCXgRj9BY+NTan4A+6lD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250378903"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="250378903"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:37:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="695045803"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 May 2022 00:37:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmsWi-000DFw-L5;
+        Fri, 06 May 2022 07:37:24 +0000
+Date:   Fri, 6 May 2022 15:36:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
-In-Reply-To: <20220506070102.26032-1-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [intel-tdx:kvm-upstream-workaround 292/361]
+ arch/x86/virt/vmx/tdx/tdx_debug.c:38:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202205061552.nQdkBaVb-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
-I actually had a question about the current poll code, from the code it
-seems when we cancel a poll-like request, it will ignore the existing
-events and just raise a -ECANCELED cqe though I haven't tested it. Is
-this by design or am I missing something?
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   3b5b338cdf10dca7a2435d1f86b2dd9f1a3ad833
+commit: 35b7a73dd22642a50aa614a812f76289a59d1509 [292/361] [REVERTME] debugfs to operation on TDX debug op
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220506/202205061552.nQdkBaVb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/35b7a73dd22642a50aa614a812f76289a59d1509
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 35b7a73dd22642a50aa614a812f76289a59d1509
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Regards,
-Hao
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/virt/vmx/tdx/tdx_debug.c:38:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (debugconfig_supported) {
+               ^~~~~~~~~~~~~~~~~~~~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:46:10: note: uninitialized use occurs here
+           return  ret;
+                   ^~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:38:2: note: remove the 'if' if its condition is always true
+           if (debugconfig_supported) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/virt/vmx/tdx/tdx_debug.c:36:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +38 arch/x86/virt/vmx/tdx/tdx_debug.c
+
+    32	
+    33	static inline u64 tddebugconfig(u64 subleaf, u64 param1, u64 param2)
+    34	{
+    35		static bool debugconfig_supported = true;
+    36		int ret;
+    37	
+  > 38		if (debugconfig_supported) {
+    39			ret = __seamcall(SEAMCALL_TDDEBUGCONFIG, subleaf, param1, param2, 0, NULL);
+    40			if (ret) {
+    41				pr_info("DEBUGCONFIG SEAMCALL isn't supported.\n");
+    42				debugconfig_supported = false;
+    43			}
+    44		}
+    45	
+    46		return  ret;
+    47	}
+    48	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

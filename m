@@ -2,166 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3931351D32D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D861051D32F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390008AbiEFITr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S1390015AbiEFIUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390048AbiEFITi (ORCPT
+        with ESMTP id S1390042AbiEFIUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:19:38 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02076352B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:15:52 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id m190so61518ybf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8500E8Rxld5vc9dYZybFYeJrffHl6XGxHFSG1DGjm8s=;
-        b=KkiGGGSLjep1WCk/ooDR5pFmX0A/xIFZN87VFDJyaTjni7Lfl5S3buUNmbgsRX34Ku
-         uZFlkCUw2kpWP5WaabD+mw928GPtF4mpGkbVGkhrGSb6lf8IkYLk3V65dsWy1gM5tOGS
-         vt6qCN+R7m5Y1lgd6Bd96quyOluVixMDuX/jeGPQ2qurB68WNp0VlbZE42XRnskuPFJ5
-         8UeRpfdY99YDUokSscSvEVY/kvCSXpClhnCxwjuDScxFM7n+AamLhcWOS8odsFDVrZQU
-         VEd7n8Xht791ggDtmnzcJAkUD6EVVt/nzRK7zI8cacmnof72fnOqjVNdVa6tEyd5AnJp
-         Bthg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8500E8Rxld5vc9dYZybFYeJrffHl6XGxHFSG1DGjm8s=;
-        b=2sILnL6Hm2csgbsWmBswGyapsnv0bk0m5Nli+pKtWEmWOdL4HB71c9msUrLufhisg3
-         iG/3k9eOenr+qkcX0y7Rsw1Rec0IuKu/newtbjEUfnhBNGFlBdalHlLatAYobwDV3lzk
-         qkDlNKOwd1EIJv3H08D1rFafEQCiFeVkgibdDqS2Zypc3MJGKmH4W957PQ40gZ2CpUzR
-         zdGXQK3ayBjVX5T/eFLoJWr8q7DH3EkUKJHJsPMlRcRb53ifeFKrs+3V9UGRiT62lr/c
-         EiEoETOUTH7KApFpOfXSlbKDxsJP/yKjtoUDnvX08fKiD94hUI3/dEu/+sZE7efoWzTH
-         1dKA==
-X-Gm-Message-State: AOAM531Qenmyy0cIosir8RoJZ0Qu0wiKYmDe8gu37NixKoCLWNIEe4k0
-        fIE7kjVa3vTjLozJh3lQ6fk2tOmIkqm41CERzh0YGA==
-X-Google-Smtp-Source: ABdhPJy9rrYVGbPd5JwMJvqCG1oarxVuTcxnNidKGWecfEABTxKqkiQ3ibOUc4k4ZWG37qriREtNXRJQMEloqYiE8+0=
-X-Received: by 2002:a25:3157:0:b0:649:b216:bb4e with SMTP id
- x84-20020a253157000000b00649b216bb4emr1460369ybx.387.1651824951606; Fri, 06
- May 2022 01:15:51 -0700 (PDT)
+        Fri, 6 May 2022 04:20:03 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D342468305
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651824972; x=1683360972;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=BY3tPmPvaQx1ru0VWeKlChmcFens1nBoj2sS3AuvwKA=;
+  b=Q/aCyQhEVi/lMZXLtP11LolDqtVHo/7WbFhzUbgum8EsoNaRbvk84rqy
+   VSQZzez0aQR9IpRUgQ6yYJT9z6tlDkBbKnoKyGwQ6zZlFU1sSXN2ynMMu
+   WXV1TIXC8KanD9hDIBnkSqivYyECDdY3puM79HwZyw3m40gy6CI+OUcDH
+   iyLlAaGyl6JjAcwL8LOuvmoYT9v57Hgosj+vqv71YzzvpjU7oOw3nUM3Z
+   a1zS87X1dwkON9UULPgn3ENf8oKPtB6rU4aolAiF+WWHWJZJCB/0emXvo
+   MpiWqL/6epvKdOTMC8upNmWnjmRfwGOXHDqGn7/7MTmlLlMr9j0HdNLUk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267993529"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="267993529"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:16:11 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="585848694"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.170.35]) ([10.249.170.35])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:16:09 -0700
+Subject: Re: [kbuild-all] Re: time.c:undefined reference to `mach_get_rtc_pll'
+To:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Daniel Palmer <daniel@0x0f.com>
+References: <202205041720.i8wJ8uXq-lkp@intel.com>
+ <CAK8P3a3F3Z1NyhVcK6wN+b6Es3gqiYGee8a+pAPsaer4hhHDbQ@mail.gmail.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <45842084-938c-1e86-8b40-e883c9ae40bb@intel.com>
+Date:   Fri, 6 May 2022 16:16:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20220422201237.416238-1-eric.dumazet@gmail.com> <20220506064439.GC23061@xsang-OptiPlex-9020>
-In-Reply-To: <20220506064439.GC23061@xsang-OptiPlex-9020>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 6 May 2022 01:15:40 -0700
-Message-ID: <CANn89iLkpsri3CxxP3Xc-jLJ_9V4K5pCHPRhdWEL69Z78VWCjw@mail.gmail.com>
-Subject: Re: [net] 72fd55c0db: invoked_oom-killer:gfp_mask=0x
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a3F3Z1NyhVcK6wN+b6Es3gqiYGee8a+pAPsaer4hhHDbQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 11:44 PM kernel test robot <oliver.sang@intel.com> wrote:
->
->
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-11):
->
-> commit: 72fd55c0dbb1ad5ba283ca80abc9546702815a33 ("[PATCH v2 net-next] net: generalize skb freeing deferral to per-cpu lists")
-> url: https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-generalize-skb-freeing-deferral-to-per-cpu-lists/20220423-060710
-> base: https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git c78c5a660439d4d341a03b651541fda3ebe76160
-> patch link: https://lore.kernel.org/netdev/20220422201237.416238-1-eric.dumazet@gmail.com
->
-
-I think this commit had two follow up fixes.
-Make sure to test the tree after the fixes are included, otherwise
-this is adding unneeded noise.
-Thank you.
-
-commit f3412b3879b4f7c4313b186b03940d4791345534
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Wed Apr 27 13:41:47 2022 -0700
-
-    net: make sure net_rx_action() calls skb_defer_free_flush()
-
-And:
-
-commit 783d108dd71d97e4cac5fe8ce70ca43ed7dc7bb7
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Fri Apr 29 18:15:23 2022 -0700
-
-    tcp: drop skb dst in tcp_rcv_established()
 
 
-> in testcase: xfstests
-> version: xfstests-x86_64-46e1b83-1_20220414
-> with following parameters:
->
->         disk: 4HDD
->         fs: ext4
->         fs2: smbv3
->         test: generic-group-10
->         ucode: 0xec
->
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
->
->
-> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz with 16G memory
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
->
-> [   80.428226][ T1836] Attempt to set a LOCK_MAND lock via flock(2). This support has been removed and the request ignored.
-> [   80.739189][  T370] generic/207       0s
-> [   80.739198][  T370]
-> [   80.785302][ T1696] run fstests generic/208 at 2022-05-06 02:42:26
-> [   81.143444][ T1836] Attempt to set a LOCK_MAND lock via flock(2). This support has been removed and the request ignored.
-> [   89.609627][   T58] kworker/u16:5 invoked oom-killer: gfp_mask=0xcd0(GFP_KERNEL|__GFP_RECLAIMABLE), order=0, oom_score_adj=0
-> [   89.620805][   T58] CPU: 0 PID: 58 Comm: kworker/u16:5 Not tainted 5.18.0-rc3-00568-g72fd55c0dbb1 #1
-> [   89.629899][   T58] Hardware name: HP HP Z240 SFF Workstation/802E, BIOS N51 Ver. 01.63 10/05/2017
-> [   89.638822][   T58] Workqueue: writeback wb_workfn (flush-8:16)
-> [   89.644727][   T58] Call Trace:
-> [   89.647863][   T58]  <TASK>
-> [ 89.650649][ T58] dump_stack_lvl (kbuild/src/consumer/lib/dump_stack.c:107 (discriminator 1))
-> [ 89.654992][ T58] dump_header (kbuild/src/consumer/mm/oom_kill.c:73 kbuild/src/consumer/mm/oom_kill.c:461)
-> [ 89.659250][ T58] oom_kill_process.cold (kbuild/src/consumer/mm/oom_kill.c:979)
-> [ 89.664110][ T58] out_of_memory (kbuild/src/consumer/mm/oom_kill.c:1119 (discriminator 4))
->
->
-> To reproduce:
->
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         sudo bin/lkp install job.yaml           # job file is attached in this email
->         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
->         sudo bin/lkp run generated-yaml-file
->
->         # if come across any failure that blocks the test,
->         # please remove ~/.lkp and /lkp dir to run from a clean state.
->
->
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
->
+On 5/4/2022 5:25 PM, Arnd Bergmann wrote:
+> On Wed, May 4, 2022 at 11:14 AM kernel test robot <lkp@intel.com> wrote:
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+>> commit: 8b22820efb35f93d98638563b0a8f4094e8ee399 m68k: m68328: remove duplicate code
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+>>>> time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+>>     m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+>>     m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+>>
+> 
+> I think this is just another build failure that was hidden before my patch,
+> not caused by my patch.
+> 
+>        Arnd
+
+Hi Arnd,
+
+Sorry for the inconvenience, we have added it to the ignore list.
+
+Best Regards,
+Rong Chen

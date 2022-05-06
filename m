@@ -2,131 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E900951D8DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9EE51D8EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392403AbiEFNZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S1392450AbiEFN0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392347AbiEFNYr (ORCPT
+        with ESMTP id S1392424AbiEFN02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:24:47 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E2366FBB;
-        Fri,  6 May 2022 06:21:01 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id v139so7173642vsv.0;
-        Fri, 06 May 2022 06:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ov/2s8L5gt/KlpinanE/9NpBhE3fk6VnsmvlXmdq/tA=;
-        b=HVOjmBsa8kBJNSGcp8KgsSBEbZqqaI7zDGE7jxIHn5y9/M+EbLZT05sakERciInCNa
-         bpaf948KuVtXAbBuuHvpV52Qi5sRvPZ8OEpfvZFfwSa/DrFo9xViw9bWDmh3MB/eX1zN
-         WjYq2uaw1JL80Q+PE92wayWOwBLlQqWF7OZ3/64idHgI3i+GXC7MVA3Y0DmRDgrbLarU
-         xsTJxgXi7BDnMn4KKSkW+bZTu1Sp2ffaWt7CxmTnXfofBTeJgU0jEX/z8DhkxSbQ7gMP
-         5ZwUcRF7izU535xyZ9K6wyWuDmUDY/pYs67HlhgvufmetPivMYncaOghg2KFMKtsxciZ
-         KB/w==
+        Fri, 6 May 2022 09:26:28 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF94C69711
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651843364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ntfBkmjNjhrxvA8xhvwrtXUPZhy6WpJ5yDdT5A+/C00=;
+        b=Wtk74G+V7aYi6mde13y1K7Fa8NuxGF0Hyf731kBLC7M2YKnml3AvC1mXkIUeofmlOzFPmE
+        LfJo3q/yMVR8D2N6cZXjkfjbgMMnNYAClohUQp2YVR23vtAw8NYmeoyyssHLL6wZdrccQW
+        qptb008pMC8Y+307xBhxDRoyT+tqnmM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-ypFVaWaVNYqy1yIqEEoILA-1; Fri, 06 May 2022 09:22:43 -0400
+X-MC-Unique: ypFVaWaVNYqy1yIqEEoILA-1
+Received: by mail-wr1-f70.google.com with SMTP id w11-20020adf8bcb000000b0020c550ba8d7so2582389wra.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:22:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ov/2s8L5gt/KlpinanE/9NpBhE3fk6VnsmvlXmdq/tA=;
-        b=sPlV8bPUGQvbTcgB6eC/MbirSuAg6X/Hb5dv8or3z/tShnBv/3AXPggBSZiCltshuo
-         6pAFJE7/fV9KKwVcaJFwbno+Zl9nHndl98OfZRdZm8SkXHYYVBde+2E1aNcSlsKwFyC2
-         qARmth1urZgEi1GtAVTRbZs8MNQqh9Cy47cdCqpq+cSmWQ1YQ63E6nrRpYyS1dePGfBt
-         BbswgWV8xDxF5yQDoLjOCUFW0ERmJLR7ccKTeOvUEPPUJHaPVobKEjYvb+17iHMzNFAZ
-         ohUEGkR/hpPjcUrhLLcEA929KA1u0iOR/+Yj9QT4RygYzb2EPuPzx7XrYeBPtQjMcHu5
-         I2Hg==
-X-Gm-Message-State: AOAM5320curBc33DnTfDxhuggdk4S8SCr+UdjbRMUoZUJWd5Sw0yQaWy
-        MrkBhw7ENk2ZLD0b4kvwzZ+3GeL0FP10pNU6s4E=
-X-Google-Smtp-Source: ABdhPJxzza0kPCqwV0BQbh/O77ndFbUKI+dODtzckIUOeQJQnROXd0zi5cGUpautfsp5ngXXQ46R0Oidd5fJ9+BauDE=
-X-Received: by 2002:a67:2e91:0:b0:32c:df82:9ad3 with SMTP id
- u139-20020a672e91000000b0032cdf829ad3mr955748vsu.40.1651843260252; Fri, 06
- May 2022 06:21:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ntfBkmjNjhrxvA8xhvwrtXUPZhy6WpJ5yDdT5A+/C00=;
+        b=wy4LGJ+M1ecrJUPUDus+xcBwP5L8UWWgtnMiz7zAyKAmHNqzSkZYA/+AZiV2/vQInQ
+         M5VWj6szW8iyA8gfWqZ2eeiw8XCcaUPHKfSEIh24MeLUo67qIIQkjAihOzHMJtMeBTHQ
+         jtBHy5kdz/PDCLGcVE0ptXX8T9uQjUk5zZWvvw3MMMRBAAAvBZrAwpHhVLbIjIl8jSwc
+         qk5A+W5iCpq9FJOt5K5h6okusgcUihuwWCdb06J2xjYsg9+o6zYhQw9azOBtM/zniaMn
+         bZMiIzdzMk8CD/8HoYkRTnEg0M+7mZMoOrnreWuy8doMtnjGjk1HJnQIdtWdxjerpcei
+         WFHg==
+X-Gm-Message-State: AOAM533v6cQLTBfET1tPW9mEfLofSCU9MQL/5xrJcn2c2CJZZr1w1AYG
+        IhwvBE2H75COqN188fwxZBg4YWsCyq1aSwtMGebM+r0MVvse4sn3kcvzLBxWoJLglv9V9n2wNLn
+        C95o5WWZq6KdxUBUpO97mpW3EXp/io/fzinYwvJ8ZXavBuWeT8OjCLC9TLLVM3wYkgmKmEdPgVE
+        s=
+X-Received: by 2002:a05:600c:20e:b0:394:2985:6d0c with SMTP id 14-20020a05600c020e00b0039429856d0cmr9784124wmi.106.1651843362262;
+        Fri, 06 May 2022 06:22:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoBGIqiXlxsybVbyUOYtj+ac6M3xoMutesjNKS5Waxldl///9zmVAj4E/EHzyx2X+CmF9+Qw==
+X-Received: by 2002:a05:600c:20e:b0:394:2985:6d0c with SMTP id 14-20020a05600c020e00b0039429856d0cmr9784085wmi.106.1651843361915;
+        Fri, 06 May 2022 06:22:41 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l16-20020a7bcf10000000b003942a244f54sm10378255wmg.45.2022.05.06.06.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 06:22:41 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, intel-gfx@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, Peter Jones <pjones@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH] fbdev: efifb: Fix a use-after-free due early fb_info cleanup
+Date:   Fri,  6 May 2022 15:22:25 +0200
+Message-Id: <20220506132225.588379-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-21-chenhuacai@loongson.cn> <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
- <CAMj1kXEDpJwLDD4ZGLwzdo1KcJG_90iD9MnBVamCK06YKF7BdA@mail.gmail.com>
- <CAAhV-H4eR5YvhABp9L4FBmofWwH+XM3V_nOjatQTV_M7Gihs7g@mail.gmail.com>
- <CAMj1kXFD8_CuijJFgQbrxvY4MVBLmKQKFKmYhD1NBFLn3v=+FQ@mail.gmail.com>
- <a6afaa3f-cb9f-2086-0e02-5ec21ba535d4@xen0n.name> <CAK8P3a0xuh1aAM7iwE-jiBbR-OOF5YVfhmU0Nygbpviso3tmbQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0xuh1aAM7iwE-jiBbR-OOF5YVfhmU0Nygbpviso3tmbQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 6 May 2022 21:20:49 +0800
-Message-ID: <CAAhV-H5FbA5DJvPwygiUyBrzq9M5R=Fr06rHAHLR31uu6ZLmkQ@mail.gmail.com>
-Subject: Re: [PATCH V9 20/24] LoongArch: Add efistub booting support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     WANG Xuerui <kernel@xen0n.name>, Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ard, Arnd and Xuerui,
+Commit d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather
+than .remove") attempted to fix a use-after-free error due driver freeing
+the fb_info in the .remove handler instead of doing it in .fb_destroy.
 
-On Fri, May 6, 2022 at 7:41 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, May 6, 2022 at 1:26 PM WANG Xuerui <kernel@xen0n.name> wrote:
-> > On 5/6/22 16:14, Ard Biesheuvel wrote:
->
-> > Or is there compatibility at all?
-> >
-> > It turns out that this port is already incompatible with shipped
-> > systems, in other ways, at least since the March revision or so.
->
-> I think we can treat user space compatibility separately from firmware
-> compatibility.
->
-> > So, in effect, this port is starting from scratch, and taking the chance
-> > to fix early mistakes and oversights all over; hence my opinion is,
-> > better do the Right Thing (tm) and give the generic codepath a chance.
-> >
-> > For the Loongson devs: at least, declare the struct boot_params flow
-> > deprecated from day one, then work to eliminate it from future products,
-> > if you really don't want to delay merging even further (it's already
-> > unlikely to land in 5.19, given the discussion happening in LKML [3]).
-> > It's not embarrassing to admit mistakes; we all make mistakes, and
-> > what's important is to learn from them so we don't collectively repeat
-> > ourselves.
->
-> Agreed. I think there can be limited compatibility support for old
-> firmware though, at least to help with the migration: As long as
-> the interface between grub and linux has a proper definition following
-> the normal UEFI standard, there can be both a modern grub
-> that is booted using the same protocol and a backwards-compatible
-> grub that can be booted from existing firmware and that is able
-> to boot the kernel.
->
-> The compatibility version of grub can be retired after the firmware
-> itself is able to speak the normal boot protocol.
-After an internal discussion, we decide to use the generic stub, and
-we have a draft version of generic stub now[1]. I hope V10 can solve
-all problems. :)
-[1] https://github.com/loongson/linux/tree/loongarch-next-generic-stub
+But ironically that change introduced yet another use-after-free since the
+fb_info was still used after the free.
 
-Huacai
->
->        Arnd
+This should fix for good by freeing the fb_info at the end of the handler.
+
+Fixes: d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove")
+Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Reported-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+
+ drivers/video/fbdev/efifb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/efifb.c b/drivers/video/fbdev/efifb.c
+index cfa3dc0b4eee..b3d5f884c544 100644
+--- a/drivers/video/fbdev/efifb.c
++++ b/drivers/video/fbdev/efifb.c
+@@ -259,12 +259,12 @@ static void efifb_destroy(struct fb_info *info)
+ 			memunmap(info->screen_base);
+ 	}
+ 
+-	framebuffer_release(info);
+-
+ 	if (request_mem_succeeded)
+ 		release_mem_region(info->apertures->ranges[0].base,
+ 				   info->apertures->ranges[0].size);
+ 	fb_dealloc_cmap(&info->cmap);
++
++	framebuffer_release(info);
+ }
+ 
+ static const struct fb_ops efifb_ops = {
+-- 
+2.35.1
+

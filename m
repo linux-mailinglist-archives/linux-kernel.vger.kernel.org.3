@@ -2,86 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9716651DAD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C404651DADC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442322AbiEFOol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S1442315AbiEFOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348175AbiEFOoi (ORCPT
+        with ESMTP id S1351465AbiEFOqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:44:38 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDB5393CF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:40:55 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso7381895fac.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:40:55 -0700 (PDT)
+        Fri, 6 May 2022 10:46:19 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4236AA4B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:42:36 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so11013183pju.2
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=F82bZ9DmI62a6GWEEGersqAdKfD7GSoQLwzO2u5c+7Q=;
-        b=EZyLNnvq88yM5iivGZeAhz9yUVcV+I/8pU1Bkf8ifgeGEcKCmanjgFOxfEnRGtpik0
-         gnOangLfle/l8mqcajj8i2O5PFzENnsaCfNOnMTjApkQRkMic5hXELKUKuexPHHsh4xh
-         xhpBnTM+W+CQ6Ju0zQFm5BWqvCb3sEyPNAylg=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fCciWKwTtYjCwNzpF3uMXMWEkDONEDvB+Ly+sSMPNak=;
+        b=wrOqFYEkCQ+YzMwOOjALqGyukOLH/diDf+vy0c4cJ6aUqtB8BbdvUtYl+g0KilNVK5
+         pMAaA4i/fIZrgiohj11pnygG6BWoFBl5CEBN5OCAk+08Z2C7toBtfO/n3mkUcxs4vnGJ
+         ZB3dgLdk1A8/KseauRYWHj4YZLqB4Oq1zyLER7Enj6OiG6zAdNX95r2NSN8PK+TAfgDQ
+         4tduZsKli4CGnthIWFnM/C/QweWo1k2Ye3edNEoI3YLGXwBXKtpdajYuhDzlhMSYQ4hY
+         oit9H/vw9iinaHjQW9gLh86OATlS2XnCl69HA/ssRStZ7YjeiwQhjdRYGbpOg8uO+WpR
+         hBpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=F82bZ9DmI62a6GWEEGersqAdKfD7GSoQLwzO2u5c+7Q=;
-        b=WGjmvb78ZOdQFu1stqF5w8QHbAcpxRm2swRYgkT/AcJCbWU7LfWoHaOQwVEL/lxWsf
-         2p9qsLfiWpE8032GrGPbdPhmU9bB+eLLc5FJ5C7FLMDgmc4lA3NfGNGcXKdG98jctCbi
-         O/MoU+eaeQt4jmOaHZ4WEaxRzSRZx9rhvC6wzlNqPYQ1MHy7sw8uDLBGOXl8QStvKAfj
-         YyRMXOkNh1kM5cOl3xsEoFKRpw1PuIMHTtJ/+A0SkSPoHO3j9JM5WPxIkemuagPQHLci
-         j/3qUc7XVRWnDyccToXpUOdWPW++gslQvg4vSe8kmhwSNCSoNuyqEokHnNhN/8ye5SaV
-         FmMA==
-X-Gm-Message-State: AOAM531vbN7OiFyLew8ojAKTOLyfw7XfhexW2WCzxSHOs/5RHxBh91gF
-        eU44WO60sex8JIWRkWMdlHQGpHV3RU7278WW1NDl9znhxqM=
-X-Google-Smtp-Source: ABdhPJxN0yptjNkxQGuaxRHu1excLtNj9MDZpVR1yVH8NLGHwEiPJNV3RJgc5+rmGuPNF6+nXeKc5DjH0O901xDuADY=
-X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
- n14-20020a056870558e00b000e1db7c26aamr1469962oao.63.1651848054799; Fri, 06
- May 2022 07:40:54 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 May 2022 10:40:54 -0400
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fCciWKwTtYjCwNzpF3uMXMWEkDONEDvB+Ly+sSMPNak=;
+        b=2NJwe2Tq6bv96LsbjCvMliccCkBJWf5BgB4cfrwepPPg28cKdhNEKEsUz8SE4L/Kpr
+         X8Ijy9QstR7oi8hoChJOct4NZHx5oFhyWMvIMxfDvsji21wCcvJcs+C4gi24v6J/SN91
+         xeyTp0CXOI9Cb6pE54NpKRp7KEh/LKH/uw8Gi6fdBKsi2SSDtTXtRIY28Pz+nIGzby60
+         IJayOzwM0QIdgm5heB2xnQmL580JVSE+GGu5zt00hH29w2r7vWJhEgRmHCodczpnhBlh
+         tkJn3J5jCiQ59wBYJcFcAmlb0zLk2hLrLZqYUNVoJOTvjJ0oUJuLERTikYirBvieQin0
+         AAQQ==
+X-Gm-Message-State: AOAM533dunn77oELLR36ii0+ZCqmh9H5g0t3cJo8tBioxW2mcU1aFiQM
+        M7lvzdp3ohxJnuNIsOkQ5WPnlA==
+X-Google-Smtp-Source: ABdhPJzPtNv0cBFsNLBY6bdCulNip6hoEv6/qyGMEUFFiMrRWalrbdojDjQvkYWP5OH9bWQFKANPFA==
+X-Received: by 2002:a17:90b:4a05:b0:1dc:1a2c:8c69 with SMTP id kk5-20020a17090b4a0500b001dc1a2c8c69mr12603286pjb.9.1651848155723;
+        Fri, 06 May 2022 07:42:35 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170902da8400b0015e8d4eb216sm1901124plx.96.2022.05.06.07.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 07:42:35 -0700 (PDT)
+Message-ID: <afb1be12-5284-79bf-8006-26448e594443@kernel.dk>
+Date:   Fri, 6 May 2022 08:42:34 -0600
 MIME-Version: 1.0
-In-Reply-To: <1651742739-12338-3-git-send-email-quic_c_skakit@quicinc.com>
-References: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com> <1651742739-12338-3-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 6 May 2022 10:40:54 -0400
-Message-ID: <CAE-0n52E6kgXuRRnwcm+koc_5C9OV2Ttwua=9mQLc8VafHg=cw@mail.gmail.com>
-Subject: Re: [PATCH V11 2/9] dt-bindings: mfd: pm8008: Change the address cells
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-6-haoxu.linux@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220506070102.26032-6-haoxu.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-05-05 02:25:32)
-> Change the address cells as '2' so that the first cell
-> describes the i2c address offset of the clients.
-> This helps us to define the child nodes of all
-> clients under the same parent mfd node, instead of
-> adding separate mfd DT nodes.
->
-> Change the gpios reg value accordingly.
->
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
+On 5/6/22 1:01 AM, Hao Xu wrote:
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 0a83ecc457d1..9febe7774dc3 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -1254,6 +1254,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags);
+>  static enum hrtimer_restart io_link_timeout_fn(struct hrtimer *timer);
+>  static void io_eventfd_signal(struct io_ring_ctx *ctx);
+>  static void io_req_tw_post_queue(struct io_kiocb *req, s32 res, u32 cflags);
+> +static void io_poll_remove_entries(struct io_kiocb *req);
+>  
+>  static struct kmem_cache *req_cachep;
+>  
+> @@ -5690,24 +5691,29 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+>  static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>  {
+>  	struct io_accept *accept = &req->accept;
+> +	bool multishot;
+>  
+>  	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
+>  		return -EINVAL;
+> -	if (sqe->ioprio || sqe->len || sqe->buf_index)
+> +	if (sqe->len || sqe->buf_index)
+>  		return -EINVAL;
+>  
+>  	accept->addr = u64_to_user_ptr(READ_ONCE(sqe->addr));
+>  	accept->addr_len = u64_to_user_ptr(READ_ONCE(sqe->addr2));
+>  	accept->flags = READ_ONCE(sqe->accept_flags);
+>  	accept->nofile = rlimit(RLIMIT_NOFILE);
+> +	multishot = !!(READ_ONCE(sqe->ioprio) & IORING_ACCEPT_MULTISHOT);
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+I tend to like:
+
+	multishot = READ_ONCE(sqe->ioprio) & IORING_ACCEPT_MULTISHOT) != 0;
+
+as I think it's more readable. But I think we really want it ala:
+
+	u16 poll_flags;
+
+	poll_flags = READ_ONCE(sqe->ioprio);
+	if (poll_flags & ~IORING_ACCEPT_MULTISHOT)
+		return -EINVAL;
+
+	...
+
+to ensure that we can add more flags later, hence only accepting this
+single flag right now.
+
+Do we need REQ_F_APOLL_MULTI_POLLED, or can we just store whether this
+is a multishot request in struct io_accept?
+
+> @@ -5760,7 +5774,35 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+>  		ret = io_install_fixed_file(req, file, issue_flags,
+>  					    accept->file_slot - 1);
+>  	}
+> -	__io_req_complete(req, issue_flags, ret, 0);
+> +
+> +	if (req->flags & REQ_F_APOLL_MULTISHOT) {
+> +		if (ret >= 0) {
+> +			bool filled;
+> +
+> +			spin_lock(&ctx->completion_lock);
+> +			filled = io_fill_cqe_aux(ctx, req->cqe.user_data, ret,
+> +						 IORING_CQE_F_MORE);
+> +			io_commit_cqring(ctx);
+> +			spin_unlock(&ctx->completion_lock);
+> +			if (unlikely(!filled)) {
+> +				io_poll_clean(req);
+> +				return -ECANCELED;
+> +			}
+> +			io_cqring_ev_posted(ctx);
+> +			goto retry;
+> +		} else {
+> +			/*
+> +			 * the apoll multishot req should handle poll
+> +			 * cancellation by itself since the upper layer
+> +			 * who called io_queue_sqe() cannot get errors
+> +			 * happened here.
+> +			 */
+> +			io_poll_clean(req);
+> +			return ret;
+> +		}
+> +	} else {
+> +		__io_req_complete(req, issue_flags, ret, 0);
+> +	}
+>  	return 0;
+>  }
+
+I'd probably just make that:
+
+	if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
+		__io_req_complete(req, issue_flags, ret, 0);
+		return 0;
+	}
+	if (ret >= 0) {
+		bool filled;
+
+		spin_lock(&ctx->completion_lock);
+		filled = io_fill_cqe_aux(ctx, req->cqe.user_data, ret,
+					 IORING_CQE_F_MORE);
+		io_commit_cqring(ctx);
+		spin_unlock(&ctx->completion_lock);
+		if (filled) {
+			io_cqring_ev_posted(ctx);
+			goto retry;
+		}
+		/* fall through to error case */
+		ret = -ECANCELED;
+	}
+
+	/*
+	 * the apoll multishot req should handle poll
+	 * cancellation by itself since the upper layer
+	 * who called io_queue_sqe() cannot get errors
+	 * happened here.
+	 */
+	io_poll_clean(req);
+	return ret;
+
+which I think is a lot easier to read and keeps the indentation at a
+manageable level and reduces duplicate code.
+
+-- 
+Jens Axboe
+

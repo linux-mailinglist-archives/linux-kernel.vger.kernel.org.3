@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA6D51D67A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C98F51D681
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384671AbiEFLUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S1391264AbiEFLU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244042AbiEFLUM (ORCPT
+        with ESMTP id S244042AbiEFLUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:20:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B385DA36;
-        Fri,  6 May 2022 04:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651835790; x=1683371790;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=Ffv8NjpypTctGSjcYAJAG04MB4c0QqG3L0uxm5pUCHs=;
-  b=AqEcMMxg4dcJxqjyswDOJZb32SkX5hEiCSErwZnKdJhLsWvY8vTXlky3
-   /xhA7Z00ErdU8WMVLdUg/ucpV4IF4DPyH5xwnI+zdE38R3roCqdvE2FVB
-   /Q/EH8QwA+ElyK4WstwVVyne2wybmxKDDyCA+Aym3mOUGrv0/INh4TMVl
-   6mkgc5GtNayfewMg1eMVR71FeN5mbKPvgzRFVsd6XteEsTX8PEHJeCUMx
-   HZoE2TtkS97rLxIRfY8UBjG5FJ5sa2floO4bbFjMUYloBm3kYIdmAOOi1
-   v4ryZP8pM5vLgE6v9XViBUaOEN6NplPKqFxhGO1SN1fp8v6I6u0vRfaP0
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354873953"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="354873953"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:16:30 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="695132735"
-Received: from psikora-mobl.ger.corp.intel.com (HELO localhost) ([10.249.157.88])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:16:25 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Doug Anderson <dianders@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
- resolution as preferred
-In-Reply-To: <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
- <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
-Date:   Fri, 06 May 2022 14:16:22 +0300
-Message-ID: <874k22lxmh.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 6 May 2022 07:20:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD315DA31;
+        Fri,  6 May 2022 04:17:07 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246AvTPO020974;
+        Fri, 6 May 2022 11:16:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+EpF3VzKu+KmK6UkqQNJPa9WTJ1aH25dO2+qeNTHboQ=;
+ b=Z61I6egSQjjOVGXVUh8Ht+HSE4Y9pvtLIRiVEhs51i1W3npA7PYozxfarQh0HDYtjz3I
+ KH2JLewNLR3fIblyZixmiz0N9KAWMSG2ruxBa7x2zYFB/GpbMsDOpL+3yqggl3i2c6aL
+ FiCPjFAEzTRgi4CKpYDBMpIOvlBQ7AxvdCIbr7lMnNW8sf57ei7BIEAhFWAWYB21PHxX
+ OVnxC+ft9/0OkkJxf8En6R0i5ThjzWQ3GvRccPYWqwk6MJNYUetBaEzwYmKICU3y9OmL
+ fP6eGi0h96/hGcIwKjxPYuQHky0uqseCD1Lc6FWmtCCgUbsb3bv+87caDh99pz/0FY39 Xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2cnrcc5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:16:53 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246AwNGi027547;
+        Fri, 6 May 2022 11:16:52 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2cnrcbe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:16:52 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246BDOu1002025;
+        Fri, 6 May 2022 11:16:51 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwcs8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:16:50 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246BGmmu58392934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 May 2022 11:16:48 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BD6F4C046;
+        Fri,  6 May 2022 11:16:48 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34F014C040;
+        Fri,  6 May 2022 11:16:47 +0000 (GMT)
+Received: from sig-9-65-81-120.ibm.com (unknown [9.65.81.120])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 May 2022 11:16:47 +0000 (GMT)
+Message-ID: <c6df072a55a29f670357e2dda384ec7c9ef332c9.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/3] ima: Append line feed to
+ ima/binary_runtime_measurements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Wang Weiyang <wangweiyang2@huawei.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Date:   Fri, 06 May 2022 07:16:46 -0400
+In-Reply-To: <20220505132301.124832-4-wangweiyang2@huawei.com>
+References: <20220505132301.124832-1-wangweiyang2@huawei.com>
+         <20220505132301.124832-4-wangweiyang2@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4ioqBiyCyuIaBzkjGTnGwLoiVESWLZuh
+X-Proofpoint-GUID: wk7lAduHv0EDXUwkV4L7URFEcIeGahX9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_03,2022-05-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=904 clxscore=1011
+ spamscore=0 phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205060062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 May 2022, Doug Anderson <dianders@chromium.org> wrote:
-> Ville,
->
-> On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
->>
->> If we're unable to read the EDID for a display because it's corrupt /
->> bogus / invalid then we'll add a set of standard modes for the
->> display. When userspace looks at these modes it doesn't really have a
->> good concept for which mode to pick and it'll likely pick the highest
->> resolution one by default. That's probably not ideal because the modes
->> were purely guesses on the part of the Linux kernel.
->>
->> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
->>
->> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->> ---
->>
->>  drivers/gpu/drm/drm_edid.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->
-> Someone suggested that you might have an opinion on this patch and
-> another one I posted recently [1]. Do you have any thoughts on it?
-> Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
-> don't have an opinion, that's OK too.
->
-> [1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
+On Thu, 2022-05-05 at 21:23 +0800, Wang Weiyang wrote:
+> There is no LF in binary_runtime_measurements output. It is little weird,
+> so append LF to it.
+> 
+> Example:
+> 
+> / # cat /sys/kernel/security/ima/binary_runtime_measurements
+> ...imaboot_aggregate/ #
 
-There are a number of drivers with combos:
+Why would you cat a binary file?!.  Doesn't make sense.
 
-	drm_add_modes_noedid()
-	drm_set_preferred_mode()
+Mimi
 
-which I think would be affected by the change. Perhaps you should just
-call drm_set_preferred_mode() in your referenced patch?
+> 
+> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
 
-Alternatively, perhaps drm_set_preferred_mode() should erase the
-previous preferred mode(s) if it finds a matching new preferred mode.
-
-
-BR,
-Jani.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

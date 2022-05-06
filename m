@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8337B51D8B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F6551D8B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392329AbiEFNUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S1392333AbiEFNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392303AbiEFNUn (ORCPT
+        with ESMTP id S239008AbiEFNVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:20:43 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1494369702;
-        Fri,  6 May 2022 06:16:58 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B0FF19200BB; Fri,  6 May 2022 15:16:56 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id ACEFD92009E;
-        Fri,  6 May 2022 14:16:56 +0100 (BST)
-Date:   Fri, 6 May 2022 14:16:56 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-In-Reply-To: <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2205061415100.52331@angie.orcam.me.uk>
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com> <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
- <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com> <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 6 May 2022 09:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA7563524
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:17:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 291CE62001
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93933C385A9;
+        Fri,  6 May 2022 13:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651843058;
+        bh=8051614L8Sll2Zr5aA68WUcaidhoMT52a/Hv54vHn7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AKNofkHd+W5jZB2AZzS3JakpjcYUdwsJ5lhSMaMPr/jsNkKgriuq/16GKNXj/9KhL
+         942ryDnREYmhsCWZvckdyD/dsAFlWLWPXAsMrVTLxjWRfa6ROVUh2AG/C5PdrW6HeC
+         v6wU5qRy9GRzaoIqZyfvw53Q3A8XKHgYXkC4wNbLb6bNMpwMWZkKpQEDEGpywhHIb3
+         mWc8rolzOAoRq5fHsRTDcEYIeQybA/RALUKHKmDcmRQJDdLtne4kAupY0vA9rlVTsG
+         6K16alpLhGktu1kfepH05hJPkSZMZApv3RS8Qw65vUe/enrX38ojZg52LuZB5ChdiM
+         /nRPAUsZ0tcuw==
+Date:   Fri, 6 May 2022 14:17:33 +0100
+From:   Will Deacon <will@kernel.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64,trace: Add page fault traceponits
+Message-ID: <20220506131733.GE22892@willie-the-truck>
+References: <20220420070109.1010257-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420070109.1010257-1-sunliming@kylinos.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 May 2022, Arnd Bergmann wrote:
-
-> >  So what happens if the instruction is given an I/O rather than memory BAR
-> > as the relevant argument?  Is the address space indicator bit (bit #0)
-> > simply ignored or what?
+On Wed, Apr 20, 2022 at 03:01:09PM +0800, sunliming wrote:
+> The arm64 architecture lacks some tracepoints support, this patch
+> adds page fault tracepoints. The code and arch policy is mainly
+> inherited  from x86.
 > 
-> Not sure. My best guess is that it would actually work as you'd expect,
-> but is deliberately left out of the architecture specification so they don't
-> have to to validate the correctness.  Note that only a small number of
-> PCIe cards are actually supported by IBM, and I think the firmware
-> only passes devices to the OS if they are whitelisted.
+> Experimented on my centos8 virtual machine:
+> 	dracut:/# echo 1 > /sys/kernel/tracing/events/exceptions/enable
+> 	dracut:/# cat /sys/kernel/tracing/trace
+> 
+> The results:
+>               sh-6098    [001] .....  1186.024675: page_fault_user: addr=0xffffe153cc00 pc=0xffffa4117338 esr=0xffffe153cc00
+>              cat-6126    [000] .....  1186.024677: page_fault_kernel: addr=0xffffa4323740 pc=schedule_tail esr=0xffffa4323740
+>               sh-6098    [001] .....  1186.026085: page_fault_user: addr=0xaaaad23fae34 pc=0xaaaad231c0fc esr=0xaaaad23fae34
+>              cat-6126    [000] .....  1186.026106: page_fault_user: addr=0xffffa414565c pc=0xffffa414565c esr=0xffffa414565c
+>              cat-6126    [000] .....  1186.026222: page_fault_user: addr=0xffffa4214e10 pc=0xffffa4145670 esr=0xffffa4214e10
+>              cat-6126    [000] .....  1186.026243: page_fault_user: addr=0xffffa420fd88 pc=0xffffa41456ac esr=0xffffa420fd88
+>              cat-6126    [000] .....  1186.026282: page_fault_user: addr=0xffffa4117338 pc=0xffffa4117338 esr=0xffffa4117338
+>              cat-6126    [000] .....  1186.026308: page_fault_user: addr=0xffffe153cc00 pc=0xffffa4117338 esr=0xffffe153cc00
+>              cat-6126    [000] .....  1186.026365: page_fault_user: addr=0xaaaad231bd84 pc=0xaaaad231bd84 esr=0xaaaad231bd84
+>               sh-6098    [001] .....  1186.026372: page_fault_user: addr=0xaaab04330098 pc=0xffffa411be68 esr=0xaaab04330098
+>              cat-6126    [000] .....  1186.026394: page_fault_user: addr=0xaaaad22ef420 pc=0xaaaad22ef420 esr=0xaaaad22ef420
+>              cat-6126    [000] .....  1186.026414: page_fault_user: addr=0xaaaad23ee9b0 pc=0xaaaad22ef424 esr=0xaaaad23ee9b0
+>              cat-6126    [000] .....  1186.026426: page_fault_user: addr=0xffffa40c3110 pc=0xffffa40c3110 esr=0xffffa40c3110
+>              cat-6126    [000] .....  1186.026450: page_fault_user: addr=0xaaaad22f23f8 pc=0xaaaad22f23f8 esr=0xaaaad22f23f8
+>              cat-6126    [000] .....  1186.026467: page_fault_user: addr=0xaaaad23f0030 pc=0xaaaad22f240c esr=0xaaaad23f0030
+>              cat-6126    [000] .....  1186.026481: page_fault_user: addr=0xaaaad23fae3c pc=0xaaaad231be40 esr=0xaaaad23fae3c
+>              cat-6126    [000] .....  1186.026530: page_fault_user: addr=0xffffa40d63d8 pc=0xffffa40d63d8 esr=0xffffa40d63d8
+>              cat-6126    [000] .....  1186.026554: page_fault_user: addr=0xffffa431f650 pc=0xffffa40d63f8 esr=0xffffa431f650
+>               sh-6098    [001] .....  1186.026556: page_fault_user: addr=0xaaab04358d28 pc=0xffffa411be70 esr=0xaaab04358d28
+>              cat-6126    [000] .....  1186.026571: page_fault_user: addr=0xaaaad24015d0 pc=0xffffa40d640c esr=0xaaaad24015d0
+>              cat-6126    [000] .....  1186.026600: page_fault_user: addr=0xaaaad2332be8 pc=0xaaaad2332be8 esr=0xaaaad2332be8
+>              cat-6126    [000] .....  1186.026703: page_fault_user: addr=0xffffa416c438 pc=0xffffa416c438 esr=0xffffa416c438
+>               sh-6098    [001] .....  1186.026749: page_fault_user: addr=0xaaab04369d70 pc=0xffffa41193d8 esr=0xaaab04369d70
+>              cat-6126    [000] .....  1186.027610: page_fault_user: addr=0xaaaad2307754 pc=0xaaaad2307754 esr=0xaaaad2307754
+>              cat-6126    [000] .....  1186.027711: page_fault_user: addr=0xaaaad24014c4 pc=0xaaaad23310e4 esr=0xaaaad24014c4
+>              cat-6126    [000] .....  1186.027892: page_fault_user: addr=0xaaab04359a80 pc=0xaaaad23052f0 esr=0xaaab04359a80
+>              cat-6126    [000] .....  1186.027916: page_fault_user: addr=0xaaaad236cf80 pc=0xaaaad236cf80 esr=0xaaaad236cf80
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  arch/arm64/include/asm/trace/common.h     | 12 +++++
+>  arch/arm64/include/asm/trace/exceptions.h | 54 +++++++++++++++++++++++
+>  arch/arm64/kernel/Makefile                |  1 +
+>  arch/arm64/kernel/tracepoint.c            | 24 ++++++++++
+>  arch/arm64/mm/Makefile                    |  3 ++
+>  arch/arm64/mm/fault.c                     | 19 ++++++++
 
- That makes sense, thanks!
+We already report page faults via perf (see the calls to perf_sw_event()),
+so why isn't that sufficient?
 
-  Maciej
+Will

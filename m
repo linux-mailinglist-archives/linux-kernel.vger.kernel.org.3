@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FD251D2A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC96B51D2AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389749AbiEFH66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S1389763AbiEFIAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386640AbiEFH6w (ORCPT
+        with ESMTP id S1386640AbiEFIAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:58:52 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB267D0B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:55:09 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso4856290wmq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=fGiYCF2iw5t4VtH5jxb71hCLielghGLBGlvL9ckdnuk=;
-        b=HDf5cH9w7G+JBlziGdc4NZXV/Bl8VMVD4v/0jrGsIwWz5NYvLAQiFnPEmBoFsefeYO
-         sztyl5l3CnuKRyfgcmlntK3uO2Uh9qRQ2WVhIS+x3SMuT64wNnk7r/pLCTYNUSYIfyUa
-         GgQS6XxeKpAkTkvg1zvrVI7ngmX6YfRKyw9eWZ1eoi5BD2v5M+HqyipHoAE26Y48TGAE
-         oujwYlhZJBPJYX1VZP3NZZd0iizRFCD5qGVVtvr++gjmvLLoYFZUqq5+5xVj8iixhKGO
-         46xpw2wOlxEc0haZbvZ9x3LUU3d1/MiRGsHt6zDrTSugr6+ECDUHhI4Lg0cYDE7T9MT2
-         RI8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=fGiYCF2iw5t4VtH5jxb71hCLielghGLBGlvL9ckdnuk=;
-        b=qVEqTosD4EAYZTmBy6K7m1CUVFDKW+XF8GrSs8+UZzhu0RVSGelMS9opIXYokZ85s5
-         Ns0+rTt6apSGNbNloH4rAfkOtXXytpWiBmYJGJrlrzBD2N04EeeIlxASzJw7LG3vQZja
-         XN1IqGURz5QAwe9/9GrhXaiu1vb406AHoOUf5wAVdGFzmhz4yXTmbE5fHsqFQrHo2AeZ
-         y0mrWlISePMk3VNAihrHQcxn9O+AqA6RotyqmNd2P6Szb2b4tJ3vfFEF45EEdZfCw8I6
-         Gd+7gnomoloWXaNjBftTgxsa7aSc0GTGthwRUULwAir4PTldVzo0BUQHWICN1fFjAwtU
-         jm1g==
-X-Gm-Message-State: AOAM532UGGNNELR3B5Xmob9I6HXhpPXExYjpN8A+MqLr0H7xK1g1vbe+
-        7Jmw+IFMPMosRTASshYQYtIrMw==
-X-Google-Smtp-Source: ABdhPJxXUWYFj9gN67iP4+AdZg3KlNlbI6sMi3eGWQ9KfpsoSreGWKSf6vkbdnNjGdQ1YfZ1QGmKqA==
-X-Received: by 2002:a05:600c:3b24:b0:394:7b59:dfd9 with SMTP id m36-20020a05600c3b2400b003947b59dfd9mr1343514wms.129.1651823707491;
-        Fri, 06 May 2022 00:55:07 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:56b7:4b6b:7ed:112a? ([2001:861:44c0:66c0:56b7:4b6b:7ed:112a])
-        by smtp.gmail.com with ESMTPSA id l13-20020a7bc34d000000b003942a244ebfsm3373135wmj.4.2022.05.06.00.55.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 00:55:06 -0700 (PDT)
-Message-ID: <ca6b70a2-9bcc-fb86-200c-e1714c9d53be@baylibre.com>
-Date:   Fri, 6 May 2022 09:55:05 +0200
+        Fri, 6 May 2022 04:00:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1860D674F2
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651823784; x=1683359784;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NfqfBy/2mV+d23R6nU9hPwmIhD35HU5Ufwf2vf+gjMc=;
+  b=ehrEMiRR7r3aQ5YmJ1pkNLhelaz3FPPKKRoxWJC8UZz6p1RL9a8fE04W
+   9PFolbDQbmtV6JCp5MfmW/3zL7prn4pnPe+a2jhpunIwOHTD744WF5FQ/
+   ykqN9o9K4BcxEhG0AtCYqmBPu9WdeVy+Mfa2qwkrk44Sy3liITQ4F6ZDi
+   Ry++89B9bfISa7WeQOG5q/9w1EnmubEguVC91wesRVYTrJnJSgmm2bBfp
+   j2kaBF8uHIBb2M8dyLdncn2X78wDIjVOKXvo8kQxAmneD7t0hWMFnyl/x
+   YGRg7IK7rBR+qg+zfd95SDCxHHonQmr+Z6CeLmSyt0ovHOFbMgBwaY0Q4
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="155029122"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 May 2022 00:56:23 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 6 May 2022 00:56:22 -0700
+Received: from ROU-LT-M43238L.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 6 May 2022 00:56:20 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <broonie@kernel.org>, <patches@lists.linux.dev>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: [PATCH] ARM: configs: at91: Enable AUTOFS_FS required by systemd
+Date:   Fri, 6 May 2022 09:56:11 +0200
+Message-ID: <20220506075611.17840-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for per-console
- locking
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
- <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
- <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
- <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
- <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
- <87k0b6blz2.fsf@jogness.linutronix.de>
- <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com> <Ym/Z7PYPqvWPEjuL@alley>
- <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
- <87pmktm2a9.fsf@jogness.linutronix.de> <87a6bwapij.fsf@jogness.linutronix.de>
- <87zgjvd2zb.fsf@jogness.linutronix.de>
- <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-On 06/05/2022 08:43, Marek Szyprowski wrote:
-> Hi John,
-> 
-> On 06.05.2022 00:33, John Ogness wrote:
->> On 2022-05-05, John Ogness <john.ogness@linutronix.de> wrote:
->>> I will go through and check if all access to AML_UART_CONTROL is
->>> protected by port->lock.
->> The startup() callback of the uart_ops is not called with the port
->> locked. I'm having difficulties identifying if the startup() callback
->> can occur after the console was already registered via meson_uart_init()
->> and could be actively printing, but I see other serial drivers are
->> protecting their registers in the startup() callback with the
->> port->lock.
->>
->> Could you try booting the meson hardware with the following change? (And
->> removing any previous debug changes I posted?)
-> 
-> Bingo! It looks that the startup() is called when getty initializes
-> console. This fixed the issues observed on the Amlogic Meson based boards.
-> 
-> Feel free to add:
-> 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> 
-> Best regards
+Align all at91 defconfigs to required options for systemd.
+The missing of autofs would cause warnings on boot
+when not available.
 
-Thanks all for figuring out the issue, perhaps other uart drivers could fall
-in the same issue if startup code isn't protected with lock ?
+Suggested-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+---
+ arch/arm/configs/sama5_defconfig | 1 +
+ arch/arm/configs/sama7_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-Neil
+diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
+index 1c4c5a035518..18852803522e 100644
+--- a/arch/arm/configs/sama5_defconfig
++++ b/arch/arm/configs/sama5_defconfig
+@@ -222,6 +222,7 @@ CONFIG_PWM_ATMEL_HLCDC_PWM=y
+ CONFIG_PWM_ATMEL_TCB=y
+ CONFIG_EXT4_FS=y
+ CONFIG_FANOTIFY=y
++CONFIG_AUTOFS_FS=m
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_UBIFS_FS=y
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+index 4a8466306b54..63302858b9c4 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -200,6 +200,7 @@ CONFIG_RESET_CONTROLLER=y
+ CONFIG_EXT2_FS=y
+ CONFIG_EXT3_FS=y
+ CONFIG_FANOTIFY=y
++CONFIG_AUTOFS_FS=m
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_UBIFS_FS=y
+-- 
+2.32.0
+

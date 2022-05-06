@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F8E51DBAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2AF51DBAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442748AbiEFPNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S1378544AbiEFPOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442777AbiEFPNc (ORCPT
+        with ESMTP id S1442873AbiEFPO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:13:32 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0516D3A8
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:09:44 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id k1so7711931pll.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:09:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
-        b=LASvZd/kr+O0L5A3bEKuR8CTk3fHm5Tsd9lUjfYwpqn33d7k3Q1zsMSLxqM2Wvmjfi
-         U9X9eV7HuBPN5VQdn6QkXC7TyhZPYAzEmjTJjpaD5GIOeD6QowBVqIADEj4QvOrPEVtg
-         ixMVdzrHVAvfbZZWmaW4tVERpTCm8iDa/gmWxbCttBjaVWUI+z2M45U6eU6/izM7UmEw
-         06W6+xGWjrV9ntNXVSJcxZeWZPlDMQeHyRKnhuxcRvfzKtHy8hThyvLAr/AALg2Mc12H
-         wnFPOPC2IlEl29O2OH/A+ASOIh9PPps0VTvp/TnkmuOcnlQwc43q1Oz0o8B4VKCBOUQ8
-         GpDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
-        b=RRBBGJCUXlDxdC6EPQ8IlvOS/8GXdjUMo5rAg4lyVCdHGJN+HV7sJJYrUbg4xGThNK
-         P9lBqdwsxh9N4jPApoBGbq827KCDZzA28fHHBWDkywGryof1ignGtPfxAzmEG829kawS
-         iE2qN/9uAxBjRdSBWjWUsAhgiXEQmfgXqu9JNtmxo7ZffTRYhiqMSmjKJ4GYNqKy2RfE
-         pfQHzAVkS/5hFW0JEYbzKQn7MXA7bpqFOpvmgPm3n5UBQj0mmZK2RSBRSWk4Uy6pu/2y
-         vn+1XG9vwW9toenWlMmnaiZcFUpVPXIIQgFppZuI0YK2PICejpE71UbFXm3AjjjeST5K
-         OReg==
-X-Gm-Message-State: AOAM533V5vCP7cfvp0uRsgogo0VKNkk/oTmC/XPskiOmMayo5CZ+BYLm
-        Tqqs01rqSejH+JS1yhPAIJld2w==
-X-Google-Smtp-Source: ABdhPJyXNCnjMbf233x1TRm9Ax9LXKujaxCcbwMHpOtAWrTw2hiA71j0kvmsMI4qbPaIDzeMtLIaSQ==
-X-Received: by 2002:a17:902:ec83:b0:15e:b5d2:a81b with SMTP id x3-20020a170902ec8300b0015eb5d2a81bmr4083716plg.64.1651849783670;
-        Fri, 06 May 2022 08:09:43 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902b70f00b0015ea0a679ddsm1868392pls.251.2022.05.06.08.09.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 08:09:43 -0700 (PDT)
-Message-ID: <4a87c2d9-89fa-2cec-7707-08fc78c88bf8@kernel.dk>
-Date:   Fri, 6 May 2022 09:09:41 -0600
+        Fri, 6 May 2022 11:14:27 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E84B430;
+        Fri,  6 May 2022 08:10:42 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 3BE091F46A77
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651849840;
+        bh=W4lTpGoqRDp9jGpQmSeg75zdqgDSf5NBF1xaIYSJv90=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nzDQfSC0mATKPl7KMFojVZYi/BuoRw0OpfD54szXaDeylL+J+qQoXJUCJwPnICT/+
+         I/8Sy9s84BogRpRojC6gImDJ92xHSdZ7FPiQMJZURPxR9roLC1xtjbIKIwiggwbDrJ
+         UyaTMJ/2JU2bfO9WoTWZ2N7xEm7TpEz7ocN5RCxlOhvhrIBNeygJsGOPczykA2dH3Y
+         ihMVuTbEr72h1fNuHXeA9KS5RWNyWO9XvwVu/QHvJStTZHleWev97ymTDjkKKIqCsB
+         bhqNsJtDoTgZz1cxiqs29hp9q3R5MhFc8U2fUaOt4aKqtIuVwJRIWZP1u5mW0Ypayn
+         BRUe8/CfvIiJQ==
+Message-ID: <3fc21eb5-218b-f783-a7ef-f805f13c66da@collabora.com>
+Date:   Fri, 6 May 2022 18:10:33 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] nvme: Ensure ret is always initialized in
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v7 04/20] kernel: Add combined power-off+restart handler
+ call chain API
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kanchan Joshi <joshi.k@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-References: <20220506150357.2443040-1-nathan@kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220506150357.2443040-1-nathan@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <20220411233832.391817-5-dmitry.osipenko@collabora.com>
+ <CAJZ5v0gnTSoeNP+QXwrZ45FQY4howVkJMuCjM=j+_-2BngJdQg@mail.gmail.com>
+ <990621e7-9f8a-8b4a-02ec-fd6c1e1f48ff@collabora.com>
+ <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 9:03 AM, Nathan Chancellor wrote:
-> Clang warns:
+On 4/20/22 21:47, Rafael J. Wysocki wrote:
+>>>> +       void (*platform_power_off_cb)(void);
+>>>> +       void (*simple_power_off_cb)(void *data);
+>>>> +       void *simple_power_off_cb_data;
+>>> Is there any particular reason to put these callbacks here and not
+>>> directly into struct sys_off_handler?
+>> They are used internally by reboot.c and shouldn't be touched by the
+>> kernel API users, so I wanted to factor out and protect all the private
+>> data.
+> But they come from these users anyway, don't they?
 > 
->   drivers/nvme/host/ioctl.c:674:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (ns)
->               ^~
->   drivers/nvme/host/ioctl.c:677:9: note: uninitialized use occurs here
->           return ret;
->                  ^~~
->   drivers/nvme/host/ioctl.c:674:2: note: remove the 'if' if its condition is always true
->           if (ns)
->           ^~~~~~~
->   drivers/nvme/host/ioctl.c:672:9: note: initialize the variable 'ret' to silence this warning
->           int ret;
->                  ^
->                   = 0
->   1 error generated.
-> 
-> Initialize ret to zero so that it cannot be used uninitialized.
 
-Thanks, will fold this in.
-
-> Or alternatively, remove the 'if (ns)' if ns can never be NULL; I tried
-> going down the rabbit hole to see if that is possible but I got a little
-> lost :^)
-
-For the admin queue, ns can be NULL.
+Yes, the point is that these callback pointers are owned by the kernel
+core while callbacks are registered.
 
 -- 
-Jens Axboe
-
+Best regards,
+Dmitry

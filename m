@@ -2,155 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDF051DF0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FCB51DF0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356616AbiEFSZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S1391955AbiEFSZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346024AbiEFSZn (ORCPT
+        with ESMTP id S1391722AbiEFSZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:25:43 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2088.outbound.protection.outlook.com [40.107.236.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED715289BA;
-        Fri,  6 May 2022 11:21:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HV5oLB1MZw9EraiN3hYhKCOG5KEqQ1fuiZaBeRRreljlfC034veF675Ru5e0kTCtWNCSGipHpDv1uEa3Gehw1IC5w2G4X6++3r8UkK8OPOJVHIvl/rQhn9wPTqE27jMUZxMmBjJPtDl12QvweQiZdeDxEWjvgwXtyrDH4ivapoGGRwSssRoBJl02Kkdr4rnwgIdpNL/If6hVpaHPcU7eAw4deGEHUxTliMB+J1gWGhSIgaDHU2jJUK/pg4HnUz7EU73gtTqkKBY77kUOd6Thbj6T8sii7c8j+x7hvhppF3YB5WedOcdeoQRtL957d9M3HeTBRbIYFUUAWF4Rs3KFiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5o6S7nFKlkU2yjIxILxPGroh2JFaA2FRk7RoI0UtD8Q=;
- b=E4a7G3vMkaAMoXRz0HjJwwKX84I6x0gmyOujNXg+zUJoiYLaH0HzORBDB8lIl4DY6Jk3AcPVUlErNhOc52a5MNVbQImu7p8D7IxG2tlUKGatbVHtPZ6+IsSXoDtZ1OBmMx2eniuRn695B2YWBp9czubUokWsSUyxGsAElPGpYgxBN0eig9fxKXi1HqsdM9tuxYVeg7NYJYoUGalR7psoNxiX5cJUZfjRT5tmDX36WOL6uBw2KO4kW8/ls7ZekkMid3WA/+U5Gjx+mgVd8MmW3csIe4SR5lYPy58dqreAUgH6HZKm1nT6VmCczw/lDwg0xUwX+n09F8b+35rIFgCLRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5o6S7nFKlkU2yjIxILxPGroh2JFaA2FRk7RoI0UtD8Q=;
- b=iYcLM0Y4iTzeeBOSgrWWcRKF6vZfd9roOQ60WvzVAuLnMYc7a5dznBHxC3Q4RcFtpRIm72uFm0m9A8mmpnIS8pKjqcrdWG7dK2Oml3l91tVMVOKGKoQjlswHKf+mC4T7+b5nqrLXfUju/0SkKUQ2xMQdAJkUbFXCZPC1oIAuspLm+C6Q0+QcO5GFhRwGx9iQfNMS32vD+XydJ4IT/L+FzfaN3xsT9uglpU41NbCQcMZaGNGSRNv7gzTBjl/auy96O8wuHODrZQ8gAuMhb3zqdkuud4qeWRiTswI/TvgrCy/aqtAm0ZrfIG0q3MqK6D4iBYoCtPFJgXKEPXTAPsWsgg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
- by CY4PR12MB1720.namprd12.prod.outlook.com (2603:10b6:903:121::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Fri, 6 May
- 2022 18:21:58 +0000
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::b998:eed3:9088:780c]) by BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::b998:eed3:9088:780c%9]) with mapi id 15.20.5206.028; Fri, 6 May 2022
- 18:21:58 +0000
-Message-ID: <6044d225-e794-3454-302a-320d0899ca27@nvidia.com>
-Date:   Fri, 6 May 2022 11:21:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] hte: uninitialized variable in hte_ts_get()
+        Fri, 6 May 2022 14:25:52 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA553714
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 11:22:06 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id p8so6895855pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 11:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=1Bn6Fj0TZ3zGdE4UsPeAIY1KIpMO6I3COOb6LVgm5QM=;
+        b=k1mPzfH8bNMMBToxDKvurgphXSGrDcJjmoP7k2lH3ZL1n7AEcjQtChmQQNsTFpv/Ub
+         27bb5/4uvjqUEhel5uJOHOGGV3ybtQQutaheYUQ2O0vbFG7SFAnWTUPIdy3vLlrpGWOy
+         PMpzjdVloEDB0WqV+Ubp4r0O/xsPdZkZXxrVnHeBxbyExNR/dZaXwZRQDqdYLPMdwphG
+         0HwuI0+My5YnhRHlclWjhT2J3osLnRmlAZ4M0ukVVvfia3XvRKyxn2WPZuwsUM1Rnbk3
+         SLR/rSeCVgcbudtssulz+gjOVU1PYSrSUFrLYC2PeGssRbDOyPYIl1+e/US4EwXl90T8
+         RbOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=1Bn6Fj0TZ3zGdE4UsPeAIY1KIpMO6I3COOb6LVgm5QM=;
+        b=ElkHuJdN199Rlv77jx6Y3d0Dph2/SOvQZy+vPiDlNWcdbjgd0f7wr38Wr56e684c35
+         FE53nLkRl4fItrdbdV2vp+pS5iIpbTPDZQWchE5iXqUQyt9zAyq71yhqiaBb8E271o9o
+         JMD6zw9r0ioAixBFbKvVjvzYjvJhqsbVVUq40OohbZhnOkkx+m+Sawd96ndKM4rdld47
+         W9vhhH3B8aZxsdxAxc81gFdt1j8hBuF11mXJsD8uHyTjw3R1YzkdrJQU2im0b0BZxi7l
+         8ESOPhaiuV2/SIUPT5CMWeNQ8J5Co3kK/0SimiAQvfxEHAkHkCh08lM0c0vMkZPgZPn4
+         XMRA==
+X-Gm-Message-State: AOAM5315at5K9biZV9eHmuOaMgT3l/nwf0s+s49KdGqkEZtJxWDpP7NL
+        2agUzmln0tHJYYZ+wacFCZZ3yw==
+X-Google-Smtp-Source: ABdhPJxNuWDQCcDn422nk7Ac5VbSjn/9TFQs3vXE0ndMEe/9s/U+8P3RxatnzrpBV925WgRr8xissA==
+X-Received: by 2002:a63:2a4a:0:b0:3c1:5f7e:beb3 with SMTP id q71-20020a632a4a000000b003c15f7ebeb3mr3690362pgq.441.1651861324894;
+        Fri, 06 May 2022 11:22:04 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id h19-20020a170902eed300b0015eaa9797e8sm2071976plb.172.2022.05.06.11.22.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 11:22:04 -0700 (PDT)
+Message-ID: <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
+Date:   Fri, 6 May 2022 12:22:03 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
 Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <YnU2p2CoNkcxBUKN@kili>
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <YnU2p2CoNkcxBUKN@kili>
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Guo Xuenan <guoxuenan@huawei.com>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
+References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <20220505141159.3182874-1-guoxuenan@huawei.com>
+ <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
+ <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
+ <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
+In-Reply-To: <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR02CA0044.namprd02.prod.outlook.com
- (2603:10b6:a03:54::21) To BY5PR12MB4116.namprd12.prod.outlook.com
- (2603:10b6:a03:210::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2eac8eef-dbbf-4eaf-a73c-08da2f8d4e69
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1720:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB172023BE9D1209936765CF87AEC59@CY4PR12MB1720.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p0YKE3ydVP8xYpw395lweN+ughJIpQI/0K2wGL/iza/lyIuYEqRPRDZbUZOPFWWYQd8kyRe8+u+8Xn0bIPjCnSTQLkemJ0cTkVKitEGSwzjnDpH3MovymREpBYfRfkB+bEfghPJj/E7FH8fC1SORwyANLYDtQi+GupnvG4MdP6G12k5j86vWt5yNdUaEqkKUEukI3cHQIqeD9JsOuVQsGTF/E0x2b5xMKJEyTcS0DyfJVkNU4Du6nWK1SF7tIZHHQjtvNqs0V05z9yXFiCsF5xXCyeNDtzLYVPuYa0CkSkuYmPkz2MPG3mRQr2xYAU6sT+/DTVT4gr/mP/iVsmEnt4E7l6+wHKJuMo9cMWS2oIveAN1gywkL1XQiP7HIuFp3L1Ws0hfhnu3P3slDypChHkwcw92YX7CK2fIJONfdgqLo9q40V8NT9A4k2gBX8p/D7GuYOK90epSAXIW6OMydMDlCh+0DjiKg4m1xCDoKwO6iH9NQ5mPSzfyRJRAJTKthzDOGQDwoFRV8BRGohI8NCDrNi7TEVeod/aCLJfdAylrHZHRnGwdtaIXxIe7XeIhXkOdGsHExYnVBYKXpeWsrWKWg1x9YuVOxPw34ff4dMnE/fYYD2XQ6a206+8Vo8hGtFDAENc6nOD/7s4XBqVn7q5R5dJgjsBHK3NddmwNAVAvFs1ySuJlZMScQ3HZzCk8+cbEYMY8WVYDAEkz77nb4F3TjqJcQlmt8V6ZaXJtfNlUZzHZirzyf8vl9EgEGmnwm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(316002)(8676002)(4326008)(38100700002)(66946007)(66476007)(66556008)(36756003)(86362001)(186003)(26005)(4744005)(2616005)(6512007)(6506007)(8936002)(83380400001)(5660300002)(31696002)(2906002)(53546011)(31686004)(6486002)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0dKcnJqdlVncDVRekRBREJSQnFiLy9TUk5tcFQwb3VNK1RSZTFqTUNXU3RK?=
- =?utf-8?B?WS9DWklnTnV0WURReElkRTdrZWdFdzRmbHN4N1g1WnJhQmFjZVBQRjcvSjgy?=
- =?utf-8?B?cVM0VFNyN2lFb0NxQlVGMmpSbDMvYi84Z3VVb2FReFUvb05ISzgzNGxTaDU0?=
- =?utf-8?B?U21kcUNJS0hPNmxxck0zaWtrMm93K2p1VTJidVVYc3Eyc2tCZ0xYRWlrSWpn?=
- =?utf-8?B?VWR1WUwxRkZwbzFNZVJMMHJOQUhSL2JtRHpIYkhhY0RHUVBhMTFmem9lZ1Z3?=
- =?utf-8?B?UDBjVlpEd29BQ2M3ODM0WkdDb2hNdmpXcjFqcE5WeHFMOE1jRnNwL3o0L2pF?=
- =?utf-8?B?UGNDNkZUZy9hYm80RFRaOVNhSmkwL2s5Uk5ndXE4OTVlbnhONm5KcTBpOVVq?=
- =?utf-8?B?T2ZjNXc3TXNobWRXUEdwU05mZ3kwTlFWalAvVGp1OTVYa3pUZDZLQmJZOWNs?=
- =?utf-8?B?SFJQQnltZ1A1TCtqcTAxRjc0N2taQ2trS1djcFFvL01rU0lMaUZXRkM2TUc1?=
- =?utf-8?B?TEFQYWRDY0c2UGpldUJmMkt2WWdVWEx5eG5lb0l4TFZMQUVveWNZMXloMFRH?=
- =?utf-8?B?UmtYM0Z4N20xeVRVbjh5QTdSbkJFRXRVRXpTWWFaL0IzSzI4cDFMRUhwbk5J?=
- =?utf-8?B?ajJ1ellaVTZKZS9wMDJybWp5UHRITjgwNmYzc2JHdUhBRGF6K1l3KzFCc2dy?=
- =?utf-8?B?cGlYLzRZWlZEVHlsUDh5MjZIUEtDK0JRZHltUjBUYmFNdS9XR2hFaGRRaDF3?=
- =?utf-8?B?MThKV0Z0SG5kUDByM1BmdnpRSnFBeEljTHlIL0VRMUdVcE1VMHU3TitTYnJu?=
- =?utf-8?B?RHNuTjZQcEpjOGlHS3ZJRmhPVmU3YXJCSUpTZDROZXRoTWo0YUpNUjJ6aGZi?=
- =?utf-8?B?QUVQOTRhQnFiak1vY3BqYzFsZzNqWnpsTXZ5ZWtYRWRrOG5QbGdsZDNDUXhU?=
- =?utf-8?B?RHNaSjkzL2ZsazI1MzUxaXZ4ajdNQU5EeitrZ3B2eEVsSGtxWFhLM2FoSzlR?=
- =?utf-8?B?TmFtTElpeXpFY1l1MFczRkFORnFkcGJqeU5aaStybmRtbGlCWjE5bGFCbmp6?=
- =?utf-8?B?TU02OHB5azUwY2pHYlA0a1B4TU5tRGNTOGFHL3BKNDBVcHBlaEljTllpZFNN?=
- =?utf-8?B?N2xaZXh5a1M1dWdXOVp3VjRqNzkvdmFTMkVMVkZtZ2dCbERYU0FWRGZXWm4w?=
- =?utf-8?B?Y0tOOEZFTlBSWHlYbWovMnMrWWNHN3ArSmtDY0k4MDJRWnVlK3dmaEdjSFBo?=
- =?utf-8?B?MEVTSW81WThYdE10Yk8xM1RZOTh4UEpuNTNaMitKeERmdXpUUk1WbFVxV284?=
- =?utf-8?B?c3c0Y0hKTE9NTVlMcm8vdCtzUjhLSEEwVkpiangzcEJ5S1pBSEloeHcycjUv?=
- =?utf-8?B?eXdpU2tQU2FrN2p1ZkdhdFRVTldYOXUzSXdjYjJsaWlqallFeFZWUnpYT1VZ?=
- =?utf-8?B?bHB6c3RuYTNJYjlRKzdkTXRBV010akMwaXNUQis4Vit1Ri92MWxtWXZTN0Ev?=
- =?utf-8?B?ajFIRG0xTUxlRzJwZUkwOTNNTW9rY2JLVXVlcTlTZUsyS1M1NUtZNWdyem41?=
- =?utf-8?B?NWJxVlFiYXFVbFM4WGR3K2hvK0V5cWlsQXYycmVLMUgyb0ltWDcxU1V1MEVl?=
- =?utf-8?B?R0lHNWRwWGN2bDUvRXhiUHp6Z0RBRXlzQ2trT1VCdHBYOHoyQUNCZlJubUdH?=
- =?utf-8?B?aXFZKzRVaGtDbnJxLzE3T2pSYWF6N2xadkFQYjNZc05NU2tJamZQdG9UaFBv?=
- =?utf-8?B?VGM3SElsVW8xeThkeHVSQStNMTlwODEyWkFSTm8vTFdvRDhHQ1ZMUWxsMEVn?=
- =?utf-8?B?dVRCL1c4OFhJY3crS1EyZmEzZG05NWZxYjVuWkZlWXpaQnQyUjU0V0pHNkU2?=
- =?utf-8?B?cTFhVUlWeHVKa0xKaW5mRGdvSEdHMFdvSHJSTmtJREVsZDJZZ3JzUzVQeXFx?=
- =?utf-8?B?Q3VOczh2b01SVitiN1BuMFp6YUc3SHA2U3NVTDgyUmZ5ekw0eXNENzdGUTJr?=
- =?utf-8?B?N1p5MnhLUFlJeTJGZ2MvQW10OE1pcU5HUlA5S1ZVWkdDZnBJMVpyNWtLM1RL?=
- =?utf-8?B?QU1WUGhWcFE4N0pHSmJ3T3BZUncwaGlwMWdvS1dUNFVMMlRycGlWSGtJVG55?=
- =?utf-8?B?VUY5SlNia1BCZEtqa1RiSVVKd2pIMit3U0N3bTEyMjFzSjEyV0VKcHphQ0ZM?=
- =?utf-8?B?MHlpOGVhT1lMWGFsVHF0UGVINGhpZzFjcXV6cm5CVVJBWXBVZkdYYWlUNkRE?=
- =?utf-8?B?UHdXUEdmYVdhL0JtT0lxc2QyWWd3b0VTY0FyaVp4SGQ4bWY2KzZHZ1o5Q1hm?=
- =?utf-8?B?NTR1b3QycHZuR0tIVVgrOFVPUTBqWnE0TmdmWjY2cmNJNzhiMnk2UT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2eac8eef-dbbf-4eaf-a73c-08da2f8d4e69
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 18:21:58.0193
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bCK1tmz1jayqeT38oE/5WEDJJKxvnurXtSljQMofmvy1Vqpmlk7L86OV96aGFXSebym138mrqJetKiSJyf4swQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1720
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Dipen Patel
+On 5/6/22 10:15 AM, Jens Axboe wrote:
+> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
+>> On 5/6/22 03:16, Jens Axboe wrote:
+>>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
+>>>> Hi, Pavel & Jens
+>>>>
+>>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
+>>>> it is not enough only apply [2] to stable-5.10.
+>>>> Io_uring is very valuable and active module of linux kernel.
+>>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
+>>>> found my understanding of io_uring is not enough to resolve all conflicts.
+>>>>
+>>>> Since 5.10 is an important stable branch of linux, we would appreciate
+>>>> your help in solving this problem.
+>>>
+>>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
+>>> there was a reproducer for this that was somewhat saner than the
+>>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
+>>
+>> No, it was the only repro and was triggering the problem
+>> just fine back then
+> 
+> I modified it a bit and I can now trigger it.
 
-On 5/6/22 7:54 AM, Dan Carpenter wrote:
-> The "free_name" variable is sometimes used without being initialized.
->
-> 31ab09b42188 ("drivers: Add hardware timestamp engine (HTE) subsystem")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/hte/hte.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hte/hte.c b/drivers/hte/hte.c
-> index a14c5bf290ff..7c3b4476f890 100644
-> --- a/drivers/hte/hte.c
-> +++ b/drivers/hte/hte.c
-> @@ -572,7 +572,7 @@ int hte_ts_get(struct device *dev, struct hte_ts_desc *desc, int index)
->  	struct of_phandle_args args;
->  	u32 xlated_id;
->  	int ret;
-> -	bool free_name;
-> +	bool free_name = false;
->  
->  	if (!desc)
->  		return -EINVAL;
+Pavel, why don't we just keep it really simple and just always save the
+iter state in read/write, and use the restore instead of the revert?
+
+Then it's just a trivial backport of ff6165b2d7f6 and the trivial
+io_uring patch after that.
+
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index ab9290ab4cae..138f204db72a 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3429,6 +3429,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+ 	struct kiocb *kiocb = &req->rw.kiocb;
+ 	struct iov_iter __iter, *iter = &__iter;
+ 	struct io_async_rw *rw = req->async_data;
++	struct iov_iter_state iter_state;
+ 	ssize_t io_size, ret, ret2;
+ 	bool no_async;
+ 
+@@ -3458,6 +3459,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+ 	if (unlikely(ret))
+ 		goto out_free;
+ 
++	iov_iter_save_state(iter, &iter_state);
+ 	ret = io_iter_do_read(req, iter);
+ 
+ 	if (!ret) {
+@@ -3473,7 +3475,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+ 		if (req->file->f_flags & O_NONBLOCK)
+ 			goto done;
+ 		/* some cases will consume bytes even on error returns */
+-		iov_iter_revert(iter, io_size - iov_iter_count(iter));
++		iov_iter_restore(iter, &iter_state);
+ 		ret = 0;
+ 		goto copy_iov;
+ 	} else if (ret < 0) {
+@@ -3557,6 +3559,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+ 	struct kiocb *kiocb = &req->rw.kiocb;
+ 	struct iov_iter __iter, *iter = &__iter;
+ 	struct io_async_rw *rw = req->async_data;
++	struct iov_iter_state iter_state;
+ 	ssize_t ret, ret2, io_size;
+ 
+ 	if (rw)
+@@ -3574,6 +3577,8 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+ 	else
+ 		kiocb->ki_flags |= IOCB_NOWAIT;
+ 
++	iov_iter_save_state(iter, &iter_state);
++
+ 	/* If the file doesn't support async, just async punt */
+ 	if (force_nonblock && !io_file_supports_async(req->file, WRITE))
+ 		goto copy_iov;
+@@ -3626,7 +3631,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+ 	} else {
+ copy_iov:
+ 		/* some cases will consume bytes even on error returns */
+-		iov_iter_revert(iter, io_size - iov_iter_count(iter));
++		iov_iter_restore(iter, &iter_state);
+ 		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
+ 		if (!ret)
+ 			return -EAGAIN;
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index 27ff8eb786dc..cedb68e49e4f 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -26,6 +26,12 @@ enum iter_type {
+ 	ITER_DISCARD = 64,
+ };
+ 
++struct iov_iter_state {
++	size_t iov_offset;
++	size_t count;
++	unsigned long nr_segs;
++};
++
+ struct iov_iter {
+ 	/*
+ 	 * Bit 0 is the read/write bit, set if we're writing.
+@@ -55,6 +61,14 @@ static inline enum iter_type iov_iter_type(const struct iov_iter *i)
+ 	return i->type & ~(READ | WRITE);
+ }
+ 
++static inline void iov_iter_save_state(struct iov_iter *iter,
++				       struct iov_iter_state *state)
++{
++	state->iov_offset = iter->iov_offset;
++	state->count = iter->count;
++	state->nr_segs = iter->nr_segs;
++}
++
+ static inline bool iter_is_iovec(const struct iov_iter *i)
+ {
+ 	return iov_iter_type(i) == ITER_IOVEC;
+@@ -226,6 +240,7 @@ ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
+ ssize_t iov_iter_get_pages_alloc(struct iov_iter *i, struct page ***pages,
+ 			size_t maxsize, size_t *start);
+ int iov_iter_npages(const struct iov_iter *i, int maxpages);
++void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state);
+ 
+ const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
+ 
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 1b0a349fbcd9..00a66229d182 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -1857,3 +1857,39 @@ int iov_iter_for_each_range(struct iov_iter *i, size_t bytes,
+ 	return err;
+ }
+ EXPORT_SYMBOL(iov_iter_for_each_range);
++
++/**
++ * iov_iter_restore() - Restore a &struct iov_iter to the same state as when
++ *     iov_iter_save_state() was called.
++ *
++ * @i: &struct iov_iter to restore
++ * @state: state to restore from
++ *
++ * Used after iov_iter_save_state() to bring restore @i, if operations may
++ * have advanced it.
++ *
++ * Note: only works on ITER_IOVEC, ITER_BVEC, and ITER_KVEC
++ */
++void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state)
++{
++	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i)) &&
++			 !iov_iter_is_kvec(i))
++		return;
++	i->iov_offset = state->iov_offset;
++	i->count = state->count;
++	/*
++	 * For the *vec iters, nr_segs + iov is constant - if we increment
++	 * the vec, then we also decrement the nr_segs count. Hence we don't
++	 * need to track both of these, just one is enough and we can deduct
++	 * the other from that. ITER_KVEC and ITER_IOVEC are the same struct
++	 * size, so we can just increment the iov pointer as they are unionzed.
++	 * ITER_BVEC _may_ be the same size on some archs, but on others it is
++	 * not. Be safe and handle it separately.
++	 */
++	BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
++	if (iov_iter_is_bvec(i))
++		i->bvec -= state->nr_segs - i->nr_segs;
++	else
++		i->iov -= state->nr_segs - i->nr_segs;
++	i->nr_segs = state->nr_segs;
++}
+
+-- 
+Jens Axboe
+

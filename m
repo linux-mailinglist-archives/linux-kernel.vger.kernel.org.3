@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D29751CF05
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE80D51CF08
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388342AbiEFCjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S1388347AbiEFCnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234479AbiEFCjm (ORCPT
+        with ESMTP id S234479AbiEFCnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:39:42 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2686B5A58E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 19:36:00 -0700 (PDT)
-Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KvZLr3LVkzNkT6;
-        Fri,  6 May 2022 10:31:16 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 10:35:58 +0800
-Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
- 2022 10:35:57 +0800
-Subject: Re: [PATCH v5 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        <mathieu.poirier@linaro.org>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-        <Jonathan_Lucas@mentor.com>
-References: <20220416083953.52610-1-liuqi115@huawei.com>
- <20220416083953.52610-2-liuqi115@huawei.com>
- <91a6f78d-1d8c-4b5b-3fc3-0c8866b184ad@arm.com>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <19061fcb-37b9-2fe8-508a-5f60bdc07639@huawei.com>
-Date:   Fri, 6 May 2022 10:35:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Thu, 5 May 2022 22:43:00 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E7F6128F;
+        Thu,  5 May 2022 19:39:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvZWz6dgCz4xXS;
+        Fri,  6 May 2022 12:39:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651804754;
+        bh=1Ilo05scNIwalNfyaTyXng6aFmzopQdKNcSB0fD7WfY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AF/xXeiEX5JHJOrCdc73ODupfntyVbcSVyuf9Wnk4DMR8Mw1E3zcdpJvy8Mq9ui6I
+         /JmH5wW+3v2oyCuezFdlxKR1KztHEOSUazRExHrSOx9NJZdzGTiobp9O9jJF+2PkR/
+         e0edBpbNk2UWZQqtGur4USBCNaR1LeigrlwOH3pDQVUAnN0gSU6M/KV4OaI8BMNHgj
+         frzePQ+9VghUr+NIUYDuYfTuBKBZJpDXNFDacFCpTlMWtOu4xOCx8ujMpH8j5h6OtW
+         GpMPxCwdpAPWLz74KUVytt0BRmBR8+MjBlckAHCvVc27aDM04RZT+6I5MfVbZqgUC4
+         +NdD5E4mY0bdw==
+Date:   Fri, 6 May 2022 12:39:10 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: linux-next: manual merge of the iommu tree with the arm-soc tree
+Message-ID: <20220506123910.3faae09f@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <91a6f78d-1d8c-4b5b-3fc3-0c8866b184ad@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/qCeDa=YQICowG_VAz3MQQrL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,360 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/qCeDa=YQICowG_VAz3MQQrL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Suzuki,
+Hi all,
 
-thanks for your review, some replies below.
+Today's linux-next merge of the iommu tree got a conflict in:
 
-On 2022/5/6 8:26, Suzuki K Poulose wrote:
-> Hi Qi Liu
-> 
-> Apologies for the delay. I have some more comments below.
->  > On 16/04/2022 09:39, Qi Liu wrote:
->> This patch adds driver for UltraSoc SMB(System Memory Buffer)
->> device. SMB provides a way to buffer messages from ETM, and
->> store these CPU instructions in system memory.
->>
->> SMB is developed by UltraSoc technology, which is acquired by
->> Siemens, and we still use "UltraSoc" to name driver.
->>
->> Signed-off-by: Qi Liu <liuqi115@huawei.com>
->> Tested-by: JunHao He <hejunhao2@hisilicon.com>
->> ---
->>   drivers/hwtracing/coresight/Kconfig        |  10 +
->>   drivers/hwtracing/coresight/Makefile       |   1 +
->>   drivers/hwtracing/coresight/ultrasoc-smb.c | 643 +++++++++++++++++++++
->>   drivers/hwtracing/coresight/ultrasoc-smb.h | 106 ++++
->>   4 files changed, 760 insertions(+)
->>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
->>
->> diff --git a/drivers/hwtracing/coresight/Kconfig 
->> b/drivers/hwtracing/coresight/Kconfig
->> index 514a9b8086e3..4380eb1a0a73 100644
->> --- a/drivers/hwtracing/coresight/Kconfig
->> +++ b/drivers/hwtracing/coresight/Kconfig
->> @@ -201,4 +201,14 @@ config CORESIGHT_TRBE
->>         To compile this driver as a module, choose M here: the module 
->> will be
->>         called coresight-trbe.
->> +config ULTRASOC_SMB
->> +    tristate "Ultrasoc system memory buffer drivers"
->> +    depends on ACPI && ARM64 && CORESIGHT_LINKS_AND_SINKS
->> +    help
->> +      This driver provides support for the Ultrasoc system memory 
->> buffer (SMB).
->> +      SMB is responsible for receiving the trace data from Coresight 
->> ETM devices
->> +      and storing them to a system buffer.
->> +
->> +      To compile this driver as a module, choose M here: the module 
->> will be
->> +      called ultrasoc-smb.
->>   endif
->> diff --git a/drivers/hwtracing/coresight/Makefile 
->> b/drivers/hwtracing/coresight/Makefile
->> index b6c4a48140ec..344dba8d6ff8 100644
->> --- a/drivers/hwtracing/coresight/Makefile
->> +++ b/drivers/hwtracing/coresight/Makefile
->> @@ -27,3 +27,4 @@ obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->>   obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
->>   coresight-cti-y := coresight-cti-core.o    coresight-cti-platform.o \
->>              coresight-cti-sysfs.o
->> +obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
->> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c 
->> b/drivers/hwtracing/coresight/ultrasoc-smb.c
->> new file mode 100644
->> index 000000000000..9a93b7fc7bda
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
->> @@ -0,0 +1,643 @@
->> +// SPDX-License-Identifier: MIT/GPL
->> +/*
->> + * Siemens System Memory Buffer driver.
->> + * Copyright(c) 2021, HiSilicon Limited.
->> + */
->> +
->> +#include <linux/acpi.h>
->> +#include <linux/circ_buf.h>
->> +#include <linux/err.h>
->> +#include <linux/module.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/platform_device.h>
->> +
->> +#include "ultrasoc-smb.h"
->> +
->> +DEFINE_CORESIGHT_DEVLIST(sink_devs, "ultra_smb");
->> +
->> +#define ULTRASOC_SMB_DSM_UUID    "82ae1283-7f6a-4cbe-aa06-53e8fb24db18"
->> +
->> +static bool smb_buffer_is_empty(struct smb_drv_data *drvdata)
->> +{
->> +    u32 buf_status = readl(drvdata->base + SMB_LB_INT_STS);
->> +
->> +    return buf_status & BIT(0) ? false : true;
->> +}
->> +
->> +static bool smb_buffer_cmp_pointer(struct smb_drv_data *drvdata)
->> +{
->> +    u32 wr_offset, rd_offset;
->> +
->> +    wr_offset = readl(drvdata->base + SMB_LB_WR_ADDR);
->> +    rd_offset = readl(drvdata->base + SMB_LB_RD_ADDR);
->> +    return wr_offset == rd_offset;
->> +}
->> +
->> +static void smb_reset_buffer_status(struct smb_drv_data *drvdata)
->> +{
->> +    writel(0xf, drvdata->base + SMB_LB_INT_STS);
->> +}
->> +
->> +/* Purge data remaining in hardware path in case them influence next 
->> trace */
->> +static void smb_purge_data(struct smb_drv_data *drvdata)
->> +{
->> +    writel(0x1, drvdata->base + SMB_LB_PURGE);
->> +}
->> +
->> +static void smb_update_data_size(struct smb_drv_data *drvdata)
->> +{
->> +    struct smb_data_buffer *sdb = &drvdata->sdb;
->> +    u32 write_offset;
->> +
->> +    smb_purge_data(drvdata);
->> +    if (smb_buffer_cmp_pointer(drvdata)) {
->> +        if (smb_buffer_is_empty(drvdata))
->> +            sdb->data_size = 0;
->> +        else
->> +            sdb->data_size = sdb->buf_size;
-> 
-> What happens when the buffer is full ? Does the sink stop writing ?
-> Or does it keep on overwriting in a circular buffer mode ?
-> If it does keep overwriting, we would need to make sure to update the
-> sdb->rd_offset so that we provide the latest data (in smb_read())?
-> If it doesn't overwrite, I think this logic could be simpler (similar
-> to the tmc-et* circular buffer mode calculation.
-> 
+  MAINTAINERS
 
-sink will stop writing when the buffer is full, and I'll simplify this 
-function like this:
+between commit:
 
-static void smb_buffer_is_full(struct smb_drv_data *drvdata)
-{
-	if (smb_buffer_cmp_pointer(drvdata) && !smb_buffer_is_empty(drvdata))
-		return true;
-	return false;
-}
+  a12d521f4a3d ("dt-bindings: iommu: Add Apple SART DMA address filter")
 
-static void smb_update_data_size(struct smb_drv_data *drvdata)
-{
-	struct smb_data_buffer *sdb = &drvdata->sdb;
-	u32 write_offset;
+from the arm-soc tree and commit:
 
-	if (smb_buffer_is_full(drvdata)) {
-		sdb->data_size = sdb->buf_size;
-		return;
-	}
+  ee5354345242 ("MAINTAINERS: Merge DART into ARM/APPLE MACHINE")
 
-	write_offset = readl(drvdata->base + SMB_LB_WR_ADDR) -
-sdb->start_addr;
-	sdb->data_size = CIRC_CNT(write_offset, sdb->rd_offset,
-sdb->buf_size);
-}
-> 
->> +        return;
->> +    }
->> +
->> +    write_offset = readl(drvdata->base + SMB_LB_WR_ADDR) - 
->> sdb->start_addr;
->> +    sdb->data_size = CIRC_CNT(write_offset, sdb->rd_offset, 
->> sdb->buf_size);
->> +}
->> +
->> +static int smb_open(struct inode *inode, struct file *file)
->> +{
->> +    struct smb_drv_data *drvdata = container_of(file->private_data,
->> +                    struct smb_drv_data, miscdev);
->> +
->> +    if (local_cmpxchg(&drvdata->reading, 0, 1))
-> 
-> I believe this must be done in the smb_read(). Please see my comment
-> for smb_disable()
-> 
-got it, I'll change this like:
+from the iommu tree.
 
-static int smb_open(struct inode *inode, struct file *file)
-{
-	struct smb_drv_data *drvdata = container_of(file->private_data, struct 
-smb_drv_data, miscdev);
-	ret = 0;
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-	spin_lock_irqsave(&drvdata->spinlock, flags);
+--=20
+Cheers,
+Stephen Rothwell
 
-	if (drvdata->reading) {
-		ret = -EBUSY;
-		goto out;
-	}
+diff --cc MAINTAINERS
+index 83a61d719d95,7d728a19e857..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -1837,9 -1829,8 +1829,10 @@@ F:	Documentation/devicetree/bindings/ar
+  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+ +F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
++ F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ +F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+  F:	Documentation/devicetree/bindings/power/apple*
+@@@ -1848,9 -1839,9 +1841,10 @@@ F:	arch/arm64/boot/dts/apple
+  F:	drivers/clk/clk-apple-nco.c
+  F:	drivers/i2c/busses/i2c-pasemi-core.c
+  F:	drivers/i2c/busses/i2c-pasemi-platform.c
++ F:	drivers/iommu/apple-dart.c
+  F:	drivers/irqchip/irq-apple-aic.c
+  F:	drivers/mailbox/apple-mailbox.c
+ +F:	drivers/nvme/host/apple.c
+  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+  F:	drivers/soc/apple/*
+  F:	drivers/watchdog/apple_wdt.c
 
-	if (drvdata->mode == CS_MODE_PERF) {
-		ret = -EINVAL;
-		goto out;
-	}
+--Sig_/qCeDa=YQICowG_VAz3MQQrL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-	if (atomic_read(drvdata->csdev->refcnt))
-		ret = -EBUSY;
+-----BEGIN PGP SIGNATURE-----
 
-out:
-	spin_unlock_irqrestore(&drvdata->spinlock, flags);
-	return ret;
-}
->> +        return -EBUSY;
->> +
->> +    return 0;
->> +}
->> +
->> +static ssize_t smb_read(struct file *file, char __user *data, size_t 
->> len,
->> +            loff_t *ppos)
->> +{
->> +    struct smb_drv_data *drvdata = container_of(file->private_data,
->> +                        struct smb_drv_data, miscdev);
->> +    struct smb_data_buffer *sdb = &drvdata->sdb;
->> +    struct device *dev = &drvdata->csdev->dev;
->> +    unsigned long flags;
->> +    int to_copy = 0;
->> +
->> +    spin_lock_irqsave(&drvdata->spinlock, flags);
->> +
->> +    if (atomic_read(drvdata->csdev->refcnt)) {
->> +        spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +        return -EBUSY;
->> +    }
->> +
->> +    if (!sdb->data_size) {
->> +        smb_update_data_size(drvdata);
->> +        if (!sdb->data_size)
->> +            goto out;
->> +    }
->> +
->> +    to_copy = min(sdb->data_size, len);
->> +
->> +    /* Copy parts of trace data when read pointer wrap around SMB 
->> buffer */
->> +    if (sdb->rd_offset + to_copy > sdb->buf_size)
->> +        to_copy = sdb->buf_size - sdb->rd_offset;
->> +
->> +    if (copy_to_user(data, (void *)sdb->buf_base + sdb->rd_offset,
->> +             to_copy)) {
->> +        dev_dbg(dev, "Failed to copy data to user.\n");
->> +        to_copy = -EFAULT;
->> +        goto out;
->> +    }
->> +
->> +    *ppos += to_copy;
->> +    sdb->data_size -= to_copy;
->> +    sdb->rd_offset += to_copy;
->> +    sdb->rd_offset %= sdb->buf_size;
->> +    writel(sdb->start_addr + sdb->rd_offset,
->> +           drvdata->base + SMB_LB_RD_ADDR);
->> +    dev_dbg(dev, "%d bytes copied.\n", to_copy);
->> +out:
->> +    if (!sdb->data_size)
->> +        smb_reset_buffer_status(drvdata);
->> +    spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +    return to_copy;
->> +}
->> +
->> +static int smb_release(struct inode *inode, struct file *file)
->> +{
->> +    struct smb_drv_data *drvdata = container_of(file->private_data,
->> +                        struct smb_drv_data, miscdev);
->> +    local_set(&drvdata->reading, 0);
->> +    return 0;
->> +}
->> +
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ0ik4ACgkQAVBC80lX
+0GwGPQf/WcMGnd7q/a2Ue32+G1oyF9ZES98SYdlDG++n5u9EPWMzjpLF1FQIG7Yi
+h7gYlwULEMPV6CzCBuWlrvrZJrKzKLkrRRueKBLXkBrmCpDWn8rBHsHAbkFRV4uc
+dJcYQZNmfM24MNY0sBrMoeBoYaWeUe78FwSwTxznwL4jrmEmq+bDQyU8DLO86cQj
+QE2DBPlltSfYdyqvW0ijYpOYhWpBBFuWEmE2d8Kw5uSHgqFwpgsWKhMRVMZqIwBH
+1SrAV1j/p440Tj1dNr2tZKIGnHKUl8nBeeegWYcKU+bnbhKOaaFi0DRi2URG8fG4
+QWvG0P5orJsgQKmYvQzkljtPNhd7zQ==
+=Hg7P
+-----END PGP SIGNATURE-----
 
-[...]
->> +
->> +static int smb_disable(struct coresight_device *csdev)
->> +{
->> +    struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +    unsigned long flags;
->> +
->> +    spin_lock_irqsave(&drvdata->spinlock, flags);
->> +
->> +    if (local_read(&drvdata->reading)) {
->> +        spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +        return -EBUSY;
->> +    }
->> +
-> 
-> This is a bit confusing. So, we don't allow "read" when a session
-> is in progress (via refcnt check in smb_read()). But the flag,
-> drvdata->reading is set as soon as we open(). And we fail the disable
-> if the drvdata->reading is set. I guess, we should move the setting
-> of the drvdata->reading to smb_read() and set it for the first case
-> where we are able to read.
-> Otherwise we could see, something like:
-> 
-> CPU0: smb_enable()         # success, SMB is on
-> CPU1: open(/dev/usmb0) # -> set drvdata->reading
-> ..
-> CPU0: smb_disable() # returns EBUSY since drvdata->reading is on.
-> CPU1: read(fd)      # returns EBUSY since there is a refcnt.
-> 
-> 
-got it, I'll change this next version, thanks.
-> 
->> +    if (atomic_dec_return(csdev->refcnt)) {
->> +        spin_unlock_irqrestore(&drvdata->spinlock, flags);
->> +        return -EBUSY;
->> +    }
->> +
->> +    WARN_ON_ONCE(drvdata->mode == CS_MODE_DISABLED);
->> +    smb_disable_hw(drvdata);
->> +    smb_purge_data(drvdata);
->> +
->> +    /*
->> +     * In perf mode, sink->disable is called after 
->> sink->update_buffer, so
-+    buf = kzalloc_node(sizeof(struct cs_buffers), GFP_KERNEL, node);
-
-[...]
->> +
->> +static unsigned long smb_update_buffer(struct coresight_device *csdev,
->> +                       struct perf_output_handle *handle,
->> +                       void *sink_config)
->> +{
->> +    struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +    struct smb_data_buffer *sdb = &drvdata->sdb;
->> +    struct cs_buffers *buf = sink_config;
->> +    unsigned long data_size = 0;
->> +    unsigned long flags;
->> +    bool lost = false;
->> +
->> +    if (!buf)
->> +        return 0;
->> +
->> +    spin_lock_irqsave(&drvdata->spinlock, flags);
->> +
->> +    /* Don't do anything if another tracer is using this sink. */
->> +    if (atomic_read(csdev->refcnt) != 1)
->> +        goto out;
->> +
->> +    smb_update_data_size(drvdata);
-> 
-> Are we allowed to call this when the SMB is ON ? In perf mode, we call
-> the update_buffer() before disabling the "sink". So, care must be taken
-> to stop the SMB if needed to make sure the registers are read properly.
-
-got it, will do disable smb before smb_update_data_size.
-> 
-> 
-> Rest looks fine to me.
-> 
-> 
-> Suzuki
-> .
-Thanks,
-Qi
+--Sig_/qCeDa=YQICowG_VAz3MQQrL--

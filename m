@@ -2,76 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A750551DFC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AB251DFC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391617AbiEFTts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S1391710AbiEFTuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391394AbiEFTtp (ORCPT
+        with ESMTP id S1391394AbiEFTuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:49:45 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553203668F;
-        Fri,  6 May 2022 12:46:01 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id dv4so6111787qvb.13;
-        Fri, 06 May 2022 12:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=REYumsm6kh6dG5JfkpmEJOF6iBFTzLNrYeIRsQ91Yy4=;
-        b=VgAPfjB60nZTL9ZLu1vVz05PN2jFWEmo7BOcQM53pAaGA0tQ83p8FQCMyfMkWCUljO
-         xrUUTVpW545iQaNOP3al4ieey6zhWj2eAeHuWQ2a7+Oe6FuuJbb4bJOvxMWgh3Qk4NmJ
-         Wd7/6LkMCZy7RhIfUGloBVSwbRHaFkIfbkHxfCwJsHyzqaq35+SJZnVWO70KIwVhycPJ
-         XIqvFfFfqOF8Ah2OHjTQ7nwjiYjyxgJ5OSZI+MrmKSFRl2iW4wich8ZSUpf00XWCkFxG
-         S1F7rRgyv7T19H7c6HjBR66HLe1ZrTif7h6o1COmDeSFxKlM8AyLQSxwpijpAH+0W8hM
-         vidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=REYumsm6kh6dG5JfkpmEJOF6iBFTzLNrYeIRsQ91Yy4=;
-        b=8AXbXr4j8WzxBdo/AWHMG3EPfBQITurOPqO5/M7h2dvnsSNXUMb7/buBy8MYer56ti
-         icHa7fudZXQw4Pu1AEMZmCXH5NpT7FlHSSX7tKZD+P9PamK8+6va0fQtbR1aedMX4aBV
-         e6eLUrLDaZdFSEygr4Q3N45KN0qFol7+0bkZCC/PoRjEpO+upXx9vsAD1wd0CsiXGH9V
-         211pD6NCLGlAn9eXmnqan7UaDe7EiEShaEyu0MrnYhxT1TVyupjOS7TRapJdjkFzSwDM
-         RSpriHlXuGQ8X7yf5x4Uh4jFY0l3cdYK4c/z9onFXcrAmpX1fwnkrcybQ3EsrgH4e3ef
-         P9Ow==
-X-Gm-Message-State: AOAM531je1EghQGNcld0eONcd7dTvmmQaffO3ec365c24HyMHhdmsXBh
-        Tdzp3yjB133R5OgD00o1r/Lo5PYVHJVM
-X-Google-Smtp-Source: ABdhPJwn1oEegsPCYxjvx5slYAKeM9HTqK+wZHoSG8ht/TYx6MTMPYLOpdpDUgiPDZWYRYuyRGvNZg==
-X-Received: by 2002:ad4:5749:0:b0:459:1c08:f80a with SMTP id q9-20020ad45749000000b004591c08f80amr3892776qvx.56.1651866360484;
-        Fri, 06 May 2022 12:46:00 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-52-72-174-210.compute-1.amazonaws.com. [52.72.174.210])
-        by smtp.gmail.com with ESMTPSA id c14-20020ac8518e000000b002f39b99f694sm3028513qtn.46.2022.05.06.12.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 12:46:00 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH RFC v1 net-next 4/4] net/sched: sch_cbq: Use Qdisc backpressure infrastructure
-Date:   Fri,  6 May 2022 12:45:46 -0700
-Message-Id: <e9c482dd77e7788f5ec97e1c8c3ef9571741167e.1651800598.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1651800598.git.peilin.ye@bytedance.com>
-References: <cover.1651800598.git.peilin.ye@bytedance.com>
+        Fri, 6 May 2022 15:50:19 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A584F458
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:46:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VCTGriZ_1651866373;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VCTGriZ_1651866373)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 07 May 2022 03:46:31 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH 1/3] erofs: get rid of erofs_prepare_dio() helper
+Date:   Sat,  7 May 2022 03:46:10 +0800
+Message-Id: <20220506194612.117120-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,50 +39,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+Fold in erofs_prepare_dio() and it seems much clearer.
 
-Recently we introduced a Qdisc backpressure infrastructure for TCP and
-UDP sockets.  Use it in CBQ.
-
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- net/sched/sch_cbq.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ fs/erofs/data.c | 40 +++++++++++++++-------------------------
+ 1 file changed, 15 insertions(+), 25 deletions(-)
 
-diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
-index 02d9f0dfe356..4a5204da49d0 100644
---- a/net/sched/sch_cbq.c
-+++ b/net/sched/sch_cbq.c
-@@ -382,6 +382,7 @@ cbq_enqueue(struct sk_buff *skb, struct Qdisc *sch,
- 		return ret;
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index bb9c1fd48c19..fa9fdc6a5966 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -366,42 +366,32 @@ static sector_t erofs_bmap(struct address_space *mapping, sector_t block)
+ 	return iomap_bmap(mapping, block, &erofs_iomap_ops);
+ }
+ 
+-static int erofs_prepare_dio(struct kiocb *iocb, struct iov_iter *to)
++static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ {
+ 	struct inode *inode = file_inode(iocb->ki_filp);
+-	loff_t align = iocb->ki_pos | iov_iter_count(to) |
+-		iov_iter_alignment(to);
+-	struct block_device *bdev = inode->i_sb->s_bdev;
+-	unsigned int blksize_mask;
+-
+-	if (bdev)
+-		blksize_mask = (1 << ilog2(bdev_logical_block_size(bdev))) - 1;
+-	else
+-		blksize_mask = (1 << inode->i_blkbits) - 1;
+-
+-	if (align & blksize_mask)
+-		return -EINVAL;
+-	return 0;
+-}
+ 
+-static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+-{
+ 	/* no need taking (shared) inode lock since it's a ro filesystem */
+ 	if (!iov_iter_count(to))
+ 		return 0;
+ 
+ #ifdef CONFIG_FS_DAX
+-	if (IS_DAX(iocb->ki_filp->f_mapping->host))
++	if (IS_DAX(inode))
+ 		return dax_iomap_rw(iocb, to, &erofs_iomap_ops);
+ #endif
+ 	if (iocb->ki_flags & IOCB_DIRECT) {
+-		int err = erofs_prepare_dio(iocb, to);
+-
+-		if (!err)
+-			return iomap_dio_rw(iocb, to, &erofs_iomap_ops,
+-					    NULL, 0, 0);
+-		if (err < 0)
+-			return err;
++		loff_t align = iocb->ki_pos | iov_iter_count(to) |
++			iov_iter_alignment(to);
++		struct block_device *bdev = inode->i_sb->s_bdev;
++		unsigned int blksize_mask;
++
++		if (bdev)
++			blksize_mask = bdev_logical_block_size(bdev) - 1;
++		else
++			blksize_mask = (1 << inode->i_blkbits) - 1;
++
++		if (align & blksize_mask)
++			return -EINVAL;
++		return iomap_dio_rw(iocb, to, &erofs_iomap_ops, NULL, 0, 0);
  	}
- 
-+	qdisc_backpressure_overlimit(sch, skb);
- 	if (net_xmit_drop_count(ret)) {
- 		qdisc_qstats_drop(sch);
- 		cbq_mark_toplevel(q, cl);
-@@ -509,6 +510,7 @@ static enum hrtimer_restart cbq_undelay(struct hrtimer *timer)
- 
- 		time = 0;
- 		time = ktime_add_ns(time, PSCHED_TICKS2NS(now + delay));
-+		qdisc_backpressure_throttle(sch);
- 		hrtimer_start(&q->delay_timer, time, HRTIMER_MODE_ABS_PINNED);
- 	}
- 
-@@ -851,9 +853,11 @@ cbq_dequeue(struct Qdisc *sch)
- 
- 	if (sch->q.qlen) {
- 		qdisc_qstats_overlimit(sch);
--		if (q->wd_expires)
-+		if (q->wd_expires) {
-+			qdisc_backpressure_throttle(sch);
- 			qdisc_watchdog_schedule(&q->watchdog,
- 						now + q->wd_expires);
-+		}
- 	}
- 	return NULL;
+ 	return filemap_read(iocb, to, 0);
  }
 -- 
-2.20.1
+2.24.4
 

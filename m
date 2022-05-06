@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2C451D6D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D19F51D6D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391413AbiEFLnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S1391432AbiEFLna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiEFLnQ (ORCPT
+        with ESMTP id S232024AbiEFLn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:43:16 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84965DE6B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:39:32 -0700 (PDT)
-X-UUID: 5cf4482705974597a43805780b255883-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:637941b4-cb86-4741-bcbd-b1ead3e81090,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:637941b4-cb86-4741-bcbd-b1ead3e81090,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:806b7816-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 5cf4482705974597a43805780b255883-20220506
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1297254437; Fri, 06 May 2022 19:39:25 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 6 May 2022 19:39:24 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 19:39:24 +0800
-Message-ID: <ef0c621760d63c28ad97d4b7e8bef34660ea079c.camel@mediatek.com>
-Subject: Re: [RESEND PATCH v7 1/1] firmware: mediatek: add adsp ipc protocol
- interface
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Borislav Petkov <bp@suse.de>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "Cristian Marussi" <cristian.marussi@arm.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        "John Stultz" <john.stultz@linaro.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Curtis Malainey <cujomalainey@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <alsa-devel@alsa-project.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 19:39:24 +0800
-In-Reply-To: <YnQ9h6k0yFN8f+Ui@kroah.com>
-References: <20220505053048.13804-1-tinghan.shen@mediatek.com>
-         <20220505053048.13804-2-tinghan.shen@mediatek.com>
-         <YnQ9h6k0yFN8f+Ui@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 07:43:28 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 712545F242
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651837184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OcB6fBENu4U2sOdYXIyYqxCfjv8pZ5CyuZGdAtWdXiA=;
+        b=N9A8/HvbldKClot1RHeLyTJhwAwL7i7JiMsfMCFi4P+DoVHSkiuTAzfvxcEVAi7/LvnKTk
+        OOiWkaElyUD64GJGYyjoAEc0UoAikxMcO1a810UXwetTgtUZtZdfY+HoVwJCTusmV5tNSP
+        3JjFdlIphyXiuJMg1PpCnmdhA+TfQSU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-uUHXo2N0O4iTn2v3Yo6D1A-1; Fri, 06 May 2022 07:39:43 -0400
+X-MC-Unique: uUHXo2N0O4iTn2v3Yo6D1A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 067A3858F14;
+        Fri,  6 May 2022 11:39:42 +0000 (UTC)
+Received: from localhost (ovpn-13-105.pek2.redhat.com [10.72.13.105])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D80E1454A5D;
+        Fri,  6 May 2022 11:39:39 +0000 (UTC)
+Date:   Fri, 6 May 2022 19:39:36 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <YnUI+PagSCZ/DnkL@MiWiFi-R3L-srv>
+References: <YmlphvZVMsGfFksp@arm.com>
+ <YmoMvV1wzHT5V1aw@MiWiFi-R3L-srv>
+ <YmoPhvkXQFZQOcIO@MiWiFi-R3L-srv>
+ <3fc41a94-4247-40f3-14e7-f11e3001ec33@huawei.com>
+ <YmtaiJhwIgP6m2Sk@MiWiFi-R3L-srv>
+ <a9c736a0-f2b3-5b8a-94d9-80742ccd2700@huawei.com>
+ <23e2dcf4-4e9a-5298-d5d8-8761b0bbbe21@huawei.com>
+ <YnGmCwaWkvCrJoU2@arm.com>
+ <YnM9w69l5dbE+k15@MiWiFi-R3L-srv>
+ <YnPdIvOktZBQYLjg@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnPdIvOktZBQYLjg@arm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,155 +85,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On 05/05/22 at 03:20pm, Catalin Marinas wrote:
+> On Thu, May 05, 2022 at 11:00:19AM +0800, Baoquan He wrote:
+> > On 05/03/22 at 11:00pm, Catalin Marinas wrote:
+> > > So, to recap, IIUC you are fine with:
+> > > 
+> > > 	crashkernel=Y		- allocate within ZONE_DMA with fallback
+> > > 				  above with a default in ZONE_DMA (like
+> > > 				  x86, 256M or swiotlb size)
+> > 
+> >         Ack to this one.
+> > 
+> > 
+> > > 	crashkernel=Y,high	- allocate from above ZONE_DMA
+> > 
+> >         Not exactly. If there's only ZONE_DMA, crashkernel,high will
+> >         be reserved in ZONE_DMA, and crashkernel,low will be ignored.
+> >         Other than this, ack.
+> 
+> Yes, that's fine.
+> 
+> > > 	crashkernel=Y,low	- allocate within ZONE_DMA
+> > 
+> >         Ack to this one.
+> > > 
+> > > 'crashkernel' overrides the high and low while the latter two can be
+> > > passed independently.
+> > 
+> >         crashkernel=,high can be passed independently, then a crashkernel=,low
+> >         is needed implicitly. If people don't want crashkernel=,low
+> >         explicitly, crashkernel=0,low need be specified.
+> 
+> I find this complicating the interface. I don't know the background to
+> the x86 implementation but we diverge already on arm64 since we talk
+> about ZONE_DMA rather than 4G limit (though for most platforms these
+> would be the same).
+> 
+> I guess we could restate the difference between crashkernel= and
+> crashkernel=,high as the hint to go for allocation above ZONE_DMA first.
 
-On Thu, 2022-05-05 at 23:11 +0200, Greg Kroah-Hartman wrote:
-> On Thu, May 05, 2022 at 01:30:48PM +0800, Tinghan Shen wrote:
-> > From: TingHan Shen <tinghan.shen@mediatek.com>
-> > 
-> > Some of mediatek processors contain
-> > the Tensilica HiFix DSP for audio processing.
-> > 
-> > The communication between Host CPU and DSP firmware is
-> > taking place using a shared memory area for message passing.
-> > 
-> > ADSP IPC protocol offers (send/recv) interfaces using
-> > mediatek-mailbox APIs.
-> > 
-> > We use two mbox channels to implement a request-reply protocol.
-> > 
-> > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> > Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
-> > Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > Reviewed-by: Curtis Malainey <cujomalainey@chromium.org>
-> > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> > Reviewed-by: YC Hung <yc.hung@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/firmware/Kconfig                      |   1 +
-> >  drivers/firmware/Makefile                     |   1 +
-> >  drivers/firmware/mediatek/Kconfig             |   9 +
-> >  drivers/firmware/mediatek/Makefile            |   2 +
-> >  drivers/firmware/mediatek/mtk-adsp-ipc.c      | 161 ++++++++++++++++++
-> >  .../linux/firmware/mediatek/mtk-adsp-ipc.h    |  65 +++++++
-> >  6 files changed, 239 insertions(+)
-> >  create mode 100644 drivers/firmware/mediatek/Kconfig
-> >  create mode 100644 drivers/firmware/mediatek/Makefile
-> >  create mode 100644 drivers/firmware/mediatek/mtk-adsp-ipc.c
-> >  create mode 100644 include/linux/firmware/mediatek/mtk-adsp-ipc.h
-> > 
-> > diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> > index d65964996e8d..c4d149b28944 100644
-> > --- a/drivers/firmware/Kconfig
-> > +++ b/drivers/firmware/Kconfig
-> > @@ -300,6 +300,7 @@ source "drivers/firmware/cirrus/Kconfig"
-> >  source "drivers/firmware/google/Kconfig"
-> >  source "drivers/firmware/efi/Kconfig"
-> >  source "drivers/firmware/imx/Kconfig"
-> > +source "drivers/firmware/mediatek/Kconfig"
-> >  source "drivers/firmware/meson/Kconfig"
-> >  source "drivers/firmware/psci/Kconfig"
-> >  source "drivers/firmware/smccc/Kconfig"
-> > diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-> > index 4e58cb474a68..88fbdc110100 100644
-> > --- a/drivers/firmware/Makefile
-> > +++ b/drivers/firmware/Makefile
-> > @@ -34,6 +34,7 @@ obj-$(CONFIG_GOOGLE_FIRMWARE)	+= google/
-> >  obj-$(CONFIG_EFI)		+= efi/
-> >  obj-$(CONFIG_UEFI_CPER)		+= efi/
-> >  obj-y				+= imx/
-> > +obj-y				+= mediatek/
-> >  obj-y				+= psci/
-> >  obj-y				+= smccc/
-> >  obj-y				+= tegra/
-> > diff --git a/drivers/firmware/mediatek/Kconfig b/drivers/firmware/mediatek/Kconfig
-> > new file mode 100644
-> > index 000000000000..6d1e580b967b
-> > --- /dev/null
-> > +++ b/drivers/firmware/mediatek/Kconfig
-> > @@ -0,0 +1,9 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +config MTK_ADSP_IPC
-> > +	tristate "MTK ADSP IPC Protocol driver"
-> > +	depends on MTK_ADSP_MBOX
-> > +	help
-> > +	  Say yes here to add support for the MediaTek ADSP IPC
-> > +	  between host AP (Linux) and the firmware running on ADSP.
-> > +	  ADSP exists on some mtk processors.
-> > +	  Client might use shared memory to exchange information with ADSP side.
-> > diff --git a/drivers/firmware/mediatek/Makefile b/drivers/firmware/mediatek/Makefile
-> > new file mode 100644
-> > index 000000000000..4e840b65650d
-> > --- /dev/null
-> > +++ b/drivers/firmware/mediatek/Makefile
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +obj-$(CONFIG_MTK_ADSP_IPC)		+= mtk-adsp-ipc.o
-> > diff --git a/drivers/firmware/mediatek/mtk-adsp-ipc.c b/drivers/firmware/mediatek/mtk-adsp-ipc.c
-> > new file mode 100644
-> > index 000000000000..87cee61dbf32
-> > --- /dev/null
-> > +++ b/drivers/firmware/mediatek/mtk-adsp-ipc.c
-> > @@ -0,0 +1,161 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2022 MediaTek Corporation. All rights reserved.
-> > + * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> > + */
-> > +
-> > +#include <linux/firmware/mediatek/mtk-adsp-ipc.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mailbox_client.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +
-> > +/*
-> > + * mtk_adsp_ipc_send - send ipc cmd to MTK ADSP
-> > + *
-> > + * @ipc: ADSP IPC handle
-> > + * @idx: index of the mailbox channel
-> > + * @msg: IPC cmd (reply or request)
-> > + *
-> > + * Returns zero for success from mbox_send_message
-> > + * negative value for error
-> > + */
-> > +int mtk_adsp_ipc_send(struct mtk_adsp_ipc *ipc, unsigned int idx, uint32_t msg)
-> > +{
-> > +	struct mtk_adsp_chan *adsp_chan;
-> > +	int ret;
-> > +
-> > +	if (idx >= MTK_ADSP_MBOX_NUM)
-> > +		return -EINVAL;
-> > +
-> > +	adsp_chan = &ipc->chans[idx];
-> > +	ret = mbox_send_message(adsp_chan->ch, &msg);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * mbox_send_message returns non-negative value on success,
-> > +	 * return zero for success
-> > +	 */
-> > +	return 0;
-> 
-> You already said this up in the function comments, no need to duplicate
-> it again.
-> 
-> > +}
-> > +EXPORT_SYMBOL(mtk_adsp_ipc_send);
-> 
-> EXPORT_SYMBOL_GPL()?  I have to ask, sorry.
-> 
-> thanks,
-> 
-> greg k-h
+Yes, rethinking about this, we can make a straightforward and simpler
+crashkernel=,high|,low on arm64, namely asking for user to clearly
+specify them.
 
-I'll update these parts in next version.
-Thank you!
+During maintenance of crashkernel= parameter in our distros, we found
+crashkernel=xM is used mostly since most of systems can be satisfied
+with 256M or a little more for kdump. While on some big end servers,
+1G or more crashkernel memory is needed. In this case, crashkernel=,high
+is taken. We don't want to reserve so much low memory during system
+running while just waiting in case rare crash happened. crashkernel=,high
+is rarely used, so making it simple and not so flexible is not so bad.
+We can improve it later with justification.
 
+> 
+> >         An independent crashkernel=,low makes no sense. Crashkernel=,low
+> >         should be paird with crashkernel=,high.
+> 
+> You could argue that crashkernel=,low gives the current crashkernel=
+> behaviour, i.e. either all within ZONE_DMA or fail to allocate. So it
+> may have some value on its own.
 
-Best regards,
-TingHan
+Yes, crashkernel=,low has the same behaviour as the current crashkernel=
+if we decide not to add fallback mechanism to it. The purpose of
+crahskernel=,low is to assist crashkernel=,high to get kdump kernel
+boot up with satisfing DMA allocation. While allowing independent
+crashkernel=,low will add it another mission, limiting crashkernel only
+reserved in low memory. Up to now, we don't see the need for that.
+
+> 
+> >         My personal opinion according to the existed senmantics on x86.
+> >         Otherwise, the guidance of crashkernel= |,high|,low reservation
+> >         will be complicated to write.
+> 
+> It's more that I find the current semantics unnecessarily confusing. But
+> even reading the x86_64 text it's not that clear. For example the
+> default low allocation for crashkernel= and crashkernel=,high is only
+> mentioned in the crashkernel=,low description.
+
+Yeah, we can improve those document if insufficiency is found.
+
+By the way, with my observation, crashkernel= with fallback meet
+99% of our needs. If people really need more than 512M memory or more,
+then please consider crashkernel=,high. Basically on servers, low memory
+is limited, while high memory is very big.
+
+So I agree with you that we can make it step by step, firstly adding
+basic crashkernel=,high and ,low support. We can add those complicated
+cases later. 
 

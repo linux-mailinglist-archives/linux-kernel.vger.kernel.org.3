@@ -2,162 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38C651D739
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B151D744
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391616AbiEFMF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S1391632AbiEFMHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391609AbiEFMF5 (ORCPT
+        with ESMTP id S1378312AbiEFMHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:05:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB397644FF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:02:13 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w19so12184769lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 05:02:13 -0700 (PDT)
+        Fri, 6 May 2022 08:07:12 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271E96471C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:03:29 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id v59so12422130ybi.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 05:03:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=K7Vk2RGVrRCy30cK1Y/ttu7NoGtQ9PBn6qYa8UKo550=;
-        b=FiAc4AkWmx2gGK2W4DlhulgwU7J1QEFJWjPkFVD0JPSHxOa1guJFVJkH67VHeLXVRW
-         3L3WNMzn6l5uAKdE39TMVYsIBLYU76/1752QHLHhvzHfYoS9PBD6YsYOH6hyNu4HkvRU
-         DuCfPQRYfT6t65U+gFqCDn/4m5bK7X3paOIjJUgVwsXzhdDh/DuRcLPdjG840UJVAISZ
-         7FDka0xi1w4ETg+14gT8oAPxX6tD0dggcEpj1K56FcgDatz7B7VKtWKr4mwEj5WGw34k
-         FLb3kgyMsRUBxvpFiqHtEzQc9eKiAkZ7pR1+oMFsNG/zCuGQaC9dImd9iRxFvVZgrJzJ
-         Lrug==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uJe61iFzcBkDHHBgwbqNO2U+CJ7UpSh7Y5S1j727pJ0=;
+        b=IxK4YTNfmwgHKR7FTZ20P2HVFQz/yuwiqdIwfXox3nUVWYczPlpm6PFaN1ZimtwW7Q
+         U/F/Z9ntCYv9PMOnLePu/tNoYaOZEgfH/kueSoaY/OPM9iQm9hULzFhmLGkrSr26cgNb
+         6plXOvVcG4cMeLA4KkpmZuIRLkw0VRRXNKoLA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=K7Vk2RGVrRCy30cK1Y/ttu7NoGtQ9PBn6qYa8UKo550=;
-        b=4owPwrpjxPElmTcnxA8DPAnSeUvTACs4RbHAmIiMtsA7mcPLQppUqz0THvBPHft3zl
-         wWxJhHPyALTGAHtMvd98hQoLBfG1E4rqoB+fVPvjpPwZvkw/ceMFkMB5/AzpNUlpI6w6
-         ojltfmMD+md+IPfkWX8zhPWQhqVsd8hNEsuy0nEDUwiH36c0mhB+GjN4BCDKIK3RH1Mr
-         Eky5+ehfM/Ac6AoC2KF66DOFr9xXYLoHiQPhFBQcxvMW1uU/Y+4Qunl8t4FIlflLx/SL
-         RbZoSbauCwTI33ALpEFet4yRSY/mEtHH1t1GhHVwh9UAbDyrMCkNNhh4iP7HiKo/WbUA
-         VLAg==
-X-Gm-Message-State: AOAM533YdoWOBI/9vfFeUT7c7otbvMy4ACiE1yLvHQ/zBc4sdKeMFlAq
-        SfYegghKstRNERSKiqtdboM=
-X-Google-Smtp-Source: ABdhPJz+vWr1fb0Vh6bkG+kOn++y4APV3wckrAXe40irG/2Mjl8jXGIcPbkLI5g8kp+vVp+8fNeD/Q==
-X-Received: by 2002:a05:6512:3984:b0:473:a6ee:5ef2 with SMTP id j4-20020a056512398400b00473a6ee5ef2mr2253227lfu.416.1651838529800;
-        Fri, 06 May 2022 05:02:09 -0700 (PDT)
-Received: from [192.168.1.11] ([217.117.246.114])
-        by smtp.gmail.com with ESMTPSA id g17-20020ac24d91000000b0047255d211d1sm655830lfe.256.2022.05.06.05.02.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 05:02:08 -0700 (PDT)
-Message-ID: <a5483e41-b5f7-d86b-21b9-2a9c3e602855@gmail.com>
-Date:   Fri, 6 May 2022 15:02:05 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uJe61iFzcBkDHHBgwbqNO2U+CJ7UpSh7Y5S1j727pJ0=;
+        b=rVk/+xx8reZPN7k/rwFmyxfGT9B6YQblsYKIYLpqA3OVPFBqAYM0PRpr2di0wCblIx
+         hPyeb0gbXoTl3pChRyOvOhs3gZxSwE6FbJ77LqFGFdV9vBty/gVm3V+aQNKpqsmop4Ib
+         KjvINdt3frtuDkq25RfH9nUAoHYldC4fu2bkG6zTeI3a76i3GG/+Htz+YRydS2tJ1IWo
+         wB9aNUqDZMuvgLRgGSNwD4IzPh4HHnufK3R9GJx/ILsX8M+6meM9PitOFqablupLMciY
+         S5KVzmXXzHBpiCHUImyf4wozAW9NjCq+OmD8ldUS2CbZKoXsrtsqU8e59xy4J3wT/E+V
+         RqEA==
+X-Gm-Message-State: AOAM530tCa4tGJQH3LLMlwzPpQ8QkyO/i94bRC1Mle+RVwHOrG01lqs3
+        7/YGRoxx0l8Vk4dl+ZmkhixODZFyQjjgfgYNKj76XQ==
+X-Google-Smtp-Source: ABdhPJx9Axl6G6Vn89Khu54TfUr+9woAZDpNbcGfw1wHALNejHYK/qeoxm9wPu0kPDc+oQU03cSeWaDg0HqV6PFxk5c=
+X-Received: by 2002:a25:4c2:0:b0:648:6a77:5da0 with SMTP id
+ 185-20020a2504c2000000b006486a775da0mr1878515ybe.203.1651838608247; Fri, 06
+ May 2022 05:03:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] staging: rtl8712: fix uninit-value in
- r871xu_drv_init()
-Content-Language: en-US
-To:     Wang Cheng <wanngchenng@gmail.com>
-Cc:     dan.carpenter@oracle.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <cover.1651760402.git.wanngchenng@gmail.com>
- <14c3886173dfa4597f0704547c414cfdbcd11d16.1651760402.git.wanngchenng@gmail.com>
- <46b89616-5ec7-fb04-f561-2647efd968c4@gmail.com>
- <20220506113320.gc6zryhm7uqnbva5@ppc.localdomain>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220506113320.gc6zryhm7uqnbva5@ppc.localdomain>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bn7JyRrybmPrWB3R9z0ba4SS"
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425125546.4129-3-johnson.wang@mediatek.com>
+ <202204271737.oAuTwqZH-lkp@intel.com> <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
+ <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com>
+In-Reply-To: <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 6 May 2022 20:03:17 +0800
+Message-ID: <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
+Subject: Re: [kbuild-all] Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce
+ MediaTek CCI devfreq driver
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Johnson Wang <johnson.wang@mediatek.com>,
+        kernel test robot <lkp@intel.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bn7JyRrybmPrWB3R9z0ba4SS
-Content-Type: multipart/mixed; boundary="------------0t0obMxZS1mkT8KtRvOSPtuU";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: Wang Cheng <wanngchenng@gmail.com>
-Cc: dan.carpenter@oracle.com, linux-staging@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Message-ID: <a5483e41-b5f7-d86b-21b9-2a9c3e602855@gmail.com>
-Subject: Re: [PATCH v2 2/2] staging: rtl8712: fix uninit-value in
- r871xu_drv_init()
-References: <cover.1651760402.git.wanngchenng@gmail.com>
- <14c3886173dfa4597f0704547c414cfdbcd11d16.1651760402.git.wanngchenng@gmail.com>
- <46b89616-5ec7-fb04-f561-2647efd968c4@gmail.com>
- <20220506113320.gc6zryhm7uqnbva5@ppc.localdomain>
-In-Reply-To: <20220506113320.gc6zryhm7uqnbva5@ppc.localdomain>
+On Thu, Apr 28, 2022 at 7:39 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
+> On 4/27/2022 6:11 PM, Johnson Wang wrote:
+> > On Wed, 2022-04-27 at 17:25 +0800, kernel test robot wrote:
+> >> Hi Johnson,
+> >>
+> >> Thank you for the patch! Perhaps something to improve:
+> >>
+> >> [auto build test WARNING on robh/for-next]
+> >> [also build test WARNING on linus/master v5.18-rc4 next-20220427]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a
+> >> note.
+> >> And when submitting patch, we suggest to use '--base' as documented
+> >> in
+> >>
+> > https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMS_s9zEZ$
+> >>   ]
+> >>
+> >> url:
+> >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMc1U_tqz$
+> >>
+> >> base:
+> >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMUzTprof$
+> >>    for-next
+> >> config: hexagon-allyesconfig (
+> >> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMaVRzbSL$
+> >>   )
+> >> compiler: clang version 15.0.0 (
+> >> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMRqw5IY-$
+> >> $  1cddcfdc3c683b393df1a5c9063252eb60e52818)
+> >> reproduce (this is a W=1 build):
+> >>          wget
+> >> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMQLiD-i9$
+> >>    -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          #
+> >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMU5yd7Y2$
+> >>
+> >>          git remote add linux-review
+> >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMW4ldtnH$
+> >>
+> >>          git fetch --no-tags linux-review Johnson-Wang/Introduce-
+> >> MediaTek-CCI-devfreq-driver/20220425-205820
+> >>          git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
+> >>          # save the config file
+> >>          mkdir build_dir && cp config build_dir/.config
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
+> >> W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/
+> >> drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
+> >>
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >>
+> >> All warnings (new ones prefixed by >>):
+> >>
+> >>     drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named
+> >> 'parent_type' in 'struct devfreq_passive_data'
+> >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
+> >>             ~~~~~~~~~~~~  ^
+> >>     drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared
+> >> identifier 'CPUFREQ_PARENT_DEV'
+> >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
+> >>                                         ^
+> >>>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format
+> >>>> specifies type 'int' but the argument has type 'long' [-Wformat]
+> >>
+> >>                             PTR_ERR(drv->devfreq));
+> >>                             ^~~~~~~~~~~~~~~~~~~~~
+> >>     include/linux/dev_printk.h:144:65: note: expanded from macro
+> >> 'dev_err'
+> >>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev,
+> >> dev_fmt(fmt), ##__VA_ARGS__)
+> >>                                                                    ~~~
+> >>       ^~~~~~~~~~~
+> >>     include/linux/dev_printk.h:110:23: note: expanded from macro
+> >> 'dev_printk_index_wrap'
+> >>                     _p_func(dev, fmt,
+> >> ##__VA_ARGS__);                       \
+> >>                                  ~~~    ^~~~~~~~~~~
+> >>     1 warning and 2 errors generated.
+> >>
+> >>
+> >> vim +379 drivers/devfreq/mtk-cci-devfreq.c
+> >>
+> >>     255
+> >>     256      static int mtk_ccifreq_probe(struct platform_device
+> >> *pdev)
+> >>     257      {
+> >>     258              struct device *dev = &pdev->dev;
+> >>     259              struct mtk_ccifreq_drv *drv;
+> >>     260              struct devfreq_passive_data *passive_data;
+> >>     261              struct dev_pm_opp *opp;
+> >>     262              unsigned long rate, opp_volt;
+> >>     263              int ret;
+> >>     264
+> >>     265              drv = devm_kzalloc(dev, sizeof(*drv),
+> >> GFP_KERNEL);
+> >>     266              if (!drv)
+> >>     267                      return -ENOMEM;
+> >>     268
+> >>     269              drv->dev = dev;
+> >>     270              drv->soc_data = (const struct
+> >> mtk_ccifreq_platform_data *)
+> >>     271                                      of_device_get_match_dat
+> >> a(&pdev->dev);
+> >>     272              mutex_init(&drv->reg_lock);
+> >>     273              platform_set_drvdata(pdev, drv);
+> >>     274
+> >>     275              drv->cci_clk = devm_clk_get(dev, "cci");
+> >>     276              if (IS_ERR(drv->cci_clk)) {
+> >>     277                      ret = PTR_ERR(drv->cci_clk);
+> >>     278                      return dev_err_probe(dev, ret,
+> >>     279                                           "failed to get cci
+> >> clk: %d\n", ret);
+> >>     280              }
+> >>     281
+> >>     282              drv->inter_clk = devm_clk_get(dev,
+> >> "intermediate");
+> >>     283              if (IS_ERR(drv->inter_clk)) {
+> >>     284                      ret = PTR_ERR(drv->inter_clk);
+> >>     285                      dev_err_probe(dev, ret,
+> >>     286                                    "failed to get
+> >> intermediate clk: %d\n", ret);
+> >>     287                      goto out_free_resources;
+> >>     288              }
+> >>     289
+> >>     290              drv->proc_reg =
+> >> devm_regulator_get_optional(dev, "proc");
+> >>     291              if (IS_ERR(drv->proc_reg)) {
+> >>     292                      ret = PTR_ERR(drv->proc_reg);
+> >>     293                      dev_err_probe(dev, ret,
+> >>     294                                    "failed to get proc
+> >> regulator: %d\n", ret);
+> >>     295                      goto out_free_resources;
+> >>     296              }
+> >>     297
+> >>     298              ret = regulator_enable(drv->proc_reg);
+> >>     299              if (ret) {
+> >>     300                      dev_err(dev, "failed to enable proc
+> >> regulator\n");
+> >>     301                      goto out_free_resources;
+> >>     302              }
+> >>     303
+> >>     304              drv->sram_reg = regulator_get_optional(dev,
+> >> "sram");
+> >>     305              if (IS_ERR(drv->sram_reg))
+> >>     306                      drv->sram_reg = NULL;
+> >>     307              else {
+> >>     308                      ret = regulator_enable(drv->sram_reg);
+> >>     309                      if (ret) {
+> >>     310                              dev_err(dev, "failed to enable
+> >> sram regulator\n");
+> >>     311                              goto out_free_resources;
+> >>     312                      }
+> >>     313              }
+> >>     314
+> >>     315              /*
+> >>     316               * We assume min voltage is 0 and tracking
+> >> target voltage using
+> >>     317               * min_volt_shift for each iteration.
+> >>     318               * The retry_max is 3 times of expeted
+> >> iteration count.
+> >>     319               */
+> >>     320              drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv-
+> >>> soc_data->sram_max_volt,
+> >>     321                                                     drv-
+> >>> soc_data->proc_max_volt),
+> >>     322                                                 drv-
+> >>> soc_data->min_volt_shift);
+> >>     323
+> >>     324              ret = clk_prepare_enable(drv->cci_clk);
+> >>     325              if (ret)
+> >>     326                      goto out_free_resources;
+> >>     327
+> >>     328              ret = clk_prepare_enable(drv->inter_clk);
+> >>     329              if (ret)
+> >>     330                      goto out_disable_cci_clk;
+> >>     331
+> >>     332              ret = dev_pm_opp_of_add_table(dev);
+> >>     333              if (ret) {
+> >>     334                      dev_err(dev, "failed to add opp table:
+> >> %d\n", ret);
+> >>     335                      goto out_disable_inter_clk;
+> >>     336              }
+> >>     337
+> >>     338              rate = clk_get_rate(drv->inter_clk);
+> >>     339              opp = dev_pm_opp_find_freq_ceil(dev, &rate);
+> >>     340              if (IS_ERR(opp)) {
+> >>     341                      ret = PTR_ERR(opp);
+> >>     342                      dev_err(dev, "failed to get
+> >> intermediate opp: %d\n", ret);
+> >>     343                      goto out_remove_opp_table;
+> >>     344              }
+> >>     345              drv->inter_voltage =
+> >> dev_pm_opp_get_voltage(opp);
+> >>     346              dev_pm_opp_put(opp);
+> >>     347
+> >>     348              rate = U32_MAX;
+> >>     349              opp = dev_pm_opp_find_freq_floor(drv->dev,
+> >> &rate);
+> >>     350              if (IS_ERR(opp)) {
+> >>     351                      dev_err(dev, "failed to get opp\n");
+> >>     352                      ret = PTR_ERR(opp);
+> >>     353                      goto out_remove_opp_table;
+> >>     354              }
+> >>     355
+> >>     356              opp_volt = dev_pm_opp_get_voltage(opp);
+> >>     357              dev_pm_opp_put(opp);
+> >>     358              ret = mtk_ccifreq_set_voltage(drv, opp_volt);
+> >>     359              if (ret) {
+> >>     360                      dev_err(dev, "failed to scale to
+> >> highest voltage %lu in proc_reg\n",
+> >>     361                              opp_volt);
+> >>     362                      goto out_remove_opp_table;
+> >>     363              }
+> >>     364
+> >>     365              passive_data = devm_kzalloc(dev, sizeof(struct
+> >> devfreq_passive_data),
+> >>     366                                          GFP_KERNEL);
+> >>     367              if (!passive_data) {
+> >>     368                      ret = -ENOMEM;
+> >>     369                      goto out_remove_opp_table;
+> >>     370              }
+> >>     371
+> >>     372              passive_data->parent_type = CPUFREQ_PARENT_DEV;
+> >>     373              drv->devfreq = devm_devfreq_add_device(dev,
+> >> &mtk_ccifreq_profile,
+> >>     374                                                     DEVFREQ_
+> >> GOV_PASSIVE,
+> >>     375                                                     passive_
+> >> data);
+> >>     376              if (IS_ERR(drv->devfreq)) {
+> >>     377                      ret = -EPROBE_DEFER;
+> >>     378                      dev_err(dev, "failed to add devfreq
+> >> device: %d\n",
+> >>   > 379                              PTR_ERR(drv->devfreq));
+> >>     380                      goto out_remove_opp_table;
+> >>     381              }
+> >>     382
+> >>     383              drv->opp_nb.notifier_call =
+> >> mtk_ccifreq_opp_notifier;
+> >>     384              ret = dev_pm_opp_register_notifier(dev, &drv-
+> >>> opp_nb);
+> >>     385              if (ret) {
+> >>     386                      dev_err(dev, "failed to register opp
+> >> notifier: %d\n", ret);
+> >>     387                      goto out_remove_devfreq_device;
+> >>     388              }
+> >>     389              return 0;
+> >>     390
+> >>     391      out_remove_devfreq_device:
+> >>     392              devm_devfreq_remove_device(dev, drv->devfreq);
+> >>     393
+> >>     394      out_remove_opp_table:
+> >>     395              dev_pm_opp_of_remove_table(dev);
+> >>     396
+> >>     397      out_disable_inter_clk:
+> >>     398              clk_disable_unprepare(drv->inter_clk);
+> >>     399
+> >>     400      out_disable_cci_clk:
+> >>     401              clk_disable_unprepare(drv->cci_clk);
+> >>     402
+> >>     403      out_free_resources:
+> >>     404              if (regulator_is_enabled(drv->proc_reg))
+> >>     405                      regulator_disable(drv->proc_reg);
+> >>     406              if (drv->sram_reg && regulator_is_enabled(drv-
+> >>> sram_reg))
+> >>     407                      regulator_disable(drv->sram_reg);
+> >>     408
+> >>     409              if (!IS_ERR(drv->proc_reg))
+> >>     410                      regulator_put(drv->proc_reg);
+> >>     411              if (!IS_ERR(drv->sram_reg))
+> >>     412                      regulator_put(drv->sram_reg);
+> >>     413              if (!IS_ERR(drv->cci_clk))
+> >>     414                      clk_put(drv->cci_clk);
+> >>     415              if (!IS_ERR(drv->inter_clk))
+> >>     416                      clk_put(drv->inter_clk);
+> >>     417
+> >>     418              return ret;
+> >>     419      }
+> >>     420
+> >>
+> >
+> > Hi "kernel test robot",
+> >
+> > Thanks for your review.
+> >
+> > This patch is based on chanwoo/devfreq-testing[1]
+> > [1]
+> > https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
+>
+> Hi Johnson,
+>
+> Thanks for the feedback, we'll take a look too.
 
---------------0t0obMxZS1mkT8KtRvOSPtuU
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I think the last patch on that branch might be broken.
 
-SGkgV2FuZywNCg0KT24gNS82LzIyIDE0OjMzLCBXYW5nIENoZW5nIHdyb3RlOg0KPiBPbiAy
-Mi8wNS8wNiAxMDo0MUFNLCBQYXZlbCBTa3JpcGtpbiB3cm90ZToNCj4+IEhpIFdhbmcsDQo+
-PiANCj4+IE9uIDUvNi8yMiAwNjoxNiwgV2FuZyBDaGVuZyB3cm90ZToNCj4+IA0KPj4gW3Nu
-aXBdDQo+PiANCj4+ID4gDQo+PiA+IFJlcG9ydGVkLWFuZC10ZXN0ZWQtYnk6IHN5emJvdCs2
-ZjVlY2QxNDQ4NTRjMGQ4NTgwYkBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tDQo+PiA+IFNp
-Z25lZC1vZmYtYnk6IFdhbmcgQ2hlbmcgPHdhbm5nY2hlbm5nQGdtYWlsLmNvbT4NCj4+ID4g
-LS0tDQo+PiA+ICAgZHJpdmVycy9zdGFnaW5nL3J0bDg3MTIvdXNiX2ludGYuYyB8IDYgKysr
-LS0tDQo+PiA+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
-bnMoLSkNCj4+ID4gDQo+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvcnRsODcx
-Mi91c2JfaW50Zi5jIGIvZHJpdmVycy9zdGFnaW5nL3J0bDg3MTIvdXNiX2ludGYuYw0KPj4g
-PiBpbmRleCBlZTRjNjFmODVhMDcuLjUwZGNkM2VjYjY4NSAxMDA2NDQNCj4+ID4gLS0tIGEv
-ZHJpdmVycy9zdGFnaW5nL3J0bDg3MTIvdXNiX2ludGYuYw0KPj4gPiArKysgYi9kcml2ZXJz
-L3N0YWdpbmcvcnRsODcxMi91c2JfaW50Zi5jDQo+PiA+IEBAIC01MzgsMTMgKzUzOCwxMyBA
-QCBzdGF0aWMgaW50IHI4NzF4dV9kcnZfaW5pdChzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqcHVz
-Yl9pbnRmLA0KPj4gPiAgIAkJfSBlbHNlIHsNCj4+ID4gICAJCQlBdXRvbG9hZEZhaWwgPSBm
-YWxzZTsNCj4+ID4gICAJCX0NCj4+ID4gLQkJaWYgKCgobWFjWzBdID09IDB4ZmYpICYmICht
-YWNbMV0gPT0gMHhmZikgJiYNCj4+ID4gKwkJaWYgKCghQXV0b2xvYWRGYWlsKSB8fA0KPj4g
-PiArCQkgICAgKChtYWNbMF0gPT0gMHhmZikgJiYgKG1hY1sxXSA9PSAweGZmKSAmJg0KPj4g
-PiAgIAkJICAgICAobWFjWzJdID09IDB4ZmYpICYmIChtYWNbM10gPT0gMHhmZikgJiYNCj4+
-ID4gICAJCSAgICAgKG1hY1s0XSA9PSAweGZmKSAmJiAobWFjWzVdID09IDB4ZmYpKSB8fA0K
-Pj4gPiAgIAkJICAgICgobWFjWzBdID09IDB4MDApICYmIChtYWNbMV0gPT0gMHgwMCkgJiYN
-Cj4+ID4gICAJCSAgICAgKG1hY1syXSA9PSAweDAwKSAmJiAobWFjWzNdID09IDB4MDApICYm
-DQo+PiA+IC0JCSAgICAgKG1hY1s0XSA9PSAweDAwKSAmJiAobWFjWzVdID09IDB4MDApKSB8
-fA0KPj4gPiAtCQkgICAgICghQXV0b2xvYWRGYWlsKSkgew0KPj4gPiArCQkgICAgIChtYWNb
-NF0gPT0gMHgwMCkgJiYgKG1hY1s1XSA9PSAweDAwKSkpIHsNCj4+IA0KPj4gDQo+PiBUaGF0
-IGxvb2tzIHVnbHkuIEkgbWVhbiBtYWMgY2hlY2tzLiBDYW4gd2UsIHBsZWFzZSwgdXNlIHNh
-bmUga2VybmVsIEFQSSBsaWtlDQo+PiBpc192YWxpZF9ldGhlcl9hZGRyKCk/DQo+IA0KPiBH
-b29kIGlkZWEhIEJ1dCB3aWxsIGlzX3ZhbGlkX2V0aGVyX2FkZHIoKSBjaGVjayBhIGxhcmdl
-ciByYW5nZT8NCj4gVGhlIGNvbW1lbnQgb2YgaXNfdmFsaWRfZXRoZXJfYWRkcigpKGluY2x1
-ZGUvbGludXgvZXRoZXJkZXZpY2UuaCkgc2F5czoNCj4gICAgQ2hlY2sgdGhhdCB0aGUgRXRo
-ZXJuZXQgYWRkcmVzcyAoTUFDKSBpcyBub3QgMDA6MDA6MDA6MDA6MDA6MDAsIGlzIG5vdA0K
-PiAgICBhICptdWx0aWNhc3QgYWRkcmVzcyosIGFuZCBpcyBub3QgRkY6RkY6RkY6RkY6RkY6
-RkYuDQo+IA0KDQpJIGFtIG5vdCBnb29kIGFuIGV4cGVydCBhdCBuZXR3b3JraW5nIHN0dWZm
-LCBidXQgY2FuIG11bHRpY2FzdCBtYWMgDQphZGRyZXNzIGJlIHZhbGlkIGZvciBwdXJwb3Nl
-IG9mIFdpLUZpIGFkYXB0ZXI/IElJVUMgaXQncyBjYW4ndCwgYnV0IGFzIEkgDQpzYWlkIGJl
-Zm9yZSwgSSBhbSBub3QgYW4gZXhwZXJ0DQoNCg0KDQpXaXRoIHJlZ2FyZHMsDQpQYXZlbCBT
-a3JpcGtpbg0K
 
---------------0t0obMxZS1mkT8KtRvOSPtuU--
-
---------------bn7JyRrybmPrWB3R9z0ba4SS
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJ1Dj0FAwAAAAAACgkQbk1w61LbBA1q
-fw/+OxI54ebjhrBJEMRhRQxaigqln4eLUmJ/ePWJOBKbdLm2O03b0TwxdRGMyI3Q/aZreuXIMd9K
-tHeh9wDZLxnlBpxbH8OPeCkgouUdTUcPcVyZIE2Ew5N0pdlM8rcXj5QaYn91p71LDi96RQ6JJjgz
-J0aiBqxbnj6RG1giYc64Y/4E+SSzomqLlW3azO0+QyV7fNnzWRUmt+u5z3jzl4UZXGFsV6mzzEHv
-HcaWqDi+t3pnAXR1Q2COSal5TywNrrNurEWw4IjJ2zbU6Czx4Gm6Pn5OCh/rXxVLajKnqK0p0wby
-rFe/FeGqxmv73bxwZHG3X3+m/BtWZLKoJk6wfkDEEod1162GhR2XZQDzxyS9M8imriYSABYTFoHp
-NSDmJEnWwg1/dT6deuJ9CW4zIl6E6Rxk77RERhIlmUVRBymbqMpTPoJUM4K0w57MBbONlwfmTRxu
-XBNIisdltZcaHST+wMr8FZ57Ix/4pcs6j3AKcnA+w9yYWIVEpLQB2zRF0e3xiltCPqVVGBhnUmlx
-SPElEPjrv1OrLZhM3EswYsxi3obSji/SoZj/KoaeXnzC+GhC4cfvRN397n6+OzLQZlRnUShznXtq
-h8qRbVyq/dz+8xKVUQqDafoH+OqvCVmA0bLc+Uc2/eDylr8dbddFJlGFdTwhS72PjpsB5L32Vu3B
-ypU=
-=gGru
------END PGP SIGNATURE-----
-
---------------bn7JyRrybmPrWB3R9z0ba4SS--
+ChenYu

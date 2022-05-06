@@ -2,339 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09EF51CE83
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1F651CE96
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350558AbiEFBs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 21:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S1384978AbiEFBt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 21:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbiEFBsx (ORCPT
+        with ESMTP id S234118AbiEFBtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 21:48:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3DF54F8E;
-        Thu,  5 May 2022 18:45:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42D63B82E5C;
-        Fri,  6 May 2022 01:45:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F27EC385A8;
-        Fri,  6 May 2022 01:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651801509;
-        bh=8bAJ5yL3BZ34e6ga6jj9plfjb8Qyt7hfVj4J6T0fzFk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ua7fhwe6C269LQAFYu6FQzizDPP0p68q2LIpqugBQYFa/8qcqiuZKFMZY4iKh63/m
-         N56dEXe2vvnt2K8k20w7agwrusVD0Zyxn0hvG5AoBZsw7Eokfep7ClSaETb5HARoKW
-         6/epUgmNo9WakAUU5YtvLbLazaKyZawEMssmPtqVdGgkItBRz6mr4giCLYEOzIl/rM
-         D7lahp0k9msgUlTAwYhD8brIFdAaBkUbLGQk7/XgFAmcgYFXYpxUq9Z+ZA3sd665B7
-         Jnu88mVxcWSP/KO3rzZVuTP7P6d0h5YSFb8p+1MfYa4uGQ3MByvw3JAo6WuHIOwmOs
-         Uw3FdvdZdo0WA==
-Date:   Fri, 6 May 2022 10:45:04 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes
- annotation
-Message-Id: <20220506104504.535c6ab065993b97604178fe@kernel.org>
-In-Reply-To: <1651753148-1464-3-git-send-email-yangtiezhu@loongson.cn>
-References: <1651753148-1464-1-git-send-email-yangtiezhu@loongson.cn>
-        <1651753148-1464-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 5 May 2022 21:49:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F55D5FD;
+        Thu,  5 May 2022 18:46:08 -0700 (PDT)
+X-UUID: 3bee3a0e7a324307afa33f92ea2e1e9f-20220506
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:78df6090-3536-419a-89d0-3c0db43164e5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:db7cc0b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 3bee3a0e7a324307afa33f92ea2e1e9f-20220506
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 653952957; Fri, 06 May 2022 09:46:04 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 6 May 2022 09:46:03 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 6 May 2022 09:46:03 +0800
+Message-ID: <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
+Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Fri, 6 May 2022 09:46:03 +0800
+In-Reply-To: <20220505115226.20130-6-rex-bc.chen@mediatek.com>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220505115226.20130-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  5 May 2022 20:19:08 +0800
-Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
+> From this opp notifier, cpufreq should listen to opp notification and
+> do
 
-> If define CONFIG_KPROBES, __kprobes annotation forces the whole function
-> into the ".kprobes.text" section, NOKPROBE_SYMBOL() just stores the given
-> function address in the "_kprobe_blacklist" section which is introduced
-> to maintain kprobes blacklist.
+Hello Viresh,
+
+There is still ">" in this patch...
+I think the root cause could be the "From" word in the beginning of
+this message.
+I will not use "From" in next version..
+
+BRs,
+Rex
+
+> proper actions when receiving events of disable and voltage
+> adjustment.
 > 
-> Modify the related code to use NOKPROBE_SYMBOL() to protect functions from
-> kprobes instead of __kprobes annotation under arch/mips.
-
-So you added some non '__kprobes' annotated functions to NOKPROBE_SYMBOL()
-in this patch. Those caused the kernel panic, right? If so, please add such
-comment on this description too. Or, split this into 2 patches, one fixes
-the kernel panic by adding those functions to NOKPROBE_SYMBOL() and the
-other is replacing __kprobes with NOKPROBE_SYMBOL().
-
-Also, could you also find the commit which introduces the kernel panic?
-It is worth to backport such fix to stable trees.
-
-Thank you,
-
+> One of the user for this opp notifier is MediaTek SVS.
+> The MediaTek Smart Voltage Scaling (SVS) is a hardware which
+> calculates
+> suitable SVS bank voltages to OPP voltage table.
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
->  arch/mips/kernel/kprobes.c | 45 ++++++++++++++++++++++++++++++++-------------
->  arch/mips/mm/fault.c       |  6 ++++--
->  2 files changed, 36 insertions(+), 15 deletions(-)
+>  drivers/cpufreq/mediatek-cpufreq.c | 91 +++++++++++++++++++++++++++-
+> --
+>  1 file changed, 83 insertions(+), 8 deletions(-)
 > 
-> diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
-> index 6c7f3b1..21f9cec 100644
-> --- a/arch/mips/kernel/kprobes.c
-> +++ b/arch/mips/kernel/kprobes.c
-> @@ -44,10 +44,11 @@ static const union mips_instruction breakpoint2_insn = {
->  DEFINE_PER_CPU(struct kprobe *, current_kprobe);
->  DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> b/drivers/cpufreq/mediatek-cpufreq.c
+> index fe205eca657d..06d80ee06bbf 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -46,6 +46,11 @@ struct mtk_cpu_dvfs_info {
+>  	int intermediate_voltage;
+>  	bool need_voltage_tracking;
+>  	int pre_vproc;
+> +	/* Avoid race condition for regulators between notify and
+> policy */
+> +	struct mutex reg_lock;
+> +	struct notifier_block opp_nb;
+> +	unsigned int opp_cpu;
+> +	unsigned long opp_freq;
+>  	const struct mtk_cpufreq_platform_data *soc_data;
+>  	int vtrack_max;
+>  };
+> @@ -182,6 +187,8 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
 >  
-> -static int __kprobes insn_has_delayslot(union mips_instruction insn)
-> +static int insn_has_delayslot(union mips_instruction insn)
->  {
->  	return __insn_has_delay_slot(insn);
->  }
-> +NOKPROBE_SYMBOL(insn_has_delayslot);
+>  	pre_freq_hz = clk_get_rate(cpu_clk);
 >  
->  /*
->   * insn_has_ll_or_sc function checks whether instruction is ll or sc
-> @@ -56,7 +57,7 @@ static int __kprobes insn_has_delayslot(union mips_instruction insn)
->   * instructions; cannot do much about breakpoint in the middle of
->   * ll/sc pair; it is upto user to avoid those places
->   */
-> -static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
-> +static int insn_has_ll_or_sc(union mips_instruction insn)
->  {
->  	int ret = 0;
->  
-> @@ -72,8 +73,9 @@ static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
+> +	mutex_lock(&info->reg_lock);
+> +
+>  	if (unlikely(info->pre_vproc <= 0))
+>  		pre_vproc = regulator_get_voltage(info->proc_reg);
+>  	else
+> @@ -214,7 +221,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			dev_err(cpu_dev,
+>  				"cpu%d: failed to scale up voltage!\n",
+> policy->cpu);
+>  			mtk_cpufreq_set_voltage(info, pre_vproc);
+> -			return ret;
+> +			goto out;
+>  		}
 >  	}
->  	return ret;
->  }
-> +NOKPROBE_SYMBOL(insn_has_ll_or_sc);
 >  
-> -int __kprobes arch_prepare_kprobe(struct kprobe *p)
-> +int arch_prepare_kprobe(struct kprobe *p)
->  {
->  	union mips_instruction insn;
->  	union mips_instruction prev_insn;
-> @@ -132,26 +134,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->  out:
->  	return ret;
->  }
-> +NOKPROBE_SYMBOL(arch_prepare_kprobe);
->  
-> -void __kprobes arch_arm_kprobe(struct kprobe *p)
-> +void arch_arm_kprobe(struct kprobe *p)
->  {
->  	*p->addr = breakpoint_insn;
->  	flush_insn_slot(p);
->  }
-> +NOKPROBE_SYMBOL(arch_arm_kprobe);
->  
-> -void __kprobes arch_disarm_kprobe(struct kprobe *p)
-> +void arch_disarm_kprobe(struct kprobe *p)
->  {
->  	*p->addr = p->opcode;
->  	flush_insn_slot(p);
->  }
-> +NOKPROBE_SYMBOL(arch_disarm_kprobe);
->  
-> -void __kprobes arch_remove_kprobe(struct kprobe *p)
-> +void arch_remove_kprobe(struct kprobe *p)
->  {
->  	if (p->ainsn.insn) {
->  		free_insn_slot(p->ainsn.insn, 0);
->  		p->ainsn.insn = NULL;
+> @@ -224,8 +231,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  		dev_err(cpu_dev,
+>  			"cpu%d: failed to re-parent cpu clock!\n",
+> policy->cpu);
+>  		mtk_cpufreq_set_voltage(info, pre_vproc);
+> -		WARN_ON(1);
+> -		return ret;
+> +		goto out;
 >  	}
->  }
-> +NOKPROBE_SYMBOL(arch_remove_kprobe);
 >  
->  static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
->  {
-> @@ -161,6 +167,7 @@ static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
->  	kcb->prev_kprobe.saved_SR = kcb->kprobe_saved_SR;
->  	kcb->prev_kprobe.saved_epc = kcb->kprobe_saved_epc;
->  }
-> +NOKPROBE_SYMBOL(save_previous_kprobe);
->  
->  static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
->  {
-> @@ -170,6 +177,7 @@ static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
->  	kcb->kprobe_saved_SR = kcb->prev_kprobe.saved_SR;
->  	kcb->kprobe_saved_epc = kcb->prev_kprobe.saved_epc;
->  }
-> +NOKPROBE_SYMBOL(restore_previous_kprobe);
->  
->  static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
->  			       struct kprobe_ctlblk *kcb)
-> @@ -178,6 +186,7 @@ static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
->  	kcb->kprobe_saved_SR = kcb->kprobe_old_SR = (regs->cp0_status & ST0_IE);
->  	kcb->kprobe_saved_epc = regs->cp0_epc;
->  }
-> +NOKPROBE_SYMBOL(set_current_kprobe);
->  
->  /**
->   * evaluate_branch_instrucion -
-> @@ -225,6 +234,7 @@ static int evaluate_branch_instruction(struct kprobe *p, struct pt_regs *regs,
->  	return -EFAULT;
->  
->  }
-> +NOKPROBE_SYMBOL(evaluate_branch_instruction);
->  
->  static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
->  						struct kprobe_ctlblk *kcb)
-> @@ -244,6 +254,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
+>  	/* Set the original PLL to target rate. */
+> @@ -235,7 +241,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			"cpu%d: failed to scale cpu clock rate!\n",
+> policy->cpu);
+>  		clk_set_parent(cpu_clk, armpll);
+>  		mtk_cpufreq_set_voltage(info, pre_vproc);
+> -		return ret;
+> +		goto out;
 >  	}
->  	regs->cp0_epc = (unsigned long)&p->ainsn.insn[0];
->  }
-> +NOKPROBE_SYMBOL(prepare_singlestep);
 >  
->  /*
->   * Called after single-stepping.  p->addr is the address of the
-> @@ -257,7 +268,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
->   * breakpoint trap. In case of branch instructions, the target
->   * epc to be restored.
->   */
-> -static void __kprobes resume_execution(struct kprobe *p,
-> +static void resume_execution(struct kprobe *p,
->  				       struct pt_regs *regs,
->  				       struct kprobe_ctlblk *kcb)
->  {
-> @@ -268,8 +279,9 @@ static void __kprobes resume_execution(struct kprobe *p,
->  		regs->cp0_epc = orig_epc + 4;
+>  	/* Set parent of CPU clock back to the original PLL. */
+> @@ -244,8 +250,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  		dev_err(cpu_dev,
+>  			"cpu%d: failed to re-parent cpu clock!\n",
+> policy->cpu);
+>  		mtk_cpufreq_set_voltage(info, inter_vproc);
+> -		WARN_ON(1);
+> -		return ret;
+> +		goto out;
 >  	}
->  }
-> +NOKPROBE_SYMBOL(resume_execution);
 >  
-> -static int __kprobes kprobe_handler(struct pt_regs *regs)
-> +static int kprobe_handler(struct pt_regs *regs)
->  {
->  	struct kprobe *p;
->  	int ret = 0;
-> @@ -367,8 +379,9 @@ static int __kprobes kprobe_handler(struct pt_regs *regs)
->  	return ret;
->  
->  }
-> +NOKPROBE_SYMBOL(kprobe_handler);
->  
-> -static inline int post_kprobe_handler(struct pt_regs *regs)
-> +static int post_kprobe_handler(struct pt_regs *regs)
->  {
->  	struct kprobe *cur = kprobe_running();
->  	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
-> @@ -396,6 +409,7 @@ static inline int post_kprobe_handler(struct pt_regs *regs)
->  
->  	return 1;
->  }
-> +NOKPROBE_SYMBOL(post_kprobe_handler);
->  
->  int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
->  {
-> @@ -411,11 +425,12 @@ int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+>  	/*
+> @@ -260,15 +265,72 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			clk_set_parent(cpu_clk, info->inter_clk);
+>  			clk_set_rate(armpll, pre_freq_hz);
+>  			clk_set_parent(cpu_clk, armpll);
+> -			return ret;
+> +			goto out;
+>  		}
 >  	}
->  	return 0;
+>  
+> -	return 0;
+> +	info->opp_freq = freq_hz;
+> +
+> +out:
+> +	mutex_unlock(&info->reg_lock);
+> +
+> +	return ret;
 >  }
-> +NOKPROBE_SYMBOL(kprobe_fault_handler);
 >  
->  /*
->   * Wrapper routine for handling exceptions.
->   */
-> -int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
-> +int kprobe_exceptions_notify(struct notifier_block *self,
->  				       unsigned long val, void *data)
+>  #define DYNAMIC_POWER "dynamic-power-coefficient"
+>  
+> +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
+> +				    unsigned long event, void *data)
+> +{
+> +	struct dev_pm_opp *opp = data;
+> +	struct dev_pm_opp *new_opp;
+> +	struct mtk_cpu_dvfs_info *info;
+> +	unsigned long freq, volt;
+> +	struct cpufreq_policy *policy;
+> +	int ret = 0;
+> +
+> +	info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
+> +
+> +	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
+> +		freq = dev_pm_opp_get_freq(opp);
+> +
+> +		mutex_lock(&info->reg_lock);
+> +		if (info->opp_freq == freq) {
+> +			volt = dev_pm_opp_get_voltage(opp);
+> +			ret = mtk_cpufreq_set_voltage(info, volt);
+> +			if (ret)
+> +				dev_err(info->cpu_dev,
+> +					"failed to scale voltage:
+> %d\n", ret);
+> +		}
+> +		mutex_unlock(&info->reg_lock);
+> +	} else if (event == OPP_EVENT_DISABLE) {
+> +		freq = dev_pm_opp_get_freq(opp);
+> +
+> +		/* case of current opp item is disabled */
+> +		if (info->opp_freq == freq) {
+> +			freq = 1;
+> +			new_opp = dev_pm_opp_find_freq_ceil(info-
+> >cpu_dev,
+> +							    &freq);
+> +			if (IS_ERR(new_opp)) {
+> +				dev_err(info->cpu_dev,
+> +					"all opp items are
+> disabled\n");
+> +				ret = PTR_ERR(new_opp);
+> +				return notifier_from_errno(ret);
+> +			}
+> +
+> +			dev_pm_opp_put(new_opp);
+> +			policy = cpufreq_cpu_get(info->opp_cpu);
+> +			if (policy) {
+> +				cpufreq_driver_target(policy, freq /
+> 1000,
+> +						      CPUFREQ_RELATION_
+> L);
+> +				cpufreq_cpu_put(policy);
+> +			}
+> +		}
+> +	}
+> +
+> +	return notifier_from_errno(ret);
+> +}
+> +
+>  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info,
+> int cpu)
 >  {
+>  	struct device *cpu_dev;
+> @@ -357,6 +419,18 @@ static int mtk_cpu_dvfs_info_init(struct
+> mtk_cpu_dvfs_info *info, int cpu)
+>  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
+>  	dev_pm_opp_put(opp);
 >  
-> @@ -446,6 +461,7 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+> +	mutex_init(&info->reg_lock);
+> +
+> +	info->opp_cpu = cpu;
+> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
+> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "cpu%d: failed to register opp
+> notifier\n", cpu);
+> +		goto out_disable_inter_clock;
+> +	}
+> +
+> +	info->opp_freq = clk_get_rate(info->cpu_clk);
+> +
+>  	/*
+>  	 * If SRAM regulator is present, software "voltage tracking" is
+> needed
+>  	 * for this CPU power domain.
+> @@ -421,6 +495,7 @@ static void mtk_cpu_dvfs_info_release(struct
+> mtk_cpu_dvfs_info *info)
 >  	}
->  	return ret;
+>  
+>  	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+> +	dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
 >  }
-> +NOKPROBE_SYMBOL(kprobe_exceptions_notify);
 >  
->  /*
->   * Function return probe trampoline:
-> @@ -469,7 +485,7 @@ static void __used kretprobe_trampoline_holder(void)
->  
->  void __kretprobe_trampoline(void);
->  
-> -void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
->  				      struct pt_regs *regs)
->  {
->  	ri->ret_addr = (kprobe_opcode_t *) regs->regs[31];
-> @@ -478,11 +494,12 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
->  	/* Replace the return addr with trampoline addr */
->  	regs->regs[31] = (unsigned long)__kretprobe_trampoline;
->  }
-> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
->  
->  /*
->   * Called when the probe at kretprobe trampoline is hit
->   */
-> -static int __kprobes trampoline_probe_handler(struct kprobe *p,
-> +static int trampoline_probe_handler(struct kprobe *p,
->  						struct pt_regs *regs)
->  {
->  	instruction_pointer(regs) = __kretprobe_trampoline_handler(regs, NULL);
-> @@ -493,14 +510,16 @@ static int __kprobes trampoline_probe_handler(struct kprobe *p,
->  	 */
->  	return 1;
->  }
-> +NOKPROBE_SYMBOL(trampoline_probe_handler);
->  
-> -int __kprobes arch_trampoline_kprobe(struct kprobe *p)
-> +int arch_trampoline_kprobe(struct kprobe *p)
->  {
->  	if (p->addr == (kprobe_opcode_t *)__kretprobe_trampoline)
->  		return 1;
->  
->  	return 0;
->  }
-> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
->  
->  static struct kprobe trampoline_p = {
->  	.addr = (kprobe_opcode_t *)__kretprobe_trampoline,
-> diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-> index 44f9810..b08bc55 100644
-> --- a/arch/mips/mm/fault.c
-> +++ b/arch/mips/mm/fault.c
-> @@ -35,7 +35,7 @@ int show_unhandled_signals = 1;
->   * and the problem, and then passes it off to one of the appropriate
->   * routines.
->   */
-> -static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
-> +static void __do_page_fault(struct pt_regs *regs, unsigned long write,
->  	unsigned long address)
->  {
->  	struct vm_area_struct * vma = NULL;
-> @@ -322,8 +322,9 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
->  	}
->  #endif
->  }
-> +NOKPROBE_SYMBOL(__do_page_fault);
->  
-> -asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
-> +asmlinkage void do_page_fault(struct pt_regs *regs,
->  	unsigned long write, unsigned long address)
->  {
->  	enum ctx_state prev_state;
-> @@ -332,3 +333,4 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
->  	__do_page_fault(regs, write, address);
->  	exception_exit(prev_state);
->  }
-> +NOKPROBE_SYMBOL(do_page_fault);
-> -- 
-> 2.1.0
-> 
+>  static int mtk_cpufreq_init(struct cpufreq_policy *policy)
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

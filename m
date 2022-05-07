@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19B551E752
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF59D51E75B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385121AbiEGNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S1446427AbiEGNNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiEGNNO (ORCPT
+        with ESMTP id S1385137AbiEGNNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:13:14 -0400
-Received: from mail-m17669.qiye.163.com (mail-m17669.qiye.163.com [59.111.176.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE83913CE8
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:09:27 -0700 (PDT)
-Received: from [172.16.12.141] (unknown [58.22.7.114])
-        by mail-m17669.qiye.163.com (Hmail) with ESMTPA id 826EC46006D;
-        Sat,  7 May 2022 21:09:25 +0800 (CST)
-Message-ID: <5b697caa-c8ff-9f10-baa0-4d3e1a644a5f@rock-chips.com>
-Date:   Sat, 7 May 2022 21:09:25 +0800
+        Sat, 7 May 2022 09:13:41 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CEE433A8
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:09:53 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 4621924010C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 15:09:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1651928991; bh=Mvl1nfcKPlDY7R8FkACDDu+dOs/VOaKBYoYhUqCo2Vs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QA27jQK6LiXHIeEI6JYIHtgiuB6mu/acaR/X4jZT5E2QcfHCxf7rjd1k2nlLdF9Df
+         SocS9JlRtvweOlvqaKMQA3m4/UZrrr3kTRtTjWN3Lz8MxH7XtBy26AWIX7FlO6RDSN
+         mF6YvoRI7TO9ZL6PxAevjhXQXGDdnrnw/2FtwTvqv3sHqk+A5XdFcQH+VnVksC7oOn
+         QvSTzBxX87fk8/ShH9LIQbS9eiymgSIFWSXKkZmajeMASf/jMRd2Pnzg4h5drTaiTh
+         0ZNigGOvZErWJD5Rln5L75P+WEvEwFoUciRrb1Rliz74cZzNoZegcXQHVlXJXsy9oS
+         PK9aC+kfCUONg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4KwST853rHz6tnN;
+        Sat,  7 May 2022 15:09:48 +0200 (CEST)
+From:   Manuel Ullmann <labre@posteo.de>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Manuel Ullmann <labre@posteo.de>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        regressions@lists.linux.dev, davem@davemloft.net,
+        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
+        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
+        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
+Subject: Re: [PATCH v3] net: atlantic: always deep reset on pm op, fixing
+ null deref regression
+References: <8735hniqcm.fsf@posteo.de>
+        <833f2574-daf6-1357-d865-3528436ba393@leemhuis.info>
+Date:   Sat, 07 May 2022 13:10:05 +0000
+Message-ID: <87bkw91ob6.fsf@posteo.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 -next] drm/rockchip: Fix Kconfig dependencies
-Content-Language: en-US
-To:     Ren Zhijie <renzhijie2@huawei.com>, hjc@rock-chips.com,
-        heiko@sntech.de, airlied@linux.ie, daniel@ffwll.ch,
-        lyude@redhat.com, tzimmermann@suse.de
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220507100910.93705-1-renzhijie2@huawei.com>
-From:   Andy Yan <andy.yan@rock-chips.com>
-In-Reply-To: <20220507100910.93705-1-renzhijie2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRkaT0pWSkxNTB0eHk
-        tPGUJKVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ni46Njo5SD0xPg0zH0IsSR0q
-        ShkaFE9VSlVKTU5KQklDQk1NS01LVTMWGhIXVRoVHwJVAhoVOwkUGBBWGBMSCwhVGBQWRVlXWRIL
-        WUFZTkNVSUlVTFVKSk9ZV1kIAVlBSEJDTjcG
-X-HM-Tid: 0a809ea3a29cda59kuws826ec46006d
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhijie:
+Thorsten Leemhuis <regressions@leemhuis.info> writes:
 
-On 5/7/22 18:09, Ren Zhijie wrote:
-> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_connector_mode_valid':
-> cdn-dp-core.c:(.text+0x1e1): undefined reference to `drm_dp_bw_code_to_link_rate'
-> cdn-dp-core.c:(.text+0x1f4): undefined reference to `drm_dp_bw_code_to_link_rate'
-> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_pd_event_work':
-> cdn-dp-core.c:(.text+0x138e): undefined reference to `drm_dp_channel_eq_ok'
-> drivers/gpu/drm/rockchip/cdn-dp-reg.o: In function `cdn_dp_train_link':
-> cdn-dp-reg.c:(.text+0xd5a): undefined reference to `drm_dp_bw_code_to_link_rate'
+> On 06.05.22 00:09, Manuel Ullmann wrote:
+>>>From d24052938345d456946be0e9ccc337e24d771c79 Mon Sep 17 00:00:00 2001
+>> Date: Wed, 4 May 2022 21:30:44 +0200
+>>=20
+>> The impact of this regression is the same for resume that I saw on
+>> thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+>>=20
+>> The null deref occurs at the same position as on thaw.
+>> BUG: kernel NULL pointer dereference
+>> RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+>>=20
+>> Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
+>> par in pm functions, preventing null derefs"), where I disabled deep
+>> pm resets in suspend and resume, trying to make sense of the
+>> atl_resume_common deep parameter in the first place.
+>>=20
+>> It turns out, that atlantic always has to deep reset on pm operations
+>> and the parameter is useless. Even though I expected that and tested
+>> resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
+>> missing the breakage.
+>>=20
+>> This fixup obsoletes the deep parameter of atl_resume_common, but I
+>> leave the cleanup for the maintainers to post to mainline.
 >
-> The DP-helper module has been replaced by the display-helper module.
-> So the driver have to select it.
+> FWIW, this section starting here and...
 >
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 1e0f66420b13("drm/display: Introduce a DRM display-helper module")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-
-Thanks.
-
-Reviewed-by: Andy Yan <andy.yan@rock-chips.com>
-
-> ---
-> v2: remove "select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP" under DRM_ROCKCHIP at the head,
-> and separately add the select for ROCKCHIP_ANALOGIX_DP and ROCKCHIP_CDN_DP, which Andy suggested.
-> ---
-> ---
->   drivers/gpu/drm/rockchip/Kconfig | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>> PS: I'm very sorry for this regression.
+>>=20
+>> Changes in v2:
+>> Patch formatting fixes
+>> - Fix Fixes tag
+>> =E2=80=93 Simplify stable Cc tag
+>> =E2=80=93 Fix Signed-off-by tag
+>>=20
+>> Changes in v3:
+>> =E2=80=93 Prefixed commit reference with "commit" aka I managed to use
+>>   checkpatch.pl.
+>> - Added Tested-by tags for the testing reporters.
+>> =E2=80=93 People start to get annoyed by my patch revision spamming. Sho=
+uld be
+>>   the last one.
 >
-> diff --git a/drivers/gpu/drm/rockchip/Kconfig b/drivers/gpu/drm/rockchip/Kconfig
-> index 5afab49dc4f2..53c2d9980d48 100644
-> --- a/drivers/gpu/drm/rockchip/Kconfig
-> +++ b/drivers/gpu/drm/rockchip/Kconfig
-> @@ -2,7 +2,6 @@
->   config DRM_ROCKCHIP
->   	tristate "DRM Support for Rockchip"
->   	depends on DRM && ROCKCHIP_IOMMU
-> -	select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP
->   	select DRM_GEM_CMA_HELPER
->   	select DRM_KMS_HELPER
->   	select DRM_PANEL
-> @@ -38,6 +37,7 @@ config ROCKCHIP_VOP2
->   config ROCKCHIP_ANALOGIX_DP
->   	bool "Rockchip specific extensions for Analogix DP driver"
->   	depends on ROCKCHIP_VOP
-> +	select DRM_DISPLAY_HELPER
->   	select DRM_DISPLAY_DP_HELPER
->   	help
->   	  This selects support for Rockchip SoC specific extensions
-> @@ -47,6 +47,8 @@ config ROCKCHIP_ANALOGIX_DP
->   config ROCKCHIP_CDN_DP
->   	bool "Rockchip cdn DP"
->   	depends on EXTCON=y || (EXTCON=m && DRM_ROCKCHIP=m)
-> +	select DRM_DISPLAY_HELPER
-> +	select DRM_DISPLAY_DP_HELPER
->   	help
->   	  This selects support for Rockchip SoC specific extensions
->   	  for the cdn DP driver. If you want to enable Dp on
+> ...ending here needs should be below the "---" line you already have
+> below. For details see:
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+>
+> BTW, same goes for any "#regzbot" commands (like you had in
+> cbe6c3a8f8f4), as things otherwise get confused when a patch for example
+> is posted as part of a stable/longterm -rc review.
+Good to know. Maybe I could patch the handling-regressions documentation
+to include this. submitting-patches could also link the subsystem
+specific documentation, e.g. the netdev FAQ, since they handle patches
+with their more bot tests. Would have helped me a bit. Might be a nice
+exercise for properly formatted patching ;)
+
+>
+> But don't worry, no big deal, I handled that :-D Many thx for actually
+> directly getting regzbot involved and taking care of this regression!
+
+Thank you for the final cleanup and you=E2=80=99re welcome. :) Where did you
+handle this? I can=E2=80=99t seem to find the fixup anywhere, i.e. net-next,
+net, linux-next or lkml.
+
+I actually took the time and read that and all related documentation
+(stable, regressions, coding style) during my vacation a few weeks ago,
+but my memory was partially overwritten by less useful (work related)
+data. Instead of regression reports induced panic mode, I should have
+reread the submitting-patches, especially the last section.
+
+>> Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, pr=
+eventing null derefs")
+>> Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Iz=
+co4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5=
+iQ=3D@protonmail.com/
+>> Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+>> Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+>> Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
+>> Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+>> Cc: <stable@vger.kernel.org> # 5.10+
+>> Signed-off-by: Manuel Ullmann <labre@posteo.de>
+>> ---
+>>  drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Ciao, Thorsten
+Regards, Manuel

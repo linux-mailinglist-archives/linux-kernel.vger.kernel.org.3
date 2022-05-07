@@ -2,109 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5817A51E63E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD1B51E64F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446210AbiEGKFA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 06:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S1446256AbiEGKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiEGKE4 (ORCPT
+        with ESMTP id S232437AbiEGKFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:04:56 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFD8D3AA67
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:01:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-285-a07I9tQYN4-ed0PF2CZy2w-1; Sat, 07 May 2022 11:01:04 +0100
-X-MC-Unique: a07I9tQYN4-ed0PF2CZy2w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Sat, 7 May 2022 11:01:03 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Sat, 7 May 2022 11:01:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jagdish Gediya' <jvgediya@linux.ibm.com>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "adobriyan@gmail.com" <adobriyan@gmail.com>
-Subject: RE: [PATCH] kobject: Refactor kobject_set_name_vargs()
-Thread-Topic: [PATCH] kobject: Refactor kobject_set_name_vargs()
-Thread-Index: AQHYYU3qLELCyca9fE2SaEK1v39Vvq0R6/5wgAAc1ACAASXE8A==
-Date:   Sat, 7 May 2022 10:01:03 +0000
-Message-ID: <97b8979ff52c4404bf74eeda574d6b23@AcuMS.aculab.com>
-References: <20220506133309.36794-1-jvgediya@linux.ibm.com>
- <5902e26ef400451b966be2dd0fbd1575@AcuMS.aculab.com>
- <YnVZujpw0RZy3eVT@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-In-Reply-To: <YnVZujpw0RZy3eVT@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 7 May 2022 06:05:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040C53D4B9;
+        Sat,  7 May 2022 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651917715; x=1683453715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q/otdjcbA6WbbPS5f3qcEn378K8z0rLFkeMOCGtuneE=;
+  b=B61f1fM1p9qVEJQbfg4WSL1V39NNCIKF5mwSY0Zk4neWljbwsvU7x8Jl
+   3j5ijrmTAsc7i0aYl4I6LSE4RjKFwCJ8yIq3dQCbeuwsAJqFCz6LJnrRZ
+   QfPcNbP5eHDPdnDehEgjgi7n5huQSbFUuv9iIlCeYDLKec6X4pvkUkeHF
+   +B/ee2gSw8gY4i7eDZrrQx3YArTQkX9Ec0lTgOtX2zwX8bvRfQpAlPxZR
+   L1LsMLMjWmrukvMKmbtg3P4gYjjb/EX/gKj1FB/JjT/wOiNqrym0zQEhR
+   BnsJ0O/KdvGj53iH6nwdA4L74HYMqdyNXVmoa8EmDBD4URt2LXy6RnoRf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268828938"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="268828938"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="695555683"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 07 May 2022 03:01:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 78FB3155; Sat,  7 May 2022 13:01:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: [PATCH v2 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Date:   Sat,  7 May 2022 13:01:44 +0300
+Message-Id: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jagdish Gediya
-> Sent: 06 May 2022 18:24
-...
-> > Are you sure this can ever work from a module?
-> > This all relies on:
-> >
-> > static inline bool is_kernel_rodata(unsigned long addr)
-> > {
-> > 	return addr >= (unsigned long)__start_rodata &&
-> > 	       addr < (unsigned long)__end_rodata;
-> > }
-> >
-> > which isn't going to do anything sane given an "xxx" inside a module.
-> >
-> > Indeed can kobject_set_name_vargs() end up with a constant string
-> > inside a module?
-> 
-> No, kobject_set_name_vargs() is not exported. I exported
-> set_name_vargs() because it can have a broader use, but you are right
-> it shouldn't be exported.
+It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
 
-I was thinking that some function that creates a 'kobject'
-could easily be called from a module - so you end up calling
-the set_name code from a module and then end up calling
-kfree() on a literal from a module.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Wolfram Sang <wsa@kernel.org>
+---
+v2: collected tags
+ arch/powerpc/include/asm/mpc52xx.h           |  1 -
+ arch/powerpc/platforms/52xx/mpc52xx_common.c | 37 --------------------
+ 2 files changed, 38 deletions(-)
 
-Now it might be that it is impossible to actually the quoted
-literal from a module into somewhere that is_kernel_rodata()
-is applied to.
-
-But, as i said, it is fragile.
-
-	David
-
+diff --git a/arch/powerpc/include/asm/mpc52xx.h b/arch/powerpc/include/asm/mpc52xx.h
+index ce1e0aabaa64..ddd80aae1e32 100644
+--- a/arch/powerpc/include/asm/mpc52xx.h
++++ b/arch/powerpc/include/asm/mpc52xx.h
+@@ -274,7 +274,6 @@ extern void mpc52xx_declare_of_platform_devices(void);
+ extern int mpc5200_psc_ac97_gpio_reset(int psc_number);
+ extern void mpc52xx_map_common_devices(void);
+ extern int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv);
+-extern unsigned int mpc52xx_get_xtal_freq(struct device_node *node);
+ extern void __noreturn mpc52xx_restart(char *cmd);
+ 
+ /* mpc52xx_gpt.c */
+diff --git a/arch/powerpc/platforms/52xx/mpc52xx_common.c b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+index 565e3a83dc9e..4a39e1cb2263 100644
+--- a/arch/powerpc/platforms/52xx/mpc52xx_common.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+@@ -203,43 +203,6 @@ int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv)
+ }
+ EXPORT_SYMBOL(mpc52xx_set_psc_clkdiv);
+ 
+-/**
+- * mpc52xx_get_xtal_freq - Get SYS_XTAL_IN frequency for a device
+- *
+- * @node: device node
+- *
+- * Returns the frequency of the external oscillator clock connected
+- * to the SYS_XTAL_IN pin, or 0 if it cannot be determined.
+- */
+-unsigned int mpc52xx_get_xtal_freq(struct device_node *node)
+-{
+-	u32 val;
+-	unsigned int freq;
 -
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-	if (!mpc52xx_cdm)
+-		return 0;
+-
+-	freq = mpc5xxx_get_bus_frequency(node);
+-	if (!freq)
+-		return 0;
+-
+-	if (in_8(&mpc52xx_cdm->ipb_clk_sel) & 0x1)
+-		freq *= 2;
+-
+-	val  = in_be32(&mpc52xx_cdm->rstcfg);
+-	if (val & (1 << 5))
+-		freq *= 8;
+-	else
+-		freq *= 4;
+-	if (val & (1 << 6))
+-		freq /= 12;
+-	else
+-		freq /= 16;
+-
+-	return freq;
+-}
+-EXPORT_SYMBOL(mpc52xx_get_xtal_freq);
+-
+ /**
+  * mpc52xx_restart: ppc_md->restart hook for mpc5200 using the watchdog timer
+  */
+-- 
+2.35.1
 

@@ -2,109 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED9A51E827
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BD651E82A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345484AbiEGPes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S1350730AbiEGPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEGPer (ORCPT
+        with ESMTP id S229449AbiEGPfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:34:47 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D20041323;
-        Sat,  7 May 2022 08:30:59 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id x12so8465240pgj.7;
-        Sat, 07 May 2022 08:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=2tvdUcnG5Au0Lj5Vu9lLKQv90nWuCPTdSrNS6yusCzM=;
-        b=Bzg0KMic/HwRJRl02t9zT2w8W0hTfvAnPMJ7sF+bVBxy7dUf/xA9YsxoC4+cLGuWsY
-         DXEhG2zGgJFfQaVOoWAPSXOvLS4FxEG+NyxDox9IAGvqur99Mrnz/ETmmzbOX9D3YUX1
-         7XtJi2rAE9L3ZsXBy34wpEn525u//0k8ikZEJIxn5OO/RFOH+06LbIY2Y6WVXgGmAV8L
-         +5X+FgY3EpzJ2ruZzaimz2Z1hiIjv2rS/2Ob3eass0yDA8hdhJiUXwh5xQ7xZNptkZcT
-         aQmzwi/YFF2SBlaPfq5pXXOQabLfhP04ZIjvAr38LqU0HtztJ8Gd976Pzny0vt1lp9w5
-         KyJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2tvdUcnG5Au0Lj5Vu9lLKQv90nWuCPTdSrNS6yusCzM=;
-        b=OWPb7sYbK9V3MV/8KIqp7mH2ZLzEIBB3K8p+oDJSiq/Z3BCSTPsOW5DtfiF2aW9/uI
-         nkclxHuSvC5pL4QK81YjXWaiC2qSpq000j3VA9QSwTANORlXpJk41iBBdYEZr6p3t+6y
-         bIwss/Ug0vQH2snJUtyLzcFbNPWpgQS088KMVO5FkyPiaugyjG9DrHOq8qVP+GSkvFwk
-         xFdpF7d8BmTN3exaEuWTnZkRbi6TcC44p5a0VOe1anDawZpEZ5ke6ljFlSfa+p33qmzS
-         AERrVQCiN+LhILApykTIipFMnPYrIb0DYwEqpE/keVU4w5fdLbaipnO+um1C4kjowiLC
-         xA/Q==
-X-Gm-Message-State: AOAM530iqQHAhZezCKMLVj0vb9xisH6vmqyLpqwMRoILfsRT38BT7cWe
-        aolJljOf5fN/k3mUeeIRxy7CecPHphAueB+MzBc=
-X-Google-Smtp-Source: ABdhPJzfz9vZV85+eBTF/syz0Bi8qzinx98fWpfxWd8ODXT6rWRHbhpivNP/k13RhAM4lDIsGUmeoQ==
-X-Received: by 2002:a63:2b0a:0:b0:3c1:c906:47f with SMTP id r10-20020a632b0a000000b003c1c906047fmr6981042pgr.122.1651937459124;
-        Sat, 07 May 2022 08:30:59 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.117])
-        by smtp.gmail.com with ESMTPSA id e7-20020a656bc7000000b003c14af5060fsm5394279pgw.39.2022.05.07.08.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 08:30:58 -0700 (PDT)
-Message-ID: <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
-Date:   Sat, 7 May 2022 23:31:09 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 1/4] io_uring: add IORING_ACCEPT_MULTISHOT for accept
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Sat, 7 May 2022 11:35:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C399941323;
+        Sat,  7 May 2022 08:31:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45B8EB80AC7;
+        Sat,  7 May 2022 15:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF87C385A6;
+        Sat,  7 May 2022 15:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651937504;
+        bh=QJj5Sep2kOlckvNOm3pNvQISPpQfrx8VxV7m3x1RMBg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YNoboC18iI89dXVAYaAOygronZuJQsJ7tougBUGc1+VI8cJTER3CJfliO4hOPeLAR
+         0asmSj80caah/B2Nglx4EtXnrs65/t7RmZRCK07JPNXQN+gKlzDodE/N0wIYANgTj3
+         K+orCvwBXUdvuukhc/AQ2XVGYQlN+ziyA70KfxEn80yHXAGyQNOmPpDyIhcbj3SxVG
+         FlBGOFCCT7KtzyPwF1FHhz94ws/xYzMcEXurJQWs85bnIQCMLJOa1Z5FM+fiKD0Qvu
+         waQBAHD1CM7yxbK0f+bmxNNoNUzlN5ChihHpP6OoL0doUB/NmlVaSXBPX9l696ZOsv
+         T2ltZvfZFinjg==
+Date:   Sat, 7 May 2022 10:31:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220507140620.85871-1-haoxu.linux@gmail.com>
- <20220507140620.85871-2-haoxu.linux@gmail.com>
- <21e1f932-f5fd-9b7e-2b34-fc3a82bbb297@kernel.dk>
-From:   Hao Xu <haoxu.linux@gmail.com>
-In-Reply-To: <21e1f932-f5fd-9b7e-2b34-fc3a82bbb297@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems
+Message-ID: <20220507153142.GA568130@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <94238be8-023e-a70a-45c8-a7096149e752@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/7 下午10:16, Jens Axboe 写道:
-> On 5/7/22 8:06 AM, Hao Xu wrote:
->> From: Hao Xu <howeyxu@tencent.com>
->>
->> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
->> support multishot.
->>
->> Signed-off-by: Hao Xu <howeyxu@tencent.com>
->> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+On Sat, May 07, 2022 at 12:09:03PM +0200, Hans de Goede wrote:
+> Hi Bjorn,
 > 
-> Heh, don't add my SOB. Guessing this came from the folding in?Nop, It is in your fastpoll-mshot branch
-https://git.kernel.dk/cgit/linux-block/commit/?h=fastpoll-mshot&id=e37527e6b4ac60e1effdc8aaa1058e931930af01
+> On 5/6/22 18:51, Bjorn Helgaas wrote:
+> > On Thu, May 05, 2022 at 05:20:16PM +0200, Hans de Goede wrote:
+> >> Some BIOS-es contain bugs where they add addresses which are already
+> >> used in some other manner to the PCI host bridge window returned by
+> >> the ACPI _CRS method. To avoid this Linux by default excludes
+> >> E820 reservations when allocating addresses since 2010, see:
+> >> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
+> >> space").
+> >>
+> >> Recently (2019) some systems have shown-up with E820 reservations which
+> >> cover the entire _CRS returned PCI bridge memory window, causing all
+> >> attempts to assign memory to PCI BARs which have not been setup by the
+> >> BIOS to fail. For example here are the relevant dmesg bits from a
+> >> Lenovo IdeaPad 3 15IIL 81WE:
+> >>
+> >>  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+> >>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+> >>
+> >> The ACPI specifications appear to allow this new behavior:
+> >>
+> >> The relationship between E820 and ACPI _CRS is not really very clear.
+> >> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
+> >>
+> >>   This range of addresses is in use or reserved by the system and is
+> >>   not to be included in the allocatable memory pool of the operating
+> >>   system's memory manager.
+> >>
+> >> and it may be used when:
+> >>
+> >>   The address range is in use by a memory-mapped system device.
+> >>
+> >> Furthermore, sec 15.2 says:
+> >>
+> >>   Address ranges defined for baseboard memory-mapped I/O devices, such
+> >>   as APICs, are returned as reserved.
+> >>
+> >> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
+> >> and its apertures are in use and certainly should not be included in
+> >> the general allocatable pool, so the fact that some BIOS-es reports
+> >> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
+> >>
+> >> So it seems that the excluding of E820 reserved addresses is a mistake.
+> >>
+> >> Ideally Linux would fully stop excluding E820 reserved addresses,
+> >> but then various old systems will regress.
+> >> Instead keep the old behavior for old systems, while ignoring
+> >> the E820 reservations for any systems from now on.
+> >>
+> >> Old systems are defined here as BIOS year < 2018, this was chosen to
+> >> make sure that pci_use_e820 will not be set on the currently affected
+> >> systems, the oldest known one is from 2019.
+> >>
+> >> Testing has shown that some newer systems also have a bad _CRS return.
+> >> The pci_crs_quirks DMI table is used to keep excluding E820 reservations
+> >> from the bridge window on these systems.
+> >>
+> >> Also add pci=no_e820 and pci=use_e820 options to allow overriding
+> >> the BIOS year + DMI matching logic.
+> >>
+> >> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+> >> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+> >> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+> >> BugLink: https://bugs.launchpad.net/bugs/1878279
+> >> BugLink: https://bugs.launchpad.net/bugs/1931715
+> >> BugLink: https://bugs.launchpad.net/bugs/1932069
+> >> BugLink: https://bugs.launchpad.net/bugs/1921649
+> >> Cc: Benoit Gr�goire <benoitg@coeus.ca>
+> >> Cc: Hui Wang <hui.wang@canonical.com>
+> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > 
+> >> +	 * Ideally Linux would fully stop using E820 reservations, but then
+> >> +	 * various old systems will regress. Instead keep the old behavior for
+> >> +	 * old systems + known to be broken newer systems in pci_crs_quirks.
+> >> +	 */
+> >> +	if (year >= 0 && year < 2018)
+> >> +		pci_use_e820 = true;
+> > 
+> > How did you pick 2018?  Prior to this patch, we used E820 reservations
+> > for all machines.  This patch would change that for 2019-2022
+> > machines, so there's a risk of breaking some of them.
 > 
->> ---
->>   include/uapi/linux/io_uring.h | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
->> index 06621a278cb6..f4d9ca62a5a6 100644
->> --- a/include/uapi/linux/io_uring.h
->> +++ b/include/uapi/linux/io_uring.h
->> @@ -223,6 +223,11 @@ enum {
->>    */
->>   #define IORING_RECVSEND_POLL_FIRST	(1U << 0)
->>   
->> +/*
->> + * accept flags stored in accept_flags
->> + */
->> +#define IORING_ACCEPT_MULTISHOT	(1U << 15)
+> Correct. I picked 2018 because the first devices where using E820
+> reservations are causing issues (i2c controller not getting resources
+> leading to non working touchpad / thunderbolt hotplug issues) have
+> BIOS dates starting in 2019. I added a year margin, so we could make
+> this 2019.
 > 
-> Looks like the git send-email is still acting up, this looks like
-> v2?
+> > I'm hesitant about changing the behavior for machines already in the
+> > field because if they were tested at all with Linux, it was without
+> > this patch.  So I would lean toward preserving the current behavior
+> > for BIOS year < 2023.
 > 
+> I see, I presume the idea is to then use DMI to disable E820 clipping
+> on current devices where this is known to cause problems ?
+> 
+> So for v8 I would:
+> 
+> 1. Change the cut-off check to < 2023
+> 2. Drop the DMI quirks I added for models which are known to need E820
+>    clipping hit by the < 2018 check
+> 3. Add DMI quirks for models for which it is known that we must _not_
+>    do E820 clipping
+> 
+> Is this the direction you want to go / does that sound right?
 
+Yes, I think that's what we should do.  All the machines in the field
+will be unaffected, except that we add quirks for known problems.
+
+Bjorn

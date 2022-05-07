@@ -2,196 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEE451E986
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F276851E98A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446896AbiEGTlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S1446904AbiEGTml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346517AbiEGTlT (ORCPT
+        with ESMTP id S1346517AbiEGTmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:41:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D2C20BE4
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:37:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 7 May 2022 15:42:37 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAF020BE4;
+        Sat,  7 May 2022 12:38:49 -0700 (PDT)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DD8B60AD7
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 19:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB96AC385A6;
-        Sat,  7 May 2022 19:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651952249;
-        bh=Z6JKxRX6m7giLQ02yJaBTI+h0RfkKB7Q/x0qt4pglXU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b9DZcy/1amKKer/ofiEFxALPCwm0fA9PfbzHqL49KN1UrMuUvnWY3crmhg51z5Jnc
-         AZaB9qIAETkVPZboxuwcuxvBwesylhwvEsnQ4L6iYySa2bER9ILNndx9CQ+YYkFSmx
-         e+zq5xKuovp+0guY941SJDDYTMTn5VT9X7F4QjeM=
-Date:   Sat, 7 May 2022 12:37:28 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH mm] tracing: incorrect gfp_t conversion
-Message-Id: <20220507123728.f20d977eba9fbb66bddee722@linux-foundation.org>
-In-Reply-To: <331d88fe-f4f7-657c-02a2-d977f15fbff6@openvz.org>
-References: <e1c09bbb-2c58-a986-c704-1db538da905a@openvz.org>
-        <331d88fe-f4f7-657c-02a2-d977f15fbff6@openvz.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ixit.cz (Postfix) with ESMTPSA id AA43A2007F;
+        Sat,  7 May 2022 21:38:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1651952327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HW4Cx51Vp49UQrokPwRu5HexTiL/GEL06MgcDX2AjBg=;
+        b=QxvMjoKgVNL+cBPygbvBVrGL0vW6gOpO1VuZ5BFNZt+nn9HAyeU05OS/tM2QqUo7k+AYyr
+        wdwkUA24jazqp9hl5zfs8ljPQ4lC6R44ZQSjmNBP4s42LWH3YrYGmTatkIVgj7yZRB7ovE
+        i7p2RO6Vi0Ki9vayvuvJxkNBpPgjQbE=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     David Heidelberg <david@ixit.cz>, Rob Herring <robh@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: watchdog: improve QCOM compatible parsing for modern chips
+Date:   Sat,  7 May 2022 21:38:45 +0200
+Message-Id: <20220507193846.35487-1-david@ixit.cz>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 May 2022 22:02:05 +0300 Vasily Averin <vvs@openvz.org> wrote:
+Parse compatible as expected for modern QCOMs.
 
-> Fixes the following sparse warnings:
-> 
-> include/trace/events/*: sparse: cast to restricted gfp_t
-> include/trace/events/*: sparse: restricted gfp_t degrades to integer
-> 
-> gfp_t type is bitwise and requires __force attributes for any casts.
-> 
-> --- a/include/trace/events/mmflags.h
-> +++ b/include/trace/events/mmflags.h
-> @@ -14,43 +14,43 @@
->   */
->  
->  #define __def_gfpflag_names						\
-> -	{(unsigned long)GFP_TRANSHUGE,		"GFP_TRANSHUGE"},	\
-> -	{(unsigned long)GFP_TRANSHUGE_LIGHT,	"GFP_TRANSHUGE_LIGHT"}, \
-> -	{(unsigned long)GFP_HIGHUSER_MOVABLE,	"GFP_HIGHUSER_MOVABLE"},\
-> -	{(unsigned long)GFP_HIGHUSER,		"GFP_HIGHUSER"},	\
-> -	{(unsigned long)GFP_USER,		"GFP_USER"},		\
-> -	{(unsigned long)GFP_KERNEL_ACCOUNT,	"GFP_KERNEL_ACCOUNT"},	\
-> -	{(unsigned long)__GFP_SKIP_KASAN_POISON,"__GFP_SKIP_KASAN_POISON"}\
->
-> ...
->
-> +	{(__force unsigned long)GFP_TRANSHUGE,		"GFP_TRANSHUGE"},	\
-> +	{(__force unsigned long)GFP_TRANSHUGE_LIGHT,	"GFP_TRANSHUGE_LIGHT"}, \
-> +	{(__force unsigned long)GFP_HIGHUSER_MOVABLE,	"GFP_HIGHUSER_MOVABLE"},\
-> +	{(__force unsigned long)GFP_HIGHUSER,		"GFP_HIGHUSER"},	\
-> +	{(__force unsigned long)GFP_USER,		"GFP_USER"},		\
-> +	{(__force unsigned long)GFP_KERNEL_ACCOUNT,	"GFP_KERNEL_ACCOUNT"},	\
-> +	{(__force unsigned long)GFP_KERNEL,		"GFP_KERNEL"},		\
-> +	{(__force unsigned long)GFP_NOFS,		"GFP_NOFS"},		\
+Fixes warnings as:
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
+        From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
+        From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
 
-This got all repetitive, line-wrappy and ugly :(
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+v2:
+ - updated compatible list as two compatibles has been added upstream
+ -> resolve merge conflict
+v3:
+ - rebased, added Guenter R-b
 
-What do we think of something silly like this?
+ .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-
-
---- a/include/trace/events/mmflags.h~tracing-incorrect-gfp_t-conversion-fix
-+++ a/include/trace/events/mmflags.h
-@@ -13,53 +13,57 @@
-  * Thus most bits set go first.
-  */
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 16c6f82a13ca..4ff8c59c59ab 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -14,22 +14,27 @@ allOf:
  
-+#define FUL __force unsigned long
-+
- #define __def_gfpflag_names						\
--	{(__force unsigned long)GFP_TRANSHUGE,		"GFP_TRANSHUGE"},	\
--	{(__force unsigned long)GFP_TRANSHUGE_LIGHT,	"GFP_TRANSHUGE_LIGHT"}, \
--	{(__force unsigned long)GFP_HIGHUSER_MOVABLE,	"GFP_HIGHUSER_MOVABLE"},\
--	{(__force unsigned long)GFP_HIGHUSER,		"GFP_HIGHUSER"},	\
--	{(__force unsigned long)GFP_USER,		"GFP_USER"},		\
--	{(__force unsigned long)GFP_KERNEL_ACCOUNT,	"GFP_KERNEL_ACCOUNT"},	\
--	{(__force unsigned long)GFP_KERNEL,		"GFP_KERNEL"},		\
--	{(__force unsigned long)GFP_NOFS,		"GFP_NOFS"},		\
--	{(__force unsigned long)GFP_ATOMIC,		"GFP_ATOMIC"},		\
--	{(__force unsigned long)GFP_NOIO,		"GFP_NOIO"},		\
--	{(__force unsigned long)GFP_NOWAIT,		"GFP_NOWAIT"},		\
--	{(__force unsigned long)GFP_DMA,		"GFP_DMA"},		\
--	{(__force unsigned long)__GFP_HIGHMEM,		"__GFP_HIGHMEM"},	\
--	{(__force unsigned long)GFP_DMA32,		"GFP_DMA32"},		\
--	{(__force unsigned long)__GFP_HIGH,		"__GFP_HIGH"},		\
--	{(__force unsigned long)__GFP_ATOMIC,		"__GFP_ATOMIC"},	\
--	{(__force unsigned long)__GFP_IO,		"__GFP_IO"},		\
--	{(__force unsigned long)__GFP_FS,		"__GFP_FS"},		\
--	{(__force unsigned long)__GFP_NOWARN,		"__GFP_NOWARN"},	\
--	{(__force unsigned long)__GFP_RETRY_MAYFAIL,	"__GFP_RETRY_MAYFAIL"},	\
--	{(__force unsigned long)__GFP_NOFAIL,		"__GFP_NOFAIL"},	\
--	{(__force unsigned long)__GFP_NORETRY,		"__GFP_NORETRY"},	\
--	{(__force unsigned long)__GFP_COMP,		"__GFP_COMP"},		\
--	{(__force unsigned long)__GFP_ZERO,		"__GFP_ZERO"},		\
--	{(__force unsigned long)__GFP_NOMEMALLOC,	"__GFP_NOMEMALLOC"},	\
--	{(__force unsigned long)__GFP_MEMALLOC,		"__GFP_MEMALLOC"},	\
--	{(__force unsigned long)__GFP_HARDWALL,		"__GFP_HARDWALL"},	\
--	{(__force unsigned long)__GFP_THISNODE,		"__GFP_THISNODE"},	\
--	{(__force unsigned long)__GFP_RECLAIMABLE,	"__GFP_RECLAIMABLE"},	\
--	{(__force unsigned long)__GFP_MOVABLE,		"__GFP_MOVABLE"},	\
--	{(__force unsigned long)__GFP_ACCOUNT,		"__GFP_ACCOUNT"},	\
--	{(__force unsigned long)__GFP_WRITE,		"__GFP_WRITE"},		\
--	{(__force unsigned long)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
--	{(__force unsigned long)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
--	{(__force unsigned long)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
--	{(__force unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
-+	{(FUL)GFP_TRANSHUGE,		"GFP_TRANSHUGE"},	\
-+	{(FUL)GFP_TRANSHUGE_LIGHT,	"GFP_TRANSHUGE_LIGHT"}, \
-+	{(FUL)GFP_HIGHUSER_MOVABLE,	"GFP_HIGHUSER_MOVABLE"},\
-+	{(FUL)GFP_HIGHUSER,		"GFP_HIGHUSER"},	\
-+	{(FUL)GFP_USER,		"GFP_USER"},		\
-+	{(FUL)GFP_KERNEL_ACCOUNT,	"GFP_KERNEL_ACCOUNT"},	\
-+	{(FUL)GFP_KERNEL,		"GFP_KERNEL"},		\
-+	{(FUL)GFP_NOFS,		"GFP_NOFS"},		\
-+	{(FUL)GFP_ATOMIC,		"GFP_ATOMIC"},		\
-+	{(FUL)GFP_NOIO,		"GFP_NOIO"},		\
-+	{(FUL)GFP_NOWAIT,		"GFP_NOWAIT"},		\
-+	{(FUL)GFP_DMA,		"GFP_DMA"},		\
-+	{(FUL)__GFP_HIGHMEM,		"__GFP_HIGHMEM"},	\
-+	{(FUL)GFP_DMA32,		"GFP_DMA32"},		\
-+	{(FUL)__GFP_HIGH,		"__GFP_HIGH"},		\
-+	{(FUL)__GFP_ATOMIC,		"__GFP_ATOMIC"},	\
-+	{(FUL)__GFP_IO,		"__GFP_IO"},		\
-+	{(FUL)__GFP_FS,		"__GFP_FS"},		\
-+	{(FUL)__GFP_NOWARN,		"__GFP_NOWARN"},	\
-+	{(FUL)__GFP_RETRY_MAYFAIL,	"__GFP_RETRY_MAYFAIL"},	\
-+	{(FUL)__GFP_NOFAIL,		"__GFP_NOFAIL"},	\
-+	{(FUL)__GFP_NORETRY,		"__GFP_NORETRY"},	\
-+	{(FUL)__GFP_COMP,		"__GFP_COMP"},		\
-+	{(FUL)__GFP_ZERO,		"__GFP_ZERO"},		\
-+	{(FUL)__GFP_NOMEMALLOC,	"__GFP_NOMEMALLOC"},	\
-+	{(FUL)__GFP_MEMALLOC,		"__GFP_MEMALLOC"},	\
-+	{(FUL)__GFP_HARDWALL,		"__GFP_HARDWALL"},	\
-+	{(FUL)__GFP_THISNODE,		"__GFP_THISNODE"},	\
-+	{(FUL)__GFP_RECLAIMABLE,	"__GFP_RECLAIMABLE"},	\
-+	{(FUL)__GFP_MOVABLE,		"__GFP_MOVABLE"},	\
-+	{(FUL)__GFP_ACCOUNT,		"__GFP_ACCOUNT"},	\
-+	{(FUL)__GFP_WRITE,		"__GFP_WRITE"},		\
-+	{(FUL)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
-+	{(FUL)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
-+	{(FUL)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
-+	{(FUL)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
+ properties:
+   compatible:
+-    enum:
+-      - qcom,apss-wdt-qcs404
+-      - qcom,apss-wdt-sc7180
+-      - qcom,apss-wdt-sc7280
+-      - qcom,apss-wdt-sdm845
+-      - qcom,apss-wdt-sdx55
+-      - qcom,apss-wdt-sm6350
+-      - qcom,apss-wdt-sm8150
+-      - qcom,apss-wdt-sm8250
+-      - qcom,kpss-timer
+-      - qcom,kpss-wdt
+-      - qcom,kpss-wdt-apq8064
+-      - qcom,kpss-wdt-ipq4019
+-      - qcom,kpss-wdt-ipq8064
+-      - qcom,kpss-wdt-msm8960
+-      - qcom,scss-timer
++    oneOf:
++      - items:
++          - enum:
++              - qcom,apss-wdt-qcs404
++              - qcom,apss-wdt-sc7180
++              - qcom,apss-wdt-sc7280
++              - qcom,apss-wdt-sdm845
++              - qcom,apss-wdt-sdx55
++              - qcom,apss-wdt-sm6350
++              - qcom,apss-wdt-sm8150
++              - qcom,apss-wdt-sm8250
++          - const: qcom,kpss-wdt
++      - items:
++          - enum:
++              - qcom,kpss-wdt
++              - qcom,kpss-timer
++              - qcom,kpss-wdt-apq8064
++              - qcom,kpss-wdt-ipq4019
++              - qcom,kpss-wdt-ipq8064
++              - qcom,kpss-wdt-msm8960
++              - qcom,scss-timer
  
- #ifdef CONFIG_KASAN_HW_TAGS
- #define __def_gfpflag_names_kasan ,					       \
--	{(__force unsigned long)__GFP_SKIP_ZERO,	   "__GFP_SKIP_ZERO"},	       \
--	{(__force unsigned long)__GFP_SKIP_KASAN_POISON,   "__GFP_SKIP_KASAN_POISON"}, \
--	{(__force unsigned long)__GFP_SKIP_KASAN_UNPOISON, "__GFP_SKIP_KASAN_UNPOISON"}
-+	{(FUL)__GFP_SKIP_ZERO,	   "__GFP_SKIP_ZERO"},	       \
-+	{(FUL)__GFP_SKIP_KASAN_POISON,   "__GFP_SKIP_KASAN_POISON"}, \
-+	{(FUL)__GFP_SKIP_KASAN_UNPOISON, "__GFP_SKIP_KASAN_UNPOISON"}
- #else
- #define __def_gfpflag_names_kasan
- #endif
- 
-+#undef FUL
-+
- #define show_gfp_flags(flags)						\
- 	(flags) ? __print_flags(flags, "|",				\
- 	__def_gfpflag_names __def_gfpflag_names_kasan			\
-_
+   reg:
+     maxItems: 1
+-- 
+2.35.1
 

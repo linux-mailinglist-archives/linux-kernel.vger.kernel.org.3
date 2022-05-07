@@ -2,164 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA29D51E787
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C902D51E78D
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385268AbiEGNyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
+        id S1385248AbiEGN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiEGNyk (ORCPT
+        with ESMTP id S1354840AbiEGN4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:54:40 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35F828D
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:50:52 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-41-00ltXLBqOpWSmzzcA63DIw-1; Sat, 07 May 2022 14:50:50 +0100
-X-MC-Unique: 00ltXLBqOpWSmzzcA63DIw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Sat, 7 May 2022 14:50:49 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Sat, 7 May 2022 14:50:49 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Filipe Manana" <fdmanana@suse.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-Subject: RE: [patch 3/3] x86/fpu: Make FPU protection more robust
-Thread-Topic: [patch 3/3] x86/fpu: Make FPU protection more robust
-Thread-Index: AQHYYG+YWY1FRr4hzkKhJKBT7m/w1q0QJdtAgAI7WgCAAQNXkA==
-Date:   Sat, 7 May 2022 13:50:49 +0000
-Message-ID: <035e10aba0904420ba83f4ea56a3e14b@AcuMS.aculab.com>
-References: <YnKh96isoB7jiFrv@zx2c4.com> <87czgtjlfq.ffs@tglx>
- <YnLOXZp6WgH7ULVU@zx2c4.com> <87wnf1huwj.ffs@tglx>
- <YnMRwPFfvB0RlBow@zx2c4.com> <87mtfwiyqp.ffs@tglx>
- <YnMkRLcxczMxdE5z@zx2c4.com> <87h764ixjs.ffs@tglx>
- <YnOuqh4YZT8ww96W@zx2c4.com>
- <1f4918f734d14e3896071d3c7de1441d@AcuMS.aculab.com>
- <YnWiasChfzbEP67C@zx2c4.com>
-In-Reply-To: <YnWiasChfzbEP67C@zx2c4.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 7 May 2022 09:56:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D00A46B27
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651931567; x=1683467567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AtwuAdbRGYliEZvMJZsmN9JyjkfGJYzyNcZLH4MV4A0=;
+  b=IzKkPWWSCUruFho5sFILpgret27mXrniMgRw8l8FRQSJkM2bBkmxP/HX
+   0+92/qM2KZ/aTpHSwylnaniP8xp9JSdLigtfpYq/r90ElnEh+TjniXFVw
+   JxuqtpwPWV+4pd0qxa2nqKlnwN//pXZQS4QONxaWAxxcmGMtQaqv3Mky6
+   TapyzMLHPJ9rd8ut4PT9WfyFQSIvPH5AeFxrCb/gX2bl59il20zxA8UhO
+   KEqAC9vba4QEBtFYuHDYE/X8sql7tGVhWsBQtgryGA02UUwKDmPPPdzCx
+   Kq/deieW6/famu2xhc+dNNlfpWJO4cUJkd9wbazEcL6alrGCLMVv7/R1I
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="268336242"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="268336242"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 06:52:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="569486347"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 07 May 2022 06:52:45 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnKrV-000Ed6-28;
+        Sat, 07 May 2022 13:52:45 +0000
+Date:   Sat, 7 May 2022 21:51:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [norov:bitmap-cocci 15/15] kernel/sched/topology.c:2002:14: error:
+ too many arguments to function 'cpumask_weight'
+Message-ID: <202205072103.8QX1JxvR-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDA2IE1heSAyMDIyIDIzOjM0DQo+IA0K
-PiBIaSBEYXZpZCwNCj4gDQo+IE9uIFRodSwgTWF5IDA1LCAyMDIyIGF0IDExOjM0OjQwQU0gKzAw
-MDAsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBPVE9IIHRoZSBlbnRyb3B5IG1peGluZyBpcyB2
-ZXJ5IGxpa2VseSB0byBiZSAnY29sZCBjYWNoZScNCj4gPiBhbmQgYWxsIHRoZSB1bnJvbGxpbmcg
-aW4gYmxha2VzNyB3aWxsIGNvbXBsZXRlbHkga2lsbA0KPiA+IHBlcmZvcm1hbmNlLg0KPiANCj4g
-SSd2ZSBzZWVuIHlvdSBtZW50aW9uIHRoZSBCTEFLRTJzIHVucm9sbGluZyBpbiBsaWtlIDggZGlm
-ZmVyZW50IHRocmVhZHMNCj4gbm93LCBhbmQgSSdtIG5vdCBjb252aW5jZWQgdGhhdCB5b3UncmUg
-ZW50aXJlbHkgd3JvbmcsIG5vciBhbSBJDQo+IGNvbnZpbmNlZCB0aGF0IHlvdSdyZSBlbnRpcmVs
-eSByaWdodC4gTXkgcmVzcG9uc2UgdG8geW91IGlzIHRoZSBzYW1lIGFzDQo+IGFsd2F5czogcGxl
-YXNlIHNlbmQgYSBwYXRjaCB3aXRoIHNvbWUgbWVhc3VyZW1lbnRzISBJJ2QgbG92ZSB0byBnZXQg
-dGhpcw0KPiB3b3JrZWQgb3V0IGluIGEgcmVhbCB3YXkuDQo+IA0KPiBUaGUgbGFzdCB0aW1lIEkg
-d2VudCBiZW5jaGluZyB0aGVzZSwgdGhlIHVucm9sbGVkIGNvZGUgd2FzIH4xMDAgY3ljbGVzDQo+
-IGZhc3RlciwgaWYgSSByZWNhbGwgY29ycmVjdGx5LCB0aGFuIHRoZSByb2xsZWQgY29kZSwgd2hl
-biB1c2VkIGZyb20NCj4gV2lyZUd1YXJkJ3MgaG90IHBhdGguIEkgZG9uJ3QgZG91YnQgdGhhdCBh
-IGNvbGQgcGF0aCB3b3VsZCBiZSBtb3JlDQo+IGZyYXVnaHQsIHRob3VnaCwgYXMgdGhhdCdzIGEg
-ZGVjZW50IGFtb3VudCBvZiBjb2RlLiBTbyB0aGUgcXVlc3Rpb24gaXMNCj4gaG93IHRvIHJlLXJv
-bGwgdGhlIHJvdW5kcyB3aXRob3V0IHNhY3JpZmljaW5nIHRob3NlIDEwMCBjeWNsZXMuDQo+IA0K
-PiBJbiBvcmRlciB0byBiZWdpbiB0byBmaWd1cmUgdGhhdCBvdXQsIHdlIGhhdmUgdG8gbG9vayBh
-dCB3aHkgdGhlDQo+IHJlLXJvbGxlZCBsb29wIGlzIHNsb3cgYW5kIHRoZSB1bnJvbGxlZCBsb29w
-IGZhc3QuIEl0J3Mgbm90IGJlY2F1c2Ugb2YNCj4gY29tcGxpY2F0ZWQgcGlwZWxpbmUgdGhpbmdz
-LiBJdCdzIGJlY2F1c2UgdGhlIEJMQUtFMnMgcGVybXV0YXRpb24gaXMNCj4gYWN0dWFsbHkgMTAg
-ZGlmZmVyZW50IHBlcm11dGF0aW9ucywgb25lIGZvciBlYWNoIHJvdW5kLiBUYWtlIGEgbG9vayBh
-dA0KPiB0aGUgY29yZSBmdW5jdGlvbiwgRywgYW5kIGl0cyB1c2VzIG9mIHRoZSByb3VuZCBudW1i
-ZXIsIHI6DQo+IA0KPiAgICAgI2RlZmluZSBHKHIsIGksIGEsIGIsIGMsIGQpIGRvIHsgXA0KPiAg
-ICAgICAgIGEgKz0gYiArIG1bYmxha2Uyc19zaWdtYVtyXVsyICogaSArIDBdXTsgXA0KPiAgICAg
-ICAgIGQgPSByb3IzMihkIF4gYSwgMTYpOyBcDQo+ICAgICAgICAgYyArPSBkOyBcDQo+ICAgICAg
-ICAgYiA9IHJvcjMyKGIgXiBjLCAxMik7IFwNCj4gICAgICAgICBhICs9IGIgKyBtW2JsYWtlMnNf
-c2lnbWFbcl1bMiAqIGkgKyAxXV07IFwNCj4gICAgICAgICBkID0gcm9yMzIoZCBeIGEsIDgpOyBc
-DQo+ICAgICAgICAgYyArPSBkOyBcDQo+ICAgICAgICAgYiA9IHJvcjMyKGIgXiBjLCA3KTsgXA0K
-PiAgICAgfSB3aGlsZSAoMCkNCg0KRWFjaCBvZiB0aG9zZSBsaW5lcyBpcyBhIGNvdXBsZSBvZiBp
-bnN0cnVjdGlvbnMgYW5kIHRoZXkgYXJlDQphbGwgZGVwZW5kYW50IG9uIHRoZSBwcmVjZWRpbmcg
-dmFsdWUuDQpJIGNvdW50IDE0IC0gZXhjbHVkaW5nIHRoZSBtW10gYWNjZXNzZXMuDQpUaGVyZSBh
-cmUgODAgY29waWVzIG9mIEcoKSAtIHRvdGFsIDExMjAsIG9yIDE3LjUvYnl0ZS4NClRvIGdldCBh
-bnkgZmFzdGVyIHRoYW4gdGhhdCB5b3UgbmVlZCB0byBnZXQgdGhlIGNvbXBpbGVyDQp0byBpbnRl
-cmxlYXZlIHRoZSBnZW5lcmF0ZWQgY29kZSBmb3IgbXVsdGlwbGUgZXhwYW5zaW9ucyBvZiBHKCku
-DQoNCj4gVGhlIGJsYWtlMnNfc2lnbWEgYXJyYXkgaXMgYSBgc3RhdGljIGNvbnN0IHU4IGJsYWtl
-MnNfc2lnbWFbMTBdWzE2XWAsDQo+IHdpdGggYSByb3cgZm9yIGV2ZXJ5IG9uZSBvZiB0aGUgMTAg
-cm91bmRzLiBXaGF0IHRoaXMgaXMgYWN0dWFsbHkgZG9pbmcNCj4gaXMgcmVhZGluZyB0aGUgbWVz
-c2FnZSB3b3JkcyBpbiBhIGRpZmZlcmVudCBvcmRlciBlYWNoIHJvdW5kLCBzbyB0aGF0DQo+IHRo
-ZSB3aG9sZSBwZXJtdXRhdGlvbiBpcyBkaWZmZXJlbnQuDQo+IA0KPiBXaGVuIHRoZSBsb29wIGlz
-IHVucm9sbGVkLCBibGFrZTJzX3NpZ21hIGdldHMgaW5saW5lZCwgYW5kIHRoZW4gdGhlcmUNCj4g
-YXJlIG5vIG1lbW9yeSBhY2Nlc3Nlcy4gV2hlbiBpdCdzIHJlLXJvbGxlZCwgZXZlcnkgcm91bmQg
-YWNjZXNzZXMNCj4gYmxha2Uyc19zaWdtYSAxNiB0aW1lcywgd2hpY2ggaGluZGVycyBwZXJmb3Jt
-YW5jZS4NCg0KSXQgc2hvdWxkbid0IHJlYWxseSBtYWtlIG11Y2ggZGlmZmVyZW5jZS4NClRoZXJl
-IGFyZSBvbmx5IHR3byBtZW1vcnkgcmVhZHMgZm9yIGVhY2ggMTQgYXJpdGhtZXRpYyBvcHMuDQpT
-byB1bmxlc3MgeW91IG1hbmFnZSB0byBtYWludGFpbiA0IGluc3RydWN0aW9ucy9jbG9jayB0aGVy
-ZQ0KYXJlIHNwYXJlIGNsb2NrcyBmb3IgdGhlIGV4dHJhIG1lbW9yeSBjeWNsZXMuDQpBbnkgdGhh
-dCBpcyBhc3N1bWluZyBvbmUgcmVhZC9jbG9jaywgbW9kZXJuIHg4NiBjYW4gZG8gMg0KKHdpdGgg
-YSBmb2xsb3dpbmcgd2luZCEpDQpPbiB4ODYgdGhlIGFycmF5IGluZGV4IGlzIGZyZWUuDQoNCj4g
-WW91J2xsIG5vdGljZSwgb24gdGhlIG90aGVyIGhhbmQsIHRoYXQgdGhlIFNJTUQgaGFuZCBjb2Rl
-ZCBhc3NlbWJseQ0KPiBpbXBsZW1lbnRhdGlvbnMgZG8gbm90IHVucm9sbC4gVGhlIHRyaWNrIGlz
-IHRvIGhpZGUgdGhlIGNvc3Qgb2YgdGhlDQo+IGJsYWtlMnNfc2lnbWEgaW5kaXJlY3Rpb24gaW4g
-dGhlIGRhdGEgZGVwZW5kZW5jaWVzLCBzbyB0aGF0IHBlcmZvcm1hbmNlDQo+IGlzbid0IGFmZmVj
-dGVkLiBOYWl2ZWx5IHJlLXJvbGxpbmcgdGhlIGdlbmVyaWMgY29kZSBkb2VzIG5vdCBpbnNwaXJl
-IHRoZQ0KPiBjb21waWxlciB0byBkbyB0aGF0LiBCdXQgbWF5YmUgeW91IGNhbiBmaWd1cmUgc29t
-ZXRoaW5nIG91dD8NCg0KSSd2ZSBub3QgbG9va2VkIGF0IHRoYXQgdmVyc2lvbi4NCkkgaGF2ZSB3
-cml0dGVuIEFWWC9TU0UgY29kZSAtIGhhcmQgd29yayBmaW5kaW5nIHRoZSBhc20gbW51bW9uaWNz
-IQ0KDQo+IEFueXdheSwgdGhhdCdzIGFib3V0IHdoZXJlIG15IHRoaW5raW5nIGlzIG9uIHRoaXMs
-IGJ1dCBJJ2QgbG92ZSB0byBzZWUNCj4gc29tZSBwYXRjaGVzIGZyb20geW91IGF0IHNvbWUgcG9p
-bnQgaWYgeW91J3JlIGludGVyZXN0ZWQuDQoNCk9rIEkganVzdCByYW4gc29tZSB0ZXN0cyBsb29w
-aW5nIG92ZXIgdGhlIFJPVU5EKCkgd2l0aG91dCB1cGRhdGluZyB2W10uDQpUaGVzZSBhcmUgdXNp
-bmcgcmRwbWMgdG8gdGltZSBzaW5nbGUgY2FsbHMgLSBub3QgYXZlcmFnaW5nIG92ZXINCmEgbGFy
-Z2UgbnVtYmVyIG9mIGl0ZXJhdGlvbnMuDQoNCk9uIG15IGk3LTc3MDAgdGhlIHVucm9sbGVkIGxv
-b3AgaXMgYWJvdXQgNi4yIGNsb2Nrcy9ieXRlLg0KVGhlICdjb2xkIGNhY2hlJyBmb3IgYSBzaW5n
-bGUgNjQgYnl0ZSBibG9jayBpcyBhYm91dCAyMCBjbG9ja3MvYnl0ZS4NCg0KSWYgSSB1c2U6DQoJ
-Zm9yICh1MzIgaSA9IDA7IGkgPCAxMDsgaSsrKSBST1VORChpKTsNCml0IGRyb3BzIHRvIDcuOCBj
-bG9ja3MvYnl0ZSBidXQgdGhlIHNpbmdsZSBibG9jayBpcyBhYm91dCAxNS4NClBhcnQgb2YgdGhl
-IHByb2JsZW0gaXMgZXh0cmEgcmVnaXN0ZXIgc3BpbGxzIHRvIHN0YWNrLg0KDQpTbyB3ZSBwbGF5
-IHNvbWUgZ2FtZXM6DQpSZW1vdmUgdGhlIGJsYWtlMnNfc2lnbWFbXSBvdXQgb2YgRygpIGludG8g
-Uk9VTkQoKQ0Kc28gdGhlICdub3JtYWwnIGNvZGUgdXNlcyBST1VORChibGFrZTJzX3NpZ21hWzBd
-KSAoZXRjKS4NClRoZW4gd2UgY2FuIHVzZSB0aGUgbG9vcDoNCglmb3IgKGNvbnN0IHU4ICpicyA9
-ICZibGFrZTJzX3NpZ21hWzBdWzBdOyBicyA8IGVuZDsgYnMgKz0gMTYpDQoJCVJPVU5EKGJzKTsN
-Cih3aXRoIHNvbWUgYml0cyB0byBtYWtlIGl0IGNvbXBpbGUuKQ0KQW5ub3lpbmdseSB0aGF0IG1h
-a2VzIHRoZSBjb21waWxlciBzcGlsbCBhbGwgdGhlIGJzW10gdG8gc3RhY2suDQpBIGZldyBjYXJl
-ZnVsbHkgcGxhY2VkIGJhcnJpZXIoKSB3b3VsZCBoZWxwLg0KQnV0IHNpbXBsZXIgaXMgJ3ZvbGF0
-aWxlIGNvbnN0IHU4ICpicycuDQpUaGlzIGhhcyB0aGUgZGVzaXJlZCBlZmZlY3Qgb2YgaW50ZXJs
-ZWF2aW5nIHRoZSAnc2lnbWEnIHJlYWRzDQp3aXRoIHRoZSBidWZmZXIgb25lcy4NClRoaXMgZ2F2
-ZSBtZSA3LjIgY2xvY2tzL2J5dGUsIHNpbmdsZSBibG9jayBtYXliZSAxNC4NCg0KU28gYWJvdXQg
-MSBjbG9jay9ieXRlIChtYXliZSAxNSUpIHNsb3dlci4NCk9UT0ggaW4gbWFueSBjYXNlcyB0aGlz
-IGlzbid0IGNyaXRpY2FsLg0KDQpUaGUgY29sZCBjYWNoZSBjdXRvZmYgZm9yIHRoZSB1bnJvbGxl
-ZCBsb29wIGlzIGFyb3VuZCAyNTYgYnl0ZXMuDQoNClRoZSBvdGhlciBiaWcgZWZmZWN0IHRoZSB1
-bnJvbGxlZCBsb29wIGhhcyBmb3Igc21hbGwgYnVmZmVycw0KaXMgdGhhdCBpdCBkaXNwbGFjZXMg
-YSBsb3Qgb2YgY29kZSBmcm9tIHRoZSBpLWNhY2hlLg0KVGhhdCB3aWxsIG1ha2UgdGhlIHVucm9s
-bGVkIGNvZGUgd29yc2UgZm9yIG1hbnkgcmVhbCBzaXR1YXRpb25zLg0KDQpJIHN1c3BlY3QgdGhh
-dCB0aGUgY29tcGlsZXIgZW5kcyB1cCBzcGlsbGluZyBhbm90aGVyIHJlZ2lzdGVyIChvciAyKQ0K
-dG8gdGhlIHN0YWNrLg0KSGFuZCBhc3NlbWJseSBjb3VsZCBhdm9pZCB0aGF0Lg0KDQpJJ3ZlIG5v
-dCBsb29rZWQgYXQgd2hhdCBnZXRzIHNwaWxsZWQsIGdjYyBjYW4gbWFrZSBob3JyaWQgY2hvaWNl
-cy4NCkl0IG1pZ2h0IGJlIHdvcnRoIG1ha2luZyAoc2F5KSBhIGFuZCBjIHZvbGF0aWxlIChieSBz
-cGxpdHRpbmcgdltdKQ0KYW5kIHVzaW5nIGEgdGVtcG9yYXJ5IGluIEcoKSwgZWc6DQoJYyA9IHQg
-PSBjICsgZDsNCgliID0gcm9yMzIoYiBeIHQsIDEyKTsNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVy
-ZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5
-bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+tree:   https://github.com/norov/linux bitmap-cocci
+head:   3175a64928a804328d3f9a87af8bfda683539bee
+commit: 3175a64928a804328d3f9a87af8bfda683539bee [15/15] sched/topology: replace cpumask_weight() with cpumask_weight_eq where appropriate
+config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20220507/202205072103.8QX1JxvR-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/norov/linux/commit/3175a64928a804328d3f9a87af8bfda683539bee
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap-cocci
+        git checkout 3175a64928a804328d3f9a87af8bfda683539bee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/sched/build_utility.c:89:
+   kernel/sched/topology.c: In function 'sched_update_numa':
+>> kernel/sched/topology.c:2002:14: error: too many arguments to function 'cpumask_weight'
+    2002 |         if (!cpumask_weight(cpumask_of_node(node), 1))
+         |              ^~~~~~~~~~~~~~
+   In file included from include/linux/smp.h:13,
+                    from include/linux/sched/clock.h:5,
+                    from kernel/sched/build_utility.c:12:
+   include/linux/cpumask.h:573:28: note: declared here
+     573 | static inline unsigned int cpumask_weight(const struct cpumask *srcp)
+         |                            ^~~~~~~~~~~~~~
+
+
+vim +/cpumask_weight +2002 kernel/sched/topology.c
+
+  1989	
+  1990	/*
+  1991	 * Call with hotplug lock held
+  1992	 */
+  1993	void sched_update_numa(int cpu, bool online)
+  1994	{
+  1995		int node;
+  1996	
+  1997		node = cpu_to_node(cpu);
+  1998		/*
+  1999		 * Scheduler NUMA topology is updated when the first CPU of a
+  2000		 * node is onlined or the last CPU of a node is offlined.
+  2001		 */
+> 2002		if (!cpumask_weight(cpumask_of_node(node), 1))
+  2003			return;
+  2004	
+  2005		sched_reset_numa();
+  2006		sched_init_numa(online ? NUMA_NO_NODE : node);
+  2007	}
+  2008	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

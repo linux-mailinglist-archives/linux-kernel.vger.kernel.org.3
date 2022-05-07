@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F3351E675
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F6551E67A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344542AbiEGKeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S1384362AbiEGKhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236031AbiEGKd5 (ORCPT
+        with ESMTP id S236372AbiEGKhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:33:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70A33FD97;
-        Sat,  7 May 2022 03:29:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 423326115E;
-        Sat,  7 May 2022 10:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D747C385A5;
-        Sat,  7 May 2022 10:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651919396;
-        bh=4BQos/r9vVkgW+NENc66br/k2k0LDJiPTIt3lbSVigE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XSXxKqiJCrs0yUm60Vuz2hHH/N3jXR+s9+QUROTVG366WK7Swjas8a2rRgWjcxFwH
-         oGnFA1i+YQMFFe1UiCJbPeHJDvoFtHxRL2ovTASwchqcQOfLHIx26B0uLzpxj6rlvP
-         lpwPiAcEQ+7wH5nriCXA1Tx8PMBu/N0+qAWzDOqKkxbLR4YQl7ONAa+TKZgfz8xDD1
-         fogz0Nn8IKrsM+Ly/lwE2odNWiEFj+Wuux7HF4O6yOIPEWHofo7M0fvmARUn9H5czQ
-         nD9uBdnfqe3fneQcYKJ/t0g9T5y9WcC0wQmDh985JTj530ELtu0ySc2/yPIGDc3t4M
-         758zF//biSy3A==
-Date:   Sat, 7 May 2022 12:29:49 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, atenart@kernel.org,
-        thomas.petazzoni@free-electrons.com, f.fainelli@gmail.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: net: orion-mdio: Convert to JSON schema
-Message-ID: <20220507122949.2c929211@thinkpad>
-In-Reply-To: <YnLxv8PbDyBE1ODa@lunn.ch>
-References: <20220504043603.949134-1-chris.packham@alliedtelesis.co.nz>
-        <YnLxv8PbDyBE1ODa@lunn.ch>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 7 May 2022 06:37:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C992D1ED;
+        Sat,  7 May 2022 03:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651919609; x=1683455609;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tz4eaxNFw3OE/vYEfmWYD9ee4vGmGUyLKAFHoXsKn8Q=;
+  b=kgDPj8hGIsQ2S/dIq0sRi9iT4oiK18Z0EJR68cKN19CnmC2SyL5eoBFx
+   6K3q6O7VF845lDASmDO5Ue3HyFcunueF9PYPdUkNyLyLdAs6V1jgbnvjB
+   sZG2QxPp85lKrTZCeFjFvT55NJvSh+c+xB+JVkGmpcMATlVF+Lc9G+uVm
+   4Uu4DCKdCFXBiwUerjhIe0WcAtewvEKFrMCiU4aWiyUEiO7hxSyKvKzj5
+   PEqS9ZVyelpM8B+tBXKFMAvfZfSEm/Nsne2gt8jBxVllSoY4am+PzZ89n
+   2U9iATPW+tTqbrwqYHsaOrN244sa8ORH+ABixS90BTXmbWlo0St3P79hQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268589634"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="268589634"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:33:29 -0700
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="550239830"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:33:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nnHkV-00D3B8-LA;
+        Sat, 07 May 2022 13:33:19 +0300
+Date:   Sat, 7 May 2022 13:33:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v4 0/8] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YnZK75D3fMvLSgAD@smile.fi.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220308205016.2c0112ad@md1za8fc.ad001.siemens.net>
+ <YnJ0tdGTzTRYEISn@smile.fi.intel.com>
+ <20220504171007.2f641098@md1za8fc.ad001.siemens.net>
+ <CAHp75Vfh5DbiGQ4NLv+hhYyRx5wDbMjFmgO5sNZ7864ipRrDHg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vfh5DbiGQ4NLv+hhYyRx5wDbMjFmgO5sNZ7864ipRrDHg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 23:35:59 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+On Wed, May 04, 2022 at 05:55:26PM +0200, Andy Shevchenko wrote:
+> On Wed, May 4, 2022 at 5:10 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> > Am Wed, 4 May 2022 15:42:29 +0300
+> > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 
-> On Wed, May 04, 2022 at 04:36:02PM +1200, Chris Packham wrote:
-> > Convert the marvell,orion-mdio binding to JSON schema.
-> >=20
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
-> >=20
-> > Notes:
-> >     Thomas, Antione & Florian I hope you don't mind me putting you as
-> >     maintainers of the binding. Between you you've written the majority=
- of
-> >     the mvmdio.c driver. =20
->=20
-> I actually think it will be me doing any maintenance work on that
-> driver.
->=20
-> >     This does throw up the following dtbs_check warnings for turris-mox:
-> >    =20
-> >     arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004:=
- switch0@10:reg: [[16], [0]] is too long
-> >             From schema: Documentation/devicetree/bindings/net/marvell,=
-orion-mdio.yaml =20
->=20
-> I assume this is coming from
->=20
-> 		reg =3D <0x10 0>;
->=20
-> This is odd. Lets see what Marek Beh=C3=BAn has to say.
+> ...
 
-Looks like a mistake on my part.
+> > Let me know if you need it in another shape or form.
+> 
+> Form is okay, just would be nice if you can retest what I have in the
+> branch as an updated version.
 
-Marek
+Is there any news? I would like to send a new version sooner than later.
+We may also apply the patches from this series and when you will be ready
+apply yours.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

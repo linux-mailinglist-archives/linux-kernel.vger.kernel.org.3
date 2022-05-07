@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EBD51E30D
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5915951E316
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445192AbiEGBgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S1445204AbiEGBhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiEGBgA (ORCPT
+        with ESMTP id S1389512AbiEGBhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:36:00 -0400
-Received: from out199-4.us.a.mail.aliyun.com (out199-4.us.a.mail.aliyun.com [47.90.199.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90058E7E;
-        Fri,  6 May 2022 18:32:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCUCndB_1651887123;
-Received: from 30.236.9.83(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCUCndB_1651887123)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 07 May 2022 09:32:05 +0800
-Message-ID: <971cfb54-f5a6-921c-b0c5-195a5daed0fb@linux.alibaba.com>
-Date:   Sat, 7 May 2022 09:32:46 +0800
+        Fri, 6 May 2022 21:37:52 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAAB5DBDD;
+        Fri,  6 May 2022 18:34:06 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kw9164hhcz1JBsV;
+        Sat,  7 May 2022 09:32:58 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 09:34:05 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 09:34:03 +0800
+Subject: Re: [PATCH v24 3/6] arm64: kdump: Reimplement crashkernel=X
+To:     Baoquan He <bhe@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-4-thunder.leizhen@huawei.com>
+ <20220506231032.GA122876@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <d9b21f31-6fd2-a898-9a70-c63ff4f36212@huawei.com>
+Date:   Sat, 7 May 2022 09:34:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <f64f0d4f-f0fc-f07c-3c17-96f124da21e4@oracle.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <f64f0d4f-f0fc-f07c-3c17-96f124da21e4@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220506231032.GA122876@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +74,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/7/2022 2:55 AM, Mike Kravetz wrote:
-> On 4/29/22 01:14, Baolin Wang wrote:
->> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->> hugetlb, which means it can support not only PMD/PUD size hugetlb:
->> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
->> size specified.
->>
->> When unmapping a hugetlb page, we will get the relevant page table
->> entry by huge_pte_offset() only once to nuke it. This is correct
->> for PMD or PUD size hugetlb, since they always contain only one
->> pmd entry or pud entry in the page table.
->>
->> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
->> since they can contain several continuous pte or pmd entry with
->> same page table attributes, so we will nuke only one pte or pmd
->> entry for this CONT-PTE/PMD size hugetlb page.
->>
->> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+On 2022/5/7 7:10, Baoquan He wrote:
+> On 05/06/22 at 07:43pm, Zhen Lei wrote:
+> ......  
+>> @@ -118,8 +162,7 @@ static void __init reserve_crashkernel(void)
+>>  	if (crash_base)
+>>  		crash_max = crash_base + crash_size;
+>>  
+>> -	/* Current arm64 boot protocol requires 2MB alignment */
+>> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+>> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>  					       crash_base, crash_max);
+>>  	if (!crash_base) {
+>>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>> @@ -127,6 +170,11 @@ static void __init reserve_crashkernel(void)
+>>  		return;
+>>  	}
+>>  
 > 
-> Since try_to_unmap can be called for non-hugetlb pages, perhaps the following
-> is more accurate?
+> There's corner case missed, e.g
+> 1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
+> 2) ,high and ,low are specified, the whole system memory is under 4G.
 > 
-> try_to_unmap is only passed a hugetlb page in the case where the
-> hugetlb page is poisoned.
+> Below judgement can filter them away:
+>         
+> 	if (crash_base > arm64_dma_phys_limit && crash_low_size &&
+> 	    reserve_crashkernel_low(crash_low_size)) {
+> 
+> What's your opinion? Leave it and add document to notice user, or fix it
+> with code change?
 
-Yes, will update in next version.
+I think maybe we can leave it unchanged. If the user configures two memory ranges,
+we'd better apply for two. Otherwise, he'll be confused when he inquires. Currently,
+crash_low_size is non-zero only when 'crashkernel=Y,low' is explicitly configured.
 
-> It does concern me that this assumption is built into the code as
-> pointed out in your discussion with Gerald.  Should we perhaps add
-> a VM_BUG_ON() to make sure the passed huge page is poisoned?  This
-> would be in the same 'if block' where we call
-> adjust_range_if_pmd_sharing_possible.
-Good point. Will do in next version. Thanks.
+> 
+> I would suggest merging this series, Lei can add this corner case
+> handling on top. Since this is a newly added support, we don't have
+> to make it one step. Doing step by step can make reviewing easier.
+> 
+>> +	if (crash_low_size && reserve_crashkernel_low(crash_low_size)) {
+>> +		memblock_phys_free(crash_base, crash_size);
+>> +		return;
+>> +	}
+>> +
+>>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>>  		crash_base, crash_base + crash_size, crash_size >> 20);
+>>  
+>> @@ -135,6 +183,9 @@ static void __init reserve_crashkernel(void)
+>>  	 * map. Inform kmemleak so that it won't try to access it.
+>>  	 */
+>>  	kmemleak_ignore_phys(crash_base);
+>> +	if (crashk_low_res.end)
+>> +		kmemleak_ignore_phys(crashk_low_res.start);
+>> +
+>>  	crashk_res.start = crash_base;
+>>  	crashk_res.end = crash_base + crash_size - 1;
+>>  	insert_resource(&iomem_resource, &crashk_res);
+>> -- 
+>> 2.25.1
+>>
+> 
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei

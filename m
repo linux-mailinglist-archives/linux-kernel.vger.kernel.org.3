@@ -2,382 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3041651E387
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6DA51E38E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445346AbiEGCdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 22:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S1445356AbiEGCgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 22:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243289AbiEGCdp (ORCPT
+        with ESMTP id S237643AbiEGCgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 22:33:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459F86A020;
-        Fri,  6 May 2022 19:29:55 -0700 (PDT)
-X-UUID: 0816ecf7a4914d20a3f6862124a7eba6-20220507
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:3e4bb740-593a-4622-82a2-05d1f2815536,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:32ef8516-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 0816ecf7a4914d20a3f6862124a7eba6-20220507
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 634343465; Sat, 07 May 2022 10:29:47 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 7 May 2022 10:29:45 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 7 May 2022 10:29:41 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2] media: mediatek: vcodec: add vp9 decoder driver for mt8186
-Date:   Sat, 7 May 2022 10:29:40 +0800
-Message-ID: <20220507022940.30439-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 6 May 2022 22:36:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5361707B;
+        Fri,  6 May 2022 19:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651890742; x=1683426742;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=vFqRJouxaNfchEl9DmTu7VLsnysJ8DcCYP4XHQXH47w=;
+  b=j7TKRMpQwI6LL0mIcLA8c53oVmKz8eudjeGVQGa6RRDAmfz6uloossNP
+   qgyVjzjXpi9Co1s5qFQwjBIg4bDYeJRWWCVx7No5Tq81GOBDlcZG2pW87
+   K0X+XfJGBgyzLcrdhWPwrIiqfWX4zhuHTH1+/FmzMQh/2FRwbeuEBnARD
+   0r3qgusBrHM5MISPgF095Pbs9QGl+2PKXOo7mOtkO4IB3frSvIpKI3ScH
+   HpF+VFpGDDZ2uWUzE95pXv9GrtiX5zAILEu/KaM1z62k0TE55WELYwVwo
+   Z1fLllvvKp0z08j7NmboXAngpEsNNfbMhdAXXGyg8x2g06jxnWwYB+bAZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="355068986"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="355068986"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:32:22 -0700
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="586314735"
+Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.170.118]) ([10.249.170.118])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:32:18 -0700
+Message-ID: <d2e14530-f3c1-53c9-dd03-95ea2c1bf3f1@intel.com>
+Date:   Sat, 7 May 2022 10:32:02 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v11 08/16] KVM: x86/pmu: Refactor code to support guest
+ Arch LBR
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220506033305.5135-1-weijiang.yang@intel.com>
+ <20220506033305.5135-9-weijiang.yang@intel.com>
+ <ce4fe0e1-357c-9e8d-67f7-f065ccbe3851@linux.intel.com>
+From:   "Yang, Weijiang" <weijiang.yang@intel.com>
+In-Reply-To: <ce4fe0e1-357c-9e8d-67f7-f065ccbe3851@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vp9 single core decode driver to support mt8186.
 
-Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
-Signed-off-by: Xiaoyong Lu <xiaoyong.lu@mediatek.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+On 5/6/2022 11:03 PM, Liang, Kan wrote:
+> On 5/5/2022 11:32 PM, Yang Weijiang wrote:
+>
+>    bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+> @@ -199,12 +203,20 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+>    		return ret;
+>    	}
+>    
+> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
+> -		(index >= records->from && index < records->from + records->nr) ||
+> -		(index >= records->to && index < records->to + records->nr);
+> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS);
+> +
+> Shouldn't we return immediately if (ret == true)?
+> Keep checking if (!ret) looks uncommon.
+>
+> Actually we probably don't need the ret in this function.
+>
+> 	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
+> 	    ((index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS)))
+> 		return true;
+>
+>> +	if (!ret) {
+>> +		ret = (index >= records->from &&
+>> +		       index < records->from + records->nr) ||
+>> +		      (index >= records->to &&
+>> +		       index < records->to + records->nr);
+>> +	}
+> 	if ((index >= records->from &&
+> 	    index < records->from + records->nr) ||
+> 	    (index >= records->to &&
+> 	    index < records->to + records->nr))
+> 		return true;
+>
+>>    
+>> -	if (!ret && records->info)
+>> -		ret = (index >= records->info && index < records->info + records->nr);
+>> +	if (!ret && records->info) {
+>> +		ret = (index >= records->info &&
+>> +		       index < records->info + records->nr);
+>> +	}
+> 	if (records->info &&
+> 	    (index >= records->info && index < records->info + records->nr)
+> 		return true;
+>
+> 	return false;
+> Sorry, I didn't notice it in the previous review.
+
+Thanks Kan, so I'll modify this function as below (keeping other part 
+unchanged):
+
+From 642d5e05e8a8578e75531632d714cec5976ab9ac Mon Sep 17 00:00:00 2001
+From: Yang Weijiang <weijiang.yang@intel.com>
+Date: Thu, 8 Jul 2021 23:51:02 +0800
+Subject: [PATCH] KVM: x86/pmu: Refactor code to support guest Arch LBR
+
+Take account of Arch LBR when do sanity checks before program
+vPMU for guest. Pass through Arch LBR recording MSRs to guest
+to gain better performance. Note, Arch LBR and Legacy LBR support
+are mutually exclusive, i.e., they're not both available on one
+platform.
+
+Co-developed-by: Like Xu <like.xu@linux.intel.com>
+Signed-off-by: Like Xu <like.xu@linux.intel.com>
+Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
 ---
-This patch depends on "support mt8195 decoder"[1]
+  arch/x86/kvm/vmx/pmu_intel.c | 47 +++++++++++++++++++++++++-----------
+  arch/x86/kvm/vmx/vmx.c       |  3 +++
+  2 files changed, 36 insertions(+), 14 deletions(-)
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/cover/20220507014618.29412-1-yunfei.dong@mediatek.com/
----
-changed with v1:
-- fix sparse and smatch check fail.
----
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 197 +++++++++++++++++-
- .../platform/mediatek/vcodec/vdec_drv_if.c    |   2 +-
- 2 files changed, 195 insertions(+), 4 deletions(-)
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index aa36d2072b91..306ce7ac9934 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -170,12 +170,16 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct 
+kvm_pmu *pmu, u32 msr)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index 3ebdb3c29e0e..f4de6951269f 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -439,6 +439,8 @@ struct vdec_vp9_slice_ref {
-  * @init_vsi:		vsi used for initialized VP9 instance
-  * @vsi:		vsi used for decoding/flush ...
-  * @core_vsi:		vsi used for Core stage
-+ *
-+ * @sc_pfc:		per frame context single core
-  * @counts_map:	used map to counts_helper
-  * @counts_helper:	counts table according to newest kernel spec
-  */
-@@ -487,6 +489,7 @@ struct vdec_vp9_slice_instance {
- 	};
- 	struct vdec_vp9_slice_vsi *core_vsi;
- 
-+	struct vdec_vp9_slice_pfc sc_pfc;
- 	struct vdec_vp9_slice_counts_map counts_map;
- 	struct v4l2_vp9_frame_symbol_counts counts_helper;
- };
-@@ -693,6 +696,25 @@ static int vdec_vp9_slice_tile_offset(int idx, int mi_num, int tile_log2)
- 	return offset < mi_num ? offset : mi_num;
- }
- 
-+static
-+int vdec_vp9_slice_setup_single_from_src_to_dst(struct vdec_vp9_slice_instance *instance)
-+{
-+	struct vb2_v4l2_buffer *src;
-+	struct vb2_v4l2_buffer *dst;
+  bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu)
+  {
++       if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
++               return guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
 +
-+	src = v4l2_m2m_next_src_buf(instance->ctx->m2m_ctx);
-+	if (!src)
-+		return -EINVAL;
-+
-+	dst = v4l2_m2m_next_dst_buf(instance->ctx->m2m_ctx);
-+	if (!dst)
-+		return -EINVAL;
-+
-+	v4l2_m2m_buf_copy_metadata(src, dst, true);
-+
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_setup_lat_from_src_buf(struct vdec_vp9_slice_instance *instance,
- 						 struct vdec_lat_buf *lat_buf)
- {
-@@ -1568,6 +1590,33 @@ static int vdec_vp9_slice_update_prob(struct vdec_vp9_slice_instance *instance,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance,
-+				        struct vdec_vp9_slice_pfc *pfc)
-+{
-+	struct vdec_vp9_slice_vsi *vsi;
-+
-+	vsi = &pfc->vsi;
-+	memcpy(&pfc->state[0], &vsi->state, sizeof(vsi->state));
-+
-+	mtk_vcodec_debug(instance, "Frame %u Y_CRC %08x %08x %08x %08x\n",
-+			 pfc->seq,
-+			 vsi->state.crc[0], vsi->state.crc[1],
-+			 vsi->state.crc[2], vsi->state.crc[3]);
-+	mtk_vcodec_debug(instance, "Frame %u C_CRC %08x %08x %08x %08x\n",
-+			 pfc->seq,
-+			 vsi->state.crc[4], vsi->state.crc[5],
-+			 vsi->state.crc[6], vsi->state.crc[7]);
-+
-+	vdec_vp9_slice_update_prob(instance, vsi);
-+
-+	instance->width = vsi->frame.uh.frame_width;
-+	instance->height = vsi->frame.uh.frame_height;
-+	instance->frame_type = vsi->frame.uh.frame_type;
-+	instance->show_frame = vsi->frame.uh.show_frame;
-+
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
- 				     struct vdec_lat_buf *lat_buf,
- 				     struct vdec_vp9_slice_pfc *pfc)
-@@ -1691,6 +1740,40 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 	return 0;
- }
- 
-+static void vdec_vp9_slice_setup_single_buffer(struct vdec_vp9_slice_instance *instance,
-+					       struct vdec_vp9_slice_pfc *pfc,
-+					       struct vdec_vp9_slice_vsi *vsi,
-+					       struct mtk_vcodec_mem *bs,
-+					       struct vdec_fb *fb)
-+{
-+	int i;
-+
-+	vsi->bs.buf.dma_addr = bs->dma_addr;
-+	vsi->bs.buf.size = bs->size;
-+	vsi->bs.frame.dma_addr = bs->dma_addr;
-+	vsi->bs.frame.size = bs->size;
-+
-+	for (i = 0; i < 2; i++) {
-+		vsi->mv[i].dma_addr = instance->mv[i].dma_addr;
-+		vsi->mv[i].size = instance->mv[i].size;
-+	}
-+	for (i = 0; i < 2; i++) {
-+		vsi->seg[i].dma_addr = instance->seg[i].dma_addr;
-+		vsi->seg[i].size = instance->seg[i].size;
-+	}
-+	vsi->tile.dma_addr = instance->tile.dma_addr;
-+	vsi->tile.size = instance->tile.size;
-+	vsi->prob.dma_addr = instance->prob.dma_addr;
-+	vsi->prob.size = instance->prob.size;
-+	vsi->counts.dma_addr = instance->counts.dma_addr;
-+	vsi->counts.size = instance->counts.size;
-+
-+	vsi->row_info.buf = 0;
-+	vsi->row_info.size = 0;
-+
-+	vdec_vp9_slice_setup_core_buffer(instance, pfc, vsi, fb, NULL);
-+}
-+
- static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
- 				     struct vdec_fb *fb,
- 				     struct vdec_lat_buf *lat_buf,
-@@ -1717,6 +1800,43 @@ static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
- 	return ret;
- }
- 
-+static int vdec_vp9_slice_setup_single(struct vdec_vp9_slice_instance *instance,
-+				       struct mtk_vcodec_mem *bs,
-+				       struct vdec_fb *fb,
-+				       struct vdec_vp9_slice_pfc *pfc)
-+{
-+	struct vdec_vp9_slice_vsi *vsi = &pfc->vsi;
-+	int ret;
-+
-+	ret = vdec_vp9_slice_setup_single_from_src_to_dst(instance);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_setup_pfc(instance, pfc);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_alloc_working_buffer(instance, vsi);
-+	if (ret)
-+		goto err;
-+
-+	vdec_vp9_slice_setup_single_buffer(instance, pfc, vsi, bs, fb);
-+	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[0]);
-+
-+	ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
-+	if (ret)
-+		goto err;
-+
-+	ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
-+	if (ret)
-+		goto err;
-+
-+	return 0;
-+
-+err:
-+	return ret;
-+}
-+
- static int vdec_vp9_slice_update_core(struct vdec_vp9_slice_instance *instance,
- 				      struct vdec_lat_buf *lat_buf,
- 				      struct vdec_vp9_slice_pfc *pfc)
-@@ -1814,8 +1934,8 @@ static int vdec_vp9_slice_flush(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	struct vdec_vp9_slice_instance *instance = h_vdec;
- 
- 	mtk_vcodec_debug(instance, "flush ...\n");
--
--	vdec_msg_queue_wait_lat_buf_full(&instance->ctx->msg_queue);
-+	if (instance->ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-+		vdec_msg_queue_wait_lat_buf_full(&instance->ctx->msg_queue);
- 	return vpu_dec_reset(&instance->vpu);
- }
- 
-@@ -1868,6 +1988,63 @@ static int vdec_vp9_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				        struct vdec_fb *fb, bool *res_chg)
-+{
-+	struct vdec_vp9_slice_instance *instance = h_vdec;
-+	struct vdec_vp9_slice_pfc *pfc = &(instance->sc_pfc);
-+	struct vdec_vp9_slice_vsi *vsi;
-+	struct mtk_vcodec_ctx *ctx;
-+	int ret;
-+
-+	if (!instance || !instance->ctx)
-+		return -EINVAL;
-+	ctx = instance->ctx;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs)
-+		return vdec_vp9_slice_flush(h_vdec, bs, fb, res_chg);
-+
-+	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
-+	if (!fb)
-+		return -EBUSY;
-+
-+	vsi = &pfc->vsi;
-+
-+	ret = vdec_vp9_slice_setup_single(instance, bs, fb, pfc);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "Failed to setup VP9 single ret %d\n", ret);
-+		return ret;
-+	}
-+	vdec_vp9_slice_vsi_to_remote(vsi, (void __iomem *)instance->vsi);
-+
-+	ret = vpu_dec_start(&instance->vpu, NULL, 0);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "Failed to dec VP9 ret %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = mtk_vcodec_wait_for_done_ctx(ctx,	MTK_INST_IRQ_RECEIVED,
-+					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	/* update remote vsi if decode timeout */
-+	if (ret) {
-+		mtk_vcodec_err(instance, "VP9 decode timeout %d\n", ret);
-+		writel(1, (void __iomem *)&instance->vsi->state.timeout);
-+	}
-+
-+	vpu_dec_end(&instance->vpu);
-+
-+	vdec_vp9_slice_vsi_from_remote(vsi, (void __iomem *)instance->vsi, 0);
-+	ret = vdec_vp9_slice_update_single(instance, pfc);
-+	if (ret) {
-+		mtk_vcodec_err(instance, "VP9 decode error: %d\n", ret);
-+		return ret;
-+	}
-+
-+	instance->ctx->decoded_frame_cnt++;
-+	return 0;
-+}
-+
- static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 				     struct vdec_fb *fb, bool *res_chg)
- {
-@@ -1947,6 +2124,20 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	return 0;
- }
- 
-+static int vdec_vp9_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				 struct vdec_fb *fb, bool *res_chg)
-+{
-+	struct vdec_vp9_slice_instance *instance = h_vdec;
-+	int ret;
-+
-+	if (instance->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		ret = vdec_vp9_slice_single_decode(h_vdec, bs, fb, res_chg);
-+	else
-+		ret = vdec_vp9_slice_lat_decode(h_vdec, bs, fb, res_chg);
-+
-+	return ret;
-+}
-+
- static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- {
- 	struct vdec_vp9_slice_instance *instance;
-@@ -2025,7 +2216,7 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- 
- const struct vdec_common_if vdec_vp9_slice_lat_if = {
- 	.init		= vdec_vp9_slice_init,
--	.decode		= vdec_vp9_slice_lat_decode,
-+	.decode		= vdec_vp9_slice_decode,
- 	.get_param	= vdec_vp9_slice_get_param,
- 	.deinit		= vdec_vp9_slice_deinit,
- };
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-index 27b4b35039cf..f3807f03d880 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-@@ -47,7 +47,7 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- 		break;
- 	case V4L2_PIX_FMT_VP9_FRAME:
- 		ctx->dec_if = &vdec_vp9_slice_lat_if;
--		ctx->hw_id = MTK_VDEC_LAT0;
-+		ctx->hw_id = IS_VDEC_LAT_ARCH(hw_arch) ? MTK_VDEC_LAT0 : MTK_VDEC_CORE;
- 		break;
- 	default:
- 		return -EINVAL;
--- 
-2.18.0
+         /*
+          * As a first step, a guest could only enable LBR feature if its
+          * cpu model is the same as the host because the LBR registers
+          * would be pass-through to the guest and they're model specific.
+          */
+-       return boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
++       return !boot_cpu_has(X86_FEATURE_ARCH_LBR) &&
++               boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
+  }
 
+  bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+@@ -188,25 +192,28 @@ bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+  static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+  {
+         struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
+-       bool ret = false;
+
+         if (!intel_pmu_lbr_is_enabled(vcpu))
+-               return ret;
++               return false;
+
+         if (index == MSR_ARCH_LBR_DEPTH || index == MSR_ARCH_LBR_CTL) {
+-               if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+-                       ret = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
+-               return ret;
++               return kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
++                      guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
+         }
+
+-       ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
+-               (index >= records->from && index < records->from + 
+records->nr) ||
+-               (index >= records->to && index < records->to + records->nr);
++       if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
++           (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
++               return true;
+
+-       if (!ret && records->info)
+-               ret = (index >= records->info && index < records->info + 
+records->nr);
++       if ((index >= records->from && index < records->from + 
+records->nr) ||
++           (index >= records->to && index < records->to + records->nr))
++               return true;
+
+-       return ret;
++       if (records->info && index >= records->info &&
++           index < records->info + records->nr)
++               return true;
++
++       return false;
+  }
+
+  static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+@@ -742,6 +749,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct 
+kvm_vcpu *vcpu, bool set)
+                         vmx_set_intercept_for_msr(vcpu, lbr->info + i, 
+MSR_TYPE_RW, set);
+         }
+
++       if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
++               return;
++
+         vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
+         vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
+  }
+@@ -782,10 +792,13 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+  {
+         struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+         struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
++       bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
++               (vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
++               (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+
+         if (!lbr_desc->event) {
+                 vmx_disable_lbr_msrs_passthrough(vcpu);
+-               if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
++               if (lbr_enable)
+                         goto warn;
+                 if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
+                         goto warn;
+@@ -802,13 +815,19 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+         return;
+
+  warn:
++       if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
++               wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
+         pr_warn_ratelimited("kvm: vcpu-%d: fail to passthrough LBR.\n",
+                 vcpu->vcpu_id);
+  }
+
+  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
+  {
+-       if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
++       bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
++               (vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
++               (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
++
++       if (!lbr_enable)
+                 intel_pmu_release_guest_lbr_event(vcpu);
+  }
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index b6bc7d97e4b4..98e56a909c01 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -573,6 +573,9 @@ static bool is_valid_passthrough_msr(u32 msr)
+         case MSR_LBR_NHM_TO ... MSR_LBR_NHM_TO + 31:
+         case MSR_LBR_CORE_FROM ... MSR_LBR_CORE_FROM + 8:
+         case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
++       case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
++       case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
++       case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
+                 /* LBR MSRs. These are handled in 
+vmx_update_intercept_for_lbr_msrs() */
+                 return true;
+         }
+--
+2.27.0
+
+> Thanks,
+> Kan
+>

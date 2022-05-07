@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E7D51E8F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED8551E8FE
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386648AbiEGRid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 13:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S1386692AbiEGRjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 13:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiEGRib (ORCPT
+        with ESMTP id S242983AbiEGRjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 13:38:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61BD205F8;
-        Sat,  7 May 2022 10:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651944884; x=1683480884;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X0ItBNJz50nkKAhRztUipXfBqiaaq+mP7b+UDMO9LAo=;
-  b=HklHAe+KlzqqLLiVNZVCmUv4DcjcdlbLab8k9le5F2zqHTv+C8QFYe8K
-   yEc+b7TLcX5SciW4R6ZAtpPRn+g5vncXmLBGFgNILmWK8VN8lWLqOw2L3
-   niCn3BWiL3HrB8LY6djveWmBm79s8VwLxGuJu9t7T1bgABSpRRnoVy1xM
-   Hkv/8ONL25v/vRgmmY4f+3mVNM3UM6Dz/N6jtdIkttbJCZG9gDam8C3PD
-   lV0qZ9YIa9/qaCUlpobkBzICm/Fsrd0vNwALEUby+ZFZAvoWmIYvSejxR
-   rynTUEzazNDZIFrr8MuSmfMbkQr5C7SKqJXVpv1HJefDKYhJSn8YGl2a7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="268631047"
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="268631047"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 10:34:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="518537172"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 07 May 2022 10:34:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0C58F155; Sat,  7 May 2022 20:34:43 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v1 1/1] iio: imu: st_lsm6dsx: Switch from of headers to mod_devicetable.h
-Date:   Sat,  7 May 2022 20:34:40 +0300
-Message-Id: <20220507173440.29053-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 7 May 2022 13:39:44 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E97727FD6
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 10:35:57 -0700 (PDT)
+Received: from [192.168.1.101] (abxi172.neoplus.adsl.tpnet.pl [83.9.2.172])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A23423ED82;
+        Sat,  7 May 2022 19:35:54 +0200 (CEST)
+Message-ID: <c13621d1-8c33-2979-b455-2e1f4e4bc5c8@somainline.org>
+Date:   Sat, 7 May 2022 19:35:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] arm64: dts: qcom: msm8998: Make regulator voltages
+ multiple of step-size
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>
+References: <20220507153627.1478268-1-marijn.suijten@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220507153627.1478268-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is nothing directly using of specific interfaces in this driver,
-so lets not include the headers.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-index 8d4201b86e87..35556cd04284 100644
---- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-+++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-@@ -6,11 +6,11 @@
-  */
- 
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/i3c/device.h>
- #include <linux/i3c/master.h>
- #include <linux/slab.h>
--#include <linux/of.h>
- #include <linux/regmap.h>
- 
- #include "st_lsm6dsx.h"
--- 
-2.35.1
+On 7.05.2022 17:36, Marijn Suijten wrote:
+> These voltages are not a multiple of the given step-size 8000 (with base
+> voltage 1664000) in pm8998_pldo, resulting in PLDO regulators l18 and
+> l22 failing to validate and in turn not probing the rpm-pm8998-regulator
+> driver:
+> 
+>     l18: unsupportable voltage constraints 2856000-2848000uV
+>     qcom_rpm_smd_regulator rpm-glink:rpm-requests:pm8998-regulators: l18: devm_regulator_register() failed, ret=-22
+> 
+> Round the voltages down for the sake of erring on the safe side, leaving
+> a comment in place to document this discrepancy wrt downstream sources.
+> 
+> Fixes: 390883af89d2 ("arm64: dts: qcom: msm8998: Introduce support for Sony Yoshino platform")
+> Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+Also:
+Reported-by: Markuss Broks <markuss.broks@gmail.com>
 
+Konrad
+
+
+>  .../dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts    | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
+> index 4a1f98a21031..c21333aa73c2 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
+> @@ -26,11 +26,13 @@ &lab {
+>  };
+>  
+>  &vreg_l18a_2p85 {
+> -	regulator-min-microvolt = <2850000>;
+> -	regulator-max-microvolt = <2850000>;
+> +	/* Note: Round-down from 2850000 to be a multiple of PLDO step-size 8000 */
+> +	regulator-min-microvolt = <2848000>;
+> +	regulator-max-microvolt = <2848000>;
+>  };
+>  
+>  &vreg_l22a_2p85 {
+> -	regulator-min-microvolt = <2700000>;
+> -	regulator-max-microvolt = <2700000>;
+> +	/* Note: Round-down from 2700000 to be a multiple of PLDO step-size 8000 */
+> +	regulator-min-microvolt = <2696000>;
+> +	regulator-max-microvolt = <2696000>;
+>  };

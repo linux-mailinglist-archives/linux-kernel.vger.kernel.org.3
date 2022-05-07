@@ -2,201 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E740D51E6C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEAC51E6CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446323AbiEGMEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 08:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S1446334AbiEGMM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 08:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446313AbiEGMEC (ORCPT
+        with ESMTP id S1442217AbiEGMMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 08:04:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F5748392
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 05:00:13 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id g20so11358506edw.6
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 05:00:13 -0700 (PDT)
+        Sat, 7 May 2022 08:12:53 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2274C165B6;
+        Sat,  7 May 2022 05:09:07 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id eq14so7238432qvb.4;
+        Sat, 07 May 2022 05:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MJ5P80Xm99M8HaZon9Nxr3GNke+ga/P6cYQ3Q9Jg6ZU=;
-        b=MQvTn/dfBEG8PymJS4/L+Db+QkbhwqqGo38F0wmkcKX6yzBdhiVm2s5ehq4K0AUE1b
-         XkDOD8IrNrblq5xgZ6lKFBKnt3giY4kFR9JHEY1B5oiS5Dhq4tO80tltyx61MbWsJvKp
-         vjVGrqQ4o4IFg3d4AhGZ/P2OyXoqWjYKGRV59EbyfYK6hfknDAYRlad6unlOA+7XtvoY
-         +keq5TOdYavisrMfbIhFVznk0F+MC6rbaJzXG6INYPruK6JA+h9Y+eahPZkSuEtAaHDO
-         jxjNN3fzYwVnVox80aye3aHKRsejgt8KmcPcj/giqoipauGHZvaAT3wY7bHc9yovFr5m
-         VwHw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9FjD7dBxRajVTH5OXTLo8selNWenA3RGdBp07nHbxqs=;
+        b=e2i9n38TU8cOjMhYnzNbfr5CyU+YEjlOUOQDZ/weGx5sHMxrUsJn1PP64UW2rtGqb9
+         eg/f0bwgZlDBEC3lykGfX06ak2la11MLxRJTfHsyL9T8vGg10O0Ym/KWyPk86z/q7ua4
+         8qkkd/09aM8pXgSKiq8YgkfdaVTZE4SfkqqCuMDsyLiXa6DviwwYCYI6oyo+Z66/uL7x
+         kGCjqx252r4VDRI8WJNHSI5FsK4QJilD+QxVsR629+9inpXMcwrCdDBg/QG1MXRMsdqt
+         VYQtLKFgEMkncH69EoX5/bdJtEhdER60g0tgiZYXvuyi4l+7oy9gbxGB76iFouiJgIZc
+         SCUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MJ5P80Xm99M8HaZon9Nxr3GNke+ga/P6cYQ3Q9Jg6ZU=;
-        b=hoj/BJuRVIG6XKDyBP+HQyQRfZjrcLq/bZuzsJHdUIrNP3L82HfCldqxvPw54104N3
-         CV/SIQd2AV77cgGrRsRXMivDXI4HnLgABtP+J0i8acF2PznCdmz3nuCnTcEPoLFlKKXt
-         xRT+bH8kZzlpjk8sWyelQwrQ0jP8NuvbXhsK5b/Okd47xK5ezsBc6mziRHdYCHJcVlI7
-         1IFAX8ovGmRaFm7re1QVxpZzz3zd2J19Syi4CVznMLJOZ9Hr962s5Z2qwapdiUOiMsAY
-         XitcWK9ELK6N9JwOCNmMKJBoAqpjSI1jkqGDn0tlhttxNBmUN5VtnhtrVRTD+VpaN6LF
-         qfjQ==
-X-Gm-Message-State: AOAM531Igyn5EP4HQ63GpBkferEtW0GuwyECcBQWT5fUPMhDP2Xpb/5j
-        dbcD5cAqa5ChSYzOBV3eQnOgIw==
-X-Google-Smtp-Source: ABdhPJxBDiBw/+Y6YqGlDI0kGxCvL6NRopsXdXUCX5l4w4QqNFYvG7MfzHhWwbmJaT0RK+wj1kz73A==
-X-Received: by 2002:aa7:c58e:0:b0:425:b5e3:6c51 with SMTP id g14-20020aa7c58e000000b00425b5e36c51mr8394827edq.99.1651924812215;
-        Sat, 07 May 2022 05:00:12 -0700 (PDT)
-Received: from [192.168.0.231] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id og21-20020a1709071dd500b006f3ef214df8sm2827458ejc.94.2022.05.07.05.00.11
+        bh=9FjD7dBxRajVTH5OXTLo8selNWenA3RGdBp07nHbxqs=;
+        b=YILZnCiOscLR9L3BPUhRCmGOBja3Kr5/0YztOE5fAI9KJWsZj9CV0abh+/i+HyOpy7
+         4I8eecj1S55mcqsD7QYcXuFNACg6JNPzAOcNDKDT1cdpwNeBtD9f8Dqjt1NTZ5ayJJZl
+         /m/Wt1JxKC2dyrNIkvuJ6fslab/sJwOu0YjPKaIamgDebBCX1BaG9Y+lO9b1DxHF5/ht
+         S0h0K6WpDozbYr01N02nT45gWlKDOvP+sFTZ35696a1UJ2xKjenje8IiseYpYPRVwXs0
+         xpQI9X47RhtNcokBzdGqfgaVoebRCiJRvh1Mf+EVJg19I/gBFvhhhgPxjfzisG6WR7KU
+         gg3w==
+X-Gm-Message-State: AOAM532jVBp+KOl9abXflKZpDTbO1apZgvvppZ5JYGvMoUR1hoX5ASpY
+        y3Iud5hPe0DGFZdLnNNKTTMP/eQWhRh+b+bl
+X-Google-Smtp-Source: ABdhPJxcllSwbxdQCOPEhNU+xY+h+UlnNDwbx7l+LDgflho+ay7ILhCvsfqGhZzaJk/ppkZnVNNmiA==
+X-Received: by 2002:ad4:5762:0:b0:45a:7b14:e252 with SMTP id r2-20020ad45762000000b0045a7b14e252mr6058792qvx.79.1651925346218;
+        Sat, 07 May 2022 05:09:06 -0700 (PDT)
+Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with UTF8SMTPSA id w24-20020ac87198000000b002f39b99f697sm4094533qto.49.2022.05.07.05.09.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 05:00:11 -0700 (PDT)
-Message-ID: <324d9977-e8bc-b69f-ce8e-b5156035074e@linaro.org>
-Date:   Sat, 7 May 2022 14:00:10 +0200
+        Sat, 07 May 2022 05:09:05 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     jj251510319013@gmail.com, stern@rowland.harvard.edu,
+        jannh@google.com, Julia.Lawall@inria.fr, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, schspa@gmail.com,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Subject: [PATCH] usb: gadget: fix race when gadget driver register via ioctl
+Date:   Sat,  7 May 2022 20:08:51 +0800
+Message-Id: <20220507120851.29948-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/3] media: dt-bindings: ov5675: document YAML binding
-Content-Language: en-US
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504135543.59522-1-foss+kernel@0leil.net>
- <18d1032c-1fee-9de5-bd25-752ff9c39200@linaro.org>
- <889135d8-575e-3f95-4c65-ff3c40f64b05@theobroma-systems.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <889135d8-575e-3f95-4c65-ff3c40f64b05@theobroma-systems.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 15:48, Quentin Schulz wrote:
->>> +  clock-names:
->>> +    description:
->>> +      Input clock for the sensor.
->>> +    items:
->>> +      - const: xvclk
->>
->> Just "xv" is preferred.
->>
-> 
-> The name of the clock in the datasheet is XVCLK though. Wouldn't it be 
-> confusing to describe HW by using names different from the datasheet?
+The usb_gadget_register_driver doesn't have inside locks to protect the
+driver, and If there is two threads are registered at the same time via
+the ioctl syscall, the system will crash as syzbot reported.
 
-No, because datasheet could call it "xvclk_clk_clk_clk" and it is not a
-reason to use it in the bindings. All of these are clocks, so don't add
-unnecessary suffixes. The same goes to interrupts (wake not wakeirq) or
-DMA (tx not txdma).
+Call trace as:
+  driver_register+0x220/0x3a0 drivers/base/driver.c:171
+  usb_gadget_register_driver_owner+0xfb/0x1e0
+    drivers/usb/gadget/udc/core.c:1546
+  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
 
-> 
->>> +
->>> +  clock-frequency:
->>> +    description:
->>> +      Frequency of the xvclk clock in Hertz.
->>> +
->>> +  dovdd-supply:
->>> +    description:
->>> +      Definition of the regulator used as interface power supply.
->>> +
->>> +  avdd-supply:
->>> +    description:
->>> +      Definition of the regulator used as analog power supply.
->>> +
->>> +  dvdd-supply:
->>> +    description:
->>> +      Definition of the regulator used as digital power supply.
->>> +
->>> +  reset-gpios:
->>> +    description:
->>> +      The phandle and specifier for the GPIO that controls sensor reset.
->>> +      This corresponds to the hardware pin XSHUTDOWN which is physically
->>> +      active low.
->>
->> Needs maxItems
->>
->>> +
->>> +  port:
->>> +    type: object
->>
->> Open other bindings and compare how it is done there. This looks like
->> /schemas/graph.yaml#/$defs/port-base
->>
-> 
-> Did that but used an old kernel as base :/
+This routine allows two processes to register the same driver instance
+via ioctl syscall. which lead to a race condition.
 
-Then please do not develop on an older kernel.
+We can fix it by adding a driver_lock to avoid double register.
 
-> 
->>> +    additionalProperties: false
->>> +    description:
->>> +      A node containing an output port node with an endpoint definition
->>> +      as documented in
->>> +      Documentation/devicetree/bindings/media/video-interfaces.txt
->>> +
->>> +    properties:
->>> +      endpoint:
->>> +        type: object
->>
->> Missing ref
->>
->>> +
->>> +        properties:
->>> +          data-lanes:
->>> +            description: |-
->>
->> No need for "|-"
->>
->>> +              The driver only supports 2-lane operation.
->>
->> Please remove references to driver. It's not part of hardware.
->>
->>> +            items:
->>> +              - const: 1
->>> +              - const: 2
->>> +
->>> +          link-frequencies:
->>> +            $ref: /schemas/types.yaml#/definitions/uint64-array
->>
->> The ref should be already provided by video-interfaces.
->>
->>> +            description:
->>> +              Allowed data bus frequencies. 450000000Hz is supported by the driver.
->>
->> Again, skip driver reference. However you need to describe the number of
->> items.
->>
-> 
-> Currently, the driver is limited to 450 MHz link-freq and 2 data lanes, 
-> while the HW advertises: "The OV5675 supports a MIPI interface of up to 
-> 2-lanes. The MIPI interface can be configured for 1/2-lane and each lane
-> 
-> is capable of a data transfer rate of up to 900 Mbps."
-> 
-> Was wondering what I am supposed to do in this situation as I see 
-> Documentation/devicetree/bindings/media/i2c/ov8856.yaml mentioning 
-> driver limitations in the dt-bindings.
+Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
 
-Bindings describe the hardware and they are used in different projects.
-Let's say Linux implementation supports only 450 MHz, but other project
-supports 450 and 900, so your bindings would be incorrect in such
-case... IOW, bindings should not depend on the implementation.
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-What is more, the driver might get updated without updating the comments
-in the bindings making them incorrect even for Linux.
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index b3be8db1ff63..d7ff9c2b5397 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -155,7 +155,9 @@ struct raw_dev {
+ 	spinlock_t			lock;
+ 
+ 	const char			*udc_name;
++	/* Protected by driver_lock for reentrant registration */
+ 	struct usb_gadget_driver	driver;
++	struct mutex			driver_lock;
+ 
+ 	/* Reference to misc device: */
+ 	struct device			*dev;
+@@ -188,6 +190,8 @@ static struct raw_dev *dev_new(void)
+ 	spin_lock_init(&dev->lock);
+ 	init_completion(&dev->ep0_done);
+ 	raw_event_queue_init(&dev->queue);
++	mutex_init(&dev->driver_lock);
++
+ 	return dev;
+ }
+ 
+@@ -398,7 +402,9 @@ static int raw_release(struct inode *inode, struct file *fd)
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	if (unregister) {
++		mutex_lock(&dev->driver_lock);
+ 		ret = usb_gadget_unregister_driver(&dev->driver);
++		mutex_unlock(&dev->driver_lock);
+ 		if (ret != 0)
+ 			dev_err(dev->dev,
+ 				"usb_gadget_unregister_driver() failed with %d\n",
+@@ -510,7 +516,9 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+ 	}
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
++	mutex_lock(&dev->driver_lock);
+ 	ret = usb_gadget_register_driver(&dev->driver);
++	mutex_unlock(&dev->driver_lock);
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	if (ret) {
+-- 
+2.29.0
 
-In the past several bindings contained actual specifics of
-implementation, but this is usually not the proper way.
-
-There are clear issues with describing implementation in the bindings,
-but what are the benefits?
-
-Best regards,
-Krzysztof

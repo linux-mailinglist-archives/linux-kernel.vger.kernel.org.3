@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7976551E7D7
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 16:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1973851E7D4
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 16:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384641AbiEGOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S1385481AbiEGOha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 10:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237457AbiEGOl4 (ORCPT
+        with ESMTP id S1347909AbiEGOh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 10:41:56 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED67BC8;
-        Sat,  7 May 2022 07:38:09 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id e189so10615966oia.8;
-        Sat, 07 May 2022 07:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nJOPPb18Oo0+/K8yxoE5qod8LtCarDUSMpTNksvDWi4=;
-        b=GVV1i2BDnyYYHDVrrTnPogQxFlVZ9SsU5k0irmRzJYyV9F+pJr9Vf2QfJib/h0rqD1
-         hqd8mkYqj1CuqHbmTeuDqcGbW+7p2f7tPKvLEHFMmaahz7UndB78VgyC8tb1HCT1Vh5H
-         qR7mcqcxtfWiiLv7rC6wNzgzWx8Mn8oA/HLs66h4RISTdErs2Lv/1bOYAPbXn485Zq4K
-         t+bipdYo041zCBNNhZarjT3sYpKGgRtHFnesTcz8/Ak1reKr7Tah5KxyYI51kH5gVCmv
-         eh2/6rRud9GVjxtubgqW7Ya4zsh7DTRI0ujv39JzSBsmqW2h/eGF56VAY+zAag1Q44kL
-         qlIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nJOPPb18Oo0+/K8yxoE5qod8LtCarDUSMpTNksvDWi4=;
-        b=lDcVNKWKOefrW1KFTAV3X85pbF+YCu9Eyo73Gx1O14aR/w6VTaHdc7Pzncix/U9cE5
-         /UbtHQ24JMCkPnilZiW5KgOXAOKykL1RdB0sbL29+qxRQrxRJucxYK77+YpH8nyfNW6a
-         lNEbTi6PIGaqRL8Rt+OoLz2RSBFDjwaBOd/XALof2b7VCDq7QslHzkqTFWh5NiKEEWEW
-         30NQFmtQnR4EAoqmPV//KWP2NA5/SQV4AQ+Yg1p0i0zKelGOq/cGrY+T2Q8OIVnCsUpF
-         VCeKZnphlBvO1+rq+3ZLoJmpZRWltwBoXAAqFLKWCwYDSzWv5zye62zaRm22Ap7voTom
-         g43g==
-X-Gm-Message-State: AOAM530U1K9jTSwKeZRXN8oqQERf4RgXdaqQFm6GRp8bdr9n8mzDM9hh
-        70UduK+h+fSwg3KgDI/c9REXlt2DrglqTo7eWC4=
-X-Google-Smtp-Source: ABdhPJxz2rDTHCIEhTyFmyrx8ADw8gfmFf8WPj575Q5NKkjoOnYOtow2/B+cPd6ER9LiwFlNn74HdnAL+hPDmO21C70=
-X-Received: by 2002:a05:6808:11c3:b0:2f9:62e0:ebe with SMTP id
- p3-20020a05680811c300b002f962e00ebemr3805925oiv.22.1651934289041; Sat, 07 May
- 2022 07:38:09 -0700 (PDT)
+        Sat, 7 May 2022 10:37:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F781580B;
+        Sat,  7 May 2022 07:33:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 402A960B3D;
+        Sat,  7 May 2022 14:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8A3C385A9;
+        Sat,  7 May 2022 14:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651934019;
+        bh=QTQsvBXAXq+u552u7h6IkbyqINQY/MTcAhV9CyC5H2w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GzlWpqVpg2p5jIuObrLhrKSOypv6RjDK7ZulDZ7jfkMvZEDa7Zs8hykQeqF1/Cl9h
+         RYNvslJFfV+TFq4bmUhbTLIFG2g5HX6KMAqJ4OiEdg7RCQ8pMI6qHj/SRhWv0dz/hE
+         j4Qu4C9rYj5/saYBgjvTz+EmHx9Nc2cuSzwdgxrSQ7KQqxlDKE9UVYTnfyMONxDTbq
+         HnG4zvJeNBdqobtbokkaUMUc8S+wVWPxnTMP5ROMW4/hE/6738HgqLh/YW5mzfkKNI
+         xaK2BV805J08yvxEVtVdQ8P4C5DI7/HTwqfU5og+aUVewHEVXQuv9VUGeIzcyBUuiD
+         QriFlCg/yDJhQ==
+Date:   Sat, 7 May 2022 15:42:06 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     LI Qingwu <qing-wu.li@leica-geosystems.com.cn>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V3 3/5] iio: accel: sca3300: modified to support multi
+ chips
+Message-ID: <20220507154206.328e2877@jic23-huawei>
+In-Reply-To: <CAHp75VcD-UpG=ppuE2Du2SsQK66MYdrwhXvjHksN5=gqcppYqA@mail.gmail.com>
+References: <20220504133612.604304-1-Qing-wu.Li@leica-geosystems.com.cn>
+        <20220504133612.604304-4-Qing-wu.Li@leica-geosystems.com.cn>
+        <CAHp75VeseZ2ChtbafmbgVavS4KvCvrQ4+XSRkeiJSyqr8__dSw@mail.gmail.com>
+        <AM9PR06MB7844E8FE0EDF712C769271DAD7C39@AM9PR06MB7844.eurprd06.prod.outlook.com>
+        <CAHp75VfEK_TXXA3NdGgjis7duHgoDo4aSOZntdO0wEGLw0sQ7g@mail.gmail.com>
+        <AM9PR06MB7844C01CA580F046FA570B43D7C29@AM9PR06MB7844.eurprd06.prod.outlook.com>
+        <CAHp75VcD-UpG=ppuE2Du2SsQK66MYdrwhXvjHksN5=gqcppYqA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <CANL0fFQRBZiVcEM0OOxkLqiAKf=rFssGetrwN6vWj5SsxX__mA@mail.gmail.com>
- <20220505082256.72c9ee43@hermes.local>
-In-Reply-To: <20220505082256.72c9ee43@hermes.local>
-From:   Gonsolo <gonsolo@gmail.com>
-Date:   Sat, 7 May 2022 16:37:58 +0200
-Message-ID: <CANL0fFSmqR4F=9bFgVRaKXyCDocwwhxySUBo5x=12900fhWn6A@mail.gmail.com>
-Subject: Re: Suspend/resume error with AWUS036ACM
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Stephen,
+On Thu, 5 May 2022 20:01:22 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-> Contact Ubuntu.  The rule for upstream is if you load out of tree drivers
-> than that kernel is unsupported.
+> On Thu, May 5, 2022 at 4:12 PM LI Qingwu
+> <qing-wu.li@leica-geosystems.com.cn> wrote:
+> > > -----Original Message-----
+> > > From: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > Sent: Wednesday, May 4, 2022 10:39 PM
+> > > On Wed, May 4, 2022 at 4:35 PM LI Qingwu
+> > > <qing-wu.li@leica-geosystems.com.cn> wrote: =20
+> > > > > From: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > > Sent: Wednesday, May 4, 2022 10:20 PM On Wed, May 4, 2022 at 3:36=
+ PM
+> > > > > LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote: =20
+>=20
+> ...
+>=20
+> > > > > > +struct sca3300_chip_info {
+> > > > > > +       const struct iio_chan_spec *channels;
+> > > > > > +       const int (*accel_scale_table)[2];
+> > > > > > +       const int *accel_scale_modes_map;
+> > > > > > +       const unsigned long *scan_masks;
+> > > > > > +       const int *avail_modes_table;
+> > > > > > +       const int *freq_modes_map;
+> > > > > > +       const int *freq_table;
+> > > > > > +       const u8 num_accel_scales;
+> > > > > > +       const u8 num_avail_modes;
+> > > > > > +       const u8 num_channels;
+> > > > > > +       const u8 num_freqs;
+> > > > > > +       const u8 chip_id; =20
+> > > > >
+> > > > > Why do you have const qualifier on all members?  The last one is
+> > > > > understandable, but the rest, esp. pointers should be justified. =
+=20
+> > > > Because I thought it was static and has fix value for each chip, un=
+acceptable =20
+> > > for you?
+> > >
+> > > But why const qualifier? What is the point of it for example for u8 m=
+embers if
+> > > the entire object is qualified as const below in the same patch?
+> > >
+> > > On top of that, please explain what in your opinion the "const ...
+> > > *foo" gives us, and what we will lose if we remove the "const" part o=
+ut of them. =20
+> >
+> > Ah, you are right, those const are unnecessary for nonpointer members.
+> > for the pointers, the contexts that the pointer points to are still wri=
+table.
+> > what about if I remove all the const from nonpointer and keep it for th=
+e pointers?
+> > Like=EF=BC=9A
+> > const struct iio_chan_spec *channels;
+> > const int (*accel_scale_table)[2];
+> > const int (*incli_scale_table)[2];
+> > const int *accel_scale_modes_map;
+> > const int *incli_scale_modes_map;
+> > const unsigned long *scan_masks;
+> > const int *avail_modes_table;
+> > const int *freq_modes_map;
+> > const int *freq_table;
+> > const char *name;
+> > u8 num_accel_scales;
+> > u8 num_incli_scales;
+> > u8 num_avail_modes;
+> > u8 num_channels;
+> > u8 num_freqs;
+> > u8 chip_id;
+> > bool angle; =20
+>=20
+> It's better, but you still need to justify the rest with explanation
+> in the commit message.
+> And I leave this to maintainers to say if the const:s are needed or not.
+Where they are being set to point to
+static const int array[]=20
+then to my mind it makes sense to have them as const as makes it nice and o=
+bvious
+what is going on.
 
-I compiled a stock 5.17.5 kernel from git.kernel.org, installed
-without kernel headers (forcing dkms to not build proprietary drivers)
-and get the following errors *at boot time* (not suspend/resume):
+Jonathan
 
-  +0,000386] wlx00c0cab022a0: associate with 8c:6a:8d:9e:2a:88 (try 1/3)
-[  +0,001118] ================================================================================
-[  +0,000005] UBSAN: invalid-load in net/mac80211/status.c:1164:21
-[  +0,000004] load of value 255 is not a valid value for type '_Bool'
-[  +0,000003] CPU: 10 PID: 380 Comm: kworker/u256:5 Not tainted 5.17.5 #3
-[  +0,000004] Hardware name: To Be Filled By O.E.M. To Be Filled By
-O.E.M./X399 Phantom Gaming 6, BIOS P1.31 01/14/2021
-[  +0,000003] Workqueue: mt76 mt76u_tx_status_data [mt76_usb]
-[  +0,000009] Call Trace:
-[  +0,000002]  <TASK>
-[  +0,000003]  dump_stack_lvl+0x4c/0x63
-[  +0,000009]  dump_stack+0x10/0x12
-[  +0,000004]  ubsan_epilogue+0x9/0x45
-[  +0,000003]  __ubsan_handle_load_invalid_value.cold+0x44/0x49
-[  +0,000004]  ieee80211_tx_status_ext.cold+0x1e/0xb8 [mac80211]
-[  +0,000058]  ? __radix_tree_delete+0x91/0x100
-[  +0,000006]  mt76_tx_status_unlock+0x119/0x170 [mt76]
-[  +0,000011]  mt76x02_send_tx_status+0x1af/0x420 [mt76x02_lib]
-[  +0,000009]  mt76x02_tx_status_data+0x47/0x70 [mt76x02_lib]
-[  +0,000007]  mt76u_tx_status_data+0x67/0xc0 [mt76_usb]
-[  +0,000005]  process_one_work+0x21f/0x3f0
-[  +0,000005]  worker_thread+0x50/0x3d0
-[  +0,000004]  ? rescuer_thread+0x390/0x390
-[  +0,000003]  kthread+0xee/0x120
-[  +0,000003]  ? kthread_complete_and_exit+0x20/0x20
-[  +0,000004]  ret_from_fork+0x22/0x30
-[  +0,000005]  </TASK>
-[  +0,000001] ================================================================================
-[  +0,003098] wlx00c0cab022a0: RX AssocResp from 8c:6a:8d:9e:2a:88
-(capab=0x1411 status=0 aid=16)
+>=20
+> > > > > > +       const char *name;
+> > > > > > +}; =20
+>=20
 
-I sent the first email because I suspected that the above (locking?)
-problem was totally unrelated to the GPU driver.
-I hope that this is more helpful.
-
--- 
-g

@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8F051E823
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB4F51E825
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343801AbiEGPap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S1343807AbiEGPcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEGPaj (ORCPT
+        with ESMTP id S229449AbiEGPcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:30:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DBFFD34
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:26:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id y3so19333433ejo.12
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:26:51 -0700 (PDT)
+        Sat, 7 May 2022 11:32:47 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349893EB8A
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:29:01 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so9662706pjb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:29:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+cyldYyGeSN8orZdKQgiNqxz5MRewwWDiC7Zpl6m0ZE=;
-        b=EtQEM/nj6x2u8iik/awsZGdMW9VySLzyDHn2hNOsBTfn27fYbkVvNCb/+rddUBX2ye
-         lOk1+3VB9PwuftOi7MlJjWHMOvWY1+q390RvKA4pTjZm2d5rtz8FOZ8VIhp6a6Etw74V
-         Kg2yUbo5WXkeHWgTQ8atIDGs7kIU9L+ehaXjXNXnImkJsVlvWJtP9gRzOSUFroYbH1KC
-         VCnFQV6fglJm1Tj43wlbxyPlXCbG+pxS5fTFh5del3XIHh7Aw1naE+J/OXPl7cScEdAE
-         n+tBw/R7TJqcpaNBMJCZIHUYkr+OUyIkkCO6Xru4EyUjA48CQruoDX28sOqVRuitVuTI
-         LYYA==
+        bh=w5snkalLPq8nNKOldyfRBHJYjmO4+itefoaZvRQgmGs=;
+        b=xtgbspjUF4DnU28FtWKzjI/Ell1hoJjF5Xi+fKe8rYp1SabQQ/QznBC7owlz8g5g1V
+         2lcb5scyidVo0HyYDIMS+NHLAyU9iHTUxi6MRSX9zUBmGeGvw8wesjQ00aAV2iEBZcyZ
+         08IUsexauv/Wea4ZwrA7YS8YbsqGKK7bdt4ziBOSqqHj/FIQQwb48Y9waBXeUg3a2e9B
+         D3AcW7a04Jps69qFV9h7PNodTtClxM4uxAgK4L2SHTMtZ9u9/pzukVepGn1ZDIPk0Oil
+         ULkxVt6faR6ktw4aOwOdO0qX8kf2dtLD66gC4b7E8Ypphj9+z8f9cehv8hPmUXy9rz7V
+         WzjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+cyldYyGeSN8orZdKQgiNqxz5MRewwWDiC7Zpl6m0ZE=;
-        b=Nv7a7miy1/bHnF28xX0n1UwB8u/1eCr6lvszZQkLj0XItjMg8k1XFiQzgRCNxVCynX
-         YJY9DHyKsY70RangH1C1/kQUR7W6t2bb9pYosOLup6wx//K53aBzHoXWY2GPHnE/iqaD
-         J1pkkj/Kr6wyswtM+XC+Jp6qiT6FI9+xRdOwNKsqzmbnQIQwP9nW/lUDsYJTA1Mw0Q9l
-         QkY0CeDi1lNqI5cg6V3XPRKR7KIjPl7smDXSDyvHLPb7aFWrCvStOLKCDIDf5PK3kyYY
-         FJ39wS0amEJVqZCT+D+/VbX1tuLZqijkldelpw5Oo1KQaAxFSejki//a0m+vtLopfbVH
-         r8wg==
-X-Gm-Message-State: AOAM530LOkczbi94H8qz/wjRBIwXSm+o3GN5UckRDbe+vvsAwMEG7XPi
-        ExdKW5K6ze8nErEVArOaCJzRMQ==
-X-Google-Smtp-Source: ABdhPJxhNeIRjFu28/yvbAt+uDadqUI1rvXdoSBxdbri0fQfVOftoRHil6NROgFCt+tIjBJ17hgmNw==
-X-Received: by 2002:a17:906:f2c8:b0:6f5:18a1:c410 with SMTP id gz8-20020a170906f2c800b006f518a1c410mr7442640ejb.281.1651937210283;
-        Sat, 07 May 2022 08:26:50 -0700 (PDT)
-Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170906938a00b006f3ef214e68sm3129018ejx.206.2022.05.07.08.26.49
+        bh=w5snkalLPq8nNKOldyfRBHJYjmO4+itefoaZvRQgmGs=;
+        b=Zr+wROgGDoW8xdl8BOJBXJjpBAtOwf5QVAxjCdcX9h3L4gaUM9lpRvqkwzJ5G2p/tw
+         IuUe8gfnb7E2xYhcrS4WfKKVqFx4qhExH6xuJgve4m7mbGhq6Nmrd5k01U6PGjPt1Sz/
+         zDGfF3gssZP2Em0V6PVOJVqiM6SnyBd+9WrFrhmrbDznDTaDb/zV0jvWeNnulPBSb6hr
+         9GfVeyg2R1MgRu7KWwjOZ6flPINkh/bdv/vMF2vaaehFa0PEG+ysgRLUmCVPepPMFjGu
+         X6FNj9ywV6+WoRlmAVgiw3RqPT3gPMJ41/EPh0jtWw6XxNrWsGW3CfBShMxfAbTyTByt
+         Hh4Q==
+X-Gm-Message-State: AOAM532nGa3i+Dpq/+W6y/Y52X6A7GLHB6M0CwD+1g7LVAvj6fYckm1t
+        MCE5z97OQz4nWNndrjq0gE0VUQ==
+X-Google-Smtp-Source: ABdhPJxVUUqh4+Tw57N1Q8d0H/9lV/Oj8vMGbxsAPaB4cjbVjpTkLE3kfvuVDxRDNHy0FTfsdhhvtQ==
+X-Received: by 2002:a17:903:2288:b0:15e:8da2:fcc0 with SMTP id b8-20020a170903228800b0015e8da2fcc0mr8917589plh.125.1651937340615;
+        Sat, 07 May 2022 08:29:00 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa78f14000000b0050dc76281e7sm5413751pfr.193.2022.05.07.08.28.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 08:26:49 -0700 (PDT)
-Message-ID: <40c22f22-8314-adb6-918e-8288090d1aea@linaro.org>
-Date:   Sat, 7 May 2022 17:26:48 +0200
+        Sat, 07 May 2022 08:28:59 -0700 (PDT)
+Message-ID: <305fd65b-310c-9a9b-cb8c-6cbc3d00dbcb@kernel.dk>
+Date:   Sat, 7 May 2022 09:28:58 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: Add prefix for EBBG
+Subject: Re: [PATCH v3 0/4] fast poll multishot mode
 Content-Language: en-US
-To:     Joel Selvaraj <jo@jsfamily.in>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hao Fang <fanghao11@huawei.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <cover.1651835715.git.jo@jsfamily.in>
- <BY5PR02MB7009E985CDB281DC9BE9CF37D9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BY5PR02MB7009E985CDB281DC9BE9CF37D9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220507140620.85871-1-haoxu.linux@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220507140620.85871-1-haoxu.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 14:17, Joel Selvaraj wrote:
-> Add a prefix for EBBG. They manufacture displays which are used in some
-> Xiaomi phones, but I could not find much details about the company.
+On 5/7/22 8:06 AM, Hao Xu wrote:
+> Let multishot support multishot mode, currently only add accept as its
+> first comsumer.
+
+consumer
+
+> theoretical analysis:
+>   1) when connections come in fast
+>     - singleshot:
+>               add accept sqe(userpsace) --> accept inline
+
+userspace
+
+>                               ^                 |
+>                               |-----------------|
+>     - multishot:
+>              add accept sqe(userspace) --> accept inline
+>                                               ^     |
+>                                               |--*--|
 > 
-> Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
+>     we do accept repeatedly in * place until get EAGAIN
+> 
+>   2) when connections come in at a low pressure
+>     similar thing like 1), we reduce a lot of userspace-kernel context
+>     switch and useless vfs_poll()
 
+Overall this looks better than v2 for sure, just some minor tweaks
+needed I believe.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+But we still need to consider direct accept with multishot... Should
+probably be an add-on patch as I think it'd get a bit more complicated
+if we need to be able to cheaply find an available free fixed fd slot.
+I'll try and play with that.
 
+-- 
+Jens Axboe
 
-Best regards,
-Krzysztof

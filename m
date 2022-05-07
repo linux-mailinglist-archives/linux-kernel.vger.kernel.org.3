@@ -2,101 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06CE51E831
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A945351E834
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353433AbiEGPjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S1345050AbiEGPkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238609AbiEGPjf (ORCPT
+        with ESMTP id S239114AbiEGPkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:39:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A372619024;
-        Sat,  7 May 2022 08:35:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53704B80AE5;
-        Sat,  7 May 2022 15:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1104AC385A9;
-        Sat,  7 May 2022 15:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651937746;
-        bh=5JdWStqnLHVOx/3OlLYMVcxQ/dWOc4viCFvQaLtKBWM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pjBDxRKcm19ggHCT3GT0gO97hf7JMvQEn4r8VlkDTogfba8iz4MuCfZLMDAuvQCQ0
-         Rg4G0dHTJIK+zNkhSLi7AI9kK/HSudOMYkBii0A02exRIRv1UZdZT1gOO5FtS26TK4
-         r1geeG28gGHRgxOuQWB3YgHUSk06tt7cDV6EbXQF0/xr0HhqyNbzCU18zmWJ2JJGJm
-         oz/gj8GbeCU4cmUMNaR9h9LyQej5J19zUGknAOv+gI4L8a8LaTZJEZ8KKOIGYxxpFM
-         1xtTKnqMAXzRXuT8t90mEjy4OATW/So6JvefbePD5upGqf4oUM2uBMmKG9ZN6MmF7s
-         +gtKvGrUVV6XA==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2f7b815ac06so107980507b3.3;
-        Sat, 07 May 2022 08:35:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530dopUEVxh/5DksAPMEXH0CptQkqpE5TpT5fYPQOv0uh3ICnTR/
-        iGezR8fpuyRs5MRF6f57h0qgB352OVZTnJ1CQQ==
-X-Google-Smtp-Source: ABdhPJwDhtthoa7AUtDJmXtXr6BoSIIvTt63knY9cK0lyKPgCmY+/9linfuCKIw9ocYEdDjBwqTrr0a8d1n7WjOKuDw=
-X-Received: by 2002:a81:3214:0:b0:2f4:dc10:33ba with SMTP id
- y20-20020a813214000000b002f4dc1033bamr7214015ywy.3.1651937745103; Sat, 07 May
- 2022 08:35:45 -0700 (PDT)
+        Sat, 7 May 2022 11:40:04 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id ED2CB23BFD
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:36:16 -0700 (PDT)
+Received: (qmail 74593 invoked by uid 1000); 7 May 2022 11:36:16 -0400
+Date:   Sat, 7 May 2022 11:36:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu>
+ <YmKt3kH+85kjzdbL@kroah.com>
+ <YmSc29YZvxgT5fEJ@rowland.harvard.edu>
+ <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
+ <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
+ <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20220504115501.3490-1-rex-bc.chen@mediatek.com>
- <20220504115501.3490-3-rex-bc.chen@mediatek.com> <7a4e7d71-4460-21f4-35fa-d3b11559785b@collabora.com>
-In-Reply-To: <7a4e7d71-4460-21f4-35fa-d3b11559785b@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sat, 7 May 2022 23:35:34 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-5QLEYyqqiw6WtepHrykXJgatUyxLMYU+61P-21CBVZw@mail.gmail.com>
-Message-ID: <CAAOTY_-5QLEYyqqiw6WtepHrykXJgatUyxLMYU+61P-21CBVZw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] soc: mediatek: devapc: Separate register offsets
- from mtk_devapc_data
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        runyang.chen@mediatek.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2022=E5=B9=B45=E6=9C=886=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:26=
-=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Il 04/05/22 13:55, Rex-BC Chen ha scritto:
-> > The register offsets is the same between MT6779 and MT8186. To reuse th=
-e
-> > register offsets, we move these register offsets to another structure
-> > "mtk_devapc_regs_ofs".
-> >
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
+On Tue, May 03, 2022 at 11:48:33AM -0400, Alan Stern wrote:
+> On Tue, May 03, 2022 at 05:27:08PM +0200, Geert Uytterhoeven wrote:
+> > Hi Alan,
+> > 
+> > On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
+> > > > On Sat, 23 Apr 2022, Alan Stern wrote:
+> > > > > This patch adds a "gadget" bus and uses it for registering gadgets and
+> > > > > their drivers.  From now on, bindings will be managed by the driver
+> > > > > core rather than through ad-hoc manipulations in the UDC core.
+> > > > >
+> > > > > As part of this change, the driver_pending_list is removed.  The UDC
+> > > > > core won't need to keep track of unbound drivers for later binding,
+> > > > > because the driver core handles all of that for us.
+> > > > >
+> > > > > However, we do need one new feature: a way to prevent gadget drivers
+> > > > > from being bound to more than one gadget at a time.  The existing code
+> > > > > does this automatically, but the driver core doesn't -- it's perfectly
+> > > > > happy to bind a single driver to all the matching devices on the bus.
+> > > > > The patch adds a new bitflag to the usb_gadget_driver structure for
+> > > > > this purpose.
+> > > > >
+> > > > > A nice side effect of this change is a reduction in the total lines of
+> > > > > code, since now the driver core will do part of the work that the UDC
+> > > > > used to do.
+> > > > >
+> > > > > A possible future patch could add udc devices to the gadget bus, say
+> > > > > as a separate device type.
+> > > > >
+> > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > >
+> > > > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
+> > > > gadget: Add a new bus for gadgets") in usb-next.
+> > > >
+> > > > This patch cause a regression on the Renesas Salvator-XS development
+> > > > board, as R-Car H3 has multiple USB gadget devices:
+> > >
+> > > Then these gadgets ought to have distinct names in order to avoid the
+> > > conflict below:
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Geert:
 
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Can you test the patch below?  It ought to fix the problem (although it 
+might end up causing other problems down the line...)
+
+Alan Stern
+
+
+Index: usb-devel/drivers/usb/gadget/udc/core.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/core.c
++++ usb-devel/drivers/usb/gadget/udc/core.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/list.h>
++#include <linux/idr.h>
+ #include <linux/err.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/sched/task_stack.h>
+@@ -23,6 +24,8 @@
+ 
+ #include "trace.h"
+ 
++static DEFINE_IDA(gadget_id_numbers);
++
+ static struct bus_type gadget_bus_type;
+ 
+ /**
+@@ -1248,7 +1251,6 @@ static void usb_udc_nop_release(struct d
+ void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
+-	dev_set_name(&gadget->dev, "gadget");
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+ 
+@@ -1304,12 +1306,21 @@ int usb_add_gadget(struct usb_gadget *ga
+ 	usb_gadget_set_state(gadget, USB_STATE_NOTATTACHED);
+ 	udc->vbus = true;
+ 
++	ret = ida_alloc(&gadget_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		goto err_del_udc;
++	gadget->id_number = ret;
++	dev_set_name(&gadget->dev, "gadget.%d", ret);
++
+ 	ret = device_add(&gadget->dev);
+ 	if (ret)
+-		goto err_del_udc;
++		goto err_free_id;
+ 
+ 	return 0;
+ 
++ err_free_id:
++	ida_free(&gadget_id_numbers, gadget->id_number);
++
+  err_del_udc:
+ 	flush_work(&gadget->work);
+ 	device_del(&udc->dev);
+@@ -1417,6 +1428,7 @@ void usb_del_gadget(struct usb_gadget *g
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
++	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	device_unregister(&udc->dev);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget);
+Index: usb-devel/include/linux/usb/gadget.h
+===================================================================
+--- usb-devel.orig/include/linux/usb/gadget.h
++++ usb-devel/include/linux/usb/gadget.h
+@@ -386,6 +386,7 @@ struct usb_gadget_ops {
+  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
+  *	indicates that it supports LPM as per the LPM ECN & errata.
+  * @irq: the interrupt number for device controller.
++ * @id_number: a unique ID number for ensuring that gadget names are distinct
+  *
+  * Gadgets have a mostly-portable "gadget driver" implementing device
+  * functions, handling all usb configurations and interfaces.  Gadget
+@@ -446,6 +447,7 @@ struct usb_gadget {
+ 	unsigned			connected:1;
+ 	unsigned			lpm_capable:1;
+ 	int				irq;
++	int				id_number;
+ };
+ #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 

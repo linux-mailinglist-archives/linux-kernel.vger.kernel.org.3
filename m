@@ -2,159 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED85651E5B8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E236651E5B9
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446148AbiEGIvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 04:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S1446152AbiEGIxi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 04:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344519AbiEGIvM (ORCPT
+        with ESMTP id S1344519AbiEGIxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 04:51:12 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DA848380;
-        Sat,  7 May 2022 01:47:26 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a11so8150330pff.1;
-        Sat, 07 May 2022 01:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccfTY95+psHCY6He+eK67UQqmYafold9pHrglmLvAmo=;
-        b=a0c+PxeyYec6iuI72OoPUUxOdZemThLnOXunZERwdu1npZzTEHdmVXp3DZFbeM/kd0
-         4ELSCLd2hwArfQvPcmuuNpExoQXLBYZQ/2sKLQ9mQ4ePwOL9x4mHLwtScbUmhfcpygFT
-         doEAhVK8vp9iylie7nfmGvdqefo9L7hXHK6HUwGchFeHMoyHg5gdu7TZjGljXZfJiCla
-         JaXr4zACb9C/GrlgyiFi3w2APlDcPjHM5kf2SSeNSlq38G+PRxB5LqBE2mlc0uRMRY/d
-         1AecSIIHKBW7pw4kvm4Q3dKzL3irJIutJEVsd4JVt2QPVqOvHwpTKHlLCqcjyORyEWvH
-         ZdQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccfTY95+psHCY6He+eK67UQqmYafold9pHrglmLvAmo=;
-        b=iSGt2AQdR6n8ANe/heB5VMpplxVxHdcrn3PX7+yuUgj7Jgken6Yzfms2R96sr9NBdS
-         oJwMpLZ7UDfNYFXGGdKFQQ7lzRbYGPwFJvxj2Zf60orR2S23atrQq9BUVbMM2oMMPkLs
-         R4T14oQYnpCCayA+gQkRBGN28EBtwtk4w1CUwzojx763stQqCPagiSW2QWLLLrnt8QCz
-         ZIXr6y+hCoLIZzdUjFwaf9IWekuRgU4p1hflw1RHTV8WAWU+g2uaw8aSkmo/m8xRDOqQ
-         Lt0eubR4iuysE3REt6tUG238tSH/6fff2H9C7A8xNG8sHMKsjkTwz5oSY1rIZGOCZpCI
-         RRow==
-X-Gm-Message-State: AOAM532eYq0YAhbHGJvuq1X/Rb5ymMpCOpT1fCxTfEcXq9sM1SYDpk0G
-        BGT6uIAoDs5zwyFbn1Ra16Z5FNombVUVgQ==
-X-Google-Smtp-Source: ABdhPJw98tTxONDGUaX/2zcjqg4/YagwX+3tFePd02L85CION61ElJstk4CmLbKdovWuk9L6C2Zy2Q==
-X-Received: by 2002:a05:6a00:21c8:b0:4fd:f89f:ec0e with SMTP id t8-20020a056a0021c800b004fdf89fec0emr7123513pfj.83.1651913245215;
-        Sat, 07 May 2022 01:47:25 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-9.three.co.id. [180.214.232.9])
-        by smtp.gmail.com with ESMTPSA id ot16-20020a17090b3b5000b001dc4d22c0a7sm5055729pjb.10.2022.05.07.01.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 01:47:24 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ben Greear <greearb@candelatech.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>, netdev@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3] net/core: Rephrase function description of __dev_queue_xmit()
-Date:   Sat,  7 May 2022 15:46:44 +0700
-Message-Id: <20220507084643.18278-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Sat, 7 May 2022 04:53:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5648380
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 01:49:50 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N1x2P-1nyiMn3Sll-012FQg for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022
+ 10:49:49 +0200
+Received: by mail-yb1-f171.google.com with SMTP id v59so16604966ybi.12
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 01:49:48 -0700 (PDT)
+X-Gm-Message-State: AOAM533AHtBL19lDAnzQ4HdEHZmrvoOKfl+Bbbrn4PQNG18TLNG5AO6D
+        PfTJqsAoHKRnKvwcNgfcBlqfFnP0boSUODEHiYc=
+X-Google-Smtp-Source: ABdhPJzU/kokkyU4Ow0IuLOE+iQhWFkk4ZE0WMAv0gv2/fvi3qr5K21WMxPcMZht90sRTBchezYcKmQ2te8bG3LT0Jg=
+X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
+ d190-20020a25cdc7000000b00648f57dc0edmr5436777ybf.480.1651913387633; Sat, 07
+ May 2022 01:49:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20210825064228.70487-1-deng.changcheng@zte.com.cn>
+ <8735hsvzig.fsf@mpe.ellerman.id.au> <e2310273-8bc8-deac-9a80-0d1587acecb1@csgroup.eu>
+In-Reply-To: <e2310273-8bc8-deac-9a80-0d1587acecb1@csgroup.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 7 May 2022 10:49:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3s8GUtUUt-7BvUEajEDDAJMH7yJNCaUF8hdhjfmf_f7Q@mail.gmail.com>
+Message-ID: <CAK8P3a3s8GUtUUt-7BvUEajEDDAJMH7yJNCaUF8hdhjfmf_f7Q@mail.gmail.com>
+Subject: Re: [PATCH linux-next] power:pkeys: fix bugon.cocci warnings
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>, CGEL <cgel.zte@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Jing Yangyang <jing.yangyang@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:m5KnsWbbTn8ytqeWgi/KEteracuXcWaRgNz47oWWOK6K14hIVQo
+ 85HKcyU1o6uAPzyeayPaSPNsiLUe0fWLHGEjnKqUC6SpmU0fYRwFk0PM6l5YkmiBlZH752P
+ WbYWYBcmp1Fiz7HgaHE6DsMWpRqe2BZHqbTzA6ZLZRCcON9xR/9dpAui5+68Fa6h9zew9Vk
+ qU7KPBWQe6oSWQN2dZK5w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:d7J8S09z6YU=:1xdkjNBT+qzaWcPq8Y+dJb
+ swWUQ2KTNAUUpp+QgxZOgl5KP+noiPU+tYwBnpNnEdtlMnvri3COc7lPa+ikQiXPuK9gWsFCp
+ q+mnjQao1mWc0jE0ByZhPfo+eHBfYs2a1SDefKHgTtIdivyFRH6WgN4DylfGNXZ4wpjYvuHru
+ UO9sm2HodAfq4Ja6tG8N9BtFGGk3leKr+OqmAKmNfqAjdOrsE/ry/X6uxRDQCrKYjqpmrp4LW
+ ea5Rs7bZIJIQEvq8NWj9PXV2cfrN6Hj2PKKmm7+WcgRCPqqwHcOzYsUnFN9cyenH3bWFyES0I
+ jv8J6XXoSEE/FiqP+dtuxDu/8F2S3a9SKaMNJf3X5s6C6CqBck8aK9WSNb7kJngai7JSYjvPj
+ 8LvJwZpENfX/p1/agVE+FKAssnzdK5T0rMeLTiEy/Qd5LkIXlE9xPfpHVI7U61pyqQIOFaikt
+ APu+zY4aKc/jEXJTjgcfc7Ertg0rwvXoiVL/oOQ2bEpw9mItVkQVU10DdJPOpagiJbzJVMixY
+ 9WqtjwJWEIdocjN9nLHbVoPwsfj2Qomu04HEc58W1YiQBHZgaXlHEfDnVOYuVi8D7DxdgzM+N
+ mYIs+ZRj2Q+yD9NN+aabLQzKJWPNheH4QxEY49sIRbmUyyH5AHvenOWmV8RsXcxlHI2WErSW4
+ 2Ou8H2DKbAMyDtPAm1o0u/x8Z6L1ABX/v0L63qgTBJULw6xpTdKTuglcgZMS7SngmGEtYXFsl
+ KQXVJn5trNmOpnthPha+8YFf6jEiRZy8tokWrByYWv4/JNd5af7CoEyJ1bg5PduqbCDmBvdgG
+ bBI0RTv4NOog1LeJZMKG957h4egW2arA0k5kdrJUWWygjmbbtg=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") inlines
-dev_queue_xmit() that contains comment quote from Ben Greear, which
-originates from commit af191367a75262 ("[NET]: Document ->hard_start_xmit()
-locking in comments."). It triggers htmldocs warning:
+On Sat, May 7, 2022 at 9:04 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+> Le 02/05/2022 à 15:24, Michael Ellerman a écrit :
+> > CGEL <cgel.zte@gmail.com> writes:
+> >> From: Jing Yangyang <jing.yangyang@zte.com.cn>
+> >>
+> >> Use BUG_ON instead of a if condition followed by BUG.
+> >>
+> >> ./arch/powerpc/include/asm/book3s/64/pkeys.h:21:2-5:WARNING
+> >> Use BUG_ON instead of if condition followed by BUG.
+> >> ./arch/powerpc/include/asm/book3s/64/pkeys.h:14:2-5:WARNING
+> >> Use BUG_ON instead of if condition followed by BUG.
+> >>
+> >> Generated by: scripts/coccinelle/misc/bugon.cocci
+> >>
+> >> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> >> Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
+> >> ---
+> >>   arch/powerpc/include/asm/book3s/64/pkeys.h | 6 ++----
+> >>   1 file changed, 2 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/arch/powerpc/include/asm/book3s/64/pkeys.h b/arch/powerpc/include/asm/book3s/64/pkeys.h
+> >> index 5b17813..5f74f0c 100644
+> >> --- a/arch/powerpc/include/asm/book3s/64/pkeys.h
+> >> +++ b/arch/powerpc/include/asm/book3s/64/pkeys.h
+> >> @@ -10,15 +10,13 @@ static inline u64 vmflag_to_pte_pkey_bits(u64 vm_flags)
+> >>      if (!mmu_has_feature(MMU_FTR_PKEY))
+> >>              return 0x0UL;
+> >>
+> >> -    if (radix_enabled())
+> >> -            BUG();
+> >> +    BUG_ON(radix_enabled());
+> >>      return hash__vmflag_to_pte_pkey_bits(vm_flags);
+> >>   }
+> >>
+> >>   static inline u16 pte_to_pkey_bits(u64 pteflags)
+> >>   {
+> >> -    if (radix_enabled())
+> >> -            BUG();
+> >> +    BUG_ON(radix_enabled());
+> >>      return hash__pte_to_pkey_bits(pteflags);
+> >>   }
+> >
+> > Have you checked how this changes the generated code?
+> >
+> > radix_enabled() is a jump label, via mmu_feature().
+> >
+> > Possibly the compiler just works it all out and generates the same code,
+> > but I'd want some evidence of that before merging this.
+>
+> Seems like the compiler is not that good, the generated code for test1()
+> is much better than the one for test2(), see below.
+>
+> void test1(void)
+> {
+>         if (radix_enabled())
+>                 BUG();
+> }
+>
+> void test2(void)
+> {
+>         BUG_ON(radix_enabled());
+> }
+>
+> 0000000000000900 <.test1>:
+>   900:  60 00 00 00     nop
+>   904:  0f e0 00 00     twui    r0,0
+>   908:  60 00 00 00     nop
+>   90c:  60 00 00 00     nop
+>   910:  4e 80 00 20     blr
+>   914:  60 00 00 00     nop
+>   918:  60 00 00 00     nop
+>   91c:  60 00 00 00     nop
+>
+> 0000000000000920 <.test2>:
+>   920:  60 00 00 00     nop
+>   924:  39 20 00 01     li      r9,1
+>   928:  0b 09 00 00     tdnei   r9,0
+>   92c:  4e 80 00 20     blr
+>   930:  39 20 00 00     li      r9,0
+>   934:  0b 09 00 00     tdnei   r9,0
+>   938:  4e 80 00 20     blr
+>
+>
+> We should keep things as they are and change the coccinelle script.
 
-Documentation/networking/kapi:92: net/core/dev.c:4101: WARNING: Missing matching underline for section title overline.
+Maybe just drop the custom ppc64 BUG_ON() then if it creates worse
+code? The default BUG_ON() should be equivalent to the open-coded
+version.
 
------------------------------------------------------------------------------------
-     I notice this method can also return errors from the queue disciplines,
-     including NET_XMIT_DROP, which is a positive value.  So, errors can also
-
-Fix the warning by rephrasing the function description. This is done by
-incorporating notes from the quote as well as dropping the banner and
-attribution signature.
-
-Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
-Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Ben Greear <greearb@candelatech.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v2 [1]:
-   - Approach the problem by rephrasing (suggested by Jakub)
-   - Explain that inlining in the Fixes: commit triggers the warning
-     (suggested by Akira)
-
- [1]: https://lore.kernel.org/linux-doc/20220505082907.42393-1-bagasdotme@gmail.com/
-
- net/core/dev.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index f036ccb61da4da..75c00bb45f9b46 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4139,22 +4139,20 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
-  *	have set the device and priority and built the buffer before calling
-  *	this function. The function can be called from an interrupt.
-  *
-- *	A negative errno code is returned on a failure. A success does not
-- *	guarantee the frame will be transmitted as it may be dropped due
-- *	to congestion or traffic shaping.
-- *
-- * -----------------------------------------------------------------------------------
-- *      I notice this method can also return errors from the queue disciplines,
-- *      including NET_XMIT_DROP, which is a positive value.  So, errors can also
-- *      be positive.
-- *
-- *      Regardless of the return value, the skb is consumed, so it is currently
-- *      difficult to retry a send to this method.  (You can bump the ref count
-- *      before sending to hold a reference for retry if you are careful.)
-- *
-- *      When calling this method, interrupts MUST be enabled.  This is because
-- *      the BH enable code must have IRQs enabled so that it will not deadlock.
-- *          --BLG
-+ *	This function can returns a negative errno code in case of failure.
-+ *	Positive errno code can also be returned from the queue disciplines
-+ *	(including NET_XMIT_DROP). A success does not guarantee the frame
-+ *	will be transmitted as it may be dropped due to congestion or
-+ *	traffic shaping.
-+ *
-+ *	The skb is consumed anyway regardless of return value, so it is
-+ *	currently difficult to retry sending to this method. If careful,
-+ *	you can bump the ref count before sending to hold a reference for
-+ *	retry.
-+ *
-+ *	Interrupts must be enabled when calling this function, because
-+ *	BH-enabled code must have IRQs enabled so that it will not deadlock.
-+ *
-  */
- int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
- {
-
-base-commit: 8fc0b6992a06998404321f26a57ea54522659b64
--- 
-An old man doll... just what I always wanted! - Clara
-
+        Arnd

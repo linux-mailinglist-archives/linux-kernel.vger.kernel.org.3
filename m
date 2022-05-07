@@ -2,321 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69E151E333
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242AC51E339
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389810AbiEGBrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S1445269AbiEGBuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445246AbiEGBrS (ORCPT
+        with ESMTP id S239753AbiEGBuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:47:18 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77C45DBC7;
-        Fri,  6 May 2022 18:43:33 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 15so7429495pgf.4;
-        Fri, 06 May 2022 18:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xhp4PmSHzdcTg4X6br/SY/MgNKlnNiug+NCaOL77dg4=;
-        b=TWXbumwiv7ccRTB0dmrhV4RFC6Mch/dZ2bQRWCxNrp7rKDulHfUmSbfczVIA/okp39
-         zmydRTRo9B+IiltF4aSIz2zw4K3gVW9mDXYtxUo4YrmGBn2gf2tOkyy3SwlPx2UAiYgT
-         ceGnOVicntfQ6X7izFOSN9A63Niz+r3mEx0Ik1Gy6FOPHpI1LEaQTq6gNbRgQK8/Bvr7
-         jFy3ku9DqIe8S6xGO7PzrvE4x3uo+KCF4rUHAL6KvxHnylH7VpqpXbwxVwiE0ZPp8tkh
-         YM7yNoL0+oHKeLZ5ydwhM4b68f3jVh52SX47vsc7eJghFnuCB7KikopVCBeW155kxe0m
-         K7HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xhp4PmSHzdcTg4X6br/SY/MgNKlnNiug+NCaOL77dg4=;
-        b=62JeJ1x5gr/VnAkgK+SB5VTQlxU6XE06j3niA6vVgT9oC7824JbWbJVg64hfapuylV
-         8D41WwiIg5toD53OUcc+0xhyEhcFteqXoNkq0260fLn5i2Kbvhy/nZSaIBz1tAByS2ZP
-         i5KWIRXDVqmU4c0K/GiHtcqk36TQiiPw7GWEO5EL/PKGx9jfc3kgqlnhpG8PIw22ZoLB
-         UHALrxT3kJlCbLDnnCgGqHJE2CrcXDbscCY+Tlx4fCG7/l4WEWQWn1ph0XDMpfqHZ+dh
-         lUEVrIPLE2tSHJXXFRvaDzLEUocDHPW/Zsxb5mlRbyeSdNeLfN0NfsTrARu76evGNM2M
-         Iltg==
-X-Gm-Message-State: AOAM531b1gMDAuYdXHygG4Pw+d0yQd7jr0oJ7FjngdP8yTp6B5EZKi1T
-        3gK6zmNAFolbKZehLSg4ojs=
-X-Google-Smtp-Source: ABdhPJw2WINuVYxwyjn4YtL6ag2cn2y/D6ysdRfB0zhZw3tC2yiWik0AIwNEnfKddQQuqGH9ndFEng==
-X-Received: by 2002:a65:6805:0:b0:3c1:bb28:6bd4 with SMTP id l5-20020a656805000000b003c1bb286bd4mr4997603pgt.585.1651887813423;
-        Fri, 06 May 2022 18:43:33 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b141-20020a621b93000000b0050dc7628176sm3999189pfb.80.2022.05.06.18.43.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 18:43:33 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Subject: [PATCH v2] mm/ksm: introduce ksm_force for each process
-Date:   Sat,  7 May 2022 01:43:18 +0000
-Message-Id: <20220507014318.642353-1-xu.xin16@zte.com.cn>
+        Fri, 6 May 2022 21:50:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09DD703F7;
+        Fri,  6 May 2022 18:46:25 -0700 (PDT)
+X-UUID: 8c2ba08f507041d78aad3b5c406289b3-20220507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:80f0a7e4-7342-4102-9184-b76a07c54bf8,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:b4dde4b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 8c2ba08f507041d78aad3b5c406289b3-20220507
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 162061621; Sat, 07 May 2022 09:46:22 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Sat, 7 May 2022 09:46:20 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Sat, 7 May 2022 09:46:18 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5, 0/7] support mt8195 decoder
+Date:   Sat, 7 May 2022 09:46:11 +0800
+Message-ID: <20220507014618.29412-1-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Firstly, add mt8195 soc lat hardware and compatible, then add documents.
+For vp8 only support MM21 mode, H264/vp9 support MT21C, need to separate
+them. Lastly, enable H264 inner racing mode to reduce hardware latency.
 
-To use KSM, we must explicitly call madvise() in application code,
-which means installed apps on OS needs to be uninstall and source
-code needs to be modified. It is inconvenient.
-
-In order to change this situation, We add a new proc 'ksm_force'
-under /proc/<pid>/ to support turning on/off KSM scanning of a
-process's mm dynamically.
-
-If ksm_force is set as 1, force all anonymous and 'qualified' vma
-of this mm to be involved in KSM scanning without explicitly
-calling madvise to make vma MADV_MERGEABLE. But It is effctive only
-when the klob of '/sys/kernel/mm/ksm/run' is set as 1.
-
-If ksm_enale is set as 0, cancel the feature of ksm_force of this
-process and unmerge those merged pages which is not madvised as
-MERGEABLE of this process, but leave MERGEABLE areas merged.
-
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Reviewed-by: wangyong <wang.yong12@zte.com.cn>
-Reviewed-by: Yunkai Zhang <zhang.yunkai@zte.com.cn>
+Patch 1~4 add mt8195 soc lat hardware and compatible, then add documents.
+Patch 5 using different format for different codecs.
+Patch 6 prevent kernel crash when scp reboot.
+Patch 7 enable H264 inner racing mode to reduce hardware latency.
 ---
-v2:
-- fix a spelling error in commit log.
-- remove a redundant condition check in ksm_force_write().
+This patch depends on "add h264 decoder driver for mt8186"[1]
 
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220507013625.29020-1-yunfei.dong@mediatek.com/
 ---
- fs/proc/base.c           | 99 ++++++++++++++++++++++++++++++++++++++++
- include/linux/mm_types.h |  9 ++++
- mm/ksm.c                 | 32 ++++++++++++-
- 3 files changed, 138 insertions(+), 2 deletions(-)
+changed with v4:
+- fix sparse and smatch check fail for patch 7.
+changed with v3:
+- rebase driver to the latest media_stage.
+changed with v2:
+- add detail explanation for lat soc hardware for patch 1.
+changed with v1:
+- separate "Init VP9 stateless decode params" patch and remove it to another one.
+- add reviewed-by in patch v3/v4/v6
+---
+Yunfei Dong (7):
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for lat
+    soc
+  media: mediatek: vcodec: Add to support lat soc hardware
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
+    mt8195
+  media: mediatek: vcodec: Adds compatible for mt8195
+  media: mediatek: vcodec: Different codec using different capture
+    format
+  media: mediatek: vcodec: prevent kernel crash when scp ipi timeout
+  media: mediatek: vcodec: Add to support H264 inner racing mode
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 8dfa36a99c74..3115ffa4c9fb 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -96,6 +96,7 @@
- #include <linux/time_namespace.h>
- #include <linux/resctrl.h>
- #include <linux/cn_proc.h>
-+#include <linux/ksm.h>
- #include <trace/events/oom.h>
- #include "internal.h"
- #include "fd.h"
-@@ -3168,6 +3169,102 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
- 
- 	return 0;
- }
-+
-+static ssize_t ksm_force_read(struct file *file, char __user *buf, size_t count,
-+				loff_t *ppos)
-+{
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	char buffer[PROC_NUMBUF];
-+	ssize_t len;
-+	int ret;
-+
-+	task = get_proc_task(file_inode(file));
-+	if (!task)
-+		return -ESRCH;
-+
-+	mm = get_task_mm(task);
-+	ret = 0;
-+	if (mm) {
-+		len = snprintf(buffer, sizeof(buffer), "%d\n", mm->ksm_force);
-+		ret =  simple_read_from_buffer(buf, count, ppos, buffer, len);
-+		mmput(mm);
-+	}
-+
-+	return ret;
-+}
-+
-+static ssize_t ksm_force_write(struct file *file, const char __user *buf,
-+				size_t count, loff_t *ppos)
-+{
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	char buffer[PROC_NUMBUF];
-+	int force;
-+	int err = 0;
-+
-+	memset(buffer, 0, sizeof(buffer));
-+	if (count > sizeof(buffer) - 1)
-+		count = sizeof(buffer) - 1;
-+	if (copy_from_user(buffer, buf, count)) {
-+		err = -EFAULT;
-+		goto out_return;
-+	}
-+
-+	err = kstrtoint(strstrip(buffer), 0, &force);
-+
-+	if (err)
-+		goto out_return;
-+	if (force != 0 && force != 1) {
-+		err = -EINVAL;
-+		goto out_return;
-+	}
-+
-+	task = get_proc_task(file_inode(file));
-+	if (!task) {
-+		err = -ESRCH;
-+		goto out_return;
-+	}
-+
-+	mm = get_task_mm(task);
-+	if (!mm)
-+		goto out_put_task;
-+
-+	if (mm->ksm_force != force) {
-+		if (mmap_write_lock_killable(mm)) {
-+			err = -EINTR;
-+			goto out_mmput;
-+		}
-+
-+		if (force == 0)
-+			mm->ksm_force = force;
-+		else {
-+			/*
-+			 * Force anonymous pages of this mm to be involved in KSM merging
-+			 * without explicitly calling madvise.
-+			 */
-+			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-+				err = __ksm_enter(mm);
-+			if (!err)
-+				mm->ksm_force = force;
-+		}
-+
-+		mmap_write_unlock(mm);
-+	}
-+
-+out_mmput:
-+	mmput(mm);
-+out_put_task:
-+	put_task_struct(task);
-+out_return:
-+	return err < 0 ? err : count;
-+}
-+
-+static const struct file_operations proc_pid_ksm_force_operations = {
-+	.read		= ksm_force_read,
-+	.write		= ksm_force_write,
-+	.llseek		= generic_file_llseek,
-+};
- #endif /* CONFIG_KSM */
- 
- #ifdef CONFIG_STACKLEAK_METRICS
-@@ -3303,6 +3400,7 @@ static const struct pid_entry tgid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
- #endif
- };
- 
-@@ -3639,6 +3737,7 @@ static const struct pid_entry tid_base_stuff[] = {
- #endif
- #ifdef CONFIG_KSM
- 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-+	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
- #endif
- };
- 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index b34ff2cdbc4f..1b1592c2f5cf 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -661,6 +661,15 @@ struct mm_struct {
- 		 * merging.
- 		 */
- 		unsigned long ksm_merging_pages;
-+		/*
-+		 * If true, force anonymous pages of this mm to be involved in KSM
-+		 * merging without explicitly calling madvise. It is effctive only
-+		 * when the klob of '/sys/kernel/mm/ksm/run' is set as 1. If false,
-+		 * cancel the feature of ksm_force of this process and unmerge
-+		 * those merged pages which is not madvised as MERGEABLE of this
-+		 * process, but leave MERGEABLE areas merged.
-+		 */
-+		bool ksm_force;
- #endif
- 	} __randomize_layout;
- 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 38360285497a..ba170e53e283 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -334,6 +334,34 @@ static void __init ksm_slab_free(void)
- 	mm_slot_cache = NULL;
- }
- 
-+/* Check if vma is qualified for ksmd scanning */
-+static bool ksm_vma_check(struct vm_area_struct *vma)
-+{
-+	unsigned long vm_flags = vma->vm_flags;
-+
-+	if (!(vma->vm_flags & VM_MERGEABLE) && !(vma->vm_mm->ksm_force))
-+		turn false;
-+
-+	if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
-+			VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
-+			VM_HUGETLB	| VM_MIXEDMAP))
-+		return false;       /* just ignore this vma*/
-+
-+	if (vma_is_dax(vma))
-+		return false;
-+
-+#ifdef VM_SAO
-+	if (vm_flags & VM_SAO)
-+		return false;
-+#endif
-+#ifdef VM_SPARC_ADI
-+	if (vm_flags & VM_SPARC_ADI)
-+		return false;
-+#endif
-+
-+	return true;
-+}
-+
- static __always_inline bool is_stable_node_chain(struct stable_node *chain)
- {
- 	return chain->rmap_hlist_len == STABLE_NODE_CHAIN;
-@@ -523,7 +551,7 @@ static struct vm_area_struct *find_mergeable_vma(struct mm_struct *mm,
- 	if (ksm_test_exit(mm))
- 		return NULL;
- 	vma = vma_lookup(mm, addr);
--	if (!vma || !(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-+	if (!vma || !ksm_vma_check(vma) || !vma->anon_vma)
- 		return NULL;
- 	return vma;
- }
-@@ -2297,7 +2325,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 		vma = find_vma(mm, ksm_scan.address);
- 
- 	for (; vma; vma = vma->vm_next) {
--		if (!(vma->vm_flags & VM_MERGEABLE))
-+		if (!ksm_vma_check(vma))
- 			continue;
- 		if (ksm_scan.address < vma->vm_start)
- 			ksm_scan.address = vma->vm_start;
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 52 +++++++++++++------
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 41 +++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  8 +++
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 12 +++--
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.h       |  2 +
+ .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 50 ++++++++++++++++++
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h | 11 ++++
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 29 ++++++++---
+ .../platform/mediatek/vcodec/vdec_vpu_if.c    |  5 ++
+ 9 files changed, 183 insertions(+), 27 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 

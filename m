@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5937D51E436
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232FD51E43A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445535AbiEGFGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1356241AbiEGFLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356601AbiEGFFy (ORCPT
+        with ESMTP id S1343722AbiEGFLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:05:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A49443DE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651899728; x=1683435728;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QLTFHdnUBTzWWU34AO9SvqAcGSLS+UOF20d6uL8pj0I=;
-  b=BY5fuDR7tZGWpkjGMhmhMbLpN9tfHZwdsfp35jy3hzUFJFQWK2+i4F1t
-   rt0CAG3Rln/9UjCVehsDlaKn4TAHdcGXkr+ixsOl/EKFZxYojo8a3LC/b
-   SR4FCu3rbBeV/j38L7N0PCNmUw8PmdDmfS826sGINcWfnBHMo8wufdPJr
-   zq81xD7BdxskpnKPLH+L6uQ4qHpVw5xcFz2G9ANbXb+uNXX2G0TUxFtd7
-   2Wra4DI8Wwi9ph4r1L0MH0zoj6VVzyNDKfcVszLYhf6/pw5xUcvwUppEg
-   lJYFWOBVUaTPNYWGZrREEx5IeTVUEoD0l0QHftbBrMGKvVR3mTgB9KvDq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="355086824"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="355086824"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 22:02:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="569372881"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 May 2022 22:02:05 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnCZx-000EES-7s;
-        Sat, 07 May 2022 05:02:05 +0000
-Date:   Sat, 7 May 2022 13:01:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Likun Gao <Likun.Gao@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [agd5f:drm-next 585/599]
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3459:17: error: implicit declaration
- of function 'vfree'; did you mean 'kfree'?
-Message-ID: <202205071258.p2FKbi8O-lkp@intel.com>
+        Sat, 7 May 2022 01:11:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 881EB5523C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651900048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WKFrTG6BT4XtoQUjOd0EJOeY4hUiJrW4gNuP1XW6bYk=;
+        b=frzyhKaY5TE5sonZU4p/ekfqNvWlP8VNJrYyVSb9W8L7nY2Bk34IgIcR29c/SqFuoj9N7C
+        eOpoBFRuXC4D0tZWQ4e9ZlU6G3dJngJPnER1mNpmMxmvaK8SFUWJyQeCp5ysZ3HgiTjoeZ
+        OSIBAFobpviOkurncTdqMxcA5asKcKg=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-E7RcxE1hOwW9Wawicl8uPg-1; Sat, 07 May 2022 01:07:26 -0400
+X-MC-Unique: E7RcxE1hOwW9Wawicl8uPg-1
+Received: by mail-lf1-f69.google.com with SMTP id e8-20020ac24e08000000b00473b1bae573so4069532lfr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:07:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WKFrTG6BT4XtoQUjOd0EJOeY4hUiJrW4gNuP1XW6bYk=;
+        b=DN2owTm7aWg9RQk/6MiVGf63AC69vJsudUpKEVJfOsfgkUETyNlYHtqjNY+3BE4vfc
+         D+cPjm6Hk64sLWCm9m06R1tYSbRKvVweu4DdkTHW616TNDDaCno/PhLeHpwFFJIQx3Ol
+         QWOhYw8m/d8VRQ/bHhso6rarRvASX0HaV5I4sSi+WhW6C0hvcbOEqBhY+GdxkA762ijN
+         MWrW1jRVm1QwX/ai8pbT5yiRWkUuukaRKCE56c9VJP6Xv3c/vNBkAXeDh2uv7sejye7m
+         ypEQyzU7rLu/+VvTFGEwZxNsOB84/0utsWimWZ7JNd3fSWr/T9hZDI/SvLjhD99saMKM
+         74hA==
+X-Gm-Message-State: AOAM530WxDdVa9D2ICslX3QNMYJCoYKe6s6LgzTEq4nhEJLgyt/F36vK
+        tL8q9xSIFuuW+JdTc/X28JZZO3GW5w1OP/S7l2LPNDbcVDaqcKVbponFYYgPB+qQW9daeLR46Ka
+        itTbkU6CJyokG8skyXz+InF+TVuB6SCY5ScRbjmZ6
+X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id d16-20020a05651233d000b00473a25ef9fbmr4951617lfg.98.1651900045340;
+        Fri, 06 May 2022 22:07:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzZGP+pzBwvqTFnGLNL46r624MAOVl0Foh5oZRGkIyYHh3KQhYZ1Z+k+zg853w8U8aha7h4FUe6I44wlLfmAlE=
+X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id
+ d16-20020a05651233d000b00473a25ef9fbmr4951603lfg.98.1651900045134; Fri, 06
+ May 2022 22:07:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20220428151242.213824-1-sgarzare@redhat.com> <CACGkMEv=0VWh_NxhvM+6_TRHEx0f2RGRWbR1n5RhKfq0a7xJUw@mail.gmail.com>
+ <20220429071449.pycbkk2dvvxmtvay@sgarzare-redhat> <CACGkMEtRwRb_jUdCcdrx77=O4bnRGssQ5z_81KJi1hEKdbMcCQ@mail.gmail.com>
+ <20220505084045.xdh3xwgfr2spp3fj@sgarzare-redhat>
+In-Reply-To: <20220505084045.xdh3xwgfr2spp3fj@sgarzare-redhat>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Sat, 7 May 2022 13:07:14 +0800
+Message-ID: <CACGkMEsAyx2V_Q41MbrFu3eXoi+Qmg_aeEz9-Aw6qYHsFivCTg@mail.gmail.com>
+Subject: Re: [PATCH] vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,79 +77,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   3170f5f234272247989fafee4cba4cbbc822631c
-commit: 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa [585/599] drm/amdgpu/psp: Add vbflash sysfs interface support
-config: alpha-randconfig-r026-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071258.p2FKbi8O-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 31aad22e2b3cfe89aef45015a9c7e4f7c0646daa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On Thu, May 5, 2022 at 4:40 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>
+> On Thu, May 05, 2022 at 04:26:24PM +0800, Jason Wang wrote:
+> >On Fri, Apr 29, 2022 at 3:14 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >>
+> >> On Fri, Apr 29, 2022 at 10:46:40AM +0800, Jason Wang wrote:
+> >> >On Thu, Apr 28, 2022 at 11:13 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >> >>
+> >> >> The simulator behaves like a ramdisk, so we don't have to do
+> >> >> anything when a VIRTIO_BLK_T_FLUSH request is received, but it
+> >> >> could be useful to test driver behavior.
+> >> >>
+> >> >> Let's expose the VIRTIO_BLK_F_FLUSH feature to inform the driver
+> >> >> that we support the flush command.
+> >> >>
+> >> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> >> >> ---
+> >> >>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 12 ++++++++++++
+> >> >>  1 file changed, 12 insertions(+)
+> >> >>
+> >> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> >> >> index 42d401d43911..a6dd1233797c 100644
+> >> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> >> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> >> >> @@ -25,6 +25,7 @@
+> >> >>  #define DRV_LICENSE  "GPL v2"
+> >> >>
+> >> >>  #define VDPASIM_BLK_FEATURES   (VDPASIM_FEATURES | \
+> >> >> +                                (1ULL << VIRTIO_BLK_F_FLUSH)    | \
+> >> >>                                  (1ULL << VIRTIO_BLK_F_SIZE_MAX) | \
+> >> >>                                  (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
+> >> >>                                  (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
+> >> >> @@ -166,6 +167,17 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+> >> >>                 pushed += bytes;
+> >> >>                 break;
+> >> >>
+> >> >> +       case VIRTIO_BLK_T_FLUSH:
+> >> >> +               if (sector != 0) {
+> >> >> +                       dev_err(&vdpasim->vdpa.dev,
+> >> >> +                               "A driver MUST set sector to 0 for a VIRTIO_BLK_T_FLUSH request - sector: 0x%llx\n",
+> >> >> +                               sector);
+> >> >
+> >> >If this is something that could be triggered by userspace/guest, then
+> >> >we should avoid this.
+> >>
+> >> It can only be triggered by an erratic driver.
+> >
+> >Right, so guest can try to DOS the host via this.
+>
+> Yes, but I don't expect the simulator to be used in the real world, but
+> only for testing and development, so the user should have full control
+> of the guest.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right, but from kernel POV it's better to avoid any guest triggerable behaviour.
 
-All error/warnings (new ones prefixed by >>):
+>
+> >
+> >>
+> >> I was using the simulator to test a virtio-blk driver that I'm writing
+> >> in userspace and I forgot to set `sector` to zero, so I thought it would
+> >> be useful.
+> >>
+> >> Do you mean to remove the error message?
+> >
+> >Some like dev_warn_once() might be better here.
+>
+> We also have other checks we do for each request (in and out header
+> length, etc.) where we use dev_err(), should we change those too?
 
-   drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c: In function 'amdgpu_psp_vbflash_write':
->> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3459:17: error: implicit declaration of function 'vfree'; did you mean 'kfree'? [-Werror=implicit-function-declaration]
-    3459 |                 vfree(adev->psp.vbflash_tmp_buf);
-         |                 ^~~~~
-         |                 kfree
->> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3467:45: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
-    3467 |                 adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-         |                                             ^~~~~~~
-         |                                             kvmalloc
->> drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c:3467:43: warning: assignment to 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    3467 |                 adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-         |                                           ^
-   cc1: some warnings being treated as errors
+I think so.
 
+>
+> I don't know, from a developer's point of view I'd prefer to have them
+> all printed, but actually if we have a totally wrong driver in the
+> guest, we risk to hang our host to print an infinite number of messages.
 
-vim +3459 drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+Or we can use pr_debug() or tracepoints. Then the log is enabled conditally.
 
-  3447	
-  3448	static ssize_t amdgpu_psp_vbflash_write(struct file *filp, struct kobject *kobj,
-  3449						struct bin_attribute *bin_attr,
-  3450						char *buffer, loff_t pos, size_t count)
-  3451	{
-  3452		struct device *dev = kobj_to_dev(kobj);
-  3453		struct drm_device *ddev = dev_get_drvdata(dev);
-  3454		struct amdgpu_device *adev = drm_to_adev(ddev);
-  3455	
-  3456		/* Safeguard against memory drain */
-  3457		if (adev->psp.vbflash_image_size > AMD_VBIOS_FILE_MAX_SIZE_B) {
-  3458			dev_err(adev->dev, "File size cannot exceed %u", AMD_VBIOS_FILE_MAX_SIZE_B);
-> 3459			vfree(adev->psp.vbflash_tmp_buf);
-  3460			adev->psp.vbflash_tmp_buf = NULL;
-  3461			adev->psp.vbflash_image_size = 0;
-  3462			return -ENOMEM;
-  3463		}
-  3464	
-  3465		/* TODO Just allocate max for now and optimize to realloc later if needed */
-  3466		if (!adev->psp.vbflash_tmp_buf) {
-> 3467			adev->psp.vbflash_tmp_buf = vmalloc(AMD_VBIOS_FILE_MAX_SIZE_B);
-  3468			if (!adev->psp.vbflash_tmp_buf)
-  3469				return -ENOMEM;
-  3470		}
-  3471	
-  3472		mutex_lock(&adev->psp.mutex);
-  3473		memcpy(adev->psp.vbflash_tmp_buf + pos, buffer, count);
-  3474		adev->psp.vbflash_image_size += count;
-  3475		mutex_unlock(&adev->psp.mutex);
-  3476	
-  3477		dev_info(adev->dev, "VBIOS flash write PSP done");
-  3478	
-  3479		return count;
-  3480	}
-  3481	
+>
+> Maybe we should change all the errors in the data path to
+> dev_warn_once() and keep returning VIRTIO_BLK_S_IOERR to the guest which
+> will surely get angry and print something.
+>
+> If you agree, I'll send a patch to change all the printing and then
+> repost this with your suggestion as well.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yes.
+
+Thanks
+
+>
+> Thanks,
+> Stefano
+>
+

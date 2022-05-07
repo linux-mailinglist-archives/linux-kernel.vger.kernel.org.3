@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBD351E62F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08A251E62E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446201AbiEGJvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S1446194AbiEGJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347894AbiEGJvo (ORCPT
+        with ESMTP id S244252AbiEGJva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:51:44 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C08C3631C;
-        Sat,  7 May 2022 02:47:58 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id u3so13075501wrg.3;
-        Sat, 07 May 2022 02:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v/2GAcCoGWA0XrbLG0oyBMQDo3jgcdYPVii1ckL8LbQ=;
-        b=ffIXVNyI9uBJLQlVgIfoxcPFxxn3ADhmeQV7hnH9my5lVZcYCuDWzWf6NAM0k9PR9U
-         /X1tZmCvY+KPiJTL+q5/WOFXPb6naa2U2YYnTuv2Butv+2QOZue1iiXtfVPufzX2QlFJ
-         /7TP2jAhLxTkylUOJYPcU/lpE25RDVU6QEQ3mHT989Dhet+o09H4idarDPV10W4TrlaC
-         UNNRMEsUlA/z4rjwOIJQ+2r41TbAKUtN4qyCSTxpV2QoGNxPPWPXvQHgNRcUpbcTZZ0z
-         FS32UrVTDddHwH34IxdxR1YTb3ED0eN6nlym9MeS/A69+pTir0kd0JCbAZ2gjAtDebNR
-         C6tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v/2GAcCoGWA0XrbLG0oyBMQDo3jgcdYPVii1ckL8LbQ=;
-        b=UbHQ4CmH6oCYlbIoVG4szrcNFR+gkAm8s7vY/LlQMSsSz9s0tlcLQRQlHWC+HD4NUl
-         YdfNU1wuCXWKqEem5lNRX9Uo1xnpZ/cXNCGd9Y/KeYCsagzDp87M3URw0YA5/R18nXAj
-         9nlOx0lB3oxCRhdyGiKFjYPJqRd2KwLtILueHXciudIIJs0cqhJVrzVFJn862pgHyfnA
-         buVsGs7JBg9/1r0K6j00kcC5KBtPIawApXio6kEHYHcOA8An31znaNc+TcFjw78/QeLK
-         FIiuNRAbMcSOhHthaE8ylKY4bsLEFhGRahZ24wFOOdUP6BPubrvF/JuvmnKLAaRYDoHK
-         7ftA==
-X-Gm-Message-State: AOAM531fc5f8v6gp8PpYmg+V2er/6mlb2c/p3QOCURePvf2UtfafgHYO
-        O3ELmVhtQhEoUJO2IAqi/As=
-X-Google-Smtp-Source: ABdhPJzks/svN3u7oItngSITPmwo2Bky+7CvxxV15UoaWPPIoJZMhADL2tcPDELLlsom+rWujjFw/w==
-X-Received: by 2002:a5d:53c1:0:b0:20a:db5d:2590 with SMTP id a1-20020a5d53c1000000b0020adb5d2590mr5795841wrw.411.1651916876731;
-        Sat, 07 May 2022 02:47:56 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.237.69])
-        by smtp.gmail.com with ESMTPSA id k7-20020a05600c1c8700b003946433a829sm6658153wms.11.2022.05.07.02.47.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 02:47:56 -0700 (PDT)
-Message-ID: <acd36e44-8351-d907-bb50-57375823268c@gmail.com>
-Date:   Sat, 7 May 2022 10:47:15 +0100
+        Sat, 7 May 2022 05:51:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487E03584A;
+        Sat,  7 May 2022 02:47:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4AD66111A;
+        Sat,  7 May 2022 09:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2A4C385A9;
+        Sat,  7 May 2022 09:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651916863;
+        bh=TN9Ln0eWjWSNpAaJly0A68+GoYhMTOpf7TMoBE/D/8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eAdWlOck68816ScoivDDAizGIIpMuirzXMEnhlTuCe0boQDQ2FAbiKVwBSDw+1PKQ
+         eryZIke41EI7FBgz3rBhcOPXg+qn/NcT+7LTFVsoooc1kbcEGoItAutByNEbYrDgWK
+         Ur0gbDNafQq8fsmSCP56cwhjhCdircLlP8pdtgic=
+Date:   Sat, 7 May 2022 11:47:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, namit@vmware.com,
+        gor@linux.ibm.com, rdunlap@infradead.org, sashal@kernel.org
+Subject: Re: [PATCH 5.10 v3] locking/csd_lock: fix csdlock_debug cause arm64
+ boot panic
+Message-ID: <YnZAO+3Rhj0gwq38@kroah.com>
+References: <20220507084510.14761-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/5] io_uring: let fast poll support multishot
-Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-4-haoxu.linux@gmail.com>
- <d68381cf-a9fc-33b8-8a9c-ff8485ba8d19@gmail.com>
- <135b16e4-f316-cb25-9cdd-09bd63eb4aef@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <135b16e4-f316-cb25-9cdd-09bd63eb4aef@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507084510.14761-1-chenzhongjin@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/22 08:08, Hao Xu wrote:
-> 在 2022/5/7 上午1:19, Pavel Begunkov 写道:
->> On 5/6/22 08:01, Hao Xu wrote:
-[...]
->> That looks dangerous, io_queue_sqe() usually takes the request ownership
->> and doesn't expect that someone, i.e. io_poll_check_events(), may still be
->> actively using it.
->>
->> E.g. io_accept() fails on fd < 0, return an error,
->> io_queue_sqe() -> io_queue_async() -> io_req_complete_failed()
->> kills it. Then io_poll_check_events() and polling in general
->> carry on using the freed request => UAF. Didn't look at it
->> too carefully, but there might other similar cases.
->>
-> I checked this when I did the coding, it seems the only case is
-> while (atomic_sub_return(v & IO_POLL_REF_MASK, &req->poll_refs));
-> uses req again after req recycled in io_queue_sqe() path like you
-> pointed out above, but this case should be ok since we haven't
-> reuse the struct req{} at that point.
-
-Replied to another message with an example that I think might
-be broken, please take a look.
-
-The issue is that io_queue_sqe() was always consuming / freeing /
-redirecting / etc. requests, i.e. call it and forget about the req.
-With io_accept now it may or may not free it and not even returning
-any return code about that. This implicit knowledge is quite tricky
-to maintain.
-
-might make more sense to "duplicate" io_queue_sqe()
-
-ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
-// REQ_F_COMPLETE_INLINE should never happen, no check for that
-// don't care about io_arm_ltimeout(), should already be armed
-// ret handling here
-
-
-
-> In my first version, I skiped the do while{} in io_poll_check_events()
-> for multishot apoll and do the reap in io_req_task_submit()
+On Sat, May 07, 2022 at 04:45:10PM +0800, Chen Zhongjin wrote:
+> csdlock_debug is a early_param to enable csd_lock_wait
+> feature.
 > 
-> static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
->    {
->            int ret;
+> It uses static_branch_enable in early_param which triggers
+> a panic on arm64 with config:
+> CONFIG_SPARSEMEM=y
+> CONFIG_SPARSEMEM_VMEMMAP=n
 > 
+> The log shows:
+> Unable to handle kernel NULL pointer dereference at
+> virtual address ", '0' <repeats 16 times>, "
+> ...
+> Call trace:
+> __aarch64_insn_write+0x9c/0x18c
+> ...
+> static_key_enable+0x1c/0x30
+> csdlock_debug+0x4c/0x78
+> do_early_param+0x9c/0xcc
+> parse_args+0x26c/0x3a8
+> parse_early_options+0x34/0x40
+> parse_early_param+0x80/0xa4
+> setup_arch+0x150/0x6c8
+> start_kernel+0x8c/0x720
+> ...
+> Kernel panic - not syncing: Oops: Fatal exception
 > 
->            ret = io_poll_check_events(req, locked);
->            if (ret > 0)
->                    return;
+> Call trace inside __aarch64_insn_write:
+> __nr_to_section
+> __pfn_to_page
+> phys_to_page
+> patch_map
+> __aarch64_insn_write
 > 
+> Here, with CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section returns
+> NULL and makes the NULL dereference because mem_section is
+> initialized in sparse_init after parse_early_param stage.
 > 
->            __io_poll_clean(req);
+> So, static_branch_enable shouldn't be used inside early_param.
+> To avoid this, I changed it to __setup and fixed this.
 > 
+> Reported-by: Chen jingwen <chenjingwen6@huawei.com>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+> Change v2 -> v3:
+> Add module name in title
 > 
->            if (!ret)
->                    io_req_task_submit(req, locked);   <------here
->            else
->                    io_req_complete_failed(req, ret);
->    }
+> Change v1 -> v2:
+> Fix return 1 for __setup
+> ---
 > 
-> But the disadvantage is in high frequent workloads case, it may loop in
-> io_poll_check_events for long time, then finally generating cqes in the
-> above io_req_task_submit() which is not good in terms of latency.
->>
+>  kernel/smp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/smp.c b/kernel/smp.c
+> index 65a630f62363..381eb15cd28f 100644
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
+>  	if (val)
+>  		static_branch_enable(&csdlock_debug_enabled);
+>  
+> -	return 0;
+> +	return 1;
+>  }
+> -early_param("csdlock_debug", csdlock_debug);
+> +__setup("csdlock_debug=", csdlock_debug);
+>  
+>  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
+>  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
+> -- 
+> 2.17.1
+> 
 
--- 
-Pavel Begunkov
+
+<formletter>
+
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+</formletter>

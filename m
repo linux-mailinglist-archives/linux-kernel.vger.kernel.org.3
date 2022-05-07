@@ -2,132 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C00F51E667
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9409F51E66D
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383154AbiEGKZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S1384165AbiEGK1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243948AbiEGKZN (ORCPT
+        with ESMTP id S243948AbiEGK06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:25:13 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A4517E8;
-        Sat,  7 May 2022 03:21:26 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id r27so10537238iot.1;
-        Sat, 07 May 2022 03:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6YX7GUuV2YaTJpmm0gXgrRmU3PbIncYub1aij6XpEtI=;
-        b=UwmUFZ62EERxI1wMFK+Loxq7gfPZoR7nuMd9u5W95wP44+6o3t6OIA8ZuekLwxo+M7
-         aVHf1SxkmRUxYzBP3UhqsMWdvpaDbjYNTcCEcAfO3i0QodRC5fPeitmYWxOTndI+dzJM
-         vZdcQVACWrq+mFkCLiy6SMQoQRfWS0A7wM+/gkFn9XJbn3sYN2kWRdy3+gcUsbh0Lm6j
-         hzLs9x6ttNCnEcYUkrZ6D5JlufPfC9mAAhy5bCgrLKFjQx0Hcg2y+zbAD3LwblWi5mx4
-         sACDzw52Fh/hxLt05XyNgzTE97UCS+4z2/KWW3WZIxT2mpk5ChyFdV5XycKqVnggHbVD
-         23JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6YX7GUuV2YaTJpmm0gXgrRmU3PbIncYub1aij6XpEtI=;
-        b=FYnafSa9g/xF6j9/8viAf+ij3or8GMIiLQKNaQzFgpofp1G0vcGw39ullPH9lIsEQL
-         lMXmaP6iSnr3y59/W18X2kTlWZ3oy5Ei/k6q9iffV9fPJHIYZoq2JE7Zick5shhoXlg4
-         XPqQ1xjKBoAx5htkRnbYZnP4BQ/VHrv9l1Z+kFI+liigtL/mCH3JVRxhjOloDvv06bVi
-         JRvwSLbiTkdxRY3cAO/FLv1XGCWyoRj+tFzUFNpsnqla9q56XTo10+dY4hN71N4+W06q
-         fVSobXPZq+WFSFbhRlJnz3dY8YHcovkMQVUmDDf43QpBXkIVvxEY5CxbMMJM7TI+55v5
-         RMkg==
-X-Gm-Message-State: AOAM533u6BaSO/m+Dd7c3W+UPQtAfwOt4tlaZjVt5ytcVV7VNrDRiJuI
-        hOdsbHl+9vTvcIIBFaquPg1ZnWm4wg73f5/PUss=
-X-Google-Smtp-Source: ABdhPJyLAG1ZbLUONpaLwcs0oR2ayADJCtOqBP+V4uNJIYDNItiej361fFkoQfXjbwPnT2guqOam/J+ZvhZYK1aErVk=
-X-Received: by 2002:a5e:c643:0:b0:657:b1b0:8e2d with SMTP id
- s3-20020a5ec643000000b00657b1b08e2dmr3050233ioo.64.1651918886123; Sat, 07 May
- 2022 03:21:26 -0700 (PDT)
+        Sat, 7 May 2022 06:26:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF60517E1;
+        Sat,  7 May 2022 03:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651918991; x=1683454991;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZFgriWo4QmnK8I4aKqpEp72LmAajKhhg7MNjxcrFCVE=;
+  b=RU5MJT1697SA4yC2jYorgLiHFOAt5IR4OD8j3Y5ds8DkA0ynzClg+5jF
+   scl+NC0EeHhEELKtP8e/6vcJ2m7jLZTtYUac5s66jFN9IS4zg5fGlgTZH
+   SKRe6C0HL8Tmf2ZcRuSBCM6W2fY2SkKw9KUiCylgZ6b84mv8h1d0y3xke
+   fMesqV0VQXx9AnTEBa0FWgc6+UqeXFNAIDZvIOaHNB34Gm+vgyVMPgOlD
+   6mkjFlt9N0LIn1r6HToJqUVdNjjKl2ngBQu+sYvBssQhR/Cl31DN/iIR9
+   1GfIHwGWO2MYfk9p5OaB1wNfkxi/Wbzy07loMObIuhmV5dc4sMoLDCpL5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="355123994"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="355123994"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:23:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="695561328"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 07 May 2022 03:23:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 039B3155; Sat,  7 May 2022 13:23:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        linux-gpio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] pinctrl: stm32: Unshadow np variable in stm32_pctl_probe()
+Date:   Sat,  7 May 2022 13:22:57 +0300
+Message-Id: <20220507102257.26414-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220507052451.12890-1-ojeda@kernel.org> <20220507052451.12890-18-ojeda@kernel.org>
- <202205070122.B240F989@keescook>
-In-Reply-To: <202205070122.B240F989@keescook>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 7 May 2022 12:21:14 +0200
-Message-ID: <CANiq72m6MaaH-o9McMuDwicosA2xgpU5ZEw0OduR0JT3w7p_fQ@mail.gmail.com>
-Subject: Re: [PATCH v6 17/23] scripts: decode_stacktrace: demangle Rust symbols
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+The np variable is used globally for stm32_pctl_probe() and in one of
+its code branches. cppcheck is not happy with that:
 
-Thanks a lot for taking the time to read all that :)
+  pinctrl-stm32.c:1530:23: warning: Local variable 'np' shadows outer variable [shadowVariable]
 
-On Sat, May 7, 2022 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
->
-> I may need some examples here for what you're thinking will cause
-> problems. Why a new specifier? Won't demangling just give us text? Is
-> the concern about breaking backtrace parsers that only understand C
-> symbols?
+Instead of simply renaming one of the variables convert some code to
+use a device pointer directly.
 
-What I was thinking here is that if we replace how `%pB` works, for
-instance, and do demangling unconditionally, then we would break some
-of the use cases that are expecting real symbol names, e.g.
-`/proc/pid/stack`. So we would need to introduce a way to
-differentiate the cases where real symbols should be kept vs.
-demangled backtraces for humans, e.g. a new specifier or a modifier
-for the existing ones.
+Fixes: bb949ed9b16b ("pinctrl: stm32: Switch to use for_each_gpiochip_node() helper")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-Similarly, if we modify the backtrace printed in the kernel log, there
-is a high chance we break somebody's userspace backtrace parsers and
-other tools connected to those in different ways, e.g.:
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index e73f2d24611f..5d1d067b2247 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1364,8 +1364,9 @@ static int stm32_gpiolib_register_bank(struct stm32_pinctrl *pctl, struct fwnode
+ 	return err;
+ }
+ 
+-static struct irq_domain *stm32_pctrl_get_irq_domain(struct device_node *np)
++static struct irq_domain *stm32_pctrl_get_irq_domain(struct platform_device *pdev)
+ {
++	struct device_node *np = pdev->dev.of_node;
+ 	struct device_node *parent;
+ 	struct irq_domain *domain;
+ 
+@@ -1482,23 +1483,19 @@ static int stm32_pctrl_create_pins_tab(struct stm32_pinctrl *pctl,
+ 
+ int stm32_pctl_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
++	const struct stm32_pinctrl_match_data *match_data;
+ 	struct fwnode_handle *child;
+-	const struct of_device_id *match;
+ 	struct device *dev = &pdev->dev;
+ 	struct stm32_pinctrl *pctl;
+ 	struct pinctrl_pin_desc *pins;
+ 	int i, ret, hwlock_id;
+ 	unsigned int banks;
+ 
+-	if (!np)
+-		return -EINVAL;
+-
+-	match = of_match_device(dev->driver->of_match_table, dev);
+-	if (!match || !match->data)
++	match_data = device_get_match_data(dev);
++	if (!match_data)
+ 		return -EINVAL;
+ 
+-	if (!of_find_property(np, "pins-are-numbered", NULL)) {
++	if (!device_property_present(dev, "pins-are-numbered")) {
+ 		dev_err(dev, "only support pins-are-numbered format\n");
+ 		return -EINVAL;
+ 	}
+@@ -1510,7 +1507,7 @@ int stm32_pctl_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, pctl);
+ 
+ 	/* check for IRQ controller (may require deferred probe) */
+-	pctl->domain = stm32_pctrl_get_irq_domain(np);
++	pctl->domain = stm32_pctrl_get_irq_domain(pdev);
+ 	if (IS_ERR(pctl->domain))
+ 		return PTR_ERR(pctl->domain);
+ 
+@@ -1526,10 +1523,10 @@ int stm32_pctl_probe(struct platform_device *pdev)
+ 	spin_lock_init(&pctl->irqmux_lock);
+ 
+ 	pctl->dev = dev;
+-	pctl->match_data = match->data;
++	pctl->match_data = match_data;
+ 
+ 	/*  get optional package information */
+-	if (!of_property_read_u32(np, "st,package", &pctl->pkg))
++	if (!device_property_read_u32(dev, "st,package", &pctl->pkg))
+ 		dev_dbg(pctl->dev, "package detected: %x\n", pctl->pkg);
+ 
+ 	pctl->pins = devm_kcalloc(pctl->dev, pctl->match_data->npins,
+-- 
+2.35.1
 
-  - If we replace the mangled symbol, then some tools may not expect
-e.g. whitespace or other characters (which Rust demangled symbols
-have); or if they handle them, they may be expecting actual symbols
-(like in the case above) because they use them later on to correlate
-them to some other data.
-
-  - If we keep the mangled symbols (so that tools still have the real
-symbols) and introduce an extra line (or extra length in the same
-line) per Rust symbol (where we write the demangled version), that
-could still break some parsers just because of the new line (or extra
-data).
-
-So my concern is all about how to introduce the new information
-without breaking any existing use case.
-
-> It seems all of that would be in the build-time helper, not the kernel
-> image, though, so that seems better than run-time demangling.
-
-Hmm... I am not sure what you mean here.
-
-What I meant by this option is that we pre-generate a table (at
-compile-time) and put it into `vmlinux` (and similar for each loadable
-module) so that we can then just look it up within the kernel instead
-of running the demangle algorithm for each symbol (e.g. when printing
-a backtrace).
-
-If you mean giving userspace that table (e.g. that distros keep in a
-file in `/boot` for tools to use etc.), that could be a good idea to
-avoid userspace tools requiring a library for demangling, but it would
-be an improvement on top of option 1 ("# Leave demangling to
-userspace") rather than an independent option (since we need to choose
-what we do for backtraces), no? Or what do you mean?
-
-Cheers,
-Miguel

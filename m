@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5245C51E87A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC6E51E87F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386187AbiEGQUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S1346210AbiEGQYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386143AbiEGQUg (ORCPT
+        with ESMTP id S240717AbiEGQYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:20:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CD7C22B08
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 09:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651940207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CUuc+lgOyGwvC+Mjteke+5WNN677eQkpHYS3l7z3q2M=;
-        b=ZqI/hsuxZ/V+jWULtrpgm8sNp3e/0Hkn75p4J4GGXInGlPlxhCDEabmYS64Zd0sT+dPlUX
-        4pBoWkIyix7w0zQiwwteC764tn0AFzbagown/rSI2p8gz7JdRItDr7CC+4+DbKaV6H4eNJ
-        1hPk8c67jBqhuasrJLYrhr8guV/fwrg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-98-GiYN5q7rMb6f8rRsHdpnfw-1; Sat, 07 May 2022 12:16:41 -0400
-X-MC-Unique: GiYN5q7rMb6f8rRsHdpnfw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96AD038041E5;
-        Sat,  7 May 2022 16:16:40 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.192.81])
-        by smtp.corp.redhat.com (Postfix) with SMTP id B36B240CFD0C;
-        Sat,  7 May 2022 16:16:36 +0000 (UTC)
-Received: by localhost.localdomain (sSMTP sendmail emulation); Sat, 07 May 2022 18:16:35 +0200
-From:   "Jerome Marchand" <jmarchan@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Jerome Marchand <jmarchan@redhat.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] samples: bpf: Don't fail for a missing VMLINUX_BTF when VMLINUX_H is provided
-Date:   Sat,  7 May 2022 18:16:35 +0200
-Message-Id: <20220507161635.2219052-1-jmarchan@redhat.com>
+        Sat, 7 May 2022 12:24:45 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39D420186;
+        Sat,  7 May 2022 09:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651940458; x=1683476458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/b/+Mr0B5Zhv55WA58zICS5As/BFDYSFtkZY5yJGamg=;
+  b=YudgmDP/5Ndca9n+OqqhclBIR3VUXtdzUKtiANrqiPKFIDCCUKI0WxKf
+   Qf2R7ehOJTlXpTxvJVFeoOy+e9Yp7DXS3Gy4hCXI/XR800vcvXEYDPNoN
+   bQHp0adi6jp5XgYyv8u41tEEZlEwxz5naSGYFJILkZM8fe1cRK0fy2uDK
+   WL6hrOtWX/26HusT5F5s1pim18K+X9q+PKbr4Z6lv8rC6dAJjYm65wmIt
+   CSCwlV+WsF77DXdzKP5cZK3ERgnXVrwBGPhu6HjECOHxNEm+7mqa+YTY3
+   fFxG+iVlEdtRMENs7bcfbSGOoI8Qv5/bBQiei4SjNUOh59K+IJajV5snW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="329278706"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="329278706"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 09:20:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="586552379"
+Received: from hmendezc-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.252.138.85])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 09:20:54 -0700
+Date:   Sat, 7 May 2022 09:20:53 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Peter Jones <pjones@redhat.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] fbdev: efifb: Fix a use-after-free due early fb_info
+ cleanup
+Message-ID: <20220507162053.auo2idd5twvnxatj@ldmartin-desk2>
+References: <20220506132225.588379-1-javierm@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220506132225.588379-1-javierm@redhat.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,44 +66,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-samples/bpf build currently always fails if it can't generate
-vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
-VMLINUX_H variable, which makes VMLINUX_H pointless.
-Only fails when neither method works.
+On Fri, May 06, 2022 at 03:22:25PM +0200, Javier Martinez Canillas wrote:
+>Commit d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather
+>than .remove") attempted to fix a use-after-free error due driver freeing
+>the fb_info in the .remove handler instead of doing it in .fb_destroy.
+>
+>But ironically that change introduced yet another use-after-free since the
+>fb_info was still used after the free.
+>
+>This should fix for good by freeing the fb_info at the end of the handler.
+>
+>Fixes: d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove")
 
-Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
-Reported-by: CKI Project <cki-project@redhat.com>
-Reported-by: Veronika Kabatova <vkabatov@redhat.com>
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
----
- samples/bpf/Makefile | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+are these patches going through any CI before being applied? Maybe would
+be a good idea to cc intel-gfx mailing list on these fixes to have Intel
+CI to pick them up for some tests?
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 38638845db9d..72bb85c18804 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -368,16 +368,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
- 
- $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
- ifeq ($(VMLINUX_H),)
-+ifeq ($(VMLINUX_BTF),)
-+	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
-+		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
-+endif
- 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
- else
- 	$(Q)cp "$(VMLINUX_H)" $@
- endif
- 
--ifeq ($(VMLINUX_BTF),)
--	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
--		build the kernel or set VMLINUX_BTF variable)
--endif
--
- clean-files += vmlinux.h
- 
- # Get Clang's default includes on this system, as opposed to those seen by
--- 
-2.35.1
+pushed to drm-misc-fixes where the previous patch was applied.
 
+thanks
+LUcas De Marchi
+
+>Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+>Reported-by: Andrzej Hajda <andrzej.hajda@intel.com>
+>Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>---
+>
+> drivers/video/fbdev/efifb.c | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+>diff --git a/drivers/video/fbdev/efifb.c b/drivers/video/fbdev/efifb.c
+>index cfa3dc0b4eee..b3d5f884c544 100644
+>--- a/drivers/video/fbdev/efifb.c
+>+++ b/drivers/video/fbdev/efifb.c
+>@@ -259,12 +259,12 @@ static void efifb_destroy(struct fb_info *info)
+> 			memunmap(info->screen_base);
+> 	}
+>
+>-	framebuffer_release(info);
+>-
+> 	if (request_mem_succeeded)
+> 		release_mem_region(info->apertures->ranges[0].base,
+> 				   info->apertures->ranges[0].size);
+> 	fb_dealloc_cmap(&info->cmap);
+>+
+>+	framebuffer_release(info);
+> }
+>
+> static const struct fb_ops efifb_ops = {
+>-- 
+>2.35.1
+>

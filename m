@@ -2,307 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4768151E329
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E6151E32E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445258AbiEGBko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S1445243AbiEGBoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445232AbiEGBkb (ORCPT
+        with ESMTP id S234131AbiEGBou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:40:31 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EB35F27C;
-        Fri,  6 May 2022 18:36:45 -0700 (PDT)
-X-UUID: 9be6c806494f4f509cd8bb67e3ace3ac-20220507
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:cb816046-b5a8-493f-b249-fa84c1704a89,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:29108516-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 9be6c806494f4f509cd8bb67e3ace3ac-20220507
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1534823005; Sat, 07 May 2022 09:36:40 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 7 May 2022 09:36:39 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Sat, 7 May 2022 09:36:37 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Fri, 6 May 2022 21:44:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146844EF73;
+        Fri,  6 May 2022 18:41:06 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kw9996q3Nz1JBtn;
+        Sat,  7 May 2022 09:39:57 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 09:41:02 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 09:41:00 +0800
+Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
+ for arm64
+To:     Baoquan He <bhe@redhat.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3, 3/3] media: mediatek: vcodec: add h264 decoder driver for mt8186
-Date:   Sat, 7 May 2022 09:36:25 +0800
-Message-ID: <20220507013625.29020-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507013625.29020-1-yunfei.dong@mediatek.com>
-References: <20220507013625.29020-1-yunfei.dong@mediatek.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-7-thunder.leizhen@huawei.com>
+ <20220506231451.GB122876@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
+Date:   Sat, 7 May 2022 09:41:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220506231451.GB122876@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add h264 decode driver to support mt8186. For the architecture
-is single core, need to add new interface to decode.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
- 1 file changed, 176 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index 024dae1ddee0..e02e89ae4fd1 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -140,6 +140,9 @@ struct vdec_h264_slice_share_info {
-  * @vsi:		vsi used for lat
-  * @vsi_core:		vsi used for core
-  *
-+ * @vsi_ctx:		Local VSI data for this decoding context
-+ * @h264_slice_param:	the parameters that hardware use to decode
-+ *
-  * @resolution_changed:resolution changed
-  * @realloc_mv_buf:	reallocate mv buffer
-  * @cap_num_planes:	number of capture queue plane
-@@ -157,6 +160,9 @@ struct vdec_h264_slice_inst {
- 	struct vdec_h264_slice_vsi *vsi;
- 	struct vdec_h264_slice_vsi *vsi_core;
- 
-+	struct vdec_h264_slice_vsi vsi_ctx;
-+	struct vdec_h264_slice_lat_dec_param h264_slice_param;
-+
- 	unsigned int resolution_changed;
- 	unsigned int realloc_mv_buf;
- 	unsigned int cap_num_planes;
-@@ -208,6 +214,61 @@ static int vdec_h264_slice_fill_decode_parameters(struct vdec_h264_slice_inst *i
- 	return 0;
- }
- 
-+static int get_vdec_sig_decode_parameters(struct vdec_h264_slice_inst *inst)
-+{
-+	const struct v4l2_ctrl_h264_decode_params *dec_params;
-+	const struct v4l2_ctrl_h264_sps *sps;
-+	const struct v4l2_ctrl_h264_pps *pps;
-+	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-+	struct vdec_h264_slice_lat_dec_param *slice_param = &inst->h264_slice_param;
-+	struct v4l2_h264_reflist_builder reflist_builder;
-+	u8 *p0_reflist = slice_param->decode_params.ref_pic_list_p0;
-+	u8 *b0_reflist = slice_param->decode_params.ref_pic_list_b0;
-+	u8 *b1_reflist = slice_param->decode_params.ref_pic_list_b1;
-+
-+	dec_params =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_DECODE_PARAMS);
-+	if (IS_ERR(dec_params))
-+		return PTR_ERR(dec_params);
-+
-+	sps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SPS);
-+	if (IS_ERR(sps))
-+		return PTR_ERR(sps);
-+
-+	pps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_PPS);
-+	if (IS_ERR(pps))
-+		return PTR_ERR(pps);
-+
-+	scaling_matrix =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SCALING_MATRIX);
-+	if (IS_ERR(scaling_matrix))
-+		return PTR_ERR(scaling_matrix);
-+
-+	mtk_vdec_h264_update_dpb(dec_params, inst->dpb);
-+
-+	mtk_vdec_h264_copy_sps_params(&slice_param->sps, sps);
-+	mtk_vdec_h264_copy_pps_params(&slice_param->pps, pps);
-+	mtk_vdec_h264_copy_scaling_matrix(&slice_param->scaling_matrix, scaling_matrix);
-+
-+	mtk_vdec_h264_copy_decode_params(&slice_param->decode_params, dec_params, inst->dpb);
-+	mtk_vdec_h264_fill_dpb_info(inst->ctx, &slice_param->decode_params,
-+				    slice_param->h264_dpb_info);
-+
-+	/* Build the reference lists */
-+	v4l2_h264_init_reflist_builder(&reflist_builder, dec_params, sps, inst->dpb);
-+	v4l2_h264_build_p_ref_list(&reflist_builder, p0_reflist);
-+
-+	v4l2_h264_build_b_ref_lists(&reflist_builder, b0_reflist, b1_reflist);
-+	/* Adapt the built lists to the firmware's expectations */
-+	mtk_vdec_h264_fixup_ref_list(p0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b1_reflist, reflist_builder.num_valid);
-+	memcpy(&inst->vsi_ctx.h264_slice_params, slice_param,
-+	       sizeof(inst->vsi_ctx.h264_slice_params));
-+
-+	return 0;
-+}
-+
- static void vdec_h264_slice_fill_decode_reflist(struct vdec_h264_slice_inst *inst,
- 						struct vdec_h264_slice_lat_dec_param *slice_param,
- 						struct vdec_h264_slice_share_info *share_info)
-@@ -599,6 +660,120 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	return err;
- }
- 
-+static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+					 struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	struct vdec_vpu_inst *vpu = &inst->vpu;
-+	struct mtk_video_dec_buf *src_buf_info, *dst_buf_info;
-+	struct vdec_fb *fb;
-+	unsigned char *buf;
-+	unsigned int data[2], i;
-+	u64 y_fb_dma, c_fb_dma;
-+	struct mtk_vcodec_mem *mem;
-+	int err, nal_start_idx;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs)
-+		return vpu_dec_reset(vpu);
-+
-+	fb = inst->ctx->dev->vdec_pdata->get_cap_buffer(inst->ctx);
-+	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-+	dst_buf_info = container_of(fb, struct mtk_video_dec_buf, frame_buffer);
-+
-+	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
-+	c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
-+	mtk_vcodec_debug(inst, "[h264-dec] [%d] y_dma=%llx c_dma=%llx",
-+			 inst->ctx->decoded_frame_cnt, y_fb_dma, c_fb_dma);
-+
-+	inst->vsi_ctx.dec.bs_buf_addr = (u64)bs->dma_addr;
-+	inst->vsi_ctx.dec.bs_buf_size = bs->size;
-+	inst->vsi_ctx.dec.y_fb_dma = y_fb_dma;
-+	inst->vsi_ctx.dec.c_fb_dma = c_fb_dma;
-+	inst->vsi_ctx.dec.vdec_fb_va = (u64)(uintptr_t)fb;
-+
-+	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
-+				   &dst_buf_info->m2m_buf.vb, true);
-+	err = get_vdec_sig_decode_parameters(inst);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	buf = (unsigned char *)bs->va;
-+	nal_start_idx = mtk_vdec_h264_find_start_code(buf, bs->size);
-+	if (nal_start_idx < 0) {
-+		err = -EINVAL;
-+		goto err_free_fb_out;
-+	}
-+	inst->vsi_ctx.dec.nal_info = buf[nal_start_idx];
-+
-+	*res_chg = inst->resolution_changed;
-+	if (inst->resolution_changed) {
-+		mtk_vcodec_debug(inst, "- resolution changed -");
-+		if (inst->realloc_mv_buf) {
-+			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
-+			inst->realloc_mv_buf = false;
-+			if (err)
-+				goto err_free_fb_out;
-+		}
-+		inst->resolution_changed = false;
-+
-+		for (i = 0; i < H264_MAX_MV_NUM; i++) {
-+			mem = &inst->mv_buf[i];
-+			inst->vsi_ctx.mv_buf_dma[i] = mem->dma_addr;
-+		}
-+	}
-+
-+	memcpy_toio((void __iomem *)inst->vpu.vsi, &inst->vsi_ctx, sizeof(inst->vsi_ctx));
-+	err = vpu_dec_start(vpu, data, 2);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	/* wait decoder done interrupt */
-+	err = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
-+					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	if (err)
-+		mtk_vcodec_err(inst, "decode timeout: pic_%d",
-+			       inst->ctx->decoded_frame_cnt);
-+
-+	inst->vsi->dec.timeout = !!err;
-+	err = vpu_dec_end(vpu);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	memcpy_fromio(&inst->vsi_ctx, (void __iomem *)inst->vpu.vsi, sizeof(inst->vsi_ctx));
-+	mtk_vcodec_debug(inst, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
-+			 inst->ctx->decoded_frame_cnt,
-+			 inst->vsi_ctx.dec.crc[0], inst->vsi_ctx.dec.crc[1],
-+			 inst->vsi_ctx.dec.crc[2], inst->vsi_ctx.dec.crc[3],
-+			 inst->vsi_ctx.dec.crc[4], inst->vsi_ctx.dec.crc[5],
-+			 inst->vsi_ctx.dec.crc[6], inst->vsi_ctx.dec.crc[7]);
-+
-+	inst->ctx->decoded_frame_cnt++;
-+	return 0;
-+
-+err_free_fb_out:
-+	mtk_vcodec_err(inst, "dec frame number: %d err: %d",
-+		       inst->ctx->decoded_frame_cnt, err);
-+	return err;
-+}
-+
-+static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				  struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	int ret;
-+
-+	if (!h_vdec)
-+		return -EINVAL;
-+
-+	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		ret = vdec_h264_slice_single_decode(h_vdec, bs, unused, res_chg);
-+	else
-+		ret = vdec_h264_slice_lat_decode(h_vdec, bs, unused, res_chg);
-+
-+	return ret;
-+}
-+
- static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
- 				     void *out)
- {
-@@ -623,7 +798,7 @@ static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type
- 
- const struct vdec_common_if vdec_h264_slice_multi_if = {
- 	.init		= vdec_h264_slice_init,
--	.decode		= vdec_h264_slice_lat_decode,
-+	.decode		= vdec_h264_slice_decode,
- 	.get_param	= vdec_h264_slice_get_param,
- 	.deinit		= vdec_h264_slice_deinit,
- };
+On 2022/5/7 7:14, Baoquan He wrote:
+> On 05/06/22 at 07:44pm, Zhen Lei wrote:
+>> Now arm64 has added support for "crashkernel=X,high" and
+>> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+>> "crashkernel=Y,low" is not specified.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -808,7 +808,7 @@
+>>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+>>  
+>>  	crashkernel=size[KMG],high
+>> -			[KNL, X86-64] range could be above 4G. Allow kernel
+>> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+>>  			to allocate physical memory region from top, so could
+>>  			be above 4G if system have more than 4G ram installed.
+>>  			Otherwise memory region will be allocated below 4G, if
+>> @@ -821,7 +821,7 @@
+>>  			that require some amount of low memory, e.g. swiotlb
+>>  			requires at least 64M+32K low memory, also enough extra
+>>  			low memory is needed to make sure DMA buffers for 32-bit
+>> -			devices won't run out. Kernel would try to allocate at
+>> +			devices won't run out. Kernel would try to allocate
+>>  			at least 256M below 4G automatically.
+>>  			This one let user to specify own low range under 4G
+>>  			for second kernel instead.
+>> @@ -829,6 +829,11 @@
+>>  			It will be ignored when crashkernel=X,high is not used
+>>  			or memory reserved is below 4G.
+>>  
+>> +			[KNL, ARM64] range in low memory.
+>> +			This one let user to specify a low range in DMA zone for
+>                                           ^ not needed,
+>                         Maybe Catalin can fix it when merging.
+
+Delete "This one let user to" or the entire sentence? I understand it to be the former.
+
+> 
+> Other than this, LGTM,
+> 
+> Acked-by: Baoquan He <bhe@redhat.com>
+> 
+>> +			crash dump kernel.
+>> +			It will be ignored when crashkernel=X,high is not used.
+>> +
+>>  	cryptomgr.notests
+>>  			[KNL] Disable crypto self-tests
+>>  
+>> -- 
+>> 2.25.1
+>>
+> 
+> .
+> 
+
 -- 
-2.18.0
-
+Regards,
+  Zhen Lei

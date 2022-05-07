@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CD551E99B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD96551E9B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446924AbiEGTxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S1447013AbiEGTxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245713AbiEGTxM (ORCPT
+        with ESMTP id S235918AbiEGTxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:53:12 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6390A17079
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:49:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so6201039wmn.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 12:49:22 -0700 (PDT)
+        Sat, 7 May 2022 15:53:13 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B0317AB8
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:49:23 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so6197214wme.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 12:49:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UG9+cIig2tf9rl736/AVv78nJje23FHX5KBYsT/BjQA=;
-        b=EMbGODijqIlISgN1pdNil9wjlUNJjOspKbP6duPQiKQvHoqy1zqqVDZxlp+k9oX1Wf
-         8e6nOWSdQNIHRktRwFOzbyck52pPnrFaOacopd/neEE8iZVoixi+VtFeKt+/znRJnl2j
-         1QdadhiUoUAWE9/IWpvWefhnvYIneeWsWUFPaGahBCrDQsrHGJ7uC82/x9WwnPGZRtKO
-         7sILMAXYyFyuXfNN2JuyEfYgLMHR3Bff25u+GjUmbfT3I61mGtTEgNHYNzMweCFjka6a
-         ZD3oC069Md4bOJavsL8qcSbStgtIv38Gqf/ry4Bc4a2osRqXEh7th8bnDXVs4h7HRqQ7
-         rulw==
+        bh=Kw5YZ04RaC5TF/c9OWgq1MFTANMDOhl3ugmuJ0GkdcI=;
+        b=kiLkhgPG3EQK79wFbKkwcwQhX1IicdWu1W9AaDqwA/+aeK62c9WkU7Xcy9HhCR37ZI
+         Z6OtKg9AaD12A/L/uaRlweu9JyE0Lpwd0NpyAqm6yzMfHIZdtXdl10697LLT8QheB5Kj
+         3rqYHQc3V+23g2RjBAjlg01L0ym0RjpwalB1RzfO/gCKAOKdO0opVVhwC/xn5/XOY3Dy
+         seWpVf3t4poy4RzrIAXSLFdYpi2QiwZXPxPMxVWFDRH8HUMZfRUrR9m5hudeQ6z/KX/z
+         Z3/gGAfTxpoBVtplPT4NXgXyxVKp2GseJ2e7sMNVcq81blgMJxyUaYf0GQzK4vYxivEk
+         M6OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UG9+cIig2tf9rl736/AVv78nJje23FHX5KBYsT/BjQA=;
-        b=vFyJg7qBLEOZlZVE6sDNV2nEbGh/fEQt9Gu0VHi01HdE4pQA2rx95NvBI45Wsf6JSk
-         BRWTm5hv6iqcOTI9x7o+Cdm5/ktTi6rT1xFv1qOL5N88mKoWelIZw8nYdoGd/WDkICGg
-         hM9GwVgek0UKEa/kVAhy/jK9ZqDPHnh4oU9qbnS9nlmWW3a+FJkyIyHfF4EjeGq4v17M
-         +5CBiOhLIJY1zms/WPKo2FIqM5vFN+T4RgOsIrMB6pI3ZE6vSO7ocfEwdNao3Ux4EWkD
-         Vh1dUoCE+Vv/mubPguM2CsoncPEmlB0H7omZN/fgbodnHRC2jFZD1VwnybMHottamWpj
-         ZGYQ==
-X-Gm-Message-State: AOAM531R1NuhuPSz+u/KLuds/udwpE9K/Pa3R+yveEVNMu/ttWWo6W0Z
-        dtiPt3z7qySVW6/Ao1LPFQyMrw==
-X-Google-Smtp-Source: ABdhPJwuMW64Rcvj5fMdYDpnbLoGwSodlAvje7aQa+DJrIzbCs/DKPagFoz3Lj6faPBuIXVQpeIFeg==
-X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr16043414wmk.77.1651952960901;
-        Sat, 07 May 2022 12:49:20 -0700 (PDT)
+        bh=Kw5YZ04RaC5TF/c9OWgq1MFTANMDOhl3ugmuJ0GkdcI=;
+        b=zXCl30vlk22U01uKW1Tv4K6G6uxUcg7Uto2MutW+wZB+UUga4/K/d8l7Ixv6e55XlO
+         JAXE1YVSpa7vkQLvWqs61jdxo8uPgXL89VYqZpJFlohcoX0CcRCTr4m+1P6Fn+pWT2hc
+         zXkHR6kNt71OAU+F33q8jLkdONiZe6DP+r1LKchdk8959sADCb7yBc9dFWBIntRR+6Oo
+         vfXSW/1pATOyjD08T95Nrtbub3DQpeAG6gKiPZ/g2PZsaN2FRRrWT09LBqOmC8schcjz
+         6Z3f4S9R1Vwi6YK/Of9dAWkxWERj9T/fB1jU6i0TSqC4JRHaXjU9Rob6h88qecIIHRN/
+         2zEA==
+X-Gm-Message-State: AOAM532TIqlDZoBC+twGwRaM8RNdbLTj3dqd03sO/C6riL/vfNkAynDN
+        OlN4rUtcoDb+aCjj5RinlMCrLw==
+X-Google-Smtp-Source: ABdhPJyLr87kVkCuEVeZ1cog5/UfK8IWliGUfmJ1UYaLfRP2/T5N8swWJYkKIQTBpIHsG4eoE4Gi/g==
+X-Received: by 2002:a7b:cd97:0:b0:38f:f785:ff8 with SMTP id y23-20020a7bcd97000000b0038ff7850ff8mr15332104wmj.44.1651952962001;
+        Sat, 07 May 2022 12:49:22 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.19
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 12:49:20 -0700 (PDT)
+        Sat, 07 May 2022 12:49:21 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 01/11] dt-bindings: pinctrl: qcom,pmic-gpio: document PM8150L and PMM8155AU
-Date:   Sat,  7 May 2022 21:49:03 +0200
-Message-Id: <20220507194913.261121-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 02/11] dt-bindings: pinctrl: qcom,pmic-gpio: fix matching pin config
+Date:   Sat,  7 May 2022 21:49:04 +0200
+Message-Id: <20220507194913.261121-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
 References: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
@@ -71,7 +71,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +79,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing compatibles for devices: PM8150L and PMM8155AU.
+Matching PMIC GPIOs config nodes within a '-state' node by '.*' pattern
+does not work as expected because of linux,phandle in the DTB:
+
+  arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon-cityman.dtb: gpios@c000: divclk4-state: 'oneOf' conditional failed, one must be fixed:
+    'pins' is a required property
+    'function' is a required property
+    'pinconf' does not match any of the regexes: 'pinctrl-[0-9]+'
+    [[2]] is not of type 'object'
+
+Make the schema stricter and expect such nodes to be either named
+'pinconfig' or followed with '-pins' prefix.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ .../devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml          | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-index 22dbcba752d0..23d6b9165e20 100644
+index 23d6b9165e20..c266aa3f05c1 100644
 --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-@@ -32,6 +32,7 @@ properties:
-           - qcom,pm8058-gpio
-           - qcom,pm8150-gpio
-           - qcom,pm8150b-gpio
-+          - qcom,pm8150l-gpio
-           - qcom,pm8226-gpio
-           - qcom,pm8350-gpio
-           - qcom,pm8350b-gpio
-@@ -49,6 +50,7 @@ properties:
-           - qcom,pmi8994-gpio
-           - qcom,pmi8998-gpio
-           - qcom,pmk8350-gpio
-+          - qcom,pmm8155au-gpio
-           - qcom,pmr735a-gpio
-           - qcom,pmr735b-gpio
-           - qcom,pms405-gpio
-@@ -135,6 +137,7 @@ $defs:
-                  - gpio1-gpio2 for pmi8950
-                  - gpio1-gpio10 for pmi8994
-                  - gpio1-gpio4 for pmk8350
-+                 - gpio1-gpio10 for pmm8155au
-                  - gpio1-gpio4 for pmr735a
-                  - gpio1-gpio4 for pmr735b
-                  - gpio1-gpio12 for pms405 (holes on gpio1, gpio9
+@@ -95,8 +95,9 @@ patternProperties:
+     oneOf:
+       - $ref: "#/$defs/qcom-pmic-gpio-state"
+       - patternProperties:
+-          ".*":
++          "(pinconf|-pins)$":
+             $ref: "#/$defs/qcom-pmic-gpio-state"
++        additionalProperties: false
+ 
+ $defs:
+   qcom-pmic-gpio-state:
+@@ -237,7 +238,7 @@ examples:
+       #gpio-cells = <2>;
+ 
+       pm8921_gpio_keys: gpio-keys-state {
+-        volume-keys {
++        volume-keys-pins {
+           pins = "gpio20", "gpio21";
+           function = "normal";
+ 
 -- 
 2.32.0
 

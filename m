@@ -2,40 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E9A51E5F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18AB51E5F8
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383867AbiEGJUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S1383891AbiEGJVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383843AbiEGJT5 (ORCPT
+        with ESMTP id S229515AbiEGJVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:19:57 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491E75712C;
-        Sat,  7 May 2022 02:16:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VCWHKSC_1651914966;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCWHKSC_1651914966)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 07 May 2022 17:16:08 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     tim@cyberelk.net
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 1/2] paride: clean up some inconsistent indenting
-Date:   Sat,  7 May 2022 17:15:36 +0800
-Message-Id: <20220507091536.32211-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20220507091536.32211-1-jiapeng.chong@linux.alibaba.com>
-References: <20220507091536.32211-1-jiapeng.chong@linux.alibaba.com>
+        Sat, 7 May 2022 05:21:21 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B025657123;
+        Sat,  7 May 2022 02:17:34 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id e24so12997383wrc.9;
+        Sat, 07 May 2022 02:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gYHAJahK4aFx5yhwaNZC95xNZdXWvLOzC1m0kiecvQ0=;
+        b=RjhlQrji4Dvf+RBTCfI7lj7YO9ESDYT5EERE7DGVSFoBflB50W4BRYv1Mxo/orM5r4
+         6kCaHOUXVj99kxw17c9YR9o4L17kTWPYr/Z/pSDSEzPe4jBi9wAFEekKrpvv9MTk7uLN
+         mwU/vTnTh6gixFhWxaAB2/KTocG3AQIU0asl7tJ3vOofx7WGKavIyFgDE9Sr2pvseYDj
+         5iOL2umy3jXRJbYGSDxeMbaHlFAl7Zm3+s4C8b3xjvp3CADcPV2l1lZ8c2SCvuUA6zAe
+         UQ+uMGFHDpqk4Dsi2d6jT2fc+EHNPxAwIM2IoZ2LNn9eniVzI5vfr4nyI1T0skf+pdeu
+         RpiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gYHAJahK4aFx5yhwaNZC95xNZdXWvLOzC1m0kiecvQ0=;
+        b=ZR1W7dm/qki4cHqxJke3aoFywM3Mg6lwPl1+zr26d/xC3CkYhv6vuXuP60DJTfTFUn
+         LkXijU08cBrx+SZftHvyr2paAnAn/J2fb0ZhC+YYkxffdHgd9N9vtB734u687HHL0Mmz
+         ab4qAQ7uFxLtTU5dpu8Xl3zzJdrYHcigF1TRc6mys2t2TZXm1wIeam90a0Uelh2N4CrF
+         1CUxkIvOa4+t75mCtWxAaOIerjfGQvOR9NUpn90r800xLIJMrBCTTIO3Q+LMKLtUbpzV
+         0/bZf8ADi+4ZroEPJqtExBdG4O/S4BSUrY+6HB+oDwMKPq/tTJSq/5VMg2GRPfECxatp
+         5e6g==
+X-Gm-Message-State: AOAM531c4cfFsj0vPHm9gNiZX37F5oFidnfW6cBaqctj+EPo/nLZf9lr
+        61uPLtSoBoFKiswTBn65W3p1V1gmPd8=
+X-Google-Smtp-Source: ABdhPJx7pP8UICrd5MzoKSTyWN955VaL5dWfQNCslzmGqjz9WkZlC0LSE+KvWXdJbHsk8Yycf6kYOg==
+X-Received: by 2002:a5d:66c8:0:b0:20a:c807:6061 with SMTP id k8-20020a5d66c8000000b0020ac8076061mr5714915wrw.399.1651915053027;
+        Sat, 07 May 2022 02:17:33 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.237.69])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1c544b000000b003942a244f30sm12455397wmi.9.2022.05.07.02.17.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 02:17:32 -0700 (PDT)
+Message-ID: <9c4cff81-ff0f-4819-c41d-54f28dba2929@gmail.com>
+Date:   Sat, 7 May 2022 10:16:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Guo Xuenan <guoxuenan@huawei.com>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
+References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <20220505141159.3182874-1-guoxuenan@huawei.com>
+ <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
+ <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
+ <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
+ <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,127 +79,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warning:
+On 5/6/22 19:22, Jens Axboe wrote:
+> On 5/6/22 10:15 AM, Jens Axboe wrote:
+>> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
+>>> On 5/6/22 03:16, Jens Axboe wrote:
+>>>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
+>>>>> Hi, Pavel & Jens
+>>>>>
+>>>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
+>>>>> it is not enough only apply [2] to stable-5.10.
+>>>>> Io_uring is very valuable and active module of linux kernel.
+>>>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
+>>>>> found my understanding of io_uring is not enough to resolve all conflicts.
+>>>>>
+>>>>> Since 5.10 is an important stable branch of linux, we would appreciate
+>>>>> your help in solving this problem.
+>>>>
+>>>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
+>>>> there was a reproducer for this that was somewhat saner than the
+>>>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
+>>>
+>>> No, it was the only repro and was triggering the problem
+>>> just fine back then
+>>
+>> I modified it a bit and I can now trigger it.
+> 
+> Pavel, why don't we just keep it really simple and just always save the
+> iter state in read/write, and use the restore instead of the revert?
 
-drivers/block/paride/on26.c:158 on26_test_port() warn: inconsistent
-indenting.
+The problem here is where we're doing revert. If it's done deep in
+the stack and then while unwinding someone decides to revert it again,
+e.g. blkdev_read_iter(), we're screwed.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/block/paride/on26.c | 85 +++++++++++++++++++------------------
- 1 file changed, 44 insertions(+), 41 deletions(-)
+The last attempt was backporting 20+ patches that would move revert
+into io_read/io_write, i.e. REQ_F_REISSUE, back that failed some of
+your tests back then. (was it read retry tests iirc?)
 
-diff --git a/drivers/block/paride/on26.c b/drivers/block/paride/on26.c
-index 95ba256921f2..d2ee74dbee29 100644
---- a/drivers/block/paride/on26.c
-+++ b/drivers/block/paride/on26.c
-@@ -125,61 +125,64 @@ static void on26_disconnect ( PIA *pi )
- #define	RESET_WAIT  200
- 
- static int on26_test_port( PIA *pi)  /* hard reset */
-+{
-+	int i, m, d, x = 0, y = 0;
- 
--{       int     i, m, d, x=0, y=0;
--
--        pi->saved_r0 = r0();
--        pi->saved_r2 = r2();
-+	pi->saved_r0 = r0();
-+	pi->saved_r2 = r2();
- 
--        d = pi->delay;
--        m = pi->mode;
--        pi->delay = 5;
--        pi->mode = 0;
-+	d = pi->delay;
-+	m = pi->mode;
-+	pi->delay = 5;
-+	pi->mode = 0;
- 
--        w2(0xc);
-+	w2(0xc);
- 
--        CCP(0x30); CCP(0); 
-+	CCP(0x30); CCP(0);
- 
--        w0(0xfe);w0(0xaa);w0(0x55);w0(0);w0(0xff);
--        i = ((r1() & 0xf0) << 4); w0(0x87);
--        i |= (r1() & 0xf0); w0(0x78);
--        w0(0x20);w2(4);w2(5);
--        i |= ((r1() & 0xf0) >> 4);
--        w2(4);w0(0xff);
-+	w0(0xfe); w0(0xaa); w0(0x55); w0(0); w0(0xff);
-+	i = ((r1() & 0xf0) << 4); w0(0x87);
-+	i |= (r1() & 0xf0); w0(0x78);
-+	w0(0x20); w2(4); w2(5);
-+	i |= ((r1() & 0xf0) >> 4);
-+	w2(4); w0(0xff);
- 
--        if (i == 0xb5f) {
-+	if (i == 0xb5f) {
- 
--            w0(2); P1; w0(0);   P2;
--            w0(3); P1; w0(0);   P2;
--            w0(2); P1; w0(8);   P2; udelay(100);
--            w0(2); P1; w0(0xa); P2; udelay(100);
--            w0(2); P1; w0(8);   P2; udelay(1000);
-+		w0(2); P1; w0(0);   P2;
-+		w0(3); P1; w0(0);   P2;
-+		w0(2); P1; w0(8);   P2; udelay(100);
-+		w0(2); P1; w0(0xa); P2; udelay(100);
-+		w0(2); P1; w0(8);   P2; udelay(1000);
-             
--            on26_write_regr(pi,0,6,0xa0);
-+		on26_write_regr(pi, 0, 6, 0xa0);
- 
--            for (i=0;i<RESET_WAIT;i++) {
--                on26_write_regr(pi,0,6,0xa0);
--                x = on26_read_regr(pi,0,7);
--                on26_write_regr(pi,0,6,0xb0);
--                y = on26_read_regr(pi,0,7);
--                if (!((x&0x80)||(y&0x80))) break;
--                mdelay(100);
--            }
-+		for (i = 0; i < RESET_WAIT; i++) {
-+			on26_write_regr(pi, 0, 6, 0xa0);
-+			x = on26_read_regr(pi, 0, 7);
- 
--	    if (i == RESET_WAIT) 
--		printk("on26: Device reset failed (%x,%x)\n",x,y);
-+			on26_write_regr(pi, 0, 6, 0xb0);
-+			y = on26_read_regr(pi, 0, 7);
- 
--            w0(4); P1; w0(4); P1;
--        }
-+			if (!((x & 0x80) || (y & 0x80)))
-+				break;
-+			mdelay(100);
-+		}
- 
--        CCP(0x30);
-+		if (i == RESET_WAIT)
-+			printk("on26: Device reset failed (%x,%x)\n", x, y);
- 
--        pi->delay = d;
--        pi->mode = m;
--        w0(pi->saved_r0);
--        w2(pi->saved_r2);
-+		w0(4); P1; w0(4); P1;
-+	}
-+
-+	CCP(0x30);
-+
-+	pi->delay = d;
-+	pi->mode = m;
-+	w0(pi->saved_r0);
-+	w2(pi->saved_r2);
- 
--        return 5;
-+	return 5;
- }
- 
- 
+
+> Then it's just a trivial backport of ff6165b2d7f6 and the trivial
+> io_uring patch after that.
+> 
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index ab9290ab4cae..138f204db72a 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -3429,6 +3429,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+>   	struct kiocb *kiocb = &req->rw.kiocb;
+>   	struct iov_iter __iter, *iter = &__iter;
+>   	struct io_async_rw *rw = req->async_data;
+> +	struct iov_iter_state iter_state;
+>   	ssize_t io_size, ret, ret2;
+>   	bool no_async;
+>   
+> @@ -3458,6 +3459,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+>   	if (unlikely(ret))
+>   		goto out_free;
+>   
+> +	iov_iter_save_state(iter, &iter_state);
+>   	ret = io_iter_do_read(req, iter);
+>   
+>   	if (!ret) {
+> @@ -3473,7 +3475,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
+>   		if (req->file->f_flags & O_NONBLOCK)
+>   			goto done;
+>   		/* some cases will consume bytes even on error returns */
+> -		iov_iter_revert(iter, io_size - iov_iter_count(iter));
+> +		iov_iter_restore(iter, &iter_state);
+>   		ret = 0;
+>   		goto copy_iov;
+>   	} else if (ret < 0) {
+> @@ -3557,6 +3559,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+>   	struct kiocb *kiocb = &req->rw.kiocb;
+>   	struct iov_iter __iter, *iter = &__iter;
+>   	struct io_async_rw *rw = req->async_data;
+> +	struct iov_iter_state iter_state;
+>   	ssize_t ret, ret2, io_size;
+>   
+>   	if (rw)
+> @@ -3574,6 +3577,8 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+>   	else
+>   		kiocb->ki_flags |= IOCB_NOWAIT;
+>   
+> +	iov_iter_save_state(iter, &iter_state);
+> +
+>   	/* If the file doesn't support async, just async punt */
+>   	if (force_nonblock && !io_file_supports_async(req->file, WRITE))
+>   		goto copy_iov;
+> @@ -3626,7 +3631,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
+>   	} else {
+>   copy_iov:
+>   		/* some cases will consume bytes even on error returns */
+> -		iov_iter_revert(iter, io_size - iov_iter_count(iter));
+> +		iov_iter_restore(iter, &iter_state);
+>   		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
+>   		if (!ret)
+>   			return -EAGAIN;
+> diff --git a/include/linux/uio.h b/include/linux/uio.h
+> index 27ff8eb786dc..cedb68e49e4f 100644
+> --- a/include/linux/uio.h
+> +++ b/include/linux/uio.h
+> @@ -26,6 +26,12 @@ enum iter_type {
+>   	ITER_DISCARD = 64,
+>   };
+>   
+> +struct iov_iter_state {
+> +	size_t iov_offset;
+> +	size_t count;
+> +	unsigned long nr_segs;
+> +};
+> +
+>   struct iov_iter {
+>   	/*
+>   	 * Bit 0 is the read/write bit, set if we're writing.
+> @@ -55,6 +61,14 @@ static inline enum iter_type iov_iter_type(const struct iov_iter *i)
+>   	return i->type & ~(READ | WRITE);
+>   }
+>   
+> +static inline void iov_iter_save_state(struct iov_iter *iter,
+> +				       struct iov_iter_state *state)
+> +{
+> +	state->iov_offset = iter->iov_offset;
+> +	state->count = iter->count;
+> +	state->nr_segs = iter->nr_segs;
+> +}
+> +
+>   static inline bool iter_is_iovec(const struct iov_iter *i)
+>   {
+>   	return iov_iter_type(i) == ITER_IOVEC;
+> @@ -226,6 +240,7 @@ ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
+>   ssize_t iov_iter_get_pages_alloc(struct iov_iter *i, struct page ***pages,
+>   			size_t maxsize, size_t *start);
+>   int iov_iter_npages(const struct iov_iter *i, int maxpages);
+> +void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state);
+>   
+>   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
+>   
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 1b0a349fbcd9..00a66229d182 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -1857,3 +1857,39 @@ int iov_iter_for_each_range(struct iov_iter *i, size_t bytes,
+>   	return err;
+>   }
+>   EXPORT_SYMBOL(iov_iter_for_each_range);
+> +
+> +/**
+> + * iov_iter_restore() - Restore a &struct iov_iter to the same state as when
+> + *     iov_iter_save_state() was called.
+> + *
+> + * @i: &struct iov_iter to restore
+> + * @state: state to restore from
+> + *
+> + * Used after iov_iter_save_state() to bring restore @i, if operations may
+> + * have advanced it.
+> + *
+> + * Note: only works on ITER_IOVEC, ITER_BVEC, and ITER_KVEC
+> + */
+> +void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state)
+> +{
+> +	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i)) &&
+> +			 !iov_iter_is_kvec(i))
+> +		return;
+> +	i->iov_offset = state->iov_offset;
+> +	i->count = state->count;
+> +	/*
+> +	 * For the *vec iters, nr_segs + iov is constant - if we increment
+> +	 * the vec, then we also decrement the nr_segs count. Hence we don't
+> +	 * need to track both of these, just one is enough and we can deduct
+> +	 * the other from that. ITER_KVEC and ITER_IOVEC are the same struct
+> +	 * size, so we can just increment the iov pointer as they are unionzed.
+> +	 * ITER_BVEC _may_ be the same size on some archs, but on others it is
+> +	 * not. Be safe and handle it separately.
+> +	 */
+> +	BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
+> +	if (iov_iter_is_bvec(i))
+> +		i->bvec -= state->nr_segs - i->nr_segs;
+> +	else
+> +		i->iov -= state->nr_segs - i->nr_segs;
+> +	i->nr_segs = state->nr_segs;
+> +}
+> 
+
 -- 
-2.20.1.7.g153144c
-
+Pavel Begunkov

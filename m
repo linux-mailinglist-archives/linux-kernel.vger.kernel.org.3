@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE8451E88B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B4251E883
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386277AbiEGQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S1351128AbiEGQbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386208AbiEGQih (ORCPT
+        with ESMTP id S240025AbiEGQbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:38:37 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0E318378
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 09:34:50 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 247GYZsr111500;
-        Sat, 7 May 2022 11:34:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651941275;
-        bh=Hur27LN4fekLufj1k16EnyuF+7Y01NJ48WB1vYzscoU=;
-        h=Date:From:To:CC:Subject;
-        b=tXiML59uN5LW6pw2muk8PTW7+B1plviyQQwwtu3r5HFX7DEWEB7EWuhWunXpFMsCz
-         b1jYoWtoUpMmdEEXHjnuY0/Z+U2vuYpzz/UixyM3aQkk+hQo3aFbhIq19R5BlVuPDp
-         a60BB+QTflfPXsfndOJH+vxM/dt53FeJRIVP1ZPE=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 247GYZHE028615
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 7 May 2022 11:34:35 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 7
- May 2022 11:34:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 7 May 2022 11:34:35 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 247GYZvu059962;
-        Sat, 7 May 2022 11:34:35 -0500
-Date:   Sat, 7 May 2022 11:34:35 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: [GIT PULL 2/2] ARM: dts: TI K2 updates for v5.19
-Message-ID: <20220507163435.tcg46cacwqhe7n64@busily>
+        Sat, 7 May 2022 12:31:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64EC31222;
+        Sat,  7 May 2022 09:27:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F88961277;
+        Sat,  7 May 2022 16:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3E2C385A6;
+        Sat,  7 May 2022 16:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651940843;
+        bh=3rr8bPT1a3oSQb1SQ5wfvUm81Gi7wyQPTmJOEcdlh2A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dqm5PdfERD+8qcwDSg/e8RFozVMjEnfGErAOdc6LJrU22OqtG3qYIdJig/qdNMkxM
+         6KTnVBi7SyqV0XbQR8/qWp1OxotQ4YxBXyCFKUSVsdArXze2M6P5deYbpEyawuaIKq
+         /IL9tGVPxpQzRsgJq1sZUni/mXUoMcZZZQpQTl0YjD+SkUc3w41LeEn0YroQmGo31U
+         3ztBgNuHz7CsIUeg9iDRIyJLdPMOZjrgUT21T4XE57FepY/Tj/cNMGfWSvDgvi98wQ
+         zW453DBNKHr7+/iQl/V7RPAv8WxZ0YOshOMsEDoX4Nz9hhCJLN/GgIUBQ0vZTUkKux
+         q6Pd7LVcjG+gQ==
+Date:   Sat, 7 May 2022 17:35:51 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v3 2/2] iio: adc: ad4130: add AD4130 driver
+Message-ID: <20220507173551.1bc45a82@jic23-huawei>
+In-Reply-To: <5d932a4a-790e-ca95-c5de-c2267e1f365c@gmail.com>
+References: <20220419150828.191933-1-cosmin.tanislav@analog.com>
+        <20220419150828.191933-3-cosmin.tanislav@analog.com>
+        <20220501170807.1e728524@jic23-huawei>
+        <5d932a4a-790e-ca95-c5de-c2267e1f365c@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vqftsuyxs5fplaqg"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,71 +61,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---vqftsuyxs5fplaqg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi ARM SoC maintainers,
+> >   
+> >> +static int ad4130_set_fifo_watermark(struct iio_dev *indio_dev, unsigned int val)
+> >> +{
+> >> +	struct ad4130_state *st = iio_priv(indio_dev);
+> >> +	unsigned int eff;
+> >> +	int ret;
+> >> +
+> >> +	if (val > AD4130_FIFO_SIZE)
+> >> +		return -EINVAL;
+> >> +
+> >> +	/*
+> >> +	 * Always set watermark to a multiple of the number of enabled channels
+> >> +	 * to avoid making the FIFO unaligned.
+> >> +	 */
+> >> +	eff = rounddown(val, st->num_enabled_channels);
+> >> +
+> >> +	mutex_lock(&st->lock);
+> >> +
+> >> +	ret = regmap_update_bits(st->regmap, AD4130_REG_FIFO_CONTROL,
+> >> +				 AD4130_WATERMARK_MASK,
+> >> +				 FIELD_PREP(AD4130_WATERMARK_MASK,
+> >> +					    ad4130_watermark_reg_val(eff)));
+> >> +	if (ret)
+> >> +		goto out;
+> >> +
+> >> +	st->effective_watermark = eff;
+> >> +	st->watermark = val;  
+> > 
+> > Hmm this is a potential inconsistency in the IIO ABI.
+> > ABI docs describes watermark as being number of 'scan elements' which is
+> > not the clearest text we could have gone with...
+> > 
+> > Now I may well have made a mistake in the following as it's rather a long time
+> > since I last looked at the core handling for this...
+> > 
+> > The core treats it as number datum (which is same as a scan) when using
+> > it for the main watermark attribute and also when using watermarks with the
+> > kfifo (the IIO fifo is made up of objects each of which is a scan. So kfifo_len()
+> > returns the number of scans.
+> >   
+> > Looking very quickly at a few other drivers
+> > adxl367 seems to use number of samples.
+> > adxl372 is using number of scans.
+> > bmc150 hardware seems to work on basis of frame count which I 'think' is probably scans.
+> > fxls8962 uses 'samples count' which is not clearly defined in the datasheet but there
+> > is an example showing that it's scans (I think)...
+> > lsm6dsx - some of the fifos used with this are based on tagged data so the connection to
+> > what hits the front end buffers is non obvious.
+> > 
+> > So, not great for consistency :(
+> > 
+> > Going forwards i think we should standardize the hardware fifo watermark on what is being
+> > used for the software watermark which I believe is number of scans.
+> > Not necessary much we can do about old drivers though due to risk of breaking ABI...
+> > We should make the documentation clearer though.
+> >   
+> 
+> I was confused too, but this seemed more logical to me at the time, and
+> since you didn't say anything regarding it on ADXL367, I did it the same
+> way here. I guess we can't go back and change it now on ADXL367, I'm
+> sorry for this. I'll fix it.
 
-    Please pull:
+I missed it.  Review is never perfect (mine definitely aren't!)
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+Thinking more on the adxl367. We still have a window to  fix that as
+the driver isn't yet in a release kernel.  Would you mind spinning a
+patch to fix that one?  Even if we miss the rc cycle (it's a bit tight
+timing wise) we can sneak it in as an early fix in stable without
+significant risk of breaking anyone's userspace.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+There might be other drivers that have that interpretation we can't
+fix but if we can reduce the scope of the problem by changing the adxl367
+that would be great.
 
-are available in the Git repository at:
+We should also definitely improve the docs and perhaps add a note to say
+that due to need to maintain ABI, a few drivers use scans * number of channels
+rather than scans.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-keysto=
-ne-dt-for-v5.19
+> 
+> >> +
+> >> +out:
+> >> +	mutex_unlock(&st->lock);
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +  
+> > 
+> > 
+> > ...
+> >   
+> >> +
+> >> +static int ad4130_parse_fw_channel(struct iio_dev *indio_dev,
+> >> +				   struct fwnode_handle *child)
+> >> +{
+> >> +	struct ad4130_state *st = iio_priv(indio_dev);
+> >> +	unsigned int index = indio_dev->num_channels++;
+> >> +	struct device *dev = &st->spi->dev;
+> >> +	struct ad4130_chan_info *chan_info;
+> >> +	struct iio_chan_spec *chan;
+> >> +	u32 pins[2];
+> >> +	int ret;
+> >> +
+> >> +	if (index >= AD4130_MAX_CHANNELS)
+> >> +		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
+> >> +
+> >> +	chan = &st->chans[index];
+> >> +	chan_info = &st->chans_info[index];
+> >> +
+> >> +	*chan = ad4130_channel_template;
+> >> +	chan->scan_type.realbits = st->chip_info->resolution;
+> >> +	chan->scan_type.storagebits = st->chip_info->resolution;
+> >> +	chan->scan_index = index;
+> >> +
+> >> +	chan_info->slot = AD4130_INVALID_SLOT;
+> >> +	chan_info->setup.fs = AD4130_FS_MIN;
+> >> +	chan_info->initialized = true;
+> >> +
+> >> +	ret = fwnode_property_read_u32_array(child, "diff-channels", pins,
+> >> +					     ARRAY_SIZE(pins));
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	ret = ad4130_validate_diff_channels(st, pins, ARRAY_SIZE(pins));
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	chan->channel = pins[0];
+> >> +	chan->channel2 = pins[1];
+> >> +
+> >> +	ret = ad4130_parse_fw_setup(st, child, &chan_info->setup);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	fwnode_property_read_u32(child, "adi,excitation-pin-0",
+> >> +				 &chan_info->iout0);
+> >> +	if (chan_info->setup.iout0_val != AD4130_IOUT_OFF) {  
+> > 
+> > It would be slightly better to set an explicit default value here as the fact it
+> > is 0 is hidden by the enum. e.g.
+> > 	chan_info->iout0 = AD4130_IOUT_OFF;
+> > 	fwnode_property_read_u32(child, "adi,excitation-pin-0",
+> > 			 	 &chan_info->iout0);
+> > 	if (chan_info->....
+> > That would save reviewers wondering what the default is and having to go
+> > check the enum (and I'm lazy :)  
+> 
+> I understand the idea, but the default value for iout0 is not
+> AD4130_IOUT_OFF. iout0 is the pin that iout0_val current is
+> applied to, and AD4130_IOUT_OFF is a value for iout0_val.
+> Look at ad4130_parse_fw_setup.
+> 
+> For iout0, I guess I could do
+> #define AD4130_AIN0	0x0
+> ...
+> chan_info->iout0 = AD4130_AIN0;
 
-for you to fetch changes up to 6273a1864d437553ab4220d1abc010c5bb758ad2:
+Oops.  I got confused.  Code is fine as it is.  Adding the define isn't going to make
+it much clearer.
+ 
+> 
+> >> +		}
+> >> +	}
+> >> +
+> >> +	return ret;
+> >> +}
+> >> +
 
-  ARM: dts: keystone: Fix missing fallback and case in SPI NOR node compati=
-ble (2022-04-22 13:48:38 -0500)
-
-----------------------------------------------------------------
-Keystone2 device tree updates for v5.19
-
-* Cleanups for SPI NOR / flash
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      ARM: dts: keystone: Align SPI NOR node name with dtschema
-      ARM: dts: keystone: Fix missing fallback and case in SPI NOR node com=
-patible
-
- arch/arm/boot/dts/keystone-k2e-evm.dts  | 4 ++--
- arch/arm/boot/dts/keystone-k2g-evm.dts  | 2 +-
- arch/arm/boot/dts/keystone-k2g-ice.dts  | 2 +-
- arch/arm/boot/dts/keystone-k2hk-evm.dts | 4 ++--
- arch/arm/boot/dts/keystone-k2l-evm.dts  | 4 ++--
- 5 files changed, 8 insertions(+), 8 deletions(-)
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---vqftsuyxs5fplaqg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmJ2n44ACgkQ3bWEnRc2
-JJ0tFhAAqPLkuqmvJv1Y4utKl8Hpa4Pst3VI9H1+bVnz5tDwWzUSx+4a1zQLxgcv
-ZcJkRTgMhlG8zGIzevGNErnVkbLmuqzdP/VNWNfsLN4ed/bxpMzMwg3DhUi/fyRg
-ZpotfG3Rut/F5U/AGgY0Qx/r02pRdXudoOLCsX8ZK+if05y4me6uk0CYc5oep2hD
-bTE/qAE04aCPhfUxSt6qULnj5vgITB7+EP2cDqLm6vpE+0pnu+zAYoLNsbv5jN9v
-pBmVNemnr62nPOOwfLfUT3130tnkA5wvKEdBGQDfBdoDuJBqBbQ0epaDFoyncUxr
-pJh2C2Y+Gs97G/04YiyADyalSmVBbe+CFOY6By+cYPBbOOkYdNY1etjdpGi1QaM1
-Uf1e7EGCZHOPlkouby9M1mmxx8ep1C2kkwELJXuv1YpPRcb/0hEclGViLs9J47v8
-LvEB4du31SqUiN0bs7z77OEUdgI8Fc9MzxziKaOmTHNwIkAHDTFMBhEHsBjZJes4
-oiKxT6Pm+V87rFfe6z5JuGitjVBv8G/tNXW13ZsHo4dKI9UdjmZuGv0sKL2yTlvg
-dTuQlTMlLC36Ax4fbSFBlluPOs0QDs9WGut+uVGrnGzu0spKInX0RIQ18m7FeHrg
-7nDm0peVFbzu3G/2tIXQT6K9fVsJvDIXrAjtFmla+y/lLuQciX4=
-=GYEt
------END PGP SIGNATURE-----
-
---vqftsuyxs5fplaqg--

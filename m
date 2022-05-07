@@ -2,186 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F4E51E601
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4B051E5FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383973AbiEGJ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S1383916AbiEGJXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiEGJ0u (ORCPT
+        with ESMTP id S229515AbiEGJXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:26:50 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCD33C4B8
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 02:23:04 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id a191so8018740pge.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 02:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HsmL70Uxpre+Yuw44Bhf/DXDbaU8ZDKhOhdy778k+yo=;
-        b=mlR3d80AhkwzzC9PKqaXsMDhWbQVXMEC6MCnzg1peU4Wr/mTRivGCNYgM7QRHTa0ub
-         Z3V6OvjENlJU/wkZN2dPGw8DjSuZcoNR2oGUlIRRhQBVH/J/SmIEO4cp5zUEAua7DtmH
-         km6VJHxTPXPOkXf28Bfd8y2Oj/hJ5Li/5hWOGMIjZcnUHnrxLi2Ce7b4K6swCToXCf7T
-         kja+3ZAT4xc4qTctp1GdxZRAwko+jFMeVBxA7mgxWtFLT8zu8kr3WjghwHOyLiP52hWs
-         ZvWYhgOn07sFKhQ0KVq2vNxuL3N6cigDdOzFwBCEHPNwFpfeLQXgfP/Z5DqDonJBga7k
-         jzjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HsmL70Uxpre+Yuw44Bhf/DXDbaU8ZDKhOhdy778k+yo=;
-        b=lAJ6zwv1J7shC0R9AwKXhrgtNZBlSDox58YR5ZmwzjW0+eIo803vnlMDJ5SbcYHd66
-         mo3c8CzQCeNee+ggypp5YlyqMzrUtgxPqzn8eIFJ8Wmns6bdVoLvjugQUG65fR+UaQ28
-         XDLd9SCacVtoclItcG3lnJ5zzPKaIPI3dcavy1DAjVxPsJ5vMLquHR0L4onxjn8wBeJx
-         zAQC2Xg5RWkze18RHqR2dsXDSLwfnjSbzEqbxuin65NSPaeKSMH+VkgLoCw69mxgeWp1
-         Q74xSzw4KHaXu0eqj3IdWPwxrAN2AHcnYg2iDxai6Sote1r9s3lL8isdC6guQl9L3UzO
-         cDCQ==
-X-Gm-Message-State: AOAM532vVdYKQ83/+nghKgnU13nTM9jx5FGmA5Cz/borkIz36sCC7J5K
-        5/+jDtTrrJzqoyfYW0UpEq+C5Uz6YMF2tw==
-X-Google-Smtp-Source: ABdhPJyw3bAQ9HgqBVfd9NCUfNAz6xXstkZXK2fVR31183kcyPUZrKZY1G88F0L6iyNceYsna1Hw0Q==
-X-Received: by 2002:a63:c013:0:b0:3c1:df82:c8b3 with SMTP id h19-20020a63c013000000b003c1df82c8b3mr6045188pgg.141.1651915383734;
-        Sat, 07 May 2022 02:23:03 -0700 (PDT)
-Received: from [10.255.89.252] ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b0015e8d4eb2e7sm3216427plg.305.2022.05.07.02.22.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 02:23:02 -0700 (PDT)
-Message-ID: <23e06fc6-84fe-122e-fc07-02c5bfa7d50b@bytedance.com>
-Date:   Sat, 7 May 2022 17:19:09 +0800
+        Sat, 7 May 2022 05:23:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF3957155
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 02:19:47 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KwMMF6VyNzhYxG;
+        Sat,  7 May 2022 17:19:21 +0800 (CST)
+Received: from [10.174.179.0] (10.174.179.0) by dggpemm500024.china.huawei.com
+ (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 7 May
+ 2022 17:19:45 +0800
+Message-ID: <e4e135fe-c3c0-19a6-67d8-23ac139627f6@huawei.com>
+Date:   Sat, 7 May 2022 17:19:45 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Re: Re: [PATCH 3/4] mm/memofy-failure.c: optimize hwpoison_filter
-Content-Language: en-US
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20220429142206.294714-1-pizhenwei@bytedance.com>
- <20220429142206.294714-4-pizhenwei@bytedance.com>
- <20220506085920.GC1356094@u2004>
- <3c0e25fb-695d-4a29-6de4-c892f89cea7a@bytedance.com>
- <ac3fc5b9-d09c-5fb6-998d-f7c655d7fa00@redhat.com>
- <a60933f2-ef07-92a3-66cf-071670a03101@bytedance.com>
- <20220507082045.GA1716199@u2004>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20220507082045.GA1716199@u2004>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+To:     <linux-kernel@vger.kernel.org>
+CC:     <suweifeng1@huawei.com>, <linfeilong@huawei.com>,
+        <akpm@linux-foundation.org>
+From:   "zhanghongtao (A)" <zhanghongtao22@huawei.com>
+Subject: [PATCH] drivers/uio: Fix system crashes during driver switchover
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.0]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/22 16:20, Naoya Horiguchi wrote:
-> On Sat, May 07, 2022 at 08:28:05AM +0800, zhenwei pi wrote:
->>
->> On 5/7/22 00:28, David Hildenbrand wrote:
->>> On 06.05.22 15:38, zhenwei pi wrote:
->>>>
->>>>
->>>> On 5/6/22 16:59, Naoya Horiguchi wrote:
->>>>> On Fri, Apr 29, 2022 at 10:22:05PM +0800, zhenwei pi wrote:
->>>>>> In the memory failure procedure, hwpoison_filter has higher priority,
->>>>>> if memory_filter() filters the error event, there is no need to do
->>>>>> the further work.
->>>>>
->>>>> Could you clarify what problem you are trying to solve (what does
->>>>> "optimize" mean in this context or what is the benefit)?
->>>>>
->>>>
->>>> OK. The background of this work:
->>>> As well known, the memory failure mechanism handles memory corrupted
->>>> event, and try to send SIGBUS to the user process which uses this
->>>> corrupted page.
->>>>
->>>> For the virtualization case, QEMU catches SIGBUS and tries to inject MCE
->>>> into the guest, and the guest handles memory failure again. Thus the
->>>> guest gets the minimal effect from hardware memory corruption.
->>>>
->>>> The further step I'm working on:
->>>> 1, try to modify code to decrease poisoned pages in a single place
->>>> (mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
-> 
-> This is fine to me.
-> 
->>>>
->>>> 2, try to use page_handle_poison() to handle SetPageHWPoison() and
->>>> num_poisoned_pages_inc() together. It would be best to call
->>>> num_poisoned_pages_inc() in a single place too. I'm not sure if this is
->>>> possible or not, please correct me if I misunderstand.
-> 
-> SetPageHWPoison() can be cancelled in memory_failure(), so simply bundling
-> it with num_poisoned_pages_inc() might not be optimal.  I think that
-> action_result() is supposed to be called when memory error handling is
-> effective (not filtered, not cancelled). So moving num_poisoned_pages_inc()
-> (and notification code in your plan) into this function might be good.
-> 
-OK, I'll remove this patch(mm/memofy-failure.c: optimize 
-hwpoison_filter) from this series, and fix the other 3 patches in the v2 
-version. Then try to implement/test as your suggestion in another series.
+From: Hongtao Zhang <zhanghongtao22@huawei.com>
 
->>>>
->>>> 3, introduce memory failure notifier list in memory-failure.c: notify
->>>> the corrupted PFN to someone who registers this list.
->>>> If I can complete [1] and [2] part, [3] will be quite easy(just call
->>>> notifier list after increasing poisoned page).
->>>>
->>>> 4, introduce memory recover VQ for memory balloon device, and registers
->>>> memory failure notifier list. During the guest kernel handles memory
->>>> failure, balloon device gets notified by memory failure notifier list,
->>>> and tells the host to recover the corrupted PFN(GPA) by the new VQ.
->>>
->>> Most probably you might want to do that asynchronously, and once the
->>> callback succeeds, un-poison the page.
->>>
->> Yes!
->>
->>>>
->>>> 5, host side remaps the corrupted page(HVA), and tells the guest side to
->>>> unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA)
->>>> dynamically.
->>>
->>> I think QEMU already does that during reboots. Now it would be triggered
->>> by the guest for individual pages.
->>>
->> Yes, currently QEMU supports to un-poison corrupted pages during
->> reset/reboot. We can reuse some code to do the work in this case, this
->> allows a VM to fix corrupted pages as soon as possible(also no need to
->> reset/reboot).
-> 
-> So this finally allows to replace broken page mapped to guest with
-> a healthy page without rebooting the guest. That sounds helpful.
-> 
-> Thanks,
-> Naoya Horiguchi
-> 
-Yes, it's my plan. Thanks for your suggestions!
+Switch the driver of the SPDK program that is being read and written from the uio_pci_generic driver to the NVMe driver
+(Unbind the UIO driver from the device and bind the NVMe driver to the device.) ,
+the system crashes and restarts, and the stacks of each crash are different.
+Bug reproduction: When the SPDK is reading or writing data, run the following command: /opt/spdk/setup.sh reset
+The one with a higher probability of occurrence is as follows:
+PANIC: "BUG: unable to handle kernel NULL pointer dereference at 0000000000000008"
+         PID: 0
+     COMMAND: "swapper/3"
+        TASK: ffff8bc3836f1e80  (1 of 8)  [THREAD_INFO: ffff8bc3836f1e80]
+         CPU: 3
+       STATE: TASK_RUNNING (PANIC)
+PID: 0      TASK: ffff8bc3836f1e80  CPU: 3   COMMAND: "swapper/3"
+ #0 [ffff8bca9ecc3c28] machine_kexec at ffffffff82e5e45b
+ #1 [ffff8bca9ecc3c80] __crash_kexec at ffffffff82f64e42
+ #2 [ffff8bca9ecc3d40] panic at ffffffff82ebab29
+ #3 [ffff8bca9ecc3dc8] oops_end at ffffffff82e23940
+ #4 [ffff8bca9ecc3de8] no_context at ffffffff82e71630
+ #5 [ffff8bca9ecc3e40] do_page_fault at ffffffff82e72301
+ #6 [ffff8bca9ecc3e70] async_page_fault at ffffffff8380125e
+    [exception RIP: _raw_spin_lock_irqsave+30]
+    RIP: ffffffff836a1cae  RSP: ffff8bca9ecc3f20  RFLAGS: 00010046
+    RAX: 0000000000000000  RBX: 0000000000000246  RCX: 0000000000000017
+    RDX: 0000000000000001  RSI: 0000000000000000  RDI: 0000000000000008
+    RBP: 0000000000000000   R8: 000000afb34e50f9   R9: 0000000000000000
+    R10: 0000000000000000  R11: 0000000000000000  R12: ffff8bca9ecc3f50
+    R13: 0000000000000004  R14: 0000000000000004  R15: 0000000000000000
+    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ #7 [ffff8bca9ecc3f28] complete at ffffffff82f09bb8
+ #8 [ffff8bca9ecc3f48] blk_done_softirq at ffffffff832069d1
+ #9 [ffff8bca9ecc3f80] __softirqentry_text_start at ffffffff83a000e8
+#10 [ffff8bca9ecc3fe0] irq_exit at ffffffff82ec1119
+#11 [ffff8bca9ecc3ff0] call_function_single_interrupt at ffffffff83801daf
+--- <IRQ stack> ---
+#12 [ffff9866c319be08] call_function_single_interrupt at ffffffff83801daf
+    [exception RIP: native_safe_halt+14]
+    RIP: ffffffff836a188e  RSP: ffff9866c319beb0  RFLAGS: 00000246
+    RAX: ffffffff836a1580  RBX: 0000000000000003  RCX: 0000000000000000
+    RDX: 0000000000000001  RSI: 0000000000000000  RDI: 0000000000000000
+    RBP: 0000000000000003   R8: 000000afb3323415   R9: 0000000000000000
+    R10: ffff9866c3173ce0  R11: 000000000000009d  R12: 0000000000000000
+    R13: 0000000000000000  R14: 0000000000000000  R15: 0000000000000000
+    ORIG_RAX: ffffffffffffff04  CS: 0010  SS: 0018
+#13 [ffff9866c319beb0] default_idle at ffffffff836a159a
+#14 [ffff9866c319bed0] do_idle at ffffffff82ef1d4a
+#15 [ffff9866c319bf10] cpu_startup_entry at ffffffff82ef1fcf
+#16 [ffff9866c319bf30] start_secondary at ffffffff82e52667
+#17 [ffff9866c319bf50] secondary_startup_64 at ffffffff82e000e7
 
->>
->>>>
->>>> Because [4] and [5] are related to balloon device, also CC Michael,
->>>> David and Jason.
->>>
->>> Doesn't sound too crazy for me, although it's a shame that we always
->>> have to use virtio-balloon for such fairly balloon-unrelated things.
->>>
->> Thanks!
->>
->> -- 
->> zhenwei pi
+After the driver switchover, the upper-layer program can still access the bar space of the NVMe disk controller and knock the doorbell.
+As a result, the interrupt process of the NVMe driver is abnormal and the system crashes.
+To solve this problem, a reference counting is added to prevent unbind execution before the application is closed or exited.
 
+Signed-off-by: Hongtao Zhang <zhanghongtao22@huawei.com>
+Reviewed-by: Weifeng Su <suweifeng1@huawei.com>
+---
+ drivers/uio/uio.c          | 13 +++++++++++++
+ include/linux/uio_driver.h |  1 +
+ 2 files changed, 14 insertions(+)
+
+diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+index 43afbb7c5ab9..cb8ed29a8648 100644
+--- a/drivers/uio/uio.c
++++ b/drivers/uio/uio.c
+@@ -31,6 +31,7 @@ static int uio_major;
+ static struct cdev *uio_cdev;
+ static DEFINE_IDR(uio_idr);
+ static const struct file_operations uio_fops;
++static DECLARE_WAIT_QUEUE_HEAD(refc_wait);
+
+ /* Protect idr accesses */
+ static DEFINE_MUTEX(minor_lock);
+@@ -501,6 +502,7 @@ static int uio_open(struct inode *inode, struct file *filep)
+ 	mutex_unlock(&idev->info_lock);
+ 	if (ret)
+ 		goto err_infoopen;
++	refcount_inc(&idev->dev_refc);
+
+ 	return 0;
+
+@@ -536,6 +538,9 @@ static int uio_release(struct inode *inode, struct file *filep)
+ 		ret = idev->info->release(idev->info, inode);
+ 	mutex_unlock(&idev->info_lock);
+
++	if (refcount_dec_and_test(&idev->dev_refc))
++			wake_up(&refc_wait);
++
+ 	module_put(idev->owner);
+ 	kfree(listener);
+ 	put_device(&idev->dev);
+@@ -937,6 +942,7 @@ int __uio_register_device(struct module *owner,
+
+ 	idev->owner = owner;
+ 	idev->info = info;
++	refcount_set(&idev->dev_refc, 0);
+ 	mutex_init(&idev->info_lock);
+ 	init_waitqueue_head(&idev->wait);
+ 	atomic_set(&idev->event, 0);
+@@ -1045,6 +1051,7 @@ void uio_unregister_device(struct uio_info *info)
+ {
+ 	struct uio_device *idev;
+ 	unsigned long minor;
++	unsigned int dref_count;
+
+ 	if (!info || !info->uio_dev)
+ 		return;
+@@ -1052,6 +1059,12 @@ void uio_unregister_device(struct uio_info *info)
+ 	idev = info->uio_dev;
+ 	minor = idev->minor;
+
++	dref_count = refcount_read(&idev->dev_refc);
++	if (dref_count > 0) {
++		dev_err(&idev->dev, "The device is in use, please close the file descriptor or kill the occupied process\n");
++		wait_event(refc_wait, !refcount_read(&idev->dev_refc));
++	}
++
+ 	mutex_lock(&idev->info_lock);
+ 	uio_dev_del_attributes(idev);
+
+diff --git a/include/linux/uio_driver.h b/include/linux/uio_driver.h
+index 47c5962b876b..28301dcc4d31 100644
+--- a/include/linux/uio_driver.h
++++ b/include/linux/uio_driver.h
+@@ -77,6 +77,7 @@ struct uio_device {
+ 	struct mutex		info_lock;
+ 	struct kobject          *map_dir;
+ 	struct kobject          *portio_dir;
++	refcount_t				dev_refc;
+ };
+
+ /**
 -- 
-zhenwei pi
+2.27.0
+

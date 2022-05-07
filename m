@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D11C51E607
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46D851E609
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384118AbiEGJak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S1446154AbiEGJay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354899AbiEGJag (ORCPT
+        with ESMTP id S1354899AbiEGJal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:30:36 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAF454FB2;
-        Sat,  7 May 2022 02:26:48 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id bg25so5810904wmb.4;
-        Sat, 07 May 2022 02:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xP6kWb2DppJ6x1IqM0Tw9TyBcxMyURsIUgj1pvO/6uU=;
-        b=VaIJsBjTDFyX+uI+3iS24YgoGQMHUWw2RcUYdAfQfLWL9JUY2FveV4ABq44CSJWnD7
-         2bhvBqaezb5p5Km7AkJtNB87FxNOIpjnmM+1N+p1WJqiK9SP+mlGJrBsPMPBRT6dsGlM
-         Knb7A72beSFUUxio9PiKUMbPfkRz2CtboFgCWaPlztkuJX5fayXJ9tqOB9Tp0z4ewP+6
-         eTu5+gmB/WVzg1qTy8jHp95oNjN6qBYeOTLNphVYSil6KoP29rTdSltlGJ4Hk5gfgL0a
-         SRAYmzmStPCYkWOjF5+qFm03luH+n/gfFJ1tLjkNvKfZmaCG2P8vTc6N+37ACLGxzI/7
-         GpVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xP6kWb2DppJ6x1IqM0Tw9TyBcxMyURsIUgj1pvO/6uU=;
-        b=D+vohVPhXvxo7F+8kb/xh3TVG2H9CxxT5b25tN8TK5WX4tzJDhYPQ26zuFMdWDuZxb
-         K8vnMoWegheNWLjevoHCKzObhxCD5FjDmQvQEyz/G8XYIxrXCi1OSh7Ps3aj10kWHGa4
-         KqYApmfpU4V2YHVX6bECnEGdzVAZvRjB+QbDtIHmU4soB1gEQuiyio+tvcLLSj4A/F6D
-         zc8mLX4V+unf6zD4AgLBvzCY/UWziFrGkSDzclzHfXLo3aVD+eoT7HpKn6yDNZ+rWr4Z
-         UA/KK/dxwk/3jauNj/0F9WjQMSlKVR5bAM4Of2OCVpcTqLTAuM54G8F33OIs07tH32S4
-         7wQA==
-X-Gm-Message-State: AOAM531+6Q/Xm48D7uIfkr12XsxeWNysEU17aK29ELKp51RrsETtsbQQ
-        ejmrtwYXYcqEPxyIukHZOOcd4VAjehA=
-X-Google-Smtp-Source: ABdhPJyGF9UIntd2VJOo2l3mbdUd3Fv7Xu27F4GxZgvEhbCvGPJHV+Xl1FDLCg+vLC0VriNBLi6CeQ==
-X-Received: by 2002:a05:600c:3b0a:b0:394:6373:6c45 with SMTP id m10-20020a05600c3b0a00b0039463736c45mr13638330wms.69.1651915607305;
-        Sat, 07 May 2022 02:26:47 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.237.69])
-        by smtp.gmail.com with ESMTPSA id f186-20020a1c38c3000000b003942a244ec9sm7610349wma.14.2022.05.07.02.26.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 02:26:46 -0700 (PDT)
-Message-ID: <e29d7079-ff52-db69-c215-7212682fd3fc@gmail.com>
-Date:   Sat, 7 May 2022 10:26:07 +0100
+        Sat, 7 May 2022 05:30:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE454FB2;
+        Sat,  7 May 2022 02:26:54 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N7Qp1-1ntC1L1FW9-017pmc; Sat, 07 May 2022 11:26:30 +0200
+Message-ID: <ee39ddd1-bfce-012d-5e04-448d779ed995@i2se.com>
+Date:   Sat, 7 May 2022 11:26:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 3/5] io_uring: let fast poll support multishot
+Subject: Re: [PATCH] clk: bcm2835: fix bcm2835_clock_choose_div
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Hao Xu <haoxu.linux@gmail.com>,
-        io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-4-haoxu.linux@gmail.com>
- <d68381cf-a9fc-33b8-8a9c-ff8485ba8d19@gmail.com>
- <8e81111d-398c-3810-50b4-e1475e956b6f@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <8e81111d-398c-3810-50b4-e1475e956b6f@kernel.dk>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220428183010.1635248-1-stefan.wahren@i2se.com>
+ <20220503145804.b2xz4etzc6kpr3fk@houat>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220503145804.b2xz4etzc6kpr3fk@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Provags-ID: V03:K1:TISiMMp8m/FV5qPKCF9n1osclmv+q2upYrueyJsVP9zlp6+v8u/
+ dsk6fIGXhBVsiBaNwaN7QJ48EC/uL3zPRJWA39tnzUGtlQFN7ttJcUSnR6/Q8D2EHeTzVnH
+ /KeQPVdsml1o24kI9JF7ZSud1R8Kdy34Xx5oQ5upZ/WKT8E45VvmsiHAnDUfoVkOs7Zdm9H
+ FyCOQ26WpBkYBYI3vTT/Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:D0xWmPYIj00=:0PpTuUQc4n477rQ1kB0JQE
+ DpBvR39rz31Z2qR4SJGWF05OkxhYTkuwhyO/NsYlI4g7I1Qu8zjsrKPz8vZZL3BpQoPUZUdNR
+ v+fLBC4JezVsRvjoCLxEPREHJ55rObO7f/fnOWis6y9SxgFudWG6yXDghEBZu+H81gWIGxi+Q
+ /YTGbVW1gIUxqd4a/5Vz1ktirIfad6ukiUQo65+nY2vZx/aoryGQ+DVINSs/+3m39fgzYJA02
+ lmKvHOv/wxeMIpMe8DpQmv4A8UJx4DszXTxj7vcaRi0WLlMuxoJuPh0TWVtaMxP5Ah7QSjNHt
+ t4sKGQ2i8XEtHrYM5VvRrNNJz7vvTVrdngteWYY8o55DYlNfp3nQzqbl87DjJAd4jKFTCueUv
+ A9VQ+oBcQbf2X40OpAaYJCLprM6EzbLGxwEUW0dn7KBmhNCj6Zm9KQ4DpW3HQiwHCeujo9XqI
+ SUTl5D9R4NvIK3gjmHVf79vf33CA/92BxwsilIkoEU286zNUas8oRdKQsYnKDhb7ev3mfXpbq
+ qBvGB+vNiGS58G1rYH1skLUTV7HPNBIW3ikGgsrhlVV19xjPg+Lu9P2G2OUEoc/P5legIt88m
+ kLbwrkiX6DNq2BZ1wpDhVOa3Bnlc5Ao0zdJJZJ7CvYvrZM2Gy59/LC87PQf3M5W12Bx94sb0Y
+ wFR3Bn9EIcWbSyJGi/vKS8nws7Z+zCHdfbX0orz1KJANrAkWZ5iNw82yH0+1EgbU2ivXPalBJ
+ 3PVR7DOW/dJEvpIo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,92 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 23:02, Jens Axboe wrote:
-> On 5/6/22 11:19 AM, Pavel Begunkov wrote:
->> On 5/6/22 08:01, Hao Xu wrote:
->>> From: Hao Xu <howeyxu@tencent.com>
->>>
->>> For operations like accept, multishot is a useful feature, since we can
->>> reduce a number of accept sqe. Let's integrate it to fast poll, it may
->>> be good for other operations in the future.
->>>
->>> Signed-off-by: Hao Xu <howeyxu@tencent.com>
->>> ---
->>>    fs/io_uring.c | 41 ++++++++++++++++++++++++++---------------
->>>    1 file changed, 26 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/fs/io_uring.c b/fs/io_uring.c
->>> index 8ebb1a794e36..d33777575faf 100644
->>> --- a/fs/io_uring.c
->>> +++ b/fs/io_uring.c
->>> @@ -5952,7 +5952,7 @@ static void io_poll_remove_entries(struct io_kiocb *req)
->>>     * either spurious wakeup or multishot CQE is served. 0 when it's done with
->>>     * the request, then the mask is stored in req->cqe.res.
->>>     */
->>> -static int io_poll_check_events(struct io_kiocb *req, bool locked)
->>> +static int io_poll_check_events(struct io_kiocb *req, bool *locked)
->>>    {
->>>        struct io_ring_ctx *ctx = req->ctx;
->>>        int v;
->>> @@ -5981,17 +5981,26 @@ static int io_poll_check_events(struct io_kiocb *req, bool locked)
->>>              /* multishot, just fill an CQE and proceed */
->>>            if (req->cqe.res && !(req->apoll_events & EPOLLONESHOT)) {
->>> -            __poll_t mask = mangle_poll(req->cqe.res & req->apoll_events);
->>> -            bool filled;
->>> -
->>> -            spin_lock(&ctx->completion_lock);
->>> -            filled = io_fill_cqe_aux(ctx, req->cqe.user_data, mask,
->>> -                         IORING_CQE_F_MORE);
->>> -            io_commit_cqring(ctx);
->>> -            spin_unlock(&ctx->completion_lock);
->>> -            if (unlikely(!filled))
->>> -                return -ECANCELED;
->>> -            io_cqring_ev_posted(ctx);
->>> +            if (req->flags & REQ_F_APOLL_MULTISHOT) {
->>> +                io_tw_lock(req->ctx, locked);
->>> +                if (likely(!(req->task->flags & PF_EXITING)))
->>> +                    io_queue_sqe(req);
+Am 03.05.22 um 16:58 schrieb Maxime Ripard:
+> Hi,
+>
+> On Thu, Apr 28, 2022 at 08:30:10PM +0200, Stefan Wahren wrote:
+>> The commit 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
+>> accidentially breaks the behavior of bcm2835_clock_choose_div() and
+>> booting of Raspberry Pi. The removed do_div macro call had side effects,
+>> so we need to restore it.
 >>
->> That looks dangerous, io_queue_sqe() usually takes the request
->> ownership and doesn't expect that someone, i.e.
->> io_poll_check_events(), may still be actively using it.
-> 
-> I took a look at this, too. We do own the request at this point, but
+>> Fixes: 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
+>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> I only found this patch after debugging why the HDMI driver was
+> returning -EINVAL at probe on -rc5.
+>
+> Acked-by: Maxime Ripard <maxime@cerno.tech>
+> Tested-by: Maxime Ripard <maxime@cerno.tech>
 
-Right, but we don't pass the ownership into io_queue_sqe(). IOW,
-it can potentially free it / use tw / etc. inside and then we
-return back to io_poll_check_events() with a broken req.
+Thanks,
 
-> it's still on the poll list. If io_accept() fails, then we do run the
-> poll_clean.
-> 
->> E.g. io_accept() fails on fd < 0, return an error, io_queue_sqe() ->
->> io_queue_async() -> io_req_complete_failed() kills it. Then
->> io_poll_check_events() and polling in general carry on using the freed
->> request => UAF. Didn't look at it too carefully, but there might other
->> similar cases.
-> 
-> But we better have done poll_clean() before returning the error. What am
-> I missing here?
+does this go via clk-fixes?
 
-One scenario I'd be worry about is sth like:
-
-
-io_apoll_task_func()                            |
--> io_poll_check_events()                       |
-   // 1st iteration                              |
-   -> io_queue_sqe()                             |
-                                                 | poll cancel()
-                                                 |   -> set IO_POLL_CANCEL_FLAG
-     -> io_accept() fails                        |
-       -> io_poll_clean()                        |
-     -> io_req_complete_failed()                 |
-   // 2nd iteration finds IO_POLL_CANCEL_FLAG    |
-     return -ECANCELLED                          |
--> io_req_complete_failed(req, ret)             |
-
-
-The problem in this example is double io_req_complete_failed()
-
--- 
-Pavel Begunkov
+>
+> Thanks!
+> Maxime

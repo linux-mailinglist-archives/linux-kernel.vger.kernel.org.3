@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67F151E96C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B56251E974
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiEGT04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S1387076AbiEGT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiEGT0x (ORCPT
+        with ESMTP id S231754AbiEGT2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:26:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB10186E2
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:23:06 -0700 (PDT)
+        Sat, 7 May 2022 15:28:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8B7193F8;
+        Sat,  7 May 2022 12:24:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BC0C6CE0AAD
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 19:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B67C385A5;
-        Sat,  7 May 2022 19:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651951383;
-        bh=/yTWTK2657a6e5IKSoTYOVfyFLxzHBO5jGiV0wX7FFU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SOj1L/sB+VaWVasrN7Jc3aYe2MKGXDmHVe0w/SJ7crTwSqxdCcYaEIlk726QHZ+Xf
-         5Qe9sznmdKULLEQFW0v3pI3RXh/a46WQFbLmJrOMvKoyaQ9kiLAMIdAsPgvKKG2xGQ
-         UtCQNxQt83G5SytDB5rFj5Gy+5AXlLQn0EZEc5A0=
-Date:   Sat, 7 May 2022 12:23:01 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v2] mm: fix is_pinnable_page against on cma page
-Message-Id: <20220507122301.3b50eb030f9cd6f047f14352@linux-foundation.org>
-In-Reply-To: <20220505064429.2818496-1-minchan@kernel.org>
-References: <20220505064429.2818496-1-minchan@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by sin.source.kernel.org (Postfix) with ESMTPS id 494D4CE0B8E;
+        Sat,  7 May 2022 19:24:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012C8C385A5;
+        Sat,  7 May 2022 19:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651951482;
+        bh=MyfTcFDU6ZdDemzDXz07p3GqM6JlaSU35muvBx+cqsA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nWa5DFGSnHM+5qK1Nz9q8zyDg/AOASCQqnvJ0DnomLwFqMBGsfWD4eNeKL/rCg1nQ
+         EAxoVoCdfC5PO27eZDd65kbixnFzkbauOLmcNodfPZbmJODG5WHub4CKwjK72WqsK6
+         wu2DiGRWmhYqAMz+waY7xpBzGk3I3x4sGM+T53TxtWKzcSy4Wbzy+xOXyCmlDjVg4k
+         bZI69rB9yME650ZZYxdYz3DehxpM+Xoobjwd7Fw7V9a/vuwOyop0cB780iDUKRWfiv
+         rsiJirftMUIYfEmAHlpFPiAqeQq/rRWKpGFhKGgBgL5DlNytyK3XrX19/ROQKmvX94
+         TfZCxf1m/Qo/g==
+Date:   Sat, 7 May 2022 22:26:16 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Michael Walle <michael@walle.cc>,
+        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
+Message-ID: <YnbH2Fgn/JFOU3Rf@iki.fi>
+References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+ <20220506062553.1068296-8-a.fatoum@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220506062553.1068296-8-a.fatoum@pengutronix.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,66 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  4 May 2022 23:44:29 -0700 Minchan Kim <minchan@kernel.org> wrote:
-
-> Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
-> so current is_pinnable_page could miss CMA pages which has MIGRATE_
-> ISOLATE. It ends up putting CMA pages longterm pinning possible on
-> pin_user_pages APIs so CMA allocation fails.
+On Fri, May 06, 2022 at 08:25:53AM +0200, Ahmad Fatoum wrote:
+> Create a maintainer entry for CAAM trusted keys in the Linux keyring.
 > 
-> The CMA allocation path protects the migration type change race
-> using zone->lock but what GUP path need to know is just whether the
-> page is on CMA area or not rather than exact type. Thus, we don't
-> need zone->lock but just checks the migratype in either of
-> (MIGRATE_ISOLATE and MIGRATE_CMA).
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> v8 -> v9:
+>   - rewrite commit message (Jarkko)
+> v7 -> v8:
+>   - add Pankaj's Reviewed-by
+> v6 -> v7:
+>   - split off as separate patch (Jarkko)
 > 
-> Adding the MIGRATE_ISOLATE check in is_pinnable_page could cause
-> rejecting of pinning the page on MIGRATE_ISOLATE pageblock even
-> thouth it's neither CMA nor movable zone if the page is temporarily
-
-"though"
-
-> unmovable. However, the migration failure is general issue, not
-> only come from MIGRATE_ISOLATE and the MIGRATE_ISOLATE is also
-> transient state like other temporal refcount holding of pages.
+> To: Jarkko Sakkinen <jarkko@kernel.org>
+> To: James Bottomley <jejb@linux.ibm.com>
+> To: Mimi Zohar <zohar@linux.ibm.com>
+> To: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: "Horia Geantă" <horia.geanta@nxp.com>
+> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> ---
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> ...
->
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1625,8 +1625,18 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
->  #ifdef CONFIG_MIGRATION
->  static inline bool is_pinnable_page(struct page *page)
->  {
-> -	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
-> -		is_zero_pfn(page_to_pfn(page));
-> +#ifdef CONFIG_CMA
-> +	/*
-> +	 * use volatile to use local variable mt instead of
-> +	 * refetching mt value.
-> +	 */
-> +	volatile int mt = get_pageblock_migratetype(page);
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5e8c2f611766..e58e6fc3016d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10855,6 +10855,15 @@ S:	Supported
+>  F:	include/keys/trusted_tee.h
+>  F:	security/keys/trusted-keys/trusted_tee.c
+>  
+> +KEYS-TRUSTED-CAAM
+> +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
+> +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+> +L:	linux-integrity@vger.kernel.org
+> +L:	keyrings@vger.kernel.org
+> +S:	Maintained
+> +F:	include/keys/trusted_caam.h
+> +F:	security/keys/trusted-keys/trusted_caam.c
 > +
-> +	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
-> +		return false;
-> +#endif
+>  KEYS/KEYRINGS
+>  M:	David Howells <dhowells@redhat.com>
+>  M:	Jarkko Sakkinen <jarkko@kernel.org>
+> -- 
+> 2.30.2
+> 
 
-Open-coded use of `volatile' draws unwelcome attention.
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-What are we trying to do here?  Prevent the compiler from rerunning all
-of get_pageblock_migratetype() (really __get_pfnblock_flags_mask())
-twice?  That would be pretty dumb of it?
-
-Would a suitably-commented something like
-
-	int __mt = get_pageblock_migratetype(page);
-	int mt = __READ_ONCE(__mt);
-
-express this better?
-	
-> +
-> +	return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
->  }
->  #else
->  static inline bool is_pinnable_page(struct page *page)
-
+BR, Jarkko

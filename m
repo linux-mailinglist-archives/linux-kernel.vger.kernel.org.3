@@ -2,202 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED8951E475
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC91951E47B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351853AbiEGFib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S1383354AbiEGFoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445700AbiEGFiP (ORCPT
+        with ESMTP id S1445737AbiEGFo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:38:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CD62E9C9
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:34:27 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d22-20020a25add6000000b00645d796034fso7924622ybe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:34:26 -0700 (PDT)
+        Sat, 7 May 2022 01:44:26 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B2DE000
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:40:40 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id e5so7740803pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=gcYqxh5Opd0xAIFhaLkZah3tm02tWS5shPMbttMBo+g=;
-        b=OnrkBF4dkwel0INnFUUcNVkb1EKQgMi0hW09jwwmgo7gvI6olx/BA6l1AI6K++mpdA
-         DYmcc8BR+m+PzPqydc2PH/dNeYUrtqeF59dozpzYMjXLemLHEz20g44T5v4fVVJ6xlT+
-         2qanIV7H5X/ebzeKqG0pbmOx0mW/X1I9JQVxucBNiuoA+Ae3YwByERX6W9Puwy2Ib3l7
-         oZqjjXAzSb/dyIjAm9DiWXrbmLwm8xkeduwne8gpSd21D17SFAzfiAIMOy4vEoLm74+E
-         7v/GiEVs1lRzthBjIF5ISeRvBQ+KjnyWhgXxY5CPeWwRpxI9uLg2gmfh2QshX0HRueMR
-         n2Vg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AVuaOiXhV01Z47Oo1rP7YN34nHEPNRHjJX/XRSE9e0M=;
+        b=EkJzGm/JeHn0Akm0WvBv/z4h/vyU57IPa7rnZoXNc/ZlcQ0LKsROLOEpk33iPvRk8H
+         wAbpoS72stM8zkuhQq55tVgSEbT5p7v+UQrNpyWBG/D7qQ1vsOmTUkSNyAoHt7ljGG//
+         4R5J+W1RhtpueH8IaUblBU46vRlfpC69NotB/JLGJgX3YsI1EV0SgevZ4Kw5tpoYZ2e/
+         q2gd9srrc8xYR4riTXVR5YFFtaqQl41wfLR1AWCDoQsRSAqrDas2+9fixH5xynyLa0ur
+         UUHm+uWyetASlKm/O8M6i1RTMyvbDlBrTnfuIjzY7z5esa6cc4AnIQtLrXudShsCR3iX
+         bE5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=gcYqxh5Opd0xAIFhaLkZah3tm02tWS5shPMbttMBo+g=;
-        b=iUCLPCiYLzIPebfIQc29L8QZ0QmFTX7oJEYfTKgCaNpaHfH7ETXU8i4PSdGvWn9Ui1
-         4jVTVBoQBvYNH98W6j0coPFU1b+8IqKvJ3PdpXhvXMnuAFWBKnnG7bUHrSwEhxpkar3P
-         33QuTd9oTtGc8OE7IkHefOleeDfzBEUBrHAnoIuSiuzZfE0Ri8yPB50CBKIvdts5/uBl
-         Oq1gTDLM/u8SaVHl7ecUvBXH3rwZUEtFj7W8MUdU4XeU+b5svD/zJBle/KduxKaBtj9y
-         S17hZrHZFGJa/pwBZbe7zSwRHxRtX+Z9S1vQMI+sXE+2bksN+27R1X6MghuLUfscsbel
-         QSVQ==
-X-Gm-Message-State: AOAM532OVYx2U7BQ6oE6JGs5PWh1pnB00ZDhMFOwDZfboomjhcVhNniq
-        9Wwh+VRaj87uUk8SJLisGiWSELw7H6lC
-X-Google-Smtp-Source: ABdhPJy+ol5pg1dvBrK0DPVgxRFflJxJDWSHXGQ63hSGPzT5cMTf0CHJZqkefT5JBX8KkSYr5hUeEYIGSCgn
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:bf2a:2f64:a273:3573])
- (user=irogers job=sendgmr) by 2002:a5b:603:0:b0:648:507a:b9f8 with SMTP id
- d3-20020a5b0603000000b00648507ab9f8mr4905887ybq.497.1651901666173; Fri, 06
- May 2022 22:34:26 -0700 (PDT)
-Date:   Fri,  6 May 2022 22:34:10 -0700
-In-Reply-To: <20220507053410.3798748-1-irogers@google.com>
-Message-Id: <20220507053410.3798748-6-irogers@google.com>
-Mime-Version: 1.0
-References: <20220507053410.3798748-1-irogers@google.com>
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 5/5] perf metrics: Don't add all tool events for sharing
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AVuaOiXhV01Z47Oo1rP7YN34nHEPNRHjJX/XRSE9e0M=;
+        b=uUiSWegpayhgCvITqyEQnbUwEuwioaQE0ci5JiKFoEdKqhKqRuK8MFQKDsNi72DloF
+         SS+MBOtWw9PGBbZKBz01+wNzvWT07LMI3i+FdidMqXMQBBC0/zPY3KuazO5Xj/M+9vQK
+         Ky7X47jMhb+VJxhsq3cFvQAsKKlmG2gutVT8zCIhrvM3zPkEhSLFArloLESp2z736Gze
+         460NsL61MHdH0sUGYekVNO1U3WLYEfJ03XLyjF64Q89w9mgkJzesnKVMV+jmKn5EvLlU
+         6Kp/MVqBuo0oXXHpDZ2xF8x3kF3/zqqE48Lb1XUw05nt2YEFKDZfKqrZequkHCOjkXmT
+         Lohg==
+X-Gm-Message-State: AOAM533oqiVTXzxZ5muicC4uoOXrKau1BRZCEEaSZRKEnLycoaCY4WVa
+        bsCd5S22SmWzZBGJIofw2hw4wZqUUZJc7Q==
+X-Google-Smtp-Source: ABdhPJz7LcUUD4gahOIUtRR7xASy10zcWdIn+aPL3P9fPuCKGJt388cR5ZYsKV4EWvX/n7RcOXduJw==
+X-Received: by 2002:a63:eb58:0:b0:3c2:6d66:c238 with SMTP id b24-20020a63eb58000000b003c26d66c238mr5597405pgk.436.1651902040128;
+        Fri, 06 May 2022 22:40:40 -0700 (PDT)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170902e9d300b0015e8d4eb253sm2748412plk.157.2022.05.06.22.40.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 06 May 2022 22:40:39 -0700 (PDT)
+Date:   Sat, 7 May 2022 13:40:41 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
+Subject: Re: [PATCH 2/3] erofs: remove obsoluted comments
+Message-ID: <20220507134041.000060da.zbestahu@gmail.com>
+In-Reply-To: <20220506194612.117120-2-hsiangkao@linux.alibaba.com>
+References: <20220506194612.117120-1-hsiangkao@linux.alibaba.com>
+        <20220506194612.117120-2-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tool events are added to the set of events for parsing so that having a
-tool event in a metric doesn't inhibit event sharing of events between
-metrics. All tool events were added but this meant unused tool events
-would be counted. Reduce this set of tool events to just those present
-in the overall metric list.
+On Sat,  7 May 2022 03:46:11 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/metricgroup.c | 45 ++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 6 deletions(-)
+> Some comments haven't been useful anymore since the code updated.
+> Let's drop them instead.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> ---
+>  fs/erofs/inode.c    |  5 -----
+>  fs/erofs/internal.h | 25 -------------------------
+>  2 files changed, 30 deletions(-)
+> 
+> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+> index 8d3f56c6469b..8b18d57ec18f 100644
+> --- a/fs/erofs/inode.c
+> +++ b/fs/erofs/inode.c
+> @@ -8,11 +8,6 @@
+>  
+>  #include <trace/events/erofs.h>
+>  
+> -/*
+> - * if inode is successfully read, return its inode page (or sometimes
+> - * the inode payload page if it's an extended inode) in order to fill
+> - * inline data if possible.
+> - */
+>  static void *erofs_read_inode(struct erofs_buf *buf,
+>  			      struct inode *inode, unsigned int *ofs)
+>  {
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index ce2a04836cd2..cfee49d33b95 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -397,31 +397,6 @@ extern const struct super_operations erofs_sops;
+>  extern const struct address_space_operations erofs_raw_access_aops;
+>  extern const struct address_space_operations z_erofs_aops;
+>  
+> -/*
+> - * Logical to physical block mapping
+> - *
+> - * Different with other file systems, it is used for 2 access modes:
+> - *
+> - * 1) RAW access mode:
+> - *
+> - * Users pass a valid (m_lblk, m_lofs -- usually 0) pair,
+> - * and get the valid m_pblk, m_pofs and the longest m_len(in bytes).
+> - *
+> - * Note that m_lblk in the RAW access mode refers to the number of
+> - * the compressed ondisk block rather than the uncompressed
+> - * in-memory block for the compressed file.
+> - *
+> - * m_pofs equals to m_lofs except for the inline data page.
+> - *
+> - * 2) Normal access mode:
+> - *
+> - * If the inode is not compressed, it has no difference with
+> - * the RAW access mode. However, if the inode is compressed,
+> - * users should pass a valid (m_lblk, m_lofs) pair, and get
+> - * the needed m_pblk, m_pofs, m_len to get the compressed data
+> - * and the updated m_lblk, m_lofs which indicates the start
+> - * of the corresponding uncompressed data in the file.
+> - */
+>  enum {
+>  	BH_Encoded = BH_PrivateStart,
+>  	BH_FullMapped,
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 7a5f488aef02..ee8fcfa115e5 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -1283,6 +1283,30 @@ static void metricgroup__free_metrics(struct list_head *metric_list)
- 	}
- }
- 
-+/**
-+ * find_tool_events - Search for the pressence of tool events in metric_list.
-+ * @metric_list: List to take metrics from.
-+ * @tool_events: Array of false values, indices corresponding to tool events set
-+ *               to true if tool event is found.
-+ */
-+static void find_tool_events(const struct list_head *metric_list,
-+			     bool tool_events[PERF_TOOL_MAX])
-+{
-+	struct metric *m;
-+
-+	list_for_each_entry(m, metric_list, nd) {
-+		int i;
-+
-+		perf_tool_event__for_each_event(i) {
-+			struct expr_id_data *data;
-+
-+			if (!tool_events[i] &&
-+			    !expr__get_id(m->pctx, perf_tool_event__to_str(i), &data))
-+				tool_events[i] = true;
-+		}
-+	}
-+}
-+
- /**
-  * build_combined_expr_ctx - Make an expr_parse_ctx with all has_constraint
-  *                           metric IDs, as the IDs are held in a set,
-@@ -1332,11 +1356,14 @@ static int build_combined_expr_ctx(const struct list_head *metric_list,
-  * @ids: the event identifiers parsed from a metric.
-  * @modifier: any modifiers added to the events.
-  * @has_constraint: false if events should be placed in a weak group.
-+ * @tool_events: entries set true if the tool event of index could be present in
-+ *               the overall list of metrics.
-  * @out_evlist: the created list of events.
-  */
- static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 		     struct expr_parse_ctx *ids, const char *modifier,
--		     bool has_constraint, struct evlist **out_evlist)
-+		     bool has_constraint, const bool tool_events[PERF_TOOL_MAX],
-+		     struct evlist **out_evlist)
- {
- 	struct parse_events_error parse_error;
- 	struct evlist *parsed_evlist;
-@@ -1360,11 +1387,13 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 		 * Add a tool event to avoid a parse error on an empty string.
- 		 */
- 		perf_tool_event__for_each_event(i) {
--			char *tmp = strdup(perf_tool_event__to_str(i));
-+			if (tool_events[i]) {
-+				char *tmp = strdup(perf_tool_event__to_str(i));
- 
--			if (!tmp)
--				return -ENOMEM;
--			ids__insert(ids->ids, tmp);
-+				if (!tmp)
-+					return -ENOMEM;
-+				ids__insert(ids->ids, tmp);
-+			}
- 		}
- 	}
- 	ret = metricgroup__build_event_string(&events, ids, modifier,
-@@ -1407,6 +1436,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 	struct evlist *combined_evlist = NULL;
- 	LIST_HEAD(metric_list);
- 	struct metric *m;
-+	bool tool_events[PERF_TOOL_MAX] = {false};
- 	int ret;
- 
- 	if (metric_events_list->nr_entries == 0)
-@@ -1422,12 +1452,15 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 	if (!metric_no_merge) {
- 		struct expr_parse_ctx *combined = NULL;
- 
-+		find_tool_events(&metric_list, tool_events);
-+
- 		ret = build_combined_expr_ctx(&metric_list, &combined);
- 
- 		if (!ret && combined && hashmap__size(combined->ids)) {
- 			ret = parse_ids(metric_no_merge, fake_pmu, combined,
- 					/*modifier=*/NULL,
- 					/*has_constraint=*/true,
-+					tool_events,
- 					&combined_evlist);
- 		}
- 		if (combined)
-@@ -1475,7 +1508,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
- 		}
- 		if (!metric_evlist) {
- 			ret = parse_ids(metric_no_merge, fake_pmu, m->pctx, m->modifier,
--					m->has_constraint, &m->evlist);
-+					m->has_constraint, tool_events, &m->evlist);
- 			if (ret)
- 				goto out;
- 
--- 
-2.36.0.512.ge40c2bad7a-goog
-
+Reviewed-by: Yue Hu <huyue2@coolpad.com>

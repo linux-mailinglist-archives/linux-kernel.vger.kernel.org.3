@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394EE51E63C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5817A51E63E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384289AbiEGKB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S1446210AbiEGKFA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 06:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiEGKBZ (ORCPT
+        with ESMTP id S232437AbiEGKE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:01:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD912657
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 02:57:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651917459; x=1683453459;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KS6oebMwuSHVGzZ2GgRSjsO7NX3usahPrS23SFzgck8=;
-  b=nsCU6GIDV128lVsU6ryST2gGdP6iosbGi0huH7q7IRSjRHIrLdDOLblV
-   V9dLBndRdWfi31/wO1dCnP+reNzsBjiaQWOfAbvQcx3a6m85tPDvgMGYz
-   60Iznziib/OQZq+4t4dzVhidQ+5hojEU9JBhH5tVjf0jxIpxpej3Jl8Nt
-   iddm1AfLUkHTSefy/HeKc7p2b1VpiY+nzq2aPk+oHxzp1lwQxzKulK062
-   CwcMcrsdzz3RhoYZgt9L28i8gN5M06OI5cxPAO+VSAq+yKnsCivTueQOZ
-   dTAv//zptu6Fk3n6z2xuJ3DLHeRavg9XzBC6zFcOVrHyndVlOClWpVNPI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="331685504"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="331685504"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 02:57:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="622201886"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 May 2022 02:57:37 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnHBw-000ERk-FD;
-        Sat, 07 May 2022 09:57:36 +0000
-Date:   Sat, 7 May 2022 17:57:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment
- of 'cb' to itself. [selfAssignment]
-Message-ID: <202205071746.wrApww8H-lkp@intel.com>
+        Sat, 7 May 2022 06:04:56 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFD8D3AA67
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:01:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-285-a07I9tQYN4-ed0PF2CZy2w-1; Sat, 07 May 2022 11:01:04 +0100
+X-MC-Unique: a07I9tQYN4-ed0PF2CZy2w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sat, 7 May 2022 11:01:03 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sat, 7 May 2022 11:01:03 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jagdish Gediya' <jvgediya@linux.ibm.com>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "adobriyan@gmail.com" <adobriyan@gmail.com>
+Subject: RE: [PATCH] kobject: Refactor kobject_set_name_vargs()
+Thread-Topic: [PATCH] kobject: Refactor kobject_set_name_vargs()
+Thread-Index: AQHYYU3qLELCyca9fE2SaEK1v39Vvq0R6/5wgAAc1ACAASXE8A==
+Date:   Sat, 7 May 2022 10:01:03 +0000
+Message-ID: <97b8979ff52c4404bf74eeda574d6b23@AcuMS.aculab.com>
+References: <20220506133309.36794-1-jvgediya@linux.ibm.com>
+ <5902e26ef400451b966be2dd0fbd1575@AcuMS.aculab.com>
+ <YnVZujpw0RZy3eVT@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+In-Reply-To: <YnVZujpw0RZy3eVT@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,63 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4b97bac0756a81cda5afd45417a99b5bccdcff67
-commit: ea8f8c99a28199f6e067581b8626d192b07750f2 arm64: spectre-v2: Favour CPU-specific mitigation at EL2
-date:   1 year, 7 months ago
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout ea8f8c99a28199f6e067581b8626d192b07750f2
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+From: Jagdish Gediya
+> Sent: 06 May 2022 18:24
+...
+> > Are you sure this can ever work from a module?
+> > This all relies on:
+> >
+> > static inline bool is_kernel_rodata(unsigned long addr)
+> > {
+> > 	return addr >= (unsigned long)__start_rodata &&
+> > 	       addr < (unsigned long)__end_rodata;
+> > }
+> >
+> > which isn't going to do anything sane given an "xxx" inside a module.
+> >
+> > Indeed can kobject_set_name_vargs() end up with a constant string
+> > inside a module?
+> 
+> No, kobject_set_name_vargs() is not exported. I exported
+> set_name_vargs() because it can have a broader use, but you are right
+> it shouldn't be exported.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I was thinking that some function that creates a 'kobject'
+could easily be called from a module - so you end up calling
+the set_name code from a module and then end up calling
+kfree() on a literal from a module.
 
+Now it might be that it is impossible to actually the quoted
+literal from a module into somewhere that is_kernel_rodata()
+is applied to.
 
-cppcheck warnings: (new ones prefixed by >>)
->> arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment of 'cb' to itself. [selfAssignment]
-    cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
-       ^
+But, as i said, it is fragile.
 
-vim +/cb +302 arch/arm64/kernel/proton-pack.c
+	David
 
-   272	
-   273	static enum mitigation_state spectre_v2_enable_fw_mitigation(void)
-   274	{
-   275		bp_hardening_cb_t cb;
-   276		enum mitigation_state state;
-   277	
-   278		state = spectre_v2_get_cpu_fw_mitigation_state();
-   279		if (state != SPECTRE_MITIGATED)
-   280			return state;
-   281	
-   282		if (spectre_v2_mitigations_off())
-   283			return SPECTRE_VULNERABLE;
-   284	
-   285		switch (arm_smccc_1_1_get_conduit()) {
-   286		case SMCCC_CONDUIT_HVC:
-   287			cb = call_hvc_arch_workaround_1;
-   288			break;
-   289	
-   290		case SMCCC_CONDUIT_SMC:
-   291			cb = call_smc_arch_workaround_1;
-   292			break;
-   293	
-   294		default:
-   295			return SPECTRE_VULNERABLE;
-   296		}
-   297	
-   298		/*
-   299		 * Prefer a CPU-specific workaround if it exists. Note that we
-   300		 * still rely on firmware for the mitigation at EL2.
-   301		 */
- > 302		cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
-   303		install_bp_hardening_cb(cb);
-   304		return SPECTRE_MITIGATED;
-   305	}
-   306	
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

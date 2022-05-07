@@ -2,257 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1550051E3BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF2251E3C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445409AbiEGDMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 23:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
+        id S1445414AbiEGDYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 23:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445418AbiEGDMi (ORCPT
+        with ESMTP id S1445407AbiEGDYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 23:12:38 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA74A703D4;
-        Fri,  6 May 2022 20:08:45 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1nnAoE-00Avc6-7j; Sat, 07 May 2022 13:08:43 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 07 May 2022 11:08:42 +0800
-Date:   Sat, 7 May 2022 11:08:42 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Cc:     fnovak@us.ibm.com
-Subject: request_module DoS
-Message-ID: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
+        Fri, 6 May 2022 23:24:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244E2AE27
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 20:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651893645; x=1683429645;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zVjKSTl58tpRGZnWQ/NWRdaGrJtq08QeNLOnBXk1/cg=;
+  b=cEAfC0iaED209k4sVz93r8i6mG6ERFz5r8w/4AjXoWIX5ZZIj442+Oxh
+   6EelBCaopsy4LLWp3dHD5JCpySRTUy/8iWJ75MXdiwQycxVWun2uw36Ia
+   bkN6wpikEXvJyga8hmw/Pgr0OAlhkJN8kLYJHh+IRZMltVvowBj5JGIWN
+   wRgrx7xHBHlG84gdrzpn9Jz1Akpgjx9cXqGBG39Pudee6nOGtXSMuKjv4
+   x21I3ODC1avr3baO/988Z8KgwXVOZo0n7Ps9YRVxapy6AvbWqJjfpn0Z8
+   e0UtOZXmB02Ht8iXOiJuvmtT1//W8+8VCRuZODQsJNPn5ptJW9ukctbkc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267479962"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="267479962"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 20:20:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="812663844"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 20:20:44 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnAzr-000EAk-KP;
+        Sat, 07 May 2022 03:20:43 +0000
+Date:   Sat, 7 May 2022 11:20:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ebiederm-user-namespace:kthread-cleanups-for-v5.19 2/7]
+ arch/h8300/kernel/process.c:108:46: error: unknown type name
+ 'kernel_clone_args'
+Message-ID: <202205071135.brFxCRDU-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git kthread-cleanups-for-v5.19
+head:   688122ff3e49ddca3c6c3572cadb19285045bbe3
+commit: 498391acef1e0098a722e7f45496fda39a15284a [2/7] fork: Pass struct kernel_clone_args into copy_thread
+config: h8300-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071135.brFxCRDU-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=498391acef1e0098a722e7f45496fda39a15284a
+        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+        git fetch --no-tags ebiederm-user-namespace kthread-cleanups-for-v5.19
+        git checkout 498391acef1e0098a722e7f45496fda39a15284a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-There are some code paths in the kernel where you can reliably
-trigger a request_module of a non-existant module.  For example,
-if you attempt to load a non-existent crypto algorithm, or create
-a socket of a non-existent network family, it will result in a
-request_module call that is guaranteed to fail.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-As user-space can do this repeatedly, it can quickly overwhelm
-the concurrency limit in kmod.  This in itself is expected,
-however, at least on some platforms this appears to result in
-a live-lock.  Here is an example triggered by stress-ng on ppc64:
+All errors (new ones prefixed by >>):
 
-[  529.853264] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.854329] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.854341] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.854419] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.925327] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.925328] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.925328] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.925356] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128, throttling...
-[  529.925373] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  529.925397] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-[  534.863623] __request_module: 572 callbacks suppressed
-[  534.863632] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.863642] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.864113] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.864989] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.865908] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.873626] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.873682] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  534.874487] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  534.875200] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-rfc4106(gcm(aes))-all, throttling...
-[  534.883333] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  539.903506] __request_module: 604 callbacks suppressed
-[  539.903514] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  539.923693] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-anubis-all, throttling...
-[  539.985508] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-rsa-all, throttling...
-[  540.005381] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.033224] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.035282] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.044614] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.045344] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.063380] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  540.073839] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  545.013451] __request_module: 364 callbacks suppressed
-[  545.013463] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-morus640-all, throttling...
-[  545.055639] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  545.073121] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aes, throttling...
-[  545.113218] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-morus640-all, throttling...
-[  545.143335] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-anubis, throttling...
-[  545.153122] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  545.213393] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  545.423560] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-blowfish-all, throttling...
-[  545.485459] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aes, throttling...
-[  545.493302] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aes, throttling...
-[  546.373762] request_module: modprobe crypto-blowfish cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  550.114824] __request_module: 89 callbacks suppressed
-[  550.114836] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  550.133698] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  550.134293] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-blowfish-all, throttling...
-[  550.134367] request_module: modprobe crypto-aegis128 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  550.134380] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  550.143479] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  550.184477] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  550.213325] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  550.273658] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module cryptomgr, throttling...
-[  550.354497] request_module: modprobe crypto-aegis128 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  550.354531] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128-all, throttling...
-[  550.373253] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  551.553129] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  555.125406] __request_module: 463 callbacks suppressed
-[  555.125414] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.144260] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.353349] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.363333] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-camellia-all, throttling...
-[  555.374176] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.404280] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.424795] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l-all, throttling...
-[  555.425009] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-camellia-all, throttling...
-[  555.433594] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-morus1280-all, throttling...
-[  555.434605] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-camellia-all, throttling...
-[  560.135515] __request_module: 528 callbacks suppressed
-[  560.135525] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  560.213142] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.213155] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.253160] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.273546] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  560.295392] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.295393] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.295447] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.295493] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  560.295539] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256, throttling...
-[  565.313118] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  565.313191] __request_module: 269 callbacks suppressed
-[  565.313193] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  565.313211] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  565.313224] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  565.313241] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  565.313253] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  565.934584] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-cast6-all, throttling...
-[  565.993559] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  566.163898] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module cryptomgr, throttling...
-[  566.324557] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  566.885018] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  567.123450] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  567.144416] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  568.224505] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  568.224517] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  568.263714] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  568.263737] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  569.123115] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  570.323756] __request_module: 27 callbacks suppressed
-[  570.323763] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.383775] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.393602] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.443781] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.473465] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.583827] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.833842] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  570.863734] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-cast6-all, throttling...
-[  570.915448] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aes, throttling...
-[  570.923497] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aes, throttling...
-[  573.374203] request_module: modprobe crypto-aegis256-all cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  573.485584] request_module: modprobe crypto-morus1280 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  573.745565] request_module: modprobe crypto-aegis256-all cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  573.853349] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  573.853453] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  574.053100] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  574.073611] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  574.073679] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  574.114243] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  574.204498] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  575.384942] __request_module: 37 callbacks suppressed
-[  575.384948] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.554612] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.614579] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.623600] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.635387] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.654233] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.764383] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.783091] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.783802] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  575.823309] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  578.783308] __request_module: 17 callbacks suppressed
-[  578.783319] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  578.943468] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.013776] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.074271] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.124351] request_module: modprobe crypto-cast5-all cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.473229] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.744561] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.744565] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.833100] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  579.845320] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  580.414590] __request_module: 25 callbacks suppressed
-[  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-[  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
-[  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
-[  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
-[  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
-[  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
-[  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
-[  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
-[  580.423148] CFAR: 0000000000000c00 IRQMASK: 1 
-               GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000 
-               GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060 
-               GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000 
-               GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8 
-               GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-               GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff 
-               GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000 
-               GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0 
-[  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
-[  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
-[  580.423173] Call Trace:
-[  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
-[  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
-[  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
-[  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
-[  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
-[  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
-[  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
-[  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
-[  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
-[  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
-[  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
-[  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
-[  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
-[  580.423213] --- interrupt: 3000 at 0x7fff9b824464
-[  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
-[  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
-[  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
-[  580.423221] IRQMASK: 0 
-               GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004 
-               GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000 
-               GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-               GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8 
-               GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-               GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8 
-               GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650 
-               GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0 
-[  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
-[  580.423237] LR [0000000000000000] 0x0
-[  580.423238] --- interrupt: 3000
-[  580.423239] Instruction dump:
-[  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24 
-[  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120 
+   arch/h8300/kernel/process.c:58:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
+      58 | void arch_cpu_idle(void)
+         |      ^~~~~~~~~~~~~
+>> arch/h8300/kernel/process.c:108:46: error: unknown type name 'kernel_clone_args'
+     108 | int copy_thread(struct task_struct *p, const kernel_clone_args *args)
+         |                                              ^~~~~~~~~~~~~~~~~
+   arch/h8300/kernel/process.c:108:5: error: conflicting types for 'copy_thread'; have 'int(struct task_struct *, const int *)'
+     108 | int copy_thread(struct task_struct *p, const kernel_clone_args *args)
+         |     ^~~~~~~~~~~
+   In file included from arch/h8300/kernel/process.c:30:
+   include/linux/sched/task.h:71:12: note: previous declaration of 'copy_thread' with type 'int(struct task_struct *, const struct kernel_clone_args *)'
+      71 | extern int copy_thread(struct task_struct *, const struct kernel_clone_args *);
+         |            ^~~~~~~~~~~
+   arch/h8300/kernel/process.c: In function 'copy_thread':
+   arch/h8300/kernel/process.c:110:33: error: request for member 'stack' in something not a structure or union
+     110 |         unsigned long usp = args->stack;
+         |                                 ^~
+   arch/h8300/kernel/process.c:111:36: error: request for member 'stack_size' in something not a structure or union
+     111 |         unsigned long topstk = args->stack_size;
+         |                                    ^~
+   arch/h8300/kernel/process.c: At top level:
+   arch/h8300/kernel/process.c:153:16: warning: no previous prototype for 'sys_clone' [-Wmissing-prototypes]
+     153 | asmlinkage int sys_clone(unsigned long __user *args)
+         |                ^~~~~~~~~
 
-Would it be possible to modify kmod so that in such cases that
-request_module calls fail more quickly rather than repeatedly
-obtaining a spinlock that appears to be under high contention?
 
-Thanks,
+vim +/kernel_clone_args +108 arch/h8300/kernel/process.c
+
+   107	
+ > 108	int copy_thread(struct task_struct *p, const kernel_clone_args *args)
+   109	{
+   110		unsigned long usp = args->stack;
+   111		unsigned long topstk = args->stack_size;
+   112		struct pt_regs *childregs;
+   113	
+   114		childregs = (struct pt_regs *) (THREAD_SIZE + task_stack_page(p)) - 1;
+   115	
+   116		if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
+   117			memset(childregs, 0, sizeof(struct pt_regs));
+   118			childregs->retpc = (unsigned long) ret_from_kernel_thread;
+   119			childregs->er4 = topstk; /* arg */
+   120			childregs->er5 = usp; /* fn */
+   121		}  else {
+   122			*childregs = *current_pt_regs();
+   123			childregs->er0 = 0;
+   124			childregs->retpc = (unsigned long) ret_from_fork;
+   125			p->thread.usp = usp ?: rdusp();
+   126		}
+   127		p->thread.ksp = (unsigned long)childregs;
+   128	
+   129		return 0;
+   130	}
+   131	
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+0-DAY CI Kernel Test Service
+https://01.org/lkp

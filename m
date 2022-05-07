@@ -2,264 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18AB51E5F8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F4E51E601
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383891AbiEGJVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S1383973AbiEGJ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiEGJVV (ORCPT
+        with ESMTP id S229515AbiEGJ0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:21:21 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B025657123;
-        Sat,  7 May 2022 02:17:34 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id e24so12997383wrc.9;
-        Sat, 07 May 2022 02:17:34 -0700 (PDT)
+        Sat, 7 May 2022 05:26:50 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCD33C4B8
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 02:23:04 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id a191so8018740pge.2
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 02:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gYHAJahK4aFx5yhwaNZC95xNZdXWvLOzC1m0kiecvQ0=;
-        b=RjhlQrji4Dvf+RBTCfI7lj7YO9ESDYT5EERE7DGVSFoBflB50W4BRYv1Mxo/orM5r4
-         6kCaHOUXVj99kxw17c9YR9o4L17kTWPYr/Z/pSDSEzPe4jBi9wAFEekKrpvv9MTk7uLN
-         mwU/vTnTh6gixFhWxaAB2/KTocG3AQIU0asl7tJ3vOofx7WGKavIyFgDE9Sr2pvseYDj
-         5iOL2umy3jXRJbYGSDxeMbaHlFAl7Zm3+s4C8b3xjvp3CADcPV2l1lZ8c2SCvuUA6zAe
-         UQ+uMGFHDpqk4Dsi2d6jT2fc+EHNPxAwIM2IoZ2LNn9eniVzI5vfr4nyI1T0skf+pdeu
-         RpiQ==
+        bh=HsmL70Uxpre+Yuw44Bhf/DXDbaU8ZDKhOhdy778k+yo=;
+        b=mlR3d80AhkwzzC9PKqaXsMDhWbQVXMEC6MCnzg1peU4Wr/mTRivGCNYgM7QRHTa0ub
+         Z3V6OvjENlJU/wkZN2dPGw8DjSuZcoNR2oGUlIRRhQBVH/J/SmIEO4cp5zUEAua7DtmH
+         km6VJHxTPXPOkXf28Bfd8y2Oj/hJ5Li/5hWOGMIjZcnUHnrxLi2Ce7b4K6swCToXCf7T
+         kja+3ZAT4xc4qTctp1GdxZRAwko+jFMeVBxA7mgxWtFLT8zu8kr3WjghwHOyLiP52hWs
+         ZvWYhgOn07sFKhQ0KVq2vNxuL3N6cigDdOzFwBCEHPNwFpfeLQXgfP/Z5DqDonJBga7k
+         jzjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=gYHAJahK4aFx5yhwaNZC95xNZdXWvLOzC1m0kiecvQ0=;
-        b=ZR1W7dm/qki4cHqxJke3aoFywM3Mg6lwPl1+zr26d/xC3CkYhv6vuXuP60DJTfTFUn
-         LkXijU08cBrx+SZftHvyr2paAnAn/J2fb0ZhC+YYkxffdHgd9N9vtB734u687HHL0Mmz
-         ab4qAQ7uFxLtTU5dpu8Xl3zzJdrYHcigF1TRc6mys2t2TZXm1wIeam90a0Uelh2N4CrF
-         1CUxkIvOa4+t75mCtWxAaOIerjfGQvOR9NUpn90r800xLIJMrBCTTIO3Q+LMKLtUbpzV
-         0/bZf8ADi+4ZroEPJqtExBdG4O/S4BSUrY+6HB+oDwMKPq/tTJSq/5VMg2GRPfECxatp
-         5e6g==
-X-Gm-Message-State: AOAM531c4cfFsj0vPHm9gNiZX37F5oFidnfW6cBaqctj+EPo/nLZf9lr
-        61uPLtSoBoFKiswTBn65W3p1V1gmPd8=
-X-Google-Smtp-Source: ABdhPJx7pP8UICrd5MzoKSTyWN955VaL5dWfQNCslzmGqjz9WkZlC0LSE+KvWXdJbHsk8Yycf6kYOg==
-X-Received: by 2002:a5d:66c8:0:b0:20a:c807:6061 with SMTP id k8-20020a5d66c8000000b0020ac8076061mr5714915wrw.399.1651915053027;
-        Sat, 07 May 2022 02:17:33 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.237.69])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1c544b000000b003942a244f30sm12455397wmi.9.2022.05.07.02.17.32
+        bh=HsmL70Uxpre+Yuw44Bhf/DXDbaU8ZDKhOhdy778k+yo=;
+        b=lAJ6zwv1J7shC0R9AwKXhrgtNZBlSDox58YR5ZmwzjW0+eIo803vnlMDJ5SbcYHd66
+         mo3c8CzQCeNee+ggypp5YlyqMzrUtgxPqzn8eIFJ8Wmns6bdVoLvjugQUG65fR+UaQ28
+         XDLd9SCacVtoclItcG3lnJ5zzPKaIPI3dcavy1DAjVxPsJ5vMLquHR0L4onxjn8wBeJx
+         zAQC2Xg5RWkze18RHqR2dsXDSLwfnjSbzEqbxuin65NSPaeKSMH+VkgLoCw69mxgeWp1
+         Q74xSzw4KHaXu0eqj3IdWPwxrAN2AHcnYg2iDxai6Sote1r9s3lL8isdC6guQl9L3UzO
+         cDCQ==
+X-Gm-Message-State: AOAM532vVdYKQ83/+nghKgnU13nTM9jx5FGmA5Cz/borkIz36sCC7J5K
+        5/+jDtTrrJzqoyfYW0UpEq+C5Uz6YMF2tw==
+X-Google-Smtp-Source: ABdhPJyw3bAQ9HgqBVfd9NCUfNAz6xXstkZXK2fVR31183kcyPUZrKZY1G88F0L6iyNceYsna1Hw0Q==
+X-Received: by 2002:a63:c013:0:b0:3c1:df82:c8b3 with SMTP id h19-20020a63c013000000b003c1df82c8b3mr6045188pgg.141.1651915383734;
+        Sat, 07 May 2022 02:23:03 -0700 (PDT)
+Received: from [10.255.89.252] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090322c900b0015e8d4eb2e7sm3216427plg.305.2022.05.07.02.22.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 02:17:32 -0700 (PDT)
-Message-ID: <9c4cff81-ff0f-4819-c41d-54f28dba2929@gmail.com>
-Date:   Sat, 7 May 2022 10:16:54 +0100
+        Sat, 07 May 2022 02:23:02 -0700 (PDT)
+Message-ID: <23e06fc6-84fe-122e-fc07-02c5bfa7d50b@bytedance.com>
+Date:   Sat, 7 May 2022 17:19:09 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+Subject: Re: Re: Re: [PATCH 3/4] mm/memofy-failure.c: optimize hwpoison_filter
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Guo Xuenan <guoxuenan@huawei.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
-References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
- <20220505141159.3182874-1-guoxuenan@huawei.com>
- <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
- <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
- <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
- <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Wu Fengguang <fengguang.wu@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>
+References: <20220429142206.294714-1-pizhenwei@bytedance.com>
+ <20220429142206.294714-4-pizhenwei@bytedance.com>
+ <20220506085920.GC1356094@u2004>
+ <3c0e25fb-695d-4a29-6de4-c892f89cea7a@bytedance.com>
+ <ac3fc5b9-d09c-5fb6-998d-f7c655d7fa00@redhat.com>
+ <a60933f2-ef07-92a3-66cf-071670a03101@bytedance.com>
+ <20220507082045.GA1716199@u2004>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20220507082045.GA1716199@u2004>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 19:22, Jens Axboe wrote:
-> On 5/6/22 10:15 AM, Jens Axboe wrote:
->> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
->>> On 5/6/22 03:16, Jens Axboe wrote:
->>>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
->>>>> Hi, Pavel & Jens
->>>>>
->>>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
->>>>> it is not enough only apply [2] to stable-5.10.
->>>>> Io_uring is very valuable and active module of linux kernel.
->>>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
->>>>> found my understanding of io_uring is not enough to resolve all conflicts.
->>>>>
->>>>> Since 5.10 is an important stable branch of linux, we would appreciate
->>>>> your help in solving this problem.
->>>>
->>>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
->>>> there was a reproducer for this that was somewhat saner than the
->>>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
->>>
->>> No, it was the only repro and was triggering the problem
->>> just fine back then
+On 5/7/22 16:20, Naoya Horiguchi wrote:
+> On Sat, May 07, 2022 at 08:28:05AM +0800, zhenwei pi wrote:
 >>
->> I modified it a bit and I can now trigger it.
+>> On 5/7/22 00:28, David Hildenbrand wrote:
+>>> On 06.05.22 15:38, zhenwei pi wrote:
+>>>>
+>>>>
+>>>> On 5/6/22 16:59, Naoya Horiguchi wrote:
+>>>>> On Fri, Apr 29, 2022 at 10:22:05PM +0800, zhenwei pi wrote:
+>>>>>> In the memory failure procedure, hwpoison_filter has higher priority,
+>>>>>> if memory_filter() filters the error event, there is no need to do
+>>>>>> the further work.
+>>>>>
+>>>>> Could you clarify what problem you are trying to solve (what does
+>>>>> "optimize" mean in this context or what is the benefit)?
+>>>>>
+>>>>
+>>>> OK. The background of this work:
+>>>> As well known, the memory failure mechanism handles memory corrupted
+>>>> event, and try to send SIGBUS to the user process which uses this
+>>>> corrupted page.
+>>>>
+>>>> For the virtualization case, QEMU catches SIGBUS and tries to inject MCE
+>>>> into the guest, and the guest handles memory failure again. Thus the
+>>>> guest gets the minimal effect from hardware memory corruption.
+>>>>
+>>>> The further step I'm working on:
+>>>> 1, try to modify code to decrease poisoned pages in a single place
+>>>> (mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
 > 
-> Pavel, why don't we just keep it really simple and just always save the
-> iter state in read/write, and use the restore instead of the revert?
-
-The problem here is where we're doing revert. If it's done deep in
-the stack and then while unwinding someone decides to revert it again,
-e.g. blkdev_read_iter(), we're screwed.
-
-The last attempt was backporting 20+ patches that would move revert
-into io_read/io_write, i.e. REQ_F_REISSUE, back that failed some of
-your tests back then. (was it read retry tests iirc?)
-
-
-> Then it's just a trivial backport of ff6165b2d7f6 and the trivial
-> io_uring patch after that.
+> This is fine to me.
 > 
+>>>>
+>>>> 2, try to use page_handle_poison() to handle SetPageHWPoison() and
+>>>> num_poisoned_pages_inc() together. It would be best to call
+>>>> num_poisoned_pages_inc() in a single place too. I'm not sure if this is
+>>>> possible or not, please correct me if I misunderstand.
 > 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index ab9290ab4cae..138f204db72a 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -3429,6 +3429,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
->   	struct kiocb *kiocb = &req->rw.kiocb;
->   	struct iov_iter __iter, *iter = &__iter;
->   	struct io_async_rw *rw = req->async_data;
-> +	struct iov_iter_state iter_state;
->   	ssize_t io_size, ret, ret2;
->   	bool no_async;
->   
-> @@ -3458,6 +3459,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
->   	if (unlikely(ret))
->   		goto out_free;
->   
-> +	iov_iter_save_state(iter, &iter_state);
->   	ret = io_iter_do_read(req, iter);
->   
->   	if (!ret) {
-> @@ -3473,7 +3475,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
->   		if (req->file->f_flags & O_NONBLOCK)
->   			goto done;
->   		/* some cases will consume bytes even on error returns */
-> -		iov_iter_revert(iter, io_size - iov_iter_count(iter));
-> +		iov_iter_restore(iter, &iter_state);
->   		ret = 0;
->   		goto copy_iov;
->   	} else if (ret < 0) {
-> @@ -3557,6 +3559,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
->   	struct kiocb *kiocb = &req->rw.kiocb;
->   	struct iov_iter __iter, *iter = &__iter;
->   	struct io_async_rw *rw = req->async_data;
-> +	struct iov_iter_state iter_state;
->   	ssize_t ret, ret2, io_size;
->   
->   	if (rw)
-> @@ -3574,6 +3577,8 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
->   	else
->   		kiocb->ki_flags |= IOCB_NOWAIT;
->   
-> +	iov_iter_save_state(iter, &iter_state);
-> +
->   	/* If the file doesn't support async, just async punt */
->   	if (force_nonblock && !io_file_supports_async(req->file, WRITE))
->   		goto copy_iov;
-> @@ -3626,7 +3631,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
->   	} else {
->   copy_iov:
->   		/* some cases will consume bytes even on error returns */
-> -		iov_iter_revert(iter, io_size - iov_iter_count(iter));
-> +		iov_iter_restore(iter, &iter_state);
->   		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
->   		if (!ret)
->   			return -EAGAIN;
-> diff --git a/include/linux/uio.h b/include/linux/uio.h
-> index 27ff8eb786dc..cedb68e49e4f 100644
-> --- a/include/linux/uio.h
-> +++ b/include/linux/uio.h
-> @@ -26,6 +26,12 @@ enum iter_type {
->   	ITER_DISCARD = 64,
->   };
->   
-> +struct iov_iter_state {
-> +	size_t iov_offset;
-> +	size_t count;
-> +	unsigned long nr_segs;
-> +};
-> +
->   struct iov_iter {
->   	/*
->   	 * Bit 0 is the read/write bit, set if we're writing.
-> @@ -55,6 +61,14 @@ static inline enum iter_type iov_iter_type(const struct iov_iter *i)
->   	return i->type & ~(READ | WRITE);
->   }
->   
-> +static inline void iov_iter_save_state(struct iov_iter *iter,
-> +				       struct iov_iter_state *state)
-> +{
-> +	state->iov_offset = iter->iov_offset;
-> +	state->count = iter->count;
-> +	state->nr_segs = iter->nr_segs;
-> +}
-> +
->   static inline bool iter_is_iovec(const struct iov_iter *i)
->   {
->   	return iov_iter_type(i) == ITER_IOVEC;
-> @@ -226,6 +240,7 @@ ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
->   ssize_t iov_iter_get_pages_alloc(struct iov_iter *i, struct page ***pages,
->   			size_t maxsize, size_t *start);
->   int iov_iter_npages(const struct iov_iter *i, int maxpages);
-> +void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state);
->   
->   const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
->   
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index 1b0a349fbcd9..00a66229d182 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -1857,3 +1857,39 @@ int iov_iter_for_each_range(struct iov_iter *i, size_t bytes,
->   	return err;
->   }
->   EXPORT_SYMBOL(iov_iter_for_each_range);
-> +
-> +/**
-> + * iov_iter_restore() - Restore a &struct iov_iter to the same state as when
-> + *     iov_iter_save_state() was called.
-> + *
-> + * @i: &struct iov_iter to restore
-> + * @state: state to restore from
-> + *
-> + * Used after iov_iter_save_state() to bring restore @i, if operations may
-> + * have advanced it.
-> + *
-> + * Note: only works on ITER_IOVEC, ITER_BVEC, and ITER_KVEC
-> + */
-> +void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state)
-> +{
-> +	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i)) &&
-> +			 !iov_iter_is_kvec(i))
-> +		return;
-> +	i->iov_offset = state->iov_offset;
-> +	i->count = state->count;
-> +	/*
-> +	 * For the *vec iters, nr_segs + iov is constant - if we increment
-> +	 * the vec, then we also decrement the nr_segs count. Hence we don't
-> +	 * need to track both of these, just one is enough and we can deduct
-> +	 * the other from that. ITER_KVEC and ITER_IOVEC are the same struct
-> +	 * size, so we can just increment the iov pointer as they are unionzed.
-> +	 * ITER_BVEC _may_ be the same size on some archs, but on others it is
-> +	 * not. Be safe and handle it separately.
-> +	 */
-> +	BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
-> +	if (iov_iter_is_bvec(i))
-> +		i->bvec -= state->nr_segs - i->nr_segs;
-> +	else
-> +		i->iov -= state->nr_segs - i->nr_segs;
-> +	i->nr_segs = state->nr_segs;
-> +}
+> SetPageHWPoison() can be cancelled in memory_failure(), so simply bundling
+> it with num_poisoned_pages_inc() might not be optimal.  I think that
+> action_result() is supposed to be called when memory error handling is
+> effective (not filtered, not cancelled). So moving num_poisoned_pages_inc()
+> (and notification code in your plan) into this function might be good.
 > 
+OK, I'll remove this patch(mm/memofy-failure.c: optimize 
+hwpoison_filter) from this series, and fix the other 3 patches in the v2 
+version. Then try to implement/test as your suggestion in another series.
+
+>>>>
+>>>> 3, introduce memory failure notifier list in memory-failure.c: notify
+>>>> the corrupted PFN to someone who registers this list.
+>>>> If I can complete [1] and [2] part, [3] will be quite easy(just call
+>>>> notifier list after increasing poisoned page).
+>>>>
+>>>> 4, introduce memory recover VQ for memory balloon device, and registers
+>>>> memory failure notifier list. During the guest kernel handles memory
+>>>> failure, balloon device gets notified by memory failure notifier list,
+>>>> and tells the host to recover the corrupted PFN(GPA) by the new VQ.
+>>>
+>>> Most probably you might want to do that asynchronously, and once the
+>>> callback succeeds, un-poison the page.
+>>>
+>> Yes!
+>>
+>>>>
+>>>> 5, host side remaps the corrupted page(HVA), and tells the guest side to
+>>>> unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA)
+>>>> dynamically.
+>>>
+>>> I think QEMU already does that during reboots. Now it would be triggered
+>>> by the guest for individual pages.
+>>>
+>> Yes, currently QEMU supports to un-poison corrupted pages during
+>> reset/reboot. We can reuse some code to do the work in this case, this
+>> allows a VM to fix corrupted pages as soon as possible(also no need to
+>> reset/reboot).
+> 
+> So this finally allows to replace broken page mapped to guest with
+> a healthy page without rebooting the guest. That sounds helpful.
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
+Yes, it's my plan. Thanks for your suggestions!
+
+>>
+>>>>
+>>>> Because [4] and [5] are related to balloon device, also CC Michael,
+>>>> David and Jason.
+>>>
+>>> Doesn't sound too crazy for me, although it's a shame that we always
+>>> have to use virtio-balloon for such fairly balloon-unrelated things.
+>>>
+>> Thanks!
+>>
+>> -- 
+>> zhenwei pi
 
 -- 
-Pavel Begunkov
+zhenwei pi

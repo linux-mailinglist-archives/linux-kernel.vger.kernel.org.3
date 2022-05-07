@@ -2,147 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987FC51E885
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884FB51E888
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380865AbiEGQbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S1386120AbiEGQhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354878AbiEGQbe (ORCPT
+        with ESMTP id S1347958AbiEGQhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:31:34 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B989A35A8B
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 09:27:43 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id B4DF724010E
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 18:27:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1651940860; bh=k0ASTfiS6TwGFLg/edUL08Y/fyise8EySIg2PekxSS8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rSJ4eiOukclbqPMoX8l9mO4qbNpWHEHt7hN++Z/aHGdk0WUP0oUKfv+KAvwZljSTu
-         dFENVsorV5H742KbA/eKUKPp6Um2s4QyswigATcQLkY11UgCBqBz/2oCto5s7M6dOD
-         Dff6biJ61fvBfsKzQVC3M+zevUCt1hgo4Pl3aoNd/At7h/+aFO29IHEhLOQO3Il/qF
-         vyFvRJrW2CIN0rvhvko5YiL5H9Bv0Lf2mrSAGI9D1zmeNYw5cF2plVk/iJIFaOe0KC
-         YmHQqZxiCy0Db+N5yPTZ5L4W04ZaJeJbE8qlacpxzJhUvVGAHae4dSqRX9PpMqsitM
-         XoND24Uk7ws6g==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4KwXsQ3gHDz6tmG;
-        Sat,  7 May 2022 18:27:38 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
-Subject: [PATCH net-next v4] net: atlantic: always deep reset on pm op,
- fixing up my null deref regression
-Date:   Sat, 07 May 2022 16:27:48 +0000
-Message-ID: <87zgjtz4sb.fsf@posteo.de>
+        Sat, 7 May 2022 12:37:22 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3C18378
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 09:33:35 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t5so11792384edw.11
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 09:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pKO2GPtNdIghjz6m7nU4lvNqHCZJe8aOfScuIu52lYI=;
+        b=cmLK3WTGMu+JUFTSMOh+sDJVERBH5LGbX9YNBtxSObQUA1nZntQ/c5pTdEdgArSC37
+         XT6tUpq3xiwy+X2rC4oFU4oYhpSyi2ZMdwxuF1/jc+WO3kouQHwmm6wJ1TPVWLB/hVph
+         fdYATZMGIKm4CHf2cx2DsjD7DxSjC+iFUqi1X9vEEz+hmBQg3XbevS6UT+UOjgiL9q+2
+         yBZcs0eoG2RgtAGi7d54VnDIXKApqL7/8x1GGXDOH1gSU3Uy4RFm0CJnxvoCL/pnhNEF
+         sjnStod+/FZH986KzgVqyZ3mXngZX3xkXCl89lVKWoQ3mQEmrEuYparnCmDAjUprWGF2
+         6HDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pKO2GPtNdIghjz6m7nU4lvNqHCZJe8aOfScuIu52lYI=;
+        b=XCuAO0HoKqHIrwc9h+OaYqfiN5qn4zocEYWfGKSYsCMycOA/63cPFGUmh6n+HKo72O
+         UUzJwzM9oqHqxQ0RUMR4qJ5zSnB1ksrcZQ+3PF1d82o2OzZopqQV91/KGVFsmsIxo5Yw
+         A4Skz59Wt7m4OfzW0dz4tUStK6q5l5BKNd9SOLKKWiSyECWz/pknwOmcutTz5cixqh5S
+         V6nFHzV7phztGfDcjMgBDYQmwKoZ5w9KrFn2lEQpxj/rZgXmQBbSR6XRfdN7+6CNXar8
+         ZFYUb4dwdPNB73WR6so4yngo108UPcLeuDjdVJlmiNgvZN5me9Z/N6WuKVszzwhX+cAa
+         cZTA==
+X-Gm-Message-State: AOAM532jV5OyJQ6oyssiA0FUn9zb1aBva+1vM4eN/ef62PAnd2xXeMBN
+        cKUITKRXTas5yyY1xdppgjz9TQ==
+X-Google-Smtp-Source: ABdhPJwHYjjrG+KKOOSLs6RtoUUFX0QbyyBt93Asr2h6J9e7iKcP3hEt3PXEy5+GCvVymWXolMYvWw==
+X-Received: by 2002:a05:6402:5255:b0:427:de81:6af with SMTP id t21-20020a056402525500b00427de8106afmr9324701edd.269.1651941213736;
+        Sat, 07 May 2022 09:33:33 -0700 (PDT)
+Received: from [192.168.0.233] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id w26-20020a50fa9a000000b0041d893ed437sm3745988edr.2.2022.05.07.09.33.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 09:33:33 -0700 (PDT)
+Message-ID: <d3e027ca-9ccf-cf91-2414-85d2b9b680f0@linaro.org>
+Date:   Sat, 7 May 2022 18:33:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
+ exclusive to mt819x
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+References: <20220506213226.257859-1-nfraprado@collabora.com>
+ <20220506213226.257859-2-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220506213226.257859-2-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 18dc080d8d4a30d0fcb45f24fd15279cc87c47d5 Mon Sep 17 00:00:00 2001
-Date: Wed, 4 May 2022 21:30:44 +0200
+On 06/05/2022 23:32, Nícolas F. R. A. Prado wrote:
+> Commit ca23ecfdbd44 ("remoteproc/mediatek: support L1TCM") added support
+> for the l1tcm memory region on the MT8192 SCP, adding a new da_to_va
+> callback that handles l1tcm while keeping the old one for
+> back-compatibility with MT8183. However, since the mt8192 compatible was
+> missing from the dt-binding, the accompanying dt-binding commit
+> 503c64cc42f1 ("dt-bindings: remoteproc: mediatek: add L1TCM memory region")
+> mistakenly added this reg as if it were for mt8183. And later
+> it became common to all platforms as their compatibles were added.
+> 
+> Fix the dt-binding so that the l1tcm reg can, and must, be present only
+> on the supported platforms: mt8192 and mt8195.
+> 
+> Fixes: 503c64cc42f1 ("dt-bindings: remoteproc: mediatek: add L1TCM memory region")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> The if:then: branches became rather long since it seems that it's not
+> possible to override the properties in them, only add new ones. That is,
+> I couldn't leave the items definition for all three regs in the global
+> reg-names and just decrease minItems and maxItems to 2 for
+> mt8183/mt8186.
+> 
+> Also I had to add a description to the global reg-names, since it
+> couldn't be neither missing nor empty.
 
-The impact of this regression is the same for resume that I saw on
-thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+It is possible:
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/example-schema.yaml#L91
 
-Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
-par in pm functions, preventing null derefs"), where I disabled deep
-pm resets in suspend and resume, trying to make sense of the
-atl_resume_common() deep parameter in the first place.
+Keep constraints and list of names in properties. Then in allOf:if:then
+raise minItems or lower maxItems, depending on the variant.
 
-It turns out, that atlantic always has to deep reset on pm
-operations. Even though I expected that and tested resume, I screwed
-up by kexec-rebooting into an unpatched kernel, thus missing the
-breakage.
 
-This fixup obsoletes the deep parameter of atl_resume_common, but I
-leave the cleanup for the maintainers to post to mainline.
-
-Suspend and hibernation were successfully tested by the reporters.
-
-Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preve=
-nting null derefs")
-Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4=
-MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=
-=3D@protonmail.com/
-Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
-Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
-Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-CC: <stable@vger.kernel.org> # 5.10+
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
----
-I=E2=80=99m very sorry for this regression. It would be nice, if this could
-reach mainline before 5.18 release, if applicable. This restores the
-original suspend behaviour, while keeping the fix for hibernation. The
-fix for hibernation might not be the root cause, but still is the most
-simple fix for backporting to stable while the root cause is unknown
-to the maintainers.
-
-Changes in v2:
-Patch formatting fixes
-=E2=80=93 Fix Fixes tag
-=E2=80=93 Simplify stable Cc tag
-=E2=80=93 Fix Signed-off-by tag
-
-Changes in v3:
-=E2=80=93 Prefixed commit reference with "commit" aka I managed to use
-  checkpatch.pl.
-=E2=80=93 Added Tested-by tags for the testing reporters.
-=E2=80=93 People start to get annoyed by my patch revision spamming. Should=
- be
-  the last one.
-
-Changes in v4:
-=E2=80=93 Moved patch changelog to comment section
-=E2=80=93 Use unicode ndash for patch changelog list to avoid confusion with
-  diff in editors
-=E2=80=93 Expanded comment
-=E2=80=93 Targeting net-next by subject
-
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers=
-/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 3a529ee8c834..831833911a52 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
-=20
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
-=20
- static int aq_pm_thaw(struct device *dev)
-@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
-=20
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
-=20
- static const struct dev_pm_ops aq_pm_ops =3D {
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
---=20
-2.35.1
+Best regards,
+Krzysztof

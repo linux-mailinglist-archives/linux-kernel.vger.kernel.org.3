@@ -2,156 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F9851E2C3
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D77751E2BF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445068AbiEGAft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 20:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S1445018AbiEGAdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 20:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235355AbiEGAfp (ORCPT
+        with ESMTP id S235355AbiEGAdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 20:35:45 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FE15BE51
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 17:32:00 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so12196230pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 17:32:00 -0700 (PDT)
+        Fri, 6 May 2022 20:33:21 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5C83CA73
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 17:29:36 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e189so9225891oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 17:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wn0dXbP2ZNZ5rtmEUdIAq+AKjqvzHBKlvsWStfjh/W0=;
-        b=fOrVM+EV4Gunf/aPtxP1nt32zwg0Xwz4PfvGKYnHCgQwFAwWTfFddYQ/YZ4R+7AKqb
-         yiWWR2ufEtrREpn9n4vplBM48DbtYM0u7ut3ChXkCkslhGtgm7lKrSesCev0H/+ruwKV
-         RUcFjA56oR02AtOyIvEG4He/xOKdub2cATeQ45KylHC3J+N4e1sr09CX/oxFTm32kvDD
-         bEiuOeH3vz12FQVgretkDDpYELaFELIc6FVOqt4G4YCPKtGSfn8wwoIMX7mXf31T6X0Q
-         BAX8mKz3jEOI6r6BdE8CROzOUylSc5p6GfOJjTDCIieZRNatDok1m5TYn7FWJm8VPh0D
-         oIjA==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=BfXIYuTjESdwCcwnM3M8fBVsvHWnXl3HX1TNkGVkeNM=;
+        b=Hj7bOIh95GPwij//9n8NwUm1Iyp50iOpugsjgNphXDJgxGmxKiY0vlKUeyMxhIi2K2
+         6VXze4xJSRJ2kDbt4uS7zYk6Qr7yImNb8t9GihFG4WjcRLbXWUEoPHYoi87oTDjtqQx/
+         dOcVT7uJgYR1HQRorqxvT5KUTQxczWwGabjn4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wn0dXbP2ZNZ5rtmEUdIAq+AKjqvzHBKlvsWStfjh/W0=;
-        b=gzbWchQ+JvMAL0yD1LyDX8vmp6bF0vmxum8pumeWAj044eEPZqMVkGb5uL/zV9EOv5
-         PdHF4dX6hbJWWAi1TVrv7ks4ewutRV/+gShGZcxJJdRHcoIkZP8vXt1Ty7xrRhDiDuMd
-         rj68391IZyOo+31YIxz44Hiw4xjqItUUyZC62KRwHZ7FcsYqFvvyfvEFPXeBAr1BkmBo
-         DWXfZzlnleQng2O3Qom0R2enzMf5hRIhpTXfCyy2M9yd9yaB0rMjsaVTiPOI/SQnVTsW
-         myckyFQcf+knv9OysZ1mfuxleI8YHLcC3JKO+ByLy53EBT5mN5emRl/ryDvaWiGNGH5f
-         gDAA==
-X-Gm-Message-State: AOAM532gbR26kE5Ej8lNgxVrBVMnkRGwP315vU5r/ckfhVMEhfvCqvnL
-        D+PpSLyvW7oIlyXTEJd6fAiLqg==
-X-Google-Smtp-Source: ABdhPJyckdf3ooD9/x8FQrTgykRhfqi6qP1ZrPcpvmWgj2IWql69kx0Wu/RQ52gT5LiMdQFMnHPxLw==
-X-Received: by 2002:a17:902:bd05:b0:158:544d:6557 with SMTP id p5-20020a170902bd0500b00158544d6557mr6514519pls.70.1651883520388;
-        Fri, 06 May 2022 17:32:00 -0700 (PDT)
-Received: from [10.255.89.252] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090341c100b0015e8d4eb278sm2471067ple.194.2022.05.06.17.31.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 17:31:59 -0700 (PDT)
-Message-ID: <a60933f2-ef07-92a3-66cf-071670a03101@bytedance.com>
-Date:   Sat, 7 May 2022 08:28:05 +0800
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=BfXIYuTjESdwCcwnM3M8fBVsvHWnXl3HX1TNkGVkeNM=;
+        b=IkEKsiowwvgj1rLvLD6ln5oOB4mpK1TyU3k7GTIVjS5MBW0ycQFygzzjNjJvEEL7e2
+         qFMHtc4wsHSJ9UMQggJfXT6312DZrzL1jmcm9nnYGBrpz8QogkVGbY3kmiraAa51/VJa
+         iU0CS9/wPIln8q2483hUz+rARje/w2hSuWisL9ECcOWLxToApXIx6LNtludVxq444Qqg
+         jGniL7jeMgaNJeLnSL7grN12f3jgRNWEsWLt42vESWDSYubCBsk2TJPmzfdluGErsbti
+         bbOfHVeg6xEsXCUMwrRFkmGObryDRVdr76gkYE2JLK5eSMCil3lVzovhUhn17My3H7p6
+         Crkg==
+X-Gm-Message-State: AOAM531Ee0T9eB4SIki4Zki3omq4IZLMw9QQCEOheMHcHJMCGsk7m6gx
+        4jHUdbhEiOXrCdIxQballeGtuBNtZLp/hBN/nS1PEw==
+X-Google-Smtp-Source: ABdhPJxy2rjvHnXRgZkg73o/CmbSvZTI1SbRFqdP1g9gdFeFf/h84x2in8Rewwao0QtsPr/lxD+NoSJdi+JC2LVdHf4=
+X-Received: by 2002:a05:6808:23ce:b0:326:6698:c271 with SMTP id
+ bq14-20020a05680823ce00b003266698c271mr2647939oib.193.1651883375667; Fri, 06
+ May 2022 17:29:35 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 6 May 2022 20:29:34 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Re: [PATCH 3/4] mm/memofy-failure.c: optimize hwpoison_filter
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20220429142206.294714-1-pizhenwei@bytedance.com>
- <20220429142206.294714-4-pizhenwei@bytedance.com>
- <20220506085920.GC1356094@u2004>
- <3c0e25fb-695d-4a29-6de4-c892f89cea7a@bytedance.com>
- <ac3fc5b9-d09c-5fb6-998d-f7c655d7fa00@redhat.com>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <ac3fc5b9-d09c-5fb6-998d-f7c655d7fa00@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1651873267-18220-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1651873267-18220-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 6 May 2022 20:29:34 -0400
+Message-ID: <CAE-0n52HvhT_RFbJHhijKCCt8jQM70fo6ceAbnYEfOfO-dRxVA@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: Always clear mask bits to disable interrupts
+ at dp_ctrl_reset_irq_ctrl()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Kuogee Hsieh (2022-05-06 14:41:07)
+> dp_catalog_ctrl_reset() will software reset DP controller. But it will
+> not reset programmable registers to default value. DP driver still have
+> to clear mask bits to interrupt status registers to disable interrupts
+> after software reset of controller. This patch removes the enable flag
+> condition checking to always clear mask bits of interrupt status
+> registers to disable interrupts if enable flag is false.
 
-On 5/7/22 00:28, David Hildenbrand wrote:
-> On 06.05.22 15:38, zhenwei pi wrote:
->>
->>
->> On 5/6/22 16:59, Naoya Horiguchi wrote:
->>> On Fri, Apr 29, 2022 at 10:22:05PM +0800, zhenwei pi wrote:
->>>> In the memory failure procedure, hwpoison_filter has higher priority,
->>>> if memory_filter() filters the error event, there is no need to do
->>>> the further work.
->>>
->>> Could you clarify what problem you are trying to solve (what does
->>> "optimize" mean in this context or what is the benefit)?
->>>
->>
->> OK. The background of this work:
->> As well known, the memory failure mechanism handles memory corrupted
->> event, and try to send SIGBUS to the user process which uses this
->> corrupted page.
->>
->> For the virtualization case, QEMU catches SIGBUS and tries to inject MCE
->> into the guest, and the guest handles memory failure again. Thus the
->> guest gets the minimal effect from hardware memory corruption.
->>
->> The further step I'm working on:
->> 1, try to modify code to decrease poisoned pages in a single place
->> (mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
->>
->> 2, try to use page_handle_poison() to handle SetPageHWPoison() and
->> num_poisoned_pages_inc() together. It would be best to call
->> num_poisoned_pages_inc() in a single place too. I'm not sure if this is
->> possible or not, please correct me if I misunderstand.
->>
->> 3, introduce memory failure notifier list in memory-failure.c: notify
->> the corrupted PFN to someone who registers this list.
->> If I can complete [1] and [2] part, [3] will be quite easy(just call
->> notifier list after increasing poisoned page).
->>
->> 4, introduce memory recover VQ for memory balloon device, and registers
->> memory failure notifier list. During the guest kernel handles memory
->> failure, balloon device gets notified by memory failure notifier list,
->> and tells the host to recover the corrupted PFN(GPA) by the new VQ.
-> 
-> Most probably you might want to do that asynchronously, and once the
-> callback succeeds, un-poison the page.
-> 
-Yes!
+Another paragraph is needed which is that this (partially?) fixes the
+suspend path where we call dp_catalog_ctrl_reset() but the irq is still
+unmasked and can come in while we're suspending. This leads to bus hangs
+if the irq is handled after we power down the DP hardware because we run
+the irq handler and access a device register assuming that no irq could
+ever come in if we powered down the device. We don't know when the irq
+will be handled though, so it's possible the irq is pending from before
+we disable the irq in the hardware. Don't we need some irq synchronize
+to make sure it doesn't run?
 
->>
->> 5, host side remaps the corrupted page(HVA), and tells the guest side to
->> unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA)
->> dynamically.
-> 
-> I think QEMU already does that during reboots. Now it would be triggered
-> by the guest for individual pages.
-> 
-Yes, currently QEMU supports to un-poison corrupted pages during 
-reset/reboot. We can reuse some code to do the work in this case, this 
-allows a VM to fix corrupted pages as soon as possible(also no need to 
-reset/reboot).
-
->>
->> Because [4] and [5] are related to balloon device, also CC Michael,
->> David and Jason.
-> 
-> Doesn't sound too crazy for me, although it's a shame that we always
-> have to use virtio-balloon for such fairly balloon-unrelated things.
-> 
-Thanks!
-
--- 
-zhenwei pi
+>
+> Fixes: ba0a422be723 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_ctrl.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index 38026f2..cbf3399 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -1379,8 +1379,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
+>
+>         dp_catalog_ctrl_reset(ctrl->catalog);
+>
+> -       if (enable)
+> -               dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+> +       /*
+> +        * all dp controller programmable registers will not
+> +        * be reset to default value after DP_SW_RESET
+> +        * therefore interrupt mask bits have to be updated
+> +        * to enable/disable interrupts
+> +        */
+> +       dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+>  }
+>
+>  void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>

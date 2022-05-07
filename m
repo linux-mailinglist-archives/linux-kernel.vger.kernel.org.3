@@ -2,285 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BB351E68C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB6451E689
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388715AbiEGKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S238426AbiEGKty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386163AbiEGKxv (ORCPT
+        with ESMTP id S1344713AbiEGKtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:53:51 -0400
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EA0A1AB
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:50:04 -0700 (PDT)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
-        id 1nnI0g-0004G2-AM
-        for linux-kernel@vger.kernel.org; Sat, 07 May 2022 12:50:02 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-kernel@vger.kernel.org
-From:   =?UTF-8?Q?Jean-Pierre_Andr=c3=a9?= <jean-pierre.andre@wanadoo.fr>
-Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
-Date:   Sat, 7 May 2022 12:42:56 +0200
-Message-ID: <a712f535-7e34-4967-d335-f3680f9c4b6f@wanadoo.fr>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <20220502102521.22875-2-dharamhans87@gmail.com> <YnGIUOP2BezDAb1k@redhat.com>
- <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
- <YnKR9CFYPXT1bM1F@redhat.com>
- <CACUYsyG+QRyObnD5eaD8pXygwBRRcBrGHLCUZb2hmMZbFOfFTg@mail.gmail.com>
- <YnPeqPTny1Eeat9r@redhat.com>
- <CACUYsyG9mKQK+pWcAcWFEtC2ad0_OBU6NZgBC965ZxQy5_JiXQ@mail.gmail.com>
- <YnUsw4O3F4wgtxTr@redhat.com> <78c2beed-b221-71b4-019f-b82522d98f1e@ddn.com>
- <YnVV2Rr4NMyFj5oF@redhat.com> <90fbe06b-4af7-c9ce-4aca-393aed709722@ddn.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
-In-Reply-To: <90fbe06b-4af7-c9ce-4aca-393aed709722@ddn.com>
-Cc:     linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 7 May 2022 06:49:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3E9F2125C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651920363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6tGT96k7wfHK+Y3z3B3U0HcMpQlkBA9WkQzKqYtG1fc=;
+        b=iS+o7XbU+OZiIeIzc6omJeU6QPyAT9b0SnVC7i78kzoemowwqJ25t99TF8OMymp+vNAfNE
+        PglNtWclvKnqYi6VVoQ30SaPEImx+G1AdXf/T5OZLn2qN31viuwtYrgi7ds9KxxpGCWvrY
+        Wu9tMLTPypLVAvaaqllTkQobp9yb5e0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-sMX8Gq8LPiOMk0YdMirfMw-1; Sat, 07 May 2022 06:45:59 -0400
+X-MC-Unique: sMX8Gq8LPiOMk0YdMirfMw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A38C91C05ABE;
+        Sat,  7 May 2022 10:45:58 +0000 (UTC)
+Received: from localhost (ovpn-13-110.pek2.redhat.com [10.72.13.110])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D1F740D2830;
+        Sat,  7 May 2022 10:45:57 +0000 (UTC)
+Date:   Sat, 7 May 2022 18:45:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <20220507104554.GE122876@MiWiFi-R3L-srv>
+References: <20220505091845.167-1-thunder.leizhen@huawei.com>
+ <20220505091845.167-4-thunder.leizhen@huawei.com>
+ <YnQC44KVKirH0vyB@arm.com>
+ <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+ <YnUfmMmON2c1FZrx@MiWiFi-R3L-srv>
+ <YnVept85UJCaZp6p@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnVept85UJCaZp6p@arm.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bernd Schubert wrote on 5/6/22 8:45 PM:
+On 05/06/22 at 06:45pm, Catalin Marinas wrote:
+> On Fri, May 06, 2022 at 09:16:08PM +0800, Baoquan He wrote:
+> > On 05/06/22 at 11:22am, Leizhen (ThunderTown) wrote:
+> > ......  
+> > > >> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
+> > > >>  	if (crash_base)
+> > > >>  		crash_max = crash_base + crash_size;
+> > > >>  
+> > > >> -	/* Current arm64 boot protocol requires 2MB alignment */
+> > > >> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+> > > >> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> > > >>  					       crash_base, crash_max);
+> > > >>  	if (!crash_base) {
+> > > >>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+> > > > 
+> > > > I personally like this but let's see how the other thread goes. I guess
+> > > 
+> > > Me too. This fallback complicates code logic more than just a little.
+> > > I'm not sure why someone would rather add fallback than change the bootup
+> > > options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
+> > > compatible and extended mode when crashkernel=X fails to reserve memory. And
+> > > the code logic will be much clearer.
+> > 
+> > The fallback does complicates code, while it was not made at the
+> > beginning, but added later. The original crahskernel=xM can only reserve
+> > low memory under 896M on x86 to be back compatible with the case in which
+> > normal kernel is x86_64, while kdump kernel could be i386. Then customer
+> > complained why crashkernel=xM can't be put anywhere so that they don't
+> > need to know the details of limited low memory and huge high memory fact 
+> > in system.
+> > 
+> > The implementation of fallback is truly complicated, but its use is
+> > quite simple. And it makes crashkernel reservation setting simple.
+> > Most of users don't need to know crashkernel=,high, ,low things, unless
+> > the crashkernel region is too big. Nobody wants to take away 1G or more
+> > from low memory for kdump just in case bad thing happens, while normal
+> > kernel itself is seriously impacted by limited low memory.
 > 
-> 
-> On 5/6/22 19:07, Vivek Goyal wrote:
->> On Fri, May 06, 2022 at 06:41:17PM +0200, Bernd Schubert wrote:
->>>
->>>
->>> On 5/6/22 16:12, Vivek Goyal wrote:
->>>
->>> [...]
->>>
->>>> On Fri, May 06, 2022 at 11:04:05AM +0530, Dharmendra Hans wrote:
->>>
->>>>
->>>> Ok, looks like your fuse file server is talking to a another file
->>>> server on network and that's why you are mentioning two network trips.
->>>>
->>>> Let us differentiate between two things first.
->>>>
->>>> A. FUSE protocol semantics
->>>> B. Implementation of FUSE protocl by libfuse.
->>>>
->>>> I think I am stressing on A and you are stressing on B. I just want
->>>> to see what's the difference between FUSE_CREATE and FUSE_ATOMIC_CREATE
->>>> from fuse protocol point of view. Again look at from kernel's point of
->>>> view and don't worry about libfuse is going to implement it.
->>>> Implementations can vary.
->>>
->>> Agreed, I don't think we need to bring in network for the kernel to 
->>> libfuse
->>> API.
->>>
->>>>
->>>>   From kernel's perspective FUSE_CREATE is supposed to create + open a
->>>> file. It is possible file already exists. Look at 
->>>> include/fuse_lowlevel.h
->>>> description for create().
->>>>
->>>>           /**
->>>>            * Create and open a file
->>>>            *
->>>>            * If the file does not exist, first create it with the 
->>>> specified
->>>>            * mode, and then open it.
->>>>            */
->>>>
->>>> I notice that fuse is offering a high level API as well as low level
->>>> API. I primarily know about low level API. To me these are just two
->>>> different implementation but things don't change how kernel sends
->>>> fuse messages and what it expects from server in return.
->>>>
->>>> Now with FUSE_ATOMIC_CREATE, from kernel's perspective, only difference
->>>> is that in reply message file server will also indicate if file was
->>>> actually created or not. Is that right?
->>>>
->>>> And I am focussing on this FUSE API apsect. I am least concerned at
->>>> this point of time who libfuse decides to actually implement 
->>>> FUSE_CREATE
->>>> or FUSE_ATOMIC_CREATE etc. You might make a single call in libfuse
->>>> server (instead of two) and that's performance optimization in libfuse.
->>>> Kernel does not care how many calls did you make in file server to
->>>> implement FUSE_CREATE or FUSE_ATOMIC_CREATE. All it cares is that
->>>> create and open the file.
->>>>
->>>> So while you might do things in more atomic manner in file server and
->>>> cut down on network traffic, kernel fuse API does not care. All it 
->>>> cares
->>>> about is create + open a file.
->>>>
->>>> Anyway, from kernel's perspective, I think you should be able to
->>>> just use FUSE_CREATE and still be do "lookup + create + open".
->>>> FUSE_ATOMIC_CREATE is just allows one additional optimization so
->>>> that you know whether to invalidate parent dir's attrs or not.
->>>>
->>>> In fact kernel is not putting any atomicity requirements as well on
->>>> file server. And that's why I think this new command should probably
->>>> be called FUSE_CREATE_EXT because it just sends back additional
->>>> info.
->>>>
->>>> All the atomicity stuff you have been describing is that you are
->>>> trying to do some optimizations in libfuse implementation to implement
->>>> FUSE_ATOMIC_CREATE so that you send less number of commands over
->>>> network. That's a good idea but fuse kernel API does not require you
->>>> do these atomically, AFAICS.
->>>>
->>>> Given I know little bit of fuse low level API, If I were to implement
->>>> this in virtiofs/passthrough_ll.c, I probably will do following.
->>>>
->>>> A. Check if caller provided O_EXCL flag.
->>>> B. openat(O_CREAT | O_EXCL)
->>>> C. If success, we created the file. Set file_created = 1.
->>>>
->>>> D. If error and error != -EEXIST, send error back to client.
->>>> E. If error and error == -EEXIST, if caller did provide O_EXCL flag,
->>>>      return error.
->>>> F. openat() returned -EEXIST and caller did not provide O_EXCL flag,
->>>>      that means file already exists.  Set file_created = 0.
->>>> G. Do lookup() etc to create internal lo_inode and stat() of file.
->>>> H. Send response back to client using fuse_reply_create().
->>>> This is one sample implementation for fuse lowlevel API. There could
->>>> be other ways to implement. But all that is libfuse + filesystem
->>>> specific and kernel does not care how many operations you use to
->>>> complete and what's the atomicity etc. Of course less number of
->>>> operations you do better it is.
->>>>
->>>> Anyway, I think I have said enough on this topic. IMHO, FUSE_CREATE
->>>> descritpion (fuse_lowlevel.h) already mentions that "If the file 
->>>> does not
->>>> exist, first create it with the specified mode and then open it". That
->>>> means intent of protocol is that file could already be there as well.
->>>> So I think we probably should implement this optimization (in kernel)
->>>> using FUSE_CREATE command and then add FUSE_CREATE_EXT to add 
->>>> optimization
->>>> about knowing whether file was actually created or not.
->>>>
->>>> W.r.t libfuse optimizations, I am not sure why can't you do 
->>>> optimizations
->>>> with FUSE_CREATE and why do you need FUSE_CREATE_EXT necessarily. If
->>>> are you worried that some existing filesystems will break, I think
->>>> you can create an internal helper say fuse_create_atomic() and then
->>>> use that if filesystem offers it. IOW, libfuse will have two
->>>> ways to implement FUSE_CREATE. And if filesystem offers a new way which
->>>> cuts down on network traffic, libfuse uses more efficient method. We
->>>> should not have to change kernel FUSE API just because libfuse can
->>>> do create + open operation more efficiently.
->>>
->>> Ah right, I like this. As I had written before, the first patch 
->>> version was
->>> using FUSE_CREATE and I was worried to break something. Yes, it 
->>> should be
->>> possible split into lookup+create on the libfuse side. That being said,
->>> libfuse will need to know which version it is - there might be an old 
->>> kernel
->>> sending the non-optimized version - libfuse should not do another lookup
->>> then.
->>
->> I am confused about one thing. For FUSE_CREATE command, how does it
->> matter whether kernel has done lookup() before sending FUSE_CREATE. All
->> FUSE_CREATE seems to say that crate a file (if it does not exist already)
->> and then open it and return file handle as well as inode attributes. It
->> does not say anything about whether a LOOKUP has already been done
->> by kernel or not.
->>
->> It looks like you are assuming that if FUSE_CREATE is coming, that
->> means client has already done FUSE_LOOKUP. So there is something we
->> are not on same page about.
->>
->> I looked at fuse_lowlevel API and passthrough_ll.c and there is no
->> assumption whether FUSE_LOOKUP has already been called by client
->> before calling FUSE_CREATE. Similarly, I looked at virtiofs code
->> and I can't see any such assumption there as well.
-> 
-> The current linux kernel code does this right now, skipping the lookup 
-> just changes behavior.  Personally I would see it as bug if the 
-> userspace implementation does not handle EEXIST for FUSE_CREATE. 
-> Implementation developer and especially users might see it differently 
-> if a kernel update breaks/changes things out of the sudden. 
-> passthrough_ll.c is not the issue here, it handles it correctly, but 
-> what about the XYZ other file systems out there - do you want to check 
-> them one by one, including closed source ones? And wouldn't even a 
-> single broken application count as regression?
-> 
->>
->> https://github.com/qemu/qemu/blob/master/tools/virtiofsd/passthrough_ll.c
->>
->> So I am sort of lost. May be you can help me understsand this.
-> 
-> I guess it would be more interesting to look at different file systems 
-> that are not overlay based. Like ntfs-3g - I have not looked at the code 
-> yet, but especially disk based file system didn't have a reason so far 
-> to handle EEXIST. And
+> IIUC, that's exactly what happens even on x86, it may take away a
+> significant chunk of the low memory. Let's say we have 1.2GB of 'low'
+> memory (below 4GB) on an arm64 platform. A crashkernel=1G would succeed
+> in a low allocation, pretty much affecting the whole system. It would
+> only fall back to 'high' _if_ you pass something like crashkernel=1.2G
+> so that the low allocation fails. So if I got this right, I find the
+> fall-back from crashkernel=X pretty useless, we shouldn't even try it.
 
-AFAIK ntfs-3g proper does not keep a context across calls and does
-not know what LOOKUP was preparing a CREATE. However this may have
-consequences in the high level of libfuse for managing the file tree.
+Most of time, it's not easy to get 1G contiguous low memory. On x86,
+firmware is mapped into low 4G virt address, and system initialization
+will take some of them too. On arm64, it's hard too, e.g the physical
+memory will start at 1G or 2G position, and firmware need be mapped
+under 4G too, and kernel initialization costing. And we are eager to see
+crashkernel=,high support too because we got a bug that on an arm64
+server, its physical memory is scattered under low 4G so that the
+biggest contiguous memory is less than 300M. (Not sure if it's a prototype
+machine, I would not say its name in public.) In this case, we need
+the fallback implementation to make our default crashkernel=xM setting
+succeed getting the required memory from above 4G.
 
-The kernel apparently issues a LOOKUP to decide whether issuing a
-CREATE (create+open) or an OPEN. If it sent blindly a CREATE,
-ntfs-3g would return EEXIST if the name was already present in
-the directory.
+So from our experience and feedback given by customer, crashkernel=xM as
+a default setting is the first choice and very easy to use and can
+satisfy 99% of needs. If big crashkernel reservation is required,
+considering low memory is limited and precious, while most of time
+high memory is huge, crashkernel=,high is recommended. The price is about
+200M or less memory for DMA, however much the required high memory is, 2G
+or more. Believe me this kind of big memory requirement happens on very
+few machines, because vmcore dumping tool makedumpfile taking the default
+cyclic buffer method to dump which require not much memory. Unless user
+has their own dumping tool or other dumping method which require much
+memory.
 
-For a test, can you suggest a way to force ignore of such lookup
-within libfuse, without applying your kernel patches ? Is there a
-way to detect the purpose of a lookup ? (A possible way is to
-hardcode a directory inode within which the lookups return ENOENT).
+crashkernel=xM, whether it is from its name, or the actual need, had
+better get the fallback mechanism to allow it being put anywhere.
 
 > 
->>
->>> Now there is 'fi.flags = arg->flags', but these are already taken by
->>> open/fcntl flags - I would not feel comfortable to overload these. At 
->>> best,
->>> struct fuse_create_in currently had a padding field, we could convert 
->>> these
->>> to something like 'ext_fuse_open_flags' and then use it for fuse 
->>> internal
->>> things. Difficulty here is that I don't know if all kernel 
->>> implementations
->>> zero the struct (BSD, MacOS), so I guess we would need to negotiate at
->>> startup/init time and would need another main feature flag? And with 
->>> that
->>> I'm not be sure anymore if the result would be actually more simple than
->>> what we have right now for the first patch.
->>
->> If FUSE_CREATE indeed has a dependency on FUSE_LOOKUP have been called
->> before that, then I agree that we can't implement new semantics with
->> FUSE_CREATE and we will have to introduce a new op say
->> FUSE_ATOMIC_CREATE/FUSE_LOOKUP_CREATE/FUSE_CREATE_EXT.
->>
->> But looking at fuse API, I don't see FUSE_CREATE ever guaranteeing that
->> a FUSE_LOOKUP has been done before this.
-> 
-> It is not in written document, but in the existing (linux) kernel behavior.
-> 
-> 
-> You can look up "regressions due to 64-bit ext4 directory cookies" - 
-> patches from me had been once already the reason for accidental breakage 
-> and back that time I did not even have the slightest chance to predict 
-> it, as glusterfs was relying on max 32bit telldir results and using the 
-> other 32bit for its own purposes. Kernel behavior changed and 
-> application broke, even though the application was relying on non-posix 
-> behavior. In case of fuse there is no document like posix, but just API 
-> headers and current behavior...
-> 
-> Thanks,
-> Bernd
-> 
-> 
-> 
-> 
-> 
+> It makes more sense if crashkernel=X,high is a hint to attempt a high
+> allocation first with a default low (overridden by a ,low option) or
+> even fall-back to low if there's no memory above 4GB.
 
+Hmm, maybe not so much. Please also consider the big end servers usually
+carry tons of devices, its rebooting will take half an hour or even more
+time. Imagine in an lab with hundereds of servers, one time of OS upgrading 
+need to attempt high allocation firstly on each machine, then decide
+what is set. That will drive operator mad. So we give them the simplest
+way, crashkernel=xM to make it work. If you want to optimize the memory
+usage and you know each system well, then please use crashkernel=,high
+and crashkernel=,low to make it.
+
+In our distros, the policy is if default crashkernel=xM setting with
+OS installation doesn't work well, e.g OOM or reserving too much memory
+causing wasting, bug can be reported. crashkernel=,high and
+crashkernel=,low don't work well, settle by yourself.
+
+> 
+> Could you please have a look at Zhen Lei's latest series without any
+> fall-backs? I'd like to queue that if you are happy with it. We can then
+> look at adding some fall-back options on top.
+
+I am fine with the v24, except of the corner case I pointed out. I
+personally suggest merging the v24 series, and fix the corner case
+and add fall back on top, with step by step style.
+
+Thanks
+Baoquan
+
+> 
+> IMO, we should only aim for:
+> 
+> 	crashkernel=X		ZONE_DMA allocation, no fall-back
+> 	crashkernel=X,high	hint for high allocation, small default
+> 				low, fall back to low if alloc fails
+> 	crashkernel=X,low	control the default low allocation, only
+> 				high is passed
+> 
+> With the above, I'd expect admins to just go for crashkernel=X,high on
+> modern hardware with up to date kexec tools and it does the right thing.
+> The crashkernel=X can lead to unexpected results if it eats up all the
+> low memory. Let's say this option is for backwards compatibility only.
+> 
+> Thanks.
+> 
+> -- 
+> Catalin
+> 
 

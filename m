@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6DA51E38E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1561451E396
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445356AbiEGCgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 22:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S1445373AbiEGCgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 22:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbiEGCgH (ORCPT
+        with ESMTP id S1445366AbiEGCgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 22:36:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5361707B;
-        Fri,  6 May 2022 19:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651890742; x=1683426742;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=vFqRJouxaNfchEl9DmTu7VLsnysJ8DcCYP4XHQXH47w=;
-  b=j7TKRMpQwI6LL0mIcLA8c53oVmKz8eudjeGVQGa6RRDAmfz6uloossNP
-   qgyVjzjXpi9Co1s5qFQwjBIg4bDYeJRWWCVx7No5Tq81GOBDlcZG2pW87
-   K0X+XfJGBgyzLcrdhWPwrIiqfWX4zhuHTH1+/FmzMQh/2FRwbeuEBnARD
-   0r3qgusBrHM5MISPgF095Pbs9QGl+2PKXOo7mOtkO4IB3frSvIpKI3ScH
-   HpF+VFpGDDZ2uWUzE95pXv9GrtiX5zAILEu/KaM1z62k0TE55WELYwVwo
-   Z1fLllvvKp0z08j7NmboXAngpEsNNfbMhdAXXGyg8x2g06jxnWwYB+bAZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="355068986"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="355068986"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:32:22 -0700
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="586314735"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.170.118]) ([10.249.170.118])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:32:18 -0700
-Message-ID: <d2e14530-f3c1-53c9-dd03-95ea2c1bf3f1@intel.com>
-Date:   Sat, 7 May 2022 10:32:02 +0800
+        Fri, 6 May 2022 22:36:32 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE8A69CE1;
+        Fri,  6 May 2022 19:32:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCUh82p_1651890757;
+Received: from 30.236.9.83(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCUh82p_1651890757)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 07 May 2022 10:32:39 +0800
+Message-ID: <e8b56f7d-ad95-7938-21a5-55caedbbb354@linux.alibaba.com>
+Date:   Sat, 7 May 2022 10:33:20 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v11 08/16] KVM: x86/pmu: Refactor code to support guest
- Arch LBR
-Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220506033305.5135-1-weijiang.yang@intel.com>
- <20220506033305.5135-9-weijiang.yang@intel.com>
- <ce4fe0e1-357c-9e8d-67f7-f065ccbe3851@linux.intel.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <ce4fe0e1-357c-9e8d-67f7-f065ccbe3851@linux.intel.com>
+Subject: Re: [PATCH 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
+ <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
+ <21b11024-e893-8c11-9b98-ab1d13413b61@linux.alibaba.com>
+ <85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,209 +60,132 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/6/2022 11:03 PM, Liang, Kan wrote:
-> On 5/5/2022 11:32 PM, Yang Weijiang wrote:
->
->    bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
-> @@ -199,12 +203,20 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
->    		return ret;
->    	}
->    
-> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
-> -		(index >= records->from && index < records->from + records->nr) ||
-> -		(index >= records->to && index < records->to + records->nr);
-> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
-> +		ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS);
-> +
-> Shouldn't we return immediately if (ret == true)?
-> Keep checking if (!ret) looks uncommon.
->
-> Actually we probably don't need the ret in this function.
->
-> 	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-> 	    ((index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS)))
-> 		return true;
->
->> +	if (!ret) {
->> +		ret = (index >= records->from &&
->> +		       index < records->from + records->nr) ||
->> +		      (index >= records->to &&
->> +		       index < records->to + records->nr);
->> +	}
-> 	if ((index >= records->from &&
-> 	    index < records->from + records->nr) ||
-> 	    (index >= records->to &&
-> 	    index < records->to + records->nr))
-> 		return true;
->
->>    
->> -	if (!ret && records->info)
->> -		ret = (index >= records->info && index < records->info + records->nr);
->> +	if (!ret && records->info) {
->> +		ret = (index >= records->info &&
->> +		       index < records->info + records->nr);
->> +	}
-> 	if (records->info &&
-> 	    (index >= records->info && index < records->info + records->nr)
-> 		return true;
->
-> 	return false;
-> Sorry, I didn't notice it in the previous review.
 
-Thanks Kan, so I'll modify this function as below (keeping other part 
-unchanged):
+On 5/7/2022 1:56 AM, Mike Kravetz wrote:
+> On 5/5/22 20:39, Baolin Wang wrote:
+>>
+>> On 5/6/2022 7:53 AM, Mike Kravetz wrote:
+>>> On 4/29/22 01:14, Baolin Wang wrote:
+>>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>>>> size specified.
+>>> <snip>
+>>>> diff --git a/mm/rmap.c b/mm/rmap.c
+>>>> index 6fdd198..7cf2408 100644
+>>>> --- a/mm/rmap.c
+>>>> +++ b/mm/rmap.c
+>>>> @@ -1924,13 +1924,15 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>>>                        break;
+>>>>                    }
+>>>>                }
+>>>> +
+>>>> +            /* Nuke the hugetlb page table entry */
+>>>> +            pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>>>>            } else {
+>>>>                flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>>>> +            /* Nuke the page table entry. */
+>>>> +            pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>>>>            }
+>>>>    
+>>>
+>>> On arm64 with CONT-PTE/PMD the returned pteval will have dirty or young set
+>>> if ANY of the PTE/PMDs had dirty or young set.
+>>
+>> Right.
+>>
+>>>
+>>>> -        /* Nuke the page table entry. */
+>>>> -        pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>>>> -
+>>>>            /* Set the dirty flag on the folio now the pte is gone. */
+>>>>            if (pte_dirty(pteval))
+>>>>                folio_mark_dirty(folio);
+>>>> @@ -2015,7 +2017,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>>>                pte_t swp_pte;
+>>>>                  if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+>>>> -                set_pte_at(mm, address, pvmw.pte, pteval);
+>>>> +                if (folio_test_hugetlb(folio))
+>>>> +                    set_huge_pte_at(mm, address, pvmw.pte, pteval);
+>>>
+>>> And, we will use that pteval for ALL the PTE/PMDs here.  So, we would set
+>>> the dirty or young bit in ALL PTE/PMDs.
+>>>
+>>> Could that cause any issues?  May be more of a question for the arm64 people.
+>>
+>> I don't think this will cause any issues. Since the hugetlb can not be split, and we should not lose the the dirty or young state if any subpages were set. Meanwhile we already did like this in hugetlb.c:
+>>
+>> pte = huge_ptep_get_and_clear(mm, address, ptep);
+>> tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
+>> if (huge_pte_dirty(pte))
+>>      set_page_dirty(page);
+>>
+> 
+> Agree that it 'should not' cause issues.  It just seems inconsistent.
+> This is not a problem specifically with your patch, just the handling of
+> CONT-PTE/PMD entries.
+> 
+> There does not appear to be an arm64 specific version of huge_ptep_get()
+> that takes CONT-PTE/PMD into account.  So, huge_ptep_get() would only
+> return the one specific value.  It would not take into account the dirty
+> or young bits of CONT-PTE/PMDs like your new version of
+> huge_ptep_get_and_clear.  Is that correct?  Or, am I missing something.
 
-From 642d5e05e8a8578e75531632d714cec5976ab9ac Mon Sep 17 00:00:00 2001
-From: Yang Weijiang <weijiang.yang@intel.com>
-Date: Thu, 8 Jul 2021 23:51:02 +0800
-Subject: [PATCH] KVM: x86/pmu: Refactor code to support guest Arch LBR
+Yes, you are right.
 
-Take account of Arch LBR when do sanity checks before program
-vPMU for guest. Pass through Arch LBR recording MSRs to guest
-to gain better performance. Note, Arch LBR and Legacy LBR support
-are mutually exclusive, i.e., they're not both available on one
-platform.
+> 
+> If I am correct, then code like the following may not work:
+> 
+> static int gather_hugetlb_stats(pte_t *pte, unsigned long hmask,
+>                  unsigned long addr, unsigned long end, struct mm_walk *walk)
+> {
+>          pte_t huge_pte = huge_ptep_get(pte);
+>          struct numa_maps *md;
+>          struct page *page;
+> 
+>          if (!pte_present(huge_pte))
+>                  return 0;
+> 
+>          page = pte_page(huge_pte);
+> 
+>          md = walk->private;
+>          gather_stats(page, md, pte_dirty(huge_pte), 1);
+>          return 0;
+> }
 
-Co-developed-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
----
-  arch/x86/kvm/vmx/pmu_intel.c | 47 +++++++++++++++++++++++++-----------
-  arch/x86/kvm/vmx/vmx.c       |  3 +++
-  2 files changed, 36 insertions(+), 14 deletions(-)
+Right, this is inconsistent with current huge_ptep_get() interface like 
+you said. So I think we can define an ARCH-specific huge_ptep_get() 
+interface for arm64, and some sample code like below. How do you think?
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index aa36d2072b91..306ce7ac9934 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -170,12 +170,16 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct 
-kvm_pmu *pmu, u32 msr)
-
-  bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu)
-  {
-+       if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
-+               return guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
++pte_t huge_ptep_get(pte_t *ptep, unsigned long size)
++{
++       int ncontig;
++       pte_t orig_pte = ptep_get(ptep);
 +
-         /*
-          * As a first step, a guest could only enable LBR feature if its
-          * cpu model is the same as the host because the LBR registers
-          * would be pass-through to the guest and they're model specific.
-          */
--       return boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
-+       return !boot_cpu_has(X86_FEATURE_ARCH_LBR) &&
-+               boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
-  }
-
-  bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
-@@ -188,25 +192,28 @@ bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
-  static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
-  {
-         struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
--       bool ret = false;
-
-         if (!intel_pmu_lbr_is_enabled(vcpu))
--               return ret;
-+               return false;
-
-         if (index == MSR_ARCH_LBR_DEPTH || index == MSR_ARCH_LBR_CTL) {
--               if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
--                       ret = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
--               return ret;
-+               return kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-+                      guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
-         }
-
--       ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
--               (index >= records->from && index < records->from + 
-records->nr) ||
--               (index >= records->to && index < records->to + records->nr);
-+       if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) &&
-+           (index == MSR_LBR_SELECT || index == MSR_LBR_TOS))
-+               return true;
-
--       if (!ret && records->info)
--               ret = (index >= records->info && index < records->info + 
-records->nr);
-+       if ((index >= records->from && index < records->from + 
-records->nr) ||
-+           (index >= records->to && index < records->to + records->nr))
-+               return true;
-
--       return ret;
-+       if (records->info && index >= records->info &&
-+           index < records->info + records->nr)
-+               return true;
++       if (!pte_cont(orig_pte))
++               return orig_pte;
 +
-+       return false;
-  }
-
-  static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
-@@ -742,6 +749,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct 
-kvm_vcpu *vcpu, bool set)
-                         vmx_set_intercept_for_msr(vcpu, lbr->info + i, 
-MSR_TYPE_RW, set);
-         }
-
-+       if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
-+               return;
++       switch (size) {
++       case CONT_PMD_SIZE:
++               ncontig = CONT_PMDS;
++               break;
++       case CONT_PTE_SIZE:
++               ncontig = CONT_PTES;
++               break;
++       default:
++               WARN_ON_ONCE(1);
++               return orig_pte;
++       }
 +
-         vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
-         vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
-  }
-@@ -782,10 +792,13 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
-  {
-         struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-         struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-+       bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
-+               (vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
-+               (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
-
-         if (!lbr_desc->event) {
-                 vmx_disable_lbr_msrs_passthrough(vcpu);
--               if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
-+               if (lbr_enable)
-                         goto warn;
-                 if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
-                         goto warn;
-@@ -802,13 +815,19 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
-         return;
-
-  warn:
-+       if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
-+               wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
-         pr_warn_ratelimited("kvm: vcpu-%d: fail to passthrough LBR.\n",
-                 vcpu->vcpu_id);
-  }
-
-  static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
-  {
--       if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
-+       bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
-+               (vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
-+               (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
++       for (i = 0; i < ncontig; i++, ptep++) {
++               pte_t pte = ptep_get(ptep);
 +
-+       if (!lbr_enable)
-                 intel_pmu_release_guest_lbr_event(vcpu);
-  }
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b6bc7d97e4b4..98e56a909c01 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -573,6 +573,9 @@ static bool is_valid_passthrough_msr(u32 msr)
-         case MSR_LBR_NHM_TO ... MSR_LBR_NHM_TO + 31:
-         case MSR_LBR_CORE_FROM ... MSR_LBR_CORE_FROM + 8:
-         case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
-+       case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
-+       case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
-+       case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
-                 /* LBR MSRs. These are handled in 
-vmx_update_intercept_for_lbr_msrs() */
-                 return true;
-         }
---
-2.27.0
-
-> Thanks,
-> Kan
->
++               if (pte_dirty(pte))
++                       orig_pte = pte_mkdirty(orig_pte);
++
++               if (pte_young(pte))
++                       orig_pte = pte_mkyong(orig_pte);
++       }
++
++       return orig_pte;
++}

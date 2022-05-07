@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B17E51E804
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C5551E816
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385632AbiEGPKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S1446607AbiEGPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiEGPKo (ORCPT
+        with ESMTP id S1382110AbiEGPRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:10:44 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB7F2237E4
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:06:56 -0700 (PDT)
-Received: (qmail 74041 invoked by uid 1000); 7 May 2022 11:06:55 -0400
-Date:   Sat, 7 May 2022 11:06:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Schspa Shi <schspa@gmail.com>, andreyknvl@gmail.com,
-        balbi@kernel.org, jj251510319013@gmail.com, jannh@google.com,
-        Julia.Lawall@inria.fr, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: gadget: fix race when gadget driver register via
- ioctl
-Message-ID: <YnaLDxcaCGMmETuP@rowland.harvard.edu>
-References: <20220507120851.29948-1-schspa@gmail.com>
- <YnaBwkhIxZ1wtIQX@kroah.com>
+        Sat, 7 May 2022 11:17:39 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1942D1FE;
+        Sat,  7 May 2022 08:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651936432; x=1683472432;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SFrfLygWwaKz2niUDCJteyOlvqg0e03MT+XUWT0AuUQ=;
+  b=DL/j5qcK8uvQVXsqw5lD87pV1QXWrlQPP9AGWqBiGoVtDNbtZvgiE5ZG
+   a+rv2WaqX1TYnwl8buzKHNg5e/k7csztqq9/A4iQB2tc/7+E8qjgpOpGa
+   8bDX2ZmQPOtnmOe/GT+mtAEJ3w6s5Qt2D2AW3EfZyDmd1BWA/2e+9/PM4
+   i6JUGT5DEUNCrg+OGVEazyo3/EZxaMaeD5bRye2SBbXNHBg/dEW5e4989
+   kofJ6ay7eqyphvGlfy3xlI7evpgq3n5MdC1Tef/+diuSRVkisUVguE0Bj
+   Pq4IjFC1uCfN5UlHdkEq6EjycOoeQX0e0bvq4RaFkJQcI9CvgzbyEEC2G
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="329271612"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="329271612"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 08:13:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="709892109"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 May 2022 08:13:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnM7w-000Eg3-7k;
+        Sat, 07 May 2022 15:13:48 +0000
+Date:   Sat, 7 May 2022 23:13:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Satya Priya <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Subject: Re: [PATCH V11 7/9] regulator: Add a regulator driver for the PM8008
+ PMIC
+Message-ID: <202205072349.clMXCCaw-lkp@intel.com>
+References: <1651742739-12338-8-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnaBwkhIxZ1wtIQX@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1651742739-12338-8-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 04:27:14PM +0200, Greg KH wrote:
-> On Sat, May 07, 2022 at 08:08:51PM +0800, Schspa Shi wrote:
-> > The usb_gadget_register_driver doesn't have inside locks to protect the
-> > driver, and If there is two threads are registered at the same time via
-> > the ioctl syscall, the system will crash as syzbot reported.
-> > 
-> > Call trace as:
-> >   driver_register+0x220/0x3a0 drivers/base/driver.c:171
-> >   usb_gadget_register_driver_owner+0xfb/0x1e0
-> >     drivers/usb/gadget/udc/core.c:1546
-> >   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-> >   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-> > 
-> > This routine allows two processes to register the same driver instance
-> > via ioctl syscall. which lead to a race condition.
-> > 
-> > We can fix it by adding a driver_lock to avoid double register.
-> > 
-> > Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-> > Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-> > 
-> > Signed-off-by: Schspa Shi <schspa@gmail.com>
-> > ---
-> >  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> > index b3be8db1ff63..d7ff9c2b5397 100644
-> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> > @@ -155,7 +155,9 @@ struct raw_dev {
-> >  	spinlock_t			lock;
-> >  
-> >  	const char			*udc_name;
-> > +	/* Protected by driver_lock for reentrant registration */
-> >  	struct usb_gadget_driver	driver;
-> > +	struct mutex			driver_lock;
-> 
-> Why are you adding another lock here?  What's wrong with the existing
-> lock in this structure that requires an additional one?
-> 
-> >  
-> >  	/* Reference to misc device: */
-> >  	struct device			*dev;
-> > @@ -188,6 +190,8 @@ static struct raw_dev *dev_new(void)
-> >  	spin_lock_init(&dev->lock);
-> >  	init_completion(&dev->ep0_done);
-> >  	raw_event_queue_init(&dev->queue);
-> > +	mutex_init(&dev->driver_lock);
-> > +
-> >  	return dev;
-> >  }
-> >  
-> > @@ -398,7 +402,9 @@ static int raw_release(struct inode *inode, struct file *fd)
-> >  	spin_unlock_irqrestore(&dev->lock, flags);
-> >  
-> >  	if (unregister) {
-> > +		mutex_lock(&dev->driver_lock);
-> >  		ret = usb_gadget_unregister_driver(&dev->driver);
-> > +		mutex_unlock(&dev->driver_lock);
-> >  		if (ret != 0)
-> >  			dev_err(dev->dev,
-> >  				"usb_gadget_unregister_driver() failed with %d\n",
-> > @@ -510,7 +516,9 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
-> >  	}
-> >  	spin_unlock_irqrestore(&dev->lock, flags);
-> >  
-> > +	mutex_lock(&dev->driver_lock);
-> >  	ret = usb_gadget_register_driver(&dev->driver);
-> > +	mutex_unlock(&dev->driver_lock);
-> 
-> How can unregister race with register?
-> 
-> What ioctl is causing this race?  What userspace program is doing this?
-> Only one userspace program should be accessing this at once, right?
+Hi Satya,
 
-These questions are on the right track.
+Thank you for the patch! Yet something to improve:
 
-The problem here is not insufficient locking.  The problem is that 
-dev->state does not have a special state to indicate that the driver is 
-being registered.
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on robh/for-next broonie-regulator/for-next v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Before calling usb_gadget_register_driver(), while still holding 
-dev->lock, the code should change dev->state to STATE_DEV_REGISTERING.  
-Then no race can occur, because the second thread to acquire the 
-spinlock will see that dev->state is not equal to STATE_DEV_INITIALIZED.
+url:    https://github.com/intel-lab-lkp/linux/commits/Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205072349.clMXCCaw-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/66f37a37cac5f149b7f08cc53508ca6363ea575a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
+        git checkout 66f37a37cac5f149b7f08cc53508ca6363ea575a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Alan Stern
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "pm8008_get_regmap" [drivers/regulator/qcom-pm8008-regulator.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F23F51E4A4
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0278151E4A5
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445508AbiEGGkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 02:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
+        id S1445628AbiEGGk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 02:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiEGGks (ORCPT
+        with ESMTP id S1445545AbiEGGk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 02:40:48 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FD940E6B;
-        Fri,  6 May 2022 23:37:02 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 789541C0BA6; Sat,  7 May 2022 08:37:00 +0200 (CEST)
-Date:   Sat, 7 May 2022 08:36:59 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v14 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <20220507063659.GA6968@amd>
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
- <20220303214300.59468-2-bjorn.andersson@linaro.org>
- <20220504073009.GC8204@duo.ucw.cz>
- <YnKTAvQc6eDxTl14@ripper>
- <20220506160901.GA1199@bug>
- <YnVMcaRV86jZslhd@ripper>
+        Sat, 7 May 2022 02:40:56 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082835A2CA;
+        Fri,  6 May 2022 23:37:11 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id a11so7990713pff.1;
+        Fri, 06 May 2022 23:37:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=XVfJ8nCtUSBBvI+zDOE/2bDYhHDKVITWrA5qgxBXiTY=;
+        b=Ky30jMVp0A5EloSd/uvgoVZWJMggqEBvSHIvF8qkkqBUmHYOTv/0oaXT9rXHY5ZRCr
+         2HboNER3xMVsdYi5xDf5DUPksp4lYmjGhDGbnd6Gd8/ZBhaI8KZhkjD4WU9a6pD1iHJE
+         d0kc6wkfS6wh+g+SRhFThwDLKlNld5ZJe867jI1BMjoq1y92K8wNJ9Vapwl4WNqGFj5i
+         tQ9Eoxwk0PwL5qRoX1TRu8o61SgCVMgnH8pHFi4CeNZeLoAlZbK2tg/vGuyp0TYp1+3V
+         JVAZEhDWvm0vB192UuHA9m6I1pjjGkgvmAoB1ECRYzZklvtYlQsJHg6bz5mkJt/qOxlh
+         zckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XVfJ8nCtUSBBvI+zDOE/2bDYhHDKVITWrA5qgxBXiTY=;
+        b=sXvpvNZ/3DGvO5Db/Hfx3wWvI5VbjaqjxphIltONT/uP5ls3cO9a1g388LTX+d0bjl
+         eU4oHnplaRoI0mRUAo1ubb7bRbAHDoKEOTa71qJ27KCo4As2nEBpkiHE27y0HUyIWndX
+         sq89Zj4lvdY0MM1Ui7HdiaYa5Dt2iXQh2PxAlna/8jpAOJzNXcfvC6bOxa/6hDOG02Wm
+         KSQTmZe53ScX9+VLMAaYV9E904gbrpvAewp84KMWEBAdVb83ujkEWdc+22mLQnwpXy37
+         DrISgisvSlNyrLq5yqcwKdlqrNGgHI6wDHUJX3Iss/PNJMKoplBIfzsVAmYYAI9lLhsx
+         f4TA==
+X-Gm-Message-State: AOAM533OKXA62mQIDRFW1gUvWwzp0FMvszgIb5VcXZg45m0ki8TM+3X1
+        UTc3R4WQw5rhqg2xRw9V0Go=
+X-Google-Smtp-Source: ABdhPJxiso2UD2UL3k/fmkVCNB4D3llu6b96K3fxRnmTTQ1LCQlJVOfh0KHpp1j1w1H454XdkLXF2g==
+X-Received: by 2002:a65:60d3:0:b0:39c:f431:5859 with SMTP id r19-20020a6560d3000000b0039cf4315859mr5679923pgv.442.1651905430555;
+        Fri, 06 May 2022 23:37:10 -0700 (PDT)
+Received: from [192.168.255.10] ([106.53.4.151])
+        by smtp.gmail.com with ESMTPSA id 16-20020a056a00071000b0050dc76281efsm4459770pfl.201.2022.05.06.23.37.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 23:37:10 -0700 (PDT)
+Message-ID: <2551f97c-aa19-cb36-bb6f-fae93cc86f17@gmail.com>
+Date:   Sat, 7 May 2022 14:37:19 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="+HP7ph2BbKc20aGI"
-Content-Disposition: inline
-In-Reply-To: <YnVMcaRV86jZslhd@ripper>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-5-haoxu.linux@gmail.com>
+ <7ea9cb04-3f80-d8a0-ab3c-40cf5049f614@kernel.dk>
+From:   Hao Xu <haoxu.linux@gmail.com>
+In-Reply-To: <7ea9cb04-3f80-d8a0-ab3c-40cf5049f614@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---+HP7ph2BbKc20aGI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> > > As such the pattern sequence provided to hw_pattern looks to be the
-> > > smae, but I don't see that it can be made compatible.
-> > >=20
-> > > > Can I get either patch to disable pattern infrastructure for now or=
- to
-> > > > get it compatible?
-> > > >=20
-> > >=20
-> > > I'd be happy to get this updated to your liking, but this was one of =
-the
-> > > drivers we discussed when we introduced the pattern trigger and led to
-> > > the conclusion that we need the ability to do hw-specific patterns.
-> > >=20
-> > > As such this document provides the hardware specific documentation, as
-> > > we describe under "hw_pattern" in
-> > > Documentation/ABI/testing/sysfs-class-led-trigger-pattern.
-> > >=20
-> > > Please advice on what you would like me to do.
-> >=20
-> > I'd like you to use same format leds-trigger-pattern describes.
-> >=20
-> > If someone passes "255 500 0 500", that's requesting gradual transition=
-s and
-> > your hw can not do that. You return -EINVAL.
-> >=20
-> > If someone wants that kind of blinking, they need to pass "255 0 255 50=
-0 0 0 0 500".
-> >=20
->=20
-> So the section under hw_pattern in sysfs-class-led-trigger-pattern that
-> says:
->=20
-> "Since different LED hardware can have different semantics of
-> hardware patterns, each driver is expected to provide its own
-> description for the hardware patterns in their documentation
-> file at Documentation/leds/."
->=20
-> That doesn't apply to this piece of hardware & driver?
-
-It applies: since your hardware can not do arbitrary patterns, you
-need description of what kinds of patterns it can do.
-
-But you should still use compatible format, so that pattern that is
-valid for hw_pattern file is valid for pattern file, too, and produces
-same result.
-
-If you believe documentation implies something else, it may need to be
-clarified.
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---+HP7ph2BbKc20aGI
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmJ2E4sACgkQMOfwapXb+vJMFACgv1L01dasG1ImG6KRZ5gYS2iV
-eHsAn0pdBf62FwAjzmn9R2KEOJoW/1rb
-=zdUZ
------END PGP SIGNATURE-----
-
---+HP7ph2BbKc20aGI--
+在 2022/5/6 下午10:36, Jens Axboe 写道:
+> On 5/6/22 1:01 AM, Hao Xu wrote:
+>> From: Hao Xu <howeyxu@tencent.com>
+>>
+>> Add a helper for poll clean, it will be used in the multishot accept in
+>> the later patches.
+> 
+> Should this just go into io_clean_op()? Didn't look at it thoroughly,
+> but it'd remove some cases from the next patch if it could.
+> 
+Actually this was my first version, here I put it in io_accept() to make
+it happen as early as possible. I rethinked about this, seems it's ok to
+put it into the io_clean_op().

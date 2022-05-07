@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4221251EA35
+	by mail.lfdr.de (Postfix) with ESMTP id 8D83051EA36
 	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358398AbiEGU7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 16:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S1387418AbiEGVBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 17:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiEGU67 (ORCPT
+        with ESMTP id S233641AbiEGVBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 16:58:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DDC205D6
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 13:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651956911; x=1683492911;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IW5GA9KY5fGNk8pn2J9fOJ9P5JzlJf02ctQI0dsVQ/U=;
-  b=K8WniyiRhyhIp0k+dxXJF0+Kl3ufn9riUB1KzWsgcXs8e+FO5zeTVA7c
-   /+DjGO5k5KZwDLdrl+fpBC3vRw1tqCrSiVIl03M/adg9G9gHVfOSkEtNh
-   GKNNyadRA4dhm8vLVtXtxApPl/SpE/nN/Gv56gCuJudqW5iJFq/zSVpqr
-   4dxee55VT/bjX7u0WTP1JBWJiC0pmovfKxKS/edySW0ozuAqb+71M97lM
-   ZeKvn5EdwZySoLhH9Amx8jpvqETgdUCdwlebPRxvkjnstC4BJTTZg0jlc
-   WVNvMdMKnsl31P36XJChQF06hlHS7dNWjMwFeAN/sK175ClhZVQOKQIIz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="266343911"
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="266343911"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 13:55:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="622361229"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 May 2022 13:55:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnRSG-000Ext-7v;
-        Sat, 07 May 2022 20:55:08 +0000
-Date:   Sun, 8 May 2022 04:54:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function
- 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205080416.vzIXy16B-lkp@intel.com>
+        Sat, 7 May 2022 17:01:05 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A485140CD
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 13:57:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t6so14420979wra.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 13:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pkruImICg7e3tjML5xwbBGFokpJkvvtWVTJOxx0KeP8=;
+        b=hHoRDQSs59A14mNuIJ0tpMx5XYAfacf7pmJxB4VDY8RAsw6tXHt8KNX1+dGH+k5ahQ
+         Y3C3HyvkaLNeagDVWjuC57YmObdGQsewwJDHDBUgP9LoRY6oOk5ltBy3n1v/UgRaYxeX
+         KNe+yh/JJ9FNyZ+t+hwXEbcW2Y03OZPP19V1Np7xGyzj8VAH0EoE24CU76tQ+PlmF0K+
+         CAHXk7vv3umsYxTerxq2f5WbF0VEuTweOmFDHf5n4haSd9gF9OXPrA5DkrvdIw/DOuTK
+         kN+zEmWjmgb5BJ6k8LtQkD1Xl3Wn74oBCQXlGF/PXO3YN/IkihHdwh9mC1dxk8g2MbU5
+         Pg8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pkruImICg7e3tjML5xwbBGFokpJkvvtWVTJOxx0KeP8=;
+        b=yYEiLKdCg3+RpHw5eP+g7gXZNTiCMP2BoEH5g3Cj7sogLvzdTp/LPmo01FpFGPitQh
+         VWg09tNvzgHrybPzsfPOYG5Qq+uRVqJjiVbWop4AB2W/nBY+e4vKrmAN5kOpGFf8k0gd
+         pe8t4wBF+PCv8VPmj69zUhXva6zUVZsGIBaDTML5iAIuUwc2G3j5MShf2XMJmyBm5pmy
+         JwBlQQTdGQ3xCN8bvIHBLXXICZsT/0E71+xMIX5YLbUOrbeJxfsZ+3IZF4/EmD3gClM4
+         mlkg2oQcqpFdfTKsH5lreW13dIPeIZ761uxgT/3qGXefj7QPw6ZP0G0s88HjB2TrhWID
+         WSSQ==
+X-Gm-Message-State: AOAM5328ia3mQLA6u8yTbDLWmKgiz5qDvYuP2VjanirfTrOkMD/y4CQZ
+        HYWKCEAsfn7tKPQ+ZLcn2S4vsYQX8jN3Gg==
+X-Google-Smtp-Source: ABdhPJwmUZT+egQqIMCiMegHwPuR94XTQjtgAJc+0eiHPRKGR/GqOOr3wlkJ5Z4mOiQtj8GGWcXfDg==
+X-Received: by 2002:adf:b35b:0:b0:20a:dd58:ef60 with SMTP id k27-20020adfb35b000000b0020add58ef60mr8018177wrd.647.1651957036045;
+        Sat, 07 May 2022 13:57:16 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id z6-20020a056000110600b0020ad05214d5sm6929538wrw.2.2022.05.07.13.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 May 2022 13:57:15 -0700 (PDT)
+Date:   Sat, 7 May 2022 21:57:13 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH 3/3] block: remove last remaining traces of IDE
+ documentation
+Message-ID: <YnbdKZiK+MGP6PnD@equinox>
+References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
+ <20220427132436.12795-4-paul.gortmaker@windriver.com>
+ <87wnfaa8ce.fsf@meer.lwn.net>
+ <20220427165917.GE12977@windriver.com>
+ <YmsmnGb3JNjH54Xb@equinox>
+ <20220506153241.GH12977@windriver.com>
+ <YnVgxEcRTQPu/DHE@equinox>
+ <20220506202434.GJ12977@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220506202434.GJ12977@windriver.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   30c8e80f79329617012f07b09b70114592092ea4
-commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-date:   8 weeks ago
-config: mips-randconfig-r022-20220507 (https://download.01.org/0day-ci/archive/20220508/202205080416.vzIXy16B-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Fri, May 06, 2022 at 04:24:34PM -0400, Paul Gortmaker wrote:
+> [Re: [PATCH 3/3] block: remove last remaining traces of IDE documentation] On 06/05/2022 (Fri 18:54) Phillip Potter wrote:
+> 
+> > On Fri, May 06, 2022 at 11:32:41AM -0400, Paul Gortmaker wrote:
+> 
+> [...]
+> 
+> > > Are you working off linux-next?  If not, what is your baseline and what
+> > > are you running and what do you see?  For example, the commands below:
+> > > 
+> > > The ecb86 that I sent in this e-mail still applies on linux-next of
+> > > today which contains Jens next as you can see:
+> > > 
+> > 
+> > I was yes, the point I was trying to make (poorly) is that your patch
+> > conflicts with Randy's patch which itself is not yet in linux-next, as
+> > normally I send everything together at the start of the merge window to
+> > Jens, as I don't have my own kernel.org tree yet, and usually I only get
+> > one or two patches in a cycle anyway.
+> > 
+> > This is not your fault, you couldn't have been expected to know this in
+> > retrospect, and I should probably look into getting my own tree/GPG key
+> > sorted to alleviate this problem in future.
+> > 
+> > In the meantime, if you're comfortable with the idea, I can just resolve
+> > the conflict myself when I send the patches onto Jens this time and
+> > include patch 3/3 pre-fixed up. Merge window will be fairly soon anyway.
+> 
+> Sure, go ahead - just fix up things so all the last bits are gone; don't
+> even worry about patch attribution; I don't care about that.
+> 
+> Paul.
+> --
+> 
+> > 
+> > Thanks,
+> > Phil
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Paul,
 
-All errors (new ones prefixed by >>):
+Thanks, I want to make sure you are properly attributed though, as I
+appreciate the effort you've gone to.
 
->> drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-           ^
->> drivers/hwmon/ltq-cputemp.c:23:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-                       ^
-   drivers/hwmon/ltq-cputemp.c:28:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
-           ^
-   drivers/hwmon/ltq-cputemp.c:28:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
-                       ^
-   drivers/hwmon/ltq-cputemp.c:39:12: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   value = (ltq_cgu_r32(CGU_GPHY1_CR) >> 9) & 0x01FF;
-                            ^
-   drivers/hwmon/ltq-cputemp.c:92:24: error: use of undeclared identifier 'SOC_TYPE_VR9_2'
-           if (ltq_soc_type() != SOC_TYPE_VR9_2)
-                                 ^
-   6 errors generated.
-
-
-vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
-
-7074d0a9275860 Florian Eckert 2017-09-01  20  
-7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
-7074d0a9275860 Florian Eckert 2017-09-01  22  {
-7074d0a9275860 Florian Eckert 2017-09-01 @23  	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-7074d0a9275860 Florian Eckert 2017-09-01  24  }
-7074d0a9275860 Florian Eckert 2017-09-01  25  
-
-:::::: The code at line 23 was first introduced by commit
-:::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
-
-:::::: TO: Florian Eckert <fe@dev.tdt.de>
-:::::: CC: Guenter Roeck <linux@roeck-us.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+All the best,
+Phil

@@ -2,81 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DC851E7C7
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 16:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2E451E7CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 16:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385517AbiEGO0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 10:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
+        id S1376812AbiEGObH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 10:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385469AbiEGO0T (ORCPT
+        with ESMTP id S234096AbiEGObF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 10:26:19 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FC545AEF;
-        Sat,  7 May 2022 07:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=4DKiZOR0d8gLevCXFlmwVusn6daMOTUf4ijErpfvJ34=; b=rsVi+Suue0O1GTak3ZsMm4pHDR
-        a8ln2A+a4+MyYT4xuAf8ZkCaAUBBnkilIAEqymUyyEc7NDUSsJwVQuGPqeLgVl2oe0yIo2DHHpGj6
-        hyAJqMeR76ukQEKrFhdQXaDfjdValCyFWHC4mmoH25wAUYYmL8SaLACozqA4bWGuxA0M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nnLJv-001fOc-CB; Sat, 07 May 2022 16:22:07 +0200
-Date:   Sat, 7 May 2022 16:22:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jason Xing <xingwanli@kuaishou.com>
-Subject: Re: [PATCH net-next] net: use the %px format to display sock
-Message-ID: <YnaAj1FoaBVnVzgt@lunn.ch>
-References: <20220505130826.40914-1-kerneljasonxing@gmail.com>
- <20220506185641.GA2289@bytedance>
- <CAL+tcoBwQ2tijfzwOO6zb2MobCL27PcyN3foRcAw91MpyWg_VA@mail.gmail.com>
+        Sat, 7 May 2022 10:31:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97722DFC;
+        Sat,  7 May 2022 07:27:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79108608C3;
+        Sat,  7 May 2022 14:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6414AC385A5;
+        Sat,  7 May 2022 14:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651933637;
+        bh=8jXCjBGJJPxlr9V8Zv0vyc5vMNnF06uj4+zEg0fhpsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A3vs/lC4UGjixwmTZ9Oc+ZggDjdz1Rio+dfRcyFx7B9JZjuC7EHZZPCA20XyTJCu9
+         YCpuNVkfTX/txbkqNDZISV9INKPVYCJjLXJTUnJP1Va2ekU3OnXEAjfu91Z5UwOT+K
+         it/aFKi6szvE0V0mqKFCApv/KF/ECV+RzSz2dQsc=
+Date:   Sat, 7 May 2022 16:27:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     andreyknvl@gmail.com, balbi@kernel.org, jj251510319013@gmail.com,
+        stern@rowland.harvard.edu, jannh@google.com, Julia.Lawall@inria.fr,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Subject: Re: [PATCH] usb: gadget: fix race when gadget driver register via
+ ioctl
+Message-ID: <YnaBwkhIxZ1wtIQX@kroah.com>
+References: <20220507120851.29948-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL+tcoBwQ2tijfzwOO6zb2MobCL27PcyN3foRcAw91MpyWg_VA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220507120851.29948-1-schspa@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 09:26:07AM +0800, Jason Xing wrote:
-> On Sat, May 7, 2022 at 2:56 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> >
-> > Hi Jason,
-> >
-> > On Thu, May 05, 2022 at 09:08:26PM +0800, kerneljasonxing@gmail.com wrote:
-> > > -             pr_err("Attempt to release TCP socket in state %d %p\n",
-> > > +             pr_err("Attempt to release TCP socket in state %d %px\n",
-> >
-> > I think we cannot use %px here for security reasons?  checkpatch is also
-> > warning about it:
-> >
+On Sat, May 07, 2022 at 08:08:51PM +0800, Schspa Shi wrote:
+> The usb_gadget_register_driver doesn't have inside locks to protect the
+> driver, and If there is two threads are registered at the same time via
+> the ioctl syscall, the system will crash as syzbot reported.
 > 
-> I noticed this warning before submitting. Since the %p format doesn't
-> print the real address, printing the address here will be helpless and
-> we cannot trace what exactly the bad socket is.
+> Call trace as:
+>   driver_register+0x220/0x3a0 drivers/base/driver.c:171
+>   usb_gadget_register_driver_owner+0xfb/0x1e0
+>     drivers/usb/gadget/udc/core.c:1546
+>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+>   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
 > 
-> What do you suggest?
+> This routine allows two processes to register the same driver instance
+> via ioctl syscall. which lead to a race condition.
+> 
+> We can fix it by adding a driver_lock to avoid double register.
+> 
+> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+> 
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index b3be8db1ff63..d7ff9c2b5397 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -155,7 +155,9 @@ struct raw_dev {
+>  	spinlock_t			lock;
+>  
+>  	const char			*udc_name;
+> +	/* Protected by driver_lock for reentrant registration */
+>  	struct usb_gadget_driver	driver;
+> +	struct mutex			driver_lock;
 
-How is a socket identified in places like /proc/<PID>/net/tcp ?
-Could you print the local and remote port to identify the socket?
+Why are you adding another lock here?  What's wrong with the existing
+lock in this structure that requires an additional one?
 
-How does the address of the structure actually help you? Do you see
-this address somewhere else?
+>  
+>  	/* Reference to misc device: */
+>  	struct device			*dev;
+> @@ -188,6 +190,8 @@ static struct raw_dev *dev_new(void)
+>  	spin_lock_init(&dev->lock);
+>  	init_completion(&dev->ep0_done);
+>  	raw_event_queue_init(&dev->queue);
+> +	mutex_init(&dev->driver_lock);
+> +
+>  	return dev;
+>  }
+>  
+> @@ -398,7 +402,9 @@ static int raw_release(struct inode *inode, struct file *fd)
+>  	spin_unlock_irqrestore(&dev->lock, flags);
+>  
+>  	if (unregister) {
+> +		mutex_lock(&dev->driver_lock);
+>  		ret = usb_gadget_unregister_driver(&dev->driver);
+> +		mutex_unlock(&dev->driver_lock);
+>  		if (ret != 0)
+>  			dev_err(dev->dev,
+>  				"usb_gadget_unregister_driver() failed with %d\n",
+> @@ -510,7 +516,9 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+>  	}
+>  	spin_unlock_irqrestore(&dev->lock, flags);
+>  
+> +	mutex_lock(&dev->driver_lock);
+>  	ret = usb_gadget_register_driver(&dev->driver);
+> +	mutex_unlock(&dev->driver_lock);
 
-     Andrew
+How can unregister race with register?
+
+What ioctl is causing this race?  What userspace program is doing this?
+Only one userspace program should be accessing this at once, right?
+
+confused,
+
+greg k-h

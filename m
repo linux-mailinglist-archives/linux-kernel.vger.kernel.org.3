@@ -2,98 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9B651E83B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F17351E83C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385654AbiEGPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S1381251AbiEGPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239695AbiEGPmK (ORCPT
+        with ESMTP id S1385751AbiEGPm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:42:10 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E42E27B2C
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:38:23 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id x52so8661614pfu.11
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iW+xuwi9GjKsQKztoza/I6BqdqWQumP2VpSCZrUbboc=;
-        b=A4AoqMht5A35+l+JOZ9w6u/pQWgJqgySLRk13szh9hQiupLiYJan2peyR1PHoWXqbA
-         KXyNbUQ2r7VIy6XRnhjLnmG1f5mu7D4eBnHv9CvUZGiNgWN1ISt56KI7EsnBmv5jZkJX
-         UFWemVNe20zXjfe8H/DBTGfRwzkh163h3KM8gMiUIy2DDbO/PDd7I9lw5F2BrWCpMoyf
-         DsHpOejJ5bSILZJziqcE4O/j56/vj9KTWREt+I26UoFoqS07X3V6He9IyqZrRe0Dl70q
-         JXr0jTKZI8VQl1yZK5PeaTnZZ4aO01ylQE1mZiFE1at0SLOPHpixyIzCR/cAWiEJvhHt
-         32yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iW+xuwi9GjKsQKztoza/I6BqdqWQumP2VpSCZrUbboc=;
-        b=w/KR6mWUGNLL18U454EYJWomTf+aWq3FPOISmh8o/yud7PdBqs4heIYtGm/VTa6z3k
-         xRsj7ORzMIovTEEMWRDDi30P+5LdBT7pD5fYdV01rowHHzgb89aCYxJGD9COREr/bLpR
-         GdJJ/3wyB17orAGGcvaSoMW8OMKD8q10BUvbOc3p4bpWOZluaQDCU27wUyked6IekI8m
-         LG5/4eEGTNQ+8be78otVor/yMKFzOOD2ovIWdJ9qc5nZYmbqyDnADr0pKOUzmGrJiSi3
-         smhAX53lfoYWOkoopVF189cWnOXxiFvV0XUwlPtzAmM27TUy6Rx9JKh7cblaTAZ/nImp
-         1yrw==
-X-Gm-Message-State: AOAM5331Ln61fb2KR/85sGUOiFdHhgUUIAPzF2p7r9Q/5ml/u7fMEyBy
-        TGa5+Km+LXeqWcAPGhOaiJBeAg==
-X-Google-Smtp-Source: ABdhPJylUzDkAA95vrZWbJ9NhQQpUcTXF2BzWw1znP+C6BwqmrCb4rR6QSI6/1M6BivM/yqq9Nt60w==
-X-Received: by 2002:a63:64c2:0:b0:3c6:2d70:9188 with SMTP id y185-20020a6364c2000000b003c62d709188mr6859960pgb.186.1651937903114;
-        Sat, 07 May 2022 08:38:23 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a19de00b001dc8eca6536sm5564919pjj.4.2022.05.07.08.38.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 08:38:22 -0700 (PDT)
-Message-ID: <0145cd16-812b-97eb-9c6f-4338fc25474a@kernel.dk>
-Date:   Sat, 7 May 2022 09:38:21 -0600
+        Sat, 7 May 2022 11:42:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141324474C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:38:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C20B0B80AEB
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 15:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4906C385A6;
+        Sat,  7 May 2022 15:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651937915;
+        bh=Wfq0ofKjflL6FDfAc2ySHMaLxEvuR11XDeLIOPWWcv4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bQSrY3gHQ+6F4Haq2jQjgWx4GzNwPGzs7Q4P/XGq76ZfM/u7dognkIMLNPEWg/Fn+
+         zrzGQF62RmDVHa0ZuIz+Seq3Zvt+/tb7c56Gew6XB5Z9gPsOiO53pYW2laWTTHes21
+         KpjhikTKaBOZOZF8Hs6vHfJl2mRba7+oIQssVAFtj5LnjLifMsOHSU2PQK7dpm8PAK
+         DWJpM9SBCZG8olW0XBvZOW3rZ4XYFPbD6rSrTodqxGetVY/7yJiCbXJyyx4sFSSrp/
+         pfxqMZWnaIXxcI8Mjq/gDFKYYNYzbgq+/SLh0dDPxwoiU6thcTGYC+eUOxWdTLZjVz
+         JqmVDlF2WWGrA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>, damon@lists.linux.dev
+Subject: Re: [PATCH] mm/damon/reclaim: Use resource_size function on resource object
+Date:   Sat,  7 May 2022 15:38:33 +0000
+Message-Id: <20220507153833.45600-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220507032512.129598-1-jiapeng.chong@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/4] io_uring: add IORING_ACCEPT_MULTISHOT for accept
-Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220507140620.85871-1-haoxu.linux@gmail.com>
- <20220507140620.85871-2-haoxu.linux@gmail.com>
- <21e1f932-f5fd-9b7e-2b34-fc3a82bbb297@kernel.dk>
- <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/22 9:31 AM, Hao Xu wrote:
-> ? 2022/5/7 ??10:16, Jens Axboe ??:
->> On 5/7/22 8:06 AM, Hao Xu wrote:
->>> From: Hao Xu <howeyxu@tencent.com>
->>>
->>> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
->>> support multishot.
->>>
->>> Signed-off-by: Hao Xu <howeyxu@tencent.com>
->>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>
->> Heh, don't add my SOB. Guessing this came from the folding in?Nop, It is in your fastpoll-mshot branch
-> https://git.kernel.dk/cgit/linux-block/commit/?h=fastpoll-mshot&id=e37527e6b4ac60e1effdc8aaa1058e931930af01
+Hi Jiapeng,
 
-But that's just a stand-alone fixup patch to be folded in, the SOB
-doesn't carry to other patches. So for all of them, just strip that for
-v4. If/when it gets applied, my SOB will get attached at that point.
 
--- 
-Jens Axboe
+Thank you for this patch!
 
+On Sat, 7 May 2022 11:25:12 +0800 Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
+
+> Fix the following coccicheck warnings:
+> 
+> ./mm/damon/reclaim.c:241:30-33: WARNING: Suspicious code. resource_size
+> is maybe missing with res.
+
+Nit.  I'd prefer having this kind of program outputs in commit message be
+indented and not broken, like below:
+
+    ./mm/damon/reclaim.c:241:30-33: WARNING: Suspicious code. resource_size is maybe missing with res.
+
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+
+Other than the nit,
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  mm/damon/reclaim.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+> index f37c5d4b27fa..8efbfb24f3a1 100644
+> --- a/mm/damon/reclaim.c
+> +++ b/mm/damon/reclaim.c
+> @@ -238,7 +238,7 @@ static int walk_system_ram(struct resource *res, void *arg)
+>  {
+>  	struct damon_reclaim_ram_walk_arg *a = arg;
+>  
+> -	if (a->end - a->start < res->end - res->start) {
+> +	if (a->end - a->start < resource_size(res)) {
+>  		a->start = res->start;
+>  		a->end = res->end;
+>  	}
+> -- 
+> 2.20.1.7.g153144c

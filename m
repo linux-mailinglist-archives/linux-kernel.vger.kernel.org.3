@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0278151E4A5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E10351E4AD
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445628AbiEGGk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 02:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S1445680AbiEGGuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 02:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445545AbiEGGk4 (ORCPT
+        with ESMTP id S1350941AbiEGGuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 02:40:56 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082835A2CA;
-        Fri,  6 May 2022 23:37:11 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id a11so7990713pff.1;
-        Fri, 06 May 2022 23:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=XVfJ8nCtUSBBvI+zDOE/2bDYhHDKVITWrA5qgxBXiTY=;
-        b=Ky30jMVp0A5EloSd/uvgoVZWJMggqEBvSHIvF8qkkqBUmHYOTv/0oaXT9rXHY5ZRCr
-         2HboNER3xMVsdYi5xDf5DUPksp4lYmjGhDGbnd6Gd8/ZBhaI8KZhkjD4WU9a6pD1iHJE
-         d0kc6wkfS6wh+g+SRhFThwDLKlNld5ZJe867jI1BMjoq1y92K8wNJ9Vapwl4WNqGFj5i
-         tQ9Eoxwk0PwL5qRoX1TRu8o61SgCVMgnH8pHFi4CeNZeLoAlZbK2tg/vGuyp0TYp1+3V
-         JVAZEhDWvm0vB192UuHA9m6I1pjjGkgvmAoB1ECRYzZklvtYlQsJHg6bz5mkJt/qOxlh
-         zckQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XVfJ8nCtUSBBvI+zDOE/2bDYhHDKVITWrA5qgxBXiTY=;
-        b=sXvpvNZ/3DGvO5Db/Hfx3wWvI5VbjaqjxphIltONT/uP5ls3cO9a1g388LTX+d0bjl
-         eU4oHnplaRoI0mRUAo1ubb7bRbAHDoKEOTa71qJ27KCo4As2nEBpkiHE27y0HUyIWndX
-         sq89Zj4lvdY0MM1Ui7HdiaYa5Dt2iXQh2PxAlna/8jpAOJzNXcfvC6bOxa/6hDOG02Wm
-         KSQTmZe53ScX9+VLMAaYV9E904gbrpvAewp84KMWEBAdVb83ujkEWdc+22mLQnwpXy37
-         DrISgisvSlNyrLq5yqcwKdlqrNGgHI6wDHUJX3Iss/PNJMKoplBIfzsVAmYYAI9lLhsx
-         f4TA==
-X-Gm-Message-State: AOAM533OKXA62mQIDRFW1gUvWwzp0FMvszgIb5VcXZg45m0ki8TM+3X1
-        UTc3R4WQw5rhqg2xRw9V0Go=
-X-Google-Smtp-Source: ABdhPJxiso2UD2UL3k/fmkVCNB4D3llu6b96K3fxRnmTTQ1LCQlJVOfh0KHpp1j1w1H454XdkLXF2g==
-X-Received: by 2002:a65:60d3:0:b0:39c:f431:5859 with SMTP id r19-20020a6560d3000000b0039cf4315859mr5679923pgv.442.1651905430555;
-        Fri, 06 May 2022 23:37:10 -0700 (PDT)
-Received: from [192.168.255.10] ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id 16-20020a056a00071000b0050dc76281efsm4459770pfl.201.2022.05.06.23.37.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 23:37:10 -0700 (PDT)
-Message-ID: <2551f97c-aa19-cb36-bb6f-fae93cc86f17@gmail.com>
-Date:   Sat, 7 May 2022 14:37:19 +0800
+        Sat, 7 May 2022 02:50:04 -0400
+X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 23:46:17 PDT
+Received: from mail-m17669.qiye.163.com (mail-m17669.qiye.163.com [59.111.176.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D784B5A2CA
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 23:46:17 -0700 (PDT)
+Received: from [172.16.12.141] (unknown [58.22.7.114])
+        by mail-m17669.qiye.163.com (Hmail) with ESMTPA id 363254600F5;
+        Sat,  7 May 2022 14:39:26 +0800 (CST)
+Message-ID: <45058759-13dd-aa43-ac88-2a7c60baa22b@rock-chips.com>
+Date:   Sat, 7 May 2022 14:39:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-5-haoxu.linux@gmail.com>
- <7ea9cb04-3f80-d8a0-ab3c-40cf5049f614@kernel.dk>
-From:   Hao Xu <haoxu.linux@gmail.com>
-In-Reply-To: <7ea9cb04-3f80-d8a0-ab3c-40cf5049f614@kernel.dk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH -next] drm/rockchip: Fix Kconfig dependencies
+Content-Language: en-US
+To:     Ren Zhijie <renzhijie2@huawei.com>, hjc@rock-chips.com,
+        heiko@sntech.de, airlied@linux.ie, daniel@ffwll.ch,
+        lyude@redhat.com, tzimmermann@suse.de
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220507010039.117310-1-renzhijie2@huawei.com>
+From:   Andy Yan <andy.yan@rock-chips.com>
+In-Reply-To: <20220507010039.117310-1-renzhijie2@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRlKQklWS0NLHRlCQk
+        4eHkoYVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nk06Izo6LD0rDA1PPzEtPgkU
+        LCwwCT5VSlVKTU5KQktOTk1NQ0pKVTMWGhIXVRoVHwJVAhoVOwkUGBBWGBMSCwhVGBQWRVlXWRIL
+        WUFZTkNVSUlVTFVKSk9ZV1kIAVlBSE5PSjcG
+X-HM-Tid: 0a809d3e971dda59kuws363254600f5
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/6 下午10:36, Jens Axboe 写道:
-> On 5/6/22 1:01 AM, Hao Xu wrote:
->> From: Hao Xu <howeyxu@tencent.com>
->>
->> Add a helper for poll clean, it will be used in the multishot accept in
->> the later patches.
-> 
-> Should this just go into io_clean_op()? Didn't look at it thoroughly,
-> but it'd remove some cases from the next patch if it could.
-> 
-Actually this was my first version, here I put it in io_accept() to make
-it happen as early as possible. I rethinked about this, seems it's ok to
-put it into the io_clean_op().
+Hi Zhijie:
+
+On 5/7/22 09:00, Ren Zhijie wrote:
+> If CONFIG_ROCKCHIP_ANALOGIX_DP is not set, the rockchip drm driver
+> will fail to link:
+>
+> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_connector_mode_valid':
+> cdn-dp-core.c:(.text+0x1e1): undefined reference to `drm_dp_bw_code_to_link_rate'
+> cdn-dp-core.c:(.text+0x1f4): undefined reference to `drm_dp_bw_code_to_link_rate'
+> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_pd_event_work':
+> cdn-dp-core.c:(.text+0x138e): undefined reference to `drm_dp_channel_eq_ok'
+> drivers/gpu/drm/rockchip/cdn-dp-reg.o: In function `cdn_dp_train_link':
+> cdn-dp-reg.c:(.text+0xd5a): undefined reference to `drm_dp_bw_code_to_link_rate'
+>
+> The problem is that the DP-helper module has been replaced by the display-helper module.
+> So the driver have to select it.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 1e0f66420b13("drm/display: Introduce a DRM display-helper module")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> ---
+>   drivers/gpu/drm/rockchip/Kconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/rockchip/Kconfig b/drivers/gpu/drm/rockchip/Kconfig
+> index 5afab49dc4f2..eb9ffa9e357d 100644
+> --- a/drivers/gpu/drm/rockchip/Kconfig
+> +++ b/drivers/gpu/drm/rockchip/Kconfig
+> @@ -47,6 +47,8 @@ config ROCKCHIP_ANALOGIX_DP
+>   config ROCKCHIP_CDN_DP
+>   	bool "Rockchip cdn DP"
+>   	depends on EXTCON=y || (EXTCON=m && DRM_ROCKCHIP=m)
+> +	select DRM_DISPLAY_HELPER
+> +	select DRM_DISPLAY_DP_HELPER
+
+
+There are two dp(ANALOGIX_DP and CDN_DP) at rockchip drm mainline,
+
+for a totally cleanup and alignment, I think it's better to remove 
+"select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP" under DRM_ROCKCHIP  
+at the head,
+
+and separately add the select for ROCKCHIP_ANALOGIX_DP and ROCKCHIP_CDN_DP.
+
+>   	help
+>   	  This selects support for Rockchip SoC specific extensions
+>   	  for the cdn DP driver. If you want to enable Dp on

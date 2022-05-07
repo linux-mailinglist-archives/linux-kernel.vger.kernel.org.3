@@ -2,141 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF2251E3C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D6251E3C6
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445414AbiEGDYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 23:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S1445420AbiEGD06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 23:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445407AbiEGDYc (ORCPT
+        with ESMTP id S1445387AbiEGD04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 23:24:32 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244E2AE27
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 20:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651893645; x=1683429645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zVjKSTl58tpRGZnWQ/NWRdaGrJtq08QeNLOnBXk1/cg=;
-  b=cEAfC0iaED209k4sVz93r8i6mG6ERFz5r8w/4AjXoWIX5ZZIj442+Oxh
-   6EelBCaopsy4LLWp3dHD5JCpySRTUy/8iWJ75MXdiwQycxVWun2uw36Ia
-   bkN6wpikEXvJyga8hmw/Pgr0OAlhkJN8kLYJHh+IRZMltVvowBj5JGIWN
-   wRgrx7xHBHlG84gdrzpn9Jz1Akpgjx9cXqGBG39Pudee6nOGtXSMuKjv4
-   x21I3ODC1avr3baO/988Z8KgwXVOZo0n7Ps9YRVxapy6AvbWqJjfpn0Z8
-   e0UtOZXmB02Ht8iXOiJuvmtT1//W8+8VCRuZODQsJNPn5ptJW9ukctbkc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267479962"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="267479962"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 20:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="812663844"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 20:20:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnAzr-000EAk-KP;
-        Sat, 07 May 2022 03:20:43 +0000
-Date:   Sat, 7 May 2022 11:20:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:kthread-cleanups-for-v5.19 2/7]
- arch/h8300/kernel/process.c:108:46: error: unknown type name
- 'kernel_clone_args'
-Message-ID: <202205071135.brFxCRDU-lkp@intel.com>
+        Fri, 6 May 2022 23:26:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEE9522C0;
+        Fri,  6 May 2022 20:23:09 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KwCRl15M2zhYxy;
+        Sat,  7 May 2022 11:22:43 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 11:23:06 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 11:23:05 +0800
+Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
+ for arm64
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Baoquan He <bhe@redhat.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-7-thunder.leizhen@huawei.com>
+ <20220506231451.GB122876@MiWiFi-R3L-srv>
+ <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
+Message-ID: <4ad9fc7b-b69b-6d9f-ffff-da665869dfd4@huawei.com>
+Date:   Sat, 7 May 2022 11:23:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git kthread-cleanups-for-v5.19
-head:   688122ff3e49ddca3c6c3572cadb19285045bbe3
-commit: 498391acef1e0098a722e7f45496fda39a15284a [2/7] fork: Pass struct kernel_clone_args into copy_thread
-config: h8300-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071135.brFxCRDU-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=498391acef1e0098a722e7f45496fda39a15284a
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace kthread-cleanups-for-v5.19
-        git checkout 498391acef1e0098a722e7f45496fda39a15284a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/h8300/kernel/process.c:58:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
-      58 | void arch_cpu_idle(void)
-         |      ^~~~~~~~~~~~~
->> arch/h8300/kernel/process.c:108:46: error: unknown type name 'kernel_clone_args'
-     108 | int copy_thread(struct task_struct *p, const kernel_clone_args *args)
-         |                                              ^~~~~~~~~~~~~~~~~
-   arch/h8300/kernel/process.c:108:5: error: conflicting types for 'copy_thread'; have 'int(struct task_struct *, const int *)'
-     108 | int copy_thread(struct task_struct *p, const kernel_clone_args *args)
-         |     ^~~~~~~~~~~
-   In file included from arch/h8300/kernel/process.c:30:
-   include/linux/sched/task.h:71:12: note: previous declaration of 'copy_thread' with type 'int(struct task_struct *, const struct kernel_clone_args *)'
-      71 | extern int copy_thread(struct task_struct *, const struct kernel_clone_args *);
-         |            ^~~~~~~~~~~
-   arch/h8300/kernel/process.c: In function 'copy_thread':
-   arch/h8300/kernel/process.c:110:33: error: request for member 'stack' in something not a structure or union
-     110 |         unsigned long usp = args->stack;
-         |                                 ^~
-   arch/h8300/kernel/process.c:111:36: error: request for member 'stack_size' in something not a structure or union
-     111 |         unsigned long topstk = args->stack_size;
-         |                                    ^~
-   arch/h8300/kernel/process.c: At top level:
-   arch/h8300/kernel/process.c:153:16: warning: no previous prototype for 'sys_clone' [-Wmissing-prototypes]
-     153 | asmlinkage int sys_clone(unsigned long __user *args)
-         |                ^~~~~~~~~
 
 
-vim +/kernel_clone_args +108 arch/h8300/kernel/process.c
+On 2022/5/7 9:41, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/5/7 7:14, Baoquan He wrote:
+>> On 05/06/22 at 07:44pm, Zhen Lei wrote:
+>>> Now arm64 has added support for "crashkernel=X,high" and
+>>> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+>>> "crashkernel=Y,low" is not specified.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+>>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>>> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+>>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>>> @@ -808,7 +808,7 @@
+>>>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+>>>  
+>>>  	crashkernel=size[KMG],high
+>>> -			[KNL, X86-64] range could be above 4G. Allow kernel
+>>> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+>>>  			to allocate physical memory region from top, so could
+>>>  			be above 4G if system have more than 4G ram installed.
+>>>  			Otherwise memory region will be allocated below 4G, if
+>>> @@ -821,7 +821,7 @@
+>>>  			that require some amount of low memory, e.g. swiotlb
+>>>  			requires at least 64M+32K low memory, also enough extra
+>>>  			low memory is needed to make sure DMA buffers for 32-bit
+>>> -			devices won't run out. Kernel would try to allocate at
+>>> +			devices won't run out. Kernel would try to allocate
+>>>  			at least 256M below 4G automatically.
+>>>  			This one let user to specify own low range under 4G
+>>>  			for second kernel instead.
+>>> @@ -829,6 +829,11 @@
+>>>  			It will be ignored when crashkernel=X,high is not used
+>>>  			or memory reserved is below 4G.
+>>>  
+>>> +			[KNL, ARM64] range in low memory.
+>>> +			This one let user to specify a low range in DMA zone for
+>>                                           ^ not needed,
+>>                         Maybe Catalin can fix it when merging.
+> 
+> Delete "This one let user to" or the entire sentence? I understand it to be the former.
 
-   107	
- > 108	int copy_thread(struct task_struct *p, const kernel_clone_args *args)
-   109	{
-   110		unsigned long usp = args->stack;
-   111		unsigned long topstk = args->stack_size;
-   112		struct pt_regs *childregs;
-   113	
-   114		childregs = (struct pt_regs *) (THREAD_SIZE + task_stack_page(p)) - 1;
-   115	
-   116		if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
-   117			memset(childregs, 0, sizeof(struct pt_regs));
-   118			childregs->retpc = (unsigned long) ret_from_kernel_thread;
-   119			childregs->er4 = topstk; /* arg */
-   120			childregs->er5 = usp; /* fn */
-   121		}  else {
-   122			*childregs = *current_pt_regs();
-   123			childregs->er0 = 0;
-   124			childregs->retpc = (unsigned long) ret_from_fork;
-   125			p->thread.usp = usp ?: rdusp();
-   126		}
-   127		p->thread.ksp = (unsigned long)childregs;
-   128	
-   129		return 0;
-   130	}
-   131	
+I re-read the doc, That's what x86 uses. So it's probably not a problem. Unlike x86
+under 4G, arm64 requires in DMA zone (Such as Raspberry Pi 4, it may under 1G or 3G).
+
+"This one let user to specify own low range under 4G for second kernel instead."
+
+> 
+>>
+>> Other than this, LGTM,
+>>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>>
+>>> +			crash dump kernel.
+>>> +			It will be ignored when crashkernel=X,high is not used.
+>>> +
+>>>  	cryptomgr.notests
+>>>  			[KNL] Disable crypto self-tests
+>>>  
+>>> -- 
+>>> 2.25.1
+>>>
+>>
+>> .
+>>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+  Zhen Lei

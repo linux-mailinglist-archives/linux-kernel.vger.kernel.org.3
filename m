@@ -2,91 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6F651E956
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6842351E95E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387002AbiEGTQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S1387041AbiEGTSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiEGTQI (ORCPT
+        with ESMTP id S229437AbiEGTSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:16:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CE128980;
-        Sat,  7 May 2022 12:12:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5DD57CE0DA3;
-        Sat,  7 May 2022 19:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B27C385A5;
-        Sat,  7 May 2022 19:12:11 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     linux-doc@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Dave Young <dyoung@redhat.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        John Donnelly <John.p.donnelly@oracle.com>
-Subject: Re: [PATCH v24 0/6] support reserving crashkernel above 4G on arm64 kdump
-Date:   Sat,  7 May 2022 20:12:09 +0100
-Message-Id: <165195066216.355842.15333560704698747541.b4-ty@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220506114402.365-1-thunder.leizhen@huawei.com>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+        Sat, 7 May 2022 15:18:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30AF28980;
+        Sat,  7 May 2022 12:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/znyXJRLDsok/YXirIxLkxYec6QFvnOe+R9jljS85JE=; b=V5byyGjS+aQTtTXriJ+35IDUKR
+        v3q+TWlwj4c97wcCcmG8DlQY+MLorVgC38EJB7oc1omiLMr2+FTBkkNT4GK2gGUFTKhw71ormve2g
+        jQ+VriF3FmMYXJH5iKuw6xPC2FmfoHlPfaGz/SlL/EANgoW+fsRQ4Zsg0rKqQnLsKE0P3JqP/9YQZ
+        TaGz6w1h9ZZrYf0zs9Z3e/rtASJOB7tPUOKXX0ZVHJqa1aaxyv4ebPkedCgnz/d1FNDoXO57GrBmo
+        1ivFTOe7e/CW+pCiPC4L2awJ8+JiW93SfrwgPIBj4WwwFVbeoisk1oVBiEC1/IgehgiBIJH2PdtBN
+        kiMQWe+w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnPt9-0085Um-Iu; Sat, 07 May 2022 19:14:47 +0000
+Date:   Sat, 7 May 2022 12:14:47 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@ozlabs.org>,
+        "fnovak@us.ibm.com" <fnovak@us.ibm.com>
+Subject: Re: request_module DoS
+Message-ID: <YnbFJ0fn5gLTRLX7@bombadil.infradead.org>
+References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
+ <77ecde32-e868-5804-d9a5-3bb22d314777@csgroup.eu>
+ <YnYnjLXm6atlznPT@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnYnjLXm6atlznPT@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 May 2022 19:43:56 +0800, Zhen Lei wrote:
-> Changes since [v23]:
-> Do two minor updates:
-> 1. Change the value of CRASH_ADDR_HIGH_MAX from memblock.current_limit to (PHYS_MASK + 1).
-> 2. The 'high' and 'low' are only take effect when crashkernel=X[@offset] does not exist.
->    If the value of crashkernel=X is invalid, the reservation of crash fails, even if 'high'
->    and 'low' are configured correctly.
+On Sat, May 07, 2022 at 01:02:20AM -0700, Luis Chamberlain wrote:
+> You can try to reproduce by using adding a new test type for crypto-aegis256
+> on lib/test_kmod.c. These tests however can try something similar but other
+> modules.
 > 
-> [...]
+> /tools/testing/selftests/kmod/kmod.sh -t 0008
+> /tools/testing/selftests/kmod/kmod.sh -t 0009
+> 
+> I can't decipher this yet.
 
-Applied to arm64 (for-next/crashkernel), finally ;). Thanks!
+Without testing it... but something like this might be an easier
+reproducer:
 
-Only patches on top please for the fall-back implementation.
-
-[1/6] kdump: return -ENOENT if required cmdline option does not exist
-      https://git.kernel.org/arm64/c/2e5920bb073a
-[2/6] arm64: Use insert_resource() to simplify code
-      https://git.kernel.org/arm64/c/e6b394425c61
-[3/6] arm64: kdump: Reimplement crashkernel=X
-      https://git.kernel.org/arm64/c/944a45abfabc
-[4/6] of: fdt: Add memory for devices by DT property "linux,usable-memory-range"
-      https://git.kernel.org/arm64/c/fb319e77a0e7
-[5/6] of: Support more than one crash kernel regions for kexec -s
-      https://git.kernel.org/arm64/c/8af6b91f5834
-[6/6] docs: kdump: Update the crashkernel description for arm64
-      https://git.kernel.org/arm64/c/5832f1ae5060
-
--- 
-Catalin
-
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index afd42387e8b2..48b6b5ec6c1e 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -41,6 +41,7 @@ set -e
+ TEST_NAME="kmod"
+ TEST_DRIVER="test_${TEST_NAME}"
+ TEST_DIR=$(dirname $0)
++PROC_CONFIG="/proc/config.gz"
+ 
+ # This represents
+ #
+@@ -65,6 +66,7 @@ ALL_TESTS="$ALL_TESTS 0010:1:1"
+ ALL_TESTS="$ALL_TESTS 0011:1:1"
+ ALL_TESTS="$ALL_TESTS 0012:1:1"
+ ALL_TESTS="$ALL_TESTS 0013:1:1"
++ALL_TESTS="$ALL_TESTS 0014:150:1"
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -79,6 +81,19 @@ test_modprobe()
+        fi
+ }
+ 
++kconfig_has()
++{
++	if [ -f $PROC_CONFIG ]; then
++		if zgrep -q $1 $PROC_CONFIG 2>/dev/null; then
++			echo "yes"
++		else
++			echo "no"
++		fi
++	else
++			echo "no"
++	fi
++}
++
+ function allow_user_defaults()
+ {
+ 	if [ -z $DEFAULT_KMOD_DRIVER ]; then
+@@ -106,6 +121,8 @@ function allow_user_defaults()
+ 	fi
+ 
+ 	MODPROBE_LIMIT_FILE="${PROC_DIR}/kmod-limit"
++	HAS_CRYPTO_AEGIS256_MOD="$(kconfig_has CONFIG_CRYPTO_AEGIS256=m)"
++	HAS_CRYPTO_AEGIS256_BUILTIN="$(kconfig_has CONFIG_CRYPTO_AEGIS256=y)"
+ }
+ 
+ test_reqs()
+@@ -504,6 +521,21 @@ kmod_test_0013()
+ 		"cat /sys/module/${DEFAULT_KMOD_DRIVER}/sections/.*text | head -n1"
+ }
+ 
++kmod_test_0014()
++{
++	kmod_defaults_driver
++	MODPROBE_LIMIT=$(config_get_modprobe_limit)
++	let EXTRA=$MODPROBE_LIMIT/6
++	config_set_driver crypto-aegis256
++	config_num_thread_limit_extra $EXTRA
++	config_trigger ${FUNCNAME[0]}
++	if [[ "$HAS_CRYPTO_AEGIS256_MOD" == "yes" || "$HAS_CRYPTO_AEGIS256_BUILTIN" == "yes" ]]; then
++		config_expect_result ${FUNCNAME[0]} SUCCESS
++	else
++		config_expect_result ${FUNCNAME[0]} MODULE_NOT_FOUND
++	fi
++}
++
+ list_tests()
+ {
+ 	echo "Test ID list:"
+@@ -525,6 +557,7 @@ list_tests()
+ 	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
+ 	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
+ 	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
++	echo "0014 x $(get_test_count 0014) - multithreaded - push kmod_concurrent over max_modprobes for request_module() for crypto-aegis256"
+ }
+ 
+ usage()

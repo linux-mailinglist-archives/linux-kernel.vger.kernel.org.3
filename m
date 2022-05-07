@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED8551E8FE
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9AC51E904
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386692AbiEGRjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 13:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S1446742AbiEGRuc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 13:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242983AbiEGRjo (ORCPT
+        with ESMTP id S1446729AbiEGRu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 13:39:44 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E97727FD6
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 10:35:57 -0700 (PDT)
-Received: from [192.168.1.101] (abxi172.neoplus.adsl.tpnet.pl [83.9.2.172])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A23423ED82;
-        Sat,  7 May 2022 19:35:54 +0200 (CEST)
-Message-ID: <c13621d1-8c33-2979-b455-2e1f4e4bc5c8@somainline.org>
-Date:   Sat, 7 May 2022 19:35:53 +0200
+        Sat, 7 May 2022 13:50:29 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7E1101DF
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 10:46:42 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 247GLWrP022328
+        for <linux-kernel@vger.kernel.org>; Sat, 7 May 2022 10:46:41 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3fwn141dbf-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 10:46:41 -0700
+Received: from twshared11660.23.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 10:46:39 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id B3D8F758C0BC; Sat,  7 May 2022 10:46:33 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>, <live-patching@vger.kernel.org>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <vincent.guittot@linaro.org>, <jpoimboe@redhat.com>,
+        <joe.lawrence@redhat.com>, <kernel-team@fb.com>,
+        Song Liu <song@kernel.org>
+Subject: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Date:   Sat, 7 May 2022 10:46:28 -0700
+Message-ID: <20220507174628.2086373-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] arm64: dts: qcom: msm8998: Make regulator voltages
- multiple of step-size
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markuss Broks <markuss.broks@gmail.com>
-References: <20220507153627.1478268-1-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220507153627.1478268-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: PmbTh2tn02r-V5hhQDXv3p2rgpoxkNnq
+X-Proofpoint-ORIG-GUID: PmbTh2tn02r-V5hhQDXv3p2rgpoxkNnq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-07_06,2022-05-06_01,2022-02-23_01
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Busy kernel threads may block the transition of livepatch. Call
+klp_try_switch_task from __cond_resched to make the transition easier.
 
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ include/linux/livepatch.h     | 2 ++
+ kernel/livepatch/transition.c | 2 +-
+ kernel/sched/core.c           | 3 +++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-On 7.05.2022 17:36, Marijn Suijten wrote:
-> These voltages are not a multiple of the given step-size 8000 (with base
-> voltage 1664000) in pm8998_pldo, resulting in PLDO regulators l18 and
-> l22 failing to validate and in turn not probing the rpm-pm8998-regulator
-> driver:
-> 
->     l18: unsupportable voltage constraints 2856000-2848000uV
->     qcom_rpm_smd_regulator rpm-glink:rpm-requests:pm8998-regulators: l18: devm_regulator_register() failed, ret=-22
-> 
-> Round the voltages down for the sake of erring on the safe side, leaving
-> a comment in place to document this discrepancy wrt downstream sources.
-> 
-> Fixes: 390883af89d2 ("arm64: dts: qcom: msm8998: Introduce support for Sony Yoshino platform")
-> Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-Also:
-Reported-by: Markuss Broks <markuss.broks@gmail.com>
+diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+index 2614247a9781..a9209f62550a 100644
+--- a/include/linux/livepatch.h
++++ b/include/linux/livepatch.h
+@@ -236,6 +236,7 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+ 			     unsigned int symindex, unsigned int secindex,
+ 			     const char *objname);
+ 
++bool klp_try_switch_task(struct task_struct *task);
+ #else /* !CONFIG_LIVEPATCH */
+ 
+ static inline int klp_module_coming(struct module *mod) { return 0; }
+@@ -253,6 +254,7 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+ 	return 0;
+ }
+ 
++bool klp_try_switch_task(struct task_struct *task) { return true; }
+ #endif /* CONFIG_LIVEPATCH */
+ 
+ #endif /* _LINUX_LIVEPATCH_H_ */
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index f6310f848f34..4257a8eec64b 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -278,7 +278,7 @@ static int klp_check_stack(struct task_struct *task, char *err_buf)
+  * running, or it's sleeping on a to-be-patched or to-be-unpatched function, or
+  * if the stack is unreliable, return false.
+  */
+-static bool klp_try_switch_task(struct task_struct *task)
++bool klp_try_switch_task(struct task_struct *task)
+ {
+ 	static char err_buf[STACK_ERR_BUF_SIZE];
+ 	struct rq *rq;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a7302b7b65f2..41d1c7a86912 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6990,6 +6990,9 @@ SYSCALL_DEFINE0(sched_yield)
+ #if !defined(CONFIG_PREEMPTION) || defined(CONFIG_PREEMPT_DYNAMIC)
+ int __sched __cond_resched(void)
+ {
++	if (unlikely(klp_patch_pending(current)))
++		klp_try_switch_task(current);
++
+ 	if (should_resched(0)) {
+ 		preempt_schedule_common();
+ 		return 1;
+-- 
+2.30.2
 
-Konrad
-
-
->  .../dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts    | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-> index 4a1f98a21031..c21333aa73c2 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-> @@ -26,11 +26,13 @@ &lab {
->  };
->  
->  &vreg_l18a_2p85 {
-> -	regulator-min-microvolt = <2850000>;
-> -	regulator-max-microvolt = <2850000>;
-> +	/* Note: Round-down from 2850000 to be a multiple of PLDO step-size 8000 */
-> +	regulator-min-microvolt = <2848000>;
-> +	regulator-max-microvolt = <2848000>;
->  };
->  
->  &vreg_l22a_2p85 {
-> -	regulator-min-microvolt = <2700000>;
-> -	regulator-max-microvolt = <2700000>;
-> +	/* Note: Round-down from 2700000 to be a multiple of PLDO step-size 8000 */
-> +	regulator-min-microvolt = <2696000>;
-> +	regulator-max-microvolt = <2696000>;
->  };

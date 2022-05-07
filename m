@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73BA51E4AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B870D51E4B2
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445642AbiEGGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 02:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
+        id S1445781AbiEGGvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 02:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbiEGGqg (ORCPT
+        with ESMTP id S1445771AbiEGGu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 02:46:36 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7014863C5;
-        Fri,  6 May 2022 23:42:51 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id e24so8855783pjt.2;
-        Fri, 06 May 2022 23:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=uDYYK0Fj+uUZkjFzaGqTdzReaL9mPitJtDVBnfx9TFE=;
-        b=RWj10dAM7328cITCqLPZxKNBHiIP2VBhiOG0YbCUEPdCXsxUPB1J/sqmftI0u+WJ++
-         dXXeCpO6ybZsS4h6QuKTCUQP/yq4tEaoVjJU/Di6BrSTV4yw/eFqmoH6tZ4mwmQP4wBT
-         JFMWfpJiQInyVlCaOmP9yvUwI8m5P4LnxAKkYrcTQdc7PaYXf3p2ss8KTjOMF3MltHBC
-         eChj6UB8R8fwYYsrugsHDRb+p4G/AjR6YlVMpq7dIDfMRygTOFuanOHqREpX7I1yfyVU
-         X5d7MQzG9PnQhnpU1tXJ9PihzNmJ6X4L/ltepjVlX/+mXqjKv8H4EmeL6eNzfcaYP/+m
-         VszQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uDYYK0Fj+uUZkjFzaGqTdzReaL9mPitJtDVBnfx9TFE=;
-        b=HvUa/ROALwTa+uHuxshljNPbckRCgCSNMpdY8+MQ9TyMHoEhfSWBD9BvhVD6JxAxQc
-         CHWmcnb2SB89h37ZnQM5fRxOIeDJNLgXE7jUtkApCOFR1ZS1hAWDbyeKaA2n5id2Ygk3
-         4QqzMn7LfJM63jr7FyfALynHZIuwWZSd0s+glOxUbb3Nq4/cjSnncAirUxauGsMSwOm/
-         HMU0VRZ8dpBnRmbgwuA5NFzXJA+kV3UXLybex/Ca40Hk7XlIYw5ceracepsSkTzsZIfF
-         kLMO9o0SMd/xx+uvxEkp/8j547gM1wpEMVyEkHLEvDQHb3C5cAeeTI7631nswmJiQgSy
-         cmbA==
-X-Gm-Message-State: AOAM531HA+cmKl2pXJ1+YmvttTlLi5x3jpmOGA/BiJDK1e9gu/TwytmP
-        YA6l/WjylYFytsxm6h3nu8I=
-X-Google-Smtp-Source: ABdhPJwpfPeuLpzXH4PC/892IW17e6XhasjpGT05YKNXunBiBaCaRDQIiPjYPa3x6ViD9m9ENDeUIQ==
-X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr7340365plv.46.1651905770975;
-        Fri, 06 May 2022 23:42:50 -0700 (PDT)
-Received: from [192.168.255.10] ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id ev17-20020a17090aead100b001cb6527ca39sm8660296pjb.0.2022.05.06.23.42.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 23:42:50 -0700 (PDT)
-Message-ID: <6f59afd3-a591-90fd-0428-3572d910b689@gmail.com>
-Date:   Sat, 7 May 2022 14:43:01 +0800
+        Sat, 7 May 2022 02:50:58 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCCA5D5E5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 23:47:08 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KwHzK0ckqz9sVq;
+        Sat,  7 May 2022 08:46:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kQCu1Il80dM8; Sat,  7 May 2022 08:46:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KwHzD5hp5z9sVV;
+        Sat,  7 May 2022 08:46:48 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A977B8B770;
+        Sat,  7 May 2022 08:46:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id HMc5DPu-VFf8; Sat,  7 May 2022 08:46:48 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.101])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E789B8B76E;
+        Sat,  7 May 2022 08:46:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2476kc2W1320469
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 7 May 2022 08:46:38 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2476kZLE1320456;
+        Sat, 7 May 2022 08:46:35 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        naveen.n.rao@linux.vnet.ibm.com
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 00/25] powerpc: ftrace optimisation and cleanup and more [v2]
+Date:   Sat,  7 May 2022 08:46:02 +0200
+Message-Id: <cover.1651905939.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-5-haoxu.linux@gmail.com>
- <28b1901e-3eb2-2a50-525c-62e1aa39eaac@gmail.com>
-From:   Hao Xu <haoxu.linux@gmail.com>
-In-Reply-To: <28b1901e-3eb2-2a50-525c-62e1aa39eaac@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1651905980; l=3734; s=20211009; h=from:subject:message-id; bh=sB47Li5cspS+Q/H8GVp437MSeqxST6ZTmmFQ7liQjVo=; b=+VMsngPikIwGNNaEsxH4AQJ2KbgCYHnSNkKjWOcg2MTB3VZJmKdqbiSAlgpgxIkiqekEeM3t8G/g LnafOpzMA8g2jyJO1UZvDZx4OgECooe7zv4fVgGMmRqBONaUVHWg
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/7 上午12:22, Pavel Begunkov 写道:
-> On 5/6/22 08:01, Hao Xu wrote:
->> From: Hao Xu <howeyxu@tencent.com>
->>
->> Add a helper for poll clean, it will be used in the multishot accept in
->> the later patches.
->>
->> Signed-off-by: Hao Xu <howeyxu@tencent.com>
->> ---
->>   fs/io_uring.c | 23 ++++++++++++++++++-----
->>   1 file changed, 18 insertions(+), 5 deletions(-)
->>
->> diff --git a/fs/io_uring.c b/fs/io_uring.c
->> index d33777575faf..0a83ecc457d1 100644
->> --- a/fs/io_uring.c
->> +++ b/fs/io_uring.c
->> @@ -5711,6 +5711,23 @@ static int io_accept_prep(struct io_kiocb *req, 
->> const struct io_uring_sqe *sqe)
->>       return 0;
->>   }
->> +static inline void __io_poll_clean(struct io_kiocb *req)
->> +{
->> +    struct io_ring_ctx *ctx = req->ctx;
->> +
->> +    io_poll_remove_entries(req);
->> +    spin_lock(&ctx->completion_lock);
->> +    hash_del(&req->hash_node);
->> +    spin_unlock(&ctx->completion_lock);
->> +}
->> +
->> +#define REQ_F_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
->> +static inline void io_poll_clean(struct io_kiocb *req)
->> +{
->> +    if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == 
->> REQ_F_APOLL_MULTI_POLLED)
-> 
-> So it triggers for apoll multishot only when REQ_F_POLLED is _not_ set,
-> but if it's not set it did never go through arm_poll / etc. and there is
-> nothing to clean up. What is the catch?
+This series provides optimisation and cleanup of ftrace on powerpc.
 
-No, it is triggered for apoll multishot only when REQ_F_POLLED is set..
-> 
-> btw, don't see the function used in this patch, better to add it later
-> or at least mark with attribute unused, or some may get build failures.
-Gotcha.
-> 
-> 
->> +        __io_poll_clean(req);
->> +}
->> +
->>   static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
->>   {
->>       struct io_accept *accept = &req->accept;
->> @@ -6041,17 +6058,13 @@ static void io_poll_task_func(struct io_kiocb 
->> *req, bool *locked)
->>   static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
->>   {
->> -    struct io_ring_ctx *ctx = req->ctx;
->>       int ret;
->>       ret = io_poll_check_events(req, locked);
->>       if (ret > 0)
->>           return;
->> -    io_poll_remove_entries(req);
->> -    spin_lock(&ctx->completion_lock);
->> -    hash_del(&req->hash_node);
->> -    spin_unlock(&ctx->completion_lock);
->> +    __io_poll_clean(req);
->>       if (!ret)
->>           io_req_task_submit(req, locked);
-> 
+With this series ftrace activation is about 20% faster on an 8xx.
+
+At the end of the series come additional cleanups around ppc-opcode,
+that would likely conflict with this series if posted separately.
+
+Main changes since v1 (details in after each individual patch description):
+- Added 3 patches (8, 9, 10) that convert PPC64_ELF_ABI_v{1/2} macros by CONFIG_PPC64_ELF_ABI_V{1/2}
+- Taken comments from Naveen
+
+Christophe Leroy (25):
+  powerpc/ftrace: Refactor prepare_ftrace_return()
+  powerpc/ftrace: Remove redundant create_branch() calls
+  powerpc/code-patching: Inline is_offset_in_{cond}_branch_range()
+  powerpc/ftrace: Use is_offset_in_branch_range()
+  powerpc/code-patching: Inline create_branch()
+  powerpc/ftrace: Inline ftrace_modify_code()
+  powerpc/ftrace: Use patch_instruction() return directly
+  powerpc: Add CONFIG_PPC64_ELF_ABI_V1 and CONFIG_PPC64_ELF_ABI_V2
+  powerpc: Replace PPC64_ELF_ABI_v{1/2} by CONFIG_PPC64_ELF_ABI_V{1/2}
+  powerpc: Finalise cleanup around ABI use
+  powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and
+    PPC64
+  powerpc/ftrace: Don't include ftrace.o for CONFIG_FTRACE_SYSCALLS
+  powerpc/ftrace: Use CONFIG_FUNCTION_TRACER instead of
+    CONFIG_DYNAMIC_FTRACE
+  powerpc/ftrace: Remove ftrace_plt_tramps[]
+  powerpc/ftrace: Use BRANCH_SET_LINK instead of value 1
+  powerpc/ftrace: Use PPC_RAW_xxx() macros instead of opencoding.
+  powerpc/ftrace: Use size macro instead of opencoding
+  powerpc/ftrace: Simplify expected_nop_sequence()
+  powerpc/ftrace: Minimise number of #ifdefs
+  powerpc/inst: Add __copy_inst_from_kernel_nofault()
+  powerpc/ftrace: Don't use copy_from_kernel_nofault() in
+    module_trampoline_target()
+  powerpc/inst: Remove PPC_INST_BRANCH
+  powerpc/modules: Use PPC_LI macros instead of opencoding
+  powerpc/inst: Remove PPC_INST_BL
+  powerpc/opcodes: Remove unused PPC_INST_XXX macros
+
+ arch/powerpc/Kconfig                     |   2 +-
+ arch/powerpc/Makefile                    |  12 +-
+ arch/powerpc/boot/Makefile               |   2 +
+ arch/powerpc/include/asm/code-patching.h |  65 +++-
+ arch/powerpc/include/asm/ftrace.h        |   4 +-
+ arch/powerpc/include/asm/inst.h          |  13 +-
+ arch/powerpc/include/asm/linkage.h       |   2 +-
+ arch/powerpc/include/asm/module.h        |   2 -
+ arch/powerpc/include/asm/ppc-opcode.h    |  22 +-
+ arch/powerpc/include/asm/ppc_asm.h       |   4 +-
+ arch/powerpc/include/asm/ptrace.h        |   2 +-
+ arch/powerpc/include/asm/sections.h      |  24 +-
+ arch/powerpc/include/asm/types.h         |   8 -
+ arch/powerpc/kernel/fadump.c             |  13 +-
+ arch/powerpc/kernel/head_64.S            |   2 +-
+ arch/powerpc/kernel/interrupt_64.S       |   2 +-
+ arch/powerpc/kernel/kprobes.c            |   6 +-
+ arch/powerpc/kernel/misc_64.S            |   2 +-
+ arch/powerpc/kernel/module.c             |   4 +-
+ arch/powerpc/kernel/module_32.c          |  23 +-
+ arch/powerpc/kernel/module_64.c          |   7 +-
+ arch/powerpc/kernel/ptrace/ptrace.c      |   6 -
+ arch/powerpc/kernel/trace/Makefile       |   5 +-
+ arch/powerpc/kernel/trace/ftrace.c       | 375 +++++++----------------
+ arch/powerpc/kvm/book3s_interrupts.S     |   2 +-
+ arch/powerpc/kvm/book3s_rmhandlers.S     |   2 +-
+ arch/powerpc/lib/code-patching.c         |  49 +--
+ arch/powerpc/lib/feature-fixups.c        |   2 +-
+ arch/powerpc/net/bpf_jit.h               |   4 +-
+ arch/powerpc/net/bpf_jit_comp.c          |   2 +-
+ arch/powerpc/net/bpf_jit_comp64.c        |   4 +-
+ arch/powerpc/platforms/Kconfig.cputype   |   6 +
+ 32 files changed, 262 insertions(+), 416 deletions(-)
+
+-- 
+2.35.1
 

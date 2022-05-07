@@ -2,165 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E236651E5B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D149951E5C5
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446152AbiEGIxi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 04:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        id S1354966AbiEGJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344519AbiEGIxh (ORCPT
+        with ESMTP id S230191AbiEGJCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 04:53:37 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5648380
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 01:49:50 -0700 (PDT)
-Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N1x2P-1nyiMn3Sll-012FQg for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022
- 10:49:49 +0200
-Received: by mail-yb1-f171.google.com with SMTP id v59so16604966ybi.12
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 01:49:48 -0700 (PDT)
-X-Gm-Message-State: AOAM533AHtBL19lDAnzQ4HdEHZmrvoOKfl+Bbbrn4PQNG18TLNG5AO6D
-        PfTJqsAoHKRnKvwcNgfcBlqfFnP0boSUODEHiYc=
-X-Google-Smtp-Source: ABdhPJzU/kokkyU4Ow0IuLOE+iQhWFkk4ZE0WMAv0gv2/fvi3qr5K21WMxPcMZht90sRTBchezYcKmQ2te8bG3LT0Jg=
-X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
- d190-20020a25cdc7000000b00648f57dc0edmr5436777ybf.480.1651913387633; Sat, 07
- May 2022 01:49:47 -0700 (PDT)
+        Sat, 7 May 2022 05:02:34 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67F24BC3;
+        Sat,  7 May 2022 01:58:43 -0700 (PDT)
+X-UUID: ded7c836f5874ba3ac180d82108dc4dd-20220507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:0020efbe-81ad-4a91-9245-e6a6010afc93,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-12
+X-CID-META: VersionHash:faefae9,CLOUDID:c82cebb2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ded7c836f5874ba3ac180d82108dc4dd-20220507
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 620380499; Sat, 07 May 2022 16:58:38 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 7 May 2022 16:58:37 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 7 May 2022 16:58:35 +0800
+From:   <yf.wang@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
+        Yunfei Wang <yf.wang@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH] iommu/dma: Fix iova map result check bug
+Date:   Sat, 7 May 2022 16:52:03 +0800
+Message-ID: <20220507085204.16914-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20210825064228.70487-1-deng.changcheng@zte.com.cn>
- <8735hsvzig.fsf@mpe.ellerman.id.au> <e2310273-8bc8-deac-9a80-0d1587acecb1@csgroup.eu>
-In-Reply-To: <e2310273-8bc8-deac-9a80-0d1587acecb1@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 7 May 2022 10:49:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3s8GUtUUt-7BvUEajEDDAJMH7yJNCaUF8hdhjfmf_f7Q@mail.gmail.com>
-Message-ID: <CAK8P3a3s8GUtUUt-7BvUEajEDDAJMH7yJNCaUF8hdhjfmf_f7Q@mail.gmail.com>
-Subject: Re: [PATCH linux-next] power:pkeys: fix bugon.cocci warnings
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>, CGEL <cgel.zte@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Jing Yangyang <jing.yangyang@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:m5KnsWbbTn8ytqeWgi/KEteracuXcWaRgNz47oWWOK6K14hIVQo
- 85HKcyU1o6uAPzyeayPaSPNsiLUe0fWLHGEjnKqUC6SpmU0fYRwFk0PM6l5YkmiBlZH752P
- WbYWYBcmp1Fiz7HgaHE6DsMWpRqe2BZHqbTzA6ZLZRCcON9xR/9dpAui5+68Fa6h9zew9Vk
- qU7KPBWQe6oSWQN2dZK5w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:d7J8S09z6YU=:1xdkjNBT+qzaWcPq8Y+dJb
- swWUQ2KTNAUUpp+QgxZOgl5KP+noiPU+tYwBnpNnEdtlMnvri3COc7lPa+ikQiXPuK9gWsFCp
- q+mnjQao1mWc0jE0ByZhPfo+eHBfYs2a1SDefKHgTtIdivyFRH6WgN4DylfGNXZ4wpjYvuHru
- UO9sm2HodAfq4Ja6tG8N9BtFGGk3leKr+OqmAKmNfqAjdOrsE/ry/X6uxRDQCrKYjqpmrp4LW
- ea5Rs7bZIJIQEvq8NWj9PXV2cfrN6Hj2PKKmm7+WcgRCPqqwHcOzYsUnFN9cyenH3bWFyES0I
- jv8J6XXoSEE/FiqP+dtuxDu/8F2S3a9SKaMNJf3X5s6C6CqBck8aK9WSNb7kJngai7JSYjvPj
- 8LvJwZpENfX/p1/agVE+FKAssnzdK5T0rMeLTiEy/Qd5LkIXlE9xPfpHVI7U61pyqQIOFaikt
- APu+zY4aKc/jEXJTjgcfc7Ertg0rwvXoiVL/oOQ2bEpw9mItVkQVU10DdJPOpagiJbzJVMixY
- 9WqtjwJWEIdocjN9nLHbVoPwsfj2Qomu04HEc58W1YiQBHZgaXlHEfDnVOYuVi8D7DxdgzM+N
- mYIs+ZRj2Q+yD9NN+aabLQzKJWPNheH4QxEY49sIRbmUyyH5AHvenOWmV8RsXcxlHI2WErSW4
- 2Ou8H2DKbAMyDtPAm1o0u/x8Z6L1ABX/v0L63qgTBJULw6xpTdKTuglcgZMS7SngmGEtYXFsl
- KQXVJn5trNmOpnthPha+8YFf6jEiRZy8tokWrByYWv4/JNd5af7CoEyJ1bg5PduqbCDmBvdgG
- bBI0RTv4NOog1LeJZMKG957h4egW2arA0k5kdrJUWWygjmbbtg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 7, 2022 at 9:04 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 02/05/2022 à 15:24, Michael Ellerman a écrit :
-> > CGEL <cgel.zte@gmail.com> writes:
-> >> From: Jing Yangyang <jing.yangyang@zte.com.cn>
-> >>
-> >> Use BUG_ON instead of a if condition followed by BUG.
-> >>
-> >> ./arch/powerpc/include/asm/book3s/64/pkeys.h:21:2-5:WARNING
-> >> Use BUG_ON instead of if condition followed by BUG.
-> >> ./arch/powerpc/include/asm/book3s/64/pkeys.h:14:2-5:WARNING
-> >> Use BUG_ON instead of if condition followed by BUG.
-> >>
-> >> Generated by: scripts/coccinelle/misc/bugon.cocci
-> >>
-> >> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> >> Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
-> >> ---
-> >>   arch/powerpc/include/asm/book3s/64/pkeys.h | 6 ++----
-> >>   1 file changed, 2 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/arch/powerpc/include/asm/book3s/64/pkeys.h b/arch/powerpc/include/asm/book3s/64/pkeys.h
-> >> index 5b17813..5f74f0c 100644
-> >> --- a/arch/powerpc/include/asm/book3s/64/pkeys.h
-> >> +++ b/arch/powerpc/include/asm/book3s/64/pkeys.h
-> >> @@ -10,15 +10,13 @@ static inline u64 vmflag_to_pte_pkey_bits(u64 vm_flags)
-> >>      if (!mmu_has_feature(MMU_FTR_PKEY))
-> >>              return 0x0UL;
-> >>
-> >> -    if (radix_enabled())
-> >> -            BUG();
-> >> +    BUG_ON(radix_enabled());
-> >>      return hash__vmflag_to_pte_pkey_bits(vm_flags);
-> >>   }
-> >>
-> >>   static inline u16 pte_to_pkey_bits(u64 pteflags)
-> >>   {
-> >> -    if (radix_enabled())
-> >> -            BUG();
-> >> +    BUG_ON(radix_enabled());
-> >>      return hash__pte_to_pkey_bits(pteflags);
-> >>   }
-> >
-> > Have you checked how this changes the generated code?
-> >
-> > radix_enabled() is a jump label, via mmu_feature().
-> >
-> > Possibly the compiler just works it all out and generates the same code,
-> > but I'd want some evidence of that before merging this.
->
-> Seems like the compiler is not that good, the generated code for test1()
-> is much better than the one for test2(), see below.
->
-> void test1(void)
-> {
->         if (radix_enabled())
->                 BUG();
-> }
->
-> void test2(void)
-> {
->         BUG_ON(radix_enabled());
-> }
->
-> 0000000000000900 <.test1>:
->   900:  60 00 00 00     nop
->   904:  0f e0 00 00     twui    r0,0
->   908:  60 00 00 00     nop
->   90c:  60 00 00 00     nop
->   910:  4e 80 00 20     blr
->   914:  60 00 00 00     nop
->   918:  60 00 00 00     nop
->   91c:  60 00 00 00     nop
->
-> 0000000000000920 <.test2>:
->   920:  60 00 00 00     nop
->   924:  39 20 00 01     li      r9,1
->   928:  0b 09 00 00     tdnei   r9,0
->   92c:  4e 80 00 20     blr
->   930:  39 20 00 00     li      r9,0
->   934:  0b 09 00 00     tdnei   r9,0
->   938:  4e 80 00 20     blr
->
->
-> We should keep things as they are and change the coccinelle script.
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-Maybe just drop the custom ppc64 BUG_ON() then if it creates worse
-code? The default BUG_ON() should be equivalent to the open-coded
-version.
+The data type of the return value of the iommu_map_sg_atomic
+is ssize_t, but the data type of iova size is size_t,
+e.g. one is int while the other is unsigned int.
 
-        Arnd
+When iommu_map_sg_atomic return value is compared with iova size,
+it will force the signed int to be converted to unsigned int, if
+iova map fails and iommu_map_sg_atomic return error code is less
+than 0, then (ret < iova_len) is false, which will to cause not
+do free iova, and the master can still successfully get the iova
+of map fail, which is not expected.
+
+Therefore, we need to check the return value of iommu_map_sg_atomic
+in two cases according to whether it is less than 0.
+
+Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+Cc: <stable@vger.kernel.org> # 5.15.*
+---
+ drivers/iommu/dma-iommu.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 09f6e1c0f9c0..2932281e93fc 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -776,6 +776,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
+ 	struct page **pages;
+ 	dma_addr_t iova;
++	ssize_t ret;
+ 
+ 	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
+ 	    iommu_deferred_attach(dev, domain))
+@@ -813,8 +814,8 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 			arch_dma_prep_coherent(sg_page(sg), sg->length);
+ 	}
+ 
+-	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
+-			< size)
++	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
++	if (ret < 0 || ret < size)
+ 		goto out_free_sg;
+ 
+ 	sgt->sgl->dma_address = iova;
+@@ -1209,7 +1210,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
+ 	 * implementation - it knows better than we do.
+ 	 */
+ 	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
+-	if (ret < iova_len)
++	if (ret < 0 || ret < iova_len)
+ 		goto out_free_iova;
+ 
+ 	return __finalise_sg(dev, sg, nents, iova);
+-- 
+2.18.0
+

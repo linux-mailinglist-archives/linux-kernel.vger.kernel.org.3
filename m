@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C58E51E866
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8422B51E86B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446648AbiEGQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S1354946AbiEGQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353246AbiEGQGw (ORCPT
+        with ESMTP id S1386035AbiEGQIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:06:52 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B369E027;
-        Sat,  7 May 2022 09:03:05 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id e15so11077044iob.3;
-        Sat, 07 May 2022 09:03:05 -0700 (PDT)
+        Sat, 7 May 2022 12:08:44 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6803F2C113;
+        Sat,  7 May 2022 09:04:57 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d17so10165035plg.0;
+        Sat, 07 May 2022 09:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k13S9ItPgALMrAugBtRUW1Wd2tO5SVJuffpkWGMdiQU=;
-        b=lNw/fMvZYAjQ2FhqgMUV9FGl1DDNpME3hvxAzNiXMj4lygExl4U9PLgutCzIHl6QH9
-         bgXKLbnm4dy5g1E0b0ztGT/RUkMhG050idq7aWDtsOuUtKJ+h9550ByP6uE250jPJgM1
-         EjZ/7vY3XhU0zscmgv/XTHpkylStbMEy0m1xP1FlM6Y398lIy88QONWFltw83jrK1+yh
-         o2jtn+sKMZYH0F5LIuYzULIVL0XSeufoWky615J25oZrDwqRTUpcMQtJJ5wHm+hQ0XC6
-         fKZjCirn+XygdQsH2cQr4EvdLz6eKTrZKuIZQGVwaGNLrauwriMKEE3kmYyO4gqfDPnZ
-         botg==
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=s4K96oJ0ziXnyxhriolWRSu89A5Glyep2GcJ20fGurs=;
+        b=XxIGeT9nXoZy7nGhniSiMtmTRPhAq3a0wnXQ6T/G2nOOIi/55rtEVFKT/OChWphIWD
+         EyIGWezWhZTbWrH9K0PwctUzQdtpobq3yG+1OyispVkYvXPgSpkhGsmnFeHClpOeZlhz
+         PIQs8rKthGSI+mZC7Ff1mXsZBq+DF838oVAwsocHRx4ggEeOZipZFVx0rmN44VTMo5Gv
+         WWrvKGNhuLUbnL+5FeCiHFQVsI/oe6tJOFDbF1cpPOPiflOYW28FBhLa8xc4Z+L5Rvna
+         YPj9A5tSvTnpTyRQO6eAivtzgEbMBZl6ee/sspUtJim0ImvrHiwheiZCTj7Lld8GG+aS
+         G8+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k13S9ItPgALMrAugBtRUW1Wd2tO5SVJuffpkWGMdiQU=;
-        b=tUd1mpyKDahchNxE/enpeyVvNa/DWmRb5snvj55iFHVfrh+swF1pS6OkjvkzjDXX1b
-         Nd2A7I2TSMuwx/6cwF2aHOlj/6p5yNIBGg3ASmpd14yQTKU8nA8k+4YYbQrKlRcf4mWl
-         8hOt50bLdicI9gPxGeOHajrzuOFVRBKeXb0Du0kRsbJz+8bDGVK086T6OthgH4YPlULG
-         sIYXPU9vsUH2VNfWUFbOwi9xeETJuzB8uEdl/ys3lq8vZjeG4DuBq4WgEkBU99FKkf6g
-         Uz/QrXWlxNJrkvofuWgG4YRX4wMZv7c05ILXqlc86Ecvea/z/VQ0ETarGRIfUQchDa6i
-         cOGw==
-X-Gm-Message-State: AOAM533dfThD3y4qgXOaatSTDl+9TDF/OZujKFI5qKayr6I/IWqsmOa6
-        /nzRPlraVKmjtIBMVuCqQCE6dGL5xhvvoA==
-X-Google-Smtp-Source: ABdhPJzbUlPrChDXRa67uDCom9wecXHf6gV5c9GpzNq4TXjQUk+Ss0FTgweOjyzOm3UrgFDZ9GRcqQ==
-X-Received: by 2002:a05:6602:2c4c:b0:64f:a897:80cb with SMTP id x12-20020a0566022c4c00b0064fa89780cbmr3503289iov.139.1651939384781;
-        Sat, 07 May 2022 09:03:04 -0700 (PDT)
-Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id k28-20020a02c77c000000b0032b3a78173fsm2200533jao.3.2022.05.07.09.02.59
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s4K96oJ0ziXnyxhriolWRSu89A5Glyep2GcJ20fGurs=;
+        b=RgzQKv8QWxRnjSyFD/9Z2Y0Rw0P+RgGPhlilGued0QzpffV8dfwy6jECeDogmHY4kY
+         yqAn3o5sYs+Gr5Givhhsqaid9axaY7/EAzsBR1xJYFcY9B6t6IdEyH9hRx6Qq7zcUVU+
+         Ve8gvYtqy08/hJXJnlPXsVozlh7vCjzE0afQAACG3/Ed8QxwBz5Lg3yQCacfKVHzMLpu
+         YEve1+aL6v9E5je81uX5NQpPuQwhv4JdpNpiY7OPs8kD4NaDhhOMCTcKG8j5ZDDD8m1m
+         dohLuo4rauio20Ov0U2XO+qpvRw7iJUQBBKwGf5kDYB+S+nc5fDqJQdAN6CK/6D+69NP
+         WtnQ==
+X-Gm-Message-State: AOAM532tAPF2kL2yEb0Eb3QEv9NdPCoihwYHp7bC/3FV2WZAYKRBBDvh
+        o0OJQANbU/QK5yDg3+uRsjRU65A2vyYhVrDJj38=
+X-Google-Smtp-Source: ABdhPJwpeoH3Y/fdS1SXYkmYDYROPsTSgS3ifXogSmI6gmeh9Prk8v7eQMuRML4aHNZhC/hFrRVhyw==
+X-Received: by 2002:a17:903:2406:b0:158:f6f0:6c44 with SMTP id e6-20020a170903240600b00158f6f06c44mr8688426plo.88.1651939496930;
+        Sat, 07 May 2022 09:04:56 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.111])
+        by smtp.gmail.com with ESMTPSA id gt9-20020a17090af2c900b001dc1e6db7c2sm9266942pjb.57.2022.05.07.09.04.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 09:03:04 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     schspa@gmail.com
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Subject: [PATCH v2] usb: gadget: fix race when gadget driver register via ioctl
-Date:   Sun,  8 May 2022 00:02:43 +0800
-Message-Id: <20220507160243.35304-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
-References: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
+        Sat, 07 May 2022 09:04:56 -0700 (PDT)
+Message-ID: <390a7780-b02b-b086-803c-a8540abfd436@gmail.com>
+Date:   Sun, 8 May 2022 00:05:08 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH v3 0/4] fast poll multishot mode
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220507140620.85871-1-haoxu.linux@gmail.com>
+ <305fd65b-310c-9a9b-cb8c-6cbc3d00dbcb@kernel.dk>
+From:   Hao Xu <haoxu.linux@gmail.com>
+In-Reply-To: <305fd65b-310c-9a9b-cb8c-6cbc3d00dbcb@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,52 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb_gadget_register_driver can be called multi time by to
-threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
-to multiple registrations.
+在 2022/5/7 下午11:28, Jens Axboe 写道:
+> On 5/7/22 8:06 AM, Hao Xu wrote:
+>> Let multishot support multishot mode, currently only add accept as its
+>> first comsumer.
+> 
+> consumer
+> 
+>> theoretical analysis:
+>>    1) when connections come in fast
+>>      - singleshot:
+>>                add accept sqe(userpsace) --> accept inline
+> 
+> userspace
+> 
+>>                                ^                 |
+>>                                |-----------------|
+>>      - multishot:
+>>               add accept sqe(userspace) --> accept inline
+>>                                                ^     |
+>>                                                |--*--|
+>>
+>>      we do accept repeatedly in * place until get EAGAIN
+>>
+>>    2) when connections come in at a low pressure
+>>      similar thing like 1), we reduce a lot of userspace-kernel context
+>>      switch and useless vfs_poll()
+> 
+> Overall this looks better than v2 for sure, just some minor tweaks
+> needed I believe.
+> 
+> But we still need to consider direct accept with multishot... Should
+> probably be an add-on patch as I think it'd get a bit more complicated
+> if we need to be able to cheaply find an available free fixed fd slot.
+> I'll try and play with that.
 
-Call trace:
-  driver_register+0x220/0x3a0 drivers/base/driver.c:171
-  usb_gadget_register_driver_owner+0xfb/0x1e0
-    drivers/usb/gadget/udc/core.c:1546
-  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-  ioctl USB_RAW_IOCTL_RUN
+I'm tending to use a new mail account to send v4 rather than the gmail
+account since the git issue seems to be network related.
+I'll also think about the fixed fd problem.
 
-This routine allows two processes to register the same driver instance
-via ioctl syscall. which lead to a race condition.
+Thanks,
+Hao
 
-We can fix it by adding a new STATE_DEV_REGISTERING device state to
-avoid double register.
-
-Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index b3be8db1ff63..b75f8f7b7b46 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -146,6 +146,7 @@ enum dev_state {
- 	STATE_DEV_OPENED,
- 	STATE_DEV_INITIALIZED,
- 	STATE_DEV_RUNNING,
-+	STATE_DEV_REGISTERING,
- 	STATE_DEV_CLOSED,
- 	STATE_DEV_FAILED
- };
-@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	dev->state = STATE_DEV_REGISTERING;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	ret = usb_gadget_register_driver(&dev->driver);
--- 
-2.24.3 (Apple Git-128)
+> 
 

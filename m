@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360D051E476
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FB851E473
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445678AbiEGFiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S1445637AbiEGFiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445612AbiEGFiG (ORCPT
+        with ESMTP id S1445646AbiEGFiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:38:06 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F18DAE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:34:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b11-20020a5b008b000000b00624ea481d55so7927008ybp.19
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:34:20 -0700 (PDT)
+        Sat, 7 May 2022 01:38:08 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2F61AF2B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:34:22 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c5767f0fso81648797b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=X0A48L0REIgxolXCeCwJBynKB3Io0hAXROJKBMA9IuU=;
-        b=aqUn+PVzh65+R5Qpx9MvkBp1exKVHZMeHzuMLx5HUe+JchuFz1Pg0Xuvju6snBsdr3
-         hT3LmX4kgUggfCB7eqBJm5N5QFU61wvahiVjvoziweJHPQAY0j82w3JKl18NNjWCyWFg
-         rxAP6BZwJ/2Ho9woQz4hTTwOhzEM4FrCBaQHHvy5+ZegwDOue/9y/bWVFDlHgT1bLn14
-         iw3sWf4C99DleXzmhSPQmgQyHnhh6FcY4JenjUzvpHWU/0RslkJQIeRN+f4chOWTw+0+
-         zGqCkKwddPUBqeWqkwrIDMQ7mtztpadekc+wWgnCtPAlZVUzkuhPG7bDC/JtIInj3xLs
-         /+gQ==
+        bh=bC1QHjSh76vc80FlT0i5N7y28Ax7j34T16/yRj6HA+0=;
+        b=oWrrJYfi4mSyNnigslp/Ljzj5jwsZOXef5S2Xitv76+Yg4pNuRBkjeHnBnRYrzOiRj
+         olpfao1Dj1bvWXUUb+Rb5ZD/dxl5QMZiDdY9s3nbgdaYMCXD1kvEsSgg9EL9hUaATDr9
+         LaAgNz6aCcSUD4jhpvLCHibTz833BzVq50KeRbJphbEoarx0hnAuPxIa4qd3Zld9o1yc
+         EOfr2lEj5hS3ZaPjsfKSp+FZkXXZ9Xl6K7f4R7pOFq6jdD9lMT3cZ0IZi/21X7vNqA9y
+         gwJ3it3T6hdGx7tECRS+elHiRkg9Cz6gjMc7fTGR+wFoa4bBmB+MH/tdNxsgEPD0sBBU
+         9usQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=X0A48L0REIgxolXCeCwJBynKB3Io0hAXROJKBMA9IuU=;
-        b=WtcPEYLFpJ4EjyXGenBNMhNZBd3VjIgRRsEHf9ogB/u0P60u12wA+1Zy/BXP/JMpl0
-         sokqtdk3fCIxWCRpArKqlOwEX99jFaPhHqp3+NdawDfH60OxGm9bURCLttNybe+XEWE2
-         mbfFHGeuVJiK4SImsOajdZvPjAFrHkZOYW1O2/rAhB9q7RJsSMeHaqJ2tsjydHRTNRPn
-         /kYrHRKlY48mGNgfuul0D88o+30oD4DlWfmkoUDzFqx7kWGe0G1qMSldS/28c8CSbpOe
-         DWdq9jTDGuHD9pQcRZ+BpZZpUZ86nJxANEL7yEq1PhS51Cqh5Z6OJ8VfbbD4yz4YR2kA
-         +ovQ==
-X-Gm-Message-State: AOAM532HVlqs2C/z6AitSVPj9QcQxncB4ZAgkD/BhVNS5eeIuOl/+UnD
-        K4oBUgSQPH8d8uYQzd/jZnlNdY4SMjPh
-X-Google-Smtp-Source: ABdhPJwPy24ZCHaXbuLNgP6AHb1xL58dIzYVg9Q0+xV4il+Ytzc0T3cj4NVTJpsEBfbp2IRMVZawJza4S5Bs
+        bh=bC1QHjSh76vc80FlT0i5N7y28Ax7j34T16/yRj6HA+0=;
+        b=HHi3NHCmRvNtx6mVewZs3t1wgDySYxAomifbPdUTwSw6Aqi35nBA9V0bvAOgK+v3z+
+         zur57QH5qpPsGW55w0qtGlTuWrPqYuowjN80XOlt6AwZeefdfaH62Ji3TT2MojiJzoi9
+         9zK+ZOWewOsVp0goWlUMyiHd+cqpp9aCD/eG9s8W2yh29asKiV/uQgels8sy0tvVrVHg
+         YUMO2NYp/Eu+7ApylDbfwrllx3tlcFXd1NxaxzmlI3rY7VM0GQSuVA2zj+W1MXKfs8+j
+         RoQH39rOh9g3SIF3ttJx8N4oJigrgScsuNVJSrZCqtu4EJBr+BqjS/iAh4Soj/DjsJN5
+         pmLQ==
+X-Gm-Message-State: AOAM530hDMRdzUwjAKHfVUDOYL0XcU2FnY/u3l+/A1kAXEt69q9el8Wm
+        2Wh2llNzI0UfnnfAxEpqYzjSF1fV3KBJ
+X-Google-Smtp-Source: ABdhPJwO7GsLd8OXvckEIq11DT8kc48Y/O5PqTlQpGkNGjd49wNqJ814A7t8+kvYK0vJusFrrAlr0gi4e/LQ
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:bf2a:2f64:a273:3573])
- (user=irogers job=sendgmr) by 2002:a81:1196:0:b0:2f8:ccab:8807 with SMTP id
- 144-20020a811196000000b002f8ccab8807mr5576891ywr.58.1651901659386; Fri, 06
- May 2022 22:34:19 -0700 (PDT)
-Date:   Fri,  6 May 2022 22:34:07 -0700
+ (user=irogers job=sendgmr) by 2002:a81:4754:0:b0:2f9:1974:5fa7 with SMTP id
+ u81-20020a814754000000b002f919745fa7mr5517646ywa.513.1651901661720; Fri, 06
+ May 2022 22:34:21 -0700 (PDT)
+Date:   Fri,  6 May 2022 22:34:08 -0700
 In-Reply-To: <20220507053410.3798748-1-irogers@google.com>
-Message-Id: <20220507053410.3798748-3-irogers@google.com>
+Message-Id: <20220507053410.3798748-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220507053410.3798748-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 2/5] perf evsel: Constify a few arrays
+Subject: [PATCH 3/5] perf evsel: Add tool event helpers
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,129 +85,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove public definition of evsel__tool_names.
+Convert to and from a string. Fix evsel__tool_name as array is off-by-1.
+Support more than just duration_time as a metric-id.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/evsel-roundtrip-name.c |  2 +-
- tools/perf/util/evsel.c                 | 14 +++++++-------
- tools/perf/util/evsel.h                 | 11 +++++------
- tools/perf/util/parse-events.c          |  2 +-
- 4 files changed, 14 insertions(+), 15 deletions(-)
+ tools/perf/util/evsel.c | 41 +++++++++++++++++++++++++++++++----------
+ tools/perf/util/evsel.h | 11 +++++++++++
+ 2 files changed, 42 insertions(+), 10 deletions(-)
 
-diff --git a/tools/perf/tests/evsel-roundtrip-name.c b/tools/perf/tests/evsel-roundtrip-name.c
-index fdbf17642e45..9d3c64974f77 100644
---- a/tools/perf/tests/evsel-roundtrip-name.c
-+++ b/tools/perf/tests/evsel-roundtrip-name.c
-@@ -64,7 +64,7 @@ static int perf_evsel__roundtrip_cache_name_test(void)
- 	return ret;
- }
- 
--static int __perf_evsel__name_array_test(const char *names[], int nr_names,
-+static int __perf_evsel__name_array_test(const char *const names[], int nr_names,
- 					 int distance)
- {
- 	int i, err;
 diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index d38722560e80..cdeace24d9be 100644
+index cdeace24d9be..5fd7924f8eb3 100644
 --- a/tools/perf/util/evsel.c
 +++ b/tools/perf/util/evsel.c
-@@ -486,7 +486,7 @@ struct evsel *evsel__newtp_idx(const char *sys, const char *name, int idx)
- 	return ERR_PTR(err);
- }
+@@ -59,6 +59,33 @@ struct perf_missing_features perf_missing_features;
  
--const char *evsel__hw_names[PERF_COUNT_HW_MAX] = {
-+const char *const evsel__hw_names[PERF_COUNT_HW_MAX] = {
- 	"cycles",
- 	"instructions",
- 	"cache-references",
-@@ -571,7 +571,7 @@ static int evsel__hw_name(struct evsel *evsel, char *bf, size_t size)
+ static clockid_t clockid;
+ 
++static const char *const perf_tool_event__tool_names[PERF_TOOL_MAX] = {
++	NULL,
++	"duration_time",
++	"user_time",
++	"system_time",
++};
++
++const char *perf_tool_event__to_str(enum perf_tool_event ev)
++{
++	if (ev > PERF_TOOL_NONE && ev < PERF_TOOL_MAX)
++		return perf_tool_event__tool_names[ev];
++
++	return NULL;
++}
++
++enum perf_tool_event perf_tool_event__from_str(const char *str)
++{
++	int i;
++
++	perf_tool_event__for_each_event(i) {
++		if (!strcmp(str, perf_tool_event__tool_names[i]))
++			return i;
++	}
++	return PERF_TOOL_NONE;
++}
++
++
+ static int evsel__no_extra_init(struct evsel *evsel __maybe_unused)
+ {
+ 	return 0;
+@@ -597,15 +624,9 @@ static int evsel__sw_name(struct evsel *evsel, char *bf, size_t size)
  	return r + evsel__add_modifiers(evsel, bf + r, size - r);
  }
  
--const char *evsel__sw_names[PERF_COUNT_SW_MAX] = {
-+const char *const evsel__sw_names[PERF_COUNT_SW_MAX] = {
- 	"cpu-clock",
- 	"task-clock",
- 	"page-faults",
-@@ -597,7 +597,7 @@ static int evsel__sw_name(struct evsel *evsel, char *bf, size_t size)
- 	return r + evsel__add_modifiers(evsel, bf + r, size - r);
+-static const char *const evsel__tool_names[PERF_TOOL_MAX] = {
+-	"duration_time",
+-	"user_time",
+-	"system_time",
+-};
+-
+ static int evsel__tool_name(enum perf_tool_event ev, char *bf, size_t size)
+ {
+-	return scnprintf(bf, size, "%s", evsel__tool_names[ev]);
++	return scnprintf(bf, size, "%s", perf_tool_event__to_str(ev));
  }
  
--const char *evsel__tool_names[PERF_TOOL_MAX] = {
-+static const char *const evsel__tool_names[PERF_TOOL_MAX] = {
- 	"duration_time",
- 	"user_time",
- 	"system_time",
-@@ -633,7 +633,7 @@ static int evsel__bp_name(struct evsel *evsel, char *bf, size_t size)
- 	return r + evsel__add_modifiers(evsel, bf + r, size - r);
+ static int __evsel__bp_name(char *bf, size_t size, u64 addr, u64 type)
+@@ -758,7 +779,7 @@ const char *evsel__name(struct evsel *evsel)
+ 		break;
+ 
+ 	case PERF_TYPE_SOFTWARE:
+-		if (evsel->tool_event)
++		if (evsel__is_tool(evsel))
+ 			evsel__tool_name(evsel->tool_event, bf, sizeof(bf));
+ 		else
+ 			evsel__sw_name(evsel, bf, sizeof(bf));
+@@ -791,8 +812,8 @@ const char *evsel__metric_id(const struct evsel *evsel)
+ 	if (evsel->metric_id)
+ 		return evsel->metric_id;
+ 
+-	if (evsel->core.attr.type == PERF_TYPE_SOFTWARE && evsel->tool_event)
+-		return "duration_time";
++	if (evsel__is_tool(evsel))
++		return perf_tool_event__to_str(evsel->tool_event);
+ 
+ 	return "unknown";
  }
- 
--const char *evsel__hw_cache[PERF_COUNT_HW_CACHE_MAX][EVSEL__MAX_ALIASES] = {
-+const char *const evsel__hw_cache[PERF_COUNT_HW_CACHE_MAX][EVSEL__MAX_ALIASES] = {
-  { "L1-dcache",	"l1-d",		"l1d",		"L1-data",		},
-  { "L1-icache",	"l1-i",		"l1i",		"L1-instruction",	},
-  { "LLC",	"L2",							},
-@@ -643,13 +643,13 @@ const char *evsel__hw_cache[PERF_COUNT_HW_CACHE_MAX][EVSEL__MAX_ALIASES] = {
-  { "node",								},
- };
- 
--const char *evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALIASES] = {
-+const char *const evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALIASES] = {
-  { "load",	"loads",	"read",					},
-  { "store",	"stores",	"write",				},
-  { "prefetch",	"prefetches",	"speculative-read", "speculative-load",	},
- };
- 
--const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES] = {
-+const char *const evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES] = {
-  { "refs",	"Reference",	"ops",		"access",		},
-  { "misses",	"miss",							},
- };
-@@ -665,7 +665,7 @@ const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_AL
-  * L1I : Read and prefetch only
-  * ITLB and BPU : Read-only
-  */
--static unsigned long evsel__hw_cache_stat[C(MAX)] = {
-+static const unsigned long evsel__hw_cache_stat[C(MAX)] = {
-  [C(L1D)]	= (CACHE_READ | CACHE_WRITE | CACHE_PREFETCH),
-  [C(L1I)]	= (CACHE_READ | CACHE_PREFETCH),
-  [C(LL)]	= (CACHE_READ | CACHE_WRITE | CACHE_PREFETCH),
 diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 45d674812239..a017781cdd47 100644
+index a017781cdd47..d4b04537ce6d 100644
 --- a/tools/perf/util/evsel.h
 +++ b/tools/perf/util/evsel.h
-@@ -257,12 +257,11 @@ static inline bool evsel__is_bpf(struct evsel *evsel)
+@@ -36,6 +36,12 @@ enum perf_tool_event {
+ 	PERF_TOOL_MAX,
+ };
  
- #define EVSEL__MAX_ALIASES 8
++const char *perf_tool_event__to_str(enum perf_tool_event ev);
++enum perf_tool_event perf_tool_event__from_str(const char *str);
++
++#define perf_tool_event__for_each_event(ev)		\
++	for ((ev) = PERF_TOOL_DURATION_TIME; (ev) < PERF_TOOL_MAX; ev++)
++
+ /** struct evsel - event selector
+  *
+  * @evlist - evlist this evsel is in, if it is in one.
+@@ -269,6 +275,11 @@ int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size
+ const char *evsel__name(struct evsel *evsel);
+ const char *evsel__metric_id(const struct evsel *evsel);
  
--extern const char *evsel__hw_cache[PERF_COUNT_HW_CACHE_MAX][EVSEL__MAX_ALIASES];
--extern const char *evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALIASES];
--extern const char *evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES];
--extern const char *evsel__hw_names[PERF_COUNT_HW_MAX];
--extern const char *evsel__sw_names[PERF_COUNT_SW_MAX];
--extern const char *evsel__tool_names[PERF_TOOL_MAX];
-+extern const char *const evsel__hw_cache[PERF_COUNT_HW_CACHE_MAX][EVSEL__MAX_ALIASES];
-+extern const char *const evsel__hw_cache_op[PERF_COUNT_HW_CACHE_OP_MAX][EVSEL__MAX_ALIASES];
-+extern const char *const evsel__hw_cache_result[PERF_COUNT_HW_CACHE_RESULT_MAX][EVSEL__MAX_ALIASES];
-+extern const char *const evsel__hw_names[PERF_COUNT_HW_MAX];
-+extern const char *const evsel__sw_names[PERF_COUNT_SW_MAX];
- extern char *evsel__bpf_counter_events;
- bool evsel__match_bpf_counter_events(const char *name);
++static inline bool evsel__is_tool(const struct evsel *evsel)
++{
++	return evsel->tool_event != PERF_TOOL_NONE;
++}
++
+ const char *evsel__group_name(struct evsel *evsel);
+ int evsel__group_desc(struct evsel *evsel, char *buf, size_t size);
  
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 937f6c9434a2..30a9d915853d 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -426,7 +426,7 @@ static int add_event_tool(struct list_head *list, int *idx,
- 	return 0;
- }
- 
--static int parse_aliases(char *str, const char *names[][EVSEL__MAX_ALIASES], int size)
-+static int parse_aliases(char *str, const char *const names[][EVSEL__MAX_ALIASES], int size)
- {
- 	int i, j;
- 	int n, longest = -1;
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

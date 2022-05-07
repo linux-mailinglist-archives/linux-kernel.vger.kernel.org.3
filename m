@@ -2,145 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464DF51E39F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64FB51E3A7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 04:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445379AbiEGCkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 22:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S1445382AbiEGCw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 22:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356739AbiEGCkI (ORCPT
+        with ESMTP id S230141AbiEGCw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 22:40:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3711A6AA6A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 19:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651890983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xQzOPSWhtPUTGSpnflEE6jkGGkhhHHWuhrYd3CJyGAI=;
-        b=HozoLmjgJrKGPTe9AVXqpjsM+xtxSh/88aX8vFysUA2DNJb357tIgqMnT3I4G4bnofTDCq
-        kmqVfpiJxUDhaxFTQj5gkKj7+2GSqp+qrjoCyYK5qMPSWVzVi4YNbXCV1TZFevaegoNpsG
-        /H0FvPluDa+gG+5Sd6zL1CXmlUqrQzU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-vVK9huJtMPGbYuwP1K6bbw-1; Fri, 06 May 2022 22:36:15 -0400
-X-MC-Unique: vVK9huJtMPGbYuwP1K6bbw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C83C329DD9A3;
-        Sat,  7 May 2022 02:36:14 +0000 (UTC)
-Received: from localhost (ovpn-13-18.pek2.redhat.com [10.72.13.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3F227AEB;
-        Sat,  7 May 2022 02:36:10 +0000 (UTC)
-Date:   Sat, 7 May 2022 10:36:06 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v24 5/6] of: Support more than one crash kernel regions
- for kexec -s
-Message-ID: <YnXbFv0crHQDoGqM@MiWiFi-R3L-srv>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
- <20220506114402.365-6-thunder.leizhen@huawei.com>
- <20220506231737.GD122876@MiWiFi-R3L-srv>
- <55e201f1-f136-607c-78f8-eb4ec481909e@huawei.com>
+        Fri, 6 May 2022 22:52:56 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E915D64C
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 19:49:10 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id i17so9098545pla.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 19:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jiiIMtDdnC7GbPot76dL+87KG0oeoaodvbyjWhDNIDA=;
+        b=fpa7NZs1sDGHMDnvRwRJqWR6qVZFRF0qGvDOGzjkfztgWwxK8y6pXb4pfsuX9/9shD
+         rUaxa9uxxOOZCcJL0kvwW7s5vFJcZofa5SUhezsM+TN4+8HaHXbCVbGf/0gQjLgf5J0I
+         n7VcrfKJ/aUCtqay9N7lTFKy12jk72VSwA9mTtgIRNghABd+nwvZ8OIjrkYQ5+685Ad9
+         c6XA+AumK71ymOaRlyqovgP2fOW7Tfa7P6fGO3z187T6xAL5R5RIuEDspNZwy/JiQvUf
+         AWUZRnCs6V2ONmlRo7HEVHr5k/eLBAQwtvf8bGzLD1ilU03GRfuIp4qI1VEYXy/0hHI3
+         QxBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jiiIMtDdnC7GbPot76dL+87KG0oeoaodvbyjWhDNIDA=;
+        b=SysKN/jI0kP7jzUNT9fQHtMN3YfyOMhZ5ElG1AwZ0krcuOEup0VDU9BP7/M09gUwBf
+         WIijP6FCCE9WyOtymrY7011n+RM87p6tz/64CJOSPXkrIGjMlYfe2tEsb3249wW917Qj
+         Now21o1OHODRCCTXBbsofhEwEpm7BYljIbS7yceJW0cPVeXX8Z7zBmkm7lUKurEBL8X9
+         LROoLgLr/zIQjS7mUdh0mBApmnC4PCK2PtrU0mUne3RRdJ1FpTHzTFIvxxvlO7FqJKz+
+         lY1OGbouLKnmeBznUpTSuqgRcdW4EohF0koEdifYw4/vdc+EDUt/E5UwrECcCSRsm8zT
+         3Rkw==
+X-Gm-Message-State: AOAM531v5iI+9WNr+YG81u8fGgghF6iCaAeCZb5fk6oiK7huOa80ifcS
+        m1sP8zVoRraE3je+J4rFOvT85g==
+X-Google-Smtp-Source: ABdhPJzbqgLzO8TYer6u2eYMMsu6Ei2HDCVPOv2W6rVKOJXSr5HuySVXJHN/BNEHpDWqT0ErND0LAg==
+X-Received: by 2002:a17:902:e742:b0:15e:9a7b:24d5 with SMTP id p2-20020a170902e74200b0015e9a7b24d5mr6799971plf.139.1651891750148;
+        Fri, 06 May 2022 19:49:10 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id s82-20020a632c55000000b003c619f3d086sm4079143pgs.2.2022.05.06.19.49.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 May 2022 19:49:09 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next] bpf: add bpf_map_lookup_percpu_elem for percpu map
+Date:   Sat,  7 May 2022 10:48:40 +0800
+Message-Id: <20220507024840.42662-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55e201f1-f136-607c-78f8-eb4ec481909e@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/22 at 09:42am, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/5/7 7:17, Baoquan He wrote:
-> > On 05/06/22 at 07:44pm, Zhen Lei wrote:
-> >> When "crashkernel=X,high" is used, there may be two crash regions:
-> >> high=crashk_res and low=crashk_low_res. But now the syscall
-> >> kexec_file_load() only add crashk_res into "linux,usable-memory-range",
-> >> this may cause the second kernel to have no available dma memory.
-> >>
-> >> Fix it like kexec tool do for option -c, add both 'high' and 'low' regions
-> >               ~~~~~~~~~~~~ 
-> >               kexec-tools does
-> 
-> OK, I will update it. Thanks.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Let's wait and see how Catalin considers. He may pick these with
-minor fix directly or your v25.
+Trace some functions, such as enqueue_task_fair, need to access the
+corresponding cpu, not the current cpu, and bpf_map_lookup_elem percpu map
+cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
+percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
 
-> 
-> > 
-> > Other than this, LGTM, > > > > Acked-by: Baoquan He <bhe@redhat.com>
-> > 
-> >> into the dtb.
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >> Acked-by: Rob Herring <robh@kernel.org>
-> >> ---
-> >>  drivers/of/kexec.c | 9 +++++++++
-> >>  1 file changed, 9 insertions(+)
-> >>
-> >> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-> >> index b9bd1cff179388c..8d374cc552be5f2 100644
-> >> --- a/drivers/of/kexec.c
-> >> +++ b/drivers/of/kexec.c
-> >> @@ -386,6 +386,15 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
-> >>  				crashk_res.end - crashk_res.start + 1);
-> >>  		if (ret)
-> >>  			goto out;
-> >> +
-> >> +		if (crashk_low_res.end) {
-> >> +			ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-> >> +					"linux,usable-memory-range",
-> >> +					crashk_low_res.start,
-> >> +					crashk_low_res.end - crashk_low_res.start + 1);
-> >> +			if (ret)
-> >> +				goto out;
-> >> +		}
-> >>  	}
-> >>  
-> >>  	/* add bootargs */
-> >> -- 
-> >> 2.25.1
-> >>
-> > 
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
-> 
+The implementation method is relatively simple, refer to the implementation
+method of map_lookup_elem of percpu map, increase the parameters of cpu, and
+obtain it according to the specified cpu.
+
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ include/linux/bpf.h            |  2 ++
+ include/uapi/linux/bpf.h       |  9 +++++++++
+ kernel/bpf/arraymap.c          | 15 +++++++++++++++
+ kernel/bpf/core.c              |  1 +
+ kernel/bpf/hashtab.c           | 32 ++++++++++++++++++++++++++++++++
+ kernel/bpf/helpers.c           | 18 ++++++++++++++++++
+ kernel/bpf/verifier.c          | 17 +++++++++++++++--
+ kernel/trace/bpf_trace.c       |  2 ++
+ tools/include/uapi/linux/bpf.h |  9 +++++++++
+ 9 files changed, 103 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index be94833d390a..6b5cf5a90d73 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -89,6 +89,7 @@ struct bpf_map_ops {
+ 	int (*map_push_elem)(struct bpf_map *map, void *value, u64 flags);
+ 	int (*map_pop_elem)(struct bpf_map *map, void *value);
+ 	int (*map_peek_elem)(struct bpf_map *map, void *value);
++	void *(*map_lookup_percpu_elem)(struct bpf_map *map, void *key, u32 cpu);
+ 
+ 	/* funcs called by prog_array and perf_event_array map */
+ 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
+@@ -2161,6 +2162,7 @@ extern const struct bpf_func_proto bpf_map_delete_elem_proto;
+ extern const struct bpf_func_proto bpf_map_push_elem_proto;
+ extern const struct bpf_func_proto bpf_map_pop_elem_proto;
+ extern const struct bpf_func_proto bpf_map_peek_elem_proto;
++extern const struct bpf_func_proto bpf_map_lookup_percpu_elem_proto;
+ 
+ extern const struct bpf_func_proto bpf_get_prandom_u32_proto;
+ extern const struct bpf_func_proto bpf_get_smp_processor_id_proto;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 444fe6f1cf35..024fb9f319a8 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5154,6 +5154,14 @@ union bpf_attr {
+  *		if not NULL, is a reference which must be released using its
+  *		corresponding release function, or moved into a BPF map before
+  *		program exit.
++ *
++ * void *bpf_map_lookup_percpu_elem(struct bpf_map *map, const void *key, u32 cpu)
++ * 	Description
++ * 		Perform a lookup in *percpu map* for an entry associated to
++ * 		*key* on *cpu*.
++ * 	Return
++ * 		Map value associated to *key* on *cpu*, or **NULL** if no entry
++ * 		was found or *cpu* is invalid.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5351,6 +5359,7 @@ union bpf_attr {
+ 	FN(skb_set_tstamp),		\
+ 	FN(ima_file_hash),		\
+ 	FN(kptr_xchg),			\
++	FN(map_lookup_percpu_elem),     \
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index b3bf31fd9458..71d9db976ab0 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -243,6 +243,20 @@ static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return this_cpu_ptr(array->pptrs[index & array->index_mask]);
+ }
+ 
++static void *percpu_array_map_lookup_percpu_elem(struct bpf_map *map, void *key, u32 cpu)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	u32 index = *(u32 *)key;
++
++	if (cpu >= nr_cpu_ids)
++		return NULL;
++
++	if (unlikely(index >= array->map.max_entries))
++		return NULL;
++
++	return per_cpu_ptr(array->pptrs[index & array->index_mask], cpu);
++}
++
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+@@ -725,6 +739,7 @@ const struct bpf_map_ops percpu_array_map_ops = {
+ 	.map_lookup_elem = percpu_array_map_lookup_elem,
+ 	.map_update_elem = array_map_update_elem,
+ 	.map_delete_elem = array_map_delete_elem,
++	.map_lookup_percpu_elem = percpu_array_map_lookup_percpu_elem,
+ 	.map_seq_show_elem = percpu_array_map_seq_show_elem,
+ 	.map_check_btf = array_map_check_btf,
+ 	.map_lookup_batch = generic_map_lookup_batch,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 13e9dbeeedf3..76f68d0a7ae8 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2619,6 +2619,7 @@ const struct bpf_func_proto bpf_map_delete_elem_proto __weak;
+ const struct bpf_func_proto bpf_map_push_elem_proto __weak;
+ const struct bpf_func_proto bpf_map_pop_elem_proto __weak;
+ const struct bpf_func_proto bpf_map_peek_elem_proto __weak;
++const struct bpf_func_proto bpf_map_lookup_percpu_elem_proto __weak;
+ const struct bpf_func_proto bpf_spin_lock_proto __weak;
+ const struct bpf_func_proto bpf_spin_unlock_proto __weak;
+ const struct bpf_func_proto bpf_jiffies64_proto __weak;
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 3e00e62b2218..9c45b07dd5b6 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -2191,6 +2191,20 @@ static void *htab_percpu_map_lookup_elem(struct bpf_map *map, void *key)
+ 		return NULL;
+ }
+ 
++static void *htab_percpu_map_lookup_percpu_elem(struct bpf_map *map, void *key, u32 cpu)
++{
++	struct htab_elem *l;
++
++	if (cpu >= nr_cpu_ids)
++		return NULL;
++
++	l = __htab_map_lookup_elem(map, key);
++	if (l)
++		return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), cpu);
++	else
++		return NULL;
++}
++
+ static void *htab_lru_percpu_map_lookup_elem(struct bpf_map *map, void *key)
+ {
+ 	struct htab_elem *l = __htab_map_lookup_elem(map, key);
+@@ -2203,6 +2217,22 @@ static void *htab_lru_percpu_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return NULL;
+ }
+ 
++static void *htab_lru_percpu_map_lookup_percpu_elem(struct bpf_map *map, void *key, u32 cpu)
++{
++	struct htab_elem *l;
++
++	if (cpu >= nr_cpu_ids)
++		return NULL;
++
++	l = __htab_map_lookup_elem(map, key);
++	if (l) {
++		bpf_lru_node_set_ref(&l->lru_node);
++		return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), cpu);
++	}
++
++	return NULL;
++}
++
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value)
+ {
+ 	struct htab_elem *l;
+@@ -2292,6 +2322,7 @@ const struct bpf_map_ops htab_percpu_map_ops = {
+ 	.map_lookup_and_delete_elem = htab_percpu_map_lookup_and_delete_elem,
+ 	.map_update_elem = htab_percpu_map_update_elem,
+ 	.map_delete_elem = htab_map_delete_elem,
++	.map_lookup_percpu_elem = htab_percpu_map_lookup_percpu_elem,
+ 	.map_seq_show_elem = htab_percpu_map_seq_show_elem,
+ 	.map_set_for_each_callback_args = map_set_for_each_callback_args,
+ 	.map_for_each_callback = bpf_for_each_hash_elem,
+@@ -2310,6 +2341,7 @@ const struct bpf_map_ops htab_lru_percpu_map_ops = {
+ 	.map_lookup_and_delete_elem = htab_lru_percpu_map_lookup_and_delete_elem,
+ 	.map_update_elem = htab_lru_percpu_map_update_elem,
+ 	.map_delete_elem = htab_lru_map_delete_elem,
++	.map_lookup_percpu_elem = htab_lru_percpu_map_lookup_percpu_elem,
+ 	.map_seq_show_elem = htab_percpu_map_seq_show_elem,
+ 	.map_set_for_each_callback_args = map_set_for_each_callback_args,
+ 	.map_for_each_callback = bpf_for_each_hash_elem,
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 3e709fed5306..d5f104a39092 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -119,6 +119,22 @@ const struct bpf_func_proto bpf_map_peek_elem_proto = {
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MAP_VALUE,
+ };
+ 
++BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key, u32, cpu)
++{
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
++}
++
++const struct bpf_func_proto bpf_map_lookup_percpu_elem_proto = {
++	.func		= bpf_map_lookup_percpu_elem,
++	.gpl_only	= false,
++	.pkt_access	= true,
++	.ret_type	= RET_PTR_TO_MAP_VALUE_OR_NULL,
++	.arg1_type	= ARG_CONST_MAP_PTR,
++	.arg2_type	= ARG_PTR_TO_MAP_KEY,
++	.arg3_type	= ARG_ANYTHING,
++};
++
+ const struct bpf_func_proto bpf_get_prandom_u32_proto = {
+ 	.func		= bpf_user_rnd_u32,
+ 	.gpl_only	= false,
+@@ -1420,6 +1436,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_map_pop_elem_proto;
+ 	case BPF_FUNC_map_peek_elem:
+ 		return &bpf_map_peek_elem_proto;
++	case BPF_FUNC_map_lookup_percpu_elem:
++		return &bpf_map_lookup_percpu_elem_proto;
+ 	case BPF_FUNC_get_prandom_u32:
+ 		return &bpf_get_prandom_u32_proto;
+ 	case BPF_FUNC_get_smp_processor_id:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 813f6ee80419..67ac0b047caf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6138,6 +6138,12 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 		    map->map_type != BPF_MAP_TYPE_BLOOM_FILTER)
+ 			goto error;
+ 		break;
++	case BPF_FUNC_map_lookup_percpu_elem:
++		if (map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
++		    map->map_type != BPF_MAP_TYPE_PERCPU_HASH &&
++		    map->map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH)
++			goto error;
++		break;
+ 	case BPF_FUNC_sk_storage_get:
+ 	case BPF_FUNC_sk_storage_delete:
+ 		if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
+@@ -6751,7 +6757,8 @@ record_func_map(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	    func_id != BPF_FUNC_map_pop_elem &&
+ 	    func_id != BPF_FUNC_map_peek_elem &&
+ 	    func_id != BPF_FUNC_for_each_map_elem &&
+-	    func_id != BPF_FUNC_redirect_map)
++	    func_id != BPF_FUNC_redirect_map &&
++	    func_id != BPF_FUNC_map_lookup_percpu_elem)
+ 		return 0;
+ 
+ 	if (map == NULL) {
+@@ -13811,7 +13818,8 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		     insn->imm == BPF_FUNC_map_pop_elem    ||
+ 		     insn->imm == BPF_FUNC_map_peek_elem   ||
+ 		     insn->imm == BPF_FUNC_redirect_map    ||
+-		     insn->imm == BPF_FUNC_for_each_map_elem)) {
++		     insn->imm == BPF_FUNC_for_each_map_elem ||
++		     insn->imm == BPF_FUNC_map_lookup_percpu_elem)) {
+ 			aux = &env->insn_aux_data[i + delta];
+ 			if (bpf_map_ptr_poisoned(aux))
+ 				goto patch_call_imm;
+@@ -13860,6 +13868,8 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 					      bpf_callback_t callback_fn,
+ 					      void *callback_ctx,
+ 					      u64 flags))NULL));
++			BUILD_BUG_ON(!__same_type(ops->map_lookup_percpu_elem,
++				     (void *(*)(struct bpf_map *map, void *key, u32 cpu))NULL));
+ 
+ patch_map_ops_generic:
+ 			switch (insn->imm) {
+@@ -13887,6 +13897,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			case BPF_FUNC_for_each_map_elem:
+ 				insn->imm = BPF_CALL_IMM(ops->map_for_each_callback);
+ 				continue;
++			case BPF_FUNC_map_lookup_percpu_elem:
++				insn->imm = BPF_CALL_IMM(ops->map_lookup_percpu_elem);
++				continue;
+ 			}
+ 
+ 			goto patch_call_imm;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index f15b826f9899..af4125407c20 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1182,6 +1182,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_map_pop_elem_proto;
+ 	case BPF_FUNC_map_peek_elem:
+ 		return &bpf_map_peek_elem_proto;
++	case BPF_FUNC_map_lookup_percpu_elem:
++		return &bpf_map_lookup_percpu_elem_proto;
+ 	case BPF_FUNC_ktime_get_ns:
+ 		return &bpf_ktime_get_ns_proto;
+ 	case BPF_FUNC_ktime_get_boot_ns:
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 444fe6f1cf35..024fb9f319a8 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5154,6 +5154,14 @@ union bpf_attr {
+  *		if not NULL, is a reference which must be released using its
+  *		corresponding release function, or moved into a BPF map before
+  *		program exit.
++ *
++ * void *bpf_map_lookup_percpu_elem(struct bpf_map *map, const void *key, u32 cpu)
++ * 	Description
++ * 		Perform a lookup in *percpu map* for an entry associated to
++ * 		*key* on *cpu*.
++ * 	Return
++ * 		Map value associated to *key* on *cpu*, or **NULL** if no entry
++ * 		was found or *cpu* is invalid.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5351,6 +5359,7 @@ union bpf_attr {
+ 	FN(skb_set_tstamp),		\
+ 	FN(ima_file_hash),		\
+ 	FN(kptr_xchg),			\
++	FN(map_lookup_percpu_elem),     \
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+-- 
+2.20.1
 

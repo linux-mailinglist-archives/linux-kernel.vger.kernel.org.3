@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C836E51E531
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A476B51E538
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446043AbiEGHZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 03:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S1380249AbiEGHdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 03:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446038AbiEGHY6 (ORCPT
+        with ESMTP id S238791AbiEGHdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 03:24:58 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F35F33883;
-        Sat,  7 May 2022 00:21:11 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 202so7862914pgc.9;
-        Sat, 07 May 2022 00:21:11 -0700 (PDT)
+        Sat, 7 May 2022 03:33:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288464C5;
+        Sat,  7 May 2022 00:29:49 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e24so12792471wrc.9;
+        Sat, 07 May 2022 00:29:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rNQz935Rwo42XgI1l8Va40p/MEeV4p6HEVCQ52VDnf4=;
-        b=P42+8ex/HBpVSeUhi79CcZsiB1rEwx7SjPsWOzHKtYtuDRjT+7g81hnQb9Bg+3nrwT
-         De8dQlU9BcgwoEV9wdnbeE3D82XEoM9rdMizKhVMhmThyQPs7pG6yQdXOZHUILyVEB8B
-         MZOMaM5Nag+I9ca+mSFwEkbaCfc+mVQpZN8W0UFxaI3P1zlBAo3OLxIQcU7yZiXAhU1h
-         Jiaawf+dpE+KAoqOYTid6KwfvlqOs8L3T25b9+uILvT8+qC03iIX5R5P7pBVqRxRlV1/
-         2L77a/eKzFW5m+4Q8qaNXGrcogU5pQhNHMvwFRhhaVI7cMNifBapsGydQXtopBhbDEvv
-         tGKw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gkqa+Dh4VElJCoRa1LM889KNNJniYHnTZNydz4wChHE=;
+        b=TQUGZuWe7CS68jYCrPs7PT4WquNIn+uMO/HmZR1kJ+UDWtIJDVdbqTgXrdkYrPFAMS
+         VyGEE/HdkxyuIin+4j/ceunxInzBDGUJMGvzPJC6AX46IeSmS2MEkTeB88TUzFKm2fdS
+         VwrzBBUoOWTwulq+WzzI4ZgUy3DBMtuFVLGWzPah0J/9Q2AR3BGOFhMIFvNDPssiT4wW
+         k2rnm4Ft4QWUbZtWejuT3cCRc/PVEPUuT4Cn4R58u3YkW/7OfKIbtecXWP/t+s51sSzS
+         SHslOvYL43AOL/liNoMM5ucZY0+ItgFSjbu6j+BEJEMv8qFsQv5756boe/UdWJX+iiZN
+         ek8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rNQz935Rwo42XgI1l8Va40p/MEeV4p6HEVCQ52VDnf4=;
-        b=dbeW4iM7xzP1pedpoDFeZtPSpmc86HZmgQb1X3b5lrJZdzI+tplsVsUWaqsF8L1s8A
-         2U5tF6esDkokfGvo/YHHeEeec6aJgpFOSQsbfcC/MQkEGcSX5c6FVHf+p0IAokhhPB+q
-         l4FClkS0nKcw4/jXpPICClyeLZ89tcDKSfVADmhw1kbEBSWgGwHU2IfmpJuqLMTtJCrk
-         PNN3GDEiLwWAtr5iU9coSPpxe6mLDsAFWt5TUq8XBXVcrXTGHRmuddlv7L2GujvJklTK
-         nC7flNwS/oLwTTv+whKqvnsq60zWSNjk4GLU7zCTih+92OwvzA6oXuZtj6nRsBqwc11D
-         eWlA==
-X-Gm-Message-State: AOAM533mkWrE91d5Fv8TF+MsfcWOY5uSudTeBV1ZFoloI+2u15sES9gD
-        tRsM1an+HHlHXwUaVI9RE7Q=
-X-Google-Smtp-Source: ABdhPJy8wngBA9nCSkNphuykt/x5APcFu3ZWQNW14hKz2s7Rb0bLuKnbzsVQiG9xcQts5UZOdrCb6w==
-X-Received: by 2002:a65:6093:0:b0:373:9c75:19ec with SMTP id t19-20020a656093000000b003739c7519ecmr5972095pgu.539.1651908071104;
-        Sat, 07 May 2022 00:21:11 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170902c20100b0015ec44d25dasm2956759pll.235.2022.05.07.00.20.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gkqa+Dh4VElJCoRa1LM889KNNJniYHnTZNydz4wChHE=;
+        b=05MNfAZLfId5xWr86mkR3GtoMQtgg09X5SjVzWx1IQmGl+Iaci6PASm3Fh/sLlyKeJ
+         MTDcRqh6kAAaV4UtFc3xndDI34cMNpF4dgSpQ8B9ofVIqKN9dqCggBJ3xdZOwimC340m
+         xmhMYDbqYg+ZmnW7guvr8vQn8t3JTvwNU/4io2T2BydrRxfKCuUMI5TNPWKv+Y1Ht8X0
+         DuaNEeD9+1tsJjcn+0NGFjopHd7zUW+R5mWuowBOtEYN359tCRWy40Md3epSri1f4Snj
+         HfXsxrBBXlRTXexpAI5dE4jiW/PzH4ersRo/RkHVOq0uvOZMSVPyMauC1yOWY1lXHuvj
+         1muA==
+X-Gm-Message-State: AOAM530H4dGGQGjawEYHrC1gsk9o3oechADymWCJ05+xgM41MT5DeiL0
+        3+0xyuMEfllF+V9MMgyU610=
+X-Google-Smtp-Source: ABdhPJzclBf81AWFccMO1vtwEvrb7IynvUbbwvmVFnBdzAfrGK5FwwgDW4ehiLiZ6QuoOy77wuqVqA==
+X-Received: by 2002:a5d:5221:0:b0:20c:9a6f:50be with SMTP id i1-20020a5d5221000000b0020c9a6f50bemr5645609wra.494.1651908587525;
+        Sat, 07 May 2022 00:29:47 -0700 (PDT)
+Received: from localhost.localdomain ([46.211.169.51])
+        by smtp.googlemail.com with ESMTPSA id p6-20020a05600c358600b0039429bfebeasm9123616wmq.2.2022.05.07.00.29.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 00:21:10 -0700 (PDT)
-Date:   Sat, 7 May 2022 16:20:50 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <YnYd0hd+yTvVQxm5@hyeyoo>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
+        Sat, 07 May 2022 00:29:46 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pauk.denis@gmail.com,
+        renedis@hotmail.com, e_dimas@rambler.ru, hubert.banas@gmail.com
+Subject: [PATCH] hwmon: (nct6775) add ASUS PRO H410T / PRIME H410M-R / ROG X570-E GAMING WIFI II
+Date:   Sat,  7 May 2022 10:29:33 +0300
+Message-Id: <20220507072933.3013-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 09:11:35AM +0900, Byungchul Park wrote:
-> Linus wrote:
-> >
-> > On Wed, May 4, 2022 at 1:19 AM Byungchul Park <byungchul.park@lge.com> wrote:
-> > >
-> > > Hi Linus and folks,
-> > >
-> > > I've been developing a tool for detecting deadlock possibilities by
-> > > tracking wait/event rather than lock(?) acquisition order to try to
-> > > cover all synchonization machanisms.
-> > 
-> > So what is the actual status of reports these days?
-> > 
-> > Last time I looked at some reports, it gave a lot of false positives
-> > due to mis-understanding prepare_to_sleep().
-> 
-> Yes, it was. I handled the case in the following way:
-> 
-> 1. Stage the wait at prepare_to_sleep(), which might be used at commit.
->    Which has yet to be an actual wait that Dept considers.
-> 2. If the condition for sleep is true, the wait will be committed at
->    __schedule(). The wait becomes an actual one that Dept considers.
-> 3. If the condition is false and the task gets back to TASK_RUNNING,
->    clean(=reset) the staged wait.
-> 
-> That way, Dept only works with what actually hits to __schedule() for
-> the waits through sleep.
-> 
-> > For this all to make sense, it would need to not have false positives
-> > (or at least a very small number of them together with a way to sanely
-> 
-> Yes. I agree with you. I got rid of them that way I described above.
->
+Boards such as
+* PRO H410T
+* PRIME H410M-R
+* ROG STRIX X570-E GAMING WIFI II
+have got a nct6775 chip, but by default there's no use of it
+because of resource conflict with WMI method.
 
-IMHO DEPT should not report what lockdep allows (Not talking about
-wait events). I mean lockdep allows some kind of nested locks but
-DEPT reports them.
+This commit adds such boards to the WMI monitoring list.
 
-When I was collecting reports from DEPT on varous configurations,
-Most of them was report of down_write_nested(), which is allowed in
-lockdep.
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Reported-by: renedis <renedis@hotmail.com>
+Reported-by: Dmitrii Levchenko <e_dimas@rambler.ru>
+Reported-by: Hubert Banas <hubert.banas@gmail.com>
+---
+I have checked code by DSDT dumps from ASUS support site. 
+Could someone please check that it works over current hwmon-next code? 
+---
+ drivers/hwmon/nct6775-platform.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-DEPT should not report at least what we know it's not a real deadlock.
-Otherwise there will be reports that is never fixed, which is quite
-unpleasant and reporters cannot examine all of them if it's real deadlock
-or not.
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index c2f76af735a2..6d46c9401898 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1042,6 +1042,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+ static struct platform_device *pdev[2];
+ 
+ static const char * const asus_wmi_boards[] = {
++	"PRO H410T",
+ 	"ProArt X570-CREATOR WIFI",
+ 	"Pro B550M-C",
+ 	"Pro WS X570-ACE",
+@@ -1050,6 +1051,7 @@ static const char * const asus_wmi_boards[] = {
+ 	"PRIME B550-PLUS",
+ 	"PRIME B550M-A",
+ 	"PRIME B550M-A (WI-FI)",
++	"PRIME H410M-R",
+ 	"PRIME X570-P",
+ 	"PRIME X570-PRO",
+ 	"ROG CROSSHAIR VIII DARK HERO",
+@@ -1064,6 +1066,7 @@ static const char * const asus_wmi_boards[] = {
+ 	"ROG STRIX B550-I GAMING",
+ 	"ROG STRIX B550-XE GAMING (WI-FI)",
+ 	"ROG STRIX X570-E GAMING",
++	"ROG STRIX X570-E GAMING WIFI II",
+ 	"ROG STRIX X570-F GAMING",
+ 	"ROG STRIX X570-I GAMING",
+ 	"ROG STRIX Z390-E GAMING",
 
-> > get rid of them), and also have a track record of finding things that
-> > lockdep doesn't.
-> 
-> I have some reports that wait_for_completion or waitqueue is involved.
-> It's worth noting those are not tracked by Lockdep. I'm checking if
-> those are true positive or not. I will share those reports once I get
-> more convinced for that.
-> 
-> > Maybe such reports have been sent out with the current situation, and
-> > I haven't seen them.
-> 
-> Dept reports usually have been sent to me privately, not in LKML. As I
-> told you, I'm planning to share them.
-> 
-> 	Byungchul
-> 
-> > 
-> >                  Linus
-> > 
-
+base-commit: e21a58f67b9bb6dde09d6ef3c585573ceaa56a47
 -- 
-Thanks,
-Hyeonggon
+2.36.0
+

@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF1451E765
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F76151E768
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385193AbiEGN3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S1385820AbiEGNbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385152AbiEGN3q (ORCPT
+        with ESMTP id S1385152AbiEGNbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:29:46 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D352AC65;
-        Sat,  7 May 2022 06:25:59 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nnKRU-0005NM-V7; Sat, 07 May 2022 15:25:53 +0200
-Message-ID: <4b99fc01-5ab4-d803-4177-a1402ac98164@leemhuis.info>
-Date:   Sat, 7 May 2022 15:25:51 +0200
+        Sat, 7 May 2022 09:31:07 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC83FD85
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:27:20 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id l8-20020a056e021aa800b002cf778c63caso2552061ilv.10
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 06:27:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=J+Bej5ZpoBm/gMBTL/LrXbQDx5WmOQgVK8bCmav5T6w=;
+        b=QQI7wSBmZUOFMLbi/AdQOwU6nPcuwhSFzRndYEnQFL7/5p/bfZ2Kmw8heG4wSwKO+1
+         96X9P1vr710bTTcTtt+dtB2zspVx3aKIpRt1ZyKjEX2B44nwg+Xocs/dpDUYIoU6qlyA
+         Xos3FxDq6aGskvU/KVAApPnum2O13GovsTAyHNObK07Pb7LAujINxaHrBpIHIc1J/Pkj
+         /EB0Bu/yJ2KdTMrvHvKWTwyWiBelxsSQGO/2Jn/m2ObRY1iqg2gXqLcMJdvI8d5X9jb2
+         G808Pwx+lk+nqsTaUwwwxrG3laT+gjZHjb4RarzI/KI1qhU3SkJQoMdz+CwPQf9qlhxc
+         kzzg==
+X-Gm-Message-State: AOAM530d1xX7V3wN2MhQy9ODKTmxUd1vzZVQRleB3X5phBPT/u3kGew3
+        lLvZ1ZkA9bOqd8sJug3lT39p06G1tWGgyLwEMdZ9Sji8iCWG
+X-Google-Smtp-Source: ABdhPJzCYviIpRnTxq7ljtByJ36DYz0i/Ppwyct1u2/SH2lMa4OD2RvdQP8c1uKuIJ+zcNoouIjj30RZEnM7BH1HLhS1TqJu0fMN
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3] net: atlantic: always deep reset on pm op, fixing null
- deref regression
-Content-Language: en-US
-To:     Manuel Ullmann <labre@posteo.de>
-Cc:     Igor Russkikh <irusskikh@marvell.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
-        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        koo5 <kolman.jindrich@gmail.com>
-References: <8735hniqcm.fsf@posteo.de>
- <833f2574-daf6-1357-d865-3528436ba393@leemhuis.info>
- <87bkw91ob6.fsf@posteo.de>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <87bkw91ob6.fsf@posteo.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651929959;4f543069;
-X-HE-SMSGID: 1nnKRU-0005NM-V7
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:22ca:b0:32b:71de:8f04 with SMTP id
+ j10-20020a05663822ca00b0032b71de8f04mr3255103jat.128.1651930040245; Sat, 07
+ May 2022 06:27:20 -0700 (PDT)
+Date:   Sat, 07 May 2022 06:27:20 -0700
+In-Reply-To: <0000000000005b04fa05dd71e0e0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003e29af05de6bef3c@google.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Write in end_buffer_read_sync
+From:   syzbot <syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,85 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.05.22 15:10, Manuel Ullmann wrote:
-> Thorsten Leemhuis <regressions@leemhuis.info> writes:
-> 
->> On 06.05.22 00:09, Manuel Ullmann wrote:
->>> >From d24052938345d456946be0e9ccc337e24d771c79 Mon Sep 17 00:00:00 2001
->>> Date: Wed, 4 May 2022 21:30:44 +0200
->>>
->>> The impact of this regression is the same for resume that I saw on
->>> thaw: the kernel hangs and nothing except SysRq rebooting can be done.
->>>
->>> The null deref occurs at the same position as on thaw.
->>> BUG: kernel NULL pointer dereference
->>> RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
->>>
->>> Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
->>> par in pm functions, preventing null derefs"), where I disabled deep
->>> pm resets in suspend and resume, trying to make sense of the
->>> atl_resume_common deep parameter in the first place.
->>>
->>> It turns out, that atlantic always has to deep reset on pm operations
->>> and the parameter is useless. Even though I expected that and tested
->>> resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
->>> missing the breakage.
->>>
->>> This fixup obsoletes the deep parameter of atl_resume_common, but I
->>> leave the cleanup for the maintainers to post to mainline.
->>
->> FWIW, this section starting here and...
->>
->>> PS: I'm very sorry for this regression.
->>>
->>> Changes in v2:
->>> Patch formatting fixes
->>> - Fix Fixes tag
->>> – Simplify stable Cc tag
->>> – Fix Signed-off-by tag
->>>
->>> Changes in v3:
->>> – Prefixed commit reference with "commit" aka I managed to use
->>>   checkpatch.pl.
->>> - Added Tested-by tags for the testing reporters.
->>> – People start to get annoyed by my patch revision spamming. Should be
->>>   the last one.
->>
->> ...ending here needs should be below the "---" line you already have
->> below. For details see:
->> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+syzbot has found a reproducer for the following issue on:
 
-Sorry, I caused a misunderstanding. I didn't handle the above, I'm not
-one of the net subsystem developers. Either you submit a v4 fixing this
-or hope the net maintainer take care of that when they look at it -- but
-I guess they would highly prefer it if you'd address this.
+HEAD commit:    4b97bac0756a Merge tag 'for-5.18-rc5-tag' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ba2e16f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f179a672dc8535fc
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a34afef00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177360b2f00000
 
->> BTW, same goes for any "#regzbot" commands (like you had in
->> cbe6c3a8f8f4), as things otherwise get confused when a patch for example
->> is posted as part of a stable/longterm -rc review.
-> Good to know. Maybe I could patch the handling-regressions documentation
-> to include this.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com
 
-Yeah, I have already thought about it, but didn't get down to it yet.
-Only so much hours in a day.
+==================================================================
+BUG: KASAN: out-of-bounds in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+BUG: KASAN: out-of-bounds in atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
+BUG: KASAN: out-of-bounds in put_bh include/linux/buffer_head.h:284 [inline]
+BUG: KASAN: out-of-bounds in end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
+Write of size 4 at addr ffffc900035879d8 by task ksoftirqd/3/33
 
-> submitting-patches could also link the subsystem
-> specific documentation, e.g. the netdev FAQ, since they handle patches
-> with their more bot tests. Would have helped me a bit. Might be a nice
-> exercise for properly formatted patching ;)
+CPU: 3 PID: 33 Comm: ksoftirqd/3 Not tainted 5.18.0-rc5-syzkaller-00163-g4b97bac0756a #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x467 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
+ put_bh include/linux/buffer_head.h:284 [inline]
+ end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
+ end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
+ bio_endio+0x5fe/0x780 block/bio.c:1541
+ req_bio_endio block/blk-mq.c:686 [inline]
+ blk_update_request+0x401/0x1310 block/blk-mq.c:815
+ blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
+ lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
+ blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ run_ksoftirqd kernel/softirq.c:921 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
-I agree that the docs for submitting patches could need a few
-improvements and that is likely one of them.
+The buggy address belongs to the virtual mapping at
+ [ffffc90003580000, ffffc90003589000) created by:
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2639
 
->> But don't worry, no big deal, I handled that :-D Many thx for actually
->> directly getting regzbot involved and taking care of this regression!
-> Thank you for the final cleanup and you’re welcome. :) Where did you
-> handle this? I can’t seem to find the fixup anywhere, i.e. net-next,
-> net, linux-next or lkml.
+------------[ cut here ]------------
+kernel BUG at mm/vmalloc.c:660!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 3 PID: 33 Comm: ksoftirqd/3 Not tainted 5.18.0-rc5-syzkaller-00163-g4b97bac0756a #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
+Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 d2 d5 c1 ff <0f> 0b e8 cb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 bc d5 c1 ff
+RSP: 0018:ffffc900007cfbe8 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: ffff888011b80200 RSI: ffffffff81b69dfe RDI: 0000000000000003
+RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000000
+R10: ffffffff81b69a16 R11: 0000000000000000 R12: 0000370000000000
+R13: 0000000000000000 R14: ffff888011b80200 R15: ffff8880231b6188
+FS:  0000000000000000(0000) GS:ffff88802cd00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000562fada51cf8 CR3: 000000001d3dd000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ print_address_description.constprop.0.cold+0x2ce/0x467 mm/kasan/report.c:350
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+ atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
+ put_bh include/linux/buffer_head.h:284 [inline]
+ end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
+ end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
+ bio_endio+0x5fe/0x780 block/bio.c:1541
+ req_bio_endio block/blk-mq.c:686 [inline]
+ blk_update_request+0x401/0x1310 block/blk-mq.c:815
+ blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
+ lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
+ blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ run_ksoftirqd kernel/softirq.c:921 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
+Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 d2 d5 c1 ff <0f> 0b e8 cb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 bc d5 c1 ff
+RSP: 0018:ffffc900007cfbe8 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: ffff888011b80200 RSI: ffffffff81b69dfe RDI: 0000000000000003
+RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000000
+R10: ffffffff81b69a16 R11: 0000000000000000 R12: 0000370000000000
+R13: 0000000000000000 R14: ffff888011b80200 R15: ffff8880231b6188
+FS:  0000000000000000(0000) GS:ffff88802cd00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000562fada51cf8 CR3: 000000001d3dd000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-See above, I only handled the regzbot issue, not the issue with this
-patch. Sorry for not being clear enough in my wording.
-
-> [...]
-
-Ciao, Thorsten

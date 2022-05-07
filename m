@@ -2,267 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB55051E73F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19B551E752
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446446AbiEGNCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S1385121AbiEGNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446474AbiEGNBy (ORCPT
+        with ESMTP id S234881AbiEGNNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:01:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257B4BE1;
-        Sat,  7 May 2022 05:58:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5A2260920;
-        Sat,  7 May 2022 12:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55757C385A5;
-        Sat,  7 May 2022 12:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651928287;
-        bh=tXxPK7uOyKwoq08t3XKrG6uJTh0f242vVIV4mBZWcH0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RS5BiS2d/qnb3CboifiFJvt+6y46O6Iqi2w3qGZrp1+jjxeD3kd7089Fts5ROVp0G
-         mYxDrcCcA3JDgWb8+CZDm4Qg6nHD6U8MhuhGOWMcwfmwIewTqW7F/3XwEWKLHUz26V
-         4MUp86U5sHLv3gdn762BXEiOFaV8bImc0fZcBXSjeNX6J6s0UvHfM2OGTDALU/zVNL
-         XLKNZfqsiSc85akQxhzOZ/MYuuwq43cT2gEAwe8ZBFyUzc8ZDNJ9Tak22eto3k6FGl
-         27Rhhur8dLB+cj6jKyoSt2Jigns6a8kNQBd5EdMT8z81zQwjXjc+ust07oltMvuHnK
-         qeBWEvs6Z2+GQ==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCHv5 bpf-next 5/5] selftests/bpf: Add attach bench test
-Date:   Sat,  7 May 2022 14:57:11 +0200
-Message-Id: <20220507125711.2022238-6-jolsa@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220507125711.2022238-1-jolsa@kernel.org>
-References: <20220507125711.2022238-1-jolsa@kernel.org>
+        Sat, 7 May 2022 09:13:14 -0400
+Received: from mail-m17669.qiye.163.com (mail-m17669.qiye.163.com [59.111.176.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE83913CE8
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:09:27 -0700 (PDT)
+Received: from [172.16.12.141] (unknown [58.22.7.114])
+        by mail-m17669.qiye.163.com (Hmail) with ESMTPA id 826EC46006D;
+        Sat,  7 May 2022 21:09:25 +0800 (CST)
+Message-ID: <5b697caa-c8ff-9f10-baa0-4d3e1a644a5f@rock-chips.com>
+Date:   Sat, 7 May 2022 21:09:25 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 -next] drm/rockchip: Fix Kconfig dependencies
+Content-Language: en-US
+To:     Ren Zhijie <renzhijie2@huawei.com>, hjc@rock-chips.com,
+        heiko@sntech.de, airlied@linux.ie, daniel@ffwll.ch,
+        lyude@redhat.com, tzimmermann@suse.de
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220507100910.93705-1-renzhijie2@huawei.com>
+From:   Andy Yan <andy.yan@rock-chips.com>
+In-Reply-To: <20220507100910.93705-1-renzhijie2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRkaT0pWSkxNTB0eHk
+        tPGUJKVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ni46Njo5SD0xPg0zH0IsSR0q
+        ShkaFE9VSlVKTU5KQklDQk1NS01LVTMWGhIXVRoVHwJVAhoVOwkUGBBWGBMSCwhVGBQWRVlXWRIL
+        WUFZTkNVSUlVTFVKSk9ZV1kIAVlBSEJDTjcG
+X-HM-Tid: 0a809ea3a29cda59kuws826ec46006d
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding test that reads all functions from ftrace available_filter_functions
-file and attach them all through kprobe_multi API.
+Hi Zhijie:
 
-It also prints stats info with -v option, like on my setup:
+On 5/7/22 18:09, Ren Zhijie wrote:
+> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_connector_mode_valid':
+> cdn-dp-core.c:(.text+0x1e1): undefined reference to `drm_dp_bw_code_to_link_rate'
+> cdn-dp-core.c:(.text+0x1f4): undefined reference to `drm_dp_bw_code_to_link_rate'
+> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_pd_event_work':
+> cdn-dp-core.c:(.text+0x138e): undefined reference to `drm_dp_channel_eq_ok'
+> drivers/gpu/drm/rockchip/cdn-dp-reg.o: In function `cdn_dp_train_link':
+> cdn-dp-reg.c:(.text+0xd5a): undefined reference to `drm_dp_bw_code_to_link_rate'
+>
+> The DP-helper module has been replaced by the display-helper module.
+> So the driver have to select it.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 1e0f66420b13("drm/display: Introduce a DRM display-helper module")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 
-  test_bench_attach: found 48712 functions
-  test_bench_attach: attached in   1.069s
-  test_bench_attach: detached in   0.373s
+Thanks.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../bpf/prog_tests/kprobe_multi_test.c        | 143 ++++++++++++++++++
- .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
- 2 files changed, 155 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+Reviewed-by: Andy Yan <andy.yan@rock-chips.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index c56db65d4c15..816eacededd1 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -2,6 +2,9 @@
- #include <test_progs.h>
- #include "kprobe_multi.skel.h"
- #include "trace_helpers.h"
-+#include "kprobe_multi_empty.skel.h"
-+#include "bpf/libbpf_internal.h"
-+#include "bpf/hashmap.h"
- 
- static void kprobe_multi_test_run(struct kprobe_multi *skel, bool test_return)
- {
-@@ -301,6 +304,144 @@ static void test_attach_api_fails(void)
- 	kprobe_multi__destroy(skel);
- }
- 
-+static inline __u64 get_time_ns(void)
-+{
-+	struct timespec t;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &t);
-+	return (__u64) t.tv_sec * 1000000000 + t.tv_nsec;
-+}
-+
-+static size_t symbol_hash(const void *key, void *ctx __maybe_unused)
-+{
-+	return str_hash((const char *) key);
-+}
-+
-+static bool symbol_equal(const void *key1, const void *key2, void *ctx __maybe_unused)
-+{
-+	return strcmp((const char *) key1, (const char *) key2) == 0;
-+}
-+
-+static int get_syms(char ***symsp, size_t *cntp)
-+{
-+	size_t cap = 0, cnt = 0, i;
-+	char *name, **syms = NULL;
-+	struct hashmap *map;
-+	char buf[256];
-+	FILE *f;
-+	int err;
-+
-+	/*
-+	 * The available_filter_functions contains many duplicates,
-+	 * but other than that all symbols are usable in kprobe multi
-+	 * interface.
-+	 * Filtering out duplicates by using hashmap__add, which won't
-+	 * add existing entry.
-+	 */
-+	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
-+	if (!f)
-+		return -EINVAL;
-+
-+	map = hashmap__new(symbol_hash, symbol_equal, NULL);
-+	if (IS_ERR(map))
-+		goto error;
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		/* skip modules */
-+		if (strchr(buf, '['))
-+			continue;
-+		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
-+			continue;
-+		/*
-+		 * We attach to almost all kernel functions and some of them
-+		 * will cause 'suspicious RCU usage' when fprobe is attached
-+		 * to them. Filter out the current culprits - arch_cpu_idle
-+		 * and rcu_* functions.
-+		 */
-+		if (!strcmp(name, "arch_cpu_idle"))
-+			continue;
-+		if (!strncmp(name, "rcu_", 4))
-+			continue;
-+		err = hashmap__add(map, name, NULL);
-+		if (err) {
-+			free(name);
-+			if (err == -EEXIST)
-+				continue;
-+			goto error;
-+		}
-+		err = libbpf_ensure_mem((void **) &syms, &cap,
-+					sizeof(*syms), cnt + 1);
-+		if (err) {
-+			free(name);
-+			goto error;
-+		}
-+		syms[cnt] = name;
-+		cnt++;
-+	}
-+
-+	*symsp = syms;
-+	*cntp = cnt;
-+
-+error:
-+	fclose(f);
-+	hashmap__free(map);
-+	if (err) {
-+		for (i = 0; i < cnt; i++)
-+			free(syms[cnt]);
-+		free(syms);
-+	}
-+	return err;
-+}
-+
-+static void test_bench_attach(void)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-+	struct kprobe_multi_empty *skel = NULL;
-+	long attach_start_ns, attach_end_ns;
-+	long detach_start_ns, detach_end_ns;
-+	double attach_delta, detach_delta;
-+	struct bpf_link *link = NULL;
-+	char **syms = NULL;
-+	size_t cnt, i;
-+
-+	if (!ASSERT_OK(get_syms(&syms, &cnt), "get_syms"))
-+		return;
-+
-+	skel = kprobe_multi_empty__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
-+		goto cleanup;
-+
-+	opts.syms = (const char **) syms;
-+	opts.cnt = cnt;
-+
-+	attach_start_ns = get_time_ns();
-+	link = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_empty,
-+						     NULL, &opts);
-+	attach_end_ns = get_time_ns();
-+
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_kprobe_multi_opts"))
-+		goto cleanup;
-+
-+	detach_start_ns = get_time_ns();
-+	bpf_link__destroy(link);
-+	detach_end_ns = get_time_ns();
-+
-+	attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
-+	detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
-+
-+	printf("%s: found %lu functions\n", __func__, cnt);
-+	printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
-+	printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
-+
-+cleanup:
-+	kprobe_multi_empty__destroy(skel);
-+	if (syms) {
-+		for (i = 0; i < cnt; i++)
-+			free(syms[i]);
-+		free(syms);
-+	}
-+}
-+
- void test_kprobe_multi_test(void)
- {
- 	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-@@ -320,4 +461,6 @@ void test_kprobe_multi_test(void)
- 		test_attach_api_syms();
- 	if (test__start_subtest("attach_api_fails"))
- 		test_attach_api_fails();
-+	if (test__start_subtest("bench_attach"))
-+		test_bench_attach();
- }
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
-new file mode 100644
-index 000000000000..e76e499aca39
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("kprobe.multi/")
-+int test_kprobe_empty(struct pt_regs *ctx)
-+{
-+	return 0;
-+}
--- 
-2.35.1
-
+> ---
+> v2: remove "select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP" under DRM_ROCKCHIP at the head,
+> and separately add the select for ROCKCHIP_ANALOGIX_DP and ROCKCHIP_CDN_DP, which Andy suggested.
+> ---
+> ---
+>   drivers/gpu/drm/rockchip/Kconfig | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/rockchip/Kconfig b/drivers/gpu/drm/rockchip/Kconfig
+> index 5afab49dc4f2..53c2d9980d48 100644
+> --- a/drivers/gpu/drm/rockchip/Kconfig
+> +++ b/drivers/gpu/drm/rockchip/Kconfig
+> @@ -2,7 +2,6 @@
+>   config DRM_ROCKCHIP
+>   	tristate "DRM Support for Rockchip"
+>   	depends on DRM && ROCKCHIP_IOMMU
+> -	select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP
+>   	select DRM_GEM_CMA_HELPER
+>   	select DRM_KMS_HELPER
+>   	select DRM_PANEL
+> @@ -38,6 +37,7 @@ config ROCKCHIP_VOP2
+>   config ROCKCHIP_ANALOGIX_DP
+>   	bool "Rockchip specific extensions for Analogix DP driver"
+>   	depends on ROCKCHIP_VOP
+> +	select DRM_DISPLAY_HELPER
+>   	select DRM_DISPLAY_DP_HELPER
+>   	help
+>   	  This selects support for Rockchip SoC specific extensions
+> @@ -47,6 +47,8 @@ config ROCKCHIP_ANALOGIX_DP
+>   config ROCKCHIP_CDN_DP
+>   	bool "Rockchip cdn DP"
+>   	depends on EXTCON=y || (EXTCON=m && DRM_ROCKCHIP=m)
+> +	select DRM_DISPLAY_HELPER
+> +	select DRM_DISPLAY_DP_HELPER
+>   	help
+>   	  This selects support for Rockchip SoC specific extensions
+>   	  for the cdn DP driver. If you want to enable Dp on

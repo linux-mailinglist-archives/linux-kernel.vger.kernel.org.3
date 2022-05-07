@@ -2,147 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC1F51E8C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD4D51E8C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 19:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446743AbiEGRKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 13:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S1446754AbiEGRKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 13:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446666AbiEGRIp (ORCPT
+        with ESMTP id S1446725AbiEGRKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 13:08:45 -0400
-Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810F31B781;
-        Sat,  7 May 2022 10:04:58 -0700 (PDT)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout4.routing.net (Postfix) with ESMTP id 588691004CD;
-        Sat,  7 May 2022 17:04:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1651943096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ztXbd80xozaI47bUw9fR7hUTHlVlOWP8CEepv0mY5ag=;
-        b=hjvBnIMgtNv5Y0TtmliGNJFJJyvdDsncrvJxS5hh75rBbCmxjMTKkmF5kSJ/IZJIhIVBxu
-        KAcTaTa1v55y4ouhZLrtwSouLWL7hwn4+7s6xDyx6APX46UEv5ziI2TFDLH7xmHpa0A80f
-        uyeMuJIlnOxrQ/cPrv/C1mg3oJMlAzE=
-Received: from localhost.localdomain (fttx-pool-80.245.74.2.bambit.de [80.245.74.2])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 415B1800AB;
-        Sat,  7 May 2022 17:04:55 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@kernel.org>,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
-        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>
-Subject: [PATCH v3 6/6] arm64: dts: rockchip: Add mt7531 dsa node to BPI-R2-Pro board
-Date:   Sat,  7 May 2022 19:04:40 +0200
-Message-Id: <20220507170440.64005-7-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507170440.64005-1-linux@fw-web.de>
-References: <20220507170440.64005-1-linux@fw-web.de>
+        Sat, 7 May 2022 13:10:31 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B13981B
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 10:06:23 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso9394162pjb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 10:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=50cVO3qthcm3b2xqR68tMJMaU8j4FFGwSvmXlvEKRIg=;
+        b=XA4BbRCNayh/ytgikpUzN4kvedWLzqcSDET1DkqFEpWb05dxGME4hQ87mzjH5F9G9/
+         xslbNlR2pxxvG3czjh/ep8ePi4H01ka3my8EYhtL8rsMeuGFZYcJKaqiavLi+W+QUcd+
+         qV8npTLSNTD52lb5uiF2OA+4PsVCQHMbM2YYA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=50cVO3qthcm3b2xqR68tMJMaU8j4FFGwSvmXlvEKRIg=;
+        b=ot+hOn3Ub4nDnLedgLiPuqLlhqUdsCzn+F4Aw20ILIAeVz+ULS1ZVkqc+AQWXTF7v+
+         4dvhSOie/sUbUN1drfUIdUcTNc0hnsjKtAn8JEXinfb7yaB+DWaPJU40xC7M8cG71ExB
+         FZQiVZVZl3xCRWrGhc3ZwC4pkh8nZ9uZG7s92dq4QlTZtgKFrdec0zDiSVzgJhMHz0eX
+         Sq3UHsGSvyOiVJUQu47Y5Vda3bYEWmOEeLQPck3toWQLp7wufFrgqL7Ncl33e9T4GwBP
+         x/fW5KbofjmKrFmLyFdUFpkb0rXqmJzf6jjCH79dR0391mXkFqcCtX5b1UB687CruKVy
+         EO9w==
+X-Gm-Message-State: AOAM533YJJl5vlaOKqFB4YLgNveMX2rEx2UeoLDOJdCTu35eP1bc6IsS
+        9WU6vA0PewzoRT4rIgJSoGj9zw==
+X-Google-Smtp-Source: ABdhPJw266ytADuOoLTKDxHhoUYHP07t/aN0b1wVgzExgdUVx2SDfoNg+6V87xdhJW1dCGT7MbbOsA==
+X-Received: by 2002:a17:902:ab55:b0:15c:ecb:81ad with SMTP id ij21-20020a170902ab5500b0015c0ecb81admr9071715plb.50.1651943183125;
+        Sat, 07 May 2022 10:06:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r23-20020a632057000000b003c14af50615sm5431944pgm.45.2022.05.07.10.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 May 2022 10:06:22 -0700 (PDT)
+Date:   Sat, 7 May 2022 10:06:21 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: Re: [PATCH v6 07/23] rust: import upstream `alloc` crate
+Message-ID: <202205071005.E734A5D6@keescook>
+References: <20220507052451.12890-1-ojeda@kernel.org>
+ <20220507052451.12890-8-ojeda@kernel.org>
+ <202205070214.AC7C566@keescook>
+ <CANiq72kHUmxyKEuWydnMrhHRS-zZ878z6KJ96VEfBE9vByfZXA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 744a8d14-3188-4f88-af20-b041c28fd74e
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72kHUmxyKEuWydnMrhHRS-zZ878z6KJ96VEfBE9vByfZXA@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Sat, May 07, 2022 at 11:33:22AM +0200, Miguel Ojeda wrote:
+> On Sat, May 7, 2022 at 11:23 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > $ find . -type f -name '*.rs' | xargs sha256sum | \
+> >         (cd ~/src/rust/library/alloc/src && \
+> >          sha256sum -c -)
+> >
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> Even if I suggested it in the message, I did not expect somebody to
+> actually go and double-check it that soon! Thanks a lot, Kees!
 
-Add Device Tree node for mt7531 switch connected to gmac0.
+How could I resist a code review that I could script? ;)
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-v2:
-- drop status=disabled
----
- .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-index 235cb7405d9b..e517712f5d8d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-@@ -454,6 +454,54 @@ &i2c5 {
- 	status = "disabled";
- };
- 
-+&mdio0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	switch@0 {
-+		compatible = "mediatek,mt7531";
-+		reg = <0>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@1 {
-+				reg = <1>;
-+				label = "lan0";
-+			};
-+
-+			port@2 {
-+				reg = <2>;
-+				label = "lan1";
-+			};
-+
-+			port@3 {
-+				reg = <3>;
-+				label = "lan2";
-+			};
-+
-+			port@4 {
-+				reg = <4>;
-+				label = "lan3";
-+			};
-+
-+			port@5 {
-+				reg = <5>;
-+				label = "cpu";
-+				ethernet = <&gmac0>;
-+				phy-mode = "rgmii";
-+
-+				fixed-link {
-+					speed = <1000>;
-+					full-duplex;
-+					pause;
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdio1 {
- 	rgmii_phy1: ethernet-phy@0 {
- 		compatible = "ethernet-phy-ieee802.3-c22";
 -- 
-2.25.1
-
+Kees Cook

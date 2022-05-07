@@ -2,225 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF59751E721
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A1F51E732
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446415AbiEGNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S1446462AbiEGNBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445470AbiEGM7T (ORCPT
+        with ESMTP id S1446548AbiEGNBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 08:59:19 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E09C1E
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 05:55:22 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j15so13459983wrb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 05:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uK+avJ+Fc4U1Ga3etjhF2701RA/xhtvy4kO7NRlkCh0=;
-        b=5dt7w3FElgfiClR0goQtIOCz/YFEmg8Ot6QNGa8xFXFXKH339rh3U3/mE4mv59hKlU
-         fTzwgMbKxg/F0yJNBTlGhALMebzD52DxaPkdyiPSnz7aFiJWbWvX22Nq6DwoEdGO6Tb7
-         7d5jZW24QKV5T9aoKg80BmhEjQ35IeJsYWse4vS0Tm55wh477gD1gvrLvoSC5lq0SqKx
-         ki38fjdzcp+kzZoyr4akDmx48k40aY40suAAANSlDf6k3p2Au62T9KDHH/g5ZMD4goLj
-         B1U6EqIkymANSEDirKOKyhYGRiX7xyk4v548Stu5R7EzANpIplYgOqn5fFN/IvwgRdGC
-         Wn1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uK+avJ+Fc4U1Ga3etjhF2701RA/xhtvy4kO7NRlkCh0=;
-        b=k8nlrZVU2CliUt5w7d7oH4AExmWrXgQ5HfqjcwBZiWDqdL5fxMi+uEA+EUOYh5E0NR
-         SGAPJFRKqOzjKwwYT3hh+qCG/HoqVZaGjA1utyY3E0+0QDfVaAH4hjd8YoCsxY23axQ0
-         oPcyqxAhs7+zm0nfo6wiay+fu7c4kBhet6N+e8giXQ8Px2y/0qS64W3HVwGCtJhpfSbh
-         bGcGAF5hZWHnD/hEHSt6RO0u5iHMiWIdawZ0/czvUf8WaB+SjG0WWwW89p+dStaZPDfn
-         elFDsOerDa4TlGHY+zrFCYl86qoslJIDlmkiAIybrSCSBVUq5OJpCvYQOr8kSxOdUd0H
-         +ZCw==
-X-Gm-Message-State: AOAM533fO7YJbWXBmT2LrMmQzQaaDGfBK0VLiQuDd18FsNa67ZgDzCkJ
-        92tBSPEDjLn5sGqGWchAIkSM5A==
-X-Google-Smtp-Source: ABdhPJwCr2c+Ca883anoBDmg/lSekW6ek8XmHs2hS+jmDoKUfMI7FpDBjxE0NfPgAWuS57k4xJtfrg==
-X-Received: by 2002:a5d:5887:0:b0:20c:83c9:b72 with SMTP id n7-20020a5d5887000000b0020c83c90b72mr6558172wrf.588.1651928122387;
-        Sat, 07 May 2022 05:55:22 -0700 (PDT)
-Received: from localhost.localdomain (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
-        by smtp.gmail.com with ESMTPSA id e9-20020a05600c218900b0039453fe55a7sm10470345wme.35.2022.05.07.05.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 05:55:22 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     khilman@baylibre.com, abailon@baylibre.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH v2 14/14] thermal/of: Initialize trip points separately
-Date:   Sat,  7 May 2022 14:54:42 +0200
-Message-Id: <20220507125443.2766939-15-daniel.lezcano@linexp.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
+        Sat, 7 May 2022 09:01:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C62274;
+        Sat,  7 May 2022 05:57:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCDEA611DD;
+        Sat,  7 May 2022 12:57:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CEEC385A9;
+        Sat,  7 May 2022 12:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651928236;
+        bh=NWsRoCfKG0cd6E6tm0v2OXLLe4vAnBaY6Bpc/4w9JUg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OIqqfb1c7rQDQKQfaciQY+ZUtDkRwaajH5AofXraMHnYIe69NRLlJKPN5GjR2wGB3
+         dHgWOGMB2zzhmnmeUvzbc6Xc4ufYAvtDEzxq2N5DQv8dVvyBDtFym7L8mMCw3Yy93b
+         rWVS4BTJ5DJwJ1zWjzSdueeZecXZMrJlMk9NMM8RBKQ+dl+bC7d0ujnZKW8wsGRkXs
+         ZYAjGA8YZVEB4zsvCieXJf3c0nZVDPArczMZ8H8tv0QoJUYnIuIlWLA6PaXkhYoXqY
+         YCh40Kq/LwcpwK5KdhNMpyHcZdAnA3N3qbvocppqEJ8jI/RZJahGj+q2IQotS+/eCP
+         YABBYvUYQvzCw==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCHv5 bpf-next 0/5] bpf: Speed up symbol resolving in kprobe multi link
+Date:   Sat,  7 May 2022 14:57:06 +0200
+Message-Id: <20220507125711.2022238-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Self contain the trip initialization from the device tree in a single
-function for the sake of making the code flow more clear.
+hi,
+sending additional fix for symbol resolving in kprobe multi link
+requested by Alexei and Andrii [1].
 
-Cc: Alexandre Bailon <abailon@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc; Eduardo Valentin <eduval@amazon.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+This speeds up bpftrace kprobe attachment, when using pure symbols
+(3344 symbols) to attach:
+
+Before:
+
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
+
+After:
+
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
+
+v5 changes:
+  - added acks [Masami]
+  - workaround in selftest for RCU warning by filtering out several
+    functions to attach
+
+v4 changes:
+  - fix compile issue [kernel test robot]
+  - added acks [Andrii]
+
+v3 changes:
+  - renamed kallsyms_lookup_names to ftrace_lookup_symbols
+    and moved it to ftrace.c [Masami]
+  - added ack [Andrii]
+  - couple small test fixes [Andrii]
+
+v2 changes (first version [2]):
+  - removed the 2 seconds check [Alexei]
+  - moving/forcing symbols sorting out of kallsyms_lookup_names function [Alexei]
+  - skipping one array allocation and copy_from_user [Andrii]
+  - several small fixes [Masami,Andrii]
+  - build fix [kernel test robot]
+
+thanks,
+jirka
+
+
+[1] https://lore.kernel.org/bpf/CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com/
+[2] https://lore.kernel.org/bpf/20220407125224.310255-1-jolsa@kernel.org/
 ---
- drivers/thermal/thermal_of.c | 84 ++++++++++++++++++++++++------------
- 1 file changed, 57 insertions(+), 27 deletions(-)
+Jiri Olsa (5):
+      kallsyms: Fully export kallsyms_on_each_symbol function
+      ftrace: Add ftrace_lookup_symbols function
+      fprobe: Resolve symbols with ftrace_lookup_symbols
+      bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+      selftests/bpf: Add attach bench test
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 64e5b9e92cb1..fd55e895258c 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -681,7 +681,8 @@ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
-  *
-  * Return: 0 on success, proper error code otherwise
-  */
--static int thermal_of_populate_bind_params(struct device_node *np,
-+static int thermal_of_populate_bind_params(struct device_node *tz_np,
-+					   struct device_node *np,
- 					   struct __thermal_bind_params *__tbp)
- {
- 	struct of_phandle_args cooling_spec;
-@@ -703,7 +704,7 @@ static int thermal_of_populate_bind_params(struct device_node *np,
- 		return -ENODEV;
- 	}
- 
--	trip_id = of_find_trip_id(np, trip);
-+	trip_id = of_find_trip_id(tz_np, trip);
- 	if (trip_id < 0) {
- 		ret = trip_id;
- 		goto end;
-@@ -837,6 +838,53 @@ static int thermal_of_populate_trip(struct device_node *np,
- 	return 0;
- }
- 
-+static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *ntrips)
-+{
-+	struct thermal_trip *tt;
-+	struct device_node *trips, *trip;
-+	int ret, count;
-+
-+	trips = of_get_child_by_name(np, "trips");
-+	if (!trips) {
-+		pr_err("Failed to find 'trips' node\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	count = of_get_child_count(trips);
-+	if (!count) {
-+		pr_err("No trip point defined\n");
-+		ret = -EINVAL;
-+		goto out_of_node_put;
-+	}
-+
-+	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-+	if (!tt) {
-+		ret = -ENOMEM;
-+		goto out_of_node_put;
-+	}
-+
-+	*ntrips = count;
-+
-+	count = 0;
-+	for_each_child_of_node(trips, trip) {
-+		ret = thermal_of_populate_trip(trip, &tt[count++]);
-+		if (ret)
-+			goto out_kfree;
-+	}
-+
-+	of_node_put(trips);
-+	
-+	return tt;
-+	
-+out_kfree:
-+	kfree(tt);
-+	*ntrips = 0;
-+out_of_node_put:
-+	of_node_put(trips);
-+
-+	return ERR_PTR(ret);
-+}
-+
- /**
-  * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-  * @np: DT node containing a thermal zone node
-@@ -855,7 +903,6 @@ static struct __thermal_zone
- __init *thermal_of_build_thermal_zone(struct device_node *np)
- {
- 	struct device_node *child = NULL, *gchild;
--	struct device_node *trips;
- 	struct __thermal_zone *tz;
- 	int ret, i;
- 	u32 prop, coef[2];
-@@ -897,28 +944,10 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 		tz->offset = 0;
- 	}
- 
--	/* trips */
--	trips = of_get_child_by_name(np, "trips");
--
--	/* No trips provided */
--	if (!trips)
--		goto finish;
--
--	tz->ntrips = of_get_child_count(trips);
--	if (tz->ntrips == 0) /* must have at least one child */
-+	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-+	if (IS_ERR(tz->trips)) {
-+		ret = PTR_ERR(tz->trips);
- 		goto finish;
--
--	tz->trips = kcalloc(tz->ntrips, sizeof(*tz->trips), GFP_KERNEL);
--	if (!tz->trips) {
--		ret = -ENOMEM;
--		goto free_tz;
--	}
--
--	i = 0;
--	for_each_child_of_node(trips, gchild) {
--		ret = thermal_of_populate_trip(gchild, &tz->trips[i++]);
--		if (ret)
--			goto free_trips;
- 	}
- 
- 	/* cooling-maps */
-@@ -940,9 +969,11 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 
- 	i = 0;
- 	for_each_child_of_node(child, gchild) {
--		ret = thermal_of_populate_bind_params(gchild, &tz->tbps[i++]);
--		if (ret)
-+		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-+		if (ret) {
-+			of_node_put(gchild);
- 			goto free_tbps;
-+		}
- 	}
- 
- finish:
-@@ -964,7 +995,6 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
- 	kfree(tz->tbps);
- free_trips:
- 	kfree(tz->trips);
--	of_node_put(gchild);
- free_tz:
- 	kfree(tz);
- 	of_node_put(child);
--- 
-2.25.1
-
+ include/linux/ftrace.h                                     |   6 ++++++
+ include/linux/kallsyms.h                                   |   7 ++++++-
+ kernel/kallsyms.c                                          |   3 +--
+ kernel/trace/bpf_trace.c                                   | 112 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------
+ kernel/trace/fprobe.c                                      |  32 ++++++++++++--------------------
+ kernel/trace/ftrace.c                                      |  62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 143 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kprobe_multi_empty.c     |  12 ++++++++++++
+ 8 files changed, 308 insertions(+), 69 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c

@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6557751E453
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4277F51E470
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445617AbiEGFai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S1445605AbiEGFiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445593AbiEGFaZ (ORCPT
+        with ESMTP id S1442067AbiEGFiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:30:25 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667916FA3A;
-        Fri,  6 May 2022 22:26:23 -0700 (PDT)
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2475Q3fC030972;
-        Sat, 7 May 2022 14:26:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2475Q3fC030972
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651901164;
-        bh=FfZkot1xX9/3A26jW6H/8b0WNAiDAR0EcY13U3/8Ct0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q+FER/8w3E5h6Qsm1RElS6vuq+ZL8wApsSglUlUn9U53jWyLp4y2P9SBNF7xHSyT7
-         dKPa+Zt/YnrZct/IS0ChkpJ8UcISu5zND744AU65GLgiowTHpT35Rr5ZQltemvoXwr
-         xZIwgYJG0zYOuI7Oi68kS37hvB1an9E/7eMoI8gIXLBUoWSoUHspfjE8vBtnhARFzQ
-         UX4Hwe+oeLR/svhlTocHsw54+9/U741E8el6WSuEX08MF3aHwrarABm6bLQ8KPikMG
-         G/Uz8u7p6vEN9ROSAjf59+3jJxaS9SFrkq0Y12NJQrgfAuwFDFNjFYNkHXwI1sibAT
-         VgFZuCMCI8KGw==
-X-Nifty-SrcIP: [209.85.214.177]
-Received: by mail-pl1-f177.google.com with SMTP id d22so9272567plr.9;
-        Fri, 06 May 2022 22:26:03 -0700 (PDT)
-X-Gm-Message-State: AOAM533scEs/vByiND3hk9Ip1uikIKv0ja5UNlQldFT+V8gcPNS4v7/Z
-        LDqGE4zl2RviDMVdAItKEJg6wnbgcZfXQR7zMCM=
-X-Google-Smtp-Source: ABdhPJz/0IPfWjlKJGTu0YSnMBSWgwcJp83smiYNjc8NlYMvw4l6ht/5A57T92PaEldUnyvY+t3vLEb0KSQNQvhbfZs=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr7014096plp.162.1651901162954; Fri, 06
- May 2022 22:26:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220501130749.1123387-1-masahiroy@kernel.org>
- <YnT3GtU975OsXVuN@gondor.apana.org.au> <CAK7LNASkQ_14NYu7K_eEOG4boBMpKEXyrOzDJMOjcT5paC7E1A@mail.gmail.com>
- <YnXTPPXRlCpUvoKz@gondor.apana.org.au>
-In-Reply-To: <YnXTPPXRlCpUvoKz@gondor.apana.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 7 May 2022 14:24:54 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAReyv20PAb1LdkoBhR_x1pvLQJA7a=jMZYf11TmK9h-iQ@mail.gmail.com>
-Message-ID: <CAK7LNAReyv20PAb1LdkoBhR_x1pvLQJA7a=jMZYf11TmK9h-iQ@mail.gmail.com>
-Subject: Re: [PATCH] crypto: vmx - Align the short log with Makefile cleanups
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?Q?Breno_Leit=C3=A3o?= <leitao@debian.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+        Sat, 7 May 2022 01:38:02 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC538DAE
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:34:15 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id l35-20020a25b323000000b00649eb57cc67so7935995ybj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4vU3lvK+Ux0QY/uX6Xb/Zo/8TNbKrXUBowbL674xebA=;
+        b=EJfGPXf4V43SOAkVj7IEaHwyPoCqo8HnabnxDHTITOmrAJnUVkotxRGGvwuwm6a0kP
+         2NTKScu8lx+m+vkE3E9kkXWbuNrroe4uRBLjrNmSQ3I3CuM+q85cB2To/mRvRGDNuYRd
+         h7X5F5LLVmYxmZslAp+PLW/1fZRmoCw4fwpbaa9mOT0xV1gUdzrTrSiD0OTeTkXxhJw/
+         LyGUbv4m6ZiUXhc4Sb9bkvDb2c8z6OhHyZgHVIpd1+gemgZ7paQ3H6zGSmQv7DPZt+CB
+         6h9sqxMUjdscust4kMKqHTZHDJ1BCPpBqFmWpw0/P70QwhyHhi46GMQPl2GGMCDeAmND
+         SZnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4vU3lvK+Ux0QY/uX6Xb/Zo/8TNbKrXUBowbL674xebA=;
+        b=lCw3WthwWLL3ZEK5ZE7dxj+Yny8nrhJ5pqfDfEeRaXUrvO2DSMHOi1miIYqQum9CBw
+         hG018YQSSv6YZflWLBwTSgkooCjngF1LG9MMhFWv2G08sFf/eEe5sLuv9Yc0/+nHU6N7
+         UhzD34u7B7DfmLkcG0e2qrVR6Gh4THYhSSyuqxHYQDD7WQnaiS/Ilk1Z17zK+5lQesPl
+         3qkCPo2BgeGJZ5pvO3rxTB9kRTsD2FPelE2pwX4HuJguifR3DRq4FF5+MlaVAEaFegA2
+         uEjGxrzs1RtP2Clqu37C0u8Tjy2NZhy64YsBBlOqqgom1eUBSGdvnGqmQI2aOXosC0f5
+         AGow==
+X-Gm-Message-State: AOAM532+GRnBQyOog9wXhNI1t1764YmoJ7/e3WDwLrTPkIhVux3DNiou
+        nUK3F4K09inCbMGjAuxNa40bZE4IzMwA
+X-Google-Smtp-Source: ABdhPJwlXvELF76l4UyZUOrNj/gJNZHeOGYaQ2tuGMaLKJ8K/78md0LxRjuwZ+v8RFNe3GV3QwzGrqG/EiAn
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:bf2a:2f64:a273:3573])
+ (user=irogers job=sendgmr) by 2002:a5b:f41:0:b0:64a:7639:3bab with SMTP id
+ y1-20020a5b0f41000000b0064a76393babmr4424411ybr.138.1651901655099; Fri, 06
+ May 2022 22:34:15 -0700 (PDT)
+Date:   Fri,  6 May 2022 22:34:05 -0700
+Message-Id: <20220507053410.3798748-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH 0/5] Revert metric hybrid events, fix tools events
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 7, 2022 at 11:02 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Sat, May 07, 2022 at 12:25:32AM +0900, Masahiro Yamada wrote:
-> >
-> > Sorry, I just noticed the 0day bot had reported the error.
-> >
-> > I sent v2.    (CONFIG_LITTLE_ENDIAN  --> CONFIG_CPU_LITTLE_ENDIAN)
-> >
-> > https://lore.kernel.org/lkml/20220506150820.1310802-1-masahiroy@kernel.org/
-> >
-> >
-> > Could you replace it, or fix it up, please?
->
-> Please send me an incremental patch.
+Hybrid metrics place a PMU at the end of the parse string. This is
+also where tool events are placed. The behavior of the parse string
+isn't clear and so revert the change for now.
 
-Done.
+commit 75eafc970bd9 ("perf list: Print all available tool events") had
+an off-by-1 error. Try to separate the tool event enum logic from
+evsels. Also add a for loop helper to simplify working with a variety
+of tool events.
 
-BTW, you added a wrong Reported-by tag:
-https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/commit/?id=b52455a73db95ef90fd3c2be84db77b55be43f46
+Add support to metrics for more tool events than just
+duration_time. Make the sharing logic only look to add for sharing
+potentially used tool events, found by scanning the list of metrics.
 
-It is a clean up patch, where 0day bot did not report anything.
+Ian Rogers (5):
+  Revert "perf stat: Support metrics with hybrid events"
+  perf evsel: Constify a few arrays
+  perf evsel: Add tool event helpers
+  perf metrics: Support all tool events
+  perf metrics: Don't add all tool events for sharing
 
-
-
+ tools/perf/tests/evsel-roundtrip-name.c |   2 +-
+ tools/perf/util/evsel.c                 |  53 +++-
+ tools/perf/util/evsel.h                 |  22 +-
+ tools/perf/util/metricgroup.c           | 373 +++++++-----------------
+ tools/perf/util/parse-events.c          |   2 +-
+ tools/perf/util/stat-display.c          |   8 +-
+ tools/perf/util/stat-shadow.c           |  27 +-
+ 7 files changed, 180 insertions(+), 307 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.36.0.512.ge40c2bad7a-goog
+

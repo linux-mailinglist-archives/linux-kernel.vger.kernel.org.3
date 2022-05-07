@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17F751E2FB
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D0151E303
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445159AbiEGB1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        id S1445174AbiEGBaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiEGB1D (ORCPT
+        with ESMTP id S236738AbiEGBa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:27:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD721A074;
-        Fri,  6 May 2022 18:23:16 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kw8kj5qmCzGpXk;
-        Sat,  7 May 2022 09:20:29 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 09:23:14 +0800
-Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 7 May
- 2022 09:23:14 +0800
-Message-ID: <c395bed5-8701-de91-feaf-ceeda95702e3@huawei.com>
-Date:   Sat, 7 May 2022 09:23:14 +0800
+        Fri, 6 May 2022 21:30:28 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849033AA49;
+        Fri,  6 May 2022 18:26:43 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-ee1e7362caso4872692fac.10;
+        Fri, 06 May 2022 18:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iDAhf762jxRhEv8fWwnY9wpSIpXGHrpFlmpaUo6C1zk=;
+        b=F3gz8XL26fGIg5x4zHuPywcBt3scsTWHmrRlxUXkNEfEVYZl/M35+V+YGFWfo1lE+P
+         yhotM6PX8de5M9NSCEYYSecqiOWoxVzkwSokt7PmQxJ834yfpEZne76p+bi2YybspM/P
+         el4Lyw701k1uZ1l9gYwf3BUAbccvic8rYHyzGmcHgGXyyUe9LpH1NrLphqCE2YFQrUu2
+         imT+3aMBlQzUZerRybx8SrUsoUBqjND8/NsQeokLI0WJ92ldvWKfU645zdimqXwxUIFn
+         VR4hTGFntXAmxyuG51Drm0j3zyzGuNxV6Oaf8Joh+TF+4fZj2wkPtC75Hkl6w+/UeU7W
+         dMpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iDAhf762jxRhEv8fWwnY9wpSIpXGHrpFlmpaUo6C1zk=;
+        b=HrC149XtE6741vFJqlJh5VtsY2uPrN52rL4BzEp4teFAK1liLyNsY9WldqpmHHHjRY
+         v2Hph+6Nw4XS3PAYw4Ue2PvFRXRoV01AeUC0HHpuh82kqmghsG+gDN8ajnSfTYt3bMUX
+         cLIyoKTjqHlUOpg3PpakF1gdrohOqAv02vuRGxPjWrfaQbFD40KLtlETkN2dGh6zfVkL
+         R9IeY2wF/g56oZqPlcKZr8+IYTAFlky6kAZacfe/QFha28Jr9nIi1K3rZpGffnpsIV6R
+         f7e2sZAHvuEGLE/9l9i7AmGaxchSUfdmweqOjGkcHnW/FNXHfDqK8H/817gl6IYUOY7x
+         rWRQ==
+X-Gm-Message-State: AOAM531xJirNqfDe9ZbL7a7ayfk9sUVHB60W2wHoj/0r+4mxQ6oktcvG
+        wdCL2aKx2u6DhRp4H5pc2lAwRGTqSLzs0YEgFk3gzQkUMW0+WA==
+X-Google-Smtp-Source: ABdhPJzyLNv+Q6ZAyNJ7GFtl4fwjM7lLihcjDwTRVz3yxuhErRy90ery7vxfFURM1YDzqoGEyqq1Pfrc60/WgfWMP1E=
+X-Received: by 2002:a05:6870:1c7:b0:ed:b4b6:27a1 with SMTP id
+ n7-20020a05687001c700b000edb4b627a1mr5626941oad.223.1651886802927; Fri, 06
+ May 2022 18:26:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] platform/x86: amd-pmc: Fix build error
- unused-function
-To:     Hans de Goede <hdegoede@redhat.com>, <Shyam-sundar.S-k@amd.com>,
-        <markgross@kernel.org>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220505121958.138905-1-renzhijie2@huawei.com>
- <f73836d2-913a-87c1-af44-56429ffcb963@redhat.com>
-From:   Ren Zhijie <renzhijie2@huawei.com>
-In-Reply-To: <f73836d2-913a-87c1-af44-56429ffcb963@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.83]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220505130826.40914-1-kerneljasonxing@gmail.com> <20220506185641.GA2289@bytedance>
+In-Reply-To: <20220506185641.GA2289@bytedance>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Sat, 7 May 2022 09:26:07 +0800
+Message-ID: <CAL+tcoBwQ2tijfzwOO6zb2MobCL27PcyN3foRcAw91MpyWg_VA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: use the %px format to display sock
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Xing <xingwanli@kuaishou.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,184 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 7, 2022 at 2:56 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+>
+> Hi Jason,
+>
+> On Thu, May 05, 2022 at 09:08:26PM +0800, kerneljasonxing@gmail.com wrote:
+> > -             pr_err("Attempt to release TCP socket in state %d %p\n",
+> > +             pr_err("Attempt to release TCP socket in state %d %px\n",
+>
+> I think we cannot use %px here for security reasons?  checkpatch is also
+> warning about it:
+>
 
-在 2022/5/6 18:37, Hans de Goede 写道:
-> Hi,
->
-> On 5/5/22 14:19, Ren Zhijie wrote:
->> If CONFIG_SUSPEND and CONFIG_DEBUG_FS are not set.
->>
->> compile error:
->> drivers/platform/x86/amd-pmc.c:323:12: error: ‘get_metrics_table’ defined but not used [-Werror=unused-function]
->>   static int get_metrics_table(struct amd_pmc_dev *pdev, struct smu_metrics *table)
->>              ^~~~~~~~~~~~~~~~~
->> drivers/platform/x86/amd-pmc.c:298:12: error: ‘amd_pmc_idlemask_read’ defined but not used [-Werror=unused-function]
->>   static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
->>              ^~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/x86/amd-pmc.c:196:12: error: ‘amd_pmc_get_smu_version’ defined but not used [-Werror=unused-function]
->>   static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->>              ^~~~~~~~~~~~~~~~~~~~~~~
->> cc1: all warnings being treated as errors
->>
->> To fix building warning, wrap all related code with CONFIG_SUSPEND or CONFIG_DEBUG_FS.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> Thanks for the patch, the issue with amd_pmc_get_smu_version() not being
-> wrapped in #ifdef CONFIG_DEBUG_FS was already fixed by:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=for-next&id=acd51562e07d17aaf4ac652f1dc55c743685bf41
->
-> Moving amd_pmc_setup_smu_logging + amd_pmc_idlemask_read +
-> get_metrics_table under:
->
-> #if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
->
-> is still necessary though, so I've merged that part of your patch:
->
-> Thank you for your patch, I've applied this patch to my review-hans
-> branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
->
-> Note it will show up in my review-hans branch once I've pushed my
-> local branch there, which might take a while.
->
-> Once I've run some tests on this branch the patches there will be
-> added to the platform-drivers-x86/for-next branch and eventually
-> will be included in the pdx86 pull-request to Linus for the next
-> merge-window.
->
-> Regards,
->
-> Hans
+I noticed this warning before submitting. Since the %p format doesn't
+print the real address, printing the address here will be helpless and
+we cannot trace what exactly the bad socket is.
 
-Glad that I could help
+What do you suggest?
 
-Regards,
+Thanks,
+Jason
 
-Ren
-
+> WARNING: Using vsprintf specifier '%px' potentially exposes the kernel memory layout, if you don't really need the address please consider using '%p'.
+> #21: FILE: net/ipv4/af_inet.c:142:
+> +               pr_err("Attempt to release TCP socket in state %d %px\n",
+>                        sk->sk_state, sk);
 >
->> ---
->>   drivers/platform/x86/amd-pmc.c | 72 ++++++++++++++++++----------------
->>   1 file changed, 39 insertions(+), 33 deletions(-)
->>
->> diff --git a/drivers/platform/x86/amd-pmc.c b/drivers/platform/x86/amd-pmc.c
->> index 668a1d6c11ee..8f004673b23f 100644
->> --- a/drivers/platform/x86/amd-pmc.c
->> +++ b/drivers/platform/x86/amd-pmc.c
->> @@ -164,7 +164,6 @@ static int amd_pmc_read_stb(struct amd_pmc_dev *dev, u32 *buf);
->>   #ifdef CONFIG_SUSPEND
->>   static int amd_pmc_write_stb(struct amd_pmc_dev *dev, u32 data);
->>   #endif
->> -static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev);
->>   
->>   static inline u32 amd_pmc_reg_read(struct amd_pmc_dev *dev, int reg_offset)
->>   {
->> @@ -193,6 +192,7 @@ struct smu_metrics {
->>   	u64 timecondition_notmet_totaltime[SOC_SUBSYSTEM_IP_MAX];
->>   } __packed;
->>   
->> +#ifdef CONFIG_DEBUG_FS
->>   static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->>   {
->>   	int rc;
->> @@ -212,6 +212,7 @@ static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->>   
->>   	return 0;
->>   }
->> +#endif /* CONFIG_DEBUG_FS */
->>   
->>   static int amd_pmc_stb_debugfs_open(struct inode *inode, struct file *filp)
->>   {
->> @@ -295,6 +296,9 @@ static const struct file_operations amd_pmc_stb_debugfs_fops_v2 = {
->>   	.release = amd_pmc_stb_debugfs_release_v2,
->>   };
->>   
->> +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
->> +static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev);
->> +
->>   static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
->>   				 struct seq_file *s)
->>   {
->> @@ -335,6 +339,40 @@ static int get_metrics_table(struct amd_pmc_dev *pdev, struct smu_metrics *table
->>   	return 0;
->>   }
->>   
->> +static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev)
->> +{
->> +	if (dev->cpu_id == AMD_CPU_ID_PCO) {
->> +		dev_warn_once(dev->dev, "SMU debugging info not supported on this platform\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* Get Active devices list from SMU */
->> +	if (!dev->active_ips)
->> +		amd_pmc_send_cmd(dev, 0, &dev->active_ips, SMU_MSG_GET_SUP_CONSTRAINTS, 1);
->> +
->> +	/* Get dram address */
->> +	if (!dev->smu_virt_addr) {
->> +		u32 phys_addr_low, phys_addr_hi;
->> +		u64 smu_phys_addr;
->> +
->> +		amd_pmc_send_cmd(dev, 0, &phys_addr_low, SMU_MSG_LOG_GETDRAM_ADDR_LO, 1);
->> +		amd_pmc_send_cmd(dev, 0, &phys_addr_hi, SMU_MSG_LOG_GETDRAM_ADDR_HI, 1);
->> +		smu_phys_addr = ((u64)phys_addr_hi << 32 | phys_addr_low);
->> +
->> +		dev->smu_virt_addr = devm_ioremap(dev->dev, smu_phys_addr,
->> +						  sizeof(struct smu_metrics));
->> +		if (!dev->smu_virt_addr)
->> +			return -ENOMEM;
->> +	}
->> +
->> +	/* Start the logging */
->> +	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_RESET, 0);
->> +	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_START, 0);
->> +
->> +	return 0;
->> +}
->> +#endif /* CONFIG_SUSPEND || CONFIG_DEBUG_FS */
->> +
->>   #ifdef CONFIG_SUSPEND
->>   static void amd_pmc_validate_deepest(struct amd_pmc_dev *pdev)
->>   {
->> @@ -475,38 +513,6 @@ static inline void amd_pmc_dbgfs_unregister(struct amd_pmc_dev *dev)
->>   }
->>   #endif /* CONFIG_DEBUG_FS */
->>   
->> -static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev)
->> -{
->> -	if (dev->cpu_id == AMD_CPU_ID_PCO) {
->> -		dev_warn_once(dev->dev, "SMU debugging info not supported on this platform\n");
->> -		return -EINVAL;
->> -	}
->> -
->> -	/* Get Active devices list from SMU */
->> -	if (!dev->active_ips)
->> -		amd_pmc_send_cmd(dev, 0, &dev->active_ips, SMU_MSG_GET_SUP_CONSTRAINTS, 1);
->> -
->> -	/* Get dram address */
->> -	if (!dev->smu_virt_addr) {
->> -		u32 phys_addr_low, phys_addr_hi;
->> -		u64 smu_phys_addr;
->> -
->> -		amd_pmc_send_cmd(dev, 0, &phys_addr_low, SMU_MSG_LOG_GETDRAM_ADDR_LO, 1);
->> -		amd_pmc_send_cmd(dev, 0, &phys_addr_hi, SMU_MSG_LOG_GETDRAM_ADDR_HI, 1);
->> -		smu_phys_addr = ((u64)phys_addr_hi << 32 | phys_addr_low);
->> -
->> -		dev->smu_virt_addr = devm_ioremap(dev->dev, smu_phys_addr,
->> -						  sizeof(struct smu_metrics));
->> -		if (!dev->smu_virt_addr)
->> -			return -ENOMEM;
->> -	}
->> -
->> -	/* Start the logging */
->> -	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_RESET, 0);
->> -	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_START, 0);
->> -
->> -	return 0;
->> -}
->>   
->>   static void amd_pmc_dump_registers(struct amd_pmc_dev *dev)
->>   {
-> .
-
+> Thanks,
+> Peilin Ye
+>

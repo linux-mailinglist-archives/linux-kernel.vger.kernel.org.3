@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BD651E82A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FF651E82E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350730AbiEGPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S1352258AbiEGPg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEGPfe (ORCPT
+        with ESMTP id S1343852AbiEGPgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:35:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C399941323;
-        Sat,  7 May 2022 08:31:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45B8EB80AC7;
-        Sat,  7 May 2022 15:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF87C385A6;
-        Sat,  7 May 2022 15:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651937504;
-        bh=QJj5Sep2kOlckvNOm3pNvQISPpQfrx8VxV7m3x1RMBg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=YNoboC18iI89dXVAYaAOygronZuJQsJ7tougBUGc1+VI8cJTER3CJfliO4hOPeLAR
-         0asmSj80caah/B2Nglx4EtXnrs65/t7RmZRCK07JPNXQN+gKlzDodE/N0wIYANgTj3
-         K+orCvwBXUdvuukhc/AQ2XVGYQlN+ziyA70KfxEn80yHXAGyQNOmPpDyIhcbj3SxVG
-         FlBGOFCCT7KtzyPwF1FHhz94ws/xYzMcEXurJQWs85bnIQCMLJOa1Z5FM+fiKD0Qvu
-         waQBAHD1CM7yxbK0f+bmxNNoNUzlN5ChihHpP6OoL0doUB/NmlVaSXBPX9l696ZOsv
-         T2ltZvfZFinjg==
-Date:   Sat, 7 May 2022 10:31:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems
-Message-ID: <20220507153142.GA568130@bhelgaas>
+        Sat, 7 May 2022 11:36:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A49C41334
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:33:01 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id kq17so19413653ejb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WoF/0Ii49PYDNsk6u6jquUVes8vOOgnxL82lmVkopNk=;
+        b=hbZaxNI6qN5ydwitjGS0ycJ9PrQVMErIN1myj1i3Ic5I/wOTsddYnje4UHU/Y6tcoW
+         C+A6D9U2emUq4347u90brLDS/vPg0mM61AacXYqH3g61vorylNW6UU6zdKpJgdhkEUtC
+         O0VmPrVZdrI/E3ZFMtAjDiAqW0EqC4qAMDohmKOe8PAIwBdnAMU7+0/pxpzVW8IqJ7xB
+         WZyLMEZav+nHSkEmyGSlul3lmo9gmE/zC38A6lAcwrmJx6uRgOL63hJ1OAjjUSEwY1eq
+         h+bO8Bs1sWouHF9uJ0HdHe9T/w4sKn09X5OGBZyYtKv7j9ErXsFgsU9kefByqJ7dMLxS
+         FEDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WoF/0Ii49PYDNsk6u6jquUVes8vOOgnxL82lmVkopNk=;
+        b=iAZmVPQ686oqJAz3BVHUWvR6rzczCEd8lO6j0ty+H4l/NBVJhKWy1gDxlWeF9wkMmN
+         F37qq0uIE9Z+u7lGktACIVWuFDLnVghi1zf6xl8A4stmH3Gp5S6uNDI2ZZPmDA/s5dSs
+         T4r6fqHFiQynu3CQLTKrUPLaa5UPu0S6oScSOlr9Q3i7Vddd4BQUy/pHxsKvBVqKU1Yh
+         eKMoHER9LZcBWvSRmy1GGU313O1rkmqLSxumGLph8ItEldq7cxz4U1aC7dDIcR3Fxc+Q
+         Kl3lD0FwbTfy4oUqbcRZ5PWqKDFhRChGbQ/LV3gaKOJPlgcs2S+idHoP+PWsrvLbvMdg
+         snyw==
+X-Gm-Message-State: AOAM531oDE3YXgtjG4rPI2NSRSWpU+rJ4rzXW+vO1KfpnAeLEP7Tn5rw
+        FnVNBH9YGE3jyVeIWaIpydc4nA==
+X-Google-Smtp-Source: ABdhPJyuLCjiprducycd4P1q1AptPYjmn5ilrCEHgqAYEPSF8/JtPmr16zxUdgC2vuN4SVeDmW0IWQ==
+X-Received: by 2002:a17:907:98eb:b0:6f3:ce56:c1a2 with SMTP id ke11-20020a17090798eb00b006f3ce56c1a2mr8034161ejc.173.1651937579992;
+        Sat, 07 May 2022 08:32:59 -0700 (PDT)
+Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id v4-20020a056402348400b0042617ba63b8sm3758505edc.66.2022.05.07.08.32.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 08:32:59 -0700 (PDT)
+Message-ID: <2ab35af2-b067-4243-35ed-a592a7046374@linaro.org>
+Date:   Sat, 7 May 2022 17:32:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <94238be8-023e-a70a-45c8-a7096149e752@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] dt-bindings: display: Add bindings for EBBG FT8719
+Content-Language: en-US
+To:     Joel Selvaraj <jo@jsfamily.in>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <cover.1651835715.git.jo@jsfamily.in>
+ <BY5PR02MB70099A894450D05DC7359CEAD9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BY5PR02MB70099A894450D05DC7359CEAD9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,115 +87,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 12:09:03PM +0200, Hans de Goede wrote:
-> Hi Bjorn,
+On 06/05/2022 14:17, Joel Selvaraj wrote:
+> Add bindings for the EBBG FT8719 6.18" 2246x1080 DSI video mode panel,
+> which can be found on some Xiaomi Poco F1 phones. The backlight is
+> managed through the QCOM WLED driver.
 > 
-> On 5/6/22 18:51, Bjorn Helgaas wrote:
-> > On Thu, May 05, 2022 at 05:20:16PM +0200, Hans de Goede wrote:
-> >> Some BIOS-es contain bugs where they add addresses which are already
-> >> used in some other manner to the PCI host bridge window returned by
-> >> the ACPI _CRS method. To avoid this Linux by default excludes
-> >> E820 reservations when allocating addresses since 2010, see:
-> >> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
-> >> space").
-> >>
-> >> Recently (2019) some systems have shown-up with E820 reservations which
-> >> cover the entire _CRS returned PCI bridge memory window, causing all
-> >> attempts to assign memory to PCI BARs which have not been setup by the
-> >> BIOS to fail. For example here are the relevant dmesg bits from a
-> >> Lenovo IdeaPad 3 15IIL 81WE:
-> >>
-> >>  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
-> >>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
-> >>
-> >> The ACPI specifications appear to allow this new behavior:
-> >>
-> >> The relationship between E820 and ACPI _CRS is not really very clear.
-> >> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
-> >>
-> >>   This range of addresses is in use or reserved by the system and is
-> >>   not to be included in the allocatable memory pool of the operating
-> >>   system's memory manager.
-> >>
-> >> and it may be used when:
-> >>
-> >>   The address range is in use by a memory-mapped system device.
-> >>
-> >> Furthermore, sec 15.2 says:
-> >>
-> >>   Address ranges defined for baseboard memory-mapped I/O devices, such
-> >>   as APICs, are returned as reserved.
-> >>
-> >> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
-> >> and its apertures are in use and certainly should not be included in
-> >> the general allocatable pool, so the fact that some BIOS-es reports
-> >> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
-> >>
-> >> So it seems that the excluding of E820 reserved addresses is a mistake.
-> >>
-> >> Ideally Linux would fully stop excluding E820 reserved addresses,
-> >> but then various old systems will regress.
-> >> Instead keep the old behavior for old systems, while ignoring
-> >> the E820 reservations for any systems from now on.
-> >>
-> >> Old systems are defined here as BIOS year < 2018, this was chosen to
-> >> make sure that pci_use_e820 will not be set on the currently affected
-> >> systems, the oldest known one is from 2019.
-> >>
-> >> Testing has shown that some newer systems also have a bad _CRS return.
-> >> The pci_crs_quirks DMI table is used to keep excluding E820 reservations
-> >> from the bridge window on these systems.
-> >>
-> >> Also add pci=no_e820 and pci=use_e820 options to allow overriding
-> >> the BIOS year + DMI matching logic.
-> >>
-> >> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
-> >> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> >> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
-> >> BugLink: https://bugs.launchpad.net/bugs/1878279
-> >> BugLink: https://bugs.launchpad.net/bugs/1931715
-> >> BugLink: https://bugs.launchpad.net/bugs/1932069
-> >> BugLink: https://bugs.launchpad.net/bugs/1921649
-> >> Cc: Benoit Grégoire <benoitg@coeus.ca>
-> >> Cc: Hui Wang <hui.wang@canonical.com>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> > 
-> >> +	 * Ideally Linux would fully stop using E820 reservations, but then
-> >> +	 * various old systems will regress. Instead keep the old behavior for
-> >> +	 * old systems + known to be broken newer systems in pci_crs_quirks.
-> >> +	 */
-> >> +	if (year >= 0 && year < 2018)
-> >> +		pci_use_e820 = true;
-> > 
-> > How did you pick 2018?  Prior to this patch, we used E820 reservations
-> > for all machines.  This patch would change that for 2019-2022
-> > machines, so there's a risk of breaking some of them.
+> Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
+> ---
+>  .../bindings/display/panel/ebbg,ft8719.yaml   | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
 > 
-> Correct. I picked 2018 because the first devices where using E820
-> reservations are causing issues (i2c controller not getting resources
-> leading to non working touchpad / thunderbolt hotplug issues) have
-> BIOS dates starting in 2019. I added a year margin, so we could make
-> this 2019.
-> 
-> > I'm hesitant about changing the behavior for machines already in the
-> > field because if they were tested at all with Linux, it was without
-> > this patch.  So I would lean toward preserving the current behavior
-> > for BIOS year < 2023.
-> 
-> I see, I presume the idea is to then use DMI to disable E820 clipping
-> on current devices where this is known to cause problems ?
-> 
-> So for v8 I would:
-> 
-> 1. Change the cut-off check to < 2023
-> 2. Drop the DMI quirks I added for models which are known to need E820
->    clipping hit by the < 2018 check
-> 3. Add DMI quirks for models for which it is known that we must _not_
->    do E820 clipping
-> 
-> Is this the direction you want to go / does that sound right?
+> diff --git a/Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml b/Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
+> new file mode 100644
+> index 000000000000..fac6c9692c55
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/ebbg,ft8719.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/ebbg,ft8719.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: EBBG FT8719 MIPI-DSI LCD panel
+> +
+> +maintainers:
+> +  - Joel Selvaraj <jo@jsfamily.in>
+> +
+> +description: |
+> +  The FT8719 panel from EBBG is a FHD+ LCD display panel with a resolution
+> +  of 1080x2246. It is a video mode DSI panel. The backlight is managed
+> +  through the QCOM WLED driver.
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ebbg,ft8719
+> +
+> +  reg:
+> +    description: DSI virtual channel of the peripheral
 
-Yes, I think that's what we should do.  All the machines in the field
-will be unaffected, except that we add quirks for known problems.
+maxItems
 
-Bjorn
+> +
+> +  reset-gpios:
+> +    description: phandle of gpio for reset line
+
+Skip description - it's obvious.
+
+> +
+> +  vddio-supply:
+> +    description: phandle of the Power IC supply regulator
+
+s/phandle of//
+
+> +
+> +  vddpos-supply:
+> +    description: phandle of the positive boost supply regulator
+> +
+> +  vddneg-supply:
+> +    description: phandle of the negative boost supply regulator
+> +
+> +  backlight: true
+> +  port: true
+
+Both should not be needed - they come from panel-common.yaml. They might
+stay in list
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vddio-supply
+> +  - vddpos-supply
+> +  - vddneg-supply
+> +  - reset-gpios
+> +  - port
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |+
+
+No need for +
+
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    dsi0 {
+
+Just dsi
+
+
+
+Best regards,
+Krzysztof

@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8873851E939
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 20:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4657551E93B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 20:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386870AbiEGSbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 14:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S1387830AbiEGSiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 14:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiEGSbl (ORCPT
+        with ESMTP id S230521AbiEGSiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 14:31:41 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77AC237CF
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 11:27:53 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id e10so10215284vsr.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 11:27:53 -0700 (PDT)
+        Sat, 7 May 2022 14:38:05 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056302FFF2;
+        Sat,  7 May 2022 11:34:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x18so14138553wrc.0;
+        Sat, 07 May 2022 11:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nWu2MywQGG/lQk+6DwIYkOy+InPInu19/JISIJ1ay6c=;
-        b=S2LmFPFT3yCVv6uHOM/n6FYz0td4vWDE4alAWZ2hpBNlKJQ3THghV1FVCnlJAf5Qql
-         Vz5+/OVzUCtw/sOUOEizQ0d2HUPzbfQ1YaHDrk5bva9ixw9kJ2fEZYthN2zzT5CKuEQJ
-         AbVhfWIbv7aFWXAj/1eFRffwpQYJU/+1KEgQhBVvDeTlNWU93PaQO/lMuNjLdCxmAjt8
-         G7obweVZ2rOhvydfWP7CRUpGkwwmrsBF9lI3Ok0mlOOEN1b4JMvmOj+F8mLaiDtpjEJJ
-         z/93Dw98zyHkD5zLIBDBXzqyNJ6nPsAKWELVFuCbvfIR98GwljRrkFDrJfcxXOZZcKc8
-         izvA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KQVod+LIsL2dmZvlmndlBF3HF+IRF2gal3cYOuUcsuc=;
+        b=gg9+N19hUZK3SAO4/zkjI2MpjxT8l7+NWmXgp6ZIrrIliOLEmfkhEp2njPbvxW3HXP
+         5RgqjdntbRCvqxXSjgpS+N5ncB0a90TkZ6dNXFZWXjnLWBhYYXyNmRCJ+Nk0VSfbtJqr
+         4kOXP4DctvbayOMWwdeeGvriYKLxnTuIhhNCNdmVzPuFIvBK17CEXew3eeS91z0lw7Nf
+         6bX0YVuf76r+h7/ybhvAyjBK+QBMQv3AHK+KzqxP9iioRPziS9Dh6d1MkIPBoBo9bvyh
+         uYqreKxigjgO+srtGQaFVZIa7A+jedUVZlQ+qw2j/8HgVQkn3dOVdDDdHYVXLpDiUsxV
+         bMdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nWu2MywQGG/lQk+6DwIYkOy+InPInu19/JISIJ1ay6c=;
-        b=kVtsz4J928KdYOrRpnIJLg1TCCXiRejH9/Rb/au7wJmvWLW6SGsvGUaimxxjFrs2Cd
-         bNXVqp2ldVi6yJQBW6DdimB9GuWWsFry1DYRK1eeo2m66gccGiGlM32xl3kc/R4R2oeS
-         XH2QxpW9FvLyNbM7n1mI9DvLcpaWzBq8fa4MC7nylaZ0k/cKWqb0df6LlRYuVhmC/3mx
-         T8Ot3mdCtTRodn+Wdz0eBPPr/17Ap7SV9O6zPKIyrtAP696lfvBbSuxVNfr1UDk0c6au
-         OFc9/KDON05XKS6eJSWV7r/0xkWw6puLUVtdvzIqI3fGLecXSYfgcKMGj2h41xQJAP2o
-         nsdg==
-X-Gm-Message-State: AOAM532jadGqqeS6bYARjNck6PfuLX//0KPIj/DjFJY90H7K8zr6RACN
-        EDI2L/XbJqnANYWvL4F/eAZYc/FHNCUvppyZ2oIAxg==
-X-Google-Smtp-Source: ABdhPJxvMr9/79bgxLnx9dOLzXxMnJ0mfL6bTXPoI5A7fOtPqbD0va77JLyV7wheFIEfWMg1VQSOtRVhFgEET3orvmY=
-X-Received: by 2002:a67:cb02:0:b0:32c:2690:be39 with SMTP id
- b2-20020a67cb02000000b0032c2690be39mr5129804vsl.81.1651948072013; Sat, 07 May
- 2022 11:27:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KQVod+LIsL2dmZvlmndlBF3HF+IRF2gal3cYOuUcsuc=;
+        b=t1MHRc6z/yTo4OYv1RuwjHP1mIZgmqvAYrZ3zGNXzvZZsy7C1Bv43dqWugqIoy7ilD
+         rgX7khhDerRVZCqDiOd2VCzflioJcvm12nXO9Y4gcI/HRo/fdyCrSi4plE8NpbARdx+S
+         4riVZ13TXPHChgE+SNCV/o0ZuPNevqk++tmHKA7tAtOYzKonWPp5tCAb+8Btri48+dRV
+         3kP+Sf1+xnqVx3yhGXuULj+7yVHkoVm5IP04TKFfn71vLP/fzidlUemsKYSvkuK6d4eD
+         CutqaUglBR4n+CMjb4SOaYRMP1gy1374ewpguo3/aozFshNJ/JgZvEEdGVYzmahT5ee9
+         LOYw==
+X-Gm-Message-State: AOAM533qO5M9U6rg3qS5KrRB9zq2j41EVeGXDhNZ0MN98El1VmceYhDy
+        BdGZQl514/SLCuN3V+bXot4=
+X-Google-Smtp-Source: ABdhPJx3Q40DD0GCOXiXnFeZWHGSMIzWaLXzzWc0Le3e9YjapKmr+0+wCmccOvPBxyqn0axEooEe6w==
+X-Received: by 2002:a5d:5846:0:b0:20c:7407:5fa1 with SMTP id i6-20020a5d5846000000b0020c74075fa1mr7368426wrf.116.1651948455622;
+        Sat, 07 May 2022 11:34:15 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n18-20020a05600c465200b003942a244f4esm11726417wmo.39.2022.05.07.11.34.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 May 2022 11:34:15 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8192u: make const array queuetopipe const, reduces object code size
+Date:   Sat,  7 May 2022 19:34:14 +0100
+Message-Id: <20220507183414.26633-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <YnWRVd5slCy5H0fC@creeky> <20220507015646.5377-1-hdanton@sina.com>
-In-Reply-To: <20220507015646.5377-1-hdanton@sina.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sat, 7 May 2022 11:27:15 -0700
-Message-ID: <CAOUHufY=xAvDKSaV8vybgObXPBEsPqqS7R3+T_-6ix7bUvQc6w@mail.gmail.com>
-Subject: Re: Alpha: rare random memory corruption/segfault in user space bisected
-To:     Michael Cree <mcree@orcon.net.nz>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Content-Type: multipart/mixed; boundary="00000000000005798e05de70220d"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000005798e05de70220d
-Content-Type: text/plain; charset="UTF-8"
+Don't populate the const array queuetopipe on the stack, instead make it
+static.  Also makes the object code smaller.
 
-On Fri, May 6, 2022 at 6:57 PM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Sat, 7 May 2022 09:21:25 +1200 Michael Cree wrote:
-> > Alpha kernel has been exhibiting rare and random memory
-> > corruptions/segaults in user space since the 5.9.y kernel.  First seen
-> > on the Debian Ports build daemon when running 5.10.y kernel resulting
-> > in the occasional (one or two a day) build failures with gcc ICEs either
-> > due to self detected corrupt memory structures or segfaults.  Have been
-> > running 5.8.y kernel without such problems for over six months.
-> >
-> > Tried bisecting last year but went off track with incorrect good/bad
-> > determinations due to rare nature of bug.  After trying a 5.16.y kernel
-> > early this year and seen the bug is still present retried the bisection
-> > and have got to:
-> >
-> > aae466b0052e1888edd1d7f473d4310d64936196 is the first bad commit
-> > commit aae466b0052e1888edd1d7f473d4310d64936196
-> > Author: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > Date:   Tue Aug 11 18:30:50 2020 -0700
-> >
-> >     mm/swap: implement workingset detection for anonymous LRU
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/staging/rtl8192u/r8192U_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This commit seems innocent to me. While not ruling out anything, i.e.,
-this commit, compiler, qemu, userspace itself, etc., my wild guess is
-the problem is memory barrier related. Two lock/unlock pairs, which
-imply two full barriers, were removed. This is not a small deal on
-Alpha, since it imposes no constraints on cache coherency, AFAIK.
+diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+index ce807c9d4219..2ca925f35830 100644
+--- a/drivers/staging/rtl8192u/r8192U_core.c
++++ b/drivers/staging/rtl8192u/r8192U_core.c
+@@ -2537,7 +2537,7 @@ static short rtl8192_init(struct net_device *dev)
+ 	}
+ #else
+ 	{
+-		const u8 queuetopipe[] = {3, 2, 1, 0, 4, 4, 0, 4, 4};
++		static const u8 queuetopipe[] = {3, 2, 1, 0, 4, 4, 0, 4, 4};
+ 
+ 		memcpy(priv->txqueue_to_outpipemap, queuetopipe, 9);
+ 	}
+-- 
+2.35.1
 
-Can you please try the attached patch on top of this commit? Thanks!
-
-> > Pretty confident this is the bad commit as the kernel built to the parent
-> > commit (3852f6768ede54...) has not failed in four days running. Always have
-> > seen the failure within one day of running in past.
->
-> See if the fix to the syzbot bisection [1] is not a cure to your issue.
->
-> [1] https://lore.kernel.org/lkml/000000000000625fa705dd1802e3@google.com/
-
---00000000000005798e05de70220d
-Content-Type: application/octet-stream; name="test.diff"
-Content-Disposition: attachment; filename="test.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l2w76ukb0>
-X-Attachment-Id: f_l2w76ukb0
-
-ZGlmZiAtLWdpdCBhL21tL21lbW9yeS5jIGIvbW0vbWVtb3J5LmMKaW5kZXggZGUzMTFmYzc2Mzll
-Li5mMWNmMDc0MTZjZjQgMTAwNjQ0Ci0tLSBhL21tL21lbW9yeS5jCisrKyBiL21tL21lbW9yeS5j
-CkBAIC0zMTUwLDYgKzMxNTAsOCBAQCB2bV9mYXVsdF90IGRvX3N3YXBfcGFnZShzdHJ1Y3Qgdm1f
-ZmF1bHQgKnZtZikKIAkJCQkJZ290byBvdXRfcGFnZTsKIAkJCQl9CiAKKwkJCQlzbXBfbWIoKTsK
-KwogCQkJCXNoYWRvdyA9IGdldF9zaGFkb3dfZnJvbV9zd2FwX2NhY2hlKGVudHJ5KTsKIAkJCQlp
-ZiAoc2hhZG93KQogCQkJCQl3b3JraW5nc2V0X3JlZmF1bHQocGFnZSwgc2hhZG93KTsKZGlmZiAt
-LWdpdCBhL21tL3N3YXBfc3RhdGUuYyBiL21tL3N3YXBfc3RhdGUuYwppbmRleCBiNzNhYWJkZmQz
-NWEuLjMxMGQ0MDQ5Y2RmMyAxMDA2NDQKLS0tIGEvbW0vc3dhcF9zdGF0ZS5jCisrKyBiL21tL3N3
-YXBfc3RhdGUuYwpAQCAtNDk5LDYgKzQ5OSw4IEBAIHN0cnVjdCBwYWdlICpfX3JlYWRfc3dhcF9j
-YWNoZV9hc3luYyhzd3BfZW50cnlfdCBlbnRyeSwgZ2ZwX3QgZ2ZwX21hc2ssCiAJCWdvdG8gZmFp
-bF91bmxvY2s7CiAJfQogCisJc21wX21iKCk7CisKIAlpZiAoc2hhZG93KQogCQl3b3JraW5nc2V0
-X3JlZmF1bHQocGFnZSwgc2hhZG93KTsKIAo=
---00000000000005798e05de70220d--

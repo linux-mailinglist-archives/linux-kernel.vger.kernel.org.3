@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08A251E62E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394EE51E63C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446194AbiEGJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
+        id S1384289AbiEGKB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244252AbiEGJva (ORCPT
+        with ESMTP id S232437AbiEGKBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:51:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487E03584A;
-        Sat,  7 May 2022 02:47:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4AD66111A;
-        Sat,  7 May 2022 09:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2A4C385A9;
-        Sat,  7 May 2022 09:47:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651916863;
-        bh=TN9Ln0eWjWSNpAaJly0A68+GoYhMTOpf7TMoBE/D/8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eAdWlOck68816ScoivDDAizGIIpMuirzXMEnhlTuCe0boQDQ2FAbiKVwBSDw+1PKQ
-         eryZIke41EI7FBgz3rBhcOPXg+qn/NcT+7LTFVsoooc1kbcEGoItAutByNEbYrDgWK
-         Ur0gbDNafQq8fsmSCP56cwhjhCdircLlP8pdtgic=
-Date:   Sat, 7 May 2022 11:47:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, namit@vmware.com,
-        gor@linux.ibm.com, rdunlap@infradead.org, sashal@kernel.org
-Subject: Re: [PATCH 5.10 v3] locking/csd_lock: fix csdlock_debug cause arm64
- boot panic
-Message-ID: <YnZAO+3Rhj0gwq38@kroah.com>
-References: <20220507084510.14761-1-chenzhongjin@huawei.com>
+        Sat, 7 May 2022 06:01:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD912657
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 02:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651917459; x=1683453459;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KS6oebMwuSHVGzZ2GgRSjsO7NX3usahPrS23SFzgck8=;
+  b=nsCU6GIDV128lVsU6ryST2gGdP6iosbGi0huH7q7IRSjRHIrLdDOLblV
+   V9dLBndRdWfi31/wO1dCnP+reNzsBjiaQWOfAbvQcx3a6m85tPDvgMGYz
+   60Iznziib/OQZq+4t4dzVhidQ+5hojEU9JBhH5tVjf0jxIpxpej3Jl8Nt
+   iddm1AfLUkHTSefy/HeKc7p2b1VpiY+nzq2aPk+oHxzp1lwQxzKulK062
+   CwcMcrsdzz3RhoYZgt9L28i8gN5M06OI5cxPAO+VSAq+yKnsCivTueQOZ
+   dTAv//zptu6Fk3n6z2xuJ3DLHeRavg9XzBC6zFcOVrHyndVlOClWpVNPI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="331685504"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="331685504"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 02:57:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="622201886"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 May 2022 02:57:37 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnHBw-000ERk-FD;
+        Sat, 07 May 2022 09:57:36 +0000
+Date:   Sat, 7 May 2022 17:57:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment
+ of 'cb' to itself. [selfAssignment]
+Message-ID: <202205071746.wrApww8H-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220507084510.14761-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,86 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 04:45:10PM +0800, Chen Zhongjin wrote:
-> csdlock_debug is a early_param to enable csd_lock_wait
-> feature.
-> 
-> It uses static_branch_enable in early_param which triggers
-> a panic on arm64 with config:
-> CONFIG_SPARSEMEM=y
-> CONFIG_SPARSEMEM_VMEMMAP=n
-> 
-> The log shows:
-> Unable to handle kernel NULL pointer dereference at
-> virtual address ", '0' <repeats 16 times>, "
-> ...
-> Call trace:
-> __aarch64_insn_write+0x9c/0x18c
-> ...
-> static_key_enable+0x1c/0x30
-> csdlock_debug+0x4c/0x78
-> do_early_param+0x9c/0xcc
-> parse_args+0x26c/0x3a8
-> parse_early_options+0x34/0x40
-> parse_early_param+0x80/0xa4
-> setup_arch+0x150/0x6c8
-> start_kernel+0x8c/0x720
-> ...
-> Kernel panic - not syncing: Oops: Fatal exception
-> 
-> Call trace inside __aarch64_insn_write:
-> __nr_to_section
-> __pfn_to_page
-> phys_to_page
-> patch_map
-> __aarch64_insn_write
-> 
-> Here, with CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section returns
-> NULL and makes the NULL dereference because mem_section is
-> initialized in sparse_init after parse_early_param stage.
-> 
-> So, static_branch_enable shouldn't be used inside early_param.
-> To avoid this, I changed it to __setup and fixed this.
-> 
-> Reported-by: Chen jingwen <chenjingwen6@huawei.com>
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
-> Change v2 -> v3:
-> Add module name in title
-> 
-> Change v1 -> v2:
-> Fix return 1 for __setup
-> ---
-> 
->  kernel/smp.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index 65a630f62363..381eb15cd28f 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
->  	if (val)
->  		static_branch_enable(&csdlock_debug_enabled);
->  
-> -	return 0;
-> +	return 1;
->  }
-> -early_param("csdlock_debug", csdlock_debug);
-> +__setup("csdlock_debug=", csdlock_debug);
->  
->  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
->  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
-> -- 
-> 2.17.1
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b97bac0756a81cda5afd45417a99b5bccdcff67
+commit: ea8f8c99a28199f6e067581b8626d192b07750f2 arm64: spectre-v2: Favour CPU-specific mitigation at EL2
+date:   1 year, 7 months ago
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout ea8f8c99a28199f6e067581b8626d192b07750f2
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-<formletter>
+cppcheck warnings: (new ones prefixed by >>)
+>> arch/arm64/kernel/proton-pack.c:302:5: warning: Redundant assignment of 'cb' to itself. [selfAssignment]
+    cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
+       ^
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+vim +/cb +302 arch/arm64/kernel/proton-pack.c
 
-</formletter>
+   272	
+   273	static enum mitigation_state spectre_v2_enable_fw_mitigation(void)
+   274	{
+   275		bp_hardening_cb_t cb;
+   276		enum mitigation_state state;
+   277	
+   278		state = spectre_v2_get_cpu_fw_mitigation_state();
+   279		if (state != SPECTRE_MITIGATED)
+   280			return state;
+   281	
+   282		if (spectre_v2_mitigations_off())
+   283			return SPECTRE_VULNERABLE;
+   284	
+   285		switch (arm_smccc_1_1_get_conduit()) {
+   286		case SMCCC_CONDUIT_HVC:
+   287			cb = call_hvc_arch_workaround_1;
+   288			break;
+   289	
+   290		case SMCCC_CONDUIT_SMC:
+   291			cb = call_smc_arch_workaround_1;
+   292			break;
+   293	
+   294		default:
+   295			return SPECTRE_VULNERABLE;
+   296		}
+   297	
+   298		/*
+   299		 * Prefer a CPU-specific workaround if it exists. Note that we
+   300		 * still rely on firmware for the mitigation at EL2.
+   301		 */
+ > 302		cb = spectre_v2_get_sw_mitigation_cb() ?: cb;
+   303		install_bp_hardening_cb(cb);
+   304		return SPECTRE_MITIGATED;
+   305	}
+   306	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

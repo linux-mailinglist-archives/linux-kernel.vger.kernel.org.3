@@ -2,251 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61F351E67E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF0C51E693
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 13:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446283AbiEGKqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S1384667AbiEGLKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 07:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384492AbiEGKqf (ORCPT
+        with ESMTP id S1384661AbiEGLKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:46:35 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2DD53B5F
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:42:48 -0700 (PDT)
-Received: from kwepemi100021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KwP633n6KzXdml;
-        Sat,  7 May 2022 18:38:03 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100021.china.huawei.com (7.221.188.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 18:42:46 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 18:42:45 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: [PATCH -next v7 6/6] riscv/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
-Date:   Sat, 7 May 2022 11:01:14 +0000
-Message-ID: <20220507110114.4128854-7-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507110114.4128854-1-tongtiangen@huawei.com>
-References: <20220507110114.4128854-1-tongtiangen@huawei.com>
+        Sat, 7 May 2022 07:10:08 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7A45784;
+        Sat,  7 May 2022 04:06:22 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q4so6825112plr.11;
+        Sat, 07 May 2022 04:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=wESZGcNFKxrpxxsend5gLk245hMJ4SIWUC0qiFaYsPY=;
+        b=qdLpdHS4co9i0tPvHe3i1K7CAJjZC1Tuqwf86FHHH3e999G3pa8SxtITWdKKomC+QB
+         oBt4keJXB0dVVOYVTkEUe9LbuBqza1NCI6k4uKc08YyOFzYWmYH2yu3LIkZuW6WNA6g3
+         seq3+eM23ea1f1srpMtn0Y1xsZJ4vSbLQWc91Eu2HikxLc6DCZbQbOXZhOY3Y4zW+aGd
+         jhcie0NcYITMFyTdfUQaw+2vWPoyD/4dynind6V1klwL6hjAKkg9WFQFBjdr+oAlg2it
+         tJmSKkQ/kLsAkhYj/EKaMXhXp3bj/gl1DwQuX7QEiimvg1NhRu/ccJfjS85FlH3sz3DF
+         EcCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wESZGcNFKxrpxxsend5gLk245hMJ4SIWUC0qiFaYsPY=;
+        b=EYEKMn/1MIC1edgAXIbuuILhAPTz4dOfZfuOV7vJlHv2TL0fluLqlZIZb039o50yTd
+         60iKpM6pcHaKdWYIjOIY9bt4kneRAENxIwPVjlzCnHG08n6x7oOv0BKNIfpSlxuGULpA
+         C13KsKKTGwTjGUH3Q36jj7rccINtpnNQKhLGOkrwN5rv55xejiOONxgPq1aM55xeb8nW
+         um6L/WL5JYHw+TB4MN6TQXDBED7ltg9yvIRrTk/bwg37SMFMtQb9nfjFnIpGbUMC0SQ/
+         LlvoT/9cJcuT44CKFCJdCV4NKWsiGyT9hyl13xYt+o06E2/RkPt2mE48TnEKNiqagDSX
+         oYzA==
+X-Gm-Message-State: AOAM530erb8nwgxA6OZbmG5veWJ1TF2DAyQTKTaM955kOmaCDjEeEHR9
+        P5U2MkFIZwoV2IW5Q54NGyg=
+X-Google-Smtp-Source: ABdhPJxQiyVuXrP9muBdoqkdc1VjFbALVDVbBdlcrFtkrpXTwWV5bO+ulE2374FZtFiu89j6P5sIdg==
+X-Received: by 2002:a17:902:9b98:b0:156:52b1:b100 with SMTP id y24-20020a1709029b9800b0015652b1b100mr7977197plp.174.1651921582078;
+        Sat, 07 May 2022 04:06:22 -0700 (PDT)
+Received: from [192.168.255.10] ([106.53.4.151])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f70200b0015e8d4eb2cbsm3394900plo.277.2022.05.07.04.06.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 04:06:21 -0700 (PDT)
+Message-ID: <b1775b40-3cbf-4f98-c6ea-922a48935025@gmail.com>
+Date:   Sat, 7 May 2022 19:06:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 3/5] io_uring: let fast poll support multishot
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-4-haoxu.linux@gmail.com>
+ <d68381cf-a9fc-33b8-8a9c-ff8485ba8d19@gmail.com>
+ <135b16e4-f316-cb25-9cdd-09bd63eb4aef@gmail.com>
+ <acd36e44-8351-d907-bb50-57375823268c@gmail.com>
+From:   Hao Xu <haoxu.linux@gmail.com>
+In-Reply-To: <acd36e44-8351-d907-bb50-57375823268c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table check")
-, enable ARCH_SUPPORTS_PAGE_TABLE_CHECK on riscv.
-
-Add additional page table check stubs for page table helpers, these stubs
-can be used to check the existing page table entries.
-
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- arch/riscv/Kconfig               |  1 +
- arch/riscv/include/asm/pgtable.h | 71 +++++++++++++++++++++++++++++---
- 2 files changed, 66 insertions(+), 6 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 715390feb6ea..bb9fde09eea5 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -38,6 +38,7 @@ config RISCV
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
-+	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
- 	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 046b44225623..62e733c85836 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -114,6 +114,8 @@
- #include <asm/pgtable-32.h>
- #endif /* CONFIG_64BIT */
- 
-+#include <linux/page_table_check.h>
-+
- #ifdef CONFIG_XIP_KERNEL
- #define XIP_FIXUP(addr) ({							\
- 	uintptr_t __a = (uintptr_t)(addr);					\
-@@ -315,6 +317,11 @@ static inline int pte_exec(pte_t pte)
- 	return pte_val(pte) & _PAGE_EXEC;
- }
- 
-+static inline int pte_user(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_USER;
-+}
-+
- static inline int pte_huge(pte_t pte)
- {
- 	return pte_present(pte) && (pte_val(pte) & _PAGE_LEAF);
-@@ -446,7 +453,7 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 
- void flush_icache_pte(pte_t pte);
- 
--static inline void set_pte_at(struct mm_struct *mm,
-+static inline void __set_pte_at(struct mm_struct *mm,
- 	unsigned long addr, pte_t *ptep, pte_t pteval)
- {
- 	if (pte_present(pteval) && pte_exec(pteval))
-@@ -455,10 +462,17 @@ static inline void set_pte_at(struct mm_struct *mm,
- 	set_pte(ptep, pteval);
- }
- 
-+static inline void set_pte_at(struct mm_struct *mm,
-+	unsigned long addr, pte_t *ptep, pte_t pteval)
-+{
-+	page_table_check_pte_set(mm, addr, ptep, pteval);
-+	__set_pte_at(mm, addr, ptep, pteval);
-+}
-+
- static inline void pte_clear(struct mm_struct *mm,
- 	unsigned long addr, pte_t *ptep)
- {
--	set_pte_at(mm, addr, ptep, __pte(0));
-+	__set_pte_at(mm, addr, ptep, __pte(0));
- }
- 
- #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
-@@ -479,7 +493,11 @@ static inline int ptep_set_access_flags(struct vm_area_struct *vma,
- static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
- 				       unsigned long address, pte_t *ptep)
- {
--	return __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
-+	pte_t pte = __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
-+
-+	page_table_check_pte_clear(mm, address, pte);
-+
-+	return pte;
- }
- 
- #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
-@@ -546,6 +564,13 @@ static inline unsigned long pmd_pfn(pmd_t pmd)
- 	return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
- }
- 
-+#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-+
-+static inline unsigned long pud_pfn(pud_t pud)
-+{
-+	return ((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT);
-+}
-+
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	return pte_pmd(pte_modify(pmd_pte(pmd), newprot));
-@@ -567,6 +592,11 @@ static inline int pmd_young(pmd_t pmd)
- 	return pte_young(pmd_pte(pmd));
- }
- 
-+static inline int pmd_user(pmd_t pmd)
-+{
-+	return pte_user(pmd_pte(pmd));
-+}
-+
- static inline pmd_t pmd_mkold(pmd_t pmd)
- {
- 	return pte_pmd(pte_mkold(pmd_pte(pmd)));
-@@ -600,15 +630,39 @@ static inline pmd_t pmd_mkdirty(pmd_t pmd)
- static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 				pmd_t *pmdp, pmd_t pmd)
- {
--	return set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-+	page_table_check_pmd_set(mm, addr, pmdp, pmd);
-+	return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-+}
-+
-+static inline int pud_user(pud_t pud)
-+{
-+	return pte_user(pud_pte(pud));
- }
- 
- static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
- 				pud_t *pudp, pud_t pud)
- {
--	return set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-+	page_table_check_pud_set(mm, addr, pudp, pud);
-+	return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-+}
-+
-+#ifdef CONFIG_PAGE_TABLE_CHECK
-+static inline bool pte_user_accessible_page(pte_t pte)
-+{
-+	return pte_present(pte) && pte_user(pte);
-+}
-+
-+static inline bool pmd_user_accessible_page(pmd_t pmd)
-+{
-+	return pmd_leaf(pmd) && pmd_user(pmd);
- }
- 
-+static inline bool pud_user_accessible_page(pud_t pud)
-+{
-+	return pud_leaf(pud) && pud_user(pud);
-+}
-+#endif
-+
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- static inline int pmd_trans_huge(pmd_t pmd)
- {
-@@ -634,7 +688,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
- static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
- 					unsigned long address, pmd_t *pmdp)
- {
--	return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
-+	pmd_t pmd = __pmd(atomic_long_xchg((atomic_long_t *)pmdp, 0));
-+
-+	page_table_check_pmd_clear(mm, address, pmd);
-+
-+	return pmd;
- }
- 
- #define __HAVE_ARCH_PMDP_SET_WRPROTECT
-@@ -648,6 +706,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
- static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
- 				unsigned long address, pmd_t *pmdp, pmd_t pmd)
- {
-+	page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
- 	return __pmd(atomic_long_xchg((atomic_long_t *)pmdp, pmd_val(pmd)));
- }
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
--- 
-2.25.1
+在 2022/5/7 下午5:47, Pavel Begunkov 写道:
+> On 5/7/22 08:08, Hao Xu wrote:
+>> 在 2022/5/7 上午1:19, Pavel Begunkov 写道:
+>>> On 5/6/22 08:01, Hao Xu wrote:
+> [...]
+>>> That looks dangerous, io_queue_sqe() usually takes the request ownership
+>>> and doesn't expect that someone, i.e. io_poll_check_events(), may 
+>>> still be
+>>> actively using it.
+>>>
+>>> E.g. io_accept() fails on fd < 0, return an error,
+>>> io_queue_sqe() -> io_queue_async() -> io_req_complete_failed()
+>>> kills it. Then io_poll_check_events() and polling in general
+>>> carry on using the freed request => UAF. Didn't look at it
+>>> too carefully, but there might other similar cases.
+>>>
+>> I checked this when I did the coding, it seems the only case is
+>> while (atomic_sub_return(v & IO_POLL_REF_MASK, &req->poll_refs));
+>> uses req again after req recycled in io_queue_sqe() path like you
+>> pointed out above, but this case should be ok since we haven't
+>> reuse the struct req{} at that point.
+> 
+> Replied to another message with an example that I think might
+> be broken, please take a look.
+I saw it just now, it looks a valid case to me. Thanks.
+> 
+> The issue is that io_queue_sqe() was always consuming / freeing /
+> redirecting / etc. requests, i.e. call it and forget about the req.
+> With io_accept now it may or may not free it and not even returning
+> any return code about that. This implicit knowledge is quite tricky
+> to maintain.
+> 
+> might make more sense to "duplicate" io_queue_sqe()
+> 
+> ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
+> // REQ_F_COMPLETE_INLINE should never happen, no check for that
+> // don't care about io_arm_ltimeout(), should already be armed
+> // ret handling here
+This is what I'm doing for v3, indeed make more sense.
 

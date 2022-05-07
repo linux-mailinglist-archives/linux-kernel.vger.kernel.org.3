@@ -2,179 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F91151E504
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D9E51E509
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445740AbiEGHHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 03:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S1359526AbiEGHJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 03:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbiEGHHu (ORCPT
+        with ESMTP id S239988AbiEGHJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 03:07:50 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90084.outbound.protection.outlook.com [40.107.9.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA624EDF4
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:04:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gPOWMcMkG8JrF8MQVY5FSZrzLxassw/TxF2hmp1W7Ce280y0H1mS205KRx5WOyH8aldAPgm9iKqQvaYby0IsUvsMHl4qofn6X9eUPbA9cW6ow0x16JLUvJD6ZoqJoWEUlX6PTUoMvZZtWfglR5mjFU1SP4hzxoaQZ9Sx3HBsAiGD4pxPMdLFTaybWPfsjoA6CY4WalqEgxREpl4m65xnj9SlZQBQtWlhFIPTjim6SrtlMq0rbVs+b5zl/3WZYijdSMyRZ7MZy8ztTr/w+t5qDkubvC299/fQjZ3PRL33IP77TbZ1ToPU3CWEeBCwtmurtTpkp3ZN92SKpcn/NFFKJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fXnP1/ETO8g0GxLQo8XdjXcXs1mO0mtEUaL/hRgrW6o=;
- b=MsexGEHglTkWyiPvQGKJnrTXiWUG5qar5vYmx1pan3cc3PmkWIJB6vOxMOMWFSYIBhjUN9GLLKrtNb2olDve4uZ2CIHvem8xoNGHylfdlx1Oo+U2dOv28AVs1RzMIR8/RYJY9bsprI9ek9uH+jupTZOyxtanhbydjoq71VGpEITQnh8XfEi+SptVRItRwUhgWDhxFnd6WiSkusKSUSmwwmU5bK0PzXv606ckkQlaYYq+Z3WnyeCEgQ48RDMplO4tdQCHmikawreWWFNyE9j0LQCDymgr86ErN+g66J77o8xoB21iy/Ew3gbYtCQ0S4HXwPqFpsWFIcgODLi4vDRDJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3987.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Sat, 7 May
- 2022 07:04:01 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d%6]) with mapi id 15.20.5227.020; Sat, 7 May 2022
- 07:04:01 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>, CGEL <cgel.zte@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Zeal Robot <zealci@zte.com.cn>,
-        Jing Yangyang <jing.yangyang@zte.com.cn>
-Subject: Re: [PATCH linux-next] power:pkeys: fix bugon.cocci warnings
-Thread-Topic: [PATCH linux-next] power:pkeys: fix bugon.cocci warnings
-Thread-Index: AQHYXif9MxWpTtwTTUuXd7LmitXkI60TBPAA
-Date:   Sat, 7 May 2022 07:04:01 +0000
-Message-ID: <e2310273-8bc8-deac-9a80-0d1587acecb1@csgroup.eu>
-References: <20210825064228.70487-1-deng.changcheng@zte.com.cn>
- <8735hsvzig.fsf@mpe.ellerman.id.au>
-In-Reply-To: <8735hsvzig.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5b82c2d5-dadd-4ab2-e7fe-08da2ff7c3ea
-x-ms-traffictypediagnostic: MR1P264MB3987:EE_
-x-microsoft-antispam-prvs: <MR1P264MB39874B7FAF6D77B5F62D232EEDC49@MR1P264MB3987.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pjBAI+SOHlGzoWhd5uTtrh1NpYKLhYys9dhzbeZ/1c2sDnkAE913MI4QEeVQQw2UY1SDOkG38wnmEYjzDt01svLHmUJw0XXXUnzQX8AQUnr8QiawsKKZwM5I66qyWuJK3jkkDtItTsgDrD6+Loom7iCV+NJsJ4dwS28OHytcOPU6n9q2iiK8MLUhbihDkef+fr8pg7l9OGUZGRWUIFmwjOGiWQwBrJMN0BBdKV+4UfMc+4/SCb58FO1NIbTJdFLwmq6TDZk6IbZiz0VRTtPsoizbalFtKNp9O1tiJzYBn8Wxe6rsyN6p7WQ98zzDnhaDtJm3Cqjed+4SXHsaWrAaGVik+fzg9urU/j3Sjcr/mq6e7WO9GMns307ZQHlXHkstJM/zrbYkq7ezA52m4+HsEx0IlO7uBjSa9wHOwKXlqBzuKdAp4BL69NSSnBE33q+IB3DZ4gjgyN1jnioOZPI91xJS/mrf3orvVkhpkT/2BosUd5o/UDG3B9YQohSCCXSEzzrjJsSThbRYgRnxQ0AJiv/c2uvYT0UGIJo6XtDE7uDccqCnY1j+6N7uJ3tIa3rvk97BfISgtMDjlE6y/mYS7ZE/+TROALIyH0UpJ6vZCvkuuKCaUbEGKRqs6gjtFS+1+/s5ORgOspJC51fqKawxn5bADGTGK7KOpRfpTVXU3Qe0uxUyIvvmKdrxHayj/JRByrBtnxT/pRKWyjdfme7Eq9IJdiC5W34O5sal7e1WppkU60SCHctuBnUVW7KfFMOm3CANhKX4psTBj+itUZKf3XZTCVXA9rdc++WinHMxwdmWmOpceMwtXs58hGVIK0Kc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66946007)(8676002)(316002)(6506007)(64756008)(66446008)(66556008)(4326008)(44832011)(31686004)(91956017)(76116006)(83380400001)(36756003)(54906003)(110136005)(71200400001)(66574015)(26005)(8936002)(86362001)(5660300002)(31696002)(2906002)(6512007)(38070700005)(2616005)(508600001)(186003)(122000001)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXZNSjZSRWgrNG5zUDRHTlVRZlhXaDJsY1VaclA5Q2JabHF3dEQyVVFXV0JN?=
- =?utf-8?B?Ri9HM1M4WXFMRTlCaGZXbjFWN3c3cW5ZZVFKaW15ZjdjN05EbHFXY1hxTE5n?=
- =?utf-8?B?WnVwcEs2Wi9zVTBqbFlhZlVmbldiWExYVFVRN21QQ1V6dnd6ZVhmd1M3dFBO?=
- =?utf-8?B?QVlsTlRwZGlwUE9KQmp4QkNYenpjSW55RVh4VStsSGp6Qm4wcDV6aU1SbDJ3?=
- =?utf-8?B?TjZCSTgyMCtva3plN2hONUwyNUxIRTNvL05ROTJhV2NBRHRGM1Y2eHAwaEJw?=
- =?utf-8?B?S1o3VUdHb2gvREhsN1FmVk5sTGRjQis5d2JoWTZlbURVUmJhKzdBbjlzazJ3?=
- =?utf-8?B?d1hMdnhZR2cxMnJqR21MTVUzcVFsK3BQalVkRWR0di8yRHdPVEdRMkFhcXFH?=
- =?utf-8?B?WTErWGNiZTFVcERjVEdXak9VL1M0RFJVbVQxcTdmTC9ISmxJRU84RTJIY1Yx?=
- =?utf-8?B?cVBoWklRMWkzT29XRVF5dm4rOFdsektkZXNxcXZaZWJhVndSZDk2Y0ZOMDZD?=
- =?utf-8?B?b0hrUG1oUGVPdzg5ZGRtVitqWERtakJZcVdYa3A1RCt2WG9HdnlKL1NrL2Iy?=
- =?utf-8?B?NDZ2Y25RNHZRdTVveU5aMUJiZkxZNURWbFhtYVFqV3JKTlluUGh5MkdKeDRt?=
- =?utf-8?B?V2ZTb0lOT3lncWtrSWlZS2ExMEhEQm5nUVR6VGVUV1JEQ0xjS1NHaDFDRXBU?=
- =?utf-8?B?b0NhUXhZUXFUdlh0WXl4WDhHYTZKSzgxYUwzNDJLZndzSWhUUnlDQnlBRjZk?=
- =?utf-8?B?THRQLzU4dk1hcDNOQjRQTnM2cEhsK0hFN2ZVNW9LT1BOYlgrNWtYand0Tita?=
- =?utf-8?B?NUYvdjVvNUZLMFRDR1NQRkd5S21HeGwrMWVvdk9CRlJaaFhjMGovMFVrbG5m?=
- =?utf-8?B?SHFQNjA5YVNpVG1vODBISUZSU0tobHFzTU96dHZIM2RnZ3lnNjlmaGhzQzVZ?=
- =?utf-8?B?dTRub0c5WkoxL2FpL3kyR25qZ1FHV245Q1AxYzI3TWRtRFBFaEJOM1RMak1o?=
- =?utf-8?B?eGxhTysxNFQzMGMwV1pLZmJ2a2dNU0NWZVNhTXNLZUpzc2huWlVZdDZLaENC?=
- =?utf-8?B?ckdodTd2Y3d3cFl4b3RGM0ZqcXorYVA0dm5LR2RZd1l2SDF0eU5pUWZoU2xn?=
- =?utf-8?B?N0hWVG8ycitVZ0RZRU5NQ0UxUU90WGU4V3EwQ1I1OGptbHNqRGIvL0pEOTVI?=
- =?utf-8?B?ZTdlZi9BdzFaQ2p5UFRjK21oNVBGSC8xZER6a2JubWF1UHhYUU5EdzJjV3pS?=
- =?utf-8?B?YXJFN0JrN2pGODFpcUdjT3JXbWR6a1YyQy9aVEpzZTRwQjJDV0xUVUJ6MTJH?=
- =?utf-8?B?Z1pkRXFBK3p6K3FrUS9vN3ZFWkZmdTBPdkoya01nQmpndmZPb1BpamlpTCtk?=
- =?utf-8?B?NERENFM0YVBVMStkbmNibEpoNEFUOTVLM0kvVXVUK2tHZkd2MUQ1WVNTNVlX?=
- =?utf-8?B?QVBQa2FjQVZieThqNWkxcmphbmwxTW5YZk8yZm1TR3VQVkRsVUFQQUZvUlR2?=
- =?utf-8?B?YWFmOTRUUGlWWFl1b090QWxreEc3RDhiNWJiTmhlQm1SVnp4Vk1vVTRjN1ds?=
- =?utf-8?B?M0FrVXhMdDlqQVVkeVRtTHVRRFk5TEdBMithVCtXaTJDQXBWVXpUZ1V6Vmdm?=
- =?utf-8?B?QjZRSFpiaDd6RXlBN2R6SnhaeXc0UFMzSzZNUkk2ZXAvdHNsMkxLaUpJVW1z?=
- =?utf-8?B?VFREa3puOGVTSGJwejJKYzc0SklkbElJRUdGRC8yV3Y1QlhpQ2Jlb3VQSDJT?=
- =?utf-8?B?NEIrTkVna1pFd3dYUkh1RndRNEtFbTVWdDJXZ2U3Qk55alY4RU14dzVuMGRH?=
- =?utf-8?B?eXBrSkxKTVVUeDRiR0ZUN1F1TW0vS280bFJ4MVNrdkkxTjEyU3JWcmJJRXM2?=
- =?utf-8?B?akUvL0I4RUowSDF6WjZEVXpWMFI2WGhMZHNXYWFncGpzQnBjMyt6LytyY0la?=
- =?utf-8?B?Yi9BbVBVTTFIZExnUFRoSzZJY1BIS0NLZ1FTYS9aS3BDM3YrT2xIdDdncDRl?=
- =?utf-8?B?MGxjMmFPMjNVL3JIYzJwOUluSTBzQmtIQXQ3UXcxNnhUdThmYXBLWjZ1aW5P?=
- =?utf-8?B?Y1NuVVhhN3NZMjVGdzc4VDZIWkpOcUlDSkZydDB6NzZEeUpaR0ZUVHZScys3?=
- =?utf-8?B?ZkdIcEp2MlA5U2hwOEVGWFpZYUova1VXYmxZNURGanNiemdGazQyU3IvdENV?=
- =?utf-8?B?Y3l6OW5MRW1hN2d6cWVlMEhmYzhPdk83dktMb0swMS9lUjdBSVpJY0k5bWw0?=
- =?utf-8?B?Q3BKaWVZWUZsNnpWZ1ZOTXVKQTFnSkJmYlRXRXlNRG5MaWZvTnBLazEwWmJk?=
- =?utf-8?B?Z2lzYy95c0M3OFRyZGlGcUFzV2tBeExMUEJWakNUWHRzUWhORkRvR2c3cWNN?=
- =?utf-8?Q?8yLh3t8zvhq5Hl5n62OKvZjKYTzuHtFE1kRZO?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2422AF923F168A41861950611487BDB3@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sat, 7 May 2022 03:09:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D135541B5;
+        Sat,  7 May 2022 00:06:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBAE5B80CB7;
+        Sat,  7 May 2022 07:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4539C385A5;
+        Sat,  7 May 2022 07:05:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651907160;
+        bh=qwSy8KX+r7vn0S4Djy5+UPC1jZRCNM6ihNYVtELPlVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oXhx8ZJtl3cEAwR6coAnbItRzC44ZHxHZGaub/YrIOThAcXRh0kH43PzrX6HC4Oic
+         zHenTmpeaklHaXT61P3vnnCEWQjqmhE/EaLEvsiPDA2DG299YNcOrkV+C7LqZrMTAl
+         dlz066J7FWaSYh+i8XWPpQ5S1CpzbDhxFvBpPAkY=
+Date:   Sat, 7 May 2022 09:05:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] rfkill: uapi: fix RFKILL_IOCTL_MAX_SIZE ioctl request
+ definition
+Message-ID: <YnYaVeCJA1VQuYie@kroah.com>
+References: <20220506171534.99509-1-glebfm@altlinux.org>
+ <20220506172454.120319-1-glebfm@altlinux.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b82c2d5-dadd-4ab2-e7fe-08da2ff7c3ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2022 07:04:01.6569
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 070aGF7ZIOFM9wtOXx1Mgnw8granqrDJxWc42+vurs0xuP2OYlumvoigrQ7GHoSZBERo4G/YkC8hEySqCkK3mEkAfH3h61Hqsr5emAWHglA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3987
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506172454.120319-1-glebfm@altlinux.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAyLzA1LzIwMjIgw6AgMTU6MjQsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gQ0dFTCA8Y2dlbC56dGVAZ21haWwuY29tPiB3cml0ZXM6DQo+PiBGcm9tOiBKaW5nIFlhbmd5
-YW5nIDxqaW5nLnlhbmd5YW5nQHp0ZS5jb20uY24+DQo+Pg0KPj4gVXNlIEJVR19PTiBpbnN0ZWFk
-IG9mIGEgaWYgY29uZGl0aW9uIGZvbGxvd2VkIGJ5IEJVRy4NCj4+DQo+PiAuL2FyY2gvcG93ZXJw
-Yy9pbmNsdWRlL2FzbS9ib29rM3MvNjQvcGtleXMuaDoyMToyLTU6V0FSTklORw0KPj4gVXNlIEJV
-R19PTiBpbnN0ZWFkIG9mIGlmIGNvbmRpdGlvbiBmb2xsb3dlZCBieSBCVUcuDQo+PiAuL2FyY2gv
-cG93ZXJwYy9pbmNsdWRlL2FzbS9ib29rM3MvNjQvcGtleXMuaDoxNDoyLTU6V0FSTklORw0KPj4g
-VXNlIEJVR19PTiBpbnN0ZWFkIG9mIGlmIGNvbmRpdGlvbiBmb2xsb3dlZCBieSBCVUcuDQo+Pg0K
-Pj4gR2VuZXJhdGVkIGJ5OiBzY3JpcHRzL2NvY2NpbmVsbGUvbWlzYy9idWdvbi5jb2NjaQ0KPj4N
-Cj4+IFJlcG9ydGVkLWJ5OiBaZWFsIFJvYm90IDx6ZWFsY2lAenRlLmNvbS5jbj4NCj4+IFNpZ25l
-ZC1vZmYtYnk6IEppbmcgWWFuZ3lhbmcgPGppbmcueWFuZ3lhbmdAenRlLmNvbS5jbj4NCj4+IC0t
-LQ0KPj4gICBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vYm9vazNzLzY0L3BrZXlzLmggfCA2ICsr
-LS0tLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygt
-KQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vYm9vazNzLzY0
-L3BrZXlzLmggYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vYm9vazNzLzY0L3BrZXlzLmgNCj4+
-IGluZGV4IDViMTc4MTMuLjVmNzRmMGMgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3Bvd2VycGMvaW5j
-bHVkZS9hc20vYm9vazNzLzY0L3BrZXlzLmgNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9pbmNsdWRl
-L2FzbS9ib29rM3MvNjQvcGtleXMuaA0KPj4gQEAgLTEwLDE1ICsxMCwxMyBAQCBzdGF0aWMgaW5s
-aW5lIHU2NCB2bWZsYWdfdG9fcHRlX3BrZXlfYml0cyh1NjQgdm1fZmxhZ3MpDQo+PiAgIAlpZiAo
-IW1tdV9oYXNfZmVhdHVyZShNTVVfRlRSX1BLRVkpKQ0KPj4gICAJCXJldHVybiAweDBVTDsNCj4+
-ICAgDQo+PiAtCWlmIChyYWRpeF9lbmFibGVkKCkpDQo+PiAtCQlCVUcoKTsNCj4+ICsJQlVHX09O
-KHJhZGl4X2VuYWJsZWQoKSk7DQo+PiAgIAlyZXR1cm4gaGFzaF9fdm1mbGFnX3RvX3B0ZV9wa2V5
-X2JpdHModm1fZmxhZ3MpOw0KPj4gICB9DQo+PiAgIA0KPj4gICBzdGF0aWMgaW5saW5lIHUxNiBw
-dGVfdG9fcGtleV9iaXRzKHU2NCBwdGVmbGFncykNCj4+ICAgew0KPj4gLQlpZiAocmFkaXhfZW5h
-YmxlZCgpKQ0KPj4gLQkJQlVHKCk7DQo+PiArCUJVR19PTihyYWRpeF9lbmFibGVkKCkpOw0KPj4g
-ICAJcmV0dXJuIGhhc2hfX3B0ZV90b19wa2V5X2JpdHMocHRlZmxhZ3MpOw0KPj4gICB9DQo+IA0K
-PiBIYXZlIHlvdSBjaGVja2VkIGhvdyB0aGlzIGNoYW5nZXMgdGhlIGdlbmVyYXRlZCBjb2RlPw0K
-PiANCj4gcmFkaXhfZW5hYmxlZCgpIGlzIGEganVtcCBsYWJlbCwgdmlhIG1tdV9mZWF0dXJlKCku
-DQo+IA0KPiBQb3NzaWJseSB0aGUgY29tcGlsZXIganVzdCB3b3JrcyBpdCBhbGwgb3V0IGFuZCBn
-ZW5lcmF0ZXMgdGhlIHNhbWUgY29kZSwNCj4gYnV0IEknZCB3YW50IHNvbWUgZXZpZGVuY2Ugb2Yg
-dGhhdCBiZWZvcmUgbWVyZ2luZyB0aGlzLg0KDQpTZWVtcyBsaWtlIHRoZSBjb21waWxlciBpcyBu
-b3QgdGhhdCBnb29kLCB0aGUgZ2VuZXJhdGVkIGNvZGUgZm9yIHRlc3QxKCkgDQppcyBtdWNoIGJl
-dHRlciB0aGFuIHRoZSBvbmUgZm9yIHRlc3QyKCksIHNlZSBiZWxvdy4NCg0Kdm9pZCB0ZXN0MSh2
-b2lkKQ0Kew0KCWlmIChyYWRpeF9lbmFibGVkKCkpDQoJCUJVRygpOw0KfQ0KDQp2b2lkIHRlc3Qy
-KHZvaWQpDQp7DQoJQlVHX09OKHJhZGl4X2VuYWJsZWQoKSk7DQp9DQoNCjAwMDAwMDAwMDAwMDA5
-MDAgPC50ZXN0MT46DQogIDkwMDoJNjAgMDAgMDAgMDAgCW5vcA0KICA5MDQ6CTBmIGUwIDAwIDAw
-IAl0d3VpICAgIHIwLDANCiAgOTA4Ogk2MCAwMCAwMCAwMCAJbm9wDQogIDkwYzoJNjAgMDAgMDAg
-MDAgCW5vcA0KICA5MTA6CTRlIDgwIDAwIDIwIAlibHINCiAgOTE0Ogk2MCAwMCAwMCAwMCAJbm9w
-DQogIDkxODoJNjAgMDAgMDAgMDAgCW5vcA0KICA5MWM6CTYwIDAwIDAwIDAwIAlub3ANCg0KMDAw
-MDAwMDAwMDAwMDkyMCA8LnRlc3QyPjoNCiAgOTIwOgk2MCAwMCAwMCAwMCAJbm9wDQogIDkyNDoJ
-MzkgMjAgMDAgMDEgCWxpICAgICAgcjksMQ0KICA5Mjg6CTBiIDA5IDAwIDAwIAl0ZG5laSAgIHI5
-LDANCiAgOTJjOgk0ZSA4MCAwMCAyMCAJYmxyDQogIDkzMDoJMzkgMjAgMDAgMDAgCWxpICAgICAg
-cjksMA0KICA5MzQ6CTBiIDA5IDAwIDAwIAl0ZG5laSAgIHI5LDANCiAgOTM4Ogk0ZSA4MCAwMCAy
-MCAJYmxyDQoNCg0KV2Ugc2hvdWxkIGtlZXAgdGhpbmdzIGFzIHRoZXkgYXJlIGFuZCBjaGFuZ2Ug
-dGhlIGNvY2NpbmVsbGUgc2NyaXB0Lg0KDQpDaHJpc3RvcGhlDQo=
+On Fri, May 06, 2022 at 05:24:54PM +0000, Gleb Fotengauer-Malinovskiy wrote:
+> Fixes: 54f586a91532 ("rfkill: make new event layout opt-in")
+> Cc: stable@vger.kernel.org # 5.11+
+> Signed-off-by: Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+> ---
+
+No changelog text at all?  I know I don't take patches like that, maybe
+other subsystem maintainers are more lax?
+
+Please provide a changelog...
+
+thanks,
+
+greg k-h

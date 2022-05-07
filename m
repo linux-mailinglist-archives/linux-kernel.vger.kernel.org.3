@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A9251E97C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F71851E97F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446870AbiEGTb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S1446874AbiEGTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiEGTbZ (ORCPT
+        with ESMTP id S231754AbiEGTec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:31:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4092A1F60C;
-        Sat,  7 May 2022 12:27:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 7 May 2022 15:34:32 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5D317ABD;
+        Sat,  7 May 2022 12:30:40 -0700 (PDT)
+Received: from [10.0.0.209] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8476091C;
-        Sat,  7 May 2022 19:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF49C385A6;
-        Sat,  7 May 2022 19:27:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651951657;
-        bh=tCbjNWh33TN9ZWuP1GI7G43uFLsaZ6EsYzzFhSYLP/k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WvoOio3aGVWCzgmEJRP6dVi9rtgboB9UsetZ5WGs7wiWmmOW2kSdNKBYvbVvDrF4Z
-         ODh/f2zbCEdRdTsmFhw1JHjz8bjaZW4/UBau0oOE7znx3EK9cA/4MdEF0XA+3Lq4Zc
-         Unkzzgo+/HTfrXB0d7J6zELPxTbdCBV/9ZN860i6L18jIOgz3TqUFvo23D9fhh7dd4
-         1uA2v/PWIjNgfww163WsmcZkXOpECZ3f01vSAo+ve19J9BvYuOnwnP6gZkUrB90887
-         u8ZvUzkTTTYx/NDRt0keQa5kF8vqw2hog4iIAM/fEw6CU/0SkniDfyy5XQdES8srEm
-         8V3TumBAt5UHQ==
-Date:   Sat, 7 May 2022 22:29:12 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
-Message-ID: <YnbIiJynQq/tcFa2@iki.fi>
-References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
- <20220506062553.1068296-8-a.fatoum@pengutronix.de>
- <YnbH2Fgn/JFOU3Rf@iki.fi>
+        by ixit.cz (Postfix) with ESMTPSA id E139C2007F;
+        Sat,  7 May 2022 21:30:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1651951836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cBgrBctusl2KdU51JeeQGLmL27dGU5bCAkAXZtAGtio=;
+        b=hoar1WXaOQHm22+HDxJCebarFpAAnJbBuJsZsiibHs03bj+RCs6LGoSivs1iuoC/SjkQfw
+        4RRSH2f3f0ca7eeZzmFXua2ytpzj8b3OnQ5Y88lJOQ3ceRbDhqm+rljcnhrVtmVDW/R4m+
+        jDiHdtsq2Pp3judabrORYHSGsvM3b4A=
+Message-ID: <dc6a4728-f08d-caa3-29c6-7f4a18e77f11@ixit.cz>
+Date:   Sat, 7 May 2022 21:30:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnbH2Fgn/JFOU3Rf@iki.fi>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] dt-bindings: watchdog: improve QCOM compatible parsing
+ for modern chips
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111212310.97566-1-david@ixit.cz>
+ <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
+From:   David Heidelberg <david@ixit.cz>
+In-Reply-To: <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,75 +65,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 10:26:21PM +0300, Jarkko Sakkinen wrote:
-> On Fri, May 06, 2022 at 08:25:53AM +0200, Ahmad Fatoum wrote:
-> > Create a maintainer entry for CAAM trusted keys in the Linux keyring.
-> > 
-> > Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > ---
-> > v8 -> v9:
-> >   - rewrite commit message (Jarkko)
-> > v7 -> v8:
-> >   - add Pankaj's Reviewed-by
-> > v6 -> v7:
-> >   - split off as separate patch (Jarkko)
-> > 
-> > To: Jarkko Sakkinen <jarkko@kernel.org>
-> > To: James Bottomley <jejb@linux.ibm.com>
-> > To: Mimi Zohar <zohar@linux.ibm.com>
-> > To: David Howells <dhowells@redhat.com>
-> > Cc: James Morris <jmorris@namei.org>
-> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> > Cc: "Horia Geantă" <horia.geanta@nxp.com>
-> > Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> > Cc: David Gstir <david@sigma-star.at>
-> > Cc: Richard Weinberger <richard@nod.at>
-> > Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> > Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> > Cc: Michael Walle <michael@walle.cc>
-> > Cc: Sumit Garg <sumit.garg@linaro.org>
-> > Cc: keyrings@vger.kernel.org
-> > Cc: linux-crypto@vger.kernel.org
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-integrity@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-security-module@vger.kernel.org
-> > ---
-> >  MAINTAINERS | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 5e8c2f611766..e58e6fc3016d 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10855,6 +10855,15 @@ S:	Supported
-> >  F:	include/keys/trusted_tee.h
-> >  F:	security/keys/trusted-keys/trusted_tee.c
-> >  
-> > +KEYS-TRUSTED-CAAM
-> > +M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > +R:	Pengutronix Kernel Team <kernel@pengutronix.de>
-> > +L:	linux-integrity@vger.kernel.org
-> > +L:	keyrings@vger.kernel.org
-> > +S:	Maintained
-> > +F:	include/keys/trusted_caam.h
-> > +F:	security/keys/trusted-keys/trusted_caam.c
-> > +
-> >  KEYS/KEYRINGS
-> >  M:	David Howells <dhowells@redhat.com>
-> >  M:	Jarkko Sakkinen <jarkko@kernel.org>
-> > -- 
-> > 2.30.2
-> > 
-> 
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-3/7 would probably need tested-by. Other than that this starts to look
-good...
+On 07/05/2022 19:22, Krzysztof Kozlowski wrote:
+> On 11/01/2022 22:23, David Heidelberg wrote:
+>> Parse compatible as expected for modern QCOMs.
+>>
+>> Fixes warnings as:
+>> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
+>>          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
+>>          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> ---
+>> v2:
+>>   - updated compatible list as two compatibles has been added upstream
+>>   -> resolve merge conflict
+>> ---
+>>   .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
+>>   1 file changed, 21 insertions(+), 16 deletions(-)
+> It seems this patch received three reviews but was not picked up. David,
+> do you plan to work on this?
+>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> index 16c6f82a13ca..4ff8c59c59ab 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> @@ -14,22 +14,27 @@ allOf:
+>>   
+>>   properties:
+>>     compatible:
+>> -    enum:
+>> -      - qcom,apss-wdt-qcs404
+>> -      - qcom,apss-wdt-sc7180
+>> -      - qcom,apss-wdt-sc7280
+>> -      - qcom,apss-wdt-sdm845
+>> -      - qcom,apss-wdt-sdx55
+>> -      - qcom,apss-wdt-sm6350
+>> -      - qcom,apss-wdt-sm8150
+>> -      - qcom,apss-wdt-sm8250
+>> -      - qcom,kpss-timer
+>> -      - qcom,kpss-wdt
+>> -      - qcom,kpss-wdt-apq8064
+>> -      - qcom,kpss-wdt-ipq4019
+>> -      - qcom,kpss-wdt-ipq8064
+>> -      - qcom,kpss-wdt-msm8960
+>> -      - qcom,scss-timer
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,apss-wdt-qcs404
+>> +              - qcom,apss-wdt-sc7180
+>> +              - qcom,apss-wdt-sc7280
+>> +              - qcom,apss-wdt-sdm845
+>> +              - qcom,apss-wdt-sdx55
+>> +              - qcom,apss-wdt-sm6350
+>> +              - qcom,apss-wdt-sm8150
+>> +              - qcom,apss-wdt-sm8250
+>> +          - const: qcom,kpss-wdt
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,kpss-wdt
+>> +              - qcom,kpss-timer
+>> +              - qcom,kpss-wdt-apq8064
+>> +              - qcom,kpss-wdt-ipq4019
+>> +              - qcom,kpss-wdt-ipq8064
+>> +              - qcom,kpss-wdt-msm8960
+> These do not look correct without appropriate fallback.
 
-BR, Jarkko
+Yes the situation there isn't optimal and I'm afraid I cannot solve it 
+in scope of this change.
+
+Previously I was thinking about also merging MSM timer into this 
+binding, which shares the compatible, but uses different driver. Sadly, 
+currently don't have a time for it (have some WIP patch locally, if 
+anyone interested to take a look).
+
+I'm (re-)sending v3 with another S-off, but it solves only warnings 
+described in commit message.
+
+David
+
+>
+>> +              - qcom,scss-timer
+>>   
+>>     reg:
+>>       maxItems: 1
+>
+> Best regards,
+> Krzysztof
+
+-- 
+David Heidelberg
+Consultant Software Engineer
+
+Matrix: @okias:matrix.org
+

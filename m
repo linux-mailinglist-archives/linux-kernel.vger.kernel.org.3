@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AA351E9DA
+	by mail.lfdr.de (Postfix) with ESMTP id 5727751E9DB
 	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234715AbiEGUSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 16:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S1446984AbiEGUTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 16:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiEGUR5 (ORCPT
+        with ESMTP id S234125AbiEGUTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 16:17:57 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB9255A7
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 13:14:08 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 476E924002D
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 22:14:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1651954446; bh=SRuGjTpb0KWkEDEofC5Ly6FHVIAsobmM0kLjf3d6gpU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aJNPHx1/71wptf4GpJrbEGNVnpINKT5ku0ynWfqglBtATOB0kbwB+PFXZ9pxClbPu
-         rdKBK0TsKv1pgKTlN4W65JxV6Ce5JiaM7+Sp1oWgb7URrSnOLg1TxoQOCW1GUbYvCS
-         X74/Nn/Njg2rhCe6/tjBR62oooIsx3OS3QLH3rQ5bZZ3Opeg92jyPtZYNmoOW7pnCG
-         B8VsLrN+zYSTahLULVn5wUPZM00V15GSOf+JBCNRA5xgVNB2ybgkT8+SoZxzU9CXIT
-         Ys2afAUd+G6NOAxOD1m0XPexNSSgD6HH4f3JaG/R9o94CxG61aE5UrBWqoQC/r89DS
-         y+qzeEua3FZCg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Kwdth5SJ5z9rxG;
-        Sat,  7 May 2022 22:14:04 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
-Subject: [PATCH net-next v5] net: atlantic: always deep reset on pm op,
- fixing up my null deref regression
-Date:   Sat, 07 May 2022 16:27:48 +0000
-Message-ID: <87fsllcd80.fsf@posteo.de>
+        Sat, 7 May 2022 16:19:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F01255BC
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 13:15:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7369EB80BA3
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 20:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1BFFC385A6;
+        Sat,  7 May 2022 20:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651954510;
+        bh=vy1aTQRyTt6mm1Fciyw9fxZa5j08wtLtUivP/CPXaw4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HN9ADlsGpl4HGsRRNrNXHM0KLz5DLENt4xIO8fDLvSspVbIVqLC8KUvhKNCtkX1X4
+         D+6r3SrryyIDopT/IdvoVS3zxdIpNnrXrHGt8wgXl2lPBrzHDFIXF/SKOJMArRSxkD
+         GGdT8bPiLKpo3FV1087u9Qf0CN2Ex4/qWqZtJUU0F2NLK7Y15PI9oKV4axf1aSKnV9
+         dDz2Q3LYiiWDEOJcaxd1FpBwCLbQh2KVCtzYl9Yb4Mqxa/ZQ7q3jaNhfejDUCPPH4A
+         vqXh92WhDvy1suM/LE7B0tb2qfbY2gpX1I+7nAHqxRWqifIjp5qrLrPNt5Oh8mLN5f
+         aWYnpY2bMn30w==
+From:   SeongJae Park <sj@kernel.org>
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+Cc:     sj@kernel.org, skhan@linuxfoundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Add documentation for Enum value 'NR_DAMON_OPS' in
+Date:   Sat,  7 May 2022 20:15:07 +0000
+Message-Id: <20220507201507.46050-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220507165620.110706-1-gautammenghani201@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,93 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 18dc080d8d4a30d0fcb45f24fd15279cc87c47d5 Mon Sep 17 00:00:00 2001
-Date: Wed, 4 May 2022 21:30:44 +0200
+Hi Gautam,
 
-The impact of this regression is the same for resume that I saw on
-thaw: the kernel hangs and nothing except SysRq rebooting can be done.
 
-Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
-par in pm functions, preventing null derefs"), where I disabled deep
-pm resets in suspend and resume, trying to make sense of the
-atl_resume_common() deep parameter in the first place.
+On Sat, 7 May 2022 22:26:20 +0530 Gautam Menghani <gautammenghani201@gmail.com> wrote:
 
-It turns out, that atlantic always has to deep reset on pm
-operations. Even though I expected that and tested resume, I screwed
-up by kexec-rebooting into an unpatched kernel, thus missing the
-breakage.
+> Fix the warning - "Enum value 'NR_DAMON_OPS' not described in 
+> enum 'damon_ops_id'" generated by the command "make pdfdocs"
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+> Changes in v2:
+> - Fix checkpatch warning of 75 characters per line
+> - Fix email mismatch in from and signed by field
 
-This fixup obsoletes the deep parameter of atl_resume_common, but I
-leave the cleanup for the maintainers to post to mainline.
+Thank you for the fix, but please read below.
 
-Suspend and hibernation were successfully tested by the reporters.
+Could you please adjust the subject so that we can know for what subsystem this
+change is made?  E.g., mm/damon: Add documentation for ...
 
-Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preventing null derefs")
-Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=@protonmail.com/
-Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
-Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
-Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-CC: <stable@vger.kernel.org> # 5.10+
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
----
-I’m very sorry for this regression. It would be nice, if this could
-reach mainline before 5.18 release, if applicable. This restores the
-original suspend behaviour, while keeping the fix for hibernation. The
-fix for hibernation might not be the root cause, but still is the most
-simple fix for backporting to stable while the root cause is unknown
-to the maintainers.
+> 
+>  include/linux/damon.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> index f23cbfa4248d..b972a7a3b6f0 100644
+> --- a/include/linux/damon.h
+> +++ b/include/linux/damon.h
+> @@ -262,6 +262,7 @@ struct damos {
+>   *
+>   * @DAMON_OPS_VADDR:	Monitoring operations for virtual address spaces
+>   * @DAMON_OPS_PADDR:	Monitoring operations for the physical address space
+> + * @NR_DAMON_OPS:	Number of monitoring operations for a particular implementation
 
-Changes in v2:
-Patch formatting fixes
-– Fix Fixes tag
-– Simplify stable Cc tag
-– Fix Signed-off-by tag
+My previous comment to this part seems not answered?  I'd suggest
+'s/for a particular implementation/implementations/'
 
-Changes in v3:
-– Prefixed commit reference with "commit" aka I managed to use
-  checkpatch.pl.
-– Added Tested-by tags for the testing reporters.
-– People start to get annoyed by my patch revision spamming. Should be
-  the last one.
 
-Changes in v4:
-– Moved patch changelog to comment section
-– Use unicode ndash for patch changelog list to avoid confusion with
-  diff in editors
-– Expanded comment
-– Targeting net-next by subject
+Thanks,
+SJ
 
-Changes in v5:
-– Changed my MTA transfer encoding to 8 bit instead of
-  quoted-printable. Git should like this a bit more.
-
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 3a529ee8c834..831833911a52 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
- 
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
- 
- static int aq_pm_thaw(struct device *dev)
-@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
- 
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
- 
- static const struct dev_pm_ops aq_pm_ops = {
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
--- 
-2.35.1
+>   */
+>  enum damon_ops_id {
+>  	DAMON_OPS_VADDR,
+> -- 
+> 2.25.1
+> 

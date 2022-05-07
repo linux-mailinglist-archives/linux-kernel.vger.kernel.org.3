@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CFD51E80A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D254D51E7EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446580AbiEGPNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S1385502AbiEGPFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354601AbiEGPNs (ORCPT
+        with ESMTP id S241703AbiEGPFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:13:48 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D624BDF;
-        Sat,  7 May 2022 08:10:00 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id a191so8456895pge.2;
-        Sat, 07 May 2022 08:10:00 -0700 (PDT)
+        Sat, 7 May 2022 11:05:39 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8816B13F31;
+        Sat,  7 May 2022 08:01:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso13328821pjb.1;
+        Sat, 07 May 2022 08:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kYQzIWQ2NAfONhuZylugDVT6IAuYpsbZNehqWxZKwgQ=;
-        b=C3GtC8Od1fj3sccJEJKc/tP+2ADQeyk0ch3PFrrU7NxSyiQx6RMdPXKAslG6gHqKmO
-         9096uLOdn0HN54FtG5kEWKr7yn6msgNcMPZ61gIm1FytUwlzKsUzA92aFkUrAtLW7anu
-         7IoE7PmSK6e1g5JF/fe2md4WHDix85BndUhdIhRtSXscBWf7MtzZ9QRSQ5f5T6I1krQT
-         MC5NLb8hAWhgncjfVp3Nk7ooQ/j3r8NWF/aZeLpqNwg4Wg4zJo9Ex5KhwrJB76scVnuX
-         8hK8Z8TmDMB+kfnAwQJdtz+6eI5XS3n2H8uygHywRwrUqI2THYDv5CICJOEsXpQmlQj4
-         Kjsw==
+        bh=8NKAyyQ3FnM44x6XP0i+mCi4s4b8wIYmk1Eo3/lHAUw=;
+        b=pkO8aQEX32pGRB6cUQTzlskx96fDI3Zch6J0tmix+6b5lGYO/1jGYuLlYBUGGX8y+b
+         RzPMgK4Yds5nTwHp6DI6eiKA26MkIT3wOdSeLRfQN1jwLaEbXddgn4DaOHodEJ1On1qV
+         7w6/Nk8TCg/aOIRCKKq8CA7mRalGPGVC3cAClDiPTQunafRK7Y6hVb6R1WoIWb+JWjGU
+         PpqwoEFFFbs3EOneBSVzVDNi0c8Jhd7wU/lWLsXuNs0K1VkAKD5m1bQTKAuFY0K/yCql
+         ATg3cDO2ERtFPpsLJw1lMkKPesDTO3euoIijW80hnYohJPDvKh/wUAw814ADYB9w88W4
+         jszA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kYQzIWQ2NAfONhuZylugDVT6IAuYpsbZNehqWxZKwgQ=;
-        b=saCoTF1iZtkKocCVkSE2QRbU8a+T+cNMzm1bhUyJ9+bOEjJxJm9IZV1JvzjUjZCvgJ
-         iyIBoy/yGPKI76n7a9GW4TdWojUhl3C8ttH/IrYZ1LWDrilJItnKzSMH9Smsre79nvde
-         scJtSCe3lg22/oCvuNonxbBqE7i3/4MKe1qHycsSB9vLr1AptCbcLGkZNkhRc6yKbKMG
-         WO/Vp6nTvECxgF5goqFcoATKuSR5swAFDUPbbS/htWdqDcVAfI9/W1q5Mta/a86H9sr3
-         uTS307yqiW3O3bRSwZd1eokY8a5r5BiK8IwoGa9CLpTrD7PP+DOrGz5Usj4Ab5o4ZVh/
-         Ltyw==
-X-Gm-Message-State: AOAM531J3IU8er1rySI3OnSbWQS/hXJbRcULjKgHTdPthuMwuzEM6sNL
-        ttP/aG7m+AJnUZ1Lii7Q/XxQpfpcObgLb+8E
-X-Google-Smtp-Source: ABdhPJw8W5HoQYr5RDKWnMRa85QzuvzlK9J87OAO4Mre3rLxmytEnZKqgA2kufvP1kuRqKOIjUKgcA==
-X-Received: by 2002:a05:6a00:179f:b0:50d:e311:7d5 with SMTP id s31-20020a056a00179f00b0050de31107d5mr8102406pfg.64.1651936199598;
-        Sat, 07 May 2022 08:09:59 -0700 (PDT)
-Received: from localhost.localdomain ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id g8-20020aa78748000000b0050dc762817bsm5355707pfo.85.2022.05.07.08.09.56
+        bh=8NKAyyQ3FnM44x6XP0i+mCi4s4b8wIYmk1Eo3/lHAUw=;
+        b=3TtWEqwl+VTzLVQDd9RrSUbUEAXqFV8GSE1isDMVVJOcY+IeOBrRrX4xyNJA6GtUu/
+         yiB9yQ9u0wr+Q8sHIkTle+023BqFzkX7AjFrlU+NAqHsfT8W9ZLftMSbyMa+dIG/Lnnh
+         RDepvrnX33UG5d8qAR97t9dljiyVnUwR+LLfCrIpJCHpSbVg3bfafzs31WX+gTAe3k2w
+         mBm6SgWArvusZVFoyuR0G076IyO3fos5SgN0EA6Og0LC0slM9Bo13wHsA7Aw1Bvkq8Up
+         t+h4dqt/9TeHah/1N09XpEFhuapGHTFXl6TEDs6gj0WU+LXGO6kfAS78draRvQIpo5G8
+         dZrg==
+X-Gm-Message-State: AOAM532C+4/DwuEH4qE40y2B8z5RC9Sfh7X52MWCCuLxHcPB37eu9OGl
+        Ins4KjVrmMBoogoVra2E8EAhluhnFmNdMg==
+X-Google-Smtp-Source: ABdhPJwF+kqnOBYFDATtEOscG1AeFgyq/qCkBo/nZj4J9PSn/y2gnNaILWlEqsOT9x3GvyGK3lT5kQ==
+X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr8561903plv.46.1651935711878;
+        Sat, 07 May 2022 08:01:51 -0700 (PDT)
+Received: from localhost.localdomain ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id v21-20020a170902ca9500b0015e8d4eb2a8sm3711007pld.242.2022.05.07.08.01.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 08:09:58 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     skhan@linuxfoundation.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Improve the readability of test results messages in cgroup
-Date:   Sat,  7 May 2022 20:30:46 +0530
-Message-Id: <20220507150046.109741-1-gautammenghani201@gmail.com>
+        Sat, 07 May 2022 08:01:51 -0700 (PDT)
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+X-Google-Original-From: Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, johnson.wang@mediatek.com,
+        mka@chromium.org, jia-wei.chang@mediatek.com,
+        andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
+        sibis@codeaurora.org, saravanak@google.com
+Subject: [PATCH v2 0/5] PM / devfreq: Add cpu based scaling support to passive governor
+Date:   Sun,  8 May 2022 00:01:40 +0900
+Message-Id: <20220507150145.531864-1-cw00.choi@samsung.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,115 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve the readability of status messages that indicate whether the
-kselftest passed or failed. 
+The devfreq passive governor has already supported the devfreq parent device
+for coupling the frequency change if some hardware have the constraints
+such as power sharing and so on.
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
- tools/testing/selftests/kselftest.h         | 12 ++++++------
- tools/testing/selftests/kselftest/runner.sh | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+Add cpu based scaling support to passive governor with required-opp property.
+It uses the cpufreq notifier to catch the frequency change timing of cpufreq
+and get the next frequency according to new cpu frequency by using required-opp
+property. It is based on patch[1] and then just code clean-up by myself.
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index b8f248018174..a38f20f376b3 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -137,7 +137,7 @@ static inline void ksft_test_result_pass(const char *msg, ...)
- 	ksft_cnt.ksft_pass++;
- 
- 	va_start(args, msg);
--	printf("ok %d ", ksft_test_num());
-+	printf("Test %d ok - ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -151,7 +151,7 @@ static inline void ksft_test_result_fail(const char *msg, ...)
- 	ksft_cnt.ksft_fail++;
- 
- 	va_start(args, msg);
--	printf("not ok %d ", ksft_test_num());
-+	printf("Test %d not ok - ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -177,7 +177,7 @@ static inline void ksft_test_result_xfail(const char *msg, ...)
- 	ksft_cnt.ksft_xfail++;
- 
- 	va_start(args, msg);
--	printf("ok %d # XFAIL ", ksft_test_num());
-+	printf("Test %d ok # XFAIL ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -191,7 +191,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
- 	ksft_cnt.ksft_xskip++;
- 
- 	va_start(args, msg);
--	printf("ok %d # SKIP ", ksft_test_num());
-+	printf("Test %d ok # SKIP ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -206,7 +206,7 @@ static inline void ksft_test_result_error(const char *msg, ...)
- 	ksft_cnt.ksft_error++;
- 
- 	va_start(args, msg);
--	printf("not ok %d # error ", ksft_test_num());
-+	printf("Test %d not ok # error ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -287,7 +287,7 @@ static inline int ksft_exit_skip(const char *msg, ...)
- 	 */
- 	if (ksft_plan || ksft_test_num()) {
- 		ksft_cnt.ksft_xskip++;
--		printf("ok %d # SKIP ", 1 + ksft_test_num());
-+		printf("Test %d ok # SKIP ", 1 + ksft_test_num());
- 	} else {
- 		printf("1..0 # SKIP ");
- 	}
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 294619ade49f..6d95a1e96ea8 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -94,7 +94,7 @@ run_one()
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
- 		echo "# Warning: file $TEST is missing!"
--		echo "not ok $test_num $TEST_HDR_MSG"
-+		echo "Test $test_num not ok - $TEST_HDR_MSG"
- 	else
- 		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
- 		cmd="./$BASENAME_TEST $kselftest_cmd_args"
-@@ -106,7 +106,7 @@ run_one()
- 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
- 				cmd="$interpreter ./$BASENAME_TEST"
- 			else
--				echo "not ok $test_num $TEST_HDR_MSG"
-+				echo "Test $test_num not ok - $TEST_HDR_MSG"
- 				return
- 			fi
- 		fi
-@@ -114,15 +114,15 @@ run_one()
- 		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
- 			tap_prefix >&4) 3>&1) |
- 			(read xs; exit $xs)) 4>>"$logfile" &&
--		echo "ok $test_num $TEST_HDR_MSG") ||
-+		echo "Test $test_num ok - $TEST_HDR_MSG") ||
- 		(rc=$?;	\
- 		if [ $rc -eq $skip_rc ]; then	\
--			echo "ok $test_num $TEST_HDR_MSG # SKIP"
-+			echo "Test $test_num ok - $TEST_HDR_MSG # SKIP"
- 		elif [ $rc -eq $timeout_rc ]; then \
- 			echo "#"
--			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
-+			echo "Test $test_num not ok - $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
- 		else
--			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
-+			echo "Test $test_num not ok - $TEST_HDR_MSG # exit=$rc"
- 		fi)
- 		cd - >/dev/null
- 	fi
+Make the common code for both passive_devfreq and passive_cpufreq
+parent type to remove the duplicate code.
+
+[1] [RFC,v2] PM / devfreq: Add cpu based scaling support to passive_governor
+- https://lore.kernel.org/patchwork/patch/1101049/
+
+Changes from v1:
+: https://patchwork.kernel.org/project/linux-pm/cover/20210617060546.26933-1-cw00.choi@samsung.com/
+- Rename cpu_data variable to parent_cpu_data to avoid build fail
+- Use for_each_possible_cpu macro when register cpufreq transition notifier
+- Add missing exception handling when cpufreq_passive_register_notifier is failed
+- Keep cpufreq_policy for posible cpus instead of NR_CPU in order to avoid
+  the memory waste when NR_CPU is too high.
+- Add reviewed-by tag of Matthias Kaehlcke for patch1
+
+Chanwoo Choi (4):
+  PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+  PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+  PM / devfreq: passive: Keep cpufreq_policy for possible cpus
+  PM / devfreq: passive: Update frequency when start governor
+
+Saravana Kannan (1):
+  PM / devfreq: Add cpu based scaling support to passive governor
+
+ drivers/devfreq/devfreq.c          |  20 +-
+ drivers/devfreq/governor.h         |  27 ++
+ drivers/devfreq/governor_passive.c | 412 ++++++++++++++++++++++++-----
+ include/linux/devfreq.h            |  17 +-
+ 4 files changed, 402 insertions(+), 74 deletions(-)
+
 -- 
 2.25.1
 

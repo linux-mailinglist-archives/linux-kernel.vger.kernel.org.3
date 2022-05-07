@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E10351E4AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73BA51E4AA
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445680AbiEGGuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 02:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S1445642AbiEGGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 02:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350941AbiEGGuE (ORCPT
+        with ESMTP id S234915AbiEGGqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 02:50:04 -0400
-X-Greylist: delayed 409 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 23:46:17 PDT
-Received: from mail-m17669.qiye.163.com (mail-m17669.qiye.163.com [59.111.176.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D784B5A2CA
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 23:46:17 -0700 (PDT)
-Received: from [172.16.12.141] (unknown [58.22.7.114])
-        by mail-m17669.qiye.163.com (Hmail) with ESMTPA id 363254600F5;
-        Sat,  7 May 2022 14:39:26 +0800 (CST)
-Message-ID: <45058759-13dd-aa43-ac88-2a7c60baa22b@rock-chips.com>
-Date:   Sat, 7 May 2022 14:39:25 +0800
+        Sat, 7 May 2022 02:46:36 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7014863C5;
+        Fri,  6 May 2022 23:42:51 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e24so8855783pjt.2;
+        Fri, 06 May 2022 23:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=uDYYK0Fj+uUZkjFzaGqTdzReaL9mPitJtDVBnfx9TFE=;
+        b=RWj10dAM7328cITCqLPZxKNBHiIP2VBhiOG0YbCUEPdCXsxUPB1J/sqmftI0u+WJ++
+         dXXeCpO6ybZsS4h6QuKTCUQP/yq4tEaoVjJU/Di6BrSTV4yw/eFqmoH6tZ4mwmQP4wBT
+         JFMWfpJiQInyVlCaOmP9yvUwI8m5P4LnxAKkYrcTQdc7PaYXf3p2ss8KTjOMF3MltHBC
+         eChj6UB8R8fwYYsrugsHDRb+p4G/AjR6YlVMpq7dIDfMRygTOFuanOHqREpX7I1yfyVU
+         X5d7MQzG9PnQhnpU1tXJ9PihzNmJ6X4L/ltepjVlX/+mXqjKv8H4EmeL6eNzfcaYP/+m
+         VszQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uDYYK0Fj+uUZkjFzaGqTdzReaL9mPitJtDVBnfx9TFE=;
+        b=HvUa/ROALwTa+uHuxshljNPbckRCgCSNMpdY8+MQ9TyMHoEhfSWBD9BvhVD6JxAxQc
+         CHWmcnb2SB89h37ZnQM5fRxOIeDJNLgXE7jUtkApCOFR1ZS1hAWDbyeKaA2n5id2Ygk3
+         4QqzMn7LfJM63jr7FyfALynHZIuwWZSd0s+glOxUbb3Nq4/cjSnncAirUxauGsMSwOm/
+         HMU0VRZ8dpBnRmbgwuA5NFzXJA+kV3UXLybex/Ca40Hk7XlIYw5ceracepsSkTzsZIfF
+         kLMO9o0SMd/xx+uvxEkp/8j547gM1wpEMVyEkHLEvDQHb3C5cAeeTI7631nswmJiQgSy
+         cmbA==
+X-Gm-Message-State: AOAM531HA+cmKl2pXJ1+YmvttTlLi5x3jpmOGA/BiJDK1e9gu/TwytmP
+        YA6l/WjylYFytsxm6h3nu8I=
+X-Google-Smtp-Source: ABdhPJwpfPeuLpzXH4PC/892IW17e6XhasjpGT05YKNXunBiBaCaRDQIiPjYPa3x6ViD9m9ENDeUIQ==
+X-Received: by 2002:a17:902:9a4c:b0:156:6735:b438 with SMTP id x12-20020a1709029a4c00b001566735b438mr7340365plv.46.1651905770975;
+        Fri, 06 May 2022 23:42:50 -0700 (PDT)
+Received: from [192.168.255.10] ([106.53.4.151])
+        by smtp.gmail.com with ESMTPSA id ev17-20020a17090aead100b001cb6527ca39sm8660296pjb.0.2022.05.06.23.42.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 23:42:50 -0700 (PDT)
+Message-ID: <6f59afd3-a591-90fd-0428-3572d910b689@gmail.com>
+Date:   Sat, 7 May 2022 14:43:01 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH -next] drm/rockchip: Fix Kconfig dependencies
-Content-Language: en-US
-To:     Ren Zhijie <renzhijie2@huawei.com>, hjc@rock-chips.com,
-        heiko@sntech.de, airlied@linux.ie, daniel@ffwll.ch,
-        lyude@redhat.com, tzimmermann@suse.de
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220507010039.117310-1-renzhijie2@huawei.com>
-From:   Andy Yan <andy.yan@rock-chips.com>
-In-Reply-To: <20220507010039.117310-1-renzhijie2@huawei.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-5-haoxu.linux@gmail.com>
+ <28b1901e-3eb2-2a50-525c-62e1aa39eaac@gmail.com>
+From:   Hao Xu <haoxu.linux@gmail.com>
+In-Reply-To: <28b1901e-3eb2-2a50-525c-62e1aa39eaac@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRlKQklWS0NLHRlCQk
-        4eHkoYVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nk06Izo6LD0rDA1PPzEtPgkU
-        LCwwCT5VSlVKTU5KQktOTk1NQ0pKVTMWGhIXVRoVHwJVAhoVOwkUGBBWGBMSCwhVGBQWRVlXWRIL
-        WUFZTkNVSUlVTFVKSk9ZV1kIAVlBSE5PSjcG
-X-HM-Tid: 0a809d3e971dda59kuws363254600f5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhijie:
+在 2022/5/7 上午12:22, Pavel Begunkov 写道:
+> On 5/6/22 08:01, Hao Xu wrote:
+>> From: Hao Xu <howeyxu@tencent.com>
+>>
+>> Add a helper for poll clean, it will be used in the multishot accept in
+>> the later patches.
+>>
+>> Signed-off-by: Hao Xu <howeyxu@tencent.com>
+>> ---
+>>   fs/io_uring.c | 23 ++++++++++++++++++-----
+>>   1 file changed, 18 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/fs/io_uring.c b/fs/io_uring.c
+>> index d33777575faf..0a83ecc457d1 100644
+>> --- a/fs/io_uring.c
+>> +++ b/fs/io_uring.c
+>> @@ -5711,6 +5711,23 @@ static int io_accept_prep(struct io_kiocb *req, 
+>> const struct io_uring_sqe *sqe)
+>>       return 0;
+>>   }
+>> +static inline void __io_poll_clean(struct io_kiocb *req)
+>> +{
+>> +    struct io_ring_ctx *ctx = req->ctx;
+>> +
+>> +    io_poll_remove_entries(req);
+>> +    spin_lock(&ctx->completion_lock);
+>> +    hash_del(&req->hash_node);
+>> +    spin_unlock(&ctx->completion_lock);
+>> +}
+>> +
+>> +#define REQ_F_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
+>> +static inline void io_poll_clean(struct io_kiocb *req)
+>> +{
+>> +    if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == 
+>> REQ_F_APOLL_MULTI_POLLED)
+> 
+> So it triggers for apoll multishot only when REQ_F_POLLED is _not_ set,
+> but if it's not set it did never go through arm_poll / etc. and there is
+> nothing to clean up. What is the catch?
 
-On 5/7/22 09:00, Ren Zhijie wrote:
-> If CONFIG_ROCKCHIP_ANALOGIX_DP is not set, the rockchip drm driver
-> will fail to link:
->
-> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_connector_mode_valid':
-> cdn-dp-core.c:(.text+0x1e1): undefined reference to `drm_dp_bw_code_to_link_rate'
-> cdn-dp-core.c:(.text+0x1f4): undefined reference to `drm_dp_bw_code_to_link_rate'
-> drivers/gpu/drm/rockchip/cdn-dp-core.o: In function `cdn_dp_pd_event_work':
-> cdn-dp-core.c:(.text+0x138e): undefined reference to `drm_dp_channel_eq_ok'
-> drivers/gpu/drm/rockchip/cdn-dp-reg.o: In function `cdn_dp_train_link':
-> cdn-dp-reg.c:(.text+0xd5a): undefined reference to `drm_dp_bw_code_to_link_rate'
->
-> The problem is that the DP-helper module has been replaced by the display-helper module.
-> So the driver have to select it.
->
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 1e0f66420b13("drm/display: Introduce a DRM display-helper module")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
->   drivers/gpu/drm/rockchip/Kconfig | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/rockchip/Kconfig b/drivers/gpu/drm/rockchip/Kconfig
-> index 5afab49dc4f2..eb9ffa9e357d 100644
-> --- a/drivers/gpu/drm/rockchip/Kconfig
-> +++ b/drivers/gpu/drm/rockchip/Kconfig
-> @@ -47,6 +47,8 @@ config ROCKCHIP_ANALOGIX_DP
->   config ROCKCHIP_CDN_DP
->   	bool "Rockchip cdn DP"
->   	depends on EXTCON=y || (EXTCON=m && DRM_ROCKCHIP=m)
-> +	select DRM_DISPLAY_HELPER
-> +	select DRM_DISPLAY_DP_HELPER
+No, it is triggered for apoll multishot only when REQ_F_POLLED is set..
+> 
+> btw, don't see the function used in this patch, better to add it later
+> or at least mark with attribute unused, or some may get build failures.
+Gotcha.
+> 
+> 
+>> +        __io_poll_clean(req);
+>> +}
+>> +
+>>   static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+>>   {
+>>       struct io_accept *accept = &req->accept;
+>> @@ -6041,17 +6058,13 @@ static void io_poll_task_func(struct io_kiocb 
+>> *req, bool *locked)
+>>   static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+>>   {
+>> -    struct io_ring_ctx *ctx = req->ctx;
+>>       int ret;
+>>       ret = io_poll_check_events(req, locked);
+>>       if (ret > 0)
+>>           return;
+>> -    io_poll_remove_entries(req);
+>> -    spin_lock(&ctx->completion_lock);
+>> -    hash_del(&req->hash_node);
+>> -    spin_unlock(&ctx->completion_lock);
+>> +    __io_poll_clean(req);
+>>       if (!ret)
+>>           io_req_task_submit(req, locked);
+> 
 
-
-There are two dp(ANALOGIX_DP and CDN_DP) at rockchip drm mainline,
-
-for a totally cleanup and alignment, I think it's better to remove 
-"select DRM_DISPLAY_HELPER if ROCKCHIP_ANALOGIX_DP" under DRM_ROCKCHIP  
-at the head,
-
-and separately add the select for ROCKCHIP_ANALOGIX_DP and ROCKCHIP_CDN_DP.
-
->   	help
->   	  This selects support for Rockchip SoC specific extensions
->   	  for the cdn DP driver. If you want to enable Dp on

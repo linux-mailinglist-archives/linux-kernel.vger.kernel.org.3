@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2921651E9E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A451E9F3
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387151AbiEGUdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 16:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S1446996AbiEGUdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 16:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiEGUdk (ORCPT
+        with ESMTP id S1387182AbiEGUdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 16:33:40 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD51BC95;
-        Sat,  7 May 2022 13:29:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id z2so18549515ejj.3;
-        Sat, 07 May 2022 13:29:52 -0700 (PDT)
+        Sat, 7 May 2022 16:33:43 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D64BBC95;
+        Sat,  7 May 2022 13:29:54 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id t5so12138635edw.11;
+        Sat, 07 May 2022 13:29:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tof11gWdZVMZxib9oySvQf9mu+NWMt2gs2nvPMKj0h4=;
-        b=C3ZuLoKoR2iCe5UXuOCY/VW4LgEWX+8cpj5smDSCHQ4HIxFwlin1LDpr07fod8mdxn
-         wzlv2MY2QGIDFPZJ66WpRVOQuqiq1QwIsCZxq612RI9rGUcF4XG2rTUxWlDiRvv1GNjz
-         p6ZOK68mjBiVohcMZTFTwnYaTzod5W6CJCUzyNufehejYA2CeJ6Wwc8jDOWPTZ1ZChf9
-         /ZkiskxHHwnXLTd6E///2f6IJqaKF0cDDUMpV7Tdcp2VhynpeIz3G68PEx6CZdRwWL6E
-         RgAi4BtoNJz2Cc1b7glnp/0wU314fkJrknE9txUxrgjuxeCX/uebtm4bWMeT+LNKIMfC
-         32tg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dghnijSd8lgtthMZ/SJImobMXWMBJhXwTeRnVajL27E=;
+        b=Sd0f9pL+Ygu7NqDD845vGjqUQO9V0ROI1aXT4DBkeJw63xzBc1tDUQtggUFGJv2cGy
+         zQDIAL+SqwW2Kr+nEzlVRr0I9Q7ip6xe1aSIvYZE9dGHJzB5Al8VVaW1fA+YgFQ5qfw6
+         BpvX2E1i/Q2hVKlz+FPOhUcn+6B5h+Ki+QaEPeW0f/Cd9vaDS2d+r9T9QQtYdzlmw/E2
+         M9m0XjizgR+xAlSd1kz1wBdujaobOpV0zurDiQNiYOIQ9N4q2W/ZeeOWlI5GWHuGd4fe
+         nHXURlWtVCKXsqfEGBgp8jKP6QoGHIirIqlEQRNW20gfQtne6NESJB3gttPkOqVQqw6L
+         g5Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Tof11gWdZVMZxib9oySvQf9mu+NWMt2gs2nvPMKj0h4=;
-        b=AMtU0J7cTBAb3gC+izXhw+S2nsLhhTqLT/4FjW1pHAK0Xix9oSEfrqATxV6m3Z3sZz
-         NbgWAWlwq5bdSSHatu4Ez28NWJdzY0U9yQm2o8/88UxGKac37Ugs1i+ktnRFEyF7IB2M
-         ukV1/JXm1Udjy7c7LZofrBxwMaqmnN9Xc4Q/lnz8O2xPeepFEtXXluMS7J6CucSztWrQ
-         BQwjlPWmcAJ6zw94fqc64aw2e5dmKgD5mMTk6BeltM0l5lUPcZaKM6hGOoIgt9/gBAPJ
-         Ly0zr52LNR5Xm854+m8cf2KhIbca/Um7pxjCQIaRJLI92VENVN4hwl/SUQK/0/pFxE9S
-         CEAg==
-X-Gm-Message-State: AOAM530Y8ZO7+/j7/BiHfmEqDWtq2495EZoZ8yrIkIls7BUlJfxbmz+4
-        klGJbDPG4ZZEzvWAXCQQIqU=
-X-Google-Smtp-Source: ABdhPJwBO0kpC+X39nkzexVVOGLumhjhW2iK1jvS8kyu1A/7LVkn+ROZIbfovMRTEgh0n3UkKCAOCg==
-X-Received: by 2002:a17:906:27cd:b0:6f3:c015:e40d with SMTP id k13-20020a17090627cd00b006f3c015e40dmr8948239ejc.15.1651955391231;
-        Sat, 07 May 2022 13:29:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dghnijSd8lgtthMZ/SJImobMXWMBJhXwTeRnVajL27E=;
+        b=zDilwQ7SE10s/2zbDgKHz7pINrLdMZWswV4wXWnEEcxVKLmd+V3E9zZIwGGt6rkHcz
+         HzytHCwzeP0mvE2LYDpa01BInndmTQ7hFAQZ1JkobGVeiWUCmDue4omG69XlDiLipyti
+         BefJb4O7J7TntDMIIs+x+GQJTz6ie3++wHGDEavH/dPF2rA3yENX3YYPl0vDsB6Tm69i
+         tuyAT5hIfMhHDX0ULuUbWduLX/qQkEXYh6nMPClg7X6DzL3188tr8aHEAS/Buw6XgTQh
+         iNrMB/K+QxpSg/psaRL9Hk6j7e2OZi5H1vHzb+Yuoeyf6nMsqfqbKaP8bTVHkixEIHhC
+         VhVg==
+X-Gm-Message-State: AOAM530GIGOxKOdoW2CMrCi1BGvwNwLVEU92u2G2vT3PxSxZdXUhHZ9X
+        DIvfuyVBYge7xwRVO9ukwMA=
+X-Google-Smtp-Source: ABdhPJwrD4sV3bY7dBOyEXb5y0JCQNB5YHsOYY8Ua3+A99XBNx5tHhDGEO+FNhdz69Nza5+gypGCgw==
+X-Received: by 2002:a05:6402:d05:b0:425:b7ab:776e with SMTP id eb5-20020a0564020d0500b00425b7ab776emr9975258edb.142.1651955392857;
+        Sat, 07 May 2022 13:29:52 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
-        by smtp.googlemail.com with ESMTPSA id k11-20020a056402048b00b0042617ba6383sm3900777edv.13.2022.05.07.13.29.50
+        by smtp.googlemail.com with ESMTPSA id k11-20020a056402048b00b0042617ba6383sm3900777edv.13.2022.05.07.13.29.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 13:29:50 -0700 (PDT)
+        Sat, 07 May 2022 13:29:52 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,10 +56,12 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v2 01/11] clk: qcom: ipq8074: fix NSS core PLL-s
-Date:   Sat,  7 May 2022 22:29:38 +0200
-Message-Id: <20220507202948.397271-1-robimarko@gmail.com>
+Subject: [PATCH v2 02/11] clk: qcom: ipq8074: SW workaround for UBI32 PLL lock
+Date:   Sat,  7 May 2022 22:29:39 +0200
+Message-Id: <20220507202948.397271-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220507202948.397271-1-robimarko@gmail.com>
+References: <20220507202948.397271-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,80 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like in IPQ6018 the NSS related Alpha PLL-s require initial configuration
-to work.
+UBI32 Huayra PLL fails to lock in 5 us in some SoC silicon and thus it
+will cause the wait_for_pll() to timeout and thus return the error
+indicating that the PLL failed to lock.
 
-So, obtain the regmap that is required for the Alpha PLL configuration
-and thus utilize the qcom_cc_really_probe() as we already have the regmap.
-Then utilize the Alpha PLL configs from the downstream QCA 5.4 based
-kernel to configure them.
+This is bug in Huayra PLL HW for which SW workaround
+is to set bit 26 of TEST_CTL register.
 
-This fixes the UBI32 and NSS crypto PLL-s failing to get enabled by the
-kernel.
+This is ported from the QCA 5.4 based downstream kernel.
 
 Fixes: b8e7e519625f ("clk: qcom: ipq8074: add remaining PLL’s")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 39 +++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 541016db3c4b..1a5141da7e23 100644
+index 1a5141da7e23..b4291ba53c78 100644
 --- a/drivers/clk/qcom/gcc-ipq8074.c
 +++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -4371,6 +4371,33 @@ static struct clk_branch gcc_pcie0_axi_s_bridge_clk = {
- 	},
- };
+@@ -4805,6 +4805,9 @@ static int gcc_ipq8074_probe(struct platform_device *pdev)
+ 	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
  
-+static const struct alpha_pll_config ubi32_pll_config = {
-+	.l = 0x4e,
-+	.config_ctl_val = 0x200d4aa8,
-+	.config_ctl_hi_val = 0x3c2,
-+	.main_output_mask = BIT(0),
-+	.aux_output_mask = BIT(1),
-+	.pre_div_val = 0x0,
-+	.pre_div_mask = BIT(12),
-+	.post_div_val = 0x0,
-+	.post_div_mask = GENMASK(9, 8),
-+};
++	/* SW Workaround for UBI32 Huayra PLL */
++	regmap_update_bits(regmap, 0x2501c, BIT(26), BIT(26));
 +
-+static const struct alpha_pll_config nss_crypto_pll_config = {
-+	.l = 0x3e,
-+	.alpha = 0x0,
-+	.alpha_hi = 0x80,
-+	.config_ctl_val = 0x4001055b,
-+	.main_output_mask = BIT(0),
-+	.pre_div_val = 0x0,
-+	.pre_div_mask = GENMASK(14, 12),
-+	.post_div_val = 0x1 << 8,
-+	.post_div_mask = GENMASK(11, 8),
-+	.vco_mask = GENMASK(21, 20),
-+	.vco_val = 0x0,
-+	.alpha_en_mask = BIT(24),
-+};
-+
- static struct clk_hw *gcc_ipq8074_hws[] = {
- 	&gpll0_out_main_div2.hw,
- 	&gpll6_out_main_div2.hw,
-@@ -4772,7 +4799,17 @@ static const struct qcom_cc_desc gcc_ipq8074_desc = {
- 
- static int gcc_ipq8074_probe(struct platform_device *pdev)
- {
--	return qcom_cc_probe(pdev, &gcc_ipq8074_desc);
-+	struct regmap *regmap;
-+
-+	regmap = qcom_cc_map(pdev, &gcc_ipq8074_desc);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
-+	clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
-+				&nss_crypto_pll_config);
-+
-+	return qcom_cc_really_probe(pdev, &gcc_ipq8074_desc, regmap);
- }
- 
- static struct platform_driver gcc_ipq8074_driver = {
+ 	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
+ 	clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
+ 				&nss_crypto_pll_config);
 -- 
 2.35.1
 

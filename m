@@ -2,220 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9E351E624
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5183051E62B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446157AbiEGJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S1446188AbiEGJqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446192AbiEGJje (ORCPT
+        with ESMTP id S1343969AbiEGJq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:39:34 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3830115709;
-        Sat,  7 May 2022 02:35:47 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KwMck38LXzXdlk;
-        Sat,  7 May 2022 17:31:02 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 17:35:45 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 17:35:44 +0800
-Subject: Re: [PATCH v24 3/6] arm64: kdump: Reimplement crashkernel=X
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Baoquan He <bhe@redhat.com>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Sat, 7 May 2022 05:46:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA3D14090;
+        Sat,  7 May 2022 02:42:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90858B83AC8;
+        Sat,  7 May 2022 09:42:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23817C385A5;
+        Sat,  7 May 2022 09:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651916560;
+        bh=4+dyx8oODyTIP1fTleKBIFWbS0FSiB5ywoj/ypnfrS8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Me9Cluf1Hw+dpVj5SxXXe9rTjrwX+oV1DkYfWSm0qmADICDkOH90f4qAxB8mS0l+a
+         kmjIGHeMeblvInhbsshBlTfukoJBu4CjqnWJynp52Ou/jx+689d7o+BZcTm08NXXIs
+         Sh8QYroGGiRhlv/ulrcOtCFW7js5FcKSVS+srFFyU8QzOpnn7DnhpTjB55IQk38epN
+         c5jXshnQT+gRXqseJ7xEEiaO2L7XinPn5+H6z7Y6//jsJ73hniqKEstZCgoX76FXvL
+         /V4pQjHHCmp9hsJTJWjJxgrxNB/s9isIyXYZhtBEJMob4h4YORuezbukxgEu/F5zNB
+         8pR4eVcGuzm1w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nnGxR-009dwj-SC; Sat, 07 May 2022 10:42:37 +0100
+Date:   Sat, 07 May 2022 10:42:49 +0100
+Message-ID: <871qx5ispy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
- <20220506114402.365-4-thunder.leizhen@huawei.com>
- <20220506231032.GA122876@MiWiFi-R3L-srv>
- <d9b21f31-6fd2-a898-9a70-c63ff4f36212@huawei.com>
- <YnXUSBcFmEpxaqBf@MiWiFi-R3L-srv>
- <9f6fdbb8-b6c5-3ca0-31b6-617175739e81@huawei.com>
-Message-ID: <6e892914-74ae-2b8f-954e-342aaf4be870@huawei.com>
-Date:   Sat, 7 May 2022 17:35:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <9f6fdbb8-b6c5-3ca0-31b6-617175739e81@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/6] irqchip/armada-370-xp: Implement SoC Error interrupts
+In-Reply-To: <20220507092054.b7yu23nj667l6xhy@pali>
+References: <20220506134029.21470-1-pali@kernel.org>
+        <20220506134029.21470-3-pali@kernel.org>
+        <87mtfu7ccd.wl-maz@kernel.org>
+        <20220506183051.wimo7p4nuqfnl2aj@pali>
+        <8735hmijlu.wl-maz@kernel.org>
+        <20220506185546.n5rl3chyyauy4bjt@pali>
+        <87levd7m2n.wl-maz@kernel.org>
+        <20220507092054.b7yu23nj667l6xhy@pali>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pali@kernel.org, tglx@linutronix.de, robh+dt@kernel.org, bhelgaas@google.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com, kw@linux.com, kabel@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 07 May 2022 10:20:54 +0100,
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>=20
+> On Saturday 07 May 2022 10:01:52 Marc Zyngier wrote:
+> > On Fri, 06 May 2022 19:55:46 +0100,
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >=20
+> > > On Friday 06 May 2022 19:47:25 Marc Zyngier wrote:
+> > > > On Fri, 06 May 2022 19:30:51 +0100,
+> > > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > > > >=20
+> > > > > On Friday 06 May 2022 19:19:46 Marc Zyngier wrote:
+> > > > > > On Fri, 06 May 2022 14:40:25 +0100,
+> > > > > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > > > > > >=20
+> > > > > > > +static void armada_370_xp_soc_err_irq_unmask(struct irq_data=
+ *d);
+> > > > > > > +
+> > > > > > >  static inline bool is_percpu_irq(irq_hw_number_t irq)
+> > > > > > >  {
+> > > > > > >  	if (irq <=3D ARMADA_370_XP_MAX_PER_CPU_IRQS)
+> > > > > > > @@ -509,6 +517,27 @@ static void armada_xp_mpic_reenable_perc=
+pu(void)
+> > > > > > >  		armada_370_xp_irq_unmask(data);
+> > > > > > >  	}
+> > > > > > > =20
+> > > > > > > +	/* Re-enable per-CPU SoC Error interrupts that were enabled=
+ before suspend */
+> > > > > > > +	for (irq =3D 0; irq < soc_err_irq_num_regs * 32; irq++) {
+> > > > > > > +		struct irq_data *data;
+> > > > > > > +		int virq;
+> > > > > > > +
+> > > > > > > +		virq =3D irq_linear_revmap(armada_370_xp_soc_err_domain, i=
+rq);
+> > > > > > > +		if (virq =3D=3D 0)
+> > > > > > > +			continue;
+> > > > > > > +
+> > > > > > > +		data =3D irq_get_irq_data(virq);
+> > > > > > > +
+> > > > > > > +		if (!irq_percpu_is_enabled(virq))
+> > > > > > > +			continue;
+> > > > > > > +
+> > > > > > > +		armada_370_xp_soc_err_irq_unmask(data);
+> > > > > > > +	}
+> > > > > >=20
+> > > > > > So you do this loop and all these lookups, both here and in the=
+ resume
+> > > > > > function (duplicated code!) just to be able to call the unmask
+> > > > > > function?  This would be better served by two straight writes o=
+f the
+> > > > > > mask register, which you'd conveniently save on suspend.
+> > > > > >=20
+> > > > > > Yes, you have only duplicated the existing logic. But surely th=
+ere is
+> > > > > > something better to do.
+> > > > >=20
+> > > > > Yes, I just used existing logic.
+> > > > >=20
+> > > > > I'm not rewriting driver or doing big refactor of it, as this is =
+not in
+> > > > > the scope of the PCIe AER interrupt support.
+> > > >=20
+> > > > Fair enough. By the same logic, I'm not taking any change to the
+> > > > driver until it is put in a better shape. Your call.
+> > >=20
+> > > If you are maintainer of this code then it is expected from _you_ to
+> > > move the current code into _better shape_ as you wrote and expect. And
+> > > then show us exactly, how new changes in this driver should look like,
+> > > in examples.
+> >=20
+> > Sorry, but that's not how this works. You are the one willing to
+> > change a sub-par piece of code, you get to make it better. You
+> > obviously have the means (the HW) and the incentive (these patches).
+> > But you don't get to make something even more unmaintainable because
+> > you're unwilling to do some extra work.
+> >=20
+> > If you're unhappy with my position, that's fine. I suggest you take it
+> > with Thomas, and maybe even Linus. As I suggested before, you can also
+> > post a patch removing me as the irqchip maintainer. I'm sure that will
+> > spark an interesting discussion.
+>=20
+> You have already suggested it in email [1] but apparently you are _not_
+> maintainer of mvebu pci controller. get_maintainer.pl for part about
+> which you have talked in [1] says:
+>=20
+> $ ./scripts/get_maintainer.pl -f drivers/pci/controller/pci-aardvark.c
 
+Remind me which file this patch is touching?
 
-On 2022/5/7 11:37, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/5/7 10:07, Baoquan He wrote:
->> On 05/07/22 at 09:34am, Leizhen (ThunderTown) wrote:
->>>
->>>
->>> On 2022/5/7 7:10, Baoquan He wrote:
->>>> On 05/06/22 at 07:43pm, Zhen Lei wrote:
->>>> ......  
->>>>> @@ -118,8 +162,7 @@ static void __init reserve_crashkernel(void)
->>>>>  	if (crash_base)
->>>>>  		crash_max = crash_base + crash_size;
->>>>>  
->>>>> -	/* Current arm64 boot protocol requires 2MB alignment */
->>>>> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
->>>>> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->>>>>  					       crash_base, crash_max);
->>>>>  	if (!crash_base) {
->>>>>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
->>>>> @@ -127,6 +170,11 @@ static void __init reserve_crashkernel(void)
->>>>>  		return;
->>>>>  	}
->>>>>  
->>>>
->>>> There's corner case missed, e.g
->>>> 1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
->>>> 2) ,high and ,low are specified, the whole system memory is under 4G.
->>>>
->>>> Below judgement can filter them away:
->>>>         
->>>> 	if (crash_base > arm64_dma_phys_limit && crash_low_size &&
->>>> 	    reserve_crashkernel_low(crash_low_size)) {
->>>>
->>>> What's your opinion? Leave it and add document to notice user, or fix it
->>>> with code change?
+> The only _toy_ here is your broken mvebu board which your ego was unable
+> to fix, and you have put it into recycling pile [2] and since than for
+> months you are trying to reject every change or improvement in mvebu
+> drivers and trying to find out a way how to remove all mvebu code, like
+> if you were not able to fix your toy, then broke it also to all other
+> people. You have already expressed this, but I'm not going to search
+> emails more and find these your statements.
 
-I decided to modify the code and document. But the code changes aren't what
-you suggested. For the following reasons:
-1. The memory allocated for 'high' may be partially under 4G. So the low
-   memory may not be enough. Of course, it's rare.
-2. The second kernel can work properly only when the high and low memory
-   are successfully applied for. For example, high=128M, low=128M, but the
-   second kernel need 256M.
+At this stage, this is pure paranoia. Do you think I am so emotionally
+attached to HW purity that I would plot the annihilation of some ugly
+platform?
 
-So for the cases you listed:
-1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
-   --> Follow you suggestion, ignore crashkernel=Y,low, don't allocate low memory.
+> Sorry, I'm stopping here. This is just a prove that you are not
+> qualified in reviewing mvebu code.
 
-@@ -100,6 +100,14 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
- {
-        unsigned long long low_base;
+Happy not to have to review this code. Just stop Cc'ing me on your
+patches, and don't expect me to merge any IRQ related patches coming
+from you.
 
-+       /*
-+        * The kernel does not have any DMA zone, so the range of each DMA
-+        * zone is unknown. Please make sure both CONFIG_ZONE_DMA and
-+        * CONFIG_ZONE_DMA32 are also not set in the second kernel.
-+        */
-+       if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-+               return 0;
-+
+	M.
 
-2) ,high and ,low are specified, the whole system memory is under 4G.
-   --> two memory ranges will be allocated, the size is what 'high' and 'low' specified.
-   --> Yes, the memory of 'low' may be above 'high', but the 'high' just hint allocation
-   --> from top, try high memory first. Of course, this may cause kexec to fail to load.
-   --> Because the memory of 'low' with small size will be used to store Image, etc..
-   --> But the memory of 'low' above 'high' is almost impossible, we use memblock API to
-   --> allocate memory from top to bottem, 'low' above 'high' need a sizeable memory block
-   --> (128M, 256M?) to be freed at init phase.
-   -->  Maybe I should add: crash_max = min(crash_base, CRASH_ADDR_LOW_MAX);
-   --> to make sure the memory of 'low' is always under 'high'
-
->>>
->>> I think maybe we can leave it unchanged. If the user configures two memory ranges,
->>> we'd better apply for two. Otherwise, he'll be confused when he inquires. Currently,
->>> crash_low_size is non-zero only when 'crashkernel=Y,low' is explicitly configured.
->>
->> Then user need know the system information, e.g how much is the high
->> memory, low memory, if CONFIG_ZONE_DMA|DMA32 is enabled. And we need
->> describe these cases in document. Any corner case or exception need
->> be noted if we don't handle it in code.
->>
->> Caring about this very much because we have CI with existed test cases
->> to run on the system, and QA will check these manually too. Support
->> engineer need detailed document if anything special but happened.
->> Anything unclear or uncovered will be reported as bug to our kernel dev.
->> Guess your company do the similar thing like this.
->>
->> This crashkerne,high and crashkernel,low reservation is special if we
->> allow ,high, ,low existing in the same zone. Imagine on system with
->> CONFIG_ZONE_DMA|DMA32 disabled, people copy the crashkernel=512M,high
->> and crashkernel=128M,low from other system, and he could get
->> crash_res at [5G, 5G+512M], while crash_low_res at [6G, 6G+128M]. Guess
->> how they will judge us.
-> 
-> OK, I got it.
-> 
->>
->>>
->>>>
->>>> I would suggest merging this series, Lei can add this corner case
->>>> handling on top. Since this is a newly added support, we don't have
->>>> to make it one step. Doing step by step can make reviewing easier.
->>>>
->>>>> +	if (crash_low_size && reserve_crashkernel_low(crash_low_size)) {
->>>>> +		memblock_phys_free(crash_base, crash_size);
->>>>> +		return;
->>>>> +	}
->>>>> +
->>>>>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
->>>>>  		crash_base, crash_base + crash_size, crash_size >> 20);
->>>>>  
->>>>> @@ -135,6 +183,9 @@ static void __init reserve_crashkernel(void)
->>>>>  	 * map. Inform kmemleak so that it won't try to access it.
->>>>>  	 */
->>>>>  	kmemleak_ignore_phys(crash_base);
->>>>> +	if (crashk_low_res.end)
->>>>> +		kmemleak_ignore_phys(crashk_low_res.start);
->>>>> +
->>>>>  	crashk_res.start = crash_base;
->>>>>  	crashk_res.end = crash_base + crash_size - 1;
->>>>>  	insert_resource(&iomem_resource, &crashk_res);
->>>>> -- 
->>>>> 2.25.1
->>>>>
->>>>
->>>> .
->>>>
->>>
->>> -- 
->>> Regards,
->>>   Zhen Lei
->>>
->>
->> .
->>
-> 
-
--- 
-Regards,
-  Zhen Lei
+--=20
+Without deviation from the norm, progress is not possible.

@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1899B51E429
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 06:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCB151E42D
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 06:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445514AbiEGEuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 00:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S1445519AbiEGExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 00:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239457AbiEGEus (ORCPT
+        with ESMTP id S239457AbiEGExu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 00:50:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3B469CE8;
-        Fri,  6 May 2022 21:46:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47687B83ABC;
-        Sat,  7 May 2022 04:46:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B7CC385A6;
-        Sat,  7 May 2022 04:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651898816;
-        bh=nCKZYzPsjKkho5w7h4bpzf8tjClGnfHBkruyaF3rEaU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UQNMCUEE9Ja6+cJ4Ij5YLK4BK25Gj66eEJ6Idh4yOrzJOGD8jF/SL+efrSzwkrLlr
-         VqJMQbcmPmMthgYZUhiq0eqeeETYMhririXF4YHVUWWhiqErr7zkdA44wkJmHDThQQ
-         b92EAUZ8QbFVt9mEIyyWV3kVul1W5dsztLAd5afOW4o0flO5D39jsE3ImXP+Usq0zu
-         6Al7vGverSspIHzddJCZJTazcsKZvBwRvPCZg9VPxXqVFS+9Wnrs6qFiPbXwLpVAkn
-         6rxFF3fpJyQqz9PzGMIVE8Olvb1t6+lIRzrdHJgssWRuNX8smPxBuQOqT3wCoNaK6Q
-         AAHlQ9Xqci0lQ==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH] rethook: Reject getting a rethook if RCU is not watching
-Date:   Sat,  7 May 2022 13:46:52 +0900
-Message-Id: <165189881197.175864.14757002789194211860.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-User-Agent: StGit/0.19
+        Sat, 7 May 2022 00:53:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0F869CE8;
+        Fri,  6 May 2022 21:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651899005; x=1683435005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/3K4Vwk1O/C7U6JgPB5V1dfiV3hQe4EsWkA0JGHPKQ=;
+  b=azYWsdJQ98eBuG9wDClHblEOCFj/Z/FQRsccwKwCkSRiRqxIVZQ1yk9e
+   09cAzC/mg51FyplAvwzGrg+PsJmTEzQuDurHAzgpiqD/igKEhFktz8MgA
+   ATTgvltbgfjcGRbpou6XgsQqw7zZ4PY2WEKlvdOf+CLAsUQK4xVQL5nR0
+   o+fLRcv09tq1VcDVlsPAgBT3iVdr/8L9kyzSfLA/oKqw9a3pGAajKJKsx
+   tGq3ANuiQNZIjdwlwq3xYQm+S5mGmZV8/IVpBDB6iLcUPBkFtaETDIhQe
+   SztqIBrVHsj6psq6AiDZtdSaAKlfe35D/Wm1AyjxyL7d3FQUpMGgGKi+V
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="329198979"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="329198979"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 21:50:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="736067130"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 21:50:01 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnCOG-000EDc-Rm;
+        Sat, 07 May 2022 04:50:00 +0000
+Date:   Sat, 7 May 2022 12:49:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Yunkai Zhang <zhang.yunkai@zte.com.cn>
+Subject: Re: [PATCH v2] mm/ksm: introduce ksm_force for each process
+Message-ID: <202205071229.7ltA0xmX-lkp@intel.com>
+References: <20220507014318.642353-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507014318.642353-1-xu.xin16@zte.com.cn>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,39 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the rethook_recycle() will involve the call_rcu() for reclaiming
-the rethook_instance, the rethook must be set up at the RCU available
-context (non idle). This rethook_recycle() in the rethook trampoline
-handler is inevitable, thus the RCU available check must be done before
-setting the rethook trampoline.
+Hi,
 
-This adds a rcu_is_watching() check in the rethook_try_get() so that
-it will return NULL if it is called when !rcu_is_watching().
+Thank you for the patch! Yet something to improve:
 
-Fixes: 54ecbe6f1ed5 ("rethook: Add a generic return hook")
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- kernel/trace/rethook.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20220506]
+[cannot apply to hnaz-mm/master kees/for-next/pstore linus/master v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-index b56833700d23..c69d82273ce7 100644
---- a/kernel/trace/rethook.c
-+++ b/kernel/trace/rethook.c
-@@ -154,6 +154,15 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
- 	if (unlikely(!handler))
- 		return NULL;
- 
-+	/*
-+	 * This expects the caller will set up a rethook on a function entry.
-+	 * When the function returns, the rethook will eventually be reclaimed
-+	 * or released in the rethook_recycle() with call_rcu().
-+	 * This means the caller must be run in the RCU-availabe context.
-+	 */
-+	if (unlikely(!rcu_is_watching()))
-+		return NULL;
-+
- 	fn = freelist_try_get(&rh->pool);
- 	if (!fn)
- 		return NULL;
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-ksm-introduce-ksm_force-for-each-process/20220507-094557
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r045-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071229.7ltA0xmX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bc6a122b9e10290755c811e7fa23dd60d39303e2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-ksm-introduce-ksm_force-for-each-process/20220507-094557
+        git checkout bc6a122b9e10290755c811e7fa23dd60d39303e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/ksm.c:343:3: error: use of undeclared identifier 'turn'
+                   turn false;
+                   ^
+   1 error generated.
+
+
+vim +/turn +343 mm/ksm.c
+
+   336	
+   337	/* Check if vma is qualified for ksmd scanning */
+   338	static bool ksm_vma_check(struct vm_area_struct *vma)
+   339	{
+   340		unsigned long vm_flags = vma->vm_flags;
+   341	
+   342		if (!(vma->vm_flags & VM_MERGEABLE) && !(vma->vm_mm->ksm_force))
+ > 343			turn false;
+   344	
+   345		if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
+   346				VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
+   347				VM_HUGETLB	| VM_MIXEDMAP))
+   348			return false;       /* just ignore this vma*/
+   349	
+   350		if (vma_is_dax(vma))
+   351			return false;
+   352	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

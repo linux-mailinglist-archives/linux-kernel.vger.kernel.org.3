@@ -2,101 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1506151E544
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F42D51E54F
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358683AbiEGHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S1383555AbiEGHsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 03:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235270AbiEGHkp (ORCPT
+        with ESMTP id S235270AbiEGHsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 03:40:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27F051E71
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:36:59 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id w17-20020a17090a529100b001db302efed6so8689275pjh.4
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 00:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S3bMf6KI/XEu+cZ94oF3l21Vq/ap6LSo7SSEXejZTrA=;
-        b=VD9lKISKceU89JkgvgZKQTZ85npaJ4QW1V2Agx9+TFJBq7TKm3nCq08V4VwOBf1hhQ
-         X0raUitjiu449kwAS5DzmZ/nbX672al59fCynUH437gQ18y/tpJmBgcOTh3VuxXcFYDn
-         bXnrfWPluLfxTBqLe7ukV4Ew4t/2JDxvZvbbLN/EJcbxjgEELpzwhK5GWFqQTNGLbtb/
-         3M6DFCao5zDmUAiiD8GRdTJj+u4daLmHwk4UUKjb7O2kklA80MDAfc+fdUIywVV9CAbX
-         NYkQPpMSrZIkRPyL231z5RvL2uu6aq/+hjfepNDn4VN9aztT4f/ceFSc+or0HalZHMMw
-         kReA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S3bMf6KI/XEu+cZ94oF3l21Vq/ap6LSo7SSEXejZTrA=;
-        b=7SiLhNAcSiVKHcKuhV9nzgWWvHSYc3vEUS0/CsroeG4GswHj6EDLBpYA8W9Go1BvNZ
-         i6gxIzLqVLbYKLUY/ewBunEGIzrAlqFlpIzQEPH7kcJ94y9W0NZIrwcIWOU6Fr5cOzvW
-         CE+FztZe2se5/2oY8pF7ecdsYhHx7eoNjwiBXLRiLPB/fi7HwxK5DujPSxLYp/ckdptG
-         b7fC4g1knA23wLwxZ2rxsVtg5yJZGaDCkR8PIeqejGVWDhODTmjNNt0bgeUNM7q1RQAy
-         ko4soIxJ2VgCYTp0JZ/EdCuRghPwK7Uc5aSqfeRXJveT3xdlUb0YLjcYLxFfEVM2x5H2
-         k9DQ==
-X-Gm-Message-State: AOAM530/2zxLBlsYbb8O1+X25eKR1J8graFclYruqaEKMWlngmBPR03v
-        IClwUrWgDxgA55gr8CT0YLw=
-X-Google-Smtp-Source: ABdhPJy4pCAYNk70IH0PMXGPWeIMlNSl2szVRTuerPLgh9NVZ47TtfLlVKL1rBFPuj1JR7W8eAsiLA==
-X-Received: by 2002:a17:902:7fc9:b0:15b:d408:5b19 with SMTP id t9-20020a1709027fc900b0015bd4085b19mr7442520plb.12.1651909019263;
-        Sat, 07 May 2022 00:36:59 -0700 (PDT)
-Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id y16-20020a62f250000000b0050dc76281b4sm4806541pfl.142.2022.05.07.00.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 00:36:58 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] MAINTAINERS: add myself as reviewer for slab
-Date:   Sat,  7 May 2022 16:35:06 +0900
-Message-Id: <20220507073506.241963-1-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Sat, 7 May 2022 03:48:09 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EED3BA45
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651909462; x=1683445462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A+QfSMTUtwlqNla3d/bvCsDYOhuDKOopeMPvyESEyG0=;
+  b=iaUuu+3chUUHWb6BwpHsMOj9f9bE6krWM6tSUkx97aPUtNarFDB3/Li+
+   mBh53gP0R1KaPRnMiV34Uv2dd0R03WlA37v1vB6Hr6ix5hjJRpTLcU1Kf
+   FwQUMEI+VeS0f089SNMsRHQ8ZodULgxl8RP6pWO/Rtf/iLkApDuvxBCHt
+   K2l0rIzNhcwVYYQoIkjIOXioaC1HaJGyFdFs7+Wxq1Aknx8Zgb/PNcXsE
+   wbLmwMVhYiGWRQBh4YNLYcD+6z3DI2nZyO1S0+oAeOE91Bd1q8Cp3oz9B
+   CzQUEiOSzdIesr2dGefglzsTgJGoenottjzrasncrMfXiQEict6qmcMVT
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="329221848"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="329221848"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 00:44:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="665825398"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 07 May 2022 00:44:21 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnF6y-000ELy-H6;
+        Sat, 07 May 2022 07:44:20 +0000
+Date:   Sat, 7 May 2022 15:43:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Edwin Peer <edwin.peer@broadcom.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Chan <michael.chan@broadcom.com>
+Subject: drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:1036:7: warning:
+ Local variable 'i' shadows outer variable [shadowVariable]
+Message-ID: <202205071514.kZaJ8rw0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently I was involved in slab subsystem (reviewing struct slab,
-SLUB debugfs and etc). I would like to help maintainers and people
-working on slab allocators by reviewing and testing their work.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4b97bac0756a81cda5afd45417a99b5bccdcff67
+commit: b032228e58ea2477955058ad4d70a636ce1dec51 bnxt_en: move coredump functions into dedicated file
+date:   6 months ago
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout b032228e58ea2477955058ad4d70a636ce1dec51
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-Let me be Cc'd on patches related to slab.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index edc96cdb85e8..c21e6221513f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18103,6 +18103,7 @@ M:	Joonsoo Kim <iamjoonsoo.kim@lge.com>
- M:	Andrew Morton <akpm@linux-foundation.org>
- M:	Vlastimil Babka <vbabka@suse.cz>
- R:	Roman Gushchin <roman.gushchin@linux.dev>
-+R:	Hyeonggon Yoo <42.hyeyoo@gmail.com>
- L:	linux-mm@kvack.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
+cppcheck warnings: (new ones prefixed by >>)
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:1036:7: warning: Local variable 'i' shadows outer variable [shadowVariable]
+     int i;
+         ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:996:6: note: Shadowed declaration
+    int i, rc = -EINVAL;
+        ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:1036:7: note: Shadow variable
+     int i;
+         ^
+
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:211:24: warning: Parameter 'frames' can be declared with const [constParameter]
+       struct xdp_frame **frames, u32 flags)
+                          ^
+--
+>> drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c:1521:40: warning: Uninitialized variables: mac_node.node, mac_node.state [uninitvar]
+     ret = hclgevf_add_del_mac_addr(hdev, mac_node, mac_type);
+                                          ^
+>> drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c:1552:48: warning: Uninitialized variable: mac_node->state [uninitvar]
+      hclgevf_update_mac_node(new_node, mac_node->state);
+                                                  ^
+   drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c:1616:21: warning: Uninitialized variable: mac_node->state [uninitvar]
+     switch (mac_node->state) {
+                       ^
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:1007:14: warning: Uninitialized variable: fltr->sw_id [uninitvar]
+      if (fltr->sw_id == fs->location)
+                ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:998:19: note: Assuming condition is false
+    if (fs->location >= BNXT_NTP_FLTR_MAX_FLTR)
+                     ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c:1007:14: note: Uninitialized variable: fltr->sw_id
+      if (fltr->sw_id == fs->location)
+                ^
+
+vim +/i +1036 drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+
+c0c050c58d8409 Michael Chan      2015-10-22   989  
+c0c050c58d8409 Michael Chan      2015-10-22   990  static int bnxt_grxclsrule(struct bnxt *bp, struct ethtool_rxnfc *cmd)
+c0c050c58d8409 Michael Chan      2015-10-22   991  {
+c0c050c58d8409 Michael Chan      2015-10-22   992  	struct ethtool_rx_flow_spec *fs =
+c0c050c58d8409 Michael Chan      2015-10-22   993  		(struct ethtool_rx_flow_spec *)&cmd->fs;
+c0c050c58d8409 Michael Chan      2015-10-22   994  	struct bnxt_ntuple_filter *fltr;
+c0c050c58d8409 Michael Chan      2015-10-22   995  	struct flow_keys *fkeys;
+c0c050c58d8409 Michael Chan      2015-10-22   996  	int i, rc = -EINVAL;
+c0c050c58d8409 Michael Chan      2015-10-22   997  
+b721cfaf03bcaa stephen hemminger 2017-07-24   998  	if (fs->location >= BNXT_NTP_FLTR_MAX_FLTR)
+c0c050c58d8409 Michael Chan      2015-10-22   999  		return rc;
+c0c050c58d8409 Michael Chan      2015-10-22  1000  
+c0c050c58d8409 Michael Chan      2015-10-22  1001  	for (i = 0; i < BNXT_NTP_FLTR_HASH_SIZE; i++) {
+c0c050c58d8409 Michael Chan      2015-10-22  1002  		struct hlist_head *head;
+c0c050c58d8409 Michael Chan      2015-10-22  1003  
+c0c050c58d8409 Michael Chan      2015-10-22  1004  		head = &bp->ntp_fltr_hash_tbl[i];
+c0c050c58d8409 Michael Chan      2015-10-22  1005  		rcu_read_lock();
+c0c050c58d8409 Michael Chan      2015-10-22  1006  		hlist_for_each_entry_rcu(fltr, head, hash) {
+c0c050c58d8409 Michael Chan      2015-10-22 @1007  			if (fltr->sw_id == fs->location)
+c0c050c58d8409 Michael Chan      2015-10-22  1008  				goto fltr_found;
+c0c050c58d8409 Michael Chan      2015-10-22  1009  		}
+c0c050c58d8409 Michael Chan      2015-10-22  1010  		rcu_read_unlock();
+c0c050c58d8409 Michael Chan      2015-10-22  1011  	}
+c0c050c58d8409 Michael Chan      2015-10-22  1012  	return rc;
+c0c050c58d8409 Michael Chan      2015-10-22  1013  
+c0c050c58d8409 Michael Chan      2015-10-22  1014  fltr_found:
+c0c050c58d8409 Michael Chan      2015-10-22  1015  	fkeys = &fltr->fkeys;
+dda0e7465f040e Michael Chan      2016-12-29  1016  	if (fkeys->basic.n_proto == htons(ETH_P_IP)) {
+c0c050c58d8409 Michael Chan      2015-10-22  1017  		if (fkeys->basic.ip_proto == IPPROTO_TCP)
+c0c050c58d8409 Michael Chan      2015-10-22  1018  			fs->flow_type = TCP_V4_FLOW;
+c0c050c58d8409 Michael Chan      2015-10-22  1019  		else if (fkeys->basic.ip_proto == IPPROTO_UDP)
+c0c050c58d8409 Michael Chan      2015-10-22  1020  			fs->flow_type = UDP_V4_FLOW;
+c0c050c58d8409 Michael Chan      2015-10-22  1021  		else
+c0c050c58d8409 Michael Chan      2015-10-22  1022  			goto fltr_err;
+c0c050c58d8409 Michael Chan      2015-10-22  1023  
+c0c050c58d8409 Michael Chan      2015-10-22  1024  		fs->h_u.tcp_ip4_spec.ip4src = fkeys->addrs.v4addrs.src;
+c0c050c58d8409 Michael Chan      2015-10-22  1025  		fs->m_u.tcp_ip4_spec.ip4src = cpu_to_be32(~0);
+c0c050c58d8409 Michael Chan      2015-10-22  1026  
+c0c050c58d8409 Michael Chan      2015-10-22  1027  		fs->h_u.tcp_ip4_spec.ip4dst = fkeys->addrs.v4addrs.dst;
+c0c050c58d8409 Michael Chan      2015-10-22  1028  		fs->m_u.tcp_ip4_spec.ip4dst = cpu_to_be32(~0);
+c0c050c58d8409 Michael Chan      2015-10-22  1029  
+c0c050c58d8409 Michael Chan      2015-10-22  1030  		fs->h_u.tcp_ip4_spec.psrc = fkeys->ports.src;
+c0c050c58d8409 Michael Chan      2015-10-22  1031  		fs->m_u.tcp_ip4_spec.psrc = cpu_to_be16(~0);
+c0c050c58d8409 Michael Chan      2015-10-22  1032  
+c0c050c58d8409 Michael Chan      2015-10-22  1033  		fs->h_u.tcp_ip4_spec.pdst = fkeys->ports.dst;
+c0c050c58d8409 Michael Chan      2015-10-22  1034  		fs->m_u.tcp_ip4_spec.pdst = cpu_to_be16(~0);
+dda0e7465f040e Michael Chan      2016-12-29  1035  	} else {
+dda0e7465f040e Michael Chan      2016-12-29 @1036  		int i;
+dda0e7465f040e Michael Chan      2016-12-29  1037  
+dda0e7465f040e Michael Chan      2016-12-29  1038  		if (fkeys->basic.ip_proto == IPPROTO_TCP)
+dda0e7465f040e Michael Chan      2016-12-29  1039  			fs->flow_type = TCP_V6_FLOW;
+dda0e7465f040e Michael Chan      2016-12-29  1040  		else if (fkeys->basic.ip_proto == IPPROTO_UDP)
+dda0e7465f040e Michael Chan      2016-12-29  1041  			fs->flow_type = UDP_V6_FLOW;
+dda0e7465f040e Michael Chan      2016-12-29  1042  		else
+dda0e7465f040e Michael Chan      2016-12-29  1043  			goto fltr_err;
+dda0e7465f040e Michael Chan      2016-12-29  1044  
+dda0e7465f040e Michael Chan      2016-12-29  1045  		*(struct in6_addr *)&fs->h_u.tcp_ip6_spec.ip6src[0] =
+dda0e7465f040e Michael Chan      2016-12-29  1046  			fkeys->addrs.v6addrs.src;
+dda0e7465f040e Michael Chan      2016-12-29  1047  		*(struct in6_addr *)&fs->h_u.tcp_ip6_spec.ip6dst[0] =
+dda0e7465f040e Michael Chan      2016-12-29  1048  			fkeys->addrs.v6addrs.dst;
+dda0e7465f040e Michael Chan      2016-12-29  1049  		for (i = 0; i < 4; i++) {
+dda0e7465f040e Michael Chan      2016-12-29  1050  			fs->m_u.tcp_ip6_spec.ip6src[i] = cpu_to_be32(~0);
+dda0e7465f040e Michael Chan      2016-12-29  1051  			fs->m_u.tcp_ip6_spec.ip6dst[i] = cpu_to_be32(~0);
+dda0e7465f040e Michael Chan      2016-12-29  1052  		}
+dda0e7465f040e Michael Chan      2016-12-29  1053  		fs->h_u.tcp_ip6_spec.psrc = fkeys->ports.src;
+dda0e7465f040e Michael Chan      2016-12-29  1054  		fs->m_u.tcp_ip6_spec.psrc = cpu_to_be16(~0);
+dda0e7465f040e Michael Chan      2016-12-29  1055  
+dda0e7465f040e Michael Chan      2016-12-29  1056  		fs->h_u.tcp_ip6_spec.pdst = fkeys->ports.dst;
+dda0e7465f040e Michael Chan      2016-12-29  1057  		fs->m_u.tcp_ip6_spec.pdst = cpu_to_be16(~0);
+dda0e7465f040e Michael Chan      2016-12-29  1058  	}
+c0c050c58d8409 Michael Chan      2015-10-22  1059  
+c0c050c58d8409 Michael Chan      2015-10-22  1060  	fs->ring_cookie = fltr->rxq;
+c0c050c58d8409 Michael Chan      2015-10-22  1061  	rc = 0;
+c0c050c58d8409 Michael Chan      2015-10-22  1062  
+c0c050c58d8409 Michael Chan      2015-10-22  1063  fltr_err:
+c0c050c58d8409 Michael Chan      2015-10-22  1064  	rcu_read_unlock();
+c0c050c58d8409 Michael Chan      2015-10-22  1065  
+c0c050c58d8409 Michael Chan      2015-10-22  1066  	return rc;
+c0c050c58d8409 Michael Chan      2015-10-22  1067  }
+a011952a1a4652 Michael Chan      2016-11-16  1068  #endif
+a011952a1a4652 Michael Chan      2016-11-16  1069  
+
+:::::: The code at line 1036 was first introduced by commit
+:::::: dda0e7465f040ed814d4a5c98c6bf042e59cba69 bnxt_en: Add IPV6 hardware RFS support.
+
+:::::: TO: Michael Chan <michael.chan@broadcom.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

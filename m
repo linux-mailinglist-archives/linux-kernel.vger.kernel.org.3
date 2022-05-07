@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ECE51E839
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9B651E83B
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385697AbiEGPkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S1385654AbiEGPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377641AbiEGPkX (ORCPT
+        with ESMTP id S239695AbiEGPmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:40:23 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7749E43EE7;
-        Sat,  7 May 2022 08:36:34 -0700 (PDT)
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EC6F33F565;
-        Sat,  7 May 2022 17:36:29 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: msm8998: Make regulator voltages multiple of step-size
-Date:   Sat,  7 May 2022 17:36:27 +0200
-Message-Id: <20220507153627.1478268-1-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.36.0
+        Sat, 7 May 2022 11:42:10 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E42E27B2C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:38:23 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id x52so8661614pfu.11
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iW+xuwi9GjKsQKztoza/I6BqdqWQumP2VpSCZrUbboc=;
+        b=A4AoqMht5A35+l+JOZ9w6u/pQWgJqgySLRk13szh9hQiupLiYJan2peyR1PHoWXqbA
+         KXyNbUQ2r7VIy6XRnhjLnmG1f5mu7D4eBnHv9CvUZGiNgWN1ISt56KI7EsnBmv5jZkJX
+         UFWemVNe20zXjfe8H/DBTGfRwzkh163h3KM8gMiUIy2DDbO/PDd7I9lw5F2BrWCpMoyf
+         DsHpOejJ5bSILZJziqcE4O/j56/vj9KTWREt+I26UoFoqS07X3V6He9IyqZrRe0Dl70q
+         JXr0jTKZI8VQl1yZK5PeaTnZZ4aO01ylQE1mZiFE1at0SLOPHpixyIzCR/cAWiEJvhHt
+         32yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iW+xuwi9GjKsQKztoza/I6BqdqWQumP2VpSCZrUbboc=;
+        b=w/KR6mWUGNLL18U454EYJWomTf+aWq3FPOISmh8o/yud7PdBqs4heIYtGm/VTa6z3k
+         xRsj7ORzMIovTEEMWRDDi30P+5LdBT7pD5fYdV01rowHHzgb89aCYxJGD9COREr/bLpR
+         GdJJ/3wyB17orAGGcvaSoMW8OMKD8q10BUvbOc3p4bpWOZluaQDCU27wUyked6IekI8m
+         LG5/4eEGTNQ+8be78otVor/yMKFzOOD2ovIWdJ9qc5nZYmbqyDnADr0pKOUzmGrJiSi3
+         smhAX53lfoYWOkoopVF189cWnOXxiFvV0XUwlPtzAmM27TUy6Rx9JKh7cblaTAZ/nImp
+         1yrw==
+X-Gm-Message-State: AOAM5331Ln61fb2KR/85sGUOiFdHhgUUIAPzF2p7r9Q/5ml/u7fMEyBy
+        TGa5+Km+LXeqWcAPGhOaiJBeAg==
+X-Google-Smtp-Source: ABdhPJylUzDkAA95vrZWbJ9NhQQpUcTXF2BzWw1znP+C6BwqmrCb4rR6QSI6/1M6BivM/yqq9Nt60w==
+X-Received: by 2002:a63:64c2:0:b0:3c6:2d70:9188 with SMTP id y185-20020a6364c2000000b003c62d709188mr6859960pgb.186.1651937903114;
+        Sat, 07 May 2022 08:38:23 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a19de00b001dc8eca6536sm5564919pjj.4.2022.05.07.08.38.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 08:38:22 -0700 (PDT)
+Message-ID: <0145cd16-812b-97eb-9c6f-4338fc25474a@kernel.dk>
+Date:   Sat, 7 May 2022 09:38:21 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/4] io_uring: add IORING_ACCEPT_MULTISHOT for accept
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220507140620.85871-1-haoxu.linux@gmail.com>
+ <20220507140620.85871-2-haoxu.linux@gmail.com>
+ <21e1f932-f5fd-9b7e-2b34-fc3a82bbb297@kernel.dk>
+ <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These voltages are not a multiple of the given step-size 8000 (with base
-voltage 1664000) in pm8998_pldo, resulting in PLDO regulators l18 and
-l22 failing to validate and in turn not probing the rpm-pm8998-regulator
-driver:
+On 5/7/22 9:31 AM, Hao Xu wrote:
+> ? 2022/5/7 ??10:16, Jens Axboe ??:
+>> On 5/7/22 8:06 AM, Hao Xu wrote:
+>>> From: Hao Xu <howeyxu@tencent.com>
+>>>
+>>> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
+>>> support multishot.
+>>>
+>>> Signed-off-by: Hao Xu <howeyxu@tencent.com>
+>>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>
+>> Heh, don't add my SOB. Guessing this came from the folding in?Nop, It is in your fastpoll-mshot branch
+> https://git.kernel.dk/cgit/linux-block/commit/?h=fastpoll-mshot&id=e37527e6b4ac60e1effdc8aaa1058e931930af01
 
-    l18: unsupportable voltage constraints 2856000-2848000uV
-    qcom_rpm_smd_regulator rpm-glink:rpm-requests:pm8998-regulators: l18: devm_regulator_register() failed, ret=-22
+But that's just a stand-alone fixup patch to be folded in, the SOB
+doesn't carry to other patches. So for all of them, just strip that for
+v4. If/when it gets applied, my SOB will get attached at that point.
 
-Round the voltages down for the sake of erring on the safe side, leaving
-a comment in place to document this discrepancy wrt downstream sources.
-
-Fixes: 390883af89d2 ("arm64: dts: qcom: msm8998: Introduce support for Sony Yoshino platform")
-Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- .../dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts    | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-index 4a1f98a21031..c21333aa73c2 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
-@@ -26,11 +26,13 @@ &lab {
- };
- 
- &vreg_l18a_2p85 {
--	regulator-min-microvolt = <2850000>;
--	regulator-max-microvolt = <2850000>;
-+	/* Note: Round-down from 2850000 to be a multiple of PLDO step-size 8000 */
-+	regulator-min-microvolt = <2848000>;
-+	regulator-max-microvolt = <2848000>;
- };
- 
- &vreg_l22a_2p85 {
--	regulator-min-microvolt = <2700000>;
--	regulator-max-microvolt = <2700000>;
-+	/* Note: Round-down from 2700000 to be a multiple of PLDO step-size 8000 */
-+	regulator-min-microvolt = <2696000>;
-+	regulator-max-microvolt = <2696000>;
- };
 -- 
-2.36.0
+Jens Axboe
 

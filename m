@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC9051E502
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D7851E48E
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 08:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445965AbiEGHFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 03:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S1383310AbiEGGKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 02:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbiEGHF0 (ORCPT
+        with ESMTP id S231432AbiEGGK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 03:05:26 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400754EDF4
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:01:40 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220507070136epoutp028d29e8d59edb40e13179e722009857e5~swJIFlgoI1109811098epoutp02S
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 07:01:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220507070136epoutp028d29e8d59edb40e13179e722009857e5~swJIFlgoI1109811098epoutp02S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651906896;
-        bh=DZ/xtsMSdo4gSlwK4tvPIcp5OKUcNVBANjcabLyX/IM=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=KRYuLMrzdBp/f6vwAc2FLiCp7Qw8+zC0lB3ooYcgQjUjr2C/sxQIW02aTTgDwqRSa
-         3zCFRyTiFVnb8N2r19ryCsyWQzNRnALQOLd1c2+6Wbp0/lIbbhtxi7G0hB+5/HmnXv
-         dwXTwf+Tcyu/Cvgd55WTkiZ0693TGVjZyLh8unGY=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220507070135epcas5p3e78380fb23e8b9b8d45923a62cf295d9~swJHFdgrc1447014470epcas5p3E;
-        Sat,  7 May 2022 07:01:35 +0000 (GMT)
-X-AuditID: b6c32a4b-1fdff70000002622-9c-6276194f5998
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.EA.09762.F4916726; Sat,  7 May 2022 16:01:35 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH 1/1] kallsyms: add kallsyms_show_value definition in
- all cases
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Vimal Agrawal <avimalin@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "wedsonaf@google.com" <wedsonaf@google.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "gary@garyguo.net" <gary@garyguo.net>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vaneet Narang <v.narang@samsung.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CALkUMdQanGgtahQDqQV-r6oWF=cvTsteztOoe5bqHsJApST0Rw@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220507054953epcms5p7037be09d433e1b9a80750a02ca6ec679@epcms5p7>
-Date:   Sat, 07 May 2022 11:19:53 +0530
-X-CMS-MailID: 20220507054953epcms5p7037be09d433e1b9a80750a02ca6ec679
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmk+LIzCtJLcpLzFFi42LZdlhTS9dfsizJYPVaeYs569ewWfQ2TWey
-        +PLzNrvFg4PX2S3WbGlksrgz6Tm7xcUzrxktjkyZxWxxedccNou7K24wWdyY8JTR4sOE/0wW
-        K+cvZ7RY0fOB1eL/46+sFvs6HjBZ7N64iM3i+J2nTBaHTs5ltNi+fD2bRePn+4wWHYtXMjqI
-        ecxuuMji8fXmOSaPJZ2/mDx2zrrL7tGy7xa7x4JNpR4tR96yemxa1cnmcWLGbxaPeScDPc6s
-        3sbk0bdlFaPH+i1XWTzOLDjC7vF5k1wAfxSXTUpqTmZZapG+XQJXxqoZc5gLTjBXbJhwiqmB
-        8SlTFyMnh4SAiUT3vElsXYxcHEICuxklJnV9Zeli5ODgFRCU+LtDGKRGWCBcout4MxuILSSg
-        KHFhxhpGkBJhAQOJX1s1QMJsAnoSq3btYQGxRQR8JBoffAAbySxwgl3i0NJ/7BC7eCVmtD9l
-        gbClJbYv38oIYnMKBEo0TNjJChEXlbi5+i07jP3+2HxGCFtEovXeWWYIW1Diwc/dUHEZidWb
-        e6FmVks8fX0ObLGEQAujxL7dMEXmEuuXrAIbyivgKzF5/WKw51kEVCUaDhyDBoSLxIbl38Hq
-        mQXkJba/ncMM8iSzgKbE+l36ECWyElNPrWOCKOGT6P39hAnmrx3zYGxViZabG1hhfvz88SPU
-        bR4SG1f8YoKE80EmiffPtjJOYFSYhQjqWUg2z0LYvICReRWjZGpBcW56arFpgXFearlecWJu
-        cWleul5yfu4mRnB61fLewfjowQe9Q4xMHIyHGCU4mJVEeIVnlSQJ8aYkVlalFuXHF5XmpBYf
-        YpTmYFES5z2VviFRSCA9sSQ1OzW1ILUIJsvEwSnVwBRf/f9IbJ3dNeNQQ7enlzTVrEpSBVRf
-        fJkrtoBDVHqp96N11Vu89jjPXRO+01nHkP9m/veEM0/+7jjy+Ve9ye019o9fSnY9/L04bvc0
-        hZ49U/TytvrsFrIsvPVz1gm9021WxjyfjxWpeP/53TPPTGum35G2P7K1kZwLp1w2f7zDruz4
-        zFDZf3+rT1zUW7SiIEV4rvzaTsfKIxV1RzRnvM90SmDUTd27wMb5w4ZzFVIq8rL3E0KSJi5p
-        61vUL+98pZ/fMXg2F7/WD5VM1j+K6fv3B0hs0dPW1irwONq4d5Hp9Zg9LFP3PgnOL5B//yMz
-        LWM27xqnj1Pc75ofLz/TOafk+4pNR9N7J7da25pprFJiKc5INNRiLipOBAAstvhiHgQAAA==
-X-CMS-RootMailID: 20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2
-References: <CALkUMdQanGgtahQDqQV-r6oWF=cvTsteztOoe5bqHsJApST0Rw@mail.gmail.com>
-        <YlaWxh5qYCe40US7@alley> <20220413055305.1768223-1-maninder1.s@samsung.com>
-        <747830777.1512786.1650256482294@mail-kr5-3>
-        <YmAlAvy6aSeeJKoO@bombadil.infradead.org>
-        <CGME20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2@epcms5p7>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 7 May 2022 02:10:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F5F2D1F9;
+        Fri,  6 May 2022 23:06:39 -0700 (PDT)
+X-UUID: 64a108fe5ded47f9b2f061412163891e-20220507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:d9b0cb79-bdd6-4bbb-a65a-20c9537b7c1a,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-12
+X-CID-META: VersionHash:faefae9,CLOUDID:210f8916-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 64a108fe5ded47f9b2f061412163891e-20220507
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1735832455; Sat, 07 May 2022 14:06:32 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Sat, 7 May 2022 14:06:31 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Sat, 7 May 2022 14:06:30 +0800
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Subject: [PATCH v8 0/2] phy: mediatek: Add PCIe PHY driver
+Date:   Sat, 7 May 2022 14:06:19 +0800
+Message-ID: <20220507060621.32252-1-jianjun.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vimal,
+These series patches add support for PCIe PHY driver on MediaTek chipsets.
 
-> Hi Maninder,
-> 
-> in sprint_module_info(), we need to take care of mod->init_layout
-> addresses as well.
-> Please test the patch against  init symbols.
-> 
-> Vimal
+Changes in v8:
+1. Use "device_property_present()" to increase human readability;
+2. Use "GPL" instead of "GPL v2" in MODULE_LICENSE as suggested in
+   checkpatch.pl.
 
-Same I updated in below thread.
+Changes in v7:
+1. Add bitfield.h header to fix the build error on non-arm64 platforms.
 
-https://lkml.org/lkml/2022/3/22/56
+Changes in v6:
+1. Remove unnecessary header files;
+2. Use FILELD_PREP in bitfield.h to set value.
 
-Can you check if anything else needs to be fixed or updated.
+Changes in v5:
+1. Fix typo in kerneldoc: "eFues" => "eFuse".
 
-(because of office mail system, reply thread was made a new thread rather than same patch conversation)
+Changes in v4:
+1. Fix no return when calling dev_err_probe.
 
-Thanks,
-Maninder Singh
+Changes in v3:
+1. Add introductions for structure members;
+2. Add SoC dependent data;
+3. Dynamically allocate efuse data;
+4. Check return value if it's an -EPROBE_DEFER.
+
+Changes in v2:
+1. Add specific compatible name;
+2. Read NVMEM data at probe time;
+3. Fix typos.
+
+Jianjun Wang (2):
+  dt-bindings: phy: mediatek: Add YAML schema for PCIe PHY
+  phy: mediatek: Add PCIe PHY driver
+
+ .../bindings/phy/mediatek,pcie-phy.yaml       |  75 +++++
+ drivers/phy/mediatek/Kconfig                  |  11 +
+ drivers/phy/mediatek/Makefile                 |   1 +
+ drivers/phy/mediatek/phy-mtk-pcie.c           | 267 ++++++++++++++++++
+ 4 files changed, 354 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+ create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
+
+-- 
+2.18.0
+

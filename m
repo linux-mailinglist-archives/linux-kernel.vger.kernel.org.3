@@ -2,140 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC91951E47B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135D351E481
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383354AbiEGFoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S1445729AbiEGFrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445737AbiEGFo0 (ORCPT
+        with ESMTP id S1377055AbiEGFq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:44:26 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B2DE000
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:40:40 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id e5so7740803pgc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:40:40 -0700 (PDT)
+        Sat, 7 May 2022 01:46:58 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EE65BD15;
+        Fri,  6 May 2022 22:43:13 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id r11so16197372ybg.6;
+        Fri, 06 May 2022 22:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AVuaOiXhV01Z47Oo1rP7YN34nHEPNRHjJX/XRSE9e0M=;
-        b=EkJzGm/JeHn0Akm0WvBv/z4h/vyU57IPa7rnZoXNc/ZlcQ0LKsROLOEpk33iPvRk8H
-         wAbpoS72stM8zkuhQq55tVgSEbT5p7v+UQrNpyWBG/D7qQ1vsOmTUkSNyAoHt7ljGG//
-         4R5J+W1RhtpueH8IaUblBU46vRlfpC69NotB/JLGJgX3YsI1EV0SgevZ4Kw5tpoYZ2e/
-         q2gd9srrc8xYR4riTXVR5YFFtaqQl41wfLR1AWCDoQsRSAqrDas2+9fixH5xynyLa0ur
-         UUHm+uWyetASlKm/O8M6i1RTMyvbDlBrTnfuIjzY7z5esa6cc4AnIQtLrXudShsCR3iX
-         bE5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IPe5l3hTT4WLd4gkCQ87tQ9p9+J36zEd8q/74JcdAxo=;
+        b=irpX9tiWLkNHAwFZRwUl8vhDzGQBGF60Wgi9GuckFUCpDWl6duGxqr7Pn10mtLIhG9
+         g8Bm749U/Qh5Wxplfcq4uzMHgXfTT9UUi6QH8vuNwpnrxhVaWcRq1WzRaMiDJW0ILgbr
+         sLStORWEChwi0Ts6GGHMwe2aO4AE5+d3cRAdeTqgYbsPQoxnAgrvkqoY1dCbx3pxNO/j
+         v9C4BivxcGOhOTHP3WXu/XxxA0xfyx2mhJ4DrN2rUctbKTuP9DjfEY00apflYbRFigdo
+         ktPyjjuRosNuKB+4dtbWiUDSneqVwDVYTcX9mDXwzBFs7qZmYGhW92AmwP+3aS/j0THt
+         hwWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AVuaOiXhV01Z47Oo1rP7YN34nHEPNRHjJX/XRSE9e0M=;
-        b=uUiSWegpayhgCvITqyEQnbUwEuwioaQE0ci5JiKFoEdKqhKqRuK8MFQKDsNi72DloF
-         SS+MBOtWw9PGBbZKBz01+wNzvWT07LMI3i+FdidMqXMQBBC0/zPY3KuazO5Xj/M+9vQK
-         Ky7X47jMhb+VJxhsq3cFvQAsKKlmG2gutVT8zCIhrvM3zPkEhSLFArloLESp2z736Gze
-         460NsL61MHdH0sUGYekVNO1U3WLYEfJ03XLyjF64Q89w9mgkJzesnKVMV+jmKn5EvLlU
-         6Kp/MVqBuo0oXXHpDZ2xF8x3kF3/zqqE48Lb1XUw05nt2YEFKDZfKqrZequkHCOjkXmT
-         Lohg==
-X-Gm-Message-State: AOAM533oqiVTXzxZ5muicC4uoOXrKau1BRZCEEaSZRKEnLycoaCY4WVa
-        bsCd5S22SmWzZBGJIofw2hw4wZqUUZJc7Q==
-X-Google-Smtp-Source: ABdhPJz7LcUUD4gahOIUtRR7xASy10zcWdIn+aPL3P9fPuCKGJt388cR5ZYsKV4EWvX/n7RcOXduJw==
-X-Received: by 2002:a63:eb58:0:b0:3c2:6d66:c238 with SMTP id b24-20020a63eb58000000b003c26d66c238mr5597405pgk.436.1651902040128;
-        Fri, 06 May 2022 22:40:40 -0700 (PDT)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902e9d300b0015e8d4eb253sm2748412plk.157.2022.05.06.22.40.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 May 2022 22:40:39 -0700 (PDT)
-Date:   Sat, 7 May 2022 13:40:41 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
-Subject: Re: [PATCH 2/3] erofs: remove obsoluted comments
-Message-ID: <20220507134041.000060da.zbestahu@gmail.com>
-In-Reply-To: <20220506194612.117120-2-hsiangkao@linux.alibaba.com>
-References: <20220506194612.117120-1-hsiangkao@linux.alibaba.com>
-        <20220506194612.117120-2-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IPe5l3hTT4WLd4gkCQ87tQ9p9+J36zEd8q/74JcdAxo=;
+        b=7u5C8QgSCARZsrOC/4mn1ZzdVX2mv8c9HqIY0gw5RY/NCGlPh9JW2OvKVpmhTJ2KD7
+         83MwIKwPAmn3GvGxoN4vwAioYBz5F36aQ/43sUMd1OYsa2Vl0zRIV1x/0UB/5YA4fLLv
+         MOOGcZ22etrMDJIq2tR1AHoX/xKPRkStcC1yr1Mjf18RTySZcOnIzdtE+R8XhO6Ynnud
+         DAXddF59NRGbsYNaJrkn2uuxpiCb9py6e4Qx4dimStogmmOtAq8wbs8o45utmY6dWkLf
+         JqTBgZsNrZI4rdacnR/hqpcjwUw50KK+qJcfnEl8WrTQUV6fnHnf0bjGhXntMTZwFqoA
+         LjHQ==
+X-Gm-Message-State: AOAM531+afstr3+pWf+g4Zj1yEAfsx0jCOq8akF68eX+Mz9tXJ/mED4T
+        f5cDRq/oXlPO4B2MpHCl/fWSzjODFoMrAGUx2VE=
+X-Google-Smtp-Source: ABdhPJzrcTL9OaDhvmVkjommo1aJkZC9KNCM75+rbl8QHfgQBt2wFR7gRpn675ZNW+w0gfOjCOTsFlBzVu4NqqPMhYQ=
+X-Received: by 2002:a25:42cd:0:b0:645:d805:4fcb with SMTP id
+ p196-20020a2542cd000000b00645d8054fcbmr5226533yba.182.1651902192697; Fri, 06
+ May 2022 22:43:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220505193143.31826-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB592225B5A5E1BA7D250C466786C29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CA+V-a8shz+Wbj84vjaw=_Sys1TW45HC2RMy4fy_5QBR-hvNGFg@mail.gmail.com> <TYCPR01MB59337E4D599F0E69D81E308086C59@TYCPR01MB5933.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYCPR01MB59337E4D599F0E69D81E308086C59@TYCPR01MB5933.jpnprd01.prod.outlook.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 7 May 2022 06:42:46 +0100
+Message-ID: <CA+V-a8uAuhHsYVLJ9fpmKMK4mQ_=cN_WKRnGcgWxtV135h2iQw@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] clk: renesas: rzg2l-cpg: Add support to stack the
+ resets instead of indexing
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  7 May 2022 03:46:11 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+Hi Biju,
 
-> Some comments haven't been useful anymore since the code updated.
-> Let's drop them instead.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/inode.c    |  5 -----
->  fs/erofs/internal.h | 25 -------------------------
->  2 files changed, 30 deletions(-)
-> 
-> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-> index 8d3f56c6469b..8b18d57ec18f 100644
-> --- a/fs/erofs/inode.c
-> +++ b/fs/erofs/inode.c
-> @@ -8,11 +8,6 @@
->  
->  #include <trace/events/erofs.h>
->  
-> -/*
-> - * if inode is successfully read, return its inode page (or sometimes
-> - * the inode payload page if it's an extended inode) in order to fill
-> - * inline data if possible.
-> - */
->  static void *erofs_read_inode(struct erofs_buf *buf,
->  			      struct inode *inode, unsigned int *ofs)
->  {
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index ce2a04836cd2..cfee49d33b95 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -397,31 +397,6 @@ extern const struct super_operations erofs_sops;
->  extern const struct address_space_operations erofs_raw_access_aops;
->  extern const struct address_space_operations z_erofs_aops;
->  
-> -/*
-> - * Logical to physical block mapping
-> - *
-> - * Different with other file systems, it is used for 2 access modes:
-> - *
-> - * 1) RAW access mode:
-> - *
-> - * Users pass a valid (m_lblk, m_lofs -- usually 0) pair,
-> - * and get the valid m_pblk, m_pofs and the longest m_len(in bytes).
-> - *
-> - * Note that m_lblk in the RAW access mode refers to the number of
-> - * the compressed ondisk block rather than the uncompressed
-> - * in-memory block for the compressed file.
-> - *
-> - * m_pofs equals to m_lofs except for the inline data page.
-> - *
-> - * 2) Normal access mode:
-> - *
-> - * If the inode is not compressed, it has no difference with
-> - * the RAW access mode. However, if the inode is compressed,
-> - * users should pass a valid (m_lblk, m_lofs) pair, and get
-> - * the needed m_pblk, m_pofs, m_len to get the compressed data
-> - * and the updated m_lblk, m_lofs which indicates the start
-> - * of the corresponding uncompressed data in the file.
-> - */
->  enum {
->  	BH_Encoded = BH_PrivateStart,
->  	BH_FullMapped,
+On Fri, May 6, 2022 at 1:11 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+>
+> Hi Prabhakar,
+> > Subject: Re: [RFC PATCH 2/4] clk: renesas: rzg2l-cpg: Add support to stack
+> > the resets instead of indexing
+> >
+> > Hi Biju,
+> >
+> > Thank you for the review.
+> >
+> > On Thu, May 5, 2022 at 8:48 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > >
+> > > Hi Lad Prabhakar,
+> > >
+> > > Thanks for the patch.
+> > >
+> > > > Subject: [RFC PATCH 2/4] clk: renesas: rzg2l-cpg: Add support to
+> > > > stack the resets instead of indexing
+> > > >
+> > > > Instead of indexing the resets, stack them and instead create an id
+> > > > member in struct rzg2l_reset to store the index. With this approach
+> > > > for every id we will have to loop through the resets array to match the
+> > id.
+> > > >
+> > > > This in preparation to add support for Renesas RZ/Five CPG in
+> > > > r9a07g043- cpg.c file where the resets array will be split up into
+> > > > three i.e. common and two SoC specific.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > >  drivers/clk/renesas/rzg2l-cpg.c | 76
+> > > > ++++++++++++++++++++++++++------- drivers/clk/renesas/rzg2l-cpg.h |
+> > > > 4 +-
+> > > >  2 files changed, 63 insertions(+), 17 deletions(-)
+> > > >
+> > > > diff --git a/drivers/clk/renesas/rzg2l-cpg.c
+> > > > b/drivers/clk/renesas/rzg2l- cpg.c index 1ce35f65682b..94fe307ec4c5
+> > > > 100644
+> > > > --- a/drivers/clk/renesas/rzg2l-cpg.c
+> > > > +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> > > > @@ -681,14 +681,37 @@ rzg2l_cpg_register_mod_clk(const struct
+> > > > rzg2l_mod_clk *mod,
+> > > >
+> > > >  #define rcdev_to_priv(x)     container_of(x, struct rzg2l_cpg_priv,
+> > > > rcdev)
+> > > >
+> > > > +static const struct rzg2l_reset
+> > > > +*rzg2l_get_reset_ptr(struct rzg2l_cpg_priv *priv,
+> > > > +                  unsigned long id)
+> > > > +
+> > > > +{
+> > > > +     const struct rzg2l_cpg_info *info = priv->info;
+> > > > +     unsigned int i;
+> > > > +
+> > > > +     for (i = 0; i < priv->num_resets; i++) {
+> > > > +             if (info->resets[i].id == id)
+> > > > +                     return &info->resets[i];
+> > > > +     }
+> > >
+> > > Is it not possible to use shared reset like RZ/G2L and RZ/V2L?, which
+> > > has optimal memory and performance wise we can avoid bigger loop.
+> > >
+> > > Like adding Last index of RZ/Five as last reset index and Handle
+> > > RZ/G2UL specific as invalid reset index in xlate??
+> > >
+> > So we will have to maintain an array id's which are invalid to RZ/Five SoC.
+> > For this too we will have to loop at runtime itself. The array for invalid
+> > index will be big too.
+>
+> As per [1], it will be 25 resets.
+>
+> if you invalidate RZ/G2L specific resets in probe, there is no runtime overhead.
+> when a device match found, the info->reset_callback() which is mentioned in the next mail
+> and invalidate the resets(resets[id].off = 0)
+>
+Ahh right got that. I'll wait for Geert if he has more cunning ideas.
+If not I'll go with your suggested approach.
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+> ie,
+>
+> if(info->reset_callback)
+>  info->reset_callback();
+>
+> and on r9a07g043-cpg.c, make resets[id].off = 0 to invalidate the resets.
+>
+OK.
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tree/include/dt-bindings/clock/r9a07g043-cpg.h
+>
+>
+Cheers,
+Prabhakar

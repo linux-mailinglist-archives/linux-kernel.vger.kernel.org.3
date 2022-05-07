@@ -2,129 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DAD51EA2A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4221251EA35
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447057AbiEGUmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 16:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S1358398AbiEGU7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 16:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236442AbiEGUl6 (ORCPT
+        with ESMTP id S233641AbiEGU67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 16:41:58 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32905193F8;
-        Sat,  7 May 2022 13:38:10 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id f3so3487547qvi.2;
-        Sat, 07 May 2022 13:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fYVDSmz6CJFw5YfHDBcv9qwy7PkfH60PFD+NkDD1usU=;
-        b=qkCsy4NWEurIa6cxWI1TXgmY8v42zw932o0BybRbt31qBmOzyCVe+F5llNUqgV6m9f
-         /esKynJh5DrP9kXw3Drxbk5CYMdEQNeAItfb91JhgOw9j5kqHVDtcOdU7ubInmWPf6QU
-         IbCvapKJqZVbTwhKPGrUlPzadG/QpHNOiiQGHZIlo/g4el++TnQO7h+Fffkmz7PU/WK3
-         bhLyIFbz9d1VM4COHzNI+LR6cWq4YNW/Rt5iBcGWD0nuNjTaRqhuR7znyBMrl+mRTq63
-         V5EUYY5U+6IJU4S3YMSLWnNXAcV5iiDSsMZFhD0RRkzXvkrhuoSjRp0/CAe3xafZwWLw
-         lb9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fYVDSmz6CJFw5YfHDBcv9qwy7PkfH60PFD+NkDD1usU=;
-        b=Rq85oUcUxXqrwZEjDfcb6PdVFR9cvXVJJfk2x6wCfmVT3sdpKRONd1LvrqlOJAEDHK
-         xuhIqGFlIDgtmnCJ8D4CL04Cy9MMtPkXSSDvmBwOzyStnUAr4xnHbKCoVTV1paAlo49D
-         NM1/gyfumE0iLYbc/dIslCSEJqr3409k1SGNxt1WFM2EbvAyBHCI6z9b6HB7b1rC9nRi
-         34lApkPGFBct8xB/nC2SCbFTf8ptzTEdYuNItDdV83qzujt9uMH5KzdMx4ZnIbF6qew0
-         ahY0cuCggYYTf3y0K2i8+jd0Oygin7HgiNuGeMsFqm/aum3LO26M+9XomtIR/QTlp/7P
-         Hi6Q==
-X-Gm-Message-State: AOAM531slcNM+KrS41rVn0SctSj+B7om2PfSJi0QmEU5GSDq6SgpPKCC
-        ctObin4zN/Nw+rOssJg2HjRxo75zQMipkBA05vQ=
-X-Google-Smtp-Source: ABdhPJyC27emggq2Nng2BIX/3igfNGzxo0Bi3oNcQ58i0Z+P0TxOJ101blFLirPCZRjKcyJq0Sg0icYOFNAfBWj9uRg=
-X-Received: by 2002:a05:6214:d8d:b0:45a:fbe2:e7c with SMTP id
- e13-20020a0562140d8d00b0045afbe20e7cmr3146878qve.48.1651955889339; Sat, 07
- May 2022 13:38:09 -0700 (PDT)
+        Sat, 7 May 2022 16:58:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DDC205D6
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 13:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651956911; x=1683492911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IW5GA9KY5fGNk8pn2J9fOJ9P5JzlJf02ctQI0dsVQ/U=;
+  b=K8WniyiRhyhIp0k+dxXJF0+Kl3ufn9riUB1KzWsgcXs8e+FO5zeTVA7c
+   /+DjGO5k5KZwDLdrl+fpBC3vRw1tqCrSiVIl03M/adg9G9gHVfOSkEtNh
+   GKNNyadRA4dhm8vLVtXtxApPl/SpE/nN/Gv56gCuJudqW5iJFq/zSVpqr
+   4dxee55VT/bjX7u0WTP1JBWJiC0pmovfKxKS/edySW0ozuAqb+71M97lM
+   ZeKvn5EdwZySoLhH9Amx8jpvqETgdUCdwlebPRxvkjnstC4BJTTZg0jlc
+   WVNvMdMKnsl31P36XJChQF06hlHS7dNWjMwFeAN/sK175ClhZVQOKQIIz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="266343911"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="266343911"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 13:55:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="622361229"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 May 2022 13:55:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnRSG-000Ext-7v;
+        Sat, 07 May 2022 20:55:08 +0000
+Date:   Sun, 8 May 2022 04:54:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function
+ 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205080416.vzIXy16B-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220503195605.4015616-1-robimarko@gmail.com> <20220503195605.4015616-5-robimarko@gmail.com>
- <7316927c-3068-90b6-3500-bf759bb46493@linaro.org>
-In-Reply-To: <7316927c-3068-90b6-3500-bf759bb46493@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Sat, 7 May 2022 22:37:58 +0200
-Message-ID: <CAOX2RU6DCueDU02Qmx9xLNVP0uWX2z+3ia5Oem30gj-jdWdcQw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] dt-bindings: mailbox: qcom: set correct #clock-cells
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        linux-clk@vger.kernel.org, dmitry.baryshkov@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 at 10:37, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 03/05/2022 21:56, Robert Marko wrote:
-> > diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> > index 3b5ba7ecc19d..1f803925867e 100644
-> > --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> > +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> > @@ -50,7 +50,7 @@ properties:
-> >      const: 1
-> >
-> >    '#clock-cells':
-> > -    const: 0
-> > +    enum: [0, 1]
-> >
-> >    clock-names:
-> >      minItems: 2
-> > @@ -96,6 +96,22 @@ allOf:
-> >        properties:
-> >          clocks:
-> >            maxItems: 3
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          enum:
-> > +            - qcom,ipq6018-apcs-apps-global
-> > +            - qcom,ipq8074-apcs-apps-global
-> > +    then:
-> > +      properties:
-> > +        '#clock-cells':
-> > +          const: 1
-> > +
->
-> If there is a respin, please drop this blank line.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   30c8e80f79329617012f07b09b70114592092ea4
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   8 weeks ago
+config: mips-randconfig-r022-20220507 (https://download.01.org/0day-ci/archive/20220508/202205080416.vzIXy16B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Done as part of v3, thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Robert
->
-> > +    else:
-> > +      properties:
-> > +        '#clock-cells':
-> > +          const: 0
-> > +
-> >  examples:
-> >
-> >    # Example apcs with msm8996
->
->
-> Best regards,
-> Krzysztof
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+           ^
+>> drivers/hwmon/ltq-cputemp.c:23:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+                       ^
+   drivers/hwmon/ltq-cputemp.c:28:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+           ^
+   drivers/hwmon/ltq-cputemp.c:28:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
+                       ^
+   drivers/hwmon/ltq-cputemp.c:39:12: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   value = (ltq_cgu_r32(CGU_GPHY1_CR) >> 9) & 0x01FF;
+                            ^
+   drivers/hwmon/ltq-cputemp.c:92:24: error: use of undeclared identifier 'SOC_TYPE_VR9_2'
+           if (ltq_soc_type() != SOC_TYPE_VR9_2)
+                                 ^
+   6 errors generated.
+
+
+vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
+
+7074d0a9275860 Florian Eckert 2017-09-01  20  
+7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
+7074d0a9275860 Florian Eckert 2017-09-01  22  {
+7074d0a9275860 Florian Eckert 2017-09-01 @23  	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+7074d0a9275860 Florian Eckert 2017-09-01  24  }
+7074d0a9275860 Florian Eckert 2017-09-01  25  
+
+:::::: The code at line 23 was first introduced by commit
+:::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
+
+:::::: TO: Florian Eckert <fe@dev.tdt.de>
+:::::: CC: Guenter Roeck <linux@roeck-us.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

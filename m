@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D0151E303
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEFA51E304
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445174AbiEGBaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S1445177AbiEGBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiEGBa2 (ORCPT
+        with ESMTP id S236738AbiEGBdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:30:28 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849033AA49;
-        Fri,  6 May 2022 18:26:43 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-ee1e7362caso4872692fac.10;
-        Fri, 06 May 2022 18:26:43 -0700 (PDT)
+        Fri, 6 May 2022 21:33:11 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC870921
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 18:29:26 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id k27so10463085edk.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 18:29:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iDAhf762jxRhEv8fWwnY9wpSIpXGHrpFlmpaUo6C1zk=;
-        b=F3gz8XL26fGIg5x4zHuPywcBt3scsTWHmrRlxUXkNEfEVYZl/M35+V+YGFWfo1lE+P
-         yhotM6PX8de5M9NSCEYYSecqiOWoxVzkwSokt7PmQxJ834yfpEZne76p+bi2YybspM/P
-         el4Lyw701k1uZ1l9gYwf3BUAbccvic8rYHyzGmcHgGXyyUe9LpH1NrLphqCE2YFQrUu2
-         imT+3aMBlQzUZerRybx8SrUsoUBqjND8/NsQeokLI0WJ92ldvWKfU645zdimqXwxUIFn
-         VR4hTGFntXAmxyuG51Drm0j3zyzGuNxV6Oaf8Joh+TF+4fZj2wkPtC75Hkl6w+/UeU7W
-         dMpA==
+        bh=sIQWyqXvIIq9sD3XM20r5zKTpkRZMWgEiouQek1gd3Y=;
+        b=WWj4C6F5RGEX4dE9POSrNe1/+NzxSscKgUQs1Ognjq4KCxFMsJ79jg9aA4P06w11FB
+         FAkIfigQsxdvYcy3m3SYCvCSjdxQ9r8ueIyShwc+abHKYixmQfeTIAzFn28gw4rVP6L4
+         t0YsPGj8OaZmJH7AlnWtt8zx3jBW6RYg0HozpmjIekMlUlX8P8cxRohm+j3ZY9nGhP9d
+         MZY96nbatPhomFTvuibWDU6Ewstm3GT6IeVZyzaKPSLM4RUSfZzHo4WZbHjX3QKzgdeV
+         twR3yOgbRebFZ9qemBLaNMELrRP5rSyqQ1AMj2rC+Fiw+bvYIRes+fMMjTES908RseeI
+         bS/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iDAhf762jxRhEv8fWwnY9wpSIpXGHrpFlmpaUo6C1zk=;
-        b=HrC149XtE6741vFJqlJh5VtsY2uPrN52rL4BzEp4teFAK1liLyNsY9WldqpmHHHjRY
-         v2Hph+6Nw4XS3PAYw4Ue2PvFRXRoV01AeUC0HHpuh82kqmghsG+gDN8ajnSfTYt3bMUX
-         cLIyoKTjqHlUOpg3PpakF1gdrohOqAv02vuRGxPjWrfaQbFD40KLtlETkN2dGh6zfVkL
-         R9IeY2wF/g56oZqPlcKZr8+IYTAFlky6kAZacfe/QFha28Jr9nIi1K3rZpGffnpsIV6R
-         f7e2sZAHvuEGLE/9l9i7AmGaxchSUfdmweqOjGkcHnW/FNXHfDqK8H/817gl6IYUOY7x
-         rWRQ==
-X-Gm-Message-State: AOAM531xJirNqfDe9ZbL7a7ayfk9sUVHB60W2wHoj/0r+4mxQ6oktcvG
-        wdCL2aKx2u6DhRp4H5pc2lAwRGTqSLzs0YEgFk3gzQkUMW0+WA==
-X-Google-Smtp-Source: ABdhPJzyLNv+Q6ZAyNJ7GFtl4fwjM7lLihcjDwTRVz3yxuhErRy90ery7vxfFURM1YDzqoGEyqq1Pfrc60/WgfWMP1E=
-X-Received: by 2002:a05:6870:1c7:b0:ed:b4b6:27a1 with SMTP id
- n7-20020a05687001c700b000edb4b627a1mr5626941oad.223.1651886802927; Fri, 06
- May 2022 18:26:42 -0700 (PDT)
+        bh=sIQWyqXvIIq9sD3XM20r5zKTpkRZMWgEiouQek1gd3Y=;
+        b=f5C9VxJazX5c7RHDgXWs9G43dPhUQfZaFLKm3pfmYppuHvyksT9ENfhl5v2XtkhUMh
+         4LTtfaICR+rqyVH1LLTzLkWw+m9yEH9PppaDskbogDfmwKVewyEhE+cEWtMnjuC35tAu
+         m30txH/v7yjLDSAgo3+1pgYhwchP4VY926Mo1SewpkaXCykZAzKEsxOJ91EO61UwPuJL
+         w57LRxmqsQmPfeSj75GdgF6z0Deg/Bq0M+SWnoCZ8pQbEOc6KEXDmP3EUKFn9O6j1YeT
+         u29GbV0hJDcoZG8ePoBLslIk0nAb/jWWv1o82/sasdU95tjAjli3fZoYZ5WUccWlScyB
+         syFA==
+X-Gm-Message-State: AOAM533RjPRJQpgvh8Mc9jmpzlPwg9LLocgI3JWtzJ5LFrLb9lrszPxD
+        xBoRF/DLrz6/Ypj4o+Uv38vQTkk2XvnFLywi0IA=
+X-Google-Smtp-Source: ABdhPJxewcFKx/5BeXVX+Cw6jCPiZRBRVEdISYOJYZ3Nd965a3XYEqXB16ComSJHpGQePEqxplDjlHJXbKLNkwaa/nA=
+X-Received: by 2002:a05:6402:1d48:b0:427:e039:9262 with SMTP id
+ dz8-20020a0564021d4800b00427e0399262mr6564374edb.148.1651886964565; Fri, 06
+ May 2022 18:29:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220505130826.40914-1-kerneljasonxing@gmail.com> <20220506185641.GA2289@bytedance>
-In-Reply-To: <20220506185641.GA2289@bytedance>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Sat, 7 May 2022 09:26:07 +0800
-Message-ID: <CAL+tcoBwQ2tijfzwOO6zb2MobCL27PcyN3foRcAw91MpyWg_VA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: use the %px format to display sock
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <xingwanli@kuaishou.com>
+References: <2fb2bc4e857848c83cfa96483e4b25b23d46be49.1651516951.git.jpoimboe@redhat.com>
+ <CAPDLWs_aOi-f801SAhA1X2YH4XE_r5P3AfPV1uhQWA10bKKffg@mail.gmail.com> <20220506152601.z4f3bachnyfeqgzf@treble>
+In-Reply-To: <20220506152601.z4f3bachnyfeqgzf@treble>
+From:   Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Date:   Sat, 7 May 2022 06:59:08 +0530
+Message-ID: <CAPDLWs8+=z_h8or4Yz_3aJUp7M=5O=SodjEgTyau6XQkRcW8yQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts/faddr2line: Only use text symbols to calculate
+ function size
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,32 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 7, 2022 at 2:56 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+On Fri, May 6, 2022 at 8:56 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 >
-> Hi Jason,
+> On Fri, May 06, 2022 at 11:34:00AM +0530, Kaiwan N Billimoria wrote:
+> > Hi Josh,
+> >
+> > Unfortunately, it didn't work with my test case (as before):
+> > $ <...>/linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko do_the_work+0x124
+> > bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
+> > $
+> >
+> > What _did_ work was the earlier (much longer) patch you'd sent (your
+> > email dt 20 Jan 2022),
+> > Could you pl recheck...
+> > (As before, i have the test case module here:
+> > https://github.com/PacktPublishing/Linux-Kernel-Debugging/tree/main/ch7/oops_tryv2
 >
-> On Thu, May 05, 2022 at 09:08:26PM +0800, kerneljasonxing@gmail.com wrote:
-> > -             pr_err("Attempt to release TCP socket in state %d %p\n",
-> > +             pr_err("Attempt to release TCP socket in state %d %px\n",
+> Sorry, I totally managed to forget that I rewrote the whole script:
 >
-> I think we cannot use %px here for security reasons?  checkpatch is also
-> warning about it:
+>   https://lkml.kernel.org/lkml/20220120171751.gibauc4zovoskjns@treble
 >
+> IIRC, that was the one that fixed your issue.  Let me go clean that one
+> up...
+Yup ! that's the one
 
-I noticed this warning before submitting. Since the %p format doesn't
-print the real address, printing the address here will be helpless and
-we cannot trace what exactly the bad socket is.
-
-What do you suggest?
-
-Thanks,
-Jason
-
-> WARNING: Using vsprintf specifier '%px' potentially exposes the kernel memory layout, if you don't really need the address please consider using '%p'.
-> #21: FILE: net/ipv4/af_inet.c:142:
-> +               pr_err("Attempt to release TCP socket in state %d %px\n",
->                        sk->sk_state, sk);
 >
-> Thanks,
-> Peilin Ye
->
+> --
+> Josh

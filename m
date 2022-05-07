@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A0851E452
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A32051E455
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445653AbiEGFaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S1445705AbiEGFa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445647AbiEGFaa (ORCPT
+        with ESMTP id S1445633AbiEGFae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:30:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA325712E2;
-        Fri,  6 May 2022 22:26:35 -0700 (PDT)
+        Sat, 7 May 2022 01:30:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E63169CF9;
+        Fri,  6 May 2022 22:26:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFAEB60B1E;
-        Sat,  7 May 2022 05:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C356C385A5;
-        Sat,  7 May 2022 05:26:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9D88B819F9;
+        Sat,  7 May 2022 05:26:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C65C385A5;
+        Sat,  7 May 2022 05:26:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651901194;
-        bh=VLh4/OwZcB792S8qyHbPDpE0+A9eFuNZFQmm2s3XE6g=;
+        s=k20201202; t=1651901200;
+        bh=rAzRU1GevRrglrY8wYe/AYdXcAXmkwORxFH4t87CFg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0t1DT4hH3y5HZ4t7upjjJT7LgFiaZWplXg2LmWNDZks+ouj5tqU4r6xD6Ie3f5VX
-         oJ47WseqrWDYmg6/BfenkeXsn2JnEMfov33USIv5Pw3AaIVe+ikpz4rTY4xQdkFvRF
-         tMpp6ZVmDkGPiugsXQ0jdjEA1TzuWr42I48DHmIq6CqCWtXEAPy6WI9eIWX+N1ltL7
-         3vLjvH/OFmmIW4a87K8UeHHrqbDatNvL2EYJHCnpLknUCFGjMSGw9zwpvRlOXdYL/d
-         5waWfSsUiDxxjJLFCy3Gz+wa+PexI5JQ7UdMCNIoTueaHvbOJsTJNRvY6tfTMbVs15
-         yefpq7yg9w+JQ==
+        b=RszRTgrQmkHnAx7Pa1BweIRAEAoPrxI36J9souQ9NBYBer9t/0pYecWdqespGj5lI
+         ERYVQD+mUNLRL0vYeudW4a4kiN3fIJVXYn7SXQgzSwUb66N2pqsdLK6GtfwuoBhRs3
+         ej2+wU2HNbpoqxScxRMxX/cyLywZDDfwmdN5nSpZRCyaLEs7I5X1vCEW8hcPPzKOHv
+         o6KfbjPDexYsBEoOP+msZch5iwVsHxRj/MWRVGZuneVQxnBAtbXaLpLDHKy9jPJA3O
+         sSB54mRhPmTMFJtwutHMWIom46Vg177rhHscOPkoZY2XW1mZKsiTmQaLb9Le6ruTqV
+         2v4V8AEiI+dlQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>
-Subject: [PATCH v6 10/23] rust: add `macros` crate
-Date:   Sat,  7 May 2022 07:24:08 +0200
-Message-Id: <20220507052451.12890-11-ojeda@kernel.org>
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>, Daniel Xu <dxu@dxuuu.xyz>,
+        Hsiang-Cheng Yang <rick68@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH v6 11/23] rust: add `kernel` crate's `sync` module
+Date:   Sat,  7 May 2022 07:24:09 +0200
+Message-Id: <20220507052451.12890-12-ojeda@kernel.org>
 In-Reply-To: <20220507052451.12890-1-ojeda@kernel.org>
 References: <20220507052451.12890-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -61,868 +65,2899 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This crate contains all the procedural macros ("proc macros")
-shared by all the kernel.
+From: Wedson Almeida Filho <wedsonaf@google.com>
 
-Procedural macros allow to create syntax extensions. They run at
-compile-time and can consume as well as produce Rust syntax.
-
-For instance, the `module!` macro that is used by Rust modules
-is implemented here. It allows to easily declare the equivalent
-information to the `MODULE_*` macros in C modules, e.g.:
-
-    module! {
-        type: RustMinimal,
-        name: b"rust_minimal",
-        author: b"Rust for Linux Contributors",
-        description: b"Rust minimal sample",
-        license: b"GPL v2",
-    }
+This module contains the kernel APIs related to synchronisation that
+have been ported or wrapped for usage by Rust code in the kernel and
+is shared by all of them.
 
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-Co-developed-by: Finn Behrens <me@kloenk.de>
-Signed-off-by: Finn Behrens <me@kloenk.de>
-Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Co-developed-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
-Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
+Co-developed-by: Geoffrey Thomas <geofft@ldpreload.com>
+Signed-off-by: Geoffrey Thomas <geofft@ldpreload.com>
+Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
 Co-developed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Gary Guo <gary@garyguo.net>
-Co-developed-by: Matthew Bakhtiari <dev@mtbk.me>
-Signed-off-by: Matthew Bakhtiari <dev@mtbk.me>
+Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Co-developed-by: Hsiang-Cheng Yang <rick68@gmail.com>
+Signed-off-by: Hsiang-Cheng Yang <rick68@gmail.com>
+Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/macros/helpers.rs |  79 ++++++
- rust/macros/lib.rs     |  94 ++++++
- rust/macros/module.rs  | 631 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 804 insertions(+)
- create mode 100644 rust/macros/helpers.rs
- create mode 100644 rust/macros/lib.rs
- create mode 100644 rust/macros/module.rs
+ include/linux/spinlock.h      |  25 +-
+ rust/kernel/sync.rs           | 161 +++++++++++
+ rust/kernel/sync/arc.rs       | 503 ++++++++++++++++++++++++++++++++++
+ rust/kernel/sync/condvar.rs   | 138 ++++++++++
+ rust/kernel/sync/guard.rs     | 169 ++++++++++++
+ rust/kernel/sync/locked_by.rs | 111 ++++++++
+ rust/kernel/sync/mutex.rs     | 153 +++++++++++
+ rust/kernel/sync/nowait.rs    | 188 +++++++++++++
+ rust/kernel/sync/revocable.rs | 250 +++++++++++++++++
+ rust/kernel/sync/rwsem.rs     | 197 +++++++++++++
+ rust/kernel/sync/seqlock.rs   | 202 ++++++++++++++
+ rust/kernel/sync/smutex.rs    | 295 ++++++++++++++++++++
+ rust/kernel/sync/spinlock.rs  | 360 ++++++++++++++++++++++++
+ 13 files changed, 2745 insertions(+), 7 deletions(-)
+ create mode 100644 rust/kernel/sync.rs
+ create mode 100644 rust/kernel/sync/arc.rs
+ create mode 100644 rust/kernel/sync/condvar.rs
+ create mode 100644 rust/kernel/sync/guard.rs
+ create mode 100644 rust/kernel/sync/locked_by.rs
+ create mode 100644 rust/kernel/sync/mutex.rs
+ create mode 100644 rust/kernel/sync/nowait.rs
+ create mode 100644 rust/kernel/sync/revocable.rs
+ create mode 100644 rust/kernel/sync/rwsem.rs
+ create mode 100644 rust/kernel/sync/seqlock.rs
+ create mode 100644 rust/kernel/sync/smutex.rs
+ create mode 100644 rust/kernel/sync/spinlock.rs
 
-diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 5c0c5174155d..cdcbf9d9c70c 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -99,11 +99,17 @@
+   extern void __raw_spin_lock_init(raw_spinlock_t *lock, const char *name,
+ 				   struct lock_class_key *key, short inner);
+ 
++static inline void _raw_spin_lock_init(raw_spinlock_t *lock, const char *name,
++				       struct lock_class_key *key)
++{
++	__raw_spin_lock_init(lock, name, key, LD_WAIT_SPIN);
++}
++
+ # define raw_spin_lock_init(lock)					\
+ do {									\
+ 	static struct lock_class_key __key;				\
+ 									\
+-	__raw_spin_lock_init((lock), #lock, &__key, LD_WAIT_SPIN);	\
++	_raw_spin_lock_init((lock), #lock, &__key);			\
+ } while (0)
+ 
+ #else
+@@ -326,12 +332,17 @@ static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+ 
+ #ifdef CONFIG_DEBUG_SPINLOCK
+ 
+-# define spin_lock_init(lock)					\
+-do {								\
+-	static struct lock_class_key __key;			\
+-								\
+-	__raw_spin_lock_init(spinlock_check(lock),		\
+-			     #lock, &__key, LD_WAIT_CONFIG);	\
++static inline void __spin_lock_init(spinlock_t *lock, const char *name,
++				    struct lock_class_key *key)
++{
++	__raw_spin_lock_init(spinlock_check(lock), name, key, LD_WAIT_CONFIG);
++}
++
++# define spin_lock_init(lock)			\
++do {						\
++	static struct lock_class_key __key;	\
++						\
++	__spin_lock_init(lock, #lock, &__key);	\
+ } while (0)
+ 
+ #else
+diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
 new file mode 100644
-index 000000000000..ad210563e5a6
+index 000000000000..66536fe2ba18
 --- /dev/null
-+++ b/rust/macros/helpers.rs
-@@ -0,0 +1,79 @@
++++ b/rust/kernel/sync.rs
+@@ -0,0 +1,161 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+use proc_macro::{token_stream, Group, TokenTree};
++//! Synchronisation primitives.
++//!
++//! This module contains the kernel APIs related to synchronisation that have been ported or
++//! wrapped for usage by Rust code in the kernel and is shared by all of them.
++//!
++//! # Example
++//!
++//! ```
++//! # use kernel::mutex_init;
++//! # use kernel::sync::Mutex;
++//! # use alloc::boxed::Box;
++//! # use core::pin::Pin;
++//! // SAFETY: `init` is called below.
++//! let mut data = Pin::from(Box::try_new(unsafe { Mutex::new(10) }).unwrap());
++//! mutex_init!(data.as_mut(), "test::data");
++//!
++//! assert_eq!(*data.lock(), 10);
++//! *data.lock() = 20;
++//! assert_eq!(*data.lock(), 20);
++//! ```
 +
-+pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
-+    if let Some(TokenTree::Ident(ident)) = it.next() {
-+        Some(ident.to_string())
-+    } else {
-+        None
-+    }
++use crate::{bindings, str::CStr};
++use core::pin::Pin;
++
++mod arc;
++mod condvar;
++mod guard;
++mod locked_by;
++mod mutex;
++mod nowait;
++mod revocable;
++mod rwsem;
++mod seqlock;
++pub mod smutex;
++mod spinlock;
++
++pub use arc::{Ref, RefBorrow, UniqueRef};
++pub use condvar::CondVar;
++pub use guard::{Guard, Lock, LockFactory, LockInfo, LockIniter, ReadLock, WriteLock};
++pub use locked_by::LockedBy;
++pub use mutex::{Mutex, RevocableMutex, RevocableMutexGuard};
++pub use nowait::{NoWaitLock, NoWaitLockGuard};
++pub use revocable::{Revocable, RevocableGuard};
++pub use rwsem::{RevocableRwSemaphore, RevocableRwSemaphoreGuard, RwSemaphore};
++pub use seqlock::{SeqLock, SeqLockReadGuard};
++pub use spinlock::{RawSpinLock, SpinLock};
++
++/// Safely initialises an object that has an `init` function that takes a name and a lock class as
++/// arguments, examples of these are [`Mutex`] and [`SpinLock`]. Each of them also provides a more
++/// specialised name that uses this macro.
++#[doc(hidden)]
++#[macro_export]
++macro_rules! init_with_lockdep {
++    ($obj:expr, $name:expr) => {{
++        static mut CLASS1: core::mem::MaybeUninit<$crate::bindings::lock_class_key> =
++            core::mem::MaybeUninit::uninit();
++        static mut CLASS2: core::mem::MaybeUninit<$crate::bindings::lock_class_key> =
++            core::mem::MaybeUninit::uninit();
++        let obj = $obj;
++        let name = $crate::c_str!($name);
++        // SAFETY: `CLASS1` and `CLASS2` are never used by Rust code directly; the C portion of the
++        // kernel may change it though.
++        #[allow(unused_unsafe)]
++        unsafe {
++            $crate::sync::NeedsLockClass::init(obj, name, CLASS1.as_mut_ptr(), CLASS2.as_mut_ptr())
++        };
++    }};
 +}
 +
-+pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<String> {
-+    if let Some(TokenTree::Literal(literal)) = it.next() {
-+        Some(literal.to_string())
-+    } else {
-+        None
-+    }
-+}
-+
-+pub(crate) fn try_byte_string(it: &mut token_stream::IntoIter) -> Option<String> {
-+    try_literal(it).and_then(|byte_string| {
-+        if byte_string.starts_with("b\"") && byte_string.ends_with('\"') {
-+            Some(byte_string[2..byte_string.len() - 1].to_string())
-+        } else {
-+            None
-+        }
-+    })
-+}
-+
-+pub(crate) fn expect_ident(it: &mut token_stream::IntoIter) -> String {
-+    try_ident(it).expect("Expected Ident")
-+}
-+
-+pub(crate) fn expect_punct(it: &mut token_stream::IntoIter) -> char {
-+    if let TokenTree::Punct(punct) = it.next().expect("Reached end of token stream for Punct") {
-+        punct.as_char()
-+    } else {
-+        panic!("Expected Punct");
-+    }
-+}
-+
-+pub(crate) fn expect_literal(it: &mut token_stream::IntoIter) -> String {
-+    try_literal(it).expect("Expected Literal")
-+}
-+
-+pub(crate) fn expect_group(it: &mut token_stream::IntoIter) -> Group {
-+    if let TokenTree::Group(group) = it.next().expect("Reached end of token stream for Group") {
-+        group
-+    } else {
-+        panic!("Expected Group");
-+    }
-+}
-+
-+pub(crate) fn expect_byte_string(it: &mut token_stream::IntoIter) -> String {
-+    try_byte_string(it).expect("Expected byte string")
-+}
-+
-+pub(crate) fn expect_end(it: &mut token_stream::IntoIter) {
-+    if it.next().is_some() {
-+        panic!("Expected end");
-+    }
-+}
-+
-+pub(crate) fn get_literal(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
-+    assert_eq!(expect_ident(it), expected_name);
-+    assert_eq!(expect_punct(it), ':');
-+    let literal = expect_literal(it);
-+    assert_eq!(expect_punct(it), ',');
-+    literal
-+}
-+
-+pub(crate) fn get_byte_string(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
-+    assert_eq!(expect_ident(it), expected_name);
-+    assert_eq!(expect_punct(it), ':');
-+    let byte_string = expect_byte_string(it);
-+    assert_eq!(expect_punct(it), ',');
-+    byte_string
-+}
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-new file mode 100644
-index 000000000000..39e8b07537a0
---- /dev/null
-+++ b/rust/macros/lib.rs
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Crate for all kernel procedural macros.
-+
-+mod helpers;
-+mod module;
-+
-+use proc_macro::TokenStream;
-+
-+/// Declares a kernel module.
++/// A trait for types that need a lock class during initialisation.
 +///
-+/// The `type` argument should be a type which implements the [`Module`]
-+/// trait. Also accepts various forms of kernel metadata.
++/// Implementers of this trait benefit from the [`init_with_lockdep`] macro that generates a new
++/// class for each initialisation call site.
++pub trait NeedsLockClass {
++    /// Initialises the type instance so that it can be safely used.
++    ///
++    /// Callers are encouraged to use the [`init_with_lockdep`] macro as it automatically creates a
++    /// new lock class on each usage.
++    ///
++    /// # Safety
++    ///
++    /// `key1` and `key2` must point to valid memory locations and remain valid until `self` is
++    /// dropped.
++    unsafe fn init(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key1: *mut bindings::lock_class_key,
++        key2: *mut bindings::lock_class_key,
++    );
++}
++
++/// Automatically initialises static instances of synchronisation primitives.
 +///
-+/// C header: [`include/linux/moduleparam.h`](../../../include/linux/moduleparam.h)
-+///
-+/// [`Module`]: ../kernel/trait.Module.html
++/// The syntax resembles that of regular static variables, except that the value assigned is that
++/// of the protected type (if one exists). In the examples below, all primitives except for
++/// [`CondVar`] require the inner value to be supplied.
 +///
 +/// # Examples
 +///
 +/// ```ignore
-+/// use kernel::prelude::*;
-+///
-+/// module!{
-+///     type: MyModule,
-+///     name: b"my_kernel_module",
-+///     author: b"Rust for Linux Contributors",
-+///     description: b"My very own kernel module!",
-+///     license: b"GPL v2",
-+///     params: {
-+///        my_i32: i32 {
-+///            default: 42,
-+///            permissions: 0o000,
-+///            description: b"Example of i32",
-+///        },
-+///        writeable_i32: i32 {
-+///            default: 42,
-+///            permissions: 0o644,
-+///            description: b"Example of i32",
-+///        },
-+///    },
++/// # use kernel::{init_static_sync, sync::{CondVar, Mutex, RevocableMutex, SpinLock}};
++/// struct Test {
++///     a: u32,
++///     b: u32,
 +/// }
 +///
-+/// struct MyModule;
++/// init_static_sync! {
++///     static A: Mutex<Test> = Test { a: 10, b: 20 };
 +///
-+/// impl kernel::Module for MyModule {
-+///     fn init() -> Result<Self> {
-+///         // If the parameter is writeable, then the kparam lock must be
-+///         // taken to read the parameter:
-+///         {
-+///             let lock = THIS_MODULE.kernel_param_lock();
-+///             pr_info!("i32 param is:  {}\n", writeable_i32.read(&lock));
-+///         }
-+///         // If the parameter is read only, it can be read without locking
-+///         // the kernel parameters:
-+///         pr_info!("i32 param is:  {}\n", my_i32.read());
-+///         Ok(Self)
-+///     }
++///     /// Documentation for `B`.
++///     pub static B: Mutex<u32> = 0;
++///
++///     pub(crate) static C: SpinLock<Test> = Test { a: 10, b: 20 };
++///     static D: CondVar;
++///
++///     static E: RevocableMutex<Test> = Test { a: 30, b: 40 };
++/// }
++/// ```
++#[macro_export]
++macro_rules! init_static_sync {
++    ($($(#[$outer:meta])* $v:vis static $id:ident : $t:ty $(= $value:expr)?;)*) => {
++        $(
++            $(#[$outer])*
++            $v static $id: $t = {
++                #[link_section = ".init_array"]
++                #[used]
++                static TMP: extern "C" fn() = {
++                    extern "C" fn constructor() {
++                        // SAFETY: This locally-defined function is only called from a constructor,
++                        // which guarantees that `$id` is not accessible from other threads
++                        // concurrently.
++                        #[allow(clippy::cast_ref_to_mut)]
++                        let mutable = unsafe { &mut *(&$id as *const _ as *mut $t) };
++                        // SAFETY: It's a shared static, so it cannot move.
++                        let pinned = unsafe { core::pin::Pin::new_unchecked(mutable) };
++                        $crate::init_with_lockdep!(pinned, stringify!($id));
++                    }
++                    constructor
++                };
++                $crate::init_static_sync!(@call_new $t, $($value)?)
++            };
++        )*
++    };
++    (@call_new $t:ty, $value:expr) => {{
++        let v = $value;
++        // SAFETY: the initialisation function is called by the constructor above.
++        unsafe { <$t>::new(v) }
++    }};
++    (@call_new $t:ty,) => {
++        // SAFETY: the initialisation function is called by the constructor above.
++        unsafe { <$t>::new() }
++    };
++}
++
++/// Reschedules the caller's task if needed.
++pub fn cond_resched() -> bool {
++    // SAFETY: No arguments, reschedules `current` if needed.
++    unsafe { bindings::cond_resched() != 0 }
++}
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+new file mode 100644
+index 000000000000..056d2bae632a
+--- /dev/null
++++ b/rust/kernel/sync/arc.rs
+@@ -0,0 +1,503 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A reference-counted pointer.
++//!
++//! This module implements a way for users to create reference-counted objects and pointers to
++//! them. Such a pointer automatically increments and decrements the count, and drops the
++//! underlying object when it reaches zero. It is also safe to use concurrently from multiple
++//! threads.
++//!
++//! It is different from the standard library's [`Arc`] in a few ways:
++//! 1. It is backed by the kernel's `refcount_t` type.
++//! 2. It does not support weak references, which allows it to be half the size.
++//! 3. It saturates the reference count instead of aborting when it goes over a threshold.
++//! 4. It does not provide a `get_mut` method, so the ref counted object is pinned.
++//!
++//! [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
++
++use crate::{bindings, error::code::*, Error, Opaque, Result};
++use alloc::{
++    alloc::{alloc, dealloc},
++    vec::Vec,
++};
++use core::{
++    alloc::Layout,
++    convert::{AsRef, TryFrom},
++    marker::{PhantomData, Unsize},
++    mem::{ManuallyDrop, MaybeUninit},
++    ops::{Deref, DerefMut},
++    pin::Pin,
++    ptr::{self, NonNull},
++};
++
++/// A reference-counted pointer to an instance of `T`.
++///
++/// The reference count is incremented when new instances of [`Ref`] are created, and decremented
++/// when they are dropped. When the count reaches zero, the underlying `T` is also dropped.
++///
++/// # Invariants
++///
++/// The reference count on an instance of [`Ref`] is always non-zero.
++/// The object pointed to by [`Ref`] is always pinned.
++pub struct Ref<T: ?Sized> {
++    ptr: NonNull<RefInner<T>>,
++    _p: PhantomData<RefInner<T>>,
++}
++
++#[repr(C)]
++struct RefInner<T: ?Sized> {
++    refcount: Opaque<bindings::refcount_t>,
++    data: T,
++}
++
++// This is to allow [`Ref`] (and variants) to be used as the type of `self`.
++impl<T: ?Sized> core::ops::Receiver for Ref<T> {}
++
++// This is to allow [`RefBorrow`] (and variants) to be used as the type of `self`.
++impl<T: ?Sized> core::ops::Receiver for RefBorrow<'_, T> {}
++
++// This is to allow coercion from `Ref<T>` to `Ref<U>` if `T` can be converted to the
++// dynamically-sized type (DST) `U`.
++impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::CoerceUnsized<Ref<U>> for Ref<T> {}
++
++// This is to allow `Ref<U>` to be dispatched on when `Ref<T>` can be coerced into `Ref<U>`.
++impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::DispatchFromDyn<Ref<U>> for Ref<T> {}
++
++// SAFETY: It is safe to send `Ref<T>` to another thread when the underlying `T` is `Sync` because
++// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
++// `T` to be `Send` because any thread that has a `Ref<T>` may ultimately access `T` directly, for
++// example, when the reference count reaches zero and `T` is dropped.
++unsafe impl<T: ?Sized + Sync + Send> Send for Ref<T> {}
++
++// SAFETY: It is safe to send `&Ref<T>` to another thread when the underlying `T` is `Sync` for
++// the same reason as above. `T` needs to be `Send` as well because a thread can clone a `&Ref<T>`
++// into a `Ref<T>`, which may lead to `T` being accessed by the same reasoning as above.
++unsafe impl<T: ?Sized + Sync + Send> Sync for Ref<T> {}
++
++impl<T> Ref<T> {
++    /// Constructs a new reference counted instance of `T`.
++    pub fn try_new(contents: T) -> Result<Self> {
++        let layout = Layout::new::<RefInner<T>>();
++        // SAFETY: The layout size is guaranteed to be non-zero because `RefInner` contains the
++        // reference count.
++        let inner = NonNull::new(unsafe { alloc(layout) })
++            .ok_or(ENOMEM)?
++            .cast::<RefInner<T>>();
++
++        // INVARIANT: The refcount is initialised to a non-zero value.
++        let value = RefInner {
++            // SAFETY: Just an FFI call that returns a `refcount_t` initialised to 1.
++            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
++            data: contents,
++        };
++        // SAFETY: `inner` is writable and properly aligned.
++        unsafe { inner.as_ptr().write(value) };
++
++        // SAFETY: We just created `inner` with a reference count of 1, which is owned by the new
++        // `Ref` object.
++        Ok(unsafe { Self::from_inner(inner) })
++    }
++
++    /// Deconstructs a [`Ref`] object into a `usize`.
++    ///
++    /// It can be reconstructed once via [`Ref::from_usize`].
++    pub fn into_usize(obj: Self) -> usize {
++        ManuallyDrop::new(obj).ptr.as_ptr() as _
++    }
++
++    /// Borrows a [`Ref`] instance previously deconstructed via [`Ref::into_usize`].
++    ///
++    /// # Safety
++    ///
++    /// `encoded` must have been returned by a previous call to [`Ref::into_usize`]. Additionally,
++    /// [`Ref::from_usize`] can only be called after *all* instances of [`RefBorrow`] have been
++    /// dropped.
++    pub unsafe fn borrow_usize<'a>(encoded: usize) -> RefBorrow<'a, T> {
++        // SAFETY: By the safety requirement of this function, we know that `encoded` came from
++        // a previous call to `Ref::into_usize`.
++        let inner = NonNull::new(encoded as *mut RefInner<T>).unwrap();
++
++        // SAFETY: The safety requirements ensure that the object remains alive for the lifetime of
++        // the returned value. There is no way to create mutable references to the object.
++        unsafe { RefBorrow::new(inner) }
++    }
++
++    /// Recreates a [`Ref`] instance previously deconstructed via [`Ref::into_usize`].
++    ///
++    /// # Safety
++    ///
++    /// `encoded` must have been returned by a previous call to [`Ref::into_usize`]. Additionally,
++    /// it can only be called once for each previous call to [`Ref::into_usize`].
++    pub unsafe fn from_usize(encoded: usize) -> Self {
++        // SAFETY: By the safety invariants we know that `encoded` came from `Ref::into_usize`, so
++        // the reference count held then will be owned by the new `Ref` object.
++        unsafe { Self::from_inner(NonNull::new(encoded as _).unwrap()) }
++    }
++}
++
++impl<T: ?Sized> Ref<T> {
++    /// Constructs a new [`Ref`] from an existing [`RefInner`].
++    ///
++    /// # Safety
++    ///
++    /// The caller must ensure that `inner` points to a valid location and has a non-zero reference
++    /// count, one of which will be owned by the new [`Ref`] instance.
++    unsafe fn from_inner(inner: NonNull<RefInner<T>>) -> Self {
++        // INVARIANT: By the safety requirements, the invariants hold.
++        Ref {
++            ptr: inner,
++            _p: PhantomData,
++        }
++    }
++
++    /// Determines if two reference-counted pointers point to the same underlying instance of `T`.
++    pub fn ptr_eq(a: &Self, b: &Self) -> bool {
++        ptr::eq(a.ptr.as_ptr(), b.ptr.as_ptr())
++    }
++
++    /// Deconstructs a [`Ref`] object into a raw pointer.
++    ///
++    /// It can be reconstructed once via [`Ref::from_raw`].
++    pub fn into_raw(obj: Self) -> *const T {
++        let ret = &*obj as *const T;
++        core::mem::forget(obj);
++        ret
++    }
++
++    /// Recreates a [`Ref`] instance previously deconstructed via [`Ref::into_raw`].
++    ///
++    /// This code relies on the `repr(C)` layout of structs as described in
++    /// <https://doc.rust-lang.org/reference/type-layout.html#reprc-structs>.
++    ///
++    /// # Safety
++    ///
++    /// `ptr` must have been returned by a previous call to [`Ref::into_raw`]. Additionally, it
++    /// can only be called once for each previous call to [`Ref::into_raw`].
++    pub unsafe fn from_raw(ptr: *const T) -> Self {
++        // SAFETY: The safety requirement ensures that the pointer is valid.
++        let align = core::mem::align_of_val(unsafe { &*ptr });
++        let offset = Layout::new::<RefInner<()>>()
++            .align_to(align)
++            .unwrap()
++            .pad_to_align()
++            .size();
++        // SAFETY: The pointer is in bounds because by the safety requirements `ptr` came from
++        // `Ref::into_raw`, so it is a pointer `offset` bytes from the beginning of the allocation.
++        let data = unsafe { (ptr as *const u8).sub(offset) };
++        let metadata = ptr::metadata(ptr as *const RefInner<T>);
++        let ptr = ptr::from_raw_parts_mut(data as _, metadata);
++        // SAFETY: By the safety requirements we know that `ptr` came from `Ref::into_raw`, so the
++        // reference count held then will be owned by the new `Ref` object.
++        unsafe { Self::from_inner(NonNull::new(ptr).unwrap()) }
++    }
++
++    /// Returns a [`RefBorrow`] from the given [`Ref`].
++    ///
++    /// This is useful when the argument of a function call is a [`RefBorrow`] (e.g., in a method
++    /// receiver), but we have a [`Ref`] instead. Getting a [`RefBorrow`] is free when optimised.
++    #[inline]
++    pub fn as_ref_borrow(&self) -> RefBorrow<'_, T> {
++        // SAFETY: The constraint that lifetime of the shared reference must outlive that of
++        // the returned `RefBorrow` ensures that the object remains alive.
++        unsafe { RefBorrow::new(self.ptr) }
++    }
++}
++
++impl<T: ?Sized> Deref for Ref<T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: By the type invariant, there is necessarily a reference to the object, so it is
++        // safe to dereference it.
++        unsafe { &self.ptr.as_ref().data }
++    }
++}
++
++impl<T: ?Sized> Clone for Ref<T> {
++    fn clone(&self) -> Self {
++        // INVARIANT: C `refcount_inc` saturates the refcount, so it cannot overflow to zero.
++        // SAFETY: By the type invariant, there is necessarily a reference to the object, so it is
++        // safe to increment the refcount.
++        unsafe { bindings::refcount_inc(self.ptr.as_ref().refcount.get()) };
++
++        // SAFETY: We just incremented the refcount. This increment is now owned by the new `Ref`.
++        unsafe { Self::from_inner(self.ptr) }
++    }
++}
++
++impl<T: ?Sized> AsRef<T> for Ref<T> {
++    fn as_ref(&self) -> &T {
++        // SAFETY: By the type invariant, there is necessarily a reference to the object, so it is
++        // safe to dereference it.
++        unsafe { &self.ptr.as_ref().data }
++    }
++}
++
++impl<T: ?Sized> Drop for Ref<T> {
++    fn drop(&mut self) {
++        // SAFETY: By the type invariant, there is necessarily a reference to the object. We cannot
++        // touch `refcount` after it's decremented to a non-zero value because another thread/CPU
++        // may concurrently decrement it to zero and free it. It is ok to have a raw pointer to
++        // freed/invalid memory as long as it is never dereferenced.
++        let refcount = unsafe { self.ptr.as_ref() }.refcount.get();
++
++        // INVARIANT: If the refcount reaches zero, there are no other instances of `Ref`, and
++        // this instance is being dropped, so the broken invariant is not observable.
++        // SAFETY: Also by the type invariant, we are allowed to decrement the refcount.
++        let is_zero = unsafe { bindings::refcount_dec_and_test(refcount) };
++        if is_zero {
++            // The count reached zero, we must free the memory.
++
++            // SAFETY: This thread holds the only remaining reference to `self`, so it is safe to
++            // get a mutable reference to it.
++            let inner = unsafe { self.ptr.as_mut() };
++            let layout = Layout::for_value(inner);
++            // SAFETY: The value stored in inner is valid.
++            unsafe { core::ptr::drop_in_place(inner) };
++            // SAFETY: The pointer was initialised from the result of a call to `alloc`.
++            unsafe { dealloc(self.ptr.cast().as_ptr(), layout) };
++        }
++    }
++}
++
++impl<T> TryFrom<Vec<T>> for Ref<[T]> {
++    type Error = Error;
++
++    fn try_from(mut v: Vec<T>) -> Result<Self> {
++        let value_layout = Layout::array::<T>(v.len())?;
++        let layout = Layout::new::<RefInner<()>>()
++            .extend(value_layout)?
++            .0
++            .pad_to_align();
++        // SAFETY: The layout size is guaranteed to be non-zero because `RefInner` contains the
++        // reference count.
++        let ptr = NonNull::new(unsafe { alloc(layout) }).ok_or(ENOMEM)?;
++        let inner =
++            core::ptr::slice_from_raw_parts_mut(ptr.as_ptr() as _, v.len()) as *mut RefInner<[T]>;
++
++        // SAFETY: Just an FFI call that returns a `refcount_t` initialised to 1.
++        let count = Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) });
++        // SAFETY: `inner.refcount` is writable and properly aligned.
++        unsafe { core::ptr::addr_of_mut!((*inner).refcount).write(count) };
++        // SAFETY: The contents of `v` as readable and properly aligned; `inner.data` is writable
++        // and properly aligned. There is no overlap between the two because `inner` is a new
++        // allocation.
++        unsafe {
++            core::ptr::copy_nonoverlapping(
++                v.as_ptr(),
++                core::ptr::addr_of_mut!((*inner).data) as *mut [T] as *mut T,
++                v.len(),
++            )
++        };
++        // SAFETY: We're setting the new length to zero, so it is <= to capacity, and old_len..0 is
++        // an empty range (so satisfies vacuously the requirement of being initialised).
++        unsafe { v.set_len(0) };
++        // SAFETY: We just created `inner` with a reference count of 1, which is owned by the new
++        // `Ref` object.
++        Ok(unsafe { Self::from_inner(NonNull::new(inner).unwrap()) })
++    }
++}
++
++impl<T: ?Sized> From<UniqueRef<T>> for Ref<T> {
++    fn from(item: UniqueRef<T>) -> Self {
++        item.inner
++    }
++}
++
++impl<T: ?Sized> From<UniqueRef<T>> for Pin<UniqueRef<T>> {
++    fn from(obj: UniqueRef<T>) -> Self {
++        // SAFETY: It is not possible to move/replace `T` inside a `Pin<UniqueRef<T>>` (unless `T`
++        // is `Unpin`), so it is ok to convert it to `Pin<UniqueRef<T>>`.
++        unsafe { Pin::new_unchecked(obj) }
++    }
++}
++
++impl<T: ?Sized> From<Pin<UniqueRef<T>>> for Ref<T> {
++    fn from(item: Pin<UniqueRef<T>>) -> Self {
++        // SAFETY: The type invariants of `Ref` guarantee that the data is pinned.
++        unsafe { Pin::into_inner_unchecked(item).inner }
++    }
++}
++
++/// A borrowed [`Ref`] with manually-managed lifetime.
++///
++/// # Invariants
++///
++/// There are no mutable references to the underlying [`Ref`], and it remains valid for the lifetime
++/// of the [`RefBorrow`] instance.
++pub struct RefBorrow<'a, T: ?Sized + 'a> {
++    inner: NonNull<RefInner<T>>,
++    _p: PhantomData<&'a ()>,
++}
++
++impl<T: ?Sized> Clone for RefBorrow<'_, T> {
++    fn clone(&self) -> Self {
++        *self
++    }
++}
++
++impl<T: ?Sized> Copy for RefBorrow<'_, T> {}
++
++impl<T: ?Sized> RefBorrow<'_, T> {
++    /// Creates a new [`RefBorrow`] instance.
++    ///
++    /// # Safety
++    ///
++    /// Callers must ensure the following for the lifetime of the returned [`RefBorrow`] instance:
++    /// 1. That `obj` remains valid;
++    /// 2. That no mutable references to `obj` are created.
++    unsafe fn new(inner: NonNull<RefInner<T>>) -> Self {
++        // INVARIANT: The safety requirements guarantee the invariants.
++        Self {
++            inner,
++            _p: PhantomData,
++        }
++    }
++}
++
++impl<T: ?Sized> From<RefBorrow<'_, T>> for Ref<T> {
++    fn from(b: RefBorrow<'_, T>) -> Self {
++        // SAFETY: The existence of `b` guarantees that the refcount is non-zero. `ManuallyDrop`
++        // guarantees that `drop` isn't called, so it's ok that the temporary `Ref` doesn't own the
++        // increment.
++        ManuallyDrop::new(unsafe { Ref::from_inner(b.inner) })
++            .deref()
++            .clone()
++    }
++}
++
++impl<T: ?Sized> Deref for RefBorrow<'_, T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: By the type invariant, the underlying object is still alive with no mutable
++        // references to it, so it is safe to create a shared reference.
++        unsafe { &self.inner.as_ref().data }
++    }
++}
++
++/// A refcounted object that is known to have a refcount of 1.
++///
++/// It is mutable and can be converted to a [`Ref`] so that it can be shared.
++///
++/// # Invariants
++///
++/// `inner` always has a reference count of 1.
++///
++/// # Examples
++///
++/// In the following example, we make changes to the inner object before turning it into a
++/// `Ref<Test>` object (after which point, it cannot be mutated directly). Note that `x.into()`
++/// cannot fail.
++///
++/// ```
++/// use kernel::sync::{Ref, UniqueRef};
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn test() -> Result<Ref<Example>> {
++///     let mut x = UniqueRef::try_new(Example { a: 10, b: 20 })?;
++///     x.a += 1;
++///     x.b += 1;
++///     Ok(x.into())
++/// }
++///
++/// # test();
++/// ```
++///
++/// In the following example we first allocate memory for a ref-counted `Example` but we don't
++/// initialise it on allocation. We do initialise it later with a call to [`UniqueRef::write`],
++/// followed by a conversion to `Ref<Example>`. This is particularly useful when allocation happens
++/// in one context (e.g., sleepable) and initialisation in another (e.g., atomic):
++///
++/// ```
++/// use kernel::sync::{Ref, UniqueRef};
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn test() -> Result<Ref<Example>> {
++///     let x = UniqueRef::try_new_uninit()?;
++///     Ok(x.write(Example { a: 10, b: 20 }).into())
++/// }
++///
++/// # test();
++/// ```
++///
++/// In the last example below, the caller gets a pinned instance of `Example` while converting to
++/// `Ref<Example>`; this is useful in scenarios where one needs a pinned reference during
++/// initialisation, for example, when initialising fields that are wrapped in locks.
++///
++/// ```
++/// use kernel::sync::{Ref, UniqueRef};
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn test() -> Result<Ref<Example>> {
++///     let mut pinned = Pin::from(UniqueRef::try_new(Example { a: 10, b: 20 })?);
++///     // We can modify `pinned` because it is `Unpin`.
++///     pinned.as_mut().a += 1;
++///     Ok(pinned.into())
++/// }
++///
++/// # test();
++/// ```
++pub struct UniqueRef<T: ?Sized> {
++    inner: Ref<T>,
++}
++
++impl<T> UniqueRef<T> {
++    /// Tries to allocate a new [`UniqueRef`] instance.
++    pub fn try_new(value: T) -> Result<Self> {
++        Ok(Self {
++            // INVARIANT: The newly-created object has a ref-count of 1.
++            inner: Ref::try_new(value)?,
++        })
++    }
++
++    /// Tries to allocate a new [`UniqueRef`] instance whose contents are not initialised yet.
++    pub fn try_new_uninit() -> Result<UniqueRef<MaybeUninit<T>>> {
++        Ok(UniqueRef::<MaybeUninit<T>> {
++            // INVARIANT: The newly-created object has a ref-count of 1.
++            inner: Ref::try_new(MaybeUninit::uninit())?,
++        })
++    }
++}
++
++impl<T> UniqueRef<MaybeUninit<T>> {
++    /// Converts a `UniqueRef<MaybeUninit<T>>` into a `UniqueRef<T>` by writing a value into it.
++    pub fn write(mut self, value: T) -> UniqueRef<T> {
++        self.deref_mut().write(value);
++        let inner = ManuallyDrop::new(self).inner.ptr;
++        UniqueRef {
++            // SAFETY: The new `Ref` is taking over `ptr` from `self.inner` (which won't be
++            // dropped). The types are compatible because `MaybeUninit<T>` is compatible with `T`.
++            inner: unsafe { Ref::from_inner(inner.cast()) },
++        }
++    }
++}
++
++impl<T: ?Sized> Deref for UniqueRef<T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        self.inner.deref()
++    }
++}
++
++impl<T: ?Sized> DerefMut for UniqueRef<T> {
++    fn deref_mut(&mut self) -> &mut Self::Target {
++        // SAFETY: By the `Ref` type invariant, there is necessarily a reference to the object, so
++        // it is safe to dereference it. Additionally, we know there is only one reference when
++        // it's inside a `UniqueRef`, so it is safe to get a mutable reference.
++        unsafe { &mut self.inner.ptr.as_mut().data }
++    }
++}
+diff --git a/rust/kernel/sync/condvar.rs b/rust/kernel/sync/condvar.rs
+new file mode 100644
+index 000000000000..7f8aa1c55a19
+--- /dev/null
++++ b/rust/kernel/sync/condvar.rs
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A condition variable.
++//!
++//! This module allows Rust code to use the kernel's [`struct wait_queue_head`] as a condition
++//! variable.
++
++use super::{Guard, Lock, LockInfo, NeedsLockClass};
++use crate::{bindings, str::CStr, task::Task, Opaque};
++use core::{marker::PhantomPinned, pin::Pin};
++
++/// Safely initialises a [`CondVar`] with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! condvar_init {
++    ($condvar:expr, $name:literal) => {
++        $crate::init_with_lockdep!($condvar, $name)
++    };
++}
++
++// TODO: `bindgen` is not generating this constant. Figure out why.
++const POLLFREE: u32 = 0x4000;
++
++/// Exposes the kernel's [`struct wait_queue_head`] as a condition variable. It allows the caller to
++/// atomically release the given lock and go to sleep. It reacquires the lock when it wakes up. And
++/// it wakes up when notified by another thread (via [`CondVar::notify_one`] or
++/// [`CondVar::notify_all`]) or because the thread received a signal.
++///
++/// [`struct wait_queue_head`]: ../../../include/linux/wait.h
++pub struct CondVar {
++    pub(crate) wait_list: Opaque<bindings::wait_queue_head>,
++
++    /// A condvar needs to be pinned because it contains a [`struct list_head`] that is
++    /// self-referential, so it cannot be safely moved once it is initialised.
++    _pin: PhantomPinned,
++}
++
++// SAFETY: `CondVar` only uses a `struct wait_queue_head`, which is safe to use on any thread.
++#[allow(clippy::non_send_fields_in_send_ty)]
++unsafe impl Send for CondVar {}
++
++// SAFETY: `CondVar` only uses a `struct wait_queue_head`, which is safe to use on multiple threads
++// concurrently.
++unsafe impl Sync for CondVar {}
++
++impl CondVar {
++    /// Constructs a new conditional variable.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call `CondVar::init` before using the conditional variable.
++    pub const unsafe fn new() -> Self {
++        Self {
++            wait_list: Opaque::uninit(),
++            _pin: PhantomPinned,
++        }
++    }
++
++    /// Atomically releases the given lock (whose ownership is proven by the guard) and puts the
++    /// thread to sleep. It wakes up when notified by [`CondVar::notify_one`] or
++    /// [`CondVar::notify_all`], or when the thread receives a signal.
++    ///
++    /// Returns whether there is a signal pending.
++    #[must_use = "wait returns if a signal is pending, so the caller must check the return value"]
++    pub fn wait<L: Lock<I>, I: LockInfo>(&self, guard: &mut Guard<'_, L, I>) -> bool {
++        let lock = guard.lock;
++        let wait = Opaque::<bindings::wait_queue_entry>::uninit();
++
++        // SAFETY: `wait` points to valid memory.
++        unsafe { bindings::init_wait(wait.get()) };
++
++        // SAFETY: Both `wait` and `wait_list` point to valid memory.
++        unsafe {
++            bindings::prepare_to_wait_exclusive(
++                self.wait_list.get(),
++                wait.get(),
++                bindings::TASK_INTERRUPTIBLE as _,
++            )
++        };
++
++        // SAFETY: The guard is evidence that the caller owns the lock.
++        unsafe { lock.unlock(&mut guard.context) };
++
++        // SAFETY: No arguments, switches to another thread.
++        unsafe { bindings::schedule() };
++
++        guard.context = lock.lock_noguard();
++
++        // SAFETY: Both `wait` and `wait_list` point to valid memory.
++        unsafe { bindings::finish_wait(self.wait_list.get(), wait.get()) };
++
++        Task::current().signal_pending()
++    }
++
++    /// Calls the kernel function to notify the appropriate number of threads with the given flags.
++    fn notify(&self, count: i32, flags: u32) {
++        // SAFETY: `wait_list` points to valid memory.
++        unsafe {
++            bindings::__wake_up(
++                self.wait_list.get(),
++                bindings::TASK_NORMAL,
++                count,
++                flags as _,
++            )
++        };
++    }
++
++    /// Wakes a single waiter up, if any. This is not 'sticky' in the sense that if no thread is
++    /// waiting, the notification is lost completely (as opposed to automatically waking up the
++    /// next waiter).
++    pub fn notify_one(&self) {
++        self.notify(1, 0);
++    }
++
++    /// Wakes all waiters up, if any. This is not 'sticky' in the sense that if no thread is
++    /// waiting, the notification is lost completely (as opposed to automatically waking up the
++    /// next waiter).
++    pub fn notify_all(&self) {
++        self.notify(0, 0);
++    }
++
++    /// Wakes all waiters up. If they were added by `epoll`, they are also removed from the list of
++    /// waiters. This is useful when cleaning up a condition variable that may be waited on by
++    /// threads that use `epoll`.
++    pub fn free_waiters(&self) {
++        self.notify(1, bindings::POLLHUP | POLLFREE);
++    }
++}
++
++impl NeedsLockClass for CondVar {
++    unsafe fn init(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++        _: *mut bindings::lock_class_key,
++    ) {
++        unsafe { bindings::__init_waitqueue_head(self.wait_list.get(), name.as_char_ptr(), key) };
++    }
++}
+diff --git a/rust/kernel/sync/guard.rs b/rust/kernel/sync/guard.rs
+new file mode 100644
+index 000000000000..a552412110ff
+--- /dev/null
++++ b/rust/kernel/sync/guard.rs
+@@ -0,0 +1,169 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A generic lock guard and trait.
++//!
++//! This module contains a lock guard that can be used with any locking primitive that implements
++//! the ([`Lock`]) trait. It also contains the definition of the trait, which can be leveraged by
++//! other constructs to work on generic locking primitives.
++
++use super::NeedsLockClass;
++use crate::{bindings, str::CStr, Bool, False, True};
++use core::pin::Pin;
++
++/// Allows mutual exclusion primitives that implement the [`Lock`] trait to automatically unlock
++/// when a guard goes out of scope. It also provides a safe and convenient way to access the data
++/// protected by the lock.
++#[must_use = "the lock unlocks immediately when the guard is unused"]
++pub struct Guard<'a, L: Lock<I> + ?Sized, I: LockInfo = WriteLock> {
++    pub(crate) lock: &'a L,
++    pub(crate) context: L::GuardContext,
++}
++
++// SAFETY: `Guard` is sync when the data protected by the lock is also sync. This is more
++// conservative than the default compiler implementation; more details can be found on
++// https://github.com/rust-lang/rust/issues/41622 -- it refers to `MutexGuard` from the standard
++// library.
++unsafe impl<L, I> Sync for Guard<'_, L, I>
++where
++    L: Lock<I> + ?Sized,
++    L::Inner: Sync,
++    I: LockInfo,
++{
++}
++
++impl<L: Lock<I> + ?Sized, I: LockInfo> core::ops::Deref for Guard<'_, L, I> {
++    type Target = L::Inner;
++
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: The caller owns the lock, so it is safe to deref the protected data.
++        unsafe { &*self.lock.locked_data().get() }
++    }
++}
++
++impl<L: Lock<I> + ?Sized, I: LockInfo<Writable = True>> core::ops::DerefMut for Guard<'_, L, I> {
++    fn deref_mut(&mut self) -> &mut Self::Target {
++        // SAFETY: The caller owns the lock, so it is safe to deref the protected data.
++        unsafe { &mut *self.lock.locked_data().get() }
++    }
++}
++
++impl<L: Lock<I> + ?Sized, I: LockInfo> Drop for Guard<'_, L, I> {
++    fn drop(&mut self) {
++        // SAFETY: The caller owns the lock, so it is safe to unlock it.
++        unsafe { self.lock.unlock(&mut self.context) };
++    }
++}
++
++impl<'a, L: Lock<I> + ?Sized, I: LockInfo> Guard<'a, L, I> {
++    /// Constructs a new immutable lock guard.
++    ///
++    /// # Safety
++    ///
++    /// The caller must ensure that it owns the lock.
++    pub(crate) unsafe fn new(lock: &'a L, context: L::GuardContext) -> Self {
++        Self { lock, context }
++    }
++}
++
++/// Specifies properties of a lock.
++pub trait LockInfo {
++    /// Determines if the data protected by a lock is writable.
++    type Writable: Bool;
++}
++
++/// A marker for locks that only allow reading.
++pub struct ReadLock;
++impl LockInfo for ReadLock {
++    type Writable = False;
++}
++
++/// A marker for locks that allow reading and writing.
++pub struct WriteLock;
++impl LockInfo for WriteLock {
++    type Writable = True;
++}
++
++/// A generic mutual exclusion primitive.
++///
++/// [`Guard`] is written such that any mutual exclusion primitive that can implement this trait can
++/// also benefit from having an automatic way to unlock itself.
++///
++/// # Safety
++///
++/// - Implementers of this trait with the [`WriteLock`] marker must ensure that only one thread/CPU
++///   may access the protected data once the lock is held, that is, between calls to `lock_noguard`
++///   and `unlock`.
++/// - Implementers of all other markers must ensure that a mutable reference to the protected data
++///   is not active in any thread/CPU because at least one shared refence is active between calls
++///   to `lock_noguard` and `unlock`.
++pub unsafe trait Lock<I: LockInfo = WriteLock> {
++    /// The type of the data protected by the lock.
++    type Inner: ?Sized;
++
++    /// The type of context, if any, that needs to be stored in the guard.
++    type GuardContext;
++
++    /// Acquires the lock, making the caller its owner.
++    #[must_use]
++    fn lock_noguard(&self) -> Self::GuardContext;
++
++    /// Reacquires the lock, making the caller its owner.
++    ///
++    /// The guard context before the last unlock is passed in.
++    ///
++    /// Locks that don't require this state on relock can simply use the default implementation
++    /// that calls [`Lock::lock_noguard`].
++    fn relock(&self, ctx: &mut Self::GuardContext) {
++        *ctx = self.lock_noguard();
++    }
++
++    /// Releases the lock, giving up ownership of the lock.
++    ///
++    /// # Safety
++    ///
++    /// It must only be called by the current owner of the lock.
++    unsafe fn unlock(&self, context: &mut Self::GuardContext);
++
++    /// Returns the data protected by the lock.
++    fn locked_data(&self) -> &core::cell::UnsafeCell<Self::Inner>;
++}
++
++/// A creator of instances of a mutual exclusion (lock) primitive.
++pub trait LockFactory {
++    /// The parametrised type of the mutual exclusion primitive that can be created by this factory.
++    type LockedType<T>;
++
++    /// Constructs a new instance of the mutual exclusion primitive.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`LockIniter::init_lock`] before using the lock.
++    unsafe fn new_lock<T>(data: T) -> Self::LockedType<T>;
++}
++
++/// A lock that can be initialised with a single lock class key.
++pub trait LockIniter {
++    /// Initialises the lock instance so that it can be safely used.
++    ///
++    /// # Safety
++    ///
++    /// `key` must point to a valid memory location that will remain valid until the lock is
++    /// dropped.
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++    );
++}
++
++impl<L: LockIniter> NeedsLockClass for L {
++    unsafe fn init(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++        _: *mut bindings::lock_class_key,
++    ) {
++        // SAFETY: The safety requirements of this function satisfy those of `init_lock`.
++        unsafe { self.init_lock(name, key) };
++    }
++}
+diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.rs
+new file mode 100644
+index 000000000000..334935fb1e37
+--- /dev/null
++++ b/rust/kernel/sync/locked_by.rs
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A wrapper for data protected by a lock that does not wrap it.
++
++use super::{Guard, Lock};
++use core::{cell::UnsafeCell, ops::Deref, ptr};
++
++/// Allows access to some data to be serialised by a lock that does not wrap it.
++///
++/// In most cases, data protected by a lock is wrapped by the appropriate lock type, e.g.,
++/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for cases when this is not
++/// possible. For example, if a container has a lock and some data in the contained elements needs
++/// to be protected by the same lock.
++///
++/// [`LockedBy`] wraps the data in lieu of another locking primitive, and only allows access to it
++/// when the caller shows evidence that 'external' lock is locked.
++///
++/// # Example
++///
++/// The following is an example for illustrative purposes: `InnerDirectory::bytes_used` is an
++/// aggregate of all `InnerFile::bytes_used` and must be kept consistent; so we wrap `InnerFile` in
++/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This allows us to enforce at
++/// compile-time that access to `InnerFile` is only granted when an `InnerDirectory` is also
++/// locked; we enforce at run time that the right `InnerDirectory` is locked.
++///
++/// ```
++/// use kernel::sync::{LockedBy, Mutex};
++///
++/// struct InnerFile {
++///     bytes_used: u64,
++/// }
++///
++/// struct File {
++///     name: String,
++///     inner: LockedBy<InnerFile, Mutex<InnerDirectory>>,
++/// }
++///
++/// struct InnerDirectory {
++///     /// The sum of the bytes used by all files.
++///     bytes_used: u64,
++///     files: Vec<File>,
++/// }
++///
++/// struct Directory {
++///     name: String,
++///     inner: Mutex<InnerDirectory>,
++/// }
++/// ```
++pub struct LockedBy<T: ?Sized, L: Lock + ?Sized> {
++    owner: *const L::Inner,
++    data: UnsafeCell<T>,
++}
++
++// SAFETY: `LockedBy` can be transferred across thread boundaries iff the data it protects can.
++unsafe impl<T: ?Sized + Send, L: Lock + ?Sized> Send for LockedBy<T, L> {}
++
++// SAFETY: `LockedBy` serialises the interior mutability it provides, so it is `Sync` as long as the
++// data it protects is `Send`.
++unsafe impl<T: ?Sized + Send, L: Lock + ?Sized> Sync for LockedBy<T, L> {}
++
++impl<T, L: Lock + ?Sized> LockedBy<T, L> {
++    /// Constructs a new instance of [`LockedBy`].
++    ///
++    /// It stores a raw pointer to the owner that is never dereferenced. It is only used to ensure
++    /// that the right owner is being used to access the protected data. If the owner is freed, the
++    /// data becomes inaccessible; if another instance of the owner is allocated *on the same
++    /// memory location*, the data becomes accessible again: none of this affects memory safety
++    /// because in any case at most one thread (or CPU) can access the protected data at a time.
++    pub fn new(owner: &L, data: T) -> Self {
++        Self {
++            owner: owner.locked_data().get(),
++            data: UnsafeCell::new(data),
++        }
++    }
++}
++
++impl<T: ?Sized, L: Lock + ?Sized> LockedBy<T, L> {
++    /// Returns a reference to the protected data when the caller provides evidence (via a
++    /// [`Guard`]) that the owner is locked.
++    pub fn access<'a>(&'a self, guard: &'a Guard<'_, L>) -> &'a T {
++        if !ptr::eq(guard.deref(), self.owner) {
++            panic!("guard does not match owner");
++        }
++
++        // SAFETY: `guard` is evidence that the owner is locked.
++        unsafe { &mut *self.data.get() }
++    }
++
++    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
++    /// mutable [`Guard`]) that the owner is locked mutably.
++    pub fn access_mut<'a>(&'a self, guard: &'a mut Guard<'_, L>) -> &'a mut T {
++        if !ptr::eq(guard.deref().deref(), self.owner) {
++            panic!("guard does not match owner");
++        }
++
++        // SAFETY: `guard` is evidence that the owner is locked.
++        unsafe { &mut *self.data.get() }
++    }
++
++    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
++    /// mutable owner) that the owner is locked mutably. Showing a mutable reference to the owner
++    /// is sufficient because we know no other references can exist to it.
++    pub fn access_from_mut<'a>(&'a self, owner: &'a mut L::Inner) -> &'a mut T {
++        if !ptr::eq(owner, self.owner) {
++            panic!("mismatched owners");
++        }
++
++        // SAFETY: `owner` is evidence that there is only one reference to the owner.
++        unsafe { &mut *self.data.get() }
++    }
++}
+diff --git a/rust/kernel/sync/mutex.rs b/rust/kernel/sync/mutex.rs
+new file mode 100644
+index 000000000000..fac846b00b08
+--- /dev/null
++++ b/rust/kernel/sync/mutex.rs
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A kernel mutex.
++//!
++//! This module allows Rust code to use the kernel's [`struct mutex`].
++
++use super::{Guard, Lock, LockFactory, LockIniter, WriteLock};
++use crate::{bindings, str::CStr, Opaque};
++use core::{cell::UnsafeCell, marker::PhantomPinned, pin::Pin};
++
++/// Safely initialises a [`Mutex`] with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! mutex_init {
++    ($mutex:expr, $name:literal) => {
++        $crate::init_with_lockdep!($mutex, $name)
++    };
++}
++
++/// Exposes the kernel's [`struct mutex`]. When multiple threads attempt to lock the same mutex,
++/// only one at a time is allowed to progress, the others will block (sleep) until the mutex is
++/// unlocked, at which point another thread will be allowed to wake up and make progress.
++///
++/// A [`Mutex`] must first be initialised with a call to [`Mutex::init_lock`] before it can be
++/// used. The [`mutex_init`] macro is provided to automatically assign a new lock class to a mutex
++/// instance.
++///
++/// Since it may block, [`Mutex`] needs to be used with care in atomic contexts.
++///
++/// [`struct mutex`]: ../../../include/linux/mutex.h
++pub struct Mutex<T: ?Sized> {
++    /// The kernel `struct mutex` object.
++    mutex: Opaque<bindings::mutex>,
++
++    /// A mutex needs to be pinned because it contains a [`struct list_head`] that is
++    /// self-referential, so it cannot be safely moved once it is initialised.
++    _pin: PhantomPinned,
++
++    /// The data protected by the mutex.
++    data: UnsafeCell<T>,
++}
++
++// SAFETY: `Mutex` can be transferred across thread boundaries iff the data it protects can.
++#[allow(clippy::non_send_fields_in_send_ty)]
++unsafe impl<T: ?Sized + Send> Send for Mutex<T> {}
++
++// SAFETY: `Mutex` serialises the interior mutability it provides, so it is `Sync` as long as the
++// data it protects is `Send`.
++unsafe impl<T: ?Sized + Send> Sync for Mutex<T> {}
++
++impl<T> Mutex<T> {
++    /// Constructs a new mutex.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`Mutex::init_lock`] before using the mutex.
++    pub const unsafe fn new(t: T) -> Self {
++        Self {
++            mutex: Opaque::uninit(),
++            data: UnsafeCell::new(t),
++            _pin: PhantomPinned,
++        }
++    }
++}
++
++impl<T: ?Sized> Mutex<T> {
++    /// Locks the mutex and gives the caller access to the data protected by it. Only one thread at
++    /// a time is allowed to access the protected data.
++    pub fn lock(&self) -> Guard<'_, Self> {
++        let ctx = self.lock_noguard();
++        // SAFETY: The mutex was just acquired.
++        unsafe { Guard::new(self, ctx) }
++    }
++}
++
++impl<T> LockFactory for Mutex<T> {
++    type LockedType<U> = Mutex<U>;
++
++    unsafe fn new_lock<U>(data: U) -> Mutex<U> {
++        // SAFETY: The safety requirements of `new_lock` also require that `init_lock` be called.
++        unsafe { Mutex::new(data) }
++    }
++}
++
++impl<T> LockIniter for Mutex<T> {
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++    ) {
++        unsafe { bindings::__mutex_init(self.mutex.get(), name.as_char_ptr(), key) };
++    }
++}
++
++pub struct EmptyGuardContext;
++
++// SAFETY: The underlying kernel `struct mutex` object ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock for Mutex<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        // SAFETY: `mutex` points to valid memory.
++        unsafe { bindings::mutex_lock(self.mutex.get()) };
++        EmptyGuardContext
++    }
++
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The safety requirements of the function ensure that the mutex is owned by the
++        // caller.
++        unsafe { bindings::mutex_unlock(self.mutex.get()) };
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++/// A revocable mutex.
++///
++/// That is, a mutex to which access can be revoked at runtime. It is a specialisation of the more
++/// generic [`super::revocable::Revocable`].
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::sync::RevocableMutex;
++/// # use kernel::revocable_init;
++/// # use core::pin::Pin;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn read_sum(v: &RevocableMutex<Example>) -> Option<u32> {
++///     let guard = v.try_write()?;
++///     Some(guard.a + guard.b)
++/// }
++///
++/// // SAFETY: We call `revocable_init` immediately below.
++/// let mut v = unsafe { RevocableMutex::new(Example { a: 10, b: 20 }) };
++/// // SAFETY: We never move out of `v`.
++/// let pinned = unsafe { Pin::new_unchecked(&mut v) };
++/// revocable_init!(pinned, "example::v");
++/// assert_eq!(read_sum(&v), Some(30));
++/// v.revoke();
++/// assert_eq!(read_sum(&v), None);
++/// ```
++pub type RevocableMutex<T> = super::revocable::Revocable<Mutex<()>, T>;
++
++/// A guard for a revocable mutex.
++pub type RevocableMutexGuard<'a, T, I = WriteLock> =
++    super::revocable::RevocableGuard<'a, Mutex<()>, T, I>;
+diff --git a/rust/kernel/sync/nowait.rs b/rust/kernel/sync/nowait.rs
+new file mode 100644
+index 000000000000..c9ee2f9a3607
+--- /dev/null
++++ b/rust/kernel/sync/nowait.rs
+@@ -0,0 +1,188 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A lock that never waits.
++
++use core::cell::UnsafeCell;
++use core::sync::atomic::{AtomicU8, Ordering};
++
++const LOCKED: u8 = 1;
++const CONTENDED: u8 = 2;
++
++/// A lock that only offers a [`try_lock`](NoWaitLock::try_lock) method.
++///
++/// That is, on contention it doesn't offer a way for the caller to block waiting for the current
++/// owner to release the lock. This is useful for best-effort kind of scenarios where waiting is
++/// never needed: in such cases, users don't need a full-featured mutex or spinlock.
++///
++/// When the lock is released via call to [`NoWaitLockGuard::unlock`], it indicates to the caller
++/// whether there was contention (i.e., if another thread tried and failed to acquire this lock).
++/// If the return value is `false`, there was definitely no contention but if it is `true`, it's
++/// possible that the contention was when attempting to acquire the lock.
++///
++/// # Examples
++///
++/// ```
++/// use kernel::sync::NoWaitLock;
++///
++/// #[derive(PartialEq)]
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// let x = NoWaitLock::new(Example{ a: 10, b: 20 });
++///
++/// // Modifying the protected value.
++/// {
++///     let mut guard = x.try_lock().unwrap();
++///     assert_eq!(guard.a, 10);
++///     assert_eq!(guard.b, 20);
++///     guard.a += 20;
++///     guard.b += 20;
++///     assert_eq!(guard.a, 30);
++///     assert_eq!(guard.b, 40);
++/// }
++///
++/// // Reading the protected value.
++/// {
++///     let guard = x.try_lock().unwrap();
++///     assert_eq!(guard.a, 30);
++///     assert_eq!(guard.b, 40);
++/// }
++///
++/// // Second acquire fails, but succeeds after the guard is dropped.
++/// {
++///     let guard = x.try_lock().unwrap();
++///     assert!(x.try_lock().is_none());
++///
++///     drop(guard);
++///     assert!(x.try_lock().is_some());
 +/// }
 +/// ```
 +///
-+/// # Supported argument types
-+///   - `type`: type which implements the [`Module`] trait (required).
-+///   - `name`: byte array of the name of the kernel module (required).
-+///   - `author`: byte array of the author of the kernel module.
-+///   - `description`: byte array of the description of the kernel module.
-+///   - `license`: byte array of the license of the kernel module (required).
-+///   - `alias`: byte array of alias name of the kernel module.
-+///   - `alias_rtnl_link`: byte array of the `rtnl_link_alias` of the kernel module (mutually exclusive with `alias`).
-+///   - `params`: parameters for the kernel module, as described below.
++/// The following examples use the [`NoWaitLockGuard::unlock`] to release the lock and check for
++/// contention.
 +///
-+/// # Supported parameter types
++/// ```
++/// use kernel::sync::NoWaitLock;
 +///
-+///   - `bool`: Corresponds to C `bool` param type.
-+///   - `i8`: No equivalent C param type.
-+///   - `u8`: Corresponds to C `char` param type.
-+///   - `i16`: Corresponds to C `short` param type.
-+///   - `u16`: Corresponds to C `ushort` param type.
-+///   - `i32`: Corresponds to C `int` param type.
-+///   - `u32`: Corresponds to C `uint` param type.
-+///   - `i64`: No equivalent C param type.
-+///   - `u64`: Corresponds to C `ullong` param type.
-+///   - `isize`: No equivalent C param type.
-+///   - `usize`: No equivalent C param type.
-+///   - `str`: Corresponds to C `charp` param type. Reading returns a byte slice.
-+///   - `ArrayParam<T,N>`: Corresponds to C parameters created using `module_param_array`. An array
-+///     of `T`'s of length at **most** `N`.
++/// #[derive(PartialEq)]
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
 +///
-+/// `invbool` is unsupported: it was only ever used in a few modules.
-+/// Consider using a `bool` and inverting the logic instead.
-+#[proc_macro]
-+pub fn module(ts: TokenStream) -> TokenStream {
-+    module::module(ts)
++/// let x = NoWaitLock::new(Example{ a: 10, b: 20 });
++///
++/// // No contention when lock is released.
++/// let guard = x.try_lock().unwrap();
++/// assert_eq!(guard.unlock(), false);
++///
++/// // Contention detected.
++/// let guard = x.try_lock().unwrap();
++/// assert!(x.try_lock().is_none());
++/// assert_eq!(guard.unlock(), true);
++///
++/// // No contention again.
++/// let guard = x.try_lock().unwrap();
++/// assert_eq!(guard.a, 10);
++/// assert_eq!(guard.b, 20);
++/// assert_eq!(guard.unlock(), false);
++/// ```
++pub struct NoWaitLock<T: ?Sized> {
++    state: AtomicU8,
++    data: UnsafeCell<T>,
 +}
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
++
++// SAFETY: `NoWaitLock` can be transferred across thread boundaries iff the data it protects can.
++unsafe impl<T: ?Sized + Send> Send for NoWaitLock<T> {}
++
++// SAFETY: `NoWaitLock` only allows a single thread at a time to access the interior mutability it
++// provides, so it is `Sync` as long as the data it protects is `Send`.
++unsafe impl<T: ?Sized + Send> Sync for NoWaitLock<T> {}
++
++impl<T> NoWaitLock<T> {
++    /// Creates a new instance of the no-wait lock.
++    pub fn new(data: T) -> Self {
++        Self {
++            state: AtomicU8::new(0),
++            data: UnsafeCell::new(data),
++        }
++    }
++}
++
++impl<T: ?Sized> NoWaitLock<T> {
++    /// Tries to acquire the lock.
++    ///
++    /// If no other thread/CPU currently owns the lock, it returns a guard that can be used to
++    /// access the protected data. Otherwise (i.e., the lock is already owned), it returns `None`.
++    pub fn try_lock(&self) -> Option<NoWaitLockGuard<'_, T>> {
++        // Fast path -- just set the LOCKED bit.
++        //
++        // Acquire ordering matches the release in `NoWaitLockGuard::drop` or
++        // `NoWaitLockGuard::unlock`.
++        if self.state.fetch_or(LOCKED, Ordering::Acquire) & LOCKED == 0 {
++            // INVARIANTS: The thread that manages to set the `LOCKED` bit becomes the owner.
++            return Some(NoWaitLockGuard { lock: self });
++        }
++
++        // Set the `CONTENDED` bit.
++        //
++        // If the `LOCKED` bit has since been reset, the lock was released and the caller becomes
++        // the owner of the lock. It will see the `CONTENDED` bit when it releases the lock even if
++        // there was no additional contention but this is allowed by the interface.
++        if self.state.fetch_or(CONTENDED | LOCKED, Ordering::Relaxed) & LOCKED == 0 {
++            // INVARIANTS: The thread that manages to set the `LOCKED` bit becomes the owner.
++            Some(NoWaitLockGuard { lock: self })
++        } else {
++            None
++        }
++    }
++}
++
++/// A guard for the holder of the no-wait lock.
++///
++/// # Invariants
++///
++/// Only the current owner can have an instance of [`NoWaitLockGuard`].
++pub struct NoWaitLockGuard<'a, T: ?Sized> {
++    lock: &'a NoWaitLock<T>,
++}
++
++impl<T: ?Sized> NoWaitLockGuard<'_, T> {
++    /// Unlocks the no-wait lock.
++    ///
++    /// The return value indicates whether there was contention while the lock was held, that is,
++    /// whether another thread tried (and failed) to acquire the lock.
++    pub fn unlock(self) -> bool {
++        // Matches the acquire in `NoWaitLock::try_lock`.
++        let contention = self.lock.state.swap(0, Ordering::Release) & CONTENDED != 0;
++        core::mem::forget(self);
++        contention
++    }
++}
++
++impl<T: ?Sized> core::ops::Deref for NoWaitLockGuard<'_, T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: The type invariant guarantees that only the owner has an instance of the guard,
++        // so the owner is the only one that can call this function.
++        unsafe { &*self.lock.data.get() }
++    }
++}
++
++impl<T: ?Sized> core::ops::DerefMut for NoWaitLockGuard<'_, T> {
++    fn deref_mut(&mut self) -> &mut Self::Target {
++        // SAFETY: The type invariant guarantees that only the owner has an instance of the guard,
++        // so the owner is the only one that can call this function.
++        unsafe { &mut *self.lock.data.get() }
++    }
++}
++
++impl<T: ?Sized> Drop for NoWaitLockGuard<'_, T> {
++    fn drop(&mut self) {
++        // Matches the acquire in `NoWaitLock::try_lock`.
++        self.lock.state.store(0, Ordering::Release);
++    }
++}
+diff --git a/rust/kernel/sync/revocable.rs b/rust/kernel/sync/revocable.rs
 new file mode 100644
-index 000000000000..323934b24e7f
+index 000000000000..3e5a76ee0950
 --- /dev/null
-+++ b/rust/macros/module.rs
-@@ -0,0 +1,631 @@
++++ b/rust/kernel/sync/revocable.rs
+@@ -0,0 +1,250 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+use proc_macro::{token_stream, Delimiter, Group, Literal, TokenStream, TokenTree};
++//! Synchronisation primitives where acccess to their contents can be revoked at runtime.
 +
-+use crate::helpers::*;
++use crate::{
++    bindings,
++    str::CStr,
++    sync::{Guard, Lock, LockFactory, LockInfo, NeedsLockClass, ReadLock, WriteLock},
++    True,
++};
++use core::{
++    mem::MaybeUninit,
++    ops::{Deref, DerefMut},
++    pin::Pin,
++};
 +
-+#[derive(Clone, PartialEq)]
-+enum ParamType {
-+    Ident(String),
-+    Array { vals: String, max_length: usize },
++/// The state within the revocable synchronisation primitive.
++///
++/// We don't use simply `Option<T>` because we need to drop in-place because the contents are
++/// implicitly pinned.
++///
++/// # Invariants
++///
++/// The `is_available` field determines if `data` is initialised.
++pub struct Inner<T> {
++    is_available: bool,
++    data: MaybeUninit<T>,
 +}
 +
-+fn expect_array_fields(it: &mut token_stream::IntoIter) -> ParamType {
-+    assert_eq!(expect_punct(it), '<');
-+    let vals = expect_ident(it);
-+    assert_eq!(expect_punct(it), ',');
-+    let max_length_str = expect_literal(it);
-+    let max_length = max_length_str
-+        .parse::<usize>()
-+        .expect("Expected usize length");
-+    assert_eq!(expect_punct(it), '>');
-+    ParamType::Array { vals, max_length }
++impl<T> Inner<T> {
++    fn new(data: T) -> Self {
++        // INVARIANT: `data` is initialised and `is_available` is `true`, so the state matches.
++        Self {
++            is_available: true,
++            data: MaybeUninit::new(data),
++        }
++    }
++
++    fn drop_in_place(&mut self) {
++        if !self.is_available {
++            // Already dropped.
++            return;
++        }
++
++        // INVARIANT: `data` is being dropped and `is_available` is set to `false`, so the state
++        // matches.
++        self.is_available = false;
++
++        // SAFETY: By the type invariants, `data` is valid because `is_available` was true.
++        unsafe { self.data.assume_init_drop() };
++    }
 +}
 +
-+fn expect_type(it: &mut token_stream::IntoIter) -> ParamType {
-+    if let TokenTree::Ident(ident) = it
-+        .next()
-+        .expect("Reached end of token stream for param type")
++impl<T> Drop for Inner<T> {
++    fn drop(&mut self) {
++        self.drop_in_place();
++    }
++}
++
++/// Revocable synchronisation primitive.
++///
++/// That is, it wraps synchronisation primitives so that access to their contents can be revoked at
++/// runtime, rendering them inacessible.
++///
++/// Once access is revoked and all concurrent users complete (i.e., all existing instances of
++/// [`RevocableGuard`] are dropped), the wrapped object is also dropped.
++///
++/// For better ergonomics, we advise the use of specialisations of this struct, for example,
++/// [`super::RevocableMutex`] and [`super::RevocableRwSemaphore`]. Callers that do not need to
++/// sleep while holding on to a guard should use [`crate::revocable::Revocable`] instead, which is
++/// more efficient as it uses RCU to keep objects alive.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::sync::{Mutex, Revocable};
++/// # use kernel::revocable_init;
++/// # use core::pin::Pin;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn add_two(v: &Revocable<Mutex<()>, Example>) -> Option<u32> {
++///     let mut guard = v.try_write()?;
++///     guard.a += 2;
++///     guard.b += 2;
++///     Some(guard.a + guard.b)
++/// }
++///
++/// // SAFETY: We call `revocable_init` immediately below.
++/// let mut v = unsafe { Revocable::<Mutex<()>, Example>::new(Example { a: 10, b: 20 }) };
++/// // SAFETY: We never move out of `v`.
++/// let pinned = unsafe { Pin::new_unchecked(&mut v) };
++/// revocable_init!(pinned, "example::v");
++/// assert_eq!(add_two(&v), Some(34));
++/// v.revoke();
++/// assert_eq!(add_two(&v), None);
++/// ```
++pub struct Revocable<F: LockFactory, T> {
++    inner: F::LockedType<Inner<T>>,
++}
++
++/// Safely initialises a [`Revocable`] instance with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! revocable_init {
++    ($mutex:expr, $name:literal) => {
++        $crate::init_with_lockdep!($mutex, $name)
++    };
++}
++
++impl<F: LockFactory, T> Revocable<F, T> {
++    /// Creates a new revocable instance of the given lock.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`Revocable::init`] before using the revocable synch primitive.
++    pub unsafe fn new(data: T) -> Self {
++        Self {
++            // SAFETY: The safety requirements of this function require that `Revocable::init`
++            // be called before the returned object can be used. Lock initialisation is called
++            // from `Revocable::init`.
++            inner: unsafe { F::new_lock(Inner::new(data)) },
++        }
++    }
++}
++
++impl<F: LockFactory, T> NeedsLockClass for Revocable<F, T>
++where
++    F::LockedType<Inner<T>>: NeedsLockClass,
++{
++    unsafe fn init(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key1: *mut bindings::lock_class_key,
++        key2: *mut bindings::lock_class_key,
++    ) {
++        // SAFETY: `inner` is pinned when `self` is.
++        let inner = unsafe { self.map_unchecked_mut(|r| &mut r.inner) };
++
++        // SAFETY: The safety requirements of this function satisfy the ones for `inner.init`
++        // (they're the same).
++        unsafe { inner.init(name, key1, key2) };
++    }
++}
++
++impl<F: LockFactory, T> Revocable<F, T>
++where
++    F::LockedType<Inner<T>>: Lock<Inner = Inner<T>>,
++{
++    /// Revokes access to and drops the wrapped object.
++    ///
++    /// Revocation and dropping happen after ongoing accessors complete.
++    pub fn revoke(&self) {
++        self.lock().drop_in_place();
++    }
++
++    /// Tries to lock the \[revocable\] wrapped object in write (exclusive) mode.
++    ///
++    /// Returns `None` if the object has been revoked and is therefore no longer accessible.
++    ///
++    /// Returns a guard that gives access to the object otherwise; the object is guaranteed to
++    /// remain accessible while the guard is alive. Callers are allowed to sleep while holding on
++    /// to the returned guard.
++    pub fn try_write(&self) -> Option<RevocableGuard<'_, F, T, WriteLock>> {
++        let inner = self.lock();
++        if !inner.is_available {
++            return None;
++        }
++        Some(RevocableGuard::new(inner))
++    }
++
++    fn lock(&self) -> Guard<'_, F::LockedType<Inner<T>>> {
++        let ctx = self.inner.lock_noguard();
++        // SAFETY: The lock was acquired in the call above.
++        unsafe { Guard::new(&self.inner, ctx) }
++    }
++}
++
++impl<F: LockFactory, T> Revocable<F, T>
++where
++    F::LockedType<Inner<T>>: Lock<ReadLock, Inner = Inner<T>>,
++{
++    /// Tries to lock the \[revocable\] wrapped object in read (shared) mode.
++    ///
++    /// Returns `None` if the object has been revoked and is therefore no longer accessible.
++    ///
++    /// Returns a guard that gives access to the object otherwise; the object is guaranteed to
++    /// remain accessible while the guard is alive. Callers are allowed to sleep while holding on
++    /// to the returned guard.
++    pub fn try_read(&self) -> Option<RevocableGuard<'_, F, T, ReadLock>> {
++        let ctx = self.inner.lock_noguard();
++        // SAFETY: The lock was acquired in the call above.
++        let inner = unsafe { Guard::new(&self.inner, ctx) };
++        if !inner.is_available {
++            return None;
++        }
++        Some(RevocableGuard::new(inner))
++    }
++}
++
++/// A guard that allows access to a revocable object and keeps it alive.
++pub struct RevocableGuard<'a, F: LockFactory, T, I: LockInfo>
++where
++    F::LockedType<Inner<T>>: Lock<I, Inner = Inner<T>>,
++{
++    guard: Guard<'a, F::LockedType<Inner<T>>, I>,
++}
++
++impl<'a, F: LockFactory, T, I: LockInfo> RevocableGuard<'a, F, T, I>
++where
++    F::LockedType<Inner<T>>: Lock<I, Inner = Inner<T>>,
++{
++    fn new(guard: Guard<'a, F::LockedType<Inner<T>>, I>) -> Self {
++        Self { guard }
++    }
++}
++
++impl<F: LockFactory, T, I: LockInfo<Writable = True>> RevocableGuard<'_, F, T, I>
++where
++    F::LockedType<Inner<T>>: Lock<I, Inner = Inner<T>>,
++{
++    /// Returns a pinned mutable reference to the wrapped object.
++    pub fn as_pinned_mut(&mut self) -> Pin<&mut T> {
++        // SAFETY: Revocable mutexes must be pinned, so we choose to always project the data as
++        // pinned as well (i.e., we guarantee we never move it).
++        unsafe { Pin::new_unchecked(&mut *self) }
++    }
++}
++
++impl<F: LockFactory, T, I: LockInfo> Deref for RevocableGuard<'_, F, T, I>
++where
++    F::LockedType<Inner<T>>: Lock<I, Inner = Inner<T>>,
++{
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        unsafe { &*self.guard.data.as_ptr() }
++    }
++}
++
++impl<F: LockFactory, T, I: LockInfo<Writable = True>> DerefMut for RevocableGuard<'_, F, T, I>
++where
++    F::LockedType<Inner<T>>: Lock<I, Inner = Inner<T>>,
++{
++    fn deref_mut(&mut self) -> &mut Self::Target {
++        unsafe { &mut *self.guard.data.as_mut_ptr() }
++    }
++}
+diff --git a/rust/kernel/sync/rwsem.rs b/rust/kernel/sync/rwsem.rs
+new file mode 100644
+index 000000000000..eb220e4972cf
+--- /dev/null
++++ b/rust/kernel/sync/rwsem.rs
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A kernel read/write mutex.
++//!
++//! This module allows Rust code to use the kernel's [`struct rw_semaphore`].
++//!
++//! C header: [`include/linux/rwsem.h`](../../../../include/linux/rwsem.h)
++
++use super::{mutex::EmptyGuardContext, Guard, Lock, LockFactory, LockIniter, ReadLock, WriteLock};
++use crate::{bindings, str::CStr, Opaque};
++use core::{cell::UnsafeCell, marker::PhantomPinned, pin::Pin};
++
++/// Safely initialises a [`RwSemaphore`] with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! rwsemaphore_init {
++    ($rwsem:expr, $name:literal) => {
++        $crate::init_with_lockdep!($rwsem, $name)
++    };
++}
++
++/// Exposes the kernel's [`struct rw_semaphore`].
++///
++/// It's a read/write mutex. That is, it allows multiple readers to acquire it concurrently, but
++/// only one writer at a time. On contention, waiters sleep.
++///
++/// A [`RwSemaphore`] must first be initialised with a call to [`RwSemaphore::init_lock`] before it
++/// can be used. The [`rwsemaphore_init`] macro is provided to automatically assign a new lock
++/// class to an [`RwSemaphore`] instance.
++///
++/// Since it may block, [`RwSemaphore`] needs to be used with care in atomic contexts.
++///
++/// [`struct rw_semaphore`]: ../../../include/linux/rwsem.h
++pub struct RwSemaphore<T: ?Sized> {
++    /// The kernel `struct rw_semaphore` object.
++    rwsem: Opaque<bindings::rw_semaphore>,
++
++    /// An rwsem needs to be pinned because it contains a [`struct list_head`] that is
++    /// self-referential, so it cannot be safely moved once it is initialised.
++    _pin: PhantomPinned,
++
++    /// The data protected by the rwsem.
++    data: UnsafeCell<T>,
++}
++
++// SAFETY: `RwSemaphore` can be transferred across thread boundaries iff the data it protects can.
++#[allow(clippy::non_send_fields_in_send_ty)]
++unsafe impl<T: ?Sized + Send> Send for RwSemaphore<T> {}
++
++// SAFETY: `RwSemaphore` requires that the protected type be `Sync` for it to be `Sync` as well
++// because the read mode allows multiple threads to access the protected data concurrently. It
++// requires `Send` because the write lock allows a `&mut T` to be accessible from an arbitrary
++// thread.
++unsafe impl<T: ?Sized + Send + Sync> Sync for RwSemaphore<T> {}
++
++impl<T> RwSemaphore<T> {
++    /// Constructs a new rw semaphore.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`RwSemaphore::init_lock`] before using the rw semaphore.
++    pub unsafe fn new(t: T) -> Self {
++        Self {
++            rwsem: Opaque::uninit(),
++            data: UnsafeCell::new(t),
++            _pin: PhantomPinned,
++        }
++    }
++}
++
++impl<T: ?Sized> RwSemaphore<T> {
++    /// Locks the rw semaphore in write (exclusive) mode and gives the caller access to the data
++    /// protected by it. Only one thread at a time is allowed to access the protected data.
++    pub fn write(&self) -> Guard<'_, Self> {
++        let ctx = <Self as Lock>::lock_noguard(self);
++        // SAFETY: The rw semaphore was just acquired in write mode.
++        unsafe { Guard::new(self, ctx) }
++    }
++
++    /// Locks the rw semaphore in read (shared) mode and gives the caller access to the data
++    /// protected by it. Only one thread at a time is allowed to access the protected data.
++    pub fn read(&self) -> Guard<'_, Self, ReadLock> {
++        let ctx = <Self as Lock<ReadLock>>::lock_noguard(self);
++        // SAFETY: The rw semaphore was just acquired in read mode.
++        unsafe { Guard::new(self, ctx) }
++    }
++}
++
++impl<T> LockFactory for RwSemaphore<T> {
++    type LockedType<U> = RwSemaphore<U>;
++
++    unsafe fn new_lock<U>(data: U) -> RwSemaphore<U> {
++        // SAFETY: The safety requirements of `new_lock` also require that `init_lock` be called.
++        unsafe { RwSemaphore::new(data) }
++    }
++}
++
++impl<T> LockIniter for RwSemaphore<T> {
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++    ) {
++        unsafe { bindings::__init_rwsem(self.rwsem.get(), name.as_char_ptr(), key) };
++    }
++}
++
++// SAFETY: The underlying kernel `struct rw_semaphore` object ensures mutual exclusion because it's
++// acquired in write mode.
++unsafe impl<T: ?Sized> Lock for RwSemaphore<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        // SAFETY: `rwsem` points to valid memory.
++        unsafe { bindings::down_write(self.rwsem.get()) };
++        EmptyGuardContext
++    }
++
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The safety requirements of the function ensure that the rw semaphore is owned by
++        // the caller.
++        unsafe { bindings::up_write(self.rwsem.get()) };
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++// SAFETY: The underlying kernel `struct rw_semaphore` object ensures that only shared references
++// are accessible from other threads because it's acquired in read mode.
++unsafe impl<T: ?Sized> Lock<ReadLock> for RwSemaphore<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        // SAFETY: `rwsem` points to valid memory.
++        unsafe { bindings::down_read(self.rwsem.get()) };
++        EmptyGuardContext
++    }
++
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The safety requirements of the function ensure that the rw semaphore is owned by
++        // the caller.
++        unsafe { bindings::up_read(self.rwsem.get()) };
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++/// A revocable rw semaphore.
++///
++/// That is, a read/write semaphore to which access can be revoked at runtime. It is a
++/// specialisation of the more generic [`super::revocable::Revocable`].
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::sync::RevocableRwSemaphore;
++/// # use kernel::revocable_init;
++/// # use core::pin::Pin;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// fn read_sum(v: &RevocableRwSemaphore<Example>) -> Option<u32> {
++///     let guard = v.try_read()?;
++///     Some(guard.a + guard.b)
++/// }
++///
++/// fn add_two(v: &RevocableRwSemaphore<Example>) -> Option<u32> {
++///     let mut guard = v.try_write()?;
++///     guard.a += 2;
++///     guard.b += 2;
++///     Some(guard.a + guard.b)
++/// }
++///
++/// // SAFETY: We call `revocable_init` immediately below.
++/// let mut v = unsafe { RevocableRwSemaphore::new(Example { a: 10, b: 20 }) };
++/// // SAFETY: We never move out of `v`.
++/// let pinned = unsafe { Pin::new_unchecked(&mut v) };
++/// revocable_init!(pinned, "example::v");
++/// assert_eq!(read_sum(&v), Some(30));
++/// assert_eq!(add_two(&v), Some(34));
++/// v.revoke();
++/// assert_eq!(read_sum(&v), None);
++/// assert_eq!(add_two(&v), None);
++/// ```
++pub type RevocableRwSemaphore<T> = super::revocable::Revocable<RwSemaphore<()>, T>;
++
++/// A guard for a revocable rw semaphore..
++pub type RevocableRwSemaphoreGuard<'a, T, I = WriteLock> =
++    super::revocable::RevocableGuard<'a, RwSemaphore<()>, T, I>;
+diff --git a/rust/kernel/sync/seqlock.rs b/rust/kernel/sync/seqlock.rs
+new file mode 100644
+index 000000000000..f42d649823c6
+--- /dev/null
++++ b/rust/kernel/sync/seqlock.rs
+@@ -0,0 +1,202 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! A kernel sequential lock (seqlock).
++//!
++//! This module allows Rust code to use the sequential locks based on the kernel's `seqcount_t` and
++//! any locks implementing the [`LockFactory`] trait.
++//!
++//! See <https://www.kernel.org/doc/Documentation/locking/seqlock.rst>.
++
++use super::{Guard, Lock, LockFactory, LockIniter, NeedsLockClass, ReadLock};
++use crate::{bindings, str::CStr, Opaque};
++use core::{cell::UnsafeCell, marker::PhantomPinned, ops::Deref, pin::Pin};
++
++/// Exposes sequential locks backed by the kernel's `seqcount_t`.
++///
++/// The write-side critical section is protected by a lock implementing the [`LockFactory`] trait.
++///
++/// # Examples
++///
++///```
++/// use kernel::sync::{SeqLock, SpinLock};
++/// use core::sync::atomic::{AtomicU32, Ordering};
++///
++/// struct Example {
++///     a: AtomicU32,
++///     b: AtomicU32,
++/// }
++///
++/// fn get_sum(v: &SeqLock<SpinLock<Example>>) -> u32 {
++///     // Use `access` to access the fields of `Example`.
++///     v.access(|e| e.a.load(Ordering::Relaxed) + e.b.load(Ordering::Relaxed))
++/// }
++///
++/// fn get_sum_with_guard(v: &SeqLock<SpinLock<Example>>) -> u32 {
++///     // Use `read` and `need_retry` in a loop to access the fields of `Example`.
++///     loop {
++///         let guard = v.read();
++///         let sum = guard.a.load(Ordering::Relaxed) + guard.b.load(Ordering::Relaxed);
++///         if !guard.need_retry() {
++///             break sum;
++///         }
++///     }
++/// }
++///
++/// fn inc_each(v: &SeqLock<SpinLock<Example>>) {
++///     // Use a write-side guard to access the fields of `Example`.
++///     let guard = v.write();
++///     let a = guard.a.load(Ordering::Relaxed);
++///     guard.a.store(a + 1, Ordering::Relaxed);
++///     let b = guard.b.load(Ordering::Relaxed);
++///     guard.b.store(b + 1, Ordering::Relaxed);
++/// }
++/// ```
++pub struct SeqLock<L: Lock + ?Sized> {
++    _p: PhantomPinned,
++    count: Opaque<bindings::seqcount>,
++    write_lock: L,
++}
++
++// SAFETY: `SeqLock` can be transferred across thread boundaries iff the data it protects and the
++// underlying lock can.
++#[allow(clippy::non_send_fields_in_send_ty)]
++unsafe impl<L: Lock + Send> Send for SeqLock<L> where L::Inner: Send {}
++
++// SAFETY: `SeqLock` allows concurrent access to the data it protects by both readers and writers,
++// so it requires that the data it protects be `Sync`, as well as the underlying lock.
++unsafe impl<L: Lock + Sync> Sync for SeqLock<L> where L::Inner: Sync {}
++
++impl<L: Lock> SeqLock<L> {
++    /// Constructs a new instance of [`SeqLock`].
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`SeqLock::init`] before using the seqlock.
++    pub unsafe fn new(data: L::Inner) -> Self
++    where
++        L: LockFactory<LockedType<L::Inner> = L>,
++        L::Inner: Sized,
 +    {
-+        match ident.to_string().as_ref() {
-+            "ArrayParam" => expect_array_fields(it),
-+            _ => ParamType::Ident(ident.to_string()),
-+        }
-+    } else {
-+        panic!("Expected Param Type")
-+    }
-+}
-+
-+struct ModInfoBuilder<'a> {
-+    module: &'a str,
-+    counter: usize,
-+    buffer: String,
-+}
-+
-+impl<'a> ModInfoBuilder<'a> {
-+    fn new(module: &'a str) -> Self {
-+        ModInfoBuilder {
-+            module,
-+            counter: 0,
-+            buffer: String::new(),
++        Self {
++            _p: PhantomPinned,
++            count: Opaque::uninit(),
++            // SAFETY: `L::init_lock` is called from `SeqLock::init`, which is required to be
++            // called by the function's safety requirements.
++            write_lock: unsafe { L::new_lock(data) },
 +        }
 +    }
-+
-+    fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
-+        use std::fmt::Write;
-+
-+        let string = if builtin {
-+            // Built-in modules prefix their modinfo strings by `module.`.
-+            format!(
-+                "{module}.{field}={content}\0",
-+                module = self.module,
-+                field = field,
-+                content = content
-+            )
-+        } else {
-+            // Loadable modules' modinfo strings go as-is.
-+            format!("{field}={content}\0", field = field, content = content)
-+        };
-+
-+        write!(
-+            &mut self.buffer,
-+            "
-+                {cfg}
-+                #[doc(hidden)]
-+                #[link_section = \".modinfo\"]
-+                #[used]
-+                pub static __{module}_{counter}: [u8; {length}] = *{string};
-+            ",
-+            cfg = if builtin {
-+                "#[cfg(not(MODULE))]"
-+            } else {
-+                "#[cfg(MODULE)]"
-+            },
-+            module = self.module,
-+            counter = self.counter,
-+            length = string.len(),
-+            string = Literal::byte_string(string.as_bytes()),
-+        )
-+        .unwrap();
-+
-+        self.counter += 1;
-+    }
-+
-+    fn emit_only_builtin(&mut self, field: &str, content: &str) {
-+        self.emit_base(field, content, true)
-+    }
-+
-+    fn emit_only_loadable(&mut self, field: &str, content: &str) {
-+        self.emit_base(field, content, false)
-+    }
-+
-+    fn emit(&mut self, field: &str, content: &str) {
-+        self.emit_only_builtin(field, content);
-+        self.emit_only_loadable(field, content);
-+    }
-+
-+    fn emit_param(&mut self, field: &str, param: &str, content: &str) {
-+        let content = format!("{param}:{content}", param = param, content = content);
-+        self.emit(field, &content);
-+    }
 +}
 +
-+fn permissions_are_readonly(perms: &str) -> bool {
-+    let (radix, digits) = if let Some(n) = perms.strip_prefix("0x") {
-+        (16, n)
-+    } else if let Some(n) = perms.strip_prefix("0o") {
-+        (8, n)
-+    } else if let Some(n) = perms.strip_prefix("0b") {
-+        (2, n)
-+    } else {
-+        (10, perms)
-+    };
-+    match u32::from_str_radix(digits, radix) {
-+        Ok(perms) => perms & 0o222 == 0,
-+        Err(_) => false,
-+    }
-+}
-+
-+fn param_ops_path(param_type: &str) -> &'static str {
-+    match param_type {
-+        "bool" => "kernel::module_param::PARAM_OPS_BOOL",
-+        "i8" => "kernel::module_param::PARAM_OPS_I8",
-+        "u8" => "kernel::module_param::PARAM_OPS_U8",
-+        "i16" => "kernel::module_param::PARAM_OPS_I16",
-+        "u16" => "kernel::module_param::PARAM_OPS_U16",
-+        "i32" => "kernel::module_param::PARAM_OPS_I32",
-+        "u32" => "kernel::module_param::PARAM_OPS_U32",
-+        "i64" => "kernel::module_param::PARAM_OPS_I64",
-+        "u64" => "kernel::module_param::PARAM_OPS_U64",
-+        "isize" => "kernel::module_param::PARAM_OPS_ISIZE",
-+        "usize" => "kernel::module_param::PARAM_OPS_USIZE",
-+        "str" => "kernel::module_param::PARAM_OPS_STR",
-+        t => panic!("Unrecognized type {}", t),
-+    }
-+}
-+
-+fn try_simple_param_val(
-+    param_type: &str,
-+) -> Box<dyn Fn(&mut token_stream::IntoIter) -> Option<String>> {
-+    match param_type {
-+        "bool" => Box::new(try_ident),
-+        "str" => Box::new(|param_it| {
-+            try_byte_string(param_it)
-+                .map(|s| format!("kernel::module_param::StringParam::Ref(b\"{}\")", s))
-+        }),
-+        _ => Box::new(try_literal),
-+    }
-+}
-+
-+fn get_default(param_type: &ParamType, param_it: &mut token_stream::IntoIter) -> String {
-+    let try_param_val = match param_type {
-+        ParamType::Ident(ref param_type)
-+        | ParamType::Array {
-+            vals: ref param_type,
-+            max_length: _,
-+        } => try_simple_param_val(param_type),
-+    };
-+    assert_eq!(expect_ident(param_it), "default");
-+    assert_eq!(expect_punct(param_it), ':');
-+    let default = match param_type {
-+        ParamType::Ident(_) => try_param_val(param_it).expect("Expected default param value"),
-+        ParamType::Array {
-+            vals: _,
-+            max_length: _,
-+        } => {
-+            let group = expect_group(param_it);
-+            assert_eq!(group.delimiter(), Delimiter::Bracket);
-+            let mut default_vals = Vec::new();
-+            let mut it = group.stream().into_iter();
-+
-+            while let Some(default_val) = try_param_val(&mut it) {
-+                default_vals.push(default_val);
-+                match it.next() {
-+                    Some(TokenTree::Punct(punct)) => assert_eq!(punct.as_char(), ','),
-+                    None => break,
-+                    _ => panic!("Expected ',' or end of array default values"),
-+                }
-+            }
-+
-+            let mut default_array = "kernel::module_param::ArrayParam::create(&[".to_string();
-+            default_array.push_str(
-+                &default_vals
-+                    .iter()
-+                    .map(|val| val.to_string())
-+                    .collect::<Vec<String>>()
-+                    .join(","),
-+            );
-+            default_array.push_str("])");
-+            default_array
++impl<L: Lock + ?Sized> SeqLock<L> {
++    /// Accesses the protected data in read mode.
++    ///
++    /// Readers and writers are allowed to run concurrently, so callers must check if they need to
++    /// refetch the values before they are used (e.g., because a writer changed them concurrently,
++    /// rendering them potentially inconsistent). The check is performed via calls to
++    /// [`SeqLockReadGuard::need_retry`].
++    pub fn read(&self) -> SeqLockReadGuard<'_, L> {
++        SeqLockReadGuard {
++            lock: self,
++            // SAFETY: `count` contains valid memory.
++            start_count: unsafe { bindings::read_seqcount_begin(self.count.get()) },
 +        }
-+    };
-+    assert_eq!(expect_punct(param_it), ',');
-+    default
-+}
++    }
 +
-+fn generated_array_ops_name(vals: &str, max_length: usize) -> String {
-+    format!(
-+        "__generated_array_ops_{vals}_{max_length}",
-+        vals = vals,
-+        max_length = max_length
-+    )
-+}
-+
-+#[derive(Debug, Default)]
-+struct ModuleInfo {
-+    type_: String,
-+    license: String,
-+    name: String,
-+    author: Option<String>,
-+    description: Option<String>,
-+    alias: Option<String>,
-+    params: Option<Group>,
-+}
-+
-+impl ModuleInfo {
-+    fn parse(it: &mut token_stream::IntoIter) -> Self {
-+        let mut info = ModuleInfo::default();
-+
-+        const EXPECTED_KEYS: &[&str] = &[
-+            "type",
-+            "name",
-+            "author",
-+            "description",
-+            "license",
-+            "alias",
-+            "alias_rtnl_link",
-+            "params",
-+        ];
-+        const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
-+        let mut seen_keys = Vec::new();
-+
++    /// Accesses the protected data in read mode.
++    ///
++    /// The provided closure is called repeatedly if it may have accessed inconsistent data (e.g.,
++    /// because a concurrent writer modified it). This is a wrapper around [`SeqLock::read`] and
++    /// [`SeqLockReadGuard::need_retry`] in a loop.
++    pub fn access<F: Fn(&L::Inner) -> R, R>(&self, cb: F) -> R {
 +        loop {
-+            let key = match it.next() {
-+                Some(TokenTree::Ident(ident)) => ident.to_string(),
-+                Some(_) => panic!("Expected Ident or end"),
-+                None => break,
-+            };
-+
-+            if seen_keys.contains(&key) {
-+                panic!(
-+                    "Duplicated key \"{}\". Keys can only be specified once.",
-+                    key
-+                );
-+            }
-+
-+            assert_eq!(expect_punct(it), ':');
-+
-+            match key.as_str() {
-+                "type" => info.type_ = expect_ident(it),
-+                "name" => info.name = expect_byte_string(it),
-+                "author" => info.author = Some(expect_byte_string(it)),
-+                "description" => info.description = Some(expect_byte_string(it)),
-+                "license" => info.license = expect_byte_string(it),
-+                "alias" => info.alias = Some(expect_byte_string(it)),
-+                "alias_rtnl_link" => {
-+                    info.alias = Some(format!("rtnl-link-{}", expect_byte_string(it)))
-+                }
-+                "params" => info.params = Some(expect_group(it)),
-+                _ => panic!(
-+                    "Unknown key \"{}\". Valid keys are: {:?}.",
-+                    key, EXPECTED_KEYS
-+                ),
-+            }
-+
-+            assert_eq!(expect_punct(it), ',');
-+
-+            seen_keys.push(key);
-+        }
-+
-+        expect_end(it);
-+
-+        for key in REQUIRED_KEYS {
-+            if !seen_keys.iter().any(|e| e == key) {
-+                panic!("Missing required key \"{}\".", key);
++            let guard = self.read();
++            let ret = cb(&guard);
++            if !guard.need_retry() {
++                return ret;
 +            }
 +        }
++    }
 +
-+        let mut ordered_keys: Vec<&str> = Vec::new();
-+        for key in EXPECTED_KEYS {
-+            if seen_keys.iter().any(|e| e == key) {
-+                ordered_keys.push(key);
-+            }
-+        }
-+
-+        if seen_keys != ordered_keys {
-+            panic!(
-+                "Keys are not ordered as expected. Order them like: {:?}.",
-+                ordered_keys
-+            );
-+        }
-+
-+        info
++    /// Locks the underlying lock and returns a guard that allows access to the protected data.
++    ///
++    /// The guard is not mutable though because readers are still allowed to concurrently access
++    /// the data. The protected data structure needs to provide interior mutability itself (e.g.,
++    /// via atomic types) for the individual fields that can be mutated.
++    pub fn write(&self) -> Guard<'_, Self, ReadLock> {
++        let ctx = self.lock_noguard();
++        // SAFETY: The seqlock was just acquired.
++        unsafe { Guard::new(self, ctx) }
 +    }
 +}
 +
-+pub(crate) fn module(ts: TokenStream) -> TokenStream {
-+    let mut it = ts.into_iter();
-+
-+    let info = ModuleInfo::parse(&mut it);
-+
-+    let mut modinfo = ModInfoBuilder::new(info.name.as_ref());
-+    if let Some(author) = info.author {
-+        modinfo.emit("author", &author);
++impl<L: LockIniter + Lock + ?Sized> NeedsLockClass for SeqLock<L> {
++    unsafe fn init(
++        mut self: Pin<&mut Self>,
++        name: &'static CStr,
++        key1: *mut bindings::lock_class_key,
++        key2: *mut bindings::lock_class_key,
++    ) {
++        // SAFETY: `write_lock` is pinned when `self` is.
++        let pinned = unsafe { self.as_mut().map_unchecked_mut(|s| &mut s.write_lock) };
++        // SAFETY: `key1` is valid by the safety requirements of this function.
++        unsafe { pinned.init_lock(name, key1) };
++        // SAFETY: `key2` is valid by the safety requirements of this function.
++        unsafe { bindings::__seqcount_init(self.count.get(), name.as_char_ptr(), key2) };
 +    }
-+    if let Some(description) = info.description {
-+        modinfo.emit("description", &description);
++}
++
++// SAFETY: The underlying lock ensures mutual exclusion.
++unsafe impl<L: Lock + ?Sized> Lock<ReadLock> for SeqLock<L> {
++    type Inner = L::Inner;
++    type GuardContext = L::GuardContext;
++
++    fn lock_noguard(&self) -> L::GuardContext {
++        let ctx = self.write_lock.lock_noguard();
++        // SAFETY: `count` contains valid memory.
++        unsafe { bindings::write_seqcount_begin(self.count.get()) };
++        ctx
 +    }
-+    modinfo.emit("license", &info.license);
-+    if let Some(alias) = info.alias {
-+        modinfo.emit("alias", &alias);
++
++    fn relock(&self, ctx: &mut L::GuardContext) {
++        self.write_lock.relock(ctx);
++        // SAFETY: `count` contains valid memory.
++        unsafe { bindings::write_seqcount_begin(self.count.get()) };
 +    }
 +
-+    // Built-in modules also export the `file` modinfo string.
-+    let file =
-+        std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
-+    modinfo.emit_only_builtin("file", &file);
++    unsafe fn unlock(&self, ctx: &mut L::GuardContext) {
++        // SAFETY: The safety requirements of the function ensure that lock is owned by the caller.
++        unsafe { bindings::write_seqcount_end(self.count.get()) };
++        // SAFETY: The safety requirements of the function ensure that lock is owned by the caller.
++        unsafe { self.write_lock.unlock(ctx) };
++    }
 +
-+    let mut array_types_to_generate = Vec::new();
-+    if let Some(params) = info.params {
-+        assert_eq!(params.delimiter(), Delimiter::Brace);
++    fn locked_data(&self) -> &UnsafeCell<L::Inner> {
++        self.write_lock.locked_data()
++    }
++}
 +
-+        let mut it = params.stream().into_iter();
++/// Allows read-side access to data protected by a sequential lock.
++pub struct SeqLockReadGuard<'a, L: Lock + ?Sized> {
++    lock: &'a SeqLock<L>,
++    start_count: u32,
++}
 +
-+        loop {
-+            let param_name = match it.next() {
-+                Some(TokenTree::Ident(ident)) => ident.to_string(),
-+                Some(_) => panic!("Expected Ident or end"),
-+                None => break,
-+            };
++impl<L: Lock + ?Sized> SeqLockReadGuard<'_, L> {
++    /// Determine if the callers needs to retry reading values.
++    ///
++    /// It returns `true` when a concurrent writer ran between the guard being created and
++    /// [`Self::need_retry`] being called.
++    pub fn need_retry(&self) -> bool {
++        // SAFETY: `count` is valid because the guard guarantees that the lock remains alive.
++        unsafe { bindings::read_seqcount_retry(self.lock.count.get(), self.start_count) != 0 }
++    }
++}
 +
-+            assert_eq!(expect_punct(&mut it), ':');
-+            let param_type = expect_type(&mut it);
-+            let group = expect_group(&mut it);
-+            assert_eq!(expect_punct(&mut it), ',');
++impl<L: Lock + ?Sized> Deref for SeqLockReadGuard<'_, L> {
++    type Target = L::Inner;
 +
-+            assert_eq!(group.delimiter(), Delimiter::Brace);
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: We only ever allow shared access to the protected data.
++        unsafe { &*self.lock.locked_data().get() }
++    }
++}
+diff --git a/rust/kernel/sync/smutex.rs b/rust/kernel/sync/smutex.rs
+new file mode 100644
+index 000000000000..4f6797361ab3
+--- /dev/null
++++ b/rust/kernel/sync/smutex.rs
+@@ -0,0 +1,295 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+            let mut param_it = group.stream().into_iter();
-+            let param_default = get_default(&param_type, &mut param_it);
-+            let param_permissions = get_literal(&mut param_it, "permissions");
-+            let param_description = get_byte_string(&mut param_it, "description");
-+            expect_end(&mut param_it);
++//! A simple mutex implementation.
++//!
++//! Differently from [`super::Mutex`], this implementation does not require pinning, so the
++//! ergonomics are much improved, though the implementation is not as feature-rich as the C-based
++//! one. The main advantage is that it doesn't impose unsafe blocks on callers.
++//!
++//! The mutex is made up of 2 words in addition to the data it protects. The first one is accessed
++//! concurrently by threads trying to acquire and release the mutex, it contains a "stack" of
++//! waiters and a "locked" bit; the second one is only accessible by the thread holding the mutex,
++//! it contains a queue of waiters. Waiters are moved from the stack to the queue when the mutex is
++//! next unlocked while the stack is non-empty and the queue is empty. A single waiter is popped
++//! from the wait queue when the owner of the mutex unlocks it.
++//!
++//! The initial state of the mutex is `<locked=0, stack=[], queue=[]>`, meaning that it isn't
++//! locked and both the waiter stack and queue are empty.
++//!
++//! A lock operation transitions the mutex to state `<locked=1, stack=[], queue=[]>`.
++//!
++//! An unlock operation transitions the mutex back to the initial state, however, an attempt to
++//! lock the mutex while it's already locked results in a waiter being created (on the stack) and
++//! pushed onto the stack, so the state is `<locked=1, stack=[W1], queue=[]>`.
++//!
++//! Another thread trying to lock the mutex results in another waiter being pushed onto the stack,
++//! so the state becomes `<locked=1, stack=[W2, W1], queue=[]>`.
++//!
++//! In such states (queue is empty but stack is non-empty), the unlock operation is performed in
++//! three steps:
++//! 1. The stack is popped (but the mutex remains locked), so the state is:
++//!    `<locked=1, stack=[], queue=[]>`
++//! 2. The stack is turned into a queue by reversing it, so the state is:
++//!    `<locked=1, stack=[], queue=[W1, W2]>
++//! 3. Finally, the lock is released, and the first waiter is awakened, so the state is:
++//!    `<locked=0, stack=[], queue=[W2]>`
++//!
++//! The mutex remains accessible to any threads attempting to lock it in any of the intermediate
++//! states above. For example, while it is locked, other threads may add waiters to the stack
++//! (which is ok because we want to release the ones on the queue first); another example is that
++//! another thread may acquire the mutex before waiter W1 in the example above, this makes the
++//! mutex unfair but this is desirable because the thread is running already and may in fact
++//! release the lock before W1 manages to get scheduled -- it also mitigates the lock convoy
++//! problem when the releasing thread wants to immediately acquire the lock again: it will be
++//! allowed to do so (as long as W1 doesn't get to it first).
++//!
++//! When the waiter queue is non-empty, unlocking the mutex always results in the first waiter being
++//! popped form the queue and awakened.
 +
-+            // TODO: More primitive types.
-+            // TODO: Other kinds: unsafes, etc.
-+            let (param_kernel_type, ops): (String, _) = match param_type {
-+                ParamType::Ident(ref param_type) => (
-+                    param_type.to_string(),
-+                    param_ops_path(param_type).to_string(),
-+                ),
-+                ParamType::Array {
-+                    ref vals,
-+                    max_length,
-+                } => {
-+                    array_types_to_generate.push((vals.clone(), max_length));
-+                    (
-+                        format!("__rust_array_param_{}_{}", vals, max_length),
-+                        generated_array_ops_name(vals, max_length),
-+                    )
-+                }
-+            };
++use super::{mutex::EmptyGuardContext, Guard, Lock, LockFactory, LockIniter};
++use crate::{bindings, str::CStr, Opaque};
++use core::sync::atomic::{AtomicUsize, Ordering};
++use core::{cell::UnsafeCell, pin::Pin};
 +
-+            modinfo.emit_param("parmtype", &param_name, &param_kernel_type);
-+            modinfo.emit_param("parm", &param_name, &param_description);
-+            let param_type_internal = match param_type {
-+                ParamType::Ident(ref param_type) => match param_type.as_ref() {
-+                    "str" => "kernel::module_param::StringParam".to_string(),
-+                    other => other.to_string(),
-+                },
-+                ParamType::Array {
-+                    ref vals,
-+                    max_length,
-+                } => format!(
-+                    "kernel::module_param::ArrayParam<{vals}, {max_length}>",
-+                    vals = vals,
-+                    max_length = max_length
-+                ),
-+            };
-+            let read_func = if permissions_are_readonly(&param_permissions) {
-+                format!(
-+                    "
-+                        fn read(&self) -> &<{param_type_internal} as kernel::module_param::ModuleParam>::Value {{
-+                            // SAFETY: Parameters do not need to be locked because they are read only or sysfs is not enabled.
-+                            unsafe {{ <{param_type_internal} as kernel::module_param::ModuleParam>::value(&__{name}_{param_name}_value) }}
-+                        }}
-+                    ",
-+                    name = info.name,
-+                    param_name = param_name,
-+                    param_type_internal = param_type_internal,
-+                )
-+            } else {
-+                format!(
-+                    "
-+                        fn read<'lck>(&self, lock: &'lck kernel::KParamGuard) -> &'lck <{param_type_internal} as kernel::module_param::ModuleParam>::Value {{
-+                            // SAFETY: Parameters are locked by `KParamGuard`.
-+                            unsafe {{ <{param_type_internal} as kernel::module_param::ModuleParam>::value(&__{name}_{param_name}_value) }}
-+                        }}
-+                    ",
-+                    name = info.name,
-+                    param_name = param_name,
-+                    param_type_internal = param_type_internal,
-+                )
-+            };
-+            let kparam = format!(
-+                "
-+                    kernel::bindings::kernel_param__bindgen_ty_1 {{
-+                        arg: unsafe {{ &__{name}_{param_name}_value }} as *const _ as *mut kernel::c_types::c_void,
-+                    }},
-+                ",
-+                name = info.name,
-+                param_name = param_name,
-+            );
-+            modinfo.buffer.push_str(
-+                &format!(
-+                    "
-+                    static mut __{name}_{param_name}_value: {param_type_internal} = {param_default};
++/// The value that is OR'd into the [`Mutex::waiter_stack`] when the mutex is locked.
++const LOCKED: usize = 1;
 +
-+                    struct __{name}_{param_name};
++/// A simple mutex.
++///
++/// This is mutual-exclusion primitive. It guarantees that only one thread at a time may access the
++/// data it protects. When multiple threads attempt to lock the same mutex, only one at a time is
++/// allowed to progress, the others will block (sleep) until the mutex is unlocked, at which point
++/// another thread will be allowed to wake up and make progress.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::{Result, sync::Ref, sync::smutex::Mutex};
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// static EXAMPLE: Mutex<Example> = Mutex::new(Example{ a: 10, b: 20 });
++///
++/// fn inc_a(example: &Mutex<Example>) {
++///     let mut guard = example.lock();
++///     guard.a += 1;
++/// }
++///
++/// fn sum(example: &Mutex<Example>) -> u32 {
++///     let guard = example.lock();
++///     guard.a + guard.b
++/// }
++///
++/// fn try_new(a: u32, b: u32) -> Result<Ref<Mutex<Example>>> {
++///     Ref::try_new(Mutex::new(Example {a, b}))
++/// }
++///
++/// assert_eq!(EXAMPLE.lock().a, 10);
++/// assert_eq!(sum(&EXAMPLE), 30);
++///
++/// inc_a(&EXAMPLE);
++///
++/// assert_eq!(EXAMPLE.lock().a, 11);
++/// assert_eq!(sum(&EXAMPLE), 31);
++///
++/// # try_new(42, 43);
++/// ```
++pub struct Mutex<T: ?Sized> {
++    /// A stack of waiters.
++    ///
++    /// It is accessed atomically by threads lock/unlocking the mutex. Additionally, the
++    /// least-significant bit is used to indicate whether the mutex is locked or not.
++    waiter_stack: AtomicUsize,
 +
-+                    impl __{name}_{param_name} {{ {read_func} }}
++    /// A queue of waiters.
++    ///
++    /// This is only accessible to the holder of the mutex. When the owner of the mutex is
++    /// unlocking it, it will move waiters from the stack to the queue when the queue is empty and
++    /// the stack non-empty.
++    waiter_queue: UnsafeCell<*mut Waiter>,
 +
-+                    const {param_name}: __{name}_{param_name} = __{name}_{param_name};
++    /// The data protected by the mutex.
++    data: UnsafeCell<T>,
++}
 +
-+                    // Note: the C macro that generates the static structs for the `__param` section
-+                    // asks for them to be `aligned(sizeof(void *))`. However, that was put in place
-+                    // in 2003 in commit 38d5b085d2 (\"[PATCH] Fix over-alignment problem on x86-64\")
-+                    // to undo GCC over-alignment of static structs of >32 bytes. It seems that is
-+                    // not the case anymore, so we simplify to a transparent representation here
-+                    // in the expectation that it is not needed anymore.
-+                    // TODO: Revisit this to confirm the above comment and remove it if it happened.
-+                    #[repr(transparent)]
-+                    struct __{name}_{param_name}_RacyKernelParam(kernel::bindings::kernel_param);
++// SAFETY: `Mutex` can be transferred across thread boundaries iff the data it protects can.
++#[allow(clippy::non_send_fields_in_send_ty)]
++unsafe impl<T: ?Sized + Send> Send for Mutex<T> {}
 +
-+                    unsafe impl Sync for __{name}_{param_name}_RacyKernelParam {{
-+                    }}
++// SAFETY: `Mutex` serialises the interior mutability it provides, so it is `Sync` as long as the
++// data it protects is `Send`.
++unsafe impl<T: ?Sized + Send> Sync for Mutex<T> {}
 +
-+                    #[cfg(not(MODULE))]
-+                    const __{name}_{param_name}_name: *const kernel::c_types::c_char = b\"{name}.{param_name}\\0\" as *const _ as *const kernel::c_types::c_char;
-+
-+                    #[cfg(MODULE)]
-+                    const __{name}_{param_name}_name: *const kernel::c_types::c_char = b\"{param_name}\\0\" as *const _ as *const kernel::c_types::c_char;
-+
-+                    #[link_section = \"__param\"]
-+                    #[used]
-+                    static __{name}_{param_name}_struct: __{name}_{param_name}_RacyKernelParam = __{name}_{param_name}_RacyKernelParam(kernel::bindings::kernel_param {{
-+                        name: __{name}_{param_name}_name,
-+                        // SAFETY: `__this_module` is constructed by the kernel at load time and will not be freed until the module is unloaded.
-+                        #[cfg(MODULE)]
-+                        mod_: unsafe {{ &kernel::bindings::__this_module as *const _ as *mut _ }},
-+                        #[cfg(not(MODULE))]
-+                        mod_: core::ptr::null_mut(),
-+                        ops: unsafe {{ &{ops} }} as *const kernel::bindings::kernel_param_ops,
-+                        perm: {permissions},
-+                        level: -1,
-+                        flags: 0,
-+                        __bindgen_anon_1: {kparam}
-+                    }});
-+                    ",
-+                    name = info.name,
-+                    param_type_internal = param_type_internal,
-+                    read_func = read_func,
-+                    param_default = param_default,
-+                    param_name = param_name,
-+                    ops = ops,
-+                    permissions = param_permissions,
-+                    kparam = kparam,
-+                )
-+            );
++impl<T> Mutex<T> {
++    /// Creates a new instance of the mutex.
++    pub const fn new(data: T) -> Self {
++        Self {
++            waiter_stack: AtomicUsize::new(0),
++            waiter_queue: UnsafeCell::new(core::ptr::null_mut()),
++            data: UnsafeCell::new(data),
 +        }
 +    }
++}
 +
-+    let mut generated_array_types = String::new();
-+
-+    for (vals, max_length) in array_types_to_generate {
-+        let ops_name = generated_array_ops_name(&vals, max_length);
-+        generated_array_types.push_str(&format!(
-+            "
-+                kernel::make_param_ops!(
-+                    {ops_name},
-+                    kernel::module_param::ArrayParam<{vals}, {{ {max_length} }}>
-+                );
-+            ",
-+            ops_name = ops_name,
-+            vals = vals,
-+            max_length = max_length,
-+        ));
++impl<T: ?Sized> Mutex<T> {
++    /// Locks the mutex and gives the caller access to the data protected by it. Only one thread at
++    /// a time is allowed to access the protected data.
++    pub fn lock(&self) -> Guard<'_, Self> {
++        let ctx = self.lock_noguard();
++        // SAFETY: The mutex was just acquired.
++        unsafe { Guard::new(self, ctx) }
 +    }
++}
 +
-+    format!(
-+        "
-+            /// The module name.
-+            ///
-+            /// Used by the printing macros, e.g. [`info!`].
-+            const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
++impl<T> LockFactory for Mutex<T> {
++    type LockedType<U> = Mutex<U>;
 +
-+            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
++    unsafe fn new_lock<U>(data: U) -> Mutex<U> {
++        Mutex::new(data)
++    }
++}
++
++impl<T> LockIniter for Mutex<T> {
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        _name: &'static CStr,
++        _key: *mut bindings::lock_class_key,
++    ) {
++    }
++}
++
++// SAFETY: The mutex implementation ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock for Mutex<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        loop {
++            // Try the fast path: the caller owns the mutex if we manage to set the `LOCKED` bit.
 +            //
-+            // This may be best done another way later on, e.g. as a new modinfo
-+            // key or a new section. For the moment, keep it simple.
-+            #[cfg(MODULE)]
-+            #[doc(hidden)]
-+            #[used]
-+            static __IS_RUST_MODULE: () = ();
++            // The `acquire` order matches with one of the `release` ones in `unlock`.
++            if self.waiter_stack.fetch_or(LOCKED, Ordering::Acquire) & LOCKED == 0 {
++                return EmptyGuardContext;
++            }
 +
-+            static mut __MOD: Option<{type_}> = None;
++            // Slow path: we'll likely need to wait, so initialise a local waiter struct.
++            let mut waiter = Waiter {
++                completion: Opaque::uninit(),
++                next: core::ptr::null_mut(),
++            };
 +
-+            // SAFETY: `__this_module` is constructed by the kernel at load time and will not be freed until the module is unloaded.
-+            #[cfg(MODULE)]
-+            static THIS_MODULE: kernel::ThisModule = unsafe {{ kernel::ThisModule::from_ptr(&kernel::bindings::__this_module as *const _ as *mut _) }};
-+            #[cfg(not(MODULE))]
-+            static THIS_MODULE: kernel::ThisModule = unsafe {{ kernel::ThisModule::from_ptr(core::ptr::null_mut()) }};
++            // SAFETY: The completion object was just allocated on the stack and is valid for
++            // writes.
++            unsafe { bindings::init_completion(waiter.completion.get()) };
 +
-+            // Loadable modules need to export the `{{init,cleanup}}_module` identifiers.
-+            #[cfg(MODULE)]
-+            #[doc(hidden)]
-+            #[no_mangle]
-+            pub extern \"C\" fn init_module() -> kernel::c_types::c_int {{
-+                __init()
-+            }}
++            // Try to enqueue the waiter by pushing into onto the waiter stack. We want to do it
++            // only while the mutex is locked by another thread.
++            loop {
++                // We use relaxed here because we're just reading the value we'll CAS later (which
++                // has a stronger ordering on success).
++                let mut v = self.waiter_stack.load(Ordering::Relaxed);
++                if v & LOCKED == 0 {
++                    // The mutex was released by another thread, so try to acquire it.
++                    //
++                    // The `acquire` order matches with one of the `release` ones in `unlock`.
++                    v = self.waiter_stack.fetch_or(LOCKED, Ordering::Acquire);
++                    if v & LOCKED == 0 {
++                        return EmptyGuardContext;
++                    }
++                }
 +
-+            #[cfg(MODULE)]
-+            #[doc(hidden)]
-+            #[no_mangle]
-+            pub extern \"C\" fn cleanup_module() {{
-+                __exit()
-+            }}
++                waiter.next = (v & !LOCKED) as _;
 +
-+            // Built-in modules are initialized through an initcall pointer
-+            // and the identifiers need to be unique.
-+            #[cfg(not(MODULE))]
-+            #[cfg(not(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS))]
-+            #[doc(hidden)]
-+            #[link_section = \"{initcall_section}\"]
-+            #[used]
-+            pub static __{name}_initcall: extern \"C\" fn() -> kernel::c_types::c_int = __{name}_init;
++                // The `release` order matches with `acquire` in `unlock` when the stack is swapped
++                // out. We use release order here to ensure that the other thread can see our
++                // waiter fully initialised.
++                if self
++                    .waiter_stack
++                    .compare_exchange(
++                        v,
++                        (&mut waiter as *mut _ as usize) | LOCKED,
++                        Ordering::Release,
++                        Ordering::Relaxed,
++                    )
++                    .is_ok()
++                {
++                    break;
++                }
++            }
 +
-+            #[cfg(not(MODULE))]
-+            #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
-+            core::arch::global_asm!(
-+                r#\".section \"{initcall_section}\", \"a\"
-+                __{name}_initcall:
-+                    .long   __{name}_init - .
-+                    .previous
-+                \"#
-+            );
++            // Wait for the owner to lock to wake this thread up.
++            //
++            // SAFETY: Completion object was previously initialised with `init_completion` and
++            // remains valid.
++            unsafe { bindings::wait_for_completion(waiter.completion.get()) };
++        }
++    }
 +
-+            #[cfg(not(MODULE))]
-+            #[doc(hidden)]
-+            #[no_mangle]
-+            pub extern \"C\" fn __{name}_init() -> kernel::c_types::c_int {{
-+                __init()
-+            }}
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The caller owns the mutex, so it is safe to manipulate the local wait queue.
++        let mut waiter = unsafe { *self.waiter_queue.get() };
++        loop {
++            // If we have a non-empty local queue of waiters, pop the first one, release the mutex,
++            // and wake it up (the popped waiter).
++            if !waiter.is_null() {
++                // SAFETY: The caller owns the mutex, so it is safe to manipulate the local wait
++                // queue.
++                unsafe { *self.waiter_queue.get() = (*waiter).next };
 +
-+            #[cfg(not(MODULE))]
-+            #[doc(hidden)]
-+            #[no_mangle]
-+            pub extern \"C\" fn __{name}_exit() {{
-+                __exit()
-+            }}
++                // The `release` order matches with one of the `acquire` ones in `lock_noguard`.
++                self.waiter_stack.fetch_and(!LOCKED, Ordering::Release);
 +
-+            fn __init() -> kernel::c_types::c_int {{
-+                match <{type_} as kernel::Module>::init(kernel::c_str!(\"{name}\"), &THIS_MODULE) {{
-+                    Ok(m) => {{
-+                        unsafe {{
-+                            __MOD = Some(m);
-+                        }}
-+                        return 0;
-+                    }}
-+                    Err(e) => {{
-+                        return e.to_kernel_errno();
-+                    }}
-+                }}
-+            }}
++                // Wake up the first waiter.
++                //
++                // SAFETY: The completion object was initialised before being added to the wait
++                // stack and is only removed above, when called completed. So it is safe for
++                // writes.
++                unsafe { bindings::complete_all((*waiter).completion.get()) };
++                return;
++            }
 +
-+            fn __exit() {{
-+                unsafe {{
-+                    // Invokes `drop()` on `__MOD`, which should be used for cleanup.
-+                    __MOD = None;
-+                }}
-+            }}
++            // Try the fast path when there are no local waiters.
++            //
++            // The `release` order matches with one of the `acquire` ones in `lock_noguard`.
++            if self
++                .waiter_stack
++                .compare_exchange(LOCKED, 0, Ordering::Release, Ordering::Relaxed)
++                .is_ok()
++            {
++                return;
++            }
 +
-+            {modinfo}
++            // We don't have a local queue, so pull the whole stack off, reverse it, and use it as a
++            // local queue. Since we're manipulating this queue, we need to keep ownership of the
++            // mutex.
++            //
++            // The `acquire` order matches with the `release` one in `lock_noguard` where a waiter
++            // is pushed onto the stack. It ensures that we see the fully-initialised waiter.
++            let mut stack =
++                (self.waiter_stack.swap(LOCKED, Ordering::Acquire) & !LOCKED) as *mut Waiter;
++            while !stack.is_null() {
++                // SAFETY: The caller still owns the mutex, so it is safe to manipulate the
++                // elements of the wait queue, which will soon become that wait queue.
++                let next = unsafe { (*stack).next };
 +
-+            {generated_array_types}
-+        ",
-+        type_ = info.type_,
-+        name = info.name,
-+        modinfo = modinfo.buffer,
-+        generated_array_types = generated_array_types,
-+        initcall_section = ".initcall6.init"
-+    ).parse().expect("Error parsing formatted string into token stream.")
++                // SAFETY: Same as above.
++                unsafe { (*stack).next = waiter };
++
++                waiter = stack;
++                stack = next;
++            }
++        }
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
 +}
 +
-+#[cfg(test)]
-+mod tests {
-+    use super::*;
++struct Waiter {
++    completion: Opaque<bindings::completion>,
++    next: *mut Waiter,
++}
+diff --git a/rust/kernel/sync/spinlock.rs b/rust/kernel/sync/spinlock.rs
+new file mode 100644
+index 000000000000..fb324d63127f
+--- /dev/null
++++ b/rust/kernel/sync/spinlock.rs
+@@ -0,0 +1,360 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+    #[test]
-+    fn test_permissions_are_readonly() {
-+        assert!(permissions_are_readonly("0b000000000"));
-+        assert!(permissions_are_readonly("0o000"));
-+        assert!(permissions_are_readonly("000"));
-+        assert!(permissions_are_readonly("0x000"));
++//! A kernel spinlock.
++//!
++//! This module allows Rust code to use the kernel's [`struct spinlock`].
++//!
++//! See <https://www.kernel.org/doc/Documentation/locking/spinlocks.txt>.
 +
-+        assert!(!permissions_are_readonly("0b111111111"));
-+        assert!(!permissions_are_readonly("0o777"));
-+        assert!(!permissions_are_readonly("511"));
-+        assert!(!permissions_are_readonly("0x1ff"));
++use super::{mutex::EmptyGuardContext, Guard, Lock, LockFactory, LockInfo, LockIniter, WriteLock};
++use crate::{bindings, c_types, str::CStr, Opaque, True};
++use core::{cell::UnsafeCell, marker::PhantomPinned, pin::Pin};
 +
-+        assert!(permissions_are_readonly("0o014"));
-+        assert!(permissions_are_readonly("0o015"));
++/// Safely initialises a [`SpinLock`] with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! spinlock_init {
++    ($spinlock:expr, $name:literal) => {
++        $crate::init_with_lockdep!($spinlock, $name)
++    };
++}
 +
-+        assert!(!permissions_are_readonly("0o214"));
-+        assert!(!permissions_are_readonly("0o024"));
-+        assert!(!permissions_are_readonly("0o012"));
++/// Exposes the kernel's [`spinlock_t`]. When multiple CPUs attempt to lock the same spinlock, only
++/// one at a time is allowed to progress, the others will block (spinning) until the spinlock is
++/// unlocked, at which point another CPU will be allowed to make progress.
++///
++/// A [`SpinLock`] must first be initialised with a call to [`SpinLock::init_lock`] before it can be
++/// used. The [`spinlock_init`] macro is provided to automatically assign a new lock class to a
++/// spinlock instance.
++///
++/// There are two ways to acquire the lock:
++///  - [`SpinLock::lock`], which doesn't manage interrupt state, so it should be used in only two
++///    cases: (a) when the caller knows that interrupts are disabled, or (b) when callers never use
++///    it in atomic context (e.g., interrupt handlers), in which case it is ok for interrupts to be
++///    enabled.
++///  - [`SpinLock::lock_irqdisable`], which disables interrupts if they are enabled before
++///    acquiring the lock. When the lock is released, the interrupt state is automatically returned
++///    to its value before [`SpinLock::lock_irqdisable`] was called.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::sync::SpinLock;
++/// # use core::pin::Pin;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// // Function that acquires spinlock without changing interrupt state.
++/// fn lock_example(value: &SpinLock<Example>) {
++///     let mut guard = value.lock();
++///     guard.a = 10;
++///     guard.b = 20;
++/// }
++///
++/// // Function that acquires spinlock and disables interrupts while holding it.
++/// fn lock_irqdisable_example(value: &SpinLock<Example>) {
++///     let mut guard = value.lock_irqdisable();
++///     guard.a = 30;
++///     guard.b = 40;
++/// }
++///
++/// // Initialises a spinlock.
++/// // SAFETY: `spinlock_init` is called below.
++/// let mut value = unsafe { SpinLock::new(Example { a: 1, b: 2 }) };
++/// // SAFETY: We don't move `value`.
++/// kernel::spinlock_init!(unsafe { Pin::new_unchecked(&mut value) }, "value");
++///
++/// // Calls the example functions.
++/// assert_eq!(value.lock().a, 1);
++/// lock_example(&value);
++/// assert_eq!(value.lock().a, 10);
++/// lock_irqdisable_example(&value);
++/// assert_eq!(value.lock().a, 30);
++/// ```
++///
++/// [`spinlock_t`]: ../../../include/linux/spinlock.h
++pub struct SpinLock<T: ?Sized> {
++    spin_lock: Opaque<bindings::spinlock>,
 +
-+        assert!(!permissions_are_readonly("0o315"));
-+        assert!(!permissions_are_readonly("0o065"));
-+        assert!(!permissions_are_readonly("0o017"));
++    /// Spinlocks are architecture-defined. So we conservatively require them to be pinned in case
++    /// some architecture uses self-references now or in the future.
++    _pin: PhantomPinned,
++
++    data: UnsafeCell<T>,
++}
++
++// SAFETY: `SpinLock` can be transferred across thread boundaries iff the data it protects can.
++unsafe impl<T: ?Sized + Send> Send for SpinLock<T> {}
++
++// SAFETY: `SpinLock` serialises the interior mutability it provides, so it is `Sync` as long as the
++// data it protects is `Send`.
++unsafe impl<T: ?Sized + Send> Sync for SpinLock<T> {}
++
++impl<T> SpinLock<T> {
++    /// Constructs a new spinlock.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`SpinLock::init_lock`] before using the spinlock.
++    pub const unsafe fn new(t: T) -> Self {
++        Self {
++            spin_lock: Opaque::uninit(),
++            data: UnsafeCell::new(t),
++            _pin: PhantomPinned,
++        }
++    }
++}
++
++impl<T: ?Sized> SpinLock<T> {
++    /// Locks the spinlock and gives the caller access to the data protected by it. Only one thread
++    /// at a time is allowed to access the protected data.
++    pub fn lock(&self) -> Guard<'_, Self, WriteLock> {
++        let ctx = <Self as Lock<WriteLock>>::lock_noguard(self);
++        // SAFETY: The spinlock was just acquired.
++        unsafe { Guard::new(self, ctx) }
++    }
++
++    /// Locks the spinlock and gives the caller access to the data protected by it. Additionally it
++    /// disables interrupts (if they are enabled).
++    ///
++    /// When the lock in unlocked, the interrupt state (enabled/disabled) is restored.
++    pub fn lock_irqdisable(&self) -> Guard<'_, Self, DisabledInterrupts> {
++        let ctx = <Self as Lock<DisabledInterrupts>>::lock_noguard(self);
++        // SAFETY: The spinlock was just acquired.
++        unsafe { Guard::new(self, ctx) }
++    }
++}
++
++impl<T> LockFactory for SpinLock<T> {
++    type LockedType<U> = SpinLock<U>;
++
++    unsafe fn new_lock<U>(data: U) -> SpinLock<U> {
++        // SAFETY: The safety requirements of `new_lock` also require that `init_lock` be called.
++        unsafe { SpinLock::new(data) }
++    }
++}
++
++impl<T> LockIniter for SpinLock<T> {
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++    ) {
++        unsafe { bindings::__spin_lock_init(self.spin_lock.get(), name.as_char_ptr(), key) };
++    }
++}
++
++/// A type state indicating that interrupts were disabled.
++pub struct DisabledInterrupts;
++impl LockInfo for DisabledInterrupts {
++    type Writable = True;
++}
++
++// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock for SpinLock<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        // SAFETY: `spin_lock` points to valid memory.
++        unsafe { bindings::spin_lock(self.spin_lock.get()) };
++        EmptyGuardContext
++    }
++
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The safety requirements of the function ensure that the spinlock is owned by
++        // the caller.
++        unsafe { bindings::spin_unlock(self.spin_lock.get()) }
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++// SAFETY: The underlying kernel `spinlock_t` object ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock<DisabledInterrupts> for SpinLock<T> {
++    type Inner = T;
++    type GuardContext = c_types::c_ulong;
++
++    fn lock_noguard(&self) -> c_types::c_ulong {
++        // SAFETY: `spin_lock` points to valid memory.
++        unsafe { bindings::spin_lock_irqsave(self.spin_lock.get()) }
++    }
++
++    unsafe fn unlock(&self, ctx: &mut c_types::c_ulong) {
++        // SAFETY: The safety requirements of the function ensure that the spinlock is owned by
++        // the caller.
++        unsafe { bindings::spin_unlock_irqrestore(self.spin_lock.get(), *ctx) }
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++/// Safely initialises a [`RawSpinLock`] with the given name, generating a new lock class.
++#[macro_export]
++macro_rules! rawspinlock_init {
++    ($spinlock:expr, $name:literal) => {
++        $crate::init_with_lockdep!($spinlock, $name)
++    };
++}
++
++/// Exposes the kernel's [`raw_spinlock_t`].
++///
++/// It is very similar to [`SpinLock`], except that it is guaranteed not to sleep even on RT
++/// variants of the kernel.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::sync::RawSpinLock;
++/// # use core::pin::Pin;
++///
++/// struct Example {
++///     a: u32,
++///     b: u32,
++/// }
++///
++/// // Function that acquires the raw spinlock without changing interrupt state.
++/// fn lock_example(value: &RawSpinLock<Example>) {
++///     let mut guard = value.lock();
++///     guard.a = 10;
++///     guard.b = 20;
++/// }
++///
++/// // Function that acquires the raw spinlock and disables interrupts while holding it.
++/// fn lock_irqdisable_example(value: &RawSpinLock<Example>) {
++///     let mut guard = value.lock_irqdisable();
++///     guard.a = 30;
++///     guard.b = 40;
++/// }
++///
++/// // Initialises a raw spinlock and calls the example functions.
++/// fn spinlock_example() {
++///     // SAFETY: `rawspinlock_init` is called below.
++///     let mut value = unsafe { RawSpinLock::new(Example { a: 1, b: 2 }) };
++///     // SAFETY: We don't move `value`.
++///     kernel::rawspinlock_init!(unsafe { Pin::new_unchecked(&mut value) }, "value");
++///     lock_example(&value);
++///     lock_irqdisable_example(&value);
++/// }
++/// ```
++///
++/// [`raw_spinlock_t`]: ../../../include/linux/spinlock.h
++pub struct RawSpinLock<T: ?Sized> {
++    spin_lock: Opaque<bindings::raw_spinlock>,
++
++    // Spinlocks are architecture-defined. So we conservatively require them to be pinned in case
++    // some architecture uses self-references now or in the future.
++    _pin: PhantomPinned,
++
++    data: UnsafeCell<T>,
++}
++
++// SAFETY: `RawSpinLock` can be transferred across thread boundaries iff the data it protects can.
++unsafe impl<T: ?Sized + Send> Send for RawSpinLock<T> {}
++
++// SAFETY: `RawSpinLock` serialises the interior mutability it provides, so it is `Sync` as long as
++// the data it protects is `Send`.
++unsafe impl<T: ?Sized + Send> Sync for RawSpinLock<T> {}
++
++impl<T> RawSpinLock<T> {
++    /// Constructs a new raw spinlock.
++    ///
++    /// # Safety
++    ///
++    /// The caller must call [`RawSpinLock::init_lock`] before using the raw spinlock.
++    pub const unsafe fn new(t: T) -> Self {
++        Self {
++            spin_lock: Opaque::uninit(),
++            data: UnsafeCell::new(t),
++            _pin: PhantomPinned,
++        }
++    }
++}
++
++impl<T: ?Sized> RawSpinLock<T> {
++    /// Locks the raw spinlock and gives the caller access to the data protected by it. Only one
++    /// thread at a time is allowed to access the protected data.
++    pub fn lock(&self) -> Guard<'_, Self, WriteLock> {
++        let ctx = <Self as Lock<WriteLock>>::lock_noguard(self);
++        // SAFETY: The raw spinlock was just acquired.
++        unsafe { Guard::new(self, ctx) }
++    }
++
++    /// Locks the raw spinlock and gives the caller access to the data protected by it.
++    /// Additionally it disables interrupts (if they are enabled).
++    ///
++    /// When the lock in unlocked, the interrupt state (enabled/disabled) is restored.
++    pub fn lock_irqdisable(&self) -> Guard<'_, Self, DisabledInterrupts> {
++        let ctx = <Self as Lock<DisabledInterrupts>>::lock_noguard(self);
++        // SAFETY: The raw spinlock was just acquired.
++        unsafe { Guard::new(self, ctx) }
++    }
++}
++
++impl<T> LockFactory for RawSpinLock<T> {
++    type LockedType<U> = RawSpinLock<U>;
++
++    unsafe fn new_lock<U>(data: U) -> RawSpinLock<U> {
++        // SAFETY: The safety requirements of `new_lock` also require that `init_lock` be called.
++        unsafe { RawSpinLock::new(data) }
++    }
++}
++
++impl<T> LockIniter for RawSpinLock<T> {
++    unsafe fn init_lock(
++        self: Pin<&mut Self>,
++        name: &'static CStr,
++        key: *mut bindings::lock_class_key,
++    ) {
++        unsafe { bindings::_raw_spin_lock_init(self.spin_lock.get(), name.as_char_ptr(), key) };
++    }
++}
++
++// SAFETY: The underlying kernel `raw_spinlock_t` object ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock for RawSpinLock<T> {
++    type Inner = T;
++    type GuardContext = EmptyGuardContext;
++
++    fn lock_noguard(&self) -> EmptyGuardContext {
++        // SAFETY: `spin_lock` points to valid memory.
++        unsafe { bindings::raw_spin_lock(self.spin_lock.get()) };
++        EmptyGuardContext
++    }
++
++    unsafe fn unlock(&self, _: &mut EmptyGuardContext) {
++        // SAFETY: The safety requirements of the function ensure that the raw spinlock is owned by
++        // the caller.
++        unsafe { bindings::raw_spin_unlock(self.spin_lock.get()) };
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
++    }
++}
++
++// SAFETY: The underlying kernel `raw_spinlock_t` object ensures mutual exclusion.
++unsafe impl<T: ?Sized> Lock<DisabledInterrupts> for RawSpinLock<T> {
++    type Inner = T;
++    type GuardContext = c_types::c_ulong;
++
++    fn lock_noguard(&self) -> c_types::c_ulong {
++        // SAFETY: `spin_lock` points to valid memory.
++        unsafe { bindings::raw_spin_lock_irqsave(self.spin_lock.get()) }
++    }
++
++    unsafe fn unlock(&self, ctx: &mut c_types::c_ulong) {
++        // SAFETY: The safety requirements of the function ensure that the raw spinlock is owned by
++        // the caller.
++        unsafe { bindings::raw_spin_unlock_irqrestore(self.spin_lock.get(), *ctx) };
++    }
++
++    fn locked_data(&self) -> &UnsafeCell<T> {
++        &self.data
 +    }
 +}
 -- 

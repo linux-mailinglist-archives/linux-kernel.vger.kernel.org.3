@@ -2,151 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C8851E58C
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D197551E590
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382421AbiEGIYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 04:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S1383672AbiEGI0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 04:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350131AbiEGIYl (ORCPT
+        with ESMTP id S1343649AbiEGI0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 04:24:41 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0527637BE3
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 01:20:54 -0700 (PDT)
-Date:   Sat, 7 May 2022 17:20:45 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651911652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hd5CM1qzcCwDjyFZyVOqcVeGkHR+TKhu4UVTHR6z5lE=;
-        b=B85RkQDctqyRPhdNfTNBgza0C7cEraJry7F8yX+lcnYZNpPX3oXda/1XstNugruF9LECa/
-        xGMXc7tzqX8j7lq/v0iVW//G449MFuNrAuj7KNoVTJ8FfAzIzA0niIWp9xY6oQW0/sk+hn
-        +zOXKtAGiOqaF29M2n7cN7PLgIWLZxA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: Re: [PATCH 3/4] mm/memofy-failure.c: optimize hwpoison_filter
-Message-ID: <20220507082045.GA1716199@u2004>
-References: <20220429142206.294714-1-pizhenwei@bytedance.com>
- <20220429142206.294714-4-pizhenwei@bytedance.com>
- <20220506085920.GC1356094@u2004>
- <3c0e25fb-695d-4a29-6de4-c892f89cea7a@bytedance.com>
- <ac3fc5b9-d09c-5fb6-998d-f7c655d7fa00@redhat.com>
- <a60933f2-ef07-92a3-66cf-071670a03101@bytedance.com>
+        Sat, 7 May 2022 04:26:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC9D515B1
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 01:22:58 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nnFhP-0001e9-Sq; Sat, 07 May 2022 10:21:59 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nnFhC-000rlB-SI; Sat, 07 May 2022 10:21:45 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nnFhA-008825-Qd; Sat, 07 May 2022 10:21:44 +0200
+Date:   Sat, 7 May 2022 10:21:37 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     lizhe <sensor1010@163.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lee.jones@linaro.org, fthain@linux-m68k.org,
+        akrowiak@linux.ibm.com, pasic@linux.ibm.com, jjherne@linux.ibm.com,
+        freude@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, zbr@ioremap.net, perex@perex.cz,
+        tiwai@suse.com, bvanassche@acm.org, dan.j.williams@intel.com,
+        srinivas.kandagatla@linaro.org, wens@csie.org,
+        colin.king@intel.com, hare@suse.de, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] kernel/drivers: Remove redundant driver match function
+Message-ID: <20220507082137.i23gbxkbjwt36ggd@pengutronix.de>
+References: <20220506045952.136290-1-sensor1010@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ycnnmzk4hzrnbozs"
 Content-Disposition: inline
-In-Reply-To: <a60933f2-ef07-92a3-66cf-071670a03101@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220506045952.136290-1-sensor1010@163.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 08:28:05AM +0800, zhenwei pi wrote:
-> 
-> On 5/7/22 00:28, David Hildenbrand wrote:
-> > On 06.05.22 15:38, zhenwei pi wrote:
-> > > 
-> > > 
-> > > On 5/6/22 16:59, Naoya Horiguchi wrote:
-> > > > On Fri, Apr 29, 2022 at 10:22:05PM +0800, zhenwei pi wrote:
-> > > > > In the memory failure procedure, hwpoison_filter has higher priority,
-> > > > > if memory_filter() filters the error event, there is no need to do
-> > > > > the further work.
-> > > > 
-> > > > Could you clarify what problem you are trying to solve (what does
-> > > > "optimize" mean in this context or what is the benefit)?
-> > > > 
-> > > 
-> > > OK. The background of this work:
-> > > As well known, the memory failure mechanism handles memory corrupted
-> > > event, and try to send SIGBUS to the user process which uses this
-> > > corrupted page.
-> > > 
-> > > For the virtualization case, QEMU catches SIGBUS and tries to inject MCE
-> > > into the guest, and the guest handles memory failure again. Thus the
-> > > guest gets the minimal effect from hardware memory corruption.
-> > > 
-> > > The further step I'm working on:
-> > > 1, try to modify code to decrease poisoned pages in a single place
-> > > (mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
 
-This is fine to me.
+--ycnnmzk4hzrnbozs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > 
-> > > 2, try to use page_handle_poison() to handle SetPageHWPoison() and
-> > > num_poisoned_pages_inc() together. It would be best to call
-> > > num_poisoned_pages_inc() in a single place too. I'm not sure if this is
-> > > possible or not, please correct me if I misunderstand.
+Hello,
 
-SetPageHWPoison() can be cancelled in memory_failure(), so simply bundling
-it with num_poisoned_pages_inc() might not be optimal.  I think that
-action_result() is supposed to be called when memory error handling is
-effective (not filtered, not cancelled). So moving num_poisoned_pages_inc()
-(and notification code in your plan) into this function might be good.
+On Thu, May 05, 2022 at 09:59:52PM -0700, lizhe wrote:
+> If there is no driver match function, the driver core assumes that each
+> candidate pair (driver, device) matches, see driver_match_device().
 
-> > > 
-> > > 3, introduce memory failure notifier list in memory-failure.c: notify
-> > > the corrupted PFN to someone who registers this list.
-> > > If I can complete [1] and [2] part, [3] will be quite easy(just call
-> > > notifier list after increasing poisoned page).
-> > > 
-> > > 4, introduce memory recover VQ for memory balloon device, and registers
-> > > memory failure notifier list. During the guest kernel handles memory
-> > > failure, balloon device gets notified by memory failure notifier list,
-> > > and tells the host to recover the corrupted PFN(GPA) by the new VQ.
-> > 
-> > Most probably you might want to do that asynchronously, and once the
-> > callback succeeds, un-poison the page.
-> > 
-> Yes!
-> 
-> > > 
-> > > 5, host side remaps the corrupted page(HVA), and tells the guest side to
-> > > unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA)
-> > > dynamically.
-> > 
-> > I think QEMU already does that during reboots. Now it would be triggered
-> > by the guest for individual pages.
-> > 
-> Yes, currently QEMU supports to un-poison corrupted pages during
-> reset/reboot. We can reuse some code to do the work in this case, this
-> allows a VM to fix corrupted pages as soon as possible(also no need to
-> reset/reboot).
+I wonder who is supposed to apply this patch. Either it should be split
+by file and go in via the respective maintainers, or it goes in via
+Greg's tree? I added Greg to To: for him to chime in.
 
-So this finally allows to replace broken page mapped to guest with
-a healthy page without rebooting the guest. That sounds helpful.
+Best regards
+Uwe
+=20
+> Signed-off-by: lizhe <sensor1010@163.com>
+> ---
+>  drivers/mfd/mcp-core.c             |  6 ------
+>  drivers/nubus/bus.c                |  6 ------
+>  drivers/s390/crypto/vfio_ap_drv.c  |  6 ------
+>  drivers/scsi/scsi_debug.c          |  7 -------
+>  drivers/target/loopback/tcm_loop.c |  7 -------
+>  drivers/w1/w1.c                    |  6 ------
+>  sound/ac97_bus.c                   | 11 -----------
+>  7 files changed, 49 deletions(-)
+>=20
+> diff --git a/drivers/mfd/mcp-core.c b/drivers/mfd/mcp-core.c
+> index 2fa592c37c6f..281a9369f2b3 100644
+> --- a/drivers/mfd/mcp-core.c
+> +++ b/drivers/mfd/mcp-core.c
+> @@ -20,11 +20,6 @@
+>  #define to_mcp(d)		container_of(d, struct mcp, attached_device)
+>  #define to_mcp_driver(d)	container_of(d, struct mcp_driver, drv)
+> =20
+> -static int mcp_bus_match(struct device *dev, struct device_driver *drv)
+> -{
+> -	return 1;
+> -}
+> -
+>  static int mcp_bus_probe(struct device *dev)
+>  {
+>  	struct mcp *mcp =3D to_mcp(dev);
+> @@ -43,7 +38,6 @@ static void mcp_bus_remove(struct device *dev)
+> =20
+>  static struct bus_type mcp_bus_type =3D {
+>  	.name		=3D "mcp",
+> -	.match		=3D mcp_bus_match,
+>  	.probe		=3D mcp_bus_probe,
+>  	.remove		=3D mcp_bus_remove,
+>  };
+> diff --git a/drivers/nubus/bus.c b/drivers/nubus/bus.c
+> index 17fad660032c..72921e4f35f6 100644
+> --- a/drivers/nubus/bus.c
+> +++ b/drivers/nubus/bus.c
+> @@ -14,11 +14,6 @@
+>  #define to_nubus_board(d)       container_of(d, struct nubus_board, dev)
+>  #define to_nubus_driver(d)      container_of(d, struct nubus_driver, dri=
+ver)
+> =20
+> -static int nubus_bus_match(struct device *dev, struct device_driver *dri=
+ver)
+> -{
+> -	return 1;
+> -}
+> -
+>  static int nubus_device_probe(struct device *dev)
+>  {
+>  	struct nubus_driver *ndrv =3D to_nubus_driver(dev->driver);
+> @@ -39,7 +34,6 @@ static void nubus_device_remove(struct device *dev)
+> =20
+>  struct bus_type nubus_bus_type =3D {
+>  	.name		=3D "nubus",
+> -	.match		=3D nubus_bus_match,
+>  	.probe		=3D nubus_device_probe,
+>  	.remove		=3D nubus_device_remove,
+>  };
+> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio=
+_ap_drv.c
+> index 29ebd54f8919..0a662c451f2a 100644
+> --- a/drivers/s390/crypto/vfio_ap_drv.c
+> +++ b/drivers/s390/crypto/vfio_ap_drv.c
+> @@ -172,14 +172,8 @@ static void vfio_ap_matrix_dev_release(struct device=
+ *dev)
+>  	kfree(matrix_dev);
+>  }
+> =20
+> -static int matrix_bus_match(struct device *dev, struct device_driver *dr=
+v)
+> -{
+> -	return 1;
+> -}
+> -
+>  static struct bus_type matrix_bus =3D {
+>  	.name =3D "matrix",
+> -	.match =3D &matrix_bus_match,
+>  };
+> =20
+>  static struct device_driver matrix_driver =3D {
+> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+> index 592a290e6cfa..8107489b36e8 100644
+> --- a/drivers/scsi/scsi_debug.c
+> +++ b/drivers/scsi/scsi_debug.c
+> @@ -7844,15 +7844,8 @@ static void sdebug_driver_remove(struct device *de=
+v)
+>  	scsi_host_put(sdbg_host->shost);
+>  }
+> =20
+> -static int pseudo_lld_bus_match(struct device *dev,
+> -				struct device_driver *dev_driver)
+> -{
+> -	return 1;
+> -}
+> -
+>  static struct bus_type pseudo_lld_bus =3D {
+>  	.name =3D "pseudo",
+> -	.match =3D pseudo_lld_bus_match,
+>  	.probe =3D sdebug_driver_probe,
+>  	.remove =3D sdebug_driver_remove,
+>  	.drv_groups =3D sdebug_drv_groups,
+> diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback=
+/tcm_loop.c
+> index 4407b56aa6d1..eeb63deff94f 100644
+> --- a/drivers/target/loopback/tcm_loop.c
+> +++ b/drivers/target/loopback/tcm_loop.c
+> @@ -83,15 +83,8 @@ static int tcm_loop_show_info(struct seq_file *m, stru=
+ct Scsi_Host *host)
+>  static int tcm_loop_driver_probe(struct device *);
+>  static void tcm_loop_driver_remove(struct device *);
+> =20
+> -static int pseudo_lld_bus_match(struct device *dev,
+> -				struct device_driver *dev_driver)
+> -{
+> -	return 1;
+> -}
+> -
+>  static struct bus_type tcm_loop_lld_bus =3D {
+>  	.name			=3D "tcm_loop_bus",
+> -	.match			=3D pseudo_lld_bus_match,
+>  	.probe			=3D tcm_loop_driver_probe,
+>  	.remove			=3D tcm_loop_driver_remove,
+>  };
+> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+> index f2ae2e563dc5..a6ecfa1b3417 100644
+> --- a/drivers/w1/w1.c
+> +++ b/drivers/w1/w1.c
+> @@ -58,11 +58,6 @@ MODULE_PARM_DESC(slave_ttl,
+>  DEFINE_MUTEX(w1_mlock);
+>  LIST_HEAD(w1_masters);
+> =20
+> -static int w1_master_match(struct device *dev, struct device_driver *drv)
+> -{
+> -	return 1;
+> -}
+> -
+>  static int w1_master_probe(struct device *dev)
+>  {
+>  	return -ENODEV;
+> @@ -174,7 +169,6 @@ static int w1_uevent(struct device *dev, struct kobj_=
+uevent_env *env);
+> =20
+>  static struct bus_type w1_bus_type =3D {
+>  	.name =3D "w1",
+> -	.match =3D w1_master_match,
+>  	.uevent =3D w1_uevent,
+>  };
+> =20
+> diff --git a/sound/ac97_bus.c b/sound/ac97_bus.c
+> index b4685c53ff11..c7aee8c42c55 100644
+> --- a/sound/ac97_bus.c
+> +++ b/sound/ac97_bus.c
+> @@ -75,19 +75,8 @@ int snd_ac97_reset(struct snd_ac97 *ac97, bool try_war=
+m, unsigned int id,
+>  }
+>  EXPORT_SYMBOL_GPL(snd_ac97_reset);
+> =20
+> -/*
+> - * Let drivers decide whether they want to support given codec from their
+> - * probe method. Drivers have direct access to the struct snd_ac97
+> - * structure and may  decide based on the id field amongst other things.
+> - */
+> -static int ac97_bus_match(struct device *dev, struct device_driver *drv)
+> -{
+> -	return 1;
+> -}
+> -
+>  struct bus_type ac97_bus_type =3D {
+>  	.name		=3D "ac97",
+> -	.match		=3D ac97_bus_match,
+>  };
+> =20
+>  static int __init ac97_bus_init(void)
+> --=20
+> 2.25.1
+>=20
+>=20
 
-Thanks,
-Naoya Horiguchi
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> 
-> > > 
-> > > Because [4] and [5] are related to balloon device, also CC Michael,
-> > > David and Jason.
-> > 
-> > Doesn't sound too crazy for me, although it's a shame that we always
-> > have to use virtio-balloon for such fairly balloon-unrelated things.
-> > 
-> Thanks!
-> 
-> -- 
-> zhenwei pi
+--ycnnmzk4hzrnbozs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJ2LA0ACgkQwfwUeK3K
+7AmOdwf/dC+dAM+BltGJiDFPWGLkkBGAxLj9besnCp+NoCMvoCM45EG1XlH6ATBe
+5C06EJYaUBC4IUD8hZBtVMkru8YOtiZji6v1TY6o8XcCoG1AZeYnw9KzNDN42QZO
+TnNQaenEo7hNiLsxTa3r4K1Zbab8SbmGkKhnN6FSoCyl1ICbxTM9E9j4Y3kcgDn5
+pv22/aezYEAHd7GoYi6Ql0DPq7why9QVrP/ReIhOwfnMEOJ4f8Ftd/W6gMUY+75F
+TW8hr0G9bGs9HXK353duMOiQkWg5JVZAgZwj1JrNdNeMgY0ntXf3UA/Fldfnvnkp
+KHhDVCXStiC6qUIR1yrghlB1rtKmpQ==
+=+bph
+-----END PGP SIGNATURE-----
+
+--ycnnmzk4hzrnbozs--

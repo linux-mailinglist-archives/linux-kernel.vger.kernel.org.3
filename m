@@ -2,138 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97E951E74E
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359BF51E756
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446467AbiEGNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S1446483AbiEGNS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446466AbiEGNQt (ORCPT
+        with ESMTP id S1357403AbiEGNSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:16:49 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4984666F
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:13:02 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so9250781pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 06:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Zjch41DGKwtjob6zJCWThmkugQGSUhNZeUMcVYURjQw=;
-        b=hz0KK1bSS2F4PJnEMw/jSlYYG/MTbmWhLmJYP2HDRg7s/nypCnOGJV7The9LID8yBG
-         K15VWmepZN4FyUF6e+uUHCqveUMibPb29QMlLnohAuF+XfFzgaW+OWk/KGy7ceGABFkJ
-         rQi2o4Z6OY3RsXskX5KyU4twCnVXsiTFSRjQgY8Hml/nwpUXrrjs8KMYK0D/isbwDD3I
-         wGDplUg9UgdcYOYQEC1ENq/GCcPxCZOOJ4c8wfL68RFkwBOHkLtRbBTo9a4NqV9QX5i3
-         10PdsNaDlXpnecgzFzyFID8/JZAphd3MacwyLiCeobiKIGLCj/BnsMpeU7P5BKmAXzYI
-         IrIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Zjch41DGKwtjob6zJCWThmkugQGSUhNZeUMcVYURjQw=;
-        b=KtdZwAvXWM1HSR50XbgSqtZi+jUr/D082i16Iolen5cLoM4Sxwl2gILaAggOg+Hj+t
-         35NoM0Y0KanOdhTnNYN2t6oRpQKghfVBqdwvlwUWn2HENFGDqdiZgXsViRYm/t3aROs5
-         5Ws9Ryr53iYEL4GNAbA0y/VuPtZO0VOhQY+XQOQULutz6Qr2sfMggNjIgCV8bm14Olo5
-         IddFgtTGE3NPT9EifEDHAcHnbUeGzkHBAAB8xd0wtppVi0ESzvgN/Tm+a/bnzsxkmDz3
-         Iy7SJEyv7u7i8xlW+4HqccCxL+eTq7wgjZG1EAJCMTa/REIUpPDb+BLaRJ8g1JjBR0Uy
-         YweA==
-X-Gm-Message-State: AOAM531p9jhs8wm2DSioz98CL15ooM+x4G5N5WPdorfZSU0aT3r8ISdR
-        sXn+9F01+8VO/pH6jCOD0T0=
-X-Google-Smtp-Source: ABdhPJwFhmb5L9Rcxt4JFbUgeRj/jPEvyLFfYyz8Z1mU/mGvJCEOtZDuMRA0U29mYx59cdH8uJlImA==
-X-Received: by 2002:a17:90b:1a88:b0:1dc:8e84:9133 with SMTP id ng8-20020a17090b1a8800b001dc8e849133mr9397979pjb.231.1651929182627;
-        Sat, 07 May 2022 06:13:02 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id i191-20020a639dc8000000b003c14af50620sm571418pgd.56.2022.05.07.06.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 06:13:02 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH v2 2/2] kbuild: call check-atomics.sh only if prerequisites change
-Date:   Sat,  7 May 2022 22:11:45 +0900
-Message-Id: <20220507131146.834810-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220507131146.834810-1-mailhol.vincent@wanadoo.fr>
-References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
- <20220507131146.834810-1-mailhol.vincent@wanadoo.fr>
+        Sat, 7 May 2022 09:18:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6906A4666F;
+        Sat,  7 May 2022 06:14:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B00BB80833;
+        Sat,  7 May 2022 13:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE553C385A9;
+        Sat,  7 May 2022 13:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651929274;
+        bh=9uTgmNAvlTbzN50Cu5IwNYqzF7atwTKQUljfe2kjZUc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NYZWIxr7bdtZV5TCcT29L1SoUFnfl0Drt2zM3YTpcRSmzMXOH2zT2baV4RKv/+juu
+         BeDMU08ud7wEyHs+PdV76d+h0FPoWNnkiKsYboYXuD0asYcJpn1MYIybfLSkxaveRD
+         uQQFXFWzr9gQFnG/xPzoBv9obxrCScP/SadNv3PCPo2G03s6CjQbtW7kU30vam9nvR
+         Gf9YIXbw31u1k0y0AlA3If+Fygh/BycEfiWjNZ4jYfFCmNDyTDxL258IRkv/OGg8DJ
+         x/as86QX/Y3tXnRDq/97ZySrx3YSbvxuVWbYl92I7gnkngH5rRb0u87EFe1JeEtcqb
+         h3B3YManvPOXw==
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso105856877b3.5;
+        Sat, 07 May 2022 06:14:34 -0700 (PDT)
+X-Gm-Message-State: AOAM5324RKs/khNVpfgto0nIU6Tw7t5R03GZYazMMiGH6m4oKC3eUQGE
+        4aM8eXq+3QcHFlQ8KhlBeB5lY/Q4ExXiQrTN8lU=
+X-Google-Smtp-Source: ABdhPJxbpJWGFV6icMBoxijo70JK/8WaaDtoVIOoN93PiTf8ADZqw87+hT03oX7HblceCPV66kg3inBF049Gp/XoA2E=
+X-Received: by 2002:a81:1697:0:b0:2fa:32f9:78c8 with SMTP id
+ 145-20020a811697000000b002fa32f978c8mr6670913yww.135.1651929273816; Sat, 07
+ May 2022 06:14:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220505195342.GA509942@bhelgaas> <22bec167-241f-2cbe-829f-a3f65e40e71@linux-m68k.org>
+ <105ccec439f709846e82b69cb854ac825d7a6a49.camel@linux.ibm.com> <7dfa7578-039-e132-c573-ad89bd3215@linux-m68k.org>
+In-Reply-To: <7dfa7578-039-e132-c573-ad89bd3215@linux-m68k.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 7 May 2022 15:14:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3tds8O+Gg2nF3MfrVVcmtLbtdQ2TnCJaDYz28cyhhWkg@mail.gmail.com>
+Message-ID: <CAK8P3a3tds8O+Gg2nF3MfrVVcmtLbtdQ2TnCJaDYz28cyhhWkg@mail.gmail.com>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
+ as necessary
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-check-atomics.sh is executed unconditionally. Most developers will not
-modify the files being checked by this script and thus do not need to
-execute it again for each iterative make.
+On Sat, May 7, 2022 at 2:01 AM Finn Thain <fthain@linux-m68k.org> wrote:
+> On Fri, 6 May 2022, Niklas Schnelle wrote:
+> > On Fri, 2022-05-06 at 19:12 +1000, Finn Thain wrote:
+> > > On Thu, 5 May 2022, Bjorn Helgaas wrote:
+> > > >
+> > > > I mooted a s390 inb() implementation like "return ~0" because that's
+> > > > what happens on most arches when there's no device to respond to the
+> > > > inb().
+> > > >
+> > > > The HAS_IOPORT dependencies are fairly ugly IMHO, and they clutter
+> > > > drivers that use I/O ports in some cases but not others.  But maybe
+> > > > it's the most practical way.
+> > > >
+> > >
+> > > Do you mean, "the most practical way to avoid a compiler warning on
+> > > s390"? What about "#pragma GCC diagnostic ignored"?
+> >
+> > This actually happens with clang.
+>
+> That suggests a clang bug to me. If you believe GCC should behave like
+> clang, then I guess the pragma above really is the one you want. If you
+> somehow feel that the kernel should cater to gcc and clang even where they
+> disagree then you would have to use "#pragma clang diagnostic ignored".
 
-We first add an additional dependency to include/linux/atomic/* to
-make sure that the script gets executed again if the headers are
-modified. We then use the if_change macro instead of cmd. c.f. [1] and
-create the dot file scripts/atomic/.check-atomics which is used for
-the target timestamp. Finally, the dot file is added to the
-CLEAN_FILES target.
+I don't see how you can blame the compiler for this. On architectures
+with a zero PCI_IOBASE, an inb(0x2f8) literally becomes
 
-[1] https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#command-change-detection
+        var = *(u8*)((NULL + 0x2f8);
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- Kbuild   | 7 ++++---
- Makefile | 3 ++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+If you run a driver that does this, the kernel gets a page fault for
+the NULL page
+and reports an Oops. clang tells you 'warning: performing pointer
+arithmetic on a null pointer has undefined behavior', which is not exactly
+spot on, but close enough to warn you that you probably shouldn't do this. gcc
+doesn't warn here, but it does warn about an array out-of-bounds access when
+you pass such a pointer into memcpy or another string function.
 
-diff --git a/Kbuild b/Kbuild
-index fa441b98c9f6..c3cb76ebcbaf 100644
---- a/Kbuild
-+++ b/Kbuild
-@@ -50,10 +50,11 @@ missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
- #####
- # Check atomic headers are up-to-date
- 
--always-y += old-atomics
-+always-y += scripts/atomic/.check-atomics
- 
- quiet_cmd_atomics = CALL    $<
-       cmd_atomics = $(CONFIG_SHELL) $<
- 
--old-atomics: scripts/atomic/check-atomics.sh FORCE
--	$(call cmd,atomics)
-+scripts/atomic/.check-atomics: scripts/atomic/check-atomics.sh $(wildcard include/linux/atomic/*) FORCE
-+	$(call if_changed,atomics)
-+	@touch $@
-diff --git a/Makefile b/Makefile
-index 9a820c525b86..9e815c8bb0b6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1483,7 +1483,8 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json .thinlto-cache
-+	       compile_commands.json .thinlto-cache \
-+	       scripts/atomic/.check-atomics
- 
- # Directories & files removed with 'make mrproper'
- MRPROPER_FILES += include/config include/generated          \
--- 
-2.35.1
+> > Apart from that, I think this would also fall under the same argument as
+> > the original patch Linus unpulled. We would just paint over someting
+> > that we know at compile time won't work:
+> >
+> > https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+> >
+>
+> I wasn't advocating adding any warnings.
+>
+> If you know at compile time that a driver won't work, the usual solution
+> is scripts/config -d CONFIG_SOME_UNDESIRED_DRIVER. Why is that no
+> longer appropriate for drivers that use IO ports?
 
+This was never an option, we rely on 'make allmodconfig' to build without
+warnings on all architectures for finding regressions. Any driver that depends
+on architecture specific interfaces must not get selected on architectures that
+don't have those interfaces.
+
+         Arnd

@@ -2,148 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F59D51E6FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9A751E6FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384835AbiEGMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 08:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
+        id S1384881AbiEGMnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 08:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbiEGMmH (ORCPT
+        with ESMTP id S1345206AbiEGMnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 08:42:07 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B3223BE1;
-        Sat,  7 May 2022 05:38:21 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n18so9835106plg.5;
-        Sat, 07 May 2022 05:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s1ziljaqBG9DbdVUX+jIB0sj5EqtCAUFUXV/TuT96cU=;
-        b=XaGooD6TPcr6WoBitXeF6igCHre+X1N80TWdsCPoRnvl4pWIhJhqRsyqnmRmEiHAxe
-         KQdAFiieqzUHqur1C8R70qpgRHPS1UYvvgSqdRA0O4Wq2DTjfwB4ljbrthnaugYiDbAn
-         Y7XUSfUCkEjDV6wTIfxFYjp9ZldmbI4Tsx8lCec+MFiP8LRcoguaPJrDY8O/wk20/yub
-         Ib07T1nlUM7lSV5C31za0uOjsow8kuA6Ra9p1tUrZGojqpjg25NeTSgR6SO1Eos6774y
-         JoA1WLUV6+SFIrhliAvay896HypO3v4L0yIEJUdBQ3HwTs8O6kKmUJEZKNHgJpejj/I8
-         d+TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s1ziljaqBG9DbdVUX+jIB0sj5EqtCAUFUXV/TuT96cU=;
-        b=HB1UjLXG8g6zZBvo6cr95Zq1Rbzhzx5hZ7tT7j6trM6tgUA64UaQI1HF/VBljqtkZ4
-         +2MhaS+hGhq60gKw7BevckM+DOE5YK5ESvYbqyZQeV4AIl9h+JGqMusoXHNXLeFfJ9Z0
-         zLvp0hZ8WZe5l7qbylaeOQTw600Cd6KTG3e1S8wEdq+Zy1D0w7158Vx59zeGsJ3ydt76
-         IrYpuCjcBuF4I6fR9oDjzI0tCJTumKPItAwxbLSuvt2oUqbrTN1n+8ZRYUXWtWgMWRWi
-         5rh2/sbtrKkjEkj+26l1s1uCIK1a6ZydhkZ0lcIMwBzKC2LXCIP407Kd21r6Asmme/c4
-         41mA==
-X-Gm-Message-State: AOAM532zbAhYFk12CqBYYAKwfBHWltlvwlOcKoDDAWR7O5Ahyacw3bwY
-        jcuPBY1BOA+Vx0WFDQ8FQHf2anAHi6uILQ==
-X-Google-Smtp-Source: ABdhPJx5cZ2S+udwQqwtb8Ay9NCwr/4PeqtxP/1LucuCu//MsTQhM/O2WWdGwAlJXD2oWk7vqi2cgw==
-X-Received: by 2002:a17:90b:3442:b0:1d9:8af8:2913 with SMTP id lj2-20020a17090b344200b001d98af82913mr17664548pjb.199.1651927100511;
-        Sat, 07 May 2022 05:38:20 -0700 (PDT)
-Received: from HOWEYXU-MB0.tencent.com ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id d3-20020aa797a3000000b0050dc762816bsm5208178pfq.69.2022.05.07.05.38.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 07 May 2022 05:38:19 -0700 (PDT)
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/4] fast poll multishot mode
-Date:   Sat,  7 May 2022 20:38:24 +0800
-Message-Id: <20220507123828.76985-1-haoxu.linux@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Sat, 7 May 2022 08:43:42 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D46A4475C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 05:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651927195; x=1683463195;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=YmK2sF5H1jxPtXJwdIL8ZX3BDZKl/eFl1duDkPG7Phk=;
+  b=a2+cd/3hf6fYkmQ3yEhZszdmXHOljVOmTGj2gkF/xiXk+E2SZlt6ntla
+   NFfGDbcLm1chFCeYmogaCJ//JnDRti4IGC60xRxlc23PA1+0YB18ESBsd
+   TbVbKZEuMwPLTf/WLHvjLkulJuBo/TlcIYQYNsXQY9wyxnYAg/qCl2oIY
+   P0MfqVs22BUNw0UnPZJ3+lcAL0R+8CK0l+MZVyiQ/w58jQwHjqquOTjIm
+   KBSeMpopjwCRWCBl/V7DBmAm6D4TNX8KXrlzOSAflfS1gUv3eAlnnKkG5
+   nt+Acihiq/bWKU1y0ge+Q/SDuF3yY0c3t9O4jsuejwHzO8wixnSPfkbAc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="249239598"
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="249239598"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 05:39:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
+   d="scan'208";a="586492100"
+Received: from zhuangxi-mobl.ccr.corp.intel.com (HELO [10.255.30.94]) ([10.255.30.94])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 05:39:51 -0700
+Message-ID: <86fd8977-1134-02d2-d9e3-19ce58cb9de4@linux.intel.com>
+Date:   Sat, 7 May 2022 20:39:49 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5 04/12] iommu/sva: Basic data structures for SVA
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
+ <20220502014842.991097-5-baolu.lu@linux.intel.com> <YnFv0ps0Ad8v+7uH@myrica>
+ <d490e542-140c-58c3-bb11-9990795272b1@linux.intel.com>
+ <669fb111-9821-aadc-acbf-de42bc551fc4@linux.intel.com>
+In-Reply-To: <669fb111-9821-aadc-acbf-de42bc551fc4@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let multishot support multishot mode, currently only add accept as its
-first comsumer.
-theoretical analysis:
-  1) when connections come in fast
-    - singleshot:
-              add accept sqe(userpsace) --> accept inline
-                              ^                 |
-                              |-----------------|
-    - multishot:
-             add accept sqe(userspace) --> accept inline
-                                              ^     |
-                                              |--*--|
+On 2022/5/7 16:32, Baolu Lu wrote:
+> Hi Jean,
+> 
+> On 2022/5/5 14:42, Baolu Lu wrote:
+>> On 2022/5/4 02:09, Jean-Philippe Brucker wrote:
+>>> On Mon, May 02, 2022 at 09:48:34AM +0800, Lu Baolu wrote:
+>>>> Use below data structures for SVA implementation in the IOMMU core:
+>>>>
+>>>> - struct iommu_sva_ioas
+>>>>    Represent the I/O address space shared with an application CPU 
+>>>> address
+>>>>    space. This structure has a 1:1 relationship with an mm_struct. It
+>>>>    grabs a "mm->mm_count" refcount during creation and drop it on 
+>>>> release.
+>>>
+>>> Do we actually need this structure?  At the moment it only keeps 
+>>> track of
+>>> bonds, which we can move to struct dev_iommu. Replacing it by a mm 
+>>> pointer
+>>> in struct iommu_domain simplifies the driver and seems to work
+>>
+>> Fair enough.
+>>
+>> +struct iommu_sva_ioas {
+>> +    struct mm_struct *mm;
+>> +    ioasid_t pasid;
+>> +
+>> +    /* Counter of domains attached to this ioas. */
+>> +    refcount_t users;
+>> +
+>> +    /* All bindings are linked here. */
+>> +    struct list_head bonds;
+>> +};
+>>
+>> By moving @mm to struct iommu_domain and @bonds to struct dev_iommu, the
+>> code looks simpler. The mm, sva domain and per-device dev_iommu are
+>> guaranteed to be valid during bind() and unbind().
+>>
+>> Will head this direction in the next version.
+> 
+> I'm trying to implement this idea in real code. It seems that we need
+> additional fields in struct iommu_domain to track which devices the mm
+> was bound to. It doesn't simplify the code much. Any thoughts?
 
-    we do accept repeatedly in * place until get EAGAIN
+Sorry, Jean. This has been discussed. We don't need to share sva domain
+among devices at this stage. It's not a big issue to sva domain as it's
+a dumb domain which has no support for map()/unmap() and the cache
+manipulation.
 
-  2) when connections come in at a low pressure
-    similar thing like 1), we reduce a lot of userspace-kernel context
-    switch and useless vfs_poll()
+I will still head this direction. Sorry for the noise.
 
-
-tests:
-Did some tests, which goes in this way:
-
-  server    client(multiple)
-  accept    connect
-  read      write
-  write     read
-  close     close
-
-Basically, raise up a number of clients(on same machine with server) to
-connect to the server, and then write some data to it, the server will
-write those data back to the client after it receives them, and then
-close the connection after write return. Then the client will read the
-data and then close the connection. Here I test 10000 clients connect
-one server, data size 128 bytes. And each client has a go routine for
-it, so they come to the server in short time.
-test 20 times before/after this patchset, time spent:(unit cycle, which
-is the return value of clock())
-before:
-  1930136+1940725+1907981+1947601+1923812+1928226+1911087+1905897+1941075
-  +1934374+1906614+1912504+1949110+1908790+1909951+1941672+1969525+1934984
-  +1934226+1914385)/20.0 = 1927633.75
-after:
-  1858905+1917104+1895455+1963963+1892706+1889208+1874175+1904753+1874112
-  +1874985+1882706+1884642+1864694+1906508+1916150+1924250+1869060+1889506
-  +1871324+1940803)/20.0 = 1894750.45
-
-(1927633.75 - 1894750.45) / 1927633.75 = 1.65%
-
-
-A liburing test is here:
-https://github.com/HowHsu/liburing/blob/multishot_accept/test/accept.c
-
-v1->v2:
- - re-implement it against the reworked poll code
-
-v2->v3:
- - fold in code tweak and clean from Jens
- - use io_issue_sqe rather than io_queue_sqe, since the former one
-   return the internal error back which makes more sense
- - remove io_poll_clean() and its friends since they are not needed
-
-
-Hao Xu (4):
-  io_uring: add IORING_ACCEPT_MULTISHOT for accept
-  io_uring: add REQ_F_APOLL_MULTISHOT for requests
-  io_uring: let fast poll support multishot
-  io_uring: implement multishot mode for accept
-
- fs/io_uring.c                 | 94 +++++++++++++++++++++++++++--------
- include/uapi/linux/io_uring.h |  5 ++
- 2 files changed, 79 insertions(+), 20 deletions(-)
-
-
-base-commit: 0a194603ba7ee67b4e39ec0ee5cda70a356ea618
--- 
-2.36.0
+Best regards,
+baolu
 

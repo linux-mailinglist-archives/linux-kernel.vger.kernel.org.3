@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAC051E9E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BA351E9FD
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 22:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387266AbiEGUdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 16:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S1447081AbiEGUeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 16:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387194AbiEGUdn (ORCPT
+        with ESMTP id S234125AbiEGUdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 16:33:43 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B1BC99;
-        Sat,  7 May 2022 13:29:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id ba17so12163189edb.5;
-        Sat, 07 May 2022 13:29:55 -0700 (PDT)
+        Sat, 7 May 2022 16:33:44 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BB8BC95;
+        Sat,  7 May 2022 13:29:57 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id m20so20105066ejj.10;
+        Sat, 07 May 2022 13:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MVsuzFv9nImFGpDrqebroDd7vxQ+CQ3cbUIBolPZTpE=;
-        b=nTyJjN7cBhOrq/T0R7DQ/2HurtjwJuJVm0LgIkFe3g4pfl7QfeN9zuSG5X93bRihvR
-         LL5gfjRsN5YuqsY0o2ii19nyU24EOZEtx7dWBuudoD9QhO98f28D7c+D+fXzsFW2fElE
-         DEw3pnMzyg+LHerAncpuURMT8DmJzofg7YveSicDfqHD76JsdY0gSKAQjrWfO3Y994NZ
-         Doj/IlWRLvb64F8qHj2914ltUZ2jVtbk8fWixbLTOP0Oa/xGO973vgrFqWfBwmkwUyL+
-         vF6nIjS89dagMk/a6xWHaS7R+3UCnShL/qhU6yPMwkQuJcOYpTSTCRPdUsGUXPeHlpnU
-         Xu3A==
+        bh=55DAttT0wioJdsCUuVQUMBFRWSPkGrAf7r5fkDcJSFU=;
+        b=QotIbjq4oy5plz50K8j0OCUcC6S5yDKTI3314ifmsZpThiEzZqR7iShyXlCQtaCthX
+         AqEH8kEz8TqpPDe0IIXWRhd/P9Wmj7GS8tmaj2ZqdELTiqO2AL1v4/dydN6j6x2JMLSY
+         l9sx/LYT/Rc4Gh66RntAQsmhWAVN6VZyqCC5Q2C3vpalHCLVvf/GLSryrWAagzUjEkhP
+         +YruJuAYv7V1/P8LQgm14pj8O4OPHt8ytKC31NoQBQZeRGN+rcYC9GIW/yXPPF6zxE+a
+         TfWXLgXlsD4HXJ/HyUPBBgI2Ksje7mz8fXJ+8MrWdUQKAUllUzkF+0xZ3jmc7Ypd/LKf
+         /FJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MVsuzFv9nImFGpDrqebroDd7vxQ+CQ3cbUIBolPZTpE=;
-        b=7/hz6J+NIeZOPBkSUcc3mCsc+ZIh/dOohdcA9nvjpbpn2+jEAtzRAg0K8th8X+3bIQ
-         eIL0U4ywHicaJGC+gDASJt/YRT35snTZDVb9IAIIG3GNcus02oyPZ0DMbDOh8bpp9PGS
-         6x1gkAxRTMpWkm4bjtADpQNHBNL4dq429u9Yf9cOA4ZsSvDd8EAg0e4r0Ev5wUdG9CxL
-         hNrivbSWLr3y+8Jqf6JS+hzXzU/tvLVDs6StgqR8LLP63jN/veZ5APInbnVPc1UA3yy3
-         epEh54KQ+VDe+PD4YVS6ZVJtDUnxJPavPYijzecyDDQ0sZc7k1pKdPyHgDItiHtjt3CH
-         tbOQ==
-X-Gm-Message-State: AOAM530CnWr0u8jD4cAZ2m9ujWMNGA61JyICPHDIprFvuwQIUjBUhdvm
-        prAFip+unYx0hJLtA3rTw7BAiuQLfo+baA==
-X-Google-Smtp-Source: ABdhPJxHQU0dvQr9rPl0/XdeFJKsyLibl4dVUb1raUn89rz69rq0Xw5IacLnprtVj6YJFvRyMez64g==
-X-Received: by 2002:aa7:d416:0:b0:425:f5c7:d633 with SMTP id z22-20020aa7d416000000b00425f5c7d633mr9832309edq.105.1651955394531;
-        Sat, 07 May 2022 13:29:54 -0700 (PDT)
+        bh=55DAttT0wioJdsCUuVQUMBFRWSPkGrAf7r5fkDcJSFU=;
+        b=LVpav7oYRIg1eeNu+DrlpGYVgCw1Z5UNZ4Q4v9pwJHV6TQzawaB0Id3oFJczzUvvLh
+         LF6ebnGlCFyyRW1w8DRgWhYf1bFeNt1P2S8aFBT9m+LXtsG1WFUgVWYx2F5obq9D6jTe
+         5GnY4uojyGk4nwVmwiFYKtZCBJMUEZHNMQYFZYToD4sNkIo4HjZBLETZNjQuucsT+Uwj
+         Dm6DIpP9HSKiVTN6HPqsKJzhJZ0bTP9p41HrMCLO0wYFndsJLC7JN2qjFciesvs0TsQY
+         Y2AF5inVw/IhiYgp886en7xQWBZz/DUM0OI85MPhLYiPOIpd49fNa7huZ8cxVDzvW9Ww
+         AuOg==
+X-Gm-Message-State: AOAM531ouCAgiQmwvZM0QyP1cI0TUlHt/FSInHlPvuOFcziFC/6pYrLZ
+        2KQxGRWUZVXcQ1MCSAm8Oj0=
+X-Google-Smtp-Source: ABdhPJzPkS27gmX56xEuowGDVfSEWgl/a+9IGyNX3O6Tbbi7v50inMH7Wv7pW1/0eaz7jNHGssBhoQ==
+X-Received: by 2002:a17:907:2d24:b0:6f4:3152:3d1a with SMTP id gs36-20020a1709072d2400b006f431523d1amr8241676ejc.324.1651955396080;
+        Sat, 07 May 2022 13:29:56 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
-        by smtp.googlemail.com with ESMTPSA id k11-20020a056402048b00b0042617ba6383sm3900777edv.13.2022.05.07.13.29.53
+        by smtp.googlemail.com with ESMTPSA id k11-20020a056402048b00b0042617ba6383sm3900777edv.13.2022.05.07.13.29.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 13:29:54 -0700 (PDT)
+        Sat, 07 May 2022 13:29:55 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v2 03/11] clk: qcom: ipq8074: fix NSS port frequency tables
-Date:   Sat,  7 May 2022 22:29:40 +0200
-Message-Id: <20220507202948.397271-3-robimarko@gmail.com>
+Subject: [PATCH v2 04/11] clk: qcom: ipq8074: add PPE crypto clock
+Date:   Sat,  7 May 2022 22:29:41 +0200
+Message-Id: <20220507202948.397271-4-robimarko@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220507202948.397271-1-robimarko@gmail.com>
 References: <20220507202948.397271-1-robimarko@gmail.com>
@@ -74,67 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NSS port 5 and 6 frequency tables are currently broken and are causing a
-wide ranges of issue like 1G not working at all on port 6 or port 5 being
-clocked with 312 instead of 125 MHz as UNIPHY1 gets selected.
+The built-in PPE engine has a dedicated clock for the EIP-197 crypto
+engine.
 
-So, update the frequency tables with the ones from the downstream QCA 5.4
-based kernel which has already fixed this.
+So, since the required clock currently missing add support for it.
 
-Fixes: 7117a51ed303 ("clk: qcom: ipq8074: add NSS ethernet port clocks")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/clk/qcom/gcc-ipq8074.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index b4291ba53c78..f1017f2e61bd 100644
+index f1017f2e61bd..c964e43ba68a 100644
 --- a/drivers/clk/qcom/gcc-ipq8074.c
 +++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -1788,8 +1788,10 @@ static struct clk_regmap_div nss_port4_tx_div_clk_src = {
- static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
- 	F(25000000, P_UNIPHY1_RX, 12.5, 0, 0),
-+	F(25000000, P_UNIPHY0_RX, 5, 0, 0),
- 	F(78125000, P_UNIPHY1_RX, 4, 0, 0),
- 	F(125000000, P_UNIPHY1_RX, 2.5, 0, 0),
-+	F(125000000, P_UNIPHY0_RX, 1, 0, 0),
- 	F(156250000, P_UNIPHY1_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_RX, 1, 0, 0),
- 	{ }
-@@ -1828,8 +1830,10 @@ static struct clk_regmap_div nss_port5_rx_div_clk_src = {
- static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
- 	F(25000000, P_UNIPHY1_TX, 12.5, 0, 0),
-+	F(25000000, P_UNIPHY0_TX, 5, 0, 0),
- 	F(78125000, P_UNIPHY1_TX, 4, 0, 0),
- 	F(125000000, P_UNIPHY1_TX, 2.5, 0, 0),
-+	F(125000000, P_UNIPHY0_TX, 1, 0, 0),
- 	F(156250000, P_UNIPHY1_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_TX, 1, 0, 0),
- 	{ }
-@@ -1867,8 +1871,10 @@ static struct clk_regmap_div nss_port5_tx_div_clk_src = {
+@@ -3182,6 +3182,24 @@ static struct clk_branch gcc_nss_ptp_ref_clk = {
+ 	},
+ };
  
- static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
-+	F(25000000, P_UNIPHY2_RX, 5, 0, 0),
- 	F(25000000, P_UNIPHY2_RX, 12.5, 0, 0),
- 	F(78125000, P_UNIPHY2_RX, 4, 0, 0),
-+	F(125000000, P_UNIPHY2_RX, 1, 0, 0),
- 	F(125000000, P_UNIPHY2_RX, 2.5, 0, 0),
- 	F(156250000, P_UNIPHY2_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_RX, 1, 0, 0),
-@@ -1907,8 +1913,10 @@ static struct clk_regmap_div nss_port6_rx_div_clk_src = {
++static struct clk_branch gcc_crypto_ppe_clk = {
++	.halt_reg = 0x68310,
++	.halt_bit = 31,
++	.clkr = {
++		.enable_reg = 0x68310,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_crypto_ppe_clk",
++			.parent_names = (const char *[]){
++				"nss_ppe_clk_src"
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct clk_branch gcc_nssnoc_ce_apb_clk = {
+ 	.halt_reg = 0x6830c,
+ 	.clkr = {
+@@ -4644,6 +4662,7 @@ static struct clk_regmap *gcc_ipq8074_clks[] = {
+ 	[GCC_PCIE0_RCHNG_CLK_SRC] = &pcie0_rchng_clk_src.clkr,
+ 	[GCC_PCIE0_RCHNG_CLK] = &gcc_pcie0_rchng_clk.clkr,
+ 	[GCC_PCIE0_AXI_S_BRIDGE_CLK] = &gcc_pcie0_axi_s_bridge_clk.clkr,
++	[GCC_CRYPTO_PPE_CLK] = &gcc_crypto_ppe_clk.clkr,
+ };
  
- static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
-+	F(25000000, P_UNIPHY2_TX, 5, 0, 0),
- 	F(25000000, P_UNIPHY2_TX, 12.5, 0, 0),
- 	F(78125000, P_UNIPHY2_TX, 4, 0, 0),
-+	F(125000000, P_UNIPHY2_TX, 1, 0, 0),
- 	F(125000000, P_UNIPHY2_TX, 2.5, 0, 0),
- 	F(156250000, P_UNIPHY2_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_TX, 1, 0, 0),
+ static const struct qcom_reset_map gcc_ipq8074_resets[] = {
 -- 
 2.35.1
 

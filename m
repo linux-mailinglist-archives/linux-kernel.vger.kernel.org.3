@@ -2,122 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D149951E5C5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 10:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CBC51E5CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 11:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354966AbiEGJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 05:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S1359489AbiEGJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 05:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiEGJCe (ORCPT
+        with ESMTP id S230191AbiEGJGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 05:02:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67F24BC3;
-        Sat,  7 May 2022 01:58:43 -0700 (PDT)
-X-UUID: ded7c836f5874ba3ac180d82108dc4dd-20220507
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0020efbe-81ad-4a91-9245-e6a6010afc93,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:c82cebb2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: ded7c836f5874ba3ac180d82108dc4dd-20220507
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 620380499; Sat, 07 May 2022 16:58:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 7 May 2022 16:58:37 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 7 May 2022 16:58:35 +0800
-From:   <yf.wang@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>, <stable@vger.kernel.org>
-Subject: [PATCH] iommu/dma: Fix iova map result check bug
-Date:   Sat, 7 May 2022 16:52:03 +0800
-Message-ID: <20220507085204.16914-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 7 May 2022 05:06:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC91DBC23;
+        Sat,  7 May 2022 02:02:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26477B82A25;
+        Sat,  7 May 2022 09:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F43C385A9;
+        Sat,  7 May 2022 09:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651914133;
+        bh=Mz3xRG4PReFDHkDz1EoW1kUBJgxS84UFJF53AAINPzI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cnNzv0gsBfgs967DWQO5oSuKp7R75NbFYGY++ckFyVDgFxxw1ivFmBZFRjUqpUsdY
+         nWhtxyqGzOTAJwP82ZiIOuuv0iGm0oV99CJgpwKjDRuNL+wTfzxBEdz4W6zioqisa6
+         cJuRwgxI1Zkqi/94JU0hfw3y+WGIDLWl2cODv3W2SjXtD7kwyUxd041wsh+1w62lEG
+         A0K9qEW5VXujonHWc8QZzU0GGKJKImNFTmjY/QZgDCDM8VJmf4v26Qn4nQFUytS3Un
+         SA0u0i75ExXWAzKN2KNwOREucpZDAe1W51JfG8Z7pmtW4G1PUCAwqGHAEQA6CUhg/L
+         pTN/VRNoyA5Zg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nnGK1-009dak-2k; Sat, 07 May 2022 10:02:10 +0100
+Date:   Sat, 07 May 2022 10:01:52 +0100
+Message-ID: <87levd7m2n.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/6] irqchip/armada-370-xp: Implement SoC Error interrupts
+In-Reply-To: <20220506185546.n5rl3chyyauy4bjt@pali>
+References: <20220506134029.21470-1-pali@kernel.org>
+        <20220506134029.21470-3-pali@kernel.org>
+        <87mtfu7ccd.wl-maz@kernel.org>
+        <20220506183051.wimo7p4nuqfnl2aj@pali>
+        <8735hmijlu.wl-maz@kernel.org>
+        <20220506185546.n5rl3chyyauy4bjt@pali>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pali@kernel.org, tglx@linutronix.de, robh+dt@kernel.org, bhelgaas@google.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com, kw@linux.com, kabel@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+On Fri, 06 May 2022 19:55:46 +0100,
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>=20
+> On Friday 06 May 2022 19:47:25 Marc Zyngier wrote:
+> > On Fri, 06 May 2022 19:30:51 +0100,
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >=20
+> > > On Friday 06 May 2022 19:19:46 Marc Zyngier wrote:
+> > > > On Fri, 06 May 2022 14:40:25 +0100,
+> > > > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > > > >=20
+> > > > > +static void armada_370_xp_soc_err_irq_unmask(struct irq_data *d);
+> > > > > +
+> > > > >  static inline bool is_percpu_irq(irq_hw_number_t irq)
+> > > > >  {
+> > > > >  	if (irq <=3D ARMADA_370_XP_MAX_PER_CPU_IRQS)
+> > > > > @@ -509,6 +517,27 @@ static void armada_xp_mpic_reenable_percpu(v=
+oid)
+> > > > >  		armada_370_xp_irq_unmask(data);
+> > > > >  	}
+> > > > > =20
+> > > > > +	/* Re-enable per-CPU SoC Error interrupts that were enabled bef=
+ore suspend */
+> > > > > +	for (irq =3D 0; irq < soc_err_irq_num_regs * 32; irq++) {
+> > > > > +		struct irq_data *data;
+> > > > > +		int virq;
+> > > > > +
+> > > > > +		virq =3D irq_linear_revmap(armada_370_xp_soc_err_domain, irq);
+> > > > > +		if (virq =3D=3D 0)
+> > > > > +			continue;
+> > > > > +
+> > > > > +		data =3D irq_get_irq_data(virq);
+> > > > > +
+> > > > > +		if (!irq_percpu_is_enabled(virq))
+> > > > > +			continue;
+> > > > > +
+> > > > > +		armada_370_xp_soc_err_irq_unmask(data);
+> > > > > +	}
+> > > >=20
+> > > > So you do this loop and all these lookups, both here and in the res=
+ume
+> > > > function (duplicated code!) just to be able to call the unmask
+> > > > function?  This would be better served by two straight writes of the
+> > > > mask register, which you'd conveniently save on suspend.
+> > > >=20
+> > > > Yes, you have only duplicated the existing logic. But surely there =
+is
+> > > > something better to do.
+> > >=20
+> > > Yes, I just used existing logic.
+> > >=20
+> > > I'm not rewriting driver or doing big refactor of it, as this is not =
+in
+> > > the scope of the PCIe AER interrupt support.
+> >=20
+> > Fair enough. By the same logic, I'm not taking any change to the
+> > driver until it is put in a better shape. Your call.
+>=20
+> If you are maintainer of this code then it is expected from _you_ to
+> move the current code into _better shape_ as you wrote and expect. And
+> then show us exactly, how new changes in this driver should look like,
+> in examples.
 
-The data type of the return value of the iommu_map_sg_atomic
-is ssize_t, but the data type of iova size is size_t,
-e.g. one is int while the other is unsigned int.
+Sorry, but that's not how this works. You are the one willing to
+change a sub-par piece of code, you get to make it better. You
+obviously have the means (the HW) and the incentive (these patches).
+But you don't get to make something even more unmaintainable because
+you're unwilling to do some extra work.
 
-When iommu_map_sg_atomic return value is compared with iova size,
-it will force the signed int to be converted to unsigned int, if
-iova map fails and iommu_map_sg_atomic return error code is less
-than 0, then (ret < iova_len) is false, which will to cause not
-do free iova, and the master can still successfully get the iova
-of map fail, which is not expected.
+If you're unhappy with my position, that's fine. I suggest you take it
+with Thomas, and maybe even Linus. As I suggested before, you can also
+post a patch removing me as the irqchip maintainer. I'm sure that will
+spark an interesting discussion.
 
-Therefore, we need to check the return value of iommu_map_sg_atomic
-in two cases according to whether it is less than 0.
+> > > > > +static int armada_xp_soc_err_irq_set_affinity(struct irq_data *d,
+> > > > > +					      const struct cpumask *mask,
+> > > > > +					      bool force)
+> > > > > +{
+> > > > > +	unsigned int cpu;
+> > > > > +
+> > > > > +	cpus_read_lock();
+> > > > > +
+> > > > > +	/* First disable IRQ on all cores */
+> > > > > +	for_each_online_cpu(cpu)
+> > > > > +		smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_mask_on_cpu, d,=
+ true);
+> > > > > +
+> > > > > +	/* Select a single core from the affinity mask which is online =
+*/
+> > > > > +	cpu =3D cpumask_any_and(mask, cpu_online_mask);
+> > > > > +	smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_unmask_on_cpu, d=
+, true);
+> > > > > +
+> > > > > +	cpus_read_unlock();
+> > > > > +
+> > > > > +	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> > > > > +
+> > > > > +	return IRQ_SET_MASK_OK;
+> > > > > +}
+> > > >=20
+> > > > Aren't these per-CPU interrupts anyway? What does it mean to set th=
+eir
+> > > > affinity? /me rolls eyes...
+> > >=20
+> > > Yes, they are per-CPU interrupts. But to mask or unmask particular
+> > > interrupt for specific CPU is possible only from that CPU. CPU 0 just
+> > > cannot move interrupt from CPU 0 to CPU 1. CPU 0 can only mask that
+> > > interrupt and CPU 1 has to unmask it.
+> >=20
+> > And that's no different form other per-CPU interrupts that have the
+> > exact same requirements. NAK to this sort of hacks.
+>=20
+> You forgot to mention in your previous email how to do it, right? So we
+> are waiting...
 
-Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Cc: <stable@vger.kernel.org> # 5.15.*
----
- drivers/iommu/dma-iommu.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+I didn't forget. I explained that it should be handled just like any
+other per-CPU interrupt. There is plenty of example of how to do that
+in the tree (timers, for example), and if you had even looked at it,
+you'd have seen that your approach most probably results in an
+arbitrary pointer dereference on anything but CPU0 because the
+requesting driver knows nothing about per-CPU interrupts.
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 09f6e1c0f9c0..2932281e93fc 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -776,6 +776,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
- 	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
- 	struct page **pages;
- 	dma_addr_t iova;
-+	ssize_t ret;
- 
- 	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
- 	    iommu_deferred_attach(dev, domain))
-@@ -813,8 +814,8 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
- 			arch_dma_prep_coherent(sg_page(sg), sg->length);
- 	}
- 
--	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
--			< size)
-+	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
-+	if (ret < 0 || ret < size)
- 		goto out_free_sg;
- 
- 	sgt->sgl->dma_address = iova;
-@@ -1209,7 +1210,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- 	 * implementation - it knows better than we do.
- 	 */
- 	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
--	if (ret < iova_len)
-+	if (ret < 0 || ret < iova_len)
- 		goto out_free_iova;
- 
- 	return __finalise_sg(dev, sg, nents, iova);
--- 
-2.18.0
+But you're obviously trying to make a very different point here. I'll
+let you play that game for as long as you want, no skin off my nose.
+Maybe in the future, you'll be more interested in actively
+collaborating on the kernel code instead of throwing your toys out of
+the pram.
 
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

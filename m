@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D77751E2BF
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A54751E2C8
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445018AbiEGAdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 20:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S1445075AbiEGAf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 20:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235355AbiEGAdV (ORCPT
+        with ESMTP id S1445071AbiEGAfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 20:33:21 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5C83CA73
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 17:29:36 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id e189so9225891oia.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 17:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=BfXIYuTjESdwCcwnM3M8fBVsvHWnXl3HX1TNkGVkeNM=;
-        b=Hj7bOIh95GPwij//9n8NwUm1Iyp50iOpugsjgNphXDJgxGmxKiY0vlKUeyMxhIi2K2
-         6VXze4xJSRJ2kDbt4uS7zYk6Qr7yImNb8t9GihFG4WjcRLbXWUEoPHYoi87oTDjtqQx/
-         dOcVT7uJgYR1HQRorqxvT5KUTQxczWwGabjn4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=BfXIYuTjESdwCcwnM3M8fBVsvHWnXl3HX1TNkGVkeNM=;
-        b=IkEKsiowwvgj1rLvLD6ln5oOB4mpK1TyU3k7GTIVjS5MBW0ycQFygzzjNjJvEEL7e2
-         qFMHtc4wsHSJ9UMQggJfXT6312DZrzL1jmcm9nnYGBrpz8QogkVGbY3kmiraAa51/VJa
-         iU0CS9/wPIln8q2483hUz+rARje/w2hSuWisL9ECcOWLxToApXIx6LNtludVxq444Qqg
-         jGniL7jeMgaNJeLnSL7grN12f3jgRNWEsWLt42vESWDSYubCBsk2TJPmzfdluGErsbti
-         bbOfHVeg6xEsXCUMwrRFkmGObryDRVdr76gkYE2JLK5eSMCil3lVzovhUhn17My3H7p6
-         Crkg==
-X-Gm-Message-State: AOAM531Ee0T9eB4SIki4Zki3omq4IZLMw9QQCEOheMHcHJMCGsk7m6gx
-        4jHUdbhEiOXrCdIxQballeGtuBNtZLp/hBN/nS1PEw==
-X-Google-Smtp-Source: ABdhPJxy2rjvHnXRgZkg73o/CmbSvZTI1SbRFqdP1g9gdFeFf/h84x2in8Rewwao0QtsPr/lxD+NoSJdi+JC2LVdHf4=
-X-Received: by 2002:a05:6808:23ce:b0:326:6698:c271 with SMTP id
- bq14-20020a05680823ce00b003266698c271mr2647939oib.193.1651883375667; Fri, 06
- May 2022 17:29:35 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 May 2022 20:29:34 -0400
+        Fri, 6 May 2022 20:35:52 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC6586543F;
+        Fri,  6 May 2022 17:32:07 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id C2F1A5344B9;
+        Sat,  7 May 2022 10:32:02 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nn8Ma-008ucI-Uc; Sat, 07 May 2022 10:32:00 +1000
+Date:   Sat, 7 May 2022 10:32:00 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     tytso <tytso@mit.edu>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220507003200.GM1949718@dread.disaster.area>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <YnRf5CNN2yNKVu0B@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <1651873267-18220-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1651873267-18220-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 6 May 2022 20:29:34 -0400
-Message-ID: <CAE-0n52HvhT_RFbJHhijKCCt8jQM70fo6ceAbnYEfOfO-dRxVA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: Always clear mask bits to disable interrupts
- at dp_ctrl_reset_irq_ctrl()
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnRf5CNN2yNKVu0B@mit.edu>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=6275be06
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8
+        a=6tRzxmq33S4bAUIDdMMA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,52 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-05-06 14:41:07)
-> dp_catalog_ctrl_reset() will software reset DP controller. But it will
-> not reset programmable registers to default value. DP driver still have
-> to clear mask bits to interrupt status registers to disable interrupts
-> after software reset of controller. This patch removes the enable flag
-> condition checking to always clear mask bits of interrupt status
-> registers to disable interrupts if enable flag is false.
+On Thu, May 05, 2022 at 04:38:12PM -0700, tytso wrote:
+> On Tue, May 03, 2022 at 02:23:23PM +0200, Miklos Szeredi wrote:
+> > 
+> > : - root
+> > bar - an attribute
+> > foo: - a folder (can contain attributes and/or folders)
+> > 
+> > The contents of a folder is represented by a null separated list of names.
+> > 
+> > Examples:
+> > 
+> > $ getfattr -etext -n ":" .
+> > # file: .
+> > :="mnt:\000mntns:"
+> 
+> In your example, does it matter what "." is?  It looks like in some
+> cases, it makes no difference at all, and in other cases, like this,
+> '.' *does* matter:
+> 
+> > $ getfattr -etext -n ":mnt:info" .
+> > # file: .
+> > :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
+> 
+> Is that right?
+> 
+> > $ getfattr -etext -n ":mntns:" .
+> > # file: .
+> > :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
+> 
+> What is this returning?  All possible mount name spaces?  Or all of
+> the mount spaces where '.' happens to exist?
+> 
+> Also, using the null character means that we can't really use shell
+> scripts calling getfattr.
 
-Another paragraph is needed which is that this (partially?) fixes the
-suspend path where we call dp_catalog_ctrl_reset() but the irq is still
-unmasked and can come in while we're suspending. This leads to bus hangs
-if the irq is handled after we power down the DP hardware because we run
-the irq handler and access a device register assuming that no irq could
-ever come in if we powered down the device. We don't know when the irq
-will be handled though, so it's possible the irq is pending from before
-we disable the irq in the hardware. Don't we need some irq synchronize
-to make sure it doesn't run?
+Yeah, it should be returning an attr per namespace, not an attr
+whose value contains all the valid namespaces.
 
->
-> Fixes: ba0a422be723 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_ctrl.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index 38026f2..cbf3399 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1379,8 +1379,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
->
->         dp_catalog_ctrl_reset(ctrl->catalog);
->
-> -       if (enable)
-> -               dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-> +       /*
-> +        * all dp controller programmable registers will not
-> +        * be reset to default value after DP_SW_RESET
-> +        * therefore interrupt mask bits have to be updated
-> +        * to enable/disable interrupts
-> +        */
-> +       dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
->  }
->
->  void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+i.e. if the next level of the heirachy is 21, 22, 24, .... we should
+be seeing a listing of multiple attributes with naming like:
+
+:mntns:21:
+:mntns:22:
+:mntns:24:
+....
+
+rather than an attribute whose value contains the names of the
+attrbiutes in the next layer of the heirarchy. Then we can just
+pull the namespace we want and feed it directly to:
+
+$ getfattr -n ":mntns:21:"
+
+and we get a list of all the attributes available for that
+namespace...
+
+> I understand that the problem is that in
+> some cases, you might want to return a pathname, and NULL is the only
+> character which is guaranteed not to show up in a pathname.  However,
+> it makes parsing the returned value in a shell script exciting.
+
+We shouldn't be returning the names of children in an attribute
+value. We have a syscall API for doing this that - listxattr() will
+iterate attribute names just like a directory does with readdir()
+via listxattr(). IOWs, we should not need to encode the next layer
+of child attribute names into the value of the parent attribute - if
+we do a listxattr on a parent that has children, return the list of
+child names as individual attribute names....
+
+(Yes, I know listxattr null separates the attribute names - it's a
+godawful kernel API - but that's not the programmatic interface
+we should expose at the shell script level.)
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

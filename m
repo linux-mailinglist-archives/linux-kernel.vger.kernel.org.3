@@ -2,127 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41FC51E6E2
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2C351E6E0
 	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 14:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbiEGMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 08:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S1347718AbiEGMYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 08:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiEGMY3 (ORCPT
+        with ESMTP id S235109AbiEGMYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 08:24:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1199F1A3AC
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 05:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651926043; x=1683462043;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=dWE27ObTsmRFl4YwonH6s8TCzixHYcf9Ym+71uMqB9U=;
-  b=Z57OpDejTeKdwW1Pt608qJVZEAiFMYBgHjfz0z0G1kR9+pktCN7EcMQe
-   af5jM7aqZ8fCPymEUVuPw79b2TUtJuqb6AwNHin9cjTZn+fMjVucCGhpT
-   xVK4gmkdJc+0M9LBu2r5b7jbOPXnlWCR/xAv9z/Tqw6s6JyuISkxbH3pE
-   xE5DDTFoYXwhV+3WA63SfpdZfTM7Mj9+DnCZtrgOISwgMvtScJG8h4rOF
-   jzLHUM+sCy1omOXEObE8C5sjx3lEomgXQZzRz+bMo8H49D5kfBpLGRVPT
-   KkU+yXT9TWbmLWCnzOXLCEzutErQ/QRb7CgdkrWm9WbF2J+7VaAy4GnYi
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267541471"
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="267541471"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 05:20:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,207,1647327600"; 
-   d="scan'208";a="812782368"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 May 2022 05:20:41 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnJQP-000EYL-1z;
-        Sat, 07 May 2022 12:20:41 +0000
-Date:   Sat, 7 May 2022 20:20:31 +0800
-From:   kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        swedhanav <swedhana.viswanathan@intel.com>
-Subject: [mchinth:sep_socwatch_linux_5_17 1/1]
- drivers/platform/x86/socperf/socperfdrv.o: warning: objtool:
- socperf_Service_IOCTL()+0x1e: unreachable instruction
-Message-ID: <202205072006.fzA1yAt5-lkp@intel.com>
+        Sat, 7 May 2022 08:24:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA1D37010;
+        Sat,  7 May 2022 05:20:52 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KwRHB6st8zXdmM;
+        Sat,  7 May 2022 20:16:06 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 20:20:50 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 7 May 2022 20:20:49 +0800
+Subject: Re: [PATCH v24 3/6] arm64: kdump: Reimplement crashkernel=X
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Baoquan He <bhe@redhat.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-4-thunder.leizhen@huawei.com>
+ <20220506231032.GA122876@MiWiFi-R3L-srv>
+ <d9b21f31-6fd2-a898-9a70-c63ff4f36212@huawei.com>
+ <YnXUSBcFmEpxaqBf@MiWiFi-R3L-srv>
+ <9f6fdbb8-b6c5-3ca0-31b6-617175739e81@huawei.com>
+ <6e892914-74ae-2b8f-954e-342aaf4be870@huawei.com>
+ <0c7e91fb-10a3-f7e6-e856-0c865c71527b@huawei.com>
+Message-ID: <a0da4fdc-ad56-13c1-ad5d-243aa70091a3@huawei.com>
+Date:   Sat, 7 May 2022 20:20:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <0c7e91fb-10a3-f7e6-e856-0c865c71527b@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_17
-head:   279a0843e522ec88123ebc978d37ddb6bf7bb2b8
-commit: 279a0843e522ec88123ebc978d37ddb6bf7bb2b8 [1/1] Merge branch 'master' into sep_socwatch_linux_5_17
-config: x86_64-randconfig-a004-20220502 (https://download.01.org/0day-ci/archive/20220507/202205072006.fzA1yAt5-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/mchinth/linux/commit/279a0843e522ec88123ebc978d37ddb6bf7bb2b8
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth sep_socwatch_linux_5_17
-        git checkout 279a0843e522ec88123ebc978d37ddb6bf7bb2b8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+On 2022/5/7 19:49, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/5/7 17:35, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/5/7 11:37, Leizhen (ThunderTown) wrote:
+>>>
+>>>
+>>> On 2022/5/7 10:07, Baoquan He wrote:
+>>>> On 05/07/22 at 09:34am, Leizhen (ThunderTown) wrote:
+>>>>>
+>>>>>
+>>>>> On 2022/5/7 7:10, Baoquan He wrote:
+>>>>>> On 05/06/22 at 07:43pm, Zhen Lei wrote:
+>>>>>> ......  
+>>>>>>> @@ -118,8 +162,7 @@ static void __init reserve_crashkernel(void)
+>>>>>>>  	if (crash_base)
+>>>>>>>  		crash_max = crash_base + crash_size;
+>>>>>>>  
+>>>>>>> -	/* Current arm64 boot protocol requires 2MB alignment */
+>>>>>>> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+>>>>>>> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>>>>>>  					       crash_base, crash_max);
+>>>>>>>  	if (!crash_base) {
+>>>>>>>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>>>>>>> @@ -127,6 +170,11 @@ static void __init reserve_crashkernel(void)
+>>>>>>>  		return;
+>>>>>>>  	}
+>>>>>>>  
+>>>>>>
+>>>>>> There's corner case missed, e.g
+>>>>>> 1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
+>>>>>> 2) ,high and ,low are specified, the whole system memory is under 4G.
+>>>>>>
+>>>>>> Below judgement can filter them away:
+>>>>>>         
+>>>>>> 	if (crash_base > arm64_dma_phys_limit && crash_low_size &&
+>>>>>> 	    reserve_crashkernel_low(crash_low_size)) {
+>>>>>>
+>>>>>> What's your opinion? Leave it and add document to notice user, or fix it
+>>>>>> with code change?
 
-   drivers/platform/x86/socperf/socperfdrv.c:208:13: warning: no previous prototype for 'SOCPERF_Read_Data3' [-Wmissing-prototypes]
-     208 | extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
-         |             ^~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:990:1: warning: no previous prototype for 'SOCPERF_Switch_Group3' [-Wmissing-prototypes]
-     990 | SOCPERF_Switch_Group3(VOID)
-         | ^~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:1175:13: warning: no previous prototype for 'lwpmudrv_Stop_Mem' [-Wmissing-prototypes]
-    1175 | extern VOID lwpmudrv_Stop_Mem(VOID)
-         |             ^~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:1392:22: warning: no previous prototype for 'socperf_Service_IOCTL' [-Wmissing-prototypes]
-    1392 | extern IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
-         |                      ^~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:1516:13: warning: no previous prototype for 'socperf_Device_Control' [-Wmissing-prototypes]
-    1516 | extern long socperf_Device_Control(IOCTL_USE_INODE struct file *filp,
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:1551:13: warning: no previous prototype for 'socperf_Device_Control_Compat' [-Wmissing-prototypes]
-    1551 | extern long socperf_Device_Control_Compat(struct file *filp, unsigned int cmd,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/socperf/socperfdrv.c:1602:12: warning: no previous prototype for 'SOCPERF_Abnormal_Terminate' [-Wmissing-prototypes]
-    1602 | extern int SOCPERF_Abnormal_Terminate(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/x86/socperf/socperfdrv.o: warning: objtool: socperf_Service_IOCTL()+0x1e: unreachable instruction
---
-   drivers/platform/x86/socwatch/sw_driver.c: In function 'sw_collection_stop_i':
-   drivers/platform/x86/socwatch/sw_driver.c:573:101: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-     573 |                         "Warning: some trace_notifier probe functions could NOT be unregistered!\n");
-         |                                                                                                     ^
-   drivers/platform/x86/socwatch/sw_driver.c: In function 'sw_collection_poll_i':
-   drivers/platform/x86/socwatch/sw_driver.c:642:56: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-     642 |                 pw_pr_debug("DEBUG: EMPTY POLL LIST\n");
-         |                                                        ^
-   drivers/platform/x86/socwatch/sw_driver.c: In function 'sw_load_driver_i':
-   drivers/platform/x86/socwatch/sw_driver.c:1698:62: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
-    1698 |                         pw_pr_debug("OK, resetting worked\n");
-         |                                                              ^
-   drivers/platform/x86/socwatch/sw_driver.c: In function 'sw_unload_driver_i':
-   drivers/platform/x86/socwatch/sw_driver.c:1715:62: warning: suggest braces around empty body in an 'else' statement [-Wempty-body]
-    1715 |                         pw_pr_debug("OK, resetting worked\n");
-         |                                                              ^
->> drivers/platform/x86/socwatch/sw_driver.o: warning: objtool: sw_unlocked_handle_ioctl_i()+0x171: unreachable instruction
+I've now got the patch ready as suggested, to be as consistent as possible
+with x86.
+
+Just wait for next Monday Catalin's response: a seperate patch or v25?
+
+
+
+>>
+>> I decided to modify the code and document. But the code changes aren't what
+>> you suggested. For the following reasons:
+>> 1. The memory allocated for 'high' may be partially under 4G. So the low
+>>    memory may not be enough. Of course, it's rare.
+>> 2. The second kernel can work properly only when the high and low memory
+>>    are successfully applied for. For example, high=128M, low=128M, but the
+>>    second kernel need 256M.
+>>
+>> So for the cases you listed:
+>> 1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
+>>    --> Follow you suggestion, ignore crashkernel=Y,low, don't allocate low memory.
+>>
+>> @@ -100,6 +100,14 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
+>>  {
+>>         unsigned long long low_base;
+>>
+>> +       /*
+>> +        * The kernel does not have any DMA zone, so the range of each DMA
+>> +        * zone is unknown. Please make sure both CONFIG_ZONE_DMA and
+>> +        * CONFIG_ZONE_DMA32 are also not set in the second kernel.
+>> +        */
+>> +       if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+>> +               return 0;
+>> +
+>>
+>> 2) ,high and ,low are specified, the whole system memory is under 4G.
+>>    --> two memory ranges will be allocated, the size is what 'high' and 'low' specified.
+>>    --> Yes, the memory of 'low' may be above 'high', but the 'high' just hint allocation
+>>    --> from top, try high memory first. Of course, this may cause kexec to fail to load.
+>>    --> Because the memory of 'low' with small size will be used to store Image, etc..
+>>    --> But the memory of 'low' above 'high' is almost impossible, we use memblock API to
+>>    --> allocate memory from top to bottem, 'low' above 'high' need a sizeable memory block
+>>    --> (128M, 256M?) to be freed at init phase.
+>>    -->  Maybe I should add: crash_max = min(crash_base, CRASH_ADDR_LOW_MAX);
+>>    --> to make sure the memory of 'low' is always under 'high'
+> 
+> I have added the min() above.
+> 
+> Test result:
+> 1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
+> root@localhost:~# dmesg | grep crash
+> [    0.000000] crashkernel reserved: 0x0000000420000000 - 0x0000000440000000 (512 MB)
+> [    0.000000] Kernel command line: console=ttyAMA0 root=/dev/vda rw panic_on_oops=1 oops=panic crashkernel=512M,high crashkernel=128M,low
+> 
+> 2) ,high and ,low are specified, the whole system memory is under 4G.
+> root@localhost:~# dmesg | grep crash
+> [    0.000000] crashkernel tmp reserved: 0x00000000f2800000 - 0x00000000fa800000 (128 MB)
+> [    0.000000] crashkernel low memory reserved: 0xca800000 - 0xd2800000 (128 MB)
+> [    0.000000] crashkernel reserved: 0x00000000d2800000 - 0x00000000f2800000 (512 MB)
+> [    0.000000] Kernel command line: console=ttyAMA0 root=/dev/vda rw panic_on_oops=1 oops=panic crashkernel=512M,high crashkernel=128M,low
+> 
+> test stub for 2):
+> 
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 5cb73bbd286b100..abbde2158a0976a 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -147,6 +147,7 @@ static void __init reserve_crashkernel(void)
+>         unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>         char *cmdline = boot_command_line;
+>         int ret;
+> +       unsigned long long tmp_base;
+> 
+>         if (!IS_ENABLED(CONFIG_KEXEC_CORE))
+>                 return;
+> @@ -179,6 +180,11 @@ static void __init reserve_crashkernel(void)
+>         if (crash_base)
+>                 crash_max = crash_base + crash_size;
+> 
+> +       tmp_base = memblock_phys_alloc_range(crash_low_size, CRASH_ALIGN, crash_base, crash_max);
+> +       BUG_ON(!tmp_base);
+> +       pr_info("crashkernel tmp reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+> +               tmp_base, tmp_base + crash_low_size, crash_low_size >> 20);
+> +
+>         crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>                                                crash_base, crash_max);
+>         if (!crash_base) {
+> @@ -186,6 +192,7 @@ static void __init reserve_crashkernel(void)
+>                         crash_size);
+>                 return;
+>         }
+> +       memblock_phys_free(tmp_base, crash_low_size);
+> 
+>         if (crash_low_size && reserve_crashkernel_low(crash_low_size, crash_base)) {
+>                 memblock_phys_free(crash_base, crash_size);
+> 
+>>
+>>>>>
+>>>>> I think maybe we can leave it unchanged. If the user configures two memory ranges,
+>>>>> we'd better apply for two. Otherwise, he'll be confused when he inquires. Currently,
+>>>>> crash_low_size is non-zero only when 'crashkernel=Y,low' is explicitly configured.
+>>>>
+>>>> Then user need know the system information, e.g how much is the high
+>>>> memory, low memory, if CONFIG_ZONE_DMA|DMA32 is enabled. And we need
+>>>> describe these cases in document. Any corner case or exception need
+>>>> be noted if we don't handle it in code.
+>>>>
+>>>> Caring about this very much because we have CI with existed test cases
+>>>> to run on the system, and QA will check these manually too. Support
+>>>> engineer need detailed document if anything special but happened.
+>>>> Anything unclear or uncovered will be reported as bug to our kernel dev.
+>>>> Guess your company do the similar thing like this.
+>>>>
+>>>> This crashkerne,high and crashkernel,low reservation is special if we
+>>>> allow ,high, ,low existing in the same zone. Imagine on system with
+>>>> CONFIG_ZONE_DMA|DMA32 disabled, people copy the crashkernel=512M,high
+>>>> and crashkernel=128M,low from other system, and he could get
+>>>> crash_res at [5G, 5G+512M], while crash_low_res at [6G, 6G+128M]. Guess
+>>>> how they will judge us.
+>>>
+>>> OK, I got it.
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> I would suggest merging this series, Lei can add this corner case
+>>>>>> handling on top. Since this is a newly added support, we don't have
+>>>>>> to make it one step. Doing step by step can make reviewing easier.
+>>>>>>
+>>>>>>> +	if (crash_low_size && reserve_crashkernel_low(crash_low_size)) {
+>>>>>>> +		memblock_phys_free(crash_base, crash_size);
+>>>>>>> +		return;
+>>>>>>> +	}
+>>>>>>> +
+>>>>>>>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>>>>>>>  		crash_base, crash_base + crash_size, crash_size >> 20);
+>>>>>>>  
+>>>>>>> @@ -135,6 +183,9 @@ static void __init reserve_crashkernel(void)
+>>>>>>>  	 * map. Inform kmemleak so that it won't try to access it.
+>>>>>>>  	 */
+>>>>>>>  	kmemleak_ignore_phys(crash_base);
+>>>>>>> +	if (crashk_low_res.end)
+>>>>>>> +		kmemleak_ignore_phys(crashk_low_res.start);
+>>>>>>> +
+>>>>>>>  	crashk_res.start = crash_base;
+>>>>>>>  	crashk_res.end = crash_base + crash_size - 1;
+>>>>>>>  	insert_resource(&iomem_resource, &crashk_res);
+>>>>>>> -- 
+>>>>>>> 2.25.1
+>>>>>>>
+>>>>>>
+>>>>>> .
+>>>>>>
+>>>>>
+>>>>> -- 
+>>>>> Regards,
+>>>>>   Zhen Lei
+>>>>>
+>>>>
+>>>> .
+>>>>
+>>>
+>>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+  Zhen Lei

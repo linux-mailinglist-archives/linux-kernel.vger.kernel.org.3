@@ -2,207 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837E151E2D5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D3451E2D9
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445118AbiEGA63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 20:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S1445132AbiEGBEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiEGA61 (ORCPT
+        with ESMTP id S229608AbiEGBEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 20:58:27 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C688850B2F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 17:54:42 -0700 (PDT)
+        Fri, 6 May 2022 21:04:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE98382
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 18:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651884882; x=1683420882;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZHUKXnpEJXH5qUcfBqfm3azdXKYtQy/eAhnKUMnduLY=;
-  b=D4vXIRHJyChe2PG7uGsmDvKofnGIn7Cchg6ODKFtquC4RJTHU8dMl0MU
-   /SYfLbNpIvA3Hmy4fECU1+g6WM09fmwm2eJn5oaPaWZl0rEqqO6PplNnJ
-   jKbTi1HX7gSbW/jDPIFc5R53aAhXzPYPgraVR35yjCQBa7nFzooNKqwXJ
-   sWaO12jUcKH6qH1K7bBjkKp1eJsXF1aTiOAJ/oTyXxnVzGNOmq09pDjd3
-   eqiyFuS037XPV8utufAVnjl/It3L/uukCYsuJ2PjLS/2BPnzKGcg7jpMQ
-   UrdkRMpE8jnqPymrm2hN1QK4uokORKDuvfgu836zHhYAU/3BQilKGAvUW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267456940"
+  t=1651885221; x=1683421221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EOSFhRhbz+/bz+QOG86PzVeITplmnupDdPk76oBcmd8=;
+  b=fW1mYDXPPrk9HKnpZlidpvXiFQY4jD4gZchiM/VCsM2rcONnHJeuxTeP
+   nbcXqVpTqDVJq0O0ejh8CNDFOKDV6D1k5TFO1Wq+7arPSeY3gGixEBn/E
+   DXI2zcAFMVRASAaftA613GSbcFhgzvCfnLd81AkRGSwrstRQr9JNRFveV
+   H3ZEYUx2WC6AxkxzZZrDKrN0ov0qgL1rVWcH/dgf5OB12ZVn5ldBQ1aY2
+   H/iOLBeP64lSA92hxXkKIef4/axDmiL72ItbkfYgTxnFDCBGvWoXHRb5Z
+   NA+XQ92U0yammYSXiuIQwOCD4hvb5pvyxo2n2WEn3MrmvYbN4fX13tCaP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="266210778"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="267456940"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 17:54:42 -0700
+   d="scan'208";a="266210778"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 18:00:20 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="586288097"
-Received: from yuzhenta-mobl.ccr.corp.intel.com ([10.254.213.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 17:54:38 -0700
-Message-ID: <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
-Subject: Re: [mm/page_alloc]  f26b3fa046:  netperf.Throughput_Mbps -18.0%
- regression
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com
-Date:   Sat, 07 May 2022 08:54:35 +0800
-In-Reply-To: <YnURx04+hE0sQ3v3@ziqianlu-desk1>
-References: <20220420013526.GB14333@xsang-OptiPlex-9020>
-         <YmvMDyx05UoPFtQy@ziqianlu-desk1>
-         <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
-         <YnURx04+hE0sQ3v3@ziqianlu-desk1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+   d="scan'208";a="550099699"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 06 May 2022 18:00:15 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 4090C9B; Sat,  7 May 2022 04:00:15 +0300 (EEST)
+Date:   Sat, 7 May 2022 04:00:15 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+Message-ID: <20220507010015.fcnaupwbenzl5qbs@black.fi.intel.com>
+References: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+ <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
+ <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
+ <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+ <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+ <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+ <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
+ <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+ <c3003e378504d2cd034e54bca6cab4d6bb53e008.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3003e378504d2cd034e54bca6cab4d6bb53e008.camel@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 20:17 +0800, Aaron Lu wrote:
-> On Fri, May 06, 2022 at 04:40:45PM +0800, ying.huang@intel.com wrote:
-> > On Fri, 2022-04-29 at 19:29 +0800, Aaron Lu wrote:
-> > > Hi Mel,
-> > > 
-> > > On Wed, Apr 20, 2022 at 09:35:26AM +0800, kernel test robot wrote:
-> > > > 
-> > > > (please be noted we reported
-> > > > "[mm/page_alloc]  39907a939a:  netperf.Throughput_Mbps -18.1% regression"
-> > > > on
-> > > > https://lore.kernel.org/all/20220228155733.GF1643@xsang-OptiPlex-9020/
-> > > > while the commit is on branch.
-> > > > now we still observe similar regression when it's on mainline, and we also
-> > > > observe a 13.2% improvement on another netperf subtest.
-> > > > so report again for information)
-> > > > 
-> > > > Greeting,
-> > > > 
-> > > > FYI, we noticed a -18.0% regression of netperf.Throughput_Mbps due to commit:
-> > > > 
-> > > > 
-> > > > commit: f26b3fa046116a7dedcaafe30083402113941451 ("mm/page_alloc: limit number of high-order pages on PCP during bulk free")
-> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > > 
-> > > 
-> > > So what this commit did is: if a CPU is always doing free(pcp->free_factor > 0)
-> > 
-> > IMHO, this means the consumer and producer are running on different
-> > CPUs.
-> > 
-> 
-> Right.
-> 
-> > > and if the being freed high-order page's order is <= PAGE_ALLOC_COSTLY_ORDER,
-> > > then do not use PCP but directly free the page directly to buddy.
-> > > 
-> > > The rationale as explained in the commit's changelog is:
-> > > "
-> > > Netperf running on localhost exhibits this pattern and while it does not
-> > > matter for some machines, it does matter for others with smaller caches
-> > > where cache misses cause problems due to reduced page reuse. Pages
-> > > freed directly to the buddy list may be reused quickly while still cache
-> > > hot where as storing on the PCP lists may be cold by the time
-> > > free_pcppages_bulk() is called.
-> > > "
-> > > 
-> > > This regression occurred on a machine that has large caches so this
-> > > optimization brings no value to it but only overhead(skipped PCP), I
-> > > guess this is the reason why there is a regression.
-> > 
-> > Per my understanding, not only the cache size is larger, but also the L2
-> > cache (1MB) is per-core on this machine.  So if the consumer and
-> > producer are running on different cores, the cache-hot page may cause
-> > more core-to-core cache transfer.  This may hurt performance too.
-> > 
-> 
-> Client side allocates skb(page) and server side recvfrom() it.
-> recvfrom() copies the page data to server's own buffer and then releases
-> the page associated with the skb. Client does all the allocation and
-> server does all the free, page reuse happens at client side.
-> So I think core-2-core cache transfer due to page reuse can occur when
-> client task migrates.
+On Fri, May 06, 2022 at 11:00:29PM +1200, Kai Huang wrote:
+> However I may have missed something.  Kirill please help to confirm if you see
+> this.
 
-The core-to-core cache transfering can be cross-socket or cross-L2 in
-one socket.  I mean the later one.
+That's correct. set_memory_decrypted() will change direct mapping as well
+even if called on vmap(). I should have catched it before. Sorry.
 
-> I have modified the job to have the client and server bound to a
-> specific CPU of different cores on the same node, and testing it on the
-> same Icelake 2 sockets server, the result is
-> 
->   kernel      throughput
-> 8b10b465d0e1     125168
-> f26b3fa04611     102039 -18%
-> 
-> It's also a 18% drop. I think this means c2c is not a factor?
-
-Can you test with client and server bound to 2 hardware threads
-(hyperthread) of one core?  The two hardware threads of one core will
-share the L2 cache.
-
-> > > I have also tested this case on a small machine: a skylake desktop and
-> > > this commit shows improvement:
-> > > 8b10b465d0e1: "netperf.Throughput_Mbps": 72288.76,
-> > > f26b3fa04611: "netperf.Throughput_Mbps": 90784.4,  +25.6%
-> > > 
-> > > So this means those directly freed pages get reused by allocator side
-> > > and that brings performance improvement for machines with smaller cache.
-> > 
-> > Per my understanding, the L2 cache on this desktop machine is shared
-> > among cores.
-> > 
-> 
-> The said CPU is i7-6700 and according to this wikipedia page,
-> L2 is per core:
-> https://en.wikipedia.org/wiki/Skylake_(microarchitecture)#Mainstream_desktop_processors
-
-Sorry, my memory was wrong.  The skylake and later server has much
-larger private L2 cache (1MB vs 256KB of client), this may increase the
-possibility of core-2-core transfering.
-
-> > > I wonder if we should still use PCP a little bit under the above said
-> > > condition, for the purpose of:
-> > > 1 reduced overhead in the free path for machines with large cache;
-> > > 2 still keeps the benefit of reused pages for machines with smaller cache.
-> > > 
-> > > For this reason, I tested increasing nr_pcp_high() from returning 0 to
-> > > either returning pcp->batch or (pcp->batch << 2):
-> > > machine\nr_pcp_high() ret: pcp->high   0   pcp->batch (pcp->batch << 2)
-> > > skylake desktop:             72288   90784   92219       91528
-> > > icelake 2sockets:           120956   99177   98251      116108
-> > > 
-> > > note nr_pcp_high() returns pcp->high is the behaviour of this commit's
-> > > parent, returns 0 is the behaviour of this commit.
-> > > 
-> > > The result shows, if we effectively use a PCP high as (pcp->batch << 2)
-> > > for the described condition, then this workload's performance on
-> > > small machine can remain while the regression on large machines can be
-> > > greately reduced(from -18% to -4%).
-> > > 
-> > 
-> > Can we use cache size and topology information directly?
-> 
-> It can be complicated by the fact that the system can have multiple
-> producers(cpus that are doing free) running at the same time and getting
-> the perfect number can be a difficult job.
-
-We can discuss this after verifying whether it's core-2-core transfering
-related.
-
-Best Regards,
-Huang, Ying
-
-
+-- 
+ Kirill A. Shutemov

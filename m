@@ -2,248 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7DE51E513
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B176B51E51A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 09:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445976AbiEGHPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 03:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S1355786AbiEGHYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 03:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbiEGHPd (ORCPT
+        with ESMTP id S1358387AbiEGHX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 03:15:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC5D186C4
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651907507; x=1683443507;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=O4JxHFmsYcymXr8Ke2ayjVAeIIlldY+X3WwkZJ8AkNQ=;
-  b=XvhA78SWRaw4Tyv/GWWif0EfwQso+hKzQvDCWgz7nZsUl22wXC/Y1MtT
-   heCYZXcPqBlUSzYntYx+PFf9y5iNc64DsMVtC6yz94Xi11a0DbUzfgwus
-   Wv5YV/SZI8rcrLOfwamol+Z9h1W2Ps2b9TIq4EEaEsBdrPLXaeQvy6dop
-   b+puvxS0JYrJl0D9y1sSYCszo4ZjEioO3gI/ZUO90wS1H19yTnC7Vq/vJ
-   0mFtc71CBZULjH5854GiK7Y38enH/qAuj4HLMeLB6ieyh7Egp9dAJzQVG
-   ptu4DjxTYgPKiVnpgMbsFoAvb9jjMD/UckOehBwySmCt1/ysebDTvTUCN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256158079"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="256158079"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 00:11:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="538237424"
-Received: from sjin6-mobl1.ccr.corp.intel.com ([10.254.214.15])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 00:11:43 -0700
-Message-ID: <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
-Subject: Re: [mm/page_alloc]  f26b3fa046:  netperf.Throughput_Mbps -18.0%
- regression
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com
-Date:   Sat, 07 May 2022 15:11:41 +0800
-In-Reply-To: <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
-References: <20220420013526.GB14333@xsang-OptiPlex-9020>
-         <YmvMDyx05UoPFtQy@ziqianlu-desk1>
-         <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
-         <YnURx04+hE0sQ3v3@ziqianlu-desk1>
-         <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
-         <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Sat, 7 May 2022 03:23:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AF715711D
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 00:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651908010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=G9fn9Vx3GvvQ05Jnhj8kd/SkzWXQ+qqrB/GBPEAxGNc=;
+        b=XXT4A52aKphf9BF9Q4QtaGbGxUGrwNwKC52wAdyDfskuq/tHycOS/iX3UbUBmhJaX2meaL
+        WpFD33dXPbK/Mn2BnDYwljoWxSQqZ3CkOdHZD3zPDpOmonki3GcYsqLT/6dw0G3FU8w3Q2
+        +3LtCYKpwBGw5PYdoHbo4lJpr9usOQE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-gCj31TyTOUGDVpUyyrhcQA-1; Sat, 07 May 2022 03:20:04 -0400
+X-MC-Unique: gCj31TyTOUGDVpUyyrhcQA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B47880A0AD;
+        Sat,  7 May 2022 07:20:04 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-13-216.pek2.redhat.com [10.72.13.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 36DEE40D2971;
+        Sat,  7 May 2022 07:19:56 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     jasowang@redhat.com, mst@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
+        maz@kernel.org, pasic@linux.ibm.com, cohuck@redhat.com,
+        eperezma@redhat.com, lulu@redhat.com, sgarzare@redhat.com,
+        xuanzhuo@linux.alibaba.com
+Subject: [PATCH V4 0/9] rework on the IRQ hardening of virtio
+Date:   Sat,  7 May 2022 15:19:45 +0800
+Message-Id: <20220507071954.14455-1-jasowang@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-05-07 at 11:27 +0800, Aaron Lu wrote:
-> On Sat, May 07, 2022 at 08:54:35AM +0800, ying.huang@intel.com wrote:
-> > On Fri, 2022-05-06 at 20:17 +0800, Aaron Lu wrote:
-> > > On Fri, May 06, 2022 at 04:40:45PM +0800, ying.huang@intel.com wrote:
-> > > > On Fri, 2022-04-29 at 19:29 +0800, Aaron Lu wrote:
-> > > > > Hi Mel,
-> > > > > 
-> > > > > On Wed, Apr 20, 2022 at 09:35:26AM +0800, kernel test robot wrote:
-> > > > > > 
-> > > > > > (please be noted we reported
-> > > > > > "[mm/page_alloc]  39907a939a:  netperf.Throughput_Mbps -18.1% regression"
-> > > > > > on
-> > > > > > https://lore.kernel.org/all/20220228155733.GF1643@xsang-OptiPlex-9020/
-> > > > > > while the commit is on branch.
-> > > > > > now we still observe similar regression when it's on mainline, and we also
-> > > > > > observe a 13.2% improvement on another netperf subtest.
-> > > > > > so report again for information)
-> > > > > > 
-> > > > > > Greeting,
-> > > > > > 
-> > > > > > FYI, we noticed a -18.0% regression of netperf.Throughput_Mbps due to commit:
-> > > > > > 
-> > > > > > 
-> > > > > > commit: f26b3fa046116a7dedcaafe30083402113941451 ("mm/page_alloc: limit number of high-order pages on PCP during bulk free")
-> > > > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > > > > 
-> > > > > 
-> > > > > So what this commit did is: if a CPU is always doing free(pcp->free_factor > 0)
-> > > > 
-> > > > IMHO, this means the consumer and producer are running on different
-> > > > CPUs.
-> > > > 
-> > > 
-> > > Right.
-> > > 
-> > > > > and if the being freed high-order page's order is <= PAGE_ALLOC_COSTLY_ORDER,
-> > > > > then do not use PCP but directly free the page directly to buddy.
-> > > > > 
-> > > > > The rationale as explained in the commit's changelog is:
-> > > > > "
-> > > > > Netperf running on localhost exhibits this pattern and while it does not
-> > > > > matter for some machines, it does matter for others with smaller caches
-> > > > > where cache misses cause problems due to reduced page reuse. Pages
-> > > > > freed directly to the buddy list may be reused quickly while still cache
-> > > > > hot where as storing on the PCP lists may be cold by the time
-> > > > > free_pcppages_bulk() is called.
-> > > > > "
-> > > > > 
-> > > > > This regression occurred on a machine that has large caches so this
-> > > > > optimization brings no value to it but only overhead(skipped PCP), I
-> > > > > guess this is the reason why there is a regression.
-> > > > 
-> > > > Per my understanding, not only the cache size is larger, but also the L2
-> > > > cache (1MB) is per-core on this machine.  So if the consumer and
-> > > > producer are running on different cores, the cache-hot page may cause
-> > > > more core-to-core cache transfer.  This may hurt performance too.
-> > > > 
-> > > 
-> > > Client side allocates skb(page) and server side recvfrom() it.
-> > > recvfrom() copies the page data to server's own buffer and then releases
-> > > the page associated with the skb. Client does all the allocation and
-> > > server does all the free, page reuse happens at client side.
-> > > So I think core-2-core cache transfer due to page reuse can occur when
-> > > client task migrates.
-> > 
-> > The core-to-core cache transfering can be cross-socket or cross-L2 in
-> > one socket.  I mean the later one.
-> > 
-> > > I have modified the job to have the client and server bound to a
-> > > specific CPU of different cores on the same node, and testing it on the
-> > > same Icelake 2 sockets server, the result is
-> > > 
-> > >   kernel      throughput
-> > > 8b10b465d0e1     125168
-> > > f26b3fa04611     102039 -18%
-> > > 
-> > > It's also a 18% drop. I think this means c2c is not a factor?
-> > 
-> > Can you test with client and server bound to 2 hardware threads
-> > (hyperthread) of one core?  The two hardware threads of one core will
-> > share the L2 cache.
-> > 
-> 
-> 8b10b465d0e1: 89702
-> f26b3fa04611: 95823 +6.8%
-> 
-> When binding client and server on the 2 threads of the same core, the
-> bisected commit is an improvement now on this 2 sockets Icelake server.
+Hi All:
 
-Good.  I guess cache-hot works now.
+This is a rework on the IRQ hardening for virtio which is done
+previously by the following commits are reverted:
 
-> > > > > I have also tested this case on a small machine: a skylake desktop and
-> > > > > this commit shows improvement:
-> > > > > 8b10b465d0e1: "netperf.Throughput_Mbps": 72288.76,
-> > > > > f26b3fa04611: "netperf.Throughput_Mbps": 90784.4,  +25.6%
-> > > > > 
-> > > > > So this means those directly freed pages get reused by allocator side
-> > > > > and that brings performance improvement for machines with smaller cache.
-> > > > 
-> > > > Per my understanding, the L2 cache on this desktop machine is shared
-> > > > among cores.
-> > > > 
-> > > 
-> > > The said CPU is i7-6700 and according to this wikipedia page,
-> > > L2 is per core:
-> > > https://en.wikipedia.org/wiki/Skylake_(microarchitecture)#Mainstream_desktop_processors
-> > 
-> > Sorry, my memory was wrong.  The skylake and later server has much
-> > larger private L2 cache (1MB vs 256KB of client), this may increase the
-> > possibility of core-2-core transfering.
-> > 
-> 
-> I'm trying to understand where is the core-2-core cache transfer.
-> 
-> When server needs to do the copy in recvfrom(), there is core-2-core
-> cache transfer from client cpu to server cpu. But this is the same no
-> matter page gets reused or not, i.e. the bisected commit and its parent
-> doesn't have any difference in this step. 
+9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
+080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
 
-Yes.
+The reason is that it depends on the IRQF_NO_AUTOEN which may conflict
+with the assumption of the affinity managed IRQ that is used by some
+virtio drivers. And what's more, it is only done for virtio-pci but
+not other transports.
 
-> Then when page gets reused in
-> the client side, there is no core-2-core cache transfer as the server
-> side didn't do write to the page's data.
+In this rework, I try to implement a general virtio solution which
+borrows the idea of the INTX hardening by re-using per virtqueue
+boolean vq->broken and toggle it in virtio_device_ready() and
+virtio_reset_device(). Then we can simply reuse the existing checks in
+the vring_interrupt() and return early if the driver is not ready.
 
-The "reused" pages were read by the server side, so their cache lines
-are in "shared" state, some inter-core traffic is needed to shoot down
-these cache lines before the client side writes them.  This will incur
-some overhead.
+Note that, I only did compile test on ccw and MMIO transport.
 
-Best Regards,
-Huang, Ying
+Please review.
 
-> So page reuse or not, it
-> shouldn't cause any difference regarding core-2-core cache transfer.
-> Is this correct?
-> 
-> > > > > I wonder if we should still use PCP a little bit under the above said
-> > > > > condition, for the purpose of:
-> > > > > 1 reduced overhead in the free path for machines with large cache;
-> > > > > 2 still keeps the benefit of reused pages for machines with smaller cache.
-> > > > > 
-> > > > > For this reason, I tested increasing nr_pcp_high() from returning 0 to
-> > > > > either returning pcp->batch or (pcp->batch << 2):
-> > > > > machine\nr_pcp_high() ret: pcp->high   0   pcp->batch (pcp->batch << 2)
-> > > > > skylake desktop:             72288   90784   92219       91528
-> > > > > icelake 2sockets:           120956   99177   98251      116108
-> > > > > 
-> > > > > note nr_pcp_high() returns pcp->high is the behaviour of this commit's
-> > > > > parent, returns 0 is the behaviour of this commit.
-> > > > > 
-> > > > > The result shows, if we effectively use a PCP high as (pcp->batch << 2)
-> > > > > for the described condition, then this workload's performance on
-> > > > > small machine can remain while the regression on large machines can be
-> > > > > greately reduced(from -18% to -4%).
-> > > > > 
-> > > > 
-> > > > Can we use cache size and topology information directly?
-> > > 
-> > > It can be complicated by the fact that the system can have multiple
-> > > producers(cpus that are doing free) running at the same time and getting
-> > > the perfect number can be a difficult job.
-> > 
-> > We can discuss this after verifying whether it's core-2-core transfering
-> > related.
-> > 
-> > Best Regards,
-> > Huang, Ying
-> > 
-> > 
+Changes since v1:
 
+- Use transport specific irq synchronization method when possible
+- Drop the module parameter and enable the hardening unconditonally
+- Tweak the barrier/ordering facilities used in the code
+- Reanme irq_soft_enabled to driver_ready
+- Avoid unnecssary IRQ synchornization (e.g during boot)
+
+Changes since V2:
+
+- add ccw and MMIO support
+- rename synchronize_vqs() to synchronize_cbs()
+- switch to re-use vq->broken instead of introducing new device
+  attributes for the future virtqueue reset support
+- remove unnecssary READ_ONCE()/WRITE_ONCE()
+- a new patch to remove device triggerable BUG_ON()
+- more tweaks on the comments
+
+Changes since V3:
+
+- Rename synchornize_vqs() to synchronize_cbs()
+- tweak the comment for synchronize_cbs()
+- switch to use a dedicated helper __virtio_unbreak_device() and
+  document it should be only used for probing
+- switch to use rwlick to synchornize the non airq for ccw
+
+Jason Wang (8):
+  virtio: use virtio_reset_device() when possible
+  virtio: introduce config op to synchronize vring callbacks
+  virtio-pci: implement synchronize_cbs()
+  virtio-mmio: implement synchronize_cbs()
+  virtio-ccw: implement synchronize_cbs()
+  virtio: allow to unbreak virtqueue
+  virtio: harden vring IRQ
+  virtio: use WARN_ON() to warning illegal status value
+
+Stefano Garzarella (1):
+  virtio: use virtio_device_ready() in virtio_device_restore()
+
+ drivers/s390/virtio/virtio_ccw.c   | 27 +++++++++++++++++++++
+ drivers/virtio/virtio.c            | 24 ++++++++++++------
+ drivers/virtio/virtio_mmio.c       |  9 +++++++
+ drivers/virtio/virtio_pci_legacy.c |  1 +
+ drivers/virtio/virtio_pci_modern.c |  2 ++
+ drivers/virtio/virtio_ring.c       | 32 +++++++++++++++++++++---
+ include/linux/virtio.h             |  1 +
+ include/linux/virtio_config.h      | 39 +++++++++++++++++++++++++++++-
+ 8 files changed, 123 insertions(+), 12 deletions(-)
+
+-- 
+2.25.1
 

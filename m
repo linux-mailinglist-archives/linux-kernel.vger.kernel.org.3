@@ -2,173 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232FD51E43A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A8051E43C
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 07:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356241AbiEGFLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 01:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S1357160AbiEGFNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343722AbiEGFLP (ORCPT
+        with ESMTP id S1343722AbiEGFNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 01:11:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 881EB5523C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 22:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651900048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WKFrTG6BT4XtoQUjOd0EJOeY4hUiJrW4gNuP1XW6bYk=;
-        b=frzyhKaY5TE5sonZU4p/ekfqNvWlP8VNJrYyVSb9W8L7nY2Bk34IgIcR29c/SqFuoj9N7C
-        eOpoBFRuXC4D0tZWQ4e9ZlU6G3dJngJPnER1mNpmMxmvaK8SFUWJyQeCp5ysZ3HgiTjoeZ
-        OSIBAFobpviOkurncTdqMxcA5asKcKg=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-670-E7RcxE1hOwW9Wawicl8uPg-1; Sat, 07 May 2022 01:07:26 -0400
-X-MC-Unique: E7RcxE1hOwW9Wawicl8uPg-1
-Received: by mail-lf1-f69.google.com with SMTP id e8-20020ac24e08000000b00473b1bae573so4069532lfr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 22:07:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WKFrTG6BT4XtoQUjOd0EJOeY4hUiJrW4gNuP1XW6bYk=;
-        b=DN2owTm7aWg9RQk/6MiVGf63AC69vJsudUpKEVJfOsfgkUETyNlYHtqjNY+3BE4vfc
-         D+cPjm6Hk64sLWCm9m06R1tYSbRKvVweu4DdkTHW616TNDDaCno/PhLeHpwFFJIQx3Ol
-         QWOhYw8m/d8VRQ/bHhso6rarRvASX0HaV5I4sSi+WhW6C0hvcbOEqBhY+GdxkA762ijN
-         MWrW1jRVm1QwX/ai8pbT5yiRWkUuukaRKCE56c9VJP6Xv3c/vNBkAXeDh2uv7sejye7m
-         ypEQyzU7rLu/+VvTFGEwZxNsOB84/0utsWimWZ7JNd3fSWr/T9hZDI/SvLjhD99saMKM
-         74hA==
-X-Gm-Message-State: AOAM530WxDdVa9D2ICslX3QNMYJCoYKe6s6LgzTEq4nhEJLgyt/F36vK
-        tL8q9xSIFuuW+JdTc/X28JZZO3GW5w1OP/S7l2LPNDbcVDaqcKVbponFYYgPB+qQW9daeLR46Ka
-        itTbkU6CJyokG8skyXz+InF+TVuB6SCY5ScRbjmZ6
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id d16-20020a05651233d000b00473a25ef9fbmr4951617lfg.98.1651900045340;
-        Fri, 06 May 2022 22:07:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzZGP+pzBwvqTFnGLNL46r624MAOVl0Foh5oZRGkIyYHh3KQhYZ1Z+k+zg853w8U8aha7h4FUe6I44wlLfmAlE=
-X-Received: by 2002:a05:6512:33d0:b0:473:a25e:f9fb with SMTP id
- d16-20020a05651233d000b00473a25ef9fbmr4951603lfg.98.1651900045134; Fri, 06
- May 2022 22:07:25 -0700 (PDT)
+        Sat, 7 May 2022 01:13:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221955523C;
+        Fri,  6 May 2022 22:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651900192; x=1683436192;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lKSANTzukEI7R7dzgXuB++9ikagSeXw2WkoC9SVCIcs=;
+  b=DxoxXMdnK4qYdmZthKfMGo6P/LxtVh6xxcPjX1CENOCgUbD4bMCDr8K0
+   0D9u/S5s94FCR+CjtP3llI7Zr8bJ0Tl3XQz3PPLNkfbipmVgNU1LYiqrv
+   MMHCBQXMhKrhE44UPfKsV0SVqH807J9YpFoD8+zNEAubWun9setbRR6zJ
+   mrMXDeoMqZyrFSrzTdlyRoKqTzJCnTudh/JLo3SqxDhqcbIpAG0bSCJHA
+   NSiu6UmuqWisuziQd6ctiesE08WiprFQiIl5x+xSY+7JmeMXJDlxzQX2k
+   2hxRGQYeqYBhkVRlpXEoQ/nzpGn9dQ1BA8SJgQMiZ0ZS/DqsmfZSNEMyP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268277560"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="268277560"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 22:09:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="564185139"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.31.152]) ([10.255.31.152])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 22:09:49 -0700
+Message-ID: <4bc567a1-e7ce-92eb-06e9-3cee91a6699f@linux.intel.com>
+Date:   Sat, 7 May 2022 13:09:47 +0800
 MIME-Version: 1.0
-References: <20220428151242.213824-1-sgarzare@redhat.com> <CACGkMEv=0VWh_NxhvM+6_TRHEx0f2RGRWbR1n5RhKfq0a7xJUw@mail.gmail.com>
- <20220429071449.pycbkk2dvvxmtvay@sgarzare-redhat> <CACGkMEtRwRb_jUdCcdrx77=O4bnRGssQ5z_81KJi1hEKdbMcCQ@mail.gmail.com>
- <20220505084045.xdh3xwgfr2spp3fj@sgarzare-redhat>
-In-Reply-To: <20220505084045.xdh3xwgfr2spp3fj@sgarzare-redhat>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Sat, 7 May 2022 13:07:14 +0800
-Message-ID: <CACGkMEsAyx2V_Q41MbrFu3eXoi+Qmg_aeEz9-Aw6qYHsFivCTg@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/3] perf stat: Merge event counts from all hybrid PMUs
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+References: <20220422065635.767648-1-zhengjun.xing@linux.intel.com>
+ <20220422065635.767648-2-zhengjun.xing@linux.intel.com>
+ <CAP-5=fWaU4d90zkqqokp-sCau5DNX_VNVb-Yz3vdqEdkkRYegw@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fWaU4d90zkqqokp-sCau5DNX_VNVb-Yz3vdqEdkkRYegw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 4:40 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> On Thu, May 05, 2022 at 04:26:24PM +0800, Jason Wang wrote:
-> >On Fri, Apr 29, 2022 at 3:14 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >>
-> >> On Fri, Apr 29, 2022 at 10:46:40AM +0800, Jason Wang wrote:
-> >> >On Thu, Apr 28, 2022 at 11:13 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >> >>
-> >> >> The simulator behaves like a ramdisk, so we don't have to do
-> >> >> anything when a VIRTIO_BLK_T_FLUSH request is received, but it
-> >> >> could be useful to test driver behavior.
-> >> >>
-> >> >> Let's expose the VIRTIO_BLK_F_FLUSH feature to inform the driver
-> >> >> that we support the flush command.
-> >> >>
-> >> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> >> ---
-> >> >>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 12 ++++++++++++
-> >> >>  1 file changed, 12 insertions(+)
-> >> >>
-> >> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> >> >> index 42d401d43911..a6dd1233797c 100644
-> >> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> >> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> >> >> @@ -25,6 +25,7 @@
-> >> >>  #define DRV_LICENSE  "GPL v2"
-> >> >>
-> >> >>  #define VDPASIM_BLK_FEATURES   (VDPASIM_FEATURES | \
-> >> >> +                                (1ULL << VIRTIO_BLK_F_FLUSH)    | \
-> >> >>                                  (1ULL << VIRTIO_BLK_F_SIZE_MAX) | \
-> >> >>                                  (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
-> >> >>                                  (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
-> >> >> @@ -166,6 +167,17 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
-> >> >>                 pushed += bytes;
-> >> >>                 break;
-> >> >>
-> >> >> +       case VIRTIO_BLK_T_FLUSH:
-> >> >> +               if (sector != 0) {
-> >> >> +                       dev_err(&vdpasim->vdpa.dev,
-> >> >> +                               "A driver MUST set sector to 0 for a VIRTIO_BLK_T_FLUSH request - sector: 0x%llx\n",
-> >> >> +                               sector);
-> >> >
-> >> >If this is something that could be triggered by userspace/guest, then
-> >> >we should avoid this.
-> >>
-> >> It can only be triggered by an erratic driver.
-> >
-> >Right, so guest can try to DOS the host via this.
->
-> Yes, but I don't expect the simulator to be used in the real world, but
-> only for testing and development, so the user should have full control
-> of the guest.
 
-Right, but from kernel POV it's better to avoid any guest triggerable behaviour.
 
->
-> >
-> >>
-> >> I was using the simulator to test a virtio-blk driver that I'm writing
-> >> in userspace and I forgot to set `sector` to zero, so I thought it would
-> >> be useful.
-> >>
-> >> Do you mean to remove the error message?
-> >
-> >Some like dev_warn_once() might be better here.
->
-> We also have other checks we do for each request (in and out header
-> length, etc.) where we use dev_err(), should we change those too?
+On 5/7/2022 12:03 PM, Ian Rogers wrote:
+> On Thu, Apr 21, 2022 at 11:57 PM <zhengjun.xing@linux.intel.com> wrote:
+>>
+>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>
+>> For hybrid events, by default stat aggregates and reports the event counts
+>> per pmu.
+>>
+>>    # ./perf stat -e cycles -a  sleep 1
+>>
+>>     Performance counter stats for 'system wide':
+>>
+>>        14,066,877,268      cpu_core/cycles/
+>>         6,814,443,147      cpu_atom/cycles/
+>>
+>>           1.002760625 seconds time elapsed
+>>
+>> Sometimes, it's also useful to aggregate event counts from all PMUs.
+>> Create a new option '--hybrid-merge' to enable that behavior and report
+>> the counts without PMUs.
+>>
+>>    # ./perf stat -e cycles -a --hybrid-merge  sleep 1
+>>
+>>     Performance counter stats for 'system wide':
+>>
+>>        20,732,982,512      cycles
+>>
+>>           1.002776793 seconds time elapsed
+>>
+>> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> 
+> This feels related to aggregation, but aggregation is for a single
+> evsel on a single PMU. What happens if you have both instructions and
+> cycles with --hybrid-merge? Normally we aggregate all counts for each
+> CPU into a the two evsels and then compute a metric:
+> ```
+# ./perf stat -e instructions,cycles  -a /bin/true
 
-I think so.
+  Performance counter stats for 'system wide':
 
->
-> I don't know, from a developer's point of view I'd prefer to have them
-> all printed, but actually if we have a totally wrong driver in the
-> guest, we risk to hang our host to print an infinite number of messages.
+          2,416,092      cpu_core/instructions/
+            305,840      cpu_atom/instructions/
+          2,645,138      cpu_core/cycles/
+            789,631      cpu_atom/cycles/
 
-Or we can use pr_debug() or tracepoints. Then the log is enabled conditally.
+        0.002345159 seconds time elapsed
 
->
-> Maybe we should change all the errors in the data path to
-> dev_warn_once() and keep returning VIRTIO_BLK_S_IOERR to the guest which
-> will surely get angry and print something.
->
-> If you agree, I'll send a patch to change all the printing and then
-> repost this with your suggestion as well.
+# ./perf stat -e instructions,cycles  -a --hybrid-merge /bin/true
 
-Yes.
+  Performance counter stats for 'system wide':
 
-Thanks
+          2,702,612      instructions
+          3,607,773      cycles
 
->
+        0.002475749 seconds time elapsed
+
+Currently, no metrics showed for the hybrid systems.
+
+> $ perf stat -e instructions,cycles /bin/true
+> 
+>   Performance counter stats for '/bin/true':
+> 
+>           1,830,554      instructions              #    1.17  insn per
+> cycle
+>           1,561,415      cycles
+> ```
+> This kind of aggregation behavior may be needed more widely for metrics.
+> 
 > Thanks,
-> Stefano
->
+> Ian
+> 
+>> ---
+>>   tools/perf/Documentation/perf-stat.txt | 10 ++++++++++
+>>   tools/perf/builtin-stat.c              |  2 ++
+>>   tools/perf/util/stat-display.c         | 17 +++++++++++++++--
+>>   tools/perf/util/stat.h                 |  1 +
+>>   4 files changed, 28 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+>> index c06c341e72b9..8d1cde00b8d6 100644
+>> --- a/tools/perf/Documentation/perf-stat.txt
+>> +++ b/tools/perf/Documentation/perf-stat.txt
+>> @@ -454,6 +454,16 @@ Multiple events are created from a single event specification when:
+>>   2. Aliases, which are listed immediately after the Kernel PMU events
+>>      by perf list, are used.
+>>
+>> +--hybrid-merge::
+>> +Merge the hybrid event counts from all PMUs.
+>> +
+>> +For hybrid events, by default, the stat aggregates and reports the event
+>> +counts per PMU. But sometimes, it's also useful to aggregate event counts
+>> +from all PMUs. This option enables that behavior and reports the counts
+>> +without PMUs.
+>> +
+>> +For non-hybrid events, it should be no effect.
+>> +
+>>   --smi-cost::
+>>   Measure SMI cost if msr/aperf/ and msr/smi/ events are supported.
+>>
+>> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+>> index a96f106dc93a..ea88ac5bed2d 100644
+>> --- a/tools/perf/builtin-stat.c
+>> +++ b/tools/perf/builtin-stat.c
+>> @@ -1235,6 +1235,8 @@ static struct option stat_options[] = {
+>>          OPT_SET_UINT('A', "no-aggr", &stat_config.aggr_mode,
+>>                      "disable CPU count aggregation", AGGR_NONE),
+>>          OPT_BOOLEAN(0, "no-merge", &stat_config.no_merge, "Do not merge identical named events"),
+>> +       OPT_BOOLEAN(0, "hybrid-merge", &stat_config.hybrid_merge,
+>> +                   "Merge identical named hybrid events"),
+>>          OPT_STRING('x', "field-separator", &stat_config.csv_sep, "separator",
+>>                     "print counts with custom separator"),
+>>          OPT_CALLBACK('G', "cgroup", &evsel_list, "name",
+>> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+>> index 46b3dd134656..d9629a83aa78 100644
+>> --- a/tools/perf/util/stat-display.c
+>> +++ b/tools/perf/util/stat-display.c
+>> @@ -612,6 +612,19 @@ static bool hybrid_uniquify(struct evsel *evsel)
+>>          return perf_pmu__has_hybrid() && !is_uncore(evsel);
+>>   }
+>>
+>> +static bool hybrid_merge(struct evsel *counter, struct perf_stat_config *config,
+>> +                        bool check)
+>> +{
+>> +       if (hybrid_uniquify(counter)) {
+>> +               if (check)
+>> +                       return config && config->hybrid_merge;
+>> +               else
+>> +                       return config && !config->hybrid_merge;
+>> +       }
+>> +
+>> +       return false;
+>> +}
+>> +
+>>   static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+>>                              void (*cb)(struct perf_stat_config *config, struct evsel *counter, void *data,
+>>                                         bool first),
+>> @@ -620,9 +633,9 @@ static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+>>          if (counter->merged_stat)
+>>                  return false;
+>>          cb(config, counter, data, true);
+>> -       if (config->no_merge || hybrid_uniquify(counter))
+>> +       if (config->no_merge || hybrid_merge(counter, config, false))
+>>                  uniquify_event_name(counter, config);
+>> -       else if (counter->auto_merge_stats)
+>> +       else if (counter->auto_merge_stats || hybrid_merge(counter, config, true))
+>>                  collect_all_aliases(config, counter, cb, data);
+>>          return true;
+>>   }
+>> diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
+>> index 335d19cc3063..91d989dfeca4 100644
+>> --- a/tools/perf/util/stat.h
+>> +++ b/tools/perf/util/stat.h
+>> @@ -122,6 +122,7 @@ struct perf_stat_config {
+>>          bool                     ru_display;
+>>          bool                     big_num;
+>>          bool                     no_merge;
+>> +       bool                     hybrid_merge;
+>>          bool                     walltime_run_table;
+>>          bool                     all_kernel;
+>>          bool                     all_user;
+>> --
+>> 2.25.1
+>>
 
+-- 
+Zhengjun Xing

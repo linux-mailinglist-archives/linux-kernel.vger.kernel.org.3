@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEFA51E304
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EBD51E30D
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445177AbiEGBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S1445192AbiEGBgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiEGBdL (ORCPT
+        with ESMTP id S236738AbiEGBgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:33:11 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC870921
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 18:29:26 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id k27so10463085edk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 18:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sIQWyqXvIIq9sD3XM20r5zKTpkRZMWgEiouQek1gd3Y=;
-        b=WWj4C6F5RGEX4dE9POSrNe1/+NzxSscKgUQs1Ognjq4KCxFMsJ79jg9aA4P06w11FB
-         FAkIfigQsxdvYcy3m3SYCvCSjdxQ9r8ueIyShwc+abHKYixmQfeTIAzFn28gw4rVP6L4
-         t0YsPGj8OaZmJH7AlnWtt8zx3jBW6RYg0HozpmjIekMlUlX8P8cxRohm+j3ZY9nGhP9d
-         MZY96nbatPhomFTvuibWDU6Ewstm3GT6IeVZyzaKPSLM4RUSfZzHo4WZbHjX3QKzgdeV
-         twR3yOgbRebFZ9qemBLaNMELrRP5rSyqQ1AMj2rC+Fiw+bvYIRes+fMMjTES908RseeI
-         bS/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sIQWyqXvIIq9sD3XM20r5zKTpkRZMWgEiouQek1gd3Y=;
-        b=f5C9VxJazX5c7RHDgXWs9G43dPhUQfZaFLKm3pfmYppuHvyksT9ENfhl5v2XtkhUMh
-         4LTtfaICR+rqyVH1LLTzLkWw+m9yEH9PppaDskbogDfmwKVewyEhE+cEWtMnjuC35tAu
-         m30txH/v7yjLDSAgo3+1pgYhwchP4VY926Mo1SewpkaXCykZAzKEsxOJ91EO61UwPuJL
-         w57LRxmqsQmPfeSj75GdgF6z0Deg/Bq0M+SWnoCZ8pQbEOc6KEXDmP3EUKFn9O6j1YeT
-         u29GbV0hJDcoZG8ePoBLslIk0nAb/jWWv1o82/sasdU95tjAjli3fZoYZ5WUccWlScyB
-         syFA==
-X-Gm-Message-State: AOAM533RjPRJQpgvh8Mc9jmpzlPwg9LLocgI3JWtzJ5LFrLb9lrszPxD
-        xBoRF/DLrz6/Ypj4o+Uv38vQTkk2XvnFLywi0IA=
-X-Google-Smtp-Source: ABdhPJxewcFKx/5BeXVX+Cw6jCPiZRBRVEdISYOJYZ3Nd965a3XYEqXB16ComSJHpGQePEqxplDjlHJXbKLNkwaa/nA=
-X-Received: by 2002:a05:6402:1d48:b0:427:e039:9262 with SMTP id
- dz8-20020a0564021d4800b00427e0399262mr6564374edb.148.1651886964565; Fri, 06
- May 2022 18:29:24 -0700 (PDT)
+        Fri, 6 May 2022 21:36:00 -0400
+Received: from out199-4.us.a.mail.aliyun.com (out199-4.us.a.mail.aliyun.com [47.90.199.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90058E7E;
+        Fri,  6 May 2022 18:32:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCUCndB_1651887123;
+Received: from 30.236.9.83(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCUCndB_1651887123)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 07 May 2022 09:32:05 +0800
+Message-ID: <971cfb54-f5a6-921c-b0c5-195a5daed0fb@linux.alibaba.com>
+Date:   Sat, 7 May 2022 09:32:46 +0800
 MIME-Version: 1.0
-References: <2fb2bc4e857848c83cfa96483e4b25b23d46be49.1651516951.git.jpoimboe@redhat.com>
- <CAPDLWs_aOi-f801SAhA1X2YH4XE_r5P3AfPV1uhQWA10bKKffg@mail.gmail.com> <20220506152601.z4f3bachnyfeqgzf@treble>
-In-Reply-To: <20220506152601.z4f3bachnyfeqgzf@treble>
-From:   Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-Date:   Sat, 7 May 2022 06:59:08 +0530
-Message-ID: <CAPDLWs8+=z_h8or4Yz_3aJUp7M=5O=SodjEgTyau6XQkRcW8yQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts/faddr2line: Only use text symbols to calculate
- function size
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+ <f64f0d4f-f0fc-f07c-3c17-96f124da21e4@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <f64f0d4f-f0fc-f07c-3c17-96f124da21e4@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,30 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 8:56 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Fri, May 06, 2022 at 11:34:00AM +0530, Kaiwan N Billimoria wrote:
-> > Hi Josh,
-> >
-> > Unfortunately, it didn't work with my test case (as before):
-> > $ <...>/linux-5.10.60/scripts/faddr2line ./oops_tryv2.ko do_the_work+0x124
-> > bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
-> > $
-> >
-> > What _did_ work was the earlier (much longer) patch you'd sent (your
-> > email dt 20 Jan 2022),
-> > Could you pl recheck...
-> > (As before, i have the test case module here:
-> > https://github.com/PacktPublishing/Linux-Kernel-Debugging/tree/main/ch7/oops_tryv2
->
-> Sorry, I totally managed to forget that I rewrote the whole script:
->
->   https://lkml.kernel.org/lkml/20220120171751.gibauc4zovoskjns@treble
->
-> IIRC, that was the one that fixed your issue.  Let me go clean that one
-> up...
-Yup ! that's the one
 
->
-> --
-> Josh
+
+On 5/7/2022 2:55 AM, Mike Kravetz wrote:
+> On 4/29/22 01:14, Baolin Wang wrote:
+>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>> size specified.
+>>
+>> When unmapping a hugetlb page, we will get the relevant page table
+>> entry by huge_pte_offset() only once to nuke it. This is correct
+>> for PMD or PUD size hugetlb, since they always contain only one
+>> pmd entry or pud entry in the page table.
+>>
+>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+>> since they can contain several continuous pte or pmd entry with
+>> same page table attributes, so we will nuke only one pte or pmd
+>> entry for this CONT-PTE/PMD size hugetlb page.
+>>
+>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+> 
+> Since try_to_unmap can be called for non-hugetlb pages, perhaps the following
+> is more accurate?
+> 
+> try_to_unmap is only passed a hugetlb page in the case where the
+> hugetlb page is poisoned.
+
+Yes, will update in next version.
+
+> It does concern me that this assumption is built into the code as
+> pointed out in your discussion with Gerald.  Should we perhaps add
+> a VM_BUG_ON() to make sure the passed huge page is poisoned?  This
+> would be in the same 'if block' where we call
+> adjust_range_if_pmd_sharing_possible.
+Good point. Will do in next version. Thanks.

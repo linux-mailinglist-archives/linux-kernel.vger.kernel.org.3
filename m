@@ -2,107 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6250051E857
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D74851E85A
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442585AbiEGQBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S1446617AbiEGQCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239981AbiEGQBc (ORCPT
+        with ESMTP id S237306AbiEGQCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:01:32 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70224289A3
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:57:45 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id iq10so9591550pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:57:45 -0700 (PDT)
+        Sat, 7 May 2022 12:02:32 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989328E0C
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 08:58:44 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id z2so17892459ejj.3
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 08:58:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cqxISk+VaciL/1aW5hViJxxnnoQZDY5NVfJEBcu1kVk=;
-        b=lLqa//TbAJUeHrTPGPBjqdGnH0uhoqZReSSOS8/+zpjmQpLxDWA6b/x8TpOORM8E63
-         t7vTZHr3J+WigK2kUy6cWiDBlD6WZ9yDXA6lpV1bN9HzP5ElIBriFGHtaALPSq0qiYjz
-         0v9/9pDQP3HiyuSjAyFZYiM/SjGYzBbM07wpO93ZOZ3XRX51TAb9CPR2JrcdJoTvbg1v
-         gYTp1haHi3qBq5li9vzCixN14pR+A39Z1L2HO8oBEDBH3pELXezvl7XOLkbdsrDMdyck
-         aW2ihT0FSl7U9M92c6vr4sr6bA99pkeRngbdBLBP2FNRkgFva0RatdYXo8OjHS3m7/z3
-         bBSA==
+        bh=F4eg3zMRdpKPCGlpzvcFzu7becBtGl7sPy8Sb1qKlmI=;
+        b=PjDkBDm1zFIqM02o+qAceGgf+oG1KkBJ1T5lAaRVXihm94rQqYsfUrzoCiL2cuc7R6
+         jR5tcI7LG+uwqrjEupVKuZ36MYNrghJQyqUno6n8AZi5vTOyDRA2HksqtRqfpqZxPLwe
+         wiamYMcwg250+hguO6aQiSyeNC92aBLYXddXdfEgCcgJLHL6xAQY1Eb2GjQ0LH13kOGd
+         Ql+KqpabkrmXL6OPYY8uTTffb308pclxUmHIkNvec9lXlEOLZFhbyPXLzmided3Wf1u3
+         u/MdhNpd3THj6rlJM/vjo2PULJio5S69mUSKZLxTePCJbjD2oUY13g/75Txyszd9mwvg
+         KlcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cqxISk+VaciL/1aW5hViJxxnnoQZDY5NVfJEBcu1kVk=;
-        b=NWAAnopIOynjzmNguKgOivOl4SJYJRAXEvN9pJZrSfpOl9nkwxkv0d2l9Hug/2Cqcz
-         GlXGGQVi+AZa1554yRQQoXLQp6xbiM5C2/mQlOMdW8PwP22hkU0TKDFVchJPDuvBNhSn
-         NVp3TluZZF8DnkXmfELVwWeVfph0oOqCpcWLJTw6vDuBTM1OcPrffXoILHsSD5kOnv71
-         mDXeQmWvq4t/iV3L0Nu9XxVdm+KaLcu3ohCoSLJzSWriyAh9YXkiSuYg9KVsXqaYybM4
-         mSyBr4QhchI+SNpxnFK6Cv18F2nSTYoaKFY3HgB0JMAvbk/Q0gPAHizPOGNpTktogfg6
-         dXgA==
-X-Gm-Message-State: AOAM531yk/dDM6E7O6XaGvinUaDCoUyV4tIoppy2hFOI46qL8ZLz4RWz
-        Ej4dOuaXmnuKHilAdFWF/e/JgTLN8cydWw==
-X-Google-Smtp-Source: ABdhPJzeSryShy4rixoBYjLIhIwaH9/ic6lCSh6uSryhEylC2QneaflEr9mKSe23CTU/Oz3lBuEWtw==
-X-Received: by 2002:a17:902:8211:b0:15e:f867:5456 with SMTP id x17-20020a170902821100b0015ef8675456mr3938917pln.34.1651939064898;
-        Sat, 07 May 2022 08:57:44 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa79615000000b0050dcd921146sm5394017pfg.108.2022.05.07.08.57.44
+        bh=F4eg3zMRdpKPCGlpzvcFzu7becBtGl7sPy8Sb1qKlmI=;
+        b=MYLQPNMrxddNLnml1ueVKbsPy1tli6TjClrcy5/wjRMREqyHyjZ3gCmZ4c0e6tHoGc
+         z1IeHOltR0RSw/TitBt/lsbdDTmKsBGXf9RCsVuUAYieXVxq5vCe4sE5oSUfz07kmowA
+         5CaopBXtpcNDWTFmZnSA6tX1Aat3Hr10lDGB5sXkrkdVYHvhayuELuwJHJRrNeblAWl5
+         WVffXA9lyn2SM+keG+c/G+5xis2b2n+MMogY61slHM3Y4SLwJizrKlyMdD91PkOnysB9
+         JE46NzCoFo52gWisFODl9t8V7mLwiB0GZutYFAUv3hR35LERZ6qbKn271/5Xxn38+anj
+         Ty7g==
+X-Gm-Message-State: AOAM530hGKQOoD4XlHA8iZWEl820XZWdWe7DGpYO8KOJlQ6/ATIDaM3g
+        XwtH5yi0agAMEH1PHDC7mvyA0w==
+X-Google-Smtp-Source: ABdhPJxvE6qr6UTyhd8YDsJjT6zrySc6pcTArns0DCeI6aPzPq4IY7FXPd6kYkL+Dez0qO9/jeu9Pw==
+X-Received: by 2002:a17:906:1845:b0:6f4:346f:f767 with SMTP id w5-20020a170906184500b006f4346ff767mr7511895eje.214.1651939123480;
+        Sat, 07 May 2022 08:58:43 -0700 (PDT)
+Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id zg12-20020a170907248c00b006f3ef214e36sm3162897ejb.156.2022.05.07.08.58.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 08:57:44 -0700 (PDT)
-Message-ID: <4560ea22-4d20-95e4-56e9-9caed6093ac2@kernel.dk>
-Date:   Sat, 7 May 2022 09:57:43 -0600
+        Sat, 07 May 2022 08:58:42 -0700 (PDT)
+Message-ID: <e49ea1aa-0711-c75a-3694-f8cdc8d56489@linaro.org>
+Date:   Sat, 7 May 2022 17:58:42 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 1/4] io_uring: add IORING_ACCEPT_MULTISHOT for accept
+Subject: Re: [PATCH v2 4/4] dt-bindings: doc/devicetree/bindings/security/tpm:
+ Move tpm-i2c.txt to YAML
 Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220507140620.85871-1-haoxu.linux@gmail.com>
- <20220507140620.85871-2-haoxu.linux@gmail.com>
- <21e1f932-f5fd-9b7e-2b34-fc3a82bbb297@kernel.dk>
- <c55de4df-a1a8-b169-8a96-3db99fa516bb@gmail.com>
- <0145cd16-812b-97eb-9c6f-4338fc25474a@kernel.dk>
- <c347be9c-0421-c8a1-1d9d-26ef7fc377ec@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <c347be9c-0421-c8a1-1d9d-26ef7fc377ec@gmail.com>
+To:     Johannes Holland <johannes.holland@infineon.com>,
+        jarkko@kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org
+References: <20220506170013.22598-1-johannes.holland@infineon.com>
+ <20220506170013.22598-4-johannes.holland@infineon.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220506170013.22598-4-johannes.holland@infineon.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/22 9:52 AM, Hao Xu wrote:
-> ? 2022/5/7 ??11:38, Jens Axboe ??:
->> On 5/7/22 9:31 AM, Hao Xu wrote:
->>> ? 2022/5/7 ??10:16, Jens Axboe ??:
->>>> On 5/7/22 8:06 AM, Hao Xu wrote:
->>>>> From: Hao Xu <howeyxu@tencent.com>
->>>>>
->>>>> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
->>>>> support multishot.
->>>>>
->>>>> Signed-off-by: Hao Xu <howeyxu@tencent.com>
->>>>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>>>
->>>> Heh, don't add my SOB. Guessing this came from the folding in?Nop, It is in your fastpoll-mshot branch
->>> https://git.kernel.dk/cgit/linux-block/commit/?h=fastpoll-mshot&id=e37527e6b4ac60e1effdc8aaa1058e931930af01
->>
->> But that's just a stand-alone fixup patch to be folded in, the SOB
->> doesn't carry to other patches. So for all of them, just strip that for
->> v4. If/when it gets applied, my SOB will get attached at that point.
->>
-> Sorry, paste a wrong link, should be this:
-> https://git.kernel.dk/cgit/linux-block/commit/?h=fastpoll-mshot&id=289555f559f252fbfca6bdd0886316a8b17693e2
+On 06/05/2022 19:00, Johannes Holland wrote:
+> Migrate the existing plain text I2c driver schema to YAML and extend by
+> the options of the generic TIS driver for I2C TPMs which comply to the
+> TCG PC Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
+> Revision 14.
+> 
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
 
-Right, but that's just me applying it to a test branch.
+Please use subject prefix consistent with subsystem:
+git log --oneline -- Documentation/devicetree/bindings/
 
--- 
-Jens Axboe
 
+so for example: "dt-bindings: tpm: tpm-i2c: Convert to YAML"
+
+> Changelog:
+>  * v2:
+>    * move existing device tree instead of just adding a new one
+>    * do not use wildcard compatibles
+>    * make properties "label", "linux,sml-base" and "linux,sml-size"
+>      optional, as they should be
+
+Why they should be? Please explain all changes deviating from conversion
+in the commit msg. Adding new features should be in new commits, because
+this is supposed to be only conversion + minor adjustments for the
+conversion needs.
+
+> 
+> All properties are listed, even if some drivers do not implement them.
+> 
+> As mentioned, I kept the generic compatible in there because the TPM
+> is a standardized device. For vendor-specific features and bugs, the
+> specific compatibles can be used. Please let me know if you need it
+> removed.
+
+I think it should be a separate patch because it is not mentioned in
+original bindings at all.
+
+> 
+>  .../bindings/security/tpm/tpm-i2c.txt         | 26 --------
+>  .../bindings/security/tpm/tpm-i2c.yaml        | 66 +++++++++++++++++++
+>  2 files changed, 66 insertions(+), 26 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
+> deleted file mode 100644
+> index a65d7b71e81a..000000000000
+> --- a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -* Device Tree Bindings for I2C based Trusted Platform Module(TPM)
+> -
+> -Required properties:
+> -
+> -- compatible     : 'manufacturer,model', eg. nuvoton,npct650
+> -- label          : human readable string describing the device, eg. "tpm"
+> -- linux,sml-base : 64-bit base address of the reserved memory allocated for
+> -                   the firmware event log
+> -- linux,sml-size : size of the memory allocated for the firmware event log
+> -
+> -Optional properties:
+> -
+> -- powered-while-suspended: present when the TPM is left powered on between
+> -                           suspend and resume (makes the suspend/resume
+> -                           callbacks do nothing).
+> -
+> -Example (for OpenPower Systems with Nuvoton TPM 2.0 on I2C)
+> -----------------------------------------------------------
+> -
+> -tpm@57 {
+> -	reg = <0x57>;
+> -	label = "tpm";
+> -	compatible = "nuvoton,npct650", "nuvoton,npct601";
+> -	linux,sml-base = <0x7f 0xfd450000>;
+> -	linux,sml-size = <0x10000>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
+> new file mode 100644
+> index 000000000000..952605ab8611
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/security/tpm/tpm-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: I2C PTP based TPM Device Tree Bindings
+
+s/Device Tree Bindings//
+
+> +
+> +maintainers:
+> +  - Johannes Holland <johannes.holland@infineon.com>
+> +
+> +description:
+> +  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
+
+s/Device Tree Bindings//
+
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          # Infineon's Trusted Platform Module (TPM) (SLB9673)
+> +          - infineon,slb9673
+
+This was not documented before, so separate commit please.
+
+> +          - nuvoton,npct601
+
+Please remove it from trivial-devices (in this commit).
+
+> +          - nuvoton,npct650
+> +      - const: tcg,tpm-tis-i2c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupt:
+> +    maxItems: 1
+> +
+> +  label:
+> +    description: |
+
+No need for "|". Also in other cases below.
+
+> +      Human readable string describing the device, eg. "tpm".
+> +
+> +  linux,sml-base:
+> +    description: |
+> +      64-bit base address of the reserved memory allocated
+> +      for the firmware event log.
+
+This does not look like standard type, so it needs a $ref.
+
+> +
+> +  linux,sml-size:
+> +    description: |
+> +      Size of the memory allocated for the firmware event log.
+
+Ditto.
+
+> +
+> +  powered-while-suspended:
+> +    description: |
+> +      Present when the TPM is left powered on between suspend and
+> +      resume (makes the suspend/resume callbacks do nothing).
+
+Missing type, so:
+type:boolean
+
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      tpm@2e {
+> +        compatible = "infineon,slb9673", "tcg,tpm-tis-i2c";
+> +        reg = <0x2e>;
+
+Why changing example? Use the original one, unless it has issues but
+this was not mentioned anywhere.
+
+> +      };
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof

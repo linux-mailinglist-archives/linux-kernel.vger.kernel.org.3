@@ -2,126 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA6D51E92F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 20:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A7551E933
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 20:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446885AbiEGSXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 14:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S1386784AbiEGS04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 14:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446819AbiEGSXW (ORCPT
+        with ESMTP id S230521AbiEGS0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 14:23:22 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE97630F43
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 11:19:31 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so6139776wmz.0
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 11:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JQ4/wPcUQ3XIBwyiOH+85aEeFtvLk17ZXfaTMabSQhQ=;
-        b=M0nL9AqbUiqgoGeBXuGJocL7BzhM9dpf6lZVm6z1MjjHA7Ksx3fAI6nsxT0Nt1TL05
-         V9n3RuTkUTnoTUTcWzbDZzYyXq+nDqhodBqF5QWBpLz3KG7WkLCJw+dMLaWXpmXERYF1
-         Z/ciVWktZyebFps/o8q2Oq5Yq41Pu3hxh+stWpNbBkwcaCkgIOQ5WYEwn7lV+jJsEdSh
-         +HhxY/jdkwpoWo5uCgqY6+fdKmpb5rQY+LpZDKBI6NpE+HUIsQOlFS0+S/WN3zq9WuIL
-         TiiJg4uvRYrYvsi0W51dYzG/nuX5J3xAnuGzn1LhIo6s+ydhszeik8BNC8Hg3Kloj1TO
-         zwOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=JQ4/wPcUQ3XIBwyiOH+85aEeFtvLk17ZXfaTMabSQhQ=;
-        b=HlmFV/R/Ea6819rQM6MBm5LVA6y4OrYdNPvYMTbNLS9IWZikBTUaCI9IOasquBKtJp
-         WOl/ye8oGXVxPBMVCI/7sZ/UUH348+EUqL2lJtbmF7uOSGWcbsuVyW0e2NfP/huzHzOE
-         g0MCuzmSg0BwyY/iBYWEZNIO6avmabOZV+deWPPuaV5yVQGy+/+PUrZP+pa6zimluFUi
-         5QJ8ipjHPRznWjyrbIks0z3G7Or7u69pHPZvJmy6okMF/X2Tykg6MBoArMSqCYsgQrDN
-         Gr3wTAL4t9unqAw1NSaweffEk4+U3qeO302Vp57Nak03WPeWraCVxl/xpRMqSCdVuDQZ
-         8Jgw==
-X-Gm-Message-State: AOAM531XAxmS7V+hkqxDT4BWT6APNv5oz6dsVF8OrQgzGzcMCcBS1k2D
-        LyiTuEAVAlt/sT++BUGaKLY=
-X-Google-Smtp-Source: ABdhPJx4KKTzPkd6Pb55J8tu0qaETBwCwPrhXqxi1bGV5Mve7UPIQCUHgzJRC6duNfUV/2m203EIIQ==
-X-Received: by 2002:a1c:3b54:0:b0:394:3910:3c7b with SMTP id i81-20020a1c3b54000000b0039439103c7bmr8718493wma.3.1651947570262;
-        Sat, 07 May 2022 11:19:30 -0700 (PDT)
-Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d4d8a000000b0020c5253d8f3sm8198457wru.63.2022.05.07.11.19.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 07 May 2022 11:19:29 -0700 (PDT)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: [PATCH V2 7/7] arm/xen: Assign xen-grant DMA ops for xen-grant DMA devices
-Date:   Sat,  7 May 2022 21:19:08 +0300
-Message-Id: <1651947548-4055-8-git-send-email-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 7 May 2022 14:26:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8D624970;
+        Sat,  7 May 2022 11:23:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C246613F5;
+        Sat,  7 May 2022 18:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08741C385A5;
+        Sat,  7 May 2022 18:23:00 +0000 (UTC)
+Date:   Sat, 7 May 2022 19:22:57 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
+ for arm64
+Message-ID: <Yna5AVli1IIUd2kg@arm.com>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-7-thunder.leizhen@huawei.com>
+ <20220506231451.GB122876@MiWiFi-R3L-srv>
+ <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
+ <YnXn87JnfUxI2lC2@MiWiFi-R3L-srv>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnXn87JnfUxI2lC2@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On Sat, May 07, 2022 at 11:30:59AM +0800, Baoquan He wrote:
+> On 05/07/22 at 09:41am, Leizhen (ThunderTown) wrote:
+> > On 2022/5/7 7:14, Baoquan He wrote:
+> > > On 05/06/22 at 07:44pm, Zhen Lei wrote:
+> > >> Now arm64 has added support for "crashkernel=X,high" and
+> > >> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+> > >> "crashkernel=Y,low" is not specified.
+> > >>
+> > >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > >> ---
+> > >>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+> > >>  1 file changed, 7 insertions(+), 2 deletions(-)
+> > >>
+> > >> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > >> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+> > >> --- a/Documentation/admin-guide/kernel-parameters.txt
+> > >> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > >> @@ -808,7 +808,7 @@
+> > >>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+> > >>  
+> > >>  	crashkernel=size[KMG],high
+> > >> -			[KNL, X86-64] range could be above 4G. Allow kernel
+> > >> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+> > >>  			to allocate physical memory region from top, so could
+> > >>  			be above 4G if system have more than 4G ram installed.
+> > >>  			Otherwise memory region will be allocated below 4G, if
+> > >> @@ -821,7 +821,7 @@
+> > >>  			that require some amount of low memory, e.g. swiotlb
+> > >>  			requires at least 64M+32K low memory, also enough extra
+> > >>  			low memory is needed to make sure DMA buffers for 32-bit
+> > >> -			devices won't run out. Kernel would try to allocate at
+> > >> +			devices won't run out. Kernel would try to allocate
+> > >>  			at least 256M below 4G automatically.
+> > >>  			This one let user to specify own low range under 4G
+> > >>  			for second kernel instead.
+> > >> @@ -829,6 +829,11 @@
+> > >>  			It will be ignored when crashkernel=X,high is not used
+> > >>  			or memory reserved is below 4G.
+> > >>  
+> > >> +			[KNL, ARM64] range in low memory.
+> > >> +			This one let user to specify a low range in DMA zone for
+> > >                                           ^ not needed,
+> > >                         Maybe Catalin can fix it when merging.
+> > 
+> > Delete "This one let user to" or the entire sentence? I understand it to be the former.
+> 
+> Oh, I mean the 'to' is not needed. "This one let user specify ....". The
+> 'to' is a grammer mistake.
 
-By assigning xen-grant DMA ops we will restrict memory access for
-passed device using Xen grant mappings. This is needed for using any
-virtualized device (e.g. virtio) in Xen guests in a safe manner.
+Slightly more correct is "This one lets the user specify..."
 
-Please note, for the virtio devices the XEN_VIRTIO config should
-be enabled (it forces ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS).
+I can fix them up when applying.
 
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
----
-Changes RFC -> V1:
-   - update commit subject/description
-   - remove #ifdef CONFIG_XEN_VIRTIO
-   - re-organize the check taking into the account that
-     swiotlb and virtio cases are mutually exclusive
-   - update according to the new naming scheme:
-     s/virtio/grant_dma
-
-Changes V1 -> V2:
-   - add Stefano's R-b
-   - remove arch_has_restricted_virtio_memory_access() check
-   - update commit description
-   - remove the inclusion of virtio_config.h
----
- include/xen/arm/xen-ops.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/xen/arm/xen-ops.h b/include/xen/arm/xen-ops.h
-index 288deb1..b0766a6 100644
---- a/include/xen/arm/xen-ops.h
-+++ b/include/xen/arm/xen-ops.h
-@@ -3,11 +3,14 @@
- #define _ASM_ARM_XEN_OPS_H
- 
- #include <xen/swiotlb-xen.h>
-+#include <xen/xen-ops.h>
- 
- static inline void xen_setup_dma_ops(struct device *dev)
- {
- #ifdef CONFIG_XEN
--	if (xen_swiotlb_detect())
-+	if (xen_is_grant_dma_device(dev))
-+		xen_grant_setup_dma_ops(dev);
-+	else if (xen_swiotlb_detect())
- 		dev->dma_ops = &xen_swiotlb_dma_ops;
- #endif
- }
 -- 
-2.7.4
-
+Catalin

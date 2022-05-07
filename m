@@ -2,95 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC7051E3E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D2F51E3CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 05:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445445AbiEGEDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 00:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S1445444AbiEGDfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 23:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiEGEDC (ORCPT
+        with ESMTP id S1442292AbiEGDfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 00:03:02 -0400
-X-Greylist: delayed 1805 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 20:59:16 PDT
-Received: from slot0.crystalscrop.com (slot0.crystalscrop.com [194.31.98.191])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CD958E49
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 20:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=crystalscrop.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=info@crystalscrop.com;
- bh=vdtJwgFshmVn/X31MyHPWvuCG4o=;
- b=a7TP6aKr+1lbioqnHZAQak4VpxLPYmQPyDaF7OOYR0gGjY3z9MEnYNxBUYoQQyCs9MIsIlhBqDv3
-   jt93pnL1Oo9GTFPeHLyZcPXjXekkuA2B72731q3OKfvnOf9hry7Pb0+QmPzN1zEsnAYyvbPprbhp
-   s04fLUc70xqKPc8ZGM1Ep7IIH6Bgefa8jBbNs8pq5ak3r/p89OhOBmJAAy0Fdzetnaj9Q3hpThTo
-   0rHp4ye2W4YFkE1hu4Uz1wveR6eC4K21R8udoNMPxBWhswIAJQzye2h2oIzJFE2mqCc3sFcKH0Qx
-   ZqNTtkO3mCxtrm38sB+wye0Q4wA0hJBBci7ShQ==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=crystalscrop.com;
- b=Fofo6KYRClGnfhcR8hdxp7HIwVmO5xHtV+Y7FaGqWvKUx3HISwiZMwn0effwIZ2hgwxJi9IDs/sG
-   sJRHw3ONOXBhJaV2/nn0THx1q80FlhYntnfWl4WMfpWCxD/cawbl2sjt40YB18VB/4XCzYQltl8R
-   0gHKoHZEg1DfwClr6eXC5cuFER0AIS6Apd9HacFuNp/Zgw/A8gsh9uyOEwxMHjDgtmfC7MaI6OtZ
-   cEgA2uv6+cRhf8b8q6xM0fjRPbuPmMHFWyNLZ3kZcVM+occpxmHglzMe7D5ECZmESx/C5rOSJIPa
-   fHWheqau9d/fENsJo+Mp6OjHaldvL9s6NDiOwA==;
-Reply-To: info@riitter-sport.com
-From:   "Alfred" <info@crystalscrop.com>
-To:     linux-kernel@vger.kernel.org
-Subject: INQUIRY
-Date:   6 May 2022 20:29:05 -0700
-Message-ID: <20220506202905.C66B95773E2E7622@crystalscrop.com>
+        Fri, 6 May 2022 23:35:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04C5F69493
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 20:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651894285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=74AbjzsgVUW4/zsFqHgAZ5XZOQsx1xf/ijiUOqjivO4=;
+        b=KXDHsl8ggynp4H0RdWI/ePIkqF4NvrvLsMoFrupN8Z1f7gnHDgeDWBbX+TbW9fRAseUjl2
+        bKDOxuwx6Z8Hs2gCwsbJ/XEzHLHP66Mk1XnK2G1mDRARP0Qem8+D8I12xUP0+ZXL5fWPjf
+        XwMAmoThLoAmS6FA0BWQId860HgakCs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-iVzmzOU6N-yKeM5q6cBPaA-1; Fri, 06 May 2022 23:31:22 -0400
+X-MC-Unique: iVzmzOU6N-yKeM5q6cBPaA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 401C4811E76;
+        Sat,  7 May 2022 03:31:21 +0000 (UTC)
+Received: from localhost (ovpn-13-18.pek2.redhat.com [10.72.13.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C2982026D6A;
+        Sat,  7 May 2022 03:31:02 +0000 (UTC)
+Date:   Sat, 7 May 2022 11:30:59 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
+ for arm64
+Message-ID: <YnXn87JnfUxI2lC2@MiWiFi-R3L-srv>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-7-thunder.leizhen@huawei.com>
+ <20220506231451.GB122876@MiWiFi-R3L-srv>
+ <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_MISSPACED,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_CSS_A,
-        URIBL_DBL_MALWARE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_MALWARE Contains a malware URL listed in the Spamhaus
-        *       DBL blocklist
-        *      [URIs: crystalscrop.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [194.31.98.191 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: crystalscrop.com]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9142]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 FROM_MISSPACED From: missing whitespace
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings sir/madam
+On 05/07/22 at 09:41am, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/5/7 7:14, Baoquan He wrote:
+> > On 05/06/22 at 07:44pm, Zhen Lei wrote:
+> >> Now arm64 has added support for "crashkernel=X,high" and
+> >> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+> >> "crashkernel=Y,low" is not specified.
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+> >>  1 file changed, 7 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> >> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+> >> --- a/Documentation/admin-guide/kernel-parameters.txt
+> >> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> >> @@ -808,7 +808,7 @@
+> >>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+> >>  
+> >>  	crashkernel=size[KMG],high
+> >> -			[KNL, X86-64] range could be above 4G. Allow kernel
+> >> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+> >>  			to allocate physical memory region from top, so could
+> >>  			be above 4G if system have more than 4G ram installed.
+> >>  			Otherwise memory region will be allocated below 4G, if
+> >> @@ -821,7 +821,7 @@
+> >>  			that require some amount of low memory, e.g. swiotlb
+> >>  			requires at least 64M+32K low memory, also enough extra
+> >>  			low memory is needed to make sure DMA buffers for 32-bit
+> >> -			devices won't run out. Kernel would try to allocate at
+> >> +			devices won't run out. Kernel would try to allocate
+> >>  			at least 256M below 4G automatically.
+> >>  			This one let user to specify own low range under 4G
+> >>  			for second kernel instead.
+> >> @@ -829,6 +829,11 @@
+> >>  			It will be ignored when crashkernel=X,high is not used
+> >>  			or memory reserved is below 4G.
+> >>  
+> >> +			[KNL, ARM64] range in low memory.
+> >> +			This one let user to specify a low range in DMA zone for
+> >                                           ^ not needed,
+> >                         Maybe Catalin can fix it when merging.
+> 
+> Delete "This one let user to" or the entire sentence? I understand it to be the former.
+
+Oh, I mean the 'to' is not needed. "This one let user specify ....". The
+'to' is a grammer mistake.
 
 
-Alfred Eugen Ritter and Clara Ritter, n=C3=A9e G=C3=B6ttle founded the=20
-chocolate and confectionery factory at Innere Moltkestra=C3=9Fe in the=20
-Stuttgart district of Bad Cannstatt and the first cornerstone for=20
-Ritter Sport's chocolate history was laid - this was where the=20
-first "Ritter" chocolates were made and sold.
+> 
+> > 
+> > Other than this, LGTM,
+> > 
+> > Acked-by: Baoquan He <bhe@redhat.com>
+> > 
+> >> +			crash dump kernel.
+> >> +			It will be ignored when crashkernel=X,high is not used.
+> >> +
+> >>  	cryptomgr.notests
+> >>  			[KNL] Disable crypto self-tests
+> >>  
+> >> -- 
+> >> 2.25.1
+> >>
+> > 
+> > .
+> > 
+> 
+> -- 
+> Regards,
+>   Zhen Lei
+> 
 
-We have got your contact from our Agent and we are in need of=20
-your product as we wish to establish a business relationship with=20
-your humble firm.
-Kindly provide us with your updated catalog and prices for our=20
-preview.
-Please indicate your payment terms for our review.
-We will get back to you with order details
-
-
-Alfred T. Ritter
-Executive Purchase
-https://www.ritter-sport.com
-E-MAIL: info@riitter-sport.com

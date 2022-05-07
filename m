@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7F151E9AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC8051E9AC
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446955AbiEGTxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S1446931AbiEGTx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241958AbiEGTxN (ORCPT
+        with ESMTP id S1446912AbiEGTxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 7 May 2022 15:53:13 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0A318381
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:49:24 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so6207057wmz.0
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 12:49:24 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C068A167F8
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:49:25 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso6183034wml.5
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 12:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KZqXP6hZh5GqqoyrCubUDtDOPQns4Gp5tyf1oRlYqoQ=;
-        b=kBrCVNL+ziJAuwGUKfdbmU1rnM4z9UmOzc2fn8Q+3Jxs5LCWgbna2hB/sre4Ykp1rI
-         QQsQ8gpXwzbLw9mUOOPATqwcrGp5m7piKVp2WdxIUsRyhH44Ff9/pimjdVgcoG9SRtNf
-         jeGx1KNvUpromFl6YJb/txZDC2d4m1IzjhYoCK2oxq8fO1lHWtVJGYPqSkxZSakwFxfM
-         gRFglx7wOlrx+8p/nMJA0MYmT76CU2v6/acH8FqADTPksRU7p8cX4EQO2u98xu0LHiD7
-         q+8RD0oGIipImAVtA2umu7MIlm7hSpl9bPW6tRvltp414BVj6D/zwydyAGmbKxhI7flD
-         K/gQ==
+        bh=myk9/CeIwb2oqmRLj1NXsqVbqAgoDqd1CdT+ldYMtBg=;
+        b=Mh2jWBEKl/E8w0kFPKiPGsrIuY7ajNHgWCXYCRoZ978ZZ9GKV8q+UacHmPYneYCcDt
+         +51SetBYvpg5/5TT48+G8MWhanXqLOo+xfueNU/iR0y9cYjRLpP2Uq4bC9dnc3EOvOZB
+         uMmfHJa00yjK8OI5ZgEnDHianPdWM7S1KLopkhMwgNNOIxZ0mafCcA5PcES2HztY7LO1
+         nZ8Xwnc2V2c9z11gDHJhu69OXINbv9bXHu0Z9RBijeZd6kWoeF75IHG4pDt9GRSEDZae
+         T9g/i5ZjxaOKLMGy5tgjOJ10KGSk7GGwRQgJBETbtdbTQOUGr/5Pg16t57HzOCPm3sEm
+         14ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KZqXP6hZh5GqqoyrCubUDtDOPQns4Gp5tyf1oRlYqoQ=;
-        b=jVhMQrzh4PsagbUdh7R0w6reo0Ie0MGSV0/pimL69JRqoaQalosZ4MPJUUgjny31TC
-         2W4mNxI56MNg++FpbFfGJAwTHgBom+UFjfxvrAlTZuFK45jLh2iuoX6cKXM+S1iE5sN5
-         PWI2PBSq65PDAKKvoI809NXeQUlHsdZgalNeV8Vq71Ub/x4Y9EFEcbCa755yiSuiVuYE
-         NlxkQ6DYjzx09gB5KHcwFGWTACLNXXojza2kGo8tfXEaFNdjv/28S9yhJSMpZNgpeatO
-         GvjEY7IgpM7t/FYbeX0bmoGg8aDsjG6FKES46LWOTLR6yUy+5yaQMkRQbt4DjFetEuvR
-         lFNA==
-X-Gm-Message-State: AOAM532n/+Zky+59jz+ehOiJ9E2MybP2iqRlzFvpbJv1anwh4Loo0WID
-        NuJlC4XKrSYmcurN7HIAReTscg==
-X-Google-Smtp-Source: ABdhPJw0NQ0meG1Pbjqe5F5Tc29/I/eI4AP15zHWncKsrvzWPKz+e71IIdyqeSULpHmyMcrbrgQzzg==
-X-Received: by 2002:a05:600c:3c97:b0:392:9ad0:1911 with SMTP id bg23-20020a05600c3c9700b003929ad01911mr15907698wmb.187.1651952963177;
-        Sat, 07 May 2022 12:49:23 -0700 (PDT)
+        bh=myk9/CeIwb2oqmRLj1NXsqVbqAgoDqd1CdT+ldYMtBg=;
+        b=MYsyPqFdXV/gGlRN4XZwWo3Pc+hQlvP5+UyJCMyUWqsusGhIXs7dJ9smNxUKeactkJ
+         i0oitMwy3JZNTl5K9EryxIBpreWNeQzhSOxcCON+3z0XfLlI7v71y77OjzEocJohGzvO
+         T2+duQrI9NjsEQrG2gCx7r/ATw0h1e1j0e+dSFm+9R84R0Ln2e6yL2VjH4cKmOLlZxzv
+         SWtrbiNVYzxv97B+O5oFksmAnKS6+XY4JT+5uU4n8M2hgSnkIv0SyKCAWtJ8LdC2GZDe
+         lndJvSIE4MovGbwjqW+SAZbx0YZxEsvkq1T75pfNpmsm+yRQzP5C4LF1eYLgkGar2SSE
+         vDtw==
+X-Gm-Message-State: AOAM533OJDS2c8cOzLKcMcuXrBQPbsTZE6h8TafZXQtf1q2YV3kBdMqt
+        OZoD0Q1pvc694YS7uQfk2a9CVYDzlq+4Mgmf
+X-Google-Smtp-Source: ABdhPJwWdbTN2Z8RP4sAy2XxJaGdn9LcigPpzNRjoHCXLHREsGKkBuDf2PmjbouI4p3Ml368y7E5cA==
+X-Received: by 2002:a05:600c:4f06:b0:394:836b:1552 with SMTP id l6-20020a05600c4f0600b00394836b1552mr3563482wmq.145.1651952964331;
+        Sat, 07 May 2022 12:49:24 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.22
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 12:49:22 -0700 (PDT)
+        Sat, 07 May 2022 12:49:23 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 03/11] dt-bindings: pinctrl: qcom,pmic-gpio: describe gpio-line-names
-Date:   Sat,  7 May 2022 21:49:05 +0200
-Message-Id: <20220507194913.261121-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 04/11] dt-bindings: pinctrl: qcom,pmic-gpio: add 'input-disable'
+Date:   Sat,  7 May 2022 21:49:06 +0200
+Message-Id: <20220507194913.261121-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
 References: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
@@ -79,253 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing 'gpio-line-names' property and describe its constraints for
-all models except PM8226 (which seems not really used).
+'input-disable' is already used and supported by common pinctrl
+bindings, so add it also here to fix warnings like:
+
+  arch/arm64/boot/dts/qcom/qrb5165-rb5.dtb: gpio@c000: lt9611-rst-state: 'oneOf' conditional failed, one must be fixed:
+    'input-disable' does not match any of the regexes: 'pinctrl-[0-9]+'
+    'function', 'input-disable', 'output-high', 'pins', 'power-source' do not match any of the regexes: '(pinconf|-pins)$', 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/pinctrl/qcom,pmic-gpio.yaml      | 221 ++++++++++++++++++
- 1 file changed, 221 insertions(+)
+ Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-index c266aa3f05c1..33eb52660291 100644
+index 33eb52660291..7e74a87ccc39 100644
 --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
-@@ -74,6 +74,10 @@ properties:
-   gpio-ranges:
-     maxItems: 1
+@@ -401,6 +401,7 @@ $defs:
  
-+  gpio-line-names:
-+    minItems: 2
-+    maxItems: 44
-+
-   '#gpio-cells':
-     const: 2
-     description:
-@@ -90,6 +94,223 @@ required:
-   - gpio-ranges
-   - interrupt-controller
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8008-gpio
-+              - qcom,pmi8950-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 2
-+          maxItems: 2
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8005-gpio
-+              - qcom,pm8450-gpio
-+              - qcom,pm8916-gpio
-+              - qcom,pmk8350-gpio
-+              - qcom,pmr735a-gpio
-+              - qcom,pmr735b-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 4
-+          maxItems: 4
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8018-gpio
-+              - qcom,pm8019-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 6
-+          maxItems: 6
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8350b-gpio
-+              - qcom,pm8950-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 8
-+          maxItems: 8
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm6350-gpio
-+              - qcom,pm8350c-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 9
-+          maxItems: 9
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm2250-gpio
-+              - qcom,pm6150-gpio
-+              - qcom,pm7325-gpio
-+              - qcom,pm8150-gpio
-+              - qcom,pm8350-gpio
-+              - qcom,pmc8180-gpio
-+              - qcom,pmi8994-gpio
-+              - qcom,pmm8155au-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 10
-+          maxItems: 10
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pmx55-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 11
-+          maxItems: 11
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm660l-gpio
-+              - qcom,pm6150l-gpio
-+              - qcom,pm8038-gpio
-+              - qcom,pm8150b-gpio
-+              - qcom,pm8150l-gpio
-+              - qcom,pmc8180c-gpio
-+              - qcom,pms405-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 12
-+          maxItems: 12
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm660-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 13
-+          maxItems: 13
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pmi8998-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 14
-+          maxItems: 14
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pmx65-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 16
-+          maxItems: 16
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8994-gpio
-+              - qcom,pma8084-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 22
-+          maxItems: 22
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8998-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 26
-+          maxItems: 26
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8941-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 36
-+          maxItems: 36
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8917-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 38
-+          maxItems: 38
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pm8058-gpio
-+              - qcom,pm8921-gpio
-+    then:
-+      properties:
-+        gpio-line-names:
-+          minItems: 44
-+          maxItems: 44
-+
- patternProperties:
-   '-state$':
-     oneOf:
+       bias-high-impedance: true
+       input-enable: true
++      input-disable: true
+       output-high: true
+       output-low: true
+       output-enable: true
 -- 
 2.32.0
 

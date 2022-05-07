@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A57F51E838
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42ECE51E839
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 17:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377263AbiEGPkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 11:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S1385697AbiEGPkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 11:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379343AbiEGPkW (ORCPT
+        with ESMTP id S1377641AbiEGPkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 11:40:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF2941631;
-        Sat,  7 May 2022 08:36:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 7 May 2022 11:40:23 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7749E43EE7;
+        Sat,  7 May 2022 08:36:34 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29F08B80AF5;
-        Sat,  7 May 2022 15:36:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C999FC385B5;
-        Sat,  7 May 2022 15:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651937788;
-        bh=xszih1+Cq3Xjrwud28Q+7VWp3eMq4XebND2xzmMcLkg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IadLKrnIL0OyA/c6zj13NgHO347dnipgKE07v9OnbixpTw7JdBmYYMG+UTrrDMMge
-         m/HM1iqP2tLbIhsqvTP9AKCeJZ+0VA0jrDfYRgWLaGwmZeq31mPK/66y0+hXtePJE0
-         zVPbqFpzrO2/DYAvNr6S1zMZwgQ/bhVaG0B32x6F7fiPUSQuJiIbYo6HLAu/faEdlZ
-         ycFYQnAOEGJyhC3DvS60t5fc1H8FKo8GChWgC4C1onc8ifkqZfSzmNItJxmmcqhNOD
-         /aEYteEjCDnJ8nvSan7scZk/mRbe/gYcRgAGz3wn9ngbA133f5GWsnnqsLFKAe7boj
-         oKk+5WsGu6fRg==
-Received: by mail-yb1-f181.google.com with SMTP id v59so17657514ybi.12;
-        Sat, 07 May 2022 08:36:28 -0700 (PDT)
-X-Gm-Message-State: AOAM531bgVyVeByqXsTeCwfAWL3hLI4BhdaK8mb3jPWO5OgpoRy1QacR
-        +dpsvGmVf0Apo9y8VjbnNIHsK1nDaXGCI8TE0g==
-X-Google-Smtp-Source: ABdhPJxXklXAgapKtKHtY50KvylR5sWyT+dCgpaCeOO2FWhn2I/4IxcIBHR2wcvnENeeXMDw2Ndi4ga5jlg4qlEzM4Y=
-X-Received: by 2002:a25:c842:0:b0:64a:9122:5ec4 with SMTP id
- y63-20020a25c842000000b0064a91225ec4mr4022064ybf.196.1651937787858; Sat, 07
- May 2022 08:36:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220504115501.3490-1-rex-bc.chen@mediatek.com>
- <20220504115501.3490-4-rex-bc.chen@mediatek.com> <eb3884ac-56b2-4c37-05bc-82e8e44b22d2@collabora.com>
-In-Reply-To: <eb3884ac-56b2-4c37-05bc-82e8e44b22d2@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sat, 7 May 2022 23:36:17 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-z0buFJ4NRSiEZ9mpSzN7dFUoJYaD8r+GRCFs7cF06_w@mail.gmail.com>
-Message-ID: <CAAOTY_-z0buFJ4NRSiEZ9mpSzN7dFUoJYaD8r+GRCFs7cF06_w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] soc: mediatek: devapc: Add support for MT8186
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EC6F33F565;
+        Sat,  7 May 2022 17:36:29 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        runyang.chen@mediatek.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: msm8998: Make regulator voltages multiple of step-size
+Date:   Sat,  7 May 2022 17:36:27 +0200
+Message-Id: <20220507153627.1478268-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.36.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2022=E5=B9=B45=E6=9C=886=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:26=
-=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Il 04/05/22 13:55, Rex-BC Chen ha scritto:
-> > Add devapc data and compatible to support MT8186 devapc.
-> >
-> > Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
+These voltages are not a multiple of the given step-size 8000 (with base
+voltage 1664000) in pm8998_pldo, resulting in PLDO regulators l18 and
+l22 failing to validate and in turn not probing the rpm-pm8998-regulator
+driver:
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+    l18: unsupportable voltage constraints 2856000-2848000uV
+    qcom_rpm_smd_regulator rpm-glink:rpm-requests:pm8998-regulators: l18: devm_regulator_register() failed, ret=-22
 
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Round the voltages down for the sake of erring on the safe side, leaving
+a comment in place to document this discrepancy wrt downstream sources.
+
+Fixes: 390883af89d2 ("arm64: dts: qcom: msm8998: Introduce support for Sony Yoshino platform")
+Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ .../dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts    | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
+index 4a1f98a21031..c21333aa73c2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dts
+@@ -26,11 +26,13 @@ &lab {
+ };
+ 
+ &vreg_l18a_2p85 {
+-	regulator-min-microvolt = <2850000>;
+-	regulator-max-microvolt = <2850000>;
++	/* Note: Round-down from 2850000 to be a multiple of PLDO step-size 8000 */
++	regulator-min-microvolt = <2848000>;
++	regulator-max-microvolt = <2848000>;
+ };
+ 
+ &vreg_l22a_2p85 {
+-	regulator-min-microvolt = <2700000>;
+-	regulator-max-microvolt = <2700000>;
++	/* Note: Round-down from 2700000 to be a multiple of PLDO step-size 8000 */
++	regulator-min-microvolt = <2696000>;
++	regulator-max-microvolt = <2696000>;
+ };
+-- 
+2.36.0
+

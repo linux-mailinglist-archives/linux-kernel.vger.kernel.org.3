@@ -2,218 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B44E51E65B
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445ED51E660
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 12:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446275AbiEGKGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 06:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S1358823AbiEGKNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 06:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388612AbiEGKFo (ORCPT
+        with ESMTP id S239143AbiEGKM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 06:05:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB60C3AA56;
-        Sat,  7 May 2022 03:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651917715; x=1683453715;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1MylfDouAUkI19ElTFtDpDZL11z3RMfTO2EX3tvIe7Q=;
-  b=K5RfCjzUGjuAlLmBVwcIU8OfH5ZBHSMwGB4ak5i2IHM0bIp7IOFs2dBl
-   1FoT6EhtunRHtQIwfP6FUVDTxcFjJjcgEMaV8yVRCQW4ZIYCLXM+1lW3a
-   cfDSJFnwppXDwNAe59tcy+GnzLcoBMrtTYSpht9lHfmCffHFgzzSZ3EAA
-   U3qEFBqWbltxgk/wSLPF1HeGZsdkkSY3JGMf6b61u75ieND2T/uMa6tCP
-   cpZgx+5m0PQ4cV7NewnWtsvMn36MHFXn+y7LkEEM3f7yDhQAie7G12arg
-   wf1TpkaDCI589XL8VjZrPQYYxvlDgVCLxEmGsOlsCv6ZYsSuLHroznQWv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268315653"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="268315653"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:01:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="600936229"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 07 May 2022 03:01:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A0ED027D; Sat,  7 May 2022 13:01:49 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mark Brown <broonie@kernel.org>,
-        chris.packham@alliedtelesis.co.nz,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>
-Subject: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
-Date:   Sat,  7 May 2022 13:01:47 +0300
-Message-Id: <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
-References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+        Sat, 7 May 2022 06:12:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8361143397
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 03:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651918148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ugyhJHOyJRb+Ii6eaPgL20qr8QTMbWmypOsqDi+kA7I=;
+        b=Vl4+UFb0HRYMD/B7GQA45pgLFkRScRXLAzQH+CNdRFWdqaEbEm7LYeQCUT2elD6LpIHYL9
+        o86m3BTaxVo9k9JIbpqaeThCyaZ1nHk6KWl7B059OV2ytAZk74OY+c2Y8gpbpu5yzfO5rH
+        N+cXmgTCDPhdh1vPmi4PfXv+59vW6ZM=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-_Nbo7UqOOiWGmDL4ADQ3sQ-1; Sat, 07 May 2022 06:09:07 -0400
+X-MC-Unique: _Nbo7UqOOiWGmDL4ADQ3sQ-1
+Received: by mail-ej1-f70.google.com with SMTP id jx8-20020a170906ca4800b006f88b28f2f6so125005ejb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 03:09:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ugyhJHOyJRb+Ii6eaPgL20qr8QTMbWmypOsqDi+kA7I=;
+        b=mxfKevrFaW3Ye0L7TvY0NZoAxTNXPJ0IYYhSIc1//6FvLQFuW4lWqBjjkzrXFzcuyd
+         26leTqrB/2Xs0kKV8iVjCrIOukKsWnlAcjDrfWvbYt2DyGBunCag78XKQLLjbwqUqeEz
+         r+pt6R8iH8JEe58pburld31Yt7S3CRP3+zXEwkZEqa5hM6CrSypKUAOxyIuN4oPBNLMb
+         IsiYbwRWUl04p1ONzfc4swPdLSyN15F8M1gjOGZPH9g8CIQ49xwiEV+uvLjA6mWtFI49
+         G3lamr5txqAXn5Gn/m37HJVdMRpR+5lEScJij6qEDX9R4EymDWpfSUh0qYEYU4dDw8Rm
+         PQPA==
+X-Gm-Message-State: AOAM532oGXWmDemPCS8Pf7889mxd/xqDTJ49ipl4YgwJQRUOE6n8VjLc
+        6uEZikEQ0N4T/GJYEC6NES/ldfhrsXJIUoUMAMD2DAQdfW9q9dzVa4NGyEBOaOWAimZJrOMPKI3
+        Hb4ZSqLUs2KSXe07JfoKXApMU
+X-Received: by 2002:a17:907:94cd:b0:6f4:da4d:6ec2 with SMTP id dn13-20020a17090794cd00b006f4da4d6ec2mr6576363ejc.702.1651918145707;
+        Sat, 07 May 2022 03:09:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzZ4nAdow9Qwp9gKwTAcqGLkTqXlfn0VuBxIqMJjGNO1GJsCm5V203TV3mn+eU6485JZcWvpw==
+X-Received: by 2002:a17:907:94cd:b0:6f4:da4d:6ec2 with SMTP id dn13-20020a17090794cd00b006f4da4d6ec2mr6576344ejc.702.1651918145470;
+        Sat, 07 May 2022 03:09:05 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id u10-20020aa7d88a000000b0042617ba638csm3365565edq.22.2022.05.07.03.09.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 03:09:04 -0700 (PDT)
+Message-ID: <94238be8-023e-a70a-45c8-a7096149e752@redhat.com>
+Date:   Sat, 7 May 2022 12:09:03 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220506165110.GA509329@bhelgaas>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220506165110.GA509329@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We may convert the GPT driver to use fwnode API for the sake
-of consistency of the used APIs inside the driver.
+Hi Bjorn,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes
- arch/powerpc/platforms/52xx/mpc52xx_gpt.c | 47 +++++++++++------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+On 5/6/22 18:51, Bjorn Helgaas wrote:
+> On Thu, May 05, 2022 at 05:20:16PM +0200, Hans de Goede wrote:
+>> Some BIOS-es contain bugs where they add addresses which are already
+>> used in some other manner to the PCI host bridge window returned by
+>> the ACPI _CRS method. To avoid this Linux by default excludes
+>> E820 reservations when allocating addresses since 2010, see:
+>> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
+>> space").
+>>
+>> Recently (2019) some systems have shown-up with E820 reservations which
+>> cover the entire _CRS returned PCI bridge memory window, causing all
+>> attempts to assign memory to PCI BARs which have not been setup by the
+>> BIOS to fail. For example here are the relevant dmesg bits from a
+>> Lenovo IdeaPad 3 15IIL 81WE:
+>>
+>>  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+>>
+>> The ACPI specifications appear to allow this new behavior:
+>>
+>> The relationship between E820 and ACPI _CRS is not really very clear.
+>> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
+>>
+>>   This range of addresses is in use or reserved by the system and is
+>>   not to be included in the allocatable memory pool of the operating
+>>   system's memory manager.
+>>
+>> and it may be used when:
+>>
+>>   The address range is in use by a memory-mapped system device.
+>>
+>> Furthermore, sec 15.2 says:
+>>
+>>   Address ranges defined for baseboard memory-mapped I/O devices, such
+>>   as APICs, are returned as reserved.
+>>
+>> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
+>> and its apertures are in use and certainly should not be included in
+>> the general allocatable pool, so the fact that some BIOS-es reports
+>> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
+>>
+>> So it seems that the excluding of E820 reserved addresses is a mistake.
+>>
+>> Ideally Linux would fully stop excluding E820 reserved addresses,
+>> but then various old systems will regress.
+>> Instead keep the old behavior for old systems, while ignoring
+>> the E820 reservations for any systems from now on.
+>>
+>> Old systems are defined here as BIOS year < 2018, this was chosen to
+>> make sure that pci_use_e820 will not be set on the currently affected
+>> systems, the oldest known one is from 2019.
+>>
+>> Testing has shown that some newer systems also have a bad _CRS return.
+>> The pci_crs_quirks DMI table is used to keep excluding E820 reservations
+>> from the bridge window on these systems.
+>>
+>> Also add pci=no_e820 and pci=use_e820 options to allow overriding
+>> the BIOS year + DMI matching logic.
+>>
+>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+>> BugLink: https://bugs.launchpad.net/bugs/1878279
+>> BugLink: https://bugs.launchpad.net/bugs/1931715
+>> BugLink: https://bugs.launchpad.net/bugs/1932069
+>> BugLink: https://bugs.launchpad.net/bugs/1921649
+>> Cc: Benoit Grégoire <benoitg@coeus.ca>
+>> Cc: Hui Wang <hui.wang@canonical.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> 
+>> +	 * Ideally Linux would fully stop using E820 reservations, but then
+>> +	 * various old systems will regress. Instead keep the old behavior for
+>> +	 * old systems + known to be broken newer systems in pci_crs_quirks.
+>> +	 */
+>> +	if (year >= 0 && year < 2018)
+>> +		pci_use_e820 = true;
+> 
+> How did you pick 2018?  Prior to this patch, we used E820 reservations
+> for all machines.  This patch would change that for 2019-2022
+> machines, so there's a risk of breaking some of them.
 
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-index ae47fdcc8a96..58c3651034bd 100644
---- a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-+++ b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-@@ -53,10 +53,9 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/list.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of.h>
--#include <linux/of_platform.h>
--#include <linux/of_gpio.h>
- #include <linux/kernel.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-@@ -64,7 +63,7 @@
- #include <linux/watchdog.h>
- #include <linux/miscdevice.h>
- #include <linux/uaccess.h>
--#include <linux/module.h>
-+
- #include <asm/div64.h>
- #include <asm/mpc52xx.h>
- 
-@@ -235,18 +234,17 @@ static const struct irq_domain_ops mpc52xx_gpt_irq_ops = {
- 	.xlate = mpc52xx_gpt_irq_xlate,
- };
- 
--static void
--mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt, struct device_node *node)
-+static void mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt)
- {
- 	int cascade_virq;
- 	unsigned long flags;
- 	u32 mode;
- 
--	cascade_virq = irq_of_parse_and_map(node, 0);
--	if (!cascade_virq)
-+	cascade_virq = platform_get_irq(to_platform_device(gpt->dev), 0);
-+	if (cascade_virq < 0)
- 		return;
- 
--	gpt->irqhost = irq_domain_add_linear(node, 1, &mpc52xx_gpt_irq_ops, gpt);
-+	gpt->irqhost = irq_domain_create_linear(dev_fwnode(gpt->dev), 1, &mpc52xx_gpt_irq_ops, gpt);
- 	if (!gpt->irqhost) {
- 		dev_err(gpt->dev, "irq_domain_add_linear() failed\n");
- 		return;
-@@ -670,8 +668,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return err;
- }
- 
--static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--				 const u32 *period)
-+static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	u64 real_timeout;
- 
-@@ -679,14 +676,14 @@ static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
- 	mpc52xx_gpt_wdt = gpt;
- 
- 	/* configure the wdt if the device tree contained a timeout */
--	if (!period || *period == 0)
-+	if (period == 0)
- 		return 0;
- 
--	real_timeout = (u64) *period * 1000000000ULL;
-+	real_timeout = (u64)period * 1000000000ULL;
- 	if (mpc52xx_gpt_do_start(gpt, real_timeout, 0, 1))
- 		dev_warn(gpt->dev, "starting as wdt failed\n");
- 	else
--		dev_info(gpt->dev, "watchdog set to %us timeout\n", *period);
-+		dev_info(gpt->dev, "watchdog set to %us timeout\n", period);
- 	return 0;
- }
- 
-@@ -697,8 +694,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return 0;
- }
- 
--static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--					const u32 *period)
-+static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	return 0;
- }
-@@ -726,25 +722,26 @@ static int mpc52xx_gpt_probe(struct platform_device *ofdev)
- 	dev_set_drvdata(&ofdev->dev, gpt);
- 
- 	mpc52xx_gpt_gpio_setup(gpt);
--	mpc52xx_gpt_irq_setup(gpt, ofdev->dev.of_node);
-+	mpc52xx_gpt_irq_setup(gpt);
- 
- 	mutex_lock(&mpc52xx_gpt_list_mutex);
- 	list_add(&gpt->list, &mpc52xx_gpt_list);
- 	mutex_unlock(&mpc52xx_gpt_list_mutex);
- 
- 	/* check if this device could be a watchdog */
--	if (of_get_property(ofdev->dev.of_node, "fsl,has-wdt", NULL) ||
--	    of_get_property(ofdev->dev.of_node, "has-wdt", NULL)) {
--		const u32 *on_boot_wdt;
-+	if (device_property_present(gpt->dev, "fsl,has-wdt") ||
-+	    device_property_present(gpt->dev, "has-wdt")) {
-+		u32 on_boot_wdt = 0;
-+		int ret;
- 
- 		gpt->wdt_mode = MPC52xx_GPT_CAN_WDT;
--		on_boot_wdt = of_get_property(ofdev->dev.of_node,
--					      "fsl,wdt-on-boot", NULL);
--		if (on_boot_wdt) {
-+		ret = device_property_read_u32(gpt->dev, "fsl,wdt-on-boot", &on_boot_wdt);
-+		if (ret) {
-+			dev_info(gpt->dev, "can function as watchdog\n");
-+		} else {
- 			dev_info(gpt->dev, "used as watchdog\n");
- 			gpt->wdt_mode |= MPC52xx_GPT_IS_WDT;
--		} else
--			dev_info(gpt->dev, "can function as watchdog\n");
-+		}
- 		mpc52xx_gpt_wdt_setup(gpt, on_boot_wdt);
- 	}
- 
--- 
-2.35.1
+Correct. I picked 2018 because the first devices where using E820
+reservations are causing issues (i2c controller not getting resources
+leading to non working touchpad / thunderbolt hotplug issues) have
+BIOS dates starting in 2019. I added a year margin, so we could make
+this 2019.
+
+> I'm hesitant about changing the behavior for machines already in the
+> field because if they were tested at all with Linux, it was without
+> this patch.  So I would lean toward preserving the current behavior
+> for BIOS year < 2023.
+
+I see, I presume the idea is to then use DMI to disable E820 clipping
+on current devices where this is known to cause problems ?
+
+So for v8 I would:
+
+1. Change the cut-off check to < 2023
+2. Drop the DMI quirks I added for models which are known to need E820
+   clipping hit by the < 2018 check
+3. Add DMI quirks for models for which it is known that we must _not_
+   do E820 clipping
+
+Is this the direction you want to go / does that sound right?
+
+Note the DMI list for 3. will initially very likely be incomplete, but
+I can ask around for testing once we have settled on this approach
+and do one or more follow up patches to extend the list.
+
+
+>> diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
+>> index 9e1e6b8d8876..7e6f79aab6a8 100644
+>> --- a/arch/x86/pci/common.c
+>> +++ b/arch/x86/pci/common.c
+>> @@ -595,6 +595,12 @@ char *__init pcibios_setup(char *str)
+>>  	} else if (!strcmp(str, "nocrs")) {
+>>  		pci_probe |= PCI_ROOT_NO_CRS;
+>>  		return NULL;
+>> +	} else if (!strcmp(str, "use_e820")) {
+>> +		pci_probe |= PCI_USE_E820;
+> 
+> I think we should add_taint(TAINT_FIRMWARE_WORKAROUND) for both these
+> cases.
+
+Ok, I'll add this for v8.
+
+> 
+> We probably should do it for *all* the parameters here, but that would
+> be a separate discussion.
+> 
+>> +		return NULL;
+>> +	} else if (!strcmp(str, "no_e820")) {
+>> +		pci_probe |= PCI_NO_E820;
+>> +		return NULL;
+>>  #ifdef CONFIG_PHYS_ADDR_T_64BIT
+>>  	} else if (!strcmp(str, "big_root_window")) {
+>>  		pci_probe |= PCI_BIG_ROOT_WINDOW;
+>> -- 
+>> 2.36.0
+>>
+> 
+
+
+Regards,
+
+Hans
+
 

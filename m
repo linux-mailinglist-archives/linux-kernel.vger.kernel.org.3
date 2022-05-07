@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCEE51EA5D
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 23:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0C851EA65
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 23:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387526AbiEGVeP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 7 May 2022 17:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S1384581AbiEGV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 17:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235745AbiEGVeM (ORCPT
+        with ESMTP id S233529AbiEGV4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 17:34:12 -0400
-Received: from mail.actia.se (212-181-117-226.customer.telia.com [212.181.117.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBB4BC32;
-        Sat,  7 May 2022 14:30:19 -0700 (PDT)
-Received: from S036ANL.actianordic.se (10.12.31.117) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 7 May
- 2022 23:30:16 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%10]) with mapi id
- 15.01.2375.024; Sat, 7 May 2022 23:30:16 +0200
-From:   John Ernberg <john.ernberg@actia.se>
-To:     "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>
-CC:     "andreas@rammhold.de" <andreas@rammhold.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        John Ernberg <john.ernberg@actia.se>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Thread-Topic: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Thread-Index: AQHYYJCRaP1BJI53pkGuwIjy0ObIW60QaeKAgANmr4A=
-Date:   Sat, 7 May 2022 21:30:16 +0000
-Message-ID: <20220507213003.3373206-1-john.ernberg@actia.se>
-References: <09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de>
-In-Reply-To: <09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-originating-ip: [10.12.12.58]
-x-esetresult: clean, is OK
-x-esetid: 37303A293105C852617465
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sat, 7 May 2022 17:56:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E313CFD10;
+        Sat,  7 May 2022 14:52:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8326F60F2D;
+        Sat,  7 May 2022 21:52:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9956DC385A5;
+        Sat,  7 May 2022 21:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1651960345;
+        bh=VUBEB/P2WIQw0SMyiFMZdKktomMMIezyj6B6YeN0fcM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YTT1ypjOFayfH/VIwXhN9k5FX9ncnibe6OKtZMXDFP1r9CQouE87+i/BZV4MrH0F4
+         6SEmVcA9WN2HY1vLSEzzSzyu3T+VibHmN8Zg+7ByrhgSImc5tubb4/uzRZYTZnT1Rx
+         L4JZUGK9wkgdnBNfRSEBg1UC6K7JjKz1nbfUBsv4=
+Date:   Sat, 7 May 2022 14:52:24 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, stable@kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] fs: sendfile handles O_NONBLOCK of out_fd
+Message-Id: <20220507145224.a9b6555969d6e66586b6514c@linux-foundation.org>
+In-Reply-To: <CANaxB-wcf0Py9eCeA8YKcBSnwzW6pKAD5edCDUadebmo=JLYhA@mail.gmail.com>
+References: <20220415005015.525191-1-avagin@gmail.com>
+        <CANaxB-wcf0Py9eCeA8YKcBSnwzW6pKAD5edCDUadebmo=JLYhA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ahmad,
+On Mon, 2 May 2022 00:01:46 -0700 Andrei Vagin <avagin@gmail.com> wrote:
 
-> > 
-> > dmesg snips:
-> > [    1.296772] trusted_key: Job Ring Device allocation for transform failed
-> > ...
-> > [    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
-> > [    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
-> > [    1.822667] caam algorithms registered in /proc/crypto
-> > [    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
-> > [    1.841807] caam 31400000.crypto: registering rng-caam
-> > 
-> > I didn't quite have the time to get a better trace than that.
+> Andrew, could you take a look at this patch?
 > 
-> I don't see a crypto@31400000 node upstream. Where can I see your device tree?
-
-Apologies for forgetting to mention that, I took it from the NXP tree
-while removing the SM and SECO bits [1].
-I also had to rebase some of their patches onto 5.17 for the CAAM to
-probe, as the SCU makes some register pages unavailable.
-
-> Initcall ordering does the right thing, but if CAAM device probe is deferred beyond
-> late_initcall, then it won't help.
+> Here is a small reproducer for the problem:
 > 
-> This is a general limitation with trusted keys at the moment. Anything that's
-> not there by the time of the late_initcall won't be tried again. You can work
-> around it by having trusted keys as a module. We might be able to do something
-> with fw_devlinks in the future and a look into your device tree would help here,
-> but I think that should be separate from this patch series.
-
-Thank for you the explanation, it makes sense, and I agree that such work
-would be a different patch set.
-
+> #define _GNU_SOURCE /* See feature_test_macros(7) */
+> #include <fcntl.h>
+> #include <stdio.h>
+> #include <unistd.h>
+> #include <errno.h>
+> #include <sys/stat.h>
+> #include <sys/types.h>
+> #include <sys/sendfile.h>
 > 
-> Please let me know if the module build improves the situation for you.
 > 
+> #define FILE_SIZE (1UL << 30)
+> int main(int argc, char **argv) {
+>         int p[2], fd;
+> 
+>         if (pipe2(p, O_NONBLOCK))
+>                 return 1;
+> 
+>         fd = open(argv[1], O_RDWR | O_TMPFILE, 0666);
+>         if (fd < 0)
+>                 return 1;
+>         ftruncate(fd, FILE_SIZE);
+> 
+>         if (sendfile(p[1], fd, 0, FILE_SIZE) == -1) {
+>                 fprintf(stderr, "FAIL\n");
+>         }
+>         if (sendfile(p[1], fd, 0, FILE_SIZE) != -1 || errno != EAGAIN) {
+>                 fprintf(stderr, "FAIL\n");
+>         }
+>         return 0;
+> }
+> 
+> It worked before b964bf53e540, it is stuck after b964bf53e540, and it
+> works again with this fix.
 
-After I changed trusted keys to a module I got it working. Which is good
-enough for me as QXP CAAM support is not upstream yet.
+Thanks.  How did b964bf53e540 cause this?  do_splice_direct()
+accidentally does the right thing even when SPLICE_F_NONBLOCK was not
+passed?
 
-Feel free to add my tested by if you need to make another spin.
-Tested-by: John Ernberg <john.ernberg@actia.se> # iMX8QXP
+I assume that Al will get to this.  Meanwhile I can toss it
+into linux-next to get some exposure and so it won't be lost.
 
-I didn't test v9 as I would have to patch around the new patch due to
-the SCU.
-
-Best regards // John Ernberg
-
-[1]: https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8-ss-security.dtsi?h=lf-5.10.y

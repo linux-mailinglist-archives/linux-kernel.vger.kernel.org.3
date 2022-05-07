@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13F851E864
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C58E51E866
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 18:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446639AbiEGQGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 12:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S1446648AbiEGQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 12:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353246AbiEGQGI (ORCPT
+        with ESMTP id S1353246AbiEGQGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 12:06:08 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641C111A31
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 09:02:21 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bv19so19494656ejb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 09:02:21 -0700 (PDT)
+        Sat, 7 May 2022 12:06:52 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B369E027;
+        Sat,  7 May 2022 09:03:05 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id e15so11077044iob.3;
+        Sat, 07 May 2022 09:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZGe2WKTSwlYRLM8mEcooO0HHCmXLiPGKlmbzaSTlMLY=;
-        b=Y7CCk9RztVEPm+vsTbcOLJTJtiVj2ZZJjSyaqRNaAkr8Nw8k7Y7ieul8PwDE80gQET
-         6ghxH3wYw/sZgP5FJ4rVQhMSDxO7RJ2x7cEjyIV+VrGketdGNconKGkBLICLp9HVogzo
-         uswvg9behkN+JUFyLCM+cMze1p30wnzMTXHKDzAS6Q8BrdzMJMPJDdCTHCnmkPoFhAwT
-         MmfjPLtn1pWF9Ua9v7RhGlN+mbWMxYvZ2F2TmNGEQNqChh8lN9weHDoCxj9MSCYB5lcT
-         XxsJ/YzVnwIbv9NGUxFV0ope1g4lsOjAmUqLscBnSiC5cAD4/K1guJ5RwgBeAESBVfXJ
-         spDw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=k13S9ItPgALMrAugBtRUW1Wd2tO5SVJuffpkWGMdiQU=;
+        b=lNw/fMvZYAjQ2FhqgMUV9FGl1DDNpME3hvxAzNiXMj4lygExl4U9PLgutCzIHl6QH9
+         bgXKLbnm4dy5g1E0b0ztGT/RUkMhG050idq7aWDtsOuUtKJ+h9550ByP6uE250jPJgM1
+         EjZ/7vY3XhU0zscmgv/XTHpkylStbMEy0m1xP1FlM6Y398lIy88QONWFltw83jrK1+yh
+         o2jtn+sKMZYH0F5LIuYzULIVL0XSeufoWky615J25oZrDwqRTUpcMQtJJ5wHm+hQ0XC6
+         fKZjCirn+XygdQsH2cQr4EvdLz6eKTrZKuIZQGVwaGNLrauwriMKEE3kmYyO4gqfDPnZ
+         botg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZGe2WKTSwlYRLM8mEcooO0HHCmXLiPGKlmbzaSTlMLY=;
-        b=vX9vYcn2yl66aKIqGyVhS5NVJct8Hj1mEvjskHpDnT2ZRMvrn7A0ZSJwphRLIgoRta
-         /p8IaHWOHyPhwc6HtorTuBnAtE5CWpV8yODCvAgEA/pLDP49D0Plykv3OkNH6m1whTg7
-         FfG3H6A9fIyc7PCcAPSmyxd3HooPiIFDT/VQ+ix+7HvMKkJ9LYSfD5NeZdsWVg3edUAI
-         yUY9e/i+cNq18S74rOYwFiSiNW1Mj67CMEOX0/FHswb/DDkSKUBeoZRwAQ3HXcECO/oz
-         7yLVAoHsXm5lp4WLnIwm3BzurBK2o/XRFuTY/G9ohelNl+r/V78MLCmR0BYOYYKGqPB1
-         bD7w==
-X-Gm-Message-State: AOAM531Kaw60pEM7chSH+8hMQdPNYcWAYr0+M5J1ttSs0MOTHPKG+jia
-        i+y+GM8ZN8WadGJQrRg9xGgVsy90df1E/fXF
-X-Google-Smtp-Source: ABdhPJzSP4Dy5K1PH+U5uRNNx39K/egsLJrR1KNAavRKOW5qU1KGhssurkrAq+UlSXAI3qM/T90iAw==
-X-Received: by 2002:a17:906:2652:b0:6f3:a042:6b51 with SMTP id i18-20020a170906265200b006f3a0426b51mr7764866ejc.565.1651939340028;
-        Sat, 07 May 2022 09:02:20 -0700 (PDT)
-Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ee38-20020a056402292600b0042617ba63a2sm3692833edb.44.2022.05.07.09.02.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=k13S9ItPgALMrAugBtRUW1Wd2tO5SVJuffpkWGMdiQU=;
+        b=tUd1mpyKDahchNxE/enpeyVvNa/DWmRb5snvj55iFHVfrh+swF1pS6OkjvkzjDXX1b
+         Nd2A7I2TSMuwx/6cwF2aHOlj/6p5yNIBGg3ASmpd14yQTKU8nA8k+4YYbQrKlRcf4mWl
+         8hOt50bLdicI9gPxGeOHajrzuOFVRBKeXb0Du0kRsbJz+8bDGVK086T6OthgH4YPlULG
+         sIYXPU9vsUH2VNfWUFbOwi9xeETJuzB8uEdl/ys3lq8vZjeG4DuBq4WgEkBU99FKkf6g
+         Uz/QrXWlxNJrkvofuWgG4YRX4wMZv7c05ILXqlc86Ecvea/z/VQ0ETarGRIfUQchDa6i
+         cOGw==
+X-Gm-Message-State: AOAM533dfThD3y4qgXOaatSTDl+9TDF/OZujKFI5qKayr6I/IWqsmOa6
+        /nzRPlraVKmjtIBMVuCqQCE6dGL5xhvvoA==
+X-Google-Smtp-Source: ABdhPJzbUlPrChDXRa67uDCom9wecXHf6gV5c9GpzNq4TXjQUk+Ss0FTgweOjyzOm3UrgFDZ9GRcqQ==
+X-Received: by 2002:a05:6602:2c4c:b0:64f:a897:80cb with SMTP id x12-20020a0566022c4c00b0064fa89780cbmr3503289iov.139.1651939384781;
+        Sat, 07 May 2022 09:03:04 -0700 (PDT)
+Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with UTF8SMTPSA id k28-20020a02c77c000000b0032b3a78173fsm2200533jao.3.2022.05.07.09.02.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 09:02:19 -0700 (PDT)
-Message-ID: <5dca492f-3afd-9da2-913c-00601dece441@linaro.org>
-Date:   Sat, 7 May 2022 18:02:18 +0200
+        Sat, 07 May 2022 09:03:04 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     schspa@gmail.com
+Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, jannh@google.com,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Subject: [PATCH v2] usb: gadget: fix race when gadget driver register via ioctl
+Date:   Sun,  8 May 2022 00:02:43 +0800
+Message-Id: <20220507160243.35304-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
+References: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v7 7/8] ARM: dts: Introduce HPE GXP Device tree
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, joel@jms.id.au,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20220506191339.78617-1-nick.hawkins@hpe.com>
- <20220506191339.78617-7-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220506191339.78617-7-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 21:13, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> The HPE SoC is new to linux. A basic device tree layout with minimum
-> required for linux to boot including a timer and watchdog support has
-> been created.
-> 
-> The dts file is empty at this point but will be updated in subsequent
-> updates as board specific features are enabled.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+The usb_gadget_register_driver can be called multi time by to
+threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
+to multiple registrations.
 
+Call trace:
+  driver_register+0x220/0x3a0 drivers/base/driver.c:171
+  usb_gadget_register_driver_owner+0xfb/0x1e0
+    drivers/usb/gadget/udc/core.c:1546
+  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+  ioctl USB_RAW_IOCTL_RUN
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This routine allows two processes to register the same driver instance
+via ioctl syscall. which lead to a race condition.
 
+We can fix it by adding a new STATE_DEV_REGISTERING device state to
+avoid double register.
 
-Best regards,
-Krzysztof
+Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index b3be8db1ff63..b75f8f7b7b46 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -146,6 +146,7 @@ enum dev_state {
+ 	STATE_DEV_OPENED,
+ 	STATE_DEV_INITIALIZED,
+ 	STATE_DEV_RUNNING,
++	STATE_DEV_REGISTERING,
+ 	STATE_DEV_CLOSED,
+ 	STATE_DEV_FAILED
+ };
+@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
++	dev->state = STATE_DEV_REGISTERING;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+ 	ret = usb_gadget_register_driver(&dev->driver);
+-- 
+2.24.3 (Apple Git-128)
+

@@ -2,130 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CF451E2D3
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837E151E2D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 02:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445113AbiEGAyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 20:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S1445118AbiEGA63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 20:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiEGAyr (ORCPT
+        with ESMTP id S229608AbiEGA61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 20:54:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE67750B2F;
-        Fri,  6 May 2022 17:51:02 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kw81W5kmDzGpLg;
-        Sat,  7 May 2022 08:48:15 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 08:51:00 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 08:51:00 +0800
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Unify data extension operation of
- jited_ksyms and jited_linfo
-To:     John Fastabend <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20220429014240.3434866-1-pulehui@huawei.com>
- <20220429014240.3434866-2-pulehui@huawei.com>
- <62758a83b512a_18fd5208b5@john.notmuch>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <7e1ef7a3-582b-7443-8018-69126efdc587@huawei.com>
-Date:   Sat, 7 May 2022 08:51:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 6 May 2022 20:58:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C688850B2F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 17:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651884882; x=1683420882;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZHUKXnpEJXH5qUcfBqfm3azdXKYtQy/eAhnKUMnduLY=;
+  b=D4vXIRHJyChe2PG7uGsmDvKofnGIn7Cchg6ODKFtquC4RJTHU8dMl0MU
+   /SYfLbNpIvA3Hmy4fECU1+g6WM09fmwm2eJn5oaPaWZl0rEqqO6PplNnJ
+   jKbTi1HX7gSbW/jDPIFc5R53aAhXzPYPgraVR35yjCQBa7nFzooNKqwXJ
+   sWaO12jUcKH6qH1K7bBjkKp1eJsXF1aTiOAJ/oTyXxnVzGNOmq09pDjd3
+   eqiyFuS037XPV8utufAVnjl/It3L/uukCYsuJ2PjLS/2BPnzKGcg7jpMQ
+   UrdkRMpE8jnqPymrm2hN1QK4uokORKDuvfgu836zHhYAU/3BQilKGAvUW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267456940"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="267456940"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 17:54:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="586288097"
+Received: from yuzhenta-mobl.ccr.corp.intel.com ([10.254.213.210])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 17:54:38 -0700
+Message-ID: <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
+Subject: Re: [mm/page_alloc]  f26b3fa046:  netperf.Throughput_Mbps -18.0%
+ regression
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        kernel test robot <oliver.sang@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Date:   Sat, 07 May 2022 08:54:35 +0800
+In-Reply-To: <YnURx04+hE0sQ3v3@ziqianlu-desk1>
+References: <20220420013526.GB14333@xsang-OptiPlex-9020>
+         <YmvMDyx05UoPFtQy@ziqianlu-desk1>
+         <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
+         <YnURx04+hE0sQ3v3@ziqianlu-desk1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-In-Reply-To: <62758a83b512a_18fd5208b5@john.notmuch>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-05-06 at 20:17 +0800, Aaron Lu wrote:
+> On Fri, May 06, 2022 at 04:40:45PM +0800, ying.huang@intel.com wrote:
+> > On Fri, 2022-04-29 at 19:29 +0800, Aaron Lu wrote:
+> > > Hi Mel,
+> > > 
+> > > On Wed, Apr 20, 2022 at 09:35:26AM +0800, kernel test robot wrote:
+> > > > 
+> > > > (please be noted we reported
+> > > > "[mm/page_alloc]  39907a939a:  netperf.Throughput_Mbps -18.1% regression"
+> > > > on
+> > > > https://lore.kernel.org/all/20220228155733.GF1643@xsang-OptiPlex-9020/
+> > > > while the commit is on branch.
+> > > > now we still observe similar regression when it's on mainline, and we also
+> > > > observe a 13.2% improvement on another netperf subtest.
+> > > > so report again for information)
+> > > > 
+> > > > Greeting,
+> > > > 
+> > > > FYI, we noticed a -18.0% regression of netperf.Throughput_Mbps due to commit:
+> > > > 
+> > > > 
+> > > > commit: f26b3fa046116a7dedcaafe30083402113941451 ("mm/page_alloc: limit number of high-order pages on PCP during bulk free")
+> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > > 
+> > > 
+> > > So what this commit did is: if a CPU is always doing free(pcp->free_factor > 0)
+> > 
+> > IMHO, this means the consumer and producer are running on different
+> > CPUs.
+> > 
+> 
+> Right.
+> 
+> > > and if the being freed high-order page's order is <= PAGE_ALLOC_COSTLY_ORDER,
+> > > then do not use PCP but directly free the page directly to buddy.
+> > > 
+> > > The rationale as explained in the commit's changelog is:
+> > > "
+> > > Netperf running on localhost exhibits this pattern and while it does not
+> > > matter for some machines, it does matter for others with smaller caches
+> > > where cache misses cause problems due to reduced page reuse. Pages
+> > > freed directly to the buddy list may be reused quickly while still cache
+> > > hot where as storing on the PCP lists may be cold by the time
+> > > free_pcppages_bulk() is called.
+> > > "
+> > > 
+> > > This regression occurred on a machine that has large caches so this
+> > > optimization brings no value to it but only overhead(skipped PCP), I
+> > > guess this is the reason why there is a regression.
+> > 
+> > Per my understanding, not only the cache size is larger, but also the L2
+> > cache (1MB) is per-core on this machine.  So if the consumer and
+> > producer are running on different cores, the cache-hot page may cause
+> > more core-to-core cache transfer.  This may hurt performance too.
+> > 
+> 
+> Client side allocates skb(page) and server side recvfrom() it.
+> recvfrom() copies the page data to server's own buffer and then releases
+> the page associated with the skb. Client does all the allocation and
+> server does all the free, page reuse happens at client side.
+> So I think core-2-core cache transfer due to page reuse can occur when
+> client task migrates.
+
+The core-to-core cache transfering can be cross-socket or cross-L2 in
+one socket.  I mean the later one.
+
+> I have modified the job to have the client and server bound to a
+> specific CPU of different cores on the same node, and testing it on the
+> same Icelake 2 sockets server, the result is
+> 
+>   kernel      throughput
+> 8b10b465d0e1     125168
+> f26b3fa04611     102039 -18%
+> 
+> It's also a 18% drop. I think this means c2c is not a factor?
+
+Can you test with client and server bound to 2 hardware threads
+(hyperthread) of one core?  The two hardware threads of one core will
+share the L2 cache.
+
+> > > I have also tested this case on a small machine: a skylake desktop and
+> > > this commit shows improvement:
+> > > 8b10b465d0e1: "netperf.Throughput_Mbps": 72288.76,
+> > > f26b3fa04611: "netperf.Throughput_Mbps": 90784.4,  +25.6%
+> > > 
+> > > So this means those directly freed pages get reused by allocator side
+> > > and that brings performance improvement for machines with smaller cache.
+> > 
+> > Per my understanding, the L2 cache on this desktop machine is shared
+> > among cores.
+> > 
+> 
+> The said CPU is i7-6700 and according to this wikipedia page,
+> L2 is per core:
+> https://en.wikipedia.org/wiki/Skylake_(microarchitecture)#Mainstream_desktop_processors
+
+Sorry, my memory was wrong.  The skylake and later server has much
+larger private L2 cache (1MB vs 256KB of client), this may increase the
+possibility of core-2-core transfering.
+
+> > > I wonder if we should still use PCP a little bit under the above said
+> > > condition, for the purpose of:
+> > > 1 reduced overhead in the free path for machines with large cache;
+> > > 2 still keeps the benefit of reused pages for machines with smaller cache.
+> > > 
+> > > For this reason, I tested increasing nr_pcp_high() from returning 0 to
+> > > either returning pcp->batch or (pcp->batch << 2):
+> > > machine\nr_pcp_high() ret: pcp->high   0   pcp->batch (pcp->batch << 2)
+> > > skylake desktop:             72288   90784   92219       91528
+> > > icelake 2sockets:           120956   99177   98251      116108
+> > > 
+> > > note nr_pcp_high() returns pcp->high is the behaviour of this commit's
+> > > parent, returns 0 is the behaviour of this commit.
+> > > 
+> > > The result shows, if we effectively use a PCP high as (pcp->batch << 2)
+> > > for the described condition, then this workload's performance on
+> > > small machine can remain while the regression on large machines can be
+> > > greately reduced(from -18% to -4%).
+> > > 
+> > 
+> > Can we use cache size and topology information directly?
+> 
+> It can be complicated by the fact that the system can have multiple
+> producers(cpus that are doing free) running at the same time and getting
+> the perfect number can be a difficult job.
+
+We can discuss this after verifying whether it's core-2-core transfering
+related.
+
+Best Regards,
+Huang, Ying
 
 
-On 2022/5/7 4:52, John Fastabend wrote:
-> Pu Lehui wrote:
->> We found that 32-bit environment can not print bpf line info due
->> to data inconsistency between jited_ksyms[0] and jited_linfo[0].
->>
->> For example:
->> jited_kyms[0] = 0xb800067c, jited_linfo[0] = 0xffffffffb800067c
->>
->> We know that both of them store bpf func address, but due to the
->> different data extension operations when extended to u64, they may
->> not be the same. We need to unify the data extension operations of
->> them.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> ---
->>   kernel/bpf/syscall.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index e9e3e49c0eb7..18137ea5190d 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -3871,13 +3871,16 @@ static int bpf_prog_get_info_by_fd(struct file *file,
->>   		info.nr_jited_line_info = 0;
->>   	if (info.nr_jited_line_info && ulen) {
->>   		if (bpf_dump_raw_ok(file->f_cred)) {
->> +			unsigned long jited_linfo_addr;
->>   			__u64 __user *user_linfo;
->>   			u32 i;
->>   
->>   			user_linfo = u64_to_user_ptr(info.jited_line_info);
->>   			ulen = min_t(u32, info.nr_jited_line_info, ulen);
->>   			for (i = 0; i < ulen; i++) {
->> -				if (put_user((__u64)(long)prog->aux->jited_linfo[i],
->> +				jited_linfo_addr = (unsigned long)
->> +					prog->aux->jited_linfo[i];
->> +				if (put_user((__u64) jited_linfo_addr,
->>   					     &user_linfo[i]))
-> 
-> the logic is fine but i'm going to nitpick a bit this 4 lines is ugly
-> just make it slightly longer than 80chars or use a shoarter name? For
-> example,
-> 
-> 			for (i = 0; i < ulen; i++) {
-> 				unsigned long l;
-> 
-> 				l = (unsigned long) prog->aux->jited_linfo[i];
-> 				if (put_user((__u64) l, &user_linfo[i]))
-> 
-> is much nicer -- no reason to smash single assignment across multiple
-> lines. My $.02.
-> 
-
-Okay, It sounds good. I will make change in next version. Thanks.
-
-> Thanks,
-> John
-> .
-> 

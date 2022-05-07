@@ -2,131 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCB151E42D
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 06:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA01D51E435
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 06:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445519AbiEGExy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 00:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S1445527AbiEGFC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 01:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239457AbiEGExu (ORCPT
+        with ESMTP id S1445520AbiEGFCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 00:53:50 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0F869CE8;
-        Fri,  6 May 2022 21:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651899005; x=1683435005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J/3K4Vwk1O/C7U6JgPB5V1dfiV3hQe4EsWkA0JGHPKQ=;
-  b=azYWsdJQ98eBuG9wDClHblEOCFj/Z/FQRsccwKwCkSRiRqxIVZQ1yk9e
-   09cAzC/mg51FyplAvwzGrg+PsJmTEzQuDurHAzgpiqD/igKEhFktz8MgA
-   ATTgvltbgfjcGRbpou6XgsQqw7zZ4PY2WEKlvdOf+CLAsUQK4xVQL5nR0
-   o+fLRcv09tq1VcDVlsPAgBT3iVdr/8L9kyzSfLA/oKqw9a3pGAajKJKsx
-   tGq3ANuiQNZIjdwlwq3xYQm+S5mGmZV8/IVpBDB6iLcUPBkFtaETDIhQe
-   SztqIBrVHsj6psq6AiDZtdSaAKlfe35D/Wm1AyjxyL7d3FQUpMGgGKi+V
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="329198979"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="329198979"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 21:50:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="736067130"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 21:50:01 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnCOG-000EDc-Rm;
-        Sat, 07 May 2022 04:50:00 +0000
-Date:   Sat, 7 May 2022 12:49:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Subject: Re: [PATCH v2] mm/ksm: introduce ksm_force for each process
-Message-ID: <202205071229.7ltA0xmX-lkp@intel.com>
-References: <20220507014318.642353-1-xu.xin16@zte.com.cn>
+        Sat, 7 May 2022 01:02:53 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2777E38BE8;
+        Fri,  6 May 2022 21:58:58 -0700 (PDT)
+X-UUID: 759bf977130d4ad0954971aad46e73c8-20220507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:450f8374-483a-45e2-a497-cce7218114fd,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:ae2e8816-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 759bf977130d4ad0954971aad46e73c8-20220507
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <powen.kao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1746285731; Sat, 07 May 2022 12:58:51 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Sat, 7 May 2022 12:58:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Sat, 7 May 2022 12:58:50 +0800
+From:   Po-Wen Kao <powen.kao@mediatek.com>
+To:     <j-young.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
+        <alice.chao@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2] scsi: ufs: add clock-scalable property for clk scaling
+Date:   Sat, 7 May 2022 12:57:30 +0800
+Message-ID: <20220507045731.19495-1-powen.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220507045223.14775-1-powen.kao@mediatek.com>
+References: <20220507045223.14775-1-powen.kao@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507014318.642353-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In clk scaling, clk_set_rate is invoked to set dedicated PLL clk rate
+on scale up and down. On some MTK platform, scaling is only possible
+by switching parent of a mux, therefore we introduce a new
+"clock-scalable" property to gain fine control over which clock rate can
+be scaled by calling clk_set_rate. If a clock is defined as non-scalable,
+clk_set_rate won't be invoked while clki->current_rate is still updated
+if min/max freq is defined. Customized clk operation may be embedded in
+pre/post change of hba->vops->clk_scale_notify.
 
-Thank you for the patch! Yet something to improve:
+All clocks in dts without "clock-scalable" property defined are assumed
+scalable and works as usual. There is no neeed to make change on existing
+dts.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20220506]
-[cannot apply to hnaz-mm/master kees/for-next/pstore linus/master v5.18-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+To specify scalable property, one may define dts as follow
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-ksm-introduce-ksm_force-for-each-process/20220507-094557
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r045-20220506 (https://download.01.org/0day-ci/archive/20220507/202205071229.7ltA0xmX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bc6a122b9e10290755c811e7fa23dd60d39303e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-ksm-introduce-ksm_force-for-each-process/20220507-094557
-        git checkout bc6a122b9e10290755c811e7fa23dd60d39303e2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+&ufshci {
+    clocks =
+        <clk1>,
+        <clk2>,
+        ...
+        <clkn>;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+    clock-names =
+        "clk1",
+        "clk2",
+        ...
+        "clkn";
 
-All errors (new ones prefixed by >>):
+    freq-table-hz =
+        <1000 2000>,
+        <0 0>,
+        ...
+        <0 0>;
 
->> mm/ksm.c:343:3: error: use of undeclared identifier 'turn'
-                   turn false;
-                   ^
-   1 error generated.
+    clock-scalable =
+        <0
+         0
+         ...
+         0
+        >;
+};
 
+Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 96 +++++++++++++++++++++++---------
+ drivers/scsi/ufs/ufshcd.c        | 54 +++++++-----------
+ drivers/scsi/ufs/ufshcd.h        |  2 +
+ include/trace/events/ufs.h       | 16 +++---
+ 4 files changed, 102 insertions(+), 66 deletions(-)
 
-vim +/turn +343 mm/ksm.c
-
-   336	
-   337	/* Check if vma is qualified for ksmd scanning */
-   338	static bool ksm_vma_check(struct vm_area_struct *vma)
-   339	{
-   340		unsigned long vm_flags = vma->vm_flags;
-   341	
-   342		if (!(vma->vm_flags & VM_MERGEABLE) && !(vma->vm_mm->ksm_force))
- > 343			turn false;
-   344	
-   345		if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
-   346				VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
-   347				VM_HUGETLB	| VM_MIXEDMAP))
-   348			return false;       /* just ignore this vma*/
-   349	
-   350		if (vma_is_dax(vma))
-   351			return false;
-   352	
-
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index 87975d1a21c8..5f95bb519485 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -18,6 +18,56 @@
+ 
+ #define UFSHCD_DEFAULT_LANES_PER_DIRECTION		2
+ 
++/**
++ * ufshcd_get_clk_u32_array - Resolve property in dts to u32 array with
++ * shape check.
++ * @hba: per-adapter instance
++ * @propname: name of property
++ * @cols: column count
++ * @rows: calculated row count with given cols
++ * @array: u32 array pointer of property data with propname
++ */
++static int ufshcd_get_clk_u32_array(struct ufs_hba *hba, const char *propname,
++				    size_t cols, size_t *rows, u32 **array)
++{
++	struct device *dev = hba->dev;
++	struct device_node *np = dev->of_node;
++	int len = 0, ret = 0;
++	int _rows = 0;
++
++	if (!of_get_property(np, propname, &len)) {
++		dev_warn(dev, "%s property not specified.\n", propname);
++		return -EINVAL;
++	}
++
++	len = len / sizeof(**array);
++	if (!cols || !len || len % cols != 0) {
++		dev_warn(dev, "%s property define error.\n", propname);
++		return -EINVAL;
++	}
++	_rows = len / cols;
++
++	*array = devm_kcalloc(dev, len, sizeof(**array), GFP_KERNEL);
++	if (!*array) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	ret = of_property_read_u32_array(np, propname, *array, len);
++	if (ret) {
++		dev_err(dev, "%s: error reading array %d\n",
++			propname, ret);
++		goto out;
++	}
++
++	*rows = _rows;
++
++	return 0;
++out:
++	devm_kfree(dev, *array);
++	return ret;
++}
++
+ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ {
+ 	int ret = 0;
+@@ -27,13 +77,14 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ 	struct device_node *np = dev->of_node;
+ 	char *name;
+ 	u32 *clkfreq = NULL;
++	u32 *scalable = NULL;
+ 	struct ufs_clk_info *clki;
+-	int len = 0;
+ 	size_t sz = 0;
+ 
+ 	if (!np)
+ 		goto out;
+ 
++	/* clock-names */
+ 	cnt = of_property_count_strings(np, "clock-names");
+ 	if (!cnt || (cnt == -EINVAL)) {
+ 		dev_info(dev, "%s: Unable to find clocks, assuming enabled\n",
+@@ -47,37 +98,29 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ 	if (cnt <= 0)
+ 		goto out;
+ 
+-	if (!of_get_property(np, "freq-table-hz", &len)) {
+-		dev_info(dev, "freq-table-hz property not specified\n");
++	/* clock-scalable (optional) */
++	ret = ufshcd_get_clk_u32_array(hba, "clock-scalable", 1, &sz, &scalable);
++	if (ret) {
++		dev_warn(dev, "Optional property %s load failed. Assume all clocks scalable.\n",
++			 "clock-scalable");
++	} else if (sz != cnt) {
++		dev_err(dev, "%s len mismatch\n", "clock-scalable");
++		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	if (len <= 0)
++	/* freq-table-hz */
++	ret = ufshcd_get_clk_u32_array(hba, "freq-table-hz", 2, &sz, &clkfreq);
++	if (ret) {
++		dev_err(dev, "Property %s load failed.", "freq-table-hz");
+ 		goto out;
+-
+-	sz = len / sizeof(*clkfreq);
+-	if (sz != 2 * cnt) {
++	} else if (sz != cnt) {
+ 		dev_err(dev, "%s len mismatch\n", "freq-table-hz");
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	clkfreq = devm_kcalloc(dev, sz, sizeof(*clkfreq),
+-			       GFP_KERNEL);
+-	if (!clkfreq) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
+-
+-	ret = of_property_read_u32_array(np, "freq-table-hz",
+-			clkfreq, sz);
+-	if (ret && (ret != -EINVAL)) {
+-		dev_err(dev, "%s: error reading array %d\n",
+-				"freq-table-hz", ret);
+-		return ret;
+-	}
+-
+-	for (i = 0; i < sz; i += 2) {
++	for (i = 0; i < cnt * 2; i += 2) {
+ 		ret = of_property_read_string_index(np,
+ 				"clock-names", i/2, (const char **)&name);
+ 		if (ret)
+@@ -92,6 +135,7 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ 		clki->min_freq = clkfreq[i];
+ 		clki->max_freq = clkfreq[i+1];
+ 		clki->name = devm_kstrdup(dev, name, GFP_KERNEL);
++		clki->scalable = scalable ? !!scalable[i / 2] : true;
+ 		if (!clki->name) {
+ 			ret = -ENOMEM;
+ 			goto out;
+@@ -99,11 +143,13 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ 
+ 		if (!strcmp(name, "ref_clk"))
+ 			clki->keep_link_active = true;
+-		dev_dbg(dev, "%s: min %u max %u name %s\n", "freq-table-hz",
+-				clki->min_freq, clki->max_freq, clki->name);
++		dev_dbg(dev, "clk %s: scalable(%u), min(%u), max(%u)\n",
++			clki->name, clki->scalable, clki->min_freq, clki->max_freq);
+ 		list_add_tail(&clki->list, &hba->clk_list_head);
+ 	}
+ out:
++	devm_kfree(dev, scalable);
++	devm_kfree(dev, clkfreq);
+ 	return ret;
+ }
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index eea5af5fa166..8dbae2f73329 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -939,6 +939,11 @@ static bool ufshcd_is_unipro_pa_params_tuning_req(struct ufs_hba *hba)
+ 		return false;
+ }
+ 
++static inline int ufshcd_clk_set_rate(struct ufs_clk_info *clki, unsigned long rate)
++{
++	return clki->scalable ? clk_set_rate(clki->clk, rate) : 0;
++}
++
+ /**
+  * ufshcd_set_clk_freq - set UFS controller clock frequencies
+  * @hba: per adapter instance
+@@ -950,6 +955,7 @@ static bool ufshcd_is_unipro_pa_params_tuning_req(struct ufs_hba *hba)
+ static int ufshcd_set_clk_freq(struct ufs_hba *hba, bool scale_up)
+ {
+ 	int ret = 0;
++	u32 target_rate = 0;
+ 	struct ufs_clk_info *clki;
+ 	struct list_head *head = &hba->clk_list_head;
+ 
+@@ -958,41 +964,23 @@ static int ufshcd_set_clk_freq(struct ufs_hba *hba, bool scale_up)
+ 
+ 	list_for_each_entry(clki, head, list) {
+ 		if (!IS_ERR_OR_NULL(clki->clk)) {
+-			if (scale_up && clki->max_freq) {
+-				if (clki->curr_freq == clki->max_freq)
+-					continue;
+-
+-				ret = clk_set_rate(clki->clk, clki->max_freq);
+-				if (ret) {
+-					dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
+-						__func__, clki->name,
+-						clki->max_freq, ret);
+-					break;
+-				}
+-				trace_ufshcd_clk_scaling(dev_name(hba->dev),
+-						"scaled up", clki->name,
+-						clki->curr_freq,
+-						clki->max_freq);
+-
+-				clki->curr_freq = clki->max_freq;
++			target_rate = scale_up ? clki->max_freq : clki->min_freq;
+ 
+-			} else if (!scale_up && clki->min_freq) {
+-				if (clki->curr_freq == clki->min_freq)
+-					continue;
++			if (!target_rate || clki->curr_freq == target_rate)
++				continue;
+ 
+-				ret = clk_set_rate(clki->clk, clki->min_freq);
+-				if (ret) {
+-					dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
+-						__func__, clki->name,
+-						clki->min_freq, ret);
+-					break;
+-				}
+-				trace_ufshcd_clk_scaling(dev_name(hba->dev),
+-						"scaled down", clki->name,
+-						clki->curr_freq,
+-						clki->min_freq);
+-				clki->curr_freq = clki->min_freq;
++			ret = ufshcd_clk_set_rate(clki, target_rate);
++			if (ret) {
++				dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
++					__func__, clki->name,
++					target_rate, ret);
++				break;
+ 			}
++			trace_ufshcd_clk_scaling(dev_name(hba->dev),
++						 clki->name, scale_up,
++						 clki->curr_freq,
++						 target_rate);
++			clki->curr_freq = target_rate;
+ 		}
+ 		dev_dbg(hba->dev, "%s: clk: %s, rate: %lu\n", __func__,
+ 				clki->name, clk_get_rate(clki->clk));
+@@ -8364,7 +8352,7 @@ static int ufshcd_init_clocks(struct ufs_hba *hba)
+ 			ufshcd_parse_dev_ref_clk_freq(hba, clki->clk);
+ 
+ 		if (clki->max_freq) {
+-			ret = clk_set_rate(clki->clk, clki->max_freq);
++			ret = ufshcd_clk_set_rate(clki, clki->max_freq);
+ 			if (ret) {
+ 				dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
+ 					__func__, clki->name,
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 1637f5cc1420..eaa3d6c5b9ab 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -260,6 +260,7 @@ struct ufs_dev_cmd {
+  * @keep_link_active: indicates that the clk should not be disabled if
+ 		      link is active
+  * @enabled: variable to check against multiple enable/disable
++ * @scalable: indicates if clk is scalable in clk scaling
+  */
+ struct ufs_clk_info {
+ 	struct list_head list;
+@@ -270,6 +271,7 @@ struct ufs_clk_info {
+ 	u32 curr_freq;
+ 	bool keep_link_active;
+ 	bool enabled;
++	bool scalable;
+ };
+ 
+ enum ufs_notify_change_status {
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739ee7b20..780c964e52c2 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -103,30 +103,30 @@ TRACE_EVENT(ufshcd_clk_gating,
+ 
+ TRACE_EVENT(ufshcd_clk_scaling,
+ 
+-	TP_PROTO(const char *dev_name, const char *state, const char *clk,
+-		u32 prev_state, u32 curr_state),
++	TP_PROTO(const char *dev_name, const char *clk,
++		 bool up, u32 prev_state, u32 curr_state),
+ 
+-	TP_ARGS(dev_name, state, clk, prev_state, curr_state),
++	TP_ARGS(dev_name, clk, up, prev_state, curr_state),
+ 
+ 	TP_STRUCT__entry(
+ 		__string(dev_name, dev_name)
+-		__string(state, state)
+ 		__string(clk, clk)
++		__field(bool, up)
+ 		__field(u32, prev_state)
+ 		__field(u32, curr_state)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__assign_str(dev_name, dev_name);
+-		__assign_str(state, state);
+ 		__assign_str(clk, clk);
++		__entry->up = up;
+ 		__entry->prev_state = prev_state;
+ 		__entry->curr_state = curr_state;
+ 	),
+ 
+-	TP_printk("%s: %s %s from %u to %u Hz",
+-		__get_str(dev_name), __get_str(state), __get_str(clk),
+-		__entry->prev_state, __entry->curr_state)
++	TP_printk("%s: scaled %s %s from %u to %u Hz",
++		  __get_str(dev_name), __entry->up ? "up" : "down", __get_str(clk),
++		  __entry->prev_state, __entry->curr_state)
+ );
+ 
+ TRACE_EVENT(ufshcd_auto_bkops_state,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+

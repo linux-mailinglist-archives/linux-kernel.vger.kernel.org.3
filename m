@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9332B51E32A
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4938D51E320
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357287AbiEGBlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S1445222AbiEGBk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445257AbiEGBlJ (ORCPT
+        with ESMTP id S236028AbiEGBkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:41:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4346712DF
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 18:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651887440; x=1683423440;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S0Bz8rP4s41uJJFTlsYVLSGlvcZ5POkxwtRvtC3Kw7o=;
-  b=kJIsBwnSZmgRzuftvRIFzraPZPNNi/jrKeqJ1aFaJZVNAZIUbCgSvFlf
-   UPOm6AqDShFMdo2em0ZtOQYn6Q9krmQpoA7qhz8Zz3Ekdi3MUvGxC7cX7
-   cfC25vyEeDf4opqUQsCphdxpaaOUuYOSgLhXh33bWP0x8AUUe9aD2NNAW
-   GIjWXtNhgAhrexokPMBCjQKkXpx0jVjDsPvNG8q+ScBRxwnzBkysiL2zp
-   10JdukMComPSId6gO9LBLXlErfWQZy/tJ+Kkyplel2Q9dEAILEqX9jNO+
-   78mA92UcE02wQsps+qHxqjxqr/IN2/HT1ZZqJE5e07Leqiqpjvz3YpkFN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="249161435"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="249161435"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 18:37:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="550108812"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 May 2022 18:37:19 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nn9Nm-000E5s-9k;
-        Sat, 07 May 2022 01:37:18 +0000
-Date:   Sat, 7 May 2022 09:36:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        John Garry <john.garry@huawei.com>
-Subject: [krzk-github:n/qcom-ufs-opp-cleanups-v2-drv-owner-wip 5/7]
- drivers/scsi/scsi_proc.c:145:6: warning: syntax error: keyword 'while' is
- not allowed in global scope [syntaxError]
-Message-ID: <202205070933.wIiOiR2Q-lkp@intel.com>
+        Fri, 6 May 2022 21:40:24 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F6C5D67E;
+        Fri,  6 May 2022 18:36:38 -0700 (PDT)
+X-UUID: c013c10afc814cc59d92a7c8afd8da82-20220507
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:c9c59963-a221-4b32-8390-80dae2802bab,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:fa0e8516-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: c013c10afc814cc59d92a7c8afd8da82-20220507
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1626718688; Sat, 07 May 2022 09:36:31 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 7 May 2022 09:36:30 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 7 May 2022 09:36:29 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Sat, 7 May 2022 09:36:27 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3, 0/3] add h264 decoder driver for mt8186
+Date:   Sat, 7 May 2022 09:36:22 +0800
+Message-ID: <20220507013625.29020-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,115 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
-head:   17609caecd53df20f631703ea084a70e7735b5d7
-commit: 157eb2ee8867afbae9dac3836e4c0bedb542e5c1 [5/7] scsi: proc: do not store proc_dir in scsi_host_template
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout 157eb2ee8867afbae9dac3836e4c0bedb542e5c1
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+Firstly, add mt8186 compatible and private data, then add document for
+compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single core
+architecture, need to add new interface for h264 hardware decoder.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Patche 1 add mt8186 compatible and private data.
+Patche 2 add mt8186 compatible document.
+Patche 3 add h264 single core driver.
+---
+This patch depends on "support for MT8192 decoder"[1]
 
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220506092855.22940-1-yunfei.dong@mediatek.com/
+---
+changed with v2:
+- fix sparse and smatch check fail for patch 3
+changed with v1:
+- rebase driver to the latest media_stage.
+---
+Yunfei Dong (3):
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
+    mt8186
+  media: mediatek: vcodec: Support MT8186
+  media: mediatek: vcodec: add h264 decoder driver for mt8186
 
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
-
->> drivers/scsi/scsi_proc.c:145:6: warning: syntax error: keyword 'while' is not allowed in global scope [syntaxError]
-   void scsi_proc_hostdir_add(const struct scsi_host_template *sht)
-        ^
-   drivers/scsi/scsi_proc.c:464:61: warning: Parameter 'pos' can be declared with const [constParameter]
-   static void *scsi_seq_start(struct seq_file *sfile, loff_t *pos)
-                                                               ^
->> drivers/scsi/scsi_proc.c:115:12: warning: Uninitialized variable: dir->sht [uninitvar]
-     if (dir->sht == sht)
-              ^
-   drivers/scsi/scsi_proc.c:154:12: warning: Uninitialized variable: dir->sht [uninitvar]
-     if (dir->sht == sht) {
-              ^
-   drivers/scsi/scsi_proc.c:149:6: note: Assuming condition is false
-    if (!sht->show_info)
-        ^
-   drivers/scsi/scsi_proc.c:154:12: note: Uninitialized variable: dir->sht
-     if (dir->sht == sht) {
-              ^
-
-vim +/while +145 drivers/scsi/scsi_proc.c
-
-   106	
-   107	static struct sht_proc_dir *
-   108	scsi_proc_find_sht_proc_dir(const struct scsi_host_template *sht)
-   109	{
-   110		struct sht_proc_dir *dir;
-   111	
-   112		lockdep_assert_held(&global_host_template_mutex);
-   113	
-   114		list_for_each_entry(dir, &sht_proc_dir_list, list) {
- > 115			if (dir->sht == sht)
-   116				return dir;
-   117		}
-   118	
-   119		return NULL;
-   120	}
-   121	
-   122	struct proc_dir_entry *
-   123	scsi_proc_get_proc_dir(const struct scsi_host_template *sht)
-   124	{
-   125		struct proc_dir_entry *proc_dir = NULL;
-   126		struct sht_proc_dir *dir;
-   127	
-   128		mutex_lock(&global_host_template_mutex);
-   129		dir = scsi_proc_find_sht_proc_dir(sht);
-   130		if (dir)
-   131			proc_dir = dir->proc_dir;
-   132		mutex_unlock(&global_host_template_mutex);
-   133	
-   134		return proc_dir;
-   135	}
-   136	EXPORT_SYMBOL_GPL(scsi_proc_get_proc_dir);
-   137	
-   138	/**
-   139	 * scsi_proc_hostdir_add - Create directory in /proc for a scsi host
-   140	 * @sht: owner of this directory
-   141	 *
-   142	 * Sets sht->proc_dir to the new directory.
-   143	 */
-   144	
- > 145	void scsi_proc_hostdir_add(const struct scsi_host_template *sht)
-   146	{
-   147		struct sht_proc_dir *dir;
-   148	
-   149		if (!sht->show_info)
-   150			return;
-   151	
-   152		mutex_lock(&global_host_template_mutex);
-   153		list_for_each_entry(dir, &sht_proc_dir_list, list) {
-   154			if (dir->sht == sht) {
-   155				dir->cnt++;
-   156				goto out;
-   157			}
-   158		}
-   159		dir = kzalloc(sizeof(*dir), GFP_KERNEL);
-   160		if (!dir)
-   161			goto out;
-   162	
-   163		dir->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
-   164		if (!dir->proc_dir) {
-   165			printk(KERN_ERR "%s: proc_mkdir failed for %s\n",
-   166			       __func__, sht->proc_name);
-   167			kfree(dir);
-   168			goto out;
-   169		}
-   170	
-   171		dir->cnt++;
-   172		list_add_tail(&dir->list, &sht_proc_dir_list);
-   173	
-   174	out:
-   175		mutex_unlock(&global_host_template_mutex);
-   176	}
-   177	
+ .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+ .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
+ 5 files changed, 203 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+

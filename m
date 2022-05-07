@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F76151E768
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA29D51E787
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 15:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385820AbiEGNbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 09:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S1385268AbiEGNyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 09:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385152AbiEGNbH (ORCPT
+        with ESMTP id S232825AbiEGNyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 09:31:07 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC83FD85
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:27:20 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l8-20020a056e021aa800b002cf778c63caso2552061ilv.10
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 06:27:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=J+Bej5ZpoBm/gMBTL/LrXbQDx5WmOQgVK8bCmav5T6w=;
-        b=QQI7wSBmZUOFMLbi/AdQOwU6nPcuwhSFzRndYEnQFL7/5p/bfZ2Kmw8heG4wSwKO+1
-         96X9P1vr710bTTcTtt+dtB2zspVx3aKIpRt1ZyKjEX2B44nwg+Xocs/dpDUYIoU6qlyA
-         Xos3FxDq6aGskvU/KVAApPnum2O13GovsTAyHNObK07Pb7LAujINxaHrBpIHIc1J/Pkj
-         /EB0Bu/yJ2KdTMrvHvKWTwyWiBelxsSQGO/2Jn/m2ObRY1iqg2gXqLcMJdvI8d5X9jb2
-         G808Pwx+lk+nqsTaUwwwxrG3laT+gjZHjb4RarzI/KI1qhU3SkJQoMdz+CwPQf9qlhxc
-         kzzg==
-X-Gm-Message-State: AOAM530d1xX7V3wN2MhQy9ODKTmxUd1vzZVQRleB3X5phBPT/u3kGew3
-        lLvZ1ZkA9bOqd8sJug3lT39p06G1tWGgyLwEMdZ9Sji8iCWG
-X-Google-Smtp-Source: ABdhPJzCYviIpRnTxq7ljtByJ36DYz0i/Ppwyct1u2/SH2lMa4OD2RvdQP8c1uKuIJ+zcNoouIjj30RZEnM7BH1HLhS1TqJu0fMN
+        Sat, 7 May 2022 09:54:40 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35F828D
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 06:50:52 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-41-00ltXLBqOpWSmzzcA63DIw-1; Sat, 07 May 2022 14:50:50 +0100
+X-MC-Unique: 00ltXLBqOpWSmzzcA63DIw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sat, 7 May 2022 14:50:49 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sat, 7 May 2022 14:50:49 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Filipe Manana" <fdmanana@suse.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+Subject: RE: [patch 3/3] x86/fpu: Make FPU protection more robust
+Thread-Topic: [patch 3/3] x86/fpu: Make FPU protection more robust
+Thread-Index: AQHYYG+YWY1FRr4hzkKhJKBT7m/w1q0QJdtAgAI7WgCAAQNXkA==
+Date:   Sat, 7 May 2022 13:50:49 +0000
+Message-ID: <035e10aba0904420ba83f4ea56a3e14b@AcuMS.aculab.com>
+References: <YnKh96isoB7jiFrv@zx2c4.com> <87czgtjlfq.ffs@tglx>
+ <YnLOXZp6WgH7ULVU@zx2c4.com> <87wnf1huwj.ffs@tglx>
+ <YnMRwPFfvB0RlBow@zx2c4.com> <87mtfwiyqp.ffs@tglx>
+ <YnMkRLcxczMxdE5z@zx2c4.com> <87h764ixjs.ffs@tglx>
+ <YnOuqh4YZT8ww96W@zx2c4.com>
+ <1f4918f734d14e3896071d3c7de1441d@AcuMS.aculab.com>
+ <YnWiasChfzbEP67C@zx2c4.com>
+In-Reply-To: <YnWiasChfzbEP67C@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:22ca:b0:32b:71de:8f04 with SMTP id
- j10-20020a05663822ca00b0032b71de8f04mr3255103jat.128.1651930040245; Sat, 07
- May 2022 06:27:20 -0700 (PDT)
-Date:   Sat, 07 May 2022 06:27:20 -0700
-In-Reply-To: <0000000000005b04fa05dd71e0e0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003e29af05de6bef3c@google.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Write in end_buffer_read_sync
-From:   syzbot <syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,117 +70,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    4b97bac0756a Merge tag 'for-5.18-rc5-tag' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16ba2e16f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f179a672dc8535fc
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a34afef00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177360b2f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3f7f291a3d327486073c@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: out-of-bounds in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: out-of-bounds in atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
-BUG: KASAN: out-of-bounds in put_bh include/linux/buffer_head.h:284 [inline]
-BUG: KASAN: out-of-bounds in end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
-Write of size 4 at addr ffffc900035879d8 by task ksoftirqd/3/33
-
-CPU: 3 PID: 33 Comm: ksoftirqd/3 Not tainted 5.18.0-rc5-syzkaller-00163-g4b97bac0756a #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
- put_bh include/linux/buffer_head.h:284 [inline]
- end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
- end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
- bio_endio+0x5fe/0x780 block/bio.c:1541
- req_bio_endio block/blk-mq.c:686 [inline]
- blk_update_request+0x401/0x1310 block/blk-mq.c:815
- blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
- lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
- blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90003580000, ffffc90003589000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2639
-
-------------[ cut here ]------------
-kernel BUG at mm/vmalloc.c:660!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 3 PID: 33 Comm: ksoftirqd/3 Not tainted 5.18.0-rc5-syzkaller-00163-g4b97bac0756a #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
-Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 d2 d5 c1 ff <0f> 0b e8 cb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 bc d5 c1 ff
-RSP: 0018:ffffc900007cfbe8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: ffff888011b80200 RSI: ffffffff81b69dfe RDI: 0000000000000003
-RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000000
-R10: ffffffff81b69a16 R11: 0000000000000000 R12: 0000370000000000
-R13: 0000000000000000 R14: ffff888011b80200 R15: ffff8880231b6188
-FS:  0000000000000000(0000) GS:ffff88802cd00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000562fada51cf8 CR3: 000000001d3dd000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- print_address_description.constprop.0.cold+0x2ce/0x467 mm/kasan/report.c:350
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
- put_bh include/linux/buffer_head.h:284 [inline]
- end_buffer_read_sync+0x24/0x30 fs/buffer.c:160
- end_bio_bh_io_sync+0xda/0x130 fs/buffer.c:2999
- bio_endio+0x5fe/0x780 block/bio.c:1541
- req_bio_endio block/blk-mq.c:686 [inline]
- blk_update_request+0x401/0x1310 block/blk-mq.c:815
- blk_mq_end_request+0x4b/0x80 block/blk-mq.c:941
- lo_complete_rq+0x1c2/0x280 drivers/block/loop.c:369
- blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1012
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vmalloc_to_page+0x46e/0x4f0 mm/vmalloc.c:660
-Code: c1 ff 4d 31 fc 4d 21 f4 49 c1 ec 0c 4c 01 e3 49 bc 00 00 00 00 00 ea ff ff 48 c1 e3 06 49 01 dc e9 35 ff ff ff e8 d2 d5 c1 ff <0f> 0b e8 cb d5 c1 ff 0f 0b 45 31 e4 e9 1f ff ff ff e8 bc d5 c1 ff
-RSP: 0018:ffffc900007cfbe8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: ffff888011b80200 RSI: ffffffff81b69dfe RDI: 0000000000000003
-RBP: ffffffff8ba8e000 R08: 00001ffffffffffe R09: 0000000000000000
-R10: ffffffff81b69a16 R11: 0000000000000000 R12: 0000370000000000
-R13: 0000000000000000 R14: ffff888011b80200 R15: ffff8880231b6188
-FS:  0000000000000000(0000) GS:ffff88802cd00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000562fada51cf8 CR3: 000000001d3dd000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDA2IE1heSAyMDIyIDIzOjM0DQo+IA0K
+PiBIaSBEYXZpZCwNCj4gDQo+IE9uIFRodSwgTWF5IDA1LCAyMDIyIGF0IDExOjM0OjQwQU0gKzAw
+MDAsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBPVE9IIHRoZSBlbnRyb3B5IG1peGluZyBpcyB2
+ZXJ5IGxpa2VseSB0byBiZSAnY29sZCBjYWNoZScNCj4gPiBhbmQgYWxsIHRoZSB1bnJvbGxpbmcg
+aW4gYmxha2VzNyB3aWxsIGNvbXBsZXRlbHkga2lsbA0KPiA+IHBlcmZvcm1hbmNlLg0KPiANCj4g
+SSd2ZSBzZWVuIHlvdSBtZW50aW9uIHRoZSBCTEFLRTJzIHVucm9sbGluZyBpbiBsaWtlIDggZGlm
+ZmVyZW50IHRocmVhZHMNCj4gbm93LCBhbmQgSSdtIG5vdCBjb252aW5jZWQgdGhhdCB5b3UncmUg
+ZW50aXJlbHkgd3JvbmcsIG5vciBhbSBJDQo+IGNvbnZpbmNlZCB0aGF0IHlvdSdyZSBlbnRpcmVs
+eSByaWdodC4gTXkgcmVzcG9uc2UgdG8geW91IGlzIHRoZSBzYW1lIGFzDQo+IGFsd2F5czogcGxl
+YXNlIHNlbmQgYSBwYXRjaCB3aXRoIHNvbWUgbWVhc3VyZW1lbnRzISBJJ2QgbG92ZSB0byBnZXQg
+dGhpcw0KPiB3b3JrZWQgb3V0IGluIGEgcmVhbCB3YXkuDQo+IA0KPiBUaGUgbGFzdCB0aW1lIEkg
+d2VudCBiZW5jaGluZyB0aGVzZSwgdGhlIHVucm9sbGVkIGNvZGUgd2FzIH4xMDAgY3ljbGVzDQo+
+IGZhc3RlciwgaWYgSSByZWNhbGwgY29ycmVjdGx5LCB0aGFuIHRoZSByb2xsZWQgY29kZSwgd2hl
+biB1c2VkIGZyb20NCj4gV2lyZUd1YXJkJ3MgaG90IHBhdGguIEkgZG9uJ3QgZG91YnQgdGhhdCBh
+IGNvbGQgcGF0aCB3b3VsZCBiZSBtb3JlDQo+IGZyYXVnaHQsIHRob3VnaCwgYXMgdGhhdCdzIGEg
+ZGVjZW50IGFtb3VudCBvZiBjb2RlLiBTbyB0aGUgcXVlc3Rpb24gaXMNCj4gaG93IHRvIHJlLXJv
+bGwgdGhlIHJvdW5kcyB3aXRob3V0IHNhY3JpZmljaW5nIHRob3NlIDEwMCBjeWNsZXMuDQo+IA0K
+PiBJbiBvcmRlciB0byBiZWdpbiB0byBmaWd1cmUgdGhhdCBvdXQsIHdlIGhhdmUgdG8gbG9vayBh
+dCB3aHkgdGhlDQo+IHJlLXJvbGxlZCBsb29wIGlzIHNsb3cgYW5kIHRoZSB1bnJvbGxlZCBsb29w
+IGZhc3QuIEl0J3Mgbm90IGJlY2F1c2Ugb2YNCj4gY29tcGxpY2F0ZWQgcGlwZWxpbmUgdGhpbmdz
+LiBJdCdzIGJlY2F1c2UgdGhlIEJMQUtFMnMgcGVybXV0YXRpb24gaXMNCj4gYWN0dWFsbHkgMTAg
+ZGlmZmVyZW50IHBlcm11dGF0aW9ucywgb25lIGZvciBlYWNoIHJvdW5kLiBUYWtlIGEgbG9vayBh
+dA0KPiB0aGUgY29yZSBmdW5jdGlvbiwgRywgYW5kIGl0cyB1c2VzIG9mIHRoZSByb3VuZCBudW1i
+ZXIsIHI6DQo+IA0KPiAgICAgI2RlZmluZSBHKHIsIGksIGEsIGIsIGMsIGQpIGRvIHsgXA0KPiAg
+ICAgICAgIGEgKz0gYiArIG1bYmxha2Uyc19zaWdtYVtyXVsyICogaSArIDBdXTsgXA0KPiAgICAg
+ICAgIGQgPSByb3IzMihkIF4gYSwgMTYpOyBcDQo+ICAgICAgICAgYyArPSBkOyBcDQo+ICAgICAg
+ICAgYiA9IHJvcjMyKGIgXiBjLCAxMik7IFwNCj4gICAgICAgICBhICs9IGIgKyBtW2JsYWtlMnNf
+c2lnbWFbcl1bMiAqIGkgKyAxXV07IFwNCj4gICAgICAgICBkID0gcm9yMzIoZCBeIGEsIDgpOyBc
+DQo+ICAgICAgICAgYyArPSBkOyBcDQo+ICAgICAgICAgYiA9IHJvcjMyKGIgXiBjLCA3KTsgXA0K
+PiAgICAgfSB3aGlsZSAoMCkNCg0KRWFjaCBvZiB0aG9zZSBsaW5lcyBpcyBhIGNvdXBsZSBvZiBp
+bnN0cnVjdGlvbnMgYW5kIHRoZXkgYXJlDQphbGwgZGVwZW5kYW50IG9uIHRoZSBwcmVjZWRpbmcg
+dmFsdWUuDQpJIGNvdW50IDE0IC0gZXhjbHVkaW5nIHRoZSBtW10gYWNjZXNzZXMuDQpUaGVyZSBh
+cmUgODAgY29waWVzIG9mIEcoKSAtIHRvdGFsIDExMjAsIG9yIDE3LjUvYnl0ZS4NClRvIGdldCBh
+bnkgZmFzdGVyIHRoYW4gdGhhdCB5b3UgbmVlZCB0byBnZXQgdGhlIGNvbXBpbGVyDQp0byBpbnRl
+cmxlYXZlIHRoZSBnZW5lcmF0ZWQgY29kZSBmb3IgbXVsdGlwbGUgZXhwYW5zaW9ucyBvZiBHKCku
+DQoNCj4gVGhlIGJsYWtlMnNfc2lnbWEgYXJyYXkgaXMgYSBgc3RhdGljIGNvbnN0IHU4IGJsYWtl
+MnNfc2lnbWFbMTBdWzE2XWAsDQo+IHdpdGggYSByb3cgZm9yIGV2ZXJ5IG9uZSBvZiB0aGUgMTAg
+cm91bmRzLiBXaGF0IHRoaXMgaXMgYWN0dWFsbHkgZG9pbmcNCj4gaXMgcmVhZGluZyB0aGUgbWVz
+c2FnZSB3b3JkcyBpbiBhIGRpZmZlcmVudCBvcmRlciBlYWNoIHJvdW5kLCBzbyB0aGF0DQo+IHRo
+ZSB3aG9sZSBwZXJtdXRhdGlvbiBpcyBkaWZmZXJlbnQuDQo+IA0KPiBXaGVuIHRoZSBsb29wIGlz
+IHVucm9sbGVkLCBibGFrZTJzX3NpZ21hIGdldHMgaW5saW5lZCwgYW5kIHRoZW4gdGhlcmUNCj4g
+YXJlIG5vIG1lbW9yeSBhY2Nlc3Nlcy4gV2hlbiBpdCdzIHJlLXJvbGxlZCwgZXZlcnkgcm91bmQg
+YWNjZXNzZXMNCj4gYmxha2Uyc19zaWdtYSAxNiB0aW1lcywgd2hpY2ggaGluZGVycyBwZXJmb3Jt
+YW5jZS4NCg0KSXQgc2hvdWxkbid0IHJlYWxseSBtYWtlIG11Y2ggZGlmZmVyZW5jZS4NClRoZXJl
+IGFyZSBvbmx5IHR3byBtZW1vcnkgcmVhZHMgZm9yIGVhY2ggMTQgYXJpdGhtZXRpYyBvcHMuDQpT
+byB1bmxlc3MgeW91IG1hbmFnZSB0byBtYWludGFpbiA0IGluc3RydWN0aW9ucy9jbG9jayB0aGVy
+ZQ0KYXJlIHNwYXJlIGNsb2NrcyBmb3IgdGhlIGV4dHJhIG1lbW9yeSBjeWNsZXMuDQpBbnkgdGhh
+dCBpcyBhc3N1bWluZyBvbmUgcmVhZC9jbG9jaywgbW9kZXJuIHg4NiBjYW4gZG8gMg0KKHdpdGgg
+YSBmb2xsb3dpbmcgd2luZCEpDQpPbiB4ODYgdGhlIGFycmF5IGluZGV4IGlzIGZyZWUuDQoNCj4g
+WW91J2xsIG5vdGljZSwgb24gdGhlIG90aGVyIGhhbmQsIHRoYXQgdGhlIFNJTUQgaGFuZCBjb2Rl
+ZCBhc3NlbWJseQ0KPiBpbXBsZW1lbnRhdGlvbnMgZG8gbm90IHVucm9sbC4gVGhlIHRyaWNrIGlz
+IHRvIGhpZGUgdGhlIGNvc3Qgb2YgdGhlDQo+IGJsYWtlMnNfc2lnbWEgaW5kaXJlY3Rpb24gaW4g
+dGhlIGRhdGEgZGVwZW5kZW5jaWVzLCBzbyB0aGF0IHBlcmZvcm1hbmNlDQo+IGlzbid0IGFmZmVj
+dGVkLiBOYWl2ZWx5IHJlLXJvbGxpbmcgdGhlIGdlbmVyaWMgY29kZSBkb2VzIG5vdCBpbnNwaXJl
+IHRoZQ0KPiBjb21waWxlciB0byBkbyB0aGF0LiBCdXQgbWF5YmUgeW91IGNhbiBmaWd1cmUgc29t
+ZXRoaW5nIG91dD8NCg0KSSd2ZSBub3QgbG9va2VkIGF0IHRoYXQgdmVyc2lvbi4NCkkgaGF2ZSB3
+cml0dGVuIEFWWC9TU0UgY29kZSAtIGhhcmQgd29yayBmaW5kaW5nIHRoZSBhc20gbW51bW9uaWNz
+IQ0KDQo+IEFueXdheSwgdGhhdCdzIGFib3V0IHdoZXJlIG15IHRoaW5raW5nIGlzIG9uIHRoaXMs
+IGJ1dCBJJ2QgbG92ZSB0byBzZWUNCj4gc29tZSBwYXRjaGVzIGZyb20geW91IGF0IHNvbWUgcG9p
+bnQgaWYgeW91J3JlIGludGVyZXN0ZWQuDQoNCk9rIEkganVzdCByYW4gc29tZSB0ZXN0cyBsb29w
+aW5nIG92ZXIgdGhlIFJPVU5EKCkgd2l0aG91dCB1cGRhdGluZyB2W10uDQpUaGVzZSBhcmUgdXNp
+bmcgcmRwbWMgdG8gdGltZSBzaW5nbGUgY2FsbHMgLSBub3QgYXZlcmFnaW5nIG92ZXINCmEgbGFy
+Z2UgbnVtYmVyIG9mIGl0ZXJhdGlvbnMuDQoNCk9uIG15IGk3LTc3MDAgdGhlIHVucm9sbGVkIGxv
+b3AgaXMgYWJvdXQgNi4yIGNsb2Nrcy9ieXRlLg0KVGhlICdjb2xkIGNhY2hlJyBmb3IgYSBzaW5n
+bGUgNjQgYnl0ZSBibG9jayBpcyBhYm91dCAyMCBjbG9ja3MvYnl0ZS4NCg0KSWYgSSB1c2U6DQoJ
+Zm9yICh1MzIgaSA9IDA7IGkgPCAxMDsgaSsrKSBST1VORChpKTsNCml0IGRyb3BzIHRvIDcuOCBj
+bG9ja3MvYnl0ZSBidXQgdGhlIHNpbmdsZSBibG9jayBpcyBhYm91dCAxNS4NClBhcnQgb2YgdGhl
+IHByb2JsZW0gaXMgZXh0cmEgcmVnaXN0ZXIgc3BpbGxzIHRvIHN0YWNrLg0KDQpTbyB3ZSBwbGF5
+IHNvbWUgZ2FtZXM6DQpSZW1vdmUgdGhlIGJsYWtlMnNfc2lnbWFbXSBvdXQgb2YgRygpIGludG8g
+Uk9VTkQoKQ0Kc28gdGhlICdub3JtYWwnIGNvZGUgdXNlcyBST1VORChibGFrZTJzX3NpZ21hWzBd
+KSAoZXRjKS4NClRoZW4gd2UgY2FuIHVzZSB0aGUgbG9vcDoNCglmb3IgKGNvbnN0IHU4ICpicyA9
+ICZibGFrZTJzX3NpZ21hWzBdWzBdOyBicyA8IGVuZDsgYnMgKz0gMTYpDQoJCVJPVU5EKGJzKTsN
+Cih3aXRoIHNvbWUgYml0cyB0byBtYWtlIGl0IGNvbXBpbGUuKQ0KQW5ub3lpbmdseSB0aGF0IG1h
+a2VzIHRoZSBjb21waWxlciBzcGlsbCBhbGwgdGhlIGJzW10gdG8gc3RhY2suDQpBIGZldyBjYXJl
+ZnVsbHkgcGxhY2VkIGJhcnJpZXIoKSB3b3VsZCBoZWxwLg0KQnV0IHNpbXBsZXIgaXMgJ3ZvbGF0
+aWxlIGNvbnN0IHU4ICpicycuDQpUaGlzIGhhcyB0aGUgZGVzaXJlZCBlZmZlY3Qgb2YgaW50ZXJs
+ZWF2aW5nIHRoZSAnc2lnbWEnIHJlYWRzDQp3aXRoIHRoZSBidWZmZXIgb25lcy4NClRoaXMgZ2F2
+ZSBtZSA3LjIgY2xvY2tzL2J5dGUsIHNpbmdsZSBibG9jayBtYXliZSAxNC4NCg0KU28gYWJvdXQg
+MSBjbG9jay9ieXRlIChtYXliZSAxNSUpIHNsb3dlci4NCk9UT0ggaW4gbWFueSBjYXNlcyB0aGlz
+IGlzbid0IGNyaXRpY2FsLg0KDQpUaGUgY29sZCBjYWNoZSBjdXRvZmYgZm9yIHRoZSB1bnJvbGxl
+ZCBsb29wIGlzIGFyb3VuZCAyNTYgYnl0ZXMuDQoNClRoZSBvdGhlciBiaWcgZWZmZWN0IHRoZSB1
+bnJvbGxlZCBsb29wIGhhcyBmb3Igc21hbGwgYnVmZmVycw0KaXMgdGhhdCBpdCBkaXNwbGFjZXMg
+YSBsb3Qgb2YgY29kZSBmcm9tIHRoZSBpLWNhY2hlLg0KVGhhdCB3aWxsIG1ha2UgdGhlIHVucm9s
+bGVkIGNvZGUgd29yc2UgZm9yIG1hbnkgcmVhbCBzaXR1YXRpb25zLg0KDQpJIHN1c3BlY3QgdGhh
+dCB0aGUgY29tcGlsZXIgZW5kcyB1cCBzcGlsbGluZyBhbm90aGVyIHJlZ2lzdGVyIChvciAyKQ0K
+dG8gdGhlIHN0YWNrLg0KSGFuZCBhc3NlbWJseSBjb3VsZCBhdm9pZCB0aGF0Lg0KDQpJJ3ZlIG5v
+dCBsb29rZWQgYXQgd2hhdCBnZXRzIHNwaWxsZWQsIGdjYyBjYW4gbWFrZSBob3JyaWQgY2hvaWNl
+cy4NCkl0IG1pZ2h0IGJlIHdvcnRoIG1ha2luZyAoc2F5KSBhIGFuZCBjIHZvbGF0aWxlIChieSBz
+cGxpdHRpbmcgdltdKQ0KYW5kIHVzaW5nIGEgdGVtcG9yYXJ5IGluIEcoKSwgZWc6DQoJYyA9IHQg
+PSBjICsgZDsNCgliID0gcm9yMzIoYiBeIHQsIDEyKTsNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVy
+ZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5
+bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 

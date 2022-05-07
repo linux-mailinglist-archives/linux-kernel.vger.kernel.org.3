@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF4C51E334
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69E151E333
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 03:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445256AbiEGBrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 21:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S1389810AbiEGBrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 21:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389810AbiEGBrB (ORCPT
+        with ESMTP id S1445246AbiEGBrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 21:47:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841059306;
-        Fri,  6 May 2022 18:43:16 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kw99m3bnczGpT7;
-        Sat,  7 May 2022 09:40:28 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 09:42:45 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 7 May 2022 09:42:44 +0800
-Subject: Re: [PATCH v24 5/6] of: Support more than one crash kernel regions
- for kexec -s
-To:     Baoquan He <bhe@redhat.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
- <20220506114402.365-6-thunder.leizhen@huawei.com>
- <20220506231737.GD122876@MiWiFi-R3L-srv>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <55e201f1-f136-607c-78f8-eb4ec481909e@huawei.com>
-Date:   Sat, 7 May 2022 09:42:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 6 May 2022 21:47:18 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77C45DBC7;
+        Fri,  6 May 2022 18:43:33 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 15so7429495pgf.4;
+        Fri, 06 May 2022 18:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhp4PmSHzdcTg4X6br/SY/MgNKlnNiug+NCaOL77dg4=;
+        b=TWXbumwiv7ccRTB0dmrhV4RFC6Mch/dZ2bQRWCxNrp7rKDulHfUmSbfczVIA/okp39
+         zmydRTRo9B+IiltF4aSIz2zw4K3gVW9mDXYtxUo4YrmGBn2gf2tOkyy3SwlPx2UAiYgT
+         ceGnOVicntfQ6X7izFOSN9A63Niz+r3mEx0Ik1Gy6FOPHpI1LEaQTq6gNbRgQK8/Bvr7
+         jFy3ku9DqIe8S6xGO7PzrvE4x3uo+KCF4rUHAL6KvxHnylH7VpqpXbwxVwiE0ZPp8tkh
+         YM7yNoL0+oHKeLZ5ydwhM4b68f3jVh52SX47vsc7eJghFnuCB7KikopVCBeW155kxe0m
+         K7HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xhp4PmSHzdcTg4X6br/SY/MgNKlnNiug+NCaOL77dg4=;
+        b=62JeJ1x5gr/VnAkgK+SB5VTQlxU6XE06j3niA6vVgT9oC7824JbWbJVg64hfapuylV
+         8D41WwiIg5toD53OUcc+0xhyEhcFteqXoNkq0260fLn5i2Kbvhy/nZSaIBz1tAByS2ZP
+         i5KWIRXDVqmU4c0K/GiHtcqk36TQiiPw7GWEO5EL/PKGx9jfc3kgqlnhpG8PIw22ZoLB
+         UHALrxT3kJlCbLDnnCgGqHJE2CrcXDbscCY+Tlx4fCG7/l4WEWQWn1ph0XDMpfqHZ+dh
+         lUEVrIPLE2tSHJXXFRvaDzLEUocDHPW/Zsxb5mlRbyeSdNeLfN0NfsTrARu76evGNM2M
+         Iltg==
+X-Gm-Message-State: AOAM531b1gMDAuYdXHygG4Pw+d0yQd7jr0oJ7FjngdP8yTp6B5EZKi1T
+        3gK6zmNAFolbKZehLSg4ojs=
+X-Google-Smtp-Source: ABdhPJw2WINuVYxwyjn4YtL6ag2cn2y/D6ysdRfB0zhZw3tC2yiWik0AIwNEnfKddQQuqGH9ndFEng==
+X-Received: by 2002:a65:6805:0:b0:3c1:bb28:6bd4 with SMTP id l5-20020a656805000000b003c1bb286bd4mr4997603pgt.585.1651887813423;
+        Fri, 06 May 2022 18:43:33 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b141-20020a621b93000000b0050dc7628176sm3999189pfb.80.2022.05.06.18.43.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 18:43:33 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Yunkai Zhang <zhang.yunkai@zte.com.cn>
+Subject: [PATCH v2] mm/ksm: introduce ksm_force for each process
+Date:   Sat,  7 May 2022 01:43:18 +0000
+Message-Id: <20220507014318.642353-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220506231737.GD122876@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,61 +74,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: xu xin <xu.xin16@zte.com.cn>
 
+To use KSM, we must explicitly call madvise() in application code,
+which means installed apps on OS needs to be uninstall and source
+code needs to be modified. It is inconvenient.
 
-On 2022/5/7 7:17, Baoquan He wrote:
-> On 05/06/22 at 07:44pm, Zhen Lei wrote:
->> When "crashkernel=X,high" is used, there may be two crash regions:
->> high=crashk_res and low=crashk_low_res. But now the syscall
->> kexec_file_load() only add crashk_res into "linux,usable-memory-range",
->> this may cause the second kernel to have no available dma memory.
->>
->> Fix it like kexec tool do for option -c, add both 'high' and 'low' regions
->               ~~~~~~~~~~~~ 
->               kexec-tools does
+In order to change this situation, We add a new proc 'ksm_force'
+under /proc/<pid>/ to support turning on/off KSM scanning of a
+process's mm dynamically.
 
-OK, I will update it. Thanks.
+If ksm_force is set as 1, force all anonymous and 'qualified' vma
+of this mm to be involved in KSM scanning without explicitly
+calling madvise to make vma MADV_MERGEABLE. But It is effctive only
+when the klob of '/sys/kernel/mm/ksm/run' is set as 1.
 
-> 
-> Other than this, LGTM,
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
-> 
->> into the dtb.
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> Acked-by: Rob Herring <robh@kernel.org>
->> ---
->>  drivers/of/kexec.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
->> index b9bd1cff179388c..8d374cc552be5f2 100644
->> --- a/drivers/of/kexec.c
->> +++ b/drivers/of/kexec.c
->> @@ -386,6 +386,15 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
->>  				crashk_res.end - crashk_res.start + 1);
->>  		if (ret)
->>  			goto out;
->> +
->> +		if (crashk_low_res.end) {
->> +			ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
->> +					"linux,usable-memory-range",
->> +					crashk_low_res.start,
->> +					crashk_low_res.end - crashk_low_res.start + 1);
->> +			if (ret)
->> +				goto out;
->> +		}
->>  	}
->>  
->>  	/* add bootargs */
->> -- 
->> 2.25.1
->>
-> 
-> .
-> 
+If ksm_enale is set as 0, cancel the feature of ksm_force of this
+process and unmerge those merged pages which is not madvised as
+MERGEABLE of this process, but leave MERGEABLE areas merged.
 
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Reviewed-by: wangyong <wang.yong12@zte.com.cn>
+Reviewed-by: Yunkai Zhang <zhang.yunkai@zte.com.cn>
+---
+v2:
+- fix a spelling error in commit log.
+- remove a redundant condition check in ksm_force_write().
+
+---
+ fs/proc/base.c           | 99 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/mm_types.h |  9 ++++
+ mm/ksm.c                 | 32 ++++++++++++-
+ 3 files changed, 138 insertions(+), 2 deletions(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 8dfa36a99c74..3115ffa4c9fb 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -96,6 +96,7 @@
+ #include <linux/time_namespace.h>
+ #include <linux/resctrl.h>
+ #include <linux/cn_proc.h>
++#include <linux/ksm.h>
+ #include <trace/events/oom.h>
+ #include "internal.h"
+ #include "fd.h"
+@@ -3168,6 +3169,102 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
+ 
+ 	return 0;
+ }
++
++static ssize_t ksm_force_read(struct file *file, char __user *buf, size_t count,
++				loff_t *ppos)
++{
++	struct task_struct *task;
++	struct mm_struct *mm;
++	char buffer[PROC_NUMBUF];
++	ssize_t len;
++	int ret;
++
++	task = get_proc_task(file_inode(file));
++	if (!task)
++		return -ESRCH;
++
++	mm = get_task_mm(task);
++	ret = 0;
++	if (mm) {
++		len = snprintf(buffer, sizeof(buffer), "%d\n", mm->ksm_force);
++		ret =  simple_read_from_buffer(buf, count, ppos, buffer, len);
++		mmput(mm);
++	}
++
++	return ret;
++}
++
++static ssize_t ksm_force_write(struct file *file, const char __user *buf,
++				size_t count, loff_t *ppos)
++{
++	struct task_struct *task;
++	struct mm_struct *mm;
++	char buffer[PROC_NUMBUF];
++	int force;
++	int err = 0;
++
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count)) {
++		err = -EFAULT;
++		goto out_return;
++	}
++
++	err = kstrtoint(strstrip(buffer), 0, &force);
++
++	if (err)
++		goto out_return;
++	if (force != 0 && force != 1) {
++		err = -EINVAL;
++		goto out_return;
++	}
++
++	task = get_proc_task(file_inode(file));
++	if (!task) {
++		err = -ESRCH;
++		goto out_return;
++	}
++
++	mm = get_task_mm(task);
++	if (!mm)
++		goto out_put_task;
++
++	if (mm->ksm_force != force) {
++		if (mmap_write_lock_killable(mm)) {
++			err = -EINTR;
++			goto out_mmput;
++		}
++
++		if (force == 0)
++			mm->ksm_force = force;
++		else {
++			/*
++			 * Force anonymous pages of this mm to be involved in KSM merging
++			 * without explicitly calling madvise.
++			 */
++			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
++				err = __ksm_enter(mm);
++			if (!err)
++				mm->ksm_force = force;
++		}
++
++		mmap_write_unlock(mm);
++	}
++
++out_mmput:
++	mmput(mm);
++out_put_task:
++	put_task_struct(task);
++out_return:
++	return err < 0 ? err : count;
++}
++
++static const struct file_operations proc_pid_ksm_force_operations = {
++	.read		= ksm_force_read,
++	.write		= ksm_force_write,
++	.llseek		= generic_file_llseek,
++};
+ #endif /* CONFIG_KSM */
+ 
+ #ifdef CONFIG_STACKLEAK_METRICS
+@@ -3303,6 +3400,7 @@ static const struct pid_entry tgid_base_stuff[] = {
+ #endif
+ #ifdef CONFIG_KSM
+ 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
++	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
+ #endif
+ };
+ 
+@@ -3639,6 +3737,7 @@ static const struct pid_entry tid_base_stuff[] = {
+ #endif
+ #ifdef CONFIG_KSM
+ 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
++	REG("ksm_force", S_IRUSR|S_IWUSR, proc_pid_ksm_force_operations),
+ #endif
+ };
+ 
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index b34ff2cdbc4f..1b1592c2f5cf 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -661,6 +661,15 @@ struct mm_struct {
+ 		 * merging.
+ 		 */
+ 		unsigned long ksm_merging_pages;
++		/*
++		 * If true, force anonymous pages of this mm to be involved in KSM
++		 * merging without explicitly calling madvise. It is effctive only
++		 * when the klob of '/sys/kernel/mm/ksm/run' is set as 1. If false,
++		 * cancel the feature of ksm_force of this process and unmerge
++		 * those merged pages which is not madvised as MERGEABLE of this
++		 * process, but leave MERGEABLE areas merged.
++		 */
++		bool ksm_force;
+ #endif
+ 	} __randomize_layout;
+ 
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 38360285497a..ba170e53e283 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -334,6 +334,34 @@ static void __init ksm_slab_free(void)
+ 	mm_slot_cache = NULL;
+ }
+ 
++/* Check if vma is qualified for ksmd scanning */
++static bool ksm_vma_check(struct vm_area_struct *vma)
++{
++	unsigned long vm_flags = vma->vm_flags;
++
++	if (!(vma->vm_flags & VM_MERGEABLE) && !(vma->vm_mm->ksm_force))
++		turn false;
++
++	if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
++			VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
++			VM_HUGETLB	| VM_MIXEDMAP))
++		return false;       /* just ignore this vma*/
++
++	if (vma_is_dax(vma))
++		return false;
++
++#ifdef VM_SAO
++	if (vm_flags & VM_SAO)
++		return false;
++#endif
++#ifdef VM_SPARC_ADI
++	if (vm_flags & VM_SPARC_ADI)
++		return false;
++#endif
++
++	return true;
++}
++
+ static __always_inline bool is_stable_node_chain(struct stable_node *chain)
+ {
+ 	return chain->rmap_hlist_len == STABLE_NODE_CHAIN;
+@@ -523,7 +551,7 @@ static struct vm_area_struct *find_mergeable_vma(struct mm_struct *mm,
+ 	if (ksm_test_exit(mm))
+ 		return NULL;
+ 	vma = vma_lookup(mm, addr);
+-	if (!vma || !(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
++	if (!vma || !ksm_vma_check(vma) || !vma->anon_vma)
+ 		return NULL;
+ 	return vma;
+ }
+@@ -2297,7 +2325,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+ 		vma = find_vma(mm, ksm_scan.address);
+ 
+ 	for (; vma; vma = vma->vm_next) {
+-		if (!(vma->vm_flags & VM_MERGEABLE))
++		if (!ksm_vma_check(vma))
+ 			continue;
+ 		if (ksm_scan.address < vma->vm_start)
+ 			ksm_scan.address = vma->vm_start;
 -- 
-Regards,
-  Zhen Lei
+2.25.1
+

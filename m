@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADE651E9C5
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D0D51E9B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 21:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447056AbiEGTxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 15:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        id S1446999AbiEGTxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 15:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446945AbiEGTxX (ORCPT
+        with ESMTP id S1446917AbiEGTxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 15:53:23 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE5A17E01
+        Sat, 7 May 2022 15:53:22 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EABD17A9D
         for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 12:49:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e24so14240374wrc.9
+Received: by mail-wm1-x32b.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so8650366wms.3
         for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 12:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DETHuK1AGW0MtJsQojTS8x33GEnXY46MVv0jFk7E9B0=;
-        b=GlIV/5K1t1kzfM1QGr+MNMcIh0/lAQSspc4ecGh1o7ZhfXG/KHZ9aofpH6dEXKeG2m
-         OIxEYr53FpB0aDtQcT6YHF2ReWEpzmrsusgffKu/Kt0UhLkSbYdVbchpNoWenchHrVZ6
-         ePgWAAwGGYfC1TYbInhugS4DloNOva5C9U7A6683nfip/ekmZOXTuN9DSEvSoIaJ8wJB
-         /XTGcQJR57Xu7AJ1SGeY/PRImCj6ZofiHGwvMn9r0iyAgL1xjJBK2iPqiaZH4tdlE/az
-         /eZ22ENCwrN0m++Lr004tQ7OnVP+34mDi9QJwiSZnKGIATnUXyBHabYvWTfsmwNokbaw
-         3CVw==
+        bh=X/B2BPBwtGOTsOAaX2PA1j2rtkaGO4jKX4DEuOwWcco=;
+        b=imZXB/jtCgUwydHjuBZ9MEWwQzzDDf9iKhVGxm834+kqsznW3v2LwnRte69OiimP+9
+         RlqbqcctI1OSfNFRSWpjvFmqstble12Oxqdp/sO36DcyzsGeFWEA0WaXxO0cLO4DJpp0
+         SIKBwp1sWc91rcNQJze02oZV2ajsTpEI3GDogklXllTZlbPNgwuGf9U+ahrCreJyhtLL
+         T+uUyZn5jYGrkDvbWLoGMAmMT1bFUPncmzLwTnKIOOvyQCz6ZXedaV4yQUp0SrNcI8Vl
+         oyOQQE60CRYJmltKfGGEVJCuIgd5qyzhx5SiMkYhBeqWkmOGK9WIQ7sBVCioXPN2Ogn4
+         IAEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DETHuK1AGW0MtJsQojTS8x33GEnXY46MVv0jFk7E9B0=;
-        b=vzviGvAanj5N0oQinl2JUvJhmvh27F+qVGWdGpvKpzmpsFBVO8+UTSnKOC+WmdSH+e
-         9xZKI8bW2bi8Pq6awj+Xeolp+XICym4UC8nyllnxq0bVVVeSkU9NLAYpvu8WZLiAQfV1
-         58fRC63h1tNOpPafksMjojOwVFVf9FVUe53G4U6C6xhP1/hhxKfvISxPAnKNQG2rpthw
-         MJ4B5RDdF/Dqp6Lf8YwRUY3Y82GWq7/DHdDIY/uSYipOs3E65w9Al8ZKMdVW/BHQdIng
-         WYCMmmXNg1DhmlK/mmED5e6ThmGj6TCP9Tk1fRXKOsEgLAM71gZJrdmIN4p+PPjY3IA9
-         WZeA==
-X-Gm-Message-State: AOAM531Z+Viau8B/pa3oXDb90tKkrjB4RbGsLMCn5divcnmuNXXXMXh3
-        AkgXy/Jr6FzKz+9Dkg/KK29U7g==
-X-Google-Smtp-Source: ABdhPJwdsdVVW2Lv0AjKkCnSMjUPTG31+jBxHqmGitx66Evc8s590XHCcVKjwW8wvPqVyI4fWi4kfA==
-X-Received: by 2002:a5d:684b:0:b0:20a:e4d2:1206 with SMTP id o11-20020a5d684b000000b0020ae4d21206mr7743940wrw.599.1651952966644;
-        Sat, 07 May 2022 12:49:26 -0700 (PDT)
+        bh=X/B2BPBwtGOTsOAaX2PA1j2rtkaGO4jKX4DEuOwWcco=;
+        b=vpOObTIQ/Sqaxfo8PwuEwdq/RZa95nPo3cvwoEOAZkSiz7s9VAD0DxHwBlmPUjkDTh
+         52EtmVQLJjBBUiVMopoFtnfCiRjsgQCSEC//+5lVxPVNzcTGzOQFWx23uBnmxireZ5Av
+         wtZyydlwMff3YljqPVmW8Lhu657HEuMG98l+EqpMIDT1LdrSrAPgDs1fliRLWXQE5cus
+         vf6nZpjlgmsV9RR+u88PE2ohgXRmhx7szrs5ewwGH8UtfQF8qqhgCh91EvbTDy7WrvkX
+         R3Vi7VWKOUNyzd6KsRYtVYjmiNQwEG5uHekAIRICeDdGVLBCqFEzP0hVA6RBSWlAUEPc
+         Y24A==
+X-Gm-Message-State: AOAM531xy1zgWzdHSRvPS0H9raMhpmoJq3M3ZqSMgtlzEWIqFhR8LtPY
+        Z9wa3kEugFn10jZDpT47v/4TKA==
+X-Google-Smtp-Source: ABdhPJzfHOoernJuqTo4FR2Vpvrj5oWfxqubn0lV6puau8hejQ+FgKfIcVxnFMzlUODRse458AJ4aA==
+X-Received: by 2002:a05:600c:3546:b0:394:77c7:edd4 with SMTP id i6-20020a05600c354600b0039477c7edd4mr9653554wmq.37.1651952967742;
+        Sat, 07 May 2022 12:49:27 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.25
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c1c0600b003942a244ec4sm8535027wms.9.2022.05.07.12.49.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 12:49:26 -0700 (PDT)
+        Sat, 07 May 2022 12:49:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 06/11] arm64: dts: qcom: add fallback compatible to PMIC GPIOs
-Date:   Sat,  7 May 2022 21:49:08 +0200
-Message-Id: <20220507194913.261121-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 07/11] arm64: dts: qcom: apq8096-db820c: add PM8994 pin function
+Date:   Sat,  7 May 2022 21:49:09 +0200
+Message-Id: <20220507194913.261121-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
 References: <20220507194913.261121-1-krzysztof.kozlowski@linaro.org>
@@ -79,198 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bindings require all PMIC GPIO nodes to have two compatibles -
-specific followed by SPMI or SSBI fallback.  Add the fallback to fix
-warnings like:
-
-  msm8916-samsung-serranove.dtb: gpios@c000: compatible: ['qcom,pm8916-gpio'] is too short
+The bindings require that every pin configuration comes with 'function'
+property.  Add such to PM8994 GPIO5.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/pm6350.dtsi      | 2 +-
- arch/arm64/boot/dts/qcom/pm660.dtsi       | 2 +-
- arch/arm64/boot/dts/qcom/pm8009.dtsi      | 2 +-
- arch/arm64/boot/dts/qcom/pm8150.dtsi      | 2 +-
- arch/arm64/boot/dts/qcom/pm8150b.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/pm8150l.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/pm8350.dtsi      | 2 +-
- arch/arm64/boot/dts/qcom/pm8350b.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/pm8916.dtsi      | 2 +-
- arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/pmr735b.dtsi     | 2 +-
- arch/arm64/boot/dts/qcom/pms405.dtsi      | 2 +-
- 13 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm6350.dtsi b/arch/arm64/boot/dts/qcom/pm6350.dtsi
-index c5d85064562b..f3056845e65f 100644
---- a/arch/arm64/boot/dts/qcom/pm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm6350.dtsi
-@@ -36,7 +36,7 @@ pm6350_resin: resin {
+---
+
+Not tested on hardware.
+---
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+index e0e965f4dd2f..ad6780151b4f 100644
+--- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
++++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+@@ -558,6 +558,7 @@ &pm8994_gpios {
+ 	ls_exp_gpio_f: pm8994-gpio5-state {
+ 		pinconf {
+ 			pins = "gpio5";
++			function = PMIC_GPIO_FUNC_NORMAL;
+ 			output-low;
+ 			power-source = <2>; // PM8994_GPIO_S4, 1.8V
  		};
- 
- 		pm6350_gpios: gpios@c000 {
--			compatible = "qcom,pm6350-gpio";
-+			compatible = "qcom,pm6350-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm660.dtsi b/arch/arm64/boot/dts/qcom/pm660.dtsi
-index c482663aad56..d0eefbb51663 100644
---- a/arch/arm64/boot/dts/qcom/pm660.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm660.dtsi
-@@ -171,7 +171,7 @@ vcoin: vcoin@83 {
- 		};
- 
- 		pm660_gpios: gpios@c000 {
--			compatible = "qcom,pm660-gpio";
-+			compatible = "qcom,pm660-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			gpio-ranges = <&pm660_gpios 0 0 13>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8009.dtsi b/arch/arm64/boot/dts/qcom/pm8009.dtsi
-index b126d7e7e4fb..d451922d2b95 100644
---- a/arch/arm64/boot/dts/qcom/pm8009.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8009.dtsi
-@@ -19,7 +19,7 @@ pm8009_pon: pon@800 {
- 		};
- 
- 		pm8009_gpios: gpio@c000 {
--			compatible = "qcom,pm8005-gpio";
-+			compatible = "qcom,pm8005-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8150.dtsi b/arch/arm64/boot/dts/qcom/pm8150.dtsi
-index 0df76f7b1cc1..72cd93ced4c5 100644
---- a/arch/arm64/boot/dts/qcom/pm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150.dtsi
-@@ -127,7 +127,7 @@ rtc@6000 {
- 		};
- 
- 		pm8150_gpios: gpio@c000 {
--			compatible = "qcom,pm8150-gpio";
-+			compatible = "qcom,pm8150-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-index 058cc5107c75..28162f6fb61d 100644
---- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-@@ -112,7 +112,7 @@ pm8150b_adc_tm: adc-tm@3500 {
- 		};
- 
- 		pm8150b_gpios: gpio@c000 {
--			compatible = "qcom,pm8150b-gpio";
-+			compatible = "qcom,pm8150b-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8150l.dtsi b/arch/arm64/boot/dts/qcom/pm8150l.dtsi
-index 52f094a2b713..0642e7d5be35 100644
---- a/arch/arm64/boot/dts/qcom/pm8150l.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150l.dtsi
-@@ -100,7 +100,7 @@ pm8150l_adc_tm: adc-tm@3500 {
- 		};
- 
- 		pm8150l_gpios: gpio@c000 {
--			compatible = "qcom,pm8150l-gpio";
-+			compatible = "qcom,pm8150l-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8350.dtsi b/arch/arm64/boot/dts/qcom/pm8350.dtsi
-index b10f33afa5e3..6e91dd7a48b3 100644
---- a/arch/arm64/boot/dts/qcom/pm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8350.dtsi
-@@ -45,7 +45,7 @@ pm8350_temp_alarm: temp-alarm@a00 {
- 		};
- 
- 		pm8350_gpios: gpio@8800 {
--			compatible = "qcom,pm8350-gpio";
-+			compatible = "qcom,pm8350-gpio", "qcom,spmi-gpio";
- 			reg = <0x8800>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8350b.dtsi b/arch/arm64/boot/dts/qcom/pm8350b.dtsi
-index f1d1d4c8edf8..d9512f01ed1e 100644
---- a/arch/arm64/boot/dts/qcom/pm8350b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8350b.dtsi
-@@ -45,7 +45,7 @@ pm8350b_temp_alarm: temp-alarm@a00 {
- 		};
- 
- 		pm8350b_gpios: gpio@8800 {
--			compatible = "qcom,pm8350b-gpio";
-+			compatible = "qcom,pm8350b-gpio", "qcom,spmi-gpio";
- 			reg = <0x8800>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-index d58902432812..aedc0aa5602f 100644
---- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-@@ -108,7 +108,7 @@ pm8916_mpps: mpps@a000 {
- 		};
- 
- 		pm8916_gpios: gpios@c000 {
--			compatible = "qcom,pm8916-gpio";
-+			compatible = "qcom,pm8916-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi b/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
-index 7072e5a2e73f..68e9122363ae 100644
---- a/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi
-@@ -116,7 +116,7 @@ pmm8155au_1_rtc: rtc@6000 {
- 		};
- 
- 		pmm8155au_1_gpios: gpio@c000 {
--			compatible = "qcom,pmm8155au-gpio";
-+			compatible = "qcom,pmm8155au-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi b/arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi
-index 72075964fbb9..c307fc662511 100644
---- a/arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmm8155au_2.dtsi
-@@ -89,7 +89,7 @@ die-temp@6 {
- 		};
- 
- 		pmm8155au_2_gpios: gpio@c000 {
--			compatible = "qcom,pmm8155au-gpio";
-+			compatible = "qcom,pmm8155au-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pmr735b.dtsi b/arch/arm64/boot/dts/qcom/pmr735b.dtsi
-index 604324188603..93a658eb4cdd 100644
---- a/arch/arm64/boot/dts/qcom/pmr735b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmr735b.dtsi
-@@ -45,7 +45,7 @@ pmr735b_temp_alarm: temp-alarm@a00 {
- 		};
- 
- 		pmr735b_gpios: gpio@8800 {
--			compatible = "qcom,pmr735b-gpio";
-+			compatible = "qcom,pmr735b-gpio", "qcom,spmi-gpio";
- 			reg = <0x8800>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/pms405.dtsi b/arch/arm64/boot/dts/qcom/pms405.dtsi
-index 98d173a377d5..43190a5cfe33 100644
---- a/arch/arm64/boot/dts/qcom/pms405.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pms405.dtsi
-@@ -38,7 +38,7 @@ pms405_0: pms405@0 {
- 		#size-cells = <0>;
- 
- 		pms405_gpios: gpio@c000 {
--			compatible = "qcom,pms405-gpio";
-+			compatible = "qcom,pms405-gpio", "qcom,spmi-gpio";
- 			reg = <0xc000>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
 -- 
 2.32.0
 

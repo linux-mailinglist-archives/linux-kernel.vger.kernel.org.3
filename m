@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E0351EC54
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B146E51EC57
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiEHJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S231826AbiEHJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiEHJNm (ORCPT
+        with ESMTP id S231431AbiEHJPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:13:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9842DF16
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:09:53 -0700 (PDT)
+        Sun, 8 May 2022 05:15:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930D2213
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:11:14 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 31AD621B0C;
-        Sun,  8 May 2022 09:09:52 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 504361F94E;
+        Sun,  8 May 2022 09:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652000992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1652001073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Wm9GHihpawg1Ivkqby7mqYAJB0ZTAOMMvqz4svNr5YQ=;
-        b=IgNJPzb857uUDodg3nsG4usbDabSh5SwfLmvwRa87NFvcJyfNfzMVidwzwS+A6LuH+/Ao4
-        +lwTtSuuvUZ8xh1VEUjF5RLT36QbDZDEoEgN13HJzJLXd2xNO4iwfpbIt5tOGJxse4pFrW
-        D1KZ8k8Jsy5sTxBgqI/zHaa+gN+Q5WE=
+        bh=2utLszVOX1va5kwC4Bhl/oahyyYjhEmmhysyvWRmi08=;
+        b=kkT7CCy/jg/Zfk+LWkO9m8oycjdgnuDsT+UfJU9Yp0PtuXlMfb5aoJbbQch733UTG+qi0f
+        lYSVc77uv6gflvMXUNnJE5cYTjFsS6fsbzIOftASbPW4VGldQ9Tqfmrhe6q2FAkru07ZIt
+        GXHlmi+WajS4CD7yDUIZ4RNWta++q4k=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652000992;
+        s=susede2_ed25519; t=1652001073;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Wm9GHihpawg1Ivkqby7mqYAJB0ZTAOMMvqz4svNr5YQ=;
-        b=OIQQxY1Ug7wwqUNFcyLOSsSEZ8746OxgKMjWXSp2ipi+kAAuO/Vrd4KkxVL+PHzNNrH+iu
-        lOXnOB+7dvPDtNDA==
+        bh=2utLszVOX1va5kwC4Bhl/oahyyYjhEmmhysyvWRmi08=;
+        b=CCmfS9bk3y21RXSbTTZIbzVf7sIoDEaREDL3/wR+CrNhvnMO3hOEV8FYhQ8/mdD+Ip9N0C
+        PGMGjdg6zvjzqvDQ==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 1EEBF2C141;
-        Sun,  8 May 2022 09:09:52 +0000 (UTC)
-Date:   Sun, 08 May 2022 11:09:52 +0200
-Message-ID: <s5h1qx4o0f3.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 3D15C2C141;
+        Sun,  8 May 2022 09:11:13 +0000 (UTC)
+Date:   Sun, 08 May 2022 11:11:13 +0200
+Message-ID: <s5hzgjsmlse.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Forest Crossman <cyrozap@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: usb-audio: Don't get sample rate for MCT Trigger 5 USB-to-HDMI
-In-Reply-To: <20220504002444.114011-2-cyrozap@gmail.com>
-References: <20220504002444.114011-2-cyrozap@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org
+Subject: Re: [PATCH] ALSA: hda - fix unused Realtek function when PM is not enabled
+In-Reply-To: <20220430193318.29024-1-rdunlap@infradead.org>
+References: <20220430193318.29024-1-rdunlap@infradead.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -61,13 +61,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 04 May 2022 02:24:44 +0200,
-Forest Crossman wrote:
+On Sat, 30 Apr 2022 21:33:18 +0200,
+Randy Dunlap wrote:
 > 
-> This device doesn't support reading the sample rate, so we need to apply
-> this quirk to avoid a 15-second delay waiting for three timeouts.
+> When CONFIG_PM is not enabled, alc_shutup() is not needed,
+> so move it inside the #ifdef CONFIG_PM guard.
+> Also drop some contiguous #endif / #ifdef CONFIG_PM for simplicity.
 > 
-> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+> Fixes this build warning:
+> sound/pci/hda/patch_realtek.c:886:20: warning: unused function 'alc_shutup'
+> 
+> Fixes: 08c189f2c552 ("ALSA: hda - Use generic parser codes for Realtek driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Takashi Iwai <tiwai@suse.de>
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: alsa-devel@alsa-project.org
 
 Thanks, applied now.
 

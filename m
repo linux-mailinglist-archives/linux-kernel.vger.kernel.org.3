@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA00951ED7D
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D451ED8E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiEHMlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 08:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S233190AbiEHMxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 08:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiEHMlQ (ORCPT
+        with ESMTP id S233121AbiEHMxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 08:41:16 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2B1261F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 05:37:26 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ef5380669cso119721757b3.9
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 05:37:26 -0700 (PDT)
+        Sun, 8 May 2022 08:53:18 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603BCDF20
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 05:49:27 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id k1so11551018pll.4
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 05:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9CgvYRHO+zyjILbsXpuCYz5kUi3xutsr2ZbyqD78JvA=;
+        b=yj7HlQlC9P/3bif3QvZacoMfkS8sumx0VL9jmM+inS90KT1x4FNGuHZ+EY5D+NR407
+         73/EfgTOpZAjVrPhAXM0Zk3NdZEwkX7Jt3e3GjnvQ2ztPSXecKFakNVgFEK5FM2sTvs1
+         ldGVXJ1cYGpxvutBdDFsDCsTJ1Eyn86qZ7QO2ASGExIUiHap2IrqFRszKB1CIz/5ZWke
+         4MwpsBWsxQetTEEYhdq6jNB4xmgeMDC0NTXnTFvT0hYRijNZFo8atgdiIsr55Y/rrbBL
+         V0U1wob3zNDWadtMs1T850NOFYPqTwmSMpqnziPlh/KCC9qqD57b1YLMjlOUAFbLeS4L
+         3TjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VuJms/7a1Fox6UxpgPi9Undwrl7KJZiaeog6B+JELcQ=;
-        b=ybmIW7T5t43ZPNwEQL+rAnQdovWfEUDtovGqS16yWN4UtHFcnKa02ohqPtBFVPjnAd
-         WtjEAbp6oUGVWDjKuIKp30+cLQKUhs1P3jYsnkjYL7LFuID+E9oI6Lv9WkvoIRR4ytYq
-         wqxbDSIzoDeucb9XM+UjJvtZyU8vY6TZq2sSK/NlrrpDg0PwVgQ0GrAN2lvu/1ZfBDkE
-         lOc+YQ3lPGCUY2XRGtl+fntttry2yWMgZrHp/RDfFOt9VFoE90Qrd3hPlluWefbRGRFP
-         BSG19GDwJVbOAZ5rxUESwV5lBRLIZqZjqidgMaSjuo+/uGR5sxvSBPbBf0q7OKPEhNPj
-         vmVQ==
-X-Gm-Message-State: AOAM5325K+6N8KEzUp50cKzqk6p1rCCIEfSyTheB3M/PvysV9/VT0gRu
-        GQJdVuy39B3Jn4Ca1ht/eVC7LImQ7sIjOqzRUig=
-X-Google-Smtp-Source: ABdhPJwqPVBmsbXYYleGS+D6FFVgxG71RmE5EyifsmaLuQSBOUC4KaebQhU7H5hZiCQNN/alYIXz1JtjByrUlXJG2AA=
-X-Received: by 2002:a81:8cf:0:b0:2f4:da59:9eef with SMTP id
- 198-20020a8108cf000000b002f4da599eefmr10253166ywi.78.1652013445268; Sun, 08
- May 2022 05:37:25 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9CgvYRHO+zyjILbsXpuCYz5kUi3xutsr2ZbyqD78JvA=;
+        b=o2DFpCDQFsfnn0drLJuMJSWU8Ut+3864IpudgVxw7bCu7cGd0maRQN8GOBD7mbs94s
+         EgKGezDhXt4ehlGUc825tr0AMWMjXwhrh4yzxyTt4CH3IajlvvQJcdBWLQAJfoNs0jE2
+         sKOk0cF+C8PUjCOf1an0Lex+dU8JD8bHP0dMHtZ+97CVzG2yFrQRVYMbg2DUFs6euy2A
+         ronqKdP5Y5IwGrCmZVKkgnrAwZq0iHTt9HpxgoXEc8BVImBiRm28iMI6x73skSLej2l3
+         R1QwfPpNJHhDpnNrmmR7CLrSbAAVa8Eifp8qJLPJBFjp4itZFIcCkcFyORpqtyComWNG
+         lqyg==
+X-Gm-Message-State: AOAM531G7TFUvrI9Qd9pY+0e2WkDsqf6ai67ouQA7NoY85Xb6U8ZGbTJ
+        Sa+LW4vFJmz6Vb1wZNkQN9H0i9vZZM0iqJBE
+X-Google-Smtp-Source: ABdhPJyz+ZeUJu57xCM99ZO3D/oL59Iu+3Go2FgbA5WiT03U2A7ip9gH11prhONktOjJgoIELiZw0Q==
+X-Received: by 2002:a17:902:6b0b:b0:158:f889:edd9 with SMTP id o11-20020a1709026b0b00b00158f889edd9mr11993926plk.122.1652014166759;
+        Sun, 08 May 2022 05:49:26 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t3-20020a17090aae0300b001d5e1b124a0sm10756372pjq.7.2022.05.08.05.49.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 05:49:26 -0700 (PDT)
+Message-ID: <df7755df-869d-86a9-bcd5-db0fd2762d31@kernel.dk>
+Date:   Sun, 8 May 2022 06:49:24 -0600
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
-In-Reply-To: <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 8 May 2022 21:37:14 +0900
-Message-ID: <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 0/4] fast poll multishot mode
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220507140620.85871-1-haoxu.linux@gmail.com>
+ <305fd65b-310c-9a9b-cb8c-6cbc3d00dbcb@kernel.dk>
+ <390a7780-b02b-b086-803c-a8540abfd436@gmail.com>
+ <f0a6c58f-62c0-737b-7125-9f75f8432496@kernel.dk>
+ <0b52bbd2-56de-c213-df3f-73f0f83a1f3a@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <0b52bbd2-56de-c213-df3f-73f0f83a1f3a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 5/7/22 11:21 AM, Hao Xu wrote:
+> 在 2022/5/8 上午12:11, Jens Axboe 写道:
+>> On 5/7/22 10:05 AM, Hao Xu wrote:
+>>>> But we still need to consider direct accept with multishot... Should
+>>>> probably be an add-on patch as I think it'd get a bit more complicated
+>>>> if we need to be able to cheaply find an available free fixed fd slot.
+>>>> I'll try and play with that.
+>>>
+>>> I'm tending to use a new mail account to send v4 rather than the gmail
+>>> account since the git issue seems to be network related.
+>>> I'll also think about the fixed fd problem.
+>>
+>> Two basic attached patches that attempt do just alloc a fixed file
+>> descriptor for this case. Not tested at all... We return the fixed file
+>> slot in this case since we have to, to let the application know what was
+>> picked. I kind of wish we'd done that with direct open/accept to begin
+>> with anyway, a bit annoying that fixed vs normal open/accept behave
+>> differently.
+>>
+>> Anyway, something to play with, and I'm sure it can be made better.
+>>
+> Thanks. I tried to fix the mail account issue, still unclear what is
+> wrong, and too late at my timezone now, I'll try to send v4 tomorrow
 
-+CC: Kees Cook
+No worries. IN the meantime, I played with allocated direct descriptors
+yesterday and implemented them for openat/openat2/accept:
 
-On Sun. 8 May 2022 at 19:27, Arnd Bergmann <arnd@kernel.org> wrote:
-> On Sun, May 8, 2022 at 12:09 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > Aside of the __builtin_foo() ones, x86 does not directly rely on any
-> > builtin functions.
-> >
-> > However, such builtin functions are not explicitly deactivated,
-> > creating some collisions, concrete example being ffs() from bitops.h,
-> > c.f.:
-> >
-> > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-> > |   283 | static __always_inline int ffs(int x)
-> >
-> > This patch adds -fno-builtin to KBUILD_CFLAGS for the x86
-> > architectures in order to prevent shadowing of builtin functions.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> > FYI, I tested this patch on a "make allyesconfig" for both x86_32 and
-> > x86_64.
-> >
-> > This is a resend. Only difference is that I dropped the RFC flag and
-> > added Arnd in CC because he did a similar patch to fix ffs shadow
-> > warnings in the past:
-> >
-> > https://lore.kernel.org/all/20201026160006.3704027-1-arnd@kernel.org/
->
-> I think this is a correct change, but unfortunately it exposes a clang bug
->  with -mregparm=3. Nick should be able to provide more details, I think
-> he has a plan.
+https://git.kernel.dk/cgit/linux-block/log/?h=fastpoll-mshot
 
-Interesting. I admittedly did not do extensive tests on clang
-but I would have expected the Linux kernel bot to have warned me
-on my previous patch.
-
-I did research on mregparm and clang. I found this thread:
-https://lore.kernel.org/r/20220208225350.1331628-9-keescook@chromium.org
-
-and the associated LLVM issue:
-https://github.com/llvm/llvm-project/issues/53645
-
-Those threads mention that some clang builtins become unusable
-when combining -mregparm=3 and -m32. But I could not find a
-bug reference about -mregparm=3 and -fno-builtin combination.
-
-Could you just double confirm that you indeed saw the issue with
--fno-builtin? If that the case, I am really curious to get the
-details :)
+It's independent of multishot accept in the sense that you can use it
+without that, but multishot accept requires it with fixed files.
 
 
-Yours sincerely,
-Vincent Mailhol
+-- 
+Jens Axboe
+

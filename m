@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B972151ED1B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B97251ED24
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiEHKxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 06:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S232528AbiEHKxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiEHKw6 (ORCPT
+        with ESMTP id S231674AbiEHKxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 06:52:58 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32878E0CE;
-        Sun,  8 May 2022 03:49:09 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id kq17so21883319ejb.4;
-        Sun, 08 May 2022 03:49:09 -0700 (PDT)
+        Sun, 8 May 2022 06:53:01 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFB0B86F;
+        Sun,  8 May 2022 03:49:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id n10so21888607ejk.5;
+        Sun, 08 May 2022 03:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Kzfnv08LNhORXbJeE1Bfpmaij4ao2Km/BVY7bXCcJik=;
-        b=Ioe5+iCmORV/tkeAgE9G3pDymhh/qMyNkuaqJrWqZMuXnDIzVzOFUU4/wYiUyUaEAl
-         2Nxa3y8gBjA39WuDC+w4xWiF+X8JmwZ5TV72JechNcqF1EfDBYnOuyjTBtoSM01+0q7W
-         t+GFJIjeTHBUSDNLbAPlzCnTF92HvLq4QdmgMZmL9A70RyMrVp92JNDZLNjwkRNYXD0b
-         K5pLulVe4V2KY6ODNVtF7+6HXd09D4PZRSVAKmfGncAix1/9pej26oyR8yY6nyUxKR7k
-         f6kg0wiLT0YCpFeRT7TNQQqS9BfkOc4p31+bJkNXHUv2KDpdpG1/yRL1ess4DwFPslPu
-         zjXw==
+        bh=iddYG1Rb4tvpla03/UsMyBFX9rB+DvQUSfmApZMvI9E=;
+        b=IkijBn+aso3oEEmXipspRhtd94LYOI62nlHAc8Qt8OXvtmM+Hpo7cINcOO4I/zpeG0
+         6i1vHt3bJ3Gvs7P92YNRNWl+0MQZmQd6Pa080Bdry0iWETSIuu9OtgvgjHNLdOabas2r
+         XcWi/3tl8JlXhxWRWXDBc8pKplAP1qBauWvTChL4kpnfrAvq0Zky0ib+V8STFBhQKz5E
+         vgKzROdvBVdm3Z7qAAqPOx+vyrPgCFUoUGywc7I/Y896Bvufc33EEtEFLKVEocNzbhZL
+         O+R4U8mT1BRVaGSbiYMumGzoKunoX0vTc7jg4Ew18Pi/NIpvti35GI4U/QWPQUVAJ3kO
+         gfKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Kzfnv08LNhORXbJeE1Bfpmaij4ao2Km/BVY7bXCcJik=;
-        b=3RJIfz+kdR4/f+mb+zjpDykkbiTLoAgi8JQQq7GMhy6j9clT8YSx0Df8zLRfy+w6ir
-         5Wh9I7sif4ZQZf6HeLlK8f5JUz2G2D48F3258HZXj4XSC8jqia6z9giDR+22agk2/Dx1
-         H+cFGZGrvlTCG2sq4kG2A8f0a9uw5agl/W0lKbqxJnIE36RlgVfkgjZ4jmKw9+tY+P1j
-         KrNIuy9nnirJdem2i3AOOG/9x/wwBsmoNeOoqKO1rWhH8/3j2RLmUS7iIpsKAGm1K6++
-         88dn4AVW/+upMkhooCEaAfryCgOYPOCSVgx88Bfu2sakvDsxXyBn/ejOk57Pma6uhkpV
-         V4qg==
-X-Gm-Message-State: AOAM532kVV1EyZOba6E4zygf29ZuGU1O9ILf/N0m4Q/4+tRF2ZggCW2m
-        W/ATtaLVJUvo5FrWGnUlaqk=
-X-Google-Smtp-Source: ABdhPJyvugOXMGif6DfvWerfPEgqlKIVw7K9VZ/v8Bi0nM/nggGd/UuliNA9EgLk8ZQ7VTePqZi26g==
-X-Received: by 2002:a17:907:160c:b0:6f4:4b2c:8e53 with SMTP id hb12-20020a170907160c00b006f44b2c8e53mr10315548ejc.10.1652006948814;
-        Sun, 08 May 2022 03:49:08 -0700 (PDT)
+        bh=iddYG1Rb4tvpla03/UsMyBFX9rB+DvQUSfmApZMvI9E=;
+        b=elovzcj86+FyD3oZqLxnNVPMqeH4Wxxk62QFB3GvnDtWRNwX6LLp3QQwpmjIO9xgFw
+         iYJPr21/xb2q+S7RcJh96r9oorRnmcqrzLd+/zqqZ1UjFnyHhw8RUsR0vsSEq8FqF8t2
+         svqet/t/+wvhi0yuWOAKuzG2APS4Ldm0N1yfbmBuSlehWW0EMcVFnRXERTeUVjFs+BLF
+         M9+pvtzkqO6h4q4QdbajgYiW7vSEsS0JE38kM+EJ6kzP7oJTol0WEN+5JOUrdkwGloD6
+         DfBRBeXnrVIOFv97b2ngPEjFwzwkjpmaZ4pjrKrvfawNfgUeO5v2zkIv5oa67XQTwMG8
+         /gWQ==
+X-Gm-Message-State: AOAM531FpfAIOLBJW6Jn5HQUrobnUB3GPiEsG3ew0Idmq2cnWJoOXDri
+        fdyImGp3CBgWXFguLaonln8=
+X-Google-Smtp-Source: ABdhPJwPqM11DpkoohC1S8GN7nYKsErm30mvSyKKdKohNWosCthVywZpnwdbSdvgmoLNgOOevaLVyg==
+X-Received: by 2002:a17:907:6d84:b0:6f4:94e2:e708 with SMTP id sb4-20020a1709076d8400b006f494e2e708mr10331759ejc.199.1652006950192;
+        Sun, 08 May 2022 03:49:10 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
-        by smtp.googlemail.com with ESMTPSA id hg12-20020a1709072ccc00b006f3ef214e0csm3917471ejc.114.2022.05.08.03.49.07
+        by smtp.googlemail.com with ESMTPSA id hg12-20020a1709072ccc00b006f3ef214e0csm3917471ejc.114.2022.05.08.03.49.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 03:49:08 -0700 (PDT)
+        Sun, 08 May 2022 03:49:09 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 07/11] dt-bindings: clocks: qcom,gcc-ipq8074: support power domains
-Date:   Sun,  8 May 2022 12:48:51 +0200
-Message-Id: <20220508104855.78804-7-robimarko@gmail.com>
+Subject: [PATCH v3 08/11] dt-bindings: clock: qcom: ipq8074: add USB GDSCs
+Date:   Sun,  8 May 2022 12:48:52 +0200
+Message-Id: <20220508104855.78804-8-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220508104855.78804-1-robimarko@gmail.com>
 References: <20220508104855.78804-1-robimarko@gmail.com>
@@ -73,43 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC inside of IPQ8074 also provides power management via built-in GDSCs.
-In order to do so, '#power-domain-cells' must be set to 1.
+Add bindings for the USB GDSCs found in IPQ8074 GCC.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- .../devicetree/bindings/clock/qcom,gcc-ipq8074.yaml          | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-index 98572b4a9b60..e3e236e4ce7d 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-@@ -27,6 +27,9 @@ properties:
-   '#reset-cells':
-     const: 1
+diff --git a/include/dt-bindings/clock/qcom,gcc-ipq8074.h b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+index 5f0928785d7a..e4991d303708 100644
+--- a/include/dt-bindings/clock/qcom,gcc-ipq8074.h
++++ b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+@@ -368,4 +368,7 @@
+ #define GCC_PCIE1_AXI_MASTER_STICKY_ARES	130
+ #define GCC_PCIE0_AXI_SLAVE_STICKY_ARES		131
  
-+  '#power-domain-cells':
-+    const: 1
++#define USB0_GDSC				0
++#define USB1_GDSC				1
 +
-   reg:
-     maxItems: 1
- 
-@@ -39,6 +42,7 @@ required:
-   - reg
-   - '#clock-cells'
-   - '#reset-cells'
-+  - '#power-domain-cells'
- 
- additionalProperties: false
- 
-@@ -49,5 +53,6 @@ examples:
-       reg = <0x01800000 0x80000>;
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-+      #power-domain-cells = <1>;
-     };
- ...
+ #endif
 -- 
 2.36.0
 

@@ -2,235 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435FA51EE4A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F246051EE50
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbiEHOlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 10:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
+        id S234049AbiEHOpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 10:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234155AbiEHOkn (ORCPT
+        with ESMTP id S229689AbiEHOpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 10:40:43 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B23E101F4;
-        Sun,  8 May 2022 07:36:40 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AVCeG0KroByT6upQOk0pb1Qj5K9deBmL0ZBIvgKr?=
- =?us-ascii?q?LsJaIsI5as4F+vmoWWDyOPq3YMGejedx1Oom2o0pVvMOHxtBrQFY4rCswQiMRo?=
- =?us-ascii?q?6IpJ/zDcB6oYHn6wu4v7a5fx5xHLIGGdajYd1eEzvuWGuWn/SkUOZ2gHOKmUra?=
- =?us-ascii?q?eYnkpHGeIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYtWo4nw/7rRCdUg?=
- =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
- =?us-ascii?q?9+lr6WkYMBLDPPwmSkWcQUK+n6vRAjnVqlP9la7xHMgEK49mKt4kZJNFlr4G5T?=
- =?us-ascii?q?xw4eKPKg/g1XQRaEj1lIOtN/7qvzX2X6JbPlxKbLCe9qxlpJARsVWECwc57CH9?=
- =?us-ascii?q?P+dQWMjcIaQqJhv7wy7W+IsFoh8ImLcDsPI43umxp0jzYS/0hRPjrQ67Kzd5e0?=
- =?us-ascii?q?i05is1HEbDZfcVxQSVuaBDRSxxJNE0eBJ83kKGvnHaXWzFRrhSX47U252zSxQl?=
- =?us-ascii?q?q+LnrLNfRPNeNQK19kkSHoWTJ12f0GBcXMJqY0zXt2natgPLf2Cb+cIEMHba7s?=
- =?us-ascii?q?PlwjzW7wHIfCRgTfV+6uuWizEq/Xc9PbUAZ5EIGraMy3EiwUp/xUnWQpneDrxd?=
- =?us-ascii?q?aW91KEuIn4wGM4qzZ6ECSAW1sZjxIbtFgv88rbTsw31SNkpXiAjkHmKeaTnaR6?=
- =?us-ascii?q?aaShSivIiVTIWJqTSsFSxYVptf4rIwtgxbnUNluCui2g8fzFDW2xCqFxAA6hrM?=
- =?us-ascii?q?OnYsI2r+98FTvnT2hvN7KQxQz6wGRWXiqhit9ZYi4d8m450Pz8/lNNsCaQ0OHs?=
- =?us-ascii?q?XxCnNKRhMgQDIuKvD6ARuQTWrWo4euVdjrGjhhyHPEcG56Fk5K4VdkIpmggewE?=
- =?us-ascii?q?yaYBZEQIFqXT74Wt5jKK/9lP2BUOvX7+MNg=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3APwrT5a/T7DOupuOHy0Fuk+DkI+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
- =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
- =?us-ascii?q?=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124075749"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 08 May 2022 22:36:38 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id E64034D17198;
-        Sun,  8 May 2022 22:36:33 +0800 (CST)
-Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Sun, 8 May 2022 22:36:37 +0800
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Sun, 8 May 2022 22:36:36 +0800
-Received: from irides.mr.mr (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Sun, 8 May 2022 22:36:32 +0800
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
-        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
-        <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
-        <willy@infradead.org>, <naoya.horiguchi@nec.com>,
-        <linmiaohe@huawei.com>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v11 07/07] xfs: Add dax dedupe support
-Date:   Sun, 8 May 2022 22:36:20 +0800
-Message-ID: <20220508143620.1775214-15-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
-References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+        Sun, 8 May 2022 10:45:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1604E0E9
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 07:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FC1611BC
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9C7C385A4;
+        Sun,  8 May 2022 14:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652020877;
+        bh=t8HXZdI0ta/IUuWc1jQys+uGfSMD6nMCvKG+hO+WBPM=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=kJ46Gd53tCLywcEn4kCqDiiuLMTMC6Uoaq1aF9x+umUYyVUCxl5X7uG+g/IMEtJw+
+         /VupFsaSTJI5s1SgnEkEl1eFERtDEeKWWitjL0+bsM6Gd2nmxTNrZ84RAtFhAc2iJS
+         EmTxaA9fP40nE7NzB1vDtyZOkuwAThuI032kF3RtLT9ctTkXfdI58N/yZOh/C+FUi/
+         CBXh2WdM7I4RXHBsWXhlaS3tIlx76w7+fAfshQK45xbBO2lf5zMKfom2W7kWvUbwuE
+         JP5EQZbWSMLmgYrVeG/TeCdyTMp3VN8Zd8PVji01vxsDjg5yGWB0WkIEpKvysgRG+I
+         2qn0dKGiBem7g==
+Message-ID: <eb8f1316-11df-ab02-1834-542ca193c17c@kernel.org>
+Date:   Sun, 8 May 2022 22:41:14 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: E64034D17198.AF7AE
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [f2fs-dev] [PATCH 3/5] f2fs: keep wait_ms if EAGAIN happens
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220506232032.1264078-1-jaegeuk@kernel.org>
+ <20220506232032.1264078-3-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220506232032.1264078-3-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce xfs_mmaplock_two_inodes_and_break_dax_layout() for dax files
-who are going to be deduped.  After that, call compare range function
-only when files are both DAX or not.
+On 2022/5/7 7:20, Jaegeuk Kim wrote:
+> In f2fs_gc thread, let's keep wait_ms when sec_freed was zero.
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- fs/xfs/xfs_file.c    |  2 +-
- fs/xfs/xfs_inode.c   | 69 +++++++++++++++++++++++++++++++++++++++++---
- fs/xfs/xfs_inode.h   |  1 +
- fs/xfs/xfs_reflink.c |  4 +--
- 4 files changed, 69 insertions(+), 7 deletions(-)
+sec_freed won't increase for background GC due to below statement:
 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 5a4508b23b51..cf78eb393258 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -807,7 +807,7 @@ xfs_wait_dax_page(
- 	xfs_ilock(ip, XFS_MMAPLOCK_EXCL);
- }
- 
--static int
-+int
- xfs_break_dax_layouts(
- 	struct inode		*inode,
- 	bool			*retry)
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index b2879870a17e..96308065a2b3 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -3767,6 +3767,50 @@ xfs_iolock_two_inodes_and_break_layout(
- 	return 0;
- }
- 
-+static int
-+xfs_mmaplock_two_inodes_and_break_dax_layout(
-+	struct xfs_inode	*ip1,
-+	struct xfs_inode	*ip2)
-+{
-+	int			error;
-+	bool			retry;
-+	struct page		*page;
-+
-+	if (ip1->i_ino > ip2->i_ino)
-+		swap(ip1, ip2);
-+
-+again:
-+	retry = false;
-+	/* Lock the first inode */
-+	xfs_ilock(ip1, XFS_MMAPLOCK_EXCL);
-+	error = xfs_break_dax_layouts(VFS_I(ip1), &retry);
-+	if (error || retry) {
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		if (error == 0 && retry)
-+			goto again;
-+		return error;
-+	}
-+
-+	if (ip1 == ip2)
-+		return 0;
-+
-+	/* Nested lock the second inode */
-+	xfs_ilock(ip2, xfs_lock_inumorder(XFS_MMAPLOCK_EXCL, 1));
-+	/*
-+	 * We cannot use xfs_break_dax_layouts() directly here because it may
-+	 * need to unlock & lock the XFS_MMAPLOCK_EXCL which is not suitable
-+	 * for this nested lock case.
-+	 */
-+	page = dax_layout_busy_page(VFS_I(ip2)->i_mapping);
-+	if (page && page_ref_count(page) != 1) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+		goto again;
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Lock two inodes so that userspace cannot initiate I/O via file syscalls or
-  * mmap activity.
-@@ -3781,8 +3825,19 @@ xfs_ilock2_io_mmap(
- 	ret = xfs_iolock_two_inodes_and_break_layout(VFS_I(ip1), VFS_I(ip2));
- 	if (ret)
- 		return ret;
--	filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
--				    VFS_I(ip2)->i_mapping);
-+
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		ret = xfs_mmaplock_two_inodes_and_break_dax_layout(ip1, ip2);
-+		if (ret) {
-+			inode_unlock(VFS_I(ip2));
-+			if (ip1 != ip2)
-+				inode_unlock(VFS_I(ip1));
-+			return ret;
-+		}
-+	} else
-+		filemap_invalidate_lock_two(VFS_I(ip1)->i_mapping,
-+					    VFS_I(ip2)->i_mapping);
-+
- 	return 0;
- }
- 
-@@ -3792,8 +3847,14 @@ xfs_iunlock2_io_mmap(
- 	struct xfs_inode	*ip1,
- 	struct xfs_inode	*ip2)
- {
--	filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
--				      VFS_I(ip2)->i_mapping);
-+	if (IS_DAX(VFS_I(ip1)) && IS_DAX(VFS_I(ip2))) {
-+		xfs_iunlock(ip2, XFS_MMAPLOCK_EXCL);
-+		if (ip1 != ip2)
-+			xfs_iunlock(ip1, XFS_MMAPLOCK_EXCL);
-+	} else
-+		filemap_invalidate_unlock_two(VFS_I(ip1)->i_mapping,
-+					      VFS_I(ip2)->i_mapping);
-+
- 	inode_unlock(VFS_I(ip2));
- 	if (ip1 != ip2)
- 		inode_unlock(VFS_I(ip1));
-diff --git a/fs/xfs/xfs_inode.h b/fs/xfs/xfs_inode.h
-index 7be6f8e705ab..8313cc83b6ee 100644
---- a/fs/xfs/xfs_inode.h
-+++ b/fs/xfs/xfs_inode.h
-@@ -467,6 +467,7 @@ xfs_itruncate_extents(
- }
- 
- /* from xfs_file.c */
-+int	xfs_break_dax_layouts(struct inode *inode, bool *retry);
- int	xfs_break_layouts(struct inode *inode, uint *iolock,
- 		enum layout_break_reason reason);
- 
-diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-index 10a9947e35d9..7cceea510a01 100644
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -1338,8 +1338,8 @@ xfs_reflink_remap_prep(
- 	if (XFS_IS_REALTIME_INODE(src) || XFS_IS_REALTIME_INODE(dest))
- 		goto out_unlock;
- 
--	/* Don't share DAX file data for now. */
--	if (IS_DAX(inode_in) || IS_DAX(inode_out))
-+	/* Don't share DAX file data with non-DAX file. */
-+	if (IS_DAX(inode_in) != IS_DAX(inode_out))
- 		goto out_unlock;
- 
- 	if (!IS_DAX(inode_in))
--- 
-2.35.1
+		if (gc_type == FG_GC &&
+				get_valid_blocks(sbi, segno, false) == 0)
+			seg_freed++;
 
+It may cause gc thread migrates lots of segments in each round?
 
+Thanks,
 
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> ---
+>   fs/f2fs/gc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index aeffcc1d5c02..ec3f6f876e76 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -37,7 +37,8 @@ static int gc_thread_func(void *data)
+>   	unsigned int wait_ms;
+>   	struct f2fs_gc_control gc_control = {
+>   		.victim_segno = NULL_SEGNO,
+> -		.should_migrate_blocks = false };
+> +		.should_migrate_blocks = false,
+> +		.err_gc_skipped = false };
+>   
+>   	wait_ms = gc_th->min_sleep_time;
+>   
+> @@ -146,7 +147,6 @@ static int gc_thread_func(void *data)
+>   
+>   		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
+>   		gc_control.no_bg_gc = foreground;
+> -		gc_control.err_gc_skipped = sync_mode;
+>   
+>   		/* if return value is not zero, no victim was selected */
+>   		if (f2fs_gc(sbi, &gc_control))

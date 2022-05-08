@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A4F51ECAA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1073451ECB5
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiEHJxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        id S229478AbiEHJy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244834AbiEHJlS (ORCPT
+        with ESMTP id S231976AbiEHJlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:41:18 -0400
+        Sun, 8 May 2022 05:41:22 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4BD1DEC0;
-        Sun,  8 May 2022 02:37:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C011DEC0;
+        Sun,  8 May 2022 02:37:32 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 2489bFex024590;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2489bFv6024591;
         Sun, 8 May 2022 11:37:15 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -26,10 +26,12 @@ Cc:     Denis Efremov <efremov@linux.com>,
         Minh Yuan <yuanmingbuaa@gmail.com>,
         Linus Torvalds <torvalds@linuxfoundation.org>,
         Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 1/3] floppy: use a statically allocated error counter
-Date:   Sun,  8 May 2022 11:37:07 +0200
-Message-Id: <20220508093709.24548-1-w@1wt.eu>
+Subject: [PATCH 2/3] ataflop: use a statically allocated error counters
+Date:   Sun,  8 May 2022 11:37:08 +0200
+Message-Id: <20220508093709.24548-2-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
+In-Reply-To: <20220508093709.24548-1-w@1wt.eu>
+References: <20220508093709.24548-1-w@1wt.eu>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -39,103 +41,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interrupt handler bad_flp_intr() may cause a UAF on the recently freed
-request just to increment the error count. There's no point keeping
-that one in the request anyway, and since the interrupt handler uses
-a static pointer to the error which cannot be kept in sync with the
-pending request, better make it use a static error counter that's
-reset for each new request. This reset now happens when entering
-redo_fd_request() for a new request via set_next_request().
+This is the last driver making use of fd_request->error_count, which
+is easy to get wrong as was shown in floppy.c. We don't need to keep
+it there, it can be moved to the atari_floppy_struct instead, so let's
+do this.
 
-One initial concern about a single error counter was that errors on
-one floppy drive could be reported on another one, but this problem
-is not real given that the driver uses a single drive at a time, as
-that PC-compatible controllers also have this limitation by using
-shared signals. As such the error count is always for the "current"
-drive.
-
-Reported-by: Minh Yuan <yuanmingbuaa@gmail.com>
 Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-Tested-by: Denis Efremov <efremov@linux.com>
+Cc: Minh Yuan <yuanmingbuaa@gmail.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- drivers/block/floppy.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ drivers/block/ataflop.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-index d5b9ff9bcbb2..015841f50f4e 100644
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -509,8 +509,8 @@ static unsigned long fdc_busy;
- static DECLARE_WAIT_QUEUE_HEAD(fdc_wait);
- static DECLARE_WAIT_QUEUE_HEAD(command_done);
+diff --git a/drivers/block/ataflop.c b/drivers/block/ataflop.c
+index 5d819a466e2f..e232cc4fd444 100644
+--- a/drivers/block/ataflop.c
++++ b/drivers/block/ataflop.c
+@@ -303,6 +303,7 @@ static struct atari_floppy_struct {
+ 	int ref;
+ 	int type;
+ 	struct blk_mq_tag_set tag_set;
++	int error_count;
+ } unit[FD_MAX_UNITS];
  
--/* Errors during formatting are counted here. */
--static int format_errors;
-+/* errors encountered on the current (or last) request */
-+static int floppy_errors;
+ #define	UD	unit[drive]
+@@ -705,14 +706,14 @@ static void fd_error( void )
+ 	if (!fd_request)
+ 		return;
  
- /* Format request descriptor. */
- static struct format_descr format_req;
-@@ -530,7 +530,6 @@ static struct format_descr format_req;
- static char *floppy_track_buffer;
- static int max_buffer_sectors;
- 
--static int *errors;
- typedef void (*done_f)(int);
- static const struct cont_t {
- 	void (*interrupt)(void);
-@@ -1455,7 +1454,7 @@ static int interpret_errors(void)
- 			if (drive_params[current_drive].flags & FTD_MSG)
- 				DPRINT("Over/Underrun - retrying\n");
- 			bad = 0;
--		} else if (*errors >= drive_params[current_drive].max_errors.reporting) {
-+		} else if (floppy_errors >= drive_params[current_drive].max_errors.reporting) {
- 			print_errors();
- 		}
- 		if (reply_buffer[ST2] & ST2_WC || reply_buffer[ST2] & ST2_BC)
-@@ -2095,7 +2094,7 @@ static void bad_flp_intr(void)
- 		if (!next_valid_format(current_drive))
- 			return;
+-	fd_request->error_count++;
+-	if (fd_request->error_count >= MAX_ERRORS) {
++	unit[SelectedDrive].error_count++;
++	if (unit[SelectedDrive].error_count >= MAX_ERRORS) {
+ 		printk(KERN_ERR "fd%d: too many errors.\n", SelectedDrive );
+ 		fd_end_request_cur(BLK_STS_IOERR);
+ 		finish_fdc();
+ 		return;
  	}
--	err_count = ++(*errors);
-+	err_count = ++floppy_errors;
- 	INFBOUND(write_errors[current_drive].badness, err_count);
- 	if (err_count > drive_params[current_drive].max_errors.abort)
- 		cont->done(0);
-@@ -2241,9 +2240,8 @@ static int do_format(int drive, struct format_descr *tmp_format_req)
- 		return -EINVAL;
- 	}
- 	format_req = *tmp_format_req;
--	format_errors = 0;
- 	cont = &format_cont;
--	errors = &format_errors;
-+	floppy_errors = 0;
- 	ret = wait_til_done(redo_format, true);
- 	if (ret == -EINTR)
- 		return -EINTR;
-@@ -2759,10 +2757,11 @@ static int set_next_request(void)
- 	current_req = list_first_entry_or_null(&floppy_reqs, struct request,
- 					       queuelist);
- 	if (current_req) {
--		current_req->error_count = 0;
-+		floppy_errors = 0;
- 		list_del_init(&current_req->queuelist);
-+		return 1;
- 	}
--	return current_req != NULL;
-+	return 0;
- }
+-	else if (fd_request->error_count == RECALIBRATE_ERRORS) {
++	else if (unit[SelectedDrive].error_count == RECALIBRATE_ERRORS) {
+ 		printk(KERN_WARNING "fd%d: recalibrating\n", SelectedDrive );
+ 		if (SelectedDrive != -1)
+ 			SUD.track = -1;
+@@ -1491,7 +1492,7 @@ static void setup_req_params( int drive )
+ 	ReqData = ReqBuffer + 512 * ReqCnt;
  
- /* Starts or continues processing request. Will automatically unlock the
-@@ -2821,7 +2820,6 @@ static void redo_fd_request(void)
- 		_floppy = floppy_type + drive_params[current_drive].autodetect[drive_state[current_drive].probed_format];
- 	} else
- 		probing = 0;
--	errors = &(current_req->error_count);
- 	tmp = make_raw_rw_request();
- 	if (tmp < 2) {
- 		request_done(tmp);
+ 	if (UseTrackbuffer)
+-		read_track = (ReqCmd == READ && fd_request->error_count == 0);
++		read_track = (ReqCmd == READ && unit[drive].error_count == 0);
+ 	else
+ 		read_track = 0;
+ 
+@@ -1520,6 +1521,7 @@ static blk_status_t ataflop_queue_rq(struct blk_mq_hw_ctx *hctx,
+ 		return BLK_STS_RESOURCE;
+ 	}
+ 	fd_request = bd->rq;
++	unit[drive].error_count = 0;
+ 	blk_mq_start_request(fd_request);
+ 
+ 	atari_disable_irq( IRQ_MFP_FDC );
 -- 
 2.17.5
 

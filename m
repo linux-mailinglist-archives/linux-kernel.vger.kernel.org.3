@@ -2,181 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32EE51EBFE
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 08:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7F651EC06
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 09:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiEHGc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 02:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
+        id S229752AbiEHHRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 03:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiEHGcw (ORCPT
+        with ESMTP id S229617AbiEHHRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 02:32:52 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5868F6451
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 23:29:00 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id s23so669979iog.13
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 23:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jQKknHlDx72xx0B4nwvGp8Z3DerHVN3AD3DYjbUsQuI=;
-        b=j4fnFCOWgizp9lpKRsc4ByfnvNzKiCiwnv9cssvueNHOT0hnDIBn0lh82BKcwzGdgC
-         0pD2Vkqu9BTg5mlzfOKO1gmR6bii4v9ezaNyoTK8Ge9MGQclygivpTDgjfgUSPlI+Le+
-         ybpceYmC+SDJEKW6Ntji4i1/t3M/KxXexB/MQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jQKknHlDx72xx0B4nwvGp8Z3DerHVN3AD3DYjbUsQuI=;
-        b=5lI1pW/E2Hi84kez059ZBV7tpY8Shy3/sFQUe5PLMdSzkaQncYJJboSnzfEpO5R17v
-         0P4kX4mRdsTj0ubGGT74xuaxfuwZwsZRBbtW6+c5epW0ghAhsfkbYD0yegPtwmsN2jEN
-         SI60O833i8lZQAzaNGnEbIMbda9OF1vlThHNEaVmlzdE9FVK2ly1R6XH4NF5W/9PJZ0s
-         uwf1xyuVUD2WJcfWpYXv7kYJUpKKPrfbPpYGi9YsvsWK1XI7Rn3V9duxiVAAGv0noUl3
-         aaACtTSvsJCrFgxKn6V9mqnVLX03IqsNU4bT0DEfRHTYZoPKd+oAQxVxfnS2uCPQ0Om3
-         0oKA==
-X-Gm-Message-State: AOAM530PR6VPzuasChaCtmNzOeCZISWhZMlJHqNFy4NItnZgrxeEawqR
-        Fikq6uYBJDZfgWZzEQcsPsnAT+hSyN8Se14oCmfboQ==
-X-Google-Smtp-Source: ABdhPJxVXSiop4563gDD1XQWZK0LmMFpMgb9vJ9mZN1fFUXJPh0Ddj0EE324aTVz4nSoMTKr+HcSjIEfhX7MwAwGeoY=
-X-Received: by 2002:a6b:1547:0:b0:64c:8bd4:acba with SMTP id
- 68-20020a6b1547000000b0064c8bd4acbamr4265608iov.204.1651991339672; Sat, 07
- May 2022 23:28:59 -0700 (PDT)
+        Sun, 8 May 2022 03:17:05 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5673FDF0D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 00:13:13 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 05E3F2800BD8D;
+        Sun,  8 May 2022 09:13:09 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id ED86711AF9A; Sun,  8 May 2022 09:13:08 +0200 (CEST)
+Date:   Sun, 8 May 2022 09:13:08 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v4 1/8] platform/x86/intel: Add Primary to Sideband
+ (P2SB) bridge support
+Message-ID: <20220508071308.GA27815@wunner.de>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
+ <20220505145503.GA25423@wunner.de>
+ <CAHp75VdQqQj0fS6t5nYj+7rJ1tuSt7+5GT78eN06PShWnrDZgA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220505101641.28472-1-urezki@gmail.com> <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnVLQozNFvgk3olP@pc638.lan> <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnY33nq5jl6FLFOu@pc638.lan> <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 8 May 2022 02:28:49 -0400
-Message-ID: <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT context
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Alison Chaiken <achaiken@aurora.tech>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdQqQj0fS6t5nYj+7rJ1tuSt7+5GT78eN06PShWnrDZgA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 7, 2022 at 6:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Sat, May 07, 2022 at 11:11:58AM +0200, Uladzislau Rezki wrote:
-> > > On Fri, May 06, 2022 at 06:22:26PM +0200, Uladzislau Rezki wrote:
-> > > > > On Thu, May 05, 2022 at 12:16:41PM +0200, Uladzislau Rezki (Sony) wrote:
-> > > > > > Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
-> > > > > > decide if an offloading has to be done in a high-prio context or
-> > > > > > not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
-> > > > > > parameters and by default it is off.
-> > > > > >
-> > > > > > This patch splits the boosting preempted RCU readers and those
-> > > > > > kthreads which directly responsible for driving expedited grace
-> > > > > > periods forward with enabling/disabling the offloading from/to
-> > > > > > SCHED_FIFO/SCHED_OTHER contexts.
-> > > > > >
-> > > > > > The main reason of such split is, for example on Android there
-> > > > > > are some workloads which require fast expedited grace period to
-> > > > > > be done whereas offloading in RT context can lead to starvation
-> > > > > > and hogging a CPU for a long time what is not acceptable for
-> > > > > > latency sensitive environment. For instance:
-> > > > > >
-> > > > > > <snip>
-> > > > > > <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
-> > > > > > <snip>
-> > > > > >
-> > > > > > invoking 34 619 callbacks will take time thus making other CFS
-> > > > > > tasks waiting in run-queue to be starved due to such behaviour.
-> > > > > >
-> > > > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > >
-> > > > > All good points!
-> > > > >
-> > > > > Some questions and comments below.
-> > > > >
-> > > > > Adding Sebastian on CC for his perspective.
-> > > > >
-> > > > >                                                 Thanx, Paul
-> > > > >
-> > > > > > ---
-> > > > > >  kernel/rcu/Kconfig     | 14 ++++++++++++++
-> > > > > >  kernel/rcu/tree.c      |  5 ++++-
-> > > > > >  kernel/rcu/tree_nocb.h |  3 ++-
-> > > > > >  3 files changed, 20 insertions(+), 2 deletions(-)
-> > > > > >
-> > > > > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > > > > > index 27aab870ae4c..074630b94902 100644
-> > > > > > --- a/kernel/rcu/Kconfig
-> > > > > > +++ b/kernel/rcu/Kconfig
-> > > > > > @@ -275,6 +275,20 @@ config RCU_NOCB_CPU_DEFAULT_ALL
-> > > > > >         Say Y here if you want offload all CPUs by default on boot.
-> > > > > >         Say N here if you are unsure.
-> > > > > >
-> > > > > > +config RCU_NOCB_CPU_CB_BOOST
-> > > > > > +     bool "Perform offloading from real-time kthread"
-> > > > > > +     depends on RCU_NOCB_CPU && RCU_BOOST
-> > > > > > +     default n
-> > > > >
-> > > > > I understand that you need this to default to "n" on your systems.
-> > > > > However, other groups already using callback offloading should not see
-> > > > > a sudden change.  I don't see an Android-specific defconfig file, but
-> > > > > perhaps something in drivers/android/Kconfig?
-> > > > >
-> > We saw a sudden change when the priority was lifted up for rcuop kthreads.
-> > I would like to know the reason. As for Android, i would like to avoid
-> > it to be Android specific. It is better just to enable boosting by
-> > default for nocb kthreads.
->
-> No, because that breaks an existing use case, which uses RCU_BOOST
-> to avoid OOM on busy systems.
->
-> > > > > One easy way to make this work would be to invert the sense of this
-> > > > > Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
-> > > > > "n", but then select it somewhere in drivers/android/Kconfig.  But I
-> > > > > would not be surprised if there is a better way.
+On Thu, May 05, 2022 at 07:54:49PM +0200, Andy Shevchenko wrote:
+> On Thu, May 5, 2022 at 4:55 PM Lukas Wunner <lukas@wunner.de> wrote:
+> > On Mon, Jan 31, 2022 at 05:13:39PM +0200, Andy Shevchenko wrote:
+> > > Background information
+> > > ======================
 > >
-> > In that situation probably we should just enable it by default.
->
-> You are within your rights to cause it to be enabled by default -within-
-> -Android-.  You are -not- within your rights to break other workloads.
->
-> If ChromeOS needs it too, they too can enable it -within- -ChromeOS-.
->
-> It is not -that- hard, guys!  ;-)
+> > The wealth of information in the commit message obscures what the
+> > actual problem is, which is actually quite simple:  SoC features
+> > such as GPIO are accessed via a reserved MMIO area, we don't know
+> > its address but can obtain it from the BAR of the P2SB device,
+> > that device is normally hidden so we have to temporarily unhide it.
+> 
+> Right, but this long commit message was a result of the previous
+> discussions with Bjorn. If we're ever going to handle something like
+> this in the PCI core, perhaps he won't be happy if I remove it. Maybe
+> we can simply state what you wrote as a problem statement and move
+> this chapter at the end?
 
-I think on the topic of RT, +Steven Rostedt should chime in as well
-considering he wrote a good chunk of the RT scheduler ;-). Personally,
-I feel the issue of "rcu callback offload" threads running as RT or
-not should not be a matter of CONFIG option or the system in concern.
-Instead it should be a function of how many callbacks there are to
-run.  The reason I say this is, RT threads should not be doing a lot
-of work anyway, lest they cause RT throttling and starvation of other
-threads.
+Yes, feel free to copy-paste the synopsis from my e-mail above
+and rephrase as you see fit.
 
-Also, I think it is wrong to assume that a certain kind of system will
-always have a certain number of callbacks to process at a time. That
-seems prone to poor design due to assumptions which may not always be
-true.
 
-Can we not have 2 sets of RCU offload threads, one which operate at RT
-and only process few callbacks at a time, while another which is the
-lower priority CFS offload thread - executes whenever there is a lot
-of CBs pending? Just a thought.
+> > > On top of that in some cases P2SB is represented by function 0 on PCI
+> > > slot (in terms of B:D.F) and according to the PCI specification any
+> > > other function can't be seen until function 0 is present and visible.
+> >
+> > I find that paragraph confusing:  Do multi-function P2SB devices exist?
+> > What are the other functions?  Are they visible but merely not enumerated
+> > because function 0 is not visible?
+> 
+> The case I see is when we want to read the BAR from another slot of a
+> PCI device, 0 function of which is P2SB. Since P2SB is hidden, the
+> other device is hidden as well. Any idea how to reformulate this? And
+> yes, we have this in the existing SoCs.
 
-Otherwise, I feel like we might be again proliferating CONFIG options
-and increasing burden on the user to get it the CONFIG right.
+The spec you linked to in the commit message (for the 100 series chipset)
+says that P2SB is located at Device 31 Function 1.
 
-thanks,
+In those chipsets where P2SB is function 0, what kind of devices are
+at functions 1 and higher?
 
-- Joel
+
+> > Do you really need all the complicated logic in __pci_bus_read_base()?
+> > For comparison, simatic_ipc_get_membase0() in simatic-ipc.c merely does:
+> >
+> >         pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+> >
+> > If that's sufficient for simatic-ipc.c, why is the more complicated code
+> > necessary in p2sb.c?
+> 
+> Since it's a PCI device I want to follow what PCI core does with it.
+> As I explained somewhere that the current code (actually it's a
+> simplified version of what is done in PCI core) follows what spec
+> requires. I would like to be in alignment with the spec, while it
+> still may work with less code. Besides that, it's theoretically
+> possible that the base address may be 64-bit in new SoCs, I won't
+> rewrite code again just because we abused the spec.
+
+So as an alternative to copy-pasting __pci_bus_read_base(),
+you could just call pci_scan_single_device().  This will create
+a proper pci_dev that you can work with.  Note that no driver will
+be bound to the device because of:
+
+  pci_scan_single_device()
+    pci_device_add()
+      dev->match_driver = false
+
+After you've read the BAR, get rid of the pci_dev with pci_destroy_dev().
+
+
+> > > +     /*
+> > > +      * I don't know how l can have all bits set.  Copied from old code.
+> > > +      * Maybe it fixes a bug on some ancient platform.
+> > > +      */
+> > > +     if (PCI_POSSIBLE_ERROR(l))
+> > > +             l = 0;
+> >
+> > l can have all bits set if the device was hot-removed.  That can't happen
+> > with a built-in device such as P2SB.
+> 
+> Can be dropped, indeed. But that chicken bit emulates that :-) Anyway,
+> we unhide the device before looking into it, so we shouldn't have the
+> surprise "removals".
+
+pci_lock_rescan_remove() prevents concurrent unhiding as well as
+removal via sysfs.
+
+Thanks,
+
+Lukas

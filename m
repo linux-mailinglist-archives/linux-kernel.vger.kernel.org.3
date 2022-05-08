@@ -2,130 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF1351EB25
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 04:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA1651EB2C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 05:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446820AbiEHC4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 22:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S1447133AbiEHDFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 23:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443966AbiEHC4V (ORCPT
+        with ESMTP id S230265AbiEHDEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 22:56:21 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD586596
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 19:52:29 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ks9so14506443ejb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 19:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=motec-com-au.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0jVDkHUl1fqfqQLGFjqvBHj+kZDZmLfom5JvGNbdgg4=;
-        b=m1so14Tb9iGfnhOfA1ik+03YVB1S3j147piYsa2vFeyo2Nqm8ZTKxhkfyf+pX/z3mU
-         pWojsoRO1A5A7FQqUQ/XmvRcxtEE7crXdEuMGNvLMkUz8St272ImE2jSBFXMDBfp68V1
-         4+vJAbkTKSw00DeAmYdQ2WqLkwI6CuwNU/zUz+5qzlZNioJpbPR2FhDgy021JN5remtq
-         PUO+ZPr3phvbIKuGAmPgCFdsjto7cmZoPQf7UaQZ7O7J/juGFOn/pRLxC20mW/WIO+41
-         cGAs+2NoEcvFPFikdahqRk/iAltpdlP5pW2xTgUwGKMxsmHWlxQFSEMUOpebEiLAQb2r
-         r2qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0jVDkHUl1fqfqQLGFjqvBHj+kZDZmLfom5JvGNbdgg4=;
-        b=uwGKoWWOo7Dm3/QyL/SWCO5IMGHLtKm1J12v7lKbtWRLIvl7/xbly4eGXLNmNH5SX1
-         JGmxYgZlif4ueB9975tzwkkKc852UEDRI3gpfLtPGBWHgTyO0Oyn0pXsaUq/q0gLuLVj
-         ZDhNBPysz0YfeQ/wRhQcjpMqktyhK8htXJLsLkj5isLW9AbAGM2Ev/3564WBmLF+70I3
-         U9m2zPtvM36JswQOhwOspak1lz89kuOcWchiLt6ygQ0EJRaJvHUSq9Y4sq0amjHLN3vI
-         oy7j9Y7ipQZwysfzno6gOsMVcAfCRojbN7mJ8G1SgSiNl92AwcddbgEIzB4wVtgN2Gto
-         5a9A==
-X-Gm-Message-State: AOAM531IvsF5YmvUk/WMPRq32chZqxVtD7KYQCPAVw3YVn/l+Xr4c03I
-        c4dorgw4Oyxh2oYdSLYz3QU5Zo/9FPARhKtlQi/Abw==
-X-Google-Smtp-Source: ABdhPJxMbGSVhfTCHkAolesSJEG0JlP8qpbg27wSzY2JDrLJrrvEJV+0BSSKyCpSOCwrH3RxO//nmdh0xi96rdz6/+o=
-X-Received: by 2002:a17:907:7fa8:b0:6f3:e975:abfa with SMTP id
- qk40-20020a1709077fa800b006f3e975abfamr9336479ejc.86.1651978348179; Sat, 07
- May 2022 19:52:28 -0700 (PDT)
+        Sat, 7 May 2022 23:04:50 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4889FDD;
+        Sat,  7 May 2022 20:00:57 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1651978842tow4zz2r
+Received: from localhost.localdomain ( [125.69.42.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 08 May 2022 11:00:40 +0800 (CST)
+X-QQ-SSF: 01000000002000E0S000C00A0000000
+X-QQ-FEAT: TskX/GkkryBRQ6VYCwZkqj8QEUmkLudebDByRVc4iXRXAJB7igKjSg8fjoeVr
+        eqJMCkbksBzm7seRvBcDoW+Dsydn4YOPw24NtI7Jx8T5tytOklWIrzww3GeX1x3B6dXhXpC
+        LqGTfmy96HQLU+tn0dM3rnk3vyLNJLvriZjJORcnd7LbC4Wd8RhwFlHNGAKC4sBbv3SQABG
+        bePnTQIu5n/NJSr9d9wOohytchdo/sV3VqKQhn8mprTkpiZda5dhJD2S9p9QDbEuuFb/DOw
+        U6Beqovmb/CcixrBisTPN+zQ2IrPMaOCBluhv6iKsh7K3lbSR0hwz0b0sdQQL1kxEvw3Dnn
+        Kj10frxX0IrYIPaUP3SWfNGt40FGw==
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     rth@twiddle.net
+Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        wangborong@cdjrlc.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] alpha: Fix comment typo
+Date:   Sun,  8 May 2022 11:00:29 +0800
+Message-Id: <20220508030029.123056-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <CAHQrW0_bxDyTf7pNHgXwcO=-0YRWtsxscOSWWU4fDmNYo8d-9Q@mail.gmail.com>
- <20220503064626.lcc7nl3rze5txive@pengutronix.de> <202205030927.15558.pisa@cmp.felk.cvut.cz>
- <20220503085506.d5v4xtpumr7gm7hy@pengutronix.de> <CAA7ZjpbzaSiX6jbV5B88_VqqJga=9y0Kf_Z77Q4DN-5YfQFy0g@mail.gmail.com>
-In-Reply-To: <CAA7ZjpbzaSiX6jbV5B88_VqqJga=9y0Kf_Z77Q4DN-5YfQFy0g@mail.gmail.com>
-From:   Andrew Dennison <andrew.dennison@motec.com.au>
-Date:   Sun, 8 May 2022 12:51:52 +1000
-Message-ID: <CAHQrW08jAYde-S_pk3QVdvCzGbeg5TL=wJbGBC4euHx6rowewg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual
- rules and documentation linking
-To:     Ondrej Ille <ondrej.ille@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 8 May 2022 at 01:51, Ondrej Ille <ondrej.ille@gmail.com> wrote:
->
-> Hello all,
->
-> again, sorry for the late reply, my daily job keeps me very busy, and the vision of completely new silicon
-> coming to our office if we meet a tape-out date is somehow motivating :)
->
-> Just few notes about the discussion:
->
-> 1. Number of TXT Buffers
-> I agree that driver should read-out this information from the HW, not rely on fixed configuration.
-> True, the default value in HW master is 2, but Linux driver had 4 hard-coded. This was coming from
-> times when there were only 4 buffers (no genericity in the HW). IMHO this is HW bug, because the
-> intention when doing the "arbitrary number of buffers" extension, was to keep default value the
-> same as in previous implementation. System architecture document also has "4" as value of txt_buffer_count generic.
->
-> I will fix this ASAP in the master branch, hopefully regression will not complain so that the current driver
-> version is compatible with default HW.
->
-> As per reading out number of TXT Buffers from HW, Pavel proposed moving TXTB_INFO else-where
-> so that there is more space for TX_COMMAND in the same memory word. The rationale here, is having
-> reserve in case of an increasing number of TXT Buffers.
->
-> But, with the current format of TX_COMMAND, the reserve would be up to 24 TXT Buffers. Even if there
-> ever was a use-case for more than 8 buffers, there would need to be another non-compatible changes
-> in TX_PRIORITY and TX_STATUS, and the whole register map would anyway not be backwards compatible...
-> So, I propose to keep TXTB_INFO in its current location.
+Remove one of the repeated 'and' in comment line 150.
 
-Hi Ondrej,
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ arch/alpha/kernel/irq_i8259.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Based on this it seems my patches can be cleaned up for merging.
+diff --git a/arch/alpha/kernel/irq_i8259.c b/arch/alpha/kernel/irq_i8259.c
+index 1dcf0d9038fd..db574dcd6675 100644
+--- a/arch/alpha/kernel/irq_i8259.c
++++ b/arch/alpha/kernel/irq_i8259.c
+@@ -147,7 +147,7 @@ isa_no_iack_sc_device_interrupt(unsigned long vector)
+ 	 */
+ 	/* 
+ 	 *  The first read of gives you *all* interrupting lines.
+-	 *  Therefore, read the mask register and and out those lines
++	 *  Therefore, read the mask register and out those lines
+ 	 *  not enabled.  Note that some documentation has 21 and a1 
+ 	 *  write only.  This is not true.
+ 	 */
+-- 
+2.35.1
 
-Pavel / Odjrej: did you want to include the patches in your public
-driver tree and submit from there, or shall I submit them? Adding to
-yoru tree would keep it in sync with the upstream driver already
-submitted. If you provide a review I'll cleanup any issues reported. I
-can submit directly to Linux as Marc proposed but having a single
-authoritative source seems cleanest to me.
-
-My current patches are on master in this tree:
-https://github.com/AndrewD/ctucanfd_ip_core
-
-I'll add "Signed-off-by: " to the commit messages next time I touch
-this - once I get clarity on the way forward. I don't have an
-immediate need for a Linux driver for ctucanfd so haven't touched this
-recently.
-
-Kind regards,
-
-Andrew

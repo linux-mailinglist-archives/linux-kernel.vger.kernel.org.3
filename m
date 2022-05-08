@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8B751EEF5
+	by mail.lfdr.de (Postfix) with ESMTP id 1116F51EEF4
 	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbiEHQhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 12:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S235804AbiEHQh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 12:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiEHQhW (ORCPT
+        with ESMTP id S232922AbiEHQhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 12:37:22 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2040.outbound.protection.outlook.com [40.107.212.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655EBE1F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 09:33:30 -0700 (PDT)
+        Sun, 8 May 2022 12:37:23 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2080.outbound.protection.outlook.com [40.107.100.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BFCBE3A
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 09:33:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cE5qgQR5or6quXhjKL7ddPaRJ1CiQ3ZiqrjscsaxProvvl6u7K4dMgb1DtECtwMKOGfv1vRLdzta4XjoLtsw6gl46L0WBYyUfaTpNrBcRI3HcGzeIROuyC7JsLyCtF9wvHd9GLStCoxCnbKRSk4aZdTwCmMflbRX7dvuIwZZR5MW3G83Pf5n5a0nhQ30vSkon/epdnLzRnpUTZqf1N7t2NKh7wxVz9D0jAKDiUaH022KFRNfkRTilXJqotOFIDWuRi5Tjy2SiuT7jmEivhxXC5IJJLV2Ahc3R2MZ9PG4ZjwEz/5sQRMHG1ycju7gZC/o4ez400vmrBX5N9UqqRmX/w==
+ b=GMBWkDS5y3Ek/35s/MG3Z7tMBk36yLOZuznWMKqflAEeMLigOuok3xX5UVWv9TbzUpsDweyl8j1eKkfY4QWNvRY4ICIKZIYKg23sXQVZpFV73PMOsY5YPal+mkDh5ji9XrYJM1ANAlzXTM6tIvXQlEswWhf0GU5RG/dYvvFiiwBOC843wsg1nQLW8s2jEn+hC/WcAGRTBAuT5dCSWJJV5oTclMY/t9Nza1820IGgGWrRYtHshXfg4DSCA28hhpASeW3GoaxWWL2edFhKyM7SUmGb1gs3mYbU3FWlaIXkWXIWJqEhte7mOmW5TPVlMpCU26SXzCIkocX4fpwBwSk7qw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cxhVRjPdiVgR1OHKYnT+eRt6/lEe4n9fcPg6RI6njno=;
- b=lJY3vCOfvh6adGWcXMlh1SWwnOWSQanFs6WoYWKyWtlLZpoGqsdiCJ0jK/6INNyp7kPTepskBXMapahkHtmWTQ9kB8poOB0BhgzgHedQPwHZD68XhHExKQlIofAcQHaAhAl3HVJz3y8CK1CdwG2Urfvb8Rf93KtB58/xzwaa/7PhkeUSJosYT0YYgOKzx7uPdnqvNfB0bflIb1hAjYDza9Ms0rKxNqiJZ+PtULxPZpq3F/4NNJra8tgZ4mAA3idGA/4t3MKDjdarc85K++aL7R6k+yLZNqtJWaW/paRKT9ubrwkSfv2Ql4sM0pKjd19CA8vF38S+LO11/pm5DS+c2A==
+ bh=WS0gzU8MhsWWY1UdLp+k/aj565NZzV7Iz0/5YWGdbEY=;
+ b=mY7Xe/83RCnd3/gH1hogLdjXClFBU4JL8pckeSQjnwngxH0zB9Mgx9CFZxUvtpPe22QdGZ0MIyT2DlYZNU3SYpj2pEnvrX0AxJa4H8JgNv/fHar99GCGLj+gr95aqcvXDrIUQDR09lDG+6mpKvS+jBQHY/AYzj37uxvHnthnudhcM/qrLgLUExgj+YeJeM7K5AU+NzHfmUlEvChHOWITg4u3q0TdZg4QBGQARHpraIcO7iMNWpPy3DcKiwpKV07VMqb8j3H9LBv01/D3qLeNfREH8JJ+b+cJ+srha+0pM1K3lbCX305yiBcnXklWWoqW40U4qNdu99GQZhgDSnGUrg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cxhVRjPdiVgR1OHKYnT+eRt6/lEe4n9fcPg6RI6njno=;
- b=Muu7eOMGuiMalF3oiyLG7bW0z/tkXp2JtKQW4n1a9vzjsGOqWJ5FnGOcFkZNpXnNhp7kCULEWQZrVN0XutqJ8uorklrUxqmOiJ8FAnH6iXEuEu7ixRvdQO07sJC60SURVbylHoGoFOW75wwiOVIpFDuFjaepuq6xCLKqfDlrfzdtjS2GjxlIvJ1Q7iqfT9E455vd1L54tEwyvHiKwE9DKULCg2I/IvRG082ZC4HS7esWNrgm2iKUOT3kC929l85jPdE41cWD9EBAjnCtlYDF+hZb81GxhRFkELLeFTphjRmZgmcEav4f+mgYrotipYS0GyEvIRCrJh8zAM97pbLYAQ==
-Received: from BN0PR07CA0019.namprd07.prod.outlook.com (2603:10b6:408:141::9)
- by CY4PR12MB1733.namprd12.prod.outlook.com (2603:10b6:903:11d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.18; Sun, 8 May
- 2022 16:33:28 +0000
-Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:141:cafe::50) by BN0PR07CA0019.outlook.office365.com
- (2603:10b6:408:141::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20 via Frontend
- Transport; Sun, 8 May 2022 16:33:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ bh=WS0gzU8MhsWWY1UdLp+k/aj565NZzV7Iz0/5YWGdbEY=;
+ b=QSc2fjF0GKC1ged6nCCFQcy+2MCZ+mtFLZlgQ/bG++UdlRGYApHQWxRCXNITl+rowjnSVZFKcUHjmxcufIHjsK9fE5wnZF8nRXiqK/trh0yKAZox/GKQvDX/KL8jgSUDQLbOjx9vxzwpEoE91HdDvGMR3bIdIUa3RLI7/msds0i4Fduh3GXCj0DuCx8YihjePW5l63qmUGkrJLR7fslWkYFyQBbOxkpSbz/0THEH2y0p4QsgGk1+1c7jODNfKHWuZibbyJPdy5T0AZIossCEO+ikr/UC2+GZjIH36wfoRDUnS8KouAVWsFtbT3NbgZb28diQF7XUpwo4nI6XT+wgnQ==
+Received: from DS7PR05CA0098.namprd05.prod.outlook.com (2603:10b6:8:56::8) by
+ BN6PR12MB1459.namprd12.prod.outlook.com (2603:10b6:405:e::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.23; Sun, 8 May 2022 16:33:30 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:56:cafe::95) by DS7PR05CA0098.outlook.office365.com
+ (2603:10b6:8:56::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13 via Frontend
+ Transport; Sun, 8 May 2022 16:33:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5227.15 via Frontend Transport; Sun, 8 May 2022 16:33:28 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Sun, 8 May
- 2022 16:33:27 +0000
+ 15.20.5227.15 via Frontend Transport; Sun, 8 May 2022 16:33:30 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Sun, 8 May
+ 2022 16:33:29 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 8 May 2022
- 09:33:27 -0700
+ 09:33:29 -0700
 Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.8)
  with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Sun, 8 May
- 2022 09:33:25 -0700
+ 2022 09:33:27 -0700
 From:   Eli Cohen <elic@nvidia.com>
 To:     <mst@redhat.com>, <jasowang@redhat.com>
 CC:     <virtualization@lists.linux-foundation.org>,
         <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
         Eli Cohen <elic@nvidia.com>
-Subject: [PATCH v4 0/3] Show statistics for a vdpa device
-Date:   Sun, 8 May 2022 19:33:14 +0300
-Message-ID: <20220508163317.204673-1-elic@nvidia.com>
+Subject: [PATCH v4 1/3] vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
+Date:   Sun, 8 May 2022 19:33:15 +0300
+Message-ID: <20220508163317.204673-2-elic@nvidia.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220508163317.204673-1-elic@nvidia.com>
+References: <20220508163317.204673-1-elic@nvidia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8767fe08-bd49-446d-a276-08da31107b5d
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1733:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB173343BCE98E5FD3A0781D42ABC79@CY4PR12MB1733.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 97452d8c-23ac-451f-6a7a-08da31107c87
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1459:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB14597C486AD0AFF2974675EEABC79@BN6PR12MB1459.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G7cDMd+0fc9OeaBobQqH1SLJHSqyorClsZEaMLaGjS+gQ6oJFSkLOoq1qhFNutZ13yl2KrcUaeZn/h7oVYH6zIj83yUy1Fn3UY9aqF2uWLepnko4/orBE2rWqUsujzeq/Cp06wZ836/gWkhG1Il1l4kIOesZWQ4Ua1UGInC9Ugat9anLkYTxYfZm5cAgLfmwNlz2KsbSPvDLpnhUxkngUv7Q0X7MHkgJCOPKv6H0WJOwbalmZ9wCHfAO5QyPPRR9XUfywNMzSA/BhXav910bpOCIYVFBCduKvP48CHA+A1yPsYtB/APwDvtaTIpfS7WzRAOy/CbwGXXZw4fQDdLZyiW7DVjgzfvNRtzJAnkBtzNp5LjN1qHfX6QskPJz0dwzHPFPTfomcSTDzqM0CXx5krxDDF8iiqtJoUO/n1lMk/M+6ZHVeKwgm8io17wupOrOnmO3l/r9dJjPssHq06Cp5h2WIJTmwsaDV0LF/8bxu89/6HF5KPve/K19MhSOgtRjsrQzFYnExEWkXJkCrOO41876q3HY85K3t95IaY9ZSFHe8QNJsyJE9rt4RD1ZQPn8XeDsUA6DI3bL1xdMR53ND9mYqwp7S0jhksdY0muAJUu3yTswUQKLOpYgg2WrctDQXJqGhYgHkU1K2MzzLtIGITTCvVNZQUDnHcfZhjW01RDNoikhcRKJ31eCVzg/M01cAmLDntrAJoWjoBDz8GICGQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(81166007)(7696005)(356005)(336012)(36860700001)(426003)(47076005)(6666004)(2906002)(5660300002)(110136005)(316002)(36756003)(82310400005)(54906003)(83380400001)(508600001)(8676002)(8936002)(70586007)(4326008)(70206006)(40460700003)(107886003)(86362001)(26005)(1076003)(2616005)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NAwh4EXGI5+aP1eH0Sxm2dpPPbMvvvAuj+NhQaWaHKxZbD1z/2cacCGOxDRZdJvZVAmzm6idFbMWmQEOGYJ7N4PlnLf4sXPM2zdnvr4PwmvYwxyEOYT9H8CC8Mfly1fY536SEsijLH7SxPsy0LzuBxOPagWm1fhH9uzOF+LE6K+SEpwU48LRITYt94KYhhcIcxzyIV+sdlB6ZK7JrRk2dz+WxYwzJessjTMbMq2JkU3w/dHj2x/JiMyZSCLeDhHOqf/xMkZ68zLkCYqZcruZl+G5WrHALo1CuMwDhtAn5AEfWPeX9vzrF6L+RcnDS8pTpr7/m8Lno3YiNQmjteVmQrkRUkPv9g8+wABfq9Uuv/CNW1ep3srYBwhYDzNGvSTNOylQrv6VO0tbWKHYX/KuFsweJbQSkPEyr8p/iVne9tx/2f5Uxo3EDztf/TZrZE97+94fZFuwnEPMVFa/JwmQf+jRCyzo/FZrCdcYRd2TOQ7haoAfbWs6cII+3gwWj/MDGRu7IngeVnqxx1imVwcjG3kC51Xe5LNfXjVBCYkkg/o5OEJ13M3AmRBMTyVl8nDBVPiFJopO9BCGLjOK+SrCDBnmlm6cy9ieoJw2YhMGDi3qivRfkLLqnUXUIF9N4HK7X4zwZSXtTOYAkxVUg8sq9/75kVX1S7RK8skGNmCJXoTsKWcfv2HtQwGlCSj28Yz+8RMjtDwZ+lONtNMCYwWtww==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(40460700003)(356005)(2906002)(36756003)(8936002)(81166007)(36860700001)(5660300002)(47076005)(426003)(336012)(4326008)(83380400001)(70206006)(508600001)(186003)(107886003)(1076003)(70586007)(2616005)(8676002)(82310400005)(54906003)(316002)(110136005)(7696005)(86362001)(6666004)(26005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2022 16:33:28.3599
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2022 16:33:30.3583
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8767fe08-bd49-446d-a276-08da31107b5d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97452d8c-23ac-451f-6a7a-08da31107c87
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1733
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1459
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -103,38 +104,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following three patch series adds support to read vendor statistics
-for a vdpa device.
+In vdpa_nl_cmd_dev_get_doit(), ff the call to genlmsg_reply() fails we
+must not call nlmsg_free() since this is done inside genlmsg_reply().
 
-The first patch is just a cleanup fix.
-The second patch lays the ground to allow an upstream driver to provide
-statistics in the form of an attribute name/attribute value pairs.
+Fix it.
 
-The third patch implements this for mlx5_vdpa which gives received
-descriptors and completed descriptors information for all the
-virtqueues. 
+Fixes: bc0d90ee021f ("vdpa: Enable user to query vdpa device info")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+---
+ drivers/vdpa/vdpa.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Jason, I removed your ack from the mlx5 patch since I modified it a bit.
-I am sending the userspace patch I was using following this series.
-
-Eli Cohen (3):
-  vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
-  vdpa: Add support for querying vendor statistics
-  vdpa/mlx5: Add support for reading descriptor statistics
-
-v3 -> v4:
-Add a small cleanup fix patch
-Only return statistics if feature negotiation is complete. 
-
- drivers/vdpa/mlx5/core/mlx5_vdpa.h |   2 +
- drivers/vdpa/mlx5/net/mlx5_vnet.c  | 171 +++++++++++++++++++++++++++++
- drivers/vdpa/vdpa.c                | 143 +++++++++++++++++++++++-
- include/linux/mlx5/mlx5_ifc.h      |   1 +
- include/linux/mlx5/mlx5_ifc_vdpa.h |  39 +++++++
- include/linux/vdpa.h               |   5 +
- include/uapi/linux/vdpa.h          |   6 +
- 7 files changed, 363 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+index 2b75c00b1005..fac89a0d8178 100644
+--- a/drivers/vdpa/vdpa.c
++++ b/drivers/vdpa/vdpa.c
+@@ -756,14 +756,19 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto mdev_err;
+ 	}
+ 	err = vdpa_dev_fill(vdev, msg, info->snd_portid, info->snd_seq, 0, info->extack);
+-	if (!err)
+-		err = genlmsg_reply(msg, info);
++	if (err)
++		goto mdev_err;
++
++	err = genlmsg_reply(msg, info);
++	put_device(dev);
++	mutex_unlock(&vdpa_dev_mutex);
++	return err;
++
+ mdev_err:
+ 	put_device(dev);
+ err:
+ 	mutex_unlock(&vdpa_dev_mutex);
+-	if (err)
+-		nlmsg_free(msg);
++	nlmsg_free(msg);
+ 	return err;
+ }
+ 
 -- 
 2.35.1
 

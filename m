@@ -2,51 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A1351ED3B
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DA551ED3C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiEHLaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 07:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S232249AbiEHLsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 07:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiEHLaM (ORCPT
+        with ESMTP id S232171AbiEHLsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 07:30:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1DEBF5B
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 04:26:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3C65CCE0EF6
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:26:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1431C385A4;
-        Sun,  8 May 2022 11:26:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fS3KiyaR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652009174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Z6OC797bOG0P8Y3qIegF1eIs34mnxZ0vxmWaiBIh/4Y=;
-        b=fS3KiyaRY5un7a6JcEnSAJXUPiBC3T7IY3B6VWtFhbFAPdvW/7ZtgDCi0TZbj42W1xrBQH
-        qqnaL7j8ypMbOX6s+hr96+ldusoV+es6hgdiVVIx5p7dpx9mGHdgr3hH2GaNqFwqk+7i+m
-        hLOm2RsTzDbIfFwaIrMqMPVchyxln3c=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d8e6f89f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 8 May 2022 11:26:13 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH] random: use symbolic constants for crng_init states
-Date:   Sun,  8 May 2022 13:26:09 +0200
-Message-Id: <20220508112609.138889-1-Jason@zx2c4.com>
+        Sun, 8 May 2022 07:48:04 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DFADFBD;
+        Sun,  8 May 2022 04:44:14 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r1-20020a1c2b01000000b00394398c5d51so6840724wmr.2;
+        Sun, 08 May 2022 04:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uGom9LadN9y/dKy9cZp6nw8Lj9Rh3bqkuTAr2QAZygs=;
+        b=A6cPx5B9Jzsiv5KRDwkhvAUNfqsoWWq7FNQH2Kd+c1HECo1EB+5MmGAGBAdqLim7Lb
+         Nktgt+EST7zZeh1XJFjxPmBkhgrUMPxUGaBnoJLfJWIJ9S6OnFqt6fzzMH/4gq6IJeyt
+         wm+Gr534Rcbpc5oDFsOVVyr7awT0pJ7HRJSXocW6B6OKw0RD2JPCHAXP57G/3Xr3FfJB
+         6RV9dpwU0/ynu40FL+gHQgr6pIJnbX17m9cqU5OkFmL3agzLkwoHrtiTg17j6EQxnhiY
+         yF+ObsQwVT8r1bJj44v5fhHBz9EOMhlg7xaIzcMkyqCpk03mC1DCXfNmEk/SuyyWNEUU
+         KxWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uGom9LadN9y/dKy9cZp6nw8Lj9Rh3bqkuTAr2QAZygs=;
+        b=AWHpFWHVPQMw/4d5zBNmcklX6pwH3lHZCOjNzox65Qeg2Gw85akyrEIodU4sTvp1oo
+         AhhBn5pDoOteCpRVEurWVt2mCfsx9waA9zy+33/3uajZlafPcNQqSz6RuGw4b4XYsVu/
+         PNs0LgR/PiqTHALaRHxb2jsOFd5Hn3Co2IhmWLrEVbE0ScwOHFgeXXRHQWSKiRMDoD/F
+         njuC814gWkB4oqYuGJ6+3MlswyL2AD0s5iN+jdR8NspkidJWv3+mYZr/AsRBpckM7l+m
+         hW+3zfhgV9LTcEk1YnflAJgFQ1+fryxl+lCbr1ZHW0USXqH8s78ciUmoezAS2+vyUsmI
+         8Z5w==
+X-Gm-Message-State: AOAM532jgbzeUTmTvwON2BZdUWxGzE8P6oiE4taQQgr8/19fpaZpBDF8
+        yu3k/JDdgb5iftD4LzZaf6kQcjvAgY4=
+X-Google-Smtp-Source: ABdhPJxk0zhR6KYK07Bn0EHj0OplxyM4f1/qqPYhsXAkCACxAA8HwtcJX5wePe1GVdTSZhGWkkLYVQ==
+X-Received: by 2002:a05:600c:288:b0:394:31f9:68f with SMTP id 8-20020a05600c028800b0039431f9068fmr17937593wmk.57.1652010252850;
+        Sun, 08 May 2022 04:44:12 -0700 (PDT)
+Received: from [192.168.8.198] ([148.252.129.103])
+        by smtp.gmail.com with ESMTPSA id ay13-20020a5d6f0d000000b0020c5253d8e3sm8698640wrb.47.2022.05.08.04.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 04:44:12 -0700 (PDT)
+Message-ID: <73fc6ba6-a63e-d674-a3bb-05a3f914a714@gmail.com>
+Date:   Sun, 8 May 2022 12:43:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Guo Xuenan <guoxuenan@huawei.com>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
+References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <20220505141159.3182874-1-guoxuenan@huawei.com>
+ <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
+ <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
+ <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
+ <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
+ <9c4cff81-ff0f-4819-c41d-54f28dba2929@gmail.com>
+ <fd9b34f1-5289-587a-2ba3-88f924af474c@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <fd9b34f1-5289-587a-2ba3-88f924af474c@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,121 +81,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-crng_init represents a state machine, with three states, and various
-rules for transitions. For the longest time, we've been managing these
-with "0", "1", and "2", and expecting people to figure it out. To make
-the code more obvious, replace these with proper enum values
-representing the transition, and then redocument what each of these
-states mean.
+On 5/7/22 15:18, Jens Axboe wrote:
+> On 5/7/22 3:16 AM, Pavel Begunkov wrote:
+>> On 5/6/22 19:22, Jens Axboe wrote:
+>>> On 5/6/22 10:15 AM, Jens Axboe wrote:
+>>>> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
+>>>>> On 5/6/22 03:16, Jens Axboe wrote:
+>>>>>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
+>>>>>>> Hi, Pavel & Jens
+>>>>>>>
+>>>>>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
+>>>>>>> it is not enough only apply [2] to stable-5.10.
+>>>>>>> Io_uring is very valuable and active module of linux kernel.
+>>>>>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
+>>>>>>> found my understanding of io_uring is not enough to resolve all conflicts.
+>>>>>>>
+>>>>>>> Since 5.10 is an important stable branch of linux, we would appreciate
+>>>>>>> your help in solving this problem.
+>>>>>>
+>>>>>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
+>>>>>> there was a reproducer for this that was somewhat saner than the
+>>>>>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
+>>>>>
+>>>>> No, it was the only repro and was triggering the problem
+>>>>> just fine back then
+>>>>
+>>>> I modified it a bit and I can now trigger it.
+>>>
+>>> Pavel, why don't we just keep it really simple and just always save the
+>>> iter state in read/write, and use the restore instead of the revert?
+>>
+>> The problem here is where we're doing revert. If it's done deep in
+>> the stack and then while unwinding someone decides to revert it again,
+>> e.g. blkdev_read_iter(), we're screwed.
+>>
+>> The last attempt was backporting 20+ patches that would move revert
+>> into io_read/io_write, i.e. REQ_F_REISSUE, back that failed some of
+>> your tests back then. (was it read retry tests iirc?)
+> 
+> Do you still have that series? Yes, if I recall correctly, the series
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+Yep, still in the repo:
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2af7a755d632..8f4a4452b31b 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -72,16 +72,16 @@
-  *********************************************************************/
- 
- /*
-- * crng_init =  0 --> Uninitialized
-- *		1 --> Initialized
-- *		2 --> Initialized from input_pool
-- *
-  * crng_init is protected by base_crng->lock, and only increases
-  * its value (from 0->1->2).
-  */
--static int crng_init = 0;
--#define crng_ready() (likely(crng_init > 1))
--/* Various types of waiters for crng_init->2 transition. */
-+static enum {
-+	CRNG_EMPTY = 0, /* Little to no entropy collected */
-+	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
-+	CRNG_READY = 2  /* Fully iniitalized with POOL_READY_BITS collected */
-+} crng_init = CRNG_EMPTY;
-+#define crng_ready() (likely(crng_init >= CRNG_READY))
-+/* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
- static DEFINE_SPINLOCK(random_ready_chain_lock);
-@@ -284,7 +284,7 @@ static void crng_reseed(void)
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
- 	if (!crng_ready()) {
--		crng_init = 2;
-+		crng_init = CRNG_READY;
- 		finalize_init = true;
- 	}
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -378,7 +378,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
- 	 * For the fast path, we check whether we're ready, unlocked first, and
- 	 * then re-check once locked later. In the case where we're really not
- 	 * ready, we do fast key erasure with the base_crng directly, extracting
--	 * when crng_init==0.
-+	 * when crng_init==CRNG_EMPTY.
- 	 */
- 	if (!crng_ready()) {
- 		bool ready;
-@@ -386,7 +386,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
- 		spin_lock_irqsave(&base_crng.lock, flags);
- 		ready = crng_ready();
- 		if (!ready) {
--			if (crng_init == 0)
-+			if (crng_init == CRNG_EMPTY)
- 				extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_fast_key_erasure(base_crng.key, chacha_state,
- 					      random_data, random_data_len);
-@@ -740,8 +740,8 @@ EXPORT_SYMBOL(get_random_bytes_arch);
- 
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_INIT_BITS = POOL_BITS, /* No point in settling for less. */
--	POOL_FAST_INIT_BITS = POOL_INIT_BITS / 2
-+	POOL_READY_BITS = POOL_BITS, /* When crng_init->CRNG_READY */
-+	POOL_EARLY_BITS = POOL_READY_BITS / 2 /* When crng_init->CRNG_EARLY */
- };
- 
- static struct {
-@@ -836,13 +836,13 @@ static void credit_init_bits(size_t nbits)
- 		init_bits = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.init_bits, orig, init_bits) != orig);
- 
--	if (!crng_ready() && init_bits >= POOL_INIT_BITS)
-+	if (!crng_ready() && init_bits >= POOL_READY_BITS)
- 		crng_reseed();
--	else if (unlikely(crng_init == 0 && init_bits >= POOL_FAST_INIT_BITS)) {
-+	else if (unlikely(crng_init == CRNG_EMPTY && init_bits >= POOL_EARLY_BITS)) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
--		if (crng_init == 0) {
-+		if (crng_init == CRNG_EMPTY) {
- 			extract_entropy(base_crng.key, sizeof(base_crng.key));
--			crng_init = 1;
-+			crng_init = CRNG_EARLY;
- 		}
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 	}
-@@ -1595,7 +1595,7 @@ const struct file_operations urandom_fops = {
-  *
-  * - write_wakeup_threshold - the amount of entropy in the input pool
-  *   below which write polls to /dev/random will unblock, requesting
-- *   more entropy, tied to the POOL_INIT_BITS constant. It is writable
-+ *   more entropy, tied to the POOL_READY_BITS constant. It is writable
-  *   to avoid breaking old userspaces, but writing to it does not
-  *   change any behavior of the RNG.
-  *
-@@ -1610,7 +1610,7 @@ const struct file_operations urandom_fops = {
- #include <linux/sysctl.h>
- 
- static int sysctl_random_min_urandom_seed = CRNG_RESEED_INTERVAL / HZ;
--static int sysctl_random_write_wakeup_bits = POOL_INIT_BITS;
-+static int sysctl_random_write_wakeup_bits = POOL_READY_BITS;
- static int sysctl_poolsize = POOL_BITS;
- static u8 sysctl_bootid[UUID_SIZE];
- 
+https://github.com/isilence/linux/tree/5.10_revert
+
+> had an issue with the resubmit. Which might just be minor, I don't
+> believe we really took a closer look at that.
+> 
+> Let's resurrect that series and see if we can pull it to completion,
+> would be nice to finally close the chapter on this issue for 5.10...
+
+We can try, but I'm not too comfortable with those backports, I had
+to considerably rewrite last three patches or so. Another option
+is to disable retries from the rw callback if the iter has been
+truncated.
+
 -- 
-2.35.1
-
+Pavel Begunkov

@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF3C51EBFC
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 08:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32EE51EBFE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 08:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiEHG3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 02:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S229733AbiEHGc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 02:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiEHG3p (ORCPT
+        with ESMTP id S229501AbiEHGcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 02:29:45 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D84910BB;
-        Sat,  7 May 2022 23:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651991088;
-        bh=Ng4jRsIwZxysTh46jpfz6AMJR9c8fLNEyif0uXQBzMM=;
-        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
-         CC:From;
-        b=X+vDZVU5h4mNwzU33pKxmhT0xREh95Q0q7hnyhDLpOlZ2oCdGgTkjLrgzT7RpZ4Xg
-         J5pZeoUkLSyUcM3tj0bhMC/wwxNWpnAwJOyA408yjpzp7Rd3wTT6fc3PPcfZlnWSZT
-         XD6Ssm4K6hdmWrGUbCN5IfffCJwF+b/wk92Vmj/s=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from frank-s9 ([217.61.158.76]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QWG-1njCcq2lQO-004WiY; Sun, 08
- May 2022 08:24:48 +0200
-Date:   Sun, 08 May 2022 08:24:37 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
-References: <20220507170440.64005-1-linux@fw-web.de> <20220507170440.64005-6-linux@fw-web.de> <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
+        Sun, 8 May 2022 02:32:52 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5868F6451
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 23:29:00 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id s23so669979iog.13
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 23:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jQKknHlDx72xx0B4nwvGp8Z3DerHVN3AD3DYjbUsQuI=;
+        b=j4fnFCOWgizp9lpKRsc4ByfnvNzKiCiwnv9cssvueNHOT0hnDIBn0lh82BKcwzGdgC
+         0pD2Vkqu9BTg5mlzfOKO1gmR6bii4v9ezaNyoTK8Ge9MGQclygivpTDgjfgUSPlI+Le+
+         ybpceYmC+SDJEKW6Ntji4i1/t3M/KxXexB/MQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jQKknHlDx72xx0B4nwvGp8Z3DerHVN3AD3DYjbUsQuI=;
+        b=5lI1pW/E2Hi84kez059ZBV7tpY8Shy3/sFQUe5PLMdSzkaQncYJJboSnzfEpO5R17v
+         0P4kX4mRdsTj0ubGGT74xuaxfuwZwsZRBbtW6+c5epW0ghAhsfkbYD0yegPtwmsN2jEN
+         SI60O833i8lZQAzaNGnEbIMbda9OF1vlThHNEaVmlzdE9FVK2ly1R6XH4NF5W/9PJZ0s
+         uwf1xyuVUD2WJcfWpYXv7kYJUpKKPrfbPpYGi9YsvsWK1XI7Rn3V9duxiVAAGv0noUl3
+         aaACtTSvsJCrFgxKn6V9mqnVLX03IqsNU4bT0DEfRHTYZoPKd+oAQxVxfnS2uCPQ0Om3
+         0oKA==
+X-Gm-Message-State: AOAM530PR6VPzuasChaCtmNzOeCZISWhZMlJHqNFy4NItnZgrxeEawqR
+        Fikq6uYBJDZfgWZzEQcsPsnAT+hSyN8Se14oCmfboQ==
+X-Google-Smtp-Source: ABdhPJxVXSiop4563gDD1XQWZK0LmMFpMgb9vJ9mZN1fFUXJPh0Ddj0EE324aTVz4nSoMTKr+HcSjIEfhX7MwAwGeoY=
+X-Received: by 2002:a6b:1547:0:b0:64c:8bd4:acba with SMTP id
+ 68-20020a6b1547000000b0064c8bd4acbamr4265608iov.204.1651991339672; Sat, 07
+ May 2022 23:28:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and add rgmii-mode to mt7531
-Reply-to: frank-w@public-files.de
-To:     linux-rockchip@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-CC:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@kernel.org>,
-        =?ISO-8859-1?Q?Ren=E9_van_Dorst?= <opensource@vdorst.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-From:   Frank Wunderlich <frank-w@public-files.de>
-Message-ID: <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de>
-X-Provags-ID: V03:K1:cmDKAX75GAWrl5EVsFsdZd3/enOiiqcTlPQt33Mk48FUrUnPxAP
- U3BMSjIAlW9yIFTQxc6r5ZGwIBzhjF3Eyc7HA/HmUMOhdXJESKU/WOTVhl/KuWjQZJHCK5y
- qcuAgH7UpLQS0Nwh95lnIShPBdyyoyyqWA+QjXtfxQ2F/aeuVB1FPLxNkP2XqesUCDrQJMR
- yG7/qjijqGViHXGbgI2HQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Bt/imPOyZgc=:gwTL4xTW1EFlFic5EmehuZ
- K3tPQ1T2YEOPsfiS+vfhaZb9DEmkYVHlD/FR4mInJt3PgNl0Qv01PIPSMx17iKY2eRal/5y6i
- cP0MYxK1pg6giLZDsQj9PdZXachOyph2RT+LTBbDqyTdwbs7CLxEtm5Pwtf2rdoY5XkHJV/Y2
- ec6qOXl0/qj/VmpdrbqBy4zQ/1hWp1UBv9OS2pT3cqavFhXZQEH4aQTDLk9JNpth8plSiqJEP
- BE9PKVM66PYgl7cjxXgCg55oJEECTEZ4uTGThtMy+tIxftpoikt6Q0J23d0LsjqxAVDAf9sih
- ak0vWuCLmoNY5NmYOnWWd4Sc9ralz1sv8qqFzhM/yzJK+zVoyMDegsDf3EMuQWE5PYzDj4pNK
- dY3XDd81wQq8YIBmMsSlhcGTijit12enWbsnefF7MAk4QyKU73N6mwVkCzlv9vjFgOUxmaV0/
- SLOQ8OhLSKHn/wp+yIUFKdDFqvjEQB2SQr4iioFpsiMIA+2Ty4N3ElDilk/1USsTQJ/QBFRa9
- iBYypxmOh1oJZOOq3reAzjnp7sc4Gqi+r7H4hkR10pIpB5xO37Bz4CVE6AHlZEmX57JYSoQLR
- APgffcXp1EooN8zuPLqI3qrETvgB5qdU5oRehbBYp4hChOzWR3BEkDODs5rsA3MR4z2RtGSyg
- UXW0GmtFGQqQ/IooPXH5qyKtVv7gDNe7fNNMwScJpE1Ju5hy9w1AxFnBCF/YOi+KwwlZRbIiU
- m1x+briTvys/DR0AxtKoU/3ARfUlE//mpL0ZZhkCPqxF8jpgPhqo8Usonb7apnQRIynbEIZf7
- +6uLAzBWZbnF56sm4WObjUbVev1kBquTKBQZ/jZEbOhcjjJVnYX3CQYZlyL7dVd55dFlFsWif
- rMwUQddDBjYWvamkLP4LW2bvbqySz4gKwB9C3Zp4Rr25JpASSXbAyfDQ9S6Ic7cyOIH33ugAd
- jJU4IdGCgljdAZWOLdWvoWBxAkdvXfxY3MdzkEH8FAKA39Z11wS0BsKMJToIssVhsMwoadgFS
- qf/y3agWZoSVD2WSm0oUTvxYbC2sU47z7lz6azW8AjCOfZnBnpOBR+9akJTyG90hq/ZI4Egg6
- 7LfkJf4JYSWx3k=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220505101641.28472-1-urezki@gmail.com> <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnVLQozNFvgk3olP@pc638.lan> <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnY33nq5jl6FLFOu@pc638.lan> <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 8 May 2022 02:28:49 -0400
+Message-ID: <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
+Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT context
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Alison Chaiken <achaiken@aurora.tech>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 7=2E Mai 2022 22:01:22 MESZ schrieb Krzysztof Kozlowski <krzysztof=2Ekoz=
-lowski@linaro=2Eorg>:
->On 07/05/2022 19:04, Frank Wunderlich wrote:
->> From: Frank Wunderlich <frank-w@public-files=2Ede>
->>=20
->> Make reset optional as driver already supports it,=20
+On Sat, May 7, 2022 at 6:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
->I do not see the connection between hardware needing or not needing a
->reset GPIO and a driver supporting it or not=2E=2E=2E What does it mean?
-
-My board has a shared gpio-reset between gmac and switch, so both will res=
-etted if it is asserted=2E Currently it is set to the gmac and is aquired e=
-xclusive=2E Adding it to switch results in 2 problems:
-
-- due to exclusive and already mapped to gmac, switch driver exits as it c=
-annot get the reset-gpio again=2E
-- if i drop the reset from gmac and add to switch, it resets the gmac and =
-this takes too long for switch to get up=2E Of course i can increase the wa=
-it time after reset,but dropping reset here was the easier way=2E
-
-Using reset only on gmac side brings the switch up=2E
-
->> allow port 5 as
->> cpu-port=20
+> On Sat, May 07, 2022 at 11:11:58AM +0200, Uladzislau Rezki wrote:
+> > > On Fri, May 06, 2022 at 06:22:26PM +0200, Uladzislau Rezki wrote:
+> > > > > On Thu, May 05, 2022 at 12:16:41PM +0200, Uladzislau Rezki (Sony) wrote:
+> > > > > > Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
+> > > > > > decide if an offloading has to be done in a high-prio context or
+> > > > > > not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
+> > > > > > parameters and by default it is off.
+> > > > > >
+> > > > > > This patch splits the boosting preempted RCU readers and those
+> > > > > > kthreads which directly responsible for driving expedited grace
+> > > > > > periods forward with enabling/disabling the offloading from/to
+> > > > > > SCHED_FIFO/SCHED_OTHER contexts.
+> > > > > >
+> > > > > > The main reason of such split is, for example on Android there
+> > > > > > are some workloads which require fast expedited grace period to
+> > > > > > be done whereas offloading in RT context can lead to starvation
+> > > > > > and hogging a CPU for a long time what is not acceptable for
+> > > > > > latency sensitive environment. For instance:
+> > > > > >
+> > > > > > <snip>
+> > > > > > <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
+> > > > > > <snip>
+> > > > > >
+> > > > > > invoking 34 619 callbacks will take time thus making other CFS
+> > > > > > tasks waiting in run-queue to be starved due to such behaviour.
+> > > > > >
+> > > > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > >
+> > > > > All good points!
+> > > > >
+> > > > > Some questions and comments below.
+> > > > >
+> > > > > Adding Sebastian on CC for his perspective.
+> > > > >
+> > > > >                                                 Thanx, Paul
+> > > > >
+> > > > > > ---
+> > > > > >  kernel/rcu/Kconfig     | 14 ++++++++++++++
+> > > > > >  kernel/rcu/tree.c      |  5 ++++-
+> > > > > >  kernel/rcu/tree_nocb.h |  3 ++-
+> > > > > >  3 files changed, 20 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > > > > > index 27aab870ae4c..074630b94902 100644
+> > > > > > --- a/kernel/rcu/Kconfig
+> > > > > > +++ b/kernel/rcu/Kconfig
+> > > > > > @@ -275,6 +275,20 @@ config RCU_NOCB_CPU_DEFAULT_ALL
+> > > > > >         Say Y here if you want offload all CPUs by default on boot.
+> > > > > >         Say N here if you are unsure.
+> > > > > >
+> > > > > > +config RCU_NOCB_CPU_CB_BOOST
+> > > > > > +     bool "Perform offloading from real-time kthread"
+> > > > > > +     depends on RCU_NOCB_CPU && RCU_BOOST
+> > > > > > +     default n
+> > > > >
+> > > > > I understand that you need this to default to "n" on your systems.
+> > > > > However, other groups already using callback offloading should not see
+> > > > > a sudden change.  I don't see an Android-specific defconfig file, but
+> > > > > perhaps something in drivers/android/Kconfig?
+> > > > >
+> > We saw a sudden change when the priority was lifted up for rcuop kthreads.
+> > I would like to know the reason. As for Android, i would like to avoid
+> > it to be Android specific. It is better just to enable boosting by
+> > default for nocb kthreads.
 >
->How do you allow it here?
+> No, because that breaks an existing use case, which uses RCU_BOOST
+> to avoid OOM on busy systems.
+>
+> > > > > One easy way to make this work would be to invert the sense of this
+> > > > > Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
+> > > > > "n", but then select it somewhere in drivers/android/Kconfig.  But I
+> > > > > would not be surprised if there is a better way.
+> >
+> > In that situation probably we should just enable it by default.
+>
+> You are within your rights to cause it to be enabled by default -within-
+> -Android-.  You are -not- within your rights to break other workloads.
+>
+> If ChromeOS needs it too, they too can enable it -within- -ChromeOS-.
+>
+> It is not -that- hard, guys!  ;-)
 
-Argh, seems i accidentally removed this part and have not recognized while=
- checking :(
+I think on the topic of RT, +Steven Rostedt should chime in as well
+considering he wrote a good chunk of the RT scheduler ;-). Personally,
+I feel the issue of "rcu callback offload" threads running as RT or
+not should not be a matter of CONFIG option or the system in concern.
+Instead it should be a function of how many callbacks there are to
+run.  The reason I say this is, RT threads should not be doing a lot
+of work anyway, lest they cause RT throttling and starvation of other
+threads.
 
-It should only change description of reg for ports to:
+Also, I think it is wrong to assume that a certain kind of system will
+always have a certain number of callbacks to process at a time. That
+seems prone to poor design due to assumptions which may not always be
+true.
 
-"Port address described must be 5 or 6 for CPU port and from 0 to 5 for us=
-er ports=2E"
+Can we not have 2 sets of RCU offload threads, one which operate at RT
+and only process few callbacks at a time, while another which is the
+lower priority CFS offload thread - executes whenever there is a lot
+of CBs pending? Just a thought.
 
-regards Frank
+Otherwise, I feel like we might be again proliferating CONFIG options
+and increasing burden on the user to get it the CONFIG right.
+
+thanks,
+
+- Joel

@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E0F51ECC7
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D1551ECC8
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiEHKHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 06:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S229958AbiEHKHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiEHKHf (ORCPT
+        with ESMTP id S229739AbiEHKHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 8 May 2022 06:07:35 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F436473
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 03:03:41 -0700 (PDT)
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2DA64CC;
+        Sun,  8 May 2022 03:03:41 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 069A03EE78;
-        Sun,  8 May 2022 12:03:38 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B06E03F5FE;
+        Sun,  8 May 2022 12:03:39 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -35,145 +35,94 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] arm64: dts: qcom: sm6125: Move sdc2 pinctrl from seine-pdx201 to sm6125
-Date:   Sun,  8 May 2022 12:03:33 +0200
-Message-Id: <20220508100336.127176-1-marijn.suijten@somainline.org>
+Subject: [PATCH 2/3] arm64: dts: qcom: sm6125: Append -state suffix to pinctrl nodes
+Date:   Sun,  8 May 2022 12:03:34 +0200
+Message-Id: <20220508100336.127176-2-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220508100336.127176-1-marijn.suijten@somainline.org>
+References: <20220508100336.127176-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both the sdc2-on and sdc2-off pinctrl nodes are used by the
-sdhci@4784000 node in sm6125.dtsi.  Surprisingly sdc2-off is defined in
-sm6125, yet its sdc2-on counterpart is only defined in board-specific DT
-for the Sony Seine PDX201 board/device resulting in an "undefined label
-&sdc2_state_on" error if sm6125.dtsi were included elsewhere.
-This sm6125 base dtsi should not rely on externally defined labels; the
-properties referencing it should then also be written externally.
-Since the sdc2-on pin configuration is board-independent just like
-sdc2-off, move it from seine-pdx201.dts into sm6125.dtsi.
+According to qcom,sm6125-pinctrl.yaml all nodes inside the tlmm must be
+suffixed by -state:
 
-The SDCard-detect pin (gpio98) is however board-specific, and remains as
-an overwrite in seine-pdx201.dts for both the on and off state.
+    qcom/sm6125-sony-xperia-seine-pdx201.dtb: pinctrl@500000: 'sdc2-off', 'sdc2-on' do not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
 
-As a drive-by cleanup, reorder bias- and drive-strength properties.
+The label names have been updated to match, going from sdc2_state_X to
+sdc2_X_state.
 
 Fixes: cff4bbaf2a2d ("arm64: dts: qcom: Add support for SM6125")
 Fixes: 82e1783890b7 ("arm64: dts: qcom: sm6125: Add support for Sony Xperia 10II")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 34 +++++--------------
- arch/arm64/boot/dts/qcom/sm6125.dtsi          | 24 +++++++++++--
- 2 files changed, 30 insertions(+), 28 deletions(-)
+ .../boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts     | 4 ++--
+ arch/arm64/boot/dts/qcom/sm6125.dtsi                      | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-index 871ccbba445b..4916e6c8b625 100644
+index 4916e6c8b625..038970c0b68e 100644
 --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
 +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-@@ -91,8 +91,16 @@ &hsusb_phy1 {
- &sdc2_state_off {
+@@ -88,7 +88,7 @@ &hsusb_phy1 {
+ 	status = "okay";
+ };
+ 
+-&sdc2_state_off {
++&sdc2_off_state {
  	sd-cd {
  		pins = "gpio98";
-+		drive-strength = <2>;
- 		bias-disable;
-+	};
-+};
-+
-+&sdc2_state_on {
-+	sd-cd {
-+		pins = "gpio98";
  		drive-strength = <2>;
-+		bias-pull-up;
+@@ -96,7 +96,7 @@ sd-cd {
  	};
  };
  
-@@ -102,32 +110,6 @@ &sdhc_1 {
- 
- &tlmm {
- 	gpio-reserved-ranges = <22 2>, <28 6>;
--
--	sdc2_state_on: sdc2-on {
--		clk {
--			pins = "sdc2_clk";
--			bias-disable;
--			drive-strength = <16>;
--		};
--
--		cmd {
--			pins = "sdc2_cmd";
--			bias-pull-up;
--			drive-strength = <10>;
--		};
--
--		data {
--			pins = "sdc2_data";
--			bias-pull-up;
--			drive-strength = <10>;
--		};
--
--		sd-cd {
--			pins = "gpio98";
--			bias-pull-up;
--			drive-strength = <2>;
--		};
--	};
- };
- 
- &usb3 {
+-&sdc2_state_on {
++&sdc2_on_state {
+ 	sd-cd {
+ 		pins = "gpio98";
+ 		drive-strength = <2>;
 diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-index e81b2a7794fb..3fadf5196c4d 100644
+index 3fadf5196c4d..e601b9bfdc04 100644
 --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -389,20 +389,40 @@ tlmm: pinctrl@500000 {
- 			sdc2_state_off: sdc2-off {
+@@ -386,7 +386,7 @@ tlmm: pinctrl@500000 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 
+-			sdc2_state_off: sdc2-off {
++			sdc2_off_state: sdc2-off-state {
  				clk {
  					pins = "sdc2_clk";
--					bias-disable;
  					drive-strength = <2>;
-+					bias-disable;
- 				};
- 
- 				cmd {
- 					pins = "sdc2_cmd";
-+					drive-strength = <2>;
- 					bias-pull-up;
-+				};
-+
-+				data {
-+					pins = "sdc2_data";
- 					drive-strength = <2>;
-+					bias-pull-up;
-+				};
-+			};
-+
-+			sdc2_state_on: sdc2-on {
-+				clk {
-+					pins = "sdc2_clk";
-+					drive-strength = <16>;
-+					bias-disable;
-+				};
-+
-+				cmd {
-+					pins = "sdc2_cmd";
-+					drive-strength = <10>;
-+					bias-pull-up;
- 				};
- 
- 				data {
- 					pins = "sdc2_data";
-+					drive-strength = <10>;
- 					bias-pull-up;
--					drive-strength = <2>;
+@@ -406,7 +406,7 @@ data {
  				};
  			};
- 		};
+ 
+-			sdc2_state_on: sdc2-on {
++			sdc2_on_state: sdc2-on-state {
+ 				clk {
+ 					pins = "sdc2_clk";
+ 					drive-strength = <16>;
+@@ -490,8 +490,8 @@ sdhc_2: sdhci@4784000 {
+ 				 <&xo_board>;
+ 			clock-names = "iface", "core", "xo";
+ 
+-			pinctrl-0 = <&sdc2_state_on>;
+-			pinctrl-1 = <&sdc2_state_off>;
++			pinctrl-0 = <&sdc2_on_state>;
++			pinctrl-1 = <&sdc2_off_state>;
+ 			pinctrl-names = "default", "sleep";
+ 
+ 			power-domains = <&rpmpd SM6125_VDDCX>;
 -- 
 2.36.0
 

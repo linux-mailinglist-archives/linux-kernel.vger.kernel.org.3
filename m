@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0452451ECEB
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E73051ECF8
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiEHKjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 06:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S231576AbiEHKwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiEHKjo (ORCPT
+        with ESMTP id S230152AbiEHKwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 06:39:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF59E0AE;
-        Sun,  8 May 2022 03:35:50 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652006148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Wg5rgmNfLBMFs6+g076Tc69lJyydQy68rcQ9tdaUcOE=;
-        b=d8FMbrH+ZnIzNn38VNXgyx0rlmVihz2sgmBykxM1ijuFHr/encYlNAO/FYu+00jN5IaBPf
-        nuT70471orDPF3hqmVgafDF+6S44F0DBmgHNcDDXybOzpk2dytgoLzeWg35VQJW5rLBx+2
-        CO2hxm90hqJoqW+/c+6edL583AnVr+IvIHWQl7KMaT+LqnoP5+WhaqKm/i2FZMcKyqtQON
-        2lu8+YOHSNxdzeYuGUZ+9xA9ZPKMGN9VYjrNAhLH9k9izTmalcjST1YecYH4ZRm3Vc9+47
-        wCZrxf+vm13kfAZMwgZoV/uSs3Lp8leLOcTpXlMrXKVYhTN2d9FgXEY0t6sXpA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652006148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Wg5rgmNfLBMFs6+g076Tc69lJyydQy68rcQ9tdaUcOE=;
-        b=jbctOsS1Qy4kMsGrmyICmp7zgkryPYX6MCehq3ekzyo01N9EyO256vJmZBPTyf8dl2IGuw
-        1Usb4/w4051eRfBg==
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH v1] serial: meson: acquire port->lock in startup()
-Date:   Sun,  8 May 2022 12:41:47 +0206
-Message-Id: <20220508103547.626355-1-john.ogness@linutronix.de>
+        Sun, 8 May 2022 06:52:51 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C93B7DD;
+        Sun,  8 May 2022 03:49:00 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id y21so13252904edo.2;
+        Sun, 08 May 2022 03:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sMXZ0jNVuDFAyxvmr7RISt1a4MRB5GYj3th1Rkku/L0=;
+        b=RyVBk2YxwmNnMRUtzmIszhLF82SiCeP8blFZ5ZDSFCMY2lsR0Gs2WBKvVgGwu+FGSH
+         p04FwkZWt/ZsD3OOXSfjAbminLMznFM68IKSouwaFFz5WVPsdD7+rL/LBhO3H1i3kuBn
+         RsDj9xlQely2y6R943TLCCEbDbpbMfqpfFOOSii2MZTaA9Po7Yx+sarL35EhrVaQV49Z
+         AG5z1o7p8XHMmwIfXkGYdIeR6wV/V7VrirL/x1B0hG0pBtKYx9/jUeIVOmLp+leqea2X
+         E0ZOTRSBx9C+DruWn/n39wzpozdFghZDIxeKOXLoFFDDcxpTlLBpSk++EpH3WEVz3gzG
+         bVoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sMXZ0jNVuDFAyxvmr7RISt1a4MRB5GYj3th1Rkku/L0=;
+        b=BlC74itov43paew/f6Xzj2uiIjRvsKTf39JciHCjjbYWWtCWgspjX/ijCrZc8FN8C3
+         Jl+9tfKdwndVxwNypglgbQZ3vYKp4nPP1eRs6alhXXcW+FuFnndypbXBy8wlVDpXEg3N
+         PR+W+NPE3gpwwRMY1khYc2ffmksoO/ldT8fbYuvSmVUAw0uhHxEiCIfUuZ3YezBYSOd4
+         sPFhyZgiN/3IBEbrUqh3HuME1DKVLarqkewywmPAACLt84zs/HUu70NDObuDCIL06JLF
+         ZDYaS7glK+XHv+zvUSbcEs6+bvKX1F3zbRNe0PJS+XbHzAtEOerXomwDjqFR7DylXypu
+         zkzg==
+X-Gm-Message-State: AOAM53239q+U0Ei8yi+DsTscWlXbyn2+/hGCyxCga+eb+kBvci7U3aXh
+        dWiZp1bouC4Mw67EAejjlZKVELsgkLKcWQ==
+X-Google-Smtp-Source: ABdhPJz49C0BobFcAxLZiUPUP1yxQm2zx6g4BGcl8jUbtsNNyocYYoiNIs6JHKKnsWPRR90FTRoKTQ==
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id z22-20020a50e696000000b00419998d5febmr12478391edm.122.1652006938695;
+        Sun, 08 May 2022 03:48:58 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
+        by smtp.googlemail.com with ESMTPSA id hg12-20020a1709072ccc00b006f3ef214e0csm3917471ejc.114.2022.05.08.03.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 03:48:58 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 01/11] clk: qcom: ipq8074: fix NSS core PLL-s
+Date:   Sun,  8 May 2022 12:48:45 +0200
+Message-Id: <20220508104855.78804-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,87 +72,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The uart_ops startup() callback is called without interrupts
-disabled and without port->lock locked, relatively late during the
-boot process (from the call path of console_on_rootfs()). If the
-device is a console, it was already previously registered and could
-be actively printing messages.
+Like in IPQ6018 the NSS related Alpha PLL-s require initial configuration
+to work.
 
-Since the startup() callback is reading/writing registers used by
-the console write() callback (AML_UART_CONTROL), its access must
-be synchronized using the port->lock. Currently it is not.
+So, obtain the regmap that is required for the Alpha PLL configuration
+and thus utilize the qcom_cc_really_probe() as we already have the regmap.
+Then utilize the Alpha PLL configs from the downstream QCA 5.4 based
+kernel to configure them.
 
-The startup() callback is the only function that explicitly enables
-interrupts. Without the synchronization, it is possible that
-interrupts become accidentally permanently disabled.
+This fixes the UBI32 and NSS crypto PLL-s failing to get enabled by the
+kernel.
 
-CPU0                           CPU1
-meson_serial_console_write     meson_uart_startup
---------------------------     ------------------
-spin_lock(port->lock)
-val = readl(AML_UART_CONTROL)
-uart_console_write()
-                               writel(INT_EN, AML_UART_CONTROL)
-writel(val, AML_UART_CONTROL)
-spin_unlock(port->lock)
-
-Add port->lock synchronization to meson_uart_startup() to avoid
-racing with meson_serial_console_write().
-
-Also add detailed comments to meson_uart_reset() explaining why it
-is *not* using port->lock synchronization.
-
-Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Fixes: b8e7e519625f ("clk: qcom: ipq8074: add remaining PLL’s")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/tty/serial/meson_uart.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/clk/qcom/gcc-ipq8074.c | 39 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-index 2bf1c57e0981..39021dac09cc 100644
---- a/drivers/tty/serial/meson_uart.c
-+++ b/drivers/tty/serial/meson_uart.c
-@@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
- 	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index 541016db3c4b..1a5141da7e23 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -4371,6 +4371,33 @@ static struct clk_branch gcc_pcie0_axi_s_bridge_clk = {
+ 	},
+ };
+ 
++static const struct alpha_pll_config ubi32_pll_config = {
++	.l = 0x4e,
++	.config_ctl_val = 0x200d4aa8,
++	.config_ctl_hi_val = 0x3c2,
++	.main_output_mask = BIT(0),
++	.aux_output_mask = BIT(1),
++	.pre_div_val = 0x0,
++	.pre_div_mask = BIT(12),
++	.post_div_val = 0x0,
++	.post_div_mask = GENMASK(9, 8),
++};
++
++static const struct alpha_pll_config nss_crypto_pll_config = {
++	.l = 0x3e,
++	.alpha = 0x0,
++	.alpha_hi = 0x80,
++	.config_ctl_val = 0x4001055b,
++	.main_output_mask = BIT(0),
++	.pre_div_val = 0x0,
++	.pre_div_mask = GENMASK(14, 12),
++	.post_div_val = 0x1 << 8,
++	.post_div_mask = GENMASK(11, 8),
++	.vco_mask = GENMASK(21, 20),
++	.vco_val = 0x0,
++	.alpha_en_mask = BIT(24),
++};
++
+ static struct clk_hw *gcc_ipq8074_hws[] = {
+ 	&gpll0_out_main_div2.hw,
+ 	&gpll6_out_main_div2.hw,
+@@ -4772,7 +4799,17 @@ static const struct qcom_cc_desc gcc_ipq8074_desc = {
+ 
+ static int gcc_ipq8074_probe(struct platform_device *pdev)
+ {
+-	return qcom_cc_probe(pdev, &gcc_ipq8074_desc);
++	struct regmap *regmap;
++
++	regmap = qcom_cc_map(pdev, &gcc_ipq8074_desc);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
++	clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
++				&nss_crypto_pll_config);
++
++	return qcom_cc_really_probe(pdev, &gcc_ipq8074_desc, regmap);
  }
  
-+/*
-+ * This function is called only from probe() using a temporary io mapping
-+ * in order to perform a reset before setting up the device. Since the
-+ * temporarily mapped region was successfully requested, there can be no
-+ * console on this port at this time. Hence it is not necessary for this
-+ * function to acquire the port->lock. (Since there is no console on this
-+ * port at this time, the port->lock is not initialized yet.)
-+ */
- static void meson_uart_reset(struct uart_port *port)
- {
- 	u32 val;
-@@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
- 
- static int meson_uart_startup(struct uart_port *port)
- {
-+	unsigned long flags;
- 	u32 val;
- 	int ret = 0;
- 
-+	spin_lock_irqsave(&port->lock, flags);
-+
- 	val = readl(port->membase + AML_UART_CONTROL);
- 	val |= AML_UART_CLEAR_ERR;
- 	writel(val, port->membase + AML_UART_CONTROL);
-@@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
- 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
- 	writel(val, port->membase + AML_UART_MISC);
- 
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
- 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
- 			  port->name, port);
- 
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+ static struct platform_driver gcc_ipq8074_driver = {
 -- 
-2.30.2
+2.36.0
 

@@ -2,165 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15B351ED43
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A2351ED47
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbiEHMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 08:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S232384AbiEHMDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 08:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiEHLwI (ORCPT
+        with ESMTP id S233412AbiEHL5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 07:52:08 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2D5E013;
-        Sun,  8 May 2022 04:48:17 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c14so10017399pfn.2;
-        Sun, 08 May 2022 04:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=78GiAOcDFncQpxS3zJf0oIIsYa1BfjnHtYeGhRAmaco=;
-        b=eD6eGLRe6NGh0IxAF1cXnuOGWl6JVY1GAzSEyk7VT9zSinKK0vtUfjaeC165b19kH1
-         mE2DCDKw6eLM8uF6HqdwgRjXy8kLpte6ejvwtEte0WUKzdnbTvZps2yZoMOKRYUeMW+N
-         7n0RQAWlUYZhpB0ONWgfcOUQdPWA+7J/VYGtkfaRsyeOjyZ37h4APer6qmNFFrGkAlX+
-         WHwd5rpja0fzgPsjQPlq45oKY8Q4t2UvTM7TAx1ymxylZSVFe0aSJi08R8FiTL8tqt1H
-         Ur20Gh/YZHbfo8NwdfIm3z8Muz6H/aIv3K+FO+S5R5xRcaAi9tA17EOSJV3NXB3lJxBN
-         vWjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=78GiAOcDFncQpxS3zJf0oIIsYa1BfjnHtYeGhRAmaco=;
-        b=4dJ5Skvw40WfkmMEn1K+dsZJix2YBm7tqS/e6BE0QUS/RMJLh5F9+1lS4v2tQ4vlc4
-         Ph/yC0UJirI4CxBDKzBApR2ic7koaxfd+ndXxk2fMX1l6abt2qv/f6kBZt2DW6UDE+P9
-         gKq8YrhuV32tfPYBHBhEFDPLNgWhsAq09MrAk8uFELSydNw2YtRqdhBDj5J29qeUYlZz
-         H8y9gVo0rSFRTMBye1r1HA868l1xSMo6TzsICBqByZzyFnD5RBFz4tu2NhS7uTH5e01t
-         FaPYRr+P6PjBni2O3blos+K1xakX7JAAN9qB7I8fE5Z55D0mNEHdCPxS6bU05xCyEuEI
-         F0Bw==
-X-Gm-Message-State: AOAM532p0POkgr45I0eo6WSSpC8TzaQWFeAxRYGW2yV3QXQcavRHxJP4
-        ErW6uMtHeZXE1dP3z9OnMxA=
-X-Google-Smtp-Source: ABdhPJxpCSfAVDVRnbHSqMuz2nPP3bs7F50tRdZX6SrsJr+n2JBZpbm4jmiquICfhPCpNS/DFbH5Qg==
-X-Received: by 2002:a05:6a00:b52:b0:510:5cbd:de94 with SMTP id p18-20020a056a000b5200b005105cbdde94mr11526599pfo.19.1652010497430;
-        Sun, 08 May 2022 04:48:17 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id gf1-20020a17090ac7c100b001cd4989fedesm10448954pjb.42.2022.05.08.04.48.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 04:48:16 -0700 (PDT)
-Message-ID: <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com>
-Date:   Sun, 8 May 2022 20:48:10 +0900
-MIME-Version: 1.0
+        Sun, 8 May 2022 07:57:13 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07olkn2108.outbound.protection.outlook.com [40.92.43.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F070CBCF;
+        Sun,  8 May 2022 04:53:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DL//L44WcERATFWL6Zy3UpiUoT4pI/kdPkBYWuXkCSGQyy+zhcgOavUl82fbKJ2pbqJWi/tHKSqDSb5xcJofxkpKuFI6E1ninmktiWMmGeOeCuDENpxdIcER8nXVYUav0iH0P6a1mMmlsLZ0AWAyq6n31JhFQf2pLM18+iD9bSS+NeAHfpPW4Lx7CybTirIJKd8KyeoEofEN4LFE7Bc7SPrnKbcYTy3LLI1RaFrUUaOwZFUGjOuJnQ0Gjyy2muhvBW81Pgnf2rGXXCYdQ7GO2k4AF4E+t9xWb/NTpZ9zKwwMZKXs8ufsNJ2qjwiY10wW9TKwGCb6dw4yCgw+tlZ8lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5xyF+7hSPW8RsyFbukfzJkekAbgPvLkzkgBxvvajf1Q=;
+ b=k34J8/R5GRT0emjLKkxPOxglS3t1cJD5ZjAX6iWZ5JUyeNaZxpl+quwc0hGjTpGTGfc+rZ52kcs0YrYCa16ZN8AHX74QiRqx5VZS6PXWcuMimP3GOnLLMrUUyicxWw90wzuVvklYeFdTZp25nmZy3zy46CBDVhbRy9vR9M2szr9+fKn5xSHktfLLT1W5gTxxWf+28iffhvhUevhM9gy/jYZg1kYA3iAEuiQhin3vPrAUc7yDg0a1qPdUlLhlLbcN0guD0gca8A1FfWcSsKzVZAb/c6vv8fEmEUUdanN7+Lk8T9WoA4WYKxwwrdnPdPgTpKHKypIXOV+TKkDlxksRgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by DM5PR0201MB3461.namprd02.prod.outlook.com (2603:10b6:4:7b::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.23; Sun, 8 May
+ 2022 11:53:20 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16%9]) with mapi id 15.20.5227.023; Sun, 8 May 2022
+ 11:53:19 +0000
+Message-ID: <BY5PR02MB70098447E93301C5658DBABBD9C79@BY5PR02MB7009.namprd02.prod.outlook.com>
+Date:   Sun, 8 May 2022 17:23:05 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
- __dev_queue_xmit()
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Ben Greear <greearb@candelatech.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220507084643.18278-1-bagasdotme@gmail.com>
+ Thunderbird/91.8.0
+To:     krzysztof.kozlowski@linaro.org
+Cc:     airlied@linux.ie, clabbe@baylibre.com, daniel@ffwll.ch,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        fanghao11@huawei.com, jo@jsfamily.in, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org, sam@ravnborg.org,
+        shawnguo@kernel.org, stano.jakubek@gmail.com,
+        thierry.reding@gmail.com, ~postmarketos/upstreaming@lists.sr.ht
+References: <2ab35af2-b067-4243-35ed-a592a7046374@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: display: Add bindings for EBBG FT8719
 Content-Language: en-US
-In-Reply-To: <20220507084643.18278-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Joel Selvaraj <jo@jsfamily.in>
+In-Reply-To: <2ab35af2-b067-4243-35ed-a592a7046374@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TMN:  [yLq2wuDRCli6jZ3nuKsF4eog37f6w3Hh/+fyx5HH2KjzhXk/tduLk/zn1yVViMuf]
+X-ClientProxiedBy: PN2PR01CA0110.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::25) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <ac50c4fb-cdb2-260c-c4c6-b5be51eeebc9@jsfamily.in>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dd641cf5-42f6-4c17-18a3-08da30e95762
+X-MS-TrafficTypeDiagnostic: DM5PR0201MB3461:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OiHz2504lBhYDMyGP7wPUeV81i0cOZMwlzBWGQo4EtSHtvCjKJ9Tg4X9ab9kgNxVF4o/yIgrP01qaXO2bXbMRG0HeXdhJzggzIjbfbZOaw7YPAPdAvEevXmorDYpYaIS9lj9kP/5PWYAa5Eh9AKy8kWjMADu5iDiexDKP2xMPtOrqegPVP0QmezJjQKe3Q5rP3d/Mm0ye+1oegIb/y4Mp/IBzMfZ5nhdjpoF+kXMT8FSfaUZKJ60aQ7nsceDv+WesdsOXzXT1pBmCxxvUJUH8WZt5Dem1jYnUowVhdb94YvclJhpQ0AAwdCxRnFU+KIqug4FswgnMe3crjGFwwAegm04gkxCqp2/cMPLMmTMAp61n7sDAYFhY5r/1UndO1MEswbhvFW+EOqIuAA8nRbmWDiIfCYo7PEa+MuSRm2d7qH0azEbBF82s7Z29gFrR+iKGFuzr6KfPT/RPy5JuOpyF+064A+20WlSKHNmMXRblchYekmq+PIf0CIE4qlZ2wXEGdLgZn6gzBZ/o9Ym9XQwh7Utq3I3VuUmMjEiJANbn3lTNNCm92/2VCu2VNd/l02Eth9qQF3U6ktNV5Q2zZn8qfFuN93tGp2k1+UFzlXBVOZfmofdFP5h356FMOqXaQJY
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2l4TzVYV0pzMytOQ1MwaEZPaG1HZTZ2S214bXJPdDIyR2hyTnQvallieFc1?=
+ =?utf-8?B?dFJ6MXlrRC9YWEdZNkNqb2MxQ3MvQ2NTTEd4T1pxNzdub3RDQ2YrZVErbGt2?=
+ =?utf-8?B?M3EwQzArNWNrczRRT0s1U1lWcHRpR0kzeXVSQjZOekJWR09KdUlyaVk3VXlV?=
+ =?utf-8?B?VXhhN0VQZzdwaVJWdG5sNElZRUNqTkNSYmppWG1zcmI0Z3NhU3ZiTFViNWNH?=
+ =?utf-8?B?enJ5Z3lHbUhZNkhDaHlQRHBaS2Z2NnRnVWFWdjM1MGdRSjVDZ1NnQjBmRjRz?=
+ =?utf-8?B?N3djdDRROUhlcHBTd1BhZUx5bFNFbU0zWE0vbHRDeUtnaDRxWlU0RmJEcTRH?=
+ =?utf-8?B?VzU4bjFKVm9KOGhtZkNuYVBGOVVJZ1NqQnlzdlBxT1NqV2tUeE5WUXdvS3N4?=
+ =?utf-8?B?bEYxQjhaWWw2Z1g1TVRJa0l0Sm84UzZxOGV3VXlpdUVWYjV6SmlTWis1bHdD?=
+ =?utf-8?B?RDdHZFZiZ2tMMmNIUU5ybXpxS0hMQjFpTWl3MHh5ZGM2b0ErNWJSa0owWjhQ?=
+ =?utf-8?B?L3JIYXZhVWl4dU1LN2w5TjZmaGtYQUNjUVRLd3lTdUVjN00xWTdMT1E1T2sz?=
+ =?utf-8?B?STBGcFdReFlOTjNNOEsvMTFGUExtL3hFMUtxNU5uVi9PS1NSbjZTWFlPOUZC?=
+ =?utf-8?B?dEhyM2FQVXAyY1BwQWJnRXRKQU1VSmhhQTR1ZjVjWmNFb2FuVHpwQnF6QmQ3?=
+ =?utf-8?B?SGxyVlVxSkh6U25CNk5tdmhVckxQbXlnMUpGQTRDRk9TR3lzNW5HdGNPTGl0?=
+ =?utf-8?B?NUwxcVhVTGhMcjhFbkdOMjhpM0UyV1pPTlZxbWlMb3RRd1BXTHJ3blZNOUND?=
+ =?utf-8?B?Mkt0VGY3NU12amRyKytoSThUVEJ0cFYrQXhCbmZGbEZxTTB0cGowWVNRTksr?=
+ =?utf-8?B?dGNnWVRxZEduclowclFCdnpPYnR1aWRNd3pwMFVqckRRY1ZpdWE5alFuZzMz?=
+ =?utf-8?B?TWxMTUVGR1pYL3RNMnYvN2NUbVRUT1RBS0hFOGhzaEZzNXBzcGNBcjZBSnlJ?=
+ =?utf-8?B?Z2FwTjNGbG5nRjdva1NTQTRDaXlxTEJ4bmErdFVhVWxkc3hKK1R4Mk8xWWRw?=
+ =?utf-8?B?bFI4c3NIYlFJMnVKdDBjOGp5YzdZaW9pY1dJSEppMHQ0bHNieURSSDJDaFhL?=
+ =?utf-8?B?THhaVU1LTVJiRS9LTmFnMlp5bWgybEJLV2JUd0ZNWEhZb3NEQ2ViUEtlUTU1?=
+ =?utf-8?B?RWUwSXhwVlVtdHp1MXQ5RnBPZWFDS1hBSmZINzlaOU5VV0sxOGQrUFpZcGVw?=
+ =?utf-8?B?NndVbTlYL2FmL3NOUTB2WlB6ZFRMVXlmU2xRQi9hY1FzdWw2dXAxaldZV3g2?=
+ =?utf-8?B?UmpMK3ExekI1dzFja3V6MU05MW96NW8xeFdQTXkraVc2akprRklXSWg2YmRv?=
+ =?utf-8?B?SlhKT0ZUd0g1ZVFZdFM2RjNTVnFMZEJTczk5eStHaEc1T0R5eGNranJUMGJt?=
+ =?utf-8?B?OCtwejdoQVh5OE5JSVJxampYRGJpaDhjM2NOaEdmV2U3MFkzSWM1TFdlaGFU?=
+ =?utf-8?B?aDgzek1GalBPakUrNlZFSUZYSU5tRlc4Wjdja3FVbTQxZFFmQlBMOUhTNkky?=
+ =?utf-8?B?dkhBbXJaM3Y2SERhenQxRHFYamRpRXM5bWFlWC9lL0dEOGFaUVFKanN4cXgr?=
+ =?utf-8?B?ZkwzSVc5RFU0UzBnRmFWaG9WK1hsVkthKzhEOXZZZ1Z0ZExYdmI3UW9uNFN1?=
+ =?utf-8?B?WmdxQ2ZBWTBZVmViVGdsR0RoOHZmLzBvWXRYM2NUaUJqUTVFVjRMakNieDhU?=
+ =?utf-8?B?TklYbVU0MVlibFhCOUEvQXFtSllpRDBKTEVYU3JIZkFHbWRrd2VhT3pYQmFX?=
+ =?utf-8?B?SkdBU1BQc2xLOGxuakhDSldja0FkNzZCWmQyUUI4a05KZFdMMlhyallSelpV?=
+ =?utf-8?B?UW00YU1kUFF2aXlJYU9raEkvc2pTU3pzTEJhU1JjQkRaZFpHTkg0SVJmenE0?=
+ =?utf-8?B?a3hoY0FlUmU4aXdlRllHSjM4K0dVeGlIL0tobmEvcjBqeEN1VU9qVnRXN0Nq?=
+ =?utf-8?B?YUVYdXd4RXpnPT0=?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd641cf5-42f6-4c17-18a3-08da30e95762
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2022 11:53:19.3687
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0201MB3461
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/07 17:46,
-Bagas Sanjaya wrote:
-> Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") inlines
-> dev_queue_xmit() that contains comment quote from Ben Greear, which
-> originates from commit af191367a75262 ("[NET]: Document ->hard_start_xmit()
-> locking in comments.").It triggers htmldocs warning:
+Hi Krzysztof Kozlowski,
 
-What I asked was the explanation of *why* the inlining of the
-function caused the new warning.
+Thank you for your review. Will fix them in v2.
 
-Your explanation above tries to tell *what* the offending commit
-did, which is not what I asked.  Furthermore, your explanation
-is not accurate in that the comment block does not belong to
-dev_queue_xmit() but to __dev_queue_xmit().
-
-After seeking the answer myself, I reached a conclusion that
-it is wrong to meddle with the comment block.
-
-So, appended below is my version of the fix with the answer to
-Stephen's question, "I am not sure why this has turned up just now."
-
-Stephen, Jakub, what do you think?
-
-        Thanks, Akira
-
-----8<--------------
-From: Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH -next] net/core: Hide __dev_queue_xmit()'s kernel-doc
-
-Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") added
-export of __dev_queue_exit() to cope with inlining of its
-wrapper functions dev_queue_xmit() and dev_queue_xmit_accel().
-This made __dev_queue_exit()'s comment block visible to Sphinx
-processing in "make htmldocs" because
-Documentation/networking/kapi.rst has the directive of:
-
-    .. kernel-doc:: net/core/dev.c
-       :export:
-
-Unfortunately, the kernel-doc style comment has a number of
-issues when parsed as RestructuredText.  Stephen reported a
-new warning message from "make htmldocs" caused by one of
-such issues.
-
-The leading "__" in the function name indicates that it is an
-internal API and should not be widely used.
-Exposing documentation of such a function in HTML and PDF
-documentations does not make sense.
-
-For the time being, hide the kernel-doc style comment from Sphinx
-processing by removing the kernel-doc marker of "/**".
-
-Proper kernel-doc comments should be added to the inlined
-wrapper functions, which is deferred to those who are familiar
-with those netdev APIs.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
-Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
----
- net/core/dev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index c2d73595a7c3..a97fd413d705 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4085,8 +4085,7 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
- 	return netdev_get_tx_queue(dev, queue_index);
- }
- 
--/**
-- *	__dev_queue_xmit - transmit a buffer
-+/*	__dev_queue_xmit - transmit a buffer
-  *	@skb: buffer to transmit
-  *	@sb_dev: suboordinate device used for L2 forwarding offload
-  *
--- 
-2.25.1
-
+Regards
+Joel Selvaraj

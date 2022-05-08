@@ -2,101 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF7F51F1CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B077051F1D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbiEHVZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 17:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S233080AbiEHVbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 17:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiEHVZr (ORCPT
+        with ESMTP id S232970AbiEHVbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 17:25:47 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB48E64F3;
-        Sun,  8 May 2022 14:21:55 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b19so16966128wrh.11;
-        Sun, 08 May 2022 14:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iX+5Jc2rBzWBZS5PHHZcSGkidLaVy9RRBK1X3Ez2/O8=;
-        b=Sx0x3tuqDNRY4wuNNNG6oNFM7QqWpxIs7L0kMWbtVyrli8zh2rm55fN8VwLcKyg0Gb
-         l3KewF73FZjPO/QqKF/nL0erOhLJOfho6inZNdUpHRBU/JhXe4VBC+Mx7l82robY2VUN
-         BucBCnlPYJYrE7MXVASe1rIE9wIkaYSS3wH/NPAhO98MWlvgzKHWYgvxUvCHtOidxPHg
-         oDGvRFyxWw/P8g87Wj40dVxaxiVFxeDKfPLWmxHtJQCY6Lgm8AzUlL1tLKZ4TTMiP5Z2
-         euFMy60VMtqdkIz9kmZXYtXNjM+JBP4SyB5mJhS7vK83A5UrvuPBDc0TPmMyAWK9ECN3
-         6x/w==
+        Sun, 8 May 2022 17:31:19 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089ACDEDF
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:27:28 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id z2so21865508ejj.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 14:27:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iX+5Jc2rBzWBZS5PHHZcSGkidLaVy9RRBK1X3Ez2/O8=;
-        b=KrWVM7kNUJI6aPmOUzd2DzC6emPLysjNtA66Q+S0kWVDO7utKXDporLzudgypKGAmE
-         04yrG8/ufDZ/qCqL+lxG8k47bnVCK4MflzDELSAEyA9iH34mDolTexMRDDfaPOxYG3VO
-         Xf+tj5BeMA+tcPIr9jFIRRAlfpuRqnINsV+bxjpdxMYoXiVCwre6zjgu5dxB9B5ZEHIJ
-         wVuYybpsyQbj1bxKPeQMavizsZCaALLscBQ+2bHvihlAzcuFJ2y2+L5HQHE8bF87LZZh
-         AeiDcOMKrYihx1VR9sVFgnv2gS5iglJo4psuZZoL/qNjeM+wXoxmlxJjHVq9pWiADq+A
-         0ebw==
-X-Gm-Message-State: AOAM532DkZCK4THV/UsKRIQ8ckoFLsBCHGQcLoTn0xyJKRxZBlOYENbW
-        BjS6mVJsKRX1XZpFJCZYQduVzeNZLg8=
-X-Google-Smtp-Source: ABdhPJxEXEVf07UXVcV4iAOZiY4edUaDEgg4TUK59avsk8p+89ui2UPJEzGSjUq/AvsFNKQl2PB/2w==
-X-Received: by 2002:a5d:404a:0:b0:20a:eb17:559 with SMTP id w10-20020a5d404a000000b0020aeb170559mr11010583wrp.602.1652044914316;
-        Sun, 08 May 2022 14:21:54 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z18-20020adff1d2000000b0020c77f36b13sm9271504wro.100.2022.05.08.14.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 14:21:53 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-janitors@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Kalle Valo <kvalo@codeaurora.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] relay: remove redundant assignment to pointer buf
-Date:   Sun,  8 May 2022 22:21:52 +0100
-Message-Id: <20220508212152.58753-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=hCHtx9BuNNSfq1aRuUx+wGgoggwlZE/FbOgWdTxGgow=;
+        b=cGnTYO2YREB9mPRagN8DURZ0gBn1jccyP3a7CPhPyyPbBRqEeLxSIBenoeiSaGHCZt
+         JjGgpv/htkXayqFG4KKQqOQ+nmdllt3tW6FZ+hZwMQyUHlDpgGN8olqGrw+zE8++PjYF
+         Ls3Woas91T85Pg4gFhmUC+UU44FpVPNkfnTfPhWMiUeRSUINqIXmWKDH8L7c2QDpKPI3
+         UmidUb3DhN7Eeskm4KO2OgSPa39r7mAFO/3Acx1I4n5EiGuu3zon8bbxzaDsFtepf7SA
+         6dyE4AVHvQYbjz+Zoqwv2uCO6m+q4wiqQDKZ8Q4OrFAgKD037BA7BaNsV029SOlkzjHw
+         cGJg==
+X-Gm-Message-State: AOAM531KQSaSsHZTbrhtYJh7Nxp2vop4hPHLX5AN2o0GefxHxpuM/A3A
+        HVrEkrUAF2nio7wLFMXiRC4=
+X-Google-Smtp-Source: ABdhPJxvvF+a9KSbPswCVEEc/fm/hcT6xNkpN9vsYCD2dpuz4CfF3YqiVEi6n30L14fIUvrwBIE3oA==
+X-Received: by 2002:a17:907:980f:b0:6f8:616f:eccc with SMTP id ji15-20020a170907980f00b006f8616fecccmr6615087ejc.381.1652045246340;
+        Sun, 08 May 2022 14:27:26 -0700 (PDT)
+Received: from [10.9.0.34] ([46.166.128.205])
+        by smtp.gmail.com with ESMTPSA id bo9-20020a0564020b2900b0042617ba63d5sm5243357edb.95.2022.05.08.14.27.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 14:27:25 -0700 (PDT)
+Message-ID: <ff36f701-6950-b923-c4f5-d6182bdc7534@linux.com>
+Date:   Mon, 9 May 2022 00:27:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Reply-To: alex.popov@linux.com
+Subject: Re: [PATCH v2 06/13] stackleak: rework stack high bound handling
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        luto@kernel.org, will@kernel.org
+References: <20220427173128.2603085-1-mark.rutland@arm.com>
+ <20220427173128.2603085-7-mark.rutland@arm.com>
+From:   Alexander Popov <alex.popov@linux.com>
+In-Reply-To: <20220427173128.2603085-7-mark.rutland@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer buf is being assigned a value that is not being read, buf
-is being re-assigned in the next starement. The assignment is
-redundant and can be removed.
+On 27.04.2022 20:31, Mark Rutland wrote:
+> Prior to returning to userpace, we reset current->lowest_stack to a
+> reasonable high bound. Currently we do this by subtracting the arbitrary
+> value `THREAD_SIZE/64` from the top of the stack, for reasons lost to
+> history.
+> 
+> Looking at configurations today:
+> 
+> * On i386 where THREAD_SIZE is 8K, the bound will be 128 bytes. The
+>    pt_regs at the top of the stack is 68 bytes (with 0 to 16 bytes of
+>    padding above), and so this covers an additional portion of 44 to 60
+>    bytes.
+> 
+> * On x86_64 where THREAD_SIZE is at least 16K (up to 32K with KASAN) the
+>    bound will be at least 256 bytes (up to 512 with KASAN). The pt_regs
+>    at the top of the stack is 168 bytes, and so this cover an additional
+>    88 bytes of stack (up to 344 with KASAN).
+> 
+> * On arm64 where THREAD_SIZE is at least 16K (up to 64K with 64K pages
+>    and VMAP_STACK), the bound will be at least 256 bytes (up to 1024 with
+>    KASAN). The pt_regs at the top of the stack is 336 bytes, so this can
+>    fall within the pt_regs, or can cover an additional 688 bytes of
+>    stack.
+> 
+> Clearly the `THREAD_SIZE/64` value doesn't make much sense -- in the
+> worst case, this will cause more than 600 bytes of stack to be erased
+> for every syscall, even if actual stack usage were substantially
+> smaller.
+> 
+> This patches makes this slightly less nonsensical by consistently
+> resetting current->lowest_stack to the base of the task pt_regs. For
+> clarity and for consistency with the handling of the low bound, the
+> generation of the high bound is split into a helper with commentary
+> explaining why.
+> 
+> Since the pt_regs at the top of the stack will be clobbered upon the
+> next exception entry, we don't need to poison these at exception exit.
+> By using task_pt_regs() as the high stack boundary instead of
+> current_top_of_stack() we avoid some redundant poisoning, and the
+> compiler can share the address generation between the poisoning and
+> restting of `current->lowest_stack`, making the generated code more
+> optimal.
+> 
+> It's not clear to me whether the existing `THREAD_SIZE/64` offset was a
+> dodgy heuristic to skip the pt_regs, or whether it was attempting to
+> minimize the number of times stackleak_check_stack() would have to
+> update `current->lowest_stack` when stack usage was shallow at the cost
+> of unconditionally poisoning a small portion of the stack for every exit
+> to userspace.
 
-Cleans up clang scan build warning:
-kernel/relay.c:443:8: warning: Although the value stored to 'buf' is
-used in the enclosing expression, the value is never actually read
-from 'buf' [deadcode.DeadStores]
+I inherited this 'THREAD_SIZE/64' logic is from the original grsecurity patch.
+As I mentioned, originally this was written in asm.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- kernel/relay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For x86_64:
+	mov	TASK_thread_sp0(%r11), %rdi
+	sub	$256, %rdi
+	mov	%rdi, TASK_lowest_stack(%r11)
 
-diff --git a/kernel/relay.c b/kernel/relay.c
-index d1a67fbb819d..6a611e779e95 100644
---- a/kernel/relay.c
-+++ b/kernel/relay.c
-@@ -440,7 +440,7 @@ int relay_prepare_cpu(unsigned int cpu)
- 
- 	mutex_lock(&relay_channels_mutex);
- 	list_for_each_entry(chan, &relay_channels, list) {
--		if ((buf = *per_cpu_ptr(chan->buf, cpu)))
-+		if (*per_cpu_ptr(chan->buf, cpu))
- 			continue;
- 		buf = relay_open_buf(chan, cpu);
- 		if (!buf) {
--- 
-2.35.1
+For x86_32:
+	mov TASK_thread_sp0(%ebp), %edi
+	sub $128, %edi
+	mov %edi, TASK_lowest_stack(%ebp)
+
+256 bytes for x86_64 and 128 bytes for x86_32 are exactly THREAD_SIZE/64.
+
+I think this value was chosen as optimal for minimizing poison scanning.
+It's possible that stackleak_track_stack() is not called during the syscall 
+because all the called functions have small stack frames.
+
+> For now I've simply removed the offset, and if we need/want to minimize
+> updates for shallow stack usage it should be easy to add a better
+> heuristic atop, with appropriate commentary so we know what's going on.
+
+I like your idea to erase the thread stack up to pt_regs if we call the 
+stackleak erasing from the trampoline stack.
+
+But here I don't understand where task_pt_regs() points to...
+
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Popov <alex.popov@linux.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>   include/linux/stackleak.h | 14 ++++++++++++++
+>   kernel/stackleak.c        | 19 ++++++++++++++-----
+>   2 files changed, 28 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/stackleak.h b/include/linux/stackleak.h
+> index 67430faa5c518..467661aeb4136 100644
+> --- a/include/linux/stackleak.h
+> +++ b/include/linux/stackleak.h
+> @@ -28,6 +28,20 @@ stackleak_task_low_bound(const struct task_struct *tsk)
+>   	return (unsigned long)end_of_stack(tsk) + sizeof(unsigned long);
+>   }
+>   
+> +/*
+> + * The address immediately after the highest address on tsk's stack which we
+> + * can plausibly erase.
+> + */
+> +static __always_inline unsigned long
+> +stackleak_task_high_bound(const struct task_struct *tsk)
+> +{
+> +	/*
+> +	 * The task's pt_regs lives at the top of the task stack and will be
+> +	 * overwritten by exception entry, so there's no need to erase them.
+> +	 */
+> +	return (unsigned long)task_pt_regs(tsk);
+> +}
+> +
+>   static inline void stackleak_task_init(struct task_struct *t)
+>   {
+>   	t->lowest_stack = stackleak_task_low_bound(t);
+> diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+> index d5f684dc0a2d9..ba346d46218f5 100644
+> --- a/kernel/stackleak.c
+> +++ b/kernel/stackleak.c
+> @@ -73,6 +73,7 @@ late_initcall(stackleak_sysctls_init);
+>   static __always_inline void __stackleak_erase(void)
+>   {
+>   	const unsigned long task_stack_low = stackleak_task_low_bound(current);
+> +	const unsigned long task_stack_high = stackleak_task_high_bound(current);
+>   	unsigned long erase_low = current->lowest_stack;
+>   	unsigned long erase_high;
+>   	unsigned int poison_count = 0;
+> @@ -93,14 +94,22 @@ static __always_inline void __stackleak_erase(void)
+>   #endif
+>   
+>   	/*
+> -	 * Now write the poison value to the kernel stack between 'erase_low'
+> -	 * and 'erase_high'. We assume that the stack pointer doesn't change
+> -	 * when we write poison.
+> +	 * Write poison to the task's stack between 'erase_low' and
+> +	 * 'erase_high'.
+> +	 *
+> +	 * If we're running on a different stack (e.g. an entry trampoline
+> +	 * stack) we can erase everything below the pt_regs at the top of the
+> +	 * task stack.
+> +	 *
+> +	 * If we're running on the task stack itself, we must not clobber any
+> +	 * stack used by this function and its caller. We assume that this
+> +	 * function has a fixed-size stack frame, and the current stack pointer
+> +	 * doesn't change while we write poison.
+>   	 */
+>   	if (on_thread_stack())
+>   		erase_high = current_stack_pointer;
+>   	else
+> -		erase_high = current_top_of_stack();
+> +		erase_high = task_stack_high;
+>   
+>   	while (erase_low < erase_high) {
+>   		*(unsigned long *)erase_low = STACKLEAK_POISON;
+> @@ -108,7 +117,7 @@ static __always_inline void __stackleak_erase(void)
+>   	}
+>   
+>   	/* Reset the 'lowest_stack' value for the next syscall */
+> -	current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
+> +	current->lowest_stack = task_stack_high;
+>   }
+>   
+>   asmlinkage void noinstr stackleak_erase(void)
 

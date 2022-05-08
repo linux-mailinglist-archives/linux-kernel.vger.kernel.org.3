@@ -2,86 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B1D51EC49
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 10:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2AD51EC4D
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiEHJDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S231563AbiEHJKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiEHJDB (ORCPT
+        with ESMTP id S231348AbiEHJKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:03:01 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FAABCB9;
-        Sun,  8 May 2022 01:59:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VCZrFBZ_1652000346;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCZrFBZ_1652000346)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 08 May 2022 16:59:07 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org
-Cc:     baolin.wang@linux.alibaba.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [RFC PATCH 3/3] mm/damon/vaddr: Change to use huge_ptep_get_access_flags()
-Date:   Sun,  8 May 2022 16:58:54 +0800
-Message-Id: <bfef01549847df7645bac0eacab74b4dde693e04.1651998586.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 8 May 2022 05:10:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901B8DF11
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:06:23 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3FC7F1F9B5;
+        Sun,  8 May 2022 09:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652000782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=HB3Z1lpogX9wMn9ze7RvLK2L5d+j40LZwTuSdKY5CQE=;
+        b=NLIZ505/BpjaOjC9eo7wiENNTuhqWN77Nvg8Tdg3UnOUGfeg60u7ABa1gnwVXsclBRRrQ1
+        INTb93v08Tb/mXR1PMRvkEbKXGp7F9xL5O2Pi27nOknWnn+FUTTSE7um+Uut0WS1rnQ7Ug
+        jr+Ee9hwdZr2g2F7Q15SOTO/52oPJsk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652000782;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=HB3Z1lpogX9wMn9ze7RvLK2L5d+j40LZwTuSdKY5CQE=;
+        b=3Vjn3jXoVbJHIaSCCYfwkp1uz0Axn8hbwfAnlsbAt0Q73ztSwNvyqaeSlgsEF65XdxWzLx
+        Kj2uch3UZ25ZeGBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 35FC02C141;
+        Sun,  8 May 2022 09:06:21 +0000 (UTC)
+Date:   Sun, 08 May 2022 11:06:21 +0200
+Message-ID: <s5h5ymgo0ky.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.18-rc6
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ARM64 platform can support CONT-PTE/PMD size hugetlb, which can
-contain seravel continuous pte or pmd entries. However current
-huge_ptep_get() only return one specific pte value for the CONT-PTE
-or CONT-PMD size hugetlb, which did not take into accounts the
-subpages' dirty or young flags. That will make the hugetlb pages
-monitoring inaccurate with missing young flags.
+Linus,
 
-Thus change to use huge_ptep_get_access_flags() taking into accounts
-the subpages' dirty or young flags of a CONT-PTE/PMD size hugetlb.
+please pull sound fixes for v5.18-rc6 from:
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.18-rc6
+
+The topmost commit is ac02e3cd5ab9407dcf926df2a1085c13881ccf7a
+
+----------------------------------------------------------------
+
+sound fixes for 5.18-rc6
+
+It became slightly larger as I've been off in the last weeks.
+The majority of changes at this PR is about ASoC, the fixes for
+dmaengine and for for addressing issues reported by CI, as well as
+other device-specific small fixes.  Also, the fixes for FireWire
+core stack and the usual HD-audio quirks are included.
+
+----------------------------------------------------------------
+
+Ajit Kumar Pandey (1):
+      ASoC: SOF: Fix NULL pointer exception in sof_pci_probe callback
+
+Andy Chi (1):
+      ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
+
+Chengfeng Ye (1):
+      firewire: fix potential uaf in outbound_phy_packet_callback()
+
+ChiYuan Huang (1):
+      ASoC: rt9120: Correct the reg 0x09 size to one byte
+
+Codrin Ciubotariu (2):
+      ASoC: atmel: mchp-pdmc: set prepare_slave_config
+      ASoC: dmaengine: Restore NULL prepare_slave_config() callback
+
+Hui Wang (1):
+      ALSA: hda/realtek: Fix mute led issue on thinkpad with cs35l41 s-codec
+
+Jakob Koschel (1):
+      firewire: remove check of list iterator against head past the loop body
+
+Mark Brown (8):
+      ASoC: wm8958: Fix change notifications for DSP controls
+      ASoC: da7219: Fix change notifications for tone generator frequency
+      ASoC: meson: Fix event generation for AUI ACODEC mux
+      ASoC: meson: Fix event generation for AUI CODEC mux
+      ASoC: meson: Fix event generation for G12A tohdmi mux
+      ASoC: max98090: Reject invalid values in custom control put()
+      ASoC: max98090: Generate notifications on changes for custom control
+      ASoC: ops: Validate input values in snd_soc_put_volsw_range()
+
+Neil Armstrong (2):
+      ASoC: meson: axg-tdm-interface: Fix formatters in trigger"
+      ASoC: meson: axg-card: Fix nonatomic links
+
+Niels Dossche (1):
+      firewire: core: extend card->lock in fw_core_handle_bus_reset
+
+Olivier Moysan (1):
+      ASoC: simple-card-utils: fix sysclk shutdown
+
+Pierre-Louis Bossart (1):
+      ASoC: soc-ops: fix error handling
+
+Takashi Sakamoto (1):
+      ALSA: fireworks: fix wrong return count shorter than expected by 4 bytes
+
+Zihao Wang (1):
+      ALSA: hda/realtek: Add quirk for Yoga Duet 7 13ITL6 speakers
+
 ---
- mm/damon/vaddr.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index d6abf76..29459ed 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -400,7 +400,8 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
- 				struct vm_area_struct *vma, unsigned long addr)
- {
- 	bool referenced = false;
--	pte_t entry = huge_ptep_get(pte);
-+	pte_t entry = huge_ptep_get_access_flags(pte,
-+					huge_page_size(hstate_vma(vma)));
- 	struct page *page = pte_page(entry);
- 
- 	get_page(page);
-@@ -557,7 +558,7 @@ static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
- 	pte_t entry;
- 
- 	ptl = huge_pte_lock(h, walk->mm, pte);
--	entry = huge_ptep_get(pte);
-+	entry = huge_ptep_get_access_flags(pte, huge_page_size(h));
- 	if (!pte_present(entry))
- 		goto out;
- 
--- 
-1.8.3.1
+ drivers/firewire/core-card.c               |  3 +++
+ drivers/firewire/core-cdev.c               |  4 +++-
+ drivers/firewire/core-topology.c           |  9 +++------
+ drivers/firewire/core-transaction.c        | 30 ++++++++++++++++--------------
+ drivers/firewire/sbp2.c                    | 13 +++++++------
+ sound/firewire/fireworks/fireworks_hwdep.c |  1 +
+ sound/pci/hda/patch_realtek.c              | 15 +++++++++------
+ sound/soc/atmel/mchp-pdmc.c                |  1 +
+ sound/soc/codecs/da7219.c                  | 14 ++++++++++----
+ sound/soc/codecs/max98090.c                |  5 ++++-
+ sound/soc/codecs/rt9120.c                  |  1 -
+ sound/soc/codecs/wm8958-dsp2.c             |  8 ++++----
+ sound/soc/generic/simple-card-utils.c      |  2 +-
+ sound/soc/meson/aiu-acodec-ctrl.c          |  2 +-
+ sound/soc/meson/aiu-codec-ctrl.c           |  2 +-
+ sound/soc/meson/axg-card.c                 |  1 -
+ sound/soc/meson/axg-tdm-interface.c        | 26 +++++---------------------
+ sound/soc/meson/g12a-tohdmitx.c            |  2 +-
+ sound/soc/soc-generic-dmaengine-pcm.c      |  6 +++---
+ sound/soc/soc-ops.c                        | 20 ++++++++++++++++++--
+ sound/soc/sof/sof-pci-dev.c                |  5 +++++
+ 21 files changed, 96 insertions(+), 74 deletions(-)
 

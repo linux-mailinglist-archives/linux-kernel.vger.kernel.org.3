@@ -2,139 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EB951F07C
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6461E51F046
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiEHTfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S231259AbiEHThh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiEHTem (ORCPT
+        with ESMTP id S229903AbiEHThg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 15:34:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5D103A;
-        Sun,  8 May 2022 12:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652038216;
-        bh=bWo1NsHRzKo/7mczgQM8M9vFn1mbdbdEYbRB3K13bxc=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=HleKCe4hrwOyeZL6mHFuyy4edh6AkfgOvpHOfuEdLHq4wXjZFiADDTKgk3pgRO6yJ
-         y5as1qZxQ5E0MVUUocQPLXWKR74Eo7ydi3qHgWCx4fS5mV72Tuxb/ROpDuJpUAYPdy
-         pkhippR4gsFg64BCtTRB8tteUrP2jvkTtYm35P0M=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from p100 ([92.116.176.85]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuDXz-1o4lC10iGz-00uWjA; Sun, 08
- May 2022 21:30:16 +0200
-Date:   Sun, 8 May 2022 21:30:14 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [GIT PULL] parisc architecture updates for v5.18-rc6
-Message-ID: <YngaRj/nUEkAKbZL@p100>
+        Sun, 8 May 2022 15:37:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB9C3A7;
+        Sun,  8 May 2022 12:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=4mLftaBBuTjP2XTniAvnLGikepUJRhX9xUhDsG68+dk=; b=fMEWDhl58fiO1/+d8N6FaYkaD7
+        XNLSZ4b9AQLY/KI5Ld2YVwYIJaMsVKcbpuY8ukTjXjzQiQAPsot1+ovdBsbBrkrTdWmMTwxKdC/MJ
+        3JLDyhd5Pm9iZzI2aDndtHNxDwMcJfI++Q+LK91DTDQzC1Ju45mGrhoKwsNq3FBYo29VMN9wSkpG7
+        Zkr+Ts+Qfqi+5WcLIZpk8rOeeQvSg87Mt79DeXhrN44ocz0HbdywluvtIBwjEMDsQdI96X0fWa2gx
+        4h1zPmx0ipIX/BNrQoq2Vlp7YHcmYh+h4bE9DRE40t+QXBl+JQ/KT7QCrH6dHPtypmcz1cv3/Nxw/
+        zSFzROpQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnmf0-002lOD-OI; Sun, 08 May 2022 19:33:42 +0000
+Date:   Sun, 8 May 2022 20:33:42 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT UPDATE] pagecache tree
+Message-ID: <YngbFluT9ftR5dqf@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Provags-ID: V03:K1:JZjR+y9aDfGLRtGGgCp5cOJKE4NHd/k5bXin4pVbcUN9fyvV+Mr
- EMw4zPeeQyS4UT8N9MGY6aHanbalMVte07zSokiTeDt1aXO2dMple+WisbpJQ3esS4qBx3w
- G4ksGP1/6LomH2+Uwh56pSeQ/lGNNhZ584fqYvSoe05bqLz/sDwy0bb/087bXg3FL8HmnFI
- VBTRzmOvZJyEcI6IywQHQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X0aIJu9HeXM=:hp1NnnHqz1LcaoHVaEICWe
- g23esKUJPHIR4HnM9hfLRde5gECBYMjqzfYvXqK2+miAR87yw/HgNspjqnkUzw5TuhZaZvWWc
- nc4NILWQA+wVBZyJwHVmENhQJZZkUT211133sZIXRCp4Iemp6ax0M7b2MLKuMKf3qvhatCfbo
- 6cBg261EGiWxy4K4lfNZlt39crdBjRSwNTzIVcSf8Lh9kd2QGI1o0ywCE0L0rdmyzg0UZbIHh
- 4ai3VepO+FN7KiRf6UPaTPW7ZZj/hfbeGDPdCeyQL3r1DsPB3oXPd6umqpUy5ekaVlOzh0DwJ
- OgmZEqotk1N8oL80uD+BwUwdPABmm+3GA+MUSz9G1DeMsz7PCwx/IJ1/lw7gahjP49zbJ1D4w
- 04ODLuwqV61qIkpM5mYxZWuNp3okxWBaBerKLen4iUPbRlcpMbwclK8aHneWOFEFgoKxzolSC
- SB/0F0bzZ/5VKxMIs4m+1W7r1VGngMTgzYvg7wItJynlwA4+SZj2MaVpIFF8SqpPUqOJsg12p
- yfpsZJMIYiyWzQbPuCnW19py74FCHEcTH9Zs22edRk2Fi5b6t9mxYe56rbliWw9oujVco9Kkv
- Qu/+Dv1FQrRqaknRj7FHOaXTw9lbL7zpWPoRMNXSoYa63KL295S/bXJYYon7EkBaYH9NZUXqs
- KXt/Efxt6mD8ppHZsfxVYr4SDK7bkIBcSstMtiItXNuQXNR9wjjPso/BpPMQczhAOJqxakOy/
- xw0+cykrCzVJcpANDgdFUDnop2yKv48Ke6W5qFvefI0Mo1d+Zi/V3TTaItZTFa8MKp/hDxgjq
- aoNudTcru5s1AQ6Qmmh2UAw+PQhQNWs7k90B4AwGuLUU2UzA1sUERCfmMFgQvnJ31t43grIRX
- cQ8mibTZKGDnQBBtfXbh9IqLLH2uKQqqucQz2zUk1AvOkcC5wWcJnzKo2PLJWorgNmrc1cCPY
- pb+6PXfK8c8P34V4ggGzO+bG0pgzNF/B/iTrnSW3/Rs4dpFoxxDw2+wfyQNzcPo9R+dosyUWO
- t+7uYOKRnkcdnblYKPVYoqH7WepJzGFzmxeNoufPW+Dw9Wn/U8uL7lDAI3selqQjr+Ywgy9ha
- n0rI245Hn8N2pE=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-please pull the latest set of fixes for the parisc architecture.
+I've just finished going through my email from last week, fixing up
+various patches and adding new R-b lines.  You can find the git tree
+here: git://git.infradead.org/users/willy/pagecache.git for-next
+or https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
 
-It includes 4 reverts of existing patches, which were necessary because we had
-boot issues due to wrong CPU clock handling and cache issues which led to
-userspace segfaults with 32bit kernels. Dave has a whole bunch of upcoming
-cache fixes which I then plan to push in the next merge window.
+I'll send out some separate series as a reply to this mail, but here's
+the shortlog:
 
-Other than that there are just small updates and fixes, e.g. defconfig updates,
-spelling fixes, a clocksource fix, boot topology fixes and a fix for
-/proc/cpuinfo output to satisfy lscpu.
+Matthew Wilcox (Oracle) (105):
+      scsicam: Fix use of page cache
+      ext4: Use page_symlink() instead of __page_symlink()
+      namei: Merge page_symlink() and __page_symlink()
+      namei: Convert page_symlink() to use memalloc_nofs_save()
+      f2fs: Convert f2fs_grab_cache_page() to use scoped memory APIs
+      ext4: Allow GFP_FS allocations in ext4_da_convert_inline_data_to_extent()
+      ext4: Use scoped memory API in mext_page_double_lock()
+      ext4: Use scoped memory APIs in ext4_da_write_begin()
+      ext4: Use scoped memory APIs in ext4_write_begin()
+      fs: Remove AOP_FLAG_NOFS
+      fs: Remove aop_flags parameter from netfs_write_begin()
+      fs: Remove aop flags parameter from block_write_begin()
+      fs: Remove aop flags parameter from cont_write_begin()
+      fs: Remove aop flags parameter from grab_cache_page_write_begin()
+      fs: Remove aop flags parameter from nobh_write_begin()
+      fs: Remove flags parameter from aops->write_begin
+      buffer: Call aops write_begin() and write_end() directly
+      namei: Call aops write_begin() and write_end() directly
+      ntfs3: Call ntfs_write_begin() and ntfs_write_end() directly
+      ntfs3: Remove fsdata parameter from ntfs_extend_initialized_size()
+      hfs: Call hfs_write_begin() and generic_write_end() directly
+      hfsplus: Call hfsplus_write_begin() and generic_write_end() directly
+      ext4: Call aops write_begin() and write_end() directly
+      f2fs: Call aops write_begin() and write_end() directly
+      i915: Call aops write_begin() and write_end() directly
+      fs: Remove pagecache_write_begin() and pagecache_write_end()
+      filemap: Update the folio_lock documentation
+      filemap: Update the folio_mark_dirty documentation
+      readahead: Use a folio in read_pages()
+      fs: Convert is_dirty_writeback() to take a folio
+      mm/readahead: Convert page_cache_async_readahead to take a folio
+      buffer: Rewrite nobh_truncate_page() to use folios
+      fs: Introduce aops->read_folio
+      fs: Add read_folio documentation
+      fs: Convert netfs_readpage to netfs_read_folio
+      fs: Convert iomap_readpage to iomap_read_folio
+      fs: Convert block_read_full_page() to block_read_full_folio()
+      fs: Convert mpage_readpage to mpage_read_folio
+      fs: Convert simple_readpage to simple_read_folio
+      affs: Convert affs to read_folio
+      afs: Convert afs_symlink_readpage to afs_symlink_read_folio
+      befs: Convert befs to read_folio
+      btrfs: Convert btrfs to read_folio
+      cifs: Convert cifs to read_folio
+      coda: Convert coda to read_folio
+      cramfs: Convert cramfs to read_folio
+      ecryptfs: Convert ecryptfs to read_folio
+      efs: Convert efs symlinks to read_folio
+      erofs: Convert erofs zdata to read_folio
+      ext4: Convert ext4 to read_folio
+      f2fs: Convert f2fs to read_folio
+      freevxfs: Convert vxfs_immed to read_folio
+      fuse: Convert fuse to read_folio
+      hostfs: Convert hostfs to read_folio
+      hpfs: Convert symlinks to read_folio
+      isofs: Convert symlinks and zisofs to read_folio
+      jffs2: Convert jffs2 to read_folio
+      jfs: Convert metadata pages to read_folio
+      nfs: Convert nfs to read_folio
+      ntfs: Convert ntfs to read_folio
+      ocfs2: Convert ocfs2 to read_folio
+      orangefs: Convert orangefs to read_folio
+      romfs: Convert romfs to read_folio
+      squashfs: Convert squashfs to read_folio
+      ubifs: Convert ubifs to read_folio
+      udf: Convert adinicb and symlinks to read_folio
+      vboxsf: Convert vboxsf to read_folio
+      mm: Convert swap_readpage to call read_folio instead of readpage
+      mm,fs: Remove aops->readpage
+      jffs2: Pass the file pointer to jffs2_do_readpage_unlock()
+      nfs: Pass the file pointer to nfs_symlink_filler()
+      fs: Change the type of filler_t
+      mm/filemap: Hoist filler_t decision to the top of do_read_cache_folio()
+      fs: Add aops->release_folio
+      iomap: Convert to release_folio
+      9p: Convert to release_folio
+      afs: Convert to release_folio
+      btrfs: Convert to release_folio
+      ceph: Convert to release_folio
+      cifs: Convert to release_folio
+      erofs: Convert to release_folio
+      ext4: Convert to release_folio
+      f2fs: Convert to release_folio
+      gfs2: Convert to release_folio
+      hfs: Convert to release_folio
+      hfsplus: Convert to release_folio
+      jfs: Convert to release_folio
+      nfs: Convert to release_folio
+      nilfs2: Remove comment about releasepage
+      ocfs2: Convert to release_folio
+      orangefs: Convert to release_folio
+      reiserfs: Convert to release_folio
+      ubifs: Convert to release_folio
+      fs: Remove last vestiges of releasepage
+      reiserfs: Convert release_buffer_page() to use a folio
+      jbd2: Convert jbd2_journal_try_to_free_buffers to take a folio
+      jbd2: Convert release_buffer_page() to use a folio
+      fs: Change try_to_free_buffers() to take a folio
+      fs: Convert drop_buffers() to use a folio
+      fs: Add free_folio address space operation
+      orangefs: Convert to free_folio
+      nfs: Convert to free_folio
+      secretmem: Convert to free_folio
+      fs: Remove aops->freepage
+      Appoint myself page cache maintainer
 
-----------------------------------------------------------------
+Miaohe Lin (1):
+      filemap: Remove obsolete comment in lock_page
 
-The following changes since commit 30c8e80f79329617012f07b09b70114592092ea4:
-
-  Merge tag 'gpio-fixes-for-v5.18-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux (2022-05-07 11:02:02 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.18/parisc-3
-
-for you to fetch changes up to ba0c04104082ca211e108dd8eec6db2ad7676528:
-
-  Revert "parisc: Increase parisc_cache_flush_threshold setting" (2022-05-08 20:13:36 +0200)
-
-----------------------------------------------------------------
-parisc architecture fixes for kernel v5.18-rc6
-
-Some reverts of existing patches, which were necessary because of boot
-issues due to wrong CPU clock handling and cache issues which led to
-userspace segfaults with 32bit kernels.
-
-Other than that just small updates and fixes, e.g. defconfig updates,
-spelling fixes, a clocksource fix, boot topology fixes and a fix for
-/proc/cpuinfo output to satisfy lscpu.
-
-----------------------------------------------------------------
-Helge Deller (10):
-      Revert "parisc: Mark cr16 CPU clocksource unstable on all SMP machines"
-      Revert "parisc: Mark sched_clock unstable only if clocks are not syncronized"
-      Revert "parisc: Fix patch code locking and flushing"
-      parisc: Only list existing CPUs in cpu_possible_mask
-      parisc: Update 32- and 64-bit defconfigs
-      parisc: Re-enable GENERIC_CPU_DEVICES for !SMP
-      parisc: Merge model and model name into one line in /proc/cpuinfo
-      parisc: Change MAX_ADDRESS to become unsigned long long
-      parisc: Mark cr16 clock unstable on all SMP machines
-      Revert "parisc: Increase parisc_cache_flush_threshold setting"
-
-Julia Lawall (1):
-      parisc: Fix typos in comments
-
- arch/parisc/Kconfig                         |  1 +
- arch/parisc/configs/generic-32bit_defconfig |  4 +++-
- arch/parisc/configs/generic-64bit_defconfig |  3 ++-
- arch/parisc/include/asm/pgtable.h           |  2 +-
- arch/parisc/kernel/cache.c                  | 18 +++---------------
- arch/parisc/kernel/kprobes.c                |  2 +-
- arch/parisc/kernel/patch.c                  | 25 ++++++++++++++-----------
- arch/parisc/kernel/processor.c              | 11 +++++++++--
- arch/parisc/kernel/setup.c                  |  2 ++
- arch/parisc/kernel/time.c                   |  6 +-----
- arch/parisc/kernel/traps.c                  |  2 +-
- arch/parisc/math-emu/dfadd.c                |  2 +-
- arch/parisc/math-emu/dfsub.c                |  2 +-
- arch/parisc/math-emu/sfadd.c                |  2 +-
- arch/parisc/math-emu/sfsub.c                |  2 +-
- 15 files changed, 42 insertions(+), 42 deletions(-)

@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8815351EE0F
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDE251EE43
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiEHOiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 10:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S234025AbiEHOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 10:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiEHOis (ORCPT
+        with ESMTP id S233957AbiEHOkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 10:38:48 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0274A6389
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 07:34:57 -0700 (PDT)
-Received: (qmail 98159 invoked by uid 1000); 8 May 2022 10:34:57 -0400
-Date:   Sun, 8 May 2022 10:34:57 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] usb: gadget: fix race when gadget driver register via
- ioctl
-Message-ID: <YnfVEcOWO63uIGs5@rowland.harvard.edu>
-References: <CAMA88TrcHZH7vw8W4Jh+NCQJvpe3wQM-4k46MnDQC9agna4XJg@mail.gmail.com>
- <20220507160243.35304-1-schspa@gmail.com>
- <Ynay6XK+ZUWtvfbH@rowland.harvard.edu>
- <CAMA88Tr3pX4UjJ0ezSs9kFcKFY4HvyetHTTgFVc=O643SXE1sQ@mail.gmail.com>
+        Sun, 8 May 2022 10:40:20 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BCC0E0B4;
+        Sun,  8 May 2022 07:36:29 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3A9n+Pf6hck/Mud4EYtngkXHvUX161uBEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUCzzBOCDyCbvmJZWGkfIwlboWy9kpUuJbRzYcyHFM4q3w8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl7ZTMkhKdKBMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTTuhqg8UqK8nmFIMCs25tzHfSCvNOaZDIQ43L49FC1?=
+ =?us-ascii?q?Ts9j8wIGuzRD+IGaD5rfTzBZRNVM1saAZ54m/2n7lHzejseqhSKpK4z4mHW1yR?=
+ =?us-ascii?q?w1qTgNJzefdnibclXgUGeqUrF8n7/DxVcM8aQoRKB83SxlqrKmAv4RosZF/u/7?=
+ =?us-ascii?q?PECqFuNym0WDTUSVECnur+9i0ijS5RTJlJ80iwnqrk7skysVNjyQha4oVaCsxV?=
+ =?us-ascii?q?aUN1Ve8U44QeAjKHU/i6eHGEPSjMHY9sj3OcsSjsu2kCYmfvyGCdi9rGYIVqZ9?=
+ =?us-ascii?q?7GJvXa8IiQYM2IGTTELQBFD4NT5pow3yBXVQb5LFK+zk82wGjzqxT2OhDYxiq9?=
+ =?us-ascii?q?VjsMR0ai/u1fdjFqEopnPUx5w9gvMdnyq4xk/Z4O/YYGsr1/B4p5oMoeDSXGTs?=
+ =?us-ascii?q?X4FhY6a7eYTHdeKjiPLXeZlIV0Dz55pKxWF2Rg2QcZnrG/rphaekUlryGkWDC9?=
+ =?us-ascii?q?U3gwsIlcFuHPuhD4=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A5w5ta657PAYRiMjBqwPXwCDXdLJyesId70hD?=
+ =?us-ascii?q?6qhwISY6TiX+rbHLoB17726StN9/YhEdcLy7VJVoIkmskKKdg7NhXotKNTOO0A?=
+ =?us-ascii?q?DDQb2KhrGC/9SPIULDH5ZmpMVdmrZFeabNJGk/ncDn+xO5Dtpl5NGG9ZqjjeDY?=
+ =?us-ascii?q?w2wFd3ASV4hQqxd+Fh2AElB7AC1PBZ8CHpKa4cZd4xW6f3B/VLXCOlA1G/jEu8?=
+ =?us-ascii?q?bQlI/rJToPBxsc4gGIij+yrJ7WeiLouCsjbw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124075733"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 08 May 2022 22:36:25 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id 1A2BF4D16FDF;
+        Sun,  8 May 2022 22:36:22 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Sun, 8 May 2022 22:36:24 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Sun, 8 May 2022 22:36:20 +0800
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>,
+        <rgoldwyn@suse.de>, <viro@zeniv.linux.org.uk>,
+        <willy@infradead.org>, <naoya.horiguchi@nec.com>,
+        <linmiaohe@huawei.com>
+Subject: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+Date:   Sun, 8 May 2022 22:36:06 +0800
+Message-ID: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMA88Tr3pX4UjJ0ezSs9kFcKFY4HvyetHTTgFVc=O643SXE1sQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 1A2BF4D16FDF.A278D
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 12:08:35PM +0800, Schspa Shi wrote:
-> Alan Stern <stern@rowland.harvard.edu> writes:
-> >
-> > Are you sure that this patch will fix the problem found by syzbot?  That
-> > is, are you sure that the problem really was caused by two threads
-> > registering the same driver concurrently?
-> >
-> 
-> Yes, from the console log from syzbot.
-> T8324 alloced driver_private was released by T8326.
+This is a combination of two patchsets:
+ 1.fsdax-rmap: https://lore.kernel.org/linux-xfs/20220419045045.1664996-1-ruansy.fnst@fujitsu.com/
+ 2.fsdax-reflink: https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/
 
-That is a smoking gun.
+ Changes since v13 of fsdax-rmap:
+  1. Fixed mistakes during rebasing code to latest next-
+  2. Rebased to next-20220504
 
-> > The fact that the error was "use after free" suggests that the problem
-> > might be something else.  It looks like one of the threads was trying to
-> > access the driver structure after the other thread had done something
-> > that caused it to be deallocated, which suggests an error in reference
-> > counting.
-> >
-> 
-> The direct cause of this place is because of the refcount error, but the
-> root cause is still caused by multiple registrations
-> 
-> Please refer to the following scenarios.
-> 
->            T1                                  T2
-> ------------------------------------------------------------------
-> usb_gadget_register_driver_owner
->   driver_register                    driver_register
->     driver_find                       driver_find
->     bus_add_driver                    bus_add_driver
->       priv alloced                     <context switch>
->       drv->p = priv;
->       <schedule out>
->       kobject_init_and_add // refcount = 1;
->    //couldn't find an available UDC or it's busy
->    <context switch>
->                                        priv alloced
->                                        drv->priv = priv;
->                                        kobject_init_and_add
->                                          ---> refcount = 1 <------
->                                        // register success
->                                        <context switch>
-> ===================== another ioctl/process ======================
->                                       driver_register
->                                        driver_find
->                                         k = kset_find_obj()
->                                          ---> refcount = 2 <------
->                                         <context out>
->    driver_unregister
->    // drv->p become T2's priv
->    ---> refcount = 1 <------
->    <context switch>
->                                         kobject_put(k)
->                                          ---> refcount = 0 <------
->                                         return priv->driver;
->                                         --------UAF here----------
+ Changes since v10 of fsdax-reflink:
+  1. Rebased to next-20220504 and fsdax-rmap
+  2. Dropped a needless cleanup patch: 'fsdax: Convert dax_iomap_zero to
+      iter model'
+  3. Fixed many conflicts during rebasing
+  4. Fixed a dedupe bug in Patch 05: the actuall length to compare could be
+      shorter than smap->length or dmap->length.
+  PS: There are many changes during rebasing.  I think it's better to
+      review again.
 
-It looks like you've got T2 calling driver_register and driver_find 
-twice, but the overall idea is pretty clear.
+==
+Shiyang Ruan (14):
+  fsdax-rmap:
+    dax: Introduce holder for dax_device
+    mm: factor helpers for memory_failure_dev_pagemap
+    pagemap,pmem: Introduce ->memory_failure()
+    fsdax: Introduce dax_lock_mapping_entry()
+    mm: Introduce mf_dax_kill_procs() for fsdax case
+    xfs: Implement ->notify_failure() for XFS
+    fsdax: set a CoW flag when associate reflink mappings
+  fsdax-reflink:
+    fsdax: Output address in dax_iomap_pfn() and rename it
+    fsdax: Introduce dax_iomap_cow_copy()
+    fsdax: Replace mmap entry in case of CoW
+    fsdax: Add dax_iomap_cow_copy() for dax zero
+    fsdax: Dedup file range to use a compare function
+    xfs: support CoW in fsdax mode
+    xfs: Add dax dedupe support
 
-> There will be UAF in this scenario.
-> And all the logs reported by syzbot can be matched to this scenario.
+ drivers/dax/super.c         |  67 +++++-
+ drivers/md/dm.c             |   2 +-
+ drivers/nvdimm/pmem.c       |  17 ++
+ fs/dax.c                    | 398 ++++++++++++++++++++++++++++++------
+ fs/erofs/super.c            |  13 +-
+ fs/ext2/super.c             |   7 +-
+ fs/ext4/super.c             |   9 +-
+ fs/remap_range.c            |  31 ++-
+ fs/xfs/Makefile             |   5 +
+ fs/xfs/xfs_buf.c            |  10 +-
+ fs/xfs/xfs_file.c           |   9 +-
+ fs/xfs/xfs_fsops.c          |   3 +
+ fs/xfs/xfs_inode.c          |  69 ++++++-
+ fs/xfs/xfs_inode.h          |   1 +
+ fs/xfs/xfs_iomap.c          |  46 ++++-
+ fs/xfs/xfs_iomap.h          |   3 +
+ fs/xfs/xfs_mount.h          |   1 +
+ fs/xfs/xfs_notify_failure.c | 220 ++++++++++++++++++++
+ fs/xfs/xfs_reflink.c        |  12 +-
+ fs/xfs/xfs_super.h          |   1 +
+ include/linux/dax.h         |  56 ++++-
+ include/linux/fs.h          |  12 +-
+ include/linux/memremap.h    |  12 ++
+ include/linux/mm.h          |   2 +
+ include/linux/page-flags.h  |   6 +
+ mm/memory-failure.c         | 257 ++++++++++++++++-------
+ 26 files changed, 1087 insertions(+), 182 deletions(-)
+ create mode 100644 fs/xfs/xfs_notify_failure.c
 
-And in any case it is obvious that the patch is necessary.  (Although I 
-would have put the new state before the RUNNING state, to reflect the 
-actual order in which the states occur.)
+-- 
+2.35.1
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern
+

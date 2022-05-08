@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE87C51EE70
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 17:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF71751EE72
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 17:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbiEHPJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 11:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S234580AbiEHPLK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 8 May 2022 11:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbiEHPJj (ORCPT
+        with ESMTP id S234437AbiEHPLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 11:09:39 -0400
+        Sun, 8 May 2022 11:11:06 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DEBDF63;
-        Sun,  8 May 2022 08:05:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5062ADF76;
+        Sun,  8 May 2022 08:07:14 -0700 (PDT)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nniTd-0000uy-O3; Sun, 08 May 2022 17:05:41 +0200
+        id 1nniV4-0000vT-EH; Sun, 08 May 2022 17:07:10 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     Brian Norris <briannorris@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Brian Norris <briannorris@chromium.org>
+        Chanwoo Choi <cwchoi00@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         Elaine Zhang <zhangqing@rock-chips.com>,
         linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource conflicts with firmware
-Date:   Sun, 08 May 2022 17:05:40 +0200
-Message-ID: <1860576.taCxCBeP46@phil>
-In-Reply-To: <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
-References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
+        linux-rockchip@lists.infradead.org
+Subject: Re: [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
+Date:   Sun, 08 May 2022 17:07:09 +0200
+Message-ID: <44651538.fMDQidcC6G@phil>
+In-Reply-To: <6c6ec0db-111c-e48f-57ce-0e444a0d168e@gmail.com>
+References: <20220406014842.2771799-1-briannorris@chromium.org> <582e3645-b24e-356e-7f0f-0d37bb1e32e6@gmail.com> <6c6ec0db-111c-e48f-57ce-0e444a0d168e@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
@@ -48,88 +48,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 6. April 2022, 03:48:41 CEST schrieb Brian Norris:
-> On RK3399 platforms, power domains are managed mostly by the kernel
-> (drivers/soc/rockchip/pm_domains.c), but there are a few exceptions
-> where ARM Trusted Firmware has to be involved:
+Am Samstag, 7. Mai 2022, 16:21:59 CEST schrieb Chanwoo Choi:
+> On 22. 4. 14. 08:13, Chanwoo Choi wrote:
+> > On 22. 4. 14. 07:45, Heiko Stübner wrote:
+> >> Hi,
+> >>
+> >> Am Donnerstag, 14. April 2022, 00:14:40 CEST schrieb Chanwoo Choi:
+> >>> On 22. 4. 6. 10:48, Brian Norris wrote:
+> >>>> See the previous patch ("soc: rockchip: power-domain: Manage resource
+> >>>> conflicts with firmware") for a thorough explanation of the conflicts.
+> >>>> While ARM Trusted Firmware may be modifying memory controller and
+> >>>> power-domain states, we need to block the kernel's power-domain driver.
+> >>>>
+> >>>> If the power-domain driver is disabled, there is no resource conflict
+> >>>> and this becomes a no-op.
+> >>>>
+> >>>> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> >>>> ---
+> >>>>
+> >>>>    drivers/devfreq/rk3399_dmc.c | 13 +++++++++++++
+> >>>>    1 file changed, 13 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/devfreq/rk3399_dmc.c 
+> >>>> b/drivers/devfreq/rk3399_dmc.c
+> >>>> index e494d1497d60..daff40702615 100644
+> >>>> --- a/drivers/devfreq/rk3399_dmc.c
+> >>>> +++ b/drivers/devfreq/rk3399_dmc.c
+> >>>> @@ -21,6 +21,7 @@
+> >>>>    #include <linux/rwsem.h>
+> >>>>    #include <linux/suspend.h>
+> >>>> +#include <soc/rockchip/pm_domains.h>
+> >>>>    #include <soc/rockchip/rk3399_grf.h>
+> >>>>    #include <soc/rockchip/rockchip_sip.h>
+> >>>> @@ -93,6 +94,16 @@ static int rk3399_dmcfreq_target(struct device 
+> >>>> *dev, unsigned long *freq,
+> >>>>        mutex_lock(&dmcfreq->lock);
+> >>>> +    /*
+> >>>> +     * Ensure power-domain transitions don't interfere with ARM 
+> >>>> Trusted
+> >>>> +     * Firmware power-domain idling.
+> >>>> +     */
+> >>>> +    err = rockchip_pmu_block();
+> >>>> +    if (err) {
+> >>>> +        dev_err(dev, "Failed to block PMU: %d\n", err);
+> >>>> +        goto out_unlock;
+> >>>> +    }
+> >>>> +
+> >>>>        /*
+> >>>>         * Some idle parameters may be based on the DDR controller 
+> >>>> clock, which
+> >>>>         * is half of the DDR frequency.
+> >>>> @@ -198,6 +209,8 @@ static int rk3399_dmcfreq_target(struct device 
+> >>>> *dev, unsigned long *freq,
+> >>>>        dmcfreq->volt = target_volt;
+> >>>>    out:
+> >>>> +    rockchip_pmu_unblock();
+> >>>> +out_unlock:
+> >>>>        mutex_unlock(&dmcfreq->lock);
+> >>>>        return err;
+> >>>>    }
+> >>>
+> >>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> >>
+> >> so I guess you're ok with me picking up both patches, right?
+> >> [Just making sure :-) ]
+> > 
+> > This patch have the dependency of latest devfreq-next branch.
+> > So that need to make the immutable branch between rockchip and devfreq.
+> > 
 > 
-> (1) system suspend/resume
-> (2) DRAM DVFS (a.k.a., "ddrfreq")
+> Hi Heiko and Brian,
 > 
-> Exception (1) does not cause much conflict, since the kernel has
-> quiesced itself by the time we make the relevant PSCI call.
+> Is there any other progress?
 > 
-> Exception (2) can cause conflict, because of two actions:
-> 
-> (a) ARM Trusted Firmware needs to read/modify/write the PMU_BUS_IDLE_REQ
->     register to idle the memory controller domain; the kernel driver
->     also has to touch this register for other domains.
-> (b) ARM Trusted Firmware needs to manage the clocks associated with
->     these domains.
-> 
-> To elaborate on (b): idling a power domain has always required ungating
-> an array of clocks; see this old explanation from Rockchip:
-> https://lore.kernel.org/linux-arm-kernel/54503C19.9060607@rock-chips.com/
-> 
-> Historically, ARM Trusted Firmware has avoided this issue by using a
-> special PMU_CRU_GATEDIS_CON0 register -- this register ungates all the
-> necessary clocks -- when idling the memory controller. Unfortunately,
-> we've found that this register is not 100% sufficient; it does not turn
-> the relevant PLLs on [0].
-> 
-> So it's possible to trigger issues with something like the following:
-> 
-> 1. enable a power domain (e.g., RK3399_PD_VDU) -- kernel will
->    temporarily enable relevant clocks/PLLs, then turn them back off
->    2. a PLL (e.g., PLL_NPLL) is part of the clock tree for
->       RK3399_PD_VDU's clocks but otherwise unused; NPLL is disabled
-> 3. perform a ddrfreq transition (rk3399_dmcfreq_target() -> ...
->    drivers/clk/rockchip/clk-ddr.c / ROCKCHIP_SIP_DRAM_FREQ)
->    4. ARM Trusted Firmware unagates VDU clocks (via PMU_CRU_GATEDIS_CON0)
->    5. ARM Trusted firmware idles the memory controller domain
->    6. Step 5 waits on the VDU domain/clocks, but NPLL is still off
-> 
-> i.e., we hang the system.
-> 
-> So for (b), we need to at a minimum manage the relevant PLLs on behalf
-> of firmware. It's easier to simply manage the whole clock tree, in a
-> similar way we do in rockchip_pd_power().
-> 
-> For (a), we need to provide mutual exclusion betwen rockchip_pd_power()
-> and firmware. To resolve that, we simply grab the PMU mutex and release
-> it when ddrfreq is done.
-> 
-> The Chromium OS kernel has been carrying versions of part of this hack
-> for a while, based on some new custom notifiers [1]. I've rewritten as a
-> simple function call between the drivers, which is OK because:
-> 
->  * the PMU driver isn't enabled, and we don't have this problem at all
->    (the firmware should have left us in an OK state, and there are no
->    runtime conflicts); or
->  * the PMU driver is present, and is a single instance.
-> 
-> And the power-domain driver cannot be removed, so there's no lifetime
-> management to worry about.
-> 
-> For completeness, there's a 'dmc_pmu_mutex' to guard (likely
-> theoretical?) probe()-time races. It's OK for the memory controller
-> driver to start running before the PMU, because the PMU will avoid any
-> critical actions during the block() sequence.
-> 
-> [0] The RK3399 TRM for PMU_CRU_GATEDIS_CON0 only talks about ungating
->     clocks. Based on experimentation, we've found that it does not power
->     up the necessary PLLs.
-> 
-> [1] CHROMIUM: soc: rockchip: power-domain: Add notifier to dmc driver
->     https://chromium-review.googlesource.com/q/I242dbd706d352f74ff706f5cbf42ebb92f9bcc60
->     Notably, the Chromium solution only handled conflict (a), not (b).
->     In practice, item (b) wasn't a problem in many cases because we
->     never managed to fully power off PLLs. Now that the (upstream) video
->     decoder driver performs runtime clock management, we often power off
->     NPLL.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> IMHO, if rockchip maintainer reply the acked-by from patch1
+> and then agree these patches to be applied to devfreq.git,
+> I can take them.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+sounds good to me. Patch1 looks good and correct to me, so
+I've added a Reviewed-by for it and it defintily makes sense for
+both to go through the devfreq tree then, so we don't need
+additional stable-branches :-)
+
+Thanks
+Heiko
 
 

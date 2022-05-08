@@ -2,128 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFDE51EDB5
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 15:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3B451EDC1
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 15:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiEHNRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 09:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S233490AbiEHN15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 09:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiEHNRE (ORCPT
+        with ESMTP id S233354AbiEHN1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 09:17:04 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23356E0CE;
-        Sun,  8 May 2022 06:13:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCaT1jO_1652015583;
-Received: from 30.15.195.77(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCaT1jO_1652015583)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 08 May 2022 21:13:05 +0800
-Message-ID: <474b8548-4e17-a6e7-a0f7-8f248aabe462@linux.alibaba.com>
-Date:   Sun, 8 May 2022 21:13:44 +0800
+        Sun, 8 May 2022 09:27:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA588DE96;
+        Sun,  8 May 2022 06:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652016235; x=1683552235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=psDk1P7wyWAseUdXJBcbmzY0aYvncXmFOfzhn5uJ3xM=;
+  b=CBl6C+MjWo6RpG+uN45nt+uxA2QpFIisUL1dofsw5/uOUg/6ZDhTFUXO
+   3UKx4vQvG+Apex924ZVBTbyfSRVrmLSg7awiI3TP8rBzWDtEASHJ05KZd
+   K4jlHVsIrt1evdCfJzfS7pBFpHW/TFbBIbn276kTTMMhr5/VAPKbHthfl
+   1eBJs9MOGvIFnjiGhpigDhpZ3UOfjovsuUrpw3wdeNfUatmv+qdOnmn9l
+   OBq+K96vltH1IlpKy0C6Z+f8zpXy6Y4JhZYwFgiaQR35ElUO+vxOEYrIb
+   8xYlLU6745OsMT83HIMWn6YhlNrDrUX9zDZl7gAhF19nJnXhC/zMh3qjt
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267678969"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="267678969"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 06:23:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="622565927"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 06:23:50 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nngt4-000FVH-16;
+        Sun, 08 May 2022 13:23:50 +0000
+Date:   Sun, 8 May 2022 21:22:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: Re: [v3 2/3] phy: qcom-snps: Add support for overriding phy tuning
+ parameters
+Message-ID: <202205082118.cd3B5WOH-lkp@intel.com>
+References: <1652011947-18575-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- migration
-To:     kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, catalin.marinas@arm.com, will@kernel.org
-Cc:     kbuild-all@lists.01.org, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
- <202205081910.mStoC5rj-lkp@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <202205081910.mStoC5rj-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652011947-18575-3-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Krishna,
 
-On 5/8/2022 8:01 PM, kernel test robot wrote:
-> Hi Baolin,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on next-20220506]
-> [cannot apply to hnaz-mm/master arm64/for-next/core linus/master v5.18-rc5]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220508/202205081910.mStoC5rj-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-> reproduce (this is a W=1 build):
->          # https://github.com/intel-lab-lkp/linux/commit/907981b27213707fdb2f8a24c107d6752a09a773
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
->          git checkout 907981b27213707fdb2f8a24c107d6752a09a773
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     mm/rmap.c: In function 'try_to_migrate_one':
->>> mm/rmap.c:1931:34: error: implicit declaration of function 'huge_ptep_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
->      1931 |                         pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
->           |                                  ^~~~~~~~~~~~~~~~~~~~~
->           |                                  ptep_clear_flush
->>> mm/rmap.c:1931:34: error: incompatible types when assigning to type 'pte_t' from type 'int'
->>> mm/rmap.c:2023:41: error: implicit declaration of function 'set_huge_pte_at'; did you mean 'set_huge_swap_pte_at'? [-Werror=implicit-function-declaration]
->      2023 |                                         set_huge_pte_at(mm, address, pvmw.pte, pteval);
->           |                                         ^~~~~~~~~~~~~~~
->           |                                         set_huge_swap_pte_at
->     cc1: some warnings being treated as errors
+Thank you for the patch! Perhaps something to improve:
 
-Thanks for reporting. I think I should add some dummy functions in 
-hugetlb.h file if the CONFIG_HUGETLB_PAGE is not selected. I can pass 
-the building with below changes and your config file.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk/for-next linus/master v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 306d6ef..9f71043 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -1093,6 +1093,17 @@ static inline void set_huge_swap_pte_at(struct 
-mm_struct *mm, unsigned long addr
-                                         pte_t *ptep, pte_t pte, 
-unsigned long sz)
-  {
-  }
-+
-+static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
-+                                         unsigned long addr, pte_t *ptep)
-+{
-+       return ptep_get(ptep);
-+}
-+
-+static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long 
-addr,
-+                                  pte_t *ptep, pte_t pte)
-+{
-+}
-  #endif /* CONFIG_HUGETLB_PAGE */
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220508-201506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220508/202205082118.cd3B5WOH-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4f3771418951e9e3fcb6357959dbd668cdb54fb1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Kurapati/Add-QCOM-SNPS-PHY-overriding-params-support/20220508-201506
+        git checkout 4f3771418951e9e3fcb6357959dbd668cdb54fb1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/phy/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c: In function 'phy_read_param_override_seq':
+>> drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c:530:33: warning: variable 'hsphy' set but not used [-Wunused-but-set-variable]
+     530 |         struct qcom_snps_hsphy *hsphy;
+         |                                 ^~~~~
+
+
+vim +/hsphy +530 drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c
+
+   524	
+   525	static void phy_read_param_override_seq(struct device *dev)
+   526	{
+   527		struct device_node *node = dev->of_node;
+   528		s32 val;
+   529		int ret, i;
+ > 530		struct qcom_snps_hsphy *hsphy;
+   531		struct override_param_map *cfg = (struct override_param_map* ) of_device_get_match_data(dev);
+   532		hsphy = dev_get_drvdata(dev);
+   533	
+   534		for (i = 0; i < ARRAY_SIZE(phy_seq_props); i++) {
+   535			ret = of_property_read_s32(node, phy_seq_props[i], &val);
+   536			if (!ret)
+   537				hsphy_override_param_update_val(cfg[i], val, &update_seq_cfg[i]);
+   538		}
+   539	}
+   540	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,114 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB83951ED2A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B922F51ED34
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiEHLG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 07:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S232131AbiEHLNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 07:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiEHLG0 (ORCPT
+        with ESMTP id S232035AbiEHLNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 07:06:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE81ADF1B
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 04:02:36 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652007754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7G+zUj54eBfyktDcZa4ZbAJ+odaEfrQMWJTCSbKdy3k=;
-        b=iGAXFGuLvVo6RpqFLMh0I7GAsJs9x6RUuD0iLq6O3k1p1jaLIT1/Dnjl1o8u3Mk8My2mvO
-        P3I5idFwbQ2uMmyBEghYRQAOJ52/jbcCUG9kpi7BDGQqqxgS1M4Knh2rfp1xSkGv2OqYup
-        GSybEJMYYY+ieyrk1J32AG14PfLXRTU7sMUyHloRCtBoKES1lZXKjc32wqh6Md/fjKI1J0
-        QuU6Fox4owf6UrYQzJCl0HXVDRAenF6AMq3e5Zl3mQ30S/jhXFddru6bjClYUnvmFI6WSI
-        coRXikGGhJzUQfhprSwM/G20Usso5Oq7HnlArGepFuPbe4/8v7oJkBd1yISKTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652007754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7G+zUj54eBfyktDcZa4ZbAJ+odaEfrQMWJTCSbKdy3k=;
-        b=fMm0K8kzoOwNve1dseEdxD4RAMHY82afC7BOqFI9E8ghspP/h/+mXruaz2MaO63rE24efU
-        +7qpfIyUWZ8o00Aw==
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-In-Reply-To: <ca6b70a2-9bcc-fb86-200c-e1714c9d53be@baylibre.com>
-References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
- <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
- <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
- <Ymjy3rHRenba7r7R@alley>
- <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
- <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
- <87k0b6blz2.fsf@jogness.linutronix.de>
- <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
- <Ym/Z7PYPqvWPEjuL@alley>
- <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
- <87pmktm2a9.fsf@jogness.linutronix.de>
- <87a6bwapij.fsf@jogness.linutronix.de>
- <87zgjvd2zb.fsf@jogness.linutronix.de>
- <b7c81f02-039e-e877-d7c3-6834728d2117@samsung.com>
- <ca6b70a2-9bcc-fb86-200c-e1714c9d53be@baylibre.com>
-Date:   Sun, 08 May 2022 13:08:33 +0206
-Message-ID: <871qx4qoc6.fsf@jogness.linutronix.de>
+        Sun, 8 May 2022 07:13:39 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E4DDF90
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 04:09:48 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p12so9994057pfn.0
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 04:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OWmWFuKURN4UwCDRPsgR9Re+rOOqJePNgFLKfmRbPyI=;
+        b=UlTfZYFJ8cQvbSFvJYR0MNjIVNnz94wcIJy7bmyHAq3K7dhExqiXwQ6GlaTqAWyxzy
+         /Z/UihrYn4PiXbZkL0LHCX2s5FoaTSEdl9xmTkNYPq7h9HiO+occ9eYuqUW2zt7FKqmt
+         b3PN1o5ZoZJqlKw9pM5JrZNOlSwE6WvfVuInjWEAmfTWiOCutIUTw8vwaC1o1YFjwp9f
+         +xjwh/8BPP6aVzOrMhkxbxgpxLomJCpFhrQhBvrcVb/DbwLhuEyhNqWHYVVFWiB/5sZZ
+         2U9B/tv5Pzx5HC7lG5vZPP5nVcDqOI8s7xA4xdRGTcVQxNcgXyFbsuZyVPlp5azgbVRy
+         VmuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OWmWFuKURN4UwCDRPsgR9Re+rOOqJePNgFLKfmRbPyI=;
+        b=wQtAmBrabacdeIczpPFBmfgN+HCXHSYKoWhiP3ftBajEnuoZ5NL+wgPBSuJR8vcNQU
+         gzQHK/OuENTurMEb7gPOTwrfVKVdhk2Wo/QjsqeFCrbgG09CIZo000QEoKATHZKb1jTB
+         /WZPenInuHZ5DRTfZ5llmU0Py6KYuNkSxhhuQCTOYZOqgCab+pF6QrsrnJ/Rrlf4pyRL
+         U06dzC0DiDqjkmOPPgjsahGC3+Vr0sxqKwkXcWt+LTQG5I0AdbaxEV5pK9B3GWlao7el
+         B2WEvTcJUBtiYOEGqwUqvioymnEpJgwlMrrD+d6HeWaScOvP7YP8rMeJb/e8cQVfy0sT
+         CJRg==
+X-Gm-Message-State: AOAM531G2AueE0NRKTeLAlXki2j7i3ZcOsk1uMr/cW9CkbN81Um/bijz
+        pNmQm5XXswzyZTEMTXI/o814MA==
+X-Google-Smtp-Source: ABdhPJxZzyOA/OXdDbOTRosPq5K5546OioeGuvjfL98xly+cJSbCFdY7/mzCWxYx8HhR8kOEcFz1eQ==
+X-Received: by 2002:a62:b60f:0:b0:508:2a61:2c8b with SMTP id j15-20020a62b60f000000b005082a612c8bmr11424511pff.2.1652008187667;
+        Sun, 08 May 2022 04:09:47 -0700 (PDT)
+Received: from localhost ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902e9d100b0015ea8b4b8f3sm4943158plk.263.2022.05.08.04.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 04:09:47 -0700 (PDT)
+Date:   Sun, 8 May 2022 19:09:45 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
+ original pte
+Message-ID: <Ynek+b3k6PVN3x7J@FVFYT0MHHV2J.usts.net>
+References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
+ <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+On Sun, May 08, 2022 at 05:36:39PM +0800, Baolin Wang wrote:
+> It is incorrect to use ptep_clear_flush() to nuke a hugetlb page
+> table when unmapping or migrating a hugetlb page, and will change
+> to use huge_ptep_clear_flush() instead in the following patches.
+> 
+> So this is a preparation patch, which changes the huge_ptep_clear_flush()
+> to return the original pte to help to nuke a hugetlb page table.
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-On 2022-05-06, Neil Armstrong <narmstrong@baylibre.com> wrote:
-> Thanks all for figuring out the issue, perhaps other uart drivers
-> could fall in the same issue if startup code isn't protected with
-> lock?
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-When preparing for the official patch submission [0], I needed quite a
-bit of time to understand why another function (meson_uart_reset) should
-not and cannot acquire the port->lock.
+But one nit below:
 
-I then started investigating some other drivers and indeed I see lots of
-potential problems. Any console initializing port->lock from the
-driver's probe() is probably wrong (and there are lots of them). But as
-I've learned with the meson driver, the details are subtle. Each driver
-will need to be carefully evaluated to see if it is actually safe.
+[...]
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 8605d7e..61a21af 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5342,7 +5342,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>  		ClearHPageRestoreReserve(new_page);
+>  
+>  		/* Break COW or unshare */
+> -		huge_ptep_clear_flush(vma, haddr, ptep);
+> +		(void)huge_ptep_clear_flush(vma, haddr, ptep);
 
-uart_ops->startup() is called without holding port->lock. If the device
-is a console, it is already registered and printing.
+Why add a "(void)" here? Is there any warning if no "(void)"?
+IIUC, I think we can remove this, right?
 
-driver->probe() is called without holding port->lock. If the device is a
-console, it is already registered and printing.
-
-For both functions, port->lock might not be initialized yet, so blindly
-acquiring it is wrong.
-
-Note that this is not related to the introduction of kthread printing.
-
-I've put it on my TODO list to go through the ~76 console drivers to
-investigate their startup() and probe() implementations. But I will not
-be able to do this quickly. My time might be better spent writing to all
-the maintainers asking them to please verify the usage.
-
-John Ogness
-
-[0] https://lore.kernel.org/lkml/20220508103547.626355-1-john.ogness@linutronix.de
+>  		mmu_notifier_invalidate_range(mm, range.start, range.end);
+>  		page_remove_rmap(old_page, vma, true);
+>  		hugepage_add_new_anon_rmap(new_page, vma, haddr);
+> -- 
+> 1.8.3.1
+> 
+> 

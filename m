@@ -2,235 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5F151ED55
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4015F51ED5E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiEHMLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 08:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S232530AbiEHMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 08:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiEHMLE (ORCPT
+        with ESMTP id S229798AbiEHMPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 08:11:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC4E60C0
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 05:07:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652011633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=23uoMWOSbZFEDZ+lD4psiytK5JZ2eAs3VrMpI5yC2+w=;
-        b=2HMOGF/BAVuO4X/KNGuft1AWpo7l4a4qL86tNtwYl4s+mzILUgpBqA0j8t/iWY+vbqhw2A
-        jdwWCcDlTVpLPSV2IPxcy+SHgVn8cPW/ijo9ExM2WWQFARFN2VrkavslGcPwA4d6VypNzJ
-        4r2fmzrDZZD/o93COuBskD35Gq49XxrCuRmaHYDniUNtfMvaWVh6YItIvx+Xemma4nMH0s
-        Mj4A3kfLhfZWVXkC9glmnmUF9RhpBlCU75DDAt3EQ3lrphPqsktrQicdaw/uqg6qA5s2dU
-        pHfG24MUTCxb3wWm/KGaPf0c6d2zvbw5k47xKxehAXqBSwTMgWXaPuDUB0ggnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652011633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=23uoMWOSbZFEDZ+lD4psiytK5JZ2eAs3VrMpI5yC2+w=;
-        b=bro1s94+hr/m++bH11HytUI4sJSWijOEY0wZE9+wNEN2CV2NsatVg/2mfh19HewwEl3FUk
-        wBd5Jf5KgLje7DBA==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] x86/urgent for v5.18-rc6
-References: <165201148069.536527.1960632033331546251.tglx@xen13>
-Message-ID: <165201159583.536601.1349852832993944140.tglx@xen13>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 8 May 2022 08:15:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041D6DEEA;
+        Sun,  8 May 2022 05:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652011916; x=1683547916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R4DAXyuGs9glGY930Yuuv0OPb/qcHtgFsYO0YLL/VWc=;
+  b=B3/2golYh6Ej08Qcmz1JItIcplzomj/8tfmCHbj6H7GHozvJ6csafte/
+   pBW7tltOk0MTFB3mbsSWj/3XfZQwEO/qz4CJxp3fcGg4Gp4OgiLcbziTp
+   NFzKh6m+z/NiMFX2esBjbaZaA/Edkv+2X0m+zykwSaB/Dk9OYnUzTs6NP
+   xt1yZGLlyGnqL4o+tQHbKFThX6IJi2RXjoW2OxLBL2edqkL9IsXEVig2f
+   8reAPCgfW/79HoqgAQVvuRTmZvN8RgoEj95Oe4YePyP9Ya5EKmMn1PEjT
+   ybpL9amTQeEh5MCeUQLHWJFGs9QWwO83fb6dexDg/zemasf5HSzNn4W4d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="267672621"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="267672621"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 05:11:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="622549952"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 05:11:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnflM-000FTB-5l;
+        Sun, 08 May 2022 12:11:48 +0000
+Date:   Sun, 8 May 2022 20:11:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue
+ when migration
+Message-ID: <202205081950.IpKFNYip-lkp@intel.com>
+References: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Date:   Sun,  8 May 2022 14:07:12 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Baolin,
 
-please pull the latest x86/urgent branch from:
+I love your patch! Yet something to improve:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2022-=
-05-08
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20220506]
+[cannot apply to hnaz-mm/master arm64/for-next/core linus/master v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-up to:  59f5ede3bc0f: x86/fpu: Prevent FPU state corruption
+url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220508/202205081950.IpKFNYip-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/907981b27213707fdb2f8a24c107d6752a09a773
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
+        git checkout 907981b27213707fdb2f8a24c107d6752a09a773
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/rmap.c:1931:13: error: call to undeclared function 'huge_ptep_clear_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                    ^
+   mm/rmap.c:1931:13: note: did you mean 'ptep_clear_flush'?
+   include/linux/pgtable.h:431:14: note: 'ptep_clear_flush' declared here
+   extern pte_t ptep_clear_flush(struct vm_area_struct *vma,
+                ^
+>> mm/rmap.c:1931:11: error: assigning to 'pte_t' from incompatible type 'int'
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/rmap.c:2023:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   mm/rmap.c:2035:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   4 errors generated.
 
 
-A fix and an email address update:
+vim +/huge_ptep_clear_flush +1931 mm/rmap.c
 
- - Prevent FPU state corruption. The condition in irq_fpu_usable() grants
-   FPU usage when the FPU is not used in the kernel. That's just wrong as
-   it does not take the fpregs_lock()'ed regions into account. If FPU usage
-   happens within such a region from interrupt context, then the FPU state
-   gets corrupted. That's a long standing bug, which got unearthed by the
-   recent changes to the random code.
+  1883	
+  1884			/* Unexpected PMD-mapped THP? */
+  1885			VM_BUG_ON_FOLIO(!pvmw.pte, folio);
+  1886	
+  1887			subpage = folio_page(folio,
+  1888					pte_pfn(*pvmw.pte) - folio_pfn(folio));
+  1889			address = pvmw.address;
+  1890			anon_exclusive = folio_test_anon(folio) &&
+  1891					 PageAnonExclusive(subpage);
+  1892	
+  1893			if (folio_test_hugetlb(folio)) {
+  1894				/*
+  1895				 * huge_pmd_unshare may unmap an entire PMD page.
+  1896				 * There is no way of knowing exactly which PMDs may
+  1897				 * be cached for this mm, so we must flush them all.
+  1898				 * start/end were already adjusted above to cover this
+  1899				 * range.
+  1900				 */
+  1901				flush_cache_range(vma, range.start, range.end);
+  1902	
+  1903				if (!folio_test_anon(folio)) {
+  1904					/*
+  1905					 * To call huge_pmd_unshare, i_mmap_rwsem must be
+  1906					 * held in write mode.  Caller needs to explicitly
+  1907					 * do this outside rmap routines.
+  1908					 */
+  1909					VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+  1910	
+  1911					if (huge_pmd_unshare(mm, vma, &address, pvmw.pte)) {
+  1912						flush_tlb_range(vma, range.start, range.end);
+  1913						mmu_notifier_invalidate_range(mm, range.start,
+  1914									      range.end);
+  1915	
+  1916						/*
+  1917						 * The ref count of the PMD page was dropped
+  1918						 * which is part of the way map counting
+  1919						 * is done for shared PMDs.  Return 'true'
+  1920						 * here.  When there is no other sharing,
+  1921						 * huge_pmd_unshare returns false and we will
+  1922						 * unmap the actual page and drop map count
+  1923						 * to zero.
+  1924						 */
+  1925						page_vma_mapped_walk_done(&pvmw);
+  1926						break;
+  1927					}
+  1928				}
+  1929	
+  1930				/* Nuke the hugetlb page table entry */
+> 1931				pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+  1932			} else {
+  1933				flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+  1934				/* Nuke the page table entry. */
+  1935				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+  1936			}
+  1937	
+  1938			/* Set the dirty flag on the folio now the pte is gone. */
+  1939			if (pte_dirty(pteval))
+  1940				folio_mark_dirty(folio);
+  1941	
+  1942			/* Update high watermark before we lower rss */
+  1943			update_hiwater_rss(mm);
+  1944	
+  1945			if (folio_is_zone_device(folio)) {
+  1946				unsigned long pfn = folio_pfn(folio);
+  1947				swp_entry_t entry;
+  1948				pte_t swp_pte;
+  1949	
+  1950				if (anon_exclusive)
+  1951					BUG_ON(page_try_share_anon_rmap(subpage));
+  1952	
+  1953				/*
+  1954				 * Store the pfn of the page in a special migration
+  1955				 * pte. do_swap_page() will wait until the migration
+  1956				 * pte is removed and then restart fault handling.
+  1957				 */
+  1958				entry = pte_to_swp_entry(pteval);
+  1959				if (is_writable_device_private_entry(entry))
+  1960					entry = make_writable_migration_entry(pfn);
+  1961				else if (anon_exclusive)
+  1962					entry = make_readable_exclusive_migration_entry(pfn);
+  1963				else
+  1964					entry = make_readable_migration_entry(pfn);
+  1965				swp_pte = swp_entry_to_pte(entry);
+  1966	
+  1967				/*
+  1968				 * pteval maps a zone device page and is therefore
+  1969				 * a swap pte.
+  1970				 */
+  1971				if (pte_swp_soft_dirty(pteval))
+  1972					swp_pte = pte_swp_mksoft_dirty(swp_pte);
+  1973				if (pte_swp_uffd_wp(pteval))
+  1974					swp_pte = pte_swp_mkuffd_wp(swp_pte);
+  1975				set_pte_at(mm, pvmw.address, pvmw.pte, swp_pte);
+  1976				trace_set_migration_pte(pvmw.address, pte_val(swp_pte),
+  1977							compound_order(&folio->page));
+  1978				/*
+  1979				 * No need to invalidate here it will synchronize on
+  1980				 * against the special swap migration pte.
+  1981				 *
+  1982				 * The assignment to subpage above was computed from a
+  1983				 * swap PTE which results in an invalid pointer.
+  1984				 * Since only PAGE_SIZE pages can currently be
+  1985				 * migrated, just set it to page. This will need to be
+  1986				 * changed when hugepage migrations to device private
+  1987				 * memory are supported.
+  1988				 */
+  1989				subpage = &folio->page;
+  1990			} else if (PageHWPoison(subpage)) {
+  1991				pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+  1992				if (folio_test_hugetlb(folio)) {
+  1993					hugetlb_count_sub(folio_nr_pages(folio), mm);
+  1994					set_huge_swap_pte_at(mm, address,
+  1995							     pvmw.pte, pteval,
+  1996							     vma_mmu_pagesize(vma));
+  1997				} else {
+  1998					dec_mm_counter(mm, mm_counter(&folio->page));
+  1999					set_pte_at(mm, address, pvmw.pte, pteval);
+  2000				}
+  2001	
+  2002			} else if (pte_unused(pteval) && !userfaultfd_armed(vma)) {
+  2003				/*
+  2004				 * The guest indicated that the page content is of no
+  2005				 * interest anymore. Simply discard the pte, vmscan
+  2006				 * will take care of the rest.
+  2007				 * A future reference will then fault in a new zero
+  2008				 * page. When userfaultfd is active, we must not drop
+  2009				 * this page though, as its main user (postcopy
+  2010				 * migration) will not expect userfaults on already
+  2011				 * copied pages.
+  2012				 */
+  2013				dec_mm_counter(mm, mm_counter(&folio->page));
+  2014				/* We have to invalidate as we cleared the pte */
+  2015				mmu_notifier_invalidate_range(mm, address,
+  2016							      address + PAGE_SIZE);
+  2017			} else {
+  2018				swp_entry_t entry;
+  2019				pte_t swp_pte;
+  2020	
+  2021				if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+  2022					if (folio_test_hugetlb(folio))
+> 2023						set_huge_pte_at(mm, address, pvmw.pte, pteval);
+  2024					else
+  2025						set_pte_at(mm, address, pvmw.pte, pteval);
+  2026					ret = false;
+  2027					page_vma_mapped_walk_done(&pvmw);
+  2028					break;
+  2029				}
+  2030				VM_BUG_ON_PAGE(pte_write(pteval) && folio_test_anon(folio) &&
+  2031					       !anon_exclusive, subpage);
+  2032				if (anon_exclusive &&
+  2033				    page_try_share_anon_rmap(subpage)) {
+  2034					if (folio_test_hugetlb(folio))
+  2035						set_huge_pte_at(mm, address, pvmw.pte, pteval);
+  2036					else
+  2037						set_pte_at(mm, address, pvmw.pte, pteval);
+  2038					ret = false;
+  2039					page_vma_mapped_walk_done(&pvmw);
+  2040					break;
+  2041				}
+  2042	
+  2043				/*
+  2044				 * Store the pfn of the page in a special migration
+  2045				 * pte. do_swap_page() will wait until the migration
+  2046				 * pte is removed and then restart fault handling.
+  2047				 */
+  2048				if (pte_write(pteval))
+  2049					entry = make_writable_migration_entry(
+  2050								page_to_pfn(subpage));
+  2051				else if (anon_exclusive)
+  2052					entry = make_readable_exclusive_migration_entry(
+  2053								page_to_pfn(subpage));
+  2054				else
+  2055					entry = make_readable_migration_entry(
+  2056								page_to_pfn(subpage));
+  2057	
+  2058				swp_pte = swp_entry_to_pte(entry);
+  2059				if (pte_soft_dirty(pteval))
+  2060					swp_pte = pte_swp_mksoft_dirty(swp_pte);
+  2061				if (pte_uffd_wp(pteval))
+  2062					swp_pte = pte_swp_mkuffd_wp(swp_pte);
+  2063				if (folio_test_hugetlb(folio))
+  2064					set_huge_swap_pte_at(mm, address, pvmw.pte,
+  2065							     swp_pte, vma_mmu_pagesize(vma));
+  2066				else
+  2067					set_pte_at(mm, address, pvmw.pte, swp_pte);
+  2068				trace_set_migration_pte(address, pte_val(swp_pte),
+  2069							compound_order(&folio->page));
+  2070				/*
+  2071				 * No need to invalidate here it will synchronize on
+  2072				 * against the special swap migration pte.
+  2073				 */
+  2074			}
+  2075	
+  2076			/*
+  2077			 * No need to call mmu_notifier_invalidate_range() it has be
+  2078			 * done above for all cases requiring it to happen under page
+  2079			 * table lock before mmu_notifier_invalidate_range_end()
+  2080			 *
+  2081			 * See Documentation/vm/mmu_notifier.rst
+  2082			 */
+  2083			page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
+  2084			if (vma->vm_flags & VM_LOCKED)
+  2085				mlock_page_drain_local();
+  2086			folio_put(folio);
+  2087		}
+  2088	
+  2089		mmu_notifier_invalidate_range_end(&range);
+  2090	
+  2091		return ret;
+  2092	}
+  2093	
 
- - Josh wants to use his kernel.org email address
-
-
-Thanks,
-
-	tglx
-
------------------->
-Josh Poimboeuf (1):
-      MAINTAINERS: Update Josh Poimboeuf's email address
-
-Thomas Gleixner (1):
-      x86/fpu: Prevent FPU state corruption
-
-
- MAINTAINERS                | 10 +++----
- arch/x86/kernel/fpu/core.c | 67 ++++++++++++++++++--------------------------=
---
- 2 files changed, 31 insertions(+), 46 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index edc96cdb85e8..1e1a2264792d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7499,7 +7499,7 @@ F:	Documentation/hwmon/f71805f.rst
- F:	drivers/hwmon/f71805f.c
-=20
- FADDR2LINE
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- S:	Maintained
- F:	scripts/faddr2line
-=20
-@@ -11348,7 +11348,7 @@ F:	drivers/mmc/host/litex_mmc.c
- N:	litex
-=20
- LIVE PATCHING
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Jiri Kosina <jikos@kernel.org>
- M:	Miroslav Benes <mbenes@suse.cz>
- M:	Petr Mladek <pmladek@suse.com>
-@@ -14224,7 +14224,7 @@ F:	lib/objagg.c
- F:	lib/test_objagg.c
-=20
- OBJTOOL
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
- S:	Supported
- F:	tools/objtool/
-@@ -18792,7 +18792,7 @@ F:	include/dt-bindings/reset/starfive-jh7100.h
-=20
- STATIC BRANCH/CALL
- M:	Peter Zijlstra <peterz@infradead.org>
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Jason Baron <jbaron@akamai.com>
- R:	Steven Rostedt <rostedt@goodmis.org>
- R:	Ard Biesheuvel <ardb@kernel.org>
-@@ -21444,7 +21444,7 @@ F:	arch/x86/kernel/apic/x2apic_uv_x.c
- F:	arch/x86/platform/uv/
-=20
- X86 STACK UNWINDING
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
- S:	Supported
- F:	arch/x86/include/asm/unwind*.h
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index c049561f373a..e28ab0ecc537 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -41,17 +41,7 @@ struct fpu_state_config fpu_user_cfg __ro_after_init;
-  */
- struct fpstate init_fpstate __ro_after_init;
-=20
--/*
-- * Track whether the kernel is using the FPU state
-- * currently.
-- *
-- * This flag is used:
-- *
-- *   - by IRQ context code to potentially use the FPU
-- *     if it's unused.
-- *
-- *   - to debug kernel_fpu_begin()/end() correctness
-- */
-+/* Track in-kernel FPU usage */
- static DEFINE_PER_CPU(bool, in_kernel_fpu);
-=20
- /*
-@@ -59,42 +49,37 @@ static DEFINE_PER_CPU(bool, in_kernel_fpu);
-  */
- DEFINE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
-=20
--static bool kernel_fpu_disabled(void)
--{
--	return this_cpu_read(in_kernel_fpu);
--}
--
--static bool interrupted_kernel_fpu_idle(void)
--{
--	return !kernel_fpu_disabled();
--}
--
--/*
-- * Were we in user mode (or vm86 mode) when we were
-- * interrupted?
-- *
-- * Doing kernel_fpu_begin/end() is ok if we are running
-- * in an interrupt context from user mode - we'll just
-- * save the FPU state as required.
-- */
--static bool interrupted_user_mode(void)
--{
--	struct pt_regs *regs =3D get_irq_regs();
--	return regs && user_mode(regs);
--}
--
- /*
-  * Can we use the FPU in kernel mode with the
-  * whole "kernel_fpu_begin/end()" sequence?
-- *
-- * It's always ok in process context (ie "not interrupt")
-- * but it is sometimes ok even from an irq.
-  */
- bool irq_fpu_usable(void)
- {
--	return !in_interrupt() ||
--		interrupted_user_mode() ||
--		interrupted_kernel_fpu_idle();
-+	if (WARN_ON_ONCE(in_nmi()))
-+		return false;
-+
-+	/* In kernel FPU usage already active? */
-+	if (this_cpu_read(in_kernel_fpu))
-+		return false;
-+
-+	/*
-+	 * When not in NMI or hard interrupt context, FPU can be used in:
-+	 *
-+	 * - Task context except from within fpregs_lock()'ed critical
-+	 *   regions.
-+	 *
-+	 * - Soft interrupt processing context which cannot happen
-+	 *   while in a fpregs_lock()'ed critical region.
-+	 */
-+	if (!in_hardirq())
-+		return true;
-+
-+	/*
-+	 * In hard interrupt context it's safe when soft interrupts
-+	 * are enabled, which means the interrupt did not hit in
-+	 * a fpregs_lock()'ed critical region.
-+	 */
-+	return !softirq_count();
- }
- EXPORT_SYMBOL(irq_fpu_usable);
-=20
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

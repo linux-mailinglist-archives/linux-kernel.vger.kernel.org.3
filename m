@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2AD51EC4D
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964E951EC4E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiEHJKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S231656AbiEHJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiEHJKR (ORCPT
+        with ESMTP id S231348AbiEHJMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:10:17 -0400
+        Sun, 8 May 2022 05:12:36 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901B8DF11
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:06:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE854DF15
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:08:46 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3FC7F1F9B5;
-        Sun,  8 May 2022 09:06:22 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7D71E1F94E;
+        Sun,  8 May 2022 09:08:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652000782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=HB3Z1lpogX9wMn9ze7RvLK2L5d+j40LZwTuSdKY5CQE=;
-        b=NLIZ505/BpjaOjC9eo7wiENNTuhqWN77Nvg8Tdg3UnOUGfeg60u7ABa1gnwVXsclBRRrQ1
-        INTb93v08Tb/mXR1PMRvkEbKXGp7F9xL5O2Pi27nOknWnn+FUTTSE7um+Uut0WS1rnQ7Ug
-        jr+Ee9hwdZr2g2F7Q15SOTO/52oPJsk=
+        t=1652000925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KzMG58xlHRYJHpOi6n4ZmfzNuQcIpWcVOtEdXFXXxAc=;
+        b=v0DisxqIj25O52KzCg+fgvTRzgadjqp1byPNE+qfZoaZPC5kdV2PzePexF+Gx8uxrmzWEq
+        OSlSAyAspInWe71vNx2++lYHaLokWFo2sNG0fMFwI1Pf8/BaFV+zcKg9wQRTq/InxUTVh7
+        EpvwmgpifTuvXR3hlGEol7ydQD3jqtc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652000782;
+        s=susede2_ed25519; t=1652000925;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=HB3Z1lpogX9wMn9ze7RvLK2L5d+j40LZwTuSdKY5CQE=;
-        b=3Vjn3jXoVbJHIaSCCYfwkp1uz0Axn8hbwfAnlsbAt0Q73ztSwNvyqaeSlgsEF65XdxWzLx
-        Kj2uch3UZ25ZeGBA==
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KzMG58xlHRYJHpOi6n4ZmfzNuQcIpWcVOtEdXFXXxAc=;
+        b=fcojrQa+ETV6Xa2uC7II9U3gvCtifGhbnaNftYU60cZuOm0z73mXd13P/WfI9apCufN2t8
+        VaRqpElQhkPhY1AQ==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 35FC02C141;
-        Sun,  8 May 2022 09:06:21 +0000 (UTC)
-Date:   Sun, 08 May 2022 11:06:21 +0200
-Message-ID: <s5h5ymgo0ky.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 66BD22C141;
+        Sun,  8 May 2022 09:08:45 +0000 (UTC)
+Date:   Sun, 08 May 2022 11:08:45 +0200
+Message-ID: <s5h35hko0gy.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sound fixes for 5.18-rc6
+To:     bo liu <bo.liu@senarytech.com>
+Cc:     tiwai@suse.com, perex@perex.cz, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] add a new hda codec SN6140
+In-Reply-To: <20220506025735.17731-1-bo.liu@senarytech.com>
+References: <20220506025735.17731-1-bo.liu@senarytech.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -58,98 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, 06 May 2022 04:57:35 +0200,
+bo liu wrote:
+> 
+> The current kernel does not support the SN6140 codec chip.
+> Add the SN6140 codec configuration item to kernel.
+> 
+> Signed-off-by: bo liu <bo.liu@senarytech.com>
 
-please pull sound fixes for v5.18-rc6 from:
+Thanks, applied now to for-next branch.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.18-rc6
 
-The topmost commit is ac02e3cd5ab9407dcf926df2a1085c13881ccf7a
-
-----------------------------------------------------------------
-
-sound fixes for 5.18-rc6
-
-It became slightly larger as I've been off in the last weeks.
-The majority of changes at this PR is about ASoC, the fixes for
-dmaengine and for for addressing issues reported by CI, as well as
-other device-specific small fixes.  Also, the fixes for FireWire
-core stack and the usual HD-audio quirks are included.
-
-----------------------------------------------------------------
-
-Ajit Kumar Pandey (1):
-      ASoC: SOF: Fix NULL pointer exception in sof_pci_probe callback
-
-Andy Chi (1):
-      ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
-
-Chengfeng Ye (1):
-      firewire: fix potential uaf in outbound_phy_packet_callback()
-
-ChiYuan Huang (1):
-      ASoC: rt9120: Correct the reg 0x09 size to one byte
-
-Codrin Ciubotariu (2):
-      ASoC: atmel: mchp-pdmc: set prepare_slave_config
-      ASoC: dmaengine: Restore NULL prepare_slave_config() callback
-
-Hui Wang (1):
-      ALSA: hda/realtek: Fix mute led issue on thinkpad with cs35l41 s-codec
-
-Jakob Koschel (1):
-      firewire: remove check of list iterator against head past the loop body
-
-Mark Brown (8):
-      ASoC: wm8958: Fix change notifications for DSP controls
-      ASoC: da7219: Fix change notifications for tone generator frequency
-      ASoC: meson: Fix event generation for AUI ACODEC mux
-      ASoC: meson: Fix event generation for AUI CODEC mux
-      ASoC: meson: Fix event generation for G12A tohdmi mux
-      ASoC: max98090: Reject invalid values in custom control put()
-      ASoC: max98090: Generate notifications on changes for custom control
-      ASoC: ops: Validate input values in snd_soc_put_volsw_range()
-
-Neil Armstrong (2):
-      ASoC: meson: axg-tdm-interface: Fix formatters in trigger"
-      ASoC: meson: axg-card: Fix nonatomic links
-
-Niels Dossche (1):
-      firewire: core: extend card->lock in fw_core_handle_bus_reset
-
-Olivier Moysan (1):
-      ASoC: simple-card-utils: fix sysclk shutdown
-
-Pierre-Louis Bossart (1):
-      ASoC: soc-ops: fix error handling
-
-Takashi Sakamoto (1):
-      ALSA: fireworks: fix wrong return count shorter than expected by 4 bytes
-
-Zihao Wang (1):
-      ALSA: hda/realtek: Add quirk for Yoga Duet 7 13ITL6 speakers
-
----
- drivers/firewire/core-card.c               |  3 +++
- drivers/firewire/core-cdev.c               |  4 +++-
- drivers/firewire/core-topology.c           |  9 +++------
- drivers/firewire/core-transaction.c        | 30 ++++++++++++++++--------------
- drivers/firewire/sbp2.c                    | 13 +++++++------
- sound/firewire/fireworks/fireworks_hwdep.c |  1 +
- sound/pci/hda/patch_realtek.c              | 15 +++++++++------
- sound/soc/atmel/mchp-pdmc.c                |  1 +
- sound/soc/codecs/da7219.c                  | 14 ++++++++++----
- sound/soc/codecs/max98090.c                |  5 ++++-
- sound/soc/codecs/rt9120.c                  |  1 -
- sound/soc/codecs/wm8958-dsp2.c             |  8 ++++----
- sound/soc/generic/simple-card-utils.c      |  2 +-
- sound/soc/meson/aiu-acodec-ctrl.c          |  2 +-
- sound/soc/meson/aiu-codec-ctrl.c           |  2 +-
- sound/soc/meson/axg-card.c                 |  1 -
- sound/soc/meson/axg-tdm-interface.c        | 26 +++++---------------------
- sound/soc/meson/g12a-tohdmitx.c            |  2 +-
- sound/soc/soc-generic-dmaengine-pcm.c      |  6 +++---
- sound/soc/soc-ops.c                        | 20 ++++++++++++++++++--
- sound/soc/sof/sof-pci-dev.c                |  5 +++++
- 21 files changed, 96 insertions(+), 74 deletions(-)
-
+Takashi

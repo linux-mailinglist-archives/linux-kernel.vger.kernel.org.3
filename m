@@ -2,146 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EB951EF6F
+	by mail.lfdr.de (Postfix) with ESMTP id CF5F251EF70
 	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbiEHTGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S240969AbiEHTI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378051AbiEHSkd (ORCPT
+        with ESMTP id S1379311AbiEHSnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 14:40:33 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD658DF40
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:36:41 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i19so23004777eja.11
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xBmn7X1sKMD561MY32VMh/zOVxyDoB4sLlJH4mBK1Yg=;
-        b=dr3n8iEg3Okpi2+98RAFGyaZsIkZq224vHkxOm2jpXBTr4bMWowz9Nq+aeGy5w2pE1
-         ZJ6350+ep2T6lHqgbhVu2oD65CQstrAqa+O3z6jHA46o2ZwHqJCfHDRMc+xQCXNRYAjR
-         Y3/d9df793izCkwXzJqiiChoAuyFekvCT/hKg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xBmn7X1sKMD561MY32VMh/zOVxyDoB4sLlJH4mBK1Yg=;
-        b=A39Q55R6TZkb9GuWI7L6u0SuqWeGp89Ck6aZib+dx/1jn56OtCTzEMPbsMrtEV5jBt
-         mYnZnQmdrSFZdu9wWGQCNC+rAMM6y5IDzRz8kartp2Zz9GSR2OeeIWJdZ9ckZy3hDuap
-         53tFmb0xCOIS03kfpuQ+brnA6cFJUtlqPHhcDCTE3vRPfL7owNGYAaWSFqmbomyXSfAn
-         aLQLiMgG9EfOeJBimInOHBbh0FP5IJCJBiwsreHwFAIG5Jw/S444E9d1kX3ixMCsZHpk
-         UOs9hdDhqWep2XFnEd0XphwZpO1G1hLLSXjaSzMpICbJ3s6tpX3+l2ySOxfLkfAarCxB
-         oEVQ==
-X-Gm-Message-State: AOAM533tBLKIqb4wWuk674xOV0LhIEZegbEXPA6mxp+wJQsrYYMZ9GKd
-        xxgWnG7YWmd4zpc3+gU8R+D3j1s+DHedCt3y
-X-Google-Smtp-Source: ABdhPJxtH2wIKz2peAtt3wLzL4JzTxH/PAm+vbzZziEufVv8RawVhdbA19MsLxlzKxbWHrMV9IHv2A==
-X-Received: by 2002:a17:907:1c20:b0:6f4:639e:9400 with SMTP id nc32-20020a1709071c2000b006f4639e9400mr11323490ejc.485.1652035000138;
-        Sun, 08 May 2022 11:36:40 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id cn18-20020a0564020cb200b0042617ba639esm5099113edb.40.2022.05.08.11.36.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 11:36:39 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id x18so16693665wrc.0
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:36:39 -0700 (PDT)
-X-Received: by 2002:adf:dfc8:0:b0:20a:d256:5b5c with SMTP id
- q8-20020adfdfc8000000b0020ad2565b5cmr10818059wrn.97.1652034999135; Sun, 08
- May 2022 11:36:39 -0700 (PDT)
+        Sun, 8 May 2022 14:43:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A217DF40;
+        Sun,  8 May 2022 11:39:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652035192; x=1683571192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ku5z9ZOYUJh+GqggbRmp5uymILKAy+CEwjEQNBeO+Ps=;
+  b=HgUZGve7GtbEh9ovsuv8D2FBpnYI0KWYJS+eft1rgTZv65YAkJ5Jk2HM
+   ULit1MrKc6ulQWJ/YBciOH9JyiAtZ3neeAov0OCTbFG5k+huZ6wAr1Xl9
+   wHOxjkFqlGXigUVfD/an52cJQUoOnSrHn9XuVRcBBpEwZQwW5YZHmb7aW
+   gq2WebXyZhzAqm3htHQDeGhpAROAzURznFMwcUFvVUA0TFkFY4KxIS+TS
+   hK6LiMFHYAGPTe5jDHN4OndL758217XcZ7uBfgUL/RkPPs5bUVQPmfRM1
+   4rFEyDbll6+k6Wjr9yCFMN8nbXxwvm3tH14NJm3SgddXiMLsseydnz8We
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="329450432"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="329450432"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 11:39:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="601650575"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 May 2022 11:39:48 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnloq-000Fic-7M;
+        Sun, 08 May 2022 18:39:48 +0000
+Date:   Mon, 9 May 2022 02:39:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        jikos@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanberzl@gmail.com, albertofanjul@gmail.com,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH for-5.19/uclogic 1/7] HID: uclogic: Move param printing
+ to a function
+Message-ID: <202205090241.d7Xmt8GT-lkp@intel.com>
+References: <20220508160146.13004-2-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-References: <165201148069.536527.1960632033331546251.tglx@xen13>
- <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com> <CAHk-=whj6m0B9ys4XyE4AAPPoXE7XpBtxL7mD3Rk6EYX1=Ugng@mail.gmail.com>
-In-Reply-To: <CAHk-=whj6m0B9ys4XyE4AAPPoXE7XpBtxL7mD3Rk6EYX1=Ugng@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 8 May 2022 11:36:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiEC-Jdx4iTP5NQ0a8stsU+SL0DjbTwhQ+mvPGNBXyMag@mail.gmail.com>
-Message-ID: <CAHk-=wiEC-Jdx4iTP5NQ0a8stsU+SL0DjbTwhQ+mvPGNBXyMag@mail.gmail.com>
-Subject: Re: [GIT pull] core/urgent for v5.18-rc6
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220508160146.13004-2-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 8, 2022 at 11:09 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Looks like it is
->
->  ->(*sva_bind)()
->     -> intel_svm_bind_mm()
->       -> mmu_notifier_register(&svm->notifier, mm)
->
-> and yes, the mmu notifiers annoyingly end up doing an mmgrab [..]
+Hi "José,
 
-Side note: quite independently of this mmgrab issue, I think the code
-in question is *very* suspect and horrendously fragile.
+Thank you for the patch! Perhaps something to improve:
 
-In particular, the code ends up being called through things like this:
+[auto build test WARNING on hid/for-next]
+[cannot apply to v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-     handle = iommu_sva_bind_device(uacce->parent, current->mm, NULL);
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+config: x86_64-randconfig-a003-20220509 (https://download.01.org/0day-ci/archive/20220509/202205090241.d7Xmt8GT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4c0671e4ce0687136ff71aa65539cd3a2798d99d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+        git checkout 4c0671e4ce0687136ff71aa65539cd3a2798d99d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/
 
-and then that Intel svm.c code does this:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-                svm->pasid = mm->pasid;
-                svm->mm = mm;
-                svm->flags = flags;
+All warnings (new ones prefixed by >>):
 
-and saves off that mm pointer in the 'svm' structure.
+>> drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+   drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface frame parameters with hid_dbg(), indented with two
+   drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Dump tablet interface parameters with hid_dbg().
 
-AND IT NEVER TAKES ANY REFERENCE TO IT AT ALL!
 
-It then does
+vim +48 drivers/hid/hid-uclogic-params.c
 
-        mm = svm->mm;
+    46	
+    47	/**
+  > 48	 * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+    49	 *
+    50	 * @hdev:	The HID device the pen parameters describe.
+    51	 * @pen:	The pen parameters to dump.
+    52	 */
+    53	static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
+    54						const struct uclogic_params_pen *pen)
+    55	{
+    56		size_t i;
+    57	
+    58		hid_dbg(hdev, "\t.usage_invalid = %s\n",
+    59			(pen->usage_invalid ? "true" : "false"));
+    60		hid_dbg(hdev, "\t.desc_ptr = %p\n", pen->desc_ptr);
+    61		hid_dbg(hdev, "\t.desc_size = %u\n", pen->desc_size);
+    62		hid_dbg(hdev, "\t.id = %u\n", pen->id);
+    63		hid_dbg(hdev, "\t.subreport_list = {\n");
+    64		for (i = 0; i < ARRAY_SIZE(pen->subreport_list); i++) {
+    65			hid_dbg(hdev, "\t\t{0x%02hhx, %hhu}%s\n",
+    66				pen->subreport_list[i].value,
+    67				pen->subreport_list[i].id,
+    68				i < (ARRAY_SIZE(pen->subreport_list) - 1) ? "," : "");
+    69		}
+    70		hid_dbg(hdev, "\t}\n");
+    71		hid_dbg(hdev, "\t.inrange = %s\n",
+    72			uclogic_params_pen_inrange_to_str(pen->inrange));
+    73		hid_dbg(hdev, "\t.fragmented_hires = %s\n",
+    74			(pen->fragmented_hires ? "true" : "false"));
+    75		hid_dbg(hdev, "\t.tilt_y_flipped = %s\n",
+    76			(pen->tilt_y_flipped ? "true" : "false"));
+    77	}
+    78	
 
-later at some unspecified time, and the 'mm' might long since have died.
-
-In other words, the code works almost by accident - the only user of
-the 'mm' pointer seems to be that mmu_notifier_register() thing, so it
-basically treats the 'struct mm_struct' as something as a random
-cookie.
-
-And yes, the mmu notifiers do then take that mmgrab reference to the
-mm, so it all works.
-
-But it sure looks horrendously ugly. Saving off a 'struct mm_struct'
-pointer with having basically an accidental reference to it is WRONG.
-
-In fact, it will save off that pointer whether it then actually does
-the mmu_notifier thing on it, because the code actually does
-
-                [...]
-                svm->mm = mm;
-                svm->flags = flags;
-                INIT_LIST_HEAD_RCU(&svm->devs);
-
-                if (!(flags & SVM_FLAG_SUPERVISOR_MODE)) {
-                        svm->notifier.ops = &intel_mmuops;
-                        ret = mmu_notifier_register(&svm->notifier, mm);
-                [...]
-
-so that mmu_notifier_register() call is conditional. On the freeing
-path, it then uses that "svm->notifier.ops" pointer as a "did we
-register this thing or not" flag, so again - it all technically
-*works*, but this is all horrendously ugly and wrong on so many
-levels, keeping pointers around with very dubious reference counting
-indeed.
-
-               Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

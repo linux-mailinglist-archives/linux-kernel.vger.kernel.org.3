@@ -2,179 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E0851EF33
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A3251EF28
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiEHTIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S238971AbiEHTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiEHRk1 (ORCPT
+        with ESMTP id S238521AbiEHRr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 13:40:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D262E023
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 10:36:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7F71B80E42
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED89AC385AC;
-        Sun,  8 May 2022 17:36:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FTkZe9z0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652031391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mACRmOl58U9SO4gJQqVdbRM/DbDb3TktaxEm7VJe80w=;
-        b=FTkZe9z0ZKjdh/5f0w3LGQngFA8AbInq0NIWgDVJ1iOnBFWU78Pj13GWf9/uMx3dVkm/8/
-        lliDsL/U5rNtXapxsZQd8OUvQEju40dj5pzwLHccEFWzFbGrPS53REvej4G5xDmtCwaPh/
-        Q/KwGFkMjUFKX/JcVYgD2qXn8B+6+f4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3cfeec18 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 8 May 2022 17:36:31 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH v2] random: use symbolic constants for crng_init states
-Date:   Sun,  8 May 2022 19:36:10 +0200
-Message-Id: <20220508173610.151998-1-Jason@zx2c4.com>
-In-Reply-To: <Ynf8qMmN+AAofKMy@zx2c4.com>
-References: <Ynf8qMmN+AAofKMy@zx2c4.com>
+        Sun, 8 May 2022 13:47:57 -0400
+X-Greylist: delayed 331 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 May 2022 10:44:04 PDT
+Received: from fx.arvanta.net (static-213-198-238-194.adsl.eunet.rs [213.198.238.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E74DBE10;
+        Sun,  8 May 2022 10:44:04 -0700 (PDT)
+Received: from m1 (unknown [10.5.1.15])
+        by fx.arvanta.net (Postfix) with ESMTP id D245E2B2FB;
+        Sun,  8 May 2022 19:38:29 +0200 (CEST)
+Date:   Sun, 8 May 2022 19:38:30 +0200
+From:   Milan =?utf-8?Q?P=2E_Stani=C4=87?= <mps@arvanta.net>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Philip Rinn <rinni@inventati.org>, wens@csie.org,
+        Samuel Holland <samuel@sholland.org>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] arm64: dts: allwinner: a64: olinuxino: Enable audio
+Message-ID: <YngAFrGeivZpJ5dK@m1>
+References: <4fc41278-c46c-6486-a336-f2a329bd6bd0@sholland.org>
+ <20220407155145.10891-1-rinni@inventati.org>
+ <40976a35-2241-a2f0-c9be-dd32c1b51814@sholland.org>
+ <4727823.31r3eYUQgx@kista>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4727823.31r3eYUQgx@kista>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-crng_init represents a state machine, with three states, and various
-rules for transitions. For the longest time, we've been managing these
-with "0", "1", and "2", and expecting people to figure it out. To make
-the code more obvious, replace these with proper enum values
-representing the transition, and then redocument what each of these
-states mean.
+On Sun, 2022-04-10 at 20:23, Jernej Škrabec wrote:
+> Dne petek, 08. april 2022 ob 00:06:01 CEST je Samuel Holland napisal(a):
+> > On 4/7/22 10:51 AM, Philip Rinn wrote:
+> > > Enable the audio hardware on the Olimex A64-OLinuXino board family.
+> > > Tested on the A64-OLinuXino-2Ge8G-IND variant.
+> > > 
+> > > Signed-off-by: Philip Rinn <rinni@inventati.org>
+> > 
+> > Acked-by: Samuel Holland <samuel@sholland.org>
+> 
+> Applied to sunxi/dt-for-5.19. Thanks!
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Joe Perches <joe@perches.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+About week ago I made nearly same patch but Jernej pointed me to this
+one. I applied this patch and it works like one I made.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 2af7a755d632..8af29507ae0d 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -72,16 +72,16 @@
-  *********************************************************************/
- 
- /*
-- * crng_init =  0 --> Uninitialized
-- *		1 --> Initialized
-- *		2 --> Initialized from input_pool
-- *
-  * crng_init is protected by base_crng->lock, and only increases
-- * its value (from 0->1->2).
-+ * its value (from empty->early->ready).
-  */
--static int crng_init = 0;
--#define crng_ready() (likely(crng_init > 1))
--/* Various types of waiters for crng_init->2 transition. */
-+static enum {
-+	CRNG_EMPTY = 0, /* Little to no entropy collected */
-+	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
-+	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
-+} crng_init = CRNG_EMPTY;
-+#define crng_ready() (likely(crng_init >= CRNG_READY))
-+/* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
- static DEFINE_SPINLOCK(random_ready_chain_lock);
-@@ -284,7 +284,7 @@ static void crng_reseed(void)
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
- 	if (!crng_ready()) {
--		crng_init = 2;
-+		crng_init = CRNG_READY;
- 		finalize_init = true;
- 	}
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -378,7 +378,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
- 	 * For the fast path, we check whether we're ready, unlocked first, and
- 	 * then re-check once locked later. In the case where we're really not
- 	 * ready, we do fast key erasure with the base_crng directly, extracting
--	 * when crng_init==0.
-+	 * when crng_init==CRNG_EMPTY.
- 	 */
- 	if (!crng_ready()) {
- 		bool ready;
-@@ -386,7 +386,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
- 		spin_lock_irqsave(&base_crng.lock, flags);
- 		ready = crng_ready();
- 		if (!ready) {
--			if (crng_init == 0)
-+			if (crng_init == CRNG_EMPTY)
- 				extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_fast_key_erasure(base_crng.key, chacha_state,
- 					      random_data, random_data_len);
-@@ -740,8 +740,8 @@ EXPORT_SYMBOL(get_random_bytes_arch);
- 
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_INIT_BITS = POOL_BITS, /* No point in settling for less. */
--	POOL_FAST_INIT_BITS = POOL_INIT_BITS / 2
-+	POOL_READY_BITS = POOL_BITS, /* When crng_init->CRNG_READY */
-+	POOL_EARLY_BITS = POOL_READY_BITS / 2 /* When crng_init->CRNG_EARLY */
- };
- 
- static struct {
-@@ -836,13 +836,13 @@ static void credit_init_bits(size_t nbits)
- 		init_bits = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.init_bits, orig, init_bits) != orig);
- 
--	if (!crng_ready() && init_bits >= POOL_INIT_BITS)
-+	if (!crng_ready() && init_bits >= POOL_READY_BITS)
- 		crng_reseed();
--	else if (unlikely(crng_init == 0 && init_bits >= POOL_FAST_INIT_BITS)) {
-+	else if (unlikely(crng_init == CRNG_EMPTY && init_bits >= POOL_EARLY_BITS)) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
--		if (crng_init == 0) {
-+		if (crng_init == CRNG_EMPTY) {
- 			extract_entropy(base_crng.key, sizeof(base_crng.key));
--			crng_init = 1;
-+			crng_init = CRNG_EARLY;
- 		}
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 	}
-@@ -1595,7 +1595,7 @@ const struct file_operations urandom_fops = {
-  *
-  * - write_wakeup_threshold - the amount of entropy in the input pool
-  *   below which write polls to /dev/random will unblock, requesting
-- *   more entropy, tied to the POOL_INIT_BITS constant. It is writable
-+ *   more entropy, tied to the POOL_READY_BITS constant. It is writable
-  *   to avoid breaking old userspaces, but writing to it does not
-  *   change any behavior of the RNG.
-  *
-@@ -1610,7 +1610,7 @@ const struct file_operations urandom_fops = {
- #include <linux/sysctl.h>
- 
- static int sysctl_random_min_urandom_seed = CRNG_RESEED_INTERVAL / HZ;
--static int sysctl_random_write_wakeup_bits = POOL_INIT_BITS;
-+static int sysctl_random_write_wakeup_bits = POOL_READY_BITS;
- static int sysctl_poolsize = POOL_BITS;
- static u8 sysctl_bootid[UUID_SIZE];
- 
--- 
-2.35.1
+Audio output works fine, but recording doesn't work at all in my tests.
+I can hear myself from microphone on headphones quite fine but 'arecord'
+records only some kind of white noise. Tried all alsamixer widget
+combinations but didn't managed to record anything.
 
+Kind regards

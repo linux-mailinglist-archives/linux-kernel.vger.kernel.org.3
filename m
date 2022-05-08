@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964E951EC4E
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E0351EC54
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiEHJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S231728AbiEHJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiEHJMg (ORCPT
+        with ESMTP id S231348AbiEHJNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:12:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE854DF15
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:08:46 -0700 (PDT)
+        Sun, 8 May 2022 05:13:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9842DF16
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:09:53 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7D71E1F94E;
-        Sun,  8 May 2022 09:08:45 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 31AD621B0C;
+        Sun,  8 May 2022 09:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652000925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1652000992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KzMG58xlHRYJHpOi6n4ZmfzNuQcIpWcVOtEdXFXXxAc=;
-        b=v0DisxqIj25O52KzCg+fgvTRzgadjqp1byPNE+qfZoaZPC5kdV2PzePexF+Gx8uxrmzWEq
-        OSlSAyAspInWe71vNx2++lYHaLokWFo2sNG0fMFwI1Pf8/BaFV+zcKg9wQRTq/InxUTVh7
-        EpvwmgpifTuvXR3hlGEol7ydQD3jqtc=
+        bh=Wm9GHihpawg1Ivkqby7mqYAJB0ZTAOMMvqz4svNr5YQ=;
+        b=IgNJPzb857uUDodg3nsG4usbDabSh5SwfLmvwRa87NFvcJyfNfzMVidwzwS+A6LuH+/Ao4
+        +lwTtSuuvUZ8xh1VEUjF5RLT36QbDZDEoEgN13HJzJLXd2xNO4iwfpbIt5tOGJxse4pFrW
+        D1KZ8k8Jsy5sTxBgqI/zHaa+gN+Q5WE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652000925;
+        s=susede2_ed25519; t=1652000992;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KzMG58xlHRYJHpOi6n4ZmfzNuQcIpWcVOtEdXFXXxAc=;
-        b=fcojrQa+ETV6Xa2uC7II9U3gvCtifGhbnaNftYU60cZuOm0z73mXd13P/WfI9apCufN2t8
-        VaRqpElQhkPhY1AQ==
+        bh=Wm9GHihpawg1Ivkqby7mqYAJB0ZTAOMMvqz4svNr5YQ=;
+        b=OIQQxY1Ug7wwqUNFcyLOSsSEZ8746OxgKMjWXSp2ipi+kAAuO/Vrd4KkxVL+PHzNNrH+iu
+        lOXnOB+7dvPDtNDA==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 66BD22C141;
-        Sun,  8 May 2022 09:08:45 +0000 (UTC)
-Date:   Sun, 08 May 2022 11:08:45 +0200
-Message-ID: <s5h35hko0gy.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 1EEBF2C141;
+        Sun,  8 May 2022 09:09:52 +0000 (UTC)
+Date:   Sun, 08 May 2022 11:09:52 +0200
+Message-ID: <s5h1qx4o0f3.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     bo liu <bo.liu@senarytech.com>
-Cc:     tiwai@suse.com, perex@perex.cz, alsa-devel@alsa-project.org,
+To:     Forest Crossman <cyrozap@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] add a new hda codec SN6140
-In-Reply-To: <20220506025735.17731-1-bo.liu@senarytech.com>
-References: <20220506025735.17731-1-bo.liu@senarytech.com>
+Subject: Re: [PATCH] ALSA: usb-audio: Don't get sample rate for MCT Trigger 5 USB-to-HDMI
+In-Reply-To: <20220504002444.114011-2-cyrozap@gmail.com>
+References: <20220504002444.114011-2-cyrozap@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -61,15 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 06 May 2022 04:57:35 +0200,
-bo liu wrote:
+On Wed, 04 May 2022 02:24:44 +0200,
+Forest Crossman wrote:
 > 
-> The current kernel does not support the SN6140 codec chip.
-> Add the SN6140 codec configuration item to kernel.
+> This device doesn't support reading the sample rate, so we need to apply
+> this quirk to avoid a 15-second delay waiting for three timeouts.
 > 
-> Signed-off-by: bo liu <bo.liu@senarytech.com>
+> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
 
-Thanks, applied now to for-next branch.
+Thanks, applied now.
 
 
 Takashi

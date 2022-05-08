@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185B951F1CF
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF7F51F1CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiEHV03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 17:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S233007AbiEHVZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 17:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbiEHV0Z (ORCPT
+        with ESMTP id S229491AbiEHVZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 17:26:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237CCBC81
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652044953; x=1683580953;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=02DbrAd5tIValgMHCSNRVfcumpO/PsGRfW28t/0b7yM=;
-  b=BxjWHNFNe+TNfhpErz002Z1ChhI7vezRmRdbopTK8wVKDTDzO7qSeB9n
-   bDKendIfSTZ+vHm7+TjgftVxS3f3MvR2Ms7D4Dto17Kl9/FI6r80L7d6i
-   ph/2WzL1bUSfAG+2lk5xc3zOJMU+niwgp1oO/i5PAne/97EvgB44yDyhC
-   fiS4uI6ktVcntYCaPwmvVvT1TV1nKhbUIYEf+/EqRHy7mH2lnqSSKkztV
-   9CeyHvhk+n5DuiuD4tAHPk9h2UfWCteS6XvgrQRk4fB2mqpGFl5vwuoxV
-   1RD7bhiXER3nlurEQm8mCQy2Iu+Cd8O008i0BnF+nVe5FO9qKDD0lpwIn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266476470"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="266476470"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:22:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="569878708"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 May 2022 14:22:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnoMG-000FqO-7v;
-        Sun, 08 May 2022 21:22:28 +0000
-Date:   Mon, 9 May 2022 05:21:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>, Junwen Wu <wudaemon@163.com>
-Subject: drivers/thermal/thermal_sysfs.c:794:5: warning: ISO C90 forbids
- mixed declarations and code
-Message-ID: <202205090558.EnCJkmXp-lkp@intel.com>
+        Sun, 8 May 2022 17:25:47 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB48E64F3;
+        Sun,  8 May 2022 14:21:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id b19so16966128wrh.11;
+        Sun, 08 May 2022 14:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iX+5Jc2rBzWBZS5PHHZcSGkidLaVy9RRBK1X3Ez2/O8=;
+        b=Sx0x3tuqDNRY4wuNNNG6oNFM7QqWpxIs7L0kMWbtVyrli8zh2rm55fN8VwLcKyg0Gb
+         l3KewF73FZjPO/QqKF/nL0erOhLJOfho6inZNdUpHRBU/JhXe4VBC+Mx7l82robY2VUN
+         BucBCnlPYJYrE7MXVASe1rIE9wIkaYSS3wH/NPAhO98MWlvgzKHWYgvxUvCHtOidxPHg
+         oDGvRFyxWw/P8g87Wj40dVxaxiVFxeDKfPLWmxHtJQCY6Lgm8AzUlL1tLKZ4TTMiP5Z2
+         euFMy60VMtqdkIz9kmZXYtXNjM+JBP4SyB5mJhS7vK83A5UrvuPBDc0TPmMyAWK9ECN3
+         6x/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iX+5Jc2rBzWBZS5PHHZcSGkidLaVy9RRBK1X3Ez2/O8=;
+        b=KrWVM7kNUJI6aPmOUzd2DzC6emPLysjNtA66Q+S0kWVDO7utKXDporLzudgypKGAmE
+         04yrG8/ufDZ/qCqL+lxG8k47bnVCK4MflzDELSAEyA9iH34mDolTexMRDDfaPOxYG3VO
+         Xf+tj5BeMA+tcPIr9jFIRRAlfpuRqnINsV+bxjpdxMYoXiVCwre6zjgu5dxB9B5ZEHIJ
+         wVuYybpsyQbj1bxKPeQMavizsZCaALLscBQ+2bHvihlAzcuFJ2y2+L5HQHE8bF87LZZh
+         AeiDcOMKrYihx1VR9sVFgnv2gS5iglJo4psuZZoL/qNjeM+wXoxmlxJjHVq9pWiADq+A
+         0ebw==
+X-Gm-Message-State: AOAM532DkZCK4THV/UsKRIQ8ckoFLsBCHGQcLoTn0xyJKRxZBlOYENbW
+        BjS6mVJsKRX1XZpFJCZYQduVzeNZLg8=
+X-Google-Smtp-Source: ABdhPJxEXEVf07UXVcV4iAOZiY4edUaDEgg4TUK59avsk8p+89ui2UPJEzGSjUq/AvsFNKQl2PB/2w==
+X-Received: by 2002:a5d:404a:0:b0:20a:eb17:559 with SMTP id w10-20020a5d404a000000b0020aeb170559mr11010583wrp.602.1652044914316;
+        Sun, 08 May 2022 14:21:54 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id z18-20020adff1d2000000b0020c77f36b13sm9271504wro.100.2022.05.08.14.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 14:21:53 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel-janitors@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] relay: remove redundant assignment to pointer buf
+Date:   Sun,  8 May 2022 22:21:52 +0100
+Message-Id: <20220508212152.58753-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
-head:   a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
-commit: a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7 thermal/core: change mm alloc method to avoid kernel warning
-date:   6 hours ago
-config: arc-randconfig-r032-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090558.EnCJkmXp-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
-        git checkout a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/thermal/
+Pointer buf is being assigned a value that is not being read, buf
+is being re-assigned in the next starement. The assignment is
+redundant and can be removed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cleans up clang scan build warning:
+kernel/relay.c:443:8: warning: Although the value stored to 'buf' is
+used in the enclosing expression, the value is never actually read
+from 'buf' [deadcode.DeadStores]
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ kernel/relay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   drivers/thermal/thermal_sysfs.c: In function 'find_show_state':
->> drivers/thermal/thermal_sysfs.c:794:5: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     794 |     int l = min, r = max, mid, cnt = 0;
-         |     ^~~
-
-
-vim +794 drivers/thermal/thermal_sysfs.c
-
-   785	
-   786	static int find_show_state( int *nums, int numsSize, int k, unsigned int *max_value)
-   787	{
-   788	    int i, min = INT_MAX, max = 0;
-   789	    for( i = 0; i < numsSize; ++i )
-   790	    {
-   791	        min = nums[i] < min ? nums[i] : min;
-   792	        max = nums[i] > max ? nums[i] : max;
-   793	    }
- > 794	    int l = min, r = max, mid, cnt = 0;
-   795	    while( l < r )
-   796	    {
-   797	        mid = r - (r - l) / 2;
-   798	        for( i = 0; i < numsSize; ++i )
-   799	        {
-   800	            if( nums[i] >= mid )
-   801	                ++cnt;
-   802	        }
-   803	        if( cnt < k )
-   804	        {
-   805	            r = mid - 1;
-   806	            cnt = 0;
-   807	        }
-   808	        else
-   809	        {
-   810	            l = mid;
-   811	            cnt = 0;
-   812	        }
-   813	    }
-   814	     *max_value = max;
-   815	    return l;
-   816	}
-   817	
-
+diff --git a/kernel/relay.c b/kernel/relay.c
+index d1a67fbb819d..6a611e779e95 100644
+--- a/kernel/relay.c
++++ b/kernel/relay.c
+@@ -440,7 +440,7 @@ int relay_prepare_cpu(unsigned int cpu)
+ 
+ 	mutex_lock(&relay_channels_mutex);
+ 	list_for_each_entry(chan, &relay_channels, list) {
+-		if ((buf = *per_cpu_ptr(chan->buf, cpu)))
++		if (*per_cpu_ptr(chan->buf, cpu))
+ 			continue;
+ 		buf = relay_open_buf(chan, cpu);
+ 		if (!buf) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

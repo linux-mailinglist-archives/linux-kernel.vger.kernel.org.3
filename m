@@ -2,170 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E208D51EE6E
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 17:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE87C51EE70
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 17:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiEHPGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 11:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S234547AbiEHPJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 11:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbiEHPGw (ORCPT
+        with ESMTP id S234437AbiEHPJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 11:06:52 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31227DEFD;
-        Sun,  8 May 2022 08:03:01 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id i20so12894122ion.0;
-        Sun, 08 May 2022 08:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kfre6/ygIE35uySKLnPsy2RBut+ZLxAp1S9dwQFPHzQ=;
-        b=gE9+S5xVAj8TG6zihR6U+ec6I+JIqqkXGGEYtVqn7MyB22aoWPNZQR2QwDUIjBTcrR
-         B0EsrGqnj8DFLwflOqWf+vBMKhGeDsBwsVMbh8Mknj366//20o4rR4zRoonMA/q2qpiw
-         EwfBsRW58WEb5BkWA/80KJK5ordO2yuUt4kPHXcWaBe1bTQwTlHec7uro0gXhrBYs8Hk
-         6XeduX3jc7oElVM0w+mOu7W0zMFLhh0Mg5FkANVV3rJE+jeCSzpv8yz4KEZti8kS8I43
-         W1dQe3hUaI/BTapKVqt45RjTfbDkEBG4gNiBazFGtQaXj5QP6hyTcgOn3NCYSOEssjZw
-         lHvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kfre6/ygIE35uySKLnPsy2RBut+ZLxAp1S9dwQFPHzQ=;
-        b=0GX/v3nT2v+na9d/C4HdwynY0l/IFClGcXvC2J0CtxWbwW7Tb4j/kzEplKjCRHKrN7
-         b0BaMKQGJXBlaH/Bl6DPCqU+p7zR9p9dHwiBBkx4HthKzNvcOod2FTnMHwRfgqNy0ewo
-         /hP9gnKtuyPrDZZ77ymM/B4yYuWjys9ozw/Fu5ndGfjqZk8yv21iQuPyZJTNMxnySYzc
-         b+djC8DXEWvzjt3gsi+0TmFh38o5/U4x1itwsSQPVVEZIj1jHsYAKuQo3IIhrfe9k1iu
-         0+KXFNmFvY2FpDbD/ZowH+shejHvzAYywwkahFWdvSOkbVtUqyYSwW0rTzpae/BphkZq
-         T21Q==
-X-Gm-Message-State: AOAM5320TpEgvcRRGTgUMJW/MxIwwrAb6KVEyC2xQHV7oT9SPdzCbRrT
-        +DCJUlZrcX+5Cgr5M8QlYPs=
-X-Google-Smtp-Source: ABdhPJznPal23yTCfnh+9+pc9egS3/BDIL0Y0RRA1TNzmaJzoRndcGF8oSYQ8aPNQZWDmLb1xpBiPg==
-X-Received: by 2002:a05:6602:2f06:b0:65a:cfe5:1778 with SMTP id q6-20020a0566022f0600b0065acfe51778mr2642842iow.192.1652022180478;
-        Sun, 08 May 2022 08:03:00 -0700 (PDT)
-Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id y25-20020a02bb19000000b0032b3a7817e7sm2890894jan.171.2022.05.08.08.02.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 08:03:00 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     stern@rowland.harvard.edu
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, schspa@gmail.com,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Subject: [PATCH v3] usb: gadget: fix race when gadget driver register via ioctl
-Date:   Sun,  8 May 2022 23:02:47 +0800
-Message-Id: <20220508150247.38204-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <YnfVEcOWO63uIGs5@rowland.harvard.edu>
-References: <YnfVEcOWO63uIGs5@rowland.harvard.edu>
+        Sun, 8 May 2022 11:09:39 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DEBDF63;
+        Sun,  8 May 2022 08:05:46 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nniTd-0000uy-O3; Sun, 08 May 2022 17:05:41 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource conflicts with firmware
+Date:   Sun, 08 May 2022 17:05:40 +0200
+Message-ID: <1860576.taCxCBeP46@phil>
+In-Reply-To: <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
+References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usb_gadget_register_driver can be called multi time by to
-threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
-to multiple registrations.
+Am Mittwoch, 6. April 2022, 03:48:41 CEST schrieb Brian Norris:
+> On RK3399 platforms, power domains are managed mostly by the kernel
+> (drivers/soc/rockchip/pm_domains.c), but there are a few exceptions
+> where ARM Trusted Firmware has to be involved:
+> 
+> (1) system suspend/resume
+> (2) DRAM DVFS (a.k.a., "ddrfreq")
+> 
+> Exception (1) does not cause much conflict, since the kernel has
+> quiesced itself by the time we make the relevant PSCI call.
+> 
+> Exception (2) can cause conflict, because of two actions:
+> 
+> (a) ARM Trusted Firmware needs to read/modify/write the PMU_BUS_IDLE_REQ
+>     register to idle the memory controller domain; the kernel driver
+>     also has to touch this register for other domains.
+> (b) ARM Trusted Firmware needs to manage the clocks associated with
+>     these domains.
+> 
+> To elaborate on (b): idling a power domain has always required ungating
+> an array of clocks; see this old explanation from Rockchip:
+> https://lore.kernel.org/linux-arm-kernel/54503C19.9060607@rock-chips.com/
+> 
+> Historically, ARM Trusted Firmware has avoided this issue by using a
+> special PMU_CRU_GATEDIS_CON0 register -- this register ungates all the
+> necessary clocks -- when idling the memory controller. Unfortunately,
+> we've found that this register is not 100% sufficient; it does not turn
+> the relevant PLLs on [0].
+> 
+> So it's possible to trigger issues with something like the following:
+> 
+> 1. enable a power domain (e.g., RK3399_PD_VDU) -- kernel will
+>    temporarily enable relevant clocks/PLLs, then turn them back off
+>    2. a PLL (e.g., PLL_NPLL) is part of the clock tree for
+>       RK3399_PD_VDU's clocks but otherwise unused; NPLL is disabled
+> 3. perform a ddrfreq transition (rk3399_dmcfreq_target() -> ...
+>    drivers/clk/rockchip/clk-ddr.c / ROCKCHIP_SIP_DRAM_FREQ)
+>    4. ARM Trusted Firmware unagates VDU clocks (via PMU_CRU_GATEDIS_CON0)
+>    5. ARM Trusted firmware idles the memory controller domain
+>    6. Step 5 waits on the VDU domain/clocks, but NPLL is still off
+> 
+> i.e., we hang the system.
+> 
+> So for (b), we need to at a minimum manage the relevant PLLs on behalf
+> of firmware. It's easier to simply manage the whole clock tree, in a
+> similar way we do in rockchip_pd_power().
+> 
+> For (a), we need to provide mutual exclusion betwen rockchip_pd_power()
+> and firmware. To resolve that, we simply grab the PMU mutex and release
+> it when ddrfreq is done.
+> 
+> The Chromium OS kernel has been carrying versions of part of this hack
+> for a while, based on some new custom notifiers [1]. I've rewritten as a
+> simple function call between the drivers, which is OK because:
+> 
+>  * the PMU driver isn't enabled, and we don't have this problem at all
+>    (the firmware should have left us in an OK state, and there are no
+>    runtime conflicts); or
+>  * the PMU driver is present, and is a single instance.
+> 
+> And the power-domain driver cannot be removed, so there's no lifetime
+> management to worry about.
+> 
+> For completeness, there's a 'dmc_pmu_mutex' to guard (likely
+> theoretical?) probe()-time races. It's OK for the memory controller
+> driver to start running before the PMU, because the PMU will avoid any
+> critical actions during the block() sequence.
+> 
+> [0] The RK3399 TRM for PMU_CRU_GATEDIS_CON0 only talks about ungating
+>     clocks. Based on experimentation, we've found that it does not power
+>     up the necessary PLLs.
+> 
+> [1] CHROMIUM: soc: rockchip: power-domain: Add notifier to dmc driver
+>     https://chromium-review.googlesource.com/q/I242dbd706d352f74ff706f5cbf42ebb92f9bcc60
+>     Notably, the Chromium solution only handled conflict (a), not (b).
+>     In practice, item (b) wasn't a problem in many cases because we
+>     never managed to fully power off PLLs. Now that the (upstream) video
+>     decoder driver performs runtime clock management, we often power off
+>     NPLL.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-Call trace:
-  driver_register+0x220/0x3a0 drivers/base/driver.c:171
-  usb_gadget_register_driver_owner+0xfb/0x1e0
-    drivers/usb/gadget/udc/core.c:1546
-  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-  ioctl USB_RAW_IOCTL_RUN
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-This routine allows two processes to register the same driver instance
-via ioctl syscall. which lead to a race condition.
-
-Please refer to the following scenarios.
-
-           T1                                  T2
-------------------------------------------------------------------
-usb_gadget_register_driver_owner
-  driver_register                    driver_register
-    driver_find                       driver_find
-    bus_add_driver                    bus_add_driver
-      priv alloced                     <context switch>
-      drv->p = priv;
-      <schedule out>
-      kobject_init_and_add // refcount = 1;
-   //couldn't find an available UDC or it's busy
-   <context switch>
-                                       priv alloced
-                                       drv->priv = priv;
-                                       kobject_init_and_add
-                                         ---> refcount = 1 <------
-                                       // register success
-                                       <context switch>
-===================== another ioctl/process ======================
-                                      driver_register
-                                       driver_find
-                                        k = kset_find_obj()
-                                         ---> refcount = 2 <------
-                                        <context out>
-   driver_unregister
-   // drv->p become T2's priv
-   ---> refcount = 1 <------
-   <context switch>
-                                        kobject_put(k)
-                                         ---> refcount = 0 <------
-                                        return priv->driver;
-                                        --------UAF here----------
-
-There will be UAF in this scenario.
-
-We can fix it by adding a new STATE_DEV_REGISTERING device state to
-avoid double register.
-
-Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-
----
-
-Changelog:
-v1 -> v2:
-        - Add a STATE_DEV_REGISTERING as Alan Stern suggested.
-v2 -> v3:
-        - Adjust STATE_DEV_REGISTERING position to reflect the actual
-          order in which the states occur.
-        - Add the fault scenarios to comments.
----
- drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index b3be8db1ff63..241740024c50 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -145,6 +145,7 @@ enum dev_state {
- 	STATE_DEV_INVALID = 0,
- 	STATE_DEV_OPENED,
- 	STATE_DEV_INITIALIZED,
-+	STATE_DEV_REGISTERING,
- 	STATE_DEV_RUNNING,
- 	STATE_DEV_CLOSED,
- 	STATE_DEV_FAILED
-@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	dev->state = STATE_DEV_REGISTERING;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	ret = usb_gadget_register_driver(&dev->driver);
--- 
-2.24.3 (Apple Git-128)
 

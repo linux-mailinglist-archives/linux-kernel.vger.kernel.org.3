@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD0B51ED94
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 14:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312ED51ED97
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 15:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiEHNCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 09:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S233203AbiEHNEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 09:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiEHNBL (ORCPT
+        with ESMTP id S232146AbiEHNEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 09:01:11 -0400
-Received: from relay3.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA727E000
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 05:57:20 -0700 (PDT)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id DDFFA1209C5;
-        Sun,  8 May 2022 12:57:19 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 124CA1B;
-        Sun,  8 May 2022 12:57:18 +0000 (UTC)
-Message-ID: <d0b220993b2fb1d306bb959707ceb374596de559.camel@perches.com>
-Subject: Re: [PATCH] random: use symbolic constants for crng_init states
-From:   Joe Perches <joe@perches.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Dominik Brodowski <linux@dominikbrodowski.net>
-Date:   Sun, 08 May 2022 05:57:18 -0700
-In-Reply-To: <20220508112609.138889-1-Jason@zx2c4.com>
-References: <20220508112609.138889-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 8 May 2022 09:04:38 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0164617B;
+        Sun,  8 May 2022 06:00:45 -0700 (PDT)
+Received: from [192.168.1.101] (abxj12.neoplus.adsl.tpnet.pl [83.9.3.12])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A344F3F36E;
+        Sun,  8 May 2022 15:00:42 +0200 (CEST)
+Message-ID: <7626562a-abbd-64f4-380e-a0b855f3aadb@somainline.org>
+Date:   Sun, 8 May 2022 15:00:41 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm6350: Replace literal rpmpd indices
+ with constants
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220507224645.2238421-1-marijn.suijten@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220507224645.2238421-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 124CA1B
-X-Stat-Signature: uqug9g81j776quzgfa9g5fpmenixazgk
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19gEG4H1+pqISvFAw5X/GjL8BEUfwnxsTo=
-X-HE-Tag: 1652014638-133398
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-05-08 at 13:26 +0200, Jason A. Donenfeld wrote:
-> crng_init represents a state machine, with three states, and various
-> rules for transitions. For the longest time, we've been managing these
-> with "0", "1", and "2", and expecting people to figure it out. To make
-> the code more obvious, replace these with proper enum values
-> representing the transition, and then redocument what each of these
-> states mean.
-
-good idea
-
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-[]
-> @@ -72,16 +72,16 @@
-[]
-> -/* Various types of waiters for crng_init->2 transition. */
-> +static enum {
-> +	CRNG_EMPTY = 0, /* Little to no entropy collected */
-> +	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
-> +	CRNG_READY = 2  /* Fully iniitalized with POOL_READY_BITS collected */
-
-typo: initialized
-
->  enum {
->  	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
-> -	POOL_INIT_BITS = POOL_BITS, /* No point in settling for less. */
-> -	POOL_FAST_INIT_BITS = POOL_INIT_BITS / 2
-> +	POOL_READY_BITS = POOL_BITS, /* When crng_init->CRNG_READY */
-> +	POOL_EARLY_BITS = POOL_READY_BITS / 2 /* When crng_init->CRNG_EARLY */
-
-Seems odd to use a divisor with an enum
 
 
+On 8.05.2022 00:46, Marijn Suijten wrote:
+> It seems the SM6350_CX definition was temporarily replaced with its
+> literal value 0 in 1797e1c9a95c ("arm64: dts: qcom: sm6350: Add SDHCI1/2
+> nodes") to prevent a dependency on the qcom-rpmpd.h header patch being
+> available prior to this DT patch being applied, similar to c23f1b77358c
+> ("arm64: dts: qcom: sm6125: Avoid using missing SM6125_VDDCX").
+> However, unlike the revert of that in the sm6125 tree the next merge
+> window around in a90b8adfa2dd ("Revert "arm64: dts: qcom: sm6125: Avoid
+> using missing SM6125_VDDCX""), this has not yet happened for sm6350:
+> replace them back now that the definitions are definitely available.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Konrad
+
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> index fb1a0f662575..b3160720edcb 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -489,7 +489,7 @@ sdhc_1: sdhci@7c4000 {
+>  			clock-names = "iface", "core", "xo";
+>  			qcom,dll-config = <0x000f642c>;
+>  			qcom,ddr-config = <0x80040868>;
+> -			power-domains = <&rpmhpd 0>;
+> +			power-domains = <&rpmhpd SM6350_CX>;
+>  			operating-points-v2 = <&sdhc1_opp_table>;
+>  			bus-width = <8>;
+>  			non-removable;
+> @@ -935,7 +935,7 @@ sdhc_2: sdhci@8804000 {
+>  			clock-names = "iface", "core", "xo";
+>  			qcom,dll-config = <0x0007642c>;
+>  			qcom,ddr-config = <0x80040868>;
+> -			power-domains = <&rpmhpd 0>;
+> +			power-domains = <&rpmhpd SM6350_CX>;
+>  			operating-points-v2 = <&sdhc2_opp_table>;
+>  			bus-width = <4>;
+>  

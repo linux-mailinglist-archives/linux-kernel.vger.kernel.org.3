@@ -2,99 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB75951F1D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838A451F1D9
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiEHVkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 17:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S233249AbiEHVq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 17:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiEHVkn (ORCPT
+        with ESMTP id S233221AbiEHVq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 17:40:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDD0DF51;
-        Sun,  8 May 2022 14:36:52 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b19so16993192wrh.11;
-        Sun, 08 May 2022 14:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wdczpGExok8Ixspg0oBG1+Qe9W34SUYs1C1W6f+vXrI=;
-        b=oGF0bN61PfJfTgwyb85UN9/mN+5cBHzaSsAq4JaZr5Lnj9d4+yr7Ses6/Y0szkeLFG
-         jt1b+dA6F9SIYk2umoBWlGiG048+2O3Cvt0gcWgIQxcAsop5IpLTfZ6ZKxFOsAnYCdfo
-         6Mk33BSjN6IxcTZf9aCYOIAJpPw/MrE5XaDwHm2RcqstJGF0OYmDeHzEXn5IxMT1qyXL
-         vus/x5z7ZH7vN4avKQ1Tczjx4OQ6/SrBNHNNINo+cPebJmKKQCfHQdlPqFp74/kSdC+z
-         76HkA0in7EFjRupZVbl4L2LHFsXVlDVRFLOm7ei/3rImyw04zEYFZSv/zeq/oYfBtUY+
-         y9tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wdczpGExok8Ixspg0oBG1+Qe9W34SUYs1C1W6f+vXrI=;
-        b=lDX3eknoh7ksX9aotQENYO0XZ7Kse6F25NkKKwfEszvcR8rbraF9gPH5u7j8W0UIWB
-         Pw48b/GIC6NUDmJhkIropiuU2D7giTwUOaJklJ0+5HE99HheuATHq7+gb0Jfnvf+4hfu
-         HKeQMp1LmznGrxqgvDH43zKXLNW5yHwrXJqUcQQ6eHeT/YrJK4ElMmWFt9aJ45ezElY2
-         q0bcDhbECt2k17ahJ7iV1pkroelmb5ssFVba9jWLClZ1qIlVIKJaQknKwudPO/nH1lqK
-         FzYhU82oMKwzp++J6Z56p5GMML3UDgz31sw1jJOC5bsTQtc7ay/qC8l1woIVXQHg7nZu
-         2JmQ==
-X-Gm-Message-State: AOAM533jnpj8Y5i+JBpsgTpppEu6DNAWGTz9f/9jZ+7dcXqCm3qEFz8G
-        1m8dDTeHKhzNrhuESr0t7aE=
-X-Google-Smtp-Source: ABdhPJy+tZJg1yGfkKl+/YN9+AStJ+NXLb/i6afFYek3TlrQgairXFovQpVPIWCsMZ/kX7v0sZ3iNw==
-X-Received: by 2002:adf:ef01:0:b0:20a:8068:ca5e with SMTP id e1-20020adfef01000000b0020a8068ca5emr11211848wro.661.1652045810835;
-        Sun, 08 May 2022 14:36:50 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z8-20020a1cf408000000b003942a244ecdsm11161445wma.18.2022.05.08.14.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 14:36:50 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hpfs: remove redundant variable r
-Date:   Sun,  8 May 2022 22:36:49 +0100
-Message-Id: <20220508213649.59917-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 8 May 2022 17:46:26 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7954DFAB
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652046152; x=1683582152;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gAfLF8CFVZ/vW71EH8Bx4/JhmuMGckhfC5tTLQ3bB00=;
+  b=LHc+iJ+R8rddNCqN6XFaandleajEuRT43p4ziCart/SHHwTopnjQi0BT
+   Gd4RJD79Njgnf/bPZz9ecMAGBgLXf+RGN6CaRNIb1FBTAK/4OfhHJx7Q4
+   UHK1H6pygd2c2ZnrYsCgFzOGRFxStLOKZddkTut2cVKsEB9uAvkOp2R2W
+   oZfYsrYDi18gAP7AMRYoH6PdTJ2whZSJ64CCKUXFx/ZhXe+nqDRaURR+0
+   VpPGFglal4S3RcqgvSdxc9atsh+2FhXiGsaasY0GiCPvBMqeqNcUUcWeT
+   Lr3V/UlV3yp7gGp0KcVNAdeboZYUO8ID3FH9adbwhmACrQZI67gMKv+2b
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266477399"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="266477399"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:42:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="539528989"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 May 2022 14:42:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnofd-000FrT-Na;
+        Sun, 08 May 2022 21:42:29 +0000
+Date:   Mon, 9 May 2022 05:41:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:axboe/linux-block/fastpoll-mshot 97/98]
+ fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used
+ here
+Message-ID: <202205090529.AQs5GOej-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable r is being assigned a value that is never used, the assignment
-and the variable are redundant and can be removed.
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/fastpoll-mshot
+head:   883f288d64ca56518398dfa59bbdbfae1215ec03
+commit: 8e0d731f259198aac32de79f7059d34b94fc0fb3 [97/98] io_uring: allow allocated fixed files for openat/openat2
+config: riscv-buildonly-randconfig-r005-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090529.AQs5GOej-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/8e0d731f259198aac32de79f7059d34b94fc0fb3
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/fastpoll-mshot
+        git checkout 8e0d731f259198aac32de79f7059d34b94fc0fb3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Cleans up clang scan warning:
-fs/hpfs/namei.c:560:8: warning: Although the value stored to 'r' is
-used in the enclosing expression, the value is never actually read
-from 'r' [deadcode.DeadStores]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/hpfs/namei.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/fs/hpfs/namei.c b/fs/hpfs/namei.c
-index 15fc63276caa..d4a57e476013 100644
---- a/fs/hpfs/namei.c
-+++ b/fs/hpfs/namei.c
-@@ -556,8 +556,7 @@ static int hpfs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	de.hidden = new_name[0] == '.';
- 
- 	if (new_inode) {
--		int r;
--		if ((r = hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1)) != 2) {
-+		if (hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1) != 2) {
- 			if ((nde = map_dirent(new_dir, hpfs_i(new_dir)->i_dno, new_name, new_len, NULL, &qbh1))) {
- 				clear_nlink(new_inode);
- 				copy_de(nde, &de);
+>> fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                           return ret;
+                                  ^~~
+   fs/io_uring.c:4736:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   fs/io_uring.c:6174:2: error: call to undeclared function '__io_poll_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           __io_poll_clean(req);
+           ^
+   fs/io_uring.c:6174:2: note: did you mean '__io_fill_cqe'?
+   fs/io_uring.c:2166:20: note: '__io_fill_cqe' declared here
+   static inline bool __io_fill_cqe(struct io_ring_ctx *ctx, u64 user_data,
+                      ^
+   1 warning and 1 error generated.
+
+
+vim +/ret +4743 fs/io_uring.c
+
+  4730	
+  4731	static int io_fixed_file_install(struct io_kiocb *req, unsigned int issue_flags,
+  4732					 struct file *file, unsigned int file_slot)
+  4733	{
+  4734		int alloc_slot = file_slot == UINT_MAX;
+  4735		struct io_ring_ctx *ctx = req->ctx;
+  4736		int ret;
+  4737	
+  4738		if (alloc_slot) {
+  4739			io_ring_submit_lock(ctx, issue_flags);
+  4740			file_slot = io_file_bitmap_get(ctx);
+  4741			if (unlikely(file_slot < 0)) {
+  4742				io_ring_submit_unlock(ctx, issue_flags);
+> 4743				return ret;
+  4744			}
+  4745		}
+  4746	
+  4747		ret = io_install_fixed_file(req, file, issue_flags, file_slot);
+  4748		if (alloc_slot) {
+  4749			io_ring_submit_unlock(ctx, issue_flags);
+  4750			return file_slot;
+  4751		}
+  4752	
+  4753		return ret;
+  4754	}
+  4755	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

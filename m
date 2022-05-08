@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6320B51EF46
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E286B51EF58
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbiEHTIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S236002AbiEHTIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358074AbiEHSU6 (ORCPT
+        with ESMTP id S238820AbiEHSWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 14:20:58 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08001B1F1
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:17:05 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id y21so13940558edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:17:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=loFIheiMu2Crc+DoRZaJl6AeMAJVov39dGaYt5KOZD4=;
-        b=bNUGz6xjgxV/ELTDUeksWxGurjA/48dJb6jRSoyvxCOquvvufBTmzycqYK8D+A0anY
-         Oty4HydLxW9D4TA+5TCBLQW3xhp0IyBWct94Xb32+RZf8adGfZKMs1remDqSeAkjf4c0
-         Sj95+HvkslDIIVXblE4qkSk7Eyjino6+2XC/AHvgMIGxuNkFGJj+v5wMQG6Kk7ypsmIB
-         Nv4ViSd++ttOTwPgoet4jPY/afvtEGxog41XbH6AKatTgdfAZkGSMfrzSTS9xnpacEiC
-         IyLI5nb9u+4IqUO/c3Eb16UJS31g6dP1Hdtkuwvntu3QubLqXZXtFPqeWHSrFS4K/AdW
-         /big==
-X-Gm-Message-State: AOAM533QOAHbVWc3ICSg4V4UzrmXyEAAucpD/vnk3F4NqCsawQBR26aL
-        mebVVy78GALhXLcbWu5sY50=
-X-Google-Smtp-Source: ABdhPJxCax2ujg6yC/0BtAh7dxpYxYj313fZjEN1v5f+vWY76URaZLSGwan6iSjmfMZX4xI9ypE65g==
-X-Received: by 2002:a05:6402:268f:b0:427:d90e:86a1 with SMTP id w15-20020a056402268f00b00427d90e86a1mr13768964edd.143.1652033824560;
-        Sun, 08 May 2022 11:17:04 -0700 (PDT)
-Received: from [10.9.0.34] ([46.166.128.205])
-        by smtp.gmail.com with ESMTPSA id zd20-20020a17090698d400b006f3ef214e31sm4270009ejb.151.2022.05.08.11.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 11:17:03 -0700 (PDT)
-Message-ID: <a604fa2b-e7c3-3fff-dd81-1a0585a9e2fa@linux.com>
-Date:   Sun, 8 May 2022 21:17:01 +0300
+        Sun, 8 May 2022 14:22:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17449AE65
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652033928; x=1683569928;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GtdZ1E9Jkp9Y4LzBoCJIoFrMBZvx8eD6iNyCc5Ta3xo=;
+  b=OC+xffa+sJ/CZgMzQ5QM0FJTiQo5G1wzATK7JwxNA9iLLR6ckrs+5wY0
+   /n1JAHmj7RN/lPmOtKrp9txNZZu8LCzl9W6Sh7NclHH0Vnh4ghgHDQwnc
+   Ga1XbOAq0bugTNL37+Vx+eNiciGenN39ACmJUYqUF6xBfHYTuQHQo/Wpc
+   Mcm+ejQjWaWQ6ClTBrEJp9L/E7RX3whqwF2n/snZ6i7uM7lptmDCYoAfi
+   hpaSqnm8yzzE0IGq1edfo0fvQaH/DV9jvr3LWjvy4lBTDZ8ffF31mimQ1
+   xOpSNI7D0lDMpPU4kjgaVMJ8regv/kJfiQos16WQiE4GIdkK7vEcldwM8
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="355298516"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="355298516"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 11:18:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="655578036"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2022 11:18:46 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnlUT-000FhR-RF;
+        Sun, 08 May 2022 18:18:45 +0000
+Date:   Mon, 9 May 2022 02:18:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>, Junwen Wu <wudaemon@163.com>
+Subject: drivers/thermal/thermal_sysfs.c:794:5: warning: ISO C90 forbids
+ mixed declarations and code
+Message-ID: <202205090229.ZuiS9dze-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Reply-To: alex.popov@linux.com
-Subject: Re: [PATCH v2 03/13] stackleak: remove redundant check
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        luto@kernel.org, will@kernel.org
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-4-mark.rutland@arm.com>
-From:   Alexander Popov <alex.popov@linux.com>
-In-Reply-To: <20220427173128.2603085-4-mark.rutland@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.04.2022 20:31, Mark Rutland wrote:
-> In __stackleak_erase() we check that the `erase_low` value derived from
-> `current->lowest_stack` is above the lowest legitimate stack pointer
-> value, but this is already enforced by stackleak_track_stack() when
-> recording the lowest stack value.
-> 
-> Remove the redundant check.
-> 
-> There should be no functional change as a result of this patch.
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
+head:   a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+commit: a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7 thermal/core: change mm alloc method to avoid kernel warning
+date:   3 hours ago
+config: m68k-randconfig-r021-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090229.ZuiS9dze-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
+        git checkout a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Mark, I can't agree here. I think this check is important.
-The performance profit from dropping it is less than the confidence decrease :)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-With this check, if the 'lowest_stack' value is corrupted, stackleak doesn't 
-overwrite some wrong kernel memory, but simply clears the whole thread stack, 
-which is safe behavior.
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Popov <alex.popov@linux.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
->   kernel/stackleak.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-> index 753eab797a04d..f7a0f8cf73c37 100644
-> --- a/kernel/stackleak.c
-> +++ b/kernel/stackleak.c
-> @@ -78,10 +78,6 @@ static __always_inline void __stackleak_erase(void)
->   	unsigned int poison_count = 0;
->   	const unsigned int depth = STACKLEAK_SEARCH_DEPTH / sizeof(unsigned long);
->   
-> -	/* Check that 'lowest_stack' value is sane */
-> -	if (unlikely(kstack_ptr - boundary >= THREAD_SIZE))
-> -		kstack_ptr = boundary;
-> -
->   	/* Search for the poison value in the kernel stack */
->   	while (kstack_ptr > boundary && poison_count <= depth) {
->   		if (*(unsigned long *)kstack_ptr == STACKLEAK_POISON)
+   drivers/thermal/thermal_sysfs.c: In function 'find_show_state':
+>> drivers/thermal/thermal_sysfs.c:794:5: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     794 |     int l = min, r = max, mid, cnt = 0;
+         |     ^~~
 
+
+vim +794 drivers/thermal/thermal_sysfs.c
+
+   785	
+   786	static int find_show_state( int *nums, int numsSize, int k, unsigned int *max_value)
+   787	{
+   788	    int i, min = INT_MAX, max = 0;
+   789	    for( i = 0; i < numsSize; ++i )
+   790	    {
+   791	        min = nums[i] < min ? nums[i] : min;
+   792	        max = nums[i] > max ? nums[i] : max;
+   793	    }
+ > 794	    int l = min, r = max, mid, cnt = 0;
+   795	    while( l < r )
+   796	    {
+   797	        mid = r - (r - l) / 2;
+   798	        for( i = 0; i < numsSize; ++i )
+   799	        {
+   800	            if( nums[i] >= mid )
+   801	                ++cnt;
+   802	        }
+   803	        if( cnt < k )
+   804	        {
+   805	            r = mid - 1;
+   806	            cnt = 0;
+   807	        }
+   808	        else
+   809	        {
+   810	            l = mid;
+   811	            cnt = 0;
+   812	        }
+   813	    }
+   814	     *max_value = max;
+   815	    return l;
+   816	}
+   817	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

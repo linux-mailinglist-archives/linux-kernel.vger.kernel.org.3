@@ -2,154 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AB551EABD
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F8951EAB9
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345521AbiEHAkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 20:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S1350464AbiEHAlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 20:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiEHAkl (ORCPT
+        with ESMTP id S1345804AbiEHAlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 20:40:41 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01473AC
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 17:36:51 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 05938240026
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:36:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1651970210; bh=eRJ72IYITlVDpKnZ6+UmjwqGp62CGsHXISCjq+X2pUU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PAok8vRxXvgVG/GaWnfIYBGcpramlP56iBb5i/MDcwepGnKrMLkK3y35DoY7BA7hP
-         b5lW8X5tEsPKN60rd/GPa/2kitH70eMITGsuWKcEPkrmS9kjWY5S66bhIJbo3i5QEL
-         br4GNSEmZGPKsDrgSnfBiD7KICn48dzr1cPHN4/OeqjCYbJAXRFFWWq4dVJ8muOQ+8
-         jEM13+I4hlRS3ZV5lbhLTSynukGX8hTQAuR381F/u0w5VbR5obE26c/KD/3t3IRHte
-         s/QfOIw9m1PO7jH9VK1VpqKFCGcy44tYrpdD2sNB56/JRMyZK5NeF9ZrhxcmbHsWXu
-         gjhEdDLI5rRtw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Kwljr30zTz9rxG;
-        Sun,  8 May 2022 02:36:48 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
-        Holger Hoffstaette <holger@applied-asynchrony.com>,
-        koo5 <kolman.jindrich@gmail.com>
-Subject: [PATCH v6] net: atlantic: always deep reset on pm op, fixing up my
- null deref regression
-Date:   Sun, 08 May 2022 00:36:46 +0000
-Message-ID: <87bkw8dfmp.fsf@posteo.de>
+        Sat, 7 May 2022 20:41:17 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896FEB2B;
+        Sat,  7 May 2022 17:37:29 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id q4so7914137plr.11;
+        Sat, 07 May 2022 17:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=arUH2MRVxEf8vhAeq3i8+iP+btufOwV/ehc3jq4WcgU=;
+        b=p11ukt8Ydp2k3YtnsohJUeCg3245UiJ/gHETAXz21sVatEaeSLC7j3QFTHQBscVBUp
+         fgCd7feTwCVK3V4p2D0W4grttv6jIRhz514Y8rPOfg1ygMKm9opOmMjwmmKd+vBwSN7F
+         bIMzqgY9p9Q2SrJfVjRuhHbOY0Vb0W/YTNVxlb7CvNla1+xXLKB2pwBT345GuVALoPjD
+         btUTaGbkMFdpsXWAb55rXJVoIj2lMZvyFc6YeXSD0ZYe5SCUHBfqQ2ogErpf5xf/36+4
+         1ufegU1gvlSIuKkXA3qIetAxQ7WrZ9CGoTyTPGI+ORMiBfvOjEnBArunp7KhgiHgiK87
+         Pg0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=arUH2MRVxEf8vhAeq3i8+iP+btufOwV/ehc3jq4WcgU=;
+        b=I9KR5VwSVNUQ5glfYJ1z+mH8tBP94e8siymm4tPg5moBFEq+9nyfKiwvfmuivpB4/0
+         KDvHVnL3u1YoeKB0QAvvIPfA3vytLW5ozf7pKRv0DUj96LMy8ArhIEwSOijfSueEllNf
+         inY3JGLZusZ9gnfOvUNEdRCVabH14ULL/euv6N2KerZ+yJGGiBScDsjxjLA47YoBP19x
+         8paRtM1Ck4VuUKmj2wJVXRkcV3TPtConNE8ILzVMgl8sgecZjE245EpPfcHhtjxeketD
+         CdbyIOXh7OSBqAihJK+UMYYoTxIzhD9lrwe+c1heK9/HBpyiagNJNKdYf4XyLBoYU+gF
+         bSPg==
+X-Gm-Message-State: AOAM531qPttFkjKFPRugsOOf/LQagHZ10qVLBDx9ZukKHHIW1xesm3nA
+        e0Ri6PhQZun59ErqmmH9fR4=
+X-Google-Smtp-Source: ABdhPJwLlAmDIofQb7jE/g+VMSVHar3owskWZ/EMG0HUf496uiLDgk4O2m3XYmugmFA8Z827riK8VA==
+X-Received: by 2002:a17:902:f68d:b0:15e:bd3c:43da with SMTP id l13-20020a170902f68d00b0015ebd3c43damr9894794plg.164.1651970248880;
+        Sat, 07 May 2022 17:37:28 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id a7-20020a1709027e4700b0015e8d4eb222sm3341599pln.108.2022.05.07.17.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 May 2022 17:37:27 -0700 (PDT)
+Date:   Sun, 8 May 2022 09:37:26 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
+Message-ID: <YncQxl1shpH5TpbK@antec>
+References: <YnI7hE4cIfjsdKSF@antec>
+ <YnJI4Ru0AlUgrr9C@zx2c4.com>
+ <YnJOCbLtdATzC+jn@zx2c4.com>
+ <YnJQXr3igEMTqY3+@smile.fi.intel.com>
+ <YnJSQ3jJyvhmIstD@zx2c4.com>
+ <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
+ <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com>
+ <CAAfxs77yaLvWx9KnkDZX7E1eDm9N-NVJn5n8=mCK9BU-cSob=A@mail.gmail.com>
+ <CAHk-=wjLRo-6PbhbvMUDojbMo=L+2jc5VpCYTyF-LGxZPhUngA@mail.gmail.com>
+ <YnLkYjOF2vEOdjOo@antec>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnLkYjOF2vEOdjOo@antec>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 18dc080d8d4a30d0fcb45f24fd15279cc87c47d5 Mon Sep 17 00:00:00 2001
-Date: Wed, 4 May 2022 21:30:44 +0200
+On Thu, May 05, 2022 at 05:38:58AM +0900, Stafford Horne wrote:
+> On Wed, May 04, 2022 at 01:10:03PM -0700, Linus Torvalds wrote:
+> > On Wed, May 4, 2022 at 12:58 PM Stafford Horne <shorne@gmail.com> wrote:
+> > >
+> > > I have uploaded a diff I created here:
+> > >   https://gist.github.com/54334556f2907104cd12374872a0597c
+> > >
+> > > It shows the same output.
+> > 
+> > In hex_to_bin itself it seems to only be a difference due to some
+> > register allocation (r19 and r3 switched around).
+> > 
+> > But then it gets inlined into hex2bin and there changes there seem to
+> > be about instruction and basic block scheduling, so it's a lot harder
+> > to see what's going on.
+> > 
+> > And a lot of constant changes, which honestly look just like code code
+> > moved around by 16 bytes and offsets changed due to that.
+> > 
+> > So I doubt it's hex_to_bin() that is causing problems, I think it's
+> > purely code movement. Which explains why adding a nop or a fake printk
+> > fixes things.
+> > 
+> > Some alignment assumption that got broken?
+> 
+> This is what it looks like to me too.  I will have to do a deep dive on what is
+> going on with this particular build combination as I can't figure out what it is
+> off the top of my head.
+> 
+> This test is using a gcc 11 compiler, I tried with my gcc 12 toolchain and the
+> issue cannot be reproduced.
+> 
+>   - musl gcc 11 - https://musl.cc/or1k-linux-musl-cross.tgz
+>   - openrisc gcc 12 - https://github.com/openrisc/or1k-gcc/releases/tag/or1k-12.0.1-20220210-20220304
+> 
+> But again the difference between the two compiler outputs is a lot of register
+> allocation and offsets changes.  Its not easy to see anything that stands out.
+> I checked the change log for the openrisc specific changes from gcc 11 to gcc
+> 12.  Nothing seems to stand out, mcount profiler fix for PIC, a new large binary
+> link flag.
 
-The impact of this regression is the same for resume that I saw on
-thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+Hello,
 
-Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
-par in pm functions, preventing null derefs"), where I disabled deep
-pm resets in suspend and resume, trying to make sense of the
-atl_resume_common() deep parameter in the first place.
+Just an update on this.  The issue so far has been traced to the alignment of
+the crypto multiplication function fe_mul_impl in lib/crypto/curve25519-fiat32.c.
 
-It turns out, that atlantic always has to deep reset on pm
-operations. Even though I expected that and tested resume, I screwed
-up by kexec-rebooting into an unpatched kernel, thus missing the
-breakage.
+This patch e5be15767e7e ("hex2bin: make the function hex_to_bin constant-time")
+allowed for the alignment to be just right to cause the failure.  Without
+this patch and forcing the alignment we can reproduce the issue.  So though the
+bisect is correct, this patch is not the root cause of the issue.
 
-This fixup obsoletes the deep parameter of atl_resume_common, but I
-leave the cleanup for the maintainers to post to mainline.
+Using some l.nop sliding techniques and some strategically placed .align
+statements I have been able to reproduce the issue on:
 
-Suspend and hibernation were successfully tested by the reporters.
+  - gcc 11 and gcc 12
+  - preempt and non-preempt kernels
 
-Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preventing null derefs")
-Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=@protonmail.com/
-Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
-Reported-by: Holger Hoffstaette <holger@applied-asynchrony.com>
-Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
-Tested-by: Holger Hoffstaette <holger@applied-asynchrony.com>
-CC: <stable@vger.kernel.org> # 5.10+
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
----
-I'm very sorry for this regression. It would be nice, if this could
-reach mainline before 5.18 release, if applicable. This restores the
-original suspend behaviour, while keeping the fix for hibernation. The
-fix for hibernation might not be the root cause, but still is the most
-simple fix for backporting to stable while the root cause is unknown
-to the maintainers.
+I have not been able to reproduce this on my FPGA, so far only QEMU.  My
+hunch now is that since the fe_mul_impl function contains some rather long basic
+blocks it appears that timer interrupts that interrupt qemu mid basic block
+execution somehow is causing this.  The hypothesis is it may be basic block
+resuming behavior in qemu that causes incosistent behavior.
 
-Changes in v2:
-Patch formatting fixes
-~ Fix Fixes tag
-~ Simplify stable Cc tag
-~ Fix Signed-off-by tag
+It will take a bit more time to trace this.  Since I maintain OpenRISC QEMU the
+issue is on me.
 
-Changes in v3:
-~ Prefixed commit reference with "commit" aka I managed to use
-  checkpatch.pl.
-~ Added Tested-by tags for the testing reporters.
-~ People start to get annoyed by my patch revision spamming. Should be
-  the last one.
+Again, It's safe to say that patch e5be15767e7e ("hex2bin: make the function
+hex_to_bin constant-time") is not an issue.
 
-Changes in v4:
-~ Moved patch changelog to comment section
-~ Use unicode ndash for patch changelog list to avoid confusion with
-  diff in editors
-~ Expanded comment
-~ Targeting net-next by subject
-
-Changes in v5:
-~ Changed my MTA transfer encoding to 8 bit instead of
-  quoted-printable. Git should like this a bit more.
-
-Changes in v6:
-~ Reducing content to 7 bit chars, because nipa did not apply v4 and v5, while
-  git does against a fresh net-next HEAD. Maybe it chokes on the
-  additional bit.
-~ Omitting target tree to resemble the last passing patch version the most.
-
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 3a529ee8c834..831833911a52 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
- 
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
- 
- static int aq_pm_thaw(struct device *dev)
-@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
- 
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
- 
- static const struct dev_pm_ops aq_pm_ops = {
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
--- 
-2.35.1
+-Stafford

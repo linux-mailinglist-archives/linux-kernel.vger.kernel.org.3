@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B4D51EABA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A1751EABE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbiEHAcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 20:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
+        id S234483AbiEHAft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 20:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiEHAcp (ORCPT
+        with ESMTP id S229974AbiEHAfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 20:32:45 -0400
+        Sat, 7 May 2022 20:35:45 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECED41707C
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 17:28:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A39D2B9
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 17:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651969735;
+        s=mimecast20190719; t=1651969916;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/JVQ4SI8lG6xRIzugQ8tXt+YN3SSvNLYRKRIdK5XTMU=;
-        b=eiCO2CefpmsX2/wz2ElXk5eSBCllpNAKRIqXn929BPIix/aX900N6XgvBfQ7KLA851IDcj
-        xvfLM0pJlzko2JZFqHyC5VF2s8BUOE582LB+UtoN87mDlIhckXrWfIvoMoM0QEl5qTWijD
-        NT1Lj7dzxmwEI2ewaXTiRTuD7Q2Lumk=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7oJ/pNGEcyEUOU4PfPLwqKmVyn82Hpz01lnvE5XFThg=;
+        b=PwhAQJAq1Z1NOqb3kxcQqY3VsO5zL5BGfoAk8ghOwdtWLrY8kSH5pMYJIiNPn7DU6vOxnl
+        Gp513uAAPoqmlqGQU2YK0zTt9LYry9ohm5kJecvksyiPSEbPL8T8eaK3SrQgBX7/oJGsdO
+        M4ytLisv4biJKmH2yV7OM+uuRYw0bXU=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-277-2tY7ty2CNJ-N-lzz6NmTBQ-1; Sat, 07 May 2022 20:28:54 -0400
-X-MC-Unique: 2tY7ty2CNJ-N-lzz6NmTBQ-1
-Received: by mail-qk1-f200.google.com with SMTP id o13-20020a05620a0d4d00b0069f47054e58so7409448qkl.13
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 17:28:54 -0700 (PDT)
+ us-mta-193-evukXkT1MXuQHtgwS17ndg-1; Sat, 07 May 2022 20:31:54 -0400
+X-MC-Unique: evukXkT1MXuQHtgwS17ndg-1
+Received: by mail-qt1-f199.google.com with SMTP id a18-20020ac85b92000000b002f3c5e0a098so5133166qta.7
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 17:31:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=/JVQ4SI8lG6xRIzugQ8tXt+YN3SSvNLYRKRIdK5XTMU=;
-        b=i5AKSr6WIDZYHwltfGCBJNVvtEWNZFzR4++t26bqT8WaM+Jx1FrwWP5Oqvz5BRARKK
-         n/uqvLNZUKEscWwEG1f2uQiOh+5f1QbRsLSqO8TCZn2VwBt6BRX3ePznvVsQmG08EFOl
-         I5ACtvlBQOWjkWZXv56/XjTBH98A4VE2ayw7ZsvGia85UyRBWbDXMJeKtwxndPyO5iN5
-         jEVMX9exK2lhkb8ClcdEmy3ifgoMwA601BBDRIDqqYMIvB5b4mmhyJnqWaDhVPiOKNxA
-         XZImRPcqYpt2rYozzNii66u5z6gXySK5HTRtnUbpfc8kzRSVHNtxiT4Xh41n24t0EhEV
-         DmPw==
-X-Gm-Message-State: AOAM533kaM1ytMiNZs1IaibAS7ce7oXKgrgVKC0i6PiwdVHNII7ES5sp
-        rb88o1e4rKQFN6i3ZGb+9NI7H1a5FMaDvq+V0u9w5B8i2We40DncwDRBypM3zzsl2dyA8KMon5m
-        5SJ/MzuaD48Wzc5YQ5Q/RpiSi
-X-Received: by 2002:a0c:cc08:0:b0:45a:8f81:d8a8 with SMTP id r8-20020a0ccc08000000b0045a8f81d8a8mr8527270qvk.88.1651969734234;
-        Sat, 07 May 2022 17:28:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyWPkh3zBSc9oc61q1WzL0NdJ1Avcf+UZ74YgB60XC3dfGeDmiVRDE4qcyYoknIHnJJK5aBVQ==
-X-Received: by 2002:a0c:cc08:0:b0:45a:8f81:d8a8 with SMTP id r8-20020a0ccc08000000b0045a8f81d8a8mr8527257qvk.88.1651969733946;
-        Sat, 07 May 2022 17:28:53 -0700 (PDT)
+        bh=7oJ/pNGEcyEUOU4PfPLwqKmVyn82Hpz01lnvE5XFThg=;
+        b=52PpV9pGKfVbIWc2YpGQ1mnz5C9Syv5Q2mdSOcTh8N1oWLoc5SSz4A+g1UT7VS1mPQ
+         /DsY0ziVfCZAavJg/FSfeZMXN15uao1iA7G0XGSM7+PqvHRb/zJNPNOBsGPPIFIrMOEm
+         9yuwr80YpC0r7Cmm+RuBsXACBEytrYzOgNJjZbScIHOILcDNHBTXFfgp7pWxOCwOLigB
+         UfwYUxwVxetNCPLP8T1omFyGwKnrAwqXChEWWXWIPWfo4ohOBRi0DB38r1RjAiEjjUOo
+         WSc8ze3qXIKFj4vJvZfV/Dg3zvHFXCWAvmbOvmWRmgJ1BMYt3jaXxhvbm10UT35Du9+9
+         mhqw==
+X-Gm-Message-State: AOAM5303c9AZIPDbAqGkWBtziBPVANo1jGPRC4p/h47gIUAq0f4XAnPw
+        /p35kNzAisz3g57ndPY2zknKy7HpfDHfi2ICIPNrooXVMGCGF+6WyEXmAO2bJZtF2QRKKqftZlN
+        KV9hrd33SFz6AJSRaSkdnSmmt
+X-Received: by 2002:ae9:de47:0:b0:69f:8818:fe78 with SMTP id s68-20020ae9de47000000b0069f8818fe78mr7627077qkf.32.1651969914172;
+        Sat, 07 May 2022 17:31:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwYIJsa/PnyIM3Bnxy8zBrAyaPRSk7/RvDKyW0rFlL6k56vpQe0r5UM3VF5ScwkkDtgIa7QvQ==
+X-Received: by 2002:ae9:de47:0:b0:69f:8818:fe78 with SMTP id s68-20020ae9de47000000b0069f8818fe78mr7627071qkf.32.1651969913922;
+        Sat, 07 May 2022 17:31:53 -0700 (PDT)
 Received: from [10.23.153.165] ([46.248.132.196])
-        by smtp.gmail.com with ESMTPSA id c2-20020ac80542000000b002f39b99f67bsm4852527qth.21.2022.05.07.17.28.52
+        by smtp.gmail.com with ESMTPSA id p185-20020a37bfc2000000b0069fc13ce24fsm4764442qkf.128.2022.05.07.17.31.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 17:28:53 -0700 (PDT)
-Message-ID: <efe00fa8-1a85-f687-b717-e22997dc42d7@redhat.com>
-Date:   Sun, 8 May 2022 02:28:51 +0200
+        Sat, 07 May 2022 17:31:52 -0700 (PDT)
+Message-ID: <5480feb2-9b02-1c03-2396-d8cc75f981c9@redhat.com>
+Date:   Sun, 8 May 2022 02:31:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
 Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
 Content-Language: en-US
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+To:     Peter Xu <peterx@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         linux-mm <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
@@ -76,9 +78,11 @@ References: <20220502173558.2510641-1-minchan@kernel.org>
  <YnFJss0doXGCmq3w@google.com>
  <da07530d-92ad-7aef-2f2b-d115f878ef76@redhat.com>
  <YnMC1jFoPvNLWqnG@google.com> <YnNzPlehofB57XXU@google.com>
+ <dd4588a4-c1ca-481c-ac33-06abef6cf70a@oracle.com>
+ <YnQIoVqXZQGILt6F@xz-m1.local>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <YnNzPlehofB57XXU@google.com>
+In-Reply-To: <YnQIoVqXZQGILt6F@xz-m1.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -91,73 +95,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.05.22 08:48, Minchan Kim wrote:
-> On Wed, May 04, 2022 at 03:48:54PM -0700, Minchan Kim wrote:
->> On Tue, May 03, 2022 at 06:02:33PM +0200, David Hildenbrand wrote:
->>> On 03.05.22 17:26, Minchan Kim wrote:
->>>> On Tue, May 03, 2022 at 03:15:24AM +0200, David Hildenbrand wrote:
->>>>>
->>>>>>>>> However, I assume we have the same issue right now already with
->>>>>>> ZONE_MOVABLE and MIGRATE_CMA when trying to pin a page residing on these
->>>>>>
->>>>>> ZONE_MOVALBE is also changed dynamically?
->>>>>>
->>>>>
->>>>> Sorry, with "same issue" I meant failing to pin if having to migrate and
->>>>> the page is temporarily unmovable.
->>>>>
->>>>>>> there are temporarily unmovable and we fail to migrate. But it would now
->>>>>>> apply even without ZONE_MOVABLE or MIGRATE_CMA. Hm...
->>>>>>
->>>>>> Didn't parse your last mention.
->>>>>
->>>>> On a system that neither uses ZONE_MOVABLE nor MIGRATE_CMA we might have
->>>>> to migrate now when pinning.
->>>>
->>>> I don't understand your point. My problem is pin_user_pages with
->>>> FOLL_LONGTERM. It shouldn't pin a page from ZONE_MOVABLE and cma area
->>>> without migrating page out of movable zone or CMA area.
->>>> That's why try_grab_folio checks whether target page stays in those
->>>> movable areas. However, to check CMA area, is_migrate_cma_page is
->>>> racy so the FOLL_LONGTERM flag semantic is broken right now.
->>>>
->>>> Do you see any problem of the fix?
->>>
->>> My point is that you might decide to migrate a page because you stumble
->>> over MIGRATE_ISOLATE, although there is no need to reject long-term
->>> pinning and to trigger page migration.
->>>
->>> Assume a system without ZONE_MOVABLE and without MIGRATE_CMA. Assume
->>> someone reserves gigantic pages (alloc_contig_range()) and you have
->>> concurrent long-term pinning on a page that is no MIGRATE_ISOLATE.
->>>
->>> GUP would see MIGRATE_ISOLATE and would reject pinning. The page has to
->>> be migrated, which can fail if the page is temporarily unmovable.
->>
->> A dump question since I'm not familiar with hugetlb.
->>
->> Is above reasonable scenario?
->>
->> The gigantic page is about to be created using alloc_contig_range so
->> they has MIGRATE_ISOLATE as temporal state. It means no one uses the
->> page yet so I guess the page is not mapped at userspace but other is
->> trying to access the page using pin_user_pages?
->>
+On 05.05.22 19:25, Peter Xu wrote:
+> On Thu, May 05, 2022 at 10:00:07AM -0700, Mike Kravetz wrote:
+>> Gigantic pages can only be migrated IF there is another (already allocated)
+>> gigantic page available.  The routine to try and allocate a page 'on the fly'
+>> for migration will fail if passed a gigantic size.  There 'might' be a free
+>> pre-allocated gigantic page.  However, if the user set up CMA reserves for
+>> gigantic page allocations it is likely the free gigantic page is also in CMA.
+>> Therefore, it can not be used for this migration.  So, unless my reasoning
+>> is wrong, FOLL_LONGTERM would almost always fail for gigantic pages in CMA.
 > 
-> Too dump question. Never mind.
-> Posted v2 - https://lore.kernel.org/all/20220505064429.2818496-1-minchan@kernel.org/T/#u
+> I'm probably not familiar enough with CMA, but.. I just noticed that if CMA
+> is destined to not be able to be pinned then maybe it'll lose quite a few
+> scenarios where pinning is a possible use case.  It doesn't even need to be
+> the major use case, but as long as it's possible (e.g. hypervisors hosting
+> virtual machines with device assignment) it'll be a hard no to CMA, which
+> seems to be a pity.
+> 
 
-Sorry for the late reply, still traveling :)
-
-Just so we're on the same page: MIGRATE_ISOLATE would be set on
-pageblocks that contain either free or movable pages. In case of movable
-pages, they are in uese.
-
-Regarding your is_cma_page() proposal, I think we might want to consider
-that if it really turns out to be a problem. For now, I'm fine with just
-documenting it.
-
-Thanks!
+Well, the same applies to ZONE_MOVABLE as well, unfortunately.
+Eventually, we might want to disable placing hugetlb pages on CMA areas
+if it turns out to be a problem. In case of ZONE_MOVABLE we can already
+fail "gracefully" when trying offlining (although that's really far from
+beautiful).
 
 -- 
 Thanks,

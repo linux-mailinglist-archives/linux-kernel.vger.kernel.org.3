@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B48251EF3A
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBC251EF88
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbiEHTID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S236728AbiEHTId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239231AbiEHR5g (ORCPT
+        with ESMTP id S1346085AbiEHSHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 13:57:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9F3DFEA;
-        Sun,  8 May 2022 10:53:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6846461295;
-        Sun,  8 May 2022 17:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA49C385A4;
-        Sun,  8 May 2022 17:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652032424;
-        bh=yJPX175r8pvytkUmcDbH5hMaqjBtCATCSaDdEMwa2IQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hp79yaL4qI6PvDBH7yU5WthuS86G4hkqP2zY+E/O5qqGE2V6ebZh69X/9c2wOStuv
-         BGAquKs2hyhD6hRePX54dTHilMTBC4+qdZkDIo7iaLRe/Oe11v8+H5SG8aUI4Tz++W
-         YvaXLzEgVWj94qMpV/EIzgMlkhxeAq/VGpRVlkpB2nN9iQ2I3QbxJDxfBIQUwNmOpC
-         8pws1hrUyxUO3m+urjcuCTaTTZsHkf+d1IJaUUxUZpiyE8mpmSYmK7Cz7nJ889hV2U
-         tYJ/jtzZeJ2mUrIoEnk6otfTk3mJXVwKP2nPJgl9dBqPgK9SdWYFD1OcLIi9ynYKAl
-         j1V74AsHiE6EA==
-Date:   Sun, 8 May 2022 19:02:12 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: imu: st_lsm6dsx: Switch from of headers to
- mod_devicetable.h
-Message-ID: <20220508190212.3fc02a3f@jic23-huawei>
-In-Reply-To: <20220507173440.29053-1-andriy.shevchenko@linux.intel.com>
-References: <20220507173440.29053-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 8 May 2022 14:07:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE86B849;
+        Sun,  8 May 2022 11:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LasmEg2rUBS72wUE19EKxuY+AQYVJSkN1z6eFcojeaU=; b=uSEwp/+iuBdu5CaOAO2cQ0XAsx
+        3bSQuW2tYAqJSzYarBs5DSvOQ143R5KJH6zJhC99HVjTFa+C5LE8h8zk+eVr9KrSJiHVwgZ2KGM2b
+        DgGtHjHONznLxHAer27E+90GqIgUYuRaYK1vgwELwOrHQPyXDWxnEdulbmoyhV3xhlNe+wtoXz0mE
+        /B5aQ4oGrORlr7a5ZY+BJNUFWzTOZ9HAPAWYvI+4s5vxdnmqIg2bWWHiTXLsV+kZDTXF4Boa+MRgA
+        SC3qLu90w2sf9if0jbK/hu2/4S7BI0j0oGnRe47Rf54/geRFo40hfL2Z1BFXdSYpwM0pSn5Mv+RWe
+        R0dHvA7Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnlFo-002he6-Vz; Sun, 08 May 2022 18:03:37 +0000
+Date:   Sun, 8 May 2022 19:03:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     cgel.zte@gmail.com
+Cc:     akpm@linux-foundation.org, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, wang.yong12@zte.com.cn,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn,
+        zhang.yunkai@zte.com.cn
+Subject: Re: [PATCH v5] mm/ksm: introduce ksm_force for each process
+Message-ID: <YngF+Lz01noCKRFc@casper.infradead.org>
+References: <20220507105926.d4423601230f698b0f5228d1@linux-foundation.org>
+ <20220508092710.930126-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220508092710.930126-1-xu.xin16@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  7 May 2022 20:34:40 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Sun, May 08, 2022 at 09:27:10AM +0000, cgel.zte@gmail.com wrote:
+> If ksm_force is set to 0, cancel the feature of ksm_force of this
+> process and unmerge those merged pages belonging to VMAs which is not
+> madvised as MADV_MERGEABLE of this process, but leave MADV_MERGEABLE
+> areas merged.
 
-> There is nothing directly using of specific interfaces in this driver,
-> so lets not include the headers.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Applied to the togreg branch of iio.git and pushed out as testing
-for all the normal boring reasons.
+Is that actually a useful feature?  Otherwise, we could simply turn
+on/off the existing MMF_VM_MERGEABLE flag instead of introducing this
+new bool.
 
-Thanks,
+> +Controlling KSM with procfs
+> +===========================
+> +
+> +KSM can also operate on anonymous areas of address space of those processes's
+> +knob ``/proc/<pid>/ksm_force`` is on, even if app codes doesn't call madvise()
+> +explicitly to advise specific areas as MADV_MERGEABLE.
+> +
+> +You can set ksm_force to 1 to force all anonymous and qualified VMAs of
+> +this process to be involved in KSM scanning. But It is effective only when the
+> +klob of ``/sys/kernel/mm/ksm/run`` is set as 1.
 
-Jonathan
+I think that last sentence doesn't really add any value.
 
-> ---
->  drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-> index 8d4201b86e87..35556cd04284 100644
-> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i3c.c
-> @@ -6,11 +6,11 @@
->   */
->  
->  #include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/i3c/device.h>
->  #include <linux/i3c/master.h>
->  #include <linux/slab.h>
-> -#include <linux/of.h>
->  #include <linux/regmap.h>
->  
->  #include "st_lsm6dsx.h"
+> +	memset(buffer, 0, sizeof(buffer));
+> +	if (count > sizeof(buffer) - 1)
+> +		count = sizeof(buffer) - 1;
+> +	if (copy_from_user(buffer, buf, count)) {
+> +		err = -EFAULT;
+> +		goto out_return;
+
+This feels a bit unnecessary.  Just 'return -EFAULT' here.
+
+> +	}
+> +
+> +	err = kstrtoint(strstrip(buffer), 0, &force);
+> +
+> +	if (err)
+> +		goto out_return;
+
+'return err'
+
+> +	if (force != 0 && force != 1) {
+> +		err = -EINVAL;
+> +		goto out_return;
+
+'return -EINVAL'
+
+> +	}
+> +
+> +	task = get_proc_task(file_inode(file));
+> +	if (!task) {
+> +		err = -ESRCH;
+> +		goto out_return;
+
+'return -ESRCH'
 

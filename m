@@ -2,173 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3DE51EF57
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DC351EF38
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240651AbiEHTIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S237655AbiEHTHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237753AbiEHR2e (ORCPT
+        with ESMTP id S237319AbiEHRgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 13:28:34 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F879DED0
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 10:24:43 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id ba17so13848788edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 10:24:43 -0700 (PDT)
+        Sun, 8 May 2022 13:36:05 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295F0E01D;
+        Sun,  8 May 2022 10:32:14 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so7112161wmz.0;
+        Sun, 08 May 2022 10:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xtzshtqnY57AWyG48xUrSZO3HB2YKLPUbkukb3SwPVQ=;
+        b=M82/1R7PVx4QETpQp8jd5Dpvdy43cfwQey7aKxG1Oee6G0fdxUFZ/SFrcagPRRfRAU
+         i5tj3yATsxyXaOaYeOLEKaFKGDYndRGt2b76XzdOPP6QGIb/EiZl32lpNJNrMK12l2/O
+         cTWkYH0HL8fcr4mdnGzG+Y5i0y5SFZLiTmJsGtLndn/3SpRt7HfNMobP0wi6Bne6VJvF
+         S6VxawGEzS6pp0RrAEbS26XEHbDa3VP0yNn/S8FZSioHk0cl7z5uZ/c7HfNntCHbd67L
+         voI5Ex0vlYt7XG1q+EUtYmSy2OSnEuLNA6hYsAuab3O8ds7B4xtqZgoF8MAsYlfN01dj
+         RvpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wqd1pfOpFBNim3pwEebs2UZOYdL6NZjjBjoV+dIe6iY=;
-        b=Fa7QmJcNo9SbT+IHpWFUIRIB7pilgr4sqMl/rPj/8sa13GAJqZBvJG9GreTTzTPIeF
-         pn1bId3gtRSSVKeShFNhmACtM2Wje1WDxpiAAoH40mQ1zGCsMa4R3y9YyIQciMA6HaPe
-         7uMxltjyniEsTBRCfqcN8+Q0GwGNABCT9TM6X8WujSYuXiZN1jER0SqMGHxNeobdFmp3
-         VqNHYJNhNw9yjS2OZJqFqrjuhtm/IcpliGZslXH4SaStId0c8oWJuPNh+9BdJXMbdJWU
-         YH4ddX2JnDgCqVFBU6Y6xFaEvjUD1tJ8YzvFGfdMtXsJElj6uqd3wzXquEUdqypOJ5Kx
-         t/WQ==
-X-Gm-Message-State: AOAM531lSrJBBhNuLlIUi2GSWuM1QfYMTOPDv8PGwjjIgI/K4cBjPP5t
-        8AMJEEJVoYAfcA5Uo130Xy0=
-X-Google-Smtp-Source: ABdhPJyo/rfuIQKNUAXvvILf5E3b882Jcte6XFXtzxTuyZm+ayghbOJg1YOFA1rXbKlUpGy3fKe2Nw==
-X-Received: by 2002:aa7:ca15:0:b0:428:3259:984a with SMTP id y21-20020aa7ca15000000b004283259984amr13826192eds.59.1652030681735;
-        Sun, 08 May 2022 10:24:41 -0700 (PDT)
-Received: from [10.9.0.34] ([46.166.128.205])
-        by smtp.gmail.com with ESMTPSA id qs24-20020a170906459800b006f3ef214e66sm4143967ejc.204.2022.05.08.10.24.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 10:24:41 -0700 (PDT)
-Message-ID: <3d65baac-93b6-7f21-1bf6-9b17d1fce843@linux.com>
-Date:   Sun, 8 May 2022 20:24:38 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xtzshtqnY57AWyG48xUrSZO3HB2YKLPUbkukb3SwPVQ=;
+        b=QB3iZkuRZkso/pkDxGpqI3oka3uYE+KZWfkISDm3kuAF3J+AXouZl32qTOmD0xeDGK
+         aVnSGJ+ZdCL+zjT/IxGFh1BWfTXirYbmIZ26ow2Tj4OAXhY0Rl4B2/HS4BKAMM9ceBEU
+         8DGYyqInx5wFkkTZ3DYxKq3/T+4jwiXV0gzbUp0aLnJzwAxW/UA4PfIWqmfSFkt4mNWP
+         QJh5/xdttvCl0bPlpVe4JBcqIqySGYPPP1YBoLBzWYnD4ARFIKnG/dO71ZGpgm52Nl+l
+         7lKN5ZOjvtXHXXsKcE90k7ipIq0HSEGKX4Qd1M3+BkNDG036s4EyKhzFDf2GczRjMOf8
+         xY0w==
+X-Gm-Message-State: AOAM531adI4LKL8snjbvBfwUI3c7ifwKEXdjOW/rnYqMJ8+/R2pzofkJ
+        MhoA+zXZWmobRkqiPUb1t9s=
+X-Google-Smtp-Source: ABdhPJxQ9JqWkArKi3om7Wq/rZFQSDPiyvqplr6k71x0dsq7vxjakAcQeRYsU9etIK3UmV0wBb6bOw==
+X-Received: by 2002:a05:600c:4808:b0:393:fbd3:f1fa with SMTP id i8-20020a05600c480800b00393fbd3f1famr19282520wmo.100.1652031132512;
+        Sun, 08 May 2022 10:32:12 -0700 (PDT)
+Received: from elementary ([94.73.37.128])
+        by smtp.gmail.com with ESMTPSA id j12-20020a5d464c000000b0020c5253d90esm10303182wrs.90.2022.05.08.10.32.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 10:32:12 -0700 (PDT)
+Date:   Sun, 8 May 2022 19:32:05 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     jikos@kernel.org, kbuild-all@lists.01.org,
+        benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanberzl@gmail.com, albertofanjul@gmail.com
+Subject: Re: [PATCH for-5.19/uclogic 1/7] HID: uclogic: Move param printing
+ to a function
+Message-ID: <20220508173205.GA34347@elementary>
+References: <20220508160146.13004-2-jose.exposito89@gmail.com>
+ <202205090129.trznWqE6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Reply-To: alex.popov@linux.com
-Subject: Re: [PATCH v2 01/13] arm64: stackleak: fix current_top_of_stack()
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        luto@kernel.org, will@kernel.org
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-2-mark.rutland@arm.com>
-From:   Alexander Popov <alex.popov@linux.com>
-In-Reply-To: <20220427173128.2603085-2-mark.rutland@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202205090129.trznWqE6-lkp@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark!
+On Mon, May 09, 2022 at 01:16:28AM +0800, kernel test robot wrote:
+> Hi "José,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on hid/for-next]
+> [cannot apply to v5.18-rc5 next-20220506]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
 
-On 27.04.2022 20:31, Mark Rutland wrote:
-> Due to some historical confusion, arm64's current_top_of_stack() isn't
-> what the stackleak code expects. This could in theory result in a number
-> of problems, and practically results in an unnecessary performance hit.
-> We can avoid this by aligning the arm64 implementation with the x86
-> implementation.
-> 
-> The arm64 implementation of current_top_of_stack() was added
-> specifically for stackleak in commit:
-> 
->    0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
-> 
-> This was intended to be equivalent to the x86 implementation, but the
-> implementation, semantics, and performance characteristics differ
-> wildly:
-> 
-> * On x86, current_top_of_stack() returns the top of the current task's
->    task stack, regardless of which stack is in active use.
-> 
->    The implementation accesses a percpu variable which the x86 entry code
->    maintains, and returns the location immediately above the pt_regs on
->    the task stack (above which x86 has some padding).
-> 
-> * On arm64 current_top_of_stack() returns the top of the stack in active
->    use (i.e. the one which is currently being used).
-> 
->    The implementation checks the SP against a number of
->    potentially-accessible stacks, and will BUG() if no stack is found.
+Missing --base=<commit> argument, the patch applies without issues on
+for-5.19/uclogic.
 
-As I could understand, for arm64, calling stackleak_erase() not from the thread 
-stack would bring troubles because current_top_of_stack() would return an 
-unexpected address from a foreign stack. Is this correct?
+Let me now if you need me to resend it,
+Jose
 
-But this bug doesn't happen because arm64 always calls stackleak_erase() from 
-the current thread stack. Right?
 
-> The core stackleak_erase() code determines the upper bound of stack to
-> erase with:
-> 
-> | if (on_thread_stack())
-> |         boundary = current_stack_pointer;
-> | else
-> |         boundary = current_top_of_stack();
-> 
-> On arm64 stackleak_erase() is always called on a task stack, and
-> on_thread_stack() should always be true. On x86, stackleak_erase() is
-> mostly called on a trampoline stack, and is sometimes called on a task
-> stack.
-> 
-> Currently, this results in a lot of unnecessary code being generated for
-> arm64 for the impossible !on_thread_stack() case. Some of this is
-> inlined, bloating stackleak_erase(), while portions of this are left
-> out-of-line and permitted to be instrumented (which would be a
-> functional problem if that code were reachable).
 
-Sorry, I didn't understand this part about instrumentation. Could you elaborate 
-please?
-
-> As a first step towards improving this, this patch aligns arm64's
-> implementation of current_top_of_stack() with x86's, always returning
-> the top of the current task's stack. With GCC 11.1.0 this results in the
-> bulk of the unnecessary code being removed, including all of the
-> out-of-line instrumentable code.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-> While I don't believe there's a functional problem in practice I've
-> marked this as a fix since the semantic was clearly wrong, the fix
-> itself is simple, and other code might rely upon this in future.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+> config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220509/202205090129.trznWqE6-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/4c0671e4ce0687136ff71aa65539cd3a2798d99d
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Jos-Exp-sito/DIGImend-patches-part-VI/20220509-000510
+>         git checkout 4c0671e4ce0687136ff71aa65539cd3a2798d99d
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/hid/
 > 
-> Fixes: 0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Popov <alex.popov@linux.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Will Deacon <will@kernel.org>
-> ---
->   arch/arm64/include/asm/processor.h | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-> index 73e38d9a540ce..6b1a12c23fe77 100644
-> --- a/arch/arm64/include/asm/processor.h
-> +++ b/arch/arm64/include/asm/processor.h
-> @@ -381,12 +381,10 @@ long get_tagged_addr_ctrl(struct task_struct *task);
->    * of header definitions for the use of task_stack_page.
->    */
->   
-> -#define current_top_of_stack()								\
-> -({											\
-> -	struct stack_info _info;							\
-> -	BUG_ON(!on_accessible_stack(current, current_stack_pointer, 1, &_info));	\
-> -	_info.high;									\
-> -})
-> +/*
-> + * The top of the current task's task stack
-> + */
-> +#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
->   #define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
->   
->   #endif /* __ASSEMBLY__ */
-
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+>    drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Dump tablet interface frame parameters with hid_dbg(), indented with two
+>    drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Dump tablet interface parameters with hid_dbg().
+> 
+> 
+> vim +48 drivers/hid/hid-uclogic-params.c
+> 
+>     46	
+>     47	/**
+>   > 48	 * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+>     49	 *
+>     50	 * @hdev:	The HID device the pen parameters describe.
+>     51	 * @pen:	The pen parameters to dump.
+>     52	 */
+>     53	static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
+>     54						const struct uclogic_params_pen *pen)
+>     55	{
+>     56		size_t i;
+>     57	
+>     58		hid_dbg(hdev, "\t.usage_invalid = %s\n",
+>     59			(pen->usage_invalid ? "true" : "false"));
+>     60		hid_dbg(hdev, "\t.desc_ptr = %p\n", pen->desc_ptr);
+>     61		hid_dbg(hdev, "\t.desc_size = %u\n", pen->desc_size);
+>     62		hid_dbg(hdev, "\t.id = %u\n", pen->id);
+>     63		hid_dbg(hdev, "\t.subreport_list = {\n");
+>     64		for (i = 0; i < ARRAY_SIZE(pen->subreport_list); i++) {
+>     65			hid_dbg(hdev, "\t\t{0x%02hhx, %hhu}%s\n",
+>     66				pen->subreport_list[i].value,
+>     67				pen->subreport_list[i].id,
+>     68				i < (ARRAY_SIZE(pen->subreport_list) - 1) ? "," : "");
+>     69		}
+>     70		hid_dbg(hdev, "\t}\n");
+>     71		hid_dbg(hdev, "\t.inrange = %s\n",
+>     72			uclogic_params_pen_inrange_to_str(pen->inrange));
+>     73		hid_dbg(hdev, "\t.fragmented_hires = %s\n",
+>     74			(pen->fragmented_hires ? "true" : "false"));
+>     75		hid_dbg(hdev, "\t.tilt_y_flipped = %s\n",
+>     76			(pen->tilt_y_flipped ? "true" : "false"));
+>     77	}
+>     78	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

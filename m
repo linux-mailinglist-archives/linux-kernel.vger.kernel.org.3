@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D2C51EAAF
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273C851EAB3
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 02:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiEHATl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 20:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S232110AbiEHAXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 20:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiEHATd (ORCPT
+        with ESMTP id S229544AbiEHAXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 20:19:33 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5F163BC;
-        Sat,  7 May 2022 17:15:41 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id BA7102B01A5E;
-        Sat,  7 May 2022 20:15:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 07 May 2022 20:15:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651968936; x=
-        1651976136; bh=hBCmJbIqgEytzYwa8CW7BN7wQ9FjoZGR5Pq0KkOSgR4=; b=a
-        Fd+8vokQcvbA4GWW9owApfwSeCCmripmwI1V8BhLeK5KaZNhXYioKWO7gI/i4WS2
-        7k47a/ZWVbS9L9Tb94YqvYOtS7N7Odf5y1vj4JNgmK7LNQqCWISAKcO+P4rj0UMi
-        q+RtVMiTD2S0odWphzabgNOzrXhZiGf5nIMLf0LKorYXqpXkyhAyhpWHbDYXh7SC
-        lIsqVRz6rHiSoRmYVbBPXTr50ooseR0KbMmjBLcBybt5kQU3VX6Uv3BlsayvPX8K
-        rT/CABNOI5QNmto+53M1TPT98lstPKrnj3wt67ZKWi2d0IKDKzkcno0YDJCen2gb
-        pvOvYx7XyUrz2lynIGXHQ==
-X-ME-Sender: <xms:nQt3Yu2EHi4ipuqnh-IQxeR3-pYmafCL0ycLmbVR9jkQSZuwwhMCTw>
-    <xme:nQt3YhGj3WbJjLWRninJPo0UdIhOCVOzhNulF-SivW5rfLH6ZZQyRpAgUojPbF8-C
-    5lTRDk0I_hwK1GBwHg>
-X-ME-Received: <xmr:nQt3Ym4M7PXyIjFTVPJSxyNTs6iYk-KiuVj0c9xbLZnPIwKKKX3pbGagQ0aMJCEstBpD08vkytiENlEH1oJyJPG-juBdv5xk6po>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeigdeftdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueeh
-    ueelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
-    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:ngt3Yv2K9-Zw_Jv6Z_K6SmuSI0Dgy56dsjusRgWQOeGaH_9LVHsGyA>
-    <xmx:ngt3YhFAxYHvfpVbkpFftwsm7VPnoe1hEExANO3zwqFSWMnA4ZPxbQ>
-    <xmx:ngt3Yo8pHsdl-eEhvlnevon6M7vqHjCeDigA6J9OPD9hPyVH2q_GOw>
-    <xmx:qAt3Ym7_mrm_1RQ5vAt6Czfp_u6IruN66F4H7V-seVcfOQQjEYOJyLnz_fE>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 7 May 2022 20:15:23 -0400 (EDT)
-Date:   Sun, 8 May 2022 10:15:31 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Sat, 7 May 2022 20:23:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F63CC12
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 17:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651969160; x=1683505160;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+vxAPkzxveR0ymbI5x+v5m759Qha/1RTi6UuTu9YXSY=;
+  b=QjZ0zTdZ0A0M4sAwDC3Ns5G5pg/ArtVuxxf85+yFi5KwktunsVo2OsJ4
+   HhXaqPHoTiAWuCFuHsuYFv0TR00kiiCZfb1RmuCfUuewGIDWx0nmQG8CT
+   TMKejLZtC4MvFXlUEJ3V+20FtbeABOjGICcz4okjGR7MvjdUz98937gys
+   og1H+2bcEH9FIWXTZUgx2yO+lIccCmMsiEsmFccKkGJzd2LOt5SVPBDAI
+   Hc6RQWWkp9hJaZ1uo80/vXk1Hqd98J84uTHBd5qhCpCtno5b8N/4G0gqV
+   nv8D2yyy8ej4Co2LQBhJk7Q307KIl/lnACw2tawqKnjk/+C3lRpjxHXct
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="266360624"
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="266360624"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 17:19:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
+   d="scan'208";a="518621052"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 May 2022 17:19:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnUdp-000F5H-G5;
+        Sun, 08 May 2022 00:19:17 +0000
+Date:   Sun, 8 May 2022 08:18:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-In-Reply-To: <6f33385-5612-7042-e1b3-aa32895e91e0@linux-m68k.org>
-Message-ID: <e01fac8a-7568-14b6-84-affc4a40c6d@linux-m68k.org>
-References: <20220505195342.GA509942@bhelgaas> <22bec167-241f-2cbe-829f-a3f65e40e71@linux-m68k.org> <105ccec439f709846e82b69cb854ac825d7a6a49.camel@linux.ibm.com> <7dfa7578-039-e132-c573-ad89bd3215@linux-m68k.org> <CAK8P3a3tds8O+Gg2nF3MfrVVcmtLbtdQ2TnCJaDYz28cyhhWkg@mail.gmail.com>
- <6f33385-5612-7042-e1b3-aa32895e91e0@linux-m68k.org>
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for
+ 'kasan_hw_tags_enable'
+Message-ID: <202205080852.hDqWRhyQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
 
-On Sun, 8 May 2022, I wrote:
+FYI, the error/warning still remains.
 
-> 
-> That suggests to me that we need a "bool CONFIG_WARINGS_INTO_ERRORS" to 
-> control -Werror, which could be disabled for .config files (like make 
-> allmodconfig) where it is not helping.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   30c8e80f79329617012f07b09b70114592092ea4
+commit: e5af50a5df571c1d0268b02f924de49b742c990f arm64: kasan: mte: move GCR_EL1 switch to task switch when KASAN disabled
+date:   7 months ago
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220508/202205080852.hDqWRhyQ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e5af50a5df571c1d0268b02f924de49b742c990f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e5af50a5df571c1d0268b02f924de49b742c990f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-I just noticed that we already have CONFIG_WERROR. So perhaps something 
-like this would help.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/init/Kconfig b/init/Kconfig
-index ddcbefe535e9..765d83fb148e 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -150,6 +150,8 @@ config WERROR
- 
- 	  However, if you have a new (or very old) compiler with odd and
- 	  unusual warnings, or you have some architecture with problems,
-+	  or if you are using a compiler that doesn't happen to interpret
-+	  the C standards in quite the same way as some other compilers,
- 	  you may need to disable this config option in order to
- 	  successfully build the kernel.
- 
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for 'kasan_hw_tags_enable' [-Wmissing-prototypes]
+     197 | void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+         |             ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/kasan_hw_tags_enable +197 arch/arm64/kernel/mte.c
+
+   196	
+ > 197	void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
+   198					 __le32 *updptr, int nr_inst)
+   199	{
+   200		BUG_ON(nr_inst != 1); /* Branch -> NOP */
+   201	
+   202		if (kasan_hw_tags_enabled())
+   203			*updptr = cpu_to_le32(aarch64_insn_gen_nop());
+   204	}
+   205	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

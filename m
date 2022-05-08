@@ -2,159 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7F651EC06
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1051EC10
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 09:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiEHHRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 03:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S229900AbiEHH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 03:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiEHHRF (ORCPT
+        with ESMTP id S229756AbiEHH0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 03:17:05 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5673FDF0D
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 00:13:13 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 05E3F2800BD8D;
-        Sun,  8 May 2022 09:13:09 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id ED86711AF9A; Sun,  8 May 2022 09:13:08 +0200 (CEST)
-Date:   Sun, 8 May 2022 09:13:08 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: Re: [PATCH v4 1/8] platform/x86/intel: Add Primary to Sideband
- (P2SB) bridge support
-Message-ID: <20220508071308.GA27815@wunner.de>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-2-andriy.shevchenko@linux.intel.com>
- <20220505145503.GA25423@wunner.de>
- <CAHp75VdQqQj0fS6t5nYj+7rJ1tuSt7+5GT78eN06PShWnrDZgA@mail.gmail.com>
+        Sun, 8 May 2022 03:26:07 -0400
+Received: from 6.mo548.mail-out.ovh.net (6.mo548.mail-out.ovh.net [188.165.58.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACDEE096
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 00:22:17 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.138.7])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 5870E22521;
+        Sun,  8 May 2022 07:14:55 +0000 (UTC)
+Received: from kaod.org (37.59.142.108) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Sun, 8 May 2022
+ 09:14:53 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-108S002fbf65d7b-541b-4859-a882-6af3346e7bf3,
+                    6A42E68C8A7CF0A161EF91BD72A2EC4D9931BD41) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 86.250.26.110
+Message-ID: <4af36c47-0895-bce4-b074-c934749e6faf@kaod.org>
+Date:   Sun, 8 May 2022 09:14:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdQqQj0fS6t5nYj+7rJ1tuSt7+5GT78eN06PShWnrDZgA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 03/11] spi: spi-mem: Convert Aspeed SMC driver to
+ spi-mem
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+References: <20220503060634.122722-1-clg@kaod.org>
+ <20220503060634.122722-4-clg@kaod.org> <YnFseFBfe5eaIqg0@robh.at.kernel.org>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <YnFseFBfe5eaIqg0@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.108]
+X-ClientProxiedBy: DAG5EX1.mxp5.local (172.16.2.41) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: eb910b0c-0e8b-44c4-8db7-9c6365255b15
+X-Ovh-Tracer-Id: 7921550270037658570
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeigdduudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekteejtdelkeejvdevffduhfetteelieefgeefffeugffhfeekheffueefledujeenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehquhhitggpjhgrvghhhihoohesqhhuihgtihhntgdrtghomh
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 07:54:49PM +0200, Andy Shevchenko wrote:
-> On Thu, May 5, 2022 at 4:55 PM Lukas Wunner <lukas@wunner.de> wrote:
-> > On Mon, Jan 31, 2022 at 05:13:39PM +0200, Andy Shevchenko wrote:
-> > > Background information
-> > > ======================
-> >
-> > The wealth of information in the commit message obscures what the
-> > actual problem is, which is actually quite simple:  SoC features
-> > such as GPIO are accessed via a reserved MMIO area, we don't know
-> > its address but can obtain it from the BAR of the P2SB device,
-> > that device is normally hidden so we have to temporarily unhide it.
+On 5/3/22 19:55, Rob Herring wrote:
+> On Tue, May 03, 2022 at 08:06:26AM +0200, Cédric Le Goater wrote:
+>> This SPI driver adds support for the Aspeed static memory controllers
+>> of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
+>>
+>>   * AST2600 Firmware SPI Memory Controller (FMC)
+>>     . BMC firmware
+>>     . 3 chip select pins (CE0 ~ CE2)
+>>     . Only supports SPI type flash memory
+>>     . different segment register interface
+>>     . single, dual and quad mode.
+>>
+>>   * AST2600 SPI Flash Controller (SPI1 and SPI2)
+>>     . host firmware
+>>     . 2 chip select pins (CE0 ~ CE1)
+>>     . different segment register interface
+>>     . single, dual and quad mode.
+>>
+>>   * AST2500 Firmware SPI Memory Controller (FMC)
+>>     . BMC firmware
+>>     . 3 chip select pins (CE0 ~ CE2)
+>>     . supports SPI type flash memory (CE0-CE1)
+>>     . CE2 can be of NOR type flash but this is not supported by the driver
+>>     . single, dual mode.
+>>
+>>   * AST2500 SPI Flash Controller (SPI1 and SPI2)
+>>     . host firmware
+>>     . 2 chip select pins (CE0 ~ CE1)
+>>     . single, dual mode.
+>>
+>>   * AST2400 New Static Memory Controller (also referred as FMC)
+>>     . BMC firmware
+>>     . New register set
+>>     . 5 chip select pins (CE0 ∼ CE4)
+>>     . supports NOR flash, NAND flash and SPI flash memory.
+>>     . single, dual and quad mode.
+>>
+>> Each controller has a memory range on which flash devices contents are
+>> mapped. Each device is assigned a window that can be changed at bootime
+>> with the Segment Address Registers.
+>>
+>> Each SPI flash device can then be accessed in two modes: Command and
+>> User. When in User mode, SPI transfers are initiated with accesses to
+>> the memory segment of a device. When in Command mode, memory
+>> operations on the memory segment of a device generate SPI commands
+>> automatically using a Control Register for the settings.
+>>
+>> This initial patch adds support for User mode. Command mode needs a little
+>> more work to check that the memory window on the AHB bus fits the device
+>> size. It will come later when support for direct mapping is added.
+>>
+>> Single and dual mode RX transfers are supported. Other types than SPI
+>> are not supported.
+>>
+>> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+>> Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+>> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   drivers/mtd/spi-nor/controllers/aspeed-smc.c  | 921 ------------------
+>>   drivers/spi/spi-aspeed-smc.c                  | 717 ++++++++++++++
+>>   .../devicetree/bindings/mtd/aspeed-smc.txt    |  51 -
 > 
-> Right, but this long commit message was a result of the previous
-> discussions with Bjorn. If we're ever going to handle something like
-> this in the PCI core, perhaps he won't be happy if I remove it. Maybe
-> we can simply state what you wrote as a problem statement and move
-> this chapter at the end?
+> This belongs with the binding patch. But then it is converting rather
+> than adding a binding. You should be converting the binding and then
+> adding to it (like adding 2600 support).
 
-Yes, feel free to copy-paste the synopsis from my e-mail above
-and rephrase as you see fit.
+OK.
 
-
-> > > On top of that in some cases P2SB is represented by function 0 on PCI
-> > > slot (in terms of B:D.F) and according to the PCI specification any
-> > > other function can't be seen until function 0 is present and visible.
-> >
-> > I find that paragraph confusing:  Do multi-function P2SB devices exist?
-> > What are the other functions?  Are they visible but merely not enumerated
-> > because function 0 is not visible?
-> 
-> The case I see is when we want to read the BAR from another slot of a
-> PCI device, 0 function of which is P2SB. Since P2SB is hidden, the
-> other device is hidden as well. Any idea how to reformulate this? And
-> yes, we have this in the existing SoCs.
-
-The spec you linked to in the commit message (for the 100 series chipset)
-says that P2SB is located at Device 31 Function 1.
-
-In those chipsets where P2SB is function 0, what kind of devices are
-at functions 1 and higher?
-
-
-> > Do you really need all the complicated logic in __pci_bus_read_base()?
-> > For comparison, simatic_ipc_get_membase0() in simatic-ipc.c merely does:
-> >
-> >         pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
-> >
-> > If that's sufficient for simatic-ipc.c, why is the more complicated code
-> > necessary in p2sb.c?
-> 
-> Since it's a PCI device I want to follow what PCI core does with it.
-> As I explained somewhere that the current code (actually it's a
-> simplified version of what is done in PCI core) follows what spec
-> requires. I would like to be in alignment with the spec, while it
-> still may work with less code. Besides that, it's theoretically
-> possible that the base address may be 64-bit in new SoCs, I won't
-> rewrite code again just because we abused the spec.
-
-So as an alternative to copy-pasting __pci_bus_read_base(),
-you could just call pci_scan_single_device().  This will create
-a proper pci_dev that you can work with.  Note that no driver will
-be bound to the device because of:
-
-  pci_scan_single_device()
-    pci_device_add()
-      dev->match_driver = false
-
-After you've read the BAR, get rid of the pci_dev with pci_destroy_dev().
-
-
-> > > +     /*
-> > > +      * I don't know how l can have all bits set.  Copied from old code.
-> > > +      * Maybe it fixes a bug on some ancient platform.
-> > > +      */
-> > > +     if (PCI_POSSIBLE_ERROR(l))
-> > > +             l = 0;
-> >
-> > l can have all bits set if the device was hot-removed.  That can't happen
-> > with a built-in device such as P2SB.
-> 
-> Can be dropped, indeed. But that chicken bit emulates that :-) Anyway,
-> we unhide the device before looking into it, so we shouldn't have the
-> surprise "removals".
-
-pci_lock_rescan_remove() prevents concurrent unhiding as well as
-removal via sysfs.
+So, I will send, some time next week, a v7 patchset updating the binding
+patch 02/11 to include the removal of the old binding.
 
 Thanks,
 
-Lukas
+C.
+
+> 
+>>   MAINTAINERS                                   |   1 +
+>>   drivers/mtd/spi-nor/controllers/Kconfig       |  10 -
+>>   drivers/mtd/spi-nor/controllers/Makefile      |   1 -
+>>   drivers/spi/Kconfig                           |  11 +
+>>   drivers/spi/Makefile                          |   1 +
+>>   8 files changed, 730 insertions(+), 983 deletions(-)
+>>   delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
+>>   create mode 100644 drivers/spi/spi-aspeed-smc.c
+>>   delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
+

@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE5351EAC5
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 03:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AFA51EAC6
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 03:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiEHB1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 7 May 2022 21:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S1387793AbiEHB3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 7 May 2022 21:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiEHB1T (ORCPT
+        with ESMTP id S1387670AbiEHB3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 7 May 2022 21:27:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7256F11A15;
-        Sat,  7 May 2022 18:23:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9F1160F7F;
-        Sun,  8 May 2022 01:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE52AC385A6;
-        Sun,  8 May 2022 01:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651973009;
-        bh=bkpfuiHpthyo4eMUiXJ6/JZTEy7lTJlasVB2DKI6S8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X+j+lD2+UAojrB2xodzbNxE19De7dQFVtyt/le/bgy8fvWA22kdpcJDwOhCYv0lok
-         g1fCEwLdZHU9knJZxXdN2VJNQdqPqZqugRigzph1cgAt/Dh2diJ8ZafkZdH/Ipgdyo
-         PKcKtWXL1DPoMs2wmwd4G77coyA7h7IwIQW6F/EWSsMeUmehlxejx00NS76TMx8B0o
-         zm7KAci0oRJmswVOE7q+SKx8JOzRZVH+8Dz4s+4cm+iUH7uz3reEfNZ/wGZBpfegcR
-         O9nTRTg/arAYEbVpJrIMr+U1pIZKT4IBulHqVzQwtf8rjrd+zddr0Y0XcIQ6msmuvD
-         hzNl7qClY4Zmg==
-Date:   Sun, 8 May 2022 09:23:21 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 1/4] dt-bindings: arm: fsl: add imx93 11x11 evk board
-Message-ID: <20220508012321.GM14615@dragon>
-References: <20220507065309.3964937-1-peng.fan@oss.nxp.com>
- <20220507065309.3964937-2-peng.fan@oss.nxp.com>
+        Sat, 7 May 2022 21:29:36 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79876FD30
+        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 18:25:48 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id c125so11891820iof.9
+        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 18:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PF1cKI3J2qY+qkEQ0Qx4QViHD+lV1w45Vz4SVngpaDg=;
+        b=H5UMdFSjSDPFzq4IFPTbZHF37Y7Jp9CWLlxexXs7wTAg0dncBSEEvUzIxdjSfTnBP3
+         H89imRBhH6YN7VoThhs0lKg1XA1pVd5a4lCmR4Kq7BwlVEGhgo23am079DuWskMoVtIv
+         W+FC7inpgljyWB6fup4I6TeWV3XDWhRNAR8jpjUB6v+U9HIB5cx60PgMh2Dkr12ZJFjD
+         ka8F5NB70yycoHqNtqwU8tUK/NcZ5x0JXw++FZr0jCKVXqBmoQ5KEsVo+Rfr7/iYacGb
+         EJnFLcWvf0M4twSNt5gTdpF3CiwuDVYoKxMuN+42cZvHU58A5Fmhxwaz6Glo3sKGVfAm
+         xKmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PF1cKI3J2qY+qkEQ0Qx4QViHD+lV1w45Vz4SVngpaDg=;
+        b=o0hjhbwcifWURmievmXbJ6nXvl5JbiCsRYWrRkfOcQ3UidjXJygbdN3VcKdFUHVPEb
+         pcx8f5lehupQzyeHFBjoNT9RlNE0iM1z6gmmPo8ZFIaZ/2NqshmtJmeqHneCUdlcrLjG
+         fASXO5+8MQdodmXbPR8cjcxlSxQmfgdT9O2w1Mlz+iWhpNKCQYE6nYNnZu83IGxLC7uY
+         xOjGjB20wPSHSFO9Uw4yYSDKbVCk9BJdW4iqs3RbUDOLIFgJJinMDs7GYIUEd+yWHnBK
+         ke1sXyJvItFNdGZzC4x89Cl9yp3Mcf48MP4XUivwr8cPZewuvyAF45xCCEbGJ6klLzL9
+         Fgcg==
+X-Gm-Message-State: AOAM530Oy/efXupZhhMm7+y+ZWFBt8p50b9cvi7N9lrXaqmhvYHrIMMN
+        nAtulAGo8YQoanOYJwlS7VE1TYgEm/r9NcpIL8k=
+X-Google-Smtp-Source: ABdhPJxRG4+Y8gq2y29o4C4YauJDtnxmX5RQsHY0AeI0im1CeRjnKSaWihgNH8JGv+Vf+X/VzAvb4UWXLgcVombC7GU=
+X-Received: by 2002:a6b:3ec1:0:b0:65a:499f:23a4 with SMTP id
+ l184-20020a6b3ec1000000b0065a499f23a4mr3977948ioa.189.1651973147740; Sat, 07
+ May 2022 18:25:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507065309.3964937-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:5af:0:0:0:0 with HTTP; Sat, 7 May 2022 18:25:46
+ -0700 (PDT)
+Reply-To: fundsrecoverycommittee@aol.com
+From:   Geoffrey Bristol - FUNDS RECOVERY COMMITTEE 
+        <macarthuremmy@gmail.com>
+Date:   Sat, 7 May 2022 18:25:46 -0700
+Message-ID: <CA+v+5815=PEKbrycVHx5Ow=VioWhWo4ETTi_2d3XGS1WZFq6dg@mail.gmail.com>
+Subject: COMPENSATION PROGRAM
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [macarthuremmy[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 02:53:06PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add the board imx93-11x11-evk in the binding docuemnt.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index b8b0efa55339..391f92282453 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -910,6 +910,11 @@ properties:
->                - toradex,verdin-imx8mp-wifi  # Verdin iMX8M Plus Wi-Fi / BT Modules
->            - const: fsl,imx8mp
->  
-> +      - description: i.MX93 based Boards
-> +        items:
-> +          - const: fsl,imx93-11x11-evk    # i.MX93 11x11 EVK Board
-> +          - const: fsl,imx93
-> +
+TO WHOM IT MAY CONCERN
 
-It breaks the order of the list.  Should be added after
-"i.MX8ULP based Board" entry, I think.
+This message is from the Office of Funds Recovery Committee, a Panel
+set up by the United Nations in conjunction with the European
+Union,International Monetary Fund and World Bank to look into and
+compensate accordingly all victims of internet fraud/scam.
+In a recent report of a thorough research conducted over a period of
+10 years,part of the findings was that about 30% of such victims
+commit suicide after losing thousands/millions of their hard earned
+monies in the hands of these evil perpetrators of online scam/fraud.
+It will interest you to know that we are doing our best to ensure that
+these culprits are brought to justice and prosecuted accordingly. More
+than 10,000 of these scammers/fraudsters have been arrested in various
+countries recently and huge sums of money recovered from them.
+These internet fraudsters actually confessed to their crimes.
+Against this background,we have been mandated to compensate each
+scammed victims of these fraudsters with the sum of $500,000.00USD
+only.
+Be informed that your name and details were found in our list as one
+of the victims. This is the reason why we contacted you through our
+agent to compensate you for your loss.
+You are therefore advised to get back to us as soon as you receive
+this message so that we can commence with the immediate process of
+releasing this $500,000.00USD to you without delay. Be informed that
+your name is in the first batch list to receive $500,000.00 this week
+as compensation.
+Any kind of delay from you will not be tolerated as we shall quickly
+move to the next batch if you fail to respond on or before 48hours of
+receiving this message. We will assume that you are not interested in
+receiving this compensation offer.
 
-Shawn
+Regards.
 
->        - description: PHYTEC phyCORE-i.MX8MP SoM based boards
->          items:
->            - const: phytec,imx8mp-phyboard-pollux-rdk # phyBOARD-Pollux RDK
-> -- 
-> 2.25.1
-> 
+Geoffrey Bristol(Chairman)
+FUNDS RECOVERY COMMITTEE.

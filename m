@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BA251ECFD
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3100151ED03
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbiEHKxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 06:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S231815AbiEHKxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbiEHKwv (ORCPT
+        with ESMTP id S231566AbiEHKwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 06:52:51 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD79B7E8;
-        Sun,  8 May 2022 03:49:02 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id g6so21892551ejw.1;
-        Sun, 08 May 2022 03:49:01 -0700 (PDT)
+        Sun, 8 May 2022 06:52:53 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E45B7DD;
+        Sun,  8 May 2022 03:49:03 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id p18so13233188edr.7;
+        Sun, 08 May 2022 03:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zvBNJiZ8Rei9kCvvOCgcWJFVne61zQ3dcujbgkMHjus=;
-        b=WJ+EKkRU5lf6p61s+aziGmHhhJaoN8V24tfbJBBUCaiVLPP6kf9ALBeiAk4rNLjpJ+
-         U4TojXKkJz8tW8fkdWCrGTbu9MadVtzcCvzc9PfJZnpHUp5f2V7JoYCmZpt/eD9+catH
-         qVsX8SjGXV6KocGtJdhZ1ChyHS1Eb9ToZQtIkiCIs2u1k7tGszYsQWAAmoxyowbUjI1y
-         /ey/KZjxysEzLl82tegohB6JqjBXndkyBjaysmJFldQ/tYNSiPPOFHrwvtQZNfaMSf0E
-         w5zk+2QV4EOr3C1f2KFC2XXe00zsqScxsIrmN2TjT6cE8I0IWFcAZwtFVJZ567BscUVa
-         618w==
+        bh=wj10WxHIbo6UUCAP9oJqNfD8dGhuPiu7BAPjORdqN3c=;
+        b=W2scJrPH7Y546YfSLyYIyMgXfyQHp2qyMXq8whSjj8j2+xJkkVDj3EWjOVBnCGc91m
+         HEZVf/DxkWYCzI6J5PUcIHQik+fnLHch0xdnciFl3VSwO80wYrtFEfZlYHdT7e7+GZR7
+         2ftoJC4s/oHB31264G4FdV/4cbNfhG5PTjxISAOub0yZW6lUgM0xgnib3teSeMhogvNL
+         CQb1gTLl8My01k/05vxI+PuMgfc84zy4jzFedUOYg1Q6soI8zb6ov8n9UmK4wRwWHi96
+         7TZtShogZZHk8ItUCm1l1FzXo3cq3zT+WumG4Gfio1jmIyR/4z1JxkGrHAAQygd7wxGn
+         peag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zvBNJiZ8Rei9kCvvOCgcWJFVne61zQ3dcujbgkMHjus=;
-        b=KkRbZGYvnBlzbDhfWLS/KFIdU+yf3XZ/fV1+T071So6rq7KwuY64rq9voPiSqie1Vy
-         lpfXOYgeQy83Mxwk1ZsJ4UtSDU5WVyHtOkFA45rMDceOOTC7yAD4dbPs3H0s5Tpu0NCO
-         E/JcwL1QwvNeJgsi/4UWQzBV/8GxKvKJiz1NXq7GNS04BpVOFJm3Ej0g4oAB3LNPbkzw
-         SHbqJvsA9rciOVMtlVtkcCIa1CVxkHWMAAipEWgQZDpw0vjVAkvfeqXVybkCMtyzdTXk
-         lVigpu4lvK+bE7TCsPOnB+xr05F2O5J9LpkWsA+9cnu22QGaGU/q88lJEH6k3XcDd0NP
-         NRfQ==
-X-Gm-Message-State: AOAM530s2UG6d5rbtOGqlFfBTHOWvWtoqgBzeHeuiDkhZsvbL3LbE2rH
-        mER3z8uA+Aw9bR6fPQ5u2F02+Ovc+cBBxg==
-X-Google-Smtp-Source: ABdhPJyUoOXsFon979o9oEGdhhkSxghUylQHelWz44wXSsaJsArclcqfrG0uqSpjCjKbnWAIm5PtNQ==
-X-Received: by 2002:a17:907:3da3:b0:6f4:4292:6d6 with SMTP id he35-20020a1709073da300b006f4429206d6mr9987539ejc.162.1652006940398;
-        Sun, 08 May 2022 03:49:00 -0700 (PDT)
+        bh=wj10WxHIbo6UUCAP9oJqNfD8dGhuPiu7BAPjORdqN3c=;
+        b=MTeVFu06uzNYTUun+9G9YsXXvIlDEULgB3MektBQdnAz11iOu30ndgPvwnHqN9dMhT
+         j6YA8q+yODJ5OZBqR15zziuV9nWi40vpUUxR6ZaNZc+iAdjkd1ISbkyJ6HbZJm5SVEI0
+         f4n43m4UIZPpfIlswhkNZaU2ShBJ/wv5Ibci9JS4jMLlZb1GPVrv370SQwMDtmW/2YEx
+         DJmFsTm7pSTeNkkz1+AHQh9HH8ZCF2iVnDbeMDMu9JNftpeX+TbRbovhmaG6NAIweonA
+         TryGAZsoLTXwsgNkyQAbRhN3GOdcJsii+WLnyu/vQIPXaVTvRQhu6Q1vnArqqWCdZ7aI
+         1Wsg==
+X-Gm-Message-State: AOAM532aX8fg3SPe18oK2dkq0bBGNeJwIZTdMFoSErjHk6wtxsw04dF0
+        m1KnvV7qiFsQZYSPY8w2/r4=
+X-Google-Smtp-Source: ABdhPJy9rTN6jNl0tQIuVSuMp8SiY0yYVYp/7QTdUOBAhtt7BjLHKocyvI7uhj5eqwN+BARk6sDVqA==
+X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id y7-20020a50eb87000000b00425c3e217a9mr12311085edr.109.1652006942072;
+        Sun, 08 May 2022 03:49:02 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
-        by smtp.googlemail.com with ESMTPSA id hg12-20020a1709072ccc00b006f3ef214e0csm3917471ejc.114.2022.05.08.03.48.59
+        by smtp.googlemail.com with ESMTPSA id hg12-20020a1709072ccc00b006f3ef214e0csm3917471ejc.114.2022.05.08.03.49.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 03:49:00 -0700 (PDT)
+        Sun, 08 May 2022 03:49:01 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -55,14 +55,13 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 02/11] clk: qcom: ipq8074: SW workaround for UBI32 PLL lock
-Date:   Sun,  8 May 2022 12:48:46 +0200
-Message-Id: <20220508104855.78804-2-robimarko@gmail.com>
+Subject: [PATCH v3 03/11] clk: qcom: ipq8074: fix NSS port frequency tables
+Date:   Sun,  8 May 2022 12:48:47 +0200
+Message-Id: <20220508104855.78804-3-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220508104855.78804-1-robimarko@gmail.com>
 References: <20220508104855.78804-1-robimarko@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,35 +73,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBI32 Huayra PLL fails to lock in 5 us in some SoC silicon and thus it
-will cause the wait_for_pll() to timeout and thus return the error
-indicating that the PLL failed to lock.
+NSS port 5 and 6 frequency tables are currently broken and are causing a
+wide ranges of issue like 1G not working at all on port 6 or port 5 being
+clocked with 312 instead of 125 MHz as UNIPHY1 gets selected.
 
-This is bug in Huayra PLL HW for which SW workaround
-is to set bit 26 of TEST_CTL register.
+So, update the frequency tables with the ones from the downstream QCA 5.4
+based kernel which has already fixed this.
 
-This is ported from the QCA 5.4 based downstream kernel.
-
-Fixes: b8e7e519625f ("clk: qcom: ipq8074: add remaining PLL’s")
+Fixes: 7117a51ed303 ("clk: qcom: ipq8074: add NSS ethernet port clocks")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/clk/qcom/gcc-ipq8074.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 1a5141da7e23..b4291ba53c78 100644
+index b4291ba53c78..f1017f2e61bd 100644
 --- a/drivers/clk/qcom/gcc-ipq8074.c
 +++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -4805,6 +4805,9 @@ static int gcc_ipq8074_probe(struct platform_device *pdev)
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
+@@ -1788,8 +1788,10 @@ static struct clk_regmap_div nss_port4_tx_div_clk_src = {
+ static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
+ 	F(19200000, P_XO, 1, 0, 0),
+ 	F(25000000, P_UNIPHY1_RX, 12.5, 0, 0),
++	F(25000000, P_UNIPHY0_RX, 5, 0, 0),
+ 	F(78125000, P_UNIPHY1_RX, 4, 0, 0),
+ 	F(125000000, P_UNIPHY1_RX, 2.5, 0, 0),
++	F(125000000, P_UNIPHY0_RX, 1, 0, 0),
+ 	F(156250000, P_UNIPHY1_RX, 2, 0, 0),
+ 	F(312500000, P_UNIPHY1_RX, 1, 0, 0),
+ 	{ }
+@@ -1828,8 +1830,10 @@ static struct clk_regmap_div nss_port5_rx_div_clk_src = {
+ static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
+ 	F(19200000, P_XO, 1, 0, 0),
+ 	F(25000000, P_UNIPHY1_TX, 12.5, 0, 0),
++	F(25000000, P_UNIPHY0_TX, 5, 0, 0),
+ 	F(78125000, P_UNIPHY1_TX, 4, 0, 0),
+ 	F(125000000, P_UNIPHY1_TX, 2.5, 0, 0),
++	F(125000000, P_UNIPHY0_TX, 1, 0, 0),
+ 	F(156250000, P_UNIPHY1_TX, 2, 0, 0),
+ 	F(312500000, P_UNIPHY1_TX, 1, 0, 0),
+ 	{ }
+@@ -1867,8 +1871,10 @@ static struct clk_regmap_div nss_port5_tx_div_clk_src = {
  
-+	/* SW Workaround for UBI32 Huayra PLL */
-+	regmap_update_bits(regmap, 0x2501c, BIT(26), BIT(26));
-+
- 	clk_alpha_pll_configure(&ubi32_pll_main, regmap, &ubi32_pll_config);
- 	clk_alpha_pll_configure(&nss_crypto_pll_main, regmap,
- 				&nss_crypto_pll_config);
+ static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
+ 	F(19200000, P_XO, 1, 0, 0),
++	F(25000000, P_UNIPHY2_RX, 5, 0, 0),
+ 	F(25000000, P_UNIPHY2_RX, 12.5, 0, 0),
+ 	F(78125000, P_UNIPHY2_RX, 4, 0, 0),
++	F(125000000, P_UNIPHY2_RX, 1, 0, 0),
+ 	F(125000000, P_UNIPHY2_RX, 2.5, 0, 0),
+ 	F(156250000, P_UNIPHY2_RX, 2, 0, 0),
+ 	F(312500000, P_UNIPHY2_RX, 1, 0, 0),
+@@ -1907,8 +1913,10 @@ static struct clk_regmap_div nss_port6_rx_div_clk_src = {
+ 
+ static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
+ 	F(19200000, P_XO, 1, 0, 0),
++	F(25000000, P_UNIPHY2_TX, 5, 0, 0),
+ 	F(25000000, P_UNIPHY2_TX, 12.5, 0, 0),
+ 	F(78125000, P_UNIPHY2_TX, 4, 0, 0),
++	F(125000000, P_UNIPHY2_TX, 1, 0, 0),
+ 	F(125000000, P_UNIPHY2_TX, 2.5, 0, 0),
+ 	F(156250000, P_UNIPHY2_TX, 2, 0, 0),
+ 	F(312500000, P_UNIPHY2_TX, 1, 0, 0),
 -- 
 2.36.0
 

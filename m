@@ -2,81 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF2351ECBF
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E0F51ECC7
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 12:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiEHKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 06:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S229822AbiEHKHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiEHKEg (ORCPT
+        with ESMTP id S229666AbiEHKHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 06:04:36 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5584DCC6;
-        Sun,  8 May 2022 03:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652004046; x=1683540046;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+5ktdwTSEzdqIzt2WqQjlTFy9PC3XSm+8de1iAFuTPI=;
-  b=WrGVTYIIkudM4sNPi8bf4BDkwMyWNEx7rqQODMi3bbFY4AUQXs3uIwph
-   G69llKPJp1SzXjuf19Ue11cATKjExqCvp2oHO/B4fQT9UliXTPURAs0Ar
-   B7TVAiC+lDORYPTlk4NHGXXQsFCR22B08K9RmjD9p6xmpJwW3Qxs91uDy
-   f9fpVNWYcvkr6D6frHPBp5RrgXvUVNB5A7FXYqEhla+8v7kiKe0GqXXfB
-   Sk4Wc2bqQ+Sul7XAU8GFJDsljJIbH3N37ZQJvBjsLsyrle0JbEARvfwiz
-   7C1eoa2OdW0Gkvrfm4k57ofyTEdp0jkMg9P/Jp0kQn+6uZ4RrkjdRjX4k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="268724286"
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="268724286"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 03:00:45 -0700
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="813064753"
-Received: from prahgoza-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.61.252])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 03:00:41 -0700
-Message-ID: <5c7196b517398e7697464fe997018e9031d15470.camel@intel.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Date:   Sun, 08 May 2022 22:00:39 +1200
-In-Reply-To: <YnW4nTub1BYUF15W@kernel.org>
-References: <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
-         <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
-         <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
-         <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
-         <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
-         <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
-         <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
-         <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
-         <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
-         <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
-         <YnW4nTub1BYUF15W@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 8 May 2022 06:07:35 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F436473
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 03:03:41 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 069A03EE78;
+        Sun,  8 May 2022 12:03:38 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] arm64: dts: qcom: sm6125: Move sdc2 pinctrl from seine-pdx201 to sm6125
+Date:   Sun,  8 May 2022 12:03:33 +0200
+Message-Id: <20220508100336.127176-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,94 +50,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 20:09 -0400, Mike Rapoport wrote:
-> On Thu, May 05, 2022 at 06:51:20AM -0700, Dan Williams wrote:
-> > [ add Mike ]
-> > 
-> > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
-> > [..]
-> > > 
-> > > Hi Dave,
-> > > 
-> > > Sorry to ping (trying to close this).
-> > > 
-> > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
-> > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
-> > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
-> > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
-> > > that no one should just use some random backend to run TD.
-> > 
-> > The platform will already do this, right? I don't understand why this
-> > is trying to take proactive action versus documenting the error
-> > conditions and steps someone needs to take to avoid unconvertible
-> > memory. There is already the CONFIG_HMEM_REPORTING that describes
-> > relative performance properties between initiators and targets, it
-> > seems fitting to also add security properties between initiators and
-> > targets so someone can enumerate the numa-mempolicy that avoids
-> > unconvertible memory.
-> > 
-> > No, special casing in hotplug code paths needed.
-> > 
-> > > 
-> > > I think w/o needing to include legacy PMEM, it's better to get all TDX memory
-> > > blocks based on memblock, but not e820.  The pages managed by page allocator are
-> > > from memblock anyway (w/o those from memory hotplug).
-> > > 
-> > > And I also think it makes more sense to introduce 'tdx_memblock' and
-> > > 'tdx_memory' data structures to gather all TDX memory blocks during boot when
-> > > memblock is still alive.  When TDX module is initialized during runtime, TDMRs
-> > > can be created based on the 'struct tdx_memory' which contains all TDX memory
-> > > blocks we gathered based on memblock during boot.  This is also more flexible to
-> > > support other TDX memory from other sources such as CLX memory in the future.
-> > > 
-> > > Please let me know if you have any objection?  Thanks!
-> > 
-> > It's already the case that x86 maintains sideband structures to
-> > preserve memory after exiting the early memblock code. Mike, correct
-> > me if I am wrong, but adding more is less desirable than just keeping
-> > the memblock around?
-> 
-> TBH, I didn't read the entire thread yet, but at the first glance, keeping
-> memblock around is much more preferable that adding yet another { .start,
-> .end, .flags } data structure. To keep memblock after boot all is needed is
-> something like
-> 
-> 	select ARCH_KEEP_MEMBLOCK if INTEL_TDX_HOST
-> 
-> I'll take a closer look next week on the entire series, maybe I'm missing
-> some details.
-> 
+Both the sdc2-on and sdc2-off pinctrl nodes are used by the
+sdhci@4784000 node in sm6125.dtsi.  Surprisingly sdc2-off is defined in
+sm6125, yet its sdc2-on counterpart is only defined in board-specific DT
+for the Sony Seine PDX201 board/device resulting in an "undefined label
+&sdc2_state_on" error if sm6125.dtsi were included elsewhere.
+This sm6125 base dtsi should not rely on externally defined labels; the
+properties referencing it should then also be written externally.
+Since the sdc2-on pin configuration is board-independent just like
+sdc2-off, move it from seine-pdx201.dts into sm6125.dtsi.
 
-Hi Mike,
+The SDCard-detect pin (gpio98) is however board-specific, and remains as
+an overwrite in seine-pdx201.dts for both the on and off state.
 
-Thanks for feedback.
+As a drive-by cleanup, reorder bias- and drive-strength properties.
 
-Perhaps I haven't put a lot details of the new TDX data structures, so let me
-point out that the new two data structures 'struct tdx_memblock' and 'struct
-tdx_memory' that I am proposing are mostly supposed to be used by TDX code only,
-which is pretty standalone.  They are not supposed to be some basic
-infrastructure that can be widely used by other random kernel components. 
+Fixes: cff4bbaf2a2d ("arm64: dts: qcom: Add support for SM6125")
+Fixes: 82e1783890b7 ("arm64: dts: qcom: sm6125: Add support for Sony Xperia 10II")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 34 +++++--------------
+ arch/arm64/boot/dts/qcom/sm6125.dtsi          | 24 +++++++++++--
+ 2 files changed, 30 insertions(+), 28 deletions(-)
 
-In fact, currently the only operation we need is to allow memblock to register
-all memory regions as TDX memory blocks when the memblock is still alive. 
-Therefore, in fact, the new data structures can even be completely invisible to
-other kernel components.  For instance, TDX code can provide below API w/o
-exposing any data structures to other kernel components:
-
-int tdx_add_memory_block(phys_addr_t start, phys_addr_t end, int nid);
-
-And we call above API for each memory region in memblock when it is alive.
-
-TDX code internally manages those memory regions via the new data structures
-that I mentioned above, so we don't need to keep memblock after boot.  The
-advantage of this approach is it is more flexible to support other potential TDX
-memory resources (such as CLX memory) in the future.
-
-Otherwise, we can do as you suggested to select ARCH_KEEP_MEMBLOCK when
-INTEL_TDX_HOST is on and TDX code internally uses memblock API directly.
-
+diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+index 871ccbba445b..4916e6c8b625 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
++++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+@@ -91,8 +91,16 @@ &hsusb_phy1 {
+ &sdc2_state_off {
+ 	sd-cd {
+ 		pins = "gpio98";
++		drive-strength = <2>;
+ 		bias-disable;
++	};
++};
++
++&sdc2_state_on {
++	sd-cd {
++		pins = "gpio98";
+ 		drive-strength = <2>;
++		bias-pull-up;
+ 	};
+ };
+ 
+@@ -102,32 +110,6 @@ &sdhc_1 {
+ 
+ &tlmm {
+ 	gpio-reserved-ranges = <22 2>, <28 6>;
+-
+-	sdc2_state_on: sdc2-on {
+-		clk {
+-			pins = "sdc2_clk";
+-			bias-disable;
+-			drive-strength = <16>;
+-		};
+-
+-		cmd {
+-			pins = "sdc2_cmd";
+-			bias-pull-up;
+-			drive-strength = <10>;
+-		};
+-
+-		data {
+-			pins = "sdc2_data";
+-			bias-pull-up;
+-			drive-strength = <10>;
+-		};
+-
+-		sd-cd {
+-			pins = "gpio98";
+-			bias-pull-up;
+-			drive-strength = <2>;
+-		};
+-	};
+ };
+ 
+ &usb3 {
+diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+index e81b2a7794fb..3fadf5196c4d 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+@@ -389,20 +389,40 @@ tlmm: pinctrl@500000 {
+ 			sdc2_state_off: sdc2-off {
+ 				clk {
+ 					pins = "sdc2_clk";
+-					bias-disable;
+ 					drive-strength = <2>;
++					bias-disable;
+ 				};
+ 
+ 				cmd {
+ 					pins = "sdc2_cmd";
++					drive-strength = <2>;
+ 					bias-pull-up;
++				};
++
++				data {
++					pins = "sdc2_data";
+ 					drive-strength = <2>;
++					bias-pull-up;
++				};
++			};
++
++			sdc2_state_on: sdc2-on {
++				clk {
++					pins = "sdc2_clk";
++					drive-strength = <16>;
++					bias-disable;
++				};
++
++				cmd {
++					pins = "sdc2_cmd";
++					drive-strength = <10>;
++					bias-pull-up;
+ 				};
+ 
+ 				data {
+ 					pins = "sdc2_data";
++					drive-strength = <10>;
+ 					bias-pull-up;
+-					drive-strength = <2>;
+ 				};
+ 			};
+ 		};
 -- 
-Thanks,
--Kai
-
+2.36.0
 

@@ -2,127 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A5851F261
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CBD51F26F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbiEIBbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S235870AbiEIBcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiEHXse (ORCPT
+        with ESMTP id S233966AbiEHXzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 19:48:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF7AB877
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 16:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652053481; x=1683589481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jB5h3gqPGl24VQNQexZQqqaG4C3E5vzrhzQgFm/ApcU=;
-  b=LqMLF3SvmjxFEfwJl3B84wpRkdwDtQ8D/l1nd3/PWACTkILH+NJD5N2t
-   NeRr0fag0TXynKqggVO/j6NomXdrgZhinb0CIlZRxoEh2XKzzo3tcOGgP
-   Uy0fiA4SVWnjfUY8DMgFbzBusGQUubYIXuVTHdJXcQk5wpRI7knHCNPvG
-   l9GZNPQ8ThesZXkYQQef3yrVmLgPPzb2xF5jOHzJK7x/ic/UXy9raahtW
-   RH9VuFi6heYzEnE/oKB8i+CHlzI/cUDodpgFS2CItPFm3UwMGbKDZYcCd
-   THd0tqCs6kJ00YJmwcnqYuG/ZKnsxSK2efmEIyvT/v0SUsV2sSkoi9ym2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="250931216"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="250931216"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 16:44:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="518933826"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 May 2022 16:44:39 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnqZq-000Fx8-M7;
-        Sun, 08 May 2022 23:44:38 +0000
-Date:   Mon, 9 May 2022 07:44:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH] fs/ufs: Replace kmap() with kmap_local_page()
-Message-ID: <202205090729.mU23mv8h-lkp@intel.com>
-References: <20220508200755.24586-1-fmdefrancesco@gmail.com>
+        Sun, 8 May 2022 19:55:12 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C6A63F8;
+        Sun,  8 May 2022 16:51:21 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z18so13694333iob.5;
+        Sun, 08 May 2022 16:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
+        b=gzCU6N4K+RH0gJYDOFzdClMUoqs+sC5dLzprBeR0gAh2NBdsFoIUDmtm6UrsHl1C22
+         hhvvyVwkcr85Bem8HAES8601Svm4cXUnKRpqZoX8B82AmRxwtFFhe+5rEgd2+b5IsAVc
+         Ehjr2JxnbzsUtzOTCQt7zyUweMkWn98QmUIOyiJXmdSGJjb7Y2Vt2HHaF5zHjCVr5HeS
+         C99xRgPNO6MydfVvHXf3vQvagErptsjIu4JbDRnLo1RFgGcMU4ziuIJU/ac6wD3Pxt6R
+         /muL6QOrnANd9gjDvltFI7JhWsuPEeGkS8/eevwKXB3U+H9nokx36TkYQHhfUaB7A7yh
+         U4LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jvGYRgc/B1cVUQHYWbyzOUJsJsb2JybLUg0MtrNHLxU=;
+        b=1DcziIkBiYwJrYGc7DosG5IlHAOiDx906xdl/iMsWX/e0fk2Mmq8cgFnFG2rpxmkYI
+         p55cExKOmlGGBULvH+wYJqHDnRQVobX+MIBKCfvCGAUg9QHmla5CDYIOKvW0NVIU1TTD
+         fOyOltTCPVHYt0EcjYIjLUWrIdY4gx8zZZSsp8HX+NYytT35HG2b1+DxPtsa75d0oENM
+         HXqoAyf05EegINk0ybyIbuXOvWhs8r7e26WjhlO0qKpsY7W1WSNgX7eahM2DAqqfvjx0
+         uUEPg91S4wzO6UHdBdU7LK6vLj4TOVLjS/DZ5NtD9MF0QO5zyhNm78PKXQMEAJJRhJIN
+         UcNw==
+X-Gm-Message-State: AOAM533yBk3gcMvsz4ysDqzsta9vtIBQbZqp3L14P50bfYuAAqWl2Uz9
+        3qpM8H2fJpVDz6l/F2Os2uWHGno6olyilfB9QY8=
+X-Google-Smtp-Source: ABdhPJwwPq9wn3ToVdj7TM4CBY43GWLA0vghTvzHEPJnEJWTSpaC+IvmSDLcXNrhXJOAZnPYA62+yHm5rItxqhEhuos=
+X-Received: by 2002:a05:6638:168f:b0:32d:8105:7646 with SMTP id
+ f15-20020a056638168f00b0032d81057646mr630122jat.9.1652053880413; Sun, 08 May
+ 2022 16:51:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220508200755.24586-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YnfVEcOWO63uIGs5@rowland.harvard.edu> <20220508150247.38204-1-schspa@gmail.com>
+In-Reply-To: <20220508150247.38204-1-schspa@gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 9 May 2022 01:51:09 +0200
+Message-ID: <CA+fCnZexPtGYX0kiwpA3-vgRbqbw0hk-fRpz9jUZrykJj-HN=w@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: fix race when gadget driver register via ioctl
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     stern@rowland.harvard.edu, Julia Lawall <Julia.Lawall@inria.fr>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jann Horn <jannh@google.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Fabio,
+On Sun, May 8, 2022 at 5:03 PM Schspa Shi <schspa@gmail.com> wrote:
+>
+> The usb_gadget_register_driver can be called multi time by to
+> threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
+> to multiple registrations.
+>
+> Call trace:
+>   driver_register+0x220/0x3a0 drivers/base/driver.c:171
+>   usb_gadget_register_driver_owner+0xfb/0x1e0
+>     drivers/usb/gadget/udc/core.c:1546
+>   raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
+>   raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
+>   ioctl USB_RAW_IOCTL_RUN
+>
+> This routine allows two processes to register the same driver instance
+> via ioctl syscall. which lead to a race condition.
+>
+> Please refer to the following scenarios.
+>
+>            T1                                  T2
+> ------------------------------------------------------------------
+> usb_gadget_register_driver_owner
+>   driver_register                    driver_register
+>     driver_find                       driver_find
+>     bus_add_driver                    bus_add_driver
+>       priv alloced                     <context switch>
+>       drv->p = priv;
+>       <schedule out>
+>       kobject_init_and_add // refcount = 1;
+>    //couldn't find an available UDC or it's busy
+>    <context switch>
+>                                        priv alloced
+>                                        drv->priv = priv;
+>                                        kobject_init_and_add
+>                                          ---> refcount = 1 <------
+>                                        // register success
+>                                        <context switch>
+> ===================== another ioctl/process ======================
+>                                       driver_register
+>                                        driver_find
+>                                         k = kset_find_obj()
+>                                          ---> refcount = 2 <------
+>                                         <context out>
+>    driver_unregister
+>    // drv->p become T2's priv
+>    ---> refcount = 1 <------
+>    <context switch>
+>                                         kobject_put(k)
+>                                          ---> refcount = 0 <------
+>                                         return priv->driver;
+>                                         --------UAF here----------
+>
+> There will be UAF in this scenario.
+>
+> We can fix it by adding a new STATE_DEV_REGISTERING device state to
+> avoid double register.
+>
+> Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
+>
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>
+> ---
+>
+> Changelog:
+> v1 -> v2:
+>         - Add a STATE_DEV_REGISTERING as Alan Stern suggested.
+> v2 -> v3:
+>         - Adjust STATE_DEV_REGISTERING position to reflect the actual
+>           order in which the states occur.
+>         - Add the fault scenarios to comments.
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index b3be8db1ff63..241740024c50 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -145,6 +145,7 @@ enum dev_state {
+>         STATE_DEV_INVALID = 0,
+>         STATE_DEV_OPENED,
+>         STATE_DEV_INITIALIZED,
+> +       STATE_DEV_REGISTERING,
+>         STATE_DEV_RUNNING,
+>         STATE_DEV_CLOSED,
+>         STATE_DEV_FAILED
+> @@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+>                 ret = -EINVAL;
+>                 goto out_unlock;
+>         }
+> +       dev->state = STATE_DEV_REGISTERING;
+>         spin_unlock_irqrestore(&dev->lock, flags);
+>
+>         ret = usb_gadget_register_driver(&dev->driver);
+> --
+> 2.24.3 (Apple Git-128)
+>
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc6 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks, Schspa!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e3de3a1cda5fdc3ac42cb0d45321fb254500595f
-config: arm-randconfig-s032-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090729.mU23mv8h-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/e73d9919e2725b216318d5d02b8a184876ab3b11
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
-        git checkout e73d9919e2725b216318d5d02b8a184876ab3b11
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   fs/ufs/namei.c: note: in included file:
->> fs/ufs/ufs.h:114:32: sparse: sparse: marked inline, but without a definition
->> fs/ufs/ufs.h:114:32: sparse: sparse: marked inline, but without a definition
->> fs/ufs/ufs.h:114:32: sparse: sparse: marked inline, but without a definition
-
-vim +114 fs/ufs/ufs.h
-
-    99	
-   100	/* dir.c */
-   101	extern const struct inode_operations ufs_dir_inode_operations;
-   102	extern int ufs_add_link (struct dentry *, struct inode *);
-   103	extern ino_t ufs_inode_by_name(struct inode *, const struct qstr *);
-   104	extern int ufs_make_empty(struct inode *, struct inode *);
-   105	extern struct ufs_dir_entry *ufs_find_entry(struct inode *, const struct qstr *,
-   106						    struct page **, void **);
-   107	extern int ufs_delete_entry(struct inode *, struct ufs_dir_entry *, struct page *,
-   108				    char *);
-   109	extern int ufs_empty_dir (struct inode *);
-   110	extern struct ufs_dir_entry *ufs_dotdot(struct inode *, struct page **, void **);
-   111	extern void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
-   112				 struct page *page, void *page_addr,
-   113				 struct inode *inode, bool update_times);
- > 114	extern inline void ufs_put_page(struct page *page, void *page_addr);
-   115	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks for the review, Alan!

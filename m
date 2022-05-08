@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2654751EDF2
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F87351EDF0
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 16:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiEHODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 10:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S233857AbiEHODv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 10:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiEHODf (ORCPT
+        with ESMTP id S233690AbiEHODf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 8 May 2022 10:03:35 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE7ADFB5
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 06:59:44 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id i27so22284358ejd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 06:59:44 -0700 (PDT)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1FDFAD
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 06:59:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w24so5758204edx.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 06:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=k50mJPbpmQp4ZqpTJGpM+QQCXPw1yE6XvXVaK9la8K8=;
-        b=Lr65hVJJkETPw516VWaQvE8zkYACS4A1NHzJ0ZDkc8+J7e4lUMyXusayN7ywW2D3lF
-         12dlRSup0iGCOhLuNLNwjOrP3ZbvyhXfjFR6wxOsa2jE3hdDWKz529oExedwTLryU8PL
-         8mze926P2VhVK1VipDHDcQeVShexST67/JKyufOcwiTcK16J0fZOb6sCigODoZZFQgxe
-         Cz/bBChj3PiMTGk404KzzTeYhywBPMtAQ/2Ds5tEttkJKfiA8gR8JnjAFqBSjEH29+G6
-         Qd894sPf6X0/BqIkTqcLPxsB3gLkUpYo9eSMHqzYjzpjUy1B8kXyuug1eYAjRcwk3mVA
-         QwSQ==
+        bh=xCzqSaVgkigfovczvrR26PQosAlqdYSj2cgF8HeNqSw=;
+        b=w6Arzao2UqIYuh3UFze5/E62F9WJsxirQ0QNVWDAi6xLONvtHzbQJvn2drnPVJj6W6
+         UuGm+Y/XAlU7VXOhJRH2G0uCr4oUrGqI5wZccuvW7Tirj5FX7u1wu1R3QTOlyrfLxPJt
+         rxIeUSm48KEwLX4njqIEe8jjBVOX2FeajRhjIV1XcdAModpmmE1UtskKq7smBX66gBg/
+         XpGC921JykCasRWQSkGZYPBLf+sMg5zP+Lne9v1ZkT7FhIxWv6A8NPTvn9C6kpGLfmyn
+         j1kHeG4MdpMmxLJvSo9MW+Px6Y/t5FRujVD8Y6jycxf+g+a3vj0O8kcsnfAfGRsZDYnw
+         lGJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=k50mJPbpmQp4ZqpTJGpM+QQCXPw1yE6XvXVaK9la8K8=;
-        b=pi7fo5aJS3akY0TAV+1dv1fnXn3aV5pz+G5kxaDoUKyNENxDsTe3eoK8KmAHehqHIf
-         zTDUuVJK0jRvWLxg5vq3s6RqRPednWswcJhIoGwSDt9MYLVDR/k8rosxoFCEGueZ3GRC
-         VUapPmRfK9FHfNYpZp3Lh+Un3DY7iE2hGVkoZxjnjUwVnBNnjwZowzCjvG7/m4YWa0fp
-         4HHDUxTDIpu9d4zGykBQa6Q8TD5eNVgdpKbu+DGog13HtQQDfWLLDtkgxEfys9UEIqHR
-         WrrAL6hlK0yBCEw6gHVuW83D0Jk9mHiFfaj0PPgI3+IQLTkscwJgyaeFhqk2X2CJwNC8
-         l2iw==
-X-Gm-Message-State: AOAM533t+gVylcPLowc2X0eup+HMfaY4M4EepRMVVk4y5eoI2mUw1Mlv
-        K4y3u2YsW1u6Sffc9cpaJIL3rA==
-X-Google-Smtp-Source: ABdhPJw3eg/IFzBYwVdGMUwtyRIdaWs2jgo/4w2kfJyKecL4+n2lggRm/3VGBSpCEJ3zgUVoIUWhGw==
-X-Received: by 2002:a17:907:7242:b0:6f5:2904:5354 with SMTP id ds2-20020a170907724200b006f529045354mr10026196ejc.452.1652018383113;
-        Sun, 08 May 2022 06:59:43 -0700 (PDT)
+        bh=xCzqSaVgkigfovczvrR26PQosAlqdYSj2cgF8HeNqSw=;
+        b=LSHuJdBTjVTM2hZm5AGoML/TAXTwFASdTxuRdZCIHfnpt1azD2cZt42mW02zHKx8DL
+         IiZ6Pf+5ahQ4OldRL847QwfI7R+dQq371rxFFb4w8cxdLVKX5Ovk5F86p2yerJTZpycF
+         YAb73QfKjcdJSkiV2HPn7EE/hTnP5/EMyzOmz8jJnZDB4YNfrkhdWGypVmjkQf9L5gAc
+         TrOSG7HJIlAYlWOtvuxL5UZvlNAYXUw2ho4H0b7DFU2vNPD/PMVwuEfsnTJl/0VIiZ7L
+         t3X+XPGeikIeYwdYKcE8IKHQWsK4CUikBU/UjT52Et2V7Ffsr0gonUu1BRHWXVk7GFl8
+         +Y+w==
+X-Gm-Message-State: AOAM533xkfJX0UxNpY/iT3erxe5LKzXnNMVQUXjnDJCGCP7BdWAUCMy4
+        JAVHVAOX+lntno8Wq9qFvWMuwuDAK9vPDRyr
+X-Google-Smtp-Source: ABdhPJxmiYnecxtNEGNXUDweujoI2ZZSy2gRZeRG/yN39SLC53d4+BLrPYYQj3i4leRZPXvd1pc6JQ==
+X-Received: by 2002:a05:6402:2214:b0:425:d6ed:de5d with SMTP id cq20-20020a056402221400b00425d6edde5dmr12614920edb.383.1652018384303;
+        Sun, 08 May 2022 06:59:44 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id qz24-20020a170907681800b006f3ef214dc6sm4075524ejc.44.2022.05.08.06.59.41
+        by smtp.gmail.com with ESMTPSA id qz24-20020a170907681800b006f3ef214dc6sm4075524ejc.44.2022.05.08.06.59.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 06:59:42 -0700 (PDT)
+        Sun, 08 May 2022 06:59:43 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT 3/4] arm64: dts: qcom: correct interrupt controller on PM8916 and PMS405
-Date:   Sun,  8 May 2022 15:59:31 +0200
-Message-Id: <20220508135932.132378-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/4] ARM: dts: qcom: add missing gpio-ranges in PMIC GPIOs
+Date:   Sun,  8 May 2022 15:59:32 +0200
+Message-Id: <20220508135932.132378-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org>
 References: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org>
@@ -77,62 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM8916 and PMS405 PMIC GPIOs are interrupt controllers, as described
-in the bindings and used by the driver.  Drop the interrupts (apparently
-copied from downstream tree), just like in commit 61d2ca503d0b ("arm64:
-dts: qcom: fix pm8150 gpio interrupts"):
+The new Qualcomm PMIC GPIO bindings require gpio-ranges property:
 
-  qcs404-evb-4000.dtb: gpio@c000: 'interrupts' does not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-  qcs404-evb-4000.dtb: gpio@c000: 'interrupt-controller' is a required property
+  qcom-sdx55-telit-fn980-tlb.dtb: gpio@c000: 'gpio-ranges' is a required property
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/pm8916.dtsi |  6 ++----
- arch/arm64/boot/dts/qcom/pms405.dtsi | 14 ++------------
- 2 files changed, 4 insertions(+), 16 deletions(-)
+ arch/arm/boot/dts/qcom-pmx55.dtsi | 1 +
+ arch/arm/boot/dts/qcom-pmx65.dtsi | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-index d52919a8c0b0..0b6e8ad7fa50 100644
---- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-@@ -113,10 +113,8 @@ pm8916_gpios: gpios@c000 {
+diff --git a/arch/arm/boot/dts/qcom-pmx55.dtsi b/arch/arm/boot/dts/qcom-pmx55.dtsi
+index 6571b88d018a..9de7578a4c5f 100644
+--- a/arch/arm/boot/dts/qcom-pmx55.dtsi
++++ b/arch/arm/boot/dts/qcom-pmx55.dtsi
+@@ -69,6 +69,7 @@ pmx55_gpios: gpio@c000 {
+ 			compatible = "qcom,pmx55-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
  			gpio-controller;
- 			gpio-ranges = <&pm8916_gpios 0 0 4>;
++			gpio-ranges = <&pmx55_gpios 0 0 11>;
  			#gpio-cells = <2>;
--			interrupts = <0 0xc0 0 IRQ_TYPE_NONE>,
--				     <0 0xc1 0 IRQ_TYPE_NONE>,
--				     <0 0xc2 0 IRQ_TYPE_NONE>,
--				     <0 0xc3 0 IRQ_TYPE_NONE>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/qcom/pms405.dtsi b/arch/arm64/boot/dts/qcom/pms405.dtsi
-index 26f1e8cc9c6c..634b0681d04c 100644
---- a/arch/arm64/boot/dts/qcom/pms405.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pms405.dtsi
-@@ -43,18 +43,8 @@ pms405_gpios: gpio@c000 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm/boot/dts/qcom-pmx65.dtsi b/arch/arm/boot/dts/qcom-pmx65.dtsi
+index 8701396fe1f2..abf229a8b75a 100644
+--- a/arch/arm/boot/dts/qcom-pmx65.dtsi
++++ b/arch/arm/boot/dts/qcom-pmx65.dtsi
+@@ -24,6 +24,7 @@ pmx65_gpios: pinctrl@8800 {
+ 			compatible = "qcom,pmx65-gpio", "qcom,spmi-gpio";
+ 			reg = <0x8800>;
  			gpio-controller;
- 			gpio-ranges = <&pms405_gpios 0 0 12>;
++			gpio-ranges = <&pmx65_gpios 0 0 16>;
  			#gpio-cells = <2>;
--			interrupts = <0 0xc0 0 IRQ_TYPE_NONE>,
--				<0 0xc1 0 IRQ_TYPE_NONE>,
--				<0 0xc2 0 IRQ_TYPE_NONE>,
--				<0 0xc3 0 IRQ_TYPE_NONE>,
--				<0 0xc4 0 IRQ_TYPE_NONE>,
--				<0 0xc5 0 IRQ_TYPE_NONE>,
--				<0 0xc6 0 IRQ_TYPE_NONE>,
--				<0 0xc7 0 IRQ_TYPE_NONE>,
--				<0 0xc8 0 IRQ_TYPE_NONE>,
--				<0 0xc9 0 IRQ_TYPE_NONE>,
--				<0 0xca 0 IRQ_TYPE_NONE>,
--				<0 0xcb 0 IRQ_TYPE_NONE>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
- 		};
- 
- 		pon@800 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
 -- 
 2.32.0
 

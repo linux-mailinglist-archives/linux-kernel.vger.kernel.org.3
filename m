@@ -2,110 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3B651EF60
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DD551EF40
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbiEHTIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S238846AbiEHTGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353322AbiEHS2x (ORCPT
+        with ESMTP id S238191AbiEHScE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 14:28:53 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C861EBC2D
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:25:02 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r192so6081798pgr.6
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:25:02 -0700 (PDT)
+        Sun, 8 May 2022 14:32:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B962DF7;
+        Sun,  8 May 2022 11:28:14 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d22so11937911plr.9;
+        Sun, 08 May 2022 11:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yGEwWPgAOFv3suN6nm6KEA8gpXdmMPjJNcqn8/i8d/I=;
-        b=kPql0bm+gk1+YgYsHlo0ZyE8Zgdc39j/z7vVCXNE1Tc03WigZf+xdr6/JxyUs8LZnl
-         cyXck4msvnCHexQIY2TfLFFQatrqP93c0yPw1G0hA0V5ceiWM5JPA+NFfgFYqGuRgqJv
-         d8g/ec1hvcSlwOyrvIU1E/EixJ6e5Re75QFrMvMPAVUFJGWd4lacPRrFbMNjuvvMcE3D
-         DyeGOCWehMG4c4V3HEU5GxC1wFA0b5oaAeC1s8USOGHNnYwNeQXj2oWWpuJRmSAZVGIm
-         ZJDdjMeRzmJDTpaYYgppFI7LRlTXfmcZILyc+vMekb2pkTCiKE7FpK3aqeQhp4Lwqurz
-         iOkA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L0vTBUu7cERNrSt/2j/cpvelXrPJBDUXqkluepqf8b8=;
+        b=jSsthn14SJCrQ++glajXqdmZL710hNBoeiChvIIa2mF54enjFgsN60hFht2Ig41Y/F
+         s15VvMWd/z9OCWjSezTGMmY2w1Xk90IIymsv2zGmFAHbB+0kjZr5M23Ex7pAUV8YLSXx
+         i/QIgEi39FE6nPWsZwuVxbEmWf8HThYWGvVJyIlhUjMgbozOpZOm1P31r5iC73NzWcOn
+         Q+NOAdGnq0tzlWX9SGruGL7rgOkCKccpNd2zGoJsqJvoaOH0rJYyw7zp9aNTNKGhoBX+
+         HsQT2OVDnX5mnAKsyK1uGvOTvmD2vVaGz7fgfyCQ8ktGlH/gHfMLD0n6ekbJ5Y5YN8YF
+         jv1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yGEwWPgAOFv3suN6nm6KEA8gpXdmMPjJNcqn8/i8d/I=;
-        b=kqzMYZYrZ5yLd4jWtd+Dtb5vCRCYRU3xL1rqTMMdgYOMOW7OHV/0h66VLYrfCyjKdC
-         /9vdYZdgoqRiyNOVvA10gEKBpYF3wubqtNRwMntRI485WWRQURLPc8cnYSsvSthQfq4m
-         GFHJH3CoBOeKULMiMqimgY3nkRufIC8c9m1Muvgh0NGzTimv1lyTvQL469N1tu7CV5vJ
-         RN5BAwiBy4GvSRa9atp8IfeENQgGDimpa2hUEaVkBucS24ZY30rmhGOFtE/2FN7a1HDi
-         mWK1GfS78xE8o36xROGSJ8O3W4867NMukKvyszgcwEQqPai4jzE784bUnkc4/dHbrYGH
-         SFHw==
-X-Gm-Message-State: AOAM533CWP0VdJgMJF2IAqPNFaffi/vO0D5zOCKYpozcIWDuk+innKHK
-        ZBt6g4PpY+eFl3FVm5tfkSk=
-X-Google-Smtp-Source: ABdhPJy0QzY0A2OvBHcri4IUIulvRCPLb54YMI48MHcGTQq+D+FXNhkavnPv8OITmWwAvtHnierUpg==
-X-Received: by 2002:a05:6a00:181d:b0:50d:d56c:73d3 with SMTP id y29-20020a056a00181d00b0050dd56c73d3mr12613659pfa.22.1652034301383;
-        Sun, 08 May 2022 11:25:01 -0700 (PDT)
-Received: from makvihas.localhost.com ([2405:201:202b:1:26d8:8642:a5dc:edc4])
-        by smtp.gmail.com with ESMTPSA id b187-20020a62cfc4000000b0050dc76281eesm6889258pfg.200.2022.05.08.11.24.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L0vTBUu7cERNrSt/2j/cpvelXrPJBDUXqkluepqf8b8=;
+        b=MzrpBYrViDDEaJA6B03/PItHrkfao5EpWU+4yA+z+/ql5PARR4hvSj41qQq4gxHibG
+         EySzDANWliYeJjarsl4p+SatmvKxsXhoJJqhzS5Rvs5xDgxFPGqZhmH9HnF36CeKNRBA
+         Y2ezdv+p6i2+U7V5glbCgTSs7uRUgXXVOQASJGp/MRkfmR6f2XVGx5JuNDRJ7Eu76bGj
+         M+gLm4D7GgbBoFosngE/uUtxwGkF7YVGfwgwC5DFB4OshIQqNMzXblIgV0941JlQaGa0
+         08NkU3yVvz9anesvnf+qyR0UUKxwjhs0ZF98lTbKNEeoi4Eb2aO121vzMt+GHxqCGwfy
+         Pz8A==
+X-Gm-Message-State: AOAM530PFARqatliSGYIQp0w2M3txVSwfd5XqWsKt5VPEmVpBvmdGQka
+        PDwwBqmHArXamfHP06KiSvA=
+X-Google-Smtp-Source: ABdhPJz5nkrHBlEe+ZEiZjuwSpdX5J++4ul6PD3fhb/JnsqyltoFFFtmmBQ3dkbNfrlUPRbhl0WYJQ==
+X-Received: by 2002:a17:90a:f3cb:b0:1d9:62d4:25db with SMTP id ha11-20020a17090af3cb00b001d962d425dbmr14412062pjb.222.1652034493427;
+        Sun, 08 May 2022 11:28:13 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id c2-20020aa79522000000b0050dc7628164sm7038349pfp.62.2022.05.08.11.28.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 11:25:01 -0700 (PDT)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH] staging: r8188eu: drop redundant if check
-Date:   Sun,  8 May 2022 23:54:01 +0530
-Message-Id: <20220508182400.22433-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 08 May 2022 11:28:12 -0700 (PDT)
+Date:   Sun, 8 May 2022 11:28:07 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, stable@kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] fs: sendfile handles O_NONBLOCK of out_fd
+Message-ID: <YngLt9seLZBQ6Cer@gmail.com>
+References: <20220415005015.525191-1-avagin@gmail.com>
+ <CANaxB-wcf0Py9eCeA8YKcBSnwzW6pKAD5edCDUadebmo=JLYhA@mail.gmail.com>
+ <20220507145224.a9b6555969d6e66586b6514c@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20220507145224.a9b6555969d6e66586b6514c@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check for ETH_P_IP is already performed in the outer if block
-and inner if check is redundant. So drop the check.
+On Sat, May 07, 2022 at 02:52:24PM -0700, Andrew Morton wrote:
+> On Mon, 2 May 2022 00:01:46 -0700 Andrei Vagin <avagin@gmail.com> wrote:
+> 
+> > Andrew, could you take a look at this patch?
+> > 
+> > Here is a small reproducer for the problem:
+> > 
+> > #define _GNU_SOURCE /* See feature_test_macros(7) */
+> > #include <fcntl.h>
+> > #include <stdio.h>
+> > #include <unistd.h>
+> > #include <errno.h>
+> > #include <sys/stat.h>
+> > #include <sys/types.h>
+> > #include <sys/sendfile.h>
+> > 
+> > 
+> > #define FILE_SIZE (1UL << 30)
+> > int main(int argc, char **argv) {
+> >         int p[2], fd;
+> > 
+> >         if (pipe2(p, O_NONBLOCK))
+> >                 return 1;
+> > 
+> >         fd = open(argv[1], O_RDWR | O_TMPFILE, 0666);
+> >         if (fd < 0)
+> >                 return 1;
+> >         ftruncate(fd, FILE_SIZE);
+> > 
+> >         if (sendfile(p[1], fd, 0, FILE_SIZE) == -1) {
+> >                 fprintf(stderr, "FAIL\n");
+> >         }
+> >         if (sendfile(p[1], fd, 0, FILE_SIZE) != -1 || errno != EAGAIN) {
+> >                 fprintf(stderr, "FAIL\n");
+> >         }
+> >         return 0;
+> > }
+> > 
+> > It worked before b964bf53e540, it is stuck after b964bf53e540, and it
+> > works again with this fix.
+> 
+> Thanks.  How did b964bf53e540 cause this?  do_splice_direct()
+> accidentally does the right thing even when SPLICE_F_NONBLOCK was not
+> passed?
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_xmit.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+do_splice_direct() calls pipe_write that handles O_NONBLOCK. Here is
+a trace log from the reproducer:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index d086812f8..9a99aa5e8 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -448,14 +448,12 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
- 		_rtw_pktfile_read(&pktfile, &tmp[0], 24);
- 		pattrib->dhcp_pkt = 0;
- 		if (pktfile.pkt_len > 282) {/* MINIMUM_DHCP_PACKET_SIZE) { */
--			if (ETH_P_IP == pattrib->ether_type) {/*  IP header */
--				if (((tmp[21] == 68) && (tmp[23] == 67)) ||
--				    ((tmp[21] == 67) && (tmp[23] == 68))) {
--					/*  68 : UDP BOOTP client */
--					/*  67 : UDP BOOTP server */
--					/*  Use low rate to send DHCP packet. */
--					pattrib->dhcp_pkt = 1;
--				}
-+			if (((tmp[21] == 68) && (tmp[23] == 67)) ||
-+			    ((tmp[21] == 67) && (tmp[23] == 68))) {
-+				/*  68 : UDP BOOTP client */
-+				/*  67 : UDP BOOTP server */
-+				/*  Use low rate to send DHCP packet. */
-+				pattrib->dhcp_pkt = 1;
- 			}
- 		}
- 	}
--- 
-2.30.2
+ 1)               |  __x64_sys_sendfile64() {
+ 1)               |    do_sendfile() {
+ 1)               |      __fdget()
+ 1)               |      rw_verify_area()
+ 1)               |      __fdget()
+ 1)               |      rw_verify_area()
+ 1)               |      do_splice_direct() {
+ 1)               |        rw_verify_area()
+ 1)               |        splice_direct_to_actor() {
+ 1)               |          do_splice_to() {
+ 1)               |            rw_verify_area()
+ 1)               |            generic_file_splice_read()
+ 1) + 74.153 us   |          }
+ 1)               |          direct_splice_actor() {
+ 1)               |            iter_file_splice_write() {
+ 1)               |              __kmalloc()
+ 1)   0.148 us    |              pipe_lock();
+ 1)   0.153 us    |              splice_from_pipe_next.part.0();
+ 1)   0.162 us    |              page_cache_pipe_buf_confirm();
+... 16 times
+ 1)   0.159 us    |              page_cache_pipe_buf_confirm();
+ 1)               |              vfs_iter_write() {
+ 1)               |                do_iter_write() {
+ 1)               |                  rw_verify_area()
+ 1)               |                  do_iter_readv_writev() {
+ 1)               |                    pipe_write() {
+ 1)               |                      mutex_lock()
+ 1)   0.153 us    |                      mutex_unlock();
+ 1)   1.368 us    |                    }
+ 1)   1.686 us    |                  }
+ 1)   5.798 us    |                }
+ 1)   6.084 us    |              }
+ 1)   0.174 us    |              kfree();
+ 1)   0.152 us    |              pipe_unlock();
+ 1) + 14.461 us   |            }
+ 1) + 14.783 us   |          }
+ 1)   0.164 us    |          page_cache_pipe_buf_release();
+... 16 times
+ 1)   0.161 us    |          page_cache_pipe_buf_release();
+ 1)               |          touch_atime()
+ 1) + 95.854 us   |        }
+ 1) + 99.784 us   |      }
+ 1) ! 107.393 us  |    }
+ 1) ! 107.699 us  |  }
 
+> 
+> I assume that Al will get to this.  Meanwhile I can toss it
+> into linux-next to get some exposure and so it won't be lost.
+> 

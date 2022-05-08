@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A623F51ECB0
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 472FB51ECBB
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiEHJxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S229542AbiEHKAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 06:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbiEHJpx (ORCPT
+        with ESMTP id S229456AbiEHJ76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:45:53 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B93DFBA;
-        Sun,  8 May 2022 02:42:02 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nndQD-0008Ms-Hg; Sun, 08 May 2022 11:41:49 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org, frank-w@public-files.de
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Sun, 8 May 2022 05:59:58 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96822640A;
+        Sun,  8 May 2022 02:56:08 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id l18so21736475ejc.7;
+        Sun, 08 May 2022 02:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rMTzwniKsJKBvHw/Xx6/XM/Pnx3ZZPbw95CMSttKIV8=;
+        b=o5wIsfUNM+VbOjSBIhIyUrCRtI5jh2afkgfbkTbrgJWOWiAWbeVtPSJUHvBSEi/yr6
+         m/u7oFiFVMr7YqzcjbJ4WiFHVi2+cddY7rgU/vA7sjbPvJZxsRr9+y3QEhYslDzZr1tb
+         RZZkZbYVrfJcLo3tx8yJGAeCOyETwIAl+ixbYuEla8mUDu4OES43Nqzvp6P0fFhqF1e6
+         x4kFgVGCyXqO3ihRho5v9e4roW/hNqytoywmuaN3mb7kcvhDej2V422n5YuckxMBw0Oy
+         Knhwx61ZlDQ6WsVn8ze7HJEH3lK5M6/AcFKdI14QhXVIs8Igh4BBVWLvaab2kqsCWf2t
+         lEKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rMTzwniKsJKBvHw/Xx6/XM/Pnx3ZZPbw95CMSttKIV8=;
+        b=RZe40s+qgwKoSdEPGmrwkm9c8S05FcZgqfF9lGKnP3pXc29wl8MkbqnGUK1TuJZnnK
+         MpbqAhk1gpLhFq6BFcdjxYgBWsWj+3Szsq5NeiGCkeFwN0n7q16tSCPK6Ss2SnrFe1OQ
+         VLGe8+SW7TwbX7O5aP6h6rBuX3aKnNabNdT5JEKZa6Gz7++ZumS0WEvwzz42PJnMGmbF
+         IabIeGkiA+eG/3Oj14vVnQTjmKEb+7gAYy5RH9lCcCfw7m5cua7hwRyw6tXlthX7TxHa
+         SME0W2uOMlYoQaeDq7ZMkEqSQpq3+SubZ7RHtEu6KNN47hNoKNOWXT/wWeBacccmvN0d
+         8Ruw==
+X-Gm-Message-State: AOAM533DUqyKOISkuB9EVx6kA4EeLgoLBv5UiruF4026XHg0yQoD6syj
+        rASJuNao2VsDyUyhQkSrgc1wCrA3X0lir+oc7jrwTIQUMaxStj0i
+X-Google-Smtp-Source: ABdhPJxmNNQmwZNo8ah9X+MPI91et4WY6i1uhtxjMTikXV0qZBM9zGPzh3XBqhqdhtOO8cw7DdOiASQMyi8Nx4Ef2Xg=
+X-Received: by 2002:a17:907:3e8c:b0:6f4:4fdb:6f24 with SMTP id
+ hs12-20020a1709073e8c00b006f44fdb6f24mr10204116ejc.44.1652003767031; Sun, 08
+ May 2022 02:56:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220505152521.71019-1-markuss.broks@gmail.com>
+ <20220505152521.71019-2-markuss.broks@gmail.com> <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
+ <20220507211402.GD11004@duo.ucw.cz>
+In-Reply-To: <20220507211402.GD11004@duo.ucw.cz>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 8 May 2022 11:55:31 +0200
+Message-ID: <CAHp75Vd=iD4QO2SV5h_P4GowVEy4Afk4nVyLezVa4w2u4jKybA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] leds: ktd2692: Avoid duplicate error messages on
+ probe deferral
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@kernel.org>,
-        =?ISO-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Subject: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and add rgmii-mode to mt7531
-Date:   Sun, 08 May 2022 11:41:48 +0200
-Message-ID: <2509116.Lt9SDvczpP@phil>
-In-Reply-To: <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de>
-References: <20220507170440.64005-1-linux@fw-web.de> <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org> <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 8. Mai 2022, 08:24:37 CEST schrieb Frank Wunderlich:
-> Am 7. Mai 2022 22:01:22 MESZ schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
-> >On 07/05/2022 19:04, Frank Wunderlich wrote:
-> >> From: Frank Wunderlich <frank-w@public-files.de>
-> >> 
-> >> Make reset optional as driver already supports it, 
+On Sat, May 7, 2022 at 11:14 PM Pavel Machek <pavel@ucw.cz> wrote:
+>
+> Hi!
+>
+> > > Use dev_err_probe instead of dev_err to avoid duplicate error
+> > > messages if the GPIO allocation makes the probe defer.
 > >
-> >I do not see the connection between hardware needing or not needing a
-> >reset GPIO and a driver supporting it or not... What does it mean?
-> 
-> My board has a shared gpio-reset between gmac and switch, so both will resetted if it is asserted. Currently it is set to the gmac and is aquired exclusive. Adding it to switch results in 2 problems:
-> 
-> - due to exclusive and already mapped to gmac, switch driver exits as it cannot get the reset-gpio again.
-> - if i drop the reset from gmac and add to switch, it resets the gmac and this takes too long for switch to get up. Of course i can increase the wait time after reset,but dropping reset here was the easier way.
-> 
-> Using reset only on gmac side brings the switch up.
-
-I think the issue is more for the description itself.
-
-Devicetree is only meant to describe the hardware and does in general don't
-care how any firmware (Linux-kernel, *BSD, etc) handles it. So going with
-"the kernel does it this way" is not a valid reason for a binding change ;-) .
-
-Instead in general want to reason that there are boards without this reset
-facility and thus make it optional for those.
-
-Heiko
-
-> >> allow port 5 as
-> >> cpu-port 
+> > Thanks!
 > >
-> >How do you allow it here?
-> 
-> Argh, seems i accidentally removed this part and have not recognized while checking :(
-> 
-> It should only change description of reg for ports to:
-> 
-> "Port address described must be 5 or 6 for CPU port and from 0 to 5 for user ports."
-> 
-> regards Frank
-> 
+> > There are two improvements we can make here.
+> > 1) adding a Fixes tag, so it can be backported to stable kernels;
+> > 2) see below.
+>
+> I don't believe this is severe-enough error to be worth stable.
 
+Fixes tag is good to have in either case, but I agree that is not so critical.
 
-
-
+-- 
+With Best Regards,
+Andy Shevchenko

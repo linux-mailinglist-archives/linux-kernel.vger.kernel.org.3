@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838A451F1D9
+	by mail.lfdr.de (Postfix) with ESMTP id CFB4E51F1DA
 	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbiEHVq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 17:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S233210AbiEHVqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 17:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbiEHVq0 (ORCPT
+        with ESMTP id S232902AbiEHVqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 17:46:26 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7954DFAB
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:42:32 -0700 (PDT)
+        Sun, 8 May 2022 17:46:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB0A6445
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652046152; x=1683582152;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gAfLF8CFVZ/vW71EH8Bx4/JhmuMGckhfC5tTLQ3bB00=;
-  b=LHc+iJ+R8rddNCqN6XFaandleajEuRT43p4ziCart/SHHwTopnjQi0BT
-   Gd4RJD79Njgnf/bPZz9ecMAGBgLXf+RGN6CaRNIb1FBTAK/4OfhHJx7Q4
-   UHK1H6pygd2c2ZnrYsCgFzOGRFxStLOKZddkTut2cVKsEB9uAvkOp2R2W
-   oZfYsrYDi18gAP7AMRYoH6PdTJ2whZSJ64CCKUXFx/ZhXe+nqDRaURR+0
-   VpPGFglal4S3RcqgvSdxc9atsh+2FhXiGsaasY0GiCPvBMqeqNcUUcWeT
-   Lr3V/UlV3yp7gGp0KcVNAdeboZYUO8ID3FH9adbwhmACrQZI67gMKv+2b
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266477399"
+  bh=R84R+8J9vaNzSiM/TZ6PeV+5YBL1xItA/lw6q6VRMxc=;
+  b=JG9kJmAgE5qHQIJuEE7UO2D+4aV3noyRiIwe1iI165ClH42rzKb4WaW8
+   epnEwS3jk9SqSK1eMWRptYT2yODHrROr9Bl7n0LDQITnS7LMhD0inm0Gj
+   saL81O0A8K8e6GKUN6wP/PE2xwAkAX9z19jYSndqoyZUUK1moqLybIvOy
+   Drsaq0Yy6V43kZzzhvNcTrhW6sWnxvPKhFMkVE89ejicak2uO7heaf/sf
+   aRXtAGDSklO4vMFT3oFJbe2A4v2wfDdbMy/dGLs51DhfzN5dm46Wjg6uy
+   MS6CfArCBJ039CdI5bvQ8q/w1DIjx64yL2Ye9XVE6tr+8xpHFON1gggYS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267723610"
 X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="266477399"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:42:32 -0700
+   d="scan'208";a="267723610"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:42:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="539528989"
+   d="scan'208";a="569881003"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 May 2022 14:42:30 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 08 May 2022 14:42:30 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nnofd-000FrT-Na;
+        id 1nnofd-000FrQ-Mu;
         Sun, 08 May 2022 21:42:29 +0000
-Date:   Mon, 9 May 2022 05:41:58 +0800
+Date:   Mon, 9 May 2022 05:42:00 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/fastpoll-mshot 97/98]
- fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used
- here
-Message-ID: <202205090529.AQs5GOej-lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>, Junwen Wu <wudaemon@163.com>
+Subject: drivers/thermal/thermal_sysfs.c:814 find_show_state() warn:
+ inconsistent indenting
+Message-ID: <202205090542.dLZqKZr7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,74 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/fastpoll-mshot
-head:   883f288d64ca56518398dfa59bbdbfae1215ec03
-commit: 8e0d731f259198aac32de79f7059d34b94fc0fb3 [97/98] io_uring: allow allocated fixed files for openat/openat2
-config: riscv-buildonly-randconfig-r005-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090529.AQs5GOej-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/8e0d731f259198aac32de79f7059d34b94fc0fb3
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/fastpoll-mshot
-        git checkout 8e0d731f259198aac32de79f7059d34b94fc0fb3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
+head:   a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
+commit: a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7 thermal/core: change mm alloc method to avoid kernel warning
+date:   6 hours ago
+config: s390-randconfig-m031-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090542.dLZqKZr7-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+smatch warnings:
+drivers/thermal/thermal_sysfs.c:814 find_show_state() warn: inconsistent indenting
 
->> fs/io_uring.c:4743:11: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                           return ret;
-                                  ^~~
-   fs/io_uring.c:4736:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   fs/io_uring.c:6174:2: error: call to undeclared function '__io_poll_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           __io_poll_clean(req);
-           ^
-   fs/io_uring.c:6174:2: note: did you mean '__io_fill_cqe'?
-   fs/io_uring.c:2166:20: note: '__io_fill_cqe' declared here
-   static inline bool __io_fill_cqe(struct io_ring_ctx *ctx, u64 user_data,
-                      ^
-   1 warning and 1 error generated.
+vim +814 drivers/thermal/thermal_sysfs.c
 
-
-vim +/ret +4743 fs/io_uring.c
-
-  4730	
-  4731	static int io_fixed_file_install(struct io_kiocb *req, unsigned int issue_flags,
-  4732					 struct file *file, unsigned int file_slot)
-  4733	{
-  4734		int alloc_slot = file_slot == UINT_MAX;
-  4735		struct io_ring_ctx *ctx = req->ctx;
-  4736		int ret;
-  4737	
-  4738		if (alloc_slot) {
-  4739			io_ring_submit_lock(ctx, issue_flags);
-  4740			file_slot = io_file_bitmap_get(ctx);
-  4741			if (unlikely(file_slot < 0)) {
-  4742				io_ring_submit_unlock(ctx, issue_flags);
-> 4743				return ret;
-  4744			}
-  4745		}
-  4746	
-  4747		ret = io_install_fixed_file(req, file, issue_flags, file_slot);
-  4748		if (alloc_slot) {
-  4749			io_ring_submit_unlock(ctx, issue_flags);
-  4750			return file_slot;
-  4751		}
-  4752	
-  4753		return ret;
-  4754	}
-  4755	
+   785	
+   786	static int find_show_state( int *nums, int numsSize, int k, unsigned int *max_value)
+   787	{
+   788	    int i, min = INT_MAX, max = 0;
+   789	    for( i = 0; i < numsSize; ++i )
+   790	    {
+   791	        min = nums[i] < min ? nums[i] : min;
+   792	        max = nums[i] > max ? nums[i] : max;
+   793	    }
+   794	    int l = min, r = max, mid, cnt = 0;
+   795	    while( l < r )
+   796	    {
+   797	        mid = r - (r - l) / 2;
+   798	        for( i = 0; i < numsSize; ++i )
+   799	        {
+   800	            if( nums[i] >= mid )
+   801	                ++cnt;
+   802	        }
+   803	        if( cnt < k )
+   804	        {
+   805	            r = mid - 1;
+   806	            cnt = 0;
+   807	        }
+   808	        else
+   809	        {
+   810	            l = mid;
+   811	            cnt = 0;
+   812	        }
+   813	    }
+ > 814	     *max_value = max;
+   815	    return l;
+   816	}
+   817	
 
 -- 
 0-DAY CI Kernel Test Service

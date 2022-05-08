@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC60151EECE
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1439151EECF
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiEHQGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 12:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S235334AbiEHQGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 12:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbiEHQGK (ORCPT
+        with ESMTP id S235169AbiEHQGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 12:06:10 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB96E0EC;
-        Sun,  8 May 2022 09:02:20 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id i5so16351282wrc.13;
-        Sun, 08 May 2022 09:02:20 -0700 (PDT)
+        Sun, 8 May 2022 12:06:11 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB49E0AB;
+        Sun,  8 May 2022 09:02:21 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id w4so16334178wrg.12;
+        Sun, 08 May 2022 09:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KUjA3hxYaMj4HNAIAW1BXRoi3/8SbsyN1ZHWbZHr2UU=;
-        b=RNz0p96FOH9tfqyHM77KVvxOj+onZhhCgCkxuvtSEfiiclcqUQqSB9DPIGKVCrG4rh
-         yUhXWKCXZS1HwOukhoAae2/7C73/6CHoCnBF572JbSPhXUfFUk7ubZ1n0srhNjPzC7Kn
-         5Lp2yjiLIm3hye890xt3u3suNQnRrqUM8Ns+PJF5UfnPsX4Jy/tCC01eKTkjZlumtdb1
-         fW09uNQv7jGrY51aiANm4xOvF/CiMQZu2bia8xuLbl6+f49p6/rT64AxKSSCY7cVdqri
-         d3dETLyc5C3MGVXCzPDbx+Jjv1empm4F6z4a/ZMsFEYtr10mG/is58lybtXtunxxmg1R
-         Be3Q==
+        bh=5c/oJcY+mU8bZWq31obYM76SgdTTfJMILUS4a25EC9M=;
+        b=Ou8tKTUjnVee5QYHsgs8fAh8DwycdNVZtbWyKG0/FponkQZLRTLyLG6N/Op+6/0ryt
+         8A/m3OvxJQzvqq+GD64IZXO03pMi6dThMO0/SP7alsclTFyTWCLeokZf63wjtaU4OxbT
+         NjcpXnfOc7d6ZOyJlTbKlo5NIfPScx16AOqiq4o1MkEeYuzHm64VSh2DYnAcTsOXCQao
+         95p4YhyJL8KitsjCai18QDCAGug+V9P9A0PXIXs39vhQaVVb9ztoz30xnio2omicEJSI
+         m0rN9uzKj1n4BHBBbv6RKMKtR6jrxYgZ29F+cjXEfJhht6OuwPWBIuFXTuhd+XdgZT72
+         YSQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KUjA3hxYaMj4HNAIAW1BXRoi3/8SbsyN1ZHWbZHr2UU=;
-        b=bs8ywpizIV6W9NaTKL9gw9fmf3MrQNdjSjdxIgC6w7xEsVcys7Zjpj6J5ZGN7TD0T1
-         adp7h1m2rh8uYRvenMLT/LuwytEppueO0GOJoiIaL4yCk6ocOd9AGAdqwndj66LreNrG
-         E13+v61hTSA7G6RHuvHp1j/bMrHINkPo7wyF6YqC6/5DbEle1YgiFpdVW/8nIj20dvua
-         31qmXONVfjNd7iD/05cXcX8xRJfCs77L7cNWmlellyjUKBHn+LLTINt15u162tYYuxfe
-         uV5KYaJCuS4b0QVSKFIDwIEe8HHxFB4zw7J0n2Zmu+9B3A3pMiChL7iUYYBFlYQvWblN
-         zXYA==
-X-Gm-Message-State: AOAM533G0w4oPqn1Ru3aL0SIHSVAe4lbMoI5kyT3jDeB0iW25V2bcMIl
-        QIC9BjoQLOe2Y5o7jOsSRn4=
-X-Google-Smtp-Source: ABdhPJyE4xwqMM0Of3uC+0tpCvYpCf89LY9vcRU26ulo4CKdUsNmsift3gRmI9oicGugThdMpiilAQ==
-X-Received: by 2002:a5d:594c:0:b0:20a:dff1:6545 with SMTP id e12-20020a5d594c000000b0020adff16545mr10266670wri.211.1652025738799;
-        Sun, 08 May 2022 09:02:18 -0700 (PDT)
+        bh=5c/oJcY+mU8bZWq31obYM76SgdTTfJMILUS4a25EC9M=;
+        b=6EqLjMt/AZixwnR617LDcCrwFj0QfYi1OWc875PD4ugG9chcCK/HKJgAXAgGZWgnjs
+         feYjnq2LDSKt0t+9TpYV/nfAxCEee9N4YNurskF6hv3dt7vwof4MeO2u0QeTkch42OGL
+         fNvhNyA1XjTbGyaUg4N4OiVp/OK05qcP1/7VghgFSVk/MiLiRSs5MDr2qWsjGRCXDQUm
+         iVB6o4cNS+Pm0iT2MKTvt2jf7CX6Yg/Qa4qN3LDtR6Q/pulXUSY4ZMIRnUQcrjU2NITE
+         PQqstUWG2vX/eIG0G5lnC23glx4AT1rH9u927pFAK+oxCekrSkhzjCxHKqS8aGCvK6hX
+         XJgQ==
+X-Gm-Message-State: AOAM531tsiRtzFa3KQQfj9TPJFUQOhJ5MYDO1p5jUObmkRxJQd85ERas
+        e+M7XivpHjzMz3Vr4vhaBBQ=
+X-Google-Smtp-Source: ABdhPJy9Pz120cLoC1JhaQndg+mUhhZwK2lhXv31H74w67CjktAf2sLjgGwcyXehdLyXqycRpl1wWg==
+X-Received: by 2002:a5d:4f08:0:b0:20a:ddfe:bd99 with SMTP id c8-20020a5d4f08000000b0020addfebd99mr10888248wru.339.1652025739637;
+        Sun, 08 May 2022 09:02:19 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.37.128])
         by smtp.gmail.com with ESMTPSA id b15-20020a7bc24f000000b003942a244ecfsm10101925wmj.20.2022.05.08.09.02.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 09:02:18 -0700 (PDT)
+        Sun, 08 May 2022 09:02:19 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         stefanberzl@gmail.com, albertofanjul@gmail.com,
-        Roman Romanenko <romu4444@gmail.com>,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH for-5.19/uclogic 6/7] HID: uclogic: Add pen support for XP-PEN Star 06
-Date:   Sun,  8 May 2022 18:01:45 +0200
-Message-Id: <20220508160146.13004-7-jose.exposito89@gmail.com>
+Subject: [PATCH for-5.19/uclogic 7/7] HID: uclogic: Switch to Digitizer usage for styluses
+Date:   Sun,  8 May 2022 18:01:46 +0200
+Message-Id: <20220508160146.13004-8-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220508160146.13004-1-jose.exposito89@gmail.com>
 References: <20220508160146.13004-1-jose.exposito89@gmail.com>
@@ -74,57 +73,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Romanenko <romu4444@gmail.com>
+From: Nikolai Kondrashov <spbnick@gmail.com>
 
-Similar to other UGEE pens, but the IDs were missing.
+The (incorrect) "Pen" (0x02) application usage used in replacement
+report descriptors throughout the drivers leads to all tablets
+recognized as a "direct" input device (i.e. a tablet monitor) by
+recent kernels, which messes up desktop environments [1].
 
-Signed-off-by: Roman Romanenko <romu4444@gmail.com>
+Replace the application usage with "Digitizer" (0x01) for each
+non-display graphics tablet.
+
+[1] https://lore.kernel.org/linux-input/f39ce5d5-bd5b-bd3f-3ea2-9b2a89ba1eb1@gmail.com/
+
 Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-ids.h            | 1 +
- drivers/hid/hid-uclogic-core.c   | 2 ++
- drivers/hid/hid-uclogic-params.c | 2 ++
- 3 files changed, 5 insertions(+)
+ drivers/hid/hid-kye.c           | 12 ++++++------
+ drivers/hid/hid-uclogic-rdesc.c | 18 +++++++++---------
+ drivers/hid/hid-viewsonic.c     |  2 +-
+ 3 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index cef51e93e220..2cf09328566a 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1260,6 +1260,7 @@
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_G540	0x0075
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_G640	0x0094
- #define USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO01	0x0042
-+#define USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06	0x0078
- #define USB_DEVICE_ID_UGEE_TABLET_G5		0x0074
- #define USB_DEVICE_ID_UGEE_TABLET_EX07S		0x0071
- #define USB_DEVICE_ID_UGEE_TABLET_RAINBOW_CV720	0x0055
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index c4ab94d58a0f..c0fe66e50c58 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -521,6 +521,8 @@ static const struct hid_device_id uclogic_devices[] = {
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_G640) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
- 				USB_DEVICE_ID_UGEE_XPPEN_TABLET_DECO01) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_UGEE,
-+				USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, uclogic_devices);
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 7db63bb77158..db838f16282d 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -1195,6 +1195,8 @@ int uclogic_params_init(struct uclogic_params *params,
- 		     USB_DEVICE_ID_UGEE_XPPEN_TABLET_G540):
- 	case VID_PID(USB_VENDOR_ID_UGEE,
- 		     USB_DEVICE_ID_UGEE_XPPEN_TABLET_G640):
-+	case VID_PID(USB_VENDOR_ID_UGEE,
-+		     USB_DEVICE_ID_UGEE_XPPEN_TABLET_STAR06):
- 	case VID_PID(USB_VENDOR_ID_UGEE,
- 		     USB_DEVICE_ID_UGEE_TABLET_RAINBOW_CV720):
- 		/* If this is the pen interface */
+diff --git a/drivers/hid/hid-kye.c b/drivers/hid/hid-kye.c
+index f46616390a98..da903138eee4 100644
+--- a/drivers/hid/hid-kye.c
++++ b/drivers/hid/hid-kye.c
+@@ -33,7 +33,7 @@ static __u8 easypen_i405x_rdesc_fixed[] = {
+ 	0xB1, 0x02,       /*    Feature (Variable),           */
+ 	0xC0,             /*  End Collection,                 */
+ 	0x05, 0x0D,       /*  Usage Page (Digitizer),         */
+-	0x09, 0x02,       /*  Usage (Pen),                    */
++	0x09, 0x01,       /*  Usage (Digitizer),              */
+ 	0xA1, 0x01,       /*  Collection (Application),       */
+ 	0x85, 0x10,       /*    Report ID (16),               */
+ 	0x09, 0x20,       /*    Usage (Stylus),               */
+@@ -91,7 +91,7 @@ static __u8 mousepen_i608x_rdesc_fixed[] = {
+ 	0xB1, 0x02,       /*    Feature (Variable),           */
+ 	0xC0,             /*  End Collection,                 */
+ 	0x05, 0x0D,       /*  Usage Page (Digitizer),         */
+-	0x09, 0x02,       /*  Usage (Pen),                    */
++	0x09, 0x01,       /*  Usage (Digitizer),              */
+ 	0xA1, 0x01,       /*  Collection (Application),       */
+ 	0x85, 0x10,       /*    Report ID (16),               */
+ 	0x09, 0x20,       /*    Usage (Stylus),               */
+@@ -190,7 +190,7 @@ static __u8 mousepen_i608x_v2_rdesc_fixed[] = {
+ 	0xB1, 0x02,                   /*    Feature (Variable),           */
+ 	0xC0,                         /*  End Collection,                 */
+ 	0x05, 0x0D,                   /*  Usage Page (Digitizer),         */
+-	0x09, 0x02,                   /*  Usage (Pen),                    */
++	0x09, 0x01,                   /*  Usage (Digitizer),              */
+ 	0xA1, 0x01,                   /*  Collection (Application),       */
+ 	0x85, 0x10,                   /*    Report ID (16),               */
+ 	0x09, 0x20,                   /*    Usage (Stylus),               */
+@@ -289,7 +289,7 @@ static __u8 easypen_m610x_rdesc_fixed[] = {
+ 	0xB1, 0x02,                   /*    Feature (Variable),           */
+ 	0xC0,                         /*  End Collection,                 */
+ 	0x05, 0x0D,                   /*  Usage Page (Digitizer),         */
+-	0x09, 0x02,                   /*  Usage (Pen),                    */
++	0x09, 0x01,                   /*  Usage (Digitizer),              */
+ 	0xA1, 0x01,                   /*  Collection (Application),       */
+ 	0x85, 0x10,                   /*    Report ID (16),               */
+ 	0x09, 0x20,                   /*    Usage (Stylus),               */
+@@ -368,7 +368,7 @@ static __u8 pensketch_m912_rdesc_fixed[] = {
+ 	0xB1, 0x02,                   /*    Feature (Variable),           */
+ 	0xC0,                         /*  End Collection,                 */
+ 	0x05, 0x0D,                   /*  Usage Page (Digitizer),         */
+-	0x09, 0x02,                   /*  Usage (Pen),                    */
++	0x09, 0x01,                   /*  Usage (Digitizer),              */
+ 	0xA1, 0x01,                   /*  Collection (Application),       */
+ 	0x85, 0x10,                   /*    Report ID (16),               */
+ 	0x09, 0x20,                   /*    Usage (Stylus),               */
+@@ -497,7 +497,7 @@ static __u8 easypen_m406xe_rdesc_fixed[] = {
+ 	0xB1, 0x02,         /*      Feature (Variable),             */
+ 	0xC0,               /*  End Collection,                     */
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x10,         /*      Report ID (16),                 */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
+index 3c3d4e8780dc..13f9ce73f1b1 100644
+--- a/drivers/hid/hid-uclogic-rdesc.c
++++ b/drivers/hid/hid-uclogic-rdesc.c
+@@ -21,7 +21,7 @@
+ /* Fixed WP4030U report descriptor */
+ __u8 uclogic_rdesc_wp4030u_fixed_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -66,7 +66,7 @@ const size_t uclogic_rdesc_wp4030u_fixed_size =
+ /* Fixed WP5540U report descriptor */
+ __u8 uclogic_rdesc_wp5540u_fixed_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -143,7 +143,7 @@ const size_t uclogic_rdesc_wp5540u_fixed_size =
+ /* Fixed WP8060U report descriptor */
+ __u8 uclogic_rdesc_wp8060u_fixed_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -220,7 +220,7 @@ const size_t uclogic_rdesc_wp8060u_fixed_size =
+ /* Fixed WP1062 report descriptor */
+ __u8 uclogic_rdesc_wp1062_fixed_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -268,7 +268,7 @@ const size_t uclogic_rdesc_wp1062_fixed_size =
+ /* Fixed PF1209 report descriptor */
+ __u8 uclogic_rdesc_pf1209_fixed_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -345,7 +345,7 @@ const size_t uclogic_rdesc_pf1209_fixed_size =
+ /* Fixed PID 0522 tablet report descriptor, interface 0 (stylus) */
+ __u8 uclogic_rdesc_twhl850_fixed0_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -457,7 +457,7 @@ const size_t uclogic_rdesc_twhl850_fixed2_size =
+ /* Fixed TWHA60 report descriptor, interface 0 (stylus) */
+ __u8 uclogic_rdesc_twha60_fixed0_arr[] = {
+ 	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,         /*  Usage (Pen),                        */
++	0x09, 0x01,         /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,         /*  Collection (Application),           */
+ 	0x85, 0x09,         /*      Report ID (9),                  */
+ 	0x09, 0x20,         /*      Usage (Stylus),                 */
+@@ -534,7 +534,7 @@ const size_t uclogic_rdesc_twha60_fixed1_size =
+ /* Fixed report descriptor template for (tweaked) v1 pen reports */
+ const __u8 uclogic_rdesc_v1_pen_template_arr[] = {
+ 	0x05, 0x0D,             /*  Usage Page (Digitizer),                 */
+-	0x09, 0x02,             /*  Usage (Pen),                            */
++	0x09, 0x01,             /*  Usage (Digitizer),                      */
+ 	0xA1, 0x01,             /*  Collection (Application),               */
+ 	0x85, 0x07,             /*      Report ID (7),                      */
+ 	0x09, 0x20,             /*      Usage (Stylus),                     */
+@@ -588,7 +588,7 @@ const size_t uclogic_rdesc_v1_pen_template_size =
+ /* Fixed report descriptor template for (tweaked) v2 pen reports */
+ const __u8 uclogic_rdesc_v2_pen_template_arr[] = {
+ 	0x05, 0x0D,             /*  Usage Page (Digitizer),                 */
+-	0x09, 0x02,             /*  Usage (Pen),                            */
++	0x09, 0x01,             /*  Usage (Digitizer),                      */
+ 	0xA1, 0x01,             /*  Collection (Application),               */
+ 	0x85, 0x08,             /*      Report ID (8),                      */
+ 	0x09, 0x20,             /*      Usage (Stylus),                     */
+diff --git a/drivers/hid/hid-viewsonic.c b/drivers/hid/hid-viewsonic.c
+index df60c8fc2efd..8024b1d370e2 100644
+--- a/drivers/hid/hid-viewsonic.c
++++ b/drivers/hid/hid-viewsonic.c
+@@ -24,7 +24,7 @@
+ /* Fixed report descriptor of PD1011 signature pad */
+ static __u8 pd1011_rdesc_fixed[] = {
+ 	0x05, 0x0D,             /*  Usage Page (Digitizer),             */
+-	0x09, 0x02,             /*  Usage (Pen),                        */
++	0x09, 0x01,             /*  Usage (Digitizer),                  */
+ 	0xA1, 0x01,             /*  Collection (Application),           */
+ 	0x85, 0x02,             /*      Report ID (2),                  */
+ 	0x09, 0x20,             /*      Usage (Stylus),                 */
 -- 
 2.25.1
 

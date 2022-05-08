@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB4E51F1DA
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E82F51F1DF
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 23:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233210AbiEHVqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 17:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S233273AbiEHVtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 17:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbiEHVqX (ORCPT
+        with ESMTP id S233276AbiEHVsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 17:46:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB0A6445
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 14:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652046152; x=1683582152;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R84R+8J9vaNzSiM/TZ6PeV+5YBL1xItA/lw6q6VRMxc=;
-  b=JG9kJmAgE5qHQIJuEE7UO2D+4aV3noyRiIwe1iI165ClH42rzKb4WaW8
-   epnEwS3jk9SqSK1eMWRptYT2yODHrROr9Bl7n0LDQITnS7LMhD0inm0Gj
-   saL81O0A8K8e6GKUN6wP/PE2xwAkAX9z19jYSndqoyZUUK1moqLybIvOy
-   Drsaq0Yy6V43kZzzhvNcTrhW6sWnxvPKhFMkVE89ejicak2uO7heaf/sf
-   aRXtAGDSklO4vMFT3oFJbe2A4v2wfDdbMy/dGLs51DhfzN5dm46Wjg6uy
-   MS6CfArCBJ039CdI5bvQ8q/w1DIjx64yL2Ye9XVE6tr+8xpHFON1gggYS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267723610"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="267723610"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 14:42:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="569881003"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 May 2022 14:42:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnofd-000FrQ-Mu;
-        Sun, 08 May 2022 21:42:29 +0000
-Date:   Mon, 9 May 2022 05:42:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>, Junwen Wu <wudaemon@163.com>
-Subject: drivers/thermal/thermal_sysfs.c:814 find_show_state() warn:
- inconsistent indenting
-Message-ID: <202205090542.dLZqKZr7-lkp@intel.com>
+        Sun, 8 May 2022 17:48:54 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56506445;
+        Sun,  8 May 2022 14:45:02 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so9763420wms.3;
+        Sun, 08 May 2022 14:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sz9yDMbWolCR5CSm2J/3vC7zIKazVJISgiLAk/Sxmjk=;
+        b=odEgRES1w3ohIoQJFJMZIgwiqx0w9ikZ5ahO6mKSOCp5MV2nmKdXmMa7ejQCzBEk4V
+         6R1CSUB6tZptfCRhrKnB1vNWbOLi64YT2Hi+c0HL9+oYjINMASi5tDhYdw1fCJODPbC0
+         10rOjcK0UOKfoJ9Xc2hOCRXvC4k93g2wuIfbmyvn8OAYISHIKxVyzlFQ6Z5BC1EeRkS8
+         TNbylN5WqYiOAPbiz7hubby5HgaJazQtdpHYw8dsoEzhyXIqBJQyR2QLMLXiSuU4ogmj
+         mHCIC/h9Ee/4LheQ8KaApm5E5dDQkinwP02y2XvlLjowe5BZWJZSU3awpGaNzlP1y1Or
+         98Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sz9yDMbWolCR5CSm2J/3vC7zIKazVJISgiLAk/Sxmjk=;
+        b=3Kwd00JdbKJTfx+8mGkVFSgKQt3KkMQTdvSPXVj8Oot83KtMKlt5MxEzRF5uxLpH89
+         uM1KoSopDNokwGuWVr8cW0kwUI/eO/ROSIyzOR9w9qVHI1NyQ9sXxYD3B0WLnxyFYZur
+         ggKk/TRO+tqfpgpqWR5lbN8O1hNSw/1UyoyT2r1DJBwlaFG0oNnoKpfHQt0AhYwRDruA
+         l08bhi/z3V41cdICvSlM9isFjgyeKRRNODYEHSxGLaAF8bmH6rwPB/Q00HAXZaWtyV0m
+         dgS/DpANONSNDHD9EM0i5eiFVMmfFrh2/NUqm3/6s5BKw2fc2FdKJZ0O3zJl1ZCyQ1cb
+         moKA==
+X-Gm-Message-State: AOAM533zBDHKzO1RDGSHKNcr2BkQgCZTBSvL6CjrikhbPo1PHu/WY+yk
+        7dh0TnAER4NjiyXAUTzYI10=
+X-Google-Smtp-Source: ABdhPJzsQei1PUBRbz+zo5dt6pV/R1IwS6bibqDjpiffCWMdTH92R5BM6ZHxo9cYWaGnJYzDCUJvbw==
+X-Received: by 2002:a05:600c:4187:b0:394:4cf8:7c61 with SMTP id p7-20020a05600c418700b003944cf87c61mr13164229wmh.119.1652046301468;
+        Sun, 08 May 2022 14:45:01 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l17-20020adff491000000b0020c6a524fe0sm9283123wro.98.2022.05.08.14.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 14:45:01 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Martin Schiller <ms@dev.tdt.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-x25@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] x25: remove redundant pointer dev
+Date:   Sun,  8 May 2022 22:45:00 +0100
+Message-Id: <20220508214500.60446-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220508-232600/Zhang-Rui/thermal-thermal_stats-skip-broken-trans_table/20220419-165035
-head:   a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7
-commit: a9158ddd9f2a97e356583d0bdb81c4e6822e6ad7 thermal/core: change mm alloc method to avoid kernel warning
-date:   6 hours ago
-config: s390-randconfig-m031-20220508 (https://download.01.org/0day-ci/archive/20220509/202205090542.dLZqKZr7-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
+Pointer dev is being assigned a value that is never used, the assignment
+and the variable are redundant and can be removed. Also replace null check
+with the preferred !ptr idiom.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cleans up clang scan warning:
+net/x25/x25_proc.c:94:26: warning: Although the value stored to 'dev' is
+used in the enclosing expression, the value is never actually read
+from 'dev' [deadcode.DeadStores]
 
-smatch warnings:
-drivers/thermal/thermal_sysfs.c:814 find_show_state() warn: inconsistent indenting
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ net/x25/x25_proc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-vim +814 drivers/thermal/thermal_sysfs.c
-
-   785	
-   786	static int find_show_state( int *nums, int numsSize, int k, unsigned int *max_value)
-   787	{
-   788	    int i, min = INT_MAX, max = 0;
-   789	    for( i = 0; i < numsSize; ++i )
-   790	    {
-   791	        min = nums[i] < min ? nums[i] : min;
-   792	        max = nums[i] > max ? nums[i] : max;
-   793	    }
-   794	    int l = min, r = max, mid, cnt = 0;
-   795	    while( l < r )
-   796	    {
-   797	        mid = r - (r - l) / 2;
-   798	        for( i = 0; i < numsSize; ++i )
-   799	        {
-   800	            if( nums[i] >= mid )
-   801	                ++cnt;
-   802	        }
-   803	        if( cnt < k )
-   804	        {
-   805	            r = mid - 1;
-   806	            cnt = 0;
-   807	        }
-   808	        else
-   809	        {
-   810	            l = mid;
-   811	            cnt = 0;
-   812	        }
-   813	    }
- > 814	     *max_value = max;
-   815	    return l;
-   816	}
-   817	
-
+diff --git a/net/x25/x25_proc.c b/net/x25/x25_proc.c
+index 3bddcbdf2e40..91a2aade3960 100644
+--- a/net/x25/x25_proc.c
++++ b/net/x25/x25_proc.c
+@@ -79,7 +79,6 @@ static int x25_seq_socket_show(struct seq_file *seq, void *v)
+ {
+ 	struct sock *s;
+ 	struct x25_sock *x25;
+-	struct net_device *dev;
+ 	const char *devname;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+@@ -91,7 +90,7 @@ static int x25_seq_socket_show(struct seq_file *seq, void *v)
+ 	s = sk_entry(v);
+ 	x25 = x25_sk(s);
+ 
+-	if (!x25->neighbour || (dev = x25->neighbour->dev) == NULL)
++	if (!x25->neighbour || !x25->neighbour->dev)
+ 		devname = "???";
+ 	else
+ 		devname = x25->neighbour->dev->name;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

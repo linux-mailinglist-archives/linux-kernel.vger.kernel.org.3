@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E516551ECB2
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A4F51ECAA
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiEHJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S231599AbiEHJxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiEHJkx (ORCPT
+        with ESMTP id S244834AbiEHJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:40:53 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26F3DEC0;
-        Sun,  8 May 2022 02:37:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCa0vT7_1652002616;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCa0vT7_1652002616)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 08 May 2022 17:36:57 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de, baolin.wang@linux.alibaba.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v2 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when unmapping
-Date:   Sun,  8 May 2022 17:36:41 +0800
-Message-Id: <43b11b69e9f0d9d7e7960b86661db27cc404d0c7.1652002221.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 8 May 2022 05:41:18 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4BD1DEC0;
+        Sun,  8 May 2022 02:37:26 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2489bFex024590;
+        Sun, 8 May 2022 11:37:15 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Denis Efremov <efremov@linux.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Minh Yuan <yuanmingbuaa@gmail.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH 1/3] floppy: use a statically allocated error counter
+Date:   Sun,  8 May 2022 11:37:07 +0200
+Message-Id: <20220508093709.24548-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some architectures (like ARM64), it can support CONT-PTE/PMD size
-hugetlb, which means it can support not only PMD/PUD size hugetlb:
-2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
-size specified.
+Interrupt handler bad_flp_intr() may cause a UAF on the recently freed
+request just to increment the error count. There's no point keeping
+that one in the request anyway, and since the interrupt handler uses
+a static pointer to the error which cannot be kept in sync with the
+pending request, better make it use a static error counter that's
+reset for each new request. This reset now happens when entering
+redo_fd_request() for a new request via set_next_request().
 
-When unmapping a hugetlb page, we will get the relevant page table
-entry by huge_pte_offset() only once to nuke it. This is correct
-for PMD or PUD size hugetlb, since they always contain only one
-pmd entry or pud entry in the page table.
+One initial concern about a single error counter was that errors on
+one floppy drive could be reported on another one, but this problem
+is not real given that the driver uses a single drive at a time, as
+that PC-compatible controllers also have this limitation by using
+shared signals. As such the error count is always for the "current"
+drive.
 
-However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
-since they can contain several continuous pte or pmd entry with
-same page table attributes, so we will nuke only one pte or pmd
-entry for this CONT-PTE/PMD size hugetlb page.
-
-And now try_to_unmap() is only passed a hugetlb page in the case
-where the hugetlb page is poisoned. Which means now we will unmap
-only one pte entry for a CONT-PTE or CONT-PMD size poisoned hugetlb
-page, and we can still access other subpages of a CONT-PTE or CONT-PMD
-size poisoned hugetlb page, which will cause serious issues possibly.
-
-So we should change to use huge_ptep_clear_flush() to nuke the
-hugetlb page table to fix this issue, which already considered
-CONT-PTE and CONT-PMD size hugetlb.
-
-We've already used set_huge_swap_pte_at() to set a poisoned
-swap entry for a poisoned hugetlb page. Meanwhile adding a VM_BUG_ON()
-to make sure the passed hugetlb page is poisoned in try_to_unmap().
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Reported-by: Minh Yuan <yuanmingbuaa@gmail.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Tested-by: Denis Efremov <efremov@linux.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- mm/rmap.c | 39 ++++++++++++++++++++++-----------------
- 1 file changed, 22 insertions(+), 17 deletions(-)
+ drivers/block/floppy.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 7cf2408..37c8fd2 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1530,6 +1530,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
+index d5b9ff9bcbb2..015841f50f4e 100644
+--- a/drivers/block/floppy.c
++++ b/drivers/block/floppy.c
+@@ -509,8 +509,8 @@ static unsigned long fdc_busy;
+ static DECLARE_WAIT_QUEUE_HEAD(fdc_wait);
+ static DECLARE_WAIT_QUEUE_HEAD(command_done);
  
- 		if (folio_test_hugetlb(folio)) {
- 			/*
-+			 * The try_to_unmap() is only passed a hugetlb page
-+			 * in the case where the hugetlb page is poisoned.
-+			 */
-+			VM_BUG_ON_PAGE(!PageHWPoison(subpage), subpage);
-+			/*
- 			 * huge_pmd_unshare may unmap an entire PMD page.
- 			 * There is no way of knowing exactly which PMDs may
- 			 * be cached for this mm, so we must flush them all.
-@@ -1564,28 +1569,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 					break;
- 				}
- 			}
-+			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
- 		} else {
- 			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
--		}
--
--		/*
--		 * Nuke the page table entry. When having to clear
--		 * PageAnonExclusive(), we always have to flush.
--		 */
--		if (should_defer_flush(mm, flags) && !anon_exclusive) {
- 			/*
--			 * We clear the PTE but do not flush so potentially
--			 * a remote CPU could still be writing to the folio.
--			 * If the entry was previously clean then the
--			 * architecture must guarantee that a clear->dirty
--			 * transition on a cached TLB entry is written through
--			 * and traps if the PTE is unmapped.
-+			 * Nuke the page table entry. When having to clear
-+			 * PageAnonExclusive(), we always have to flush.
- 			 */
--			pteval = ptep_get_and_clear(mm, address, pvmw.pte);
-+			if (should_defer_flush(mm, flags) && !anon_exclusive) {
-+				/*
-+				 * We clear the PTE but do not flush so potentially
-+				 * a remote CPU could still be writing to the folio.
-+				 * If the entry was previously clean then the
-+				 * architecture must guarantee that a clear->dirty
-+				 * transition on a cached TLB entry is written through
-+				 * and traps if the PTE is unmapped.
-+				 */
-+				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+-/* Errors during formatting are counted here. */
+-static int format_errors;
++/* errors encountered on the current (or last) request */
++static int floppy_errors;
  
--			set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
--		} else {
--			pteval = ptep_clear_flush(vma, address, pvmw.pte);
-+				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-+			} else {
-+				pteval = ptep_clear_flush(vma, address, pvmw.pte);
-+			}
+ /* Format request descriptor. */
+ static struct format_descr format_req;
+@@ -530,7 +530,6 @@ static struct format_descr format_req;
+ static char *floppy_track_buffer;
+ static int max_buffer_sectors;
+ 
+-static int *errors;
+ typedef void (*done_f)(int);
+ static const struct cont_t {
+ 	void (*interrupt)(void);
+@@ -1455,7 +1454,7 @@ static int interpret_errors(void)
+ 			if (drive_params[current_drive].flags & FTD_MSG)
+ 				DPRINT("Over/Underrun - retrying\n");
+ 			bad = 0;
+-		} else if (*errors >= drive_params[current_drive].max_errors.reporting) {
++		} else if (floppy_errors >= drive_params[current_drive].max_errors.reporting) {
+ 			print_errors();
  		}
+ 		if (reply_buffer[ST2] & ST2_WC || reply_buffer[ST2] & ST2_BC)
+@@ -2095,7 +2094,7 @@ static void bad_flp_intr(void)
+ 		if (!next_valid_format(current_drive))
+ 			return;
+ 	}
+-	err_count = ++(*errors);
++	err_count = ++floppy_errors;
+ 	INFBOUND(write_errors[current_drive].badness, err_count);
+ 	if (err_count > drive_params[current_drive].max_errors.abort)
+ 		cont->done(0);
+@@ -2241,9 +2240,8 @@ static int do_format(int drive, struct format_descr *tmp_format_req)
+ 		return -EINVAL;
+ 	}
+ 	format_req = *tmp_format_req;
+-	format_errors = 0;
+ 	cont = &format_cont;
+-	errors = &format_errors;
++	floppy_errors = 0;
+ 	ret = wait_til_done(redo_format, true);
+ 	if (ret == -EINTR)
+ 		return -EINTR;
+@@ -2759,10 +2757,11 @@ static int set_next_request(void)
+ 	current_req = list_first_entry_or_null(&floppy_reqs, struct request,
+ 					       queuelist);
+ 	if (current_req) {
+-		current_req->error_count = 0;
++		floppy_errors = 0;
+ 		list_del_init(&current_req->queuelist);
++		return 1;
+ 	}
+-	return current_req != NULL;
++	return 0;
+ }
  
- 		/*
+ /* Starts or continues processing request. Will automatically unlock the
+@@ -2821,7 +2820,6 @@ static void redo_fd_request(void)
+ 		_floppy = floppy_type + drive_params[current_drive].autodetect[drive_state[current_drive].probed_format];
+ 	} else
+ 		probing = 0;
+-	errors = &(current_req->error_count);
+ 	tmp = make_raw_rw_request();
+ 	if (tmp < 2) {
+ 		request_done(tmp);
 -- 
-1.8.3.1
+2.17.5
 

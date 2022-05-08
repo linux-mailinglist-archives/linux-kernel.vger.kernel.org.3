@@ -2,397 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4168951EBF3
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 07:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF3C51EBFC
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 08:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiEHGCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 02:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S229616AbiEHG3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 02:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbiEHGC1 (ORCPT
+        with ESMTP id S229501AbiEHG3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 02:02:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DDC38BF
-        for <linux-kernel@vger.kernel.org>; Sat,  7 May 2022 22:58:38 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso10215119pjb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 07 May 2022 22:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k8gwVOtYdMrfQXErl2as3N/VGH9lS+z0WJbqTg/uq8E=;
-        b=oMdTvzqRrXTWQqD6xU4QKdtjXAy8RLZbExOTV4/Gx3p6bq21iWUqXpTeg1CNAo/Bby
-         45m7PKGAhDTtKOJi1MDW7o5+unzYNwvAMtsZSnIiisq/otK8cXKlXBh4INLXzN/kGOwW
-         VMEcnP4fvWdotvuODS7zBQ1pR1XEM6Fgp6SFykT9cvdAHZWFnujWpl6fxXdJ4aP16Jk2
-         6z2MCcbPjx+hUboXe4pfcLje/hWpTPIXGo7rmzxo/UajU6P0nQWt3VDt+xILVEzHbcns
-         gbZMYaIoM+FISMs14xF6tcLDYzt0kuUCX6uAXXyY2cUgrLXOxVaJadPNFdFfo2I9hIby
-         1Ryw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k8gwVOtYdMrfQXErl2as3N/VGH9lS+z0WJbqTg/uq8E=;
-        b=tU2adBzeKmps9EodixP0qBIX6pVJs094d+zvUsPF2QBccR3lHyvZ2nUa25k4o8ycN5
-         vajOfEsQPPVGhpU5WL55Ze2erCAvfv2SAisWZ95HzyrNSatWyTn7NE0tNSJQJAeEv/9J
-         fTF53mgCz9P4h+PskcK4IBG/XOPdFlGBJpMCi6HLrA15c6gxc6TFWAX00zShqzvESTXO
-         KeRmkxtOdKEhtgNF6Fk1RT8Su+wzlRFIFWEv7P/y6FD2KiV1YWSviTla4e81NyFS8P5u
-         yrmqSuddMMrnJRBJJsaEG8pbOt5NCBbx6rhV5kY0BIb45Nf4cCoum4xm7hAxD7G38p3k
-         K5Jg==
-X-Gm-Message-State: AOAM531Wuj7iXMTm9VArdIHZnkRRVEXhj9nbVNnRT34QG5r7SD384oE1
-        XVWPk6awahHVOHfOJAfT5u0=
-X-Google-Smtp-Source: ABdhPJzJCmoOvYwnJl+zM0zQzL1p+AGUllpm9Y3GkaWAZ9BZuaGUdlpIU2EXO5vmqi59LMy8SB0t5Q==
-X-Received: by 2002:a17:90b:4cc7:b0:1dc:18c5:adb2 with SMTP id nd7-20020a17090b4cc700b001dc18c5adb2mr11763195pjb.121.1651989518006;
-        Sat, 07 May 2022 22:58:38 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id a29-20020a056a001d1d00b0050dc7628158sm5979919pfx.50.2022.05.07.22.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 22:58:37 -0700 (PDT)
-Date:   Sun, 8 May 2022 14:58:30 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, smuchun@gmail.com
-Subject: Re: [PATCH v2] mm: slab: optimize memcg_slab_free_hook()
-Message-ID: <YndcBgfAjG7lcUHr@hyeyoo>
-References: <20220429123044.37885-1-songmuchun@bytedance.com>
+        Sun, 8 May 2022 02:29:45 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D84910BB;
+        Sat,  7 May 2022 23:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651991088;
+        bh=Ng4jRsIwZxysTh46jpfz6AMJR9c8fLNEyif0uXQBzMM=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=X+vDZVU5h4mNwzU33pKxmhT0xREh95Q0q7hnyhDLpOlZ2oCdGgTkjLrgzT7RpZ4Xg
+         J5pZeoUkLSyUcM3tj0bhMC/wwxNWpnAwJOyA408yjpzp7Rd3wTT6fc3PPcfZlnWSZT
+         XD6Ssm4K6hdmWrGUbCN5IfffCJwF+b/wk92Vmj/s=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from frank-s9 ([217.61.158.76]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QWG-1njCcq2lQO-004WiY; Sun, 08
+ May 2022 08:24:48 +0200
+Date:   Sun, 08 May 2022 08:24:37 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
+References: <20220507170440.64005-1-linux@fw-web.de> <20220507170440.64005-6-linux@fw-web.de> <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429123044.37885-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and add rgmii-mode to mt7531
+Reply-to: frank-w@public-files.de
+To:     linux-rockchip@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+CC:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Greg Ungerer <gerg@kernel.org>,
+        =?ISO-8859-1?Q?Ren=E9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de>
+X-Provags-ID: V03:K1:cmDKAX75GAWrl5EVsFsdZd3/enOiiqcTlPQt33Mk48FUrUnPxAP
+ U3BMSjIAlW9yIFTQxc6r5ZGwIBzhjF3Eyc7HA/HmUMOhdXJESKU/WOTVhl/KuWjQZJHCK5y
+ qcuAgH7UpLQS0Nwh95lnIShPBdyyoyyqWA+QjXtfxQ2F/aeuVB1FPLxNkP2XqesUCDrQJMR
+ yG7/qjijqGViHXGbgI2HQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Bt/imPOyZgc=:gwTL4xTW1EFlFic5EmehuZ
+ K3tPQ1T2YEOPsfiS+vfhaZb9DEmkYVHlD/FR4mInJt3PgNl0Qv01PIPSMx17iKY2eRal/5y6i
+ cP0MYxK1pg6giLZDsQj9PdZXachOyph2RT+LTBbDqyTdwbs7CLxEtm5Pwtf2rdoY5XkHJV/Y2
+ ec6qOXl0/qj/VmpdrbqBy4zQ/1hWp1UBv9OS2pT3cqavFhXZQEH4aQTDLk9JNpth8plSiqJEP
+ BE9PKVM66PYgl7cjxXgCg55oJEECTEZ4uTGThtMy+tIxftpoikt6Q0J23d0LsjqxAVDAf9sih
+ ak0vWuCLmoNY5NmYOnWWd4Sc9ralz1sv8qqFzhM/yzJK+zVoyMDegsDf3EMuQWE5PYzDj4pNK
+ dY3XDd81wQq8YIBmMsSlhcGTijit12enWbsnefF7MAk4QyKU73N6mwVkCzlv9vjFgOUxmaV0/
+ SLOQ8OhLSKHn/wp+yIUFKdDFqvjEQB2SQr4iioFpsiMIA+2Ty4N3ElDilk/1USsTQJ/QBFRa9
+ iBYypxmOh1oJZOOq3reAzjnp7sc4Gqi+r7H4hkR10pIpB5xO37Bz4CVE6AHlZEmX57JYSoQLR
+ APgffcXp1EooN8zuPLqI3qrETvgB5qdU5oRehbBYp4hChOzWR3BEkDODs5rsA3MR4z2RtGSyg
+ UXW0GmtFGQqQ/IooPXH5qyKtVv7gDNe7fNNMwScJpE1Ju5hy9w1AxFnBCF/YOi+KwwlZRbIiU
+ m1x+briTvys/DR0AxtKoU/3ARfUlE//mpL0ZZhkCPqxF8jpgPhqo8Usonb7apnQRIynbEIZf7
+ +6uLAzBWZbnF56sm4WObjUbVev1kBquTKBQZ/jZEbOhcjjJVnYX3CQYZlyL7dVd55dFlFsWif
+ rMwUQddDBjYWvamkLP4LW2bvbqySz4gKwB9C3Zp4Rr25JpASSXbAyfDQ9S6Ic7cyOIH33ugAd
+ jJU4IdGCgljdAZWOLdWvoWBxAkdvXfxY3MdzkEH8FAKA39Z11wS0BsKMJToIssVhsMwoadgFS
+ qf/y3agWZoSVD2WSm0oUTvxYbC2sU47z7lz6azW8AjCOfZnBnpOBR+9akJTyG90hq/ZI4Egg6
+ 7LfkJf4JYSWx3k=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 08:30:44PM +0800, Muchun Song wrote:
-> Most callers of memcg_slab_free_hook() already know the slab,  which could
-> be passed to memcg_slab_free_hook() directly to reduce the overhead of an
-> another call of virt_to_slab().  For bulk freeing of objects, the call of
-> slab_objcgs() in the loop in memcg_slab_free_hook() is redundant as well.
-> Rework memcg_slab_free_hook() and build_detached_freelist() to reduce
-> those unnecessary overhead and make memcg_slab_free_hook() can handle bulk
-> freeing in slab_free().
-> 
-> Move the calling site of memcg_slab_free_hook() from do_slab_free() to
-> slab_free() for slub to make the code clearer since the logic is weird
-> (e.g. the caller need to judge whether it needs to call
-> memcg_slab_free_hook()). It is easy to make mistakes like missing calling
-> of memcg_slab_free_hook() like fixes of:
-> 
->   commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
->   commit ae085d7f9365 ("mm: kfence: fix missing objcg housekeeping for SLAB")
-> 
-> This optimization is mainly for bulk objects freeing.  The following numbers
-> is shown for 16-object freeing.
-> 
->                            before      after
->   kmem_cache_free_bulk:   ~430 ns     ~400 ns
-> 
-> The overhead is reduced by about 7% for 16-object freeing.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
-> v2:
->  - Add numbers to commit log.
-> 
->  mm/slab.c |  4 ++--
->  mm/slab.h | 30 ++++++++---------------------
->  mm/slub.c | 66 +++++++++++++++++++++------------------------------------------
->  3 files changed, 32 insertions(+), 68 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index f8cd00f4ba13..2174962055ae 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3406,9 +3406,10 @@ static __always_inline void __cache_free(struct kmem_cache *cachep, void *objp,
->  {
->  	bool init;
->  
-> +	memcg_slab_free_hook(cachep, virt_to_slab(objp), &objp, 1);
-> +
->  	if (is_kfence_address(objp)) {
->  		kmemleak_free_recursive(objp, cachep->flags);
-> -		memcg_slab_free_hook(cachep, &objp, 1);
->  		__kfence_free(objp);
->  		return;
->  	}
-> @@ -3441,7 +3442,6 @@ void ___cache_free(struct kmem_cache *cachep, void *objp,
->  	check_irq_off();
->  	kmemleak_free_recursive(objp, cachep->flags);
->  	objp = cache_free_debugcheck(cachep, objp, caller);
-> -	memcg_slab_free_hook(cachep, &objp, 1);
+Am 7=2E Mai 2022 22:01:22 MESZ schrieb Krzysztof Kozlowski <krzysztof=2Ekoz=
+lowski@linaro=2Eorg>:
+>On 07/05/2022 19:04, Frank Wunderlich wrote:
+>> From: Frank Wunderlich <frank-w@public-files=2Ede>
+>>=20
+>> Make reset optional as driver already supports it,=20
 >
+>I do not see the connection between hardware needing or not needing a
+>reset GPIO and a driver supporting it or not=2E=2E=2E What does it mean?
 
-SLAB part just looks fine.
+My board has a shared gpio-reset between gmac and switch, so both will res=
+etted if it is asserted=2E Currently it is set to the gmac and is aquired e=
+xclusive=2E Adding it to switch results in 2 problems:
 
->  	/*
->  	 * Skip calling cache_free_alien() when the platform is not numa.
-> diff --git a/mm/slab.h b/mm/slab.h
-> index db9fb5c8dae7..a8d5eb1c323f 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -547,36 +547,22 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
->  	obj_cgroup_put(objcg);
->  }
->  
-> -static inline void memcg_slab_free_hook(struct kmem_cache *s_orig,
-> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
->  					void **p, int objects)
->  {
-> -	struct kmem_cache *s;
->  	struct obj_cgroup **objcgs;
-> -	struct obj_cgroup *objcg;
-> -	struct slab *slab;
-> -	unsigned int off;
->  	int i;
->  
->  	if (!memcg_kmem_enabled())
->  		return;
->  
-> -	for (i = 0; i < objects; i++) {
-> -		if (unlikely(!p[i]))
-> -			continue;
-> -
-> -		slab = virt_to_slab(p[i]);
-> -		/* we could be given a kmalloc_large() object, skip those */
-> -		if (!slab)
-> -			continue;
-> -
+- due to exclusive and already mapped to gmac, switch driver exits as it c=
+annot get the reset-gpio again=2E
+- if i drop the reset from gmac and add to switch, it resets the gmac and =
+this takes too long for switch to get up=2E Of course i can increase the wa=
+it time after reset,but dropping reset here was the easier way=2E
 
-Oh, memcg_slab_free_hook() no longer takes kmalloc_large() object becuase
-such objects does not have corresponding slab.
+Using reset only on gmac side brings the switch up=2E
 
-> -		objcgs = slab_objcgs(slab);
-> -		if (!objcgs)
-> -			continue;
-> +	objcgs = slab_objcgs(slab);
-> +	if (!objcgs)
-> +		return;
+>> allow port 5 as
+>> cpu-port=20
+>
+>How do you allow it here?
 
-Now all objects in void **p should be in same slab,
-so that we can remove some redundant part of loops that finds slab.
-(virt_to_slab() and slab_objcgs())
+Argh, seems i accidentally removed this part and have not recognized while=
+ checking :(
 
-> -		if (!s_orig)
-> -			s = slab->slab_cache;
-> -		else
-> -			s = s_orig;
-> +	for (i = 0; i < objects; i++) {
-> +		struct obj_cgroup *objcg;
-> +		unsigned int off;
->  
->  		off = obj_to_index(s, slab, p[i]);
->  		objcg = objcgs[off];
-> @@ -628,7 +614,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
->  {
->  }
->  
-> -static inline void memcg_slab_free_hook(struct kmem_cache *s,
-> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
->  					void **p, int objects)
->  {
->  }
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 1f699ddfff7f..3794afe32b5f 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3435,9 +3435,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
->  	struct kmem_cache_cpu *c;
->  	unsigned long tid;
->  
-> -	/* memcg_slab_free_hook() is already called for bulk free. */
-> -	if (!tail)
-> -		memcg_slab_free_hook(s, &head, 1);
->  redo:
->  	/*
->  	 * Determine the currently cpus per cpu slab.
-> @@ -3497,9 +3494,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
->  }
->  
->  static __always_inline void slab_free(struct kmem_cache *s, struct slab *slab,
-> -				      void *head, void *tail, int cnt,
-> +				      void *head, void *tail, void **p, int cnt,
->  				      unsigned long addr)
->  {
-> +	memcg_slab_free_hook(s, slab, p, cnt);
->  	/*
->  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
->  	 * to remove objects, whose reuse must be delayed.
-> @@ -3521,7 +3519,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
->  	if (!s)
->  		return;
->  	trace_kmem_cache_free(_RET_IP_, x, s->name);
-> -	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
-> +	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
->  }
+It should only change description of reg for ports to:
 
-memcg slab free hook is moved from do_slab_free() to slab_free().
+"Port address described must be 5 or 6 for CPU port and from 0 to 5 for us=
+er ports=2E"
 
->  EXPORT_SYMBOL(kmem_cache_free);
->  
-> @@ -3562,79 +3560,59 @@ static inline
->  int build_detached_freelist(struct kmem_cache *s, size_t size,
->  			    void **p, struct detached_freelist *df)
->  {
-> -	size_t first_skipped_index = 0;
->  	int lookahead = 3;
->  	void *object;
->  	struct folio *folio;
-> -	struct slab *slab;
-> -
-> -	/* Always re-init detached_freelist */
-> -	df->slab = NULL;
-> -
-> -	do {
-> -		object = p[--size];
-> -		/* Do we need !ZERO_OR_NULL_PTR(object) here? (for kfree) */
-> -	} while (!object && size);
-> -
-> -	if (!object)
-> -		return 0;
-
-
-Now it does not mark p[size] = NULL as processed
-
-> +	size_t same;
->  
-> +	object = p[--size];
->  	folio = virt_to_folio(object);
->  	if (!s) {
->  		/* Handle kalloc'ed objects */
->  		if (unlikely(!folio_test_slab(folio))) {
->  			free_large_kmalloc(folio, object);
-> -			p[size] = NULL; /* mark object processed */
-> +			df->slab = NULL;
->  			return size;
-
-This part looks good too as kmem_cache_free_bulk() just skips if
-df->slab == NULL.
-
->  		}
->  		/* Derive kmem_cache from object */
-> -		slab = folio_slab(folio);
-> -		df->s = slab->slab_cache;
-> +		df->slab = folio_slab(folio);
-> +		df->s = df->slab->slab_cache;
->  	} else {
-> -		slab = folio_slab(folio);
-> +		df->slab = folio_slab(folio);
->  		df->s = cache_from_obj(s, object); /* Support for memcg */
->  	}
->  
-> -	if (is_kfence_address(object)) {
-> -		slab_free_hook(df->s, object, false);
-> -		__kfence_free(object);
-> -		p[size] = NULL; /* mark object processed */
-> -		return size;
-> -	}
-> -
->  	/* Start new detached freelist */
-> -	df->slab = slab;
-> -	set_freepointer(df->s, object, NULL);
->  	df->tail = object;
->  	df->freelist = object;
-> -	p[size] = NULL; /* mark object processed */
->  	df->cnt = 1;
->  
-> +	if (is_kfence_address(object))
-> +		return size;
-> +
-
-and kfence too is freed in slab_free() using detached freelist after
-this patch.
-
-> +	set_freepointer(df->s, object, NULL);
-> +
-> +	same = size;
->  	while (size) {
->  		object = p[--size];
-> -		if (!object)
-> -			continue; /* Skip processed objects */
-> -
->  		/* df->slab is always set at this point */
->  		if (df->slab == virt_to_slab(object)) {
->  			/* Opportunity build freelist */
->  			set_freepointer(df->s, object, df->freelist);
->  			df->freelist = object;
->  			df->cnt++;
-> -			p[size] = NULL; /* mark object processed */
-> -
-> +			same--;
-> +			if (size != same)
-> +				swap(p[size], p[same]);
->  			continue;
-
-Now that SLUB does not mark processed objects as p[size] = NULL,
-SLUB should put objects in same slab together, so swap() to put them
-together.
-
->  		}
->  
->  		/* Limit look ahead search */
->  		if (!--lookahead)
->  			break;
-> -
-> -		if (!first_skipped_index)
-> -			first_skipped_index = size + 1;
->  	}
->  
-> -	return first_skipped_index;
-> +	return same;
->  }
-
-same is last index of freed object in previous step,
-so that should not be problem if next step treat that
-as 'size' of array.
-
->  
->  /* Note that interrupts must be enabled when calling this function. */
-> @@ -3643,7 +3621,6 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
->  	if (WARN_ON(!size))
->  		return;
->  
-> -	memcg_slab_free_hook(s, p, size);
->  	do {
->  		struct detached_freelist df;
->  
-> @@ -3651,7 +3628,8 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
->  		if (!df.slab)
->  			continue;
->  
-> -		slab_free(df.s, df.slab, df.freelist, df.tail, df.cnt, _RET_IP_);
-> +		slab_free(df.s, df.slab, df.freelist, df.tail, &p[size], df.cnt,
-> +			  _RET_IP_);
->  	} while (likely(size));
->  }
->  EXPORT_SYMBOL(kmem_cache_free_bulk);
-> @@ -4554,7 +4532,7 @@ void kfree(const void *x)
->  		return;
->  	}
->  	slab = folio_slab(folio);
-> -	slab_free(slab->slab_cache, slab, object, NULL, 1, _RET_IP_);
-> +	slab_free(slab->slab_cache, slab, object, NULL, &object, 1, _RET_IP_);
->  }
->  EXPORT_SYMBOL(kfree);
->  
-> -- 
-> 2.11.0
-> 
-> 
-
-Nice improvements,
-Looks good to me.
-
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
--- 
-Thanks,
-Hyeonggon
+regards Frank

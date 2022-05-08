@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DA551ED3C
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15B351ED43
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 13:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiEHLsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 07:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S232298AbiEHMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 08:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiEHLsE (ORCPT
+        with ESMTP id S232569AbiEHLwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 07:48:04 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DFADFBD;
-        Sun,  8 May 2022 04:44:14 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id r1-20020a1c2b01000000b00394398c5d51so6840724wmr.2;
-        Sun, 08 May 2022 04:44:14 -0700 (PDT)
+        Sun, 8 May 2022 07:52:08 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2D5E013;
+        Sun,  8 May 2022 04:48:17 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id c14so10017399pfn.2;
+        Sun, 08 May 2022 04:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uGom9LadN9y/dKy9cZp6nw8Lj9Rh3bqkuTAr2QAZygs=;
-        b=A6cPx5B9Jzsiv5KRDwkhvAUNfqsoWWq7FNQH2Kd+c1HECo1EB+5MmGAGBAdqLim7Lb
-         Nktgt+EST7zZeh1XJFjxPmBkhgrUMPxUGaBnoJLfJWIJ9S6OnFqt6fzzMH/4gq6IJeyt
-         wm+Gr534Rcbpc5oDFsOVVyr7awT0pJ7HRJSXocW6B6OKw0RD2JPCHAXP57G/3Xr3FfJB
-         6RV9dpwU0/ynu40FL+gHQgr6pIJnbX17m9cqU5OkFmL3agzLkwoHrtiTg17j6EQxnhiY
-         yF+ObsQwVT8r1bJj44v5fhHBz9EOMhlg7xaIzcMkyqCpk03mC1DCXfNmEk/SuyyWNEUU
-         KxWQ==
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=78GiAOcDFncQpxS3zJf0oIIsYa1BfjnHtYeGhRAmaco=;
+        b=eD6eGLRe6NGh0IxAF1cXnuOGWl6JVY1GAzSEyk7VT9zSinKK0vtUfjaeC165b19kH1
+         mE2DCDKw6eLM8uF6HqdwgRjXy8kLpte6ejvwtEte0WUKzdnbTvZps2yZoMOKRYUeMW+N
+         7n0RQAWlUYZhpB0ONWgfcOUQdPWA+7J/VYGtkfaRsyeOjyZ37h4APer6qmNFFrGkAlX+
+         WHwd5rpja0fzgPsjQPlq45oKY8Q4t2UvTM7TAx1ymxylZSVFe0aSJi08R8FiTL8tqt1H
+         Ur20Gh/YZHbfo8NwdfIm3z8Muz6H/aIv3K+FO+S5R5xRcaAi9tA17EOSJV3NXB3lJxBN
+         vWjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=uGom9LadN9y/dKy9cZp6nw8Lj9Rh3bqkuTAr2QAZygs=;
-        b=AWHpFWHVPQMw/4d5zBNmcklX6pwH3lHZCOjNzox65Qeg2Gw85akyrEIodU4sTvp1oo
-         AhhBn5pDoOteCpRVEurWVt2mCfsx9waA9zy+33/3uajZlafPcNQqSz6RuGw4b4XYsVu/
-         PNs0LgR/PiqTHALaRHxb2jsOFd5Hn3Co2IhmWLrEVbE0ScwOHFgeXXRHQWSKiRMDoD/F
-         njuC814gWkB4oqYuGJ6+3MlswyL2AD0s5iN+jdR8NspkidJWv3+mYZr/AsRBpckM7l+m
-         hW+3zfhgV9LTcEk1YnflAJgFQ1+fryxl+lCbr1ZHW0USXqH8s78ciUmoezAS2+vyUsmI
-         8Z5w==
-X-Gm-Message-State: AOAM532jgbzeUTmTvwON2BZdUWxGzE8P6oiE4taQQgr8/19fpaZpBDF8
-        yu3k/JDdgb5iftD4LzZaf6kQcjvAgY4=
-X-Google-Smtp-Source: ABdhPJxk0zhR6KYK07Bn0EHj0OplxyM4f1/qqPYhsXAkCACxAA8HwtcJX5wePe1GVdTSZhGWkkLYVQ==
-X-Received: by 2002:a05:600c:288:b0:394:31f9:68f with SMTP id 8-20020a05600c028800b0039431f9068fmr17937593wmk.57.1652010252850;
-        Sun, 08 May 2022 04:44:12 -0700 (PDT)
-Received: from [192.168.8.198] ([148.252.129.103])
-        by smtp.gmail.com with ESMTPSA id ay13-20020a5d6f0d000000b0020c5253d8e3sm8698640wrb.47.2022.05.08.04.44.11
+        bh=78GiAOcDFncQpxS3zJf0oIIsYa1BfjnHtYeGhRAmaco=;
+        b=4dJ5Skvw40WfkmMEn1K+dsZJix2YBm7tqS/e6BE0QUS/RMJLh5F9+1lS4v2tQ4vlc4
+         Ph/yC0UJirI4CxBDKzBApR2ic7koaxfd+ndXxk2fMX1l6abt2qv/f6kBZt2DW6UDE+P9
+         gKq8YrhuV32tfPYBHBhEFDPLNgWhsAq09MrAk8uFELSydNw2YtRqdhBDj5J29qeUYlZz
+         H8y9gVo0rSFRTMBye1r1HA868l1xSMo6TzsICBqByZzyFnD5RBFz4tu2NhS7uTH5e01t
+         FaPYRr+P6PjBni2O3blos+K1xakX7JAAN9qB7I8fE5Z55D0mNEHdCPxS6bU05xCyEuEI
+         F0Bw==
+X-Gm-Message-State: AOAM532p0POkgr45I0eo6WSSpC8TzaQWFeAxRYGW2yV3QXQcavRHxJP4
+        ErW6uMtHeZXE1dP3z9OnMxA=
+X-Google-Smtp-Source: ABdhPJxpCSfAVDVRnbHSqMuz2nPP3bs7F50tRdZX6SrsJr+n2JBZpbm4jmiquICfhPCpNS/DFbH5Qg==
+X-Received: by 2002:a05:6a00:b52:b0:510:5cbd:de94 with SMTP id p18-20020a056a000b5200b005105cbdde94mr11526599pfo.19.1652010497430;
+        Sun, 08 May 2022 04:48:17 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id gf1-20020a17090ac7c100b001cd4989fedesm10448954pjb.42.2022.05.08.04.48.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 04:44:12 -0700 (PDT)
-Message-ID: <73fc6ba6-a63e-d674-a3bb-05a3f914a714@gmail.com>
-Date:   Sun, 8 May 2022 12:43:26 +0100
+        Sun, 08 May 2022 04:48:16 -0700 (PDT)
+Message-ID: <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com>
+Date:   Sun, 8 May 2022 20:48:10 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
+ __dev_queue_xmit()
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Ben Greear <greearb@candelatech.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220507084643.18278-1-bagasdotme@gmail.com>
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Guo Xuenan <guoxuenan@huawei.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
-References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
- <20220505141159.3182874-1-guoxuenan@huawei.com>
- <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
- <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
- <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
- <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
- <9c4cff81-ff0f-4819-c41d-54f28dba2929@gmail.com>
- <fd9b34f1-5289-587a-2ba3-88f924af474c@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <fd9b34f1-5289-587a-2ba3-88f924af474c@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220507084643.18278-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
@@ -81,60 +80,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/7/22 15:18, Jens Axboe wrote:
-> On 5/7/22 3:16 AM, Pavel Begunkov wrote:
->> On 5/6/22 19:22, Jens Axboe wrote:
->>> On 5/6/22 10:15 AM, Jens Axboe wrote:
->>>> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
->>>>> On 5/6/22 03:16, Jens Axboe wrote:
->>>>>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
->>>>>>> Hi, Pavel & Jens
->>>>>>>
->>>>>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
->>>>>>> it is not enough only apply [2] to stable-5.10.
->>>>>>> Io_uring is very valuable and active module of linux kernel.
->>>>>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
->>>>>>> found my understanding of io_uring is not enough to resolve all conflicts.
->>>>>>>
->>>>>>> Since 5.10 is an important stable branch of linux, we would appreciate
->>>>>>> your help in solving this problem.
->>>>>>
->>>>>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
->>>>>> there was a reproducer for this that was somewhat saner than the
->>>>>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
->>>>>
->>>>> No, it was the only repro and was triggering the problem
->>>>> just fine back then
->>>>
->>>> I modified it a bit and I can now trigger it.
->>>
->>> Pavel, why don't we just keep it really simple and just always save the
->>> iter state in read/write, and use the restore instead of the revert?
->>
->> The problem here is where we're doing revert. If it's done deep in
->> the stack and then while unwinding someone decides to revert it again,
->> e.g. blkdev_read_iter(), we're screwed.
->>
->> The last attempt was backporting 20+ patches that would move revert
->> into io_read/io_write, i.e. REQ_F_REISSUE, back that failed some of
->> your tests back then. (was it read retry tests iirc?)
-> 
-> Do you still have that series? Yes, if I recall correctly, the series
+On 2022/05/07 17:46,
+Bagas Sanjaya wrote:
+> Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") inlines
+> dev_queue_xmit() that contains comment quote from Ben Greear, which
+> originates from commit af191367a75262 ("[NET]: Document ->hard_start_xmit()
+> locking in comments.").It triggers htmldocs warning:
 
-Yep, still in the repo:
+What I asked was the explanation of *why* the inlining of the
+function caused the new warning.
 
-https://github.com/isilence/linux/tree/5.10_revert
+Your explanation above tries to tell *what* the offending commit
+did, which is not what I asked.  Furthermore, your explanation
+is not accurate in that the comment block does not belong to
+dev_queue_xmit() but to __dev_queue_xmit().
 
-> had an issue with the resubmit. Which might just be minor, I don't
-> believe we really took a closer look at that.
-> 
-> Let's resurrect that series and see if we can pull it to completion,
-> would be nice to finally close the chapter on this issue for 5.10...
+After seeking the answer myself, I reached a conclusion that
+it is wrong to meddle with the comment block.
 
-We can try, but I'm not too comfortable with those backports, I had
-to considerably rewrite last three patches or so. Another option
-is to disable retries from the rw callback if the iter has been
-truncated.
+So, appended below is my version of the fix with the answer to
+Stephen's question, "I am not sure why this has turned up just now."
 
+Stephen, Jakub, what do you think?
+
+        Thanks, Akira
+
+----8<--------------
+From: Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH -next] net/core: Hide __dev_queue_xmit()'s kernel-doc
+
+Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") added
+export of __dev_queue_exit() to cope with inlining of its
+wrapper functions dev_queue_xmit() and dev_queue_xmit_accel().
+This made __dev_queue_exit()'s comment block visible to Sphinx
+processing in "make htmldocs" because
+Documentation/networking/kapi.rst has the directive of:
+
+    .. kernel-doc:: net/core/dev.c
+       :export:
+
+Unfortunately, the kernel-doc style comment has a number of
+issues when parsed as RestructuredText.  Stephen reported a
+new warning message from "make htmldocs" caused by one of
+such issues.
+
+The leading "__" in the function name indicates that it is an
+internal API and should not be widely used.
+Exposing documentation of such a function in HTML and PDF
+documentations does not make sense.
+
+For the time being, hide the kernel-doc style comment from Sphinx
+processing by removing the kernel-doc marker of "/**".
+
+Proper kernel-doc comments should be added to the inlined
+wrapper functions, which is deferred to those who are familiar
+with those netdev APIs.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
+Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+---
+ net/core/dev.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c2d73595a7c3..a97fd413d705 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4085,8 +4085,7 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
+ 	return netdev_get_tx_queue(dev, queue_index);
+ }
+ 
+-/**
+- *	__dev_queue_xmit - transmit a buffer
++/*	__dev_queue_xmit - transmit a buffer
+  *	@skb: buffer to transmit
+  *	@sb_dev: suboordinate device used for L2 forwarding offload
+  *
 -- 
-Pavel Begunkov
+2.25.1
+

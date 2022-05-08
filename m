@@ -2,207 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6205351EEFC
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419D251EF5C
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiEHQvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 12:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S235642AbiEHTDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234938AbiEHQvk (ORCPT
+        with ESMTP id S237066AbiEHRJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 12:51:40 -0400
-Received: from relay3.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5C162F9
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 09:47:47 -0700 (PDT)
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id D35DDCA0;
-        Sun,  8 May 2022 16:47:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id B2D1920028;
-        Sun,  8 May 2022 16:47:45 +0000 (UTC)
-Message-ID: <eeb32669c6641bc609d5b4460262b25e4b3d3f00.camel@perches.com>
-Subject: Re: [PATCH] staging: drivers: hid: hid-asus.c: Fixed
- brace/formatting issues.
-From:   Joe Perches <joe@perches.com>
-To:     Johan Boger <jb@ip.fi>, jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 08 May 2022 09:47:44 -0700
-In-Reply-To: <20220508125056.354001-1-jb@ip.fi>
-References: <20220508125056.354001-1-jb@ip.fi>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 8 May 2022 13:09:00 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB50F64D5;
+        Sun,  8 May 2022 10:05:09 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id m190so9551213ybf.4;
+        Sun, 08 May 2022 10:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W7Hl8BOx+adgs6geATfRW0o3lLPBvMogTGQ28EqLWaA=;
+        b=lkgMS1iIMVf9Fy72wcDl3MPVgbNj/S+8G4i7KuAJf12aCIWl55+lPEek3+Cenow8nR
+         9MKVshPKYtnCcMk0rVsRWXFDArby9lCwKFGx4DgqDTMfaDG5QVPNOwZkTwC9Jxkj/nIJ
+         Fk8j//X0r1kVv6Hg9udaF6oXWF5ny36hAwfrx01HEKaXznS6k51vQHJcyrclwvM51Y4F
+         P8dDk9/UJdLMJqBB3t106A3sIj91Zja4D7bj+rVDqRf4X/8WxBR2+t5oR05XYbHwr0OD
+         gMrsjh8hipq/WHjgIOHvgegA/bDIyxTeulYWnzhA1fAHcwgksc4HHVHiPW2o6Mx4XIQL
+         KsfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W7Hl8BOx+adgs6geATfRW0o3lLPBvMogTGQ28EqLWaA=;
+        b=NLvw2lJxStQrCuNvjfyO3xqPZop1Y6fSBnXPAyn5Jb16O/nLYkMe8pcacj3AaIMLrU
+         yh80XV/vMjncQnFzaL+IR8hLopiWn4NluKY+MU8joZJAz0VXOKnNU2pJTD3u1wg0V3EF
+         da/DrMgUyQHuOCgaXz4ceZLE214XIgEXdVse3ukVjV8DVspYLjhS4BLmDwl3cwhzlPEK
+         6V0wWkD9usNJoXRSbq4lvHI7OxwI0EFaw0eEyNUjTKPYOq6I2fjZF44JcfkTwGdxFJ17
+         OfSAcFpF6YWOy/3aPnC5s2EFhfmCQqLCWLWXNZutEsqlx3m2l7gy78lSJd8KXtppXc0g
+         43Vg==
+X-Gm-Message-State: AOAM532TsM53Y7Wf5lP6ueTL403WXA9xn+JPbuZi6WHamWYOnxFdGzs3
+        fLzT9h7WVywc7xZc44dKB15BNc5Tjqz23ielG3c=
+X-Google-Smtp-Source: ABdhPJy+9aAnBuxa0JfhTFZ4aaqwddQqqO8njeM70HqTBYBOqN1hLMd22aoooSxKWRQg+5rhDWM0uUI6VEpipsrsGMI=
+X-Received: by 2002:a05:6902:143:b0:628:7cf1:f2a9 with SMTP id
+ p3-20020a056902014300b006287cf1f2a9mr9464807ybh.51.1652029508882; Sun, 08 May
+ 2022 10:05:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: m99qzcz5otr7jw1j8jq9665qcr9cnope
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: B2D1920028
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/+VzXIsHSXapGIOrF0fKhPIPVnNpOpIKU=
-X-HE-Tag: 1652028465-192970
+References: <20220507170440.64005-1-linux@fw-web.de> <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
+ <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de> <2509116.Lt9SDvczpP@phil>
+ <trinity-7f04b598-0300-4f3c-80e7-0c2145e8ba8f-1652011928036@3c-app-gmx-bap68>
+In-Reply-To: <trinity-7f04b598-0300-4f3c-80e7-0c2145e8ba8f-1652011928036@3c-app-gmx-bap68>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sun, 8 May 2022 13:04:56 -0400
+Message-ID: <CAMdYzYrG8bK-Yo15RjhhCQKS4ZQW53ePu1q4gbGxVVNKPJHBWg@mail.gmail.com>
+Subject: Re: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and
+ add rgmii-mode to mt7531
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-05-08 at 14:50 +0200, Johan Boger wrote:
-> Fixed formatting issues based on recommendations from 
-> scripts/checkpatch.pl, in accordance with coding style.
-[]
-> diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-[]
-> @@ -852,47 +850,86 @@ static int asus_input_mapping(struct hid_device *hdev,
->  	/* ASUS-specific keyboard hotkeys and led backlight */
->  	if ((usage->hid & HID_USAGE_PAGE) == HID_UP_ASUSVENDOR) {
->  		switch (usage->hid & HID_USAGE) {
-> -		case 0x10: asus_map_key_clear(KEY_BRIGHTNESSDOWN);	break;
-[...]
+On Sun, May 8, 2022 at 8:12 AM Frank Wunderlich <frank-w@public-files.de> wrote:
+>
+> Hi Heiko
+>
+> > Gesendet: Sonntag, 08. Mai 2022 um 11:41 Uhr
+> > Von: "Heiko Stuebner" <heiko@sntech.de>
+> > Am Sonntag, 8. Mai 2022, 08:24:37 CEST schrieb Frank Wunderlich:
+> > > Am 7. Mai 2022 22:01:22 MESZ schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+> > > >On 07/05/2022 19:04, Frank Wunderlich wrote:
+> > > >> From: Frank Wunderlich <frank-w@public-files.de>
+> > > >>
+> > > >> Make reset optional as driver already supports it,
+> > > >
+> > > >I do not see the connection between hardware needing or not needing a
+> > > >reset GPIO and a driver supporting it or not... What does it mean?
+> > >
+> > > My board has a shared gpio-reset between gmac and switch, so both will resetted if it
+> > > is asserted. Currently it is set to the gmac and is aquired exclusive. Adding it to switch results in 2 problems:
+> > >
+> > > - due to exclusive and already mapped to gmac, switch driver exits as it cannot get the reset-gpio again.
+> > > - if i drop the reset from gmac and add to switch, it resets the gmac and this takes too long for switch
+> > > to get up. Of course i can increase the wait time after reset,but dropping reset here was the easier way.
+> > >
+> > > Using reset only on gmac side brings the switch up.
+> >
+> > I think the issue is more for the description itself.
+> >
+> > Devicetree is only meant to describe the hardware and does in general don't
+> > care how any firmware (Linux-kernel, *BSD, etc) handles it. So going with
+> > "the kernel does it this way" is not a valid reason for a binding change ;-) .
+> >
+> > Instead in general want to reason that there are boards without this reset
+> > facility and thus make it optional for those.
+>
+> if only the wording is the problem i try to rephrase it from hardware PoV.
+>
+> maybe something like this?
+>
+> https://github.com/frank-w/BPI-R2-4.14/commits/5.18-mt7531-mainline2/Documentation/devicetree/bindings/net/dsa/mediatek%2Cmt7530.yaml
+>
+> Another way is maybe increasing the delay after the reset (to give more time all
+> come up again), but imho it is no good idea resetting the gmac/mdio-bus from the
+> child device.
+>
+> have not looked into the gmac driver if this always  does the initial reset to
+> have a "clean state". In this initial reset the switch will be resetted too
+> and does not need an additional one which needs the gmac/mdio initialization
+> to be done again.
 
-I think the break on the same line isn't that difficult a style.
+For clarification, the reset gpio line is purely to reset the phy.
+If having the switch driver own the reset gpio instead of the gmac
+breaks initialization that means there's a bug in the gmac driver
+handling phy init.
+In testing I've seen issues moving the reset line to the mdio node
+with other phys and the stmmac gmac driver, so I do believe this is
+the case.
 
-All of these changes would be better with different code setting
-a temporary then a single call to asus_map_key_clear(temp);
-
-It'd also make the object code rather smaller.
-
-$ size drivers/hid/hid-asus.o* (x86-64 defconfig with hid-asus)
-   text	   data	    bss	    dec	    hex	filename
-  10695	    420	      0	  11115	   2b6b	drivers/hid/hid-asus.o.new
-  14108	    420	      0	  14528	   38c0	drivers/hid/hid-asus.o.old
----
-diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-index 08c9a9a60ae47..4702902ee4dad 100644
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -827,6 +827,7 @@ static int asus_input_mapping(struct hid_device *hdev,
- 		struct hid_usage *usage, unsigned long **bit,
- 		int *max)
- {
-+	int clear_key;
- 	struct asus_drvdata *drvdata = hid_get_drvdata(hdev);
- 
- 	if (drvdata->quirks & QUIRK_SKIP_INPUT_MAPPING) {
-@@ -852,43 +853,43 @@ static int asus_input_mapping(struct hid_device *hdev,
- 	/* ASUS-specific keyboard hotkeys and led backlight */
- 	if ((usage->hid & HID_USAGE_PAGE) == HID_UP_ASUSVENDOR) {
- 		switch (usage->hid & HID_USAGE) {
--		case 0x10: asus_map_key_clear(KEY_BRIGHTNESSDOWN);	break;
--		case 0x20: asus_map_key_clear(KEY_BRIGHTNESSUP);		break;
--		case 0x35: asus_map_key_clear(KEY_DISPLAY_OFF);		break;
--		case 0x6c: asus_map_key_clear(KEY_SLEEP);		break;
--		case 0x7c: asus_map_key_clear(KEY_MICMUTE);		break;
--		case 0x82: asus_map_key_clear(KEY_CAMERA);		break;
--		case 0x88: asus_map_key_clear(KEY_RFKILL);			break;
--		case 0xb5: asus_map_key_clear(KEY_CALC);			break;
--		case 0xc4: asus_map_key_clear(KEY_KBDILLUMUP);		break;
--		case 0xc5: asus_map_key_clear(KEY_KBDILLUMDOWN);		break;
-+		case 0x10: clear_key = KEY_BRIGHTNESSDOWN;	break;
-+		case 0x20: clear_key = KEY_BRIGHTNESSUP;	break;
-+		case 0x35: clear_key = KEY_DISPLAY_OFF;		break;
-+		case 0x6c: clear_key = KEY_SLEEP;		break;
-+		case 0x7c: clear_key = KEY_MICMUTE;		break;
-+		case 0x82: clear_key = KEY_CAMERA;		break;
-+		case 0x88: clear_key = KEY_RFKILL;		break;
-+		case 0xb5: clear_key = KEY_CALC;		break;
-+		case 0xc4: clear_key = KEY_KBDILLUMUP;		break;
-+		case 0xc5: clear_key = KEY_KBDILLUMDOWN;	break;
- 
- 		/* ASUS touchpad toggle */
--		case 0x6b: asus_map_key_clear(KEY_F21);			break;
-+		case 0x6b: clear_key = KEY_F21;			break;
- 
- 		/* ROG key */
--		case 0x38: asus_map_key_clear(KEY_PROG1);		break;
-+		case 0x38: clear_key = KEY_PROG1;		break;
- 
- 		/* Fn+C ASUS Splendid */
--		case 0xba: asus_map_key_clear(KEY_PROG2);		break;
-+		case 0xba: clear_key = KEY_PROG2;		break;
- 
- 		/* Fn+Space Power4Gear Hybrid */
--		case 0x5c: asus_map_key_clear(KEY_PROG3);		break;
-+		case 0x5c: clear_key = KEY_PROG3;		break;
- 
- 		/* Fn+F5 "fan" symbol on FX503VD */
--		case 0x99: asus_map_key_clear(KEY_PROG4);		break;
-+		case 0x99: clear_key = KEY_PROG4;		break;
- 
- 		/* Fn+F5 "fan" symbol on N-Key keyboard */
--		case 0xae: asus_map_key_clear(KEY_PROG4);		break;
-+		case 0xae: clear_key = KEY_PROG4;		break;
- 
- 		/* Fn+Ret "Calc" symbol on N-Key keyboard */
--		case 0x92: asus_map_key_clear(KEY_CALC);		break;
-+		case 0x92: clear_key = KEY_CALC;		break;
- 
- 		/* Fn+Left Aura mode previous on N-Key keyboard */
--		case 0xb2: asus_map_key_clear(KEY_PROG2);		break;
-+		case 0xb2: clear_key = KEY_PROG2;		break;
- 
- 		/* Fn+Right Aura mode next on N-Key keyboard */
--		case 0xb3: asus_map_key_clear(KEY_PROG3);		break;
-+		case 0xb3: clear_key = KEY_PROG3;		break;
- 
- 		default:
- 			/* ASUS lazily declares 256 usages, ignore the rest,
-@@ -896,6 +897,8 @@ static int asus_input_mapping(struct hid_device *hdev,
- 			return -1;
- 		}
- 
-+		asus_map_key_clear(clear_key);
-+
- 		/*
- 		 * Check and enable backlight only on devices with UsagePage ==
- 		 * 0xff31 to avoid initializing the keyboard firmware multiple
-@@ -911,27 +914,29 @@ static int asus_input_mapping(struct hid_device *hdev,
- 
- 	if ((usage->hid & HID_USAGE_PAGE) == HID_UP_MSVENDOR) {
- 		switch (usage->hid & HID_USAGE) {
--		case 0xff01: asus_map_key_clear(BTN_1);	break;
--		case 0xff02: asus_map_key_clear(BTN_2);	break;
--		case 0xff03: asus_map_key_clear(BTN_3);	break;
--		case 0xff04: asus_map_key_clear(BTN_4);	break;
--		case 0xff05: asus_map_key_clear(BTN_5);	break;
--		case 0xff06: asus_map_key_clear(BTN_6);	break;
--		case 0xff07: asus_map_key_clear(BTN_7);	break;
--		case 0xff08: asus_map_key_clear(BTN_8);	break;
--		case 0xff09: asus_map_key_clear(BTN_9);	break;
--		case 0xff0a: asus_map_key_clear(BTN_A);	break;
--		case 0xff0b: asus_map_key_clear(BTN_B);	break;
--		case 0x00f1: asus_map_key_clear(KEY_WLAN);	break;
--		case 0x00f2: asus_map_key_clear(KEY_BRIGHTNESSDOWN);	break;
--		case 0x00f3: asus_map_key_clear(KEY_BRIGHTNESSUP);	break;
--		case 0x00f4: asus_map_key_clear(KEY_DISPLAY_OFF);	break;
--		case 0x00f7: asus_map_key_clear(KEY_CAMERA);	break;
--		case 0x00f8: asus_map_key_clear(KEY_PROG1);	break;
-+		case 0xff01: clear_key = BTN_1;			break;
-+		case 0xff02: clear_key = BTN_2;			break;
-+		case 0xff03: clear_key = BTN_3;			break;
-+		case 0xff04: clear_key = BTN_4;			break;
-+		case 0xff05: clear_key = BTN_5;			break;
-+		case 0xff06: clear_key = BTN_6;			break;
-+		case 0xff07: clear_key = BTN_7;			break;
-+		case 0xff08: clear_key = BTN_8;			break;
-+		case 0xff09: clear_key = BTN_9;			break;
-+		case 0xff0a: clear_key = BTN_A;			break;
-+		case 0xff0b: clear_key = BTN_B;			break;
-+		case 0x00f1: clear_key = KEY_WLAN;		break;
-+		case 0x00f2: clear_key = KEY_BRIGHTNESSDOWN;	break;
-+		case 0x00f3: clear_key = KEY_BRIGHTNESSUP;	break;
-+		case 0x00f4: clear_key = KEY_DISPLAY_OFF;	break;
-+		case 0x00f7: clear_key = KEY_CAMERA;		break;
-+		case 0x00f8: clear_key = KEY_PROG1;		break;
- 		default:
- 			return 0;
- 		}
- 
-+		asus_map_key_clear(clear_key);
-+
- 		set_bit(EV_REP, hi->input->evbit);
- 		return 1;
- 	}
-
+>
+> > > >> allow port 5 as
+> > > >> cpu-port
+> > > >
+> > > >How do you allow it here?
+> > >
+> > > Argh, seems i accidentally removed this part and have not recognized while checking :(
+> > >
+> > > It should only change description of reg for ports to:
+> > >
+> > > "Port address described must be 5 or 6 for CPU port and from 0 to 5 for user ports."
+>
+> noticed that the target-phase is not removed but squashed in the first bindings-patch.
+> This was a rebasing error and not intented...will fix in next version.
+>
+> regards Frank

@@ -2,120 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE3151EEED
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C813C51EEEE
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 18:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbiEHQWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 12:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S235646AbiEHQXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 12:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbiEHQWt (ORCPT
+        with ESMTP id S232042AbiEHQXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 12:22:49 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DEBC3F
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 09:18:59 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c9so11102466plh.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 09:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QWhBNZogHnlvklmcU4nt0RMjAacSV4GHQXRxhMD3Rlo=;
-        b=pZqYl9oApiyD69ykUKFSXDUrectgXO2RIH+N2EDpEVnmkQRU9LlGQX//uCvUD7Kmhu
-         8CJDHcK4IvpPlBArsCKeTKkW+YPVJhlSjrZBLHJ3bIPcePRep2hyVsnjfpODBmGeexNw
-         bJLU69fGwpVWJU1ynYkA6ibtP7WCO8ynyKfZXxHpEDq6znFA6P0/H8HoGLui2Im/uDn4
-         5IAF81xo7qWbK8aaJMizfybHv5B546fURyOzAXSEZ9UI+J3St2xC/r0YVUwPuK70fmOX
-         JhIGf4n50Rrdh8tB+7UvbXSsqRk9zAGpKaICajsd//gY5mFJ79x+V6HYNrSSHLCG4rDw
-         2Cbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QWhBNZogHnlvklmcU4nt0RMjAacSV4GHQXRxhMD3Rlo=;
-        b=B9t298alOoEutFD+1eC8+n/5iRlUC5V9F+zGRD5UJNBGkK4MgB52GpJAAfAxA2iIJM
-         C7YrvQHYg+mgAbLa693onhn+3//4esn26G7QLo+IkAilE4XqBSxWdKxwvvhvJWuQr8Dh
-         iZbV0BKmSSRYujX07riQFpMj3qudH48QYZdYVtoJYuvP4GJBQL2RS/oBTjRTLHeX7NbY
-         a96yo0lg5wCX+G5Niet5XYkwQLarXwZzyqJZwxp7xjkk34c8SMG3K8qwbsk/mXISbXqp
-         1AwAY8NlU0mztpQ3+2+w+SX7hJCLTnjaFrkpNFmkT2ONk/GAYVEZ4sog/tlV3R/xGdyC
-         Ur7A==
-X-Gm-Message-State: AOAM533mAhgFyQMMaMrBIcYhDznHuSqNHJrBrkIrXF33eaozYdnzvIRM
-        HKEdw+9SMK1DQa1wnZIWHL8=
-X-Google-Smtp-Source: ABdhPJxjksflt8YPBPBXZnb+99bTJxcM/VykyLiI9A347MMsKrAaLOA1VhPRDJMVt2b2dGWqMDJbfw==
-X-Received: by 2002:a17:90b:2311:b0:1d9:277e:edad with SMTP id mt17-20020a17090b231100b001d9277eedadmr14136254pjb.190.1652026738706;
-        Sun, 08 May 2022 09:18:58 -0700 (PDT)
-Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902b70f00b0015ea0a679ddsm5320291pls.251.2022.05.08.09.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 09:18:58 -0700 (PDT)
-From:   Jeff Xie <xiehuan09@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH] tracing: Fix possible crash in ftrace_free_ftrace_ops()
-Date:   Mon,  9 May 2022 00:18:27 +0800
-Message-Id: <20220508161827.1014186-1-xiehuan09@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 8 May 2022 12:23:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41227C3F;
+        Sun,  8 May 2022 09:19:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCD9F61238;
+        Sun,  8 May 2022 16:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1B3C385A4;
+        Sun,  8 May 2022 16:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652026782;
+        bh=zrC5JzfMZu1blCIF9XsTPjYQwlFVmczwl6h74uQUH+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JDSspYlDJl4dy8dwZzEU663/k0P+Hhpso4lFI1e63KrMQzIjklnIgAu21XeIEAWPv
+         5YdkOhdG0+3xgVNyhbdHCAB1MocIsVBHqmO7jZmKdCtqGz3cI3WfSBWL4c856Hhbfu
+         /rYs0523exg0XnDCkmqMRzxXkY8Sb+HyGJ0y+kx+ySaDjY1dUuktcXBZSApJ4kCTDr
+         D7pdX7iZ/T89KI7FyHgb0KZPDi7X4MxYC2yVIyMyulcRg56CmDdJsz8PnqNiEookNZ
+         F4oXGB/WMD2R1XHT89heI1MtEGBVVeDL7zVoO6bJlP6vt9/CGHhInNnJ0kzzml9Ib9
+         Ui0cbCBLwqEZw==
+Received: by pali.im (Postfix)
+        id 619877F7; Sun,  8 May 2022 18:19:39 +0200 (CEST)
+Date:   Sun, 8 May 2022 18:19:39 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Matthew Hagan <mnhagan88@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: sfp: Add tx-fault workaround for Huawei MA5671A
+ SFP ONT
+Message-ID: <20220508161939.wk5c6sjkakzhqrz7@pali>
+References: <20220502223315.1973376-1-mnhagan88@gmail.com>
+ <20220508161712.wgzrq3wigaa7kobh@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220508161712.wgzrq3wigaa7kobh@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if the ftrace_allocate_ftrace_ops() return -ENOMEM,
-the ftrace_free_ftrace_ops() will kfree(NULL).
- 
-trace_array_create()
-{
-	...
-	if (ftrace_allocate_ftrace_ops(tr) < 0)
-		goto out_free_tr;
-	...
-out_free_tr:
-        ftrace_free_ftrace_ops(tr);
-	...
-}
+On Sunday 08 May 2022 18:17:12 Pali Rohár wrote:
+> On Monday 02 May 2022 23:33:15 Matthew Hagan wrote:
+> > As noted elsewhere, various GPON SFP modules exhibit non-standard
+> > TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
+> > in combination with a Marvell mv88e6085 switch, was found to
+> > persistently assert TX-fault, resulting in the module being disabled.
+> 
+> Hello! I have some other GPON SFP modules with this issue... which has
+> inverted TX-fault signal.
 
-ftrace_allocate_ftrace_ops()
-{
-	...
-	ops = kzalloc(sizeof(*ops), GFP_KERNEL);
-        if (!ops)
-                return -ENOMEM;
-	...
-}
+Anyway, I'm planning to send patches for fixing other GPON modules...
 
-ftrace_free_ftrace_ops()
-{
-        kfree(tr->ops);
-        tr->ops = NULL;
-}
-
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
----
- kernel/trace/trace_functions.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/trace/trace_functions.c b/kernel/trace/trace_functions.c
-index 9f1bfbe105e8..d186d6101695 100644
---- a/kernel/trace/trace_functions.c
-+++ b/kernel/trace/trace_functions.c
-@@ -73,6 +73,9 @@ int ftrace_allocate_ftrace_ops(struct trace_array *tr)
- 
- void ftrace_free_ftrace_ops(struct trace_array *tr)
- {
-+	if (!tr->ops)
-+		return;
-+
- 	kfree(tr->ops);
- 	tr->ops = NULL;
- }
--- 
-2.25.1
-
+> > This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
+> > module to function.
+> 
+> I think that you should rather invert TX-fault signal, instead of
+> masking it.
+> 
+> > Change from v1: removal of erroneous return statment (Andrew Lunn)
+> > 
+> > Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+> > ---
+> >  drivers/net/phy/sfp.c | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+> > index 4dfb79807823..9a5d5a10560f 100644
+> > --- a/drivers/net/phy/sfp.c
+> > +++ b/drivers/net/phy/sfp.c
+> > @@ -250,6 +250,7 @@ struct sfp {
+> >  	struct sfp_eeprom_id id;
+> >  	unsigned int module_power_mW;
+> >  	unsigned int module_t_start_up;
+> > +	bool tx_fault_ignore;
+> >  
+> >  #if IS_ENABLED(CONFIG_HWMON)
+> >  	struct sfp_diag diag;
+> > @@ -1956,6 +1957,12 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
+> >  	else
+> >  		sfp->module_t_start_up = T_START_UP;
+> >  
+> > +	if (!memcmp(id.base.vendor_name, "HUAWEI          ", 16) &&
+> > +	    !memcmp(id.base.vendor_pn, "MA5671A         ", 16))
+> > +		sfp->tx_fault_ignore = true;
+> > +	else
+> > +		sfp->tx_fault_ignore = false;
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > @@ -2409,7 +2416,10 @@ static void sfp_check_state(struct sfp *sfp)
+> >  	mutex_lock(&sfp->st_mutex);
+> >  	state = sfp_get_state(sfp);
+> >  	changed = state ^ sfp->state;
+> > -	changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
+> > +	if (sfp->tx_fault_ignore)
+> > +		changed &= SFP_F_PRESENT | SFP_F_LOS;
+> > +	else
+> > +		changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
+> >  
+> >  	for (i = 0; i < GPIO_MAX; i++)
+> >  		if (changed & BIT(i))
+> > -- 
+> > 2.27.0
+> > 

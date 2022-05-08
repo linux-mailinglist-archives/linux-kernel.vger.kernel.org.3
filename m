@@ -2,296 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F9351EF79
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A783751EF86
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 21:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbiEHTF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 15:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S235199AbiEHTGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 15:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238341AbiEHSB1 (ORCPT
+        with ESMTP id S1344561AbiEHSE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 14:01:27 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B8B558C
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 10:57:35 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n18so11928808plg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 10:57:35 -0700 (PDT)
+        Sun, 8 May 2022 14:04:28 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA1FE3
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 11:00:37 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ba17so13905980edb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5Yha8YXFmSTCwJOACS5ryysDBCF5HLsNhYhG1Pfc1Jk=;
-        b=PuA6skDHu+1odQ73rVsqYOfaFpILwYOxgSXjfUFkinJcZ9JsQCGqrKrbEtl5dWXxD1
-         aU1jxDG2wrusCvQgo4AvvwB3tg+I63Jeag/fo8aNvN+XPeXnU/FrYq1GnP/ZJyj54GkA
-         7PqFslEW352FBd463fvn6IB3D7qsfHGZ9GFV8=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tcaHO+HqpMQv3+DLpIAhYp2C5r7z6Gel9BfrGJWEBrQ=;
+        b=IlM4lhJlJ2d07BNY1D8txDkP1oAW3YcNeZ93q2oLYgogCvo5k208E0ZRRp7wmn5zzn
+         uzTzmLz4eArNamcc6FiQQahescDgwY/UeBnXOlNABtKk6MEX/oddgfacXW29CPBwl2Nd
+         RKZah5ByfhTGR6tJynRj1ekttHDm8vScstcIA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5Yha8YXFmSTCwJOACS5ryysDBCF5HLsNhYhG1Pfc1Jk=;
-        b=N47XwHf5GZcvUhW8gVV0oxFwz2YbtEzgw/RWNsPvkAf4C92QVt1U2P046tOaf1uv/q
-         +218mFmN1e/804d9Q+GEZaD/c1lUKH50WeP1HHXeMXjtN9B9RmG6S4CXQgCpySTZz/xO
-         OpVdaJGbDY2shX7WcZDAHo/DM7dOw3BOXXfeoQjhH8hYNy2IbYzEf2rh3pgtZwDsGNTY
-         4pI66q9+V8cdtPKAd+OgaVg8ZaqCJOFpTDkyCeyYkT7oeYJaPMQVuycR+o73VDhvTqo8
-         Du0D9WkY/NGL9wGTdRLkCBtGBYT4leZfIW6h7lDwXl8D9PWU3j0CQWt37294829dgMug
-         VSPQ==
-X-Gm-Message-State: AOAM530aUPGrdICxTt33ZzWPRcl22Ny2BmkgAqDbvF+kfDW8YXGXCoRI
-        U0ZlaKD2kDLFTovk5x4eFEaFtg==
-X-Google-Smtp-Source: ABdhPJwFYxH9PXHkN+BXhWFaY5rn4lwyKLHVqKXGtzu72UqPAwEUVVY8R7D4oO3fum0fWvqyLTvQRQ==
-X-Received: by 2002:a17:902:768a:b0:159:71e:971e with SMTP id m10-20020a170902768a00b00159071e971emr12764810pll.163.1652032654667;
-        Sun, 08 May 2022 10:57:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s13-20020a056a00178d00b0050dc7628139sm7193031pfg.19.2022.05.08.10.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 10:57:34 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-hardening@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] big_keys: Use struct for internal payload
-Date:   Sun,  8 May 2022 10:57:31 -0700
-Message-Id: <20220508175732.2693426-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tcaHO+HqpMQv3+DLpIAhYp2C5r7z6Gel9BfrGJWEBrQ=;
+        b=Fa416WCZVyHMkod1r4QAKp6bNupdn5tcQPR/NI+gp0uJgkBe0SdWp7t2DhYT1oi2Ps
+         KzOFo5bu3LA1OqCMSQmWQraV4boz0Y//QGfQPST7ob8CNT04CehN4mx2a3ka0j+vevuq
+         2hZrUlVqF8UW8WS4ihSQQFSDV2BRtz8SKRFxlrYub+jrnCW7jedHQbMhmhVnjBju+S8j
+         RJgaWDoShpOflYK02/20qPtwOebXvYY/bwFaHg6v5m4uTJBYz3wR+sfh3KsM0Mk7wyB8
+         n5+mLe3aJ2jAzFqHQRVK+A2bXAltt0KnP5QcUfcN0FTEqOUGTW/0YURbvZXKKSymvDc3
+         2NHA==
+X-Gm-Message-State: AOAM531hKCycw/O9z+yH+yrfGUpLtGRtcpcBroUCa0mEgK5FuJM33POH
+        iYr1Wgqpmd2GzClPw32SnJ0avI6ID2SySGiT
+X-Google-Smtp-Source: ABdhPJxkwIFcMkQNm1jDtlp7H1rE4Cgj+6rMHnymX0Qc780ZJ+rNiW/R8AfiQhbVSgAMWQEN/phW1Q==
+X-Received: by 2002:a05:6402:17c7:b0:425:d52c:8907 with SMTP id s7-20020a05640217c700b00425d52c8907mr13532553edy.15.1652032835650;
+        Sun, 08 May 2022 11:00:35 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id ev6-20020a17090729c600b006f3ef214df6sm4224202ejc.92.2022.05.08.11.00.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 11:00:34 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id e24so16599195wrc.9
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 11:00:34 -0700 (PDT)
+X-Received: by 2002:adf:dfc8:0:b0:20a:d256:5b5c with SMTP id
+ q8-20020adfdfc8000000b0020ad2565b5cmr10724888wrn.97.1652032834122; Sun, 08
+ May 2022 11:00:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7559; h=from:subject; bh=6yjZF1eeLJcME/kQGtC/QjTDIfuxcqry8vsXZwhINiE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBieASLSW30lM+bd7UdG/gtSXstFwsIeNBUKhUEOq+n Yw4ND3yJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYngEiwAKCRCJcvTf3G3AJvrvEA Cg9QzTwJdZQo0zDz63uUNZEEopn69q72fsIrZvaRyJfD3+yA5xRDms/q16p5P5FX8sPzy/dc0tE/RB flTF5etTCALZQr9FDB1vu9uUxy89Ht6d0+gQmlIGiZ+6gNfh2p1eO14fmzGGAObOy0ZRTN7sznqsKv uirIMSYLeCtUKh6IDJZPg2JIshxtRwIHWjCZu4GCItEh20pyaGSFqeh/uD6HaHmgKFbmLzOvqLknvu Rx1kREDqySfrIPmqgALTWQwUZiir6RFwRinvE3lM3ZvHZpHqp+LYb4uQ/ubkTh2FE/IcIggtfnNe2W unuqNSqIhpbJQjEQ/Ay84wzzA/S+FQzl83kEeQ+ebMWjnb6+7ydcRcxtcwDXAhpmNQeGih1O/mGmeq Kab98RDRJTnKvt9oTgTuC2bhHI/PB36emxBl0Na2mwF+OdgjpNUt7kMRmf1vLIUKwlVhh+ZRdbA6QK Mgo6B/8skuig0rnEj5RHl/VNs8XCYcj9jXS7YgoG+FqHXtYNlIykecA0o0XVRvRoqyMa/keGLp8eH3 FYCkJk/T+VZFOlXWxVvYAtDzunDVBJSgU0R4/w+zxejNAre9RgBFA+ERYM7wUl6PhFaCLf0u5YOlxs YYrASekELKgaSOr8g67vEn0Ykpi4FHHM6oW95Yg433DDSeX6fvDP5Mbvti+w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <165201148069.536527.1960632033331546251.tglx@xen13>
+In-Reply-To: <165201148069.536527.1960632033331546251.tglx@xen13>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 8 May 2022 11:00:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+Message-ID: <CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com>
+Subject: Re: [GIT pull] core/urgent for v5.18-rc6
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The randstruct GCC plugin gets upset when it sees struct path (which is
-randomized) being assigned from a "void *" (which it cannot type-check).
+On Sun, May 8, 2022 at 5:05 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> A single bugfix for the PASID management code, which freed the PASID too
+> early. The PASID needs to be tied to the mm lifetime, not to the address
+> space lifetime.
 
-There's no need for these casts, as the entire internal payload use is
-following a normal struct layout. Convert the enum-based void * offset
-dereferencing to the new big_key_payload struct. No meaningful machine
-code changes result after this change, and source readability is improved.
+So I have to once more complain about the -tip tree "Link:" usage.
 
-Drop the randstruct exception now that there is no "confusing" cross-type
-assignment.
+Again, the commit has a link to the patch *submission*, which is
+almost entirely useless. There's no link to the actual problem the
+patch fixes.
 
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-hardening@vger.kernel.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- scripts/gcc-plugins/randomize_layout_plugin.c |  2 -
- security/keys/big_key.c                       | 64 ++++++++++---------
- 2 files changed, 34 insertions(+), 32 deletions(-)
+It does have a "Fixes:" link, and it has an "explanation", but the
+explanation doesn't actually make much sense to me.
 
-diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
-index c2ec81b68505..727512eebb3b 100644
---- a/scripts/gcc-plugins/randomize_layout_plugin.c
-+++ b/scripts/gcc-plugins/randomize_layout_plugin.c
-@@ -50,8 +50,6 @@ static const struct whitelist_entry whitelist[] = {
- 	{ "drivers/net/ethernet/sun/niu.c", "page", "address_space" },
- 	/* unix_skb_parms via UNIXCB() buffer */
- 	{ "net/unix/af_unix.c", "unix_skb_parms", "char" },
--	/* big_key payload.data struct splashing */
--	{ "security/keys/big_key.c", "path", "void *" },
- 	{ }
- };
- 
-diff --git a/security/keys/big_key.c b/security/keys/big_key.c
-index d17e5f09eeb8..625869939099 100644
---- a/security/keys/big_key.c
-+++ b/security/keys/big_key.c
-@@ -20,12 +20,13 @@
- /*
-  * Layout of key payload words.
-  */
--enum {
--	big_key_data,
--	big_key_path,
--	big_key_path_2nd_part,
--	big_key_len,
-+struct big_key_payload {
-+	u8 *data;
-+	struct path path;
-+	size_t length;
- };
-+#define to_big_key_payload(payload)			\
-+	(struct big_key_payload *)((payload).data)
- 
- /*
-  * If the data is under this limit, there's no point creating a shm file to
-@@ -55,7 +56,7 @@ struct key_type key_type_big_key = {
-  */
- int big_key_preparse(struct key_preparsed_payload *prep)
- {
--	struct path *path = (struct path *)&prep->payload.data[big_key_path];
-+	struct big_key_payload *payload = to_big_key_payload(prep->payload);
- 	struct file *file;
- 	u8 *buf, *enckey;
- 	ssize_t written;
-@@ -63,13 +64,15 @@ int big_key_preparse(struct key_preparsed_payload *prep)
- 	size_t enclen = datalen + CHACHA20POLY1305_AUTHTAG_SIZE;
- 	int ret;
- 
-+	BUILD_BUG_ON(sizeof(*payload) != sizeof(prep->payload.data));
-+
- 	if (datalen <= 0 || datalen > 1024 * 1024 || !prep->data)
- 		return -EINVAL;
- 
- 	/* Set an arbitrary quota */
- 	prep->quotalen = 16;
- 
--	prep->payload.data[big_key_len] = (void *)(unsigned long)datalen;
-+	payload->length = datalen;
- 
- 	if (datalen > BIG_KEY_FILE_THRESHOLD) {
- 		/* Create a shmem file to store the data in.  This will permit the data
-@@ -117,9 +120,9 @@ int big_key_preparse(struct key_preparsed_payload *prep)
- 		/* Pin the mount and dentry to the key so that we can open it again
- 		 * later
- 		 */
--		prep->payload.data[big_key_data] = enckey;
--		*path = file->f_path;
--		path_get(path);
-+		payload->data = enckey;
-+		payload->path = file->f_path;
-+		path_get(&payload->path);
- 		fput(file);
- 		kvfree_sensitive(buf, enclen);
- 	} else {
-@@ -129,7 +132,7 @@ int big_key_preparse(struct key_preparsed_payload *prep)
- 		if (!data)
- 			return -ENOMEM;
- 
--		prep->payload.data[big_key_data] = data;
-+		payload->data = data;
- 		memcpy(data, prep->data, prep->datalen);
- 	}
- 	return 0;
-@@ -148,12 +151,14 @@ int big_key_preparse(struct key_preparsed_payload *prep)
-  */
- void big_key_free_preparse(struct key_preparsed_payload *prep)
- {
-+	struct big_key_payload *payload = to_big_key_payload(prep->payload);
-+
- 	if (prep->datalen > BIG_KEY_FILE_THRESHOLD) {
--		struct path *path = (struct path *)&prep->payload.data[big_key_path];
-+		struct path *path = &payload->path;
- 
- 		path_put(path);
- 	}
--	kfree_sensitive(prep->payload.data[big_key_data]);
-+	kfree_sensitive(payload->data);
- }
- 
- /*
-@@ -162,13 +167,12 @@ void big_key_free_preparse(struct key_preparsed_payload *prep)
-  */
- void big_key_revoke(struct key *key)
- {
--	struct path *path = (struct path *)&key->payload.data[big_key_path];
-+	struct big_key_payload *payload = to_big_key_payload(key->payload);
- 
- 	/* clear the quota */
- 	key_payload_reserve(key, 0);
--	if (key_is_positive(key) &&
--	    (size_t)key->payload.data[big_key_len] > BIG_KEY_FILE_THRESHOLD)
--		vfs_truncate(path, 0);
-+	if (key_is_positive(key) && payload->length > BIG_KEY_FILE_THRESHOLD)
-+		vfs_truncate(&payload->path, 0);
- }
- 
- /*
-@@ -176,17 +180,17 @@ void big_key_revoke(struct key *key)
-  */
- void big_key_destroy(struct key *key)
- {
--	size_t datalen = (size_t)key->payload.data[big_key_len];
-+	struct big_key_payload *payload = to_big_key_payload(key->payload);
- 
--	if (datalen > BIG_KEY_FILE_THRESHOLD) {
--		struct path *path = (struct path *)&key->payload.data[big_key_path];
-+	if (payload->length > BIG_KEY_FILE_THRESHOLD) {
-+		struct path *path = &payload->path;
- 
- 		path_put(path);
- 		path->mnt = NULL;
- 		path->dentry = NULL;
- 	}
--	kfree_sensitive(key->payload.data[big_key_data]);
--	key->payload.data[big_key_data] = NULL;
-+	kfree_sensitive(payload->data);
-+	payload->data = NULL;
- }
- 
- /*
-@@ -211,14 +215,14 @@ int big_key_update(struct key *key, struct key_preparsed_payload *prep)
-  */
- void big_key_describe(const struct key *key, struct seq_file *m)
- {
--	size_t datalen = (size_t)key->payload.data[big_key_len];
-+	struct big_key_payload *payload = to_big_key_payload(key->payload);
- 
- 	seq_puts(m, key->description);
- 
- 	if (key_is_positive(key))
- 		seq_printf(m, ": %zu [%s]",
--			   datalen,
--			   datalen > BIG_KEY_FILE_THRESHOLD ? "file" : "buff");
-+			   payload->length,
-+			   payload->length > BIG_KEY_FILE_THRESHOLD ? "file" : "buff");
- }
- 
- /*
-@@ -227,16 +231,16 @@ void big_key_describe(const struct key *key, struct seq_file *m)
-  */
- long big_key_read(const struct key *key, char *buffer, size_t buflen)
- {
--	size_t datalen = (size_t)key->payload.data[big_key_len];
-+	struct big_key_payload *payload = to_big_key_payload(key->payload);
-+	size_t datalen = payload->length;
- 	long ret;
- 
- 	if (!buffer || buflen < datalen)
- 		return datalen;
- 
- 	if (datalen > BIG_KEY_FILE_THRESHOLD) {
--		struct path *path = (struct path *)&key->payload.data[big_key_path];
- 		struct file *file;
--		u8 *buf, *enckey = (u8 *)key->payload.data[big_key_data];
-+		u8 *buf, *enckey = payload->data;
- 		size_t enclen = datalen + CHACHA20POLY1305_AUTHTAG_SIZE;
- 		loff_t pos = 0;
- 
-@@ -244,7 +248,7 @@ long big_key_read(const struct key *key, char *buffer, size_t buflen)
- 		if (!buf)
- 			return -ENOMEM;
- 
--		file = dentry_open(path, O_RDONLY, current_cred());
-+		file = dentry_open(&payload->path, O_RDONLY, current_cred());
- 		if (IS_ERR(file)) {
- 			ret = PTR_ERR(file);
- 			goto error;
-@@ -274,7 +278,7 @@ long big_key_read(const struct key *key, char *buffer, size_t buflen)
- 		kvfree_sensitive(buf, enclen);
- 	} else {
- 		ret = datalen;
--		memcpy(buffer, key->payload.data[big_key_data], datalen);
-+		memcpy(buffer, payload->data, datalen);
- 	}
- 
- 	return ret;
--- 
-2.32.0
+The *sensible* thing for an iommu driver to do is to just do a
+mmget/mmput, and then the whole "drop PASIX on last mmput() (ie in
+__mmput)" makes lots of sense.
 
+The commit claims that's not what the iommu drivers do, but it's
+really hard to tell *what* it is that does a mmgrab. It just says
+
+  "the IOMMU driver holds a reference on the mm itself, not the address space"
+
+but then I tried to see where such references are held, and I couldn't find it.
+
+*Must* users do mmget/mmput, and the commit even says that's the
+logical thing to do. Apparently something that the iommu code relies
+on does the mmgrab/mmdrop thing, but I really would have liked to know
+what that is.
+
+Yes, "mmgab" is the right thing to do if all you want is the "struct
+mm_struct", and don't actually care about the page tables themselves,
+and don't want to have the refcount keep page tables alive. But you'd
+think the iommu code really does want the page tables.
+
+So it would have been really nice to have an explanation for what it
+was that did the mmgrab, especially since the commit itself makes it
+clear that the logical thing to do seems to be just mmget/put. No?
+
+I _really_ wish the -tip tree had more links to the actual problem
+reports and explanations, rather than links to the patch submission.
+
+One has the actual issue. The other just has the information that is
+already in the commit, and the "Link:" adds almost no actual value
+(yes, yes, you can see late "Acked-by" etc, but that really isn't
+worth it).
+
+I've pulled this, because I definitely believe the issue is real. I
+just wish I could see _what_ the issue was.
+
+Put another way: I can see that
+
+    Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+
+in the commit, but I don't have a clue what the actual report was, and
+there really isn't enough information in the commit itself, except for
+a fairly handwavy "Device drivers might, for instance, still need to
+flush operations.."
+
+I don't want to know what device drivers _might_ do. I would want to
+have an actual pointer to what they do and where.
+
+I suspect it's related to mmu_notifiers or something, but I really
+would have liked a more exact "this is where things go wrong".
+
+I also *suspect* that this is all about that _loong_ thread (picking
+one email almost at random) here:
+
+   https://lore.kernel.org/all/a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com/
+
+but if so, the confusion I see in that thread is even more reason to
+have more background for what is going on.
+
+Anyway, this is merged in my tree, but I'm having trouble following
+the logic, which is why I'm writing this long email to complain about
+lack of context.
+
+               Linus

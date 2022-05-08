@@ -2,100 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6B451EC71
-	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B53D51EC6E
+	for <lists+linux-kernel@lfdr.de>; Sun,  8 May 2022 11:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbiEHJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 05:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S232191AbiEHJXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 05:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiEHJXg (ORCPT
+        with ESMTP id S230000AbiEHJXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 05:23:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41EAE015
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 02:19:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C5061011
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 09:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73EBC385AE;
-        Sun,  8 May 2022 09:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652001585;
-        bh=nYtAmgzHu/LotnUz+1WFF6FvtCStuVXy90EhlpoDZxw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eSciOgtnBiaUVF/dTyh2+OYkvO0AohnZVKPZOe2iTZzr8m217bD8qDXthQ25eLig5
-         V3F4gumj7yjO1Jie7seFasyFU7JyjJZoz06FQ8oXhPDb3bwjTWYkmGYaOOPqOMbtrb
-         JLJ4E6iSGlwdgtJdZSaWnpvvzIczAQqs1Me88VNKUs9tFghbhpVEaDyibwdKSUG9MT
-         isFMfgHdVxgRm+gPv4vIUBeBfw3cKML5Uwe+EP+CAIl7jnA2Z25+nvQgDY9OUKlDPX
-         2PIYBCsFbWm+Xdm6U8H/MVp9LwIB2omnCoD+DIDq1zn6/ua/AQvgdQ+RxSxvqooQEz
-         F2fSS3lJalWVQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-Cc:     sj@kernel.org, skhan@linuxfoundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon : Add documentation for Enum value
-Date:   Sun,  8 May 2022 09:19:43 +0000
-Message-Id: <20220508091943.47042-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220508073316.141401-1-gautammenghani201@gmail.com>
-References: 
+        Sun, 8 May 2022 05:23:03 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20191E015;
+        Sun,  8 May 2022 02:19:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCZtzMG_1652001541;
+Received: from 30.15.195.77(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCZtzMG_1652001541)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 08 May 2022 17:19:03 +0800
+Message-ID: <1fad03a6-98cf-1b0e-e012-82dc6466c7d2@linux.alibaba.com>
+Date:   Sun, 8 May 2022 17:19:43 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
+ <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
+ <21b11024-e893-8c11-9b98-ab1d13413b61@linux.alibaba.com>
+ <85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com>
+ <e8b56f7d-ad95-7938-21a5-55caedbbb354@linux.alibaba.com>
+In-Reply-To: <e8b56f7d-ad95-7938-21a5-55caedbbb354@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gautam,
 
 
-On Sun, 8 May 2022 13:03:16 +0530 Gautam Menghani <gautammenghani201@gmail.com> wrote:
-
-> Fix the warning - "Enum value 'NR_DAMON_OPS' not described in 
-> enum 'damon_ops_id'" generated by the command "make pdfdocs"
+On 5/7/2022 10:33 AM, Baolin Wang wrote:
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
-> Changes in v3:
-> - Add the subsystem in subject.
-> - Modify the description for NR_DAMON_OPS field.
-
-Thank you for making the changes.
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
 > 
-> Changes in v2:
-> - Fix checkpatch warning of 75 characters per line
-> - Fix email mismatch in from and signed by field
+> On 5/7/2022 1:56 AM, Mike Kravetz wrote:
+>> On 5/5/22 20:39, Baolin Wang wrote:
+>>>
+>>> On 5/6/2022 7:53 AM, Mike Kravetz wrote:
+>>>> On 4/29/22 01:14, Baolin Wang wrote:
+>>>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>>>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>>>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>>>>> size specified.
+>>>> <snip>
+>>>>> diff --git a/mm/rmap.c b/mm/rmap.c
+>>>>> index 6fdd198..7cf2408 100644
+>>>>> --- a/mm/rmap.c
+>>>>> +++ b/mm/rmap.c
+>>>>> @@ -1924,13 +1924,15 @@ static bool try_to_migrate_one(struct folio 
+>>>>> *folio, struct vm_area_struct *vma,
+>>>>>                        break;
+>>>>>                    }
+>>>>>                }
+>>>>> +
+>>>>> +            /* Nuke the hugetlb page table entry */
+>>>>> +            pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>>>>>            } else {
+>>>>>                flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>>>>> +            /* Nuke the page table entry. */
+>>>>> +            pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>>>>>            }
+>>>>
+>>>> On arm64 with CONT-PTE/PMD the returned pteval will have dirty or 
+>>>> young set
+>>>> if ANY of the PTE/PMDs had dirty or young set.
+>>>
+>>> Right.
+>>>
+>>>>
+>>>>> -        /* Nuke the page table entry. */
+>>>>> -        pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>>>>> -
+>>>>>            /* Set the dirty flag on the folio now the pte is gone. */
+>>>>>            if (pte_dirty(pteval))
+>>>>>                folio_mark_dirty(folio);
+>>>>> @@ -2015,7 +2017,10 @@ static bool try_to_migrate_one(struct folio 
+>>>>> *folio, struct vm_area_struct *vma,
+>>>>>                pte_t swp_pte;
+>>>>>                  if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+>>>>> -                set_pte_at(mm, address, pvmw.pte, pteval);
+>>>>> +                if (folio_test_hugetlb(folio))
+>>>>> +                    set_huge_pte_at(mm, address, pvmw.pte, pteval);
+>>>>
+>>>> And, we will use that pteval for ALL the PTE/PMDs here.  So, we 
+>>>> would set
+>>>> the dirty or young bit in ALL PTE/PMDs.
+>>>>
+>>>> Could that cause any issues?  May be more of a question for the 
+>>>> arm64 people.
+>>>
+>>> I don't think this will cause any issues. Since the hugetlb can not 
+>>> be split, and we should not lose the the dirty or young state if any 
+>>> subpages were set. Meanwhile we already did like this in hugetlb.c:
+>>>
+>>> pte = huge_ptep_get_and_clear(mm, address, ptep);
+>>> tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
+>>> if (huge_pte_dirty(pte))
+>>>      set_page_dirty(page);
+>>>
+>>
+>> Agree that it 'should not' cause issues.  It just seems inconsistent.
+>> This is not a problem specifically with your patch, just the handling of
+>> CONT-PTE/PMD entries.
+>>
+>> There does not appear to be an arm64 specific version of huge_ptep_get()
+>> that takes CONT-PTE/PMD into account.  So, huge_ptep_get() would only
+>> return the one specific value.  It would not take into account the dirty
+>> or young bits of CONT-PTE/PMDs like your new version of
+>> huge_ptep_get_and_clear.  Is that correct?  Or, am I missing something.
 > 
->  include/linux/damon.h | 1 +
->  1 file changed, 1 insertion(+)
+> Yes, you are right.
 > 
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index f23cbfa4248d..b972a7a3b6f0 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -262,6 +262,7 @@ struct damos {
->   *
->   * @DAMON_OPS_VADDR:	Monitoring operations for virtual address spaces
->   * @DAMON_OPS_PADDR:	Monitoring operations for the physical address space
-> + * @NR_DAMON_OPS:	Number of monitoring operations implementations
->   */
->  enum damon_ops_id {
->  	DAMON_OPS_VADDR,
-> -- 
-> 2.25.1
+>>
+>> If I am correct, then code like the following may not work:
+>>
+>> static int gather_hugetlb_stats(pte_t *pte, unsigned long hmask,
+>>                  unsigned long addr, unsigned long end, struct mm_walk 
+>> *walk)
+>> {
+>>          pte_t huge_pte = huge_ptep_get(pte);
+>>          struct numa_maps *md;
+>>          struct page *page;
+>>
+>>          if (!pte_present(huge_pte))
+>>                  return 0;
+>>
+>>          page = pte_page(huge_pte);
+>>
+>>          md = walk->private;
+>>          gather_stats(page, md, pte_dirty(huge_pte), 1);
+>>          return 0;
+>> }
 > 
+> Right, this is inconsistent with current huge_ptep_get() interface like 
+> you said. So I think we can define an ARCH-specific huge_ptep_get() 
+> interface for arm64, and some sample code like below. How do you think?
+
+After some investigation, I send out a RFC patch set[1] to address this 
+issue. We can talk about this issue in that thread. Thanks.
+
+[1] 
+https://lore.kernel.org/all/cover.1651998586.git.baolin.wang@linux.alibaba.com/

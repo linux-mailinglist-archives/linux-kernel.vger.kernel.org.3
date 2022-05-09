@@ -2,131 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94CA51F375
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4909851F385
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiEIE1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        id S234091AbiEIEdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiEIEZi (ORCPT
+        with ESMTP id S233684AbiEIEan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:25:38 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8A0D5CC4
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:21:44 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ebf4b91212so131045507b3.8
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6o0Uik995yzG1w7JVfse+kra98IPXYjJG5F2pF4TKic=;
-        b=ibOLlh6RmQZhKqv5XJlMc42zd3sWvBubvis7myJG8no9Bt38MZNP0xbMqAG1gF2ezX
-         psJSukaKCqEVHp+UYj5aXqiSfOY5XMiX/fLWC02wqgRI5Uy6olX273yoYu9pAPfeQbzw
-         AxmG4bh5uzuEhLqb+EzlH/Hd0XNWy0CO1afEhbVbLDgsQzJYSN7vKxjkoCjj9b/25AgH
-         iUwPCzN7kaWrP/xrB90CtwgjBKwoyV+GWskNsX1TveNBrwfvGUEq0/Gf4wAcCkkBmgi0
-         38Rtl7xMSgpDcDNkgtcqoxJRnKMFbowcI+2TsF+8zs7BIGyTOGD0OU3hfvEyOAJVLs7O
-         l42g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6o0Uik995yzG1w7JVfse+kra98IPXYjJG5F2pF4TKic=;
-        b=oF/O/+xOADqZwFAsxyInf1TsIbeadobHEJfhrS9sxRUaXmZSG6qt65/nB6GqiC1MXl
-         +eZ4OlLZ/kimMogpUhSDQdWJ3KM2b2k9yqfV4r2CIjFGIbFeDrz9HE1Vj5obYwG8cnw2
-         TjOnq8CAfsbdZMxrhwe30wODOV0xIS5gtJSndK83MC2a0rtOHHSkhXvDtfKbndJEL30k
-         fT3cP7Y2t3cJDTDR56P8WynAJHTXf5WIV9YGhVr+NsH1cHYe9EYvOM7eMYXN1Zb0liKc
-         9WONoFw/UNINbh9+7PtZM7g/F3ptT3PqC6i46MkHulxx19/Zf0SuODSHapQemCYXbAcy
-         HfWA==
-X-Gm-Message-State: AOAM532auXGDYWhtJpo5CuRXNGym4lSLpbMvffMJlZBsxSxG4/OHfzwa
-        qErigM6dkcXFzZ3q5qf9RepXH4MTQCk/sGeQ7+jCxw==
-X-Google-Smtp-Source: ABdhPJySu0XRvPOatCo+tSO/VW8eZMm17WuYTUg2UQ1vOofroZ5K5T8cW9N/OFNOyWr+XrYq2AJaaEu7OFtCGaZODvI=
-X-Received: by 2002:a81:7b05:0:b0:2f4:e45a:b06e with SMTP id
- w5-20020a817b05000000b002f4e45ab06emr12223967ywc.458.1652070103623; Sun, 08
- May 2022 21:21:43 -0700 (PDT)
+        Mon, 9 May 2022 00:30:43 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9731059F4;
+        Sun,  8 May 2022 21:26:48 -0700 (PDT)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2494PhcJ014643;
+        Mon, 9 May 2022 13:25:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2494PhcJ014643
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652070344;
+        bh=DM2Qvk/KSJwggZQc+f9r/EEPApKQ0miaQHjxBSW8IV8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o6XYg2bwQfHrSq3bmQnG8Jpcnk1UTD3FhC5a1TUoXExRLyvujSGeOMFR3dfEqtIxx
+         jZIb9XBWPLHupK1YnU+oibAr0NtF7JrU/xq9ge0bTvQxiXAsf5FSwZf/aBLkzokBSh
+         4pYnoQJrhruoSCAZW5vQpqOKLKRG+TD+bP/cc+wlRqd1lkmZ6G/jPPJMKc6+GeRK0p
+         yWn5WRjoA7b1nUAeCM1kGbAv1dll+XvcerBv59vD5767bpInjYSc63X4ghyeOgNpIk
+         O+3kAqdTjgld9pwF/oKvzQSUpg5noc20wbQuZ1RetnGg5M/PlDZ6Y1JjaznJKcydLK
+         Vxs0cbmmsKiPw==
+X-Nifty-SrcIP: [209.85.216.52]
+Received: by mail-pj1-f52.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15924784pjb.5;
+        Sun, 08 May 2022 21:25:43 -0700 (PDT)
+X-Gm-Message-State: AOAM532XfFh1WmMfSMp+sY5k4d+qirDaMgiWiE+DRPH+6AQNQno3rwId
+        l8o+QZ4Kv6sNE/ZjyX4E+IjGA39jHZfvBylT3uE=
+X-Google-Smtp-Source: ABdhPJz+EyiLX7j6uh3WzqWMOrMkF5hlrWDy6od+IPDFGCNr8NC4vk92cU3B82hmpcsJDxTmnQ5GEcRpm1eC9pqP+d0=
+X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
+ q17-20020a170902789100b0015ecae97620mr14626650pll.136.1652070342778; Sun, 08
+ May 2022 21:25:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220425132723.34824-1-linmiaohe@huawei.com> <20220425132723.34824-4-linmiaohe@huawei.com>
- <YmvNqWhC0uBwJ2yF@FVFYT0MHHV2J.usts.net> <09ccdbac-c267-15de-0d81-57e211dea6d2@huawei.com>
-In-Reply-To: <09ccdbac-c267-15de-0d81-57e211dea6d2@huawei.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 9 May 2022 12:21:06 +0800
-Message-ID: <CAMZfGtVeFj_qh6e7DzNnN7jdXwXhBwqxPCwnq26V2ziHDxTiFA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] mm/migration: return errno when isolate_huge_page failed
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>, Huang Ying <ying.huang@intel.com>,
-        Christoph Hellwig <hch@lst.de>, dhowells@redhat.com,
-        Christoph Lameter <cl@linux.com>,
-        David Hildenbrand <david@redhat.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 9 May 2022 13:24:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
+Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 11:24 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On 2022/4/29 19:36, Muchun Song wrote:
-> > On Mon, Apr 25, 2022 at 09:27:22PM +0800, Miaohe Lin wrote:
-> >> We might fail to isolate huge page due to e.g. the page is under migration
-> >> which cleared HPageMigratable. So we should return -EBUSY in this case
-> >> rather than always return 1 which could confuse the user. Also we make
-> >> the prototype of isolate_huge_page consistent with isolate_lru_page to
-> >> improve the readability.
-> >>
-> >> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
-> >> Suggested-by: Huang Ying <ying.huang@intel.com>
-> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> >> ---
-> >>  include/linux/hugetlb.h |  6 +++---
-> >>  mm/gup.c                |  2 +-
-> >>  mm/hugetlb.c            | 11 +++++------
-> >>  mm/memory-failure.c     |  2 +-
-> >>  mm/mempolicy.c          |  2 +-
-> >>  mm/migrate.c            |  5 +++--
-> >>  6 files changed, 14 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> >> index 04f0186b089b..306d6ef3fa22 100644
-> >> --- a/include/linux/hugetlb.h
-> >> +++ b/include/linux/hugetlb.h
-> >> @@ -170,7 +170,7 @@ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
-> >>                                              vm_flags_t vm_flags);
-> >>  long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
-> >>                                              long freed);
-> >> -bool isolate_huge_page(struct page *page, struct list_head *list);
-> >> +int isolate_huge_page(struct page *page, struct list_head *list);
-> >>  int get_hwpoison_huge_page(struct page *page, bool *hugetlb);
-> >>  int get_huge_page_for_hwpoison(unsigned long pfn, int flags);
-> >>  void putback_active_hugepage(struct page *page);
-> >> @@ -376,9 +376,9 @@ static inline pte_t *huge_pte_offset(struct mm_struct *mm, unsigned long addr,
-> >>      return NULL;
-> >>  }
-> >>
-> >> -static inline bool isolate_huge_page(struct page *page, struct list_head *list)
-> >> +static inline int isolate_huge_page(struct page *page, struct list_head *list)
-> >
-> > Since you already touched all the call sites, how about renaming this
-> > to hugetlb_isolate()? I've always felt that huge_page is not a
-> > straightforward and clear name since we also have another type of
-> > huge page (THP).  I think hugetlb is more specific.
-> >
+> This is the third batch of cleanups in this development cycle.
 >
-> Sorry for late respond. This suggestion looks good to me. But is isolate_hugetlb more suitable?
-> This could make it more consistent with isolate_lru_page? What do you think?
+> Major changes in v4:
+>  - Move static EXPORT_SYMBOL check to a script
+>  - Some refactoring
 >
+> Major changes in v3:
+>
+>  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
+>
+> Major changes in v2:
+>
+>  - V1 did not work with CONFIG_MODULE_REL_CRCS.
+>    I fixed this for v2.
+>
+>  - Reflect some review comments in v1
+>
+>  - Refactor the code more
+>
+>  - Avoid too long argument error
 
-There is also a function named folio_isolate_lru(). My initial consideration was
-making it consistent with folio_isolate_lru(). isolate_hugetlb looks good to me
-as well.
+This series is available at
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+lto-cleanup-v4
 
-Thanks.
+
+
+
+>
+>
+> Masahiro Yamada (14):
+>   modpost: remove left-over cross_compile declaration
+>   modpost: change the license of EXPORT_SYMBOL to bool type
+>   modpost: split the section mismatch checks into section-check.c
+>   modpost: add sym_find_with_module() helper
+>   modpost: extract symbol versions from *.cmd files
+>   kbuild: link symbol CRCs at final link, removing
+>     CONFIG_MODULE_REL_CRCS
+>   kbuild: stop merging *.symversions
+>   genksyms: adjust the output format to modpost
+>   kbuild: do not create *.prelink.o for Clang LTO or IBT
+>   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+>   kbuild: make built-in.a rule robust against too long argument error
+>   kbuild: make *.mod rule robust against too long argument error
+>   kbuild: add cmd_and_savecmd macro
+>   kbuild: rebuild multi-object modules when objtool is updated
+>
+>  arch/powerpc/Kconfig            |    1 -
+>  arch/s390/Kconfig               |    1 -
+>  arch/um/Kconfig                 |    1 -
+>  include/asm-generic/export.h    |   22 +-
+>  include/linux/export-internal.h |   16 +
+>  include/linux/export.h          |   30 +-
+>  init/Kconfig                    |    4 -
+>  kernel/module.c                 |   10 +-
+>  scripts/Kbuild.include          |   10 +-
+>  scripts/Makefile.build          |  134 +--
+>  scripts/Makefile.lib            |    7 -
+>  scripts/Makefile.modfinal       |    5 +-
+>  scripts/Makefile.modpost        |    9 +-
+>  scripts/check-local-export      |   48 +
+>  scripts/genksyms/genksyms.c     |   18 +-
+>  scripts/link-vmlinux.sh         |   33 +-
+>  scripts/mod/Makefile            |    2 +-
+>  scripts/mod/modpost.c           | 1499 ++++---------------------------
+>  scripts/mod/modpost.h           |   35 +-
+>  scripts/mod/section-check.c     | 1222 +++++++++++++++++++++++++
+>  20 files changed, 1551 insertions(+), 1556 deletions(-)
+>  create mode 100644 include/linux/export-internal.h
+>  create mode 100755 scripts/check-local-export
+>  create mode 100644 scripts/mod/section-check.c
+>
+> --
+> 2.32.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20220508190631.2386038-1-masahiroy%40kernel.org.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,101 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800935205E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253D95205E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiEIUeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 16:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S229486AbiEIUed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 16:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiEIUeA (ORCPT
+        with ESMTP id S229655AbiEIUeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 16:34:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D662D290C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 13:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652127838; x=1683663838;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Af51gOxhxQLsVM2gLNKJOPeUadLNAgQ9IMJJ0mPaZuo=;
-  b=ThUyAz0W1wY63Jl+LIlBWOjPejZ54kBB0CqZAXW7bOOER1lu+RSCXnDr
-   6a0klNFIOcdgfzSRIOG9meaEkGQYdG+tJ4gZMrd4Po17sokn7s0tx5p8h
-   F9qSm0JNSAjmqPjicnJ/K53rqSaFrnMOzvsYY5q4zRMyxzSWqlqPrMww9
-   5N4m/tI2Gs142HFkaJvIsZa0tiBrOrl5KplroC+9ZP0/BYooARln07WD7
-   eyDCvJKFIYnmtRw17qnBKUiZdFTlrWnp0OH3TpoCSZI6s/ecr8khvUMN7
-   OMqVuOaCQlNsyPujjH9kmBGq6YWSqaUyQKiVDjqUYvjDwozhtFkPMw44B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269298939"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="269298939"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 13:23:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="565262061"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 May 2022 13:23:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no9vA-000Grp-29;
-        Mon, 09 May 2022 20:23:56 +0000
-Date:   Tue, 10 May 2022 04:23:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nishad Kamdar <nishadkamdar@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/staging/iio/resolver/ad2s1210.c:702:34: warning:
- 'ad2s1210_of_match' defined but not used
-Message-ID: <202205100411.pERg5Z1r-lkp@intel.com>
+        Mon, 9 May 2022 16:34:03 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F362D2930;
+        Mon,  9 May 2022 13:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1652127863; x=1683663863;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cbosptKrbMIe8k/Gv5F/V00Xlc9whGQqaQE8iFl+sCE=;
+  b=PdH5rjO+0Ys9wnB4tOQbrkXMxvKiUs/aDz17n7cW0eliuNgXVcPvvrw6
+   TIxyEwDu2iLACe4d+Z//HU4uHsaBAqZAHDBa96Q7mGD9OaS2N8eqR5dxc
+   3UzykavUtgyaRrn1ZR89Layhzb6aAbUdtFI99+IIK7MqBfQL2wY2xlt1W
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.91,212,1647302400"; 
+   d="scan'208";a="193768546"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 09 May 2022 20:24:06 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id 39CADA2846;
+        Mon,  9 May 2022 20:24:05 +0000 (UTC)
+Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 9 May 2022 20:24:04 +0000
+Received: from u79c5a0a55de558.ant.amazon.com (10.43.160.180) by
+ EX13D20UWC001.ant.amazon.com (10.43.162.244) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 9 May 2022 20:24:02 +0000
+From:   Alexander Graf <graf@amazon.com>
+To:     <kvm@vger.kernel.org>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Matt Evans <matt@ozlabs.org>, <stable@vger.kernel.org>
+Subject: [PATCH] KVM: PPC: Book3S PR: Enable MSR_DR for switch_mmu_context()
+Date:   Mon, 9 May 2022 22:23:55 +0200
+Message-ID: <20220509202355.13985-1-graf@amazon.com>
+X-Mailer: git-send-email 2.28.0.394.ge197136389
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.180]
+X-ClientProxiedBy: EX13D01UWA002.ant.amazon.com (10.43.160.74) To
+ EX13D20UWC001.ant.amazon.com (10.43.162.244)
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9be9ed2612b5aedb52a2c240edb1630b6b743cb6
-commit: 382c7fce7005b55f0583cf5905758d2b8def803a staging: iio: ad2s1210: Add device tree table.
-date:   3 years, 6 months ago
-config: i386-randconfig-a002-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100411.pERg5Z1r-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=382c7fce7005b55f0583cf5905758d2b8def803a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 382c7fce7005b55f0583cf5905758d2b8def803a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/iio/resolver/
+Commit 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+moved the switch_mmu_context() to C. While in principle a good idea, it
+meant that the function now uses the stack. The stack is not accessible
+from real mode though.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So to keep calling the function, let's turn on MSR_DR while we call it.
+That way, all pointer references to the stack are handled virtually.
 
-All warnings (new ones prefixed by >>):
+Reported-by: Matt Evans <matt@ozlabs.org>
+Fixes: 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+Signed-off-by: Alexander Graf <graf@amazon.com>
+Cc: stable@vger.kernel.org
+---
+ arch/powerpc/kvm/book3s_32_sr.S | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
->> drivers/staging/iio/resolver/ad2s1210.c:702:34: warning: 'ad2s1210_of_match' defined but not used [-Wunused-const-variable=]
-     702 | static const struct of_device_id ad2s1210_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~
-
-
-vim +/ad2s1210_of_match +702 drivers/staging/iio/resolver/ad2s1210.c
-
-   701	
- > 702	static const struct of_device_id ad2s1210_of_match[] = {
-   703		{ .compatible = "adi,ad2s1210", },
-   704		{ }
-   705	};
-   706	MODULE_DEVICE_TABLE(of, ad2s1210_of_match);
-   707	
-
+diff --git a/arch/powerpc/kvm/book3s_32_sr.S b/arch/powerpc/kvm/book3s_32_sr.S
+index e3ab9df6cf19..bd4f798f7a46 100644
+--- a/arch/powerpc/kvm/book3s_32_sr.S
++++ b/arch/powerpc/kvm/book3s_32_sr.S
+@@ -122,11 +122,21 @@
+ 
+ 	/* 0x0 - 0xb */
+ 
+-	/* 'current->mm' needs to be in r4 */
+-	tophys(r4, r2)
+-	lwz	r4, MM(r4)
+-	tophys(r4, r4)
+-	/* This only clobbers r0, r3, r4 and r5 */
++	/* switch_mmu_context() needs paging, let's enable it */
++	mfmsr   r9
++	ori     r11, r9, MSR_DR
++	mtmsr   r11
++	sync
++
++	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
++	lwz	r4, MM(r2)
+ 	bl	switch_mmu_context
+ 
++	/* Disable paging again */
++	mfmsr   r9
++	li      r6, MSR_DR
++	andc    r9, r9, r6
++	mtmsr	r9
++	sync
++
+ .endm
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.28.0.394.ge197136389
+
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+

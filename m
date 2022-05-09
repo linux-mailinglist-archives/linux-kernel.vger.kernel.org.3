@@ -2,131 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FC351F535
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E060351F53F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiEIHYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S233778AbiEIHZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiEIHEa (ORCPT
+        with ESMTP id S236080AbiEIHH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:04:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BF1B9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:00:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dk23so24912412ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:00:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=10+UzFhJUXUE/m7JFftwGBDXxzJS2yQN7xf9L3FQsJY=;
-        b=fu5e+GgqRHJzTtZ3kal25qzqR+wfPA2xl9VjVKrAtR/wf9GRNhxSBe77yHnT8WTjV7
-         LvfJ9+OhI1+9+RpMfAkZX9QU5PXGu70Lp9qgQb64riRZRAypCNolfEjJZxeU2ORhh+t2
-         k8s5Y5TyxC/V+py89mZdkZCMXLTpCTrXAbv+SKRogomeGxBcPPoCOHnfg6/aVl8zrxdo
-         nHctqvSeXt2ygsFKcyrF2tl0lHORk2XWaWHFDtkcVeedHPoue2SQWRrFomzPOxOMoZYA
-         uGlNCNflJD8XFYbYV8JzaYE4EsOtromc7hr3AWu0Fv5Cxwrzinhm60hC0WO3PjweozLl
-         tRmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=10+UzFhJUXUE/m7JFftwGBDXxzJS2yQN7xf9L3FQsJY=;
-        b=QrQEqhI83BSbieJoVnDNCHTKFbkNdaqrAdRBLIcP3cjPVdjZxtIm07hunYTtVjwSPZ
-         0P6Yc1H9TtQPBFktty06NqptFRe6tc3rsYx0DrBq2GFQkTg6oBfJkwd8WhipNS6J2ZH/
-         N5AD/Qpi2PG7YIa9bLlns0IzjbLrpM7doNgLgOTuz6y5/TchuCH2ohR3C6rkWKmNhyVI
-         3GmPf6aMeVudOqWoGgtDNVRc6c7WHeA4uGmKFf663wY1LOvZ50cj78Rz+Yr1enVtS41U
-         zSjOT7OcdjB6l6q2xJ1SuU8lwhcKgkUO4ljFH+NNV96WLGzuKptIqOLeZkJo6XTlZU4Z
-         ftFg==
-X-Gm-Message-State: AOAM5328yJLSCfFDQzNXVWptHaEk7VTDx8jwaZfPDe/DurNA6tr79sCx
-        tg15HNVdaxMT+U6GoiKfOrzQ0A==
-X-Google-Smtp-Source: ABdhPJx+W8N0wDBux4Nviec94vEc13Cct6fPOWv1Zrt8QYQrOJjntM1uzd1nkPPpUe1+c7WPTHRJ3w==
-X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id by2-20020a170906a2c200b006e7efc217f2mr12668739ejb.542.1652079633872;
-        Mon, 09 May 2022 00:00:33 -0700 (PDT)
-Received: from [192.168.0.242] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y5-20020a50f1c5000000b0042617ba63afsm5909016edl.57.2022.05.09.00.00.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:00:33 -0700 (PDT)
-Message-ID: <84d8e292-1bae-6088-5a06-88c635275672@linaro.org>
-Date:   Mon, 9 May 2022 09:00:32 +0200
+        Mon, 9 May 2022 03:07:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69925190D26
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:04:04 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KxXDs213jz1JBxf;
+        Mon,  9 May 2022 15:02:53 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 15:04:02 +0800
+Subject: Re: [hnaz-mm:master 214/410] mm/madvise.c:632:36: error: implicit
+ declaration of function 'is_swapin_error_entry'
+To:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <202204301111.d0R5xzHF-lkp@intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e7e68275-aff7-2d38-fe3f-095a497b5256@huawei.com>
+Date:   Mon, 9 May 2022 15:04:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 02/14] thermal/core: Add a thermal sensor structure in
- the thermal zone
+In-Reply-To: <202204301111.d0R5xzHF-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     khilman@baylibre.com, abailon@baylibre.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
- <20220507125443.2766939-3-daniel.lezcano@linexp.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220507125443.2766939-3-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/2022 14:54, Daniel Lezcano wrote:
-> The thermal sensor ops is directly defined in the thermal zone but
-> still its data structuration makes the sensor ops and the thermal zone
-> too much interconnected for multiple sensors per thermal zone.
+On 2022/4/30 12:00, kernel test robot wrote:
+> tree:   https://github.com/hnaz/linux-mm master
+> head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
+> commit: fe343091405131f91dcb9230ae7649bb1ee7fe9a [214/410] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
+> config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220430/202204301111.d0R5xzHF-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/hnaz/linux-mm/commit/fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>         git remote add hnaz-mm https://github.com/hnaz/linux-mm
+>         git fetch --no-tags hnaz-mm master
+>         git checkout fe343091405131f91dcb9230ae7649bb1ee7fe9a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 > 
-> Create a dedicated structure for the thermal sensor to be included in
-> the thermal zone structure so these components are clearly separated.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
+> Note: the hnaz-mm/master HEAD bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66 builds fine.
+>       It only hurts bisectability.
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    mm/madvise.c: In function 'madvise_free_pte_range':
+>>> mm/madvise.c:632:36: error: implicit declaration of function 'is_swapin_error_entry' [-Werror=implicit-function-declaration]
+>      632 |                                    is_swapin_error_entry(entry)) {
+>          |                                    ^~~~~~~~~~~~~~~~~~~~~
+>    cc1: some warnings being treated as errors
 
-You have a ';' typo here.
+Sorry for late respond. And finally I found the root cause. :) In the hnaz-mm tree, commit 2ca240bbfe
+("mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range") is applied but prerequisite
+commit 1a622c8b5123 ("mm/swapfile: unuse_pte can map random data if swap read fails") is left behind. They
+belong to same series [1]. Please apply all the commit in that series to check if this build error still exists.
 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/thermal/broadcom/bcm2835_thermal.c |  2 +-
->  drivers/thermal/gov_bang_bang.c            |  6 +--
->  drivers/thermal/gov_fair_share.c           |  6 +--
->  drivers/thermal/gov_power_allocator.c      | 18 ++++----
->  drivers/thermal/gov_step_wise.c            |  4 +-
->  drivers/thermal/rcar_gen3_thermal.c        |  6 +--
->  drivers/thermal/samsung/exynos_tmu.c       |  6 +--
+Thanks for your test!
 
-For Samsung:
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[1]: https://lore.kernel.org/all/20220424091105.48374-2-linmiaohe@huawei.com/T/#m27886f137e1ff5c8bd4f74a8191a60d1df023c65
 
+> 
+> 
+> vim +/is_swapin_error_entry +632 mm/madvise.c
+> 
+>    587	
+>    588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+>    589					unsigned long end, struct mm_walk *walk)
+>    590	
+>    591	{
+>    592		struct mmu_gather *tlb = walk->private;
+>    593		struct mm_struct *mm = tlb->mm;
+>    594		struct vm_area_struct *vma = walk->vma;
+>    595		spinlock_t *ptl;
+>    596		pte_t *orig_pte, *pte, ptent;
+>    597		struct page *page;
+>    598		int nr_swap = 0;
+>    599		unsigned long next;
+>    600	
+>    601		next = pmd_addr_end(addr, end);
+>    602		if (pmd_trans_huge(*pmd))
+>    603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+>    604				goto next;
+>    605	
+>    606		if (pmd_trans_unstable(pmd))
+>    607			return 0;
+>    608	
+>    609		tlb_change_page_size(tlb, PAGE_SIZE);
+>    610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    611		flush_tlb_batched_pending(mm);
+>    612		arch_enter_lazy_mmu_mode();
+>    613		for (; addr != end; pte++, addr += PAGE_SIZE) {
+>    614			ptent = *pte;
+>    615	
+>    616			if (pte_none(ptent))
+>    617				continue;
+>    618			/*
+>    619			 * If the pte has swp_entry, just clear page table to
+>    620			 * prevent swap-in which is more expensive rather than
+>    621			 * (page allocation + zeroing).
+>    622			 */
+>    623			if (!pte_present(ptent)) {
+>    624				swp_entry_t entry;
+>    625	
+>    626				entry = pte_to_swp_entry(ptent);
+>    627				if (!non_swap_entry(entry)) {
+>    628					nr_swap--;
+>    629					free_swap_and_cache(entry);
+>    630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>    631				} else if (is_hwpoison_entry(entry) ||
+>  > 632					   is_swapin_error_entry(entry)) {
+>    633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+>    634				}
+>    635				continue;
+>    636			}
+>    637	
+>    638			page = vm_normal_page(vma, addr, ptent);
+>    639			if (!page)
+>    640				continue;
+>    641	
+>    642			/*
+>    643			 * If pmd isn't transhuge but the page is THP and
+>    644			 * is owned by only this process, split it and
+>    645			 * deactivate all pages.
+>    646			 */
+>    647			if (PageTransCompound(page)) {
+>    648				if (page_mapcount(page) != 1)
+>    649					goto out;
+>    650				get_page(page);
+>    651				if (!trylock_page(page)) {
+>    652					put_page(page);
+>    653					goto out;
+>    654				}
+>    655				pte_unmap_unlock(orig_pte, ptl);
+>    656				if (split_huge_page(page)) {
+>    657					unlock_page(page);
+>    658					put_page(page);
+>    659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    660					goto out;
+>    661				}
+>    662				unlock_page(page);
+>    663				put_page(page);
+>    664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+>    665				pte--;
+>    666				addr -= PAGE_SIZE;
+>    667				continue;
+>    668			}
+>    669	
+>    670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
+>    671	
+>    672			if (PageSwapCache(page) || PageDirty(page)) {
+>    673				if (!trylock_page(page))
+>    674					continue;
+>    675				/*
+>    676				 * If page is shared with others, we couldn't clear
+>    677				 * PG_dirty of the page.
+>    678				 */
+>    679				if (page_mapcount(page) != 1) {
+>    680					unlock_page(page);
+>    681					continue;
+>    682				}
+>    683	
+>    684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
+>    685					unlock_page(page);
+>    686					continue;
+>    687				}
+>    688	
+>    689				ClearPageDirty(page);
+>    690				unlock_page(page);
+>    691			}
+>    692	
+>    693			if (pte_young(ptent) || pte_dirty(ptent)) {
+>    694				/*
+>    695				 * Some of architecture(ex, PPC) don't update TLB
+>    696				 * with set_pte_at and tlb_remove_tlb_entry so for
+>    697				 * the portability, remap the pte with old|clean
+>    698				 * after pte clearing.
+>    699				 */
+>    700				ptent = ptep_get_and_clear_full(mm, addr, pte,
+>    701								tlb->fullmm);
+>    702	
+>    703				ptent = pte_mkold(ptent);
+>    704				ptent = pte_mkclean(ptent);
+>    705				set_pte_at(mm, addr, pte, ptent);
+>    706				tlb_remove_tlb_entry(tlb, pte, addr);
+>    707			}
+>    708			mark_page_lazyfree(page);
+>    709		}
+>    710	out:
+>    711		if (nr_swap) {
+>    712			if (current->mm == mm)
+>    713				sync_mm_rss(mm);
+>    714	
+>    715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+>    716		}
+>    717		arch_leave_lazy_mmu_mode();
+>    718		pte_unmap_unlock(orig_pte, ptl);
+>    719		cond_resched();
+>    720	next:
+>    721		return 0;
+>    722	}
+>    723	
+> 
 
-Best regards,
-Krzysztof

@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B21352058D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23962520595
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240747AbiEIT7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S240770AbiEIUBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 16:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240739AbiEIT7B (ORCPT
+        with ESMTP id S240708AbiEIUBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:59:01 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ABE7223B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:55:05 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so586052pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 12:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
-        b=DB5AMq154uPVEABPd/Ht20m9xAuHdLPAIpLNbV2AUd+Xl3o5PSogp22tXDaf8adH/V
-         thnCPnxPBairN5psa5Q3YUT6K4ogh3mhaBxf8XJNroaaR0CdTMSXlGfdIopfPo7ebDAN
-         AEoxTBUl1A2BS1estbYeGlGjmqCX74SR2d4XY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
-        b=2J6YM1wwf2UxSx9W+D6qbg9vSJUvC923ltoY8BTMn3D3f4KAX491yfH2CG8Ea/24A9
-         7JI3Qd0CEfD9HISHDo5553DDAFHySC12axx67sIYQkHz8kQdoY8Ng5wnK5p2YiRXkUNM
-         lpmkDWo2nIYu/cC22KJwBqIvCiG5ulibj66Ez0bEWjmeFnfINn3kvgd11z7hgnoBpMyw
-         1vjfAnFaUPwzrHIaWWcgzU2q1kVUkiVQ6GVOrItm2pwYbQ4G/CoHWRKD5RhNNzpr5Rer
-         hit4wonGgIKjfZRjWccu8AgY5z9DkIB/QfBaiTgoZ0GKQdQg0BhLIjtud3w77tkfGsQ1
-         aMXg==
-X-Gm-Message-State: AOAM530hQOZz/mrlAyFkct0xlnTdTfhQLZZWCjZYMlyB/s6WwmD2ytq2
-        63MzRzKH/EGTBEWyl3+HKLozfQ==
-X-Google-Smtp-Source: ABdhPJweHWgd7qc2MqEdODa2jlyfVzb0XNyTHa8rV9JgRxEzF16wLYb7GsZAb9n2TCoNDkBKkyCnUw==
-X-Received: by 2002:a17:90b:314e:b0:1dc:d143:a15d with SMTP id ip14-20020a17090b314e00b001dcd143a15dmr20698782pjb.111.1652126105085;
-        Mon, 09 May 2022 12:55:05 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:753:614a:caf8:e14d])
-        by smtp.gmail.com with UTF8SMTPSA id w19-20020a170903311300b0015e8d4eb2a2sm229445plc.236.2022.05.09.12.55.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 12:55:04 -0700 (PDT)
-Date:   Mon, 9 May 2022 12:55:03 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, ohad@wizery.com,
-        agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        evgreen@chromium.org, dianders@chromium.org, swboyd@chromium.org,
-        krzysztof.kozlowski@canonical.com
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add proxy interconnect
- requirements for modem
-Message-ID: <Ynlxlz7brLWZFRnd@google.com>
-References: <1652082798-5855-1-git-send-email-quic_sibis@quicinc.com>
- <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
+        Mon, 9 May 2022 16:01:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F3718B21;
+        Mon,  9 May 2022 12:57:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906C4616B1;
+        Mon,  9 May 2022 19:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C267C385B2;
+        Mon,  9 May 2022 19:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652126264;
+        bh=xKlmdHLZkImPaVJ0vEbDOGtDhEjWXzfx0mxKGKDFUxc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=PmlGsU9so7KVEDdzDsc5qWpNV6GzoLmKQ6M4uuNs8KZuP0ur01kpRPaWxJjBIrj4C
+         VTUypkjSTLbcXK/sqFIa+cG4DdtdT0ZHSgb1zjjtqReoLiBMxYg3F98jmahaWTJ/mw
+         ViU7DHcDQjd8O4A5KasMR2Xhn3l+aLeh1cDdxPr5tTu28ef5wADDfTFG7czn/SI/u0
+         eUY2/ax3Hbbj/Al8z3DVlz7DZl4dEI2jqqDtSYcXC4ad6ovWhoRTYMdvxDR7GQGcZL
+         Km4bRMrYIgbwzqfwcN1sNTCnqg7qyxdIZP5odFp5cvLoBsTqDXR90PYRC3fQwVG3LA
+         RrfjZNnHmH+zQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     nfraprado@collabora.com
+Cc:     angelogioacchino.delregno@collabora.com,
+        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, jiaxin.yu@mediatek.com,
+        alsa-devel@alsa-project.org, shane.chien@mediatek.com,
+        lgirdwood@gmail.com, linux-mediatek@lists.infradead.org,
+        kernel@collabora.com, krzk+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220509185625.580811-1-nfraprado@collabora.com>
+References: <20220509185625.580811-1-nfraprado@collabora.com>
+Subject: Re: [PATCH] Revert "ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties"
+Message-Id: <165212626102.1478109.3697258153804528211.b4-ty@kernel.org>
+Date:   Mon, 09 May 2022 20:57:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,10 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 01:23:18PM +0530, Sibi Sankar wrote:
-> Add interconnects that are required to be proxy voted upon during modem
-> bootup on SC7280 SoCs.
+On Mon, 9 May 2022 14:56:25 -0400, Nícolas F. R. A. Prado wrote:
+> This reverts commit e056cf4341ae3f856f1e38da02b27cb04de4c69b. The commit
+> was merged while the property name and definition were still being
+> discussed. Revert the commit for now and a follow up commit will re-add
+> the property after it is further discussed and reviewed.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] Revert "ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties"
+      commit: d94d1486952b860dcedd04d0ff8ade2176418905
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

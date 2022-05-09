@@ -2,163 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B38352061E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18792520622
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiEIUrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 16:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S229811AbiEIUtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 16:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiEIUrl (ORCPT
+        with ESMTP id S229448AbiEIUs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 16:47:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36153B1D3;
-        Mon,  9 May 2022 13:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zxtHEZB7FJXcLD4uWhqlrNQfKLg4uYSZS3iQcpPv3Q8=; b=Um4T745eraA4H0ZgNxS0pk18PZ
-        Xq97mepNxGxMSUjCP+wxeGnaWEH5/cdZnQBcwwp/nYhhVo0LZ0izp4JI5JLx/tuGEZhpgwmnCpwbf
-        2txDSDfzQXZuX51PS3ujK++12T6SuqFqyX9iHBdzrIXBEwXzKGUPjXBHtkEGWls89KE/8klzoNmKc
-        OtRsmT+7lqC9xf9aTPvk9a7bUeFPBORXhMxzsTl8lnLlgwKsSrZfIa7TmD/4zQ2C9RPd7NtoZqmth
-        dF3gybOaVG6RP99mI4FvocGXiSQrwuUY58gBdt2p0lR6Ir2l99ABzRmYO+DKAJ8vfOhqZfu0Trp+2
-        2ega45ZQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noAEG-00GCg8-KP; Mon, 09 May 2022 20:43:40 +0000
-Date:   Mon, 9 May 2022 13:43:40 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-Message-ID: <Ynl8/MqmDZzpbh5y@bombadil.infradead.org>
-References: <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
- <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
- <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
- <YnKS3MwNxvEi73OP@bombadil.infradead.org>
- <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
- <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
- <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
- <YnLsPgbQ7CHiannN@bombadil.infradead.org>
- <YnNnLIZDxkNwECv+@bombadil.infradead.org>
- <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
+        Mon, 9 May 2022 16:48:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F27428ABA3;
+        Mon,  9 May 2022 13:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652129100; x=1683665100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kV3QGIMkK5UaMhz5OyUHz2Njf2odm8K27ZLZvtIEh9Q=;
+  b=GtD2EeDRAdDMJMD0Op0heoq1GIVrupuGNtTZa19wTQ/2cpFUQyVe9af1
+   gfHcAan/ko5zT8miSYLGEuHA6y2ENbaBjb1Fy2IlHe3dy/7BdsQx5Z4V6
+   3OuXx1rTDGb15o41y1MnO42Sy0GJLLoxm9CngQaarCCpuNG0e6IeFtRUD
+   u6rCDEwS33TbE107Boy55p8p6OAKr4E0xqqu8xmmQn1tHm3OqU/3NMmrM
+   q0/KqTFwTV+Ytd4KmWxgv/5ZVxudlB3t3zdq7aD2KXOsuZ4RKqYf3qmSk
+   KQgzAc+3VP7LsBOtQNwOCFVcgn2+R2A9YsKn4q1G7OcvBGNPFfIdfYhqZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266756049"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="266756049"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 13:45:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="623144724"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 May 2022 13:44:57 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noAFV-000GtM-1O;
+        Mon, 09 May 2022 20:44:57 +0000
+Date:   Tue, 10 May 2022 04:44:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, maz@kernel.org, will@kernel.org,
+        qperret@google.com, Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Ene <sebastianene@google.com>
+Subject: Re: [PATCH v5 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <202205100420.UlVQD7zP-lkp@intel.com>
+References: <20220509091103.2220604-3-sebastianene@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220509091103.2220604-3-sebastianene@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 03:01:34PM +0800, David Gow wrote:
-> On Thu, May 5, 2022 at 1:57 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
-> > > On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
-> > > > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > > OK so, we can just skip tainting considerations for selftests which
-> > > > > don't use modules for now. There may be selftests which do wonky
-> > > > > things in userspace but indeed I agree the userspace taint would
-> > > > > be better for those but I don't think it may be worth bother
-> > > > > worrying about those at this point in time.
-> > > > >
-> > > > > But my point in that sharing a taint between kunit / selftests modules
-> > > > > does make sense and is easily possible. The unfortunate aspect is just
-> > > >
-> > > > Yes, I 100% agree that we should share a taint for kernelspace testing
-> > > > from both kunit/kselftest.
-> > > > Someone running the system won't care what framework was used.
-> > >
-> > > OK do you mind doing the nasty work of manually adding the new
-> > > MODULE_TAINT() to the selftests as part of your effort?
-> > >
-> > > *Alternatively*, if we *moved* all sefltests modules to a new
-> > > lib/debug/selftests/ directory or something like that then t would
-> > > seem modpost *could* add the taint flag automagically for us without
-> > > having to edit or require it on new drivers. We have similar type of
-> > > taint for staging, see add_staging_flag().
-> > >
-> > > I would *highly* prefer this approach, event though it is more work,
-> > > because I think this is a step we should take anyway.
-> > >
-> > > However, I just checked modules on lib/ and well, some of them are
-> > > already in their own directory, like lib/math/test_div64.c. So not
-> > > sure, maybe just move a few modules which are just in lib/*.c for now
-> > > and then just sprinkle the MODULE_TAINT() to the others?
-> >
-> > I *think* we could just pull this off with a much easier approach,
-> > simply looking for the substrings in the module name in modpost.c:
-> >
-> >   * "_test." || "-test."
-> >   * ^"test_" || ^"test-"
-> >
-> > An issue with this of course is a vendor $FOO with an out of tree
-> > test driver may end up with the taint. Perhaps we don't care.
-> >
-> > That means moving selftests to its own directory is not needed at this
-> > point in time.
-> 
-> I can't say I'm thrilled with the idea of just doing name comparisons,
-> particularly since not all of them match this pattern, for example:
-> bpf_testmod.ko. (Though, frankly, more of them do than I'd've
-> guessed.)
-> 
-> Maybe adding a taint call to the selftest helper module framework in
-> kselftest_module.h, though again, there are several tests which don't
-> use it.
+Hi Sebastian,
 
-Right, I can't think of a generic way to peg this. I think long term
-we do stand to gain to move all selftests under a lib/debug/selftests/
-or something like that, but for now what I suggested is the only thing
-I can come up with.
+Thank you for the patch! Perhaps something to improve:
 
-> I _suspect_ we'd be able to hit most of them by tainting in frameworks
-> like the above, and patch the remaining modules manually.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on char-misc/char-misc-testing soc/for-next v5.18-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Works with me.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: h8300-randconfig-s032-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100420.UlVQD7zP-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/d3152372fdd19448b32806c0bffd78d8729d02e4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sebastian-Ene/Detect-stalls-on-guest-vCPUS/20220509-174959
+        git checkout d3152372fdd19448b32806c0bffd78d8729d02e4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/misc/
 
-> There's also
-> definitely a grey area with things like netdevsim, which are used a
-> lot as helper modules by selftests, but may have other uses as well.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-They can peg the module if they want the taint.
 
-> (The advantage of the KUnit tainting is that, due to KUnit's
-> centralised executor, we can be sure all KUnit tests will correctly
-> trigger the taint. But maybe it doesn't matter as much if one or two
-> selftests miss out.)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/misc/vcpu_stall_detector.c:106:33: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct vm_stall_detect_s * @@
+   drivers/misc/vcpu_stall_detector.c:106:33: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/misc/vcpu_stall_detector.c:106:33: sparse:     got struct vm_stall_detect_s *
+   drivers/misc/vcpu_stall_detector.c:115:32: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct vm_stall_detect_s * @@
+   drivers/misc/vcpu_stall_detector.c:115:32: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/misc/vcpu_stall_detector.c:115:32: sparse:     got struct vm_stall_detect_s *
+>> drivers/misc/vcpu_stall_detector.c:131:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct vm_stall_detect_s *vm_stall_detect @@     got struct vm_stall_detect_s [noderef] __percpu * @@
+   drivers/misc/vcpu_stall_detector.c:131:25: sparse:     expected struct vm_stall_detect_s *vm_stall_detect
+   drivers/misc/vcpu_stall_detector.c:131:25: sparse:     got struct vm_stall_detect_s [noderef] __percpu *
+   drivers/misc/vcpu_stall_detector.c:154:36: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct vm_stall_detect_s * @@
+   drivers/misc/vcpu_stall_detector.c:154:36: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/misc/vcpu_stall_detector.c:154:36: sparse:     got struct vm_stall_detect_s *
+>> drivers/misc/vcpu_stall_detector.c:177:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __percpu *__pdata @@     got struct vm_stall_detect_s *vm_stall_detect @@
+   drivers/misc/vcpu_stall_detector.c:177:21: sparse:     expected void [noderef] __percpu *__pdata
+   drivers/misc/vcpu_stall_detector.c:177:21: sparse:     got struct vm_stall_detect_s *vm_stall_detect
+   drivers/misc/vcpu_stall_detector.c:189:36: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct vm_stall_detect_s * @@
+   drivers/misc/vcpu_stall_detector.c:189:36: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   drivers/misc/vcpu_stall_detector.c:189:36: sparse:     got struct vm_stall_detect_s *
+   drivers/misc/vcpu_stall_detector.c:194:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __percpu *__pdata @@     got struct vm_stall_detect_s *vm_stall_detect @@
+   drivers/misc/vcpu_stall_detector.c:194:21: sparse:     expected void [noderef] __percpu *__pdata
+   drivers/misc/vcpu_stall_detector.c:194:21: sparse:     got struct vm_stall_detect_s *vm_stall_detect
+   drivers/misc/vcpu_stall_detector.c: note: in included file (through include/linux/io.h):
+   arch/h8300/include/asm/io.h:44:11: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/h8300/include/asm/io.h:44:11: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/h8300/include/asm/io.h:44:11: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/h8300/include/asm/io.h:44:11: sparse: sparse: cast removes address space '__iomem' of expression
+   arch/h8300/include/asm/io.h:44:11: sparse: sparse: cast removes address space '__iomem' of expression
 
-That is what I was thinking.
+vim +106 drivers/misc/vcpu_stall_detector.c
 
-I'm convinced we *should* move selftests to a one directory. The
-amount of stuff in lib/ is getting out of hand.
+   100	
+   101	static int start_stall_detector_on_cpu(unsigned int cpu)
+   102	{
+   103		struct vm_stall_detect_s *vm_stall_detect;
+   104	
+   105		vm_stall_detect = platform_get_drvdata(virt_dev);
+ > 106		vcpu_stall_detect_start(this_cpu_ptr(vm_stall_detect));
+   107		return 0;
+   108	}
+   109	
+   110	static int stop_stall_detector_on_cpu(unsigned int cpu)
+   111	{
+   112		struct vm_stall_detect_s *vm_stall_detect;
+   113	
+   114		vm_stall_detect = platform_get_drvdata(virt_dev);
+   115		vcpu_stall_detect_stop(this_cpu_ptr(vm_stall_detect));
+   116		return 0;
+   117	}
+   118	
+   119	static int vcpu_stall_detect_probe(struct platform_device *dev)
+   120	{
+   121		int cpu, ret, err;
+   122		void __iomem *membase;
+   123		struct resource *r;
+   124		struct vm_stall_detect_s *vm_stall_detect;
+   125		u32 stall_detect_clock, stall_detect_timeout_sec = 0;
+   126	
+   127		r = platform_get_resource(dev, IORESOURCE_MEM, 0);
+   128		if (r == NULL)
+   129			return -ENOENT;
+   130	
+ > 131		vm_stall_detect = alloc_percpu(typeof(struct vm_stall_detect_s));
+   132		if (!vm_stall_detect)
+   133			return -ENOMEM;
+   134	
+   135		membase = ioremap(r->start, resource_size(r));
+   136		if (!membase) {
+   137			ret = -ENXIO;
+   138			goto err_withmem;
+   139		}
+   140	
+   141		virt_dev = dev;
+   142		platform_set_drvdata(dev, vm_stall_detect);
+   143		if (of_property_read_u32(dev->dev.of_node, "clock-frequency",
+   144					 &stall_detect_clock))
+   145			stall_detect_clock = DEFAULT_CLOCK_HZ;
+   146	
+   147		if (of_property_read_u32(dev->dev.of_node, "timeout-sec",
+   148					 &stall_detect_timeout_sec))
+   149			stall_detect_timeout_sec = DEFAULT_TIMEOT_SEC;
+   150	
+   151		for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
+   152			struct vm_stall_detect_s *cpu_stall_detect;
+   153	
+   154			cpu_stall_detect = per_cpu_ptr(vm_stall_detect, cpu);
+   155			cpu_stall_detect->membase = membase + cpu * REG_LEN;
+   156			cpu_stall_detect->clock_freq = stall_detect_clock;
+   157			cpu_stall_detect->expiration_sec = stall_detect_timeout_sec;
+   158			cpu_stall_detect->ping_timeout_ms = stall_detect_timeout_sec *
+   159				MSEC_PER_SEC / 2;
+   160			smp_call_function_single(cpu, vcpu_stall_detect_start,
+   161						 cpu_stall_detect, true);
+   162		}
+   163	
+   164		err = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+   165						"virt/vcpu_stall_detector:online",
+   166						start_stall_detector_on_cpu,
+   167						stop_stall_detector_on_cpu);
+   168		if (err < 0) {
+   169			dev_warn(&dev->dev, "failed to install cpu hotplug");
+   170			ret = err;
+   171			goto err_withmem;
+   172		}
+   173	
+   174		return 0;
+   175	
+   176	err_withmem:
+ > 177		free_percpu(vm_stall_detect);
+   178		return ret;
+   179	}
+   180	
 
-  Luis
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

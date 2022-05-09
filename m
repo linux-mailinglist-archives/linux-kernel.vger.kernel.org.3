@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4836251FD68
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1187451FD57
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiEIMwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S234893AbiEIMvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbiEIMwm (ORCPT
+        with ESMTP id S234828AbiEIMvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:52:42 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001FE1A9ACD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 05:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652100528; x=1683636528;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ALg/xWRxsXDbHFICzwU0J9vs+kGdb1yVHzNMxIPBbMU=;
-  b=CeDsAAW1oMwDswcsy3mKclUd2chhA3AF/jG+mmObv3r2kghoz2R5BQ88
-   y9fqO0MIw7FsmpkO6y6fbrGt3/yxE00mRUznuVbnLQQnTbOhVjuEAiO4e
-   h0VA121RYnXY+7NfoNcw2b0W4p7DF3t7QBCHiAEkn0XU19NBALrzQlGhS
-   OgSRNRhoGRGaByaaB16DAvSI+m03Pmw7p0m3OqiWSvZ0NiSCJPSzusCgv
-   2kaHKq2uXeL4yzv2o3y4psK9HTlYg57qhaRAxuFXq4Cif4IKCWRfUAzs4
-   jHlleY5p2qWFyN8/DblDEw8mbsW6CCjeb+K3FDHdpse8S27/l75xZ1aVv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="329631644"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="329631644"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:48:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="710510466"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:48:46 -0700
-Date:   Mon, 9 May 2022 20:46:59 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     "Jason A. Donenfeld" <zx2c4@kernel.org>, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:crng/random/master 29/29] WARNING: modpost:
- vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the
- variable .L0 to the variable .debug_str:.LASF1747
-Message-ID: <YnkNQ51hnNsgH2hT@rli9-dbox>
-References: <202205091658.vQtGGjeg-lkp@intel.com>
+        Mon, 9 May 2022 08:51:38 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ED42A1507;
+        Mon,  9 May 2022 05:47:44 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249CMgoR007788;
+        Mon, 9 May 2022 07:47:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=eOjjoMvRWvPpJ0hgClKMj0YsMUCFEr2/e90Xg0pSWtc=;
+ b=KGbxUnqIdH0739XcMRkFLgwYkKsQo6q7eMu94+3SdRTjLbO8oqeuzKGqs38vN+NHgOEw
+ 3Ak7N3Bs9lnVUw+hDfTIiI1SPqxzuoguKD6eOCjfjbIDN8RhrEe9ApWnxP//tfgD3GiK
+ aUgDirOehm3TeO0/pbBoHLLTy3ub+3l2C9uKc4ewHxRYcVJSEmqyPhJDMR3xMz18+A+t
+ Qj45JD+nYr94u9XXAmi40KprhYvDhfhyYvj6HcqwDAK2a9v4XD/dirlW4zl81aVhgCIw
+ CcACB1v+WbBlhu5YwbvkosI89dKz7hkw/HyJPxLivx1dEcZ1fczEUZ3R5klNSH9/l9Tf Ow== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fwp612wu0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 09 May 2022 07:47:27 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 13:47:25 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Mon, 9 May 2022 13:47:25 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 568C1B10;
+        Mon,  9 May 2022 12:47:25 +0000 (UTC)
+Date:   Mon, 9 May 2022 12:47:25 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lukasz Majewski <lukma@denx.de>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 2/2] doc: dts: Add device tree information regarding
+ wm8940 codec
+Message-ID: <20220509124725.GZ38351@ediswmail.ad.cirrus.com>
+References: <20220509121313.31216-1-lukma@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <202205091658.vQtGGjeg-lkp@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220509121313.31216-1-lukma@denx.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: JE-tmVTuy_8_kQ0V8bl-RjpqShAy531Q
+X-Proofpoint-ORIG-GUID: JE-tmVTuy_8_kQ0V8bl-RjpqShAy531Q
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:33:29PM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block crng/random/master
-> head:   26bcbb981eb1ab60612d6cee1bb1b5f444a23ef2
-> commit: 26bcbb981eb1ab60612d6cee1bb1b5f444a23ef2 [29/29] random: use symbolic constants for crng_init states
-> config: riscv-randconfig-r042-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091658.vQtGGjeg-lkp@intel.com/config)
-> compiler: riscv32-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/26bcbb981eb1ab60612d6cee1bb1b5f444a23ef2
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block crng/random/master
->         git checkout 26bcbb981eb1ab60612d6cee1bb1b5f444a23ef2
->         # save the config file
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 ARCH=riscv 
+On Mon, May 09, 2022 at 02:13:13PM +0200, Lukasz Majewski wrote:
+> This commit provides documentation entry for wm8940 codec.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> ---
 
-Sorry, kindly ignore this report, which is a false positive.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-> 
-> >> WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1747
-> FATAL: modpost: extable_entry size hasn't been discovered!
-> 
-> Note: the below error/warnings can be found in parent commit:
-> << WARNING: modpost: vmlinux.o(.text+0xa76b86): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xbacbf2): Section mismatch in reference from the function comedi_buf_map_get() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1744
-> << WARNING: modpost: vmlinux.o(.text+0xae24ec): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2b2e): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2c8c): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2cb0): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb1f67e): Section mismatch in reference from the function thermal_zone_device_enable() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb1f688): Section mismatch in reference from the function thermal_zone_device_disable() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb201d8): Section mismatch in reference from the function thermal_of_cooling_device_register() to the variable .init.text:.L0
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Thanks,
+Charles

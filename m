@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A29551F615
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD3C51F5D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbiEIHyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S236488AbiEIHwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiEIHqE (ORCPT
+        with ESMTP id S236183AbiEIHrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:46:04 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E191CC9BC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:42:10 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso5618780wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=u33bLPRdxARRGRPezs6qQuUbqXt0FX2OnInzgW6/Vb8=;
-        b=kyPihqDNRV/DVSHyohJ9tqDwrLHzu0J/ExQsfme6xXmb3HuH36CuJvdpsJGju9FL6L
-         A/nuJL8qt6ViTOJ2jOjSjQQn3RgVLOGuNnLrIKP70q1PF3E47ZbA8evm4rLAYgnxni/3
-         Z6l+O0hYnTRMaT1nY2F1leC92xZi9xACSG9RA05Pi/AKzKNl4mqcffVldwaEUE/1/c+9
-         5PdPxJAKOp6dpKmeo+Su3wLvP+Cf/2/6OmFWvoTFROMxaN33YveO0CSQz0W6hs4rqH6X
-         6/XTPsws1BWj+g/ycbh39H2o/0dAQFdZJg6kfvR7GgHyoZmzn1n2P3zzFv9O8usiVCUf
-         BJOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=u33bLPRdxARRGRPezs6qQuUbqXt0FX2OnInzgW6/Vb8=;
-        b=H/RnUDBfKOe/N7+qdRqEZHoRsgweYzumkzgtqk52qVzqTn9eFA2G9+dM6UNKOKmfw1
-         Q5/zlKN71tUYISAK8lgjWNbTzL5r0mVuCl7HTcHLGq1O6h0S5uLzp9PP8E8hp0TZT3uV
-         IkPsP3omOztMCMUlg3NER1TfNWne5Ox1CxRqjmYoFjXmZePalTs3Ld9B2oxLRRg8uurs
-         GZUijmwZ8+niKFPbYBuBkTjp/k4BN4WO/WjP3rfgEIu9mw6mD66O3sLAbHBNW2KZCxUO
-         RK4pa3d3DQAU5iz6sbmuvXpmUqfiSErXGEl/3dSN0zatE9jFlv8wfkhBxxEjcrVOAhGy
-         ee/Q==
-X-Gm-Message-State: AOAM531OU/6fmLxWya5wfIGBDWFdKfeJg+MGH5hUSRR8ntfyiZNOMUBn
-        uNu0wNZ6cdVFcHnw29j+TLMvlz4Jrkq20HpMVzo=
-X-Google-Smtp-Source: ABdhPJxUPbWw9pzav3szPWSRMtg6h1Fm9wrro00KOw6R7h8JcNvLHa6Ewe/v4u3y+VU9ga8n6UI8IsqAKGu/C5PFcHQ=
-X-Received: by 2002:a05:600c:1c1f:b0:394:6950:2bda with SMTP id
- j31-20020a05600c1c1f00b0039469502bdamr19632487wms.52.1652082115602; Mon, 09
- May 2022 00:41:55 -0700 (PDT)
+        Mon, 9 May 2022 03:47:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D5912F1EE;
+        Mon,  9 May 2022 00:43:16 -0700 (PDT)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxY652JsvzfbLN;
+        Mon,  9 May 2022 15:42:05 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 15:43:14 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 15:43:14 +0800
+Message-ID: <b68595e0-68e2-a194-ea93-a96decbdbb8f@huawei.com>
+Date:   Mon, 9 May 2022 15:43:13 +0800
 MIME-Version: 1.0
-Reply-To: salkavar2@gmail.com
-Sender: wunionofficedept@gmail.com
-Received: by 2002:a05:6020:bd8e:b0:1db:687d:d05b with HTTP; Mon, 9 May 2022
- 00:41:55 -0700 (PDT)
-From:   "Mr.Sal kavar" <salkavar2@gmail.com>
-Date:   Mon, 9 May 2022 08:41:55 +0100
-X-Google-Sender-Auth: 3lPtUXKVrzpUlUhhsmyMsbHBAEo
-Message-ID: <CAKheY8cVovr_SZbhaTxPpnQ1QHwHFgA7_CHMDR9+gAv6tXUCzA@mail.gmail.com>
-Subject: Yours Faithful,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_FM_MR_MRS,LOTS_OF_MONEY,
-        MILLION_HUNDRED,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:32f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [salkavar2[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [salkavar2[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  1.7 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        *  0.1 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+Subject: Re: [PATCH -next 1/2] nfs: nfs{,4}_file_flush should consume
+ writeback error
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "smayhew@redhat.com" <smayhew@redhat.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220305124636.2002383-1-chenxiaosong2@huawei.com>
+ <20220305124636.2002383-2-chenxiaosong2@huawei.com>
+ <ca81e90788eabbf6b5df5db7ea407199a6a3aa04.camel@hammerspace.com>
+ <5666cb64-c9e4-0549-6ddb-cfc877c9c071@huawei.com>
+ <eab4bbb565a50bd09c2dbd3522177237fde2fad9.camel@hammerspace.com>
+ <037054f5ac2cd13e59db14b12f4ab430f1ddef5d.camel@hammerspace.com>
+ <4a8e21fb-d8bf-5428-67e5-41c47529e641@huawei.com>
+ <0528423f710cd612262666b1533763943c717273.camel@hammerspace.com>
+ <ccd017a4-31f1-297f-b2e2-e71eb16f1159@huawei.com>
+ <9fc83915a24d7b65d743910dd0f0e5f3d0373596.camel@hammerspace.com>
+ <a3300d4d-6428-8157-b2dc-eaeb9f249858@huawei.com>
+In-Reply-To: <a3300d4d-6428-8157-b2dc-eaeb9f249858@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I assume you and your family are in good health. I am the foreign
-operations Manager
+在 2022/4/20 16:50, chenxiaosong (A) 写道:
+> 在 2022/4/12 22:27, Trond Myklebust 写道:
+> 
+>>
+>> It will clear ENOSPC, EDQUOT and EFBIG. It should not clear other
+>> errors that are not supposed to be reported by write().
+>>
+>> As I keep repeating, that is _documented behaviour_!
+>>
+> 
+> Hi Trond:
+> 
+> You may mean that write(2) manpage described:
+> 
+>> Since Linux 4.13, errors from write-back come with a promise that
+>> they may be reported by subsequent.  write(2) requests, and will be
+>> reported by a subsequent fsync(2) (whether or not they were also
+>> reported by write(2)).
+> 
+> The manpage mentioned that "reported by a subsequent fsync(2)", your 
+> patch[1] clear the wb err on _async_ write(), and wb err will _not_ be 
+> reported by subsequent fsync(2), is it documented behaviour?
+> 
+> All other filesystems will _not_ clear any wb err on _async_ write().
+> 
+> [1] 
+> https://patchwork.kernel.org/project/linux-nfs/patch/20220411213346.762302-4-trondmy@kernel.org/ 
+> 
 
-This being a wide world in which it can be difficult to make new
-acquaintances and because it is virtually impossible to know who is
-trustworthy and who can be believed, I have decided to repose
-confidence in you after much fasting and prayer. It is only because of
-this that I have decided to confide in you and to share with you this
-confidential business.
 
-overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
-Thousand Dollars Only) when the account holder suddenly passed on he
-left no beneficiary who would be entitled to the receipt of this fund.
-For this reason, I have found it expedient to transfer this fund to a
-trustworthy individual with capacity to act as foreign business
-partner.
+Hi Trond:
 
-Yours Faithful,
-Mr.Sal Kavar.
+write(2) manpage described:
+
+> On some filesystems, including NFS, it does not even guarantee that
+> space has successfully been reserved for the data.  In this case, some
+> errors might be delayed until a future write(2), fsync(2), or even
+> close(2).  The only way to be sure is to call fsync(2) after you are
+> done writing all your data.
+
+Maybe it mean that: writeback errors of NFS is delayed until future sync 
+write() and fsync(), because sync write() will call fsync(). We all 
+agreed that close()->flush() should not clear writeback errors, should 
+async write() do the same thing like other filesystems?

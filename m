@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7514520155
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA00252015E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbiEIPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S238597AbiEIPsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238415AbiEIPrX (ORCPT
+        with ESMTP id S238415AbiEIPsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:47:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963241B5F97;
-        Mon,  9 May 2022 08:43:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5125D21C54;
-        Mon,  9 May 2022 15:43:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652111008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8T6pl1iznxs13Ey9cez14qQxbbfQ6jd4EKhTAHfONQ=;
-        b=OIX4wvitWGHcNBQ8JmpcU3rPsZU1gR6+LHcNOwZdDXt/ctTFk3ovA/alCFpxrJgZHkU0jO
-        j8H8ca2us26w1OtLpELOr66VCMVrsGfD9mSVAmr9PH2eHNxXsyMiymy4TEEYmN0veUZ4rO
-        jmPneqJd3q3wmPSpiG3aBLWFqPbxo1E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652111008;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8T6pl1iznxs13Ey9cez14qQxbbfQ6jd4EKhTAHfONQ=;
-        b=jK3ZXCl1D7XaTIz1+9uo9WVUNqIOJAFF6WB0oqleV2JaHMus92O7168s829hFh2XwbYV9M
-        8GbAzUyq/BtpAbBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 245CD13AA5;
-        Mon,  9 May 2022 15:43:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b11GCKA2eWJIIgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 09 May 2022 15:43:28 +0000
-Message-ID: <0d8f368a-54bb-b4e7-931f-9bf3ae24af4c@suse.cz>
-Date:   Mon, 9 May 2022 17:43:27 +0200
+        Mon, 9 May 2022 11:48:21 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912DF1BDAFE;
+        Mon,  9 May 2022 08:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=K4Ghe47wyHzJC/f9L6n0o6zagAWPzwTkrtr6pV97IUk=; b=WzlKZ7fSN/dBH8RKYd6m3bkXdD
+        mv2quNMAOlbc7iJjqcQ8baqyyMWKBY7SGPOtekFffiAu/2nom/2/VhHi6WR1TOrtcF2cyWwfR3T7h
+        2lFwN2xNQGxftqfKORZ4q5kFKqRc+ocL4CGJQn2wAbdHnJ56keASELf+ImYa6LzLvDn5OEmKZtbYU
+        gS056gWixGDz+4cpZGEb6b5k0jTil/YgEIZKfmaMh8FsRtefyv8VqierKsOEZ9OspPyoDZyBbHqVQ
+        vT3TLVn+TGbtwDV1mNqEgatoGHJHYUovpgac9W2DHkw0W6W78rmgXulI1bF6ph5lpq2gZ3s0KhMM1
+        oiqoA+8Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60642)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1no5YO-0003Gf-Lj; Mon, 09 May 2022 16:44:09 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1no5YI-0005Dn-Jw; Mon, 09 May 2022 16:44:02 +0100
+Date:   Mon, 9 May 2022 16:44:02 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct
+Message-ID: <Ynk2wjRyH05uEJiO@shell.armlinux.org.uk>
+References: <20220421074204.1284072-1-hch@lst.de>
+ <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [v3 PATCH 8/8] mm: mmap: register suitable readonly file vmas for
- khugepaged
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, songliubraving@fb.com, riel@surriel.com,
-        willy@infradead.org, ziy@nvidia.com, tytso@mit.edu,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220404200250.321455-1-shy828301@gmail.com>
- <20220404200250.321455-9-shy828301@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220404200250.321455-9-shy828301@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdbdKBfmXGdyTm3T-MFAK30N-z4KH0k8eD8F7xaYUbDDhA@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 22:02, Yang Shi wrote:
-> The readonly FS THP relies on khugepaged to collapse THP for suitable
-> vmas.  But it is kind of "random luck" for khugepaged to see the
-> readonly FS vmas (https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/)
-> since currently the vmas are registered to khugepaged when:
->   - Anon huge pmd page fault
->   - VMA merge
->   - MADV_HUGEPAGE
->   - Shmem mmap
+On Fri, Apr 22, 2022 at 11:17:20PM +0200, Linus Walleij wrote:
+> On Thu, Apr 21, 2022 at 9:42 AM Christoph Hellwig <hch@lst.de> wrote:
 > 
-> If the above conditions are not met, even though khugepaged is enabled
-> it won't see readonly FS vmas at all.  MADV_HUGEPAGE could be specified
-> explicitly to tell khugepaged to collapse this area, but when khugepaged
-> mode is "always" it should scan suitable vmas as long as VM_NOHUGEPAGE
-> is not set.
+> > arm is the last platform not using the dma-direct code for directly
+> > mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+> > arm to always use dma-direct now (it already does for LPAE configs
+> > and nommu).  I'd love to merge this series through the dma-mapping tree
+> > as it gives us the opportunity for additional core dma-mapping
+> > improvements.
+> (...)
 > 
-> So make sure readonly FS vmas are registered to khugepaged to make the
-> behavior more consistent.
+> >  b/arch/arm/mach-footbridge/Kconfig                   |    1
+> >  b/arch/arm/mach-footbridge/common.c                  |   19
+> >  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8
+> >  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4
 > 
-> Registering suitable vmas in common mmap path, that could cover both
-> readonly FS vmas and shmem vmas, so removed the khugepaged calls in
-> shmem.c.
-> 
-> Still need to keep the khugepaged call in vma_merge() since vma_merge()
-> is called in a lot of places, for example, madvise, mprotect, etc.
-> 
-> Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> I think Marc Z has a Netwinder that he can test this on. Marc?
+> I have one too, just not much in my office because of parental leave.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Netwinder is just more of a PC-but-with-ARM - it doesn't make use of any
+of the dmabounce code.
 
-> ---
->  mm/mmap.c  | 6 ++++++
->  mm/shmem.c | 4 ----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 604c8dece5dd..616ebbc2d052 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1842,6 +1842,12 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
->  	}
->  
->  	vma_link(mm, vma, prev, rb_link, rb_parent);
-> +
-> +	/*
-> +	 * vma_merge() calls khugepaged_enter_vma() either, the below
-> +	 * call covers the non-merge case.
-> +	 */
-> +	khugepaged_enter_vma(vma, vma->vm_flags);
->  	/* Once vma denies write, undo our temporary denial count */
->  unmap_writable:
->  	if (file && vm_flags & VM_SHARED)
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 92eca974771d..0c448080d210 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -34,7 +34,6 @@
->  #include <linux/export.h>
->  #include <linux/swap.h>
->  #include <linux/uio.h>
-> -#include <linux/khugepaged.h>
->  #include <linux/hugetlb.h>
->  #include <linux/fs_parser.h>
->  #include <linux/swapfile.h>
-> @@ -2239,7 +2238,6 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
->  
->  	file_accessed(file);
->  	vma->vm_ops = &shmem_vm_ops;
-> -	khugepaged_enter_vma(vma, vma->vm_flags);
->  	return 0;
->  }
->  
-> @@ -4132,8 +4130,6 @@ int shmem_zero_setup(struct vm_area_struct *vma)
->  	vma->vm_file = file;
->  	vma->vm_ops = &shmem_vm_ops;
->  
-> -	khugepaged_enter_vma(vma, vma->vm_flags);
-> -
->  	return 0;
->  }
->  
+Assabet is what needs testing for that, or one of the SA1110 machines.
+I'm away from home on my boat (and have been for the last two and a bit
+weeks) so can't test. Sorry.
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

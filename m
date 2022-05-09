@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E9C51FEF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88F151FEE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236773AbiEIODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S236553AbiEIN5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236701AbiEIODt (ORCPT
+        with ESMTP id S236485AbiEIN5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:03:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90C618D4ED
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BTWkAX27uDsyC4vbkOGDA43e2cUCH11HFcXPqJvTq38=; b=awER6OlTyq1mYQEExwvGUYw+4D
-        lWQzXNQ+/jGS7ZpQrV6sXkNS6mi9eXaPYZLvAqQHZqOUj/1yub8lhIAxCrTDAGeUIgWmB8siFH/rx
-        /pvAP14GNQiQPxPJY4XKvpqEDbKKEycfFFYOAQEcRDM42K/NKeBsJlXJeLHr6pP2jfzn27uubspLw
-        bipjqgKe8Xo1L9fIJ/r4mpIxeJRRcQeaUlp9wUjsNdp44TuAuPY0nHgwYPrN0dHBEj0RRTBFI2AcW
-        ZGYJohzAPUYd+xvr5xaYmkDRcSTNgY1n92uuEKZsdRaV7J4DX11Hj4CknTiU6VKTefvuI6w1Zy+0U
-        UZmlp+MA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1no3vP-003VWx-9Y; Mon, 09 May 2022 13:59:47 +0000
-Date:   Mon, 9 May 2022 14:59:47 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     hughd@google.com, akpm@linux-foundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/shmem: initialize folio to NULL
-Message-ID: <YnkeUz0Z2O9Xd5O+@casper.infradead.org>
-References: <20220509123116.3169267-1-trix@redhat.com>
+        Mon, 9 May 2022 09:57:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711B12AE0B;
+        Mon,  9 May 2022 06:53:07 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxjKS5RqdzhYtW;
+        Mon,  9 May 2022 21:52:28 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 21:53:05 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 21:53:04 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+CC:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <robert.foss@linaro.org>, <bryan.odonoghue@linaro.org>,
+        <vladimir.zapolskiy@linaro.org>
+Subject: [PATCH] media: camss: csid: fix wrong size passed to devm_kmalloc_array()
+Date:   Mon, 9 May 2022 22:04:39 +0800
+Message-ID: <20220509140439.1361352-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509123116.3169267-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:31:16AM -0400, Tom Rix wrote:
-> The clang build fails with
-> mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->   if (!page) {
->        ^~~~~
-> The error handler for !page jumps to an if-check for an unset folio.
-> So initialize folio to NULL.
+'supplies' is a pointer, the real size of struct regulator_bulk_data
+should be pass to devm_kmalloc_array().
 
-I appreciate you're trying to help, but the fourth report of a problem
-adds more noise than utility.
+Fixes: 0d8140179715 ("media: camss: Add regulator_bulk support")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/media/platform/qcom/camss/camss-csid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://lore.kernel.org/linux-mm/?q=shmem+folio
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+index f993f349b66b..80628801cf09 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -666,7 +666,7 @@ int msm_csid_subdev_init(struct camss *camss, struct csid_device *csid,
+ 	if (csid->num_supplies) {
+ 		csid->supplies = devm_kmalloc_array(camss->dev,
+ 						    csid->num_supplies,
+-						    sizeof(csid->supplies),
++						    sizeof(*csid->supplies),
+ 						    GFP_KERNEL);
+ 		if (!csid->supplies)
+ 			return -ENOMEM;
+-- 
+2.25.1
 
-shows emails about this from the cgelbot, Dan Carpenter, SeongJae Park,
-Colin King, Nathan Chancellor and Sebastian Siewior.  So actually you
-were seventh, not fourth.

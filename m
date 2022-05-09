@@ -2,90 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970945201AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1AA5201D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbiEIP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S238754AbiEIQEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238792AbiEIP4Q (ORCPT
+        with ESMTP id S238726AbiEIQEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:56:16 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20C61C83CB;
-        Mon,  9 May 2022 08:52:21 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ba17so16823693edb.5;
-        Mon, 09 May 2022 08:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=T4W3R+aw33VcSaWnTP2sFL45c75EFxdaakc2vCb8haw=;
-        b=frArOZv2QWXyGt51ho8PKXrVN4tfIm0kqmW/YznWOW70opLM768dlqojLg6C3Ht/mb
-         iPI1bHDjLwoQ24yYKJJzlnjcHx+/DwktNWK47YIqbXzMO8mg7avM+NU1s9lq6UG1uvIL
-         atiILDmXdXkSRSBzTJrfUo9GYsNPt+Rz0Q1KjNRrSeRRCPqxQtX6a5EWcgqRjxs4q7Cw
-         sX3N6ns8rZXlXe4ZBpw2+wGnKM+DqbxIHH0vJ+qoVawK5Swdgp95hP/n5Od/y4pTucpC
-         gIHl2YE/iUoit+CyMAlDVwIwpbPNZb3tlmfaIEsWjSqtj8lJBlm50tstYqy71xXL64oi
-         gVxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=T4W3R+aw33VcSaWnTP2sFL45c75EFxdaakc2vCb8haw=;
-        b=ZaP/7cghs9UVAI++a5DsM+BbJekKmMShGNK1d/BGO5+Y7D9rPpazsAC0R1y8TvF1G4
-         SlWcjSoI6Wz20843SYdT1m2o0OICgj/5M7B3Dgh5gcRH1B+pA92E22k6Xl8FI0tNh7bA
-         eFgT+dHLbSioXxhnD0gGk37q4WOj2T81AvHY8pGHaAXEBGoinU5mgmrdwfEwL1HUaBpS
-         ElAgCAVio0PAjRRaThergFa1+sEPvUU6zzlzhXv7aKttW33kogz11TH1AInhL4zQ83tW
-         jVngri6i0zaAurzLnb3tikLyCMWfHPBQiEXAPXgaOfH4Q5wm/HKda4EGOm8HtJYudmKL
-         azAQ==
-X-Gm-Message-State: AOAM533ooqwjIiOVqECRgzsMizBskNg1cR8dA4/j9zOly3P5d+fIlVvx
-        wWPwSE9DLBnBrLNpQrXvR7o=
-X-Google-Smtp-Source: ABdhPJwq4n5/jPNzmdbqn/KfhjMByaspFBDbgGXP+1UiPo5jwEWXj1Uc/Z7GfLmkX5XIFy+ZLWRgMQ==
-X-Received: by 2002:a05:6402:cb6:b0:425:f2e0:3644 with SMTP id cn22-20020a0564020cb600b00425f2e03644mr17935888edb.301.1652111540059;
-        Mon, 09 May 2022 08:52:20 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id u8-20020a50eac8000000b0042617ba63c9sm6472240edp.83.2022.05.09.08.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 08:52:19 -0700 (PDT)
-Date:   Mon, 9 May 2022 18:52:17 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4 02/12] net: dsa: add Renesas RZ/N1 switch tag
- driver
-Message-ID: <20220509155217.jrepbl3j4c5fmbpk@skbuf>
-References: <20220509131900.7840-1-clement.leger@bootlin.com>
- <20220509131900.7840-3-clement.leger@bootlin.com>
+        Mon, 9 May 2022 12:04:40 -0400
+X-Greylist: delayed 483 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 09:00:45 PDT
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0472F0D;
+        Mon,  9 May 2022 09:00:44 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1no5gT-0002xt-UY; Mon, 09 May 2022 11:52:29 -0400
+Date:   Mon, 9 May 2022 11:52:27 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     Song Liu <song@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <live-patching@vger.kernel.org>,
+        <mingo@redhat.com>, <peterz@infradead.org>,
+        <vincent.guittot@linaro.org>, <jpoimboe@redhat.com>,
+        <joe.lawrence@redhat.com>, <kernel-team@fb.com>
+Subject: [RFC] sched,livepatch: call stop_one_cpu in
+ klp_check_and_switch_task
+Message-ID: <20220509115227.6075105e@imladris.surriel.com>
+In-Reply-To: <20220507174628.2086373-1-song@kernel.org>
+References: <20220507174628.2086373-1-song@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509131900.7840-3-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,11 +47,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:18:50PM +0200, Clément Léger wrote:
-> The switch that is present on the Renesas RZ/N1 SoC uses a specific
-> VLAN value followed by 6 bytes which contains forwarding configuration.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
+After talking with Peter, this seems like it might be a potential approach
+to fix the issue for kernels both with PREEMPT enabled and disabled.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+If this looks like a reasonable approach to people, we can run experiments
+with this patch on a few thousand systems, and compare it with the kernel
+live patch transition latencies (and number of failures) on a kernel without
+that patch.
+
+Does this look like an approach that could work?
+
+---8<---
+sched,livepatch: call stop_one_cpu in klp_check_and_switch_task
+
+If a running task fails to transition to the new kernel live patch after the
+first attempt, use the stopper thread to preempt it during subsequent attempts
+at switching to the new kernel live patch.
+
+<INSERT EXPERIMENTAL RESULTS HERE>
+
+Signed-off-by: Rik van Riel <riel@surriel.com>
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5d03a2ad1066..26e9e5f09822 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/cpu.h>
+ #include <linux/stacktrace.h>
++#include <linux/stop_machine.h>
+ #include "core.h"
+ #include "patch.h"
+ #include "transition.h"
+@@ -281,6 +282,11 @@ static int klp_check_and_switch_task(struct task_struct *task, void *arg)
+ 	return 0;
+ }
+ 
++static int kpatch_dummy_fn(void *dummy)
++{
++	return 0;
++}
++
+ /*
+  * Try to safely switch a task to the target patch state.  If it's currently
+  * running, or it's sleeping on a to-be-patched or to-be-unpatched function, or
+@@ -315,6 +321,9 @@ static bool klp_try_switch_task(struct task_struct *task)
+ 	case -EBUSY:	/* klp_check_and_switch_task() */
+ 		pr_debug("%s: %s:%d is running\n",
+ 			 __func__, task->comm, task->pid);
++		/* Preempt the task from the second KLP switch attempt. */
++		if (klp_signals_cnt)
++			stop_one_cpu(task_cpu(task), kpatch_dummy_fn, NULL);
+ 		break;
+ 	case -EINVAL:	/* klp_check_and_switch_task() */
+ 		pr_debug("%s: %s:%d has an unreliable stack\n",
+

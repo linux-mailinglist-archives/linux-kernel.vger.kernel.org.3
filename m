@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B275202E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957E45202E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbiEIQvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S239393AbiEIQww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239365AbiEIQvP (ORCPT
+        with ESMTP id S239382AbiEIQwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:51:15 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 28CC8223088
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:47:19 -0700 (PDT)
-Received: (qmail 131135 invoked by uid 1000); 9 May 2022 12:47:19 -0400
-Date:   Mon, 9 May 2022 12:47:19 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
-Message-ID: <YnlFl0M0FRzhxwpK@rowland.harvard.edu>
-References: <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
- <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
- <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
- <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
- <YnaR8LaaPTdLTiok@rowland.harvard.edu>
- <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
- <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
- <CAMuHMdVi6jCi=tRBNjBodVcA48ygiqPACQcmHx+1HRYnArJ9tQ@mail.gmail.com>
- <YnktokC8Uk9j53yO@rowland.harvard.edu>
- <YnlAAxT5Lq0NvxX0@kroah.com>
+        Mon, 9 May 2022 12:52:47 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5E1239B18
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:48:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bu29so24892399lfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5g8PMEr0fUha/SOThrUTETc1ItXC2lJPUN9/NQxWRVg=;
+        b=MTLQyColdjkZgneoiO2JCqBMXtCiy+AfIci1x5bN8m/pMI1K+N6mWUuJqIXJO485zB
+         ckPvI6zubY6h6FFL90K0wOdEgJ+OYvs71xh7lZMNbvmpa+88N3wAmAbTRa7164xC4Wpn
+         kPadB+F+/aVDf+cfcn3fiXl+O/FKqeSw7T34E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5g8PMEr0fUha/SOThrUTETc1ItXC2lJPUN9/NQxWRVg=;
+        b=1SrxW00QeezklVOZSGfPm7Qrpb6zkeIHCUuy5ormB2Aoz8MVH4rK9/xgUt8DLHqGoI
+         2cQJDV0rgoRUriwW/GC3E0PN7idooRlb/5TSYpHNKjMgyMlWdOCgpn2nAtymVNWQzrb/
+         Zpm6OQm6HCl4DhA3v1HP/UzuerZxlhEr4VhM1dVXiqh/RennqjAKHVBn48v3//aVAh6B
+         x9CtLGGPm1TE632RffKaWd6XNCDTAk/cwWYp2feCU61yviodL5L05vgrHl/uAvl4b5+Y
+         PKUb8/BRhytxR4L+aF2THk0WrsuA09Rq9OP2+OohBJ2FT3uw5AO5UI8OW3cs3rlOvc8L
+         VtfQ==
+X-Gm-Message-State: AOAM531IJS9HcCzcFM/W94GKx6dg15QyI4GyXy23w+2UWCLB84P7fm9Y
+        fV0ebuS6G7edRpp9sIRcdNyI+aEw50XabmObv664pg==
+X-Google-Smtp-Source: ABdhPJwPo5JqWbaAlLxvMlGR2NliI+YODauqw3FDoQdF3n9yPSWsygJ1qVypKeLMyEtd6+ld8sdQSlHGmbJqcJBBw/c=
+X-Received: by 2002:a05:6512:2313:b0:473:a307:b1ee with SMTP id
+ o19-20020a056512231300b00473a307b1eemr13201763lfu.159.1652114930854; Mon, 09
+ May 2022 09:48:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnlAAxT5Lq0NvxX0@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220508214500.60446-1-colin.i.king@gmail.com>
+ <CAADfD8wApw_v+uDTijY1K89WRJ_f7tkHmz=6LR086yMjEU4mWQ@mail.gmail.com> <20220509124427.GG4009@kadam>
+In-Reply-To: <20220509124427.GG4009@kadam>
+From:   Ozgur <ozgurk@ieee.org>
+Date:   Mon, 9 May 2022 20:48:39 +0400
+Message-ID: <CAADfD8zwoGUw4aJ8ebz9sLYyZSGp8Au6y5QvpFPvV9Rc4HY_Aw@mail.gmail.com>
+Subject: Re: [PATCH] x25: remove redundant pointer dev
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Martin Schiller <ms@dev.tdt.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-x25@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 06:23:31PM +0200, Greg KH wrote:
-> On Mon, May 09, 2022 at 11:05:06AM -0400, Alan Stern wrote:
-> > On Mon, May 09, 2022 at 04:42:01PM +0200, Geert Uytterhoeven wrote:
-> > > Hi Alan,
-> > > 
-> > > On Mon, May 9, 2022 at 4:15 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > On Mon, May 09, 2022 at 09:46:25AM +0200, Geert Uytterhoeven wrote:
-> > > > > > Geert:
-> > > > > >
-> > > > > > Can you test the patch below?  It ought to fix the problem (although it
-> > > > >
-> > > > > Thanks!
-> > > > >
-> > > > > root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
-> > > > > total 0
-> > > > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
-> > > > > ../../../devices/platform/soc/e659c000.usb/gadget.0
-> > > > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
-> > > > > ../../../devices/platform/soc/ee020000.usb/gadget.1
-> > > > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
-> > > > > ../../../devices/platform/soc/e6590000.usb/gadget.2
-> > > > >
-> > > > > Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > >
-> > > > > LGTM, so
-> > > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > >
-> > > > Thanks!
-> > > >
-> > > > > > might end up causing other problems down the line...)
-> > > > >
-> > > > > Can you please elaborate? I'm not too familiar with UBS gadgets.
-> > > >
-> > > > I was concerned about the fact that changing the name of a file,
-> > > > directory, or symbolic link in sysfs means changing a user API, and so
-> > > > it might cause some existing programs to fail.  That would be a
-> > > > regression.
-> > > >
-> > > > Perhaps the best way to work around the problem is to leave the name set
-> > > > to "gadget" if the ID number is 0, while adding the ID number on to the
-> > > > name if the value is > 0.  What do you think?
-> > > 
-> > > Oh, you mean the "gadget.N" subdirs, which are the targets of the
-> > > symlinks above? These were indeed named "gadget" before.
-> > > 
-> > > Would it be possible to append the ".N" suffixes only to the actual
-> > > symlinks, while keeping the target directory names unchanged?
-> > > E.g. /sys/bus/gadget/devices/gadget.0 ->
-> > > ../../../devices/platform/soc/e659c000.usb/gadget
-> > 
-> > No, it's not possible.  Or at least, not without significant changes to 
-> > the driver core.  Besides, people expect these names to be the same.
-> 
-> It should always be ok to change the names of devices as those are not
-> going to be persistent / determinisitic.  It's the attributes of devices
-> that are supposed to be used to determine those types of things.
-> 
-> So I think let's start out with the .N suffix for everything for now.
-> I'll be glad to submit the fixed patch to the Android kernel build
-> system to see what their testing comes back with to see if they happened
-> to make any name assumptions as that's the largest user of this
-> codebase.
+On Mon, May 9, 2022 at 4:44 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Mon, May 09, 2022 at 04:57:40AM +0400, Ozgur wrote:
+> > On Mon, May 9, 2022 at 1:45 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+> > >
+> > > Pointer dev is being assigned a value that is never used, the assignment
+> > > and the variable are redundant and can be removed. Also replace null check
+> > > with the preferred !ptr idiom.
+> > >
+> >
+> > Hello,
+> >
+> > *dev pointer is device assign global linked list and shouldnt be
+> > touched by the driver so *dev wont get any value right?
+>
+> Why are you talking about "*dev" instead of "dev"?
+>
 
-Okay.  Do you need me to send it as a proper patch before you try it 
-out?
+Hi Dan,
+I just realized this, i thought dev was necessary for launch functions
+device and to activate.
+if carries this with x25, dev is useless I understand.
 
-Alan Stern
+> > Also seems to use this while network interface is initializing because
+> > some activation information and stats information is also kept here,
+> > for example, open *dev will call when ifconfig is called from.
+> >
+> > route, link, forward these inital activate and move all values with
+> > net_device *dev?
+>
+> It's not clear what you are saying...
+>
+> When I review these kinds of patches I ask:
+> 1) Does Colin's patch change run time behavior?  Obviosly not.
+> 2) Is the current code buggy?  Sometimes when there is a static checker
+>    warning it indicates a typo in the code.  I do not see a bug in the
+>    original code before Colin's patch.
+> 3) What was the author's original intent?  This code predates git but
+>    I think the "dev" was just a going to be a shorter name to type than
+>    "x25->neighbour->dev".
+
+Actually i thought similarly because when this patch remove dev from i
+thought would depend on
+other source code whose x25 interface will be implemented are not ready.
+
+I thought any x25 interface or x25route was using it.
+
+> I honestly have no idea what you are saying.  At first I thought you
+> might be saying that this is stub code.  But that seems wrong.  Also we
+> do not allow stub code in the kernel.
+
+thanks for enlightening,
+
+Regards
+
+> regards,
+> dan carpenter
+>
+
+
+-- 
+Ozgur Kara
+Linux Kernel Developer
+
+ozgurk@ieee.org

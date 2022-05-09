@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF5451F967
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA18A51F972
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbiEIKM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S232496AbiEIKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiEIKMu (ORCPT
+        with ESMTP id S233837AbiEIKOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:12:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC9222387A;
-        Mon,  9 May 2022 03:08:48 -0700 (PDT)
-Date:   Mon, 9 May 2022 12:06:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652090792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kRM2zMJ9XhBQmwQro9AS/tz3rra0CYimJ07/gdih+4g=;
-        b=wQI5dVEpzI2jTq6PNAJStI8X544Ms++lTQPW8/tmEYTDnbG1+ihgP0hGW/i07N5hghWmS6
-        PlyJUlyZqGAULc+FxtPTCVXyDB+rlJtld4gWUwB/RVgF4So5Vm8O409iJLZu+ML5yTqk0U
-        oyqI3PblyXKABjqvM5JBm+eQl6cR5tLGGXvV6QkqxQ/geBVtaavESuxVRrfimWTDoE7MX7
-        nqgqimmHc3yeoubqDITq3gzCXHlqYE9AXpyBuAsAk4lL0SA4T4GXVW33qdGXLQLQQr6Ohm
-        uBe5TBTt5c/Q0Ai6BFXYqXKQdAI+l8Et+Ym9BGekwcTAxYForHcvSI9UaCUYXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652090792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kRM2zMJ9XhBQmwQro9AS/tz3rra0CYimJ07/gdih+4g=;
-        b=V8rd+T8MGrRH607niUq0b6Ovku6MsABSNAmj15ZPOth+ECLVvXwnSpAyq+Ot6Lc1V/Ya+6
-        TpqbSp/WBjHJKICg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [ANNOUNCE] v5.18-rc5-rt5
-Message-ID: <YnjnprZzEZUM4z89@linutronix.de>
-References: <YnVagPnKc+SDnkP/@linutronix.de>
- <CAFTL4hxoGnTkXs4O4_L2bZafFjFJOPUH+U+h__zsfYOhLpsSGQ@mail.gmail.com>
+        Mon, 9 May 2022 06:14:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C4237266;
+        Mon,  9 May 2022 03:10:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 181B560ABC;
+        Mon,  9 May 2022 10:06:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19415C385AB;
+        Mon,  9 May 2022 10:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652090805;
+        bh=QzkMLjT1rOqOza+MZUJwpgWcVa9l/57yvp1guEUS1qw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tU+FTu+4vYjYnrI1KJU+jqWTkfjBpB+IeBMiyj0ffy4S8v6tfZHRA6JYAw4d5oXio
+         w9psrS2628omHe0e8/jy3ZjRHh8kTR5/TJNJPop7+vrxhYhAq3/2taQuIVeaRomD1O
+         jjkDR+ngZnxDmyRO1lGKqhTC6KI7CfKWm38bO45EjUlLxMl8pFNw8yVu7EvLJQixWd
+         gt66y+2E7M2njOrPwpWR0g3/w+ArCjQ3luhRpFdbdxTsqJp7JgI8rDNkWHFaDKVqY0
+         82YFcqfF0qJ9EiwocJkp1f/tqq/Ir6l50zazDm/2zLpDJaWM6Fh8806d3jRN1pEMuU
+         OJ+JTHuWep3KQ==
+Date:   Mon, 9 May 2022 12:06:39 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] binder: additional transaction error logs
+Message-ID: <20220509100639.y5qwofnyqlnooeig@wittgenstein>
+References: <20220429235644.697372-1-cmllamas@google.com>
+ <20220429235644.697372-6-cmllamas@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAFTL4hxoGnTkXs4O4_L2bZafFjFJOPUH+U+h__zsfYOhLpsSGQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220429235644.697372-6-cmllamas@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-09 12:04:21 [+0200], Frederic Weisbecker wrote:
-> Please don't ignore
-> https://lore.kernel.org/all/20220405010752.1347437-1-frederic@kernel.org/
-> and https://lore.kernel.org/all/20220405010752.1347437-2-frederic@kernel.org/
+On Fri, Apr 29, 2022 at 11:56:44PM +0000, Carlos Llamas wrote:
+> Log readable and specific error messages whenever a transaction failure
+> happens. This will ensure better context is given to regular users about
+> these unique error cases, without having to decode a cryptic log.
 > 
-> Especially the second patch fixes a pretty serious issue!
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> ---
 
-Sorry, this somehow slipped.
-
-> Thanks.
-
-Sebastian
+Looks good to me,
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>

@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F28520167
+	by mail.lfdr.de (Postfix) with ESMTP id 61A64520168
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbiEIPuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S238536AbiEIPuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238523AbiEIPtt (ORCPT
+        with ESMTP id S238517AbiEIPtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 11:49:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033291573E;
-        Mon,  9 May 2022 08:45:51 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FEC3EA88
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:45:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 750AA611CA;
-        Mon,  9 May 2022 15:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134F6C385B1;
-        Mon,  9 May 2022 15:45:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 163F7B8172F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 15:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3729C385AE;
+        Mon,  9 May 2022 15:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652111149;
-        bh=5C2gAycAYfH3AorYV+ZVZig2Mkz2fhCTBkA4i45e2sM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yyq26cyETefivwltGGCi4Lgq3PfyAW4KN70HsE+JWAq2Rki2ctu27vtNCsto1jU9z
-         oMNH/RFae2XQpOHJwM4Jybv/n4dtHzK5Y0iPQJPDL4VIY7qOHgI8pUJhD9ZOyYZoh8
-         qNsfsXETPNMprtMjniIP9lPiVxAwgSitLMBwGArYOSuvCU+AXYIm/MgjrM3z6HdbOp
-         x6qzpsSl8jgFxfpfzDMOXPv52qaetCkOl3ii7d9Kvv33CI79TU1Ks08vWTtZUqD2Z/
-         LIyQx4MYBsG+6gW8HpRnFMFFRAffYZyVRpB41PzdfvFpSArIvbwB58ex+F6UIs0mKa
-         w2iShoB5Lau2w==
-Date:   Mon, 9 May 2022 16:45:43 +0100
+        s=k20201202; t=1652111146;
+        bh=+ri0BCQo8aTMYSl+J6NJ61kJS7xKTHp40FlfBs7hKl0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=o2uBT/CcMwG2eToTf6sxro/YVEvhhGh6rDiRFNA+71Bc7xT7yjErEhqeXTg+WdsTc
+         C4cGuZ954gAvO+foCuBuJ5KGv828k1iOOUHIrpK64OlV354gJ7y5/oJg57USGzV4kt
+         G6mEZrQRMh0VD0rlVBEf71p9nP08nRbmC/zGAxL430vTyDGsmb9iJw5bwtUnOiN38l
+         N7IV4vc3QvjcWpGeTH5Wgtt/RROi6zhxlVNmXgh8gByvJGFyIfQge2O7pYGFE3yvnU
+         9EuiXyLfrDJ9Egmg21GoO+hANczrfjvVidbsp0IYOkIAQoj7qwXlZ0f1Cn7Y2Lt4oy
+         xblz5XGl2WdRg==
 From:   Mark Brown <broonie@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, german.gomez@arm.com,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 2/6] arm64/sve: Add Perf extensions documentation
-Message-ID: <Ynk3J2Gfnm4LkHn0@sirena.org.uk>
-References: <20220509144257.1623063-1-james.clark@arm.com>
- <20220509144257.1623063-3-james.clark@arm.com>
+To:     marex@denx.de, linux-kernel@vger.kernel.org
+Cc:     lkp@intel.com, dan.carpenter@oracle.com
+In-Reply-To: <20220509003035.225272-1-marex@denx.de>
+References: <20220509003035.225272-1-marex@denx.de>
+Subject: Re: [PATCH] regmap: Add missing map->bus check
+Message-Id: <165211114563.774560.685568820972872583.b4-ty@kernel.org>
+Date:   Mon, 09 May 2022 16:45:45 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mk/wbO/L6mmEEdnA"
-Content-Disposition: inline
-In-Reply-To: <20220509144257.1623063-3-james.clark@arm.com>
-X-Cookie: Boycott meat -- suck your thumb.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,35 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 9 May 2022 02:30:35 +0200, Marek Vasut wrote:
+> The map->bus can be NULL here, add the missing NULL pointer check.
+> 
+> 
 
---mk/wbO/L6mmEEdnA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, May 09, 2022 at 03:42:50PM +0100, James Clark wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-> +* Its value is equivalent to the current vector length (VL) in bits divided by
-> +  64.
+Thanks!
 
-Please explicitly say that this is the current *SVE* vector length,
-given that with SME entering streaming mode means we have SVE registers
-with the current streaming vector length which may be different to the
-SVE vector length it is possible that someone may read the above as
-referring to the vector length that applies to the current Z/P registers.
+[1/1] regmap: Add missing map->bus check
+      commit: 5c422f0b970d287efa864b8390a02face404db5d
 
---mk/wbO/L6mmEEdnA
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5NycACgkQJNaLcl1U
-h9Dbdwf+PcSNippPQhwEFZ7lU/qxZTpSVBuoGp0Z1YUpzKhv2UgfZEbPz6WHtW89
-W2jmtd52nfsNTc6old7JvHErzT3sdhrD5cdlNmZ8e5La/GS1NOwcLZKinXEarsqY
-3nJPHYmKvSXCZCFuSMmnHB1xpTCZFou8dxgruNczu1DONbfXU0uil0bXHchEOYxa
-Z3Bk5WdShpD67OwH9hgX4ub2ML5XEXpSmQnhKBZSGs4UIOETKvmraf7TYYZBWkZy
-2RW6BJ4yE8/ZzWVx/HLPKzIlO9XPZN5Hl5gVsTQsk1uRK1fAPQNydQfITl3PPX7R
-kmOKG0EK5Ov5rfaVdR8OQqXvIw/iMw==
-=saF4
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---mk/wbO/L6mmEEdnA--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373FE51FDD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E99351FDD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbiEINTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S235473AbiEINT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiEINSI (ORCPT
+        with ESMTP id S235411AbiEINSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:18:08 -0400
+        Mon, 9 May 2022 09:18:12 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853D72A83DD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:14:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901B82A76AE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:14:16 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxhSn6vskzhZ1x;
-        Mon,  9 May 2022 21:13:45 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxhSp0hK8zhZ3Q;
+        Mon,  9 May 2022 21:13:46 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 21:14:08 +0800
+ 2022 21:14:09 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
@@ -29,9 +29,9 @@ CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
         <surenb@google.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 14/15] mm/swap: fix the comment of get_kernel_pages
-Date:   Mon, 9 May 2022 21:14:15 +0800
-Message-ID: <20220509131416.17553-15-linmiaohe@huawei.com>
+Subject: [PATCH 15/15] mm/swap: fix comment about swap extent
+Date:   Mon, 9 May 2022 21:14:16 +0800
+Message-ID: <20220509131416.17553-16-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220509131416.17553-1-linmiaohe@huawei.com>
 References: <20220509131416.17553-1-linmiaohe@huawei.com>
@@ -51,29 +51,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If no pages were pinned, 0 is returned in fact. Fix the corresponding
-comment.
+Since commit 4efaceb1c5f8 ("mm, swap: use rbtree for swap_extent"), rbtree
+is used for swap extent. Also curr_swap_extent is removed at that time.
+Update the corresponding comment.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/swap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/swap.h |  4 ++--
+ mm/swapfile.c        | 15 ++++++---------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/mm/swap.c b/mm/swap.c
-index 6d2c37f781f8..236b37663a1a 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -168,8 +168,8 @@ EXPORT_SYMBOL(put_pages_list);
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 8772132d21dc..e1f3201dec6f 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -173,8 +173,8 @@ struct zone;
+ 
+ /*
+  * A swap extent maps a range of a swapfile's PAGE_SIZE pages onto a range of
+- * disk blocks.  A list of swap extents maps the entire swapfile.  (Where the
+- * term `swapfile' refers to either a blockdevice or an IS_REG file.  Apart
++ * disk blocks.  A rbtree of swap extents maps the entire swapfile (Where the
++ * term `swapfile' refers to either a blockdevice or an IS_REG file). Apart
+  * from setup, they're handled identically.
   *
-  * Returns number of pages pinned. This may be fewer than the number
-  * requested. If nr_pages is 0 or negative, returns 0. If no pages
-- * were pinned, returns -errno. Each page returned must be released
-- * with a put_page() call when it is finished with.
-+ * were pinned, returns 0. Each page returned must be released with
-+ * a put_page() call when it is finished with.
+  * We always assume that blocks are of size PAGE_SIZE.
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 7ead5fb96d9d..b3f977d9c83e 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2225,8 +2225,8 @@ EXPORT_SYMBOL_GPL(add_swap_extent);
+ 
+ /*
+  * A `swap extent' is a simple thing which maps a contiguous range of pages
+- * onto a contiguous range of disk blocks.  An ordered list of swap extents
+- * is built at swapon time and is then used at swap_writepage/swap_readpage
++ * onto a contiguous range of disk blocks.  A rbtree of swap extents is
++ * built at swapon time and is then used at swap_writepage/swap_readpage
+  * time for locating where on disk a page belongs.
+  *
+  * If the swapfile is an S_ISBLK block device, a single extent is installed.
+@@ -2234,12 +2234,12 @@ EXPORT_SYMBOL_GPL(add_swap_extent);
+  * swap files identically.
+  *
+  * Whether the swapdev is an S_ISREG file or an S_ISBLK blockdev, the swap
+- * extent list operates in PAGE_SIZE disk blocks.  Both S_ISREG and S_ISBLK
++ * extent rbtree operates in PAGE_SIZE disk blocks.  Both S_ISREG and S_ISBLK
+  * swapfiles are handled *identically* after swapon time.
+  *
+  * For S_ISREG swapfiles, setup_swap_extents() will walk all the file's blocks
+- * and will parse them into an ordered extent list, in PAGE_SIZE chunks.  If
+- * some stray blocks are found which do not fall within the PAGE_SIZE alignment
++ * and will parse them into a rbtree, in PAGE_SIZE chunks.  If some stray
++ * blocks are found which do not fall within the PAGE_SIZE alignment
+  * requirements, they are simply tossed out - we will never use those blocks
+  * for swapping.
+  *
+@@ -2248,10 +2248,7 @@ EXPORT_SYMBOL_GPL(add_swap_extent);
+  *
+  * The amount of disk space which a single swap extent represents varies.
+  * Typically it is in the 1-4 megabyte range.  So we can have hundreds of
+- * extents in the list.  To avoid much list walking, we cache the previous
+- * search location in `curr_swap_extent', and start new searches from there.
+- * This is extremely effective.  The average number of iterations in
+- * map_swap_page() has been measured at about 0.3 per page.  - akpm.
++ * extents in the rbtree. - akpm.
   */
- int get_kernel_pages(const struct kvec *kiov, int nr_segs, int write,
- 		struct page **pages)
+ static int setup_swap_extents(struct swap_info_struct *sis, sector_t *span)
+ {
 -- 
 2.23.0
 

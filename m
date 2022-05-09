@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A42520110
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D819E52010F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbiEIP2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S238305AbiEIP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238236AbiEIP2B (ORCPT
+        with ESMTP id S238229AbiEIP2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:28:01 -0400
+        Mon, 9 May 2022 11:28:03 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263C12B031C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:24:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4802B09F1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652109847; x=1683645847;
+  t=1652109849; x=1683645849;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7BI3ZK+h+P3VwEMDxcAP7FNTp6syom8qcPR9b2opId4=;
-  b=ghvLdJpK9RGV6otcmeaT4/b4QKCRxS0pP4eJA9cRkMJS8Sl+iQiOO6Fs
-   p8kMFyrwgcyHJPFf0VPLykWYB4eRViCR4wwkresKZFb6gTqL3mdrCC0cr
-   A3cfFxriqwh+Ksp3R6HGxhfkWWlyz7hqR8+hJ8R8uqhYFp0aWkWXdvhZc
-   EWFbskUgQgFy88wlHzsAqlmvfD8U8DiHvt9FMGt/Mit0Zitt96oN1VIWt
-   aEgFudMo2ZMmELQQ5CwmPIhZOosTW3cp8ly0aLGnGg3BeyoO01BccZFHU
-   hoh+pwOgEd3uUb+geYa7gVs1V4h3x7OXINnUlo6YkVDTtahmwsQtKJ3vt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294306864"
+  bh=/sViUog6BCJi155DSkmrPcl4AzpSt9KMDE0A8R8Se/U=;
+  b=Gq1Ad5V0ITZgAczgR9niGde8+Co/t1KejXfPDd56XcLiKEKj5/WjGk71
+   J3fLHMd7g7GoNUuRJtvjof59veCSkenw+2gH6RA58jSt7cuxm6i0GRNSR
+   ZFqamInSprbD7apV24cGnxzi0+KFdQ1fhDlpdehle5X4iHsJK+I4Ff2K6
+   zxInLH2xsilzVpKegZSn9klpeQuWtybvTn1dTgh0AZotL+83Bdo3tBBBn
+   xf/y5uwqW3uNTnDTe1SE9wvu4ZP+X/rVCxGYL2g0Hc0heuu1Ru0e6mC7a
+   XzWejjet1oBkfJhBLwRP7J5Oo6cN6I4J8xhArPA5rIX0aJLjJ1CRwVtDt
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294306875"
 X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="294306864"
+   d="scan'208";a="294306875"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 08:24:06 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 08:24:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="592705398"
+   d="scan'208";a="592705512"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
-  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 08:24:05 -0700
+  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 08:24:07 -0700
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] perf script: Print Intel ptwrite value as a string if it is ASCII
-Date:   Mon,  9 May 2022 18:23:59 +0300
-Message-Id: <20220509152400.376613-3-adrian.hunter@intel.com>
+Subject: [PATCH 3/3] perf scripts python: intel-pt-events.py: Print ptwrite value as a string if it is ASCII
+Date:   Mon,  9 May 2022 18:24:00 +0300
+Message-Id: <20220509152400.376613-4-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220509152400.376613-1-adrian.hunter@intel.com>
 References: <20220509152400.376613-1-adrian.hunter@intel.com>
@@ -76,66 +76,36 @@ tools/perf/Documentation/perf-intel-pt.txt:
  $ perf record -e intel_pt//u ./eg_ptw 0x0000006f6c6c6548
  [ perf record: Woken up 1 times to write data ]
  [ perf record: Captured and wrote 0.016 MB perf.data ]
- $ perf script --itrace=ew
-           eg_ptw 35563 [005] 18256.087338:     ptwrite:  IP: 0 payload: 0x6f6c6c6548 Hello      55e764db5196 perf_emulate_ptwrite+0x16 (/home/user/eg_ptw)
- $
+ $ perf script --itrace=ew intel-pt-events.py
+ Intel PT Branch Trace, Power Events, Event Trace and PTWRITE
+      Switch In   38524/38524 [001]     24166.044995916     0/0
+           eg_ptw 38524/38524 [001]     24166.045380004   ptwrite  jmp                   IP: 0 payload: 0x6f6c6c6548 Hello     56532c7ce196 perf_emulate_ptwrite+0x16 (/home/ahunter/git/work/eg_ptw)
+ End
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/builtin-script.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+ tools/perf/scripts/python/intel-pt-events.py | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index cf5eab5431b4..ae6d216df438 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -1742,16 +1742,44 @@ static int perf_sample__fprintf_pt_spacing(int len, FILE *fp)
- 	return perf_sample__fprintf_spacing(len, 34, fp);
- }
+diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
+index 973bd12b7b40..9b7746b89381 100644
+--- a/tools/perf/scripts/python/intel-pt-events.py
++++ b/tools/perf/scripts/python/intel-pt-events.py
+@@ -104,7 +104,13 @@ def print_ptwrite(raw_buf):
+ 	flags = data[0]
+ 	payload = data[1]
+ 	exact_ip = flags & 1
+-	print("IP: %u payload: %#x" % (exact_ip, payload), end=' ')
++	try:
++		s = payload.to_bytes(8, "little").decode("ascii").rstrip("\x00")
++		if not s.isprintable():
++			s = ""
++	except:
++		s = ""
++	print("IP: %u payload: %#x" % (exact_ip, payload), s, end=' ')
  
-+/* If a value contains only printable ASCII characters padded with NULLs */
-+static bool ptw_is_prt(u64 val)
-+{
-+	char c;
-+	u32 i;
-+
-+	for (i = 0; i < sizeof(val); i++) {
-+		c = ((char *)&val)[i];
-+		if (!c)
-+			break;
-+		if (!isprint(c) || !isascii(c))
-+			return false;
-+	}
-+	for (; i < sizeof(val); i++) {
-+		c = ((char *)&val)[i];
-+		if (c)
-+			return false;
-+	}
-+	return true;
-+}
-+
- static int perf_sample__fprintf_synth_ptwrite(struct perf_sample *sample, FILE *fp)
- {
- 	struct perf_synth_intel_ptwrite *data = perf_sample__synth_ptr(sample);
-+	char str[sizeof(u64) + 1] = "";
- 	int len;
-+	u64 val;
- 
- 	if (perf_sample__bad_synth_size(sample, *data))
- 		return 0;
- 
--	len = fprintf(fp, " IP: %u payload: %#" PRIx64 " ",
--		     data->ip, le64_to_cpu(data->payload));
-+	val = le64_to_cpu(data->payload);
-+	if (ptw_is_prt(val)) {
-+		memcpy(str, &val, sizeof(val));
-+		str[sizeof(val)] = 0;
-+	}
-+	len = fprintf(fp, " IP: %u payload: %#" PRIx64 " %s ",
-+		      data->ip, val, str);
- 	return len + perf_sample__fprintf_pt_spacing(len, fp);
- }
- 
+ def print_cbr(raw_buf):
+ 	data = struct.unpack_from("<BBBBII", raw_buf)
 -- 
 2.25.1
 

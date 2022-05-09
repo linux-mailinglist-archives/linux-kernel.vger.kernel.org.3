@@ -2,113 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A65202F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476435202F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239308AbiEIQz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S239317AbiEIQ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239297AbiEIQzw (ORCPT
+        with ESMTP id S239305AbiEIQ4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:55:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D9A2A83E7;
-        Mon,  9 May 2022 09:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652115118; x=1683651118;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZHf1aKrJPNEzW3CkgiZfux0Tgdcjxu6YIMeTHM4FNg8=;
-  b=HqvzycxNJqhIv5kTYJJ6RtMy19OoAc83bCoeTFfdE5XW7nWOZQY2P95y
-   j8puy348guhBTWS4ZcKRqgdwCS13mImhZ+JTVN0YgIHkkknHTyCDYGexU
-   sRbfkTnqEog8r1WiS5WXLn3EToKkqilAqFq3868hQ3ThYvibgNszyeh1d
-   TtfKWi8tW7nnyM7i5+a5/tHlfIJf7gwJeS49tTZx0WGt0HHRYbgy3Xqbc
-   IjJPzakSSLcbC37/m2MOvC9taUCyLbqGdjUPxhzY6sDS+C+3z8uk5DYR1
-   KZzRLZDcn0+cJHYjE5lnQA4yGh6rBcvoByaRidf5s0E3bUD41jk/YhysE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249007726"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="249007726"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 09:51:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="710610178"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 09 May 2022 09:51:57 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 9 May 2022 09:51:57 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 9 May 2022 09:51:57 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Mon, 9 May 2022 09:51:57 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v7 06/12] platform/x86/intel/ifs: Check IFS Image sanity
-Thread-Topic: [PATCH v7 06/12] platform/x86/intel/ifs: Check IFS Image sanity
-Thread-Index: AQHYYZw4URI4jEBNME2Pw/7vY15Q9K0XNqMA//+PpSA=
-Date:   Mon, 9 May 2022 16:51:56 +0000
-Message-ID: <ddd29688b88b4176957ef5dd8731d90a@intel.com>
-References: <20220506014035.1173578-1-tony.luck@intel.com>
- <20220506225410.1652287-1-tony.luck@intel.com>
- <20220506225410.1652287-7-tony.luck@intel.com> <YnlB6iAp4fjM0Cw9@zn.tnic>
-In-Reply-To: <YnlB6iAp4fjM0Cw9@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 9 May 2022 12:56:30 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A202AACCA
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:52:36 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id e12so26025563ybc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:52:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UXiFk325eT/uin6juY8MDs9uDbcZ0rRGYF4uwLrhYoM=;
+        b=CU57t1DGavqfk6REfm4jRrmgtCHhA9Bxhq2YKjsvtcug8qNwcUw80SzW3L1amX/eub
+         aWHrplchw1istxVlUaUqAhQHIEM8hsceFJO5JdyQz47ykHSStdl3M0N1JESaF9e0u5ET
+         upwfQlac2YdqILyIu5hYCpNmJDkQ6jcNcvVSPUfOJR5QX3UaEFzcUOY5WJlp44FK8QKq
+         kAJJMWIH9muaZmmyuxcPnCOPkOrgn8pItEUdQcV8XOUyXlezRsYugSSsA9pqfGIOaQcO
+         2+0WkYzqIPwPTT/I+Wky0adhyCLHO6M8xSl9FA8nkJWQ7OdR+VbR7QCM7s9ZqkuxB5N4
+         qpEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UXiFk325eT/uin6juY8MDs9uDbcZ0rRGYF4uwLrhYoM=;
+        b=hmktVChq+VUQ2WKR4sMTT5+3KjuFa/BhrSP3oppF18sKt2FCEozDBOiZ1ui5qdnNYy
+         TciW7DmZ9JVCe9O4ws+SOvakLycbOppZxb4/GHBe0IvhssOSUZ+fSggtBvyAxrjmwu1K
+         k6bHydqDIO0ISZQPzI37wvJEghF05eTtqhylL90ZoK69FPuaQzZ2h21PiUV/4Lc4m9s6
+         /0BBHIc2lCtmlTGjgKA++KuGGC0dBTbGbEQw4YDYwlOGh1CuVI78cQ2VuXznryyK4Bhj
+         MCmt3hvsbaI+pSdBRZn3YbufLDwKCJSdOkxRHjao+pZPxQfCElknwDhT+5tiwEBU/08z
+         uBDQ==
+X-Gm-Message-State: AOAM533GqeF2lM0pKnM37B7+8Cb//y7RgEKEwOjJiEPgpsUkb3ua23mh
+        6sii11+X3CT/Tjx8zUpl9dffcWH/YI2xmN83rfVzjw==
+X-Google-Smtp-Source: ABdhPJzD5+vOjoR45J8vJybqt5bFVkZynODUV+GbSK3Xg47Qljq/cxhdIWBHvAQIVHV3k2CB3K52qDrkMO0vgvJva+4=
+X-Received: by 2002:a25:e7d1:0:b0:645:7216:d9d0 with SMTP id
+ e200-20020a25e7d1000000b006457216d9d0mr14454488ybh.307.1652115155053; Mon, 09
+ May 2022 09:52:35 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+ <87k0ayhc43.ffs@tglx> <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+ <87h762h5c2.ffs@tglx> <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
+In-Reply-To: <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 9 May 2022 18:51:59 +0200
+Message-ID: <CAG_fn=X8mc9-_-S-+b9HuF4_-PhN3=1umu5twY8oYn1OgRhuLg@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBJcyB0aGUgY2hlY2tzdW0gdGhlIG9ubHkgcHJvdGVjdGlvbiBhZ2FpbnN0IHBlb3BsZSBsb2Fk
-aW5nIGFyYml0cmFyeSBJRlMNCj4gaW1hZ2VzIG9yIGFyZSB0aG9zZSB0aGluZ3Mgc2lnbmVkIG9y
-IGVuY3J5cHRlZCwganVzdCBsaWtlIHRoZSBtaWNyb2NvZGU/DQo+DQo+IEknZCBob3BlIHRoZXkg
-cGFzcyB0aGUgc2FtZSBjaGVja3MgYXMgbWljcm9jb2RlLCB3aGVuIHRoZXkgZ2V0IGxvYWRlZCwN
-Cj4gY29uc2lkZXJpbmcgdGhlIHNpbWlsYXJpdHkgb2YgaG93IHRoZXkncmUgaGFuZGxlZC4uLg0K
-DQpUaGUgY2hlY2tzdW0gaXMganVzdCBhICJkaWQgdGhpcyBmaWxlIGdldCBjb3JydXB0ZWQgY2hl
-Y2siLiBUaGUgZmlsZSBjb250YWlucw0KU0hBMjU2IGNoZWNrc3VtcyBmb3IgZWFjaCBvZiB0aGUg
-Y2h1bmtzLiBUaGVzZSBjaGVja3N1bXMgYXJlIGRpZ2l0YWxseQ0Kc2lnbmVkLiBDaGVja2luZyBv
-ZiB0aGVzZSBpcyBkb25lIGJ5IG1pY3JvY29kZSB3aGVuIHRoZSBmaWxlIGlzIGxvYWRlZCBpbnRv
-DQpCSU9TIHJlc2VydmVkIG1lbW9yeSAod2hlcmUgaXQgaXMgaW5hY2Nlc3NpYmxlIHRvIE9TIGFu
-ZCBJL08pLg0KDQotVG9ueQ0K
+On Mon, May 9, 2022 at 6:50 PM Alexander Potapenko <glider@google.com> wrote:
+>
+> > The callchain is:
+> >
+> >   asm_sysvec_apic_timer_interrupt               <- ASM entry in gate
+> >      sysvec_apic_timer_interrupt(regs)          <- noinstr C entry point
+> >         irqentry_enter(regs)                    <- unpoisons @reg
+> >         __sysvec_apic_timer_interrupt(regs)     <- the actual handler
+> >            set_irq_regs(regs)                   <- stores regs
+> >            local_apic_timer_interrupt()
+> >              ...
+> >              tick_handler()                     <- One of the 4 variants
+> >                 regs = get_irq_regs();          <- retrieves regs
+> >                 update_process_times(user_tick = user_mode(regs))
+> >                    account_process_tick(user_tick)
+> >                       irqtime_account_process_tick(user_tick)
+> > line 382:                } else if { user_tick }   <- KMSAN complains
+> >
+> > I'm even more confused now.
+>
+> Ok, I think I know what's going on.
+>
+> Indeed, calling kmsan_unpoison_memory() in irqentry_enter() was
+> supposed to be enough, but we have code in kmsan_unpoison_memory() (as
+> well as other runtime functions) that checks for kmsan_in_runtime()
+> and bails out to prevent potential recursion if KMSAN code starts
+> calling itself.
+>
+> kmsan_in_runtime() is implemented as follows:
+>
+> ==============================================
+> static __always_inline bool kmsan_in_runtime(void)
+> {
+>   if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
+>     return true;
+>   return kmsan_get_context()->kmsan_in_runtime;
+> }
+> ==============================================
+> (see the code here:
+> https://lore.kernel.org/lkml/20220426164315.625149-13-glider@google.com/#Z31mm:kmsan:kmsan.h)
+>
+> If we are running in the task context (in_task()==true),
+> kmsan_get_context() returns a per-task `struct *kmsan_ctx`.
+> If `in_task()==false` and `hardirq_count()>>HARDIRQ_SHIFT==1`, it
+> returns a per-CPU one.
+> Otherwise kmsan_in_runtime() is considered true to avoid dealing with
+> nested interrupts.
+>
+> So in the case when `hardirq_count()>>HARDIRQ_SHIFT` is greater than
+> 1, kmsan_in_runtime() becomes a no-op, which leads to false positives.
+Should be "kmsan_unpoison_memory() becomes a no-op..."

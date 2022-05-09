@@ -2,96 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E3651F386
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E648D51F38A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiEIEju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S231540AbiEIEoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbiEIEgo (ORCPT
+        with ESMTP id S233120AbiEIElW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:36:44 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BADB126C2A
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:32:49 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 248Nq6e9004620;
-        Sun, 8 May 2022 21:32:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=rLr3fZbfrwdxpdqUmO+7CXj9h1u666zzhD5qe0O+oHw=;
- b=HWh81//F61cNkEG0UfKh0asgFZK/aJYN7qH9erMthRC7zPeorO2Oh85f6wHN9qnX2hXm
- 9/hYFfGTtryZFjQ09rmSH/ou0wNFtnZDgphD6kBpSA383yx9LnFgee3L/movHN8sVZFo
- nvw3cOzjtuXJ3u61f0xtowoSie1WaNSepTyJVlMayfJaYZWRI3aGofclNfFQlL6eEnIi
- qzZ20MhPx9UeWz3Wur8RrVcdyG8VacWhn9gQ0tAzB+UHlfCPVKbfxeDp8GiLqo4EtOEf
- zFAhEOSbJsQuf86Omi2DQvrY83RBomls+Ph60UvLu/fDiUMPgUCL4cwOjU4Z57tM9BTX LQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3fwy5j3mh1-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sun, 08 May 2022 21:32:30 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sun, 8 May
- 2022 21:32:28 -0700
-Received: from localhost.localdomain (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Sun, 8 May 2022 21:32:25 -0700
-From:   Linu Cherian <lcherian@marvell.com>
-To:     <maz@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        "kernel test robot" <lkp@intel.com>
-Subject: [PATCH V2] arm64: Declare non global symbols as static
-Date:   Mon, 9 May 2022 10:02:21 +0530
-Message-ID: <20220509043221.16361-1-lcherian@marvell.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 9 May 2022 00:41:22 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B99C128158
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:37:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id k126so7678991wme.2
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ov4p0XX7tQqCu3BT1O07xpESNC6AFz/oTsF1DSF1DeY=;
+        b=CIUvEXQyV6Kw6zKcKwganTJ9uL4GSu7nCc1HaR22V3NpFhh+o/R4HnNzPn0jj3j5M6
+         vn/IV/XESXhwVIdYHG4JU3+9T/wWZ9nank20/BzpGqc16kNP8f7o3vJnimo0wKpXD1V5
+         2LMdi50z6dz6gCkumhOzrSy+FABWc4j2i8Xl9VlKA1OFVQHNzqyYnRHgoiz9jf6DsaWe
+         Pm49CVfMF28G1PN038G0Lb+MHYfsv6rkxdNb3qDmD/vUZBbFUG6ba1r9a2iEszdq3SvZ
+         xZK4XRvgiLu2uTHHyoYz+VorXX7rByxY4TI7PZm1eTJ18bIEa9qW1RN7E6Xqd+Vmcp9k
+         FBMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ov4p0XX7tQqCu3BT1O07xpESNC6AFz/oTsF1DSF1DeY=;
+        b=Ug0kqxtkk+lbod7nmSQ5ChMbAXgBY13uYkiNqHQ6Fx8/Lr4g6EE/lzDyMyCLzD7/5A
+         6lXjbCko1zaUOdw7GoyYV6RbOVrpi4FTbBHHdW5eTEqpg+meyA6eATvH9v8qtxATTeUA
+         bvJP4oooGOIV2YOs9zQ6Q4xvQj0IftG6mqtESP4/ySaDLf9YclVkiLnhF75B5Heb1WGn
+         3U0fL5wOXCAg4E+A9dK7utHgi8VIf0FtD5t9hc5j4rkYy6OS5tmJ5TeXdqkSghk0Fcjf
+         VelznwumyNOrSGPPnnAQ107B+Gm3o/N5xi1FXYcHsOw0f7nRAyI6ide+PId6dyD37vR5
+         DisQ==
+X-Gm-Message-State: AOAM530YBXmfjo/aYs3kdlEEMEDpsTLENeZbBGEA0o59ipp8QnhW/CZX
+        QVYken+fAhuhunFey/KAP0fZo783lsV35/QA2fHbFA==
+X-Google-Smtp-Source: ABdhPJwKlNzuRE3DL81XLBWis1ERv1cq+V1muXCMdHLI5gzEuRvadbetbhnukQ9XzoVFdhzjI2CaXT+vNeqj1MdG5qo=
+X-Received: by 2002:a05:600c:1d08:b0:394:54ee:c994 with SMTP id
+ l8-20020a05600c1d0800b0039454eec994mr13927419wms.137.1652071047349; Sun, 08
+ May 2022 21:37:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: VPmKMi-ejMp8eedWKaFJv5xE6Cx2Mhc-
-X-Proofpoint-GUID: VPmKMi-ejMp8eedWKaFJv5xE6Cx2Mhc-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-09_01,2022-05-06_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220508160749.984-1-jszhang@kernel.org>
+In-Reply-To: <20220508160749.984-1-jszhang@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 9 May 2022 10:07:16 +0530
+Message-ID: <CAAhSdy1qri5L9pVcZO8areB=TXMSJBg2+cTNMZGQ3g+3Qhxmfg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] unified way to use static key and optimize pgtable_l4_enabled
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix below sparse warnings introduced while adding errata.
+On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> Currently, riscv has several features which may not be supported on all
+> riscv platforms, for example, FPU, SV48, SV57 and so on. To support
+> unified kernel Image style, we need to check whether the feature is
+> suportted or not. If the check sits at hot code path, then performance
+> will be impacted a lot. static key can be used to solve the issue. In
+> the past, FPU support has been converted to use static key mechanism.
+> I believe we will have similar cases in the future. For example, the
+> SV48 support can take advantage of static key[1].
+>
+> patch1 is a simple W=1 warning fix.
+> patch2 introduces an unified mechanism to use static key for riscv cpu
+> features.
+> patch3 converts has_cpu() to use the mechanism.
+> patch4 uses the mechanism to optimize pgtable_l4|[l5]_enabled.
+>
+> [1] http://lists.infradead.org/pipermail/linux-riscv/2021-December/011164.html
 
-arch/arm64/kernel/cpu_errata.c:218:25: sparse: warning: symbol
-'cavium_erratum_23154_cpus' was not declared. Should it be static?
+Overall, using a script to generate CPU capabilities seems a bit
+over-engineered to me. We already have RISC-V ISA extension
+parsing infrastructure which can be easily extended to support
+static key arrays.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Linu Cherian <lcherian@marvell.com>
----
-Changes from V1:
-Reverted change to global symbol cavium_erratum_27456_cpus since it
-was used in other files.
+Regards,
+Anup
 
- arch/arm64/kernel/cpu_errata.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 4c9b5b4b7a0b..49f4863c6c56 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -215,7 +215,7 @@ static const struct arm64_cpu_capabilities arm64_repeat_tlbi_list[] = {
- #endif
- 
- #ifdef CONFIG_CAVIUM_ERRATUM_23154
--const struct midr_range cavium_erratum_23154_cpus[] = {
-+static const struct midr_range cavium_erratum_23154_cpus[] = {
- 	MIDR_ALL_VERSIONS(MIDR_THUNDERX),
- 	MIDR_ALL_VERSIONS(MIDR_THUNDERX_81XX),
- 	MIDR_ALL_VERSIONS(MIDR_THUNDERX_83XX),
--- 
-2.31.1
-
+>
+> Since v1:
+>  - Add a W=1 warning fix
+>  - Fix W=1 error
+>  - Based on v5.18-rcN, since SV57 support is added, so convert
+>    pgtable_l5_enabled as well.
+>
+> Jisheng Zhang (4):
+>   riscv: mm: init: make pt_ops_set_[early|late|fixmap] static
+>   riscv: introduce unified static key mechanism for CPU features
+>   riscv: replace has_fpu() with system_supports_fpu()
+>   riscv: convert pgtable_l4|[l5]_enabled to static key
+>
+>  arch/riscv/Makefile                 |   3 +
+>  arch/riscv/include/asm/cpufeature.h | 110 ++++++++++++++++++++++++++++
+>  arch/riscv/include/asm/pgalloc.h    |  16 ++--
+>  arch/riscv/include/asm/pgtable-64.h |  40 +++++-----
+>  arch/riscv/include/asm/pgtable.h    |   5 +-
+>  arch/riscv/include/asm/switch_to.h  |   9 +--
+>  arch/riscv/kernel/cpu.c             |   4 +-
+>  arch/riscv/kernel/cpufeature.c      |  29 ++++++--
+>  arch/riscv/kernel/process.c         |   2 +-
+>  arch/riscv/kernel/signal.c          |   4 +-
+>  arch/riscv/mm/init.c                |  52 ++++++-------
+>  arch/riscv/mm/kasan_init.c          |  16 ++--
+>  arch/riscv/tools/Makefile           |  22 ++++++
+>  arch/riscv/tools/cpucaps            |   7 ++
+>  arch/riscv/tools/gen-cpucaps.awk    |  40 ++++++++++
+>  15 files changed, 274 insertions(+), 85 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/cpufeature.h
+>  create mode 100644 arch/riscv/tools/Makefile
+>  create mode 100644 arch/riscv/tools/cpucaps
+>  create mode 100755 arch/riscv/tools/gen-cpucaps.awk
+>
+> --
+> 2.34.1
+>

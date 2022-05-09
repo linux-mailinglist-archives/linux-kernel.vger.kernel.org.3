@@ -2,151 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF87C51FB27
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0FC51FB21
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiEILVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S232342AbiEILUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiEILVF (ORCPT
+        with ESMTP id S232286AbiEILUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:21:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87822248D9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652095031; x=1683631031;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E3F9lJvCV7D52b4WS/P9PZZC1polKbLU7pVbpD/VrA8=;
-  b=XD+a65VcxcQffTCGcPlxGp1GNI7gbW1uQalLIN0kbBh0DF2y/z6WtH4I
-   ZagYYx0+57jfhtoqeW7d0G7Ritpi0qLWJXCNpaIMr0xoSBSjOt0IsCtMl
-   0mEetmKEDCOvYOMjKT9ErTgOXttNGyxmu1VsILRtyMYf5SSf0X1nRVBEG
-   uF3AoRlCTW83BDynBZMRYj6q1I5VvQfPKEo9LKKVnpg2A4VlJD3j29+YQ
-   vIi+nF1pH2b+bSOYtyzu4oJvelv+9H80JuoH2BoEYVY7C4LlVV0Tf3Ty8
-   rq/vf/S8Wd6Rd5ZKG+TjoSUc7hq8OmKCsNAtx3D3e8LsmOwR0HuWW+nNy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267859996"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="267859996"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:17:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="550978639"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 04:17:07 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no1Ny-000GSQ-QU;
-        Mon, 09 May 2022 11:17:06 +0000
-Date:   Mon, 9 May 2022 19:16:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     kbuild-all@lists.01.org, alaa@dev.mellanox.co.il,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [alaahl:netdev-next 6/7] WARNING: modpost:
- vmlinux.o(.text+0xba9220): Section mismatch in reference from the function
- vhost_poll_init() to the variable .init.text:.L334
-Message-ID: <202205091902.efRQLfpK-lkp@intel.com>
+        Mon, 9 May 2022 07:20:38 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FB1C6C80
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:16:44 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so8058976wme.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jNOBE1z/4NtpGLe00EXXh4Iu7ejgcHgzbGnUckjMihw=;
+        b=WvdzSshWmxodyKHlw6VFoeqRqJESG3fTgU+7I4UwSjiytpfn8XZqxJYSvw9CVd7fCf
+         k6Kkw32dLAD4+IDNlIel9WEjVDjB8/qRninhCMqLZ4ZnIzv5Hw0gWmEfZTsGuWkv2HZf
+         lWZh0P36OMaddpkd7Wj+ExVdMlgsEF59SrAhYtILImU8N0lKcECHW0noMqjcZWMwMIhp
+         Vwy2EdGEgMxB3+AwgoNiyxalqy4iH3U+dx20/Pf0ui84FGgt/27RpNlHCLjToRJiPNlL
+         BKyP0jBH50B/Lm4odz69ikfLK6Ojo+7uKc0BoeUzj9Anp5d7P6iETJpIF5RwTRO6i4wq
+         QNqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jNOBE1z/4NtpGLe00EXXh4Iu7ejgcHgzbGnUckjMihw=;
+        b=ep2Dq4VF4/mG9bphJZKnR220GeiC7mVxq2AoMELDw4sByXli0dQKocGtrCP7tmO9uC
+         UKvOVcrb5Tc4G0bAozs+WtGxQZNVXlHS/dhiKewf1NBmlcCWhWiWJ4qIQYrE4DsOK1Bi
+         OmR5Z8enTppma/p8a4UZ7dBD4X0lgyZqYG4DbHVcKRkCYnX/kUhdQv739P/fcnSHRUqQ
+         qG6tAONyU8FzpAdYjbc7/WaB9k16Ah6n+oWfMK4viNkB0/cjWa2ESnXbjjDmChr5FSnl
+         RWKgxDkj0ieMiPqs76b8KL6eCM7lAT4fUnKpnxlMTMABS6ZNsSKZgaX7o1qVJ77xkkxA
+         QqWg==
+X-Gm-Message-State: AOAM533zioIzsICCxJufCWjV+CxaP13lC1AF+vFDTz9ePoKf7In7Z2R6
+        64oajBIKeMZK0MXJUnuI4+38wA==
+X-Google-Smtp-Source: ABdhPJw/uA3KyEOb7IOfYdcJibXDQ2ibAG9h0d3kW5wk9pYdwo4Xg6EC+5Z1GD4ZWa2JBQRLRfPIJw==
+X-Received: by 2002:a7b:c215:0:b0:394:5235:fe1 with SMTP id x21-20020a7bc215000000b0039452350fe1mr21703152wmi.56.1652095002759;
+        Mon, 09 May 2022 04:16:42 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id x18-20020a5d4912000000b0020c5253d928sm10611514wrq.116.2022.05.09.04.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 04:16:42 -0700 (PDT)
+Date:   Mon, 9 May 2022 13:16:38 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     alexandre.torgue@foss.st.com, andrew@lunn.ch, broonie@kernel.org,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 4/6] ARM: dts: sunxi: move phy regulator in PHY node
+Message-ID: <Ynj4FlyhZ3lEtLBT@Red>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-5-clabbe@baylibre.com>
+ <20220509115533.1493db30@donnerap.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509115533.1493db30@donnerap.cambridge.arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alaahl/linux.git netdev-next
-head:   c908565eecf2d310edddaecea6166015abe9df08
-commit: fe5233b0ba0d2216d549f93e4540542b99b97642 [6/7] net: dsa: delete dsa_port_walk_{fdbs,mdbs}
-config: riscv-randconfig-r042-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091902.efRQLfpK-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alaahl/linux/commit/fe5233b0ba0d2216d549f93e4540542b99b97642
-        git remote add alaahl https://github.com/alaahl/linux.git
-        git fetch --no-tags alaahl netdev-next
-        git checkout fe5233b0ba0d2216d549f93e4540542b99b97642
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Le Mon, May 09, 2022 at 11:55:33AM +0100, Andre Przywara a écrit :
+> On Mon,  9 May 2022 07:48:55 +0000
+> Corentin Labbe <clabbe@baylibre.com> wrote:
+> 
+> Hi!
+> 
+> > Now that PHY core can handle regulators, move regulator handle in PHY
+> > node.
+> 
+> Other than this is somewhat more "correct", is it really needed for those
+> boards? Because it breaks compatibility with older kernels, so when we
+> update the DTs in U-Boot, we run into problems (again).
+> 
+> IIUC this series is about the OPi3 & friends, which didn't work with older
+> kernels anyway, so can we just skip this patch (and 5/6), to just enable
+> the boards that didn't work before?
+> 
+> Cheers,
+> Andre
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0xba9220): Section mismatch in reference from the function vhost_poll_init() to the variable .init.text:.L334
-The function vhost_poll_init() references
-the variable __init .L334.
-This is often because vhost_poll_init lacks a __init
-annotation or the annotation of .L334 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xba9942): Section mismatch in reference from the function vhost_dev_reset_owner_prepare() to the variable .init.text:.L328
-The function vhost_dev_reset_owner_prepare() references
-the variable __init .L328.
-This is often because vhost_dev_reset_owner_prepare lacks a __init
-annotation or the annotation of .L328 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0xba9d20): Section mismatch in reference from the function vhost_log_access_ok() to the variable .init.text:.L320
-The function vhost_log_access_ok() references
-the variable __init .L320.
-This is often because vhost_log_access_ok lacks a __init
-annotation or the annotation of .L320 is wrong.
---
->> WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1172
-FATAL: modpost: extable_entry size hasn't been discovered!
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x20f7e): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4e838): Section mismatch in reference from the function calc_global_load_tick() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x2c801e): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2c2): Section mismatch in reference from the function bio_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2da): Section mismatch in reference from the function disk_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d4552): Section mismatch in reference from the function blk_abort_request() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d456a): Section mismatch in reference from the function blk_rq_timeout() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x7e5972): Section mismatch in reference from the function ipu_pre_update() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x846554): Section mismatch in reference from the function scsi_track_queue_full() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x9ccb28): Section mismatch in reference from the function ohci_setup() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x20f7e): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4e838): Section mismatch in reference from the function calc_global_load_tick() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x2c801e): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2c2): Section mismatch in reference from the function bio_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2da): Section mismatch in reference from the function disk_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d4552): Section mismatch in reference from the function blk_abort_request() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d456a): Section mismatch in reference from the function blk_rq_timeout() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x7e5972): Section mismatch in reference from the function ipu_pre_update() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x846554): Section mismatch in reference from the function scsi_track_queue_full() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x9ccb28): Section mismatch in reference from the function ohci_setup() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x20f7e): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4e838): Section mismatch in reference from the function calc_global_load_tick() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x2c801e): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2c2): Section mismatch in reference from the function bio_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2da): Section mismatch in reference from the function disk_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d4552): Section mismatch in reference from the function blk_abort_request() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d456a): Section mismatch in reference from the function blk_rq_timeout() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x7e5972): Section mismatch in reference from the function ipu_pre_update() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x846554): Section mismatch in reference from the function scsi_track_queue_full() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x9ccb28): Section mismatch in reference from the function ohci_setup() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x20f7e): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4e838): Section mismatch in reference from the function calc_global_load_tick() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x2c801e): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2c2): Section mismatch in reference from the function bio_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4cf2da): Section mismatch in reference from the function disk_start_io_acct() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d4552): Section mismatch in reference from the function blk_abort_request() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x4d456a): Section mismatch in reference from the function blk_rq_timeout() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x7e5972): Section mismatch in reference from the function ipu_pre_update() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x846554): Section mismatch in reference from the function scsi_track_queue_full() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x9ccb28): Section mismatch in reference from the function ohci_setup() to the variable .init.text:.L0
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+We could have a situation where stmmac handle phy for older boards, and PHY core handle them for new boards.
+Up to maintainers to see if they want a split situation or not.

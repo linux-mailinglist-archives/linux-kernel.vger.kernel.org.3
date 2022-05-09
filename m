@@ -2,93 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23680520460
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840CB520480
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbiEISUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S240122AbiEIS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240026AbiEISUc (ORCPT
+        with ESMTP id S240107AbiEIS3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:20:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5427C1704D;
-        Mon,  9 May 2022 11:16:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id A1A081F43FBF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652120196;
-        bh=0esjJrezivP9EYp59dd6OuPM+PGc8UvFALjMsvmFKsw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mUh3KDx8N16l+rXRuTIRBtKHsGvmr01Muo2U74eUROqwiqIK9TdjItLT2iPA+pFdw
-         ZfEWl/b+6xDzqzGV3Z6Ogh7UxvtzVCTDXt7fNxonKzjLDb4w4GmV+S//PNbGOkP2H0
-         +ymJQljlQM1pjjU89yEWu9EMflqiwD7Q2U2oUuTaMDWYS+AtJm8okAb00IzpJD3uGx
-         4ORjyRbtV1v6k8OoJ+iHNw8ZRI8gENXeoq1K2bTGTpIAIFzNkmYn9e6GH/dMxLCFLm
-         KOQLwgDqJcID6J2UAyWB5UAvWDA12sWsTEb4JJmPOHXvBumyYeQLBjHIZEweYrUive
-         9rJIooEZD9GfQ==
-Date:   Mon, 9 May 2022 14:16:29 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jiaxin.yu@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, shane.chien@mediatek.com,
-        linux-mediatek@lists.infradead.org, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, kernel@collabora.com, tzungbi@google.com
-Subject: Re: [PATCH 0/3] Add missing dt-binding properties for audio
- components on mt8192-asurada
-Message-ID: <20220509181629.ettskdxfvwvqaq76@notapiano>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
- <165211666198.1065748.1151009730882312510.b4-ty@kernel.org>
+        Mon, 9 May 2022 14:29:35 -0400
+X-Greylist: delayed 478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 11:25:37 PDT
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7833E49242
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:25:34 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 2B9E41AD6F;
+        Mon,  9 May 2022 21:17:35 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 9603E1AEB7;
+        Mon,  9 May 2022 21:17:33 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 18DCD3C07D1;
+        Mon,  9 May 2022 21:17:31 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 249IHPlO074453;
+        Mon, 9 May 2022 21:17:28 +0300
+Date:   Mon, 9 May 2022 21:17:25 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     menglong8.dong@gmail.com
+cc:     Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH net-next] net: ipvs: random start for RR scheduler
+In-Reply-To: <20220509122213.19508-1-imagedong@tencent.com>
+Message-ID: <cb8eaad0-83c5-a150-d830-e078682ba18b@ssi.bg>
+References: <20220509122213.19508-1-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <165211666198.1065748.1151009730882312510.b4-ty@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 06:17:41PM +0100, Mark Brown wrote:
-> On Fri, 29 Apr 2022 16:30:36 -0400, Nícolas F. R. A. Prado wrote:
-> > These patches add properties that were missing on the dt-bindings of the
-> > audio components used by mt8192-asurada. Namely the i2s-share
-> > properties for the sound platform and the #sound-dai-cells on the
-> > rt1015p and rt5682 codecs when they're referenced by the machine sound
-> > node.
-> > 
-> > 
-> > [...]
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> 
-> Thanks!
-> 
-> [1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties
->       commit: e056cf4341ae3f856f1e38da02b27cb04de4c69b
-> [2/3] ASoC: dt-bindings: rt1015p: Add #sound-dai-cells
->       commit: 2f45536587e53a7a22024e12fbe97ef13598e623
-> [3/3] ASoC: dt-bindings: rt5682: Add #sound-dai-cells
->       commit: 0adccaf1eac91a2c2ee6a54a6de042affe9860f4
 
-Hi Mark,
+	Hello,
 
-this series wasn't supposed to be merged yet, I'm in the process of preparing
-and sending a v2. Well, for patch 1 at least, which needs some improvements
-still. Patches 2 and 3 weren't going to be changed, so those would be fine to
-keep merged if you want. 
+On Mon, 9 May 2022, menglong8.dong@gmail.com wrote:
 
-Thanks,
-Nícolas
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> For now, the start of the RR scheduler is in the order of dest
+> service added, it will result in imbalance if the load balance
+
+	...order of added destinations,...
+
+> is done in client side and long connect is used.
+
+	..."long connections are used". Is this a case where
+small number of connections are used? And the two connections
+relatively overload the real servers?
+
+> For example, we have client1, client2, ..., client5 and real service
+> service1, service2, service3. All clients have the same ipvs config,
+> and each of them will create 2 long TCP connect to the virtual
+> service. Therefore, all the clients will connect to service1 and
+> service2, leaving service3 free.
+
+	You mean, there are many IPVS directors with same
+config and each director gets 2 connections? Third connection
+will get real server #3, right ? Also, are the clients local
+to the director?
+
+> Fix this by randomize the start of dest service to RR scheduler when
+
+	..."randomizing the starting destination when"
+
+> IP_VS_SVC_F_SCHED_RR_RANDOM is set.
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  include/uapi/linux/ip_vs.h    |  2 ++
+>  net/netfilter/ipvs/ip_vs_rr.c | 25 ++++++++++++++++++++++++-
+>  2 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/ip_vs.h b/include/uapi/linux/ip_vs.h
+> index 4102ddcb4e14..7f74bafd3211 100644
+> --- a/include/uapi/linux/ip_vs.h
+> +++ b/include/uapi/linux/ip_vs.h
+> @@ -28,6 +28,8 @@
+>  #define IP_VS_SVC_F_SCHED_SH_FALLBACK	IP_VS_SVC_F_SCHED1 /* SH fallback */
+>  #define IP_VS_SVC_F_SCHED_SH_PORT	IP_VS_SVC_F_SCHED2 /* SH use port */
+>  
+> +#define IP_VS_SVC_F_SCHED_RR_RANDOM	IP_VS_SVC_F_SCHED1 /* random start */
+> +
+>  /*
+>   *      Destination Server Flags
+>   */
+> diff --git a/net/netfilter/ipvs/ip_vs_rr.c b/net/netfilter/ipvs/ip_vs_rr.c
+> index 38495c6f6c7c..e309d97bdd08 100644
+> --- a/net/netfilter/ipvs/ip_vs_rr.c
+> +++ b/net/netfilter/ipvs/ip_vs_rr.c
+> @@ -22,13 +22,36 @@
+>  
+>  #include <net/ip_vs.h>
+>  
+> +static void ip_vs_rr_random_start(struct ip_vs_service *svc)
+> +{
+> +	struct list_head *cur;
+> +	u32 start;
+> +
+> +	if (!(svc->flags | IP_VS_SVC_F_SCHED_RR_RANDOM) ||
+
+	| -> &
+
+> +	    svc->num_dests <= 1)
+> +		return;
+> +
+> +	spin_lock_bh(&svc->sched_lock);
+> +	start = get_random_u32() % svc->num_dests;
+
+	May be prandom is more appropriate for non-crypto purposes. 
+Also, not sure if it is a good idea to limit the number of steps,
+eg. to 128...
+
+	start = prandom_u32_max(min(svc->num_dests, 128U));
+
+	or just use
+
+	start = prandom_u32_max(svc->num_dests);
+
+	Also, this line can be before the spin_lock_bh.
+
+> +	cur = &svc->destinations;
+
+	cur = svc->sched_data;
+
+	... and to start from current svc->sched_data because
+we are called for every added dest. Better to jump 0..127 steps
+ahead, to avoid delay with long lists?
+
+> +	while (start--)
+> +		cur = cur->next;
+> +	svc->sched_data = cur;
+> +	spin_unlock_bh(&svc->sched_lock);
+> +}
+>  
+>  static int ip_vs_rr_init_svc(struct ip_vs_service *svc)
+>  {
+>  	svc->sched_data = &svc->destinations;
+> +	ip_vs_rr_random_start(svc);
+>  	return 0;
+>  }
+>  
+> +static int ip_vs_rr_add_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
+> +{
+> +	ip_vs_rr_random_start(svc);
+> +	return 0;
+> +}
+>  
+>  static int ip_vs_rr_del_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
+>  {
+> @@ -104,7 +127,7 @@ static struct ip_vs_scheduler ip_vs_rr_scheduler = {
+>  	.module =		THIS_MODULE,
+>  	.n_list =		LIST_HEAD_INIT(ip_vs_rr_scheduler.n_list),
+>  	.init_service =		ip_vs_rr_init_svc,
+> -	.add_dest =		NULL,
+> +	.add_dest =		ip_vs_rr_add_dest,
+>  	.del_dest =		ip_vs_rr_del_dest,
+>  	.schedule =		ip_vs_rr_schedule,
+>  };
+> -- 
+> 2.36.0
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+

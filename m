@@ -2,183 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5247C51FBED
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CAD51FBF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiEIMCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        id S233644AbiEIMEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbiEIMCn (ORCPT
+        with ESMTP id S233560AbiEIMEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:02:43 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46B29807;
-        Mon,  9 May 2022 04:58:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VClEr-M_1652097526;
-Received: from localhost.localdomain(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VClEr-M_1652097526)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 09 May 2022 19:58:46 +0800
-From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] net/smc: align the connect behaviour with TCP
-Date:   Mon,  9 May 2022 19:58:37 +0800
-Message-Id: <20220509115837.94911-3-guangguan.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20220509115837.94911-1-guangguan.wang@linux.alibaba.com>
-References: <20220509115837.94911-1-guangguan.wang@linux.alibaba.com>
+        Mon, 9 May 2022 08:04:00 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE4418B95B;
+        Mon,  9 May 2022 05:00:05 -0700 (PDT)
+Received: from [127.0.0.1] (unknown [46.183.103.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56BFE1EC0529;
+        Mon,  9 May 2022 13:59:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652097600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SZ0FUxK106JbsF1xbRYLQqCEry+KRNYRswr1LpAp2pE=;
+        b=VxzKXdJGegayDkmVXDvQFwrNls2RPi2YfuiEOm93VxrDV7gOSr5Sr6E2eqQXUDudljUWm2
+        naM86eaoC/NmDPrzV3lyAs+o3FssqBbS9HxGYrGrmlxM95YCGfpfObKvrMb/fxKltUycds
+        KZlVEiMd3cmC5Uyz/n2jiE3kMh2rc2M=
+Date:   Mon, 09 May 2022 11:59:49 +0000
+From:   Boris Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, linux-s390@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+CC:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_2/2=5D_virtio=3A_replace_arc?= =?US-ASCII?Q?h=5Fhas=5Frestricted=5Fvirtio=5Fmemory=5Faccess=28=29?=
+In-Reply-To: <20220504155703.13336-3-jgross@suse.com>
+References: <20220504155703.13336-1-jgross@suse.com> <20220504155703.13336-3-jgross@suse.com>
+Message-ID: <1376936D-E067-430C-A02D-565959F83BE0@alien8.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Connect with O_NONBLOCK will not be completed immediately
-and returns -EINPROGRESS. It is possible to use selector/poll
-for completion by selecting the socket for writing. After select
-indicates writability, a second connect function call will return
-0 to indicate connected successfully as TCP does, but smc returns
--EISCONN. Use socket state for smc to indicate connect state, which
-can help smc aligning the connect behaviour with TCP.
 
-Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
----
- net/smc/af_smc.c | 53 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index fce16b9d6e1a..45f9f7c6e776 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -1544,9 +1544,32 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
- 		goto out_err;
- 
- 	lock_sock(sk);
-+	switch (sock->state) {
-+	default:
-+		rc = -EINVAL;
-+		goto out;
-+	case SS_CONNECTED:
-+		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
-+		goto out;
-+	case SS_CONNECTING:
-+		if (sk->sk_state == SMC_ACTIVE) {
-+			sock->state = SS_CONNECTED;
-+			rc = 0;
-+			goto out;
-+		}
-+		break;
-+	case SS_UNCONNECTED:
-+		sock->state = SS_CONNECTING;
-+		break;
-+	}
-+
- 	switch (sk->sk_state) {
- 	default:
- 		goto out;
-+	case SMC_CLOSED:
-+		rc = sock_error(sk) ? : -ECONNABORTED;
-+		sock->state = SS_UNCONNECTED;
-+		goto out;
- 	case SMC_ACTIVE:
- 		rc = -EISCONN;
- 		goto out;
-@@ -1565,18 +1588,22 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
- 		goto out;
- 
- 	sock_hold(&smc->sk); /* sock put in passive closing */
--	if (smc->use_fallback)
-+	if (smc->use_fallback) {
-+		sock->state = SS_CONNECTED;
- 		goto out;
-+	}
- 	if (flags & O_NONBLOCK) {
- 		if (queue_work(smc_hs_wq, &smc->connect_work))
- 			smc->connect_nonblock = 1;
- 		rc = -EINPROGRESS;
- 	} else {
- 		rc = __smc_connect(smc);
--		if (rc < 0)
-+		if (rc < 0) {
- 			goto out;
--		else
-+		} else {
- 			rc = 0; /* success cases including fallback */
-+			sock->state = SS_CONNECTED;
-+		}
- 	}
- 
- out:
-@@ -1693,6 +1720,7 @@ struct sock *smc_accept_dequeue(struct sock *parent,
- 		}
- 		if (new_sock) {
- 			sock_graft(new_sk, new_sock);
-+			new_sock->state = SS_CONNECTED;
- 			if (isk->use_fallback) {
- 				smc_sk(new_sk)->clcsock->file = new_sock->file;
- 				isk->clcsock->file->private_data = isk->clcsock;
-@@ -2424,7 +2452,7 @@ static int smc_listen(struct socket *sock, int backlog)
- 
- 	rc = -EINVAL;
- 	if ((sk->sk_state != SMC_INIT && sk->sk_state != SMC_LISTEN) ||
--	    smc->connect_nonblock)
-+	    smc->connect_nonblock || sock->state != SS_UNCONNECTED)
- 		goto out;
- 
- 	rc = 0;
-@@ -2716,6 +2744,17 @@ static int smc_shutdown(struct socket *sock, int how)
- 
- 	lock_sock(sk);
- 
-+	if (sock->state == SS_CONNECTING) {
-+		if (sk->sk_state == SMC_ACTIVE)
-+			sock->state = SS_CONNECTED;
-+		else if (sk->sk_state == SMC_PEERCLOSEWAIT1 ||
-+			 sk->sk_state == SMC_PEERCLOSEWAIT2 ||
-+			 sk->sk_state == SMC_APPCLOSEWAIT1 ||
-+			 sk->sk_state == SMC_APPCLOSEWAIT2 ||
-+			 sk->sk_state == SMC_APPFINCLOSEWAIT)
-+			sock->state = SS_DISCONNECTING;
-+	}
-+
- 	rc = -ENOTCONN;
- 	if ((sk->sk_state != SMC_ACTIVE) &&
- 	    (sk->sk_state != SMC_PEERCLOSEWAIT1) &&
-@@ -2729,6 +2768,7 @@ static int smc_shutdown(struct socket *sock, int how)
- 		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
- 		if (sk->sk_shutdown == SHUTDOWN_MASK) {
- 			sk->sk_state = SMC_CLOSED;
-+			sk->sk_socket->state = SS_UNCONNECTED;
- 			sock_put(sk);
- 		}
- 		goto out;
-@@ -2754,6 +2794,10 @@ static int smc_shutdown(struct socket *sock, int how)
- 	/* map sock_shutdown_cmd constants to sk_shutdown value range */
- 	sk->sk_shutdown |= how + 1;
- 
-+	if (sk->sk_state == SMC_CLOSED)
-+		sock->state = SS_UNCONNECTED;
-+	else
-+		sock->state = SS_DISCONNECTING;
- out:
- 	release_sock(sk);
- 	return rc ? rc : rc1;
-@@ -3139,6 +3183,7 @@ static int __smc_create(struct net *net, struct socket *sock, int protocol,
- 
- 	rc = -ENOBUFS;
- 	sock->ops = &smc_sock_ops;
-+	sock->state = SS_UNCONNECTED;
- 	sk = smc_sock_alloc(net, sock, protocol);
- 	if (!sk)
- 		goto out;
--- 
-2.24.3 (Apple Git-128)
+On May 4, 2022 3:57:03 PM UTC, Juergen Gross <jgross@suse=2Ecom> wrote:
+>Instead of using arch_has_restricted_virtio_memory_access() together
+>with CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, replace those
+>with platform_has() and a new platform feature
+>PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS=2E
+>
+>Signed-off-by: Juergen Gross <jgross@suse=2Ecom>
+>---
+>V2:
+>- move setting of PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS in SEV case
+>  to sev_setup_arch()=2E
+>V3:
+>- remove Hyper-V chunk (Michael Kelley)
+>- remove include virtio_config=2Eh from mem_encrypt=2Ec (Oleksandr Tyshch=
+enko)
+>- add comment for PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS (Oleksandr Tyshch=
+enko)
+>---
+> arch/s390/Kconfig                |  1 -
+> arch/s390/mm/init=2Ec              | 13 +++----------
+> arch/x86/Kconfig                 |  1 -
+> arch/x86/mm/mem_encrypt=2Ec        |  7 -------
+> arch/x86/mm/mem_encrypt_amd=2Ec    |  4 ++++
+> drivers/virtio/Kconfig           |  6 ------
+> drivers/virtio/virtio=2Ec          |  5 ++---
+> include/linux/platform-feature=2Eh |  6 +++++-
+> include/linux/virtio_config=2Eh    |  9 ---------
+> 9 files changed, 14 insertions(+), 38 deletions(-)
 
+Acked-by: Borislav Petkov <bp@suse=2Ede>
+--=20
+Sent from a device which is ok for reading mail but awful for writing=2E P=
+lease excuse any shortcomings=2E

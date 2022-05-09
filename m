@@ -2,161 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9C851F514
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF79051F521
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235687AbiEIHGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S235795AbiEIHGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiEIG6R (ORCPT
+        with ESMTP id S234943AbiEIG6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 02:58:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BAE1A021F;
-        Sun,  8 May 2022 23:54:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id e24so12315385pjt.2;
-        Sun, 08 May 2022 23:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3nKM/0/HHALognv0Zk99w+J+a8OnPMYc69HYC2U7ub8=;
-        b=VZhFu1YRYSVn4ASDKUESe/K4kQa+jbfHhigKuiywnYCBGKvwkROUChQtEH5e4CT3kB
-         jyJdt0I2jUHbZfXNZlh9vMH6t0PosGWRAVIP7mnrGwwokY8UnlH9io4pJtjjXe9uSBtO
-         zMe8tNqtOP60BWJNi1ANQCpYt2xBk0GeiXXGuK72l/R5if94NDurIofMwgbhvBfKTL+Z
-         932RrMo6wFho+5zbdKYfLhbTnB7C/2CN0Ne2Z5LQT6B5tBDai1LZH5HdCI8wR0iwYPHg
-         GeTz2PvccPMLDJjvlzWz2scnzy4gqe3qtF6EZEDSD6Nh6l8/Ngb9YwlowLkR7fk1ZwZo
-         rPaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3nKM/0/HHALognv0Zk99w+J+a8OnPMYc69HYC2U7ub8=;
-        b=QkFJwocQxecZtbADuCB4rJE8kXUVefg2ILfTHYQbg5Pj7xhGq9Q+8ykuDMdMYLK649
-         tSma0igbJIeno/cJSHQTxxNhofJo3qh7m6LRaQ4D/Ftt6hJuA4dkSRZcZLXceZWn+hy2
-         wq0j3m2l0UbB4Tt/ZyEYzIdZ4cYqf3nRIeRA+uvg3Y5oz1nljsyRDnCHHKJLvTbaHEHM
-         dNmUWTdkjEaZUd/25mkOVW3Mgw5noNSdEUNATAwXKZnfdOLII/Jmq7dqgeocUGZHdZFY
-         +aWT7kEzGgGji9HDjPIcxLwPOp6wUF/KRt69117MqOLQCSq2evbUcijxJAd4rGo8roub
-         hi9w==
-X-Gm-Message-State: AOAM531U9r/fWmHYrV+hYSWnvs3CUZBpTfSCNTm3toMq9H/EadXuF8Ok
-        VrrU5lOj0oe/S4BOmciDLBElFFim08A=
-X-Google-Smtp-Source: ABdhPJwZXCXGD14gg2tQpxyhNsz4kCz5ZWznUc2zu1b4qSh+GVoU+ggG8/BYGaelRCTO2lvFuGcq6g==
-X-Received: by 2002:a17:902:d490:b0:15e:b443:6852 with SMTP id c16-20020a170902d49000b0015eb4436852mr14888232plg.111.1652079264383;
-        Sun, 08 May 2022 23:54:24 -0700 (PDT)
-Received: from localhost (subs32-116-206-28-19.three.co.id. [116.206.28.19])
-        by smtp.gmail.com with ESMTPSA id t10-20020a62ea0a000000b0050dc762816asm2267902pfh.68.2022.05.08.23.54.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 23:54:23 -0700 (PDT)
-Date:   Mon, 9 May 2022 13:54:20 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ben Greear <greearb@candelatech.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
- __dev_queue_xmit()
-Message-ID: <Yni6nBTq+0LrBvQN@debian.me>
-References: <20220507084643.18278-1-bagasdotme@gmail.com>
- <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com>
+        Mon, 9 May 2022 02:58:44 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75FE1A04AE
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 23:54:51 -0700 (PDT)
+Received: from localhost.localdomain (unknown [138.197.159.143])
+        by gnuweeb.org (Postfix) with ESMTPSA id BB6947ED99;
+        Mon,  9 May 2022 06:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1652079291;
+        bh=S02Hmy2ySu7f3PmzWcyNC62xCF6tNDxQIeCYDbJJgL8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G2IVrpE8mpPZ6ZJ3DtpuPGtHCD7jbj2Wp3e2vG25GZDwMwdBR+pX7u5Dxk6FSBlea
+         1/Bpxki+2qV/qtRWzpfXDZJFMGgmUn/MrBcgZm5FzoIh34EzzjQrHFYIG1fmKCO/7d
+         lyD9d04NrbHidiAzbde2tymzUnWR/oPaskLAtz5R1Pa4mipoFaVY8/fyDxbmJylh/O
+         jgvyPXPIXrjMS0+OnqmTyvqInGQ55iYnvq8ou4m3m4lZLzc8I56Yj93qle+cpNsUSD
+         yMaQmt2JU22kcqoie+4GCZePosrqvWXCZaCs6+58MZ9fN6uq0goDTaZ2AQdTAphWHS
+         SUOIzcwG7tWrw==
+From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Subject: [PATCH 0/1] Add format attribute to enable printf warnings
+Date:   Mon,  9 May 2022 06:54:44 +0000
+Message-Id: <20220509065445.3912334-1-alviro.iskandar@gnuweeb.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 08:48:10PM +0900, Akira Yokosawa wrote:
-> So, appended below is my version of the fix with the answer to
-> Stephen's question, "I am not sure why this has turned up just now."
-> 
-> Stephen, Jakub, what do you think?
-> 
->         Thanks, Akira
-> 
-> ----8<--------------
-> From: Akira Yokosawa <akiyks@gmail.com>
-> Subject: [PATCH -next] net/core: Hide __dev_queue_xmit()'s kernel-doc
-> 
-> Commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()") added
-> export of __dev_queue_exit() to cope with inlining of its
-> wrapper functions dev_queue_xmit() and dev_queue_xmit_accel().
-> This made __dev_queue_exit()'s comment block visible to Sphinx
-> processing in "make htmldocs" because
-> Documentation/networking/kapi.rst has the directive of:
-> 
->     .. kernel-doc:: net/core/dev.c
->        :export:
-> 
-> Unfortunately, the kernel-doc style comment has a number of
-> issues when parsed as RestructuredText.  Stephen reported a
-> new warning message from "make htmldocs" caused by one of
-> such issues.
-> 
-> The leading "__" in the function name indicates that it is an
-> internal API and should not be widely used.
-> Exposing documentation of such a function in HTML and PDF
-> documentations does not make sense.
-> 
+Hi Ammar,
 
-Oops, I don't see that internal API marker. Maybe we can add "Only
-public funtions should be added kernel-doc comments" note to
-Documentation/doc-guide/kernel-doc.rst?
+When we use printf and fprintf functions from nolibc, we don't get any
+warning from the compiler if we have wrong arguments, for example the
+following calls will compile silently:
+```
+  printf("%s %s\n", "aaa");
+  fprintf(stdout, "%s %s\n", "xxx", 1);
+```
+Those calls are undefined behavior. We can catch it at compile time by
+adding format attribute to those function declarations. After this
+patch, we get the following warnings:
+```
+  warning: format `%s` expects a matching `char *` argument [-Wformat=]
+  warning: format `%s` expects argument of type `char *`, but argument 4 has type `int` [-Wformat=]
+```
 
-> For the time being, hide the kernel-doc style comment from Sphinx
-> processing by removing the kernel-doc marker of "/**".
-> 
-> Proper kernel-doc comments should be added to the inlined
-> wrapper functions, which is deferred to those who are familiar
-> with those netdev APIs.
-> 
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+---
 
-Ah! Thanks for the explanation.
+Alviro Iskandar Setiawan (1):
+  tools/nolibc/stdio: Add format attribute to enable printf warnings
 
-Did you mean proper kernel-doc comments should be added to the wrapper
-functions that called this inlined method?
+ tools/include/nolibc/stdio.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
-> Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
-> ---
->  net/core/dev.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index c2d73595a7c3..a97fd413d705 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4085,8 +4085,7 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
->  	return netdev_get_tx_queue(dev, queue_index);
->  }
->  
-> -/**
-> - *	__dev_queue_xmit - transmit a buffer
-> +/*	__dev_queue_xmit - transmit a buffer
->   *	@skb: buffer to transmit
->   *	@sb_dev: suboordinate device used for L2 forwarding offload
->   *
-> -- 
-> 2.25.1
-> 
 
-I'm in favor of this patch. Thanks.
-
+base-commit: 2fbaf4ddb5e2f64a565247683093b869b5b3f792
+prerequisite-patch-id: 1bcffd448f6984eee80d86560af19672cd4ae716
+prerequisite-patch-id: 3e31c80bd4dd532e30b4bba76e5d98647e21184b
+prerequisite-patch-id: 34e531967a67791d5b3c3e071527de7235715906
+prerequisite-patch-id: 14105c6ae9dcc068ddf12a7c1bf431066199b813
+prerequisite-patch-id: 4299173943ea579f538da00488fb1a7b1a690a79
+prerequisite-patch-id: dd85164f2ec9eb8cea64ab801abac614f9d0c8f5
+prerequisite-patch-id: 2c1b940635d1564e26b9959eb57cf9fa6983cb2f
+prerequisite-patch-id: 8b1b453d855c9b8081353ffbddd03f6cfcfa2ab6
 -- 
-An old man doll... just what I always wanted! - Clara
+Alviro Iskandar Setiawan
+

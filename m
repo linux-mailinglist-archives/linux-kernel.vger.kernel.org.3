@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DFD51FF11
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1759651FF1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236561AbiEIOHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S236569AbiEIOHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236533AbiEIOHH (ORCPT
+        with ESMTP id S236578AbiEIOHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:07:07 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC8201320
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:03:12 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:8886:2b92:63eb:2922])
-        by xavier.telenet-ops.be with bizsmtp
-        id Ue312700i0moLbn01e31NE; Mon, 09 May 2022 16:03:09 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1no3yX-003XrP-7E; Mon, 09 May 2022 16:03:01 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1no3yW-003Sj2-Mq; Mon, 09 May 2022 16:03:00 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Mon, 9 May 2022 10:07:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADC72701BE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:03:41 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652105019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GqbJqls16FNy0vugLmt3uGKWWGVnEjYiGmRysMH1yNs=;
+        b=tvslSlziDv2t2phpzE4lNj+wrzJgX67KxhCt1FuyD1ceg6sJFkBlxDhpRcOusXD3vCH1GO
+        rrwBIOqwLBE/09DZS1RWIEpRUyzO4Ylxq9wypMWnCjV9KtGMgRRbEooy5Av5VpyEFRGz5A
+        ZhYHIWm3yehXFdD4iBjXd6R7PU5v8T6fgojfu0Xj9/TcO08hmV7QXMv6URnVkVzfzFLPYQ
+        nCVwI6uHnWtOiluEEbY/QZ0aJobXPwV6uKRnLdA5YA8RqQpeGlC+MXbMXss77eJLujwtT7
+        ZzQK/ggooLf32/huA0pdmI4dXrznLN0honUiqbA/ZsXU29EKPlPPYg33zHC8PA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652105019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GqbJqls16FNy0vugLmt3uGKWWGVnEjYiGmRysMH1yNs=;
+        b=B+umBlaN/4/EfvGP0sahg2ByBcjgBKcjCmDqM6xwlN4Jeh/lEDpTcEWCOSnSQddUEZRznA
+        Ju1piRkbSamhYbAA==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] can: ctucanfd: Let users select instead of depend on CAN_CTUCANFD
-Date:   Mon,  9 May 2022 16:02:59 +0200
-Message-Id: <887b7440446b6244a20a503cc6e8dc9258846706.1652104941.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH v6 22/29] x86/watchdog/hardlockup: Add an HPET-based
+ hardlockup detector
+In-Reply-To: <20220506000008.30892-23-ricardo.neri-calderon@linux.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-23-ricardo.neri-calderon@linux.intel.com>
+Date:   Mon, 09 May 2022 16:03:39 +0200
+Message-ID: <877d6uref8.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,50 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CTU CAN-FD IP core is only useful when used with one of the
-corresponding PCI/PCIe or platform (FPGA, SoC) drivers, which depend on
-PCI resp. OF.
+On Thu, May 05 2022 at 17:00, Ricardo Neri wrote:
+> +	if (is_hpet_hld_interrupt(hdata)) {
+> +		/*
+> +		 * Kick the timer first. If the HPET channel is periodic, it
+> +		 * helps to reduce the delta between the expected TSC value and
+> +		 * its actual value the next time the HPET channel fires.
+> +		 */
+> +		kick_timer(hdata, !(hdata->has_periodic));
+> +
+> +		if (cpumask_weight(hld_data->monitored_cpumask) > 1) {
+> +			/*
+> +			 * Since we cannot know the source of an NMI, the best
+> +			 * we can do is to use a flag to indicate to all online
+> +			 * CPUs that they will get an NMI and that the source of
+> +			 * that NMI is the hardlockup detector. Offline CPUs
+> +			 * also receive the NMI but they ignore it.
+> +			 *
+> +			 * Even though we are in NMI context, we have concluded
+> +			 * that the NMI came from the HPET channel assigned to
+> +			 * the detector, an event that is infrequent and only
+> +			 * occurs in the handling CPU. There should not be races
+> +			 * with other NMIs.
+> +			 */
+> +			cpumask_copy(hld_data->inspect_cpumask,
+> +				     cpu_online_mask);
+> +
+> +			/* If we are here, IPI shorthands are enabled. */
+> +			apic->send_IPI_allbutself(NMI_VECTOR);
 
-Hence make the users select the core driver code, instead of letting
-then depend on it.  Keep the core code config option visible when
-compile-testing, to maintain compile-coverage.
+So if the monitored cpumask is a subset of online CPUs, which is the
+case when isolation features are enabled, then you still send NMIs to
+those isolated CPUs. I'm sure the isolation folks will be enthused.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/net/can/ctucanfd/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks,
 
-diff --git a/drivers/net/can/ctucanfd/Kconfig b/drivers/net/can/ctucanfd/Kconfig
-index 48963efc7f19955f..3c383612eb1764e2 100644
---- a/drivers/net/can/ctucanfd/Kconfig
-+++ b/drivers/net/can/ctucanfd/Kconfig
-@@ -1,5 +1,5 @@
- config CAN_CTUCANFD
--	tristate "CTU CAN-FD IP core"
-+	tristate "CTU CAN-FD IP core" if COMPILE_TEST
- 	help
- 	  This driver adds support for the CTU CAN FD open-source IP core.
- 	  More documentation and core sources at project page
-@@ -13,8 +13,8 @@ config CAN_CTUCANFD
- 
- config CAN_CTUCANFD_PCI
- 	tristate "CTU CAN-FD IP core PCI/PCIe driver"
--	depends on CAN_CTUCANFD
- 	depends on PCI
-+	select CAN_CTUCANFD
- 	help
- 	  This driver adds PCI/PCIe support for CTU CAN-FD IP core.
- 	  The project providing FPGA design for Intel EP4CGX15 based DB4CGX15
-@@ -23,8 +23,8 @@ config CAN_CTUCANFD_PCI
- 
- config CAN_CTUCANFD_PLATFORM
- 	tristate "CTU CAN-FD IP core platform (FPGA, SoC) driver"
--	depends on CAN_CTUCANFD
- 	depends on OF || COMPILE_TEST
-+	select CAN_CTUCANFD
- 	help
- 	  The core has been tested together with OpenCores SJA1000
- 	  modified to be CAN FD frames tolerant on MicroZed Zynq based
--- 
-2.25.1
-
+        tglx

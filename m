@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D5951F839
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F4551F832
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbiEIJdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S237156AbiEIJdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbiEII6v (ORCPT
+        with ESMTP id S237741AbiEII7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:58:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF61B2145;
-        Mon,  9 May 2022 01:54:58 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxZfr4KTXzGpfv;
-        Mon,  9 May 2022 16:52:04 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 9 May 2022 16:54:51 +0800
-Subject: Re: [PATCH v2] MM: handle THP in swap_*page_fs() - count_vm_events()
-To:     NeilBrown <neilb@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Christoph Hellwig <hch@lst.de>, <linux-nfs@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <165146746627.24404.2324091720943354711@noble.neil.brown.name>
- <165146948934.24404.5909750610552745025@noble.neil.brown.name>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <37653eca-e82e-62aa-6829-7413cb844b75@huawei.com>
-Date:   Mon, 9 May 2022 16:54:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <165146948934.24404.5909750610552745025@noble.neil.brown.name>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 9 May 2022 04:59:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA46B1C83CB
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:55:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A848C21C37;
+        Mon,  9 May 2022 08:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652086535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0uG0/LlBEZjwhlgsnXOomtG9yPrEuDKrL/p6a5J2T0=;
+        b=yVlkIMdu8rvzJj0osrT5qts+Cj4LFP94lv3xO6YpspYSAA9bPHf6VJuYdAhs28bqMNz7mM
+        MTDlBG7I9d+ABPvXFoI5mVj4XFbGXr9cQeeB5umpQEKMOq60QXSg9fzNgOtLQR+4kKTXHA
+        ov2JaCDJThB45GkHTi9xo6I5KglmtRI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652086535;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0uG0/LlBEZjwhlgsnXOomtG9yPrEuDKrL/p6a5J2T0=;
+        b=FS0EAieXafQi1Su9OWsZ6uMdTVMpc/kgRaqmR2zf3QO1Pvkg0k/b8CIAPjVA/VpD1MbIUT
+        m5oyfnzjH7NfqSCg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 9E72E2C141;
+        Mon,  9 May 2022 08:55:35 +0000 (UTC)
+Date:   Mon, 09 May 2022 10:55:35 +0200
+Message-ID: <s5hbkw7m6ew.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/26] ALSA: hda: cirrus: Add initial DSP support and firmware loading
+In-Reply-To: <YmljEm6jUr3Odsv9@sirena.org.uk>
+References: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
+        <YmljEm6jUr3Odsv9@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/2 13:31, NeilBrown wrote:
+On Wed, 27 Apr 2022 17:36:50 +0200,
+Mark Brown wrote:
 > 
-> We need to use count_swpout_vm_event() for sio_write_complete() to get
-> correct counting.
+> On Wed, Apr 27, 2022 at 04:06:54PM +0100, Vitaly Rodionov wrote:
+> > The CS35L41 Amplifier contains a DSP, capable of running firmware.
+> > The firmware can run algorithms such as Speaker Protection, to ensure
+> > that playback at high gains do not harm the speakers.
+> > Adding support for CS35L41 firmware into the CS35L41 HDA driver also
+> > allows us to support several extra features, such as hiberation 
+> > and interrupts.
 > 
-> Note that THP swap in (if it ever happens) is current accounted 1 for
-> each page, whether HUGE or normal.  This is different from swap-out
-> accounting.
+> There's a bunch of changes for this driver in the ASoC tree, it looks
+> like the bits that touch ASoC will need basing off those.
 
-Agree, there is no THP swap-in now.
+How is the situation for the time being?
+I've been off in the last weeks, so couldn't follow the whole
+thread.
 
-> 
-> This patch should be squashed into
->     MM: handle THP in swap_*page_fs()
-> 
 
-This patch looks good to me. Thanks!
+thanks,
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  mm/page_io.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/page_io.c b/mm/page_io.c
-> index d636a3531cad..1b8075ef3418 100644
-> --- a/mm/page_io.c
-> +++ b/mm/page_io.c
-> @@ -280,8 +280,10 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
->  			set_page_dirty(page);
->  			ClearPageReclaim(page);
->  		}
-> -	} else
-> -		count_vm_events(PSWPOUT, sio->pages);
-> +	} else {
-> +		for (p = 0; p < sio->pages; p++)
-> +			count_swpout_vm_event(sio->bvec[p].bv_page);
-> +	}
->  
->  	for (p = 0; p < sio->pages; p++)
->  		end_page_writeback(sio->bvec[p].bv_page);
-> 
-
+Takashi

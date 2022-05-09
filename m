@@ -2,178 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE54651F5CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E2051F5AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiEIHxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S236928AbiEIHyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235785AbiEIHkk (ORCPT
+        with ESMTP id S233735AbiEIHlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:40:40 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEEF177078
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:36:47 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k2so18130643wrd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=6y0i+8IvUfpM15cKXcNjuJU/4mkCpkZfX4YXWqvQ1Js=;
-        b=lhqV1BbqxVLsXAlcHPqFKn2QZeiHzCGSZ3xMHe5C150zWMV3iQdJFB4oLBPwcDwTgz
-         fmtjWtTzoWHg3AHPShPOmwUZHOQXvEsTXw0ThO+dwUG8HFsKio0RSx2j4AKE1BITDeDz
-         /v6xz61ilCoaSDQ2UNdVxgqGLQNZxZLBpfdSfpnehNLRF2t86P8WpCfbPPirLw2/H7FD
-         V6ZsfLw9UHL89Smoe8CqgTK2EWy/87Jzvzm92hH6bx0b1jdgAipRJj2ZZZ2+gV5sTZXE
-         /G1ADH9jSggWv1urk9UdeEH2G1JCS4SFCHLE61bexKvjxaq51Fd37yK1nj+0a609lfDy
-         eUig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=6y0i+8IvUfpM15cKXcNjuJU/4mkCpkZfX4YXWqvQ1Js=;
-        b=F7drI5xOzinzsPyPhWnAJTyAAsV1tJZyVPd7ayfbh715PzvBSbzbRGneYk/Wd6owgW
-         LUW4ywoJ4wttFlqFBRC/HR/sOZNUhPz6WzOv543Czf1dooueIvJGU3MUf2rcLrwFZc+w
-         o0rCNnlVq4J/HgQMDbglor18P50yrOOGyZwN4m5o33M79ZrDKvSK/dxEAGNT3MJ+0jbq
-         JW54M1YJMGBjQDC7UAjKN2XnfIqugDeTN8n5m+vPvMGsGZJcLim3pkiGKDrfT8nAxHhH
-         0Ejvwpra9dIqpgczeV1esNQ+hOnFSccRMcQiYRgf3AadXqxoqNpLHv61s0+sNxw0ip6I
-         JdKw==
-X-Gm-Message-State: AOAM5307icEFepDOgFz6MIt+0hkeP2SZEG9/Z8o9DhOMVlfyebaixzbD
-        E+uFJzq7qUa2e0evtDmFKetV3A==
-X-Google-Smtp-Source: ABdhPJy2RhLQ+p1zNBH1qCsIEwkacJo/ZUmf6kHo7ueOOQy2OiKWAzP3ct7aOKYz4lFrNtdvWV9wRw==
-X-Received: by 2002:a5d:4703:0:b0:20a:ce3c:7528 with SMTP id y3-20020a5d4703000000b0020ace3c7528mr12556104wrq.688.1652081799169;
-        Mon, 09 May 2022 00:36:39 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:23c8:2656:fd52:f1cb? ([2001:861:44c0:66c0:23c8:2656:fd52:f1cb])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c264b00b0039444973258sm18402407wmy.0.2022.05.09.00.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:36:38 -0700 (PDT)
-Message-ID: <cf593ff3-bf57-ccd3-9a25-b28cc604d6f4@baylibre.com>
-Date:   Mon, 9 May 2022 09:36:40 +0200
+        Mon, 9 May 2022 03:41:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FCD17909D;
+        Mon,  9 May 2022 00:37:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8937CB80FC0;
+        Mon,  9 May 2022 07:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CECC2C385AE;
+        Mon,  9 May 2022 07:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652081870;
+        bh=Bv4eUfOFWbN3CjROlUwmkryAVsj7BzS4T6pqq112ZsA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1AWxEbp/RbuMzXKvlFfUF9myLEs83ECNvphXQyXaDXz1naFTvdW2YJosx7Ut1zOBl
+         xX4CX7gzYfMo3UaKACHgvz5rIOUgDJ6iURYE2065xYI/svivjh08XleISZJPBo/A30
+         HITrGYOTHLqG4+XkvObE82aC1jGsfEhx4EYjuO/c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.192
+Date:   Mon,  9 May 2022 09:37:46 +0200
+Message-Id: <16520818664210@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1] serial: meson: acquire port->lock in startup()
-Content-Language: en-US
-To:     John Ogness <john.ogness@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <20220508103547.626355-1-john.ogness@linutronix.de>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220508103547.626355-1-john.ogness@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/05/2022 12:35, John Ogness wrote:
-> The uart_ops startup() callback is called without interrupts
-> disabled and without port->lock locked, relatively late during the
-> boot process (from the call path of console_on_rootfs()). If the
-> device is a console, it was already previously registered and could
-> be actively printing messages.
-> 
-> Since the startup() callback is reading/writing registers used by
-> the console write() callback (AML_UART_CONTROL), its access must
-> be synchronized using the port->lock. Currently it is not.
-> 
-> The startup() callback is the only function that explicitly enables
-> interrupts. Without the synchronization, it is possible that
-> interrupts become accidentally permanently disabled.
-> 
-> CPU0                           CPU1
-> meson_serial_console_write     meson_uart_startup
-> --------------------------     ------------------
-> spin_lock(port->lock)
-> val = readl(AML_UART_CONTROL)
-> uart_console_write()
->                                 writel(INT_EN, AML_UART_CONTROL)
-> writel(val, AML_UART_CONTROL)
-> spin_unlock(port->lock)
-> 
-> Add port->lock synchronization to meson_uart_startup() to avoid
-> racing with meson_serial_console_write().
-> 
-> Also add detailed comments to meson_uart_reset() explaining why it
-> is *not* using port->lock synchronization.
-> 
-> Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 2bf1c57e0981..39021dac09cc 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
->   	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
->   }
->   
-> +/*
-> + * This function is called only from probe() using a temporary io mapping
-> + * in order to perform a reset before setting up the device. Since the
-> + * temporarily mapped region was successfully requested, there can be no
-> + * console on this port at this time. Hence it is not necessary for this
-> + * function to acquire the port->lock. (Since there is no console on this
-> + * port at this time, the port->lock is not initialized yet.)
-> + */
->   static void meson_uart_reset(struct uart_port *port)
->   {
->   	u32 val;
-> @@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
->   
->   static int meson_uart_startup(struct uart_port *port)
->   {
-> +	unsigned long flags;
->   	u32 val;
->   	int ret = 0;
->   
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
->   	val = readl(port->membase + AML_UART_CONTROL);
->   	val |= AML_UART_CLEAR_ERR;
->   	writel(val, port->membase + AML_UART_CONTROL);
-> @@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
->   	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
->   	writel(val, port->membase + AML_UART_MISC);
->   
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +
->   	ret = request_irq(port->irq, meson_uart_interrupt, 0,
->   			  port->name, port);
->   
-> 
-> base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+I'm announcing the release of the 5.4.192 kernel.
 
-Thanks for fixing this, it may also fix an uart apparent lockup I encountered
-several time while developing on the platform, but the target was still alive
-so it matches.
+All users of the 5.4 kernel series must upgrade.
 
-So I'll add:
-Fixes: ff7693d079e5 ("ARM: meson: serial: add MesonX SoC on-chip uart driver")
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-and
+thanks,
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+greg k-h
+
+------------
+
+ Makefile                                               |    2 
+ arch/arm/boot/dts/am3517-evm.dts                       |   45 +++++++++-
+ arch/arm/boot/dts/am3517-som.dtsi                      |    9 ++
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi            |    6 +
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi                  |   10 +-
+ arch/arm/boot/dts/imx6ull-colibri.dtsi                 |    2 
+ arch/arm/boot/dts/logicpd-som-lv-35xx-devkit.dts       |   15 +++
+ arch/arm/boot/dts/logicpd-som-lv-37xx-devkit.dts       |   15 +++
+ arch/arm/boot/dts/logicpd-som-lv.dtsi                  |   15 ---
+ arch/arm/boot/dts/omap3-gta04.dtsi                     |    2 
+ arch/arm/mach-omap2/omap4-common.c                     |    2 
+ arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi      |   40 ---------
+ arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi      |   40 ---------
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi             |   20 ----
+ arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts      |    4 
+ arch/x86/include/asm/microcode.h                       |    2 
+ arch/x86/kernel/cpu/microcode/core.c                   |    6 -
+ arch/x86/lib/usercopy_64.c                             |    2 
+ arch/x86/power/cpu.c                                   |    8 +
+ drivers/base/arch_topology.c                           |    2 
+ drivers/block/Kconfig                                  |   16 +++
+ drivers/block/floppy.c                                 |   43 +++++++---
+ drivers/bus/sunxi-rsb.c                                |    2 
+ drivers/clk/sunxi/clk-sun9i-mmc.c                      |    2 
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c                 |    4 
+ drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |    1 
+ drivers/iio/dac/ad5446.c                               |    2 
+ drivers/iio/dac/ad5592r-base.c                         |    2 
+ drivers/iio/magnetometer/ak8975.c                      |    1 
+ drivers/lightnvm/Kconfig                               |    2 
+ drivers/mtd/nand/raw/mtk_ecc.c                         |   12 +-
+ drivers/mtd/nand/raw/sh_flctl.c                        |   14 +--
+ drivers/net/dsa/lantiq_gswip.c                         |    3 
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c       |    9 +-
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c         |    7 +
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c |    7 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c         |    3 
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c    |   12 +-
+ drivers/net/hamradio/6pack.c                           |    5 -
+ drivers/net/hippi/rrunner.c                            |    2 
+ drivers/phy/motorola/phy-mapphone-mdm6600.c            |    3 
+ drivers/phy/samsung/phy-exynos5250-sata.c              |   21 +++--
+ drivers/phy/ti/phy-am654-serdes.c                      |    2 
+ drivers/phy/ti/phy-omap-usb2.c                         |    2 
+ drivers/pinctrl/pinctrl-pistachio.c                    |    6 -
+ drivers/tty/n_gsm.c                                    |   40 +++++----
+ drivers/tty/serial/8250/8250_pci.c                     |    8 -
+ drivers/tty/serial/8250/8250_port.c                    |    2 
+ drivers/tty/serial/imx.c                               |    2 
+ drivers/usb/core/quirks.c                              |    6 +
+ drivers/usb/dwc3/core.c                                |    8 -
+ drivers/usb/dwc3/gadget.c                              |   31 +++++++
+ drivers/usb/gadget/configfs.c                          |    2 
+ drivers/usb/gadget/function/uvc_queue.c                |    2 
+ drivers/usb/host/xhci-hub.c                            |    2 
+ drivers/usb/host/xhci-ring.c                           |    2 
+ drivers/usb/host/xhci.c                                |   11 ++
+ drivers/usb/misc/uss720.c                              |    3 
+ drivers/usb/mtu3/mtu3_dr.c                             |    6 -
+ drivers/usb/serial/cp210x.c                            |    2 
+ drivers/usb/serial/option.c                            |   12 ++
+ drivers/usb/serial/whiteheat.c                         |    5 -
+ drivers/usb/typec/ucsi/ucsi.c                          |   20 +++-
+ drivers/video/fbdev/udlfb.c                            |   14 ++-
+ fs/cifs/smb2ops.c                                      |    8 +
+ fs/hugetlbfs/inode.c                                   |   70 ++++++++++++++---
+ include/linux/kernel.h                                 |    2 
+ include/linux/sched/mm.h                               |    8 +
+ include/net/tcp.h                                      |    7 +
+ lib/hexdump.c                                          |   41 +++++++--
+ mm/mmap.c                                              |    8 -
+ net/core/lwt_bpf.c                                     |    7 -
+ net/ipv4/ip_gre.c                                      |    8 -
+ net/ipv4/tcp_input.c                                   |   15 +++
+ net/ipv4/tcp_minisocks.c                               |    2 
+ net/ipv4/tcp_output.c                                  |    1 
+ net/ipv4/tcp_rate.c                                    |   11 +-
+ net/ipv6/ip6_gre.c                                     |    5 -
+ net/netfilter/ipvs/ip_vs_conn.c                        |    2 
+ net/netfilter/nft_socket.c                             |   52 +++++++++---
+ net/sctp/sm_sideeffect.c                               |    4 
+ net/smc/af_smc.c                                       |    2 
+ net/tls/tls_device.c                                   |   12 +-
+ sound/soc/codecs/wm8731.c                              |   19 ++--
+ 84 files changed, 589 insertions(+), 303 deletions(-)
+
+Adam Ford (2):
+      ARM: dts: am3517-evm: Fix misc pinmuxing
+      ARM: dts: logicpd-som-lv: Fix wrong pinmuxing on OMAP35
+
+Borislav Petkov (1):
+      x86/cpu: Load microcode during restore_processor_state()
+
+Bruno Thomsen (1):
+      USB: serial: cp210x: add PIDs for Kamstrup USB Meter Reader
+
+Christian Hewitt (2):
+      arm64: dts: meson: remove CPU opps below 1GHz for G12B boards
+      arm64: dts: meson: remove CPU opps below 1GHz for SM1 boards
+
+Christophe JAILLET (1):
+      bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
+
+Christophe Leroy (1):
+      mm, hugetlb: allow for "high" userspace addresses
+
+Chuanhong Guo (1):
+      mtd: rawnand: fix ecc parameters for mt7622
+
+Dan Vacura (1):
+      usb: gadget: uvc: Fix crash when encoding data for usb request
+
+Daniel Starke (7):
+      tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
+      tty: n_gsm: fix malformed counter for out of frame data
+      tty: n_gsm: fix insufficient txframe size
+      tty: n_gsm: fix missing explicit ldisc flush
+      tty: n_gsm: fix wrong command retry handling
+      tty: n_gsm: fix wrong command frame length field encoding
+      tty: n_gsm: fix incorrect UA handling
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
+
+Dinh Nguyen (1):
+      net: ethernet: stmmac: fix write to sgmii_adapter_base
+
+Duoming Zhou (1):
+      drivers: net: hippi: Fix deadlock in rr_close()
+
+Eric Dumazet (1):
+      tcp: fix potential xmit stalls caused by TCP_NOTSENT_LOWAT
+
+Eyal Birger (1):
+      bpf, lwt: Fix crash when using bpf_skb_set_tunnel_key() from bpf_xmit lwt hook
+
+Fabio Estevam (2):
+      ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
+      arm64: dts: imx8mn-ddr4-evk: Describe the 32.768 kHz PMIC clock
+
+Florian Westphal (1):
+      netfilter: nft_socket: only do sk lookups when indev is available
+
+Francesco Ruggeri (1):
+      tcp: md5: incorrect tcp_header_len for incoming connections
+
+Greg Kroah-Hartman (2):
+      lightnvm: disable the subsystem
+      Linux 5.4.192
+
+H. Nikolaus Schaller (1):
+      ARM: dts: Fix mmc order for omap3-gta04
+
+Hangyu Hua (1):
+      usb: misc: fix improper handling of refcount in uss720_probe()
+
+Heikki Krogerus (1):
+      usb: typec: ucsi: Fix role swapping
+
+Henry Lin (1):
+      xhci: stop polling roothubs after shutdown
+
+Jian Shen (1):
+      net: hns3: add validity check for message data length
+
+Johan Hovold (1):
+      serial: imx: fix overrun interrupts in DMA mode
+
+Jonathan Lemon (1):
+      net: bcmgenet: hide status block before TX timestamping
+
+Kees Cook (1):
+      USB: serial: whiteheat: fix heap overflow in WHITEHEAT_GET_DTR_RTS
+
+Krzysztof Kozlowski (1):
+      phy: samsung: exynos5250-sata: fix missing device put in probe error paths
+
+Leon Romanovsky (1):
+      ixgbe: ensure IPsec VF<->PF compatibility
+
+Lin Ma (2):
+      hamradio: defer 6pack kfree after unregister_netdev
+      hamradio: remove needs_free_netdev to avoid UAF
+
+Lv Ruyi (1):
+      pinctrl: pistachio: fix use of irq_of_parse_and_map()
+
+Maciej W. Rozycki (2):
+      serial: 8250: Also set sticky MCR bits in console restoration
+      serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+
+Macpaul Lin (1):
+      usb: mtu3: fix USB 3.0 dual-role-switch from device to host
+
+Manish Chopra (1):
+      bnx2x: fix napi API usage sequence
+
+Mark Brown (1):
+      ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
+
+Martin Blumenstingl (1):
+      net: dsa: lantiq_gswip: Don't set GSWIP_MII_CFG_RMII_CLK
+
+Mathias Nyman (1):
+      xhci: increase usb U3 -> U0 link resume timeout from 100ms to 500ms
+
+Max Krummenacher (1):
+      ARM: dts: imx6ull-colibri: fix vqmmc regulator
+
+Maxim Mikityanskiy (1):
+      tls: Skip tls_append_frag on zero copy size
+
+Miaoqian Lin (7):
+      phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
+      ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
+      phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
+      phy: mapphone-mdm6600: Fix PM error handling in phy_mdm6600_probe
+      phy: ti: Add missing pm_runtime_disable() in serdes_am654_probe
+      mtd: rawnand: Fix return value check of wait_for_completion_timeout
+      drm/amd/display: Fix memory leak in dcn21_clock_source_create
+
+Michael Hennerich (1):
+      iio: dac: ad5446: Fix read_raw not returning set value
+
+Mikulas Patocka (3):
+      hex2bin: make the function hex_to_bin constant-time
+      hex2bin: fix access beyond string end
+      x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
+
+Oliver Neukum (2):
+      USB: quirks: add a Realtek card reader
+      USB: quirks: add STRING quirk for VCOM device
+
+Pavel Skripkin (1):
+      video: fbdev: udlfb: properly check endpoint type
+
+Peilin Ye (2):
+      ip_gre: Make o_seqno start from 0 in native mode
+      ip6_gre: Avoid updating tunnel->tun_hlen in __gre6_xmit()
+
+Pengcheng Yang (3):
+      ipvs: correctly print the memory size of ip_vs_conn_tab
+      tcp: ensure to use the most recently sent skb when filling the rate sample
+      tcp: fix F-RTO may not work correctly when receiving DSACK
+
+Ronnie Sahlberg (1):
+      cifs: destage any unwritten data to the server before calling copychunk_write
+
+Shijie Hu (1):
+      hugetlbfs: get unmapped area below TASK_UNMAPPED_BASE for hugetlbfs
+
+Slark Xiao (1):
+      USB: serial: option: add support for Cinterion MV32-WA/MV32-WB
+
+Thinh Nguyen (2):
+      usb: dwc3: core: Fix tx/rx threshold settings
+      usb: dwc3: gadget: Return proper request status
+
+Vijayavardhan Vennapusa (1):
+      usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
+
+Wang Qing (1):
+      arch_topology: Do not set llc_sibling if llc_id is invalid
+
+Weitao Wang (1):
+      USB: Fix xhci event ring dequeue pointer ERDP update issue
+
+Willy Tarreau (1):
+      floppy: disable FDRAWCMD by default
+
+Xiaobing Luo (1):
+      cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
+
+Xin Long (1):
+      sctp: check asoc strreset_chunk in sctp_generate_reconf_event
+
+Yang Yingliang (1):
+      clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
+
+Zheyu Ma (2):
+      iio: magnetometer: ak8975: Fix the error handling in ak8975_power_on()
+      ASoC: wm8731: Disable the regulator when probing fails
+
+Zizhuang Deng (1):
+      iio: dac: ad5592r: Fix the missing return value.
+
+liuyacan (1):
+      net/smc: sync err code when tcp connection was refused
+

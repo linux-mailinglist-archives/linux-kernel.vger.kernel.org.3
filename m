@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344DA520616
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B38352061E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiEIUpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 16:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S229802AbiEIUrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 16:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiEIUpA (ORCPT
+        with ESMTP id S229567AbiEIUrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 16:45:00 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F062AC7A;
-        Mon,  9 May 2022 13:40:50 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id gh6so29141918ejb.0;
-        Mon, 09 May 2022 13:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ugeMprRoxrWREeg1RKkYPg4Z7RTTPYWXOFWFyXLKJkY=;
-        b=bl59jxYva+k74U5PvkEkc3+zrF+rXUFUom1CtW2SBk31foyF2caMrx2GZYSVp38Keu
-         309gf5i1sU0v4N0Zup5BKrps+hK6oT1nru9MgDjdcTAC5LeHlQsdXLk/NAJCSg6Zu5Wk
-         Mb/MwkIqd5nHl/omlbTVlZmwHYNyfBmxo1zek0IbrZzgEAGwmPKzsR7xRxsqxrtPTUr/
-         juWDnnAapif2AvymdLXREB14vBTkntOx4dvxFxuJVxv6gbyqqxWqwdaJm+eDa0RSHc9F
-         ZMOmFgsHdKrWLwB/HQRu3PdK4sR5QfeuNN7GiV9GG1yY0wp6fVkhWdAyyCXxKvt4uQWG
-         0nFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ugeMprRoxrWREeg1RKkYPg4Z7RTTPYWXOFWFyXLKJkY=;
-        b=Kl4OCKXFVs2XwqibUfYdsDrNxkbN3ezbeMO1tPqXDsFUWMEfBuhhEb+DTaaFwV9G4d
-         p+B1xQB0NB1WU/FIpYXjK3wbmHT2jX/6bywS0JQYJ/nMGE+yG1o566qT7HYzrXBuiLtg
-         aPXuHz3sTC4c38E4TDsASl3sWgEotp17M+96kXrIJjmkUnMCTCVmbC0g4KE+9mlmq49p
-         oo3LguL9dTUdFPvv3o4sgMB2RnQsbGB6lFMIGzmS+gBOKuVLQkmMT8Rr4zymI23tjdvi
-         I4FCOqBaYO3h3MKar7VJg2sSVg0myUkQ6tiWRkNdvb3VgnDb38mXOKpkD+t9dbkNfBAj
-         s2uw==
-X-Gm-Message-State: AOAM5304i3HcKgZzLIZGdJ6nsUZTPKdQXElhX6PDyalNh5NLXchEkkLP
-        06NK3z496NoJ8Rk5o8uEqURv50ndh89kG0VAEGjIZQbA6r4nue6+
-X-Google-Smtp-Source: ABdhPJzXi5SdTvvpc5c8vT3NNNzWo6Cr8z0PXYIhbP3f/ag+dxrEWJge/uMGAdlCnjopMvzTkVtBvaZhJb6ChQO/ERs=
-X-Received: by 2002:a17:907:868e:b0:6fa:2fe2:92d6 with SMTP id
- qa14-20020a170907868e00b006fa2fe292d6mr6920008ejc.639.1652128849246; Mon, 09
- May 2022 13:40:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220427094502.456111-1-clement.leger@bootlin.com>
- <96db62bb-18be-f44a-6f53-05b22319f23a@gmail.com> <20220509141634.16158c38@xps-bootlin>
- <f9b0cbf1-dde2-ff97-cca0-5d2895734f91@gmail.com> <20220509180917.0f0ae851@xps-bootlin>
- <YnlIs312R4Temgu3@smile.fi.intel.com> <b476913d-896d-309c-f304-3ab37b81b4a9@gmail.com>
-In-Reply-To: <b476913d-896d-309c-f304-3ab37b81b4a9@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 9 May 2022 22:40:12 +0200
-Message-ID: <CAHp75VedNAG4EqPkCp-mCSUNJiKPNgaJEtsHQkWimyaYh0Nueg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] add dynamic PCI device of_node creation for overlay
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        devicetree <devicetree@vger.kernel.org>,
+        Mon, 9 May 2022 16:47:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36153B1D3;
+        Mon,  9 May 2022 13:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zxtHEZB7FJXcLD4uWhqlrNQfKLg4uYSZS3iQcpPv3Q8=; b=Um4T745eraA4H0ZgNxS0pk18PZ
+        Xq97mepNxGxMSUjCP+wxeGnaWEH5/cdZnQBcwwp/nYhhVo0LZ0izp4JI5JLx/tuGEZhpgwmnCpwbf
+        2txDSDfzQXZuX51PS3ujK++12T6SuqFqyX9iHBdzrIXBEwXzKGUPjXBHtkEGWls89KE/8klzoNmKc
+        OtRsmT+7lqC9xf9aTPvk9a7bUeFPBORXhMxzsTl8lnLlgwKsSrZfIa7TmD/4zQ2C9RPd7NtoZqmth
+        dF3gybOaVG6RP99mI4FvocGXiSQrwuUY58gBdt2p0lR6Ir2l99ABzRmYO+DKAJ8vfOhqZfu0Trp+2
+        2ega45ZQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1noAEG-00GCg8-KP; Mon, 09 May 2022 20:43:40 +0000
+Date:   Mon, 9 May 2022 13:43:40 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
+Message-ID: <Ynl8/MqmDZzpbh5y@bombadil.infradead.org>
+References: <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
+ <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
+ <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
+ <YnKS3MwNxvEi73OP@bombadil.infradead.org>
+ <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
+ <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
+ <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
+ <YnLsPgbQ7CHiannN@bombadil.infradead.org>
+ <YnNnLIZDxkNwECv+@bombadil.infradead.org>
+ <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,65 +78,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 10:36 PM Frank Rowand <frowand.list@gmail.com> wrote=
-:
->
-> On 5/9/22 12:00, Andy Shevchenko wrote:
-> > On Mon, May 09, 2022 at 06:09:17PM +0200, Cl=C3=A9ment L=C3=A9ger wrote=
-:
-> >> Le Mon, 9 May 2022 10:56:36 -0500,
-> >> Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+On Fri, May 06, 2022 at 03:01:34PM +0800, David Gow wrote:
+> On Thu, May 5, 2022 at 1:57 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > >
-> > ...
+> > On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
+> > > On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
+> > > > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > > OK so, we can just skip tainting considerations for selftests which
+> > > > > don't use modules for now. There may be selftests which do wonky
+> > > > > things in userspace but indeed I agree the userspace taint would
+> > > > > be better for those but I don't think it may be worth bother
+> > > > > worrying about those at this point in time.
+> > > > >
+> > > > > But my point in that sharing a taint between kunit / selftests modules
+> > > > > does make sense and is easily possible. The unfortunate aspect is just
+> > > >
+> > > > Yes, I 100% agree that we should share a taint for kernelspace testing
+> > > > from both kunit/kselftest.
+> > > > Someone running the system won't care what framework was used.
+> > >
+> > > OK do you mind doing the nasty work of manually adding the new
+> > > MODULE_TAINT() to the selftests as part of your effort?
+> > >
+> > > *Alternatively*, if we *moved* all sefltests modules to a new
+> > > lib/debug/selftests/ directory or something like that then t would
+> > > seem modpost *could* add the taint flag automagically for us without
+> > > having to edit or require it on new drivers. We have similar type of
+> > > taint for staging, see add_staging_flag().
+> > >
+> > > I would *highly* prefer this approach, event though it is more work,
+> > > because I think this is a step we should take anyway.
+> > >
+> > > However, I just checked modules on lib/ and well, some of them are
+> > > already in their own directory, like lib/math/test_div64.c. So not
+> > > sure, maybe just move a few modules which are just in lib/*.c for now
+> > > and then just sprinkle the MODULE_TAINT() to the others?
 > >
-> >>> On the surface, it appears that your need might be well met by having
-> >>> a base devicetree that describes all of the pcie nodes, but with each
-> >>> node having a status of "disabled" so that they will not be used.
-> >>> Have a devicetree overlay describing the pcie card (as you proposed),
-> >>> where the overlay also includes a status of "ok" for the pcie node.
-> >>> Applying the overlay, with a method of redirecting the target to a
-> >>> specific pcie node would change the status of the pcie node to enable
-> >>> its use.  (You have already proposed a patch to modify
-> >>> of_overlay_fdt_apply() to allow a modified target, so not a new
-> >>> concept from me.)  My suggestion is to apply the overlay devicetree
-> >>> to the base devicetree before the combined FDT devicetree is passed
-> >>> to the kernel at boot.  The overlay apply could be done by several
-> >>> different entities.  It could be before the bootloader executes, it
-> >>> could be done by the bootloader, it could be done by a shim between
-> >>> the bootloader and the kernel.  This method avoids all of the issues
-> >>> of applying an overlay to a running system that I find problematic.
-> >>> It is also a method used by the U-boot bootloader, as an example.
-> >>
-> >> Ok, that is actually possible on a system that is given a device-tree
-> >> by the bootloader. But on a system that is desrcibed using ACPI (such
-> >> as the x86), this is much more difficult (at least to my knowledge)...
-> >> We want this feature to be easy to use for the end user. Adding such
-> >> configuration which also differs between various architecture is
-> >> clearly not so easy to setup.
-> >>
-> >> Moreover, since the PCI is meant to be "Plug and Play", such
-> >> configuration would completely break that. If the user switches the
-> >> PCIe card from one slot to another, the bootloader configuration will
-> >> need to be modified. This seems a big no way for me (and for the user)=
-.
+> > I *think* we could just pull this off with a much easier approach,
+> > simply looking for the substrings in the module name in modpost.c:
 > >
-> > The main problem here is that Linux does not support hotplugging for th=
-e
-> > devices behind non-hotpluggable buses. You need to develop something to
-> > say that the device tree (in terms of hardware) can morph at run-time
-> > transparently to the user. I think the closest one is what FPGA does,
-> > or at least should do.
->
-> That is something I was not aware of yet.  Is the card in question a
-> hotpluggable card?  Do the systems that you anticipate plugging the
-> card into support hotplug?
+> >   * "_test." || "-test."
+> >   * ^"test_" || ^"test-"
+> >
+> > An issue with this of course is a vendor $FOO with an out of tree
+> > test driver may end up with the taint. Perhaps we don't care.
+> >
+> > That means moving selftests to its own directory is not needed at this
+> > point in time.
+> 
+> I can't say I'm thrilled with the idea of just doing name comparisons,
+> particularly since not all of them match this pattern, for example:
+> bpf_testmod.ko. (Though, frankly, more of them do than I'd've
+> guessed.)
+> 
+> Maybe adding a taint call to the selftest helper module framework in
+> kselftest_module.h, though again, there are several tests which don't
+> use it.
 
-Any PCIe card is potentially hotpluggable (seems nobody actually cares
-in 90%+ drivers in the Linux kernel). But what I have heard in a
-thread (not this one IIRC) is that the card may have pluggable modules
-and it would be nice to change configuration and notify OS somehow. I
-might be mistaken if it's the case here or not.
+Right, I can't think of a generic way to peg this. I think long term
+we do stand to gain to move all selftests under a lib/debug/selftests/
+or something like that, but for now what I suggested is the only thing
+I can come up with.
 
---=20
-With Best Regards,
-Andy Shevchenko
+> I _suspect_ we'd be able to hit most of them by tainting in frameworks
+> like the above, and patch the remaining modules manually.
+
+Works with me.
+
+> There's also
+> definitely a grey area with things like netdevsim, which are used a
+> lot as helper modules by selftests, but may have other uses as well.
+
+They can peg the module if they want the taint.
+
+> (The advantage of the KUnit tainting is that, due to KUnit's
+> centralised executor, we can be sure all KUnit tests will correctly
+> trigger the taint. But maybe it doesn't matter as much if one or two
+> selftests miss out.)
+
+That is what I was thinking.
+
+I'm convinced we *should* move selftests to a one directory. The
+amount of stuff in lib/ is getting out of hand.
+
+  Luis

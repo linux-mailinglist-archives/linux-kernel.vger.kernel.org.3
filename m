@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C933520113
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0E2520112
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbiEIP2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S238315AbiEIP2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238308AbiEIP2R (ORCPT
+        with ESMTP id S238250AbiEIP2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:28:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6A92B3F50
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:24:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7229160C7A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 15:24:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B98C385AE;
-        Mon,  9 May 2022 15:24:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652109861;
-        bh=LEm6HgVppnlZQISFT+9HHMdM02TVToh0/TmdUIV0sOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n1VA/KljPkrbN3E0VrXXWDAy85QXkbsJaVBAQiOF4F8Q5WDODiEjAoXQwzcENK7tN
-         RzwmvpGgOcIbQ/Qy2a8jDuwRxGxHHf2vWRg3iR2QQxh2QGmvYOho/wWRTO+Wy1atUE
-         ZyS+mZZBqXMm8+O1ruKF5FCPJf7VwS4d5aUDngSzTfTDj63nL0OlnAWtYux1vzy++8
-         Vg+BM7BsoUDdeYa/So4urPkvgeLL1H8gZ9HP1MnQ1mQk3tYAFss1M2qSbvhuG/SKps
-         IaQaM78dqK/jfp2RuYx2KXRAQrmm4kzq9QNiy0CfJTluGQkJK9u46KrXlsiVPsdcs7
-         dqBHERaC60cvA==
-Date:   Mon, 9 May 2022 16:24:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chanwoo Choi <cwchoi00@gmail.com>
-Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2 2/2] extcon: Add extcon-regulator driver
-Message-ID: <YnkyIBh2HnXXLHw3@sirena.org.uk>
-References: <20220505232557.10936-1-zev@bewilderbeest.net>
- <20220505232557.10936-3-zev@bewilderbeest.net>
- <e27ff1b2-c82f-8335-340f-ae1fa914ed30@gmail.com>
+        Mon, 9 May 2022 11:28:25 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3222C634C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:24:30 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id k2so19951020wrd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 08:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=rKwtLw3cM+95hvuJT1geCS3rHMfOzSi9KoR5XyQyqpA=;
+        b=wvnRNI989Cr31sBb60Fzfp/CEVVtKm1DOJMlpdFbxF/KhSuxQmEPKGOgfCZv5fw6ii
+         EArLsqX/FVAvXoqhQBSxfIvtiinaO2PlnwacCucDvSfvypoKh9gu6dxN1NK7Zz5SAeX2
+         s+yhqYOKRoSnGJHQw61bcsdDsXGKAhnNDPPCoJzlLpwkKWk2kUplS64o/XGdwvupCzAq
+         bN3RSr93opiPNtq5aWUqXeQ7BRH+dNtCNC4DWbSZHiXJQ7zkBy9PR1wNmt2nm34V7q3m
+         nXHhXaPENXXjfrjmQrhqcv3LcIrXrWaBEPAuZEHX8npUfkjbDNl5mrMFKzfA5SHniLre
+         BUSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=rKwtLw3cM+95hvuJT1geCS3rHMfOzSi9KoR5XyQyqpA=;
+        b=PRP8QWGldq2ec0MQxpZAmEYkoBx+ieZct+qdZ1941RBR/etFCX7BvLGTM1nNqDbgB9
+         +gZpybtVcYU/JdjGr9A6qRG5I9CB7j5vTjtw0GDwfLibnh4B+/AhfHJdL07iA6gJg6Xy
+         O1efmC9aWbp73d9zJfmpItklXi1T5HtF25RcWJ3zEchC5Zd7XsCJjPtg0BVLO4ze7XYQ
+         ro/lLh6jCj9EcgZt3jiDg05AGM4fK4VB62OZkd/LdlPSGY4derujB2fDAhFjiK5DrboY
+         EFWGLfgorpMwvY80BcxJ0oo4YIxg6z6b36SEnDw8b5VkPOmBhvrMIm0WL5+1qubz9dUC
+         hCpg==
+X-Gm-Message-State: AOAM531jhE2/UsDqlCWOSGJbJRw92F3T8s1Rosq7EZ9wwZOmanT7vsV3
+        JVBYkE2/x4QAqlt6cbQlncFq8Q==
+X-Google-Smtp-Source: ABdhPJzDsDDrTemBeI3M748nGEAOCxz5E616Xce7ZvQNu0rMeHzDwcyWVElFh6Ahp8pSR4VPlT/esQ==
+X-Received: by 2002:adf:d1c7:0:b0:20c:4d5f:e57f with SMTP id b7-20020adfd1c7000000b0020c4d5fe57fmr14372719wrd.453.1652109868819;
+        Mon, 09 May 2022 08:24:28 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id o9-20020a5d62c9000000b0020c5253d903sm11539796wrv.79.2022.05.09.08.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 08:24:28 -0700 (PDT)
+Date:   Mon, 9 May 2022 17:24:26 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     alexandre.torgue@foss.st.com, broonie@kernel.org,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 0/6] arm64: add ethernet to orange pi 3
+Message-ID: <YnkyKiRmOEYEtO3z@Red>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <YnkG9yV+Fbf7WtCh@lunn.ch>
+ <YnkWwrKk4zjPnZLg@Red>
+ <Ynkw9EekNj5Ih5gc@lunn.ch>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WO/WlJ02k/DBZ1pO"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <e27ff1b2-c82f-8335-340f-ae1fa914ed30@gmail.com>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ynkw9EekNj5Ih5gc@lunn.ch>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Mon, May 09, 2022 at 05:19:16PM +0200, Andrew Lunn a écrit :
+> On Mon, May 09, 2022 at 03:27:30PM +0200, LABBE Corentin wrote:
+> > Le Mon, May 09, 2022 at 02:20:07PM +0200, Andrew Lunn a écrit :
+> > > On Mon, May 09, 2022 at 07:48:51AM +0000, Corentin Labbe wrote:
+> > > > Hello
+> > > > 
+> > > > 2 sunxi board still does not have ethernet working, orangepi 1+ and
+> > > > orangepi 3.
+> > > > This is due to the fact thoses boards have a PHY which need 2 regulators.
+> > > 
+> > > Why PHY make/module is it which is causing problems?
+> > > 
+> > 
+> > The problem was stmmac support only one regulator for PHY.
+> 
+> I'm trying to understand the differences between the two different
+> regulators. If you tell me what the PHY is, i might be able to find
+> the data sheet, and then understand why two regulators are needed and
+> if one needs to be controlled by the PHY driver, not the MDIO bus
+> driver.
 
---WO/WlJ02k/DBZ1pO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, May 09, 2022 at 09:24:39PM +0900, Chanwoo Choi wrote:
-> Hi Zev,
->=20
-> I checked this patch. But, it doesn't look like the extcon provider
-> driver. Because basically, extcon provider driver need the circuit
-> in order to detect the kind of external connector. But, there are
-> no any code for detection. Just add the specific sysfs attribute
-> for only this driver. It is not standard interface.
-
-OTOH it's something where if I look at the physical system with the
-hardware there's a clearly visible external connector that I can point
-to - it just happens to not support hotplug.  It's not clear what other
-system it would sit in, and it seems like an application that displays
-external connections on a system in a UI would be able to do something
-sensible with it.
-
---WO/WlJ02k/DBZ1pO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5MiAACgkQJNaLcl1U
-h9Bq8Qf+JNTLnMxAchMYbqY4M85vtiwxg4q/j0UC05QW3qbi2AF/jyk5zShlky7a
-GUigz1AJUhq85ujG2dmNJTHX+rgGpDEbY1rl6Bw1Nl4XqKwGikC3HkSY+YS6DoA+
-Mtz+7rc0NpPRlf6QqSTJDhag0sNf9ZMWbnY6uf5N2ORkKnqTxapInPGtFZRoLy4t
-FYFnBcwnhsrmnDJmZnywyXY4sE2iEZ08C8Try6RE7KHQp2O6xTmB529/a1GwnrSb
-3uzdV+52H4s/+2+yiEYC3kIDpjH6P5heCbT345RN9hOW7H5v1yBPD8K5c66cL8+7
-6AWmwJPpjq37H7gG88KCZOS4EJfzGA==
-=+dcY
------END PGP SIGNATURE-----
-
---WO/WlJ02k/DBZ1pO--
+The schematic for the board is https://linux-sunxi.org/images/5/50/OrangePi_3_Schematics_v1.5.pdf
+Which show a RTL8211E.

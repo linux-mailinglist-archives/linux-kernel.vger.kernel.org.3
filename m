@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF2E51FBC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93D851FB9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbiEIL62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S233251AbiEILu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiEIL6Z (ORCPT
+        with ESMTP id S233221AbiEILuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:58:25 -0400
-X-Greylist: delayed 548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 04:54:31 PDT
-Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE81BDADC
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-67-ed;
- t=1652096721; h=date : from : to : cc : subject : message-id :
- references : mime-version : content-type : content-transfer-encoding :
- in-reply-to : from; bh=A7VZnkOooDmMVt0zmVkAt2c4XohtDtf3/DK9V1jJLOM=;
- b=6NIYylgjhPZog+yLwPODPJcIfvcr2ocFDpkqISi70tNxjI7/Rel1tXmowCuX+rKmvyQ0t
- U5XYZcoyTYbdnViCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
- i=@lespinasse.org; q=dns/txt; s=srv-67-rsa; t=1652096721; h=date :
- from : to : cc : subject : message-id : references : mime-version :
- content-type : content-transfer-encoding : in-reply-to : from;
- bh=A7VZnkOooDmMVt0zmVkAt2c4XohtDtf3/DK9V1jJLOM=;
- b=QqIDruEzcYTOkudQdoZ/epVo8dv8ZoFkhL3ztjpET6S2nM91npiPlvF4tBDb2OrJ9Zlqf
- 4gfNS9L6uVA9/dFOQw2eL/CnoRcplDDly4lIDHp6oGZ7oglzlelpg/9fZaYmFHuKCDuI3rS
- AN+WY15QcCV1Io2u9sjbqv9xOaSI53TwnmZGB4/RiGqxOHkMLCzUVrfiFknVF0rKZE5ikWx
- 6Ynasu07e15ty34sCnZI0ejeYOf5XaT/ptwLTnxBZ0oybifX/2JPjA4UDiZ9hE1/zVSOiKj
- R253BT8DQBBh764iBmuw7+zSmw3GGes4T6fXtv2XPuSVDau7gRDm+7UUGIlw==
-Received: by server.lespinasse.org (Postfix, from userid 1000)
-        id 5C500160B4E; Mon,  9 May 2022 04:45:21 -0700 (PDT)
-Date:   Mon, 9 May 2022 04:45:21 -0700
-From:   Michel Lespinasse <michel@lespinasse.org>
-To:     "lipeifeng@oppo.com" <lipeifeng@oppo.com>
-Cc:     akpm <akpm@linux-foundation.org>, michel <michel@lespinasse.org>,
-        hughd <hughd@google.com>, linux-mm <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        zhangshiming <zhangshiming@oppo.com>,
-        peifengl55 <peifengl55@gmail.com>
-Subject: Re: Re: [PATCH] mm: fix align-error when get_addr in
- unmapped_area_topdown
-Message-ID: <20220509114521.GA9512@lespinasse.org>
-References: <20220412081014.399-1-lipeifeng@oppo.com>
- <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>
- <2022041310411426044561@oppo.com>
- <2022050110235766139218@oppo.com>
- <20220501181041.6d53cb9ed54bf697840e36cc@linux-foundation.org>
- <2022050211305415626916@oppo.com>
+        Mon, 9 May 2022 07:50:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CBC18430F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:46:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id x18so19084227wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=misjj5JTB12DlyGFP9aFMSgV8RGVVP30IJPFNdnpF+w=;
+        b=vcm8ol+n0vdvHjNkmFysmqfoMdnJAXp0XlqQZH4Vey9RcGcNJYWaS3XbqMxl2oE5Ka
+         sdrAxxme+/ilEdnK5OjXbaxee9lypHPC6Gd51l99xsBDm+of2Ag4mLmqoI0FKRbADWD0
+         ydvpxq8FdJ2SfX123spAoSTnX8V6mldE3qgEdwODYSq+9hEg+xu+h9urKS4lhOg10ip/
+         JFOIFtCvPRUQ366h67ipFMukKFsmeK2MqkRPel8OaskasEol/nzbbGxPInvorMO1YBcs
+         HIngSiNh2hwhybpxoltaFRL7ZpWfXMWyOqQMtTijw0rWYE6lR/bDb33jywYpO4OjriOP
+         +0JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=misjj5JTB12DlyGFP9aFMSgV8RGVVP30IJPFNdnpF+w=;
+        b=eYN71BwYGcXs62lanW/laLh97bM0yEy7p1QPEX8WOMzFTykv3R3rhYQ/OYcEUHoiyE
+         gT06hfUXEolOGfjJ5p8GcNQfJiHsHtjNFlhYd8x0rhwxa99/d2HvvoMRJ+NYGoi3sM88
+         Wp2JPgQDXFYkdT/cEKOm97xkcWIyfrrfRqapFOFMEKZy1ptT2PUyFBJdEzApyf6spc98
+         7gmTqtEnYjAywNz8K9kuvmLcAxeLmiZPNeLY/MVJyBsTetnEErviNz8ccpJQ0amzQpny
+         fiP9QaSV0p/qin5aR0W6buhf12VUlPilk4iN0d2is22jPTAxUN0F+qnexq2UvKrweJUg
+         VOKA==
+X-Gm-Message-State: AOAM5338LhP+V1P5XA6pW/753329tN+cJ3giKxPNe+Qj5dMbnMeP/r/V
+        MKxXpltlovt8LT5GjzJrztd/KA==
+X-Google-Smtp-Source: ABdhPJxUHknTccYYo0FBvjr+ROc0w77xQIpr0J50KwaOVb50UXG/NivSAf3PnGfF/UHaxiJloSJzOg==
+X-Received: by 2002:a05:6000:136b:b0:20a:c416:e914 with SMTP id q11-20020a056000136b00b0020ac416e914mr13382462wrz.167.1652096787075;
+        Mon, 09 May 2022 04:46:27 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id b12-20020adfc74c000000b0020c5253d8e8sm11399633wrh.52.2022.05.09.04.46.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 04:46:26 -0700 (PDT)
+Message-ID: <a1d44fbb-c2a9-e422-8ce8-2a3982a75bb8@linaro.org>
+Date:   Mon, 9 May 2022 13:46:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] clocksource/drivers/sp804: avoid error on multiple
+ instances
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220506162522.3675399-1-andre.przywara@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220506162522.3675399-1-andre.przywara@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2022050211305415626916@oppo.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,81 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 11:33:18AM +0800, lipeifeng@oppo.com wrote:
-> Hi Andrew：
+On 06/05/2022 18:25, Andre Przywara wrote:
+> When a machine sports more than one SP804 timer instance, we only bring
+> up the first one, since multiple timers of the same kind are not useful
+> to Linux. As this is intentional behaviour, we should not return an
+> error message, as we do today:
+> ===============
+> [    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
+> ===============
 > 
-> Thanks for your quick response.
+> Replace the -EINVAL return with a debug message and return 0 instead.
 > 
-> > They caused me some merge issues against mapletree, which I had
-> > resolved.  Mapletree is dropped at present so I set these patches aside
-> > until the next version of the mapletree patches are available.
+> Also we do not reach the init function anymore if the DT node is
+> disabled (as this is now handled by OF_DECLARE), so remove the explicit
+> check for that case.
 > 
-> Do we have a definite time for the next available version of the mapletree patches?
-> Excuse me, is it possible for our patch to be independent of mapletree and brought in separately?
-
-I think it's unavoidable that there will be a conflict with maple tree
-because they are changing the way we track gaps between vmas.
-
-> > I've been holding your patches until Michel Lespinasse has had time to
-> > review them (and hopefully explain them to me ;)).  Please review
-> > earlier comments which Michel has provided and ensure that those
-> > comments have been fully addressed so we can hopefully move forward on
-> > this.
+> This fixes a long standing bogus error when booting ARM's fastmodels.
 > 
-> We will reply soon if Mr.Lespinasse provideds any advices or question.
-> And I haven't received any reply from Mr.Lespinasse yet, pls let me know
-> if I missed the reply.
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
 
-This previous thread is very relevant here:
-https://lore.kernel.org/lkml/CANN689G6mGLSOkyj31ympGgnqxnJosPVc4EakW5gYGtA_45L7g@mail.gmail.com/
+Applied, thanks
 
-I am sorry that I had confused you with the original poster on that
-thread - your proposed changes are very similar. That said, I still
-have the exact same concerns that I had at the time. The current
-search algorithm is guaranteed to find a gap in O(log N) time, if there
-is an available gap of size (requested_size + alignment - page_size).
-The modified search only requires an available gap of the requested
-size and alignment, but it can take O(N) time which might be too slow.
-Maybe we could afford the slow search if it's only used as a fallback
-when the fast search fails, but very few people would ever execute
-that fallback and that makes it hard to test / easy for bugs to hide in.
 
-If I understand your message at
-https://lore.kernel.org/lkml/202204241833454848958@oppo.com/ ,
-it seems like some andoid apps such as wechat are filling up
-a 32-bit address space such as there is no 13MB gap available anymore
-(as would be required by the current search), but there are still some
-12MB gaps aligned on a 1MB boundary, which they are then trying to
-allocate from. It seems very odd to me that one would find themselves
-in that situation, could you give us some details as to how that happened ?
-Do you know what the app is trying to do to fill the address space that way ?
-Also, why is this odd behavior considered to be a kernel issue - was the
-app previously running on a (quite old !) kernel that didn't have the fast
-vma gap search, and is now failing when ported to a more recent kernel ?
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> Thank you very much indeed.
-> 
-> lipeifeng@oppo.com
->  
-> From: Andrew Morton
-> Date: 2022-05-02 09:10
-> To: lipeifeng@oppo.com
-> CC: michel; hughd; linux-mm; linux-kernel; Barry Song; zhangshiming; peifengl55
-> Subject: Re: [PATCH] mm: fix align-error when get_addr in unmapped_area_topdown
-> On Sun, 1 May 2022 10:26:35 +0800 "lipeifeng@oppo.com" <lipeifeng@oppo.com> wrote:
->  
-> > Why did the two patches suddenly disappear without any email or notice for us?
-> > And they had been merged in linux-next.git on April 5 and 13.
->  
-> They caused me some merge issues against mapletree, which I had
-> resolved.  Mapletree is dropped at present so I set these patches aside
-> until the next version of the mapletree patches are available.
->  
->  
-> I've been holding your patches until Michel Lespinasse has had time to
-> review them (and hopefully explain them to me ;)).  Please review
-> earlier comments which Michel has provided and ensure that those
-> comments have been fully addressed so we can hopefully move forward on
-> this.
->  
->  
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

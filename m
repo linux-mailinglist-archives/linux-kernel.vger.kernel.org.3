@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053EB520966
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E823452096F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbiEIXlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S233469AbiEIXn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbiEIXkl (ORCPT
+        with ESMTP id S233558AbiEIXlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:40:41 -0400
+        Mon, 9 May 2022 19:41:20 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBDF26084A;
-        Mon,  9 May 2022 16:34:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E6A262658;
+        Mon,  9 May 2022 16:34:53 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 58F021F44236
+        with ESMTPSA id 3F0BE1F44239
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139285;
-        bh=eYJEb1cGtJb7wgluz0Ogjp7ayyCB95M+pYV0qM2nZAA=;
+        s=mail; t=1652139289;
+        bh=pGHmFEEjaXj2663JV2ZbLu8gGj/vTytf7TAeEENRqwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gOPDp8rDBp4JqzhH2ZY5PDoY4HXZSGmIYDZVHq2wPZhnNa0ZEY8wHzDjSwJXSOy7G
-         Jn3P0RpsPvdV1ccR1c7FYtekDBuMdIqHI/aiWT1xUalNbFQIYMAsQPzQQO8ErrDaIV
-         kFrKBSZ34QZiDdDEnum/2k5lZYT4smZCS4dGksm9MkJP9yRifE3HhcgGF8QQaRxUHF
-         8OKJXTbYQqx54XKJP3i2UuHvKC5MKIza6raMDWqSj+SRWUPFaJv5JM9CKz9jAfGOsk
-         BzabK5ee86xDicvVDuzYlfJK/71F5OymwPMUD0bsqwdZmlvXd7xuIOWT8u8Gpbk/9q
-         9o+MDWgOLAD0w==
+        b=j6TdMpmPOCtsPovulFCfAQHz4uF7UDkPzJj/3CmgFYBImRy8M4O8YGcz4W706uWok
+         oiILXGafhBbX7n+gHJn6RXTuMBUQC8tJ+EhQAGsuO/iXIERVRLzkR/44dQES7yRA6/
+         FtuuqnjfOGSov1+k3mURGR/0OqutTfvEFLoWalI2/ND2VETgVusAQFBX2DfNOA/g7I
+         j0l9XZgvP22CfJfFfA6ZxZIqFh1T34qNRlUcm5bkUIByJGzf9sEM5G0d3YHcPWZak3
+         l8eX2DCnZSObZ31khwPUziOiMTJxqBOzynYhlqeRkrRRR5tLIOpk/iZhwBgqc0RGs9
+         Toz7YL4ixFXdA==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -79,9 +79,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 26/27] kernel/reboot: Add devm_register_power_off_handler()
-Date:   Tue, 10 May 2022 02:32:34 +0300
-Message-Id: <20220509233235.995021-27-dmitry.osipenko@collabora.com>
+Subject: [PATCH v8 27/27] kernel/reboot: Add devm_register_restart_handler()
+Date:   Tue, 10 May 2022 02:32:35 +0300
+Message-Id: <20220509233235.995021-28-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
 References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
@@ -97,9 +97,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devm_register_power_off_handler() helper that registers sys-off
-handler using power-off mode and with a default priority. Most drivers
-will want to register power-off handler with a default priority, so this
+Add devm_register_restart_handler() helper that registers sys-off
+handler using restart mode and with a default priority. Most drivers
+will want to register restart handler with a default priority, so this
 helper will reduce the boilerplate code and make code easier to read and
 follow.
 
@@ -110,49 +110,49 @@ Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
  2 files changed, 26 insertions(+)
 
 diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index f185b64faae0..7c6e1f308f7c 100644
+index 7c6e1f308f7c..e5d9ef886179 100644
 --- a/include/linux/reboot.h
 +++ b/include/linux/reboot.h
-@@ -141,6 +141,10 @@ int devm_register_sys_off_handler(struct device *dev,
- 				  int (*callback)(struct sys_off_data *data),
- 				  void *cb_data);
+@@ -145,6 +145,10 @@ int devm_register_power_off_handler(struct device *dev,
+ 				    int (*callback)(struct sys_off_data *data),
+ 				    void *cb_data);
  
-+int devm_register_power_off_handler(struct device *dev,
-+				    int (*callback)(struct sys_off_data *data),
-+				    void *cb_data);
++int devm_register_restart_handler(struct device *dev,
++				  int (*callback)(struct sys_off_data *data),
++				  void *cb_data);
 +
  int register_platform_power_off(void (*power_off)(void));
  void unregister_platform_power_off(void (*power_off)(void));
  
 diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 66033e12e8eb..b790025154ac 100644
+index b790025154ac..2e78bd754a75 100644
 --- a/kernel/reboot.c
 +++ b/kernel/reboot.c
-@@ -462,6 +462,28 @@ int devm_register_sys_off_handler(struct device *dev,
+@@ -484,6 +484,28 @@ int devm_register_power_off_handler(struct device *dev,
  }
- EXPORT_SYMBOL_GPL(devm_register_sys_off_handler);
+ EXPORT_SYMBOL_GPL(devm_register_power_off_handler);
  
 +/**
-+ *	devm_register_power_off_handler - Register power-off handler
++ *	devm_register_restart_handler - Register restart handler
 + *	@dev: Device that registers callback
 + *	@callback: Callback function
 + *	@cb_data: Callback's argument
 + *
 + *	Registers resource-managed sys-off handler with a default priority
-+ *	and using power-off mode.
++ *	and using restart mode.
 + *
 + *	Returns zero on success, or error code on failure.
 + */
-+int devm_register_power_off_handler(struct device *dev,
-+				    int (*callback)(struct sys_off_data *data),
-+				    void *cb_data)
++int devm_register_restart_handler(struct device *dev,
++				  int (*callback)(struct sys_off_data *data),
++				  void *cb_data)
 +{
 +	return devm_register_sys_off_handler(dev,
-+					     SYS_OFF_MODE_POWER_OFF,
++					     SYS_OFF_MODE_RESTART,
 +					     SYS_OFF_PRIO_DEFAULT,
 +					     callback, cb_data);
 +}
-+EXPORT_SYMBOL_GPL(devm_register_power_off_handler);
++EXPORT_SYMBOL_GPL(devm_register_restart_handler);
 +
  static struct sys_off_handler *platform_power_off_handler;
  

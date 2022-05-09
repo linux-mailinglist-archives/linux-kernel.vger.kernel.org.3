@@ -2,116 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C281E520835
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E294452083F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiEIXQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S232311AbiEIXRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiEIXQk (ORCPT
+        with ESMTP id S232281AbiEIXRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:16:40 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E91E2A3BC2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:12:45 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id i11so5666767ybq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:12:45 -0700 (PDT)
+        Mon, 9 May 2022 19:17:43 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937DA2A3BEE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:13:48 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f7d19cac0bso161379217b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oazinpgomaqUG0jSYMm8ubizFPTzpD9YluLXTH1Uf+8=;
+        b=f6fWCk6p41OZaY/aYptJIOS/H7gQoR2LQU/vFrk5Gn4NSNwuGdiZDiDStk7AbG3yZD
+         IKBXb4w884/50UAgGFMYKZ1TW7UWPSrJsR6aU/0xVkQloWI1gv9dqJSDbnU+7ZRlaq+H
+         5q6FzLE9Jch5W51SjYRwMzmvNSaAVh59pmK1la7G6Ce7QS8+phGNXM1poUTxBJEghkkL
+         rkNzGIHiR6cg7h2j0E68I08LETn6PDCH3Bk2j2CtnK3mFxMH+qkZYlQ5Mbk0pgP96vbx
+         k86u84TYrd/iZlrt9edUpHqGeZQt6sH9DbxxljCpeCMl8DqbX8Q9LTMC9vVENf9lnOH2
+         8xnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2ZF0aaGxPgqlWytLFil+L87rXP/3Mh2LugmakMdLiHc=;
-        b=uXpqT0xCF7vBrqs0KtzqrYI5dB+NVARskSozy72v17V+phYFohxqGKoCQmNGZiRNTf
-         3Fx3Q9C322EYG2TGPF5myqFa/qInvw9sg+ZYf3OfFFr42/XArxTHnaFV/kDYECVH87YV
-         atAKF4MJq42CnM/B72U1CjlzPZbRVhhxYm55LLlU2jVQmEraUWTgILXKzv96PlmDlH2t
-         cutIzlOUwHX6qBLgIp1Ldc2c22miFNkOjhPuIUhoyW188TwxAFtiPl9MM+jE1tPURIPJ
-         wQYXlMcUm6MRAU9AlN/Hb1vAny6dk+KsZqiLGnCZDYgMPuFxSD6UnPquzriaVEERvt+y
-         ESpg==
-X-Gm-Message-State: AOAM53126MAQ1kYzo3P/1/GlJxWmQWHU/wKap853AGTZ5SKcXPEUqGRL
-        zem9HTYbnMdNpx4oteqCS6xR2EnLEzW1MMDKRqg=
-X-Google-Smtp-Source: ABdhPJxtqzF8TkeIOVaFkQH8p/9uF9xftraHkwIFHfYD5qc8cA+oK1c0fxpmTkiTmRc3ZMnOTqLGGsGSJHAwSb2gfnU=
-X-Received: by 2002:a25:76c6:0:b0:648:5616:ca50 with SMTP id
- r189-20020a2576c6000000b006485616ca50mr16718433ybc.423.1652137964457; Mon, 09
- May 2022 16:12:44 -0700 (PDT)
+        bh=oazinpgomaqUG0jSYMm8ubizFPTzpD9YluLXTH1Uf+8=;
+        b=ggCRmKixQk5YABhd+fkdT4XtH5h8w2d/9l5/S3LcvDMFsLNljr/SpiX+0trNk+f3qy
+         FGGgVHZwMj9/Sp1D7SxMQ3SeT2vKBCZj+GomzE5ymcCa5GBi0W1X8+Q0XVRPG3wvUqRW
+         uCOWJOuZpeUbrTDhrM5vPGPV5QeDSGA6Oem15ZYG+YwoLoWGtlFAOmKdzXqAbFE8khAH
+         PDji3kK/fEgJRSfsRPloweFoep6mvQ6HHwDZrsd1mTnTZBLYVN3qSzLwIV6fCg+1pr/R
+         1pMxesM5Si5ZYJWv7F2REVMJ2+tR6CypCGqeiWaBPAvqRB7g6PYpE7zpIg2vaAwELqu4
+         Dt1A==
+X-Gm-Message-State: AOAM532vK4/0xJLBShHp4Iuxf6xBeKSJlyV60JigxH+JhYBkP3ME0k+k
+        PrRuIHmC18u9wIj4kR+jPl/AsLruQAsdetEgVB2sYg==
+X-Google-Smtp-Source: ABdhPJxssHqsbnbsTj81I2dSgjtFlZace94GadSqyvpd5jqz1pk64Y4lHyhr+1TXl7QDxSK2F5OuNrrpLo+K4Kc2AN8=
+X-Received: by 2002:a81:1108:0:b0:2f7:bf11:3fb9 with SMTP id
+ 8-20020a811108000000b002f7bf113fb9mr17011668ywr.305.1652138027673; Mon, 09
+ May 2022 16:13:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
- <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
- <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
-In-Reply-To: <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 10 May 2022 08:12:33 +0900
-Message-ID: <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-10-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-10-masahiroy@kernel.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 9 May 2022 16:13:11 -0700
+Message-ID: <CABCJKudnbTS=_2WgX63xb_3oCwt_6jwotqfoV5wSjkmfjuUJZQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/14] kbuild: do not create *.prelink.o for Clang LTO
+ or IBT
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, linux-s390@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Ard Biesheuvel <ardb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
-
-On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > Instead, I am thinking of just using -fno-builtin-ffs to remove
-> > the annoying -Wshadow warning. Would that make more sense?
+On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Perhaps a pragma would be the best tool to silence this instance of
-> -Wshadow?  I understand what GCC is trying to express, but the kernel
-> does straddle a weird place between -ffreestanding and a "hosted" env.
+> When CONFIG_LTO_CLANG=y, additional intermediate *.prelink.o is created
+> for each module. Also, objtool is postponed until LLVM bitcode is
+> converted to ELF.
+>
+> CONFIG_X86_KERNEL_IBT works in a similar way to postpone objtool until
+> objects are merged together.
+>
+> This commit stops generating *.prelink.o, so the build flow will look
+> the same with/without LTO.
+>
+> The following figures show how the LTO build currently works, and
+> how this commit is changing it.
+>
+> Current build flow
+> ==================
+>
+>  [1] single-object module
+>
+>                                       $(LD)
+>            $(CC)                     +objtool              $(LD)
+>     foo.c --------------------> foo.o -----> foo.prelink.o -----> foo.ko
+>                            (LLVM bitcode)        (ELF)       |
+>                                                              |
+>                                                  foo.mod.o --/
+>
+>  [2] multi-object module
+>                                       $(LD)
+>            $(CC)         $(AR)       +objtool               $(LD)
+>     foo1.c -----> foo1.o -----> foo.o -----> foo.prelink.o -----> foo.ko
+>                            |  (archive)          (ELF)       |
+>     foo2.c -----> foo2.o --/                                 |
+>                 (LLVM bitcode)                   foo.mod.o --/
+>
+>   One confusion is foo.o in multi-object module is an archive despite of
+>   its suffix.
+>
+> New build flow
+> ==============
+>
+>  [1] single-object module
+>
+>   Since there is only one object, we do not need to have the LLVM
+>   bitcode stage. Use $(CC)+$(LD) to generate an ELF object in one
+>   build rule. When LTO is disabled, $(LD) is unneeded because $(CC)
+>   produces an ELF object.
+>
+>            $(CC)+$(LD)+objtool             $(LD)
+>     foo.c ------------------------> foo.o -------> foo.ko
+>                                     (ELF)    |
+>                                              |
+>                                  foo.mod.o --/
+>
+>  [2] multi-object module
+>
+>   Previously, $(AR) was used to combine LLVM bitcode into an archive,
+>   but there was no technical reason to do so.
+>   This commit just uses $(LD) to combine and convert them into a single
+>   ELF object.
+>
+>                             $(LD)
+>             $(CC)          +objtool        $(LD)
+>     foo1.c -------> foo1.o -------> foo.o -------> foo.ko
+>                               |     (ELF)    |
+>     foo2.c -------> foo2.o ---/              |
+>                 (LLVM bitcode)   foo.mod.o --/
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-I was a bit reluctant to propose the use of pragma because I received
-negative feedback in another patch for using the __diag_ignore()
-c.f.:
-https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
+Looks good, thanks for cleaning this up!
 
-But the context here is a bit different, I guess. If I receive your support, I
-am fully OK to silence this with some #pragma.
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-The patch would look as below (I just need to test with clang
-before submitting).
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index a288ecd230ab..e44911253bdf 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -269,6 +269,9 @@ static __always_inline unsigned long
-__fls(unsigned long word)
- #undef ADDR
-
- #ifdef __KERNEL__
-+__diag_push();
-+__diag_ignore_all("-Wshadow",
-+                  "-fno-builtin-foo would remove optimization, just
-silence it instead");
- /**
-  * ffs - find first set bit in word
-  * @x: the word to search
-@@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
- #endif
-        return r + 1;
- }
-+__diag_pop(); /* ignore -Wshadow */
-
- /**
-  * fls - find last set bit in word
+Sami

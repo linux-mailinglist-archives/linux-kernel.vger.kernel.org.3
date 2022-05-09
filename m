@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9843651F333
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C210851F331
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbiEIELC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S232683AbiEIEKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiEIEGI (ORCPT
+        with ESMTP id S233056AbiEIEHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:06:08 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E39AAE11;
-        Sun,  8 May 2022 21:02:16 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15889631pjb.5;
-        Sun, 08 May 2022 21:02:16 -0700 (PDT)
+        Mon, 9 May 2022 00:07:45 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5B429835
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:03:52 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id k14so11006047pga.0
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=6eVdKKgpvfyr2lmpaU0Ls6K7vbdJu1m0KcXbrbuObD4=;
-        b=hH9sLId90RXxnTi03TtWtlGJZ1l/Or77bFTq/1LTS58C6VV0qLI8aEiWCouxiw7nCu
-         cNelI42+zINXLWLY4N2N+Yx9V5wPAWUBw6BFpqDF2Ls418gcH+2Y4PQUOCk9Z3QL7dht
-         4Oo6peOgjs9uz+HQ082wOBwyCvoXZ3SB4G1tns26nTuo5YVaXTWzcC8m/aCIt5cFBKJO
-         ASK1sbsPRMTeZboQd2sTCfqgUDtJclwZe5XchholeXN81NEKdipA4p//JTIV5TbNIEx8
-         Tc/SddLxDMB3axqNMr1xF0r/3a6HJDAC7Xt5pOlUfYzAnpCIejjrwRnQmp4QK9cJRYVd
-         CBUA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9A+y9PDcYTV+3BDPkG669L0FMzhgV70cq1ARje3fkgs=;
+        b=ksd9ARsI3qJYy0rsMGtM+GlMmr6fF4WTlfAo6BkfpqSWODocWLfDIFGQiHWfXDNesa
+         x0Zvb581p38O6K010tGvMk2/fiWue0HtffDLgW3baH/AuRHleUYeQ1kRII8vMhNkQh6i
+         Q6w5E0+PaeEimsqXdEr/bHv2Arctt7hWlzCSkuKrR4DfBmlFRS7/x1PqaIQRXhjKzeNK
+         qFn7jinXxKyOEqdz9SmsCfHtfQxWfgnlgV0Ueyyk/j/w+JHpdj9+04lRPNRDrHtjsxyJ
+         DhCRVcvAM/zDk/oNBvlxYuyGov9n9eBKmxCHVTu4PL6I8L3uF9GTDGaMOtDOyIgtRocC
+         gPCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6eVdKKgpvfyr2lmpaU0Ls6K7vbdJu1m0KcXbrbuObD4=;
-        b=RHE7nX/FKXzbbGHTjYUubE45AhZN13jNp2z+dzqnguMRvsEkrM3Fr4cF7mQOI9ro7Z
-         dsGrsrllrUKnnxnYSbKtRQRC2kz4tTiJoXwW2e+XPF4GfjDmznAbiteZXqF3fHeSqnOh
-         vw9x9GOA6fbPjLJfTu+4463cp+AyMYiTDEIBIumvHD3ZRx3cH8QKlk7pO4X6uP32qrhr
-         iabVRvmYJQ7HngN2ZNUnnmuNI/d4BdM/aZeBD/yVvbQerw65mMGaRPToyJo1sKUZqZVT
-         jwZuQrWzPWQAQgpNq3rPLYEhFYCnTYHgOW7fH0IN84BpFwqYvc28bEmg9xqNC7u835zD
-         7FQQ==
-X-Gm-Message-State: AOAM5331V+ZCD0p58AHFfkAtDzl81FuaQ4lCjBgBvJDRm0uDven/QKKO
-        pnTNSfU8Q6iLl5xOi9tWpfk=
-X-Google-Smtp-Source: ABdhPJziN8xtoWqM0azviq6vE079XOSlMsdPagRnGq0woepZ5+g+K8ajQh6aD0zmIIZT3AJhh04bBA==
-X-Received: by 2002:a17:90a:5886:b0:1dc:6b58:91e with SMTP id j6-20020a17090a588600b001dc6b58091emr16257395pji.176.1652068935509;
-        Sun, 08 May 2022 21:02:15 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902dac100b0015e8d4eb2dfsm5873971plx.297.2022.05.08.21.02.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 21:02:14 -0700 (PDT)
-Message-ID: <7e9c2e77-8b70-6e15-3f3d-905ab42b0fcd@gmail.com>
-Date:   Mon, 9 May 2022 13:02:08 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9A+y9PDcYTV+3BDPkG669L0FMzhgV70cq1ARje3fkgs=;
+        b=DHuKKAfu9v9NLtz32yPevcR1lijJe+AB85FVkrY8JTWEguDCUVSHoiocmUZeuW7wVy
+         twt83LQd0nAMEE9EGYLvS80okTenlBuIBfc8drJ9HSj0nyruD7jUo3ViIDl1m9MAahuY
+         MjltGtjUGKAthtK0UOh31CYKxR3OGgqsunflhDYTupVcXvp/kkGTm4TPP7RkRl5h1Amy
+         Q6RzpvN3lk1C1eGGCmWjxcvQvi8W51EITyfznGQjyK4F8Nvn7/G2xh253QPusawt8mO3
+         ld9K441YrJN9aL9EcGk27H/09yjG35p2rdEnHS3wasSDM2Nh8evIFEGkw17Uox7XhQ2c
+         7Vtw==
+X-Gm-Message-State: AOAM533XoyJWMyZqEAjmKAefcv+egxqrP8UTlEkhJGUqq2OjYUx2yYIZ
+        LxsOv8VnEikDzwcbq4CFyK8=
+X-Google-Smtp-Source: ABdhPJxPSgTLOZ7OBkDAcwGVk/u+rQl6cEGFHuruWNSl7RVobicSRPu349vCetXpJ+IaSuxHOtBW9Q==
+X-Received: by 2002:aa7:8888:0:b0:50f:2e7a:76b7 with SMTP id z8-20020aa78888000000b0050f2e7a76b7mr14301355pfe.48.1652069032230;
+        Sun, 08 May 2022 21:03:52 -0700 (PDT)
+Received: from localhost ([152.70.90.187])
+        by smtp.gmail.com with ESMTPSA id w12-20020a17090aea0c00b001d9e3b0e10fsm11289877pjy.16.2022.05.08.21.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 21:03:51 -0700 (PDT)
+Date:   Mon, 9 May 2022 12:03:48 +0800
+From:   Wang Cheng <wanngchenng@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     dan.carpenter@oracle.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] staging: rtl8712: fix uninit-value in
+ r871xu_drv_init()
+Message-ID: <20220509040348.57f3nbudn2izodqw@ppc.localdomain>
+References: <cover.1651760402.git.wanngchenng@gmail.com>
+ <14c3886173dfa4597f0704547c414cfdbcd11d16.1651760402.git.wanngchenng@gmail.com>
+ <46b89616-5ec7-fb04-f561-2647efd968c4@gmail.com>
+ <20220506113320.gc6zryhm7uqnbva5@ppc.localdomain>
+ <a5483e41-b5f7-d86b-21b9-2a9c3e602855@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-To:     ojeda@kernel.org
-Cc:     alex.gaynor@gmail.com, ark.email@gmail.com, bobo1239@web.de,
-        bobwxc@email.cn, corbet@lwn.net, dxu@dxuuu.xyz, gary@garyguo.net,
-        gregkh@linuxfoundation.org, jarkko@kernel.org, jtitor@2k36.org,
-        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, masahiroy@kernel.org, me@jvmerkle.de,
-        me@kloenk.de, michal.lkml@markovi.net, mpe@ellerman.id.au,
-        ndesaulniers@google.com, rust-for-linux@vger.kernel.org,
-        thesven73@gmail.com, torvalds@linux-foundation.org,
-        wedsonaf@google.com, wei.liu@kernel.org
-References: <20220507052451.12890-19-ojeda@kernel.org>
-Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220507052451.12890-19-ojeda@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a5483e41-b5f7-d86b-21b9-2a9c3e602855@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,175 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miguel,
-
-On Sat,  7 May 2022 07:24:16 +0200,
-Miguel Ojeda wrote:
-> Most of the documentation for Rust is written within the source code
-> itself, as it is idiomatic for Rust projects. This applies to both
-> the shared infrastructure at `rust/` as well as any other Rust module
-> (e.g. drivers) written across the kernel.
+On 22/05/06 03:02PM, Pavel Skripkin wrote:
+> Hi Wang,
 > 
-> However, these documents contain general information that does not
-> fit particularly well in the source code, like the Quick Start guide.
+> On 5/6/22 14:33, Wang Cheng wrote:
+> > On 22/05/06 10:41AM, Pavel Skripkin wrote:
+> > > Hi Wang,
+> > > 
+> > > On 5/6/22 06:16, Wang Cheng wrote:
+> > > 
+> > > [snip]
+> > > 
+> > > > > Reported-and-tested-by:
+> > > syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
+> > > > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+> > > > ---
+> > > >   drivers/staging/rtl8712/usb_intf.c | 6 +++---
+> > > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > > diff --git a/drivers/staging/rtl8712/usb_intf.c
+> > > b/drivers/staging/rtl8712/usb_intf.c
+> > > > index ee4c61f85a07..50dcd3ecb685 100644
+> > > > --- a/drivers/staging/rtl8712/usb_intf.c
+> > > > +++ b/drivers/staging/rtl8712/usb_intf.c
+> > > > @@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
+> > > >   		} else {
+> > > >   			AutoloadFail = false;
+> > > >   		}
+> > > > -		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
+> > > > +		if ((!AutoloadFail) ||
+> > > > +		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
+> > > >   		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
+> > > >   		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
+> > > >   		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
+> > > >   		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
+> > > > -		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
+> > > > -		     (!AutoloadFail)) {
+> > > > +		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
+> > > 
+> > > 
+> > > That looks ugly. I mean mac checks. Can we, please, use sane kernel API like
+> > > is_valid_ether_addr()?
+> > 
+> > Good idea! But will is_valid_ether_addr() check a larger range?
+> > The comment of is_valid_ether_addr()(include/linux/etherdevice.h) says:
+> >    Check that the Ethernet address (MAC) is not 00:00:00:00:00:00, is not
+> >    a *multicast address*, and is not FF:FF:FF:FF:FF:FF.
+> > 
 > 
-> It also contains an asset (SVG logo) used for the `rustdoc` target
-> and a few other small changes elsewhere in the documentation folder.
-> 
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Finn Behrens <me@kloenk.de>
-> Signed-off-by: Finn Behrens <me@kloenk.de>
-> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Co-developed-by: Wu XiangCheng <bobwxc@email.cn>
-> Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-> Co-developed-by: Yuki Okushi <jtitor@2k36.org>
-> Signed-off-by: Yuki Okushi <jtitor@2k36.org>
-> Co-developed-by: Wei Liu <wei.liu@kernel.org>
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> Co-developed-by: Julian Merkle <me@jvmerkle.de>
-> Signed-off-by: Julian Merkle <me@jvmerkle.de>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  Documentation/doc-guide/kernel-doc.rst     |   3 +
->  Documentation/index.rst                    |   1 +
->  Documentation/kbuild/kbuild.rst            |  17 +
->  Documentation/kbuild/makefiles.rst         |  50 ++-
->  Documentation/process/changes.rst          |  41 +++
->  Documentation/rust/arch-support.rst        |  34 ++
->  Documentation/rust/coding-guidelines.rst   | 214 ++++++++++++
->  Documentation/rust/general-information.rst |  77 +++++
->  Documentation/rust/index.rst               |  20 ++
->  Documentation/rust/logo.svg                | 357 +++++++++++++++++++++
-I think you agreed splitting SVG part into its own patch with
-a proper copying info, etc.  Let me see...  So, here is the link:
+> I am not good an expert at networking stuff, but can multicast mac address
+> be valid for purpose of Wi-Fi adapter? IIUC it's can't, but as I said
+> before, I am not an expert
 
-https://lore.kernel.org/lkml/CANiq72mLtvWJ5peSTpYQ8AeLEskga6Pda8Q7Daysv2pfycnyxA@mail.gmail.com/
+Me neither. :P I found some reference here:
+https://en.wikipedia.org/wiki/Multicast_address#Ethernet
 
-I might have missed v5 of this patch series.
-That might be because v5's 15/20 was not accepted by linux-doc's
-lore archive (maybe) due to its size despite it had Cc: linux-doc.
-v6's 18/23 was also rejected.
+And in the implementation of
+is_multicast_ether_addr()(include/linux/etherdevice.h), it checks one
+bit of mac address to determine a multicast or not.
 
->  Documentation/rust/quick-start.rst         | 230 +++++++++++++
->  11 files changed, 1040 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/rust/arch-support.rst
->  create mode 100644 Documentation/rust/coding-guidelines.rst
->  create mode 100644 Documentation/rust/general-information.rst
->  create mode 100644 Documentation/rust/index.rst
->  create mode 100644 Documentation/rust/logo.svg
->  create mode 100644 Documentation/rust/quick-start.rst
+Probably some other kernel API could help.
 
-I have some alternative ideas for table formatting in ReST.
+thanks,
+- w
 
-> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-> new file mode 100644
-> index 000000000000..482757a1f3d0
-> --- /dev/null
-> +++ b/Documentation/rust/arch-support.rst
-> @@ -0,0 +1,34 @@
-> +Arch Support
-> +============
-> +
-> +Currently, the Rust compiler (``rustc``) uses LLVM for code generation,
-> +which limits the supported architectures that can be targeted. In addition,
-> +support for building the kernel with LLVM/Clang varies (please see
-> +Documentation/kbuild/llvm.rst). This support is needed for ``bindgen``
-> +which uses ``libclang``.
-> +
-> +Below is a general summary of architectures that currently work. Level of
-> +support corresponds to ``S`` values in the ``MAINTAINERS`` file.
-> +
-> +.. list-table::
-> +   :widths: 10 10 10
-> +   :header-rows: 1
-> +
-> +   * - Architecture
-> +     - Level of support
-> +     - Constraints
-> +   * - ``arm``
-> +     - Maintained
-> +     - ``armv6`` and compatible only, ``RUST_OPT_LEVEL >= 2``
-> +   * - ``arm64``
-> +     - Maintained
-> +     - None
-> +   * - ``powerpc``
-> +     - Maintained
-> +     - ``ppc64le`` only, ``RUST_OPT_LEVEL < 2`` requires ``CONFIG_THREAD_SHIFT=15``
-> +   * - ``riscv``
-> +     - Maintained
-> +     - ``riscv64`` only
-> +   * - ``x86``
-> +     - Maintained
-> +     - ``x86_64`` only
-
-Excerpt from Section "list tables" in
-Documentation/doc-guide/sphinx.rst:
-
-> The list-table formats can be useful for tables that are not easily laid
-> out in the usual Sphinx ASCII-art formats.  These formats are nearly
-> impossible for readers of the plain-text documents to understand, though,
-> and should be avoided in the absence of a strong justification for their
-> use.
-
-So here are a couple of alternative ways to represent the table
-
-* ASCII-art format:
-
-============ ================ ==========================================
-Architecture Level of support Constraints
-============ ================ ==========================================
-``arm``      Maintained       ``armv6`` and compatible only,
-                              ``RUST_OPT_LEVEL >= 2``
-``arm64``    Maintained       None
-``powerpc``  Maintained       ``ppc64le`` only, ``RUST_OPT_LEVEL < 2``
-                              requires ``CONFIG_THREAD_SHIFT=15``
-``riscv``    Maintained       ``riscv64`` only
-``x86``      Maintained       ``x86_64`` only
-============ ================ ==========================================
-
-* Literal block format:
-
-::
-
- Architecture  Level of support  Constraints
- ------------  ----------------  -------------------------------------
- arm           Maintained        armv6 and compatible only,
-                                 RUST_OPT_LEVEL >= 2
- arm64         Maintained        None
- powerpc       Maintained        ppc64le only, RUST_OPT_LEVEL < 2
-                                 requires CONFIG_THREAD_SHIFT=15
- riscv         Maintained        riscv64 only
- x86           Maintained        x86_64 only
-
-
-"::" above the table marks the start of a literal block.
-Indents are important for la iteral block to work.
-A literal block ends at a line which has the same indent as
-the preceding paragraph, in this case with no indent, or at
-the end of file.
-
-As you see, those inline-literal markers of ``xxxx``, which are
-distracting when the .rst file is read as plain-text, are not
-necessary in the literal-block approach.  And you can directly
-tweak line breaks in the Constraints column in the final HTML
-and PDF docs.
-
-In my opinion, the literal-block approach should be the most
-reasonable choice here. Of course its your call which one
-to choose.
-
-        Thanks, Akira

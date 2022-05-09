@@ -2,258 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0317D51FD8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A51B51FD89
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiEINLd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 9 May 2022 09:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S235123AbiEINMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235168AbiEINLc (ORCPT
+        with ESMTP id S235080AbiEINMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:11:32 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645F423EB57;
-        Mon,  9 May 2022 06:07:34 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1no36j-0006No-PZ; Mon, 09 May 2022 15:07:25 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org,
-        mail@conchuod.ie, Conor.Dooley@microchip.com
-Cc:     Cyril.Jean@microchip.com, Daire.McNamara@microchip.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        palmer@rivosinc.com, arnd@arndb.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 8/8] riscv: dts: microchip: add the sundance polarberry
-Date:   Mon, 09 May 2022 15:07:24 +0200
-Message-ID: <3665104.kQq0lBPeGt@diego>
-In-Reply-To: <5de89e89-c30d-d9fc-4ef7-f4c0327a28e8@microchip.com>
-References: <20220504203051.1210355-1-mail@conchuod.ie> <8060906.T7Z3S40VBb@diego> <5de89e89-c30d-d9fc-4ef7-f4c0327a28e8@microchip.com>
+        Mon, 9 May 2022 09:12:14 -0400
+Received: from outbound-smtp55.blacknight.com (outbound-smtp55.blacknight.com [46.22.136.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776E923F3A1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:08:18 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp55.blacknight.com (Postfix) with ESMTPS id ED95DFA78E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:08:16 +0100 (IST)
+Received: (qmail 17402 invoked from network); 9 May 2022 13:08:16 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 9 May 2022 13:08:16 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [RFC PATCH 0/6] Drain remote per-cpu directly v2
+Date:   Mon,  9 May 2022 14:07:59 +0100
+Message-Id: <20220509130805.20335-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 9. Mai 2022, 13:24:12 CEST schrieb Conor.Dooley@microchip.com:
-> On 09/05/2022 12:10, Heiko Stübner wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Am Mittwoch, 4. Mai 2022, 22:30:52 CEST schrieb Conor Dooley:
-> >> From: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> Add a minimal device tree for the PolarFire SoC based Sundance
-> >> PolarBerry.
-> >>
-> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >> ---
-> >>   arch/riscv/boot/dts/microchip/Makefile        |  1 +
-> >>   .../dts/microchip/mpfs-polarberry-fabric.dtsi | 16 +++
-> >>   .../boot/dts/microchip/mpfs-polarberry.dts    | 97 +++++++++++++++++++
-> >>   3 files changed, 114 insertions(+)
-> >>   create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-> >>   create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> >>
-> >> diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-> >> index af3a5059b350..39aae7b04f1c 100644
-> >> --- a/arch/riscv/boot/dts/microchip/Makefile
-> >> +++ b/arch/riscv/boot/dts/microchip/Makefile
-> >> @@ -1,3 +1,4 @@
-> >>   # SPDX-License-Identifier: GPL-2.0
-> >>   dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
-> >> +dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
-> >>   obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
-> >> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-> >> new file mode 100644
-> >> index 000000000000..49380c428ec9
-> >> --- /dev/null
-> >> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-> >> @@ -0,0 +1,16 @@
-> >> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> >> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
-> >> +
-> >> +/ {
-> >> +     fabric_clk3: fabric-clk3 {
-> >> +             compatible = "fixed-clock";
-> >> +             #clock-cells = <0>;
-> >> +             clock-frequency = <62500000>;
-> >> +     };
-> >> +
-> >> +     fabric_clk1: fabric-clk1 {
-> >> +             compatible = "fixed-clock";
-> >> +             #clock-cells = <0>;
-> >> +             clock-frequency = <125000000>;
-> >> +     };
-> >> +};
-> >> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> >> new file mode 100644
-> >> index 000000000000..1cad5b0d42e1
-> >> --- /dev/null
-> >> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> >> @@ -0,0 +1,97 @@
-> >> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> >> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
-> >> +
-> >> +/dts-v1/;
-> >> +
-> >> +#include "mpfs.dtsi"
-> >> +#include "mpfs-polarberry-fabric.dtsi"
-> >> +
-> >> +/* Clock frequency (in Hz) of the rtcclk */
-> >> +#define MTIMER_FREQ  1000000
-> >> +
-> >> +/ {
-> >> +     model = "Sundance PolarBerry";
-> >> +     compatible = "sundance,polarberry", "microchip,mpfs";
-> >> +
-> >> +     aliases {
-> >> +             ethernet0 = &mac1;
-> >> +             serial0 = &mmuart0;
-> >> +     };
-> >> +
-> >> +     chosen {
-> >> +             stdout-path = "serial0:115200n8";
-> >> +     };
-> >> +
-> >> +     cpus {
-> >> +             timebase-frequency = <MTIMER_FREQ>;
-> >> +     };
-> >> +
-> >> +     ddrc_cache_lo: memory@80000000 {
-> >> +             device_type = "memory";
-> >> +             reg = <0x0 0x80000000 0x0 0x2e000000>;
-> >> +     };
-> >> +
-> >> +     ddrc_cache_hi: memory@1000000000 {
-> >> +             device_type = "memory";
-> >> +             reg = <0x10 0x00000000 0x0 0xC0000000>;
-> >> +     };
-> >> +};
-> >> +
-> >> +/*
-> >> + * phy0 is connected to mac0, but the port itself is on the (optional) carrier
-> >> + * board.
-> >> + */
-> >> +&mac0 {
-> >> +     status = "disabled";
-> >> +     phy-mode = "sgmii";
-> >> +     phy-handle = <&phy0>;
-> > 
-> > nit: it makes it was easier recognizing the status if it's in the
-> > same place all the time (for example as the last property)
-> > like in &mmc below.
-> > 
-> > Though that may just be my preference ;-) .
-> > The other option would be to adhere to stricter sorting
-> > because right now status is neither in one place nor sorted.
-> 
-> My I had it in my head (and correct me if I am wrong please), that it is
-> okay to sort the phys after the status. It doesn't matter either way to
-> me, but there are plenty of dts that do it this way.
-> 
-> I don't care either way, so I am happy to change if those are bad examples
-> to follow!
+Changelog since v1
+o Fix unsafe RT locking scheme
+o Use spin_trylock on UP PREEMPT_RT
 
-I guess which order to follow really is more a matter of taste and I
-don't think there is a definitive rulebook on what belongs where ;-) .
+This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+per-cpu lists drain support" -- avoid interference of a high priority
+task due to a workqueue item draining per-cpu page lists. While many
+workloads can tolerate a brief interruption, it may be cause a real-time
+task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
+the draining in non-deterministic.
 
-Though from past experience I do know that it makes reading devicetrees
-easier when you know which property to expect in which place - especially
-when their number increases and right now you have status above here,
-and below everything else in the mmc node for example.
+Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
+The local_lock on its own prevents migration and the IRQ disabling protects
+from corruption due to an interrupt arriving while a page allocation is
+in progress. The locking is inherently unsafe for remote access unless
+the CPU is hot-removed.
 
-In the end Palmer might not care that much about tiny odering
-differences, but I do think following one scheme is definitively an
-advantage over mixing different ones.
+This series adjusts the locking. A spinlock is added to struct
+per_cpu_pages to protect the list contents while local_lock_irq continues
+to prevent migration and IRQ reentry. This allows a remote CPU to safely
+drain a remote per-cpu list.
 
+This series is a partial series. Follow-on work should allow the
+local_irq_save to be converted to a local_irq to avoid IRQs being
+disabled/enabled in most cases. Consequently, there are some TODO comments
+highlighting the places that would change if local_irq was used. However,
+there are enough corner cases that it deserves a series on its own
+separated by one kernel release and the priority right now is to avoid
+interference of high priority tasks.
 
-Heiko
+Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+	and when it is storing per-cpu pages.
 
+Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+	this is not necessary but it avoids per_cpu_pages consuming another
+	cache line.
 
-> >> +};
-> >> +
-> >> +&mac1 {
-> >> +     status = "okay";
-> >> +     phy-mode = "sgmii";
-> >> +     phy-handle = <&phy1>;
-> > 
-> > nit (1): same as above
-> > nit (2): blank line between properties and subnodes makes
-> >    everything more readable.
-> 
-> Aye, not wrong. I'll fix this regardless of what happens with
-> the status ordering.
-> Thanks,
-> Conor.
-> 
-> > 
-> >> +     phy1: ethernet-phy@5 {
-> >> +             reg = <5>;
-> >> +             ti,fifo-depth = <0x01>;
-> >> +     };
-> > 
-> > nit: blank line?
-> > 
-> > Otherwise:
-> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> > 
-> >> +     phy0: ethernet-phy@4 {
-> >> +             reg = <4>;
-> >> +             ti,fifo-depth = <0x01>;
-> >> +     };
-> >> +};
-> >> +
-> >> +&mbox {
-> >> +     status = "okay";
-> >> +};
-> >> +
-> >> +&mmc {
-> >> +     bus-width = <4>;
-> >> +     disable-wp;
-> >> +     cap-sd-highspeed;
-> >> +     cap-mmc-highspeed;
-> >> +     card-detect-delay = <200>;
-> >> +     mmc-ddr-1_8v;
-> >> +     mmc-hs200-1_8v;
-> >> +     sd-uhs-sdr12;
-> >> +     sd-uhs-sdr25;
-> >> +     sd-uhs-sdr50;
-> >> +     sd-uhs-sdr104;
-> >> +     status = "okay";
-> >> +};
-> >> +
-> >> +&mmuart0 {
-> >> +     status = "okay";
-> >> +};
-> >> +
-> >> +&refclk {
-> >> +     clock-frequency = <125000000>;
-> >> +};
-> >> +
-> >> +&rtc {
-> >> +     status = "okay";
-> >> +};
-> >> +
-> >> +&syscontroller {
-> >> +     status = "okay";
-> >> +};
-> >>
-> > 
-> > 
-> > 
-> > 
-> 
-> 
+Patch 3 is a preparation patch to avoid code duplication.
 
+Patch 4 is a simple micro-optimisation that improves code flow necessary for
+	a later patch to avoid code duplication.
 
+Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+	relying on local_lock to prevent migration, stabilise the pcp
+	lookup and prevent IRQ reentrancy.
 
+Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+
+ include/linux/mm_types.h |   5 +
+ include/linux/mmzone.h   |  12 +-
+ mm/page_alloc.c          | 342 +++++++++++++++++++++++++--------------
+ 3 files changed, 230 insertions(+), 129 deletions(-)
+
+-- 
+2.34.1
 

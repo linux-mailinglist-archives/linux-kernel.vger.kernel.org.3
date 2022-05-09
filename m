@@ -2,156 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D518851F6CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F7751F6E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiEIIOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 04:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S234604AbiEIINb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbiEIIBS (ORCPT
+        with ESMTP id S237398AbiEIIAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:01:18 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe1a::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BA819C32;
-        Mon,  9 May 2022 00:57:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UTfJI9aYr4kuujjjwoG6kejvioF8uuAxAyLsD5mfo0uohnDlvuqcCc8pofiTXpvx21T2Wj7XduB3+29ZG8pgVj+DydRrLuwLrfNEEJjy/HBIrdmA+pO0oMB3CSp6D1pyfB++Irh1Bk0sCYOR9jsilJ2Wk22W+rh/n0paJzKI7E1cTBwCfzpbtl8fuUhaLOLCOshgleR5cew/6hO5owPLpgkYiD8Q14sX8rksaGL2rlOCTfiN6UEst28JL7/mkZQFvw1sXzAPcNZSXa4lQAHCkJTNXcGY83T9QYXYvWF+sV27d9JzECA2Od/AA+3FF5twzxCZt1/GUgt9ipKE4UhZ0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FFer5QZPSXXzyHY77JHH2MsdpW5Hs8IX/taIJg8Y0s8=;
- b=cFF2p2ziGceGS5j5wtgGKedc+i9jKkplJhaIMRwbwR15hVyUsTx5xaHdhMqN4ghk644/zqwP7jNmY+CzXcbRDH40oSl67q4+Agbh6YAJkxLFohelvoJD4VYc0q1yUH1+a4mOYB/MdtQCaLLOUi7e9s2rJOHnjw6Cx7e0IA96lGoxe2tqeLfACYaUImNfMU51aKyq3jyZu3ERJZvUYG+DzxN6S0Y+DOoXBbCV3JwdjmqEff1VeVkr1igHmBLu7pDvsaBKP+m7ItxFpkPQknTFll+YFc+canLy26OG7/5fywKAOkRwoujoJUXI0jBqwXX2PgfMPAfkDO1f8L71U6/tOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FFer5QZPSXXzyHY77JHH2MsdpW5Hs8IX/taIJg8Y0s8=;
- b=Hw7oAgj8Img27ZiBF6i/vJJWZH6QEz2sDwvj/cikYN4k4awH/gw7smxYhs7I1GcCGy5HZjE05trQaYEdve5lDWBozmzRi4wfQ6E9bLBwILgQSdsYWo8aJvlptpFOOtnpDLZFK1cHtCIvKiHe4BnDTUxUBwXcwzqmDtmJcdvdhEY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AS1PR04MB9504.eurprd04.prod.outlook.com (2603:10a6:20b:4d2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.28; Mon, 9 May
- 2022 07:53:42 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::ed87:b085:802d:2390]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::ed87:b085:802d:2390%6]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 07:53:42 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] media: amphion: G/S_PARM only for encoder's output queue
-Date:   Mon,  9 May 2022 15:52:25 +0800
-Message-Id: <20220509075225.8031-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.36.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0063.apcprd02.prod.outlook.com
- (2603:1096:4:54::27) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Mon, 9 May 2022 04:00:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3023189E5D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652082990; x=1683618990;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ino11uijCuvYEBBiCsBGTBzxkPq0irZ5o3V4YaCc+Eo=;
+  b=TfKLJON3eJcykoohg/i0Ymz1itl67qBrCVMLV/Oyuzhhzp2gubqF4E0G
+   7sL6ghKFvdGvCe0vpBqFTCc5sjgbdQ/OxrwQ80rrly1XNeUhfw/xBu4iL
+   GY4RXeDbAV7Xoat4m4MMLtcBTyc49KjjlDWYJF04fJ614fz3rGE1N66PN
+   UqCliFjrfEAWDFH8S6blU77+hYdxPD43PxywV8hPtCHwYCRYCC4jIXTEn
+   jjRVw0q9vy28pKDyFiNkrrz6ZpU6V5c9Lq39gmPx2uqfBrSxj5z6KKlRH
+   2eOm3z9Pc7COasYKw8om6l4Lqze42odTM3+fKXECJJSVYZ1ic0aZ3DIs6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="248875213"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="248875213"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 00:53:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="668848352"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 00:53:31 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnyCw-000GJq-Jm;
+        Mon, 09 May 2022 07:53:30 +0000
+Date:   Mon, 9 May 2022 15:52:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Samuel Holland <samuel@sholland.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Samuel Holland <samuel@sholland.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 3/5] genirq: Provide an IRQ affinity mask in non-SMP
+ configs
+Message-ID: <202205091545.QhhCDxVm-lkp@intel.com>
+References: <20220509034333.60017-4-samuel@sholland.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d467045-69f7-4cb9-7cc0-08da3191090c
-X-MS-TrafficTypeDiagnostic: AS1PR04MB9504:EE_
-X-Microsoft-Antispam-PRVS: <AS1PR04MB950417D16F1D962CD0FF23A8E7C69@AS1PR04MB9504.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jF+nq548pvSMZw2zV6lw41LNSikur059d8cDNyjJAoQjgAFCxmN54oIvdOUTPr8NBc3E7B8uloBMRhmkX8MNSt+OAnmy5tpCoedspL2jMXSbMsjwcxKsF+ent9H1u8oOIJ+ABdlis94GflkGUdo4oV5FFFVWgtAmaDNw1y6OiVk7YPoMVlSK9OtFKam09FRtfEWZXYtk10elFWHH90kYZ9dSbtrFJvzo46wYL/3ebI6wwWZp7ENEIsztODPlPJRKFWaZdA1S71j+ftpCccUqZKtNI21741AktOoctY4IcO6NJ800qBLxNNTKut46GbkSDScG1+TI3HQc4yIThrS+rc66VNF8usDMfMluWx5mk5pUPjiXTyPeakRB7K+P38Nj7kb4qsS2mMVTVgue6FX9PNMht27kX6UOueAgy3kS7G1TmF8nft1OmcJUuyIPGrCuwksw80RrJzWwEvnDBxczSe26A/o9qyaJJDp3obBJLT1L2dwxGJ6Z1eldkqmib58IjnthNiOK5ysZ8JHsPySvB9/VeprO1vbl+J/Pna9k1Z0gsPzY1maz/+ekwWOU4FDiH7ocqKYkI8rCIf2e0biZWq1BUlZQE5JEl8B4SxBAH4zRlzeF9DGnV99bTYJ7drtB2pqQvPocvm4LCITe/luPO8RdmZCOV1zLluH15K6frQFYbxuV9pG0eJLwU5GGn6zg34/LlYpL/NoWGosgdWlH2A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6512007)(38100700002)(36756003)(38350700002)(186003)(6486002)(1076003)(316002)(66556008)(2616005)(66946007)(8936002)(2906002)(4326008)(66476007)(8676002)(86362001)(508600001)(6666004)(6506007)(7416002)(52116002)(44832011)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RRUXLUjTNO8NwCCGAqB1JwDm8hy9cKujSWIfw2plZdBZbnFabbOx/q3DQthw?=
- =?us-ascii?Q?HAVDVEEfzWSXgvBBPbrJ/tsYQTv+zLwfdVvkzRZDJIh03bAO3KWAq4c920ja?=
- =?us-ascii?Q?OdsuG8C1FaPLs7SfkmkiLL1VWNBsYArb1MHgF85Y2yLupMqpxA0zZZ1REA8O?=
- =?us-ascii?Q?XeDRvAEUEYUoyAL7EKVRLfwpFLoCrM85Z1TAe3huEyVMOzO3PM5vg+cISoYF?=
- =?us-ascii?Q?9mFKkaL+a7jbACiGv/hmkqcRnhHEw9volvC6v5T+THVy73NPlpWMApF3w3hF?=
- =?us-ascii?Q?LUwO2/vGa+AV762he20ZCuCpBN+a8S1pVxCWuJoTrFh3D62glNGhtEIlc/v7?=
- =?us-ascii?Q?KRGNdjSYf4ZMEMQSRaUZijU8aE6+MIcnLnGyajatpj08WiW9HE3I1Ib2d+lF?=
- =?us-ascii?Q?a7g6iBmpMY3YMsYsZxDp2O8Nr8vnDfjAxm0CXv9ZVLrUOsvYZl/W5vxCLUqV?=
- =?us-ascii?Q?pR2rMpdC9YGUH8K3fS6rGHzXKa9XG502Y+w37kdGTsodBaiAAoh6D9hH0qtC?=
- =?us-ascii?Q?w4T3qTFeMopRCI7E7OG+wj1Qir9AOcTy5nQG73Qq1pAm2YvxfuUN8pbV3yEZ?=
- =?us-ascii?Q?zCNE0/N4oTwUt9ERRmjKh8T35fqEallHR7ahNu0lz+IqlLj3ctJvE6e8C7tA?=
- =?us-ascii?Q?1xmYR19fmKcbZLnjrGYuyT2ybCWq/yuFmqoEZToGBrF6FZm6b8o5CKR/pvEs?=
- =?us-ascii?Q?MxpJ/sxdbD2ydOBecXNedmNw7MANSLXbvzQtZoh57fcwbVHG6kQMWpoH+VTc?=
- =?us-ascii?Q?jVbi0kdtO4ofNnlVZNmsiA8NvWuTGuqEacA1ibfLsUzmn6yiMeGOWjR5mYaD?=
- =?us-ascii?Q?APgZB7NpW+8Gz+GbafDAa0yVlsC5ix7MQSP6lKKUSpIDxIqhDhq03SzeD0pR?=
- =?us-ascii?Q?850ZMbhZuRodE5fOePp/3MpgxFZwYfYvpzHUmezCoEdIF12RPpeck/NVdqDK?=
- =?us-ascii?Q?+uiDraNpqFaqeiGQUaptyRpqhq9mgi0ITCQ51rFdnvbDaBHobEjggk9DFu1N?=
- =?us-ascii?Q?rkJwgJIZRRUgbzvanVyaR1XWs3KAGOcGJury66NM7gyHiaIpHZVF7aNm7ACv?=
- =?us-ascii?Q?FOgNMW4Hv1Xke3NZp4eTPi5zwwTILScTtP0auuZhj3osjTw1IhClFsSoxLoh?=
- =?us-ascii?Q?dcCXxD7MrJYaoPt/h1yPS4dNR1Afq0/0Et4RPlEokkX0nTOFmlAwE+EwfAqb?=
- =?us-ascii?Q?HbdmwkCo4us36rNhACQAtbY69/sY7At7aCtlTbO2FIxPoXLCUBS+iZ6q5N01?=
- =?us-ascii?Q?qglFWxoodaEsHhg7FDHXAlqo8D92NMdNe+WpC1LhHfsG8FiSmB2rAMRe0a60?=
- =?us-ascii?Q?Bfwx3p37pr9JGaUwNaVCvbJrEvMwkyGidiUM0RU8H7IPOQK+BwjgzekGTivj?=
- =?us-ascii?Q?lI8kpccjeC76QUcm0Ns51WQywRylpiCsnp7waza83w/CpY8JCp1GEiFOgKbP?=
- =?us-ascii?Q?qY7sFP6+89aRo3cuYcazmIiGqDBroLfNZw4RJv4xGuA/t+WR7ykZmSFK3Sjk?=
- =?us-ascii?Q?lmvg/u36WMb/mUx7QrWDEBO0rRXgd8dNn/bD8qhM+0i0h7FtvDrtJpjil18E?=
- =?us-ascii?Q?ynXKLhVRxWFvT4IdSWHR17njzoCKIbXoYihcWFKWyrXw92KrS6jmE4S6aaCS?=
- =?us-ascii?Q?id92NyfXR/VjmvXmxvoFS34jfPTFi4VhgXYjRMisGTGTfsH5u7zXePQrPuUp?=
- =?us-ascii?Q?T/JJBecR9BWmvIGMZPj2Hm4NtKvVgNxXZgmTCK65x8MX2epm/oedHS05431w?=
- =?us-ascii?Q?ubUPl0305A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d467045-69f7-4cb9-7cc0-08da3191090c
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 07:53:42.2084
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A3FSZVOMspERu1opO0hik0h1PW4NYWO7T/U5tuK5Cqp/zed6J4go2tGnAQkZ3NvOCEb7rgNK34sN9d7Xp/gdRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9504
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509034333.60017-4-samuel@sholland.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-G/S_PARM doesn't make sense for the capture queue of a stateful encoder,
-unless V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL is set to reserve hardware
-resources.
+Hi Samuel,
 
-Otherwise it will fail the v4l2-compliance
+I love your patch! Yet something to improve:
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/venc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on soc/for-next linus/master v5.18-rc6 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platform/amphion/venc.c
-index ba9f49cca155..43d61d82f58c 100644
---- a/drivers/media/platform/amphion/venc.c
-+++ b/drivers/media/platform/amphion/venc.c
-@@ -283,6 +283,9 @@ static int venc_g_parm(struct file *file, void *fh, struct v4l2_streamparm *parm
- 	if (!parm)
- 		return -EINVAL;
- 
-+	if (!V4L2_TYPE_IS_OUTPUT(parm->type))
-+		return -EINVAL;
-+
- 	if (!vpu_helper_check_type(inst, parm->type))
- 		return -EINVAL;
- 
-@@ -304,6 +307,9 @@ static int venc_s_parm(struct file *file, void *fh, struct v4l2_streamparm *parm
- 	if (!parm)
- 		return -EINVAL;
- 
-+	if (!V4L2_TYPE_IS_OUTPUT(parm->type))
-+		return -EINVAL;
-+
- 	if (!vpu_helper_check_type(inst, parm->type))
- 		return -EINVAL;
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
+config: mips-randconfig-r024-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091545.QhhCDxVm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/4bca5b436c97eb2ee232dd23f262ebad05fa183c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
+        git checkout 4bca5b436c97eb2ee232dd23f262ebad05fa183c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/irq/ipi.c:94:30: error: no member named 'affinity' in 'struct irq_common_data'
+                   cpumask_copy(data->common->affinity, dest);
+                                ~~~~~~~~~~~~  ^
+   1 error generated.
+
+
+vim +94 kernel/irq/ipi.c
+
+d17bf24e695290 Qais Yousef     2015-12-08   13  
+d17bf24e695290 Qais Yousef     2015-12-08   14  /**
+d17bf24e695290 Qais Yousef     2015-12-08   15   * irq_reserve_ipi() - Setup an IPI to destination cpumask
+d17bf24e695290 Qais Yousef     2015-12-08   16   * @domain:	IPI domain
+3b35e7e6daef5a Randy Dunlap    2021-08-10   17   * @dest:	cpumask of CPUs which can receive the IPI
+d17bf24e695290 Qais Yousef     2015-12-08   18   *
+d17bf24e695290 Qais Yousef     2015-12-08   19   * Allocate a virq that can be used to send IPI to any CPU in dest mask.
+d17bf24e695290 Qais Yousef     2015-12-08   20   *
+3b35e7e6daef5a Randy Dunlap    2021-08-10   21   * Return: Linux IRQ number on success or error code on failure
+d17bf24e695290 Qais Yousef     2015-12-08   22   */
+7cec18a3906b52 Matt Redfearn   2016-04-25   23  int irq_reserve_ipi(struct irq_domain *domain,
+d17bf24e695290 Qais Yousef     2015-12-08   24  			     const struct cpumask *dest)
+d17bf24e695290 Qais Yousef     2015-12-08   25  {
+d17bf24e695290 Qais Yousef     2015-12-08   26  	unsigned int nr_irqs, offset;
+d17bf24e695290 Qais Yousef     2015-12-08   27  	struct irq_data *data;
+d17bf24e695290 Qais Yousef     2015-12-08   28  	int virq, i;
+d17bf24e695290 Qais Yousef     2015-12-08   29  
+d17bf24e695290 Qais Yousef     2015-12-08   30  	if (!domain ||!irq_domain_is_ipi(domain)) {
+d17bf24e695290 Qais Yousef     2015-12-08   31  		pr_warn("Reservation on a non IPI domain\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   32  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   33  	}
+d17bf24e695290 Qais Yousef     2015-12-08   34  
+d17bf24e695290 Qais Yousef     2015-12-08   35  	if (!cpumask_subset(dest, cpu_possible_mask)) {
+d17bf24e695290 Qais Yousef     2015-12-08   36  		pr_warn("Reservation is not in possible_cpu_mask\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   37  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   38  	}
+d17bf24e695290 Qais Yousef     2015-12-08   39  
+d17bf24e695290 Qais Yousef     2015-12-08   40  	nr_irqs = cpumask_weight(dest);
+d17bf24e695290 Qais Yousef     2015-12-08   41  	if (!nr_irqs) {
+d17bf24e695290 Qais Yousef     2015-12-08   42  		pr_warn("Reservation for empty destination mask\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   43  		return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   44  	}
+d17bf24e695290 Qais Yousef     2015-12-08   45  
+d17bf24e695290 Qais Yousef     2015-12-08   46  	if (irq_domain_is_ipi_single(domain)) {
+d17bf24e695290 Qais Yousef     2015-12-08   47  		/*
+d17bf24e695290 Qais Yousef     2015-12-08   48  		 * If the underlying implementation uses a single HW irq on
+d17bf24e695290 Qais Yousef     2015-12-08   49  		 * all cpus then we only need a single Linux irq number for
+d17bf24e695290 Qais Yousef     2015-12-08   50  		 * it. We have no restrictions vs. the destination mask. The
+d17bf24e695290 Qais Yousef     2015-12-08   51  		 * underlying implementation can deal with holes nicely.
+d17bf24e695290 Qais Yousef     2015-12-08   52  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   53  		nr_irqs = 1;
+d17bf24e695290 Qais Yousef     2015-12-08   54  		offset = 0;
+d17bf24e695290 Qais Yousef     2015-12-08   55  	} else {
+d17bf24e695290 Qais Yousef     2015-12-08   56  		unsigned int next;
+d17bf24e695290 Qais Yousef     2015-12-08   57  
+d17bf24e695290 Qais Yousef     2015-12-08   58  		/*
+c5f48c0a7aa1a8 Ingo Molnar     2018-12-03   59  		 * The IPI requires a separate HW irq on each CPU. We require
+d17bf24e695290 Qais Yousef     2015-12-08   60  		 * that the destination mask is consecutive. If an
+d17bf24e695290 Qais Yousef     2015-12-08   61  		 * implementation needs to support holes, it can reserve
+d17bf24e695290 Qais Yousef     2015-12-08   62  		 * several IPI ranges.
+d17bf24e695290 Qais Yousef     2015-12-08   63  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   64  		offset = cpumask_first(dest);
+d17bf24e695290 Qais Yousef     2015-12-08   65  		/*
+d17bf24e695290 Qais Yousef     2015-12-08   66  		 * Find a hole and if found look for another set bit after the
+d17bf24e695290 Qais Yousef     2015-12-08   67  		 * hole. For now we don't support this scenario.
+d17bf24e695290 Qais Yousef     2015-12-08   68  		 */
+d17bf24e695290 Qais Yousef     2015-12-08   69  		next = cpumask_next_zero(offset, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   70  		if (next < nr_cpu_ids)
+d17bf24e695290 Qais Yousef     2015-12-08   71  			next = cpumask_next(next, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   72  		if (next < nr_cpu_ids) {
+d17bf24e695290 Qais Yousef     2015-12-08   73  			pr_warn("Destination mask has holes\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   74  			return -EINVAL;
+d17bf24e695290 Qais Yousef     2015-12-08   75  		}
+d17bf24e695290 Qais Yousef     2015-12-08   76  	}
+d17bf24e695290 Qais Yousef     2015-12-08   77  
+06ee6d571f0e35 Thomas Gleixner 2016-07-04   78  	virq = irq_domain_alloc_descs(-1, nr_irqs, 0, NUMA_NO_NODE, NULL);
+d17bf24e695290 Qais Yousef     2015-12-08   79  	if (virq <= 0) {
+d17bf24e695290 Qais Yousef     2015-12-08   80  		pr_warn("Can't reserve IPI, failed to alloc descs\n");
+7cec18a3906b52 Matt Redfearn   2016-04-25   81  		return -ENOMEM;
+d17bf24e695290 Qais Yousef     2015-12-08   82  	}
+d17bf24e695290 Qais Yousef     2015-12-08   83  
+d17bf24e695290 Qais Yousef     2015-12-08   84  	virq = __irq_domain_alloc_irqs(domain, virq, nr_irqs, NUMA_NO_NODE,
+eb0dc47ab6810c Vincent Stehle  2016-07-18   85  				       (void *) dest, true, NULL);
+d17bf24e695290 Qais Yousef     2015-12-08   86  
+d17bf24e695290 Qais Yousef     2015-12-08   87  	if (virq <= 0) {
+d17bf24e695290 Qais Yousef     2015-12-08   88  		pr_warn("Can't reserve IPI, failed to alloc hw irqs\n");
+d17bf24e695290 Qais Yousef     2015-12-08   89  		goto free_descs;
+d17bf24e695290 Qais Yousef     2015-12-08   90  	}
+d17bf24e695290 Qais Yousef     2015-12-08   91  
+d17bf24e695290 Qais Yousef     2015-12-08   92  	for (i = 0; i < nr_irqs; i++) {
+d17bf24e695290 Qais Yousef     2015-12-08   93  		data = irq_get_irq_data(virq + i);
+d17bf24e695290 Qais Yousef     2015-12-08  @94  		cpumask_copy(data->common->affinity, dest);
+d17bf24e695290 Qais Yousef     2015-12-08   95  		data->common->ipi_offset = offset;
+4589f450fb285a Matt Redfearn   2016-04-21   96  		irq_set_status_flags(virq + i, IRQ_NO_BALANCING);
+d17bf24e695290 Qais Yousef     2015-12-08   97  	}
+d17bf24e695290 Qais Yousef     2015-12-08   98  	return virq;
+d17bf24e695290 Qais Yousef     2015-12-08   99  
+d17bf24e695290 Qais Yousef     2015-12-08  100  free_descs:
+d17bf24e695290 Qais Yousef     2015-12-08  101  	irq_free_descs(virq, nr_irqs);
+7cec18a3906b52 Matt Redfearn   2016-04-25  102  	return -EBUSY;
+d17bf24e695290 Qais Yousef     2015-12-08  103  }
+d17bf24e695290 Qais Yousef     2015-12-08  104  
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

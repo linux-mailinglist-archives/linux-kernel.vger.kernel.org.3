@@ -2,119 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EEC51FF8A
+	by mail.lfdr.de (Postfix) with ESMTP id 2B36251FF88
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236957AbiEIOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S236866AbiEIOVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236866AbiEIOUs (ORCPT
+        with ESMTP id S236921AbiEIOVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:20:48 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE601FB548;
-        Mon,  9 May 2022 07:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vHtkmd2lwLYVtO4FWqrbyaVkWxRk4axb2Qa+PPeChZA=; b=LskkzzJmYfWYXPeDfr2IdCaTLR
-        3hA3AwAXsFwPvw1yZOWysZYMySqHGiMeZOm0bDb2Q6RbJ01gLxUFvc0TPbGO4CNTknFlmWLHek9+j
-        fNw6GIgfVAC2AwFEbPjx/A49ZgvLf4C98a1NhLhauKhl6X16yGXgUhVYkbLiMhd2bcyjc8FRhGAlV
-        b0fE3r5ZHANgTVnzKk9zmgNYn+K1dB4VlK+OrOntysNOTeFSF6+gnM24q5MRGfpCActKh2ASDkGBP
-        /lhbboZ2BaxSaPQdOYRyUWk/WZOTlB1ImMULVLiCjsomiGL/EUGjICR18d54kbZvnwoQGALy9IH6V
-        nZhYpE5g==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1no4Bp-000ApE-Jf; Mon, 09 May 2022 16:16:45 +0200
-Message-ID: <7017c234-7c73-524a-11b6-fefdd5646f59@igalia.com>
-Date:   Mon, 9 May 2022 11:16:10 -0300
+        Mon, 9 May 2022 10:21:19 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7A320131D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:17:16 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gh6so27178168ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+8+QqXVKL5wTk1USxhSJy91rHhDM1q+WdZU6lGP6JQ4=;
+        b=Se5eMb8Ygo8+NTsu2WGGmLwSiZe3RssFpzMyc+7jXSDykSJnAVSZVnd/OngGPWZciL
+         TqOhSSgSmDT040EiixkOlRjSjs+ukuyf54/dNj07uwd2adCU7iAHQeyZ6NPWcbIYVPwR
+         pnseMj0cI03Ui9b5xM9w/yOlvf2/OlxlznUm1jexmSPMmaEiax93PQoJ/G6Q+n7fow9z
+         IeuitDasdXBRSpB+6VIA+P3OanKlTTP+m6n8bakAwn+q9cJfZqwF1lR8LLdZPHpM+15i
+         QZvAmWZBOy2/SBull0eHOksCzYbIomn1nr2T6ttdbSEDr1YAhsbO0VVKPlHOwot8XrnA
+         S8LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+8+QqXVKL5wTk1USxhSJy91rHhDM1q+WdZU6lGP6JQ4=;
+        b=zPS/1cFUbKZF2yUZG2zYwfeoBshwDaeCI4DjUxdu5zFkZRpAoHhImGqw//PsHMg1Pq
+         VXcH4XoU0z9k5SjxTKiTsxxMBZ5wVCPDxL790K5YwjTDcRJz32v0NbsHC/6Hgy+4hAQt
+         ampOY6LpXS8IdEB/PkdQW8/mtoxW2Crc94evougXKQkcB7C6+zMqjWqLShmdx8iMpcVz
+         mO/3adkn21+SdVOCzDYyzXZczg7KsP0O1vTDcq4W7nRxLvtie6lccprdV5Iti5vL3FRh
+         cdPu9lvm77aHchtzIfu0PjgIWRLloyhl0JW8qPHJnVAp9/ZcAUeAM1NA6qQqCQo3gcG4
+         89uA==
+X-Gm-Message-State: AOAM533hQBw93xtMHuB/oYVLpkzwLPU+yLmkPOL3uQ+H7sPyPEDOfU2o
+        EOpa1qckpAOHMSXYHo+x2gUju60Z7s15SD00NfvM6w==
+X-Google-Smtp-Source: ABdhPJz4oPKheaglIPZCKrUFsKejt51Mh50V9/DGs7u8F7syBlw3wHnbVvg9K8d9bl9luUK/vJye5kZrXA5cwi3Keig=
+X-Received: by 2002:a17:907:a0c8:b0:6f7:492e:e74c with SMTP id
+ hw8-20020a170907a0c800b006f7492ee74cmr11393092ejc.670.1652105834875; Mon, 09
+ May 2022 07:17:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 22/30] panic: Introduce the panic post-reboot notifier
- list
-Content-Language: en-US
-To:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, pmladek@suse.com, bhe@redhat.com,
-        akpm@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kexec@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-23-gpiccoli@igalia.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220427224924.592546-23-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220508202544.501981-1-frattaroli.nicolas@gmail.com> <20220508202544.501981-4-frattaroli.nicolas@gmail.com>
+In-Reply-To: <20220508202544.501981-4-frattaroli.nicolas@gmail.com>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Mon, 9 May 2022 11:17:03 -0300
+Message-ID: <CAAEAJfC5aoFmk7hKZ-CSv1=RhzO8YU38Abz8PhD26MvV+X0r-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 19:49, Guilherme G. Piccoli wrote:
-> Currently we have 3 notifier lists in the panic path, which will
-> be wired in a way to allow the notifier callbacks to run in
-> different moments at panic time, in a subsequent patch.
-> 
-> But there is also an odd set of architecture calls hardcoded in
-> the end of panic path, after the restart machinery. They're
-> responsible for late time tunings / events, like enabling a stop
-> button (Sparc) or effectively stopping the machine (s390).
-> 
-> This patch introduces yet another notifier list to offer the
-> architectures a way to add callbacks in such late moment on
-> panic path without the need of ifdefs / hardcoded approaches.
-> 
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Hi Nicolas,
 
-Hey S390/SPARC folks, sorry for the ping!
+On Sun, May 8, 2022 at 5:26 PM Nicolas Frattaroli
+<frattaroli.nicolas@gmail.com> wrote:
+>
+> The RK3566 and RK3568 come with a dedicated Hantro instance solely for
+> encoding. This patch adds a node for this to the device tree, along with
+> a node for its MMU.
+>
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 7cdef800cb3c..2e3c9e1887e3 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -508,6 +508,27 @@ gpu: gpu@fde60000 {
+>                 status = "disabled";
+>         };
+>
+> +       vepu: video-codec@fdee0000 {
+> +               compatible = "rockchip,rk3568-vepu";
+> +               reg = <0x0 0xfdee0000 0x0 0x800>;
+> +               interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> +               interrupt-names = "vepu";
 
-Any reviews on this V1 would be greatly appreciated, I'm working on V2
-and seeking feedback in the non-reviewed patches.
+It this block "encoder only" and if so, maybe we should remove the
+"interrupt-names" [1]?
 
-Thanks in advance,
+The driver is able to handle it. See:
 
+https://elixir.bootlin.com/linux/latest/source/drivers/staging/media/hantro/hantro_drv.c#L962
 
-Guilherme
+You might have to adjust the dt-bindings for this.
+
+[1] https://lore.kernel.org/linux-media/20210324151715.GA3070006@robh.at.kernel.org/
+
+Thanks,
+Ezequiel
+
+> +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> +               clock-names = "aclk", "hclk";
+> +               iommus = <&vepu_mmu>;
+> +               power-domains = <&power RK3568_PD_RGA>;
+> +       };
+> +
+> +       vepu_mmu: iommu@fdee0800 {
+> +               compatible = "rockchip,rk3568-iommu";
+> +               reg = <0x0 0xfdee0800 0x0 0x40>;
+> +               interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> +               clock-names = "aclk", "iface";
+> +               power-domains = <&power RK3568_PD_RGA>;
+> +               #iommu-cells = <0>;
+> +       };
+> +
+>         sdmmc2: mmc@fe000000 {
+>                 compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
+>                 reg = <0x0 0xfe000000 0x0 0x4000>;
+> --
+> 2.36.0
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip

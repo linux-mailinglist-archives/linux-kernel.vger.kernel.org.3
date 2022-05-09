@@ -2,89 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9945651FEEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2A651FEF9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236546AbiEIN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S236684AbiEIN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236657AbiEIN6t (ORCPT
+        with ESMTP id S236387AbiEIN7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:58:49 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEED1DE571;
-        Mon,  9 May 2022 06:54:54 -0700 (PDT)
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 71EF221114;
-        Mon,  9 May 2022 13:54:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 55AAE2002C;
-        Mon,  9 May 2022 13:54:52 +0000 (UTC)
-Message-ID: <5e44ef1302b722d3bf7fafe55111e76f7173e6be.camel@perches.com>
-Subject: Re: [PATCH] staging: drivers: hid: hid-asus.c: Optimized input
- logic for keys
-From:   Joe Perches <joe@perches.com>
-To:     Johan Boger <jb@ip.fi>, jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        Mon, 9 May 2022 09:59:47 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2105.outbound.protection.outlook.com [40.107.215.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B1418B3E;
+        Mon,  9 May 2022 06:55:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MEZqPS7pCBexxOlGb5hq6KkibpaYePKdvOzQUq6FjVJp0HN9WtQeq/PicRsYEnVjHeNm1z3aovWZhhpjNvX4Iy6hRSa3k/pU9I/BI0QvVO79JyijohmQPnDu3W2zfwOoeXu3tIbx/vJcE5CvGc+xgKqt54rEeeDLYk9vIaxZ18Qd3uQLry96mUmHV3mfhUmRXe6NGqt5w6PvNa6817RUCHJPpsoD7mzT76hHWTaNCgWS/VnvhgTH5hmll1fWtkroP+THboxUBOfPJN9xdauOOQwULC/+GZWEbLUk/wRpQYFlvxeSijxU6qNyj0rfiRmf0j9LK/uTnSWVW8YFFZGctg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oK2rogvgNdkBaBxpL2ZlZZioTUSw/jVf3WKy8JIF7SI=;
+ b=gOVKynbDjXuB237iDnIlN/ogHc4cgupwexZDHDz4R5KjVcCh0CZWqM4IwP5jBfo2GnOubJ1HdtlJMx8kbwfBS5MAFhxPDc/oIy0xiBFqhdhtYoEW+X+RTZRVn+VA8gF47WefPQZ+e5uOrsr/ZBs4F+BEqDeSpTlmAKqz2FKOK3SVcyUOlvSmaIrn92ypi/K/csXoERL2DMTls6UkyB+0jFokkpji6gxVyvNPL5M3z+JXIcm8mkRaOdBByze7poA1H3Q30TTFOK/zfp7bzLhBwTcsDvyw7C1jGRbppt1D59JuxLHedYkmriB5mBQcv4L7s0SLOGBWnXlIZ01GnfbU4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oK2rogvgNdkBaBxpL2ZlZZioTUSw/jVf3WKy8JIF7SI=;
+ b=obOyLiIGJS2BMa/JO6bFoeEtQHAY5EXgBkpCo5pjOH+WjG5tk8HFMYajFrFiTUF1sTGszEn/himzlQ72pB9maS/r7HCDSDpFf28JvWCStM7PU9yymCCPwGNpvvTWHj58OeXzB0QxaV+9A9I0M8hI0Ufpfbn5MvAqGmYUIiIbJ7g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ HK0PR06MB2995.apcprd06.prod.outlook.com (2603:1096:203:80::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.22; Mon, 9 May 2022 13:55:48 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5227.022; Mon, 9 May 2022
+ 13:55:48 +0000
+Message-ID: <8e2e3c34-1aa3-bab4-cdde-256a6eea5e44@vivo.com>
+Date:   Mon, 9 May 2022 21:55:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] net: phy: micrel: Fix incorret variable type in micrel
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Mon, 09 May 2022 06:54:51 -0700
-In-Reply-To: <20220509100258.24764-1-jb@ip.fi>
-References: <20220509100258.24764-1-jb@ip.fi>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
-MIME-Version: 1.0
+References: <20220509134951.2327924-1-wanjiabing@vivo.com>
+ <Ynkcy0VhJ/HTfqMU@lunn.ch>
+From:   Jiabing Wan <wanjiabing@vivo.com>
+Organization: vivo
+In-Reply-To: <Ynkcy0VhJ/HTfqMU@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+X-ClientProxiedBy: TY2PR02CA0001.apcprd02.prod.outlook.com
+ (2603:1096:404:56::13) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 006b4bf7-916d-4b89-fccd-08da31c39f0a
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2995:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB29956D51F956B427119B1631ABC69@HK0PR06MB2995.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q51NHcoElPG0sa4Wwr+iLT67ucZW1x72v11AUW9xs76dHz0Rgd1oceIPxOTsDtoPHYKJdj945CsS8ugttVxUbuiG9SMQL1QyW0lWACdg1DQ2xxV/ZFx4azB4rsbLufzGxIFsGCY3uqiSsxEUzd9Fpl8K/ML4NT2ltMIBtUDAGfQHb6eMw83NOFBr2cQ/c1M6l00gMh4Q9ZGpBqQwJVaMGq1uMaFBYSeiJwWWEbroUyNh5TJs9Ku2fJBtAJ90qdrzaaaWeusjpV3JEtTEdY+mRlnUtj0UMKGmG5lU1i+eutR7itS5pCUCn1T3L77Sp86KqbmObcrJUSTnIempu3YP198zC0i6CEr/j4iFoK2KzNvNiOO9RsYWma1CJIr+LsF+4ATVfH+dkHkV8cTHfQB3+MwPXAk39dFn0lRs8hVkpsWqDc+IX4mEBefw4PpfxqSmdh7J8wVqqU8XGvgc6+42uNTJF/dF+3z1vYY94H6tCRjj0NPO7KzKHacYARmgHfKHe5TtQesEdyOXVakdZrSkT8M+lRxdCKpnsJtsZKjV3IylmkfjPYKF+fqfxqijpWQgIRcMonWk9kITRzdQrxbFj9O8bHlRxJNat9V1hDA2kDKGk4HC5aDZyv2ZODAAnNEQenpl9yzBWbh2aC2vwSgNCaxybaXRG/xXtT1As44cUBdk3+pw+aQJ9Qa7p9iV9BYSEXPPC9ISQhL2M+u0mBbYPuDNyiziqsCTuL2lS1s9AnCgSGrgHlxdgsLa7dBZn/ObwaH1FM+TJrpDdFkJdC8dhn1i3vRaADvvJOl4hu8fE9c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6486002)(6512007)(26005)(2906002)(86362001)(186003)(6666004)(6506007)(52116002)(36916002)(5660300002)(49246003)(4744005)(31696002)(2616005)(53546011)(36756003)(316002)(4326008)(8676002)(6916009)(66476007)(54906003)(66946007)(66556008)(38350700002)(38100700002)(31686004)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGJEVTZ5YVd3Q1ZWc0sxakRQR2pBVVRWeXlWN05xaXFuOWZ2eEhDdElKMXFQ?=
+ =?utf-8?B?WStqV0JQMm5tdkYrdVByL1FoRzgxN1hJYXNubCsyclUwcHJWMzZsS3FqekN6?=
+ =?utf-8?B?Q3NXUXJxN3NlWUdzb0NyMUJoVGdVM2dOaGNadlRBK1lVOXpKclhUVHVsZmhj?=
+ =?utf-8?B?bXZ6ajB3RHJaODBNd1diYVlPdTFBd0UyV2thb3hITmZJU3dqMkx4dFNJdkEy?=
+ =?utf-8?B?dk5DWUZwb0pxbEtyRUtycG02aWZPMU4zeWtzNlZVRzd2Ym56ay9Ybmk0YWlp?=
+ =?utf-8?B?SVluQm1wbkQycGdGMWNXSm9BS21LZEFYU29JaHpJWlZLRkltekhsRHdoWW4v?=
+ =?utf-8?B?VXNLYzFPcDRMd0tIWjBiZ1AyTHBCKzVGcGZGOWZiM3J6OThKTlRnMWVYcERK?=
+ =?utf-8?B?WFkxWitLdlE5VFNLbElCYy91U25hNlhGc3BpSDdXSGVhZWVUb2dUSm1XRzVs?=
+ =?utf-8?B?MUt0cTNaV0pwTCtLSy8vVEY1REZWQWplbFlNOFBxR1dXblZpd1lEWDVEQnVH?=
+ =?utf-8?B?TFoxLy9LU1FLZVlvQkMyY1V5Rkt6V25PVGkzR3lUSXVEcll3ejhJZUgrc1lu?=
+ =?utf-8?B?eVgzNnBDMWpHOUFpOWJ5ek8rcnNjZ3ZVTHpyZzBPZHJBOUxaWm82UURQRHV2?=
+ =?utf-8?B?Q0dNMW8ybFA2eWVkRWMwd3gyVkltMnM1d3NhMS9LR2FjVzBGdElYaXhWWlIr?=
+ =?utf-8?B?SzFtc3YzemZzQnc0TmhMWHN6Qi9SaXphUDN3S0d1K0ZaY05xZXZaMzFMT1RI?=
+ =?utf-8?B?UjFTMU53YnFTNUk4SWYxdjJMQjNNNm42YTdBWkVQZ3RpY1BZZ3RacXFBMnZT?=
+ =?utf-8?B?cGRVRHlOcHhUbGU5endQNGZnMU1EeG92d2ltL0NlZlptUHZXV2g0S293NVlQ?=
+ =?utf-8?B?TVBIeXFIanFtdVppVU5zbUFxVjFsYlJUaEYzQlNDSENFZXp1QmZKS1VVa2U0?=
+ =?utf-8?B?NHpIcWJHb1hqOUpLcERFTjVWRVd1QnRTK1lPRUIxdVhrUGgyTnNWaFlUMjBU?=
+ =?utf-8?B?T1BnRGxnY3JwcXNHMUVXMk4rM3ZuZGJpVUZQN3FqVGJXRTFPUTI5cDUycVJ4?=
+ =?utf-8?B?dXJLYVJ1MFdOdTRlTDZSUjFxK3BHelVZMEE3d0FpZVlvcE5RbGdRZzJiT1Ev?=
+ =?utf-8?B?MnVpOHF1OEx4ZkptTnVsVTBRTm9ya2VrSWhHb05MSnVubU96WW9mZ3JtR1NJ?=
+ =?utf-8?B?eHpTZUY0WkJjRlhBTkVxQzJJaCszdk5McHZ6RUdHblFKTnZmQmhGWnEvQTlY?=
+ =?utf-8?B?MGV0bXFIQnlUcVVDTzhZMHpwajQ4d2RtMVNpUUhmTGNzajMxSmxzTlhaV2JG?=
+ =?utf-8?B?TGtTL3NxOVI0ZzI4OVg3a0ZzYlJCR28wdGEvc2hEOXdHQWtUWlNoUHQyR3VU?=
+ =?utf-8?B?dC9MNW5DNG1DL3ErcVpra2k5NVdQZUNXaXRKei90S3VRRTlaUUtsT2J4Qm1x?=
+ =?utf-8?B?VTRWekNOaWNwaTR4SHA5R01uK0laRS9IRmdNUU1Ucms3VHhybzliV3llcDRO?=
+ =?utf-8?B?bXpncEJscmd5UzY3d0xMemMzU2gydFBRd0RwVDVmSFg1QjUrVFh4NXdsaXBB?=
+ =?utf-8?B?M0tFRnplbWl1RWxOODhzTlBZYjkrd3R2NU1VeVBBRjQ3TEtGVUVuTDB6NjZn?=
+ =?utf-8?B?UGJJeUk2R3hTRHlJc2Fra1BwRHYyUVRSODR6bHFGZTFSTlZHQ2h6MGZjdGZt?=
+ =?utf-8?B?NHlKekVFQ3JMeVA3ZlhqVFdEZitZZTF4WjdXM2duZWZSL1ZaRzFkbENGZExW?=
+ =?utf-8?B?S2ZmUUVUR1R5Y1RvKzJGM1ljMTBnd0dQVW00cldzcEhRZU8zYkhvdXJkc09q?=
+ =?utf-8?B?VVVTQitNck9xQW1YRHZud1VMb3N2YjcxVkJwWWhSOW9tZmpIU1U1d3pBNFY5?=
+ =?utf-8?B?QmlXUTltYmtPUEpYTkoyRkk2Sm5uRWlFZ0dUSlJ6RHlhTzN0N1Vnd0pkZzVa?=
+ =?utf-8?B?Wms3RFducjVoc2lyUi9QeVczWDV5TVc1NnpYVldkRVVEZHFVNlJQT21jZDND?=
+ =?utf-8?B?MnRtbnJ4QnErN20yK0ZpcG4xS09xTGRobEJabHhuYXViU2gvdEJiTFJBUElp?=
+ =?utf-8?B?WkszZDJuQkViOUVsSDNmYWpNbi9rVU5yQUhkTklhTlZYQWl2SWhWSnFEZzNQ?=
+ =?utf-8?B?TTBPWStYUEluczEwRWFhSHFqV2cxT0dkVXZWNGNtQUFkTFRmNDZkS0RsNVlt?=
+ =?utf-8?B?UmtiTUxjalRDcXFES3RmMERGUE9kbHY3Qlp4cloxUWZ2dWI4M2lSU3BFSGJl?=
+ =?utf-8?B?Mjc5V0JDQ3lBRFNrQjZ1UHcvYWtCTUlMK09sT3FEbTlVTTY3TzNmR2tBanQw?=
+ =?utf-8?B?bTI2QXhvRFBNbzU4SU1vT3d4UStKNUc1dWxHUW5WbkJqQlg5eHYydz09?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 006b4bf7-916d-4b89-fccd-08da31c39f0a
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 13:55:48.4590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N0x+VQUGcL5VV+ue516z6xonQ6tqGJhMSkKQEYe97aE7hV5obGeLaSA5mz7LI4blZze7/gpZ7Y7r0QIdS6IhoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2995
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: uikmp1cmopecb6ysxgrm8uthrk5qbnkd
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 55AAE2002C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19siEZ6i90BjYKhTg3/vNQyMSOLpCRnlsQ=
-X-HE-Tag: 1652104492-339497
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-09 at 12:02 +0200, Johan Boger wrote:
-> Instead of calling asus_map_key_clear() function in each case,
-> we now set a temporary value and clear it after default.
-> Patch was checked by checkpatch and adjusted accordingly.
 
-This patch subject is not correct.  This is not a staging patch.
+Hi, Andrew
 
-Your commit message is also incomplete as this is modifying comments,
-changing whitespace, and changing brace styles.
+On 2022/5/9 21:53, Andrew Lunn wrote:
+> On Mon, May 09, 2022 at 09:49:51PM +0800, Wan Jiabing wrote:
+>> In lanphy_read_page_reg, calling __phy_read() might return a negative
+>> error code. Use 'int' to check the negative error code.
+> Hi Wan
+>
+> As far as the code goes, this looks good.
+>
+> Please could you add a Fixes: tag, to indicate where the problem was
+> introduced. Please also read the netdev FAQ, so you can correctly set
+> the patch subject. This should be against the net tree, since it is a
+> fix.
+>
+> Thanks
+> 	Andrew
 
-and IMO:
+OK, I'll fix it in v2.
 
-Either use a single line case style like:
-
-	case foo: statement; break;
-
-or use a multiple line case style like:
-
-	case foo:
-		statement;
-		break;
-
-but please do not use a mixed case one line and statement; break;
-on another like:
-
-	case foo:
-		statement; break;
-
-Please remember checkpatch is only a guide, it's not the last word
-on style where every message it emits requires an actual code change.
-
-btw: there are _many_ single line case uses in the kernel
-
-$ git grep  -P 'case\s+\w+\s*:\s*\w+' -- '*.[ch]' | wc -l
-7581
-
-
+Thanks,
+Wan Jiabing
 

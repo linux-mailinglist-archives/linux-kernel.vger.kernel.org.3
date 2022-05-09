@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11AA520020
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C398C52001B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237678AbiEIOqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
+        id S237548AbiEIOqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237658AbiEIOqS (ORCPT
+        with ESMTP id S237567AbiEIOqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:46:18 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AECC16549E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652107344; x=1683643344;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DHlcBA0CsTUYg84TRsyQ8DN9VxCsiBrS8QOCtYMhX4I=;
-  b=kDmPAEnPfY2hGZGaDKRYyOPneXsKEXU4iOBbA5nrpzD5zQWVa0H34TXA
-   J5ZL5X+lKHO1BqtwLSTHQdfbxyVaDTcpEiiETx+/J6W3A71HNa/bc03Xr
-   fEY8AmhL6stXtwuSJoIgYlqmpNmxRv+2PLIsiimMIZjGKR4GAcTuPYWuD
-   AsnieXa8DIDtIdbfoLC5T3Vt7EuVU68Ptcj4Wz/w7T6DLJCSWi7FxU7In
-   SaxQs1PFIzJRTkRtgmnMMVHZ4oVx9pOUM2DG/YLLPbJ6EoabhtNsf+u4T
-   l2CA4XXA1E9Vw/FwOyLfjBIiUATaeKIge51esaWE1m9lRHAOeiGvDQ+Yn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269206790"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="269206790"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:42:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="570192833"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 May 2022 07:42:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no4ab-000GaK-AW;
-        Mon, 09 May 2022 14:42:21 +0000
-Date:   Mon, 9 May 2022 22:42:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 29/35] arch/arm64/kvm/mmu.c:767:62:
- sparse: sparse: incorrect type in initializer (different base types)
-Message-ID: <202205092247.ZMWPjju8-lkp@intel.com>
+        Mon, 9 May 2022 10:46:37 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A34E174933
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:42:37 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so10927720wmj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QqShHkKgDFizDmpmSSdmDrX/sfeJAiBTI970sTvj+Bk=;
+        b=vUy+W4dIB/CP4YqBPfl7YXr3TPoHkkXMM47VvBAqP/P1bbeTv4auv5JpEO6P39GtZm
+         bsQxBjNyr4BTyuFajqyQj/5iiJXQHSSq1vLW78v2crhgsZw7Aa6oXTgSYFzYJlfQtayt
+         WWoI7y3gP2Oe9lNHwYCzvDmVAx4DJ/J6rXmdLnAkugqYE5ogUCPFXFf10SHfx2Luq0J4
+         JZHqC7UkLdH4Qvcr4DtfA9ICf47joRUk8ZEG0n0derS73v0seQdqQ8pPvN+4jtbxxT3i
+         rBlHR+Joh2mFZEWpealWjPEjyD7SeQOJhzZ1gf80hJQyTybFOVr0abLFbYecgfkogYVG
+         h69w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QqShHkKgDFizDmpmSSdmDrX/sfeJAiBTI970sTvj+Bk=;
+        b=KbJ0sLP7tMXhDKPy08684g8Jgdn0xc59Bx9cS7cfAQhINou1x1m1QosuLdKZkxoRwu
+         ZwxUqMkEUgJhKqY+P/TMziIc+1rah6+FUdreQ2/TJWnJzB2yy03idsSTiBxT0Dse06Sl
+         aNz1RLh/uXemZ2ggT3lgYCfWPw1aC47KESfo5V1Yh6UOccS2iQFZ1VOWLOQJHXqXEDmm
+         iS86pxr2Vrep4z/vBBl0w4lxvdcywt8wM+0N+dJBVH925O4AjZFzRjbGy8j2I2CBG3uw
+         W3/TzhUliXbJ6qKd8XuXdyjURar3sz4Gjk08lIYfRgstx3C7b4v0WJHezF9RTuMChiel
+         nhFw==
+X-Gm-Message-State: AOAM533Np+4UmNHmgY4Kbpxl6m/bkM9WP+3tPzAmrLzP/pKnf+CMleiU
+        uA9yozB/opNn8DOQpn0aWaR02w==
+X-Google-Smtp-Source: ABdhPJxsUsgm5c1MnmnJGYS6LLodO6fR2/kEd6o3eu0aWtFgK9hd1itoxZfX0/O+ZDNhqZshbeCK2g==
+X-Received: by 2002:a05:600c:3b99:b0:394:70a0:12e3 with SMTP id n25-20020a05600c3b9900b0039470a012e3mr16461461wms.120.1652107355673;
+        Mon, 09 May 2022 07:42:35 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id 7-20020a05600c230700b003942a244edbsm14842645wmo.32.2022.05.09.07.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 07:42:35 -0700 (PDT)
+Message-ID: <b127f25f-51ea-f5d1-baef-9a0f026a2e05@linaro.org>
+Date:   Mon, 9 May 2022 15:42:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] soundwire: qcom: adjust autoenumeration timeout
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        bard.liao@intel.com,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+References: <20220506084705.18525-1-srinivas.kandagatla@linaro.org>
+ <725af523-d144-e373-e09b-fb48b3afb9ed@linux.intel.com>
+ <8643d266-7108-2440-43e1-c51b829ba481@linaro.org>
+ <d9646029-29b1-d71b-d1f5-b33267888e3c@linux.intel.com>
+ <fd355232-c5e3-ba1b-801d-526ee6f04946@linaro.org>
+ <97cd6566-e686-e1f2-fe91-4b4ba9d95f12@linux.intel.com>
+ <d17db27d-ad1b-f52c-50e9-4aab78ae0ff0@linaro.org>
+ <0d645ee0-a54f-d9b4-9392-06ea1c37b29a@linux.intel.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <0d645ee0-a54f-d9b4-9392-06ea1c37b29a@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   2622f5aa2f4ccb93fdd771e7503ca364c6a290d4
-commit: a2b56ba6112a814d70545ec5e5c1c04da0bfa83a [29/35] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-randconfig-s031-20220509 (https://download.01.org/0day-ci/archive/20220509/202205092247.ZMWPjju8-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/avpatel/linux/commit/a2b56ba6112a814d70545ec5e5c1c04da0bfa83a
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout a2b56ba6112a814d70545ec5e5c1c04da0bfa83a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm64/kvm/mmu.c:767:62: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted gfp_t [usertype] gfp_atomic @@     got void * @@
-   arch/arm64/kvm/mmu.c:767:62: sparse:     expected restricted gfp_t [usertype] gfp_atomic
-   arch/arm64/kvm/mmu.c:767:62: sparse:     got void *
+On 09/05/2022 15:36, Pierre-Louis Bossart wrote:
+> 
+>>>> Even if enumeration timeout, we will not access the registers because
+>>>> the ASoC codec is not registered yet from WCD938x component master.
+>>>
+>>> What happens when the codec is registered then? the autoenumeration
+>> Codec is only registered after reset and when both TX and RX components
+>> are probed.
+>>
+>>> still didn't complete, so what prevents the read/writes from failing
+>>> then?
+>> If codec is reset and registered and for some reason autoenum took more
+>> than 100ms which will be hw bug then :-).
+>> In this case register read/writes will fail.
+> 
+> Does this reset result in the 'bus reset' in the SoundWire sence and
+> restart hence the autoenumeration?
+The reset am referring here is codec reset gpio line. on reset device 
+will show up on the bus which should trigger an autoenumeration.
 
-vim +767 arch/arm64/kvm/mmu.c
+> 
+> It looks like you have a race between different components and starting
+> the bus before it's needed, no?WCD938x is bit of a odd hw configuration, that is why we are using 
+Component framework for this codec. This does ensure most part of it.
 
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  752  
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  753  /**
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  754   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  755   *
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  756   * @kvm:	The KVM pointer
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  757   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  758   * @pa:		The physical address of the device
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  759   * @size:	The size of the mapping
-c9c0279cc02b4e arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  760   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  761   */
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  762  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  763  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  764  {
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  765  	phys_addr_t addr;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  766  	int ret = 0;
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @767  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  768  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  769  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  770  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  771  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  772  
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  773  	if (is_protected_kvm_enabled())
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  774  		return -EPERM;
-bff01cb6b1bf68 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  775  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  776  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  777  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833ed arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  778  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  779  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  780  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  781  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  782  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  783  			break;
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  784  
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  785  		write_lock(&kvm->mmu_lock);
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  786  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  					     &cache);
-fcc5bf89635a05 arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  788  		write_unlock(&kvm->mmu_lock);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  789  		if (ret)
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  			break;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  791  
-02bbd374ce4a8a arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  		pa += PAGE_SIZE;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  793  	}
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
-c1a33aebe91d49 arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  795  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  796  	return ret;
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  797  }
-d5d8184d35c990 arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  798  
-
-:::::: The code at line 767 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--srini

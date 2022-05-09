@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D66051FEDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD2051FEE3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbiEIN4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S236655AbiEIN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236478AbiEIN4H (ORCPT
+        with ESMTP id S236485AbiEIN5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:56:07 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39F5BE04
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:52:13 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:8886:2b92:63eb:2922])
-        by laurent.telenet-ops.be with bizsmtp
-        id Uds52700G0moLbn01ds5Ae; Mon, 09 May 2022 15:52:12 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1no3nw-003Xo3-FV; Mon, 09 May 2022 15:52:04 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1no3nv-003NM2-Ot; Mon, 09 May 2022 15:52:03 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] drm: bridge: DRM_FSL_LDB should depend on ARCH_MXC
-Date:   Mon,  9 May 2022 15:52:02 +0200
-Message-Id: <449e08ca791a3ca308de5477c1bdc1f6eb1b34e7.1652104211.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Mon, 9 May 2022 09:57:20 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6C12D1C0;
+        Mon,  9 May 2022 06:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Kxxyg1HZnQSs/qeLzfqToEvB7I7JnrqLFn5Ofm/34bY=; b=mkpF3BTb9sYAwjiKkfmAKvRtRR
+        ta5V+lcRSuTlh4plsa5nFCL0LXnihub+nNgTIzgxSU1xT7urt4+VNvXnAP/AnSCOLVBobQsOmhgBW
+        pz/K0YRJlb4ZwMUDrFsRojpY4T2ELh3V6rI11kweNRCSvQz3J/QOhMgVeSNyqbbfrLtI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1no3p5-001x4a-GG; Mon, 09 May 2022 15:53:15 +0200
+Date:   Mon, 9 May 2022 15:53:15 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: micrel: Fix incorret variable type in micrel
+Message-ID: <Ynkcy0VhJ/HTfqMU@lunn.ch>
+References: <20220509134951.2327924-1-wanjiabing@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509134951.2327924-1-wanjiabing@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,28 +52,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Freescale i.MX8MP LDB bridge is only present on Freescale i.MX8MP
-SoCs.  Hence add a dependency on ARCH_MXC, to prevent asking the user
-about this driver when configuring a kernel without i.MX SoC support.
+On Mon, May 09, 2022 at 09:49:51PM +0800, Wan Jiabing wrote:
+> In lanphy_read_page_reg, calling __phy_read() might return a negative
+> error code. Use 'int' to check the negative error code.
 
-Fixes: 463db5c2ed4aed01 ("drm: bridge: ldb: Implement simple Freescale i.MX8MP LDB bridge")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/gpu/drm/bridge/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Hi Wan
 
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index da3441830d46a584..146ab069838fe97a 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -78,6 +78,7 @@ config DRM_DISPLAY_CONNECTOR
- config DRM_FSL_LDB
- 	tristate "Freescale i.MX8MP LDB bridge"
- 	depends on OF
-+	depends on ARCH_MXC || COMPILE_TEST
- 	select DRM_KMS_HELPER
- 	select DRM_PANEL_BRIDGE
- 	help
--- 
-2.25.1
+As far as the code goes, this looks good.
 
+Please could you add a Fixes: tag, to indicate where the problem was
+introduced. Please also read the netdev FAQ, so you can correctly set
+the patch subject. This should be against the net tree, since it is a
+fix.
+
+Thanks
+	Andrew

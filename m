@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC2D51F6C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8740F51F6C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236288AbiEII1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 04:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S235861AbiEIIZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236985AbiEIISF (ORCPT
+        with ESMTP id S236025AbiEIIPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:18:05 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A473158FA7;
-        Mon,  9 May 2022 01:14:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id CA6D11F43962
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652083700;
-        bh=Ci9YeTkiERXxEyN0uHAckbygOm03b3gSoys0gEWkatg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lu6CSgcBkNxkj+rtHKpudaiQFms5D8/IHGzvYxKIceXMeY9ow6WkzNphJXQzVG8/H
-         YpIvmIWMc0Lsv+jRPUAQOYH4/qX9Eo6ZW7mfibHFgBQCAg/aVZbqKTbi+m+80VsR3f
-         XBSAXXqjI4YIqEl/A3S+eYyOUYdhakyTDvlVx7lapZCuHTGJsrELSEWusIG5LdpcFN
-         GQdwqMj8BN+Bg1hRfYiKmi5j1t7bzVn1VJ5T7sNzNmIBoRpCfKkinbu7PGFOwhcF7C
-         KxlpzMGUkALypqUucXwngY+oyZwauCCXuYIKIcuA88LxNVU/rN+bnFWnheTFif05o2
-         vLPbXmcGVgGEQ==
-Message-ID: <40d49a43-9e90-7af0-5af3-5a61a384e442@collabora.com>
-Date:   Mon, 9 May 2022 10:08:16 +0200
+        Mon, 9 May 2022 04:15:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8728134E27
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wKFmhrP3WzJLDbdv59rm6WBSkcF7RLZCEwBXG20oLYE=; b=GSkcMaBNEadXEJdb8WkyJrrUKh
+        YgemITSvEkkzI312GJ6/E9gL8QWQ6DA3xOK8TlkV1/DjftLPGKygWzUCT7AHhVW/IsB5i6c9fy75T
+        RCjV4rUXOGHSSaGNt8zysF91fe+3E3Gf4CjUe2CChbmeG81c6CNTTFRf28PfGH0M2qniI25lRcium
+        4w8f068Fjsf1EP6cAoxuNWVdj+BRzfaoBYx/DanZ7hBOZ7tIJV+M2PnoKH2DA8cKkOzQe1A4Q5dTV
+        HY8jNsw2pJlpZK44P+dMDijPXiz48NhIPhk+u0kFFf0/fZjgc1a9GSUgliPvr3SEjxVKufO2seIvx
+        S1kYXmBQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnyRH-00CV35-LD; Mon, 09 May 2022 08:08:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39961300385;
+        Mon,  9 May 2022 10:08:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 11E5A2026968A; Mon,  9 May 2022 10:08:17 +0200 (CEST)
+Date:   Mon, 9 May 2022 10:08:17 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] sched/core: Avoid obvious double update_rq_clock
+ warning
+Message-ID: <YnjL8UQ1ejVnsMG6@hirez.programming.kicks-ass.net>
+References: <20220430085843.62939-1-jiahao.os@bytedance.com>
+ <20b9822d-4a87-c868-1683-30b0a7e97777@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 2/2] phy: mediatek: Add PCIe PHY driver
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-References: <20220507060621.32252-1-jianjun.wang@mediatek.com>
- <20220507060621.32252-3-jianjun.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220507060621.32252-3-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20b9822d-4a87-c868-1683-30b0a7e97777@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/05/22 08:06, Jianjun Wang ha scritto:
-> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+On Mon, May 09, 2022 at 11:16:39AM +0800, Hao Jia wrote:
+> Friendly ping...
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Hi Dietmar Eggemann & Peter Zijlstra,
+> If you have time, please review these two patches.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I've picked them up, shall push them to tip soonish.
 
+Thanks!

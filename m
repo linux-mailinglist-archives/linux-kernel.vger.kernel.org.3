@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E712551FA1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D0351FA2F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiEIKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S230286AbiEIKrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiEIKmZ (ORCPT
+        with ESMTP id S230240AbiEIKro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:42:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFC205D6;
-        Mon,  9 May 2022 03:38:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B250760FAD;
-        Mon,  9 May 2022 10:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D94C385A8;
-        Mon,  9 May 2022 10:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652092447;
-        bh=NSHAgzSuzjtuD7Tjj9g99sthrjIGsxuDy6cZ0osNlgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KtSDi6ckvqgMOaHS+FfGqqXgAe/cl6zO47IvsmxQYfNan8YoA+cE5a3FOxZpbs0Uj
-         pV7P1D2rcTpBc5iYGdFIghkPSRctl/JvAmXEjuueqMF1kH+aY45wduQIBaCkp0dBC6
-         dSDExChHLMOXHczNDU6d22Yc1ttxZrUD4Fj1MFxr8xWrZhbK7DxnGwy291li+GhdQ8
-         41xOkBIwDDp6uTiGZEAC1XQxEneCVuF3i+O0DJIYgINkU2jICpMpSVcE/NIN312Dq/
-         HYBQz1yjC2WaMAjWQ5IZh6JHWrwmRwCZ9rPJm+n9YFUR4doi49RwB/A57IZXOMWGcV
-         wwJ+uKTyUgG8g==
-Date:   Mon, 9 May 2022 13:33:56 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-Message-ID: <YnjuFHvyGwa9yHat@kernel.org>
-References: <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
- <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
- <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
- <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
- <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
- <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
- <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
- <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
- <YnW4nTub1BYUF15W@kernel.org>
- <5c7196b517398e7697464fe997018e9031d15470.camel@intel.com>
+        Mon, 9 May 2022 06:47:44 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062452CFE8A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:42:08 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id j6so25907907ejc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 03:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JivA9lag35NY9StRFNW9wke9LTJ6pmcL9zBt3wJOnU0=;
+        b=ebaX/LiG6h3ghMGqzXvvTtDfpdIdzRUdMsxKFM94Yy8+E12Sr3DvvX192yCt7N9eaf
+         Wo9pgDs/hq2TtDMw+I3gIbpC/iPByRUlD0nnpcj4K1aFZluap+o4rT1jKW+lRxQsY/lB
+         YImjtFV5Y2N37SSLo40zlepq4inIK4viPucbc0ucPvd7yuhvC8VBxM/aIiJCdan0EQpi
+         6z1b1qtItWLP5Qj6D5HtJCSXIcPHecK/zY6vkBDdaHTstIFF7DwctSp6Chp8sucFqYXG
+         VMDK/pAURSFkWRz0RMVESZltCFl2iav0O54VA6a9Shnscry122w8SMGNoJAYQvVobcnx
+         qpBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JivA9lag35NY9StRFNW9wke9LTJ6pmcL9zBt3wJOnU0=;
+        b=beAAxqAE8BBnpNZmqGcBdLPXmhJ7Vb4xR58EVWwFk3HU0kPJ6OJHzyNPDXsO9DQWEv
+         knR2AlgFjbzR+VUB0HHUEIOostJzOm5uBebqWfDhfAwYharcrkCqVYHHbSCResX28J9r
+         wrQ8nTCLJO4c0VaLy5B1JqIkN5cgJVaNZrOv00kCqLCl1SScWNe00372tG3F/2oYXM1Y
+         wWC3UPgSmkWgDLjuphJyb3NonUGbQxpH/SwMmKrRxQqDrF32ELsYTtPfDlnnXIWlDW0M
+         1UjvKnu5nkB/G5/OanS22WA0nVUjqsKTjmAPyDgQVR9RqBXAxkqUoab02Liry1WeYXLO
+         s6ig==
+X-Gm-Message-State: AOAM532t1+fzmrb3GMH1eZhFvPNYZ2YnRAaLBKQpzy9dOp3eQcaL5Jy1
+        nJJM9aMoAtqC7jWpdeY6tGbMJA==
+X-Google-Smtp-Source: ABdhPJyydy8/hiqqh2G8YhKauvC+LWx8dzSKJTUfCcLfOe3cv7c+z2fSoNuVxciYHs95+Iin63Zlig==
+X-Received: by 2002:a17:906:559:b0:6f3:8ba6:39c8 with SMTP id k25-20020a170906055900b006f38ba639c8mr14043662eja.486.1652092684369;
+        Mon, 09 May 2022 03:38:04 -0700 (PDT)
+Received: from [192.168.0.243] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z12-20020a170906714c00b006f3ef214dfdsm4907874ejj.99.2022.05.09.03.38.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 03:38:03 -0700 (PDT)
+Message-ID: <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+Date:   Mon, 9 May 2022 12:38:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c7196b517398e7697464fe997018e9031d15470.camel@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,113 +90,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 10:00:39PM +1200, Kai Huang wrote:
-> On Fri, 2022-05-06 at 20:09 -0400, Mike Rapoport wrote:
-> > On Thu, May 05, 2022 at 06:51:20AM -0700, Dan Williams wrote:
-> > > [ add Mike ]
-> > > 
-> > > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
-> > > [..]
-> > > > 
-> > > > Hi Dave,
-> > > > 
-> > > > Sorry to ping (trying to close this).
-> > > > 
-> > > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
-> > > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
-> > > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
-> > > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
-> > > > that no one should just use some random backend to run TD.
-> > > 
-> > > The platform will already do this, right? I don't understand why this
-> > > is trying to take proactive action versus documenting the error
-> > > conditions and steps someone needs to take to avoid unconvertible
-> > > memory. There is already the CONFIG_HMEM_REPORTING that describes
-> > > relative performance properties between initiators and targets, it
-> > > seems fitting to also add security properties between initiators and
-> > > targets so someone can enumerate the numa-mempolicy that avoids
-> > > unconvertible memory.
-> > > 
-> > > No, special casing in hotplug code paths needed.
-> > > 
-> > > > 
-> > > > I think w/o needing to include legacy PMEM, it's better to get all TDX memory
-> > > > blocks based on memblock, but not e820.  The pages managed by page allocator are
-> > > > from memblock anyway (w/o those from memory hotplug).
-> > > > 
-> > > > And I also think it makes more sense to introduce 'tdx_memblock' and
-> > > > 'tdx_memory' data structures to gather all TDX memory blocks during boot when
-> > > > memblock is still alive.  When TDX module is initialized during runtime, TDMRs
-> > > > can be created based on the 'struct tdx_memory' which contains all TDX memory
-> > > > blocks we gathered based on memblock during boot.  This is also more flexible to
-> > > > support other TDX memory from other sources such as CLX memory in the future.
-> > > > 
-> > > > Please let me know if you have any objection?  Thanks!
-> > > 
-> > > It's already the case that x86 maintains sideband structures to
-> > > preserve memory after exiting the early memblock code. Mike, correct
-> > > me if I am wrong, but adding more is less desirable than just keeping
-> > > the memblock around?
-> > 
-> > TBH, I didn't read the entire thread yet, but at the first glance, keeping
-> > memblock around is much more preferable that adding yet another { .start,
-> > .end, .flags } data structure. To keep memblock after boot all is needed is
-> > something like
-> > 
-> > 	select ARCH_KEEP_MEMBLOCK if INTEL_TDX_HOST
-> > 
-> > I'll take a closer look next week on the entire series, maybe I'm missing
-> > some details.
-> > 
+On 25/04/2022 09:27, Viresh Kumar wrote:
+> On 11-04-22, 17:43, Krzysztof Kozlowski wrote:
+>> Devices might need to control several clocks when scaling the frequency
+>> and voltage.  Example is the Universal Flash Storage (UFS) which scales
+>> several independent clocks with change of performance levels.
+>>
+>> Add parsing of multiple clocks and clock names
 > 
-> Hi Mike,
-> 
-> Thanks for feedback.
-> 
-> Perhaps I haven't put a lot details of the new TDX data structures, so let me
-> point out that the new two data structures 'struct tdx_memblock' and 'struct
-> tdx_memory' that I am proposing are mostly supposed to be used by TDX code only,
-> which is pretty standalone.  They are not supposed to be some basic
-> infrastructure that can be widely used by other random kernel components. 
+> This part is fine, the OPP core should be able to do this.
 
-We already have "pretty standalone" numa_meminfo that originally was used
-to setup NUMA memory topology, but now it's used by other code as well.
-And e820 tables also contain similar data and they are supposedly should be
-used only at boot time, but in reality there are too much callbacks into
-e820 way after the system is booted.
+Sorry for late reply, I think I my filters archived it or I missed it.
 
-So any additional memory representation will only add to the overall
-complexity and well have even more "eventually consistent" collections of 
-{ .start, .end, .flags } structures.
- 
-> In fact, currently the only operation we need is to allow memblock to register
-> all memory regions as TDX memory blocks when the memblock is still alive. 
-> Therefore, in fact, the new data structures can even be completely invisible to
-> other kernel components.  For instance, TDX code can provide below API w/o
-> exposing any data structures to other kernel components:
 > 
-> int tdx_add_memory_block(phys_addr_t start, phys_addr_t end, int nid);
+>> and scale all of them,
 > 
-> And we call above API for each memory region in memblock when it is alive.
+> This is tricky as the OPP core can't really assume the order in which the clocks
+> needs to be programmed. We had the same problem with multiple regulators and the
+> same is left for drivers to do via the custom-api.
 > 
-> TDX code internally manages those memory regions via the new data structures
-> that I mentioned above, so we don't need to keep memblock after boot.  The
-> advantage of this approach is it is more flexible to support other potential TDX
-> memory resources (such as CLX memory) in the future.
+> Either we can take the same route here, and let platforms add their own OPP
+> drivers which can handle this, Or hide this all behind a basic device clock's
+> driver, which you get with clk_get(dev, NULL).
 
-Please let keep things simple. If other TDX memory resources will need
-different handling it can be implemented then. For now, just enable
-ARCH_KEEP_MEMBLOCK and use memblock to track TDX memory.
- 
-> Otherwise, we can do as you suggested to select ARCH_KEEP_MEMBLOCK when
-> INTEL_TDX_HOST is on and TDX code internally uses memblock API directly.
-> 
-> -- 
-> Thanks,
-> -Kai
-> 
-> 
+For my use case, the order of scaling will be the same as in previous
+implementation, because UFS drivers just got bunch of clocks with
+freq-table-hz property and were scaling in DT order.
 
--- 
-Sincerely yours,
-Mike.
+If drivers need something better, they can always provide custom-opp
+thus replacing my method. My implementation here does not restrict them.
+
+For the drivers where the order does not matter, why forcing each driver
+to provide its own implementation of clock scaling? Isn't shared generic
+PM OPP code a way to remove code duplication?
+
+> 
+>> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> 
+>> +static int _generic_set_opp_clks_only(struct device *dev,
+>> +				      struct opp_table *opp_table,
+>> +				      struct dev_pm_opp *opp)
+>> +{
+>> +	int i, ret;
+>> +
+>> +	if (!opp_table->clks)
+>> +		return 0;
+>> +
+>> +	for (i = 0; i < opp_table->clk_count; i++) {
+>> +		if (opp->rates[i]) {
+> 
+> This should mean that we can disable that clock and it isn't required.
+
+No, it does not mean that. The DT might provide several clocks which
+only some are important for frequency scaling. All others just need to
+be enabled.
+
+Maybe you prefer to skip getting such clocks in PM OPP?
+
+> 
+>> +			ret = _generic_set_opp_clk_only(dev, opp_table->clks[i],
+>> +							opp->rates[i]);
+>> +			if (ret) {
+>> +				dev_err(dev, "%s: failed to set clock %pC rate: %d\n",
+>> +					__func__, opp_table->clks[i], ret);
+>> +				return ret;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> 
+> As said earlier, this won't work in the core.
+> 
+>> +
+>>  static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>>  				      struct device *dev,
+>>  				      struct dev_pm_opp *opp,
+>> @@ -796,7 +835,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>>  	}
+>>  
+>>  	/* Change frequency */
+>> -	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+>> +	ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>>  	if (ret)
+>>  		goto restore_voltage;
+>>  
+>> @@ -820,7 +859,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>>  	return 0;
+>>  
+>>  restore_freq:
+>> -	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
+>> +	if (_generic_set_opp_clks_only(dev, opp_table, old_opp))
+>>  		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
+>>  			__func__, old_opp->rate);
+>>  restore_voltage:
+>> @@ -880,7 +919,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
+> 
+> This is where we can handle it in your case, if you don't want to hide it behind
+> a clk driver.
+> 
+>>  	}
+>>  
+>>  	data->regulators = opp_table->regulators;
+>> -	data->clk = opp_table->clk;
+>> +	data->clk = (opp_table->clks ? opp_table->clks[0] : NULL);
+>>  	data->dev = dev;
+>>  	data->old_opp.rate = old_opp->rate;
+>>  	data->new_opp.rate = freq;
+>> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+> 
+> I think this routine breaks as soon as we add support for multiple clocks.
+> clks[0]'s frequency can be same for multiple OPPs and this won't get you the
+> right OPP then.
+
+I don't think so and this was raised also by Stephen - only the first
+clock is considered the one used for all PM OPP frequency operations,
+like get ceil/floor.
+
+The assumption (which might need better documentation) is that first
+clock frequency is the main one:
+1. It is still in opp->rate field, so it is used everywhere when OPPs
+are compared/checked for rates.
+1. Usually is used also in opp-table nodes names.
+
+The logical explanation is that devices has some main operating
+frequency, e.g. the core clock, and this determines the performance. In
+the same time such device might not be able to scale this one core clock
+independently from others, therefore this set of patches.
+
+> 
+>>  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
+>>  	unsigned long freq;
+>>  
+>> -	if (!IS_ERR(opp_table->clk)) {
+>> -		freq = clk_get_rate(opp_table->clk);
+>> +	if (opp_table->clks && !IS_ERR(opp_table->clks[0])) {
+>> +		freq = clk_get_rate(opp_table->clks[0]);
+>>  		opp = _find_freq_ceil(opp_table, &freq);
+>>  	}
+>>  
+>> @@ -1070,7 +1109,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+>>  						 scaling_down);
+>>  	} else {
+>>  		/* Only frequency scaling */
+>> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+>> +		ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>>  	}
+>>  
+>>  	if (ret)
+>> @@ -1135,11 +1174,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+> 
+> This should have a BUG or WARN _ON() now if clock count is more than one. This
+> routine can't be called unless custom handler is available.
+> 
+> I skipped rest of the code as we need to work/decide on the design first.
+
+
+
+Best regards,
+Krzysztof

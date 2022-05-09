@@ -2,72 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8740F51F6C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CFB51F6B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbiEIIZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 04:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S236437AbiEII1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbiEIIPg (ORCPT
+        with ESMTP id S236367AbiEIIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:15:36 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8728134E27
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wKFmhrP3WzJLDbdv59rm6WBSkcF7RLZCEwBXG20oLYE=; b=GSkcMaBNEadXEJdb8WkyJrrUKh
-        YgemITSvEkkzI312GJ6/E9gL8QWQ6DA3xOK8TlkV1/DjftLPGKygWzUCT7AHhVW/IsB5i6c9fy75T
-        RCjV4rUXOGHSSaGNt8zysF91fe+3E3Gf4CjUe2CChbmeG81c6CNTTFRf28PfGH0M2qniI25lRcium
-        4w8f068Fjsf1EP6cAoxuNWVdj+BRzfaoBYx/DanZ7hBOZ7tIJV+M2PnoKH2DA8cKkOzQe1A4Q5dTV
-        HY8jNsw2pJlpZK44P+dMDijPXiz48NhIPhk+u0kFFf0/fZjgc1a9GSUgliPvr3SEjxVKufO2seIvx
-        S1kYXmBQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nnyRH-00CV35-LD; Mon, 09 May 2022 08:08:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39961300385;
-        Mon,  9 May 2022 10:08:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 11E5A2026968A; Mon,  9 May 2022 10:08:17 +0200 (CEST)
-Date:   Mon, 9 May 2022 10:08:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] sched/core: Avoid obvious double update_rq_clock
- warning
-Message-ID: <YnjL8UQ1ejVnsMG6@hirez.programming.kicks-ass.net>
-References: <20220430085843.62939-1-jiahao.os@bytedance.com>
- <20b9822d-4a87-c868-1683-30b0a7e97777@bytedance.com>
+        Mon, 9 May 2022 04:17:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD001EE096
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:13:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5837AB8100C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DB5C385AB;
+        Mon,  9 May 2022 08:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652083917;
+        bh=0vlwj225AQCrduDkebsNRLXn8vRJT65zbF3Bkc9Eujc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E8hYPyuX7ME5+wjWs5Qw/pbzOBy1lnJJ7PjEJRQfu4S0+h40IOxwhiJd8nsnElY+u
+         aBdwBHoYhuVS5Ur9cbwU7t6WpcHFCOSmqARML4y7wnk4MWlkl8J3VRnpgqQZ1phBfm
+         Q9fPisezTZzJqiLYmkyqF45IV5eRG6lW0Z6r9SJ+pdsojtrA4FFYe0o1GPOV9Kddap
+         DQdU7o2Cg8VyqYoz0trKI6I5QHjRCimDCP9qfFFgj2EYmKwuTUI5f5WXUVUcOzcEdf
+         kGd6qqDcuusd6p/8VlhV3+zztyHmd9ivuwPX10+ncRUhQaMCwXSzX54J6DF78+Da3K
+         9ANwZo4aYFZjA==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        skhan@linuxfoundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon : Add documentation for Enum value
+Date:   Mon,  9 May 2022 08:11:54 +0000
+Message-Id: <20220509081154.1834-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220508091943.47042-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20b9822d-4a87-c868-1683-30b0a7e97777@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 11:16:39AM +0800, Hao Jia wrote:
-> Friendly ping...
+Hi Gautam,
+
+
+I just found this patch is not cleanly applicable on top of the mm-unstable
+branch[1].  Could you please rebase?
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/log/?h=mm-unstable
+
+
+Thanks,
+SJ
+
+On Sun, 8 May 2022 09:19:43 +0000 SeongJae Park <sj@kernel.org> wrote:
+
+> Hi Gautam,
 > 
-> Hi Dietmar Eggemann & Peter Zijlstra,
-> If you have time, please review these two patches.
-
-I've picked them up, shall push them to tip soonish.
-
-Thanks!
+> 
+> On Sun, 8 May 2022 13:03:16 +0530 Gautam Menghani <gautammenghani201@gmail.com> wrote:
+> 
+> > Fix the warning - "Enum value 'NR_DAMON_OPS' not described in 
+> > enum 'damon_ops_id'" generated by the command "make pdfdocs"
+> > 
+> > Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> > ---
+> > Changes in v3:
+> > - Add the subsystem in subject.
+> > - Modify the description for NR_DAMON_OPS field.
+> 
+> Thank you for making the changes.
+> 
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
+> 
+> Thanks,
+> SJ
+> 
+> > 
+> > Changes in v2:
+> > - Fix checkpatch warning of 75 characters per line
+> > - Fix email mismatch in from and signed by field
+> > 
+> >  include/linux/damon.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/include/linux/damon.h b/include/linux/damon.h
+> > index f23cbfa4248d..b972a7a3b6f0 100644
+> > --- a/include/linux/damon.h
+> > +++ b/include/linux/damon.h
+> > @@ -262,6 +262,7 @@ struct damos {
+> >   *
+> >   * @DAMON_OPS_VADDR:	Monitoring operations for virtual address spaces
+> >   * @DAMON_OPS_PADDR:	Monitoring operations for the physical address space
+> > + * @NR_DAMON_OPS:	Number of monitoring operations implementations
+> >   */
+> >  enum damon_ops_id {
+> >  	DAMON_OPS_VADDR,
+> > -- 
+> > 2.25.1
+> > 

@@ -2,110 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8A852037F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13629520381
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239541AbiEIRZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S239570AbiEIR0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiEIRZM (ORCPT
+        with ESMTP id S239574AbiEIRZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:25:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB34052528
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:21:17 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kq17so28166001ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:21:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NbKadAlbEuv9SCL4clueu9SSBtV1FA6IQDblzg5FTkc=;
-        b=VhLWVfy7VuAnawsLFBmFlKuhHwfBkHheP2GCjLRi0YYeGJiosDj1ZiqdhTw0COwHlL
-         oyAC748yRG+xi07STBQBggoNnarsQtg82LQ2wAmMCse/7vNdZan7c8GM+wPCCL33stzb
-         zsXIFmfxn4Can6ZOtEq58A3aSqYgMGqCetzAE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NbKadAlbEuv9SCL4clueu9SSBtV1FA6IQDblzg5FTkc=;
-        b=NhqDx0xKGeBCzddWb+jrT0p+0ZVe7Fcr7oDUVcEqmYNwxkvLkFtUveqpX3e1T2Lj+N
-         yROfXXcmDro9jkLaFIkrlX7LiNt6Ggw4uaQ3mVRmiqieXbRNNoCgiRfhpRuR8F4SyeUq
-         5dsjoitFFFTunOeOfm5XMNk+IeeN/YzKt4yEF5gNq6UEMrik0tqyJCOyY6DpscyrFEXG
-         nN4cMZEHyrOYTWskZtRyI5XNJelbJMOEjflzYcUi17KUFgChdjL7tNMwIStWys7K4d7q
-         pWMmo5NIRsLfw2WNoq/H33SS4GIc4XexBs97/wDatpHALM4iXwV/C4SxG9kkJ+WWgD+D
-         aA1w==
-X-Gm-Message-State: AOAM530lwPauwbLHxMvDOFX4WP7v84hAYKH8fy7gRc8ingtC6H1H+LmV
-        aGwIs/TOY6KCuNEzGMAoU121X8lcliqtSSP5
-X-Google-Smtp-Source: ABdhPJzbO4HD5EwEH3Txhbe3813oTZkY844NaZLSyfHpUKGD/rCBYGKKPdMH8YyNrT5iosVfIXkKtQ==
-X-Received: by 2002:a17:906:dc8a:b0:6f9:13e9:4c87 with SMTP id cs10-20020a170906dc8a00b006f913e94c87mr8807123ejc.729.1652116876103;
-        Mon, 09 May 2022 10:21:16 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id g34-20020a056402322200b0042617ba63b7sm6397679eda.65.2022.05.09.10.21.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 10:21:15 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id k126so8770049wme.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:21:14 -0700 (PDT)
-X-Received: by 2002:a05:600c:4f06:b0:394:836b:1552 with SMTP id
- l6-20020a05600c4f0600b00394836b1552mr11550087wmq.145.1652116874604; Mon, 09
- May 2022 10:21:14 -0700 (PDT)
+        Mon, 9 May 2022 13:25:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3A524FDAB;
+        Mon,  9 May 2022 10:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652116891; x=1683652891;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I4V4xhLbqiqJOKcdU+RpD14ssw/t4JQP8jT2I6gAeBc=;
+  b=MBdZ95lzLqb5TsdkyWuqKsCE0MSluxezRwuyDMdRbtOv6W94ywKjeYyD
+   G67NApJy5CW2/c3U5xATJw4BluzUQjgDvT49vLQsxTpwGC4RCREr6AxBL
+   NmqneoXxGv3RPliR5w9iByWtqIOD/ncH7ES/bDhb5ZQvTsolBdmAuv6DP
+   YYT1ndlXG0Gkle+dnJ1IQkSERG5n+5I7rUVvMH+q4iWBFnuKrSMnYVSfM
+   O/cszBgthwcVTxxa97TKJvJBHz+x7sAxC6vWgM78w6760uF/AbS3aNW/b
+   TSv1jIMMRSoRCHt+iOGpVL5vin+ZSkfDQW2esw7h6aFMHKMiKjsoMejsa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="329710546"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="329710546"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 10:21:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="592915418"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 10:21:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4A80DD1; Mon,  9 May 2022 20:21:30 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v1 1/2] serial: 8250_dw: Use devm_add_action_or_reset()
+Date:   Mon,  9 May 2022 20:21:28 +0300
+Message-Id: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
- <165209064657.193515.10163777181547077546@leemhuis.info>
-In-Reply-To: <165209064657.193515.10163777181547077546@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 9 May 2022 10:20:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj0gHsG6iw3D8ufptm9a_dvTSqrrOFY9WopObbYbyuwnA@mail.gmail.com>
-Message-ID: <CAHk-=wj0gHsG6iw3D8ufptm9a_dvTSqrrOFY9WopObbYbyuwnA@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2022-05-09] (was: Linux 5.18-rc6)
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 3:47 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Hi Linus! Here's a quick compilation of open reports about regressions in
-> 5.18-rc that I'm currently aware of; most of the reports are quite
-> recent and there afaics is nothing that looks particularly worrisome.
+Slightly simplify ->probe() and drop a few goto labels by using
+devm_add_action_or_reset() for clock and reset cleanup.
 
-Well, the Intel GPU issue seems likely to cause problems for lots of people:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_dw.c | 63 +++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 32 deletions(-)
 
-> [ *NEW* ] drm/i915: BYT rendering broken due to "Remove short-term pins from execbuf, v6"
-> -----------------------------------------------------------------------------------------
-> https://linux-regtracking.leemhuis.info/regzbot/regression/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
-> https://lore.kernel.org/dri-devel/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
->
-> By Hans de Goede; 0 days ago; 2 activities, latest 0 days ago.
-> Introduced in b5cfe6f7a6e1 (v5.18-rc1)
->
-> Recent activities from: Tvrtko Ursulin (1), Hans de Goede (1)
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index 7934e4658281..e7ef61899576 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -484,6 +484,16 @@ static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+ 	}
+ }
+ 
++static void dw8250_clk_disable_unprepare(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
++static void dw8250_reset_control_assert(void *data)
++{
++	reset_control_assert(data);
++}
++
+ static int dw8250_probe(struct platform_device *pdev)
+ {
+ 	struct uart_8250_port uart = {}, *up = &uart;
+@@ -585,35 +595,43 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	if (err)
+ 		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
+ 
++	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->clk);
++	if (err)
++		return err;
++
+ 	if (data->clk)
+ 		p->uartclk = clk_get_rate(data->clk);
+ 
+ 	/* If no clock rate is defined, fail. */
+ 	if (!p->uartclk) {
+ 		dev_err(dev, "clock rate not defined\n");
+-		err = -EINVAL;
+-		goto err_clk;
++		return -EINVAL;
+ 	}
+ 
+ 	data->pclk = devm_clk_get_optional(dev, "apb_pclk");
+-	if (IS_ERR(data->pclk)) {
+-		err = PTR_ERR(data->pclk);
+-		goto err_clk;
+-	}
++	if (IS_ERR(data->pclk))
++		return PTR_ERR(data->pclk);
+ 
+ 	err = clk_prepare_enable(data->pclk);
+ 	if (err) {
+ 		dev_err(dev, "could not enable apb_pclk\n");
+-		goto err_clk;
++		return err;
+ 	}
+ 
++	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->pclk);
++	if (err)
++		return err;
++
+ 	data->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
+-	if (IS_ERR(data->rst)) {
+-		err = PTR_ERR(data->rst);
+-		goto err_pclk;
+-	}
++	if (IS_ERR(data->rst))
++		return PTR_ERR(data->rst);
++
+ 	reset_control_deassert(data->rst);
+ 
++	err = devm_add_action_or_reset(dev, dw8250_reset_control_assert, data->rst);
++	if (err)
++		return err;
++
+ 	dw8250_quirks(p, data);
+ 
+ 	/* If the Busy Functionality is not implemented, don't handle it */
+@@ -631,10 +649,8 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	data->data.line = serial8250_register_8250_port(up);
+-	if (data->data.line < 0) {
+-		err = data->data.line;
+-		goto err_reset;
+-	}
++	if (data->data.line < 0)
++		return data->data.line;
+ 
+ 	/*
+ 	 * Some platforms may provide a reference clock shared between several
+@@ -655,17 +671,6 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
+-
+-err_reset:
+-	reset_control_assert(data->rst);
+-
+-err_pclk:
+-	clk_disable_unprepare(data->pclk);
+-
+-err_clk:
+-	clk_disable_unprepare(data->clk);
+-
+-	return err;
+ }
+ 
+ static int dw8250_remove(struct platform_device *pdev)
+@@ -683,12 +688,6 @@ static int dw8250_remove(struct platform_device *pdev)
+ 
+ 	serial8250_unregister_port(data->data.line);
+ 
+-	reset_control_assert(data->rst);
+-
+-	clk_disable_unprepare(data->pclk);
+-
+-	clk_disable_unprepare(data->clk);
+-
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_put_noidle(dev);
+ 
+-- 
+2.35.1
 
-Although it looks possible that it mainly affects old chipsets (ie the
-two reports are for a Bay Trail chip and a Core 2 Duo chip - I have no
-idea how they compare).
-
-That probably means there are a lot of machines out there, but likely
-not the kind that most kernel developers will be testing, so not a ton
-of reports until it hits distro kernels etc.
-
-It looks like Maarten is already involved.
-
-                    Linus

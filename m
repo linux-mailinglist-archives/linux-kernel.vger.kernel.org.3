@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A795206E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA04D5206ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiEIVvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S231135AbiEIVxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiEIVvR (ORCPT
+        with ESMTP id S230266AbiEIVvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:51:17 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F9C2716E1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:47:21 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249KTf3J031853;
-        Mon, 9 May 2022 16:47:09 -0500
+        Mon, 9 May 2022 17:51:18 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D72273F44
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:47:23 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249BF6xb021606;
+        Mon, 9 May 2022 16:47:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=oDYQrz5v9BfYEw41UD+JKXNKxN44X9BHFFonMWvDl3c=;
- b=A1aWHArGvDolNnJZN11oVWr4wZCuKhVkFjNt6EI1V0r92kQeZ2jGOpYR3yV+WXxrv2du
- PrniyziLHeT0vjg0Xz8TBwZnrU6+yrZJ+WCfIgP15T3u/TKOC+Qx5q5ffCG9ACWfyeqE
- cGaudTOrCS8U3FhWoXCwfF3wVc+iAv+5NErpWpwDWccvQAIXigJHy7KGjjfuC5uw9VRg
- XsvOtvicElBD/79/cXcPbD9UTceUjoQNS0AZP41PZftATDR+uQjx6Bwo9WH48gFaSwqB
- BudNk5Zv9s9AcH+cEEG5TtZZXzWBD4B/arQMz5Pgg28xHnXHSjIxQm19ksmKFSKnFiul Zw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fwn6nu87p-4
+ bh=mNX1c5kAq0wpMwAdd4aKxjknx0r0nFQxTjypz1pXoV0=;
+ b=g1y1E3l+UjkC4Meo6lZq8p28vgA/WHLvc4r7G3EUcNEoqC4Yy69vyj51xFTrlKm1YpkF
+ rz0B1d+tDwuu4Rt0+L4ZM3T2ohN9zVAj47imbeom7+CFFzG10FHNvJ0s3wgchYZL4p5h
+ kJNVW4xdtyeD8gjvLUXBDddEFHZcPc5dTF0rO1ff2cuIl9BWqIJmFWrah1G+KjJALFYB
+ RbI8ZJVI6UHA0pt+GJJbJbsoNz+LV8AIhoujupdFgbFj9UMdj2xZQF4Xsh+epxjiNqe5
+ 2yI0rEpJ/9H0L+xKU9xWgzq5eX/l3aL1HRPV1gKBUcUEVTCNyWqHnJDmjojKxEBOnrO+ 4g== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fwp613jer-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 09 May 2022 16:47:08 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 09 May 2022 16:47:09 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 22:47:07 +0100
+ 2022 22:47:08 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Mon, 9 May 2022 22:47:07 +0100
+ Transport; Mon, 9 May 2022 22:47:08 +0100
 Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.55])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4E6ADB10;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B4CC311D1;
         Mon,  9 May 2022 21:47:07 +0000 (UTC)
 From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Mark Brown <broonie@kernel.org>
 CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH v2 08/26] ASoC: cs35l41: Move cs_dsp config struct into shared code
-Date:   Mon, 9 May 2022 22:46:45 +0100
-Message-ID: <20220509214703.4482-9-vitalyr@opensource.cirrus.com>
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v2 09/26] ALSA: hda: cs35l41: Add Amp Name based on channel and index
+Date:   Mon, 9 May 2022 22:46:46 +0100
+Message-ID: <20220509214703.4482-10-vitalyr@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
 References: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: dKtnLKApwqfF52uxRk7kzm-prvvnccZY
-X-Proofpoint-GUID: dKtnLKApwqfF52uxRk7kzm-prvvnccZY
+X-Proofpoint-GUID: UYmmqCYltPA_KDf0XklwS1xew3Zkv1MN
+X-Proofpoint-ORIG-GUID: UYmmqCYltPA_KDf0XklwS1xew3Zkv1MN
 X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,120 +70,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-This can then be used by HDA code to configure cs_dsp.
-
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+This will be used to identify ALSA controls and firmware.
+The Amp Name will be a channel identifier (L or R), and an
+index, which identifies which amp for that channel.
 
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 ---
- include/sound/cs35l41.h        |  2 ++
- sound/soc/codecs/cs35l41-lib.c | 24 ++++++++++++++++++++++++
- sound/soc/codecs/cs35l41.c     | 20 ++------------------
- 3 files changed, 28 insertions(+), 18 deletions(-)
+ sound/pci/hda/cs35l41_hda.c | 17 +++++++++++++++++
+ sound/pci/hda/cs35l41_hda.h |  2 ++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
-index ef08f2c17238..8972fa697622 100644
---- a/include/sound/cs35l41.h
-+++ b/include/sound/cs35l41.h
-@@ -11,6 +11,7 @@
- #define __CS35L41_H
- 
- #include <linux/regmap.h>
-+#include <linux/firmware/cirrus/cs_dsp.h>
- 
- #define CS35L41_FIRSTREG		0x00000000
- #define CS35L41_LASTREG			0x03804FE8
-@@ -876,6 +877,7 @@ int cs35l41_set_channels(struct device *dev, struct regmap *reg,
- 			 unsigned int tx_num, unsigned int *tx_slot,
- 			 unsigned int rx_num, unsigned int *rx_slot);
- int cs35l41_gpio_config(struct regmap *regmap, struct cs35l41_hw_cfg *hw_cfg);
-+void cs35l41_configure_cs_dsp(struct device *dev, struct regmap *reg, struct cs_dsp *dsp);
- int cs35l41_set_cspl_mbox_cmd(struct device *dev, struct regmap *regmap,
- 			      enum cs35l41_cspl_mbox_cmd cmd);
- int cs35l41_write_fs_errata(struct device *dev, struct regmap *regmap);
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index a3cd1255500c..6d3070ea9e06 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -12,6 +12,7 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
-+#include <linux/firmware/cirrus/wmfw.h>
- 
- #include <sound/cs35l41.h>
- 
-@@ -1227,6 +1228,29 @@ int cs35l41_gpio_config(struct regmap *regmap, struct cs35l41_hw_cfg *hw_cfg)
- }
- EXPORT_SYMBOL_GPL(cs35l41_gpio_config);
- 
-+static const struct cs_dsp_region cs35l41_dsp1_regions[] = {
-+	{ .type = WMFW_HALO_PM_PACKED,	.base = CS35L41_DSP1_PMEM_0 },
-+	{ .type = WMFW_HALO_XM_PACKED,	.base = CS35L41_DSP1_XMEM_PACK_0 },
-+	{ .type = WMFW_HALO_YM_PACKED,	.base = CS35L41_DSP1_YMEM_PACK_0 },
-+	{. type = WMFW_ADSP2_XM,	.base = CS35L41_DSP1_XMEM_UNPACK24_0},
-+	{. type = WMFW_ADSP2_YM,	.base = CS35L41_DSP1_YMEM_UNPACK24_0},
-+};
-+
-+void cs35l41_configure_cs_dsp(struct device *dev, struct regmap *reg, struct cs_dsp *dsp)
-+{
-+	dsp->num = 1;
-+	dsp->type = WMFW_HALO;
-+	dsp->rev = 0;
-+	dsp->dev = dev;
-+	dsp->regmap = reg;
-+	dsp->base = CS35L41_DSP1_CTRL_BASE;
-+	dsp->base_sysinfo = CS35L41_DSP1_SYS_ID;
-+	dsp->mem = cs35l41_dsp1_regions;
-+	dsp->num_mems = ARRAY_SIZE(cs35l41_dsp1_regions);
-+	dsp->lock_regions = 0xFFFFFFFF;
-+}
-+EXPORT_SYMBOL_GPL(cs35l41_configure_cs_dsp);
-+
- static bool cs35l41_check_cspl_mbox_sts(enum cs35l41_cspl_mbox_cmd cmd,
- 					enum cs35l41_cspl_mbox_status sts)
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 2608bf4a6851..cce27a86267f 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -88,6 +88,17 @@ static int cs35l41_hda_channel_map(struct device *dev, unsigned int tx_num, unsi
+ 				    unsigned int rx_num, unsigned int *rx_slot)
  {
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 75527649bb14..5f0eca229dd3 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -680,14 +680,6 @@ static const struct snd_soc_dapm_route cs35l41_audio_map[] = {
- 	{"CLASS H", NULL, "PCM Source"},
+ 	struct cs35l41_hda *cs35l41 = dev_get_drvdata(dev);
++	static const char * const channel_name[] = { "L", "R" };
++
++	if (!cs35l41->amp_name) {
++		if (*rx_slot >= ARRAY_SIZE(channel_name))
++			return -EINVAL;
++
++		cs35l41->amp_name = devm_kasprintf(cs35l41->dev, GFP_KERNEL, "%s%d",
++						   channel_name[*rx_slot], cs35l41->channel_index);
++		if (!cs35l41->amp_name)
++			return -ENOMEM;
++	}
+ 
+ 	return cs35l41_set_channels(cs35l41->dev, cs35l41->regmap, tx_num, tx_slot, rx_num,
+ 				    rx_slot);
+@@ -345,6 +356,11 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+ 		goto err;
+ 	hw_cfg->spk_pos = values[cs35l41->index];
+ 
++	cs35l41->channel_index = 0;
++	for (i = 0; i < cs35l41->index; i++)
++		if (values[i] == hw_cfg->spk_pos)
++			cs35l41->channel_index++;
++
+ 	property = "cirrus,gpio1-func";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret)
+@@ -410,6 +426,7 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+ 	/* check I2C address to assign the index */
+ 	cs35l41->index = id == 0x40 ? 0 : 1;
+ 	cs35l41->hw_cfg.spk_pos = cs35l41->index;
++	cs35l41->channel_index = 0;
+ 	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
+ 	cs35l41->hw_cfg.bst_type = CS35L41_EXT_BOOST_NO_VSPK_SWITCH;
+ 	hw_cfg->gpio2.func = CS35L41_GPIO2_INT_OPEN_DRAIN;
+diff --git a/sound/pci/hda/cs35l41_hda.h b/sound/pci/hda/cs35l41_hda.h
+index c486e4a5bb24..a52ffd1f7999 100644
+--- a/sound/pci/hda/cs35l41_hda.h
++++ b/sound/pci/hda/cs35l41_hda.h
+@@ -35,7 +35,9 @@ struct cs35l41_hda {
+ 
+ 	int irq;
+ 	int index;
++	int channel_index;
+ 	unsigned volatile long irq_errors;
++	const char *amp_name;
+ 	struct regmap_irq_chip_data *irq_data;
  };
  
--static const struct cs_dsp_region cs35l41_dsp1_regions[] = {
--	{ .type = WMFW_HALO_PM_PACKED,	.base = CS35L41_DSP1_PMEM_0 },
--	{ .type = WMFW_HALO_XM_PACKED,	.base = CS35L41_DSP1_XMEM_PACK_0 },
--	{ .type = WMFW_HALO_YM_PACKED,	.base = CS35L41_DSP1_YMEM_PACK_0 },
--	{. type = WMFW_ADSP2_XM,	.base = CS35L41_DSP1_XMEM_UNPACK24_0},
--	{. type = WMFW_ADSP2_YM,	.base = CS35L41_DSP1_YMEM_UNPACK24_0},
--};
--
- static int cs35l41_set_channel_map(struct snd_soc_dai *dai, unsigned int tx_n,
- 				   unsigned int *tx_slot, unsigned int rx_n, unsigned int *rx_slot)
- {
-@@ -1100,18 +1092,10 @@ static int cs35l41_dsp_init(struct cs35l41_private *cs35l41)
- 
- 	dsp = &cs35l41->dsp;
- 	dsp->part = "cs35l41";
--	dsp->cs_dsp.num = 1;
--	dsp->cs_dsp.type = WMFW_HALO;
--	dsp->cs_dsp.rev = 0;
- 	dsp->fw = 9; /* 9 is WM_ADSP_FW_SPK_PROT in wm_adsp.c */
- 	dsp->toggle_preload = true;
--	dsp->cs_dsp.dev = cs35l41->dev;
--	dsp->cs_dsp.regmap = cs35l41->regmap;
--	dsp->cs_dsp.base = CS35L41_DSP1_CTRL_BASE;
--	dsp->cs_dsp.base_sysinfo = CS35L41_DSP1_SYS_ID;
--	dsp->cs_dsp.mem = cs35l41_dsp1_regions;
--	dsp->cs_dsp.num_mems = ARRAY_SIZE(cs35l41_dsp1_regions);
--	dsp->cs_dsp.lock_regions = 0xFFFFFFFF;
-+
-+	cs35l41_configure_cs_dsp(cs35l41->dev, cs35l41->regmap, &dsp->cs_dsp);
- 
- 	ret = cs35l41_write_fs_errata(cs35l41->dev, cs35l41->regmap);
- 	if (ret < 0)
 -- 
 2.34.1
 

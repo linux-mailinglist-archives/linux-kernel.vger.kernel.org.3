@@ -2,238 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ED951FB4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0093551FB4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiEILbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S232956AbiEILa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbiEILbH (ORCPT
+        with ESMTP id S232808AbiEILak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:31:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02908DCF;
-        Mon,  9 May 2022 04:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652095633; x=1683631633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ya1pIm6vZbBNzSqJeY65qthxy/T3x9Rl6SrCFaTGnYo=;
-  b=KLzsPcKvLJumb91OkJg9jync2y2nIcLR20AGON05uMXeDGrkiz4nA7yo
-   SjXWDra0zZl50BmlZC2qk0zhC9shmG/JoeinDfuymQCgToZdqCNBAvArg
-   wKJgiDerKQwMbbiOqsxvRA96FKh9IhAlG2SRfLjNbhgRBzlc7207kpJEF
-   vkuzswAcZ2mFjDV+I66xPEiMjfqggLjdw1sC1YK0kc0bw9hAF59GGdnl4
-   hUPXmdbnT04r7D9hagxZ57btrp7qetbBBFVMJd1Q33+PhSM8v/toNWjis
-   YJs5wMlJVLNDd7OqZvQDpmnzbMzQXn6CKJW7uaRUe1u2W2IS45uextPmK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="268685193"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="268685193"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:27:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="622923821"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 May 2022 04:27:09 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no1Xg-000GTA-Fj;
-        Mon, 09 May 2022 11:27:08 +0000
-Date:   Mon, 9 May 2022 19:26:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v1] vdpa: Do not count the pages that were already pinned
- in the vhost-vDPA
-Message-ID: <202205091928.dheTGNAt-lkp@intel.com>
-References: <20220509071426.155941-1-lulu@redhat.com>
+        Mon, 9 May 2022 07:30:40 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E4F164C99;
+        Mon,  9 May 2022 04:26:46 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s16so1681406pgs.3;
+        Mon, 09 May 2022 04:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0Ms5dtQehfkw1mFFz53YAav8LEpkzzlzEpCcB6kSnvY=;
+        b=MVsp2jjiHNDmg59AzmpxFmJ7JTasWhUSVTYxRGAhW/4rn2RZgVAzmY6rO8TowyTJAc
+         FRAAowpSFJ73ZVtwXcM6SzbbrEpMWO4jA96IwSUd4/toiWyZwJd+kVCybGjjHZXhU9fK
+         UuggCJ5SWapCGbLK8LkRCuUXDXr5RQYuW+XEfCvfJCJYNsNg/zVn/XIWfwQ+3qZiNMH1
+         97LvMixlZ7SMQ1s2a18HesTT052QM5dR2Ek1eOEDtImvaAHHlFzhloQkJ+MHrkGouvI1
+         MGqhXhXrX5KMpOwtQAjOaDdea+K0oLRKdEh1kas3SspjdjBUHiC2UjT31YJxQkqVVm4e
+         /eTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0Ms5dtQehfkw1mFFz53YAav8LEpkzzlzEpCcB6kSnvY=;
+        b=KlO7vPnIk+X0EVBr9dDQsFEw+SkPI5BlNnRYn8wtPGgBL/v7o6ot0r2Ldj3LH8GmxX
+         150zRFbOqLD/07eOzTIOiVKZGJc6C9kPAWhn8hQ8TiPXuc1RLS6MiS2k9nkBoCOcNE1I
+         w09WrcYhO17FOLQNLBvhqRDjdVp5GE3ePJLgUjO7876qpfCQz8i5HCZMObUEwSCDchHM
+         bwXikN9a70ZDiGC8xhQf66x39qZ6PY5EgwXX+hIKlQ1ENqM7VsPWFCYoTs59XKvf951f
+         er/Fuj9+LtjcPJzfzqApzW6PkYNLDXLjflQVG7rI1yqk1jJyjgwBKyMK7HxHsbUimTbK
+         v1ww==
+X-Gm-Message-State: AOAM533LEkUtwLRlxDj00eYh9pcgf3C847YHAExV/gAhimXFgSFdaFGw
+        b28xRYjUTqPSHWQgn3CVgDc=
+X-Google-Smtp-Source: ABdhPJxolDEt0Adrw+QGt/t5j16jYKevYnRFb403wZBw1BSJWcDPihVMAV64uYXj/wt+1jrVzyqcoA==
+X-Received: by 2002:aa7:9085:0:b0:50d:35ae:271 with SMTP id i5-20020aa79085000000b0050d35ae0271mr15404202pfa.42.1652095605860;
+        Mon, 09 May 2022 04:26:45 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709028a8900b0015e8d4eb1d5sm6845311plo.31.2022.05.09.04.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 04:26:45 -0700 (PDT)
+Message-ID: <6278fa75.1c69fb81.9c598.f794@mx.google.com>
+X-Google-Original-Message-ID: <20220509112643.GA1147603@cgel.zte@gmail.com>
+Date:   Mon, 9 May 2022 11:26:43 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
+        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, william.kucharski@oracle.com,
+        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
+        songmuchun@bytedance.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+ <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
+ <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
+ <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509071426.155941-1-lulu@redhat.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cindy,
+On Mon, May 09, 2022 at 12:00:28PM +0200, Michal Hocko wrote:
+> On Sat 07-05-22 02:05:25, CGEL wrote:
+> [...]
+> > If there are many containers to run on one host, and some of them have high
+> > performance requirements, administrator could turn on thp for them:
+> > # docker run -it --thp-enabled=always
+> > Then all the processes in those containers will always use thp.
+> > While other containers turn off thp by:
+> > # docker run -it --thp-enabled=never
+> 
+> I do not know. The THP config space is already too confusing and complex
+> and this just adds on top. E.g. is the behavior of the knob
+> hierarchical? What is the policy if parent memcg says madivise while
+> child says always? How does the per-application configuration aligns
+> with all that (e.g. memcg policy madivise but application says never via
+> prctl while still uses some madvised - e.g. via library).
+>
 
-Thank you for the patch! Perhaps something to improve:
+The cgroup THP behavior is align to host and totally independent just likes
+/sys/fs/cgroup/memory.swappiness. That means if one cgroup config 'always'
+for thp, it has no matter with host or other cgroup. This make it simple for
+user to understand or control.
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linux/master linus/master v5.18-rc6]
-[cannot apply to next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+If memcg policy madivise but application says never, just like host, the result
+is no THP for that application.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: s390-randconfig-r044-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091928.dheTGNAt-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4225cc2a756b75d1e0ff7ca2a593bada42def380
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-        git checkout 4225cc2a756b75d1e0ff7ca2a593bada42def380
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/vhost/
+> > By doing this we could promote important containers's performance with less
+> > footprint of thp.
+> 
+> Do we really want to provide something like THP based QoS? To me it
+> sounds like a bad idea and if the justification is "it might be useful"
+> then I would say no. So you really need to come with a very good usecase
+> to promote this further.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+At least on some 5G(communication technology) machine, it's useful to provide
+THP based QoS. Those 5G machine use micro-service software architecture, in
+other words one service application runs in one container. Container becomes
+the suitable management unit but not the whole host. And some performance
+sensitive containers desiderate THP to provide low latency communication.
+But if we use THP with 'always', it will consume more memory(on our machine
+that is about 10% of total memory). And unnecessary huge pages will increase
+memory pressure, add latency for minor pages faults, and add overhead when
+splitting huge pages or coalescing normal sized pages into huge pages.
 
-All warnings (new ones prefixed by >>):
+So container manager should welcome cgroup based THP QoS.
 
->> drivers/vhost/vdpa.c:542:5: warning: no previous prototype for 'vhost_vdpa_add_range_ctx' [-Wmissing-prototypes]
-     542 | int vhost_vdpa_add_range_ctx(struct rb_root_cached *root, u64 start, u64 last)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/vhost/vdpa.c:571:6: warning: no previous prototype for 'vhost_vdpa_del_range' [-Wmissing-prototypes]
-     571 | void vhost_vdpa_del_range(struct rb_root_cached *root, u64 start, u64 last)
-         |      ^~~~~~~~~~~~~~~~~~~~
->> drivers/vhost/vdpa.c:581:28: warning: no previous prototype for 'vhost_vdpa_search_range' [-Wmissing-prototypes]
-     581 | struct interval_tree_node *vhost_vdpa_search_range(struct rb_root_cached *root,
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/vhost_vdpa_add_range_ctx +542 drivers/vhost/vdpa.c
-
-   464	
-   465	static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-   466					      unsigned int cmd, unsigned long arg)
-   467	{
-   468		struct vhost_vdpa *v = filep->private_data;
-   469		struct vhost_dev *d = &v->vdev;
-   470		void __user *argp = (void __user *)arg;
-   471		u64 __user *featurep = argp;
-   472		u64 features;
-   473		long r = 0;
-   474	
-   475		if (cmd == VHOST_SET_BACKEND_FEATURES) {
-   476			if (copy_from_user(&features, featurep, sizeof(features)))
-   477				return -EFAULT;
-   478			if (features & ~VHOST_VDPA_BACKEND_FEATURES)
-   479				return -EOPNOTSUPP;
-   480			vhost_set_backend_features(&v->vdev, features);
-   481			return 0;
-   482		}
-   483	
-   484		mutex_lock(&d->mutex);
-   485	
-   486		switch (cmd) {
-   487		case VHOST_VDPA_GET_DEVICE_ID:
-   488			r = vhost_vdpa_get_device_id(v, argp);
-   489			break;
-   490		case VHOST_VDPA_GET_STATUS:
-   491			r = vhost_vdpa_get_status(v, argp);
-   492			break;
-   493		case VHOST_VDPA_SET_STATUS:
-   494			r = vhost_vdpa_set_status(v, argp);
-   495			break;
-   496		case VHOST_VDPA_GET_CONFIG:
-   497			r = vhost_vdpa_get_config(v, argp);
-   498			break;
-   499		case VHOST_VDPA_SET_CONFIG:
-   500			r = vhost_vdpa_set_config(v, argp);
-   501			break;
-   502		case VHOST_GET_FEATURES:
-   503			r = vhost_vdpa_get_features(v, argp);
-   504			break;
-   505		case VHOST_SET_FEATURES:
-   506			r = vhost_vdpa_set_features(v, argp);
-   507			break;
-   508		case VHOST_VDPA_GET_VRING_NUM:
-   509			r = vhost_vdpa_get_vring_num(v, argp);
-   510			break;
-   511		case VHOST_SET_LOG_BASE:
-   512		case VHOST_SET_LOG_FD:
-   513			r = -ENOIOCTLCMD;
-   514			break;
-   515		case VHOST_VDPA_SET_CONFIG_CALL:
-   516			r = vhost_vdpa_set_config_call(v, argp);
-   517			break;
-   518		case VHOST_GET_BACKEND_FEATURES:
-   519			features = VHOST_VDPA_BACKEND_FEATURES;
-   520			if (copy_to_user(featurep, &features, sizeof(features)))
-   521				r = -EFAULT;
-   522			break;
-   523		case VHOST_VDPA_GET_IOVA_RANGE:
-   524			r = vhost_vdpa_get_iova_range(v, argp);
-   525			break;
-   526		case VHOST_VDPA_GET_CONFIG_SIZE:
-   527			r = vhost_vdpa_get_config_size(v, argp);
-   528			break;
-   529		case VHOST_VDPA_GET_VQS_COUNT:
-   530			r = vhost_vdpa_get_vqs_count(v, argp);
-   531			break;
-   532		default:
-   533			r = vhost_dev_ioctl(&v->vdev, cmd, argp);
-   534			if (r == -ENOIOCTLCMD)
-   535				r = vhost_vdpa_vring_ioctl(v, cmd, argp);
-   536			break;
-   537		}
-   538	
-   539		mutex_unlock(&d->mutex);
-   540		return r;
-   541	}
- > 542	int vhost_vdpa_add_range_ctx(struct rb_root_cached *root, u64 start, u64 last)
-   543	{
-   544		struct interval_tree_node *new_node;
-   545	
-   546		if (last < start)
-   547			return -EFAULT;
-   548	
-   549		/* If the range being mapped is [0, ULONG_MAX], split it into two entries
-   550		 * otherwise its size would overflow u64.
-   551		 */
-   552		if (start == 0 && last == ULONG_MAX) {
-   553			u64 mid = last / 2;
-   554	
-   555			vhost_vdpa_add_range_ctx(root, start, mid);
-   556			start = mid + 1;
-   557		}
-   558	
-   559		new_node = kmalloc(sizeof(struct interval_tree_node), GFP_ATOMIC);
-   560		if (!new_node)
-   561			return -ENOMEM;
-   562	
-   563		new_node->start = start;
-   564		new_node->last = last;
-   565	
-   566		interval_tree_insert(new_node, root);
-   567	
-   568		return 0;
-   569	}
-   570	
- > 571	void vhost_vdpa_del_range(struct rb_root_cached *root, u64 start, u64 last)
-   572	{
-   573		struct interval_tree_node *new_node;
-   574	
-   575		while ((new_node = interval_tree_iter_first(root, start, last))) {
-   576			interval_tree_remove(new_node, root);
-   577			kfree(new_node);
-   578		}
-   579	}
-   580	
- > 581	struct interval_tree_node *vhost_vdpa_search_range(struct rb_root_cached *root,
-   582							   u64 start, u64 last)
-   583	{
-   584		return interval_tree_iter_first(root, start, last);
-   585	}
-   586	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> -- 
+> Michal Hocko
+> SUSE Labs

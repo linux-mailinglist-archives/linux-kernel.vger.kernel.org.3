@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C7051F416
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF9251F414
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiEIFtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S229629AbiEIFuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbiEIFq3 (ORCPT
+        with ESMTP id S235376AbiEIFsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:46:29 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F7A15E498;
-        Sun,  8 May 2022 22:42:36 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so7614128wmz.0;
-        Sun, 08 May 2022 22:42:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PgUJQCGuVuN7RMUt/u/GB2vkYIZJaEjDbMnifyGw+XM=;
-        b=uWYHN/OTPaoS3Qf10LSpocUCCLihQH0lh6ZiwjMj9Rtsb3OJYGFaBLfkbhP2sRjEEo
-         +MQtww0LFDu9g394XKJlkHNE9/F3jnwxdbpWjb0Tp/HRV75iiQzEMiXWRfeZt5xnH0R1
-         7PfJmAJrL7NxAP3Ack+LcTXerTbXkUKnIXIuLOq4U9WBzXUIqoaSKHgfSYNCOfp9aWOl
-         LMRF1A9EQWp3P/YotgFrhDZMAEf8w4NtIq3E5FdHQDgJcYyxZI5H3la0gYa2pdFmumrR
-         d2Tukv0VeIb5JILapRcrBya/+8ZhjsN5AR8MqMWmaqbJZKjxUdIxO/uqKnnbDVDlhjAy
-         JgZA==
-X-Gm-Message-State: AOAM530hKvIzA/eORU6ymucSZcLJqZ6PB5mgmD8qAeZSP2GWo4WnM1Ia
-        uuAqbTGB3HU1geQ2IkqPWus=
-X-Google-Smtp-Source: ABdhPJwc4eYBOaGWeOZpzdHrP/EzHMr+8axHRm30/zjzwNtxs/nJxF3qH+zPotS6vDu9D2X/XzPbUQ==
-X-Received: by 2002:a05:600c:3b11:b0:394:57eb:c58b with SMTP id m17-20020a05600c3b1100b0039457ebc58bmr20723567wms.3.1652074950839;
-        Sun, 08 May 2022 22:42:30 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id d7-20020adffbc7000000b0020c66310845sm9972919wrs.55.2022.05.08.22.42.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 22:42:30 -0700 (PDT)
-Message-ID: <c0eac83f-8483-7709-b558-561ff7a382b0@kernel.org>
-Date:   Mon, 9 May 2022 07:42:12 +0200
+        Mon, 9 May 2022 01:48:00 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4264126C37
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652075047; x=1683611047;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vGLWB6wm2R99i0n5ZImSofDpnx0nFa2JTFNR1F4AQvM=;
+  b=C4fCUU1JlnJoQ1JEFR5W7XzdYptSq2G0lu6dDbGCW8BV6wLCyaKPYdqS
+   vzF8RuNPzst7T5w7roiz9b1STHKbmuF6yY5aIgQ7ixy3OpseWu0+pYf5k
+   8400p/a33pizXm4MQvARx4DWaZT24lxH0rISgLekjc8LCQ8f7SSN4J+zh
+   783hJE5lGUtstJvyiJiRz8CMXReFb97koKseHjTQle8ify17qmXyk9bK4
+   MZ6hAz7s1Y/MmMeuItT7odT1PtxpgQrsq1CYatimD7Vjb5YtWzb/AqdG7
+   r0cXgzDDtMj+rER2upCL/FuHwdZ32krA4Hewkkz0QlFcuY2oxhlokbByL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="249483601"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="249483601"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 22:44:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="591129784"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.199])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 22:44:04 -0700
+Message-ID: <a9e97cca-8bd6-9a47-a7d9-79198e6b9a81@intel.com>
+Date:   Mon, 9 May 2022 08:44:02 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1] serial: meson: acquire port->lock in startup()
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 00/23] perf intel-pt: Better support for perf record
+ --cpu
 Content-Language: en-US
-To:     John Ogness <john.ogness@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <20220508103547.626355-1-john.ogness@linutronix.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220508103547.626355-1-john.ogness@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, James Clark <James.Clark@arm.com>,
+        German Gomez <german.gomez@arm.com>
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220508150832.GA278102@leoy-ThinkPad-X240s>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220508150832.GA278102@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08. 05. 22, 12:35, John Ogness wrote:
-> The uart_ops startup() callback is called without interrupts
-> disabled and without port->lock locked, relatively late during the
-> boot process (from the call path of console_on_rootfs()). If the
-> device is a console, it was already previously registered and could
-> be actively printing messages.
+On 8/05/22 18:08, Leo Yan wrote:
+> Hi Adrian,
 > 
-> Since the startup() callback is reading/writing registers used by
-> the console write() callback (AML_UART_CONTROL), its access must
-> be synchronized using the port->lock. Currently it is not.
+> On Fri, May 06, 2022 at 03:25:38PM +0300, Adrian Hunter wrote:
+>> Hi
+>>
+>> Here are V2 patches to support capturing Intel PT sideband events such as
+>> mmap, task, context switch, text poke etc, on every CPU even when tracing
+>> selected user_requested_cpus.  That is, when using the perf record -C or
+>>  --cpu option.
+>>
+>> This is needed for:
+>> 1. text poke: a text poke on any CPU affects all CPUs
+>> 2. tracing user space: a user space process can migrate between CPUs so
+>> mmap events that happen on a different CPU can be needed to decode a
+>> user_requested_cpus CPU.
+>>
+>> For example:
+>>
+>> 	Trace on CPU 1:
+>>
+>> 	perf record --kcore -C 1 -e intel_pt// &
+>>
+>> 	Start a task on CPU 0:
+>>
+>> 	taskset 0x1 testprog &
+>>
+>> 	Migrate it to CPU 1:
+>>
+>> 	taskset -p 0x2 <testprog pid>
+>>
+>> 	Stop tracing:
+>>
+>> 	kill %1
+>>
+>> 	Prior to these changes there will be errors decoding testprog
+>> 	in userspace because the comm and mmap events for testprog will not
+>> 	have been captured.
 > 
-> The startup() callback is the only function that explicitly enables
-> interrupts. Without the synchronization, it is possible that
-> interrupts become accidentally permanently disabled.
+> Thanks a lot for this patch set, I believe this is a common issue for
+> AUX trace (not only for Intel-PT), so I verified this patch set for both
+> Arm CoreSight and SPE; unfortunately both cannot see MMAP events for
+> migrated task.  I used below commands:
 > 
-> CPU0                           CPU1
-> meson_serial_console_write     meson_uart_startup
-> --------------------------     ------------------
-> spin_lock(port->lock)
-> val = readl(AML_UART_CONTROL)
-> uart_console_write()
->                                 writel(INT_EN, AML_UART_CONTROL)
-> writel(val, AML_UART_CONTROL)
-> spin_unlock(port->lock)
+>   # perf record -B -N --no-bpf-event -e cs_etm//u -C 0 -- taskset --cpu-list 1 uname
+>   # perf script  --no-itrace --show-mmap-events -C 1 2>/dev/null | grep MMAP | wc -l
+>   0
 > 
-> Add port->lock synchronization to meson_uart_startup() to avoid
-> racing with meson_serial_console_write().
 > 
-> Also add detailed comments to meson_uart_reset() explaining why it
-> is *not* using port->lock synchronization.
+>   # perf record -B -N --no-bpf-event -e arm_spe_0//u -C 0 -- taskset --cpu-list 1 uname
+>   # perf script --no-itrace --show-mmap-events -C 1 2>/dev/null | grep MMAP | wc -l
+>   0
 > 
-> Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> I didn't dive into details for this patch set, so I cannot say the
+> failure is caused by any issue in this patch set.  But it's definitely
+> we need to look into for Arm platforms to root cause what's the reason
+> it cannot record MMAP events properly when migrate tasks.  Loop James
+> and German for this reason.
 
-Makes sense to me.
+You would need the equivalent of patch "perf intel-pt: Track sideband
+system-wide when needed" which makes use of new helper
+evlist__add_aux_dummy() to set up the dummy event with the option to
+make it "system wide".
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+cs_etm_recording_options() and arm_spe_recording_options() have similar
+code.
 
-> ---
->   drivers/tty/serial/meson_uart.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 2bf1c57e0981..39021dac09cc 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
->   	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
->   }
->   
-> +/*
-> + * This function is called only from probe() using a temporary io mapping
-> + * in order to perform a reset before setting up the device. Since the
-> + * temporarily mapped region was successfully requested, there can be no
-> + * console on this port at this time. Hence it is not necessary for this
-> + * function to acquire the port->lock. (Since there is no console on this
-> + * port at this time, the port->lock is not initialized yet.)
-> + */
->   static void meson_uart_reset(struct uart_port *port)
->   {
->   	u32 val;
-> @@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
->   
->   static int meson_uart_startup(struct uart_port *port)
->   {
-> +	unsigned long flags;
->   	u32 val;
->   	int ret = 0;
->   
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
->   	val = readl(port->membase + AML_UART_CONTROL);
->   	val |= AML_UART_CLEAR_ERR;
->   	writel(val, port->membase + AML_UART_CONTROL);
-> @@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
->   	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
->   	writel(val, port->membase + AML_UART_MISC);
->   
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +
->   	ret = request_irq(port->irq, meson_uart_interrupt, 0,
->   			  port->name, port);
->   
-> 
-> base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-
-
--- 
-js
-suse labs
+You will need to decide if it is worth the extra sideband.  I decided
+if it became an issue, it could be made optional in the future.

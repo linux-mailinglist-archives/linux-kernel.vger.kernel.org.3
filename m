@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B933251F6BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4E651F6DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiEIINK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 04:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S236545AbiEII1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiEIIJA (ORCPT
+        with ESMTP id S235586AbiEIIOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:09:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960661D6774;
-        Mon,  9 May 2022 01:05:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEEFA6135F;
-        Mon,  9 May 2022 08:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDB2C385A8;
-        Mon,  9 May 2022 08:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652083476;
-        bh=3wjcx/H6Uk19bMqCn1cAxyyBNx/H0v6RBLIJgYSYUPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PwTJfh6Rmur94pTzFA1G1OG9zVQXsWA7iVLfIt0+WmSXyh2s79L/+8goMWazd+E2j
-         PDbIQdyElnfi109QssMKcD1ErklYetfLOYWVxbwwTMPJfFNv9k5Jdfcb0Z4Dl8HbdV
-         m6PfE4g8LrfF0sX3jY24/5oCNdooTqTzx6oUT+aw=
-Date:   Mon, 9 May 2022 10:04:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/12] 4.19.241-rc1 review
-Message-ID: <YnjLEU1UoyzNYOUd@kroah.com>
-References: <20220429104048.459089941@linuxfoundation.org>
- <20220503141652.GA3698419@roeck-us.net>
- <YnE7aX7p4iQvOrZf@kroah.com>
- <fd8f1f86-1fb3-b4de-61f7-b7ec5aa2f95c@roeck-us.net>
+        Mon, 9 May 2022 04:14:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5415B185CBF;
+        Mon,  9 May 2022 01:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652083625;
+        bh=M4uiBJ0SrRm3ugvJXz12yggQ3vN5GTXqnSYLxrQ/oHs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=b/4Pa0oliyKAEasDWKOIFAeByXhAfC4XtPfN3dOlJHAnb4Mc0GJUWxCQ32pwineAl
+         kcU+BpdIrS3GQVAmMNUUNm8Pod4iLRir/2ShxpVP/LWpB9358qUpKl2lo0hf2qqH4B
+         edzuZ526y3lcfMIN0lXEfuPI+eaubtZzsXOJTBJY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.3.89]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQMuX-1nSCJU2Lnl-00MKuy; Mon, 09
+ May 2022 10:07:05 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: [PATCH v4 0/6] TPM irq fixes
+Date:   Mon,  9 May 2022 10:05:53 +0200
+Message-Id: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd8f1f86-1fb3-b4de-61f7-b7ec5aa2f95c@roeck-us.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:jd1zsKpJOfv6QwsNpOuzhGc8NRM3R5nkXHVqzjdmH7YEXNIU7ne
+ la/ZV2IY9Q74+00orv0t2MWAahRMJIDjQ3cSaW9eegv7N/uUUml30W5gcp1X/fPDSwdKoR7
+ K3gu732JFMsodXAgAFcEL8MBrG7b1ShzMV8H2hYQ5fVG1xkMxfJ7DywA0ZNk/CsazbFQg9P
+ SCXsn80M2nwHPzO6bUf/g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JkI4FvcRRfE=:ya3qy+PY8LWKx7E8pZIhrQ
+ 4K0lhxQNPgpTXbrL5oIoGMUqmTUoz6Ov0OKQ381Xyga8FJmN7/vzewraNyMXFT9aBA2cPoLEB
+ gZrRySJhPGv46WizbHrRrlNvTNd+iKL+ZIXEYib9Y0Yz2hfwt47yWprKuLXzs4TAMrQZOFlsj
+ UVWHaUk/goIVV/EZusfPd9YmoKszYWuNHoR57FfarLt7buxj711GnMsIPt8M6ybRIpN5wXcBY
+ Ncd3FQxZBZqYT+xbzvak3UNK2MnhsjnVOktajgn3ajVA6DoBQsXPdaOtY+Fdr4anaFRU2kkoK
+ wGags94RP1YXwrOW8Jq3O+xOWR+o1S/iyz9ev+AWm3e5NVvnUCbXmn8UvtOL/2VtFLyfnwMbr
+ 51Rrs6VaEstH3R5VcyhCIKcwjUN34Ayn6Jqf4MjVUPqbpD5+BG+zJzsDWGkL5Xsp9ooCVMkaU
+ 7fnMRVIyvmwgzcz85NlTuAVxj9YSfh8rMc617GJ4V7FKjzYNm8ssbqW7W3Makc5mVlMJPOINW
+ 6At4RQpo7QD1rkFzXuerXQgUrCoGmkgQN07KmhJ5P5VTNga6A8DyU0x5p9peVdNwzfqBp/Lhu
+ XxTrS2QezZgPmLdnRg53Y3qqG8lj7EuK/Ayc3+318oMY+oyzlD+cNRj6WpXsWah8LukEY6GFs
+ AUspHoN+2uDdfalqaA2ynqpxYjyg/frCj02AgydPYNHF9uwr7gJd06TVAwf/norQuy4rRXIzA
+ M4FsFJcJyIcP6iwbfAhW92ClWcx7r/+U0FMjDxAxF9wDlap7gaBLymJ4LHnxMaSQieryef14D
+ 5WtRGhcC9/ns5s4UaDRWwS7aY7WoLXqQio8WokhUkiA0jIeAQWlYFz7/HoAplfWeLYbmyLFqV
+ PjMyGGvE+k4FEiLnUmHjfGPLJB99+UJh4RUy3i984EoBWWmxq6Z8b0okZXM0UySDKOamFe1d7
+ 56/1aD/T0r3ppiiNVr/uKOYmZsnYXi1GIbWn/hqGJu3n5mt/PDfQDhtGKW/KmMYpI8rxMEn4F
+ OhFHJ6XxloPGcYDJes0p8F12V0280JiQlIV8xUBCYVziSTUsmm1HU7BDRDgVyfIchNIbZOX3c
+ BHZrerWgZMP5I0=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 09:41:48AM -0700, Guenter Roeck wrote:
-> On 5/3/22 07:25, Greg Kroah-Hartman wrote:
-> > On Tue, May 03, 2022 at 07:16:52AM -0700, Guenter Roeck wrote:
-> > > On Fri, Apr 29, 2022 at 12:41:17PM +0200, Greg Kroah-Hartman wrote:
-> > > > This is the start of the stable review cycle for the 4.19.241 release.
-> > > > There are 12 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > > 
-> > > > Responses should be made by Sun, 01 May 2022 10:40:41 +0000.
-> > > > Anything received after that time might be too late.
-> > > > 
-> > > 
-> > > No cc this time ?
-> > 
-> > You and Pavel said this, yet I see your response here:
-> > 	https://lore.kernel.org/r/20220429234822.GB2444503@roeck-us.net
-> > that you sent on Friday.
-> > 
-> > Did some old email get unstuck and resent somehow?
-> > 
-> > 4.19.241 was released on Sunday, I have not sent out new -rc
-> > announcements yet.
-> > 
-> > confused,
-> > 
-> 
-> No, it is me who is confused. I saw Pavel's e-mail, checked stable,
-> found this announcement, and thought it was a new one since lore
-> reordered it after Pavel's reply.
-> 
-> The problem I reported is for v4.19.241-49-g667276a8c00e,
-> but is also affects v4.14.y.queue and v4.9.y.queue.
-
-This should now be resolved.
-
-thanks,
-
-greg k-h
+VGhpcyBzZXJpZXMgZml4ZXMgaXNzdWVzIGFyb3VuZCB0aGUgaW50ZXJydXB0IGhhbmRsaW5nIGlu
+IHRoZSBUUE0gVElTIGNvcmUuCgpQYXRjaCAxOgpSZXF1ZXN0IHRocmVhZGVkIGludGVycnVwdCBo
+YW5kbGVyIGZvciBTUEkuIFRoaXMgaXMgbmVlZGVkIHNpbmNlIFNQSSB1c2VzIGEKbXV0ZXggZm9y
+IGRhdGEgdHJhbnNtaXNzaW9uIGFuZCBzaW5jZSB3ZSBleGNoYW5nZSBkYXRhIHZpYSBTUEkgaW50
+IHRoZSBpcnEKaGFuZGxlciB3ZSBuZWVkIGEgc2xlZXBhYmxlIGNvbnRleHQuCgpQYXRjaCAyOgpN
+YWtlIGxvY2FsaXR5IGhhbmRsaW5nIHNpbXBsZXIgYnkgb25seSBjbGFpbWluZyBpdCBhdCBkcml2
+ZXIgc3RhcnR1cCBhbmQKcmVsZWFzaW5nIGl0IGF0IGRyaXZlciBzaHV0ZG93bi4KClBhdGNoIDM6
+CkVuYWJsZSB0aGUgaXJxIHRlc3Qgd2hpY2ggaXMgYWx3YXlzIHNraXBwZWQgaW4gdGhlIGN1cnJl
+bnQgY29kZS4KClBhdGNoIDQ6CkZpeCB0aGUgaXJxIHRlc3QgYnkgZW5zdXJpbmcgQ1BVIGNhY2hl
+IGNvaGVyZW5jeSB3aGVuIHNldHRpbmcgdGhlIGlycSB0ZXN0CmNvbmRpdGlvbiBvbiBvbmUgYW5k
+IGNoZWNraW5nIGl0IG9uIGFub3RoZXIgQ1BVLgoKUGF0Y2ggNToKTW92ZSB0aGUgaXJxIHRlc3Qg
+YW5kIHRoZSBjaGVjayBmb3IgaXJxIHRlc3QgZnJvbSB0cG1fdGlzX3NlbmQoKSB0bwp0cG1fdGlz
+X3Byb2JlX2lycV9zaW5nbGUoKSBzbyB0aGUgY2hlY2sgaGFzIG5vdCB0byBiZSBkb25lIGZvciBl
+YWNoIGRhdGEKdHJhbnNtaXNzaW9uLgoKUGF0Y2ggNjoKSW5zdGVhZCBvZiBibGluZGx5IHRyeWlu
+ZyB0byBlbmFibGUgYWxsIHBvc3NpYmxlIGludGVycnVwdHMsIHVzZSB0aGUgcmVzdWx0CmZyb20g
+dGhlIGNhcGFiaWxpdHkgcXVlcnkgYW5kIHJlcXVlc3Qgb25seSB0aGUgaW50ZXJydXB0cyB0aGF0
+IGFyZSBhY3R1YWxseQpzdXBwb3J0ZWQuCgoKQ2hhbmdlcyBpbiB2NDoKLSBvbmx5IHJlcXVlc3Qg
+dGhyZWFkZWQgaXJxIGluIGNhc2Ugb2YgU1BJIGFzIHJlcXVlc3RlZCBieSBKYXJrby4KLSByZWlt
+cGxlbWVudCBwYXRjaCAyIHRvIGxpbWl0IGxvY2FsaXR5IGhhbmRsaW5nIGNoYW5nZXMgdG8gdGhl
+IFRJUyBjb3JlLgotIHNlcGFyYXRlIGZpeGVzIGZyb20gY2xlYW51cHMgYXMgcmVxdWVzdGVkIGJ5
+IEphcmtvLgotIHJlcGhyYXNlIGNvbW1pdCBtZXNzYWdlcyAKCkNoYW5nZXMgaW4gdjM6Ci0gZml4
+ZWQgY29tcGlsZXIgZXJyb3IgcmVwb3J0ZWQgYnkga2VybmVsIHRlc3Qgcm9ib3QKLSByZXBocmFz
+ZWQgY29tbWl0IG1lc3NhZ2UgYXMgc3VnZ2VzdGVkIGJ5IEphcmtvIFNha2tpbmVuCi0gYWRkZWQg
+UmV2aWV3ZWQtYnkgdGFnCgpDaGFuZ2VzIGluIHYyOgotIHJlYmFzZSBhZ2FpbnN0IDUuMTIKLSBm
+cmVlIGlycSBvbiBlcnJvciBwYXRoCgoKTGlubyBTYW5maWxpcHBvICg2KToKICB0cG0sIHRwbV90
+aXNfc3BpOiBSZXF1ZXN0IHRocmVhZGVkIGlycQogIHRwbSwgdHBtX3RpczogQ2xhaW0gYW5kIHJl
+bGVhc2UgbG9jYWxpdHkgb25seSBvbmNlCiAgdHBtLCB0cG1fdGlzOiBlbmFibGUgaXJxIHRlc3QK
+ICB0cG0sIHRwbV90aXM6IGF2b2lkIENQVSBjYWNoZSBpbmNvaGVyZW5jeSBpbiBpcnEgdGVzdAog
+IHRwbSwgdHBtX3RpczogTW92ZSBpcnEgdGVzdCBmcm9tIHRwbV90aXNfc2VuZCgpIHRvCiAgICB0
+cG1fdGlzX3Byb2JlX2lycV9zaW5nbGUoKQogIHRwbSwgdHBtX3RpczogT25seSBlbmFibGUgc3Vw
+cG9ydGVkIElSUXMKCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jICAgICB8IDIwMiAr
+KysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
+ZS5oICAgICB8ICAgOCArLQogZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3NwaV9tYWluLmMgfCAg
+IDUgKy0KIDMgZmlsZXMgY2hhbmdlZCwgOTYgaW5zZXJ0aW9ucygrKSwgMTE5IGRlbGV0aW9ucygt
+KQoKCmJhc2UtY29tbWl0OiBmZTI3ZDE4OWUzZjQyZTMxZDNjODIyM2Q1ZGFlZDcyODVlMzM0YzVl
+Ci0tIAoyLjM2LjAKCg==

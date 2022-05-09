@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A2B51F271
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF8651F256
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiEIBc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S233980AbiEIBat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbiEIATe (ORCPT
+        with ESMTP id S234796AbiEIAWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 20:19:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282842606
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652055342; x=1683591342;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=knKEC0Iq6KIveFyK+ZG8yscddesG/kcvyLkhx3K9FUo=;
-  b=kzakYx2CgJBVjbK2Y+cveOrw9X0hxoqg72OIjupf9n3smZu+v5ecCl69
-   Vt9U8jlb1X8Ooi2eaeaZM0gaP7csp7byogyEZY7nnmzFNiPtD6d5vgVH5
-   n4Lf9kO6p04hVj16PcRnfSFYphr+GLNz3qxub4XU02EqXRDdZBDqaL/1K
-   cclHuJ+4fhUUpLwUhJvMcqxHWrjy+GVjUENkaXik9IYFH+d8dthFzjyhG
-   pk7JZneEazw26bkV9SSyodIhWJt7wbmTCWDLxmMCi7HsgeO4m6rC5BEQN
-   /Zl7N5j+JH6dWdYTHOGyMJYIhVfhkgw+mJrXb0JH8gSn8v+khl3l/aUOr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="331921848"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="331921848"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 17:15:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="737890833"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 May 2022 17:15:40 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nnr3r-000FyQ-Pw;
-        Mon, 09 May 2022 00:15:39 +0000
-Date:   Mon, 9 May 2022 08:14:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: WARNING: modpost: vmlinux.o(.text+0xa76d36): Section mismatch in
- reference from the function rtc_update_irq() to the variable .init.text:.L0
-Message-ID: <202205090847.j9NvIYxI-lkp@intel.com>
+        Sun, 8 May 2022 20:22:08 -0400
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9970C2647
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:18:15 -0700 (PDT)
+Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
+        by 156.147.23.52 with ESMTP; 9 May 2022 09:18:13 +0900
+X-Original-SENDERIP: 156.147.1.121
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.121 with ESMTP; 9 May 2022 09:18:13 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Mon, 9 May 2022 09:16:37 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
+Message-ID: <20220509001637.GA6047@X58A-UD3R>
+References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
+ <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
+ <YnYd0hd+yTvVQxm5@hyeyoo>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YnYd0hd+yTvVQxm5@hyeyoo>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +67,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
-commit: 170f37d6aa6ad4582eefd7459015de79e244536e block: Do not call folio_next() on an unreferenced folio
-date:   4 days ago
-config: riscv-randconfig-r042-20220509 (https://download.01.org/0day-ci/archive/20220509/202205090847.j9NvIYxI-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=170f37d6aa6ad4582eefd7459015de79e244536e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 170f37d6aa6ad4582eefd7459015de79e244536e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sat, May 07, 2022 at 04:20:50PM +0900, Hyeonggon Yoo wrote:
+> On Fri, May 06, 2022 at 09:11:35AM +0900, Byungchul Park wrote:
+> > Linus wrote:
+> > >
+> > > On Wed, May 4, 2022 at 1:19 AM Byungchul Park <byungchul.park@lge.com> wrote:
+> > > >
+> > > > Hi Linus and folks,
+> > > >
+> > > > I've been developing a tool for detecting deadlock possibilities by
+> > > > tracking wait/event rather than lock(?) acquisition order to try to
+> > > > cover all synchonization machanisms.
+> > > 
+> > > So what is the actual status of reports these days?
+> > > 
+> > > Last time I looked at some reports, it gave a lot of false positives
+> > > due to mis-understanding prepare_to_sleep().
+> > 
+> > Yes, it was. I handled the case in the following way:
+> > 
+> > 1. Stage the wait at prepare_to_sleep(), which might be used at commit.
+> >    Which has yet to be an actual wait that Dept considers.
+> > 2. If the condition for sleep is true, the wait will be committed at
+> >    __schedule(). The wait becomes an actual one that Dept considers.
+> > 3. If the condition is false and the task gets back to TASK_RUNNING,
+> >    clean(=reset) the staged wait.
+> > 
+> > That way, Dept only works with what actually hits to __schedule() for
+> > the waits through sleep.
+> > 
+> > > For this all to make sense, it would need to not have false positives
+> > > (or at least a very small number of them together with a way to sanely
+> > 
+> > Yes. I agree with you. I got rid of them that way I described above.
+> >
+> 
+> IMHO DEPT should not report what lockdep allows (Not talking about
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> wait events). I mean lockdep allows some kind of nested locks but
+> DEPT reports them.
 
->> WARNING: modpost: vmlinux.o(.text+0xa76d36): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-The function rtc_update_irq() references
-the variable __init .L0 .
-This is often because rtc_update_irq lacks a __init
-annotation or the annotation of .L0 is wrong.
+You have already asked exactly same question in another thread of
+LKML. That time I answered to it but let me explain it again.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0xa7418e): Section mismatch in reference from the function rtc_month_days() to the variable .init.setup:__setup_root_delay_setup
-<< WARNING: modpost: vmlinux.o(.text+0xb2080e): Section mismatch in reference from the function thermal_zone_device_unregister() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0xb34ff0): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB18955
-<< WARNING: modpost: vmlinux.o(.text+0xb5964e): Section mismatch in reference from the function cpuidle_switch_governor() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0xbacbfa): Section mismatch in reference from the function comedi_buf_map_get() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1100
+---
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+CASE 1.
+
+   lock L with depth n
+   lock_nested L' with depth n + 1
+   ...
+   unlock L'
+   unlock L
+
+This case is allowed by Lockdep.
+This case is allowed by DEPT cuz it's not a deadlock.
+
+CASE 2.
+
+   lock L with depth n
+   lock A
+   lock_nested L' with depth n + 1
+   ...
+   unlock L'
+   unlock A
+   unlock L
+
+This case is allowed by Lockdep.
+This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
+
+---
+
+The following scenario would explain why CASE 2 is problematic.
+
+   THREAD X			THREAD Y
+
+   lock L with depth n
+				lock L' with depth n
+   lock A
+				lock A
+   lock_nested L' with depth n + 1
+				lock_nested L'' with depth n + 1
+   ...				...
+   unlock L'			unlock L''
+   unlock A			unlock A
+   unlock L			unlock L'
+
+Yes. I need to check if the report you shared with me is a true one, but
+it's not because DEPT doesn't work with *_nested() APIs.
+
+	Byungchul

@@ -2,274 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B84B52053F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979C7520547
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbiEIT06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S240577AbiEIT2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240551AbiEIT0v (ORCPT
+        with ESMTP id S240567AbiEIT2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:26:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC81C2D76DB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652124176; x=1683660176;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GHNonM3jH9pla2IxjYJfhLVi7jgaGwx94+F6XHdz7pw=;
-  b=LZ4ijpPoEaSV4XaV3iqqQkhYzdThPckwylhwaqaciytwZUmbq1CCXAaC
-   A/LdhFH6PU/AXDZzSDvza6FRk4GnrYU23jpHHkzJ2ARPtiF4IzBQfPWqk
-   CaatLkLF5awDbcDvnPVMPJtyYsEEF7Bd245U74EILOsazEI0U+/An4/2p
-   hFAcBjWr4JOZr+XeX6PIJDtD5C7IFesZWwvzzMZIbnX1sGRHZ9cLECvAq
-   U4VNgQ9HUzadlWppqCsn5wjRrMRD8Zqz6GsoPsND62/lSC9pvPYBL23Gz
-   wi498Z+TunVRoo5g7OqLIvYBTe2dIKRu0cgyXjTJ5ZjYykVg1CTVp5Rne
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="267991154"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="267991154"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 12:22:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="519375645"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 May 2022 12:22:54 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no8y5-000Goo-W1;
-        Mon, 09 May 2022 19:22:54 +0000
-Date:   Tue, 10 May 2022 03:22:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless 30/30]
- net/rxrpc/call_event.c:157:6: warning: variable 'oldest' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202205100352.IRGYEdGU-lkp@intel.com>
+        Mon, 9 May 2022 15:28:47 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD1513C344;
+        Mon,  9 May 2022 12:24:52 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r11so26762857ybg.6;
+        Mon, 09 May 2022 12:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6eYHL3htjuqUuc5ZQAjLpv+iz8OHLUbS2twjBjqyVGo=;
+        b=SwjaZh6vcE92Xn0LoEo7La82fpVvifhHHOOOtoSaO0qtVMWhhQO7NFtCA+W7ueMH+M
+         UNhOVFDlLv4V+R3GmEyvXHkBFVuPvW+X06/re+MJg4Jzi9jf0O2kDTWkFeViJFH4FlXd
+         l3d9fiLGN4RqHklQBYYJ8gy3+b63lX1mY0Uq0CyZRu+4NlSIr52I3wKuo9yunabgJGlC
+         xEAONdLCFfFeeVFvXQUqItnPfucuaZO1Q/SjFbFwHYrdJQPNJP/CYKUrWpEqjG5lFYo1
+         KCIgQKapovTiYYADVfhtSbdjzqR932TDqMOOXUWpZ+QN9lZXtKBOzL/VFQHrp0ErJXIy
+         Rzlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6eYHL3htjuqUuc5ZQAjLpv+iz8OHLUbS2twjBjqyVGo=;
+        b=WQCf3t6o9i3HfBr+ATGjJW2sfpLFpSIwZcP81PqMiHxrkGZTd+GKM7ESWl4ecofGMC
+         7ogXnbdUWmwQEMnJfnQTtNqCvgz0pdBc99KYjHTD22svV2OxL4MJTuFo1AmdXuSAbPz7
+         U9U3yMVBlfM9ZjvNsSjLwTqMFkpPvyhXLZ2aBbJtqo9sgEgqpOPEN33LdKTR7JjXmIII
+         Nu+MjnNBIPSJ2BRtcZWoe+8R/dzycYKzvP1JYRl+vvK0PXv/Lt7ULheXrf0DFopU3zR5
+         ySmIT1DotCc5Q6Q7zY6W4XUtwt657xc8cpwZ2eGgb1KfwR1KOo3TAoPv3d69G7s7fe1A
+         Jf9w==
+X-Gm-Message-State: AOAM5322LAhOA5LgCCBOLeFMEULmE51ioknf76guTq3f8xmPFI6uYBJ0
+        OX+uYGX1s5c6w3DCyXxHI4mliK1NnCpXq/v2gpiW+aT5bu3C5w==
+X-Google-Smtp-Source: ABdhPJxbmv4gl3f8BwWDkVhsiQ2Vn2r1krelgX6Sd+Ncpn/ySOC77iTTCE/WHZiKyq2Epq7UMwxIZ7X0KGZlyCNt8Ng=
+X-Received: by 2002:a25:83d1:0:b0:648:725c:6a05 with SMTP id
+ v17-20020a2583d1000000b00648725c6a05mr14335902ybm.218.1652124292128; Mon, 09
+ May 2022 12:24:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220509050953.11005-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220509050953.11005-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB5922B58BB70B92813041745786C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAMuHMdVuLq1Q2KB7gFQ5MsQmyUTv4yuu-GUBVn_xGwKhUwYQZg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVuLq1Q2KB7gFQ5MsQmyUTv4yuu-GUBVn_xGwKhUwYQZg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 9 May 2022 20:24:25 +0100
+Message-ID: <CA+V-a8uG8qzzWj+=6EhzSd5j8NC3bpf=9tU9jgxzK8Cg75BTtw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless
-head:   6c602b75eb616db42db08a634ed6e17ecd3a20d0
-commit: 6c602b75eb616db42db08a634ed6e17ecd3a20d0 [30/30] rxrpc: Fix Tx resend by saving last ACK packet rather than marking packet ring
-config: x86_64-randconfig-a004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100352.IRGYEdGU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/6c602b75eb616db42db08a634ed6e17ecd3a20d0
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless
-        git checkout 6c602b75eb616db42db08a634ed6e17ecd3a20d0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/rxrpc/
+Hi Geert,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for the review.
 
-All warnings (new ones prefixed by >>):
+On Mon, May 9, 2022 at 10:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> On Mon, May 9, 2022 at 9:22 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > > Subject: [PATCH v2 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller
+> > > driver
+> > >
+> > > Add a driver for the Renesas RZ/G2L Interrupt Controller.
+> > >
+> > > This supports external pins being used as interrupts. It supports one line
+> > > for NMI, 8 external pins and 32 GPIO pins (out of 123) to be used as IRQ
+> > > lines.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> > > --- /dev/null
+> > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+>
+> > > +static void rzg2l_irqc_irq_disable(struct irq_data *d) {
+> > > +     unsigned int hw_irq = irqd_to_hwirq(d);
+> > > +
+> > > +     if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT) {
+> > > +             struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> > > +             u32 offset = hw_irq - IRQC_TINT_START;
+> > > +             u32 tssr_offset = TSSR_OFFSET(offset);
+> > > +             u8 tssr_index = TSSR_INDEX(offset);
+> > > +             u32 reg;
+> > > +
+> > > +             raw_spin_lock(&priv->lock);
+> > > +             reg = readl_relaxed(priv->base + TSSR(tssr_index));
+> > > +             reg &= ~(TSSEL_MASK << tssr_offset);
+> > > +             writel_relaxed(reg, priv->base + TSSR(tssr_index));
+> > > +             raw_spin_unlock(&priv->lock);
+> > > +     }
+> > > +     irq_chip_disable_parent(d);
+> > > +}
+>
+> > > +static int rzg2l_tint_set_edge(struct irq_data *d, unsigned int type) {
+> > > +     struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+> > > +     unsigned int hwirq = irqd_to_hwirq(d);
+> > > +     u32 titseln = hwirq - IRQC_TINT_START;
+> > > +     u32 offset;
+> > > +     u8 sense;
+> > > +     u32 reg;
+> > > +
+> > > +     switch (type & IRQ_TYPE_SENSE_MASK) {
+> > > +     case IRQ_TYPE_EDGE_RISING:
+> > > +             sense = TITSR_TITSEL_EDGE_RISING;
+> > > +             break;
+> > > +
+> > > +     case IRQ_TYPE_EDGE_FALLING:
+> > > +             sense = TITSR_TITSEL_EDGE_FALLING;
+> > > +             break;
+> > > +
+> > > +     default:
+> > > +             return -EINVAL;
+> > > +     }
+> > > +
+> >
+> > > +     if (titseln < TITSR0_MAX_INT) {
+> > > +             offset = TITSR0;
+> > > +     } else {
+> > > +             titseln /= TITSEL_WIDTH;
+> > > +             offset  = TITSR1;
+> > > +     }
+> >
+> > as TITSR0 (0x24) and TITSR1(0x28) are contiguous address location
+> >
+> > May be like others, above declare it as
+> > u32 offset = TITSR0; ??
+> >
+> > and here
+> >  if ((titseln >= TITSR0_MAX_INT) {
+> >         titseln /= TITSEL_WIDTH;
+> >         offset  += 4;
+> >  }
+>
+> Why "titseln /= TITSEL_WIDTH"?
+> Shouldn't that be "titseln -= TITSR0_MAX_INT"?
 
->> net/rxrpc/call_event.c:157:6: warning: variable 'oldest' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (list_empty(&call->tx_queue))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/call_event.c:247:58: note: uninitialized use occurs here
-           resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
-                                                                   ^~~~~~
-   include/linux/ktime.h:47:39: note: expanded from macro 'ktime_sub'
-   #define ktime_sub(lhs, rhs)     ((lhs) - (rhs))
-                                             ^~~
-   net/rxrpc/call_event.c:157:2: note: remove the 'if' if its condition is always false
-           if (list_empty(&call->tx_queue))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/call_event.c:134:30: note: initialize the variable 'oldest' to silence this warning
-           ktime_t now, max_age, oldest, ack_ts;
-                                       ^
-                                        = 0
-   1 warning generated.
+Ouch, that should be "titseln -= TITSR0_MAX_INT".
 
+> Do I need more coffee?
+>
+> Can't you define TITSR_{OFFSET,INDEX}() helper macros, like for
+> TSSR above?
+>
+you mean a macro to get the TITSELx offset?
 
-vim +157 net/rxrpc/call_event.c
+Cheers,
+Prabhakar
 
-   122	
-   123	/*
-   124	 * Perform retransmission of NAK'd and unack'd packets.
-   125	 */
-   126	static void rxrpc_resend(struct rxrpc_call *call, unsigned long now_j)
-   127	{
-   128		struct rxrpc_ackpacket *ack = NULL;
-   129		struct rxrpc_local *local = call->peer->local;
-   130		struct rxrpc_txbuf *txb;
-   131		struct sk_buff *ack_skb = NULL;
-   132		unsigned long resend_at;
-   133		rxrpc_seq_t transmitted = READ_ONCE(call->tx_transmitted);
-   134		ktime_t now, max_age, oldest, ack_ts;
-   135		bool unacked = false;
-   136		unsigned int i;
-   137		LIST_HEAD(retrans_queue);
-   138	
-   139		_enter("{%d,%d}", call->acks_hard_ack, call->tx_top);
-   140	
-   141		now = ktime_get_real();
-   142		max_age = ktime_sub_us(now, jiffies_to_usecs(call->peer->rto_j));
-   143	
-   144		/* See if there's an ACK saved with a soft-ACK table in it. */
-   145		if (call->acks_soft_tbl) {
-   146			spin_lock_bh(&call->acks_ack_lock);
-   147			ack_skb = call->acks_soft_tbl;
-   148			if (ack_skb) {
-   149				rxrpc_get_skb(ack_skb, rxrpc_skb_ack);
-   150				ack = (void *)ack_skb->data + sizeof(struct rxrpc_wire_header);
-   151			}
-   152			spin_unlock_bh(&call->acks_ack_lock);
-   153		}
-   154	
-   155		spin_lock(&call->tx_lock);
-   156	
- > 157		if (list_empty(&call->tx_queue))
-   158			goto no_resend;
-   159	
-   160		trace_rxrpc_resend(call);
-   161		txb = list_first_entry(&call->tx_queue, struct rxrpc_txbuf, call_link);
-   162		oldest = now;
-   163	
-   164		/* Scan the soft ACK table without dropping the lock and resend any
-   165		 * explicitly NAK'd packets.
-   166		 */
-   167		if (ack) {
-   168			for (i = 0; i < ack->nAcks; i++) {
-   169				rxrpc_seq_t seq;
-   170	
-   171				if (ack->acks[i] & 1)
-   172					continue;
-   173				seq = ntohl(ack->firstPacket) + i;
-   174				if (after(txb->seq, transmitted))
-   175					break;
-   176				if (after(txb->seq, seq))
-   177					continue; /* A new hard ACK probably came in */
-   178				if (before(txb->seq, seq)) {
-   179					list_for_each_entry_continue(txb, &call->tx_queue, call_link) {
-   180						if (txb->seq == seq)
-   181							goto found_txb;
-   182					}
-   183					goto no_resend;
-   184				}
-   185	
-   186			found_txb:
-   187				if (after(ntohl(txb->wire.serial), call->acks_highest_serial))
-   188					continue; /* Ack point not yet reached */
-   189	
-   190				rxrpc_see_txbuf(txb, rxrpc_txbuf_see_unacked);
-   191	
-   192				if (list_empty(&txb->tx_link)) {
-   193					rxrpc_get_txbuf(txb, rxrpc_txbuf_get_retrans);
-   194					rxrpc_get_call(call, rxrpc_call_got_tx);
-   195					list_add_tail(&txb->tx_link, &retrans_queue);
-   196					set_bit(RXRPC_TXBUF_RESENT, &txb->flags);
-   197				}
-   198	
-   199				trace_rxrpc_retransmit(call, txb->seq,
-   200						       ktime_to_ns(ktime_sub(txb->last_sent,
-   201									     max_age)));
-   202			}
-   203		}
-   204	
-   205		/* Fast-forward through the Tx queue to the point the peer says it has
-   206		 * seen.  Anything between the soft-ACK table and that point will get
-   207		 * ACK'd or NACK'd in due course, so don't worry about it here; here we
-   208		 * need to consider retransmitting anything beyond that point.
-   209		 *
-   210		 * Note that ACK for a packet can beat the update of tx_transmitted.
-   211		 */
-   212		if (after_eq(READ_ONCE(call->acks_prev_seq), READ_ONCE(call->tx_transmitted)))
-   213			goto no_resend;
-   214	
-   215		list_for_each_entry_continue(txb, &call->tx_queue, call_link) {
-   216			if (before_eq(txb->seq, READ_ONCE(call->acks_prev_seq)))
-   217				continue;
-   218			if (after(txb->seq, READ_ONCE(call->tx_transmitted)))
-   219				break; /* Not transmitted yet */
-   220	
-   221			if (ack && ack->reason == RXRPC_ACK_PING_RESPONSE &&
-   222			    before(htonl(txb->wire.serial), htonl(ack->serial)))
-   223				goto do_resend; /* Wasn't accounted for by a more recent ping. */
-   224	
-   225			if (ktime_after(txb->last_sent, max_age)) {
-   226				if (ktime_before(txb->last_sent, oldest))
-   227					oldest = txb->last_sent;
-   228				continue;
-   229			}
-   230	
-   231		do_resend:
-   232			unacked = true;
-   233			if (list_empty(&txb->tx_link)) {
-   234				rxrpc_get_txbuf(txb, rxrpc_txbuf_get_retrans);
-   235				rxrpc_get_call(call, rxrpc_call_got_tx);
-   236				list_add_tail(&txb->tx_link, &retrans_queue);
-   237				set_bit(RXRPC_TXBUF_RESENT, &txb->flags);
-   238			}
-   239		}
-   240	
-   241	
-   242	
-   243	no_resend:
-   244		spin_unlock(&call->tx_lock);
-   245		rxrpc_free_skb(ack_skb, rxrpc_skb_freed);
-   246	
-   247		resend_at = nsecs_to_jiffies(ktime_to_ns(ktime_sub(now, oldest)));
-   248		resend_at += jiffies + rxrpc_get_rto_backoff(call->peer,
-   249							     !list_empty(&retrans_queue));
-   250		WRITE_ONCE(call->resend_at, resend_at);
-   251	
-   252		if (unacked)
-   253			rxrpc_congestion_timeout(call);
-   254	
-   255		/* If there was nothing that needed retransmission then it's likely
-   256		 * that an ACK got lost somewhere.  Send a ping to find out instead of
-   257		 * retransmitting data.
-   258		 */
-   259		if (list_empty(&retrans_queue)) {
-   260			rxrpc_reduce_call_timer(call, resend_at, now_j,
-   261						rxrpc_timer_set_for_resend);
-   262			ack_ts = ktime_sub(now, call->acks_latest_ts);
-   263			if (ktime_to_us(ack_ts) < (call->peer->srtt_us >> 3))
-   264				goto out;
-   265			rxrpc_send_ACK(call, RXRPC_ACK_PING, 0,
-   266				       rxrpc_propose_ack_ping_for_lost_ack);
-   267			goto out;
-   268		}
-   269	
-   270		/* Push the packets to be retransmitted onto the transmission queue and
-   271		 * wake up the transmitter worker.  Note that it's possible that an ACK
-   272		 * might come in whilst a packet is on the queue.
-   273		 */
-   274		spin_lock(&local->tx_lock);
-   275		if (rxrpc_is_client_call(call))
-   276			rxrpc_expose_client_call(call);
-   277		list_splice_tail(&retrans_queue, &local->tx_queue);
-   278		spin_unlock(&local->tx_lock);
-   279		rxrpc_wake_up_transmitter(local);
-   280	
-   281	out:
-   282		_leave("");
-   283	}
-   284	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > > +
+> > > +     raw_spin_lock(&priv->lock);
+> > > +     reg = readl_relaxed(priv->base + offset);
+> > > +     reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
+> > > +     reg |= sense << (titseln * TITSEL_WIDTH);
+> > > +     writel_relaxed(reg, priv->base + offset);
+> > > +     raw_spin_unlock(&priv->lock);
+> > > +
+> > > +     return 0;
+> > > +}
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

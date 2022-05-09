@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEBD51FA02
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E712551FA1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiEIKhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S229880AbiEIKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiEIKg2 (ORCPT
+        with ESMTP id S229756AbiEIKmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:36:28 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBCB11AFD5;
-        Mon,  9 May 2022 03:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652092354; x=1683628354;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hIsCP4FjDSnGHwqf621W+ZKgvM6jNyMg0I5DcCDJkig=;
-  b=fvYulAZ4WfiGPJR22mxsfMmX/YpxHSyWmWBP4otz4KmzwswKXYUsIPNH
-   4JAtALOY4yL1NE+CvxcXFk/7juEY4cS1cH6xKdoGYEqw95Ufn17Qyx9VS
-   oTRY5Ytq1+DTwjs6xDRZIfeyjh5tKybXOXhtciLGCSK2TVt4NG5TpIY1y
-   s=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 May 2022 03:32:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 03:32:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 9 May 2022 03:32:31 -0700
-Received: from [10.216.5.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 9 May 2022
- 03:32:25 -0700
-Message-ID: <ec1cb361-d6b1-828c-98f4-ab2aac55ce80@quicinc.com>
-Date:   Mon, 9 May 2022 16:02:19 +0530
+        Mon, 9 May 2022 06:42:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFC205D6;
+        Mon,  9 May 2022 03:38:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B250760FAD;
+        Mon,  9 May 2022 10:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D94C385A8;
+        Mon,  9 May 2022 10:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652092447;
+        bh=NSHAgzSuzjtuD7Tjj9g99sthrjIGsxuDy6cZ0osNlgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KtSDi6ckvqgMOaHS+FfGqqXgAe/cl6zO47IvsmxQYfNan8YoA+cE5a3FOxZpbs0Uj
+         pV7P1D2rcTpBc5iYGdFIghkPSRctl/JvAmXEjuueqMF1kH+aY45wduQIBaCkp0dBC6
+         dSDExChHLMOXHczNDU6d22Yc1ttxZrUD4Fj1MFxr8xWrZhbK7DxnGwy291li+GhdQ8
+         41xOkBIwDDp6uTiGZEAC1XQxEneCVuF3i+O0DJIYgINkU2jICpMpSVcE/NIN312Dq/
+         HYBQz1yjC2WaMAjWQ5IZh6JHWrwmRwCZ9rPJm+n9YFUR4doi49RwB/A57IZXOMWGcV
+         wwJ+uKTyUgG8g==
+Date:   Mon, 9 May 2022 13:33:56 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+Message-ID: <YnjuFHvyGwa9yHat@kernel.org>
+References: <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
+ <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+ <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+ <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+ <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
+ <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
+ <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
+ <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
+ <YnW4nTub1BYUF15W@kernel.org>
+ <5c7196b517398e7697464fe997018e9031d15470.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V5 4/5] mmc: debugfs: Add debug fs error state entry for
- mmc driver
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <wsa+renesas@sang-engineering.com>,
-        <yoshihiro.shimoda.uh@renesas.com>, <linus.walleij@linaro.org>,
-        <digetx@gmail.com>, <briannorris@chromium.org>,
-        <quic_riteshh@quicinc.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_asutoshd@quicinc.com>, <quic_rampraka@quicinc.com>,
-        <quic_pragalla@quicinc.com>, <quic_sartgarg@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <quic_sayalil@quicinc.com>,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-References: <1650902443-26357-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1650902443-26357-5-git-send-email-quic_c_sbhanu@quicinc.com>
- <ce5582e3-0d8d-f1cf-0d23-8fbf17226775@intel.com>
- <5c2a9eae-3ab2-1fa4-c7df-ba7384e07b24@quicinc.com>
- <9261a62d-e496-ba2b-74f4-627e0a5e6abe@intel.com>
-From:   "Sajida Bhanu (Temp)" <quic_c_sbhanu@quicinc.com>
-In-Reply-To: <9261a62d-e496-ba2b-74f4-627e0a5e6abe@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5c7196b517398e7697464fe997018e9031d15470.camel@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,95 +78,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 08, 2022 at 10:00:39PM +1200, Kai Huang wrote:
+> On Fri, 2022-05-06 at 20:09 -0400, Mike Rapoport wrote:
+> > On Thu, May 05, 2022 at 06:51:20AM -0700, Dan Williams wrote:
+> > > [ add Mike ]
+> > > 
+> > > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
+> > > [..]
+> > > > 
+> > > > Hi Dave,
+> > > > 
+> > > > Sorry to ping (trying to close this).
+> > > > 
+> > > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
+> > > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
+> > > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
+> > > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
+> > > > that no one should just use some random backend to run TD.
+> > > 
+> > > The platform will already do this, right? I don't understand why this
+> > > is trying to take proactive action versus documenting the error
+> > > conditions and steps someone needs to take to avoid unconvertible
+> > > memory. There is already the CONFIG_HMEM_REPORTING that describes
+> > > relative performance properties between initiators and targets, it
+> > > seems fitting to also add security properties between initiators and
+> > > targets so someone can enumerate the numa-mempolicy that avoids
+> > > unconvertible memory.
+> > > 
+> > > No, special casing in hotplug code paths needed.
+> > > 
+> > > > 
+> > > > I think w/o needing to include legacy PMEM, it's better to get all TDX memory
+> > > > blocks based on memblock, but not e820.  The pages managed by page allocator are
+> > > > from memblock anyway (w/o those from memory hotplug).
+> > > > 
+> > > > And I also think it makes more sense to introduce 'tdx_memblock' and
+> > > > 'tdx_memory' data structures to gather all TDX memory blocks during boot when
+> > > > memblock is still alive.  When TDX module is initialized during runtime, TDMRs
+> > > > can be created based on the 'struct tdx_memory' which contains all TDX memory
+> > > > blocks we gathered based on memblock during boot.  This is also more flexible to
+> > > > support other TDX memory from other sources such as CLX memory in the future.
+> > > > 
+> > > > Please let me know if you have any objection?  Thanks!
+> > > 
+> > > It's already the case that x86 maintains sideband structures to
+> > > preserve memory after exiting the early memblock code. Mike, correct
+> > > me if I am wrong, but adding more is less desirable than just keeping
+> > > the memblock around?
+> > 
+> > TBH, I didn't read the entire thread yet, but at the first glance, keeping
+> > memblock around is much more preferable that adding yet another { .start,
+> > .end, .flags } data structure. To keep memblock after boot all is needed is
+> > something like
+> > 
+> > 	select ARCH_KEEP_MEMBLOCK if INTEL_TDX_HOST
+> > 
+> > I'll take a closer look next week on the entire series, maybe I'm missing
+> > some details.
+> > 
+> 
+> Hi Mike,
+> 
+> Thanks for feedback.
+> 
+> Perhaps I haven't put a lot details of the new TDX data structures, so let me
+> point out that the new two data structures 'struct tdx_memblock' and 'struct
+> tdx_memory' that I am proposing are mostly supposed to be used by TDX code only,
+> which is pretty standalone.  They are not supposed to be some basic
+> infrastructure that can be widely used by other random kernel components. 
 
-On 5/9/2022 3:33 PM, Adrian Hunter wrote:
-> On 9/05/22 12:42, Sajida Bhanu (Temp) wrote:
->> Hi,
->>
->> Thank you for the review.
->>
->> Please find the inline comments.
->>
->> Thanks,
->>
->> Sajida
->>
->> On 4/26/2022 1:24 PM, Adrian Hunter wrote:
->>
->>> On 25/04/22 19:00, Shaik Sajida Bhanu wrote:
->>>> Add debug fs entry error state to query eMMC and SD card errors statistics.
->>>> If any errors occurred in eMMC and SD card driver level then
->>>> err_state value will be set to 1.
->>>>
->>>> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
->>>> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
->>>> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
->>>> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
->>>> ---
->>>>   drivers/mmc/core/debugfs.c | 25 +++++++++++++++++++++++++
->>>>   1 file changed, 25 insertions(+)
->>>>
->>>> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
->>>> index 6aa5a60..2f5b63f 100644
->>>> --- a/drivers/mmc/core/debugfs.c
->>>> +++ b/drivers/mmc/core/debugfs.c
->>>> @@ -222,6 +222,29 @@ static int mmc_clock_opt_set(void *data, u64 val)
->>>>   
->>>>   DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
->>>>   	"%llu\n");
->>> A blank line would be nice here
->> Sure
->>>> +static int mmc_err_state_get(void *data, u64 *val)
->>>> +{
->>>> +	struct mmc_host *host = data;
->>>> +
->>>> +	if (!host)
->>>> +		return -EINVAL;
->>>> +
->>> I am not sure why you have left out some err_stats[].
->>> Why not all of them?  At least, it needs a comment to explain.
->> MMC_ERR_ICE_CFG --> we don't have ICE config.
-> So err_stats[MMC_ERR_ICE_CFG]  would be zero and make
-> no difference.
->
-> If you are going to check all then you could loop
-> through them
->
-> 	*val = 0;
-> 	for (i = 0; i < MMC_ERR_MAX; i++) {
-> 		if (host->err_stats[i]) {
-> 			*val = 1;
-> 			break;
-> 		}
-> 	}
-Sure Thanks
->> Remaining we need to update, Thank you for pointing.
->>
->>>> +	*val = host->err_stats[MMC_ERR_REQ_TIMEOUT] ||
->>>> +	       host->err_stats[MMC_ERR_ADMA] ||
->>>> +	       host->err_stats[MMC_ERR_CTRL_TIMEOUT] ||
->>>> +	       host->err_stats[MMC_ERR_UNEXPECTED_IRQ] ||
->>>> +	       host->err_stats[MMC_ERR_CMDQ_RED] ||
->>>> +	       host->err_stats[MMC_ERR_CMDQ_GCE] ||
->>>> +	       host->err_stats[MMC_ERR_CMDQ_ICCE] ||
->>>> +	       host->err_stats[MMC_ERR_DAT_TIMEOUT] ||
->>>> +	       host->err_stats[MMC_ERR_DAT_CRC] ||
->>>> +	       host->err_stats[MMC_ERR_CMD_CRC] ||
->>>> +	       host->err_stats[MMC_ERR_CMD_TIMEOUT];
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +DEFINE_SIMPLE_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
->>>>   
->>>>   static int mmc_err_stats_show(struct seq_file *file, void *data)
->>>>   {
->>>> @@ -289,6 +312,8 @@ void mmc_add_host_debugfs(struct mmc_host *host)
->>>>   	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
->>>>   				   &mmc_clock_fops);
->>>>   
->>>> +	debugfs_create_file("err_state", 0600, root, host,
->>>> +			    &mmc_err_state);
->>>>   	debugfs_create_file("err_stats", 0600, root, host,
->>>>   			    &mmc_err_stats_fops);
->>>>   
+We already have "pretty standalone" numa_meminfo that originally was used
+to setup NUMA memory topology, but now it's used by other code as well.
+And e820 tables also contain similar data and they are supposedly should be
+used only at boot time, but in reality there are too much callbacks into
+e820 way after the system is booted.
+
+So any additional memory representation will only add to the overall
+complexity and well have even more "eventually consistent" collections of 
+{ .start, .end, .flags } structures.
+ 
+> In fact, currently the only operation we need is to allow memblock to register
+> all memory regions as TDX memory blocks when the memblock is still alive. 
+> Therefore, in fact, the new data structures can even be completely invisible to
+> other kernel components.  For instance, TDX code can provide below API w/o
+> exposing any data structures to other kernel components:
+> 
+> int tdx_add_memory_block(phys_addr_t start, phys_addr_t end, int nid);
+> 
+> And we call above API for each memory region in memblock when it is alive.
+> 
+> TDX code internally manages those memory regions via the new data structures
+> that I mentioned above, so we don't need to keep memblock after boot.  The
+> advantage of this approach is it is more flexible to support other potential TDX
+> memory resources (such as CLX memory) in the future.
+
+Please let keep things simple. If other TDX memory resources will need
+different handling it can be implemented then. For now, just enable
+ARCH_KEEP_MEMBLOCK and use memblock to track TDX memory.
+ 
+> Otherwise, we can do as you suggested to select ARCH_KEEP_MEMBLOCK when
+> INTEL_TDX_HOST is on and TDX code internally uses memblock API directly.
+> 
+> -- 
+> Thanks,
+> -Kai
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.

@@ -2,234 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A231520469
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC08520474
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiEISXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        id S240159AbiEISZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240150AbiEISXk (ORCPT
+        with ESMTP id S240100AbiEISZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:23:40 -0400
+        Mon, 9 May 2022 14:25:50 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA552CE237
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:19:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7F0F53E08
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652120383;
+        s=mimecast20190719; t=1652120513;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PDFIEGAmMkYI3lcSgWTP/D9Zx+5IJKr94HLnqcFoXoI=;
-        b=JbkIx0gcvx3iZGAwdftphW2Z3cWIeQjcYZBbAdYcn670P275YxucVpr2hCIcRaSWw/UOrS
-        XlYRFKEm5pMx2VL/y7tMCdYfAsTclyjvw8/cm5urj8HOYh9MbjNrSsTR9U3RjKMhZsrdUA
-        7KuXUbzlVtZ7rjAQ3mTSH3l0m0kIuPY=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=GLELIP05cS2Sasoe6+b4wWsLybRsaa11r2u6OkGVZbE=;
+        b=UJuI7RL9NisudFlSsmvzbV2nWqWKWU/Kw/kZ4kGLAUPfnYsyNJFO9CSW8kNBF9Sfav4wCF
+        odnamOc+y/ie77Sui/JZ9cJYVRa+pCvwelLBDEfec2v5E1QmgYxWdib9mQNap+OpOykF3Z
+        DGu8YYCSup7SARESevLP+56n4BjuT7s=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-pqgms_YLNM-tXpkbHb7qnA-1; Mon, 09 May 2022 14:19:42 -0400
-X-MC-Unique: pqgms_YLNM-tXpkbHb7qnA-1
-Received: by mail-qt1-f197.google.com with SMTP id o16-20020ac87c50000000b002f3b8cd6a7fso12683458qtv.13
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:19:42 -0700 (PDT)
+ us-mta-463-Or4O2gwvOTiJ0Pq0xWNcgQ-1; Mon, 09 May 2022 14:21:52 -0400
+X-MC-Unique: Or4O2gwvOTiJ0Pq0xWNcgQ-1
+Received: by mail-ej1-f72.google.com with SMTP id sh14-20020a1709076e8e00b006f4a5de6888so7193536ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:21:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=PDFIEGAmMkYI3lcSgWTP/D9Zx+5IJKr94HLnqcFoXoI=;
-        b=Y5xe6BeMQLCD4CRKzkt0adXSoYooax7lSEfHHJ6ZfSpXY0pIRnklDKa8Euicxdux5a
-         zsgz8zb8Ll0d3rQ/Xv4rMGOXPei/92C/qC3Tad8JyLsYeIjY3yFSwPLTW1rP8gappy+1
-         6SRowucagFEOCe1VJCJQFv9HGS4fmUFBwDBWoGqhjAzA1vxFniYwq/vi5FXpRFLDOCgt
-         TW986U4HWBgYbCRmFuu9kkN4YAaCM27Edu5F8ws/SSViBwyBHK52RdaG5+ZwXxxqLlT7
-         JcFCWY5Z6l5V5sF60rz0XAAdwiHObWijvUnfRo9QGqcR0mmsniOTNVgDIuM6JZs8Rioy
-         Kwlw==
-X-Gm-Message-State: AOAM533clxgpQUiihbdzFuB4etGHcXOGRSqewrC91k13yBdwUqasWBB/
-        dpBgo4NgWbG7Yg7LIgrNPoPV+aTs0S017EClJpK67w5xpbMJiew4jnvy5O+g/QlfZKeIDLpM08p
-        8QRSkO5OKS4qapwgHuCnCKOiM
-X-Received: by 2002:ad4:594b:0:b0:45a:9692:14a3 with SMTP id eo11-20020ad4594b000000b0045a969214a3mr14821467qvb.107.1652120381817;
-        Mon, 09 May 2022 11:19:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxTKWoBx8hf4aO9oeLuMx3Wy5UIKOWsPo4PTItAkI7mNq7lPxt1S1WQ+QbyFWj4uh2wXeAczA==
-X-Received: by 2002:ad4:594b:0:b0:45a:9692:14a3 with SMTP id eo11-20020ad4594b000000b0045a969214a3mr14821445qvb.107.1652120381597;
-        Mon, 09 May 2022 11:19:41 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id y7-20020ac87c87000000b002f39b99f67csm8127235qtv.22.2022.05.09.11.19.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 11:19:41 -0700 (PDT)
-Message-ID: <1deeebc415c188c35f090048f32d7dacd93b14b1.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau: reorder nouveau_drm_device_fini
-From:   Lyude Paul <lyude@redhat.com>
-To:     Mark Menzynski <mmenzyns@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        nouveau <nouveau@lists.freedesktop.org>
-Date:   Mon, 09 May 2022 14:19:39 -0400
-In-Reply-To: <82c9b246bcbe544036d2fc0873f15f8483947a57.camel@redhat.com>
-References: <20220504171851.17188-1-mmenzyns@redhat.com>
-         <7574d491866ffa7c1a4607885b76140ba4206477.camel@redhat.com>
-         <CA+i2r=uKq=CWts-6wXh2qqy6=vEVHLY0vRBxzcA-mg0P8wXOZg@mail.gmail.com>
-         <82c9b246bcbe544036d2fc0873f15f8483947a57.camel@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=GLELIP05cS2Sasoe6+b4wWsLybRsaa11r2u6OkGVZbE=;
+        b=dwxmS3nmj/P7nYrQ+12AoUHgzJy69vLwVBe7fTbQx3wV9a8PgCKLzyOF5kIom8tATg
+         4UKDoHrsle66gPPnzs+As3l6DE08BMJ54C2FzR/MN/s7ya/WkiYk02e7VK0joy1OvfCT
+         TogRMjzIcfWkkBVCzWIC6BLramY11ib7LHpAv9d4fHDBky5KDbdDypI3nYHgqCydPOfA
+         cuRcbAb4xOXo5x2qgcJ7eKB1Mn2gzYUyCWx/4iqcP9+yr9MWZmeNPLAQP4rO2PviLXZT
+         FMm+Dn4EodwiVJhaX78I3oqBVB9LXFZjV4s7NXhZT2YQEijFl8Z9FPVFf2Kvl2XyBkoa
+         zMLg==
+X-Gm-Message-State: AOAM532j3AyKd2tKL7cMXCZ526CAWBaSfFp10OutvC+LmYF0rT6TX/8g
+        qdGLS6s/rMtrlrKTRjDYgZWTgxzXwwSZkwlmEXK1mo13V1xMlbVlSuFyHMr63qGQJrMBBYDIrQA
+        myPAHneLDCkrZLWeWN2FtLN+n
+X-Received: by 2002:a17:907:a40f:b0:6f4:d2af:b720 with SMTP id sg15-20020a170907a40f00b006f4d2afb720mr15610576ejc.305.1652120511573;
+        Mon, 09 May 2022 11:21:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy/h0R6H0k8bGlFW4rRwRK5rVBv4TH8gq9z/VHyMkltf2eYOwIrrjQygUl+WxGrXFrMCy4GKg==
+X-Received: by 2002:a17:907:a40f:b0:6f4:d2af:b720 with SMTP id sg15-20020a170907a40f00b006f4d2afb720mr15610545ejc.305.1652120511231;
+        Mon, 09 May 2022 11:21:51 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id gg19-20020a170906899300b006f3ef214dfbsm5303192ejc.97.2022.05.09.11.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 11:21:50 -0700 (PDT)
+Message-ID: <a81efd98-b3f9-6041-411d-8de65f7ec0de@redhat.com>
+Date:   Mon, 9 May 2022 20:21:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220507153142.GA568130@bhelgaas>
+ <3e92c4b6-8976-2bd4-ebe2-465990eb66d2@redhat.com>
+In-Reply-To: <3e92c4b6-8976-2bd4-ebe2-465990eb66d2@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also JFYI Mark - I just realized that your email client is defaulting to
-sending HTML mail when you reply to me, that doesn't really make it onto the
-mailing list at all so you probably want to fix that.
+Hi,
 
-Also - I misspoke here again, I think it should actually be a call to
-drm_kms_helper_poll_fini() instead since that will both cancel the output poll
-worker and update dev->mode_config.poll_enabled to prevent the output poll
-worker from starting up again. The documentation doesn't say it's fine to call
-drm_kms_helper_poll_disable() after that, but it seems to be safe from looking
-at the code - and I think someone just generally forgot to write docs for
-drm_kms_helper_poll_fini()…
+On 5/9/22 19:33, Hans de Goede wrote:
+> Hi Bjorn,
+> 
+> On 5/7/22 17:31, Bjorn Helgaas wrote:
+>> On Sat, May 07, 2022 at 12:09:03PM +0200, Hans de Goede wrote:
+>>> Hi Bjorn,
+>>>
+>>> On 5/6/22 18:51, Bjorn Helgaas wrote:
+>>>> On Thu, May 05, 2022 at 05:20:16PM +0200, Hans de Goede wrote:
+>>>>> Some BIOS-es contain bugs where they add addresses which are already
+>>>>> used in some other manner to the PCI host bridge window returned by
+>>>>> the ACPI _CRS method. To avoid this Linux by default excludes
+>>>>> E820 reservations when allocating addresses since 2010, see:
+>>>>> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
+>>>>> space").
+>>>>>
+>>>>> Recently (2019) some systems have shown-up with E820 reservations which
+>>>>> cover the entire _CRS returned PCI bridge memory window, causing all
+>>>>> attempts to assign memory to PCI BARs which have not been setup by the
+>>>>> BIOS to fail. For example here are the relevant dmesg bits from a
+>>>>> Lenovo IdeaPad 3 15IIL 81WE:
+>>>>>
+>>>>>  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
+>>>>>  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
+>>>>>
+>>>>> The ACPI specifications appear to allow this new behavior:
+>>>>>
+>>>>> The relationship between E820 and ACPI _CRS is not really very clear.
+>>>>> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
+>>>>>
+>>>>>   This range of addresses is in use or reserved by the system and is
+>>>>>   not to be included in the allocatable memory pool of the operating
+>>>>>   system's memory manager.
+>>>>>
+>>>>> and it may be used when:
+>>>>>
+>>>>>   The address range is in use by a memory-mapped system device.
+>>>>>
+>>>>> Furthermore, sec 15.2 says:
+>>>>>
+>>>>>   Address ranges defined for baseboard memory-mapped I/O devices, such
+>>>>>   as APICs, are returned as reserved.
+>>>>>
+>>>>> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
+>>>>> and its apertures are in use and certainly should not be included in
+>>>>> the general allocatable pool, so the fact that some BIOS-es reports
+>>>>> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
+>>>>>
+>>>>> So it seems that the excluding of E820 reserved addresses is a mistake.
+>>>>>
+>>>>> Ideally Linux would fully stop excluding E820 reserved addresses,
+>>>>> but then various old systems will regress.
+>>>>> Instead keep the old behavior for old systems, while ignoring
+>>>>> the E820 reservations for any systems from now on.
+>>>>>
+>>>>> Old systems are defined here as BIOS year < 2018, this was chosen to
+>>>>> make sure that pci_use_e820 will not be set on the currently affected
+>>>>> systems, the oldest known one is from 2019.
+>>>>>
+>>>>> Testing has shown that some newer systems also have a bad _CRS return.
+>>>>> The pci_crs_quirks DMI table is used to keep excluding E820 reservations
+>>>>> from the bridge window on these systems.
+>>>>>
+>>>>> Also add pci=no_e820 and pci=use_e820 options to allow overriding
+>>>>> the BIOS year + DMI matching logic.
+>>>>>
+>>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
+>>>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+>>>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
+>>>>> BugLink: https://bugs.launchpad.net/bugs/1878279
+>>>>> BugLink: https://bugs.launchpad.net/bugs/1931715
+>>>>> BugLink: https://bugs.launchpad.net/bugs/1932069
+>>>>> BugLink: https://bugs.launchpad.net/bugs/1921649
+>>>>> Cc: Benoit Grégoire <benoitg@coeus.ca>
+>>>>> Cc: Hui Wang <hui.wang@canonical.com>
+>>>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>>>>
+>>>>> +	 * Ideally Linux would fully stop using E820 reservations, but then
+>>>>> +	 * various old systems will regress. Instead keep the old behavior for
+>>>>> +	 * old systems + known to be broken newer systems in pci_crs_quirks.
+>>>>> +	 */
+>>>>> +	if (year >= 0 && year < 2018)
+>>>>> +		pci_use_e820 = true;
+>>>>
+>>>> How did you pick 2018?  Prior to this patch, we used E820 reservations
+>>>> for all machines.  This patch would change that for 2019-2022
+>>>> machines, so there's a risk of breaking some of them.
+>>>
+>>> Correct. I picked 2018 because the first devices where using E820
+>>> reservations are causing issues (i2c controller not getting resources
+>>> leading to non working touchpad / thunderbolt hotplug issues) have
+>>> BIOS dates starting in 2019. I added a year margin, so we could make
+>>> this 2019.
+>>>
+>>>> I'm hesitant about changing the behavior for machines already in the
+>>>> field because if they were tested at all with Linux, it was without
+>>>> this patch.  So I would lean toward preserving the current behavior
+>>>> for BIOS year < 2023.
+>>>
+>>> I see, I presume the idea is to then use DMI to disable E820 clipping
+>>> on current devices where this is known to cause problems ?
+>>>
+>>> So for v8 I would:
+>>>
+>>> 1. Change the cut-off check to < 2023
+>>> 2. Drop the DMI quirks I added for models which are known to need E820
+>>>    clipping hit by the < 2018 check
+>>> 3. Add DMI quirks for models for which it is known that we must _not_
+>>>    do E820 clipping
+>>>
+>>> Is this the direction you want to go / does that sound right?
+>>
+>> Yes, I think that's what we should do.  All the machines in the field
+>> will be unaffected, except that we add quirks for known problems.
+> 
+> I've been working on this today. I've mostly been going through
+> the all the existing bugs about this, to make a list of DMI matches
+> for devices on which we should _not_ do e820 clipping to fix th
+> kernel being unable to assign BARs there.
+> 
+> I've found an interesting pattern there, all affected devices
+> are Lenovo devices with "IIL" in there device name, e.g. :
+> "IdeaPad 3 15IIL05". I've looked up all Lenovo devices which
+> have "IIL" as part of their DMI_PRODUCT_VERSION string here:
+> https://github.com/linuxhw/DMI/
+> 
+> And then looked them up at https://linux-hardware.org/ and checked
+> their dmesg to see if they have the e820 problem other ideapads
+> have. I've gone through approx. half the list now and all
+> except one model seem to have the e820 problem.
+> 
+> So it looks like we might be able to match all problem models
+> with a single DMI match.
+> 
+> So the problem seems to be limited to one specific device
+> series / range and this is making me have second thoughts
+> about doing a date based cut-off at all. Trying to switch
+> over any models which are new in 2023 is fine, the problem
+> with a DMI BIOS date approach though is that as soon as some
+> new management-engine CVE comes out we will also see BIOS
+> updates with a year of 2023 for many existing models, of
+> up to 3-4 years old at least; and chances are that some of
+> those older models getting BIOS updates will be bitten by
+> this change.
+> 
+> So as said I'm having second thoughts about the date based
+> approach. Bjorn, what do you think of just using DMI quirks
+> to disable e820 clipping on known problematic models and
+> otherwise keeping things as is ?
+> 
+> Note I'm also fine with going with the 2023 date based
+> approach, I'm just wondering if that will be a good idea
+> and not something which we might regret later.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> p.s.
+> 
+> I've seen your email about the Acer laptop; I'll take
+> a look at that coming Wednesday.
 
-On Mon, 2022-05-09 at 13:59 -0400, Lyude Paul wrote:
-> On Mon, 2022-05-09 at 15:13 +0200, Mark Menzynski wrote:
-> > I think there are no direct issues with initialization in the state how it
-> > is now. I suspect it's because "drm_kms_helper_poll_enable()" starts the
-> > first worker thread with a delay, which gives enough time to initialize
-> > required resources. I changed the initialization part to keep it
-> > consistent with the finish part, which is the one causing troubles.
-> 
-> I think I may have misspoke on what the issue was here since I was about to
-> leave work. The MST bit might not actually be an issue, however I think
-> nouveau_fbcon_init() being called before nouveau_display_init() would be an
-> issue since nouveau_fbcon_init() can trigger a modeset - and we can't
-> perform modesets before nouveau_display_init() has set things up.
-> 
-> Looking at the docs for drm_kms_helper_poll_disable() - I think the actual
-> fix here (to ensure that we still call drm_kms_helper_poll_disable() at the
-> right time during suspend) would be to actually add another call to
-> drm_kms_helper_poll_disable() into nouveau_fbcon_fini() before we call
-> nouveau_fbcon_accel_fini() and everything after. This should make sure that
-> we stop the output polling work early on driver unload, and since the docs
-> mention that it's OK to disable polling more then once with
-> drm_kms_helper_poll_disable() I don't see any issues with that.
-> 
-> 
-> > 
-> > I am not sure where I could move "drm_kms_helper_poll_enable/disable()",
-> > since it is defined in "drm/drm_probe_helper.c", which is only included in
-> > "nouveau_display.c" and "nouveau_connector.c". Both creating a new
-> > function in "nouveau_display.c", and including "probe_helper.h" and using
-> > poll_enable in a different file like "nouveau_fbcon.c" seem like too big
-> > changes for such small fix. I don't know.
-> > 
-> > Can this new proposed order break something in the finish part as well?
-> > Maybe it would be just better to change the order of "nouveau_drm_finish"
-> > and keep the current order of "noueau_drm_init"?
-> > 
-> > On Thu, May 5, 2022 at 9:57 PM Lyude Paul <lyude@redhat.com> wrote:
-> > > Hmm, I think we might just need to move the drm_kms_helper_poll_enable()
-> > > call
-> > > to the end here instead of all of nouveau_display_init(). I realized
-> > > this
-> > > because in nouveau_display_init() it seems that we actually rely on
-> > > nouveau_display_init() to setup hotplug interrupts - which we do
-> > > actually need
-> > > this early on in the driver probe process.
-> > > 
-> > > That being said though, drm_kms_helper_poll_enable() shouldn't be
-> > > required for
-> > > MST short HPD IRQs from working so moving that instead should work.
-> > > 
-> > > On Wed, 2022-05-04 at 19:18 +0200, Mark Menzynski wrote:
-> > > > Resources needed for output poll workers are destroyed in
-> > > > nouveau_fbcon_fini() before output poll workers are cleared in
-> > > > nouveau_display_fini(). This means there is a time between fbcon_fini
-> > > > and display_fini, where if output poll happens, it crashes.
-> > > > 
-> > > > BUG: KASAN: use-after-free in
-> > > > __drm_fb_helper_initial_config_and_unlock.cold+0x1f3/0x291
-> > > > [drm_kms_helper]
-> > > > 
-> > > > Cc: Ben Skeggs <bskeggs@redhat.com>
-> > > > Cc: Karol Herbst <kherbst@redhat.com>
-> > > > Cc: Lyude Paul <lyude@redhat.com>
-> > > > Cc: David Airlie <airlied@linux.ie>
-> > > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > > > Cc: "Christian König" <christian.koenig@amd.com>
-> > > > Cc: dri-devel@lists.freedesktop.org
-> > > > Cc: nouveau@lists.freedesktop.org
-> > > > Cc: linux-kernel@vger.kernel.org
-> > > > Cc: linux-media@vger.kernel.org
-> > > > Cc: linaro-mm-sig@lists.linaro.org
-> > > > Signed-off-by: Mark Menzynski <mmenzyns@redhat.com>
-> > > > ---
-> > > >  drivers/gpu/drm/nouveau/nouveau_drm.c | 17 ++++++++---------
-> > > >  1 file changed, 8 insertions(+), 9 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > > > b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > > > index 561309d447e0..773efdd20d2f 100644
-> > > > --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > > > +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > > > @@ -588,12 +588,6 @@ nouveau_drm_device_init(struct drm_device *dev)
-> > > >         if (ret)
-> > > >                 goto fail_dispctor;
-> > > >  
-> > > > -       if (dev->mode_config.num_crtc) {
-> > > > -               ret = nouveau_display_init(dev, false, false);
-> > > > -               if (ret)
-> > > > -                       goto fail_dispinit;
-> > > > -       }
-> > > > -
-> > > >         nouveau_debugfs_init(drm);
-> > > >         nouveau_hwmon_init(dev);
-> > > >         nouveau_svm_init(drm);
-> > > > @@ -601,6 +595,12 @@ nouveau_drm_device_init(struct drm_device *dev)
-> > > >         nouveau_fbcon_init(dev);
-> > > >         nouveau_led_init(dev);
-> > > >  
-> > > > +       if (dev->mode_config.num_crtc) {
-> > > > +               ret = nouveau_display_init(dev, false, false);
-> > > > +               if (ret)
-> > > > +                       goto fail_dispinit;
-> > > > +       }
-> > > > +
-> > > >         if (nouveau_pmops_runtime()) {
-> > > >                 pm_runtime_use_autosuspend(dev->dev);
-> > > >                 pm_runtime_set_autosuspend_delay(dev->dev, 5000);
-> > > > @@ -641,15 +641,14 @@ nouveau_drm_device_fini(struct drm_device *dev)
-> > > >                 pm_runtime_forbid(dev->dev);
-> > > >         }
-> > > >  
-> > > > +       if (dev->mode_config.num_crtc)
-> > > > +               nouveau_display_fini(dev, false, false);
-> > > >         nouveau_led_fini(dev);
-> > > >         nouveau_fbcon_fini(dev);
-> > > >         nouveau_dmem_fini(drm);
-> > > >         nouveau_svm_fini(drm);
-> > > >         nouveau_hwmon_fini(dev);
-> > > >         nouveau_debugfs_fini(drm);
-> > > > -
-> > > > -       if (dev->mode_config.num_crtc)
-> > > > -               nouveau_display_fini(dev, false, false);
-> > > >         nouveau_display_destroy(dev);
-> > > >  
-> > > >         nouveau_accel_fini(drm);
-> > > 
-> 
+So I couldn't help myself and I took a quick peek. This
+definitely is the same issue as on the various lenovo
+devices, with an E820 reserved region covering the entire
+bridge window, causing assigning unassigned BARs like
+for the I2C controller for the touchpad to not work.
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Interestingly enough, this is the first non Lenovo
+machine with this issue I have heard about.
+
+Regards,
+
+Hans
 

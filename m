@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DFE51F838
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7559B51F8FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237530AbiEIJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S238066AbiEIJe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbiEIJaN (ORCPT
+        with ESMTP id S237486AbiEIJap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:30:13 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD8A19FB2F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:26:19 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id q23so18541280wra.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 02:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XvC4vuGJ/fReLhoxIOtj//WxywUWuOvAGbrh68Zu2XI=;
-        b=u6KPetVh5gX4en9xXua4fJ39OdDbDXqtbrrZWvzZxpNleg18yURy1rvlOoUc67jXpt
-         z2L3P9Tn2W6SeMKdyQJae2cR5zmqj+myuOPg92SBDK14CJ7z5o4noKdalzFKviRvYMBb
-         Q5CSL5BsKBd5VSj/gP48C/4v9hbPDTKBGPyv8L9U/fcLqVTWtFl8cWzl8HiC9sz0my9S
-         e21d9xfBGXBEc6IA+hDISz/5h/wgydCrvPOwY5SQFbbk/eEPCcfsqauhzzRDr8kTgqlO
-         FuJQUpmmMHipb0h/N3yQRV+Q7Shro/EXOmoK3MQf03NVKNlsMh6cuBmPZEIAqw/Y3Ufm
-         94Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XvC4vuGJ/fReLhoxIOtj//WxywUWuOvAGbrh68Zu2XI=;
-        b=cfiHIqG4Z7iWVQhkWHJQyPmmoXftir2jCWM1Wl9tovose5VF5m9jIRmxk4LqjnQBXA
-         1n1l+kExgAgogVRmbpJKFd47QFUlOG+hUaTKdEogQX4yhjYvjhtmqYaQZ60LFoCpJAnn
-         CXvA6POWGiAi2+qDqbpO72u+iCEmE2TjmDz+AYrF3w5/jj3Y+C3ML9fHuY3jtX0sp191
-         5IOPnMivr/5Hm+z6HSYPAhdMBY4ojXUeLM13pOpYy6RiusHCQMtVKubW7YIbgI/80PfK
-         F75oApWeYAZ3UljxEmQmCUEy4WgkLSIO3mGawwEbX3HeTwKUmFjbEZus0Vkjtzgfq0m2
-         slAA==
-X-Gm-Message-State: AOAM532emKqAVThCyAcMWGPiztemeQBW8Eh+xzJnFsDGQdhElKgp0+HI
-        Xb1y0hWPSg62dL69GQBIcVy2ug==
-X-Google-Smtp-Source: ABdhPJwfgmvpJMpAjetQ6aDrppF91DRKlFGaxClEH22/Wu+jpjajhRFwccHLxRXUs5lU0FsZ/Q+9xw==
-X-Received: by 2002:a05:6000:1549:b0:20c:7183:439 with SMTP id 9-20020a056000154900b0020c71830439mr13118696wry.104.1652088375832;
-        Mon, 09 May 2022 02:26:15 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f10-20020a1cc90a000000b003942a244ec1sm11633124wmb.6.2022.05.09.02.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 02:26:15 -0700 (PDT)
-Date:   Mon, 9 May 2022 10:26:13 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, ~okias/devicetree@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: spmi: convert QCOM PMIC SPMI bindings to
- yaml
-Message-ID: <YnjeNUOy5zZFu+M9@google.com>
-References: <20211227170151.73116-1-david@ixit.cz>
- <YnjeGIGW6Pe1R/gY@google.com>
+        Mon, 9 May 2022 05:30:45 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3E36E8F7;
+        Mon,  9 May 2022 02:26:51 -0700 (PDT)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 010901BF207;
+        Mon,  9 May 2022 09:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652088408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cdjhq5fJB25B8P8JUsIktHRDMTHRFBnJXY7MYLgwfNA=;
+        b=Q9KAGW10Fdlstaz3h58sRvOXgIV8Gn0oa5TUa1WGO9UpY0+AfBUcyDK6A1Quijpm771JxL
+        JahcqFG05SQs8gdCOU9OMU3cPO3gDV8lNzxkqcJIBYK+Xx5+uJd9vEpHMFz0ytTvY4th0D
+        rCcxxs248tJEZfbTjFBf9yuqwzbGuDQiiil34xLflKKmdoa5/KNPoxzSDsRfWX18BzycGS
+        jcQXMaLExHxWgJvQTfeh4t+VtG3sc2a3fRdAMXnpcxQyHsYHaQkH6qjnU+fCnSyP076jsZ
+        a9c6LUDBpPYq5cKetO+UvwhmwmK9iqvwwnBrfGavnhOARObXknHs6D3Fn+miCg==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        huziji@marvell.com, andrew@lunn.ch, sebastian.hesselbarth@gmail.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Update sdhci node names to
+ match schema
+In-Reply-To: <20220329220544.2132135-2-chris.packham@alliedtelesis.co.nz>
+References: <20220329220544.2132135-1-chris.packham@alliedtelesis.co.nz>
+ <20220329220544.2132135-2-chris.packham@alliedtelesis.co.nz>
+Date:   Mon, 09 May 2022 11:26:35 +0200
+Message-ID: <87bkw7rr90.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnjeGIGW6Pe1R/gY@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 May 2022, Lee Jones wrote:
+Chris Packham <chris.packham@alliedtelesis.co.nz> writes:
 
-> On Mon, 27 Dec 2021, David Heidelberg wrote:
-> 
-> > Convert Qualcomm PMIC SPMI binding to yaml format.
-> > 
-> > Signed-off-by: David Heidelberg <david@ixit.cz>
-> > 
-> > ---
-> > v2:
-> >  - add #address and #size-cells
-> >  - add reg and remove spmi include from example
-> > v3:
-> >  - fix doc reference error (make refcheckdocs)
-> > 
-> > Signed-off-by: David Heidelberg <david@ixit.cz>
-> > ---
-> >  .../bindings/mfd/qcom,spmi-pmic.txt           |   2 +-
-> >  .../bindings/spmi/qcom,spmi-pmic-arb.txt      |  65 ----------
-> >  .../bindings/spmi/qcom,spmi-pmic-arb.yaml     | 120 ++++++++++++++++++
-> >  3 files changed, 121 insertions(+), 66 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-> >  create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> 
-> Applied, thanks.
+> Update the node names of the sdhci@ interfaces to be mmc@ to match the
+> node name enforced by the mmc-controller.yaml schema.
+>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Cancel.  I see that Rob already applied it.
+Applied on mvebu/dt64
+
+Thanks,
+
+Gregory
+> ---
+>
+> Notes:
+>     This has been sent separately [1] but on Krzysztof's advice I've
+>     included it in v3 of this series.
+>     
+>     [1] -  https://lore.kernel.org/linux-arm-kernel/20220321212007.2961581-1-chris.packham@alliedtelesis.co.nz/
+>     Changes in v5:
+>     - None
+>     Changes in v4:
+>     - None
+>     Changes in v3:
+>     - New
+>
+>  arch/arm64/boot/dts/marvell/armada-37xx.dtsi  | 4 ++--
+>  arch/arm64/boot/dts/marvell/armada-ap80x.dtsi | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-cp11x.dtsi | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> index 30233de58bb3..78adb803df26 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+> @@ -434,7 +434,7 @@ rwtm: mailbox@b0000 {
+>  				#mbox-cells = <1>;
+>  			};
+>  
+> -			sdhci1: sdhci@d0000 {
+> +			sdhci1: mmc@d0000 {
+>  				compatible = "marvell,armada-3700-sdhci",
+>  					     "marvell,sdhci-xenon";
+>  				reg = <0xd0000 0x300>,
+> @@ -445,7 +445,7 @@ sdhci1: sdhci@d0000 {
+>  				status = "disabled";
+>  			};
+>  
+> -			sdhci0: sdhci@d8000 {
+> +			sdhci0: mmc@d8000 {
+>  				compatible = "marvell,armada-3700-sdhci",
+>  					     "marvell,sdhci-xenon";
+>  				reg = <0xd8000 0x300>,
+> diff --git a/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi b/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi
+> index 6614472100c2..a06a0a889c43 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi
+> @@ -250,7 +250,7 @@ watchdog: watchdog@610000 {
+>  				interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+>  			};
+>  
+> -			ap_sdhci0: sdhci@6e0000 {
+> +			ap_sdhci0: mmc@6e0000 {
+>  				compatible = "marvell,armada-ap806-sdhci";
+>  				reg = <0x6e0000 0x300>;
+>  				interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+> diff --git a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi b/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
+> index 3bd2182817fb..d6c0990a267d 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
+> @@ -493,7 +493,7 @@ CP11X_LABEL(trng): trng@760000 {
+>  			status = "okay";
+>  		};
+>  
+> -		CP11X_LABEL(sdhci0): sdhci@780000 {
+> +		CP11X_LABEL(sdhci0): mmc@780000 {
+>  			compatible = "marvell,armada-cp110-sdhci";
+>  			reg = <0x780000 0x300>;
+>  			interrupts = <27 IRQ_TYPE_LEVEL_HIGH>;
+> -- 
+> 2.35.1
+>
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

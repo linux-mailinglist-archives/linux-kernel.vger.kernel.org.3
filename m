@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8094151F28D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CB751F28F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiEIB4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S231671AbiEIBz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiEIBt1 (ORCPT
+        with ESMTP id S234334AbiEIBxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 21:49:27 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04030284;
-        Sun,  8 May 2022 18:45:31 -0700 (PDT)
-X-UUID: 46fa9032b54741dcbe0f7ad98487b557-20220509
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:ebe8ad17-54e3-40c5-a217-83d5c5f5ba1a,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:faefae9,CLOUDID:78f9a816-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 46fa9032b54741dcbe0f7ad98487b557-20220509
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 296730226; Mon, 09 May 2022 09:45:25 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 9 May 2022 09:45:24 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 9 May 2022 09:45:23 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-Subject: [PATCH v4] dt-bindings: nvmem: convert mtk-efuse.txt to YAML schema
-Date:   Mon, 9 May 2022 09:45:21 +0800
-Message-ID: <20220509014521.10248-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 8 May 2022 21:53:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F33940A2E
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 18:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652060968; x=1683596968;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dmu4xavnXeAZTi/O/LTWt/8dZsQ1SzTfqu+cuWojN10=;
+  b=KNoQ5q+abi+cj8Kc4ne6VI2YT9a+eqg6jccbn9C3GjGNwI455LCPWqpB
+   JtcJ77NgQ42o/fy2m7HlXdSvMzPz9HvG/JwgXAc1INFuhWTByeW+q4e/6
+   J86dUgXuyxyh0UeKn8N3tdenRhO2w8q9tKYgGQkSF/03yTHh2yyh0ZcMa
+   GRG5a2Y1SsaO6hswl5Xn72U6R8VaRt8P7OrX2JZsg469IyVkUiukm4l53
+   bwSbcprEbg1r9n8yi8+PL1JPD4Ur4fcBDt23LzEfJ2AH74NSk+qCItjFS
+   nxfah0WnErr+LyCSBu8ZfQzf6nI6lcJqIlUQngWjbJ0anHFD1SemkMM4G
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="250946867"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="250946867"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 18:49:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="550775029"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 08 May 2022 18:49:26 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnsWc-000G5e-2Z;
+        Mon, 09 May 2022 01:49:26 +0000
+Date:   Mon, 09 May 2022 09:48:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:timers/core] BUILD SUCCESS
+ f4b62e1e1137507268c2c63dc4e6da279dc58e9f
+Message-ID: <627872f2.SmpGexX7alsYKmf9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,167 +63,293 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert mtk-efuse.txt to YAML schema mediatek,efuse.yaml
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git timers/core
+branch HEAD: f4b62e1e1137507268c2c63dc4e6da279dc58e9f  time/sched_clock: Fix formatting of frequency reporting code
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v4: fix duplicated unit-address in example;
-    drop reviewed-by Rob, due to changes;
+elapsed time: 9388m
 
-v3: add reviewed-by Rob
+configs tested: 267
+configs skipped: 6
 
-v2:
-   1. remove description of subnodes which is covered by nvmem.yaml suggested by Rob
-   2. change the example which is commoner than mt8173's
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
----
- .../bindings/nvmem/mediatek,efuse.yaml        | 86 +++++++++++++++++++
- .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ----------
- 2 files changed, 86 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
- delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc                         ps3_defconfig
+arc                     haps_hs_smp_defconfig
+arc                            hsdk_defconfig
+arm                         vf610m4_defconfig
+powerpc                     ep8248e_defconfig
+nios2                            allyesconfig
+parisc                              defconfig
+sh                         microdev_defconfig
+powerpc                     taishan_defconfig
+m68k                           sun3_defconfig
+powerpc                      pcm030_defconfig
+parisc                           allyesconfig
+arm                       aspeed_g5_defconfig
+powerpc                 mpc834x_mds_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                         apollo_defconfig
+sh                               j2_defconfig
+sh                        apsh4ad0a_defconfig
+mips                             allyesconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                         ap325rxa_defconfig
+x86_64                              defconfig
+m68k                          hp300_defconfig
+ia64                          tiger_defconfig
+m68k                          atari_defconfig
+powerpc                           allnoconfig
+powerpc                     tqm8555_defconfig
+mips                           jazz_defconfig
+um                               alldefconfig
+xtensa                    smp_lx200_defconfig
+openrisc                    or1ksim_defconfig
+m68k                       m5275evb_defconfig
+sparc                       sparc64_defconfig
+sh                          polaris_defconfig
+arm                      jornada720_defconfig
+xtensa                              defconfig
+parisc                generic-64bit_defconfig
+sh                          lboxre2_defconfig
+sparc64                             defconfig
+arm                           sunxi_defconfig
+powerpc                       maple_defconfig
+m68k                       m5249evb_defconfig
+arc                 nsimosci_hs_smp_defconfig
+mips                           ip32_defconfig
+powerpc                     asp8347_defconfig
+sh                            shmin_defconfig
+alpha                            alldefconfig
+arc                     nsimosci_hs_defconfig
+arc                           tb10x_defconfig
+ia64                        generic_defconfig
+mips                       bmips_be_defconfig
+i386                                defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                      cm5200_defconfig
+arm                         nhk8815_defconfig
+arm                        clps711x_defconfig
+arm                            zeus_defconfig
+powerpc                       holly_defconfig
+csky                                defconfig
+arc                        vdk_hs38_defconfig
+m68k                        mvme16x_defconfig
+arc                        nsimosci_defconfig
+powerpc64                           defconfig
+powerpc                    klondike_defconfig
+sh                   sh7724_generic_defconfig
+sh                        sh7785lcr_defconfig
+powerpc                     redwood_defconfig
+arm                       multi_v4t_defconfig
+arm                        realview_defconfig
+arc                         haps_hs_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                         cobalt_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                     sequoia_defconfig
+sh                          sdk7786_defconfig
+arm                         lpc18xx_defconfig
+powerpc                      chrp32_defconfig
+mips                     decstation_defconfig
+powerpc                         wii_defconfig
+powerpc                 mpc8540_ads_defconfig
+s390                             allyesconfig
+arm                            lart_defconfig
+microblaze                          defconfig
+sh                                  defconfig
+arm                         at91_dt_defconfig
+arm                        mvebu_v7_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                      tqm8xx_defconfig
+arm                           imxrt_defconfig
+m68k                             alldefconfig
+arm                            qcom_defconfig
+s390                          debug_defconfig
+sh                        sh7763rdp_defconfig
+m68k                             allmodconfig
+arm                        oxnas_v6_defconfig
+ia64                             alldefconfig
+mips                         bigsur_defconfig
+sh                           se7721_defconfig
+sh                           se7705_defconfig
+sh                             sh03_defconfig
+arm                        mini2440_defconfig
+m68k                       m5475evb_defconfig
+mips                        bcm47xx_defconfig
+m68k                        stmark2_defconfig
+arm                            mps2_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220501
+arm                  randconfig-c002-20220506
+x86_64               randconfig-c001-20220502
+i386                 randconfig-c001-20220502
+arm                  randconfig-c002-20220502
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc64                            defconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a006-20220502
+x86_64               randconfig-a001-20220502
+x86_64               randconfig-a003-20220502
+x86_64               randconfig-a002-20220502
+x86_64               randconfig-a004-20220502
+x86_64               randconfig-a005-20220502
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                 randconfig-a004-20220502
+i386                 randconfig-a006-20220502
+i386                 randconfig-a002-20220502
+i386                 randconfig-a003-20220502
+i386                 randconfig-a001-20220502
+i386                 randconfig-a005-20220502
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220501
+arc                  randconfig-r043-20220502
+arc                  randconfig-r043-20220501
+s390                 randconfig-r044-20220501
+arc                  randconfig-r043-20220505
+s390                 randconfig-r044-20220505
+riscv                randconfig-r042-20220505
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-new file mode 100644
-index 000000000000..abb8b85655fe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -0,0 +1,86 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/mediatek,efuse.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek efuse device tree bindings
-+
-+description: |
-+  MediaTek's efuse is used for storing calibration data, it can be accessed
-+  on ARM devices usiong I/O mapped memory.
-+
-+maintainers:
-+  - Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  $nodename:
-+    pattern: "^efuse@[0-9a-f]+$"
-+
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - mediatek,mt7622-efuse
-+              - mediatek,mt7623-efuse
-+              - mediatek,mt8173-efuse
-+              - mediatek,mt8192-efuse
-+              - mediatek,mt8195-efuse
-+              - mediatek,mt8516-efuse
-+          - const: mediatek,efuse
-+      - const: mediatek,mt8173-efuse
-+        deprecated: true
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    efuse@11c10000 {
-+        compatible = "mediatek,mt8195-efuse", "mediatek,efuse";
-+        reg = <0x11c10000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        u3_tx_imp_p0: usb3-tx-imp@184,1 {
-+            reg = <0x184 0x1>;
-+            bits = <0 5>;
-+        };
-+        u3_rx_imp_p0: usb3-rx-imp@184,2 {
-+            reg = <0x184 0x2>;
-+            bits = <5 5>;
-+        };
-+        u3_intr_p0: usb3-intr@185 {
-+            reg = <0x185 0x1>;
-+            bits = <2 6>;
-+        };
-+        comb_tx_imp_p1: usb3-tx-imp@186,1 {
-+            reg = <0x186 0x1>;
-+            bits = <0 5>;
-+        };
-+        comb_rx_imp_p1: usb3-rx-imp@186,2 {
-+            reg = <0x186 0x2>;
-+            bits = <5 5>;
-+        };
-+        comb_intr_p1: usb3-intr@187 {
-+            reg = <0x187 0x1>;
-+            bits = <2 6>;
-+        };
-+        u2_intr_p0: usb2-intr-p0@188,1 {
-+            reg = <0x188 0x1>;
-+            bits = <0 5>;
-+        };
-+        u2_intr_p1: usb2-intr-p1@188,2 {
-+            reg = <0x188 0x2>;
-+            bits = <5 5>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt b/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-deleted file mode 100644
-index 39d529599444..000000000000
---- a/Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--= Mediatek MTK-EFUSE device tree bindings =
--
--This binding is intended to represent MTK-EFUSE which is found in most Mediatek SOCs.
--
--Required properties:
--- compatible: should be
--	      "mediatek,mt7622-efuse", "mediatek,efuse": for MT7622
--	      "mediatek,mt7623-efuse", "mediatek,efuse": for MT7623
--	      "mediatek,mt8173-efuse" or "mediatek,efuse": for MT8173
--	      "mediatek,mt8192-efuse", "mediatek,efuse": for MT8192
--	      "mediatek,mt8195-efuse", "mediatek,efuse": for MT8195
--	      "mediatek,mt8516-efuse", "mediatek,efuse": for MT8516
--- reg: Should contain registers location and length
--- bits: contain the bits range by offset and size
--
--= Data cells =
--Are child nodes of MTK-EFUSE, bindings of which as described in
--bindings/nvmem/nvmem.txt
--
--Example:
--
--	efuse: efuse@10206000 {
--		compatible = "mediatek,mt8173-efuse";
--		reg	   = <0 0x10206000 0 0x1000>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--
--		/* Data cells */
--		thermal_calibration: calib@528 {
--			reg = <0x528 0xc>;
--		};
--	};
--
--= Data consumers =
--Are device nodes which consume nvmem data cells.
--
--For example:
--
--	thermal {
--		...
--		nvmem-cells = <&thermal_calibration>;
--		nvmem-cell-names = "calibration";
--	};
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220501
+riscv                randconfig-c006-20220501
+mips                 randconfig-c004-20220501
+arm                  randconfig-c002-20220501
+powerpc              randconfig-c003-20220508
+riscv                randconfig-c006-20220508
+mips                 randconfig-c004-20220508
+arm                  randconfig-c002-20220508
+s390                 randconfig-c005-20220506
+powerpc              randconfig-c003-20220506
+riscv                randconfig-c006-20220506
+mips                 randconfig-c004-20220506
+arm                  randconfig-c002-20220506
+powerpc              randconfig-c003-20220505
+riscv                randconfig-c006-20220505
+arm                  randconfig-c002-20220505
+mips                     loongson2k_defconfig
+arm                   milbeaut_m10v_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                           omap1_defconfig
+arm                          moxart_defconfig
+arm                          collie_defconfig
+powerpc                    socrates_defconfig
+mips                     cu1830-neo_defconfig
+mips                      pic32mzda_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                  mpc866_ads_defconfig
+mips                  cavium_octeon_defconfig
+arm                          ep93xx_defconfig
+arm                        neponset_defconfig
+powerpc                 mpc832x_mds_defconfig
+mips                        qi_lb60_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      pmac32_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                      katmai_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                     tqm8540_defconfig
+arm                            mmp2_defconfig
+arm                     davinci_all_defconfig
+arm                            dove_defconfig
+riscv                          rv32_defconfig
+mips                          ath25_defconfig
+arm                        multi_v5_defconfig
+powerpc                     kmeter1_defconfig
+arm                      tct_hammer_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64               randconfig-a011-20220502
+x86_64               randconfig-a014-20220502
+x86_64               randconfig-a012-20220502
+x86_64               randconfig-a013-20220502
+x86_64               randconfig-a015-20220502
+x86_64               randconfig-a016-20220502
+i386                 randconfig-a011-20220502
+i386                 randconfig-a013-20220502
+i386                 randconfig-a016-20220502
+i386                 randconfig-a015-20220502
+i386                 randconfig-a014-20220502
+i386                 randconfig-a012-20220502
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220502
+hexagon              randconfig-r045-20220501
+hexagon              randconfig-r041-20220501
+s390                 randconfig-r044-20220502
+riscv                randconfig-r042-20220502
+hexagon              randconfig-r041-20220502
+hexagon              randconfig-r045-20220506
+riscv                randconfig-r042-20220506
+hexagon              randconfig-r041-20220506
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

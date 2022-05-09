@@ -2,208 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188C651FE72
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C131151FE71
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235989AbiEINjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S236013AbiEINkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235956AbiEINjf (ORCPT
+        with ESMTP id S235956AbiEINkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:39:35 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CED1A3A1;
-        Mon,  9 May 2022 06:35:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=chDKWTQdiBed67TDCCnqq9ezpTt35QSHRHtFyrpnKyD8lxOY6YlQuJoxNFSYhzFXViBSGeicPQ/AjEwzfCEoY6+amjnxjh0QtyjdQqdxqFXTC48GnknfHX9qEjp5pKxIu14x58+VXiZ4c2zzDaLSyHdLeMhdzbM7UgbX5IGc9SrR2jqjOKw3xoGk2rDKaKV6t/y12BATFAwBmbcFpeFBjLhhiO+Xz6bMcqJDpUDThZXxqqWVwK1SLY4cvWs/wvwcN6v0vI7y2rkakiyMc9MTDLbYId8x3xlo9SIbfdBBE2FZIRzZ/tc65ow0N7kVoyhtJop0BkQBeJCqbYuMqVsBGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OijZttoBWjm0v2NubX+65XSH8m7uW1vc8tC1NfAG2gw=;
- b=B9VGJOjIMovOmOdFSxb3FOXzpj/E1j0wwkcA6K7Bjb/T2jC3fbyDJHjx/5kof1dAqX0Gdbnz4HIUCFz1rSxU7mzR71LDsksY1VdIe1FI1/fEY3kiWxDVkp0pifrNRQGXmh09gJIq2tBjl21m+FjJ8pWMYvthF2cv8W23s4VSkUdB5FikktNuOH3sYBXesVGBxqjtdAY5N991Xjk6P8JVwZ6lmFi39SBCDKg6qixSg/nhmcSby7rPL2GccsRJMCu99GwRbWMK1VoNCh6Dx+qQx1zXbQeikFWXj5KcnBG1oywApaq5bEbKTTvT+S2ZQrD0tz4Yys+cXhM74Hy3M6F5Ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OijZttoBWjm0v2NubX+65XSH8m7uW1vc8tC1NfAG2gw=;
- b=inlOW0mh3Mak8KxL0Nhfod2RPvawI59UbFosJj0Hql33znnYxPadig28qXYEx1FI8T7HMP/tZOBstI1nyOBs4NYcvFL6OFwuHdi9cNFCWIEm+agT6Geb1ZvAmeCR9HjalPA6M6lsoc5s6NFPZPkopGXbTc10/ctMezIcSDf3bdc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
- (2603:10b6:910:1f::11) by MN0PR12MB6320.namprd12.prod.outlook.com
- (2603:10b6:208:3d3::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
- 2022 13:35:35 +0000
-Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
- ([fe80::5c1f:2ec0:4e86:7fad]) by CY4PR1201MB0181.namprd12.prod.outlook.com
- ([fe80::5c1f:2ec0:4e86:7fad%3]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 13:35:32 +0000
-Message-ID: <ffa7d6ad-56ad-9da8-ebf6-3a10d56842db@amd.com>
-Date:   Mon, 9 May 2022 15:35:24 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 04/15] KVM: SVM: Update max number of vCPUs supported
- for x2AVIC mode
-Content-Language: en-US
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, mlevitsk@redhat.com, seanjc@google.com,
-        joro@8bytes.org, jon.grimm@amd.com, wei.huang2@amd.com,
-        terry.bowman@amd.com
-References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
- <20220508023930.12881-5-suravee.suthikulpanit@amd.com>
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20220508023930.12881-5-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS8PR04CA0165.eurprd04.prod.outlook.com
- (2603:10a6:20b:331::20) To CY4PR1201MB0181.namprd12.prod.outlook.com
- (2603:10b6:910:1f::11)
+        Mon, 9 May 2022 09:40:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4236E34672
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652103387; x=1683639387;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qvznECsuLkK6RXnOeA6Ax0m0ofe4wfy3oTmtVcMDJIo=;
+  b=GNTyz5+0V/cBVk7JAFhQgu30dpvhSgoc5TBiGSfN40duvGUBfbAqbg/d
+   sxzVNcGFhmMIxF/2nltpLUnzrh8vRPBNbJY1ppSzB7wRJxptOl+auT9NE
+   h+wM01o4yGt+rfJxg+RfZRlFHLlpW5xp/bjrkIQ3fOVVMXgzQ7FJ+4J6J
+   KCTW/i19WhXwhWblW3Xd06GwjrR7dK1+awDCtLSUrxjygl0o23WSHd6K6
+   n0qH3WvKq0tS1884Ns2DLJ8OavE/5NNxUeoIcasiTgpCaolcUu4srvQUJ
+   FyXTu89HvsT9zpeTM0TQD07K08ONOT+8eidWUxlDGjvBAQVBYmvFPACcy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="267891049"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="267891049"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 06:36:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="738168423"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 06:36:22 -0700
+Date:   Mon, 9 May 2022 21:36:22 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+Message-ID: <20220509133622.GE40730@shbuild999.sh.intel.com>
+References: <20220508144733.91343-1-feng.tang@intel.com>
+ <20220509045839.GA40730@shbuild999.sh.intel.com>
+ <20220509071652.GE76023@worktop.programming.kicks-ass.net>
+ <20220509073003.GB40730@shbuild999.sh.intel.com>
+ <87h75zrpmh.ffs@tglx>
+ <20220509112235.GD40730@shbuild999.sh.intel.com>
+ <87levarh7m.ffs@tglx>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 196f44f2-81b4-41ee-d95c-08da31c0c9d4
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6320:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB6320EC9B0C9B5EF1791DA4419BC69@MN0PR12MB6320.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S5bjbG7Y9P0jCRpkcB9vXhmXXaYkSbNAGDTkq84dw9b7ENenhv2GEwv8QILMakBWw4Ko83KFgfLpiEsWWw+aX3Z7D/1q7blnOrhZ5SE+qTsNH/V7RPMNjQtJbBJzRYIRx5zDnMl3c7YyATQ8GvKiWsnhcF9P12kFA0Tbj1b2K2i4SgmeR0I/oxqRYee4XtWg24+msAYlHszlW0pVB8nGAjcgserg5Z+imhxtXmy5WfZHC1iEPReny9f0kC9DOm1s4hsJG06xti2z7QDdgOSj+hdp4ebIqNrLDpmQxnxlXw2FV10EwkasUqY1cIOJv8CKv+kzwTsnA+U7BT+GnDTY3GqkjJjqSISkYnKf1f0fDjStfunRS2omStG/9K2Uk1JenV7McieNOeAA1IIoCnhlxWzW12KhI3U3KpusuJ1IxfqSidAdsVviOX4gn2BpeD/BIL8+B6Puw2Eym3euqJuQH6kxJlHVVXai4ArYeDkXO6y6h11rU35X/a/RLr+witDhblw2gP4KTpC+SIGIMphEYSYftBGvqZHizQ6pBa4aE57tnZvFNdkawbvekdTvz884JnpOJLcZ0p4y1m4xyYIkMB1Bcq5MhqlSKlRipwXuxOsz6TfaikQTnuKhr40I1Z/mPPHuEYEsimMKV6RDg8XNq2HWVeQhFOe7JFhzd74n3CbXrP2xTO2x55TypLXNyHnDW9YGKgON0/ZkOc+pGewpRs7TD0SoYleJGFJJSM+F6YA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(15650500001)(508600001)(6486002)(31686004)(83380400001)(2906002)(6512007)(186003)(26005)(31696002)(5660300002)(8936002)(6506007)(6666004)(36756003)(2616005)(86362001)(8676002)(4326008)(38100700002)(66556008)(66946007)(66476007)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dWtuekgyZlhDYzk3YVhmdlJIQ2dTaHNVRVlXeGEvM0xydGhXWjl4cnlkQVV3?=
- =?utf-8?B?ZUgxcHIzVWZkWDR2bUREdnlxWGEyNmpPRTU5TVpldW9TTHBQOE1tOCttRnY4?=
- =?utf-8?B?YUVOak53d29MbjQxSVMwQlpiSG5KeWlmMy81bTZlMSsweFR4WHAxSXVobjIx?=
- =?utf-8?B?NHBGVktvbCt1L2ZRRG5ITDhtWWtEd1lGUng0bFBFM25rR3MxL2ZwV0JrVzZp?=
- =?utf-8?B?M0tLU2MyemtxeGwxN0pWSDdlUGFSM0hmdERqd3BHVThrbDk0OG1lNVJlcStM?=
- =?utf-8?B?RDNRQzJ6Q3dOWEJhb3lWS0psNExPQXhJclYrNThJejhvN1FPZ3MzUnBxRmto?=
- =?utf-8?B?Tis1cWg3d1JOblljTml3RTIvalFCa1lWZE1pTlF1eFBkVGtVSGgzeTFHbmVR?=
- =?utf-8?B?Tk81Z0dlc1RHZEJrRFB4dGtGYWRJWEk2ZXBBV0VSeFpUbHRVd3F0M0tQQ1JE?=
- =?utf-8?B?OEgwNVNRci9URm5lRXM2NG42TUpQdVJYVGN2UWdTazVjVzRiQld3VFRaSU44?=
- =?utf-8?B?NmY0bFJxa2o3NVE3eHJ1K0R1SDNlMDlYT2xDTU03MGpCZXpPQTRxWGk3K2s1?=
- =?utf-8?B?aVd3K0dlaVNiei9wYTlJcVovdGFHYVhhUDFyclBsQmdPdnJWcXVsMkp3Rnpt?=
- =?utf-8?B?L0VmQ3BsWXAvSnlrMEVhVHVxNVJObmNqcTZFZHhoSjI2RTdjMXFvSzBlcnRv?=
- =?utf-8?B?T3ZKSWVFSFRlbHN4K1FXcXVncldYZW5iMFc1MVJ6NUQvdVJEazZuM0tlYUtI?=
- =?utf-8?B?ZHpXMXQ1TlYwcG1STVJaSW9waU5ZV09HNWNveGpmdGxxMVJwaGFHa0ttM0F3?=
- =?utf-8?B?ZTFCcC9kTmYvMEpXSnVYMFRjd0VxV2p2b1c3TE8xQmo5TnhHOHdSQ0FqOVZ5?=
- =?utf-8?B?UTJSOUhLdmEzbzJkR3N3NEkrQWhDZFBJY3FKNGNrbWFoYTZScU83TUJqN3ZN?=
- =?utf-8?B?MlRtSy9yMG9UVDEwYnMvYk9XK2l4Z0FneTlFL1JXeHR3ZDg5bnUzQXY3Mmlm?=
- =?utf-8?B?M2ovTkY5WGM3Q3BQMHlpMmdTRFVSUjJ1ZmwzQ3lNdWpMYXgrNjhHRzBGdU9a?=
- =?utf-8?B?WmFhejJoM1BkTmVGMlNhNWxNS0xOVE1FS1ZvYnFoQ1lNenFMZU0ybWt1SjlH?=
- =?utf-8?B?YmtKQ29qMmtIL2NpMHk4em82Y2FlT2MvdWlrNWlOeUYxZFozR2tlNUUrZENB?=
- =?utf-8?B?enI4NGdKSWFSSHVSeUlra1ZLRis0Smx0enkveTFZTmNvRGNIMVg2WGJxVXlJ?=
- =?utf-8?B?ajBBTnJGaGEyQUJTdGU1d0RYUXRsR1ZNT2pyejJXY1BHaklqZE5RWmh1VUsz?=
- =?utf-8?B?aDNMc2FWb2R3eXhrTEZwaWt6ZFRGUG52UHdXQkhNcEp1MzBIRkRiRG1mTUM3?=
- =?utf-8?B?dGVONmswY2N1NDRZSmw5NWhaMkpibmNjY3pDeldnMzVVdkx0L1JBN0lxT0hm?=
- =?utf-8?B?S3YrV2RJa0lWclp1U1NmN1lRblhKdnpGeFlRMlZ4U0tiVW15c2RDazNQNkU3?=
- =?utf-8?B?enJUYndRdU1UUEpBcWt0T0JrYmx2ZE1PZ3RRL2R2c1hjMmhyNXlQNVhnOGZZ?=
- =?utf-8?B?dnR5UVZYOEQ1YkZ6WnFZSElHNllMSXczOWRFU0tpS1FRY1RobGt3Z0FyVmN4?=
- =?utf-8?B?enk2ZmJsY29yQTh1cGtyUkJaTDl5MUthbWV5VWcwdmhSSW9vUXhtdWg3Sk5v?=
- =?utf-8?B?L0FtZm0vZHFxeVVFTWRIRzBEaVNHbkplVktMNVZYVG9yVVZ1d1V4T3J5M1My?=
- =?utf-8?B?amYzV3JlamJmZ3VUbmhjcG1KN1Y4d05ReHloTnpaYU00SDJyUGpocVU4d1pU?=
- =?utf-8?B?RHFiV0haWmorNkJuYnJlL2ljY2NONGxwNk80UkZVak4wM21JSlYrYVVPM0Y4?=
- =?utf-8?B?Uy9sdnVTSnJ1VDdYYXVlVFBHU3NVK3F3cjlJd0dlUjFVWGxZVCt1eGd0cnlC?=
- =?utf-8?B?MUZadjlRaEJMMk93ZnNqMGNGNEJNVjZQU0ZJdElUYVBmRURHWWY1WllXSmdr?=
- =?utf-8?B?M1NTWkxaTVlPd1doNlA2TlFseFFVVGpyYmQ5NlRHSVFtWll6blFGMnZEMC9t?=
- =?utf-8?B?TCtQU1ErUGtiUjFQN3JkK0hnRnhIVnU1WHhLRHZXaHpKMXVRUllDWUZjV2N2?=
- =?utf-8?B?ZVFFNS95WW5Bc0IyaHMzNGc3ekRtTEllTDZ1cHJ0UWswRGtXYlRIK2lEVVlx?=
- =?utf-8?B?WWc2TGFIZG5zMURRQXY5RE10Y1NYeUtpL0oraWliV0dzUjBaZU1hM3lsL2J3?=
- =?utf-8?B?RlhlRm1HL2xvWU03cmZKVGRpSXFqMVVOeHJ3aHBxN0hRYmFRdGZFV0NJSXhm?=
- =?utf-8?B?cEdzZVUyK09jaXhkTWdGNHFsa1dWZVlvWGdTNlVpQitQTUxvdWhrZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 196f44f2-81b4-41ee-d95c-08da31c0c9d4
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0181.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 13:35:31.9435
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cZdqt0VorTAq+/mt3FBkVxKRC38Iz6Q4To8dOM+8yTptts9WCJF2GXE50jQQBh00Sg+UnLItKThiAnrCOt6ckw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6320
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87levarh7m.ffs@tglx>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> xAVIC and x2AVIC modes can support diffferent number of vcpus.
-> Update existing logics to support each mode accordingly.
+On Mon, May 09, 2022 at 03:03:25PM +0200, Thomas Gleixner wrote:
+> Feng,
 > 
-> Also, modify the maximum physical APIC ID for AVIC to 255 to reflect
-> the actual value supported by the architecture.
+> On Mon, May 09 2022 at 19:22, Feng Tang wrote:
+> > On Mon, May 09, 2022 at 12:01:42PM +0200, Thomas Gleixner wrote:
+> >> > This option is more like a way to double-check the correctness of
+> >> > tsc-freq got from MSR/CPUID(0x15).
+> >> 
+> >> If at all it's a workaround for the inability and ignorance of firmware
+> >> people. The crystal frequency and the TSC/crystal ratio _are_ known to
+> >> the system designer and firmware people. It's really not asked too much
+> >> to put the correct values into CPUID(0x15) and have proper quality
+> >> control to ensure the correctness.
+> >> 
+> >> The whole argument about early firmware and pre-production hardware is
+> >> bogus. It's 2022 and we are debating this problem for more than a decade
+> >> now and still hardware and firmware people think they can do what they
+> >> want and it all can be "fixed" in software. It's not rocket science to
+> >> get this straight.
+> >  
+> > I completely understand it, as we've also suffered a lot from such
+> > problems. This patch doesn't change any current work flow, and it simply
+> > calibrates and prints out the freq info (warn if there is big deviation).
+> > It acctually provides SW guys a quick way to argue with HW/FW people:
+> > "See! You've given us a wrong number, please fix it", otherwise I heard
+> > there was customer long ago  who used atomic clock to prove the
+> > deviation.
 > 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->   arch/x86/include/asm/svm.h | 12 +++++++++---
->   arch/x86/kvm/svm/avic.c    |  8 +++++---
->   2 files changed, 14 insertions(+), 6 deletions(-)
+> Then please say clearly in the changelog what this is about.
 > 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 2c2a104b777e..4c26b0d47d76 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -258,10 +258,16 @@ enum avic_ipi_failure_cause {
->   
->   
->   /*
-> - * 0xff is broadcast, so the max index allowed for physical APIC ID
-> - * table is 0xfe.  APIC IDs above 0xff are reserved.
-> + * For AVIC, the max index allowed for physical APIC ID
-> + * table is 0xff (255).
->    */
-> -#define AVIC_MAX_PHYSICAL_ID_COUNT	0xff
-> +#define AVIC_MAX_PHYSICAL_ID		0XFEULL
-> +
-> +/*
-> + * For x2AVIC, the max index allowed for physical APIC ID
-> + * table is 0x1ff (511).
-> + */
-> +#define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
->   
->   #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
->   #define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 95006bbdf970..29665b3e4e4e 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -185,7 +185,7 @@ void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb)
->   	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
->   	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
->   	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
-> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID_COUNT;
-> +	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->   	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
->   
->   	if (kvm_apicv_activated(svm->vcpu.kvm))
-> @@ -200,7 +200,8 @@ static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
->   	u64 *avic_physical_id_table;
->   	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
->   
-> -	if (index >= AVIC_MAX_PHYSICAL_ID_COUNT)
-> +	if ((avic_mode == AVIC_MODE_X1 && index > AVIC_MAX_PHYSICAL_ID) ||
-> +	    (avic_mode == AVIC_MODE_X2 && index > X2AVIC_MAX_PHYSICAL_ID))
->   		return NULL;
->   
->   	avic_physical_id_table = page_address(kvm_svm->avic_physical_id_table_page);
-> @@ -247,7 +248,8 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
->   	int id = vcpu->vcpu_id;
->   	struct vcpu_svm *svm = to_svm(vcpu);
->   
-> -	if (id >= AVIC_MAX_PHYSICAL_ID_COUNT)
-> +	if ((avic_mode == AVIC_MODE_X1 && id > AVIC_MAX_PHYSICAL_ID) ||
-> +	    (avic_mode == AVIC_MODE_X2 && id > X2AVIC_MAX_PHYSICAL_ID))
->   		return -EINVAL;
->   
->   	if (!vcpu->arch.apic->regs)
+>  "Currently when HW provides the tsc freq info through MSR or
+>   CPUID(0x15), the info will be taken as the 'best guess', and kernel
+>   will set the X86_FEATURE_TSC_KNOWN_FREQ flag and skip the HW timer
+>   based recalibration, which works pretty well.
+> 
+>   And there is still very few corner case that the freq info is not
+>   accurate enough will small deviation from the actual value, like on
+>   a product with early version (fix needed) of firmware or some
+>   pre-production hardware.
+> 
+>   Add..."
+> 
+> versus:
+> 
+>  "The kernel assumes that the TSC frequency which is provided by the
+>   hardware / firmware via MSRs or CPUID(0x15) is correct after applying
+>   a few basic consistency checks. This disables the TSC recalibration
+>   against HPET or PM timer.
+> 
+>   As a result there is no mechanism to validate that frequency in cases
+>   where a firmware or hardware defect is suspected.
+> 
+>   Add..."
+> 
+> Can you spot the difference in intention? The first one sounds like:
+> 
+>     We need to tolerate the hardware/firmware induced crap.
+> 
+> The second one says:
+> 
+>     Provide a mechanism to validate because we cannot trust hardware /
+>     firmware.
+> 
+> Hmm?
 
-Looks good to me.
+I see now. My commit log was ambiguous and didn't state clearly what
+was the real problem and what we want to achieve. 
 
-Reviewed-by: Pankaj Gupta <pankaj.gupta@amd.com>
+Many thanks for rewording! will use it as commit log in the next spin.
+
+> >> Aside of that HPET has become unrealiable and PM timer is not guaranteed
+> >> to be there either. So we really do not need a mechanism to enforce
+> >> recalibration against something which is not guaranteed to provide
+> >> sensible information.
+> >
+> > Correct. The HPET on new client platforms turn to be disabled for the
+> > PC10 issue, though it's fine on server platforms where tsc accuracy is
+> > more important.
+> 
+> TSC accuracy is important in any case. Why would it be more important on
+> server platforms? Just because?
+
+It was my wild guess, as I thought servers used by enterprise or financial
+system may care more about the accuracy.
+
+> > Also even for the disabled HPET case, I remembered that you've once
+> > suggested to leverage its capability for calibration, and only disable
+> > it before cpu idle framework really starts :)
+> 
+> Correct, but that would only be valid for early boot calibration and not
+> accross the recalibration.
+> 
+> That's why we ended up disabling HPET early in case of PC10. See
+> hpet_is_pc10_damaged().
+
+Got it. And I just checked some new client generations at hand like
+Icelake and Alderlake, they both have acpi_pm timer and CPUID (0x15) 
+supported.
+
+Thanks,
+Feng
+
+> Thanks,
+> 
+>         tglx

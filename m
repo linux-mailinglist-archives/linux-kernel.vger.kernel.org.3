@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600FD51F82F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629F051F847
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbiEIJdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S233493AbiEIJeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238316AbiEIJOR (ORCPT
+        with ESMTP id S232093AbiEIJPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:14:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4229C15E495
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652087424; x=1683623424;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=+9I3M3M149O5m/K/6SP4VV21MJHrSVn8FFuRfBVfwVo=;
-  b=KA+BaYhdgKSc/iGDbYKn/CiralU1wwc/rfG0pkssNYEEnWHxQnIXLpR1
-   trtTMyMgH0Gkw9e9xrMY5jHwaO644AkHuC0Hb14LMn3bChoYJjPY81b84
-   ZLxP6t5dnGIDmrWUS6eBaod5rwdDi/Fc3jnAHS1MdzPUbEdIHBE8StmcN
-   BftPNKEcjpEB/H5A9xchqifeS2x4PjUVJNCv9+66DMjVQiBkHsVPRGjfq
-   47+ev3Xsf3or8vzQTPm4N5ZSkbHvNVtJwY1wZlAosSPe1Rv7WvuOUk0c+
-   c1HTaWmAdXLinsfKxpn6MsWGE1w5EzzM6i+EH4/5MOhtsJDRNmYM9gGCX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="266580840"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="266580840"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 02:10:24 -0700
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="668908606"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.170.55]) ([10.249.170.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 02:10:22 -0700
-Subject: Re: [kbuild-all] Re: [PATCH] fs/ufs: Replace kmap() with
- kmap_local_page()
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org
-References: <20220508200755.24586-1-fmdefrancesco@gmail.com>
- <202205090835.NEUQ3VKB-lkp@intel.com> <4710227.GXAFRqVoOG@leap>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <b46bf8e8-9901-1026-2abf-ae7af163c7ad@intel.com>
-Date:   Mon, 9 May 2022 17:10:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <4710227.GXAFRqVoOG@leap>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 9 May 2022 05:15:13 -0400
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2921D3D62
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:11:19 -0700 (PDT)
+Received: by mail-wr1-x44a.google.com with SMTP id k29-20020adfb35d000000b0020adc94662dso5513120wrd.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 02:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lywA1vt51kZck6PXzExT18cr3ZKuMyPEg8s9HmYYUI0=;
+        b=EFgQknN9kz0vNqF7IeQoUwRJZqgbytppSycHiqpb1+5jMewc1YNqZG83lLllsx66wi
+         hPWbTH5433R+3JdGpDwSUGgKg8RcTEclTZ1/DVxfUbuDR4hkAua6YTGmN1W9UdXaeBRb
+         JpFvmzH0GXHyi6sJK6D9BWsHIwwu6l0TYLLbmovQW+zC/8kec43+NsvCl95IMKXUfriq
+         XbS7eJaaxkzWsXuh1f0JSc4m/GymScAuYOUvm+IzOFWmKqQ/VoaAm4EI5sBtK4Soh7En
+         80vEz99Zl8vhpI3l+ldV+l+ScQXjgKuCd0ofKBObgcFFJx9t1vTPrj/XLSb+pUKEOAV6
+         hJog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lywA1vt51kZck6PXzExT18cr3ZKuMyPEg8s9HmYYUI0=;
+        b=8GlQbY0/Af5KWZ+6YoeG+Igtb8zYNmwz0/a73rTahzO0yapcMl86DbFU0U+3piYB5r
+         gHdFS1HD8r+hK5RKKJOeWqNES3WGLGziwp5crmX4xGwsxSJav0siKHnqCyKcj9Hq0T5S
+         gQtu41j99/jBpTfkklAwfRyJtvaVlbMYqsBph3UZWqEdivEolh3o1psTxsz2F/sOa+1+
+         10ZfyIWs2dRzB1hqCiCh1QTz6NXwYmxaGH/+BEmFwCguseMuPk7NEF6enMcSxw1eMXJY
+         lIDUtkBd4fA0lBoGHb1UtAgOeyigc3KM2CTJ65j3TMDwXdZmU4ixBl4xBLYZ4SHdbO2k
+         syuw==
+X-Gm-Message-State: AOAM533btRbhcTBmB2eIykGO2ZX1X6DDE7uqzYXIYpIcDKJyFfa8VXPm
+        pkGvZ6dlR5J0bS2mZByTQ+jehqejl3cflVawGYY=
+X-Google-Smtp-Source: ABdhPJwyZyyTcfhhEG5pFC5DO7mxarCBjChnI+cUNHBn5uZE7gpwtutADdy7LeFG44BngRzvvpGkp2ZI1Q9fRSrFcYo=
+X-Received: from sene.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:27c4])
+ (user=sebastianene job=sendgmr) by 2002:a7b:c446:0:b0:394:3293:a88f with SMTP
+ id l6-20020a7bc446000000b003943293a88fmr15090980wmi.22.1652087477500; Mon, 09
+ May 2022 02:11:17 -0700 (PDT)
+Date:   Mon,  9 May 2022 09:11:02 +0000
+Message-Id: <20220509091103.2220604-1-sebastianene@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
+Subject: [PATCH v5 0/2] Detect stalls on guest vCPUS
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, qperret@google.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Ene <sebastianene@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,138 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This adds a mechanism to detect stalls on the guest vCPUS by creating a
+per CPU hrtimer which periodically 'pets' the host backend driver.
+On a conventional watchdog-core driver, the userspace is responsible for
+delivering the 'pet' events by writing to the particular /dev/watchdogN node.
+In this case we require a strong thread affinity to be able to
+account for lost time on a per vCPU basis.
 
+This device driver acts as a soft lockup detector by relying on the host
+backend driver to measure the elapesed time between subsequent 'pet' events.
+If the elapsed time doesn't match an expected value, the backend driver
+decides that the guest vCPU is locked and resets the guest. The host
+backend driver takes into account the time that the guest is not
+running. The communication with the backend driver is done through MMIO
+and the register layout of the virtual watchdog is described as part of
+the backend driver changes.
 
-On 5/9/2022 2:14 PM, Fabio M. De Francesco wrote:
-> On lunedì 9 maggio 2022 02:25:00 CEST kernel test robot wrote:
->> Hi "Fabio,
->>
+The host backend driver is implemented as part of:
+https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
 
-Hi Fabio,
+Changelog v5:
+ - fix dt warnings
+ - rename %s/watchdog/stall_detector/g
+ - rename the config from Kconfig VM_WATCHDOG -> VCPU_STALL_DETECTOR
 
-Here is a note:
+Changelog v4:
+ - rename the source from vm-wdt.c -> vm-watchdog.c
+ - convert all the error logging calls from pr_* to dev_* calls
+ - rename the DTS node "clock" to "clock-frequency"
 
->>
->> Note: the below error/warnings can be found in parent commit:
->> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in
-> reference from the function rtc_update_irq() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in
-> reference from the function rproc_exit_sysfs() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in
-> reference from the variable .L0 to the variable .debug_str:.LASF1567
->> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in
-> reference from the function rtc_get_dev_attribute_groups() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in
-> reference from the function ir_raw_get_allowed_protocols() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in
-> reference from the function ir_raw_event_prepare() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in
-> reference from the function ir_raw_event_free() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in
-> reference from the function ir_raw_event_unregister() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in
-> reference from the function btintel_enter_mfg() to the variable
-> .init.text:.LBB19521
->> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in
-> reference from the function rtc_update_irq() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in
-> reference from the function rproc_exit_sysfs() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in
-> reference from the variable .L0 to the variable .debug_str:.LASF1567
->> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in
-> reference from the function rtc_get_dev_attribute_groups() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in
-> reference from the function ir_raw_get_allowed_protocols() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in
-> reference from the function ir_raw_event_prepare() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in
-> reference from the function ir_raw_event_free() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in
-> reference from the function ir_raw_event_unregister() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in
-> reference from the function btintel_enter_mfg() to the variable
-> .init.text:.LBB19521
->> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in
-> reference from the function rtc_update_irq() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in
-> reference from the function rproc_exit_sysfs() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in
-> reference from the variable .L0 to the variable .debug_str:.LASF1567
->> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in
-> reference from the function rtc_get_dev_attribute_groups() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in
-> reference from the function ir_raw_get_allowed_protocols() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in
-> reference from the function ir_raw_event_prepare() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in
-> reference from the function ir_raw_event_free() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in
-> reference from the function ir_raw_event_unregister() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in
-> reference from the function btintel_enter_mfg() to the variable
-> .init.text:.LBB19521
->> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in
-> reference from the function rtc_update_irq() to the variable .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in
-> reference from the function rproc_exit_sysfs() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in
-> reference from the variable .L0 to the variable .debug_str:.LASF1567
->> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in
-> reference from the function rtc_get_dev_attribute_groups() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in
-> reference from the function ir_raw_get_allowed_protocols() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in
-> reference from the function ir_raw_event_prepare() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in
-> reference from the function ir_raw_event_free() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in
-> reference from the function ir_raw_event_unregister() to the variable
-> .init.text:.L0
->> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in
-> reference from the function btintel_enter_mfg() to the variable
-> .init.text:.LBB19521
->>
->> -- 
->> 0-DAY CI Kernel Test Service
->> https://01.org/lkp
->>
-> I cannot understand this report. All the functions listed here seem to have
-> nothing to do with my patch. Can anyone explain how these errors are
-> related to my changes?
-> 
-> Thanks,
-> 
-> Fabio
-> 
-> 
+Changelog v3:
+ - cosmetic fixes, remove pr_info and version information
+ - improve description in the commit messag
+ - improve description in the Kconfig help section
 
+Sebastian Ene (2):
+  dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector
+    compatible
+  misc: Add a mechanism to detect stalls on guest vCPUs
 
-Please ignore this report, a lot of similar warnings can be found in 
-parent commit.
+ .../bindings/misc/vcpu_stall_detector.yaml    |  47 ++++
+ drivers/misc/Kconfig                          |  12 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/vcpu_stall_detector.c            | 218 ++++++++++++++++++
+ 4 files changed, 278 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml
+ create mode 100644 drivers/misc/vcpu_stall_detector.c
 
-Best Regards,
-Rong Chen
+-- 
+2.36.0.512.ge40c2bad7a-goog
 

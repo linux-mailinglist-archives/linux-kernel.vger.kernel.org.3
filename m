@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F12751F9B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7B551F984
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiEIKZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S230399AbiEIKRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiEIKZD (ORCPT
+        with ESMTP id S229453AbiEIKR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:25:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1BF93B019;
-        Mon,  9 May 2022 03:21:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A21EB1480;
-        Mon,  9 May 2022 03:02:28 -0700 (PDT)
-Received: from [10.57.1.248] (unknown [10.57.1.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BFCF3F66F;
-        Mon,  9 May 2022 03:02:26 -0700 (PDT)
-Message-ID: <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
-Date:   Mon, 9 May 2022 11:02:23 +0100
+        Mon, 9 May 2022 06:17:27 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B3B27EBA6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:13:34 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 129so8081991wmz.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 03:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qgkx9ZC8YGJJeK5iTMZYlOqvFF3Oqattg27UJCiRY1Q=;
+        b=Pi3Xgsw+zt4lcSvgy01HxAxeKPFRomrVRyzr1Mh7iUX24+iKZGe77eE/XeZokDgUK8
+         yUpbrar1CwEtSqJpt1JaYJ+Vcm4ESYQMY5t8/5jvPYr9NRz6jW/7mcM8vSfHXYhoZvrS
+         28hHPFW/5ec+50Fces0xUNsRNMNMrSqjjieqIR28jeszSVFYacK7MUZ8Xrq/JzblklgI
+         CjGsMLz3dVfBZ6g1SBY8xywboRbMcVIVPCGx9vV800o7TB3nMkShpEkkIIVxlKWahg2s
+         8YECUEGbCuReXVLhhsK8RcgUFWbViaxNg31dPs8Ms/zPhjMxtuXBn0Ir46i/rGa4KNzQ
+         wxow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qgkx9ZC8YGJJeK5iTMZYlOqvFF3Oqattg27UJCiRY1Q=;
+        b=TvqWnoDzhahBPOEjrS2msql/rTHTTrXQnWuhvNntWHo21BGivVZkN7dQ7BCk2ByEjd
+         kKXCweuW3r448Lxu/oYJEOYKhYQ50qhkwIpMD+xm6WLdtc0Tj/ZbQsmHTGaHcmyUPR4q
+         NJFDhyUzCZUOettnYqCYGSvQgoAIjNUB1Q1BkG68oM017q2SGD2wycFV0VRd/ygV+vxe
+         hDA1uyorDcFFKZrAWkjvj0rOoIgc8tC4wTn0pcliYCtnGg0+wlSc6ueDzGYIK4rc2gUs
+         2u7QnsAenEiUF9gi1DEUn9vT9W8blFTe4WQpickEkZME98HrW8DKtJQ+Oa+CMIWGL+qV
+         Dj9Q==
+X-Gm-Message-State: AOAM530s4gOPQ8gSW/v/ElOe3tnDEXXAJmL7cnu9gs0VaCFnabcnuh+w
+        b0P2vOlJQ8JU6AVC49e+MfFbJg1LGxK8wg==
+X-Google-Smtp-Source: ABdhPJwIftT/UsBQmfVV48i+Vgca7Yqe2sTYcpBIUm433z+geRhMUia1x9txLA/Oj+TL2SMmKfKeXQ==
+X-Received: by 2002:a05:600c:190b:b0:394:96d3:5780 with SMTP id j11-20020a05600c190b00b0039496d35780mr1627274wmq.82.1652090567943;
+        Mon, 09 May 2022 03:02:47 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id n11-20020a056000170b00b0020c5253d8c7sm10283350wrc.19.2022.05.09.03.02.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 03:02:47 -0700 (PDT)
+Message-ID: <bb05dd4b-3114-73bc-0bd8-81e30dac1497@linaro.org>
+Date:   Mon, 9 May 2022 12:02:46 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
-To:     Will Deacon <will@kernel.org>,
-        Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
-        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Michael Williams (ATG)" <Michael.Williams@arm.com>
-References: <20220509002810.12412-1-bwicaksono@nvidia.com>
- <20220509092843.GB26264@willie-the-truck>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220509092843.GB26264@willie-the-truck>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] thermal/drivers/qcom/lmh: Add sc8180x compatible
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220502164504.3972938-1-bjorn.andersson@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220502164504.3972938-1-bjorn.andersson@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc: Mike Williams, Mathieu Poirier
-
-On 09/05/2022 10:28, Will Deacon wrote:
-> On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
->> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
->> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
->> Performance Monitoring Unit table (APMT) specification below:
->>   * ARM Coresight PMU:
->>          https://developer.arm.com/documentation/ihi0091/latest
->>   * APMT: https://developer.arm.com/documentation/den0117/latest
->>
->> Notes:
->>   * There is a concern on the naming of the PMU device.
->>     Currently the driver is probing "arm-coresight-pmu" device, however the APMT
->>     spec supports different kinds of CoreSight PMU based implementation. So it is
->>     open for discussion if the name can stay or a "generic" name is required.
->>     Please see the following thread:
->>     http://lists.infradead.org/pipermail/linux-arm-kernel/2022-May/740485.html
->>
->> Besar Wicaksono (2):
->>    perf: coresight_pmu: Add support for ARM CoreSight PMU driver
->>    perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
->>
->>   arch/arm64/configs/defconfig                  |    1 +
->>   drivers/perf/Kconfig                          |    2 +
->>   drivers/perf/Makefile                         |    1 +
->>   drivers/perf/coresight_pmu/Kconfig            |   10 +
->>   drivers/perf/coresight_pmu/Makefile           |    7 +
->>   .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317 +++++++++++++++++
->>   .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
->>   .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
->>   .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
->>   9 files changed, 1802 insertions(+)
+On 02/05/2022 18:45, Bjorn Andersson wrote:
+> The LMh instances in the Qualcomm SC8180X platform looks to behave
+> similar to those in SM8150, add additional compatibles to allow
+> platform specific behavior to be added if needed.
 > 
-> How does this interact with all the stuff we have under
-> drivers/hwtracing/coresight/?
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
 
-Absolutely zero, except for the name. The standard
-is named "CoreSight PMU" which is a bit unfortunate,
-given the only link, AFAIU, with the "CoreSight" architecture
-is the Lock Access Register(LAR). For reference, the
-drivers/hwtracing/coresight/ is purely "CoreSight" self-hosted
-tracing and the PMU is called "cs_etm" (expands to coresight etm).
-Otherwise the standard doesn't have anything to do with what
-exists already in the kernel.
+Applied, thanks
 
-That said, I am concerned that the "coresight_pmu" is easily confused
-with what exists today. Given that this is more of a "PMU" standard
-for the IPs in the Arm world, it would be better to name it as such
-avoiding any confusion with the existing PMUs.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-One potential recommendation for the name is, "Arm PMU"  (The ACPI table 
-is named Arm PMU Table). But then that could be clashing with the 
-armv8_pmu :-(.
-
-Some of the other options are :
-
-"Arm Generic PMU"
-"Arm Uncore PMU"
-"Arm PMU"
-
-Suzuki
-
-> 
-> Will
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

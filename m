@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395A8520849
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCA052084D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiEIXWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S232366AbiEIXXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiEIXW3 (ORCPT
+        with ESMTP id S232378AbiEIXXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:22:29 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B051327
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:18:34 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so594054pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:18:34 -0700 (PDT)
+        Mon, 9 May 2022 19:23:12 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC63A21607E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:19:16 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id v8-20020a170902b7c800b0015e927ee201so8942564plz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S3MsMPfbPAtt+LUx5QQOJPDQW/jqUKRczHTmbnCnNlo=;
-        b=Lo3FcdLeWFTsfpLIEtHet1p83g9yEAUTRFUUlVA9jNybAnhR0ACD66qvwx/Sni7Xvr
-         KOJFXQJJ8qK8OXYOYI4LF9vvQDnot8Nf0A1g/XQ2GznnKufeBlILgR3GcQlp7RGJ0Ebk
-         clgZZ1EnekJLzRptH/+bl1z/QggljRTkX5di4=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=BCsnd9wzln6SIBCaSSlJS6Bpvy5MKz7jpyqA0qGwjBw=;
+        b=Kz+o6BXhKfBZQQe7+daPzx+o7K9hHTFAVH4QKtZF5Gn+nc/t1mzzKy3ZtfaNprrlqe
+         jpNDJvzr22gN8RN42cTqfRcmgqt1s5UUN+PQ9jGk5qgxY8Xjry+cRnp4X+uuDS0eO9vI
+         /fH6w+aoKuU6nVrJYNlzS8Mrj6nRmQvQ31qYPpd2KXij8CmNdoEjTMRz9ZoIVSSQOSQ8
+         UBZ2wc63dlv5XAGpoLeWsNP9bZsVNGnghPs3mScqP4fQ2WuApETk4/CIB7ZgbBWlwkNH
+         NfFFt9w06quLYcuTwgnfMXzjLBnbqwlkQMHWXTs9grmvuKX2Mq8zIVIVnPwu4RrjLpTB
+         vvNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S3MsMPfbPAtt+LUx5QQOJPDQW/jqUKRczHTmbnCnNlo=;
-        b=YRBqtU7d1OhO2Ch6qyPKGkcwfHNTngAmztMIMw6Hop/TQzgLbJ0ajXv+y6oKhf3u8J
-         5TSvXd3Kty0eGuhq324wjS78cdGmgFMeQ1ZoCMHlgUAJ7zezTUNxGfTVhzZ7+w8KYzvp
-         TH2adDX/uOCMUWi2l6cGhOtwV/B93eOhij+q8zaeD0ptlFAwMfMbqANVRYqO4G1dwmuK
-         BJQBe6Uv966dsFPAlhfRvYd9TKm3Div8aTZEGrw6HtSnHNnbnqexo7jbdUwZkBuCsKtN
-         DfPS57FD3JZBOS5KOSFgW6cxa4k89O3xVuhdW9IuTFOWmAd/HY4jmThZHRtrTcMoWeJX
-         81NA==
-X-Gm-Message-State: AOAM531RsQCzHGbeAYwMGPjQUeN9V+zaPf6/HyaMNRX1Gkx3Ua8EDTi7
-        sNIaARX4z6pPk4OYgVhT7G9eQg==
-X-Google-Smtp-Source: ABdhPJwQCABxWhyzWje58moI3QY+RTSGkK5L/8OY0DPvxKxKjVGkEKQ2u55xzo2aEXZeNm94nOeQKw==
-X-Received: by 2002:a17:902:f708:b0:153:839f:bf2c with SMTP id h8-20020a170902f70800b00153839fbf2cmr18252580plo.113.1652138313471;
-        Mon, 09 May 2022 16:18:33 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:e0c:1ed:8d0b:2894])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902edcd00b0015ed003552fsm371045plk.293.2022.05.09.16.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 16:18:33 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-msm@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        freedreno@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm: Document the power requirements for DP AUX transfers
-Date:   Mon,  9 May 2022 16:18:09 -0700
-Message-Id: <20220509161733.v2.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=BCsnd9wzln6SIBCaSSlJS6Bpvy5MKz7jpyqA0qGwjBw=;
+        b=dzvOiP/5L+dVI0JCM+0S9O8ejjcXlJv57ZOj2StvIppgEKpPbds6Nej2CkJQjMVk0T
+         s3Nr8IAvxEXUJ35IMAxvA77nyjKrod9FnC8CyzyAL8L23tLxE+3xu4oEFwlEA5hvzgV+
+         Ym+QagP9w8M8wxAiwKqdxdNHBWkLjfq5mU7l/5tO3mlbXvcQnucyhm/kQSkLabZqLNKq
+         wDSsSj0dV2W+XaBsuqlDmiRQAXhvP3qux5isErP3tvYWNJBMqBNlaZR65ivRIyki+mjq
+         yale8zr6cP8LdmaK4f2gpA92WxHAa5Rh/lmYAaBno9Z7euYhM8sd6c8/MTVF43xrosRc
+         snpg==
+X-Gm-Message-State: AOAM5313U/gKSjWEUul/tD3Pxp5Fe+GLdu2Gup/YJs2z/KroQYcLdSRE
+        RiSv8DFFDsXJNBn+9MmlEM22lkU1qvsCWw==
+X-Google-Smtp-Source: ABdhPJyKu726ioJrlfuyldA9N5yHePRxj0NUUXS7H/3v/b0NYwSEZubjln+Ns5cqVF9CpRinoeiSBNsIirjYGA==
+X-Received: from zllamas.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:4c])
+ (user=cmllamas job=sendgmr) by 2002:a17:902:b213:b0:158:d44d:cad4 with SMTP
+ id t19-20020a170902b21300b00158d44dcad4mr18169199plr.45.1652138356306; Mon,
+ 09 May 2022 16:19:16 -0700 (PDT)
+Date:   Mon,  9 May 2022 23:19:01 +0000
+Message-Id: <20220509231901.3852573-1-cmllamas@google.com>
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Subject: [PATCH] binder: fix printk format for commands
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        Carlos Llamas <cmllamas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing DP AUX transfers there are two actors that need to be
-powered in order for the DP AUX transfer to work: the DP source and
-the DP sink. Commit bacbab58f09d ("drm: Mention the power state
-requirement on side-channel operations") added some documentation
-saying that the DP source is required to power itself up (if needed)
-to do AUX transfers. However, that commit doesn't talk anything about
-the DP sink.
+Make sure we use unsigned format specifier %u for binder commands as
+most of them are encoded above INT_MAX. This prevents negative values
+when logging them as in the following case:
 
-For full fledged DP the sink isn't really a problem. It's expected
-that if an external DP monitor isn't plugged in that attempting to do
-AUX transfers won't work. It's also expected that if a DP monitor is
-plugged in (and thus asserting HPD) then AUX transfers will work.
+[  211.895781] binder: 8668:8668 BR_REPLY 258949 0:0, cmd -2143260157 size 0-0 ptr 0000006e766a8000-0000006e766a8000
 
-When we're looking at eDP, however, things are less obvious. Let's add
-some documentation about expectations. Here's what we'll say:
-
-1. We don't expect the DP AUX transfer function to power on an eDP
-panel. If an eDP panel is physically connected but powered off then it
-makes sense for the transfer to fail.
-
-2. We'll document that the official way to power on a panel is via the
-bridge chain, specifically by making sure that the panel's prepare
-function has been called (which is called by
-panel_bridge_pre_enable()). It's already specified in the kernel doc
-of drm_panel_prepare() that this is the way to power the panel on and
-also that after this call "it is possible to communicate with any
-integrated circuitry via a command bus."
-
-3. We'll also document that for code running in the panel driver
-itself that it is legal for the panel driver to power itself up
-however it wants (it doesn't need to officially call
-drm_panel_pre_enable()) and then it can do AUX bus transfers. This is
-currently the way that edp-panel works when it's running atop the DP
-AUX bus.
-
-NOTE: there was much discussion of all of this in response to v1 [1]
-of this patch. A summary of that is:
-* With the Intel i195 driver, apparently eDP panels do get powered
-  up. We won't forbid this but it is expected that code that wants to
-  run on a variety of platforms should ensure that the drm_panel's
-  prepare() function has been called.
-* There is at least a reasonable amount of agreement that the
-  transfer() functions itself shouldn't be responsible for powering
-  the panel. It's proposed that if we need the DP AUX dev nodes to be
-  robust for eDP that the code handling the DP AUX dev nodes could
-  handle powering the panel by ensuring that the panel's prepare()
-  call was made. Potentially drm_dp_aux_dev_get_by_minor() could be a
-  good place to do this. This is left as a future exercise. Until
-  that's fixed the DP AUX dev nodes for eDP are probably best just
-  used for debugging.
-* If a panel could be in PSR and DP AUX via the dev node needs to be
-  reliable then we need to be able to pull the panel out of PSR. On
-  i915 this is also apparently handled as part of the transfer()
-  function.
-
-[1] https://lore.kernel.org/r/20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
 ---
-Hopefully I've resolved everything here to everyone's
-satisfaction. There's no crazy hurry here. I'll give this a week or so
-and then land it on drm-misc if there is no additional discussion.
+ drivers/android/binder.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Updated wording as per discussion on v1.
-- Updated commit message as per discussion on v1.
-- Add pointer to v1 discussion for future reference.
-
- include/drm/display/drm_dp_helper.h | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
-index dca40a045dd6..dc3c02225fcf 100644
---- a/include/drm/display/drm_dp_helper.h
-+++ b/include/drm/display/drm_dp_helper.h
-@@ -370,9 +370,19 @@ struct drm_dp_aux {
- 	 * helpers assume this is the case.
- 	 *
- 	 * Also note that this callback can be called no matter the
--	 * state @dev is in. Drivers that need that device to be powered
--	 * to perform this operation will first need to make sure it's
--	 * been properly enabled.
-+	 * state @dev is in and also no matter what state the panel is
-+	 * in. It's expected:
-+	 * - If the @dev providing the AUX bus is currently unpowered then
-+	 *   it will power itself up for the transfer.
-+	 * - If we're on eDP (using a drm_panel) and the panel is not in a
-+	 *   state where it can respond (it's not powered or it's in a
-+	 *   low power state) then this function may return an error, but
-+	 *   not crash. It's up to the caller of this code to make sure that
-+	 *   the panel is powered on if getting an error back is not OK. If a
-+	 *   drm_panel driver is initiating a DP AUX transfer it may power
-+	 *   itself up however it wants. All other code should ensure that
-+	 *   the pre_enable() bridge chain (which eventually calls the
-+	 *   drm_panel prepare function) has powered the panel.
- 	 */
- 	ssize_t (*transfer)(struct drm_dp_aux *aux,
- 			    struct drm_dp_aux_msg *msg);
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index f3b639e89dd8..b4b0e4489bef 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -3984,7 +3984,7 @@ static int binder_thread_write(struct binder_proc *proc,
+ 		} break;
+ 
+ 		default:
+-			pr_err("%d:%d unknown command %d\n",
++			pr_err("%d:%d unknown command %u\n",
+ 			       proc->pid, thread->pid, cmd);
+ 			return -EINVAL;
+ 		}
+@@ -4490,7 +4490,7 @@ static int binder_thread_read(struct binder_proc *proc,
+ 		trace_binder_transaction_received(t);
+ 		binder_stat_br(proc, thread, cmd);
+ 		binder_debug(BINDER_DEBUG_TRANSACTION,
+-			     "%d:%d %s %d %d:%d, cmd %d size %zd-%zd ptr %016llx-%016llx\n",
++			     "%d:%d %s %d %d:%d, cmd %u size %zd-%zd ptr %016llx-%016llx\n",
+ 			     proc->pid, thread->pid,
+ 			     (cmd == BR_TRANSACTION) ? "BR_TRANSACTION" :
+ 				(cmd == BR_TRANSACTION_SEC_CTX) ?
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

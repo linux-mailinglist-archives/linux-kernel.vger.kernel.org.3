@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD76551FD5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED80451FD51
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235006AbiEIMzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S234828AbiEIMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiEIMy4 (ORCPT
+        with ESMTP id S234910AbiEIMvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:54:56 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF152BB39;
-        Mon,  9 May 2022 05:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vNWZxas8t1kFoCf13D7/vaEHrhXkMcvheesCeQUODMg=; b=LiRqvKrtw9XJxMP26bz+wzbn1n
-        fBHqZS6c/XR8QMIkcDbMMcoNGulyS43Rfp83nqthIjvwxcC0/rE6EUbNIf51/kQdvFB0MZLjpT1Zt
-        jPlWUhML/RrgwA/8AbWtoLwz1yzaOdGTpwde1q8bM8ZApOffPjJ50hQj+UprMTPvFMZ+3kTukzvDC
-        T+M3aUntgoIptglMOe9noJu8WxIIHyHpxsCC1uL0UNNnEkCrtSTA6MLc7ESoFMKljoD3/1VBzhboF
-        ZG7o2pwmSFhOEypVckR6q5+g5/pOsvXV3qshYFBj5WEOrVLcV95X7vQdrWZ9lJh80TjIodpEGtnLe
-        +KvSh8AA==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1no2qT-0003gn-07; Mon, 09 May 2022 14:50:37 +0200
-Message-ID: <f9c3de3c-1709-a1aa-2ece-c9fbfd5e6d6a@igalia.com>
-Date:   Mon, 9 May 2022 09:50:05 -0300
+        Mon, 9 May 2022 08:51:46 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B05D2A1FD8;
+        Mon,  9 May 2022 05:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1652100473; x=1683636473;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DGC/Jxk5wtyvy6vNWf7S1XzQjNkoQDadcKmWQ7WC7VI=;
+  b=RKpEqJL4ppYlyrGP7SBlhas7PCUK7Yop7K6+OQLUaYGATNFnYko5f1Bl
+   2Gxie6YCQwGeaDK7WOmGi4L8q+H8Y0GfYgStIP3byac5h/ETIcE6z6/WO
+   IOeWNPhCEgcRhu41GYruey32yHbpbrBdTNjbgIY39zSln2xp+M9/XK+Rt
+   4=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="119780255"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647298800"; 
+   d="scan'208";a="119780255"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 14:47:51 +0200
+Received: from MUCSE812.infineon.com (MUCSE812.infineon.com [172.23.29.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Mon,  9 May 2022 14:47:50 +0200 (CEST)
+Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE812.infineon.com
+ (172.23.29.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 9 May 2022
+ 14:47:49 +0200
+Received: from smaha-lin-dev01.agb.infineon.com (172.23.8.247) by
+ MUCSE818.infineon.com (172.23.29.44) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 9 May 2022 14:47:49 +0200
+From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+To:     <jarkko@kernel.org>
+CC:     <Marten.Lindahl@axis.com>, <jgg@ziepe.ca>,
+        <johannes.holland@infineon.com>, <jsnitsel@redhat.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martenli@axis.com>, <nayna@linux.vnet.ibm.com>,
+        <peterhuewe@gmx.de>, <stefan.mahnke-hartmann@infineon.com>
+Subject: Re: [PATCH 2/2] tpm: Add Field Upgrade mode support for Infineon TPM2 modules
+Date:   Mon, 9 May 2022 14:50:18 +0200
+Message-ID: <20220509125018.246093-1-stefan.mahnke-hartmann@infineon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YnbL9LwDkY+MHdkK@iki.fi>
+References: <YnbL9LwDkY+MHdkK@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 08/30] powerpc/setup: Refactor/untangle panic notifiers
-Content-Language: en-US
-To:     Hari Bathini <hbathini@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        pmladek@suse.com, kexec@lists.infradead.org, bhe@redhat.com,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, akpm@linux-foundation.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-9-gpiccoli@igalia.com>
- <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE824.infineon.com (172.23.29.55) To
+ MUCSE818.infineon.com (172.23.29.44)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,16 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 15:55, Hari Bathini wrote:
-> [...] 
-> The change looks good. I have tested it on an LPAR (ppc64).
-> 
-> Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
-> 
+On 07.05.22 21:43, Jarkko Sakkinen wrote:
+> On Fri, May 06, 2022 at 02:31:48PM +0200, Stefan Mahnke-Hartmann wrote:
+>> TPM2_GetCapability with a capability that has the property type value
+>> of TPM_PT_TOTAL_COMMANDS returns a zero length list, when an Infineon
+>> TPM2 is in Field Upgrade mode.
+>> Since an Infineon TPM2.0 in Field Upgrade mode returns RC_SUCCESS on
+>> TPM2_Startup, the Field Upgrade mode has to be detected by
+>> TPM2_GetCapability.
+>>
+>> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+>> ---
+>>  drivers/char/tpm/tpm2-cmd.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+>> index e62a644ce26b..659130e2936e 100644
+>> --- a/drivers/char/tpm/tpm2-cmd.c
+>> +++ b/drivers/char/tpm/tpm2-cmd.c
+>> @@ -746,6 +746,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>>  	}
+>>  
+>>  	rc = tpm2_get_cc_attrs_tbl(chip);
+>> +	/*
+>> +	 * Infineon TPM in Field Upgrade mode will return no data for the number
+>> +	 * of supported commands.
+>> +	 */
+>> +	if (rc == -ENODATA)
+>> +		rc = TPM2_RC_UPGRADE;
+>
+> Injecting hardware error codes like this is not considered a great idea.
 
-Hi Michael. do you think it's possible to add this one to powerpc/next
-(or something like that), or do you prefer a V2 with his tag?
-Thanks,
+Resetting the error code was to avoid code duplication, while following the
+same rationale as Mårten's patch. I can also add the -ENODATA to the if clause
+below or duplicate the code block (similar to Mårten's). Do you have a better
+suggestion?
 
+>
+>>  
+>>  out:
+>>  	if (rc == TPM2_RC_UPGRADE) {
+>> -- 
+>> 2.25.1
+>>
+>
+> BR, Jarkko
 
-Guilherme

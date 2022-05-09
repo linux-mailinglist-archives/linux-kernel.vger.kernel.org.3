@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8E751F95A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDC551F99C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiEIKJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S233074AbiEIKUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiEIKJ1 (ORCPT
+        with ESMTP id S233162AbiEIKUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:09:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534D92655E5;
-        Mon,  9 May 2022 03:05:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 9 May 2022 06:20:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573FADF2B;
+        Mon,  9 May 2022 03:16:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B098321C1C;
+        Mon,  9 May 2022 10:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652090433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EnVbGbF3CiTcycSBZO/loerdaCBwAlV6olMPMO9R0Qs=;
+        b=crXHB0LGP0sk30wzd0kWaM5SpjARbCCh70lfRoTsVFXEIuaZcoMvyMb1tID3C62z31gqYe
+        yQ7D8QfaK+pJpNbEPL+K5d78N02gEkqfCsXBVAgUwGGbsSMibVYHliBh+Lr3X45ftFpA+w
+        keJFS3J/goZuc+Z0vjcFJEU3EQEGDXE=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA255B810B6;
-        Mon,  9 May 2022 10:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 49070C385B0;
-        Mon,  9 May 2022 10:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652090412;
-        bh=29mSpAua4b8hjk9GKvTkGUR9JajuXItC18hWIP0Js8A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O11DO6mYOO600sMRMllIbjLkarWSnk5FMiBm79/PWIWaAuiYSyCCavJbhm0hg+KzO
-         DQhvNtMZW5ILPkNUbD5QfiTkLpLy2r8rN0C4RFyBUFqWqEyq0PHK/vo4GSiPM9XEIO
-         4ftwcJxqiiW+g9c41Dk/7ixHMPjSBQ+V+3VYAvp/yAkWglySpqoylz3rCT7ifKJ5rR
-         9jfF5PMeSRvJMI1TDFZyug/E5Oyzv3EXur/Pryk6tj+c9MaiGqWVnUMDvtCgduQBMS
-         u/c0O76qUzl4o/VEiQ5Id0B0eKAcdigpVH/e0S5/6MdV5VVSjbqPFjPWauHcBka19r
-         eYmpP52r2ieow==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30B4DE85D8A;
-        Mon,  9 May 2022 10:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by relay2.suse.de (Postfix) with ESMTPS id 0B1902C141;
+        Mon,  9 May 2022 10:00:31 +0000 (UTC)
+Date:   Mon, 9 May 2022 12:00:28 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
+        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, william.kucharski@oracle.com,
+        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
+        songmuchun@bytedance.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+Message-ID: <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+ <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
+ <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v6 1/2] net: fix wrong network header length
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165209041219.866.7810964831911496184.git-patchwork-notify@kernel.org>
-Date:   Mon, 09 May 2022 10:00:12 +0000
-References: <20220505054850.4878-1-lina.wang@mediatek.com>
-In-Reply-To: <20220505054850.4878-1-lina.wang@mediatek.com>
-To:     Lina Wang <lina.wang@mediatek.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, matthias.bgg@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, hawk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, edumazet@google.com,
-        willemb@google.com, maze@google.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sat 07-05-22 02:05:25, CGEL wrote:
+[...]
+> If there are many containers to run on one host, and some of them have high
+> performance requirements, administrator could turn on thp for them:
+> # docker run -it --thp-enabled=always
+> Then all the processes in those containers will always use thp.
+> While other containers turn off thp by:
+> # docker run -it --thp-enabled=never
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+I do not know. The THP config space is already too confusing and complex
+and this just adds on top. E.g. is the behavior of the knob
+hierarchical? What is the policy if parent memcg says madivise while
+child says always? How does the per-application configuration aligns
+with all that (e.g. memcg policy madivise but application says never via
+prctl while still uses some madvised - e.g. via library).
 
-On Thu, 5 May 2022 13:48:49 +0800 you wrote:
-> When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
-> several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
-> ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
-> network_header\transport_header\mac_header have been updated as ipv4 acts,
-> but other skbs in frag_list didnot update anything, just ipv6 packets.
-> 
-> udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
-> frag_list and make sure right udp payload is delivered to user space.
-> Unfortunately, other skbs in frag_list who are still ipv6 packets are
-> updated like the first skb and will have wrong transport header length.
-> 
-> [...]
+> By doing this we could promote important containers's performance with less
+> footprint of thp.
 
-Here is the summary with links:
-  - [v6,1/2] net: fix wrong network header length
-    https://git.kernel.org/netdev/net/c/cf3ab8d4a797
-  - [v6,2/2] selftests net: add UDP GRO fraglist + bpf self-tests
-    (no matching commit)
-
-You are awesome, thank you!
+Do we really want to provide something like THP based QoS? To me it
+sounds like a bad idea and if the justification is "it might be useful"
+then I would say no. So you really need to come with a very good usecase
+to promote this further.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Michal Hocko
+SUSE Labs

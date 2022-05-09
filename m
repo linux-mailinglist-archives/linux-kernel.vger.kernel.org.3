@@ -2,116 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16345204F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF046520510
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbiEITOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S240488AbiEITQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240446AbiEITOV (ORCPT
+        with ESMTP id S240474AbiEITQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:14:21 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64C293B79;
-        Mon,  9 May 2022 12:10:26 -0700 (PDT)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1no8lt-0002U9-KO; Mon, 09 May 2022 15:10:17 -0400
-Message-ID: <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
-Subject: Re: [RFC] sched,livepatch: call stop_one_cpu in
- klp_check_and_switch_task
-From:   Rik van Riel <riel@surriel.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        jpoimboe@redhat.com, joe.lawrence@redhat.com, kernel-team@fb.com
-Date:   Mon, 09 May 2022 15:10:16 -0400
-In-Reply-To: <20220509180004.zmvhz65xlncwqrrc@treble>
-References: <20220507174628.2086373-1-song@kernel.org>
-         <20220509115227.6075105e@imladris.surriel.com>
-         <20220509180004.zmvhz65xlncwqrrc@treble>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-8fjrMtbSQtuvFTIamLXF"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 9 May 2022 15:16:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6344C781
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652123580; x=1683659580;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wY/3eKaGs+7mZ+hRBExVmSgBjRISz6hZzU/ALUSB9Rk=;
+  b=RPme/d6XKYm4UYgq0sKk1Kqg7AxKLQ+PIahN7DOJ8LA+4SbgAQ86U9m+
+   +KxhNukE5UEGfo0ZLivRxgMd8JWsKy8IEt6CtOwSFh3H4+9RiCi5AlBsP
+   /F403NY6C+VWTAoWIExvAG0CsUcCQFLK56k7DT72CUFK157Z1ZsaP4qHS
+   kMdiLTvmmku+VHWZb+16h2++41qmZCCzQ9L3G82e6tOwb85NZUJk+y4A7
+   n1u+lefSFlOql6VFcBCw4y4EXMkWuVLUPX4PQu4rg8DO2vklYdvK6pFql
+   gpAs+Aoa4X0pTkK+1QByWPxwlyLtJlBLVLSdgy6aTazAqTT1SRc5ZoeEb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="251193508"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="251193508"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 12:12:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="669491962"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 12:12:54 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1no8oP-000Go8-GT;
+        Mon, 09 May 2022 19:12:53 +0000
+Date:   Tue, 10 May 2022 03:12:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>
+Subject: arch/m68k/include/asm/amigaints.h:40:33: error: 'IRQ_AUTO_2'
+ undeclared
+Message-ID: <202205100302.SfvKkCPB-lkp@intel.com>
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9be9ed2612b5aedb52a2c240edb1630b6b743cb6
+commit: 9ab27d1d35fda0c5fce624083e92546a8545e7e5 ata: add Amiga Gayle PATA controller driver
+date:   4 years, 2 months ago
+config: m68k-randconfig-r002-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100302.SfvKkCPB-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9ab27d1d35fda0c5fce624083e92546a8545e7e5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9ab27d1d35fda0c5fce624083e92546a8545e7e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/ata/
 
---=-8fjrMtbSQtuvFTIamLXF
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Mon, 2022-05-09 at 11:00 -0700, Josh Poimboeuf wrote:
-> On Mon, May 09, 2022 at 11:52:27AM -0400, Rik van Riel wrote:
-> > Does this look like an approach that could work?
-> >=20
-> > @@ -315,6 +321,9 @@ static bool klp_try_switch_task(struct
-> > task_struct *task)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case -EBUSY:=C2=A0=C2=
-=A0=C2=A0=C2=A0/* klp_check_and_switch_task() */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0pr_debug("%s: %s:%d is running\n",
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- __func__, task->comm, task->pid);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/* Preempt the task from the second KLP switch
-> > attempt. */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (klp_signals_cnt)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0stop_o=
-ne_cpu(task_cpu(task),
-> > kpatch_dummy_fn, NULL);
->=20
-> I must be missing something, how is briefly preempting a kthread
-> supposed to actually transition it?=C2=A0 Won't it likely go back to
-> running
-> on the CPU before the next periodic klp_transition_work_fn() check?
->=20
-That's the kind of feedback I was hoping for ;)
+All errors (new ones prefixed by >>):
 
-I looked around the code a little bit, and it seems
-that only the idle tasks can transition to another KLP
-while they are running?
+   In file included from arch/m68k/include/asm/io_mm.h:27,
+                    from arch/m68k/include/asm/io.h:5,
+                    from include/linux/bio.h:28,
+                    from include/linux/blkdev.h:21,
+                    from drivers/ata/pata_gayle.c:15:
+   arch/m68k/include/asm/raw_io.h: In function 'raw_rom_outsb':
+   arch/m68k/include/asm/raw_io.h:97:14: warning: variable '__w' set but not used [-Wunused-but-set-variable]
+      97 |         ({u8 __w, __v = (b);  u32 _addr = ((u32) (addr)); \
+         |              ^~~
+   arch/m68k/include/asm/raw_io.h:413:17: note: in expansion of macro 'rom_out_8'
+     413 |                 rom_out_8(port, *buf++);
+         |                 ^~~~~~~~~
+   arch/m68k/include/asm/raw_io.h: In function 'raw_rom_outsw':
+   arch/m68k/include/asm/raw_io.h:100:15: warning: variable '__w' set but not used [-Wunused-but-set-variable]
+     100 |         ({u16 __w, __v = (w); u32 _addr = ((u32) (addr)); \
+         |               ^~~
+   arch/m68k/include/asm/raw_io.h:431:17: note: in expansion of macro 'rom_out_be16'
+     431 |                 rom_out_be16(port, *buf++);
+         |                 ^~~~~~~~~~~~
+   arch/m68k/include/asm/raw_io.h: In function 'raw_rom_outsw_swapw':
+   arch/m68k/include/asm/raw_io.h:104:15: warning: variable '__w' set but not used [-Wunused-but-set-variable]
+     104 |         ({u16 __w, __v = (w); u32 _addr = ((u32) (addr)); \
+         |               ^~~
+   arch/m68k/include/asm/raw_io.h:449:17: note: in expansion of macro 'rom_out_le16'
+     449 |                 rom_out_le16(port, *buf++);
+         |                 ^~~~~~~~~~~~
+   In file included from include/linux/kernel.h:10,
+                    from include/linux/ata.h:32,
+                    from drivers/ata/pata_gayle.c:14:
+   include/linux/scatterlist.h: In function 'sg_set_buf':
+   arch/m68k/include/asm/page_mm.h:169:50: warning: ordered comparison of pointer with null pointer [-Wextra]
+     169 | #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && (void *)(kaddr) < high_memory)
+         |                                                  ^~
+   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/scatterlist.h:147:9: note: in expansion of macro 'BUG_ON'
+     147 |         BUG_ON(!virt_addr_valid(buf));
+         |         ^~~~~~
+   include/linux/scatterlist.h:147:17: note: in expansion of macro 'virt_addr_valid'
+     147 |         BUG_ON(!virt_addr_valid(buf));
+         |                 ^~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h: In function 'dma_map_resource':
+   arch/m68k/include/asm/page_mm.h:169:50: warning: ordered comparison of pointer with null pointer [-Wextra]
+     169 | #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && (void *)(kaddr) < high_memory)
+         |                                                  ^~
+   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/dma-mapping.h:329:9: note: in expansion of macro 'BUG_ON'
+     329 |         BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+         |         ^~~~~~
+   arch/m68k/include/asm/page_mm.h:170:33: note: in expansion of macro 'virt_addr_valid'
+     170 | #define pfn_valid(pfn)          virt_addr_valid(pfn_to_virt(pfn))
+         |                                 ^~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:329:16: note: in expansion of macro 'pfn_valid'
+     329 |         BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+         |                ^~~~~~~~~
+   In file included from drivers/ata/pata_gayle.c:28:
+   drivers/ata/pata_gayle.c: In function 'pata_gayle_init_one':
+>> arch/m68k/include/asm/amigaints.h:40:33: error: 'IRQ_AUTO_2' undeclared (first use in this function)
+      40 | #define IRQ_AMIGA_PORTS         IRQ_AUTO_2
+         |                                 ^~~~~~~~~~
+   drivers/ata/pata_gayle.c:187:39: note: in expansion of macro 'IRQ_AMIGA_PORTS'
+     187 |         ret = ata_host_activate(host, IRQ_AMIGA_PORTS, ata_sff_interrupt,
+         |                                       ^~~~~~~~~~~~~~~
+   arch/m68k/include/asm/amigaints.h:40:33: note: each undeclared identifier is reported only once for each function it appears in
+      40 | #define IRQ_AMIGA_PORTS         IRQ_AUTO_2
+         |                                 ^~~~~~~~~~
+   drivers/ata/pata_gayle.c:187:39: note: in expansion of macro 'IRQ_AMIGA_PORTS'
+     187 |         ret = ata_host_activate(host, IRQ_AMIGA_PORTS, ata_sff_interrupt,
+         |                                       ^~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_gayle.c:21:
+   drivers/ata/pata_gayle.c: At top level:
+   include/linux/module.h:132:13: warning: 'init_module' specifies less restrictive attribute than its target 'pata_gayle_driver_init': 'cold' [-Wmissing-attributes]
+     132 |         int init_module(void) __attribute__((alias(#initfn)));
+         |             ^~~~~~~~~~~
+   include/linux/platform_device.h:251:1: note: in expansion of macro 'module_init'
+     251 | module_init(__platform_driver##_init); \
+         | ^~~~~~~~~~~
+   drivers/ata/pata_gayle.c:213:1: note: in expansion of macro 'module_platform_driver_probe'
+     213 | module_platform_driver_probe(pata_gayle_driver, pata_gayle_init_one);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_gayle.c:22:
+   drivers/ata/pata_gayle.c:213:30: note: 'init_module' target declared here
+     213 | module_platform_driver_probe(pata_gayle_driver, pata_gayle_init_one);
+         |                              ^~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:246:19: note: in definition of macro 'module_platform_driver_probe'
+     246 | static int __init __platform_driver##_init(void) \
+         |                   ^~~~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_gayle.c:21:
+   include/linux/module.h:138:14: warning: 'cleanup_module' specifies less restrictive attribute than its target 'pata_gayle_driver_exit': 'cold' [-Wmissing-attributes]
+     138 |         void cleanup_module(void) __attribute__((alias(#exitfn)));
+         |              ^~~~~~~~~~~~~~
+   include/linux/platform_device.h:256:1: note: in expansion of macro 'module_exit'
+     256 | module_exit(__platform_driver##_exit);
+         | ^~~~~~~~~~~
+   drivers/ata/pata_gayle.c:213:1: note: in expansion of macro 'module_platform_driver_probe'
+     213 | module_platform_driver_probe(pata_gayle_driver, pata_gayle_init_one);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_gayle.c:22:
+   drivers/ata/pata_gayle.c:213:30: note: 'cleanup_module' target declared here
+     213 | module_platform_driver_probe(pata_gayle_driver, pata_gayle_init_one);
+         |                              ^~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:252:20: note: in definition of macro 'module_platform_driver_probe'
+     252 | static void __exit __platform_driver##_exit(void) \
+         |                    ^~~~~~~~~~~~~~~~~
 
-That makes me wonder how the kworker thread that runs
-the klp switching code transitions itself...
 
-Should kernel threads that can use a lot of CPU have
-something in their outer loop to transition KLPs,
-just like the idle task does?
+vim +/IRQ_AUTO_2 +40 arch/m68k/include/asm/amigaints.h
 
---=20
-All Rights Reversed.
+^1da177e4c3f415 include/asm-m68k/amigaints.h Linus Torvalds 2005-04-16  38  
+1d174cfb0f2a896 include/asm-m68k/amigaints.h Roman Zippel   2006-06-25  39  /* interrupts from external hardware */
+74be8d0835f91f0 include/asm-m68k/amigaints.h Roman Zippel   2006-06-25 @40  #define IRQ_AMIGA_PORTS		IRQ_AUTO_2
+74be8d0835f91f0 include/asm-m68k/amigaints.h Roman Zippel   2006-06-25  41  #define IRQ_AMIGA_EXTER		IRQ_AUTO_6
+^1da177e4c3f415 include/asm-m68k/amigaints.h Linus Torvalds 2005-04-16  42  
 
---=-8fjrMtbSQtuvFTIamLXF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+:::::: The code at line 40 was first introduced by commit
+:::::: 74be8d0835f91f0f77a2f1554dfa7242f1f7b652 [PATCH] m68k: convert amiga irq code
 
------BEGIN PGP SIGNATURE-----
+:::::: TO: Roman Zippel <zippel@linux-m68k.org>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
 
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmJ5ZxgACgkQznnekoTE
-3oMAbQf/atY56IVjx2ggJ6AXEZS/hq956KtUV6M0CHWL4+JGly/8Y+CFt/FDHy6U
-00r89Uty7vv6OxL++mjjfOGg7o9FGDogg1dIqRaQwX++uXk493ixmvlQE77g6WtJ
-lfk+pOtJyDwUaEiJkwHjv7MCbQBYBiwwZB4eZH/mlMwo1xNt8ten1YOOGojRmDfv
-hwxvs25AHNIDv3PUIK5YuyBR7n6/bkUgh3Wuw1zj8kQ05LgcM4obHLvjDvFcBLRW
-TbmyFC8ODY1Vq3gcWieLAlmPG9vkgzI/ESE8OYIg90xGfChbwUE8hQPrqZO5z3Y4
-/n2eqP2EBSmCD7g0cz25Ite2R82cgQ==
-=+Vcf
------END PGP SIGNATURE-----
-
---=-8fjrMtbSQtuvFTIamLXF--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

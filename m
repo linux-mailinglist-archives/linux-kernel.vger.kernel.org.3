@@ -2,96 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B963051FB9B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF2E51FBC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiEILtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S233459AbiEIL62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiEILsi (ORCPT
+        with ESMTP id S233314AbiEIL6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:48:38 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEFA13FA2A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1652096684; x=1683632684;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1x+FMxo1b1TQU/wdpcA4rbUnkh/IM34rDwgwBlnHG3M=;
-  b=Asd97UJV8qjBrJjbwJddw17KWGX+d+Ogq/G84Le/D6jECamwTNfv1Tkl
-   YAKUaMtjfDMXg30qgWJt8c8VI4Ezk+gGZwvlOrbHlOJBPkGeHiU1dlovM
-   Rpk+V+5z5Iz68TgL5EkRghejm8I0Nk0pxPpYzvvEP4dyvwESRda3bmgM3
-   Ce5kXTaiEU8oaINrQtaVfp840cMMzTsgsCkgWL11id7ogSZCfN/F5IhxW
-   QXBZ+AJO/9uZZx3vNEcd3wTrJlP5tG+T3bNfY0DfOMkr2KXpnfbxNtiH8
-   9+I95qby0UnD7QGDVIyeVgtVKmMZtFiDYQ7O8TIIvEGEtP4H+bKKG1nil
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,211,1647273600"; 
-   d="scan'208";a="198691009"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 May 2022 19:44:42 +0800
-IronPort-SDR: nbHpXsgTK0eP84qEwBL8K53/dfxXFcqHcxX0FOLQPT+gUHQvWE20kJs/sI424ii9NVAXkgS2s4
- 3bMz2ESHYIMXPHXmhGH+Zqtx2r9PfqQcGa9X/pWEXHoTc6DCRWSffTglNA4QZlVT4OJJk1P0dP
- I8Wm6f37rO0A76TusoVcl6vac9XSqxHgTf2qZV1tLGENHBy9fhxo+6o0knr0AeQA850R9TF3Pv
- WB2opBZAe71abxAnZAqzmO9/WUyH6RUOqhxbAkfWtIBos/aEw1GnEnMY5m8iZoRVQFFOVW0+xO
- PObUF5THDFal9mAlS16PIMUY
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 May 2022 04:14:48 -0700
-IronPort-SDR: M2i9pZbF5fRmfcBBE/qMjnOqRJ3G+4huc5PqEMg0JwOMeVp77xv6NjbFhBnG54yDEdSai3eao/
- 8ndLGwQi34/1lJHlphOv9cx83s37zMo1TpCEx5rUesJnZShgeRR43jVvKyrTgP/4iKhocMMAf6
- Zq1YGmTgLuJO+JmrnjnORP77UtECORoLW9ZrmoC5z0O4IYAfrh0cY9C3BWT8YZDbCtnkfrlck4
- owi1rNdt6mRrD49TDGBwDEQn8yE84NPHLlalV5kApgCCe+/DjXoBAfYfO1MPpRSy3x6a2dWfLC
- d98=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 May 2022 04:44:42 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KxfV15f3vz1SVp0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:44:41 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1652096681; x=1654688682; bh=1x+FMxo1b1TQU/wdpcA4rbUnkh/IM34rDwg
-        wBlnHG3M=; b=T8q8DD3Okj9Vto6TIzr5k7zi1PPmv02jIQOpzmoR4FKPkzCIys8
-        Vd3QE3FK6Mf9rhT6WY49FG2c8Yi5foX96AGnQtdfrACKGyEZrLBdeb+BfmQZCFtB
-        7l9CSkG3jfq+/K4ia6GvGzd2F4InQuyAbx5aa6PT4xrkkWlJYOHHVtqoUFELsxtM
-        uSdmrepugLZkDFpLrQynIzYBvcG8F0ngJdq+yFjoj/3Oq2bITAYjVm/+xGjz2D1d
-        /Yxx+Q7scsPhGGhLD0KHZmli7BijM+2q6+PftqxyHyd1oXPp3hxga6jHskgd+KY4
-        TNNkiverp7SmIxKi0FRMbCUv+amaUCwlTSg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JB_Rb05oE_5A for <linux-kernel@vger.kernel.org>;
-        Mon,  9 May 2022 04:44:41 -0700 (PDT)
-Received: from [192.168.10.49] (unknown [10.225.164.111])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KxfV01VqRz1Rvlc;
-        Mon,  9 May 2022 04:44:39 -0700 (PDT)
-Message-ID: <a54d0558-be00-b87b-9238-187978ca06c1@opensource.wdc.com>
-Date:   Mon, 9 May 2022 20:44:38 +0900
+        Mon, 9 May 2022 07:58:25 -0400
+X-Greylist: delayed 548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 04:54:31 PDT
+Received: from server.lespinasse.org (server.lespinasse.org [IPv6:2001:470:82ab::100:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE81BDADC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+ d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-67-ed;
+ t=1652096721; h=date : from : to : cc : subject : message-id :
+ references : mime-version : content-type : content-transfer-encoding :
+ in-reply-to : from; bh=A7VZnkOooDmMVt0zmVkAt2c4XohtDtf3/DK9V1jJLOM=;
+ b=6NIYylgjhPZog+yLwPODPJcIfvcr2ocFDpkqISi70tNxjI7/Rel1tXmowCuX+rKmvyQ0t
+ U5XYZcoyTYbdnViCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
+ i=@lespinasse.org; q=dns/txt; s=srv-67-rsa; t=1652096721; h=date :
+ from : to : cc : subject : message-id : references : mime-version :
+ content-type : content-transfer-encoding : in-reply-to : from;
+ bh=A7VZnkOooDmMVt0zmVkAt2c4XohtDtf3/DK9V1jJLOM=;
+ b=QqIDruEzcYTOkudQdoZ/epVo8dv8ZoFkhL3ztjpET6S2nM91npiPlvF4tBDb2OrJ9Zlqf
+ 4gfNS9L6uVA9/dFOQw2eL/CnoRcplDDly4lIDHp6oGZ7oglzlelpg/9fZaYmFHuKCDuI3rS
+ AN+WY15QcCV1Io2u9sjbqv9xOaSI53TwnmZGB4/RiGqxOHkMLCzUVrfiFknVF0rKZE5ikWx
+ 6Ynasu07e15ty34sCnZI0ejeYOf5XaT/ptwLTnxBZ0oybifX/2JPjA4UDiZ9hE1/zVSOiKj
+ R253BT8DQBBh764iBmuw7+zSmw3GGes4T6fXtv2XPuSVDau7gRDm+7UUGIlw==
+Received: by server.lespinasse.org (Postfix, from userid 1000)
+        id 5C500160B4E; Mon,  9 May 2022 04:45:21 -0700 (PDT)
+Date:   Mon, 9 May 2022 04:45:21 -0700
+From:   Michel Lespinasse <michel@lespinasse.org>
+To:     "lipeifeng@oppo.com" <lipeifeng@oppo.com>
+Cc:     akpm <akpm@linux-foundation.org>, michel <michel@lespinasse.org>,
+        hughd <hughd@google.com>, linux-mm <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        zhangshiming <zhangshiming@oppo.com>,
+        peifengl55 <peifengl55@gmail.com>
+Subject: Re: Re: [PATCH] mm: fix align-error when get_addr in
+ unmapped_area_topdown
+Message-ID: <20220509114521.GA9512@lespinasse.org>
+References: <20220412081014.399-1-lipeifeng@oppo.com>
+ <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>
+ <2022041310411426044561@oppo.com>
+ <2022050110235766139218@oppo.com>
+ <20220501181041.6d53cb9ed54bf697840e36cc@linux-foundation.org>
+ <2022050211305415626916@oppo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH] ata: simplify the return expression of brcm_ahci_remove
-Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220505022133.55852-1-chi.minghao@zte.com.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220505022133.55852-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2022050211305415626916@oppo.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,41 +69,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/05 11:21, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Mon, May 02, 2022 at 11:33:18AM +0800, lipeifeng@oppo.com wrote:
+> Hi Andrew：
 > 
-> Simplify the return expression.
+> Thanks for your quick response.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/ata/ahci_brcm.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+> > They caused me some merge issues against mapletree, which I had
+> > resolved.  Mapletree is dropped at present so I set these patches aside
+> > until the next version of the mapletree patches are available.
 > 
-> diff --git a/drivers/ata/ahci_brcm.c b/drivers/ata/ahci_brcm.c
-> index ab8552b1ff2a..f61795c546cf 100644
-> --- a/drivers/ata/ahci_brcm.c
-> +++ b/drivers/ata/ahci_brcm.c
-> @@ -549,15 +549,10 @@ static int brcm_ahci_remove(struct platform_device *pdev)
->  	struct ata_host *host = dev_get_drvdata(&pdev->dev);
->  	struct ahci_host_priv *hpriv = host->private_data;
->  	struct brcm_ahci_priv *priv = hpriv->plat_data;
-> -	int ret;
->  
->  	brcm_sata_phys_disable(priv);
->  
-> -	ret = ata_platform_remove_one(pdev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return 0;
-> +	return ata_platform_remove_one(pdev);
->  }
->  
->  static void brcm_ahci_shutdown(struct platform_device *pdev)
+> Do we have a definite time for the next available version of the mapletree patches?
+> Excuse me, is it possible for our patch to be independent of mapletree and brought in separately?
 
-Applied to for-5.19. Thanks !
+I think it's unavoidable that there will be a conflict with maple tree
+because they are changing the way we track gaps between vmas.
 
--- 
-Damien Le Moal
-Western Digital Research
+> > I've been holding your patches until Michel Lespinasse has had time to
+> > review them (and hopefully explain them to me ;)).  Please review
+> > earlier comments which Michel has provided and ensure that those
+> > comments have been fully addressed so we can hopefully move forward on
+> > this.
+> 
+> We will reply soon if Mr.Lespinasse provideds any advices or question.
+> And I haven't received any reply from Mr.Lespinasse yet, pls let me know
+> if I missed the reply.
+
+This previous thread is very relevant here:
+https://lore.kernel.org/lkml/CANN689G6mGLSOkyj31ympGgnqxnJosPVc4EakW5gYGtA_45L7g@mail.gmail.com/
+
+I am sorry that I had confused you with the original poster on that
+thread - your proposed changes are very similar. That said, I still
+have the exact same concerns that I had at the time. The current
+search algorithm is guaranteed to find a gap in O(log N) time, if there
+is an available gap of size (requested_size + alignment - page_size).
+The modified search only requires an available gap of the requested
+size and alignment, but it can take O(N) time which might be too slow.
+Maybe we could afford the slow search if it's only used as a fallback
+when the fast search fails, but very few people would ever execute
+that fallback and that makes it hard to test / easy for bugs to hide in.
+
+If I understand your message at
+https://lore.kernel.org/lkml/202204241833454848958@oppo.com/ ,
+it seems like some andoid apps such as wechat are filling up
+a 32-bit address space such as there is no 13MB gap available anymore
+(as would be required by the current search), but there are still some
+12MB gaps aligned on a 1MB boundary, which they are then trying to
+allocate from. It seems very odd to me that one would find themselves
+in that situation, could you give us some details as to how that happened ?
+Do you know what the app is trying to do to fill the address space that way ?
+Also, why is this odd behavior considered to be a kernel issue - was the
+app previously running on a (quite old !) kernel that didn't have the fast
+vma gap search, and is now failing when ported to a more recent kernel ?
+
+> Thank you very much indeed.
+> 
+> lipeifeng@oppo.com
+>  
+> From: Andrew Morton
+> Date: 2022-05-02 09:10
+> To: lipeifeng@oppo.com
+> CC: michel; hughd; linux-mm; linux-kernel; Barry Song; zhangshiming; peifengl55
+> Subject: Re: [PATCH] mm: fix align-error when get_addr in unmapped_area_topdown
+> On Sun, 1 May 2022 10:26:35 +0800 "lipeifeng@oppo.com" <lipeifeng@oppo.com> wrote:
+>  
+> > Why did the two patches suddenly disappear without any email or notice for us?
+> > And they had been merged in linux-next.git on April 5 and 13.
+>  
+> They caused me some merge issues against mapletree, which I had
+> resolved.  Mapletree is dropped at present so I set these patches aside
+> until the next version of the mapletree patches are available.
+>  
+>  
+> I've been holding your patches until Michel Lespinasse has had time to
+> review them (and hopefully explain them to me ;)).  Please review
+> earlier comments which Michel has provided and ensure that those
+> comments have been fully addressed so we can hopefully move forward on
+> this.
+>  
+>  

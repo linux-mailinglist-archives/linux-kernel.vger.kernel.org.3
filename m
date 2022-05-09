@@ -2,99 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6092520399
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC425203B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239738AbiEIRiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S239745AbiEIRsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239693AbiEIRiV (ORCPT
+        with ESMTP id S239878AbiEIRrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:38:21 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10607216043
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:34:26 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2496VWU3001166;
-        Mon, 9 May 2022 12:34:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=t6gq3R+AfB/aX2+wHeecRH0o6mpd0KKT9eW7emaNAQ0=;
- b=jyR+xTAUDxgPGnIrGmO1aayZ3EC3Y+ukJc+fN/QD0F7LYLNenVC2UfMNHFR7dovCAUNj
- 1XDNo7bmNxl1jD/j53RG9Rc7sXHxZoJLJScs0A9xAnoj3uvnhlnPIr3LLdKZa3NO4nDr
- dLDL4RBZDyfxFiG2qb2kN00ItmCkLaq8cXlWJN7cndmGx+AeIUODIhhYCzPaZhB8wZtG
- VXJtCufWWcljLGPPrZSAk9A3IJ4FuFq15IWulcUtn3AbDox/i/EJIa48K6BstGiqWPGB
- Ic3PiLtDOpoc5VdYbAxEEALgKlzRmb7FtuRw2Wytbzapfut171bQYo7bC28B7FlC2bRT Ow== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fwn6nu0a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 09 May 2022 12:34:15 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 18:34:13 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Mon, 9 May 2022 18:34:13 +0100
-Received: from [198.90.202.102] (lon-sw-dsktp002.ad.cirrus.com [198.90.202.102])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B83C8476;
-        Mon,  9 May 2022 17:34:13 +0000 (UTC)
-Message-ID: <1b64582b-59f0-5eb5-5873-8102f99f649b@opensource.cirrus.com>
-Date:   Mon, 9 May 2022 18:34:13 +0100
+        Mon, 9 May 2022 13:47:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8542725CE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:43:13 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id o7PanVLJYZe7jo7PannEiN; Mon, 09 May 2022 19:43:11 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 09 May 2022 19:43:11 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <d76c13b2-16a0-d53f-0cc9-562fa96f373d@wanadoo.fr>
+Date:   Mon, 9 May 2022 19:43:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 00/26] ALSA: hda: cirrus: Add initial DSP support and
- firmware loading
+Subject: Re: [PATCH v1 1/2] serial: 8250_dw: Use devm_add_action_or_reset()
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
- <YmljEm6jUr3Odsv9@sirena.org.uk> <s5hbkw7m6ew.wl-tiwai@suse.de>
- <Ynj5PG0flJhn9iYD@sirena.org.uk>
-From:   Vitaly Rodionov <vitaly.rodionov@opensource.cirrus.com>
-In-Reply-To: <Ynj5PG0flJhn9iYD@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: Z6-T7Ijtgp9gP4qhW1kfctbLi5AMhiRz
-X-Proofpoint-GUID: Z6-T7Ijtgp9gP4qhW1kfctbLi5AMhiRz
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark, Takashi
+Le 09/05/2022 à 19:21, Andy Shevchenko a écrit :
+> Slightly simplify ->probe() and drop a few goto labels by using
+> devm_add_action_or_reset() for clock and reset cleanup.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/tty/serial/8250/8250_dw.c | 63 +++++++++++++++----------------
+>   1 file changed, 31 insertions(+), 32 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+> index 7934e4658281..e7ef61899576 100644
+> --- a/drivers/tty/serial/8250/8250_dw.c
+> +++ b/drivers/tty/serial/8250/8250_dw.c
+> @@ -484,6 +484,16 @@ static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+>   	}
+>   }
+>   
+> +static void dw8250_clk_disable_unprepare(void *data)
+> +{
+> +	clk_disable_unprepare(data);
+> +}
 
-On 09/05/2022 12:21 pm, Mark Brown wrote:
-> On Mon, May 09, 2022 at 10:55:35AM +0200, Takashi Iwai wrote:
->> Mark Brown wrote:
->>> On Wed, Apr 27, 2022 at 04:06:54PM +0100, Vitaly Rodionov wrote:
->>>> The CS35L41 Amplifier contains a DSP, capable of running firmware.
->>>> The firmware can run algorithms such as Speaker Protection, to ensure
->>>> that playback at high gains do not harm the speakers.
->>>> Adding support for CS35L41 firmware into the CS35L41 HDA driver also
->>>> allows us to support several extra features, such as hiberation
->>>> and interrupts.
->>> There's a bunch of changes for this driver in the ASoC tree, it looks
->>> like the bits that touch ASoC will need basing off those.
->> How is the situation for the time being?
->> I've been off in the last weeks, so couldn't follow the whole
->> thread.
-> No change, Vitaly didn't update or respond as far as I remember.  We'll
-> need a new version.
+Hi,
 
-Sorry for delay, yes we have re-based version, I will send again.
+we already have several time this function in different drivers.
+Maybe, it would be nice to have something standart for it.
 
-Thanks,
+A devm_clk_prepare_enable() or something devm-helpers.h ([1])
 
-Vitaly
+Just my 2c.
+
+CJ
+
+[1]: 
+https://elixir.bootlin.com/linux/v5.18-rc6/source/include/linux/devm-helpers.h
+
+> +
+> +static void dw8250_reset_control_assert(void *data)
+> +{
+> +	reset_control_assert(data);
+> +}
+> +
+>   static int dw8250_probe(struct platform_device *pdev)
+>   {
+>   	struct uart_8250_port uart = {}, *up = &uart;
+> @@ -585,35 +595,43 @@ static int dw8250_probe(struct platform_device *pdev)
+>   	if (err)
+>   		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
+>   
+> +	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->clk);
+> +	if (err)
+> +		return err;
+> +
+>   	if (data->clk)
+>   		p->uartclk = clk_get_rate(data->clk);
+>   
+>   	/* If no clock rate is defined, fail. */
+>   	if (!p->uartclk) {
+>   		dev_err(dev, "clock rate not defined\n");
+> -		err = -EINVAL;
+> -		goto err_clk;
+> +		return -EINVAL;
+>   	}
+>   
+>   	data->pclk = devm_clk_get_optional(dev, "apb_pclk");
+> -	if (IS_ERR(data->pclk)) {
+> -		err = PTR_ERR(data->pclk);
+> -		goto err_clk;
+> -	}
+> +	if (IS_ERR(data->pclk))
+> +		return PTR_ERR(data->pclk);
+>   
+>   	err = clk_prepare_enable(data->pclk);
+>   	if (err) {
+>   		dev_err(dev, "could not enable apb_pclk\n");
+> -		goto err_clk;
+> +		return err;
+>   	}
+>   
+> +	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->pclk);
+> +	if (err)
+> +		return err;
+> +
+>   	data->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
+> -	if (IS_ERR(data->rst)) {
+> -		err = PTR_ERR(data->rst);
+> -		goto err_pclk;
+> -	}
+> +	if (IS_ERR(data->rst))
+> +		return PTR_ERR(data->rst);
+> +
+>   	reset_control_deassert(data->rst);
+>   
+> +	err = devm_add_action_or_reset(dev, dw8250_reset_control_assert, data->rst);
+> +	if (err)
+> +		return err;
+> +
+>   	dw8250_quirks(p, data);
+>   
+>   	/* If the Busy Functionality is not implemented, don't handle it */
+> @@ -631,10 +649,8 @@ static int dw8250_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	data->data.line = serial8250_register_8250_port(up);
+> -	if (data->data.line < 0) {
+> -		err = data->data.line;
+> -		goto err_reset;
+> -	}
+> +	if (data->data.line < 0)
+> +		return data->data.line;
+>   
+>   	/*
+>   	 * Some platforms may provide a reference clock shared between several
+> @@ -655,17 +671,6 @@ static int dw8250_probe(struct platform_device *pdev)
+>   	pm_runtime_enable(dev);
+>   
+>   	return 0;
+> -
+> -err_reset:
+> -	reset_control_assert(data->rst);
+> -
+> -err_pclk:
+> -	clk_disable_unprepare(data->pclk);
+> -
+> -err_clk:
+> -	clk_disable_unprepare(data->clk);
+> -
+> -	return err;
+>   }
+>   
+>   static int dw8250_remove(struct platform_device *pdev)
+> @@ -683,12 +688,6 @@ static int dw8250_remove(struct platform_device *pdev)
+>   
+>   	serial8250_unregister_port(data->data.line);
+>   
+> -	reset_control_assert(data->rst);
+> -
+> -	clk_disable_unprepare(data->pclk);
+> -
+> -	clk_disable_unprepare(data->clk);
+> -
+>   	pm_runtime_disable(dev);
+>   	pm_runtime_put_noidle(dev);
+>   
 

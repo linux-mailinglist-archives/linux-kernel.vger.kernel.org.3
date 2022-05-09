@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840CB520480
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C276152046A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbiEIS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
+        id S240156AbiEISWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240107AbiEIS3f (ORCPT
+        with ESMTP id S240146AbiEISWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:29:35 -0400
-X-Greylist: delayed 478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 11:25:37 PDT
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7833E49242
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:25:34 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 2B9E41AD6F;
-        Mon,  9 May 2022 21:17:35 +0300 (EEST)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 9603E1AEB7;
-        Mon,  9 May 2022 21:17:33 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 18DCD3C07D1;
-        Mon,  9 May 2022 21:17:31 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 249IHPlO074453;
-        Mon, 9 May 2022 21:17:28 +0300
-Date:   Mon, 9 May 2022 21:17:25 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     menglong8.dong@gmail.com
-cc:     Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH net-next] net: ipvs: random start for RR scheduler
-In-Reply-To: <20220509122213.19508-1-imagedong@tencent.com>
-Message-ID: <cb8eaad0-83c5-a150-d830-e078682ba18b@ssi.bg>
-References: <20220509122213.19508-1-imagedong@tencent.com>
+        Mon, 9 May 2022 14:22:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE3F2B94E6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:18:09 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id o7xLnswDmF4GZo7xLniG7Y; Mon, 09 May 2022 20:18:07 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 09 May 2022 20:18:07 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <4460783f-6a1f-e8c4-863a-4f6d926590d6@wanadoo.fr>
+Date:   Mon, 9 May 2022 20:18:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 1/2] serial: 8250_dw: Use devm_add_action_or_reset()
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com>
+ <d76c13b2-16a0-d53f-0cc9-562fa96f373d@wanadoo.fr>
+ <CAHp75Vca60m+mkPDzh022B4pU2sng8-ZLoEK0POLQON3EWjBKg@mail.gmail.com>
+From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAHp75Vca60m+mkPDzh022B4pU2sng8-ZLoEK0POLQON3EWjBKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,137 +53,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-	Hello,
+Le 09/05/2022 à 19:59, Andy Shevchenko a écrit :
+> On Mon, May 9, 2022 at 7:49 PM Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+>> Le 09/05/2022 à 19:21, Andy Shevchenko a écrit :
+> ...
+>
+>>> +static void dw8250_clk_disable_unprepare(void *data)
+>>> +{
+>>> +     clk_disable_unprepare(data);
+>>> +}
+>> we already have several time this function in different drivers.
+>> Maybe, it would be nice to have something standart for it.
+>>
+>> A devm_clk_prepare_enable() or something devm-helpers.h ([1])
+> Seems you missed the full story. We tried to add that several times
+> [1] and CCF maintainers refused all the time. You may work with them
+> to convince them.
+>
+> [1]: https://lore.kernel.org/linux-clk/20210304221247.488173-2-linux@rasmusvillemoes.dk/
+> (the latest one AFAIK)
+>
+LoL, got it.
 
-On Mon, 9 May 2022, menglong8.dong@gmail.com wrote:
+Sorry for the noise.
 
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> For now, the start of the RR scheduler is in the order of dest
-> service added, it will result in imbalance if the load balance
+CJ
 
-	...order of added destinations,...
-
-> is done in client side and long connect is used.
-
-	..."long connections are used". Is this a case where
-small number of connections are used? And the two connections
-relatively overload the real servers?
-
-> For example, we have client1, client2, ..., client5 and real service
-> service1, service2, service3. All clients have the same ipvs config,
-> and each of them will create 2 long TCP connect to the virtual
-> service. Therefore, all the clients will connect to service1 and
-> service2, leaving service3 free.
-
-	You mean, there are many IPVS directors with same
-config and each director gets 2 connections? Third connection
-will get real server #3, right ? Also, are the clients local
-to the director?
-
-> Fix this by randomize the start of dest service to RR scheduler when
-
-	..."randomizing the starting destination when"
-
-> IP_VS_SVC_F_SCHED_RR_RANDOM is set.
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  include/uapi/linux/ip_vs.h    |  2 ++
->  net/netfilter/ipvs/ip_vs_rr.c | 25 ++++++++++++++++++++++++-
->  2 files changed, 26 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/ip_vs.h b/include/uapi/linux/ip_vs.h
-> index 4102ddcb4e14..7f74bafd3211 100644
-> --- a/include/uapi/linux/ip_vs.h
-> +++ b/include/uapi/linux/ip_vs.h
-> @@ -28,6 +28,8 @@
->  #define IP_VS_SVC_F_SCHED_SH_FALLBACK	IP_VS_SVC_F_SCHED1 /* SH fallback */
->  #define IP_VS_SVC_F_SCHED_SH_PORT	IP_VS_SVC_F_SCHED2 /* SH use port */
->  
-> +#define IP_VS_SVC_F_SCHED_RR_RANDOM	IP_VS_SVC_F_SCHED1 /* random start */
-> +
->  /*
->   *      Destination Server Flags
->   */
-> diff --git a/net/netfilter/ipvs/ip_vs_rr.c b/net/netfilter/ipvs/ip_vs_rr.c
-> index 38495c6f6c7c..e309d97bdd08 100644
-> --- a/net/netfilter/ipvs/ip_vs_rr.c
-> +++ b/net/netfilter/ipvs/ip_vs_rr.c
-> @@ -22,13 +22,36 @@
->  
->  #include <net/ip_vs.h>
->  
-> +static void ip_vs_rr_random_start(struct ip_vs_service *svc)
-> +{
-> +	struct list_head *cur;
-> +	u32 start;
-> +
-> +	if (!(svc->flags | IP_VS_SVC_F_SCHED_RR_RANDOM) ||
-
-	| -> &
-
-> +	    svc->num_dests <= 1)
-> +		return;
-> +
-> +	spin_lock_bh(&svc->sched_lock);
-> +	start = get_random_u32() % svc->num_dests;
-
-	May be prandom is more appropriate for non-crypto purposes. 
-Also, not sure if it is a good idea to limit the number of steps,
-eg. to 128...
-
-	start = prandom_u32_max(min(svc->num_dests, 128U));
-
-	or just use
-
-	start = prandom_u32_max(svc->num_dests);
-
-	Also, this line can be before the spin_lock_bh.
-
-> +	cur = &svc->destinations;
-
-	cur = svc->sched_data;
-
-	... and to start from current svc->sched_data because
-we are called for every added dest. Better to jump 0..127 steps
-ahead, to avoid delay with long lists?
-
-> +	while (start--)
-> +		cur = cur->next;
-> +	svc->sched_data = cur;
-> +	spin_unlock_bh(&svc->sched_lock);
-> +}
->  
->  static int ip_vs_rr_init_svc(struct ip_vs_service *svc)
->  {
->  	svc->sched_data = &svc->destinations;
-> +	ip_vs_rr_random_start(svc);
->  	return 0;
->  }
->  
-> +static int ip_vs_rr_add_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
-> +{
-> +	ip_vs_rr_random_start(svc);
-> +	return 0;
-> +}
->  
->  static int ip_vs_rr_del_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
->  {
-> @@ -104,7 +127,7 @@ static struct ip_vs_scheduler ip_vs_rr_scheduler = {
->  	.module =		THIS_MODULE,
->  	.n_list =		LIST_HEAD_INIT(ip_vs_rr_scheduler.n_list),
->  	.init_service =		ip_vs_rr_init_svc,
-> -	.add_dest =		NULL,
-> +	.add_dest =		ip_vs_rr_add_dest,
->  	.del_dest =		ip_vs_rr_del_dest,
->  	.schedule =		ip_vs_rr_schedule,
->  };
-> -- 
-> 2.36.0
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
 

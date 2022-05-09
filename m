@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD6851FF85
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F5151FFD9
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiEIO26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
+        id S237224AbiEIO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237152AbiEIO2z (ORCPT
+        with ESMTP id S237151AbiEIO3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:28:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3951E3EF0
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652106301; x=1683642301;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RmFKKHm/zNxF176Uu6i/9T/WV9+GLqHLCIUqgV5ZDXQ=;
-  b=FW2EfRSr1gWaMAzUrY7Jhxsff1ZuEqjz9veq0fyEMASq1ek41Twk64xY
-   KQflcXFef/kesj1RdYCKcBU8gEZtzIPml+VJdaaUxrHkPxIpcQsOFvANa
-   ArDoZB4fzPAR5th57wcNnR8gOos5KWXLsDEQlsu9wJ0MlSP0Uyrendop2
-   gX0tXdW+l7wvE1KyvzKlxPJxn0kK2jM8mbRyNmu+WxWxhd7R/8rj03s2Z
-   ZEHZt/2sDtJWf0n2qz1/pRP8GW3+JANUuVNeVCp3S5PgIMT/OrViEugSq
-   qmm1k5VpuGo/GzzbkPzQkAYNfF6jcGZEOLx7bkeotUmasD2TSSbhKxSEU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="248967063"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="248967063"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:25:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="592510983"
-Received: from gfgerman-mobl1.amr.corp.intel.com (HELO [10.209.80.95]) ([10.209.80.95])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:25:00 -0700
-Message-ID: <97cd6566-e686-e1f2-fe91-4b4ba9d95f12@linux.intel.com>
-Date:   Mon, 9 May 2022 09:24:59 -0500
+        Mon, 9 May 2022 10:29:39 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADB15700;
+        Mon,  9 May 2022 07:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=P7ItdBTC+KXB0aqEwbSMXisX2R2Wb9V+tpF+BUJ3fMQ=; b=afqWOj15+1L7ZOehgz4TDp3T9b
+        MarVdwm0LTk8+i9B4YSy7xFp7vHwG1/w4WbfDff1U5lUjMxS0vk2DRuV0fJ7wbVLLeaMw89VjYM5x
+        WVJwpPzVyva0X5NmUi/i4nuSyMS2YeO8WasLcgi1Y8xImc6fOPpwaaWR9ocIpTn6nZEFaqdopezXx
+        OHjXA1hjw9QuPDRbTOoKOwl5vTqszrquVcmDp1xGYYzEdEOTzOi8SiNmSxJjEIE9o/SJMrBbQG4MO
+        b+UdR8rUhoog9dM2StftHOG35g7VaJwxTPUyd5VBoTJ128N6lfMi0IgW+WU1FzuWQA7pga9h2J0Nf
+        78MmVTaA==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1no4KQ-000BPa-6C; Mon, 09 May 2022 16:25:38 +0200
+Message-ID: <260dccd8-a4f6-882c-8767-5bc27576df14@igalia.com>
+Date:   Mon, 9 May 2022 11:25:06 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v2] soundwire: qcom: adjust autoenumeration timeout
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        bard.liao@intel.com,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <20220506084705.18525-1-srinivas.kandagatla@linaro.org>
- <725af523-d144-e373-e09b-fb48b3afb9ed@linux.intel.com>
- <8643d266-7108-2440-43e1-c51b829ba481@linaro.org>
- <d9646029-29b1-d71b-d1f5-b33267888e3c@linux.intel.com>
- <fd355232-c5e3-ba1b-801d-526ee6f04946@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <fd355232-c5e3-ba1b-801d-526ee6f04946@linaro.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, bhe@redhat.com,
+        akpm@linux-foundation.org, bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        kexec@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, pmladek@suse.com
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
+ <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
+In-Reply-To: <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> You could say why do we need wait itself in the first place.
->>>
->>> The reason we need wait in first place is because, there is a danger of
->>> codec accessing registers even before enumeration is finished. Because
->>> most of the ASoC codec registration happens as part of codec/component
->>> driver probe function rather than status callback.
->>>
->>> I hope this answers your questions.
+On 29/04/2022 13:04, Guilherme G. Piccoli wrote:
+> On 27/04/2022 21:28, Randy Dunlap wrote:
 >>
 >>
->> Humm, not really.
+>> On 4/27/22 15:49, Guilherme G. Piccoli wrote:
+>>> +	crash_kexec_post_notifiers
+>>> +			This was DEPRECATED - users should always prefer the
 >>
->> First, you're using this TIMEOUT_MS value in 3 unrelated places, and
->> using 2 different struct completion, which means there are side effects
->> beyond autoenumeration.
-> 
-> 2 of these 3 are autoenum ones, one is in probe path and other in bus
-> reset path during pm.
-> 
-> The final one is broadcast timeout, new timeout value should be okay for
-> that too, given that we need 10ms timeout.
-
-probably better to make things explicit with a different timeout value
-for the broadcast case.
-
-100ms for a broadcast is really eons, it's supposed to be immediate really.
-
->> And then I don't get what you do on a timeout. in the enumeration part,
-> 
-> We can't do much on the timeout.
-> 
->> the timeout value is not checked for, so I guess enumeration proceeds
->> without the hardware being available? That seems to contradict the
->> assertion that you don't want to access registers before the hardware is
->> properly initialized.
-> 
-> Even if enumeration timeout, we will not access the registers because
-> the ASoC codec is not registered yet from WCD938x component master.
-
-What happens when the codec is registered then? the autoenumeration
-still didn't complete, so what prevents the read/writes from failing then?
-
->> And then on broadcast you have this error handling:
+>> 			This is DEPRECATED - users should always prefer the
 >>
->>         ret = wait_for_completion_timeout(&swrm->broadcast,
->>                           msecs_to_jiffies(TIMEOUT_MS));
->>         if (!ret)
->>             ret = SDW_CMD_IGNORED;
->>         else
->>             ret = SDW_CMD_OK;
+>>> +			parameter "panic_notifiers_level" - check its entry
+>>> +			in this documentation for details on how it works.
+>>> +			Setting this parameter is exactly the same as setting
+>>> +			"panic_notifiers_level=4".
 >>
->> Which is equally confusing since SDW_CMD_IGNORED is really an error, and
->> the bus layer does not really handle it well - not to mention that I
->> vaguely recall the qcom hardware having its own definition of IGNORED?
-> QCom hardware alteast the version based on which this driver was written
-> did not have any support to report errors type back on register
-> read/writes.
 > 
-> In this case a broad cast read or write did not generate a complete
-> interrupt its assumed that its ignored, as there is no way to say if its
-> error or ignored.
+> Thanks Randy, for your suggestion - but I confess I couldn't understand
+> it properly. It's related to spaces/tabs, right? What you suggest me to
+> change in this formatting? Just by looking the email I can't parse.
+> 
+> Cheers,
+> 
+> 
+> Guilherme
 
-ok, that should be fine.
-
-The code in bus.c mostly ignores -ENODATA for the suspend cases. For the
-bank switch, I forgot that we also ignore it, Bard added a patch in
-2021. The only case where we abort a transfer is on a real error.
-
-
-
+Complete lack of attention from me, apologies!
+The suggestions was s/was/is - already fixed for V2, thanks Randy.

@@ -2,115 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBFA52018B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3364552018D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238612AbiEIPwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S238621AbiEIPwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238529AbiEIPwQ (ORCPT
+        with ESMTP id S238529AbiEIPwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:52:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92FA2D76C5;
-        Mon,  9 May 2022 08:48:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 9 May 2022 11:52:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D8672D76E7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652111320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t41mLb2CHoozgZBbJV2mqxblkUXL3qgQ9BaS0ec36pA=;
+        b=GqrnichxuzzoFhFp9vsdwUNagoGoumxv+LtFYRF48pUli2oyAS9AIksk4oLoWukG6gw4NV
+        0msD7nyTElo6fBl2Uz9kvXkvE4S3d7f70co4sOrQxd5+dqyXk6OJ+gtwWQN8cEREe4EUNC
+        7EncwWMflYyS0w6s4poxLWmvw2bY04k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-135-7hH4sju1OWekDDaQwxs_FQ-1; Mon, 09 May 2022 11:48:29 -0400
+X-MC-Unique: 7hH4sju1OWekDDaQwxs_FQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4E3B8172F;
-        Mon,  9 May 2022 15:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BF9C385B1;
-        Mon,  9 May 2022 15:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652111300;
-        bh=0o6i/khs9xGoGHyAd0bai2xuSS3ZhiI169q7SJoXynE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cbu2djXI9wVzfcyzyXWhowzZSI35BvSYN9w6wCzFM8roanq/3vKuNROqDkVIBTAGu
-         eXP6CqSGs5FmDULU/Q0p4wVTAcXr5wlO+E1lFH7mqpNyRL2mVNzWp9TZI/8nfcqlAq
-         3/Stty+uMXoX+YqU8Yb4SPD8xFh/MY8VGaP+EWkN9x94aVDC6rz56H0sF74vmZ+YIj
-         H1JFQofijaLpQXKFRlhAB6F9H6h62jgTuwmobir0V23+NOnijTbwdMD0L4CUqcu80P
-         zL2uO/iqgFZn0O2I+pwBdnNrs9NhKPdRMcHaJrnjhIOj9fU/kAmvIvDKz2wHkDEWjS
-         28vSzOlWkhe2w==
-Date:   Mon, 9 May 2022 16:48:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, german.gomez@arm.com,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 1/6] perf: arm64: Add SVE vector granule register to
- user regs
-Message-ID: <Ynk3vTtJApO13peb@sirena.org.uk>
-References: <20220509144257.1623063-1-james.clark@arm.com>
- <20220509144257.1623063-2-james.clark@arm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58FB5801E80;
+        Mon,  9 May 2022 15:48:29 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 204714010E40;
+        Mon,  9 May 2022 15:48:29 +0000 (UTC)
+Message-ID: <d5a9d228-df0a-2209-618f-c963c62f0e24@redhat.com>
+Date:   Mon, 9 May 2022 11:48:28 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kWHxwAIOcGn9XJL6"
-Content-Disposition: inline
-In-Reply-To: <20220509144257.1623063-2-james.clark@arm.com>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] mm/page_owner: use strscpy() instead of strlcpy()
+Content-Language: en-US
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>
+References: <20220509145949.265184-1-eric.dumazet@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220509145949.265184-1-eric.dumazet@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/9/22 10:59, Eric Dumazet wrote:
+> From: Eric Dumazet <edumazet@google.com>
+>
+> current->comm[] is not a string (no guarantee for
+> a zero byte in it).
+>
+> strlcpy(s1, s2, l) is calling strlen(s2), potentially
+> causing out-of-bound access, as reported by syzbot:
+>
+> detected buffer overflow in __fortify_strlen
+> ------------[ cut here ]------------
+> kernel BUG at lib/string_helpers.c:980!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 4087 Comm: dhcpcd-run-hooks Not tainted 5.18.0-rc3-syzkaller-01537-g20b87e7c29df #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:fortify_panic+0x18/0x1a lib/string_helpers.c:980
+> Code: 8c e8 c5 ba e1 fa e9 23 0f bf fa e8 0b 5d 8c f8 eb db 55 48 89 fd e8 e0 49 40 f8 48 89 ee 48 c7 c7 80 f5 26 8a e8 99 09 f1 ff <0f> 0b e8 ca 49 40 f8 48 8b 54 24 18 4c 89 f1 48 c7 c7 00 00 27 8a
+> RSP: 0018:ffffc900000074a8 EFLAGS: 00010286
+>
+> RAX: 000000000000002c RBX: ffff88801226b728 RCX: 0000000000000000
+> RDX: ffff8880198e0000 RSI: ffffffff81600458 RDI: fffff52000000e87
+> RBP: ffffffff89da2aa0 R08: 000000000000002c R09: 0000000000000000
+> R10: ffffffff815fae2e R11: 0000000000000000 R12: ffff88801226b700
+> R13: ffff8880198e0830 R14: 0000000000000000 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f5876ad6ff8 CR3: 000000001a48c000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+> Call Trace:
+>   <IRQ>
+>   __fortify_strlen include/linux/fortify-string.h:128 [inline]
+>   strlcpy include/linux/fortify-string.h:143 [inline]
+>   __set_page_owner_handle+0x2b1/0x3e0 mm/page_owner.c:171
+>   __set_page_owner+0x3e/0x50 mm/page_owner.c:190
+>   prep_new_page mm/page_alloc.c:2441 [inline]
+>   get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+>   __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+>   alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+>   alloc_slab_page mm/slub.c:1799 [inline]
+>   allocate_slab+0x26c/0x3c0 mm/slub.c:1944
+>   new_slab mm/slub.c:2004 [inline]
+>   ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+>   __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+>   slab_alloc_node mm/slub.c:3183 [inline]
+>   slab_alloc mm/slub.c:3225 [inline]
+>   __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+>   kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3242
+>   dst_alloc+0x146/0x1f0 net/core/dst.c:92
+>
+> Fixes: 865ed6a32786 ("mm/page_owner: record task command name")
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
+> Reported-by: syzbot <syzkaller@googlegroups.com>
+> Cc: Waiman Long <longman@redhat.com>
+> ---
+>   mm/page_owner.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index fb3a05fdebdbf1c3646ba1584cbf06facf0e7a9a..19bc559e49040e60c03a5f4268c89618fa0f1b1c 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -168,7 +168,7 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+>   		page_owner->pid = current->pid;
+>   		page_owner->tgid = current->tgid;
+>   		page_owner->ts_nsec = local_clock();
+> -		strlcpy(page_owner->comm, current->comm,
+> +		strscpy(page_owner->comm, current->comm,
+>   			sizeof(page_owner->comm));
+>   		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
+>   		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
 
---kWHxwAIOcGn9XJL6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, I think it is more correct to use strscpy().
 
-On Mon, May 09, 2022 at 03:42:49PM +0100, James Clark wrote:
-> Dwarf based unwinding in a function that pushes SVE registers onto
-> the stack requires the unwinder to know the length of the SVE register
-> to calculate the stack offsets correctly. This was added to the Arm
-> specific Dwarf spec as the VG pseudo register[1].
->=20
-> Add the vector length at position 46 if it's requested by userspace and
-> SVE is supported. If it's not supported then fail to open the event.
->=20
-> The vector length must be on each sample because it can be changed
-> at runtime via a prctl or ptrace call. Also by adding it as a register
-> rather than a separate attribute, minimal changes will be required in an
-> unwinder that already indexes into the register list.
+Acked-by: Waiman Long <longman@redhat.com>
 
-> +static u64 perf_ext_regs_value(int idx)
-> +{
-> +	switch (idx) {
-> +	case PERF_REG_ARM64_VG:
-> +		if (WARN_ON_ONCE(!system_supports_sve()))
-> +			return 0;
+Thanks,
+Longman
 
-These WARN_ON_ONCE()s seem a bit loud but I do see they are idiomatic
-for this code so
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---kWHxwAIOcGn9XJL6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5N70ACgkQJNaLcl1U
-h9ARVQf9G0mw/2Bx5k3Bh/9t98gHB+qEtoXMXhzgkJjMUiXzj3E9uwkUmvKNR58B
-PkM4MMWPCy3pQAP/Pc0zgLSKyOM30z54SdCucVVRP+ma8+y4+cBUnxvp5462F8x7
-mKMbLjp3E1D1vl+4y/nqCOEKctytWfJEMUvMPd36n3Hwt4fg/7gzv14wCaJzZMrk
-TZJe/W8LsNFr/pQMpPA5yKgonJKP8QCC97028L1BUq8tNWNMSWp1rtStgwDm6f7d
-ZeuCqrHHljaqY9/3QuuX5LBXMr3b3WyrzVdguH1xSDChvnKQHHUpneY0oNUvDFCh
-O7zct9SC04onTfuDNr1orFH6uAliQg==
-=TX9r
------END PGP SIGNATURE-----
-
---kWHxwAIOcGn9XJL6--

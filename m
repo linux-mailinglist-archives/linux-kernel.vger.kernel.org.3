@@ -2,215 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E498151F334
+	by mail.lfdr.de (Postfix) with ESMTP id 9843651F333
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiEIELR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S233241AbiEIELC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232443AbiEIEFx (ORCPT
+        with ESMTP id S232592AbiEIEGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:05:53 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A080BCB
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:02:00 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id q23so17648685wra.1
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:02:00 -0700 (PDT)
+        Mon, 9 May 2022 00:06:08 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E39AAE11;
+        Sun,  8 May 2022 21:02:16 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15889631pjb.5;
+        Sun, 08 May 2022 21:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SJ8dF+QuMh/vx+O3NBUHJR6SAWNkIGtKyfjSID7EqTw=;
-        b=IX/c5ofu+DaFlsi1jnFUDRl9XdZl1WZC81pKbYDuudzHveM/7WM6xfecMOUF5qp/iP
-         UI8sJlVCvDQJu4iXYlGVoDOJXtKSYhHLsGvFIYwo3t6mpuvLyL4SV/GZQbxEks1xNIik
-         A/qsIaxlFtb/rI8wddI/qlhzy3/XROR+J8pR7mQbtFI6eHQzZYEs+sP90pMRgb+sRhp5
-         YJCdYq+H61DwmHMO7UzpMOcUl8XhU9PiZk4YpDRb9UcxYoryYMhDzlhL+kACPoMnypAn
-         AqZq9MyceQ9jp3u40/eYgQYwNrKBLDrDFr4SaoFZxV+PWZMggMarlyz5+v6APJ8c5DEV
-         Caug==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=6eVdKKgpvfyr2lmpaU0Ls6K7vbdJu1m0KcXbrbuObD4=;
+        b=hH9sLId90RXxnTi03TtWtlGJZ1l/Or77bFTq/1LTS58C6VV0qLI8aEiWCouxiw7nCu
+         cNelI42+zINXLWLY4N2N+Yx9V5wPAWUBw6BFpqDF2Ls418gcH+2Y4PQUOCk9Z3QL7dht
+         4Oo6peOgjs9uz+HQ082wOBwyCvoXZ3SB4G1tns26nTuo5YVaXTWzcC8m/aCIt5cFBKJO
+         ASK1sbsPRMTeZboQd2sTCfqgUDtJclwZe5XchholeXN81NEKdipA4p//JTIV5TbNIEx8
+         Tc/SddLxDMB3axqNMr1xF0r/3a6HJDAC7Xt5pOlUfYzAnpCIejjrwRnQmp4QK9cJRYVd
+         CBUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SJ8dF+QuMh/vx+O3NBUHJR6SAWNkIGtKyfjSID7EqTw=;
-        b=Z9RwVrVD6EMkB4cPPi1neFt1+LuE31Vj2Sv17+IV7zlx4v9eU/Tt9FGCxtXTjvoppv
-         z/BRvQEiQtBaGy3mv0/wWivVaO6Q1/PtIcEGGY7G5+VF7PwYjLhu69ZIMPOtkoqhnkvv
-         4HI9Yyf2gxdVp3fOHKFQ/2anhJdjl+IxazkUEsA2BrgQTowLqSdeVc3DYga19UftJmpi
-         bd1OEHuX29t0ajU5u8HP3ZFabJ6cu/QeLRM60SIuSLY84x3DhfDwI48l2TUgQkGPzK7Q
-         iMCr/8jfK9S+zBfrEd4zUD48gvc4uE2bnu1xtLfvM/qy8+LdUQ7a4BuopNdU0s2VMzod
-         BCKg==
-X-Gm-Message-State: AOAM530mpy9Iuv5nnAjg97Gn6u9dBrAYeB7tAF6TfRt63hv+T+BnbpvY
-        ZSb32pOJpZVIAbBwB1Qix2tQEuuM+t8iWQBiQc+YoQ==
-X-Google-Smtp-Source: ABdhPJxcZSyW1JpOeqlyUitgRFAErha6IKy2Qp5nxrezznBtFQsIryCYlE9BooGVgCcE5TEryK/szudYVHViUtmnsoM=
-X-Received: by 2002:a5d:6d0d:0:b0:20c:530c:1681 with SMTP id
- e13-20020a5d6d0d000000b0020c530c1681mr11940881wrq.214.1652068918822; Sun, 08
- May 2022 21:01:58 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6eVdKKgpvfyr2lmpaU0Ls6K7vbdJu1m0KcXbrbuObD4=;
+        b=RHE7nX/FKXzbbGHTjYUubE45AhZN13jNp2z+dzqnguMRvsEkrM3Fr4cF7mQOI9ro7Z
+         dsGrsrllrUKnnxnYSbKtRQRC2kz4tTiJoXwW2e+XPF4GfjDmznAbiteZXqF3fHeSqnOh
+         vw9x9GOA6fbPjLJfTu+4463cp+AyMYiTDEIBIumvHD3ZRx3cH8QKlk7pO4X6uP32qrhr
+         iabVRvmYJQ7HngN2ZNUnnmuNI/d4BdM/aZeBD/yVvbQerw65mMGaRPToyJo1sKUZqZVT
+         jwZuQrWzPWQAQgpNq3rPLYEhFYCnTYHgOW7fH0IN84BpFwqYvc28bEmg9xqNC7u835zD
+         7FQQ==
+X-Gm-Message-State: AOAM5331V+ZCD0p58AHFfkAtDzl81FuaQ4lCjBgBvJDRm0uDven/QKKO
+        pnTNSfU8Q6iLl5xOi9tWpfk=
+X-Google-Smtp-Source: ABdhPJziN8xtoWqM0azviq6vE079XOSlMsdPagRnGq0woepZ5+g+K8ajQh6aD0zmIIZT3AJhh04bBA==
+X-Received: by 2002:a17:90a:5886:b0:1dc:6b58:91e with SMTP id j6-20020a17090a588600b001dc6b58091emr16257395pji.176.1652068935509;
+        Sun, 08 May 2022 21:02:15 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id q1-20020a170902dac100b0015e8d4eb2dfsm5873971plx.297.2022.05.08.21.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 21:02:14 -0700 (PDT)
+Message-ID: <7e9c2e77-8b70-6e15-3f3d-905ab42b0fcd@gmail.com>
+Date:   Mon, 9 May 2022 13:02:08 +0900
 MIME-Version: 1.0
-References: <20220508160749.984-1-jszhang@kernel.org> <20220508160749.984-4-jszhang@kernel.org>
-In-Reply-To: <20220508160749.984-4-jszhang@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 9 May 2022 09:31:47 +0530
-Message-ID: <CAAhSdy32C59ULdP7KNNgy08jF5vUbvYoF6_n+kAopJfiLsJQFw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] riscv: replace has_fpu() with system_supports_fpu()
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+To:     ojeda@kernel.org
+Cc:     alex.gaynor@gmail.com, ark.email@gmail.com, bobo1239@web.de,
+        bobwxc@email.cn, corbet@lwn.net, dxu@dxuuu.xyz, gary@garyguo.net,
+        gregkh@linuxfoundation.org, jarkko@kernel.org, jtitor@2k36.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, masahiroy@kernel.org, me@jvmerkle.de,
+        me@kloenk.de, michal.lkml@markovi.net, mpe@ellerman.id.au,
+        ndesaulniers@google.com, rust-for-linux@vger.kernel.org,
+        thesven73@gmail.com, torvalds@linux-foundation.org,
+        wedsonaf@google.com, wei.liu@kernel.org
+References: <20220507052451.12890-19-ojeda@kernel.org>
+Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220507052451.12890-19-ojeda@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> This is to use the unified cpus_have_{final|const}_cap() instead of
-> putting static key related here and there.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Hi Miguel,
+
+On Sat,  7 May 2022 07:24:16 +0200,
+Miguel Ojeda wrote:
+> Most of the documentation for Rust is written within the source code
+> itself, as it is idiomatic for Rust projects. This applies to both
+> the shared infrastructure at `rust/` as well as any other Rust module
+> (e.g. drivers) written across the kernel.
+> 
+> However, these documents contain general information that does not
+> fit particularly well in the source code, like the Quick Start guide.
+> 
+> It also contains an asset (SVG logo) used for the `rustdoc` target
+> and a few other small changes elsewhere in the documentation folder.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Finn Behrens <me@kloenk.de>
+> Signed-off-by: Finn Behrens <me@kloenk.de>
+> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Co-developed-by: Wu XiangCheng <bobwxc@email.cn>
+> Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Co-developed-by: Yuki Okushi <jtitor@2k36.org>
+> Signed-off-by: Yuki Okushi <jtitor@2k36.org>
+> Co-developed-by: Wei Liu <wei.liu@kernel.org>
+> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> Co-developed-by: Julian Merkle <me@jvmerkle.de>
+> Signed-off-by: Julian Merkle <me@jvmerkle.de>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
->  arch/riscv/include/asm/cpufeature.h | 5 +++++
->  arch/riscv/include/asm/switch_to.h  | 9 ++-------
->  arch/riscv/kernel/cpufeature.c      | 8 ++------
->  arch/riscv/kernel/process.c         | 2 +-
->  arch/riscv/kernel/signal.c          | 4 ++--
->  5 files changed, 12 insertions(+), 16 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-> index d80ddd2f3b49..634a653c7fa2 100644
-> --- a/arch/riscv/include/asm/cpufeature.h
-> +++ b/arch/riscv/include/asm/cpufeature.h
-> @@ -91,4 +91,9 @@ static inline void cpus_set_cap(unsigned int num)
->         }
->  }
->
-> +static inline bool system_supports_fpu(void)
-> +{
-> +       return IS_ENABLED(CONFIG_FPU) && !cpus_have_final_cap(RISCV_HAS_NO_FPU);
+>  Documentation/doc-guide/kernel-doc.rst     |   3 +
+>  Documentation/index.rst                    |   1 +
+>  Documentation/kbuild/kbuild.rst            |  17 +
+>  Documentation/kbuild/makefiles.rst         |  50 ++-
+>  Documentation/process/changes.rst          |  41 +++
+>  Documentation/rust/arch-support.rst        |  34 ++
+>  Documentation/rust/coding-guidelines.rst   | 214 ++++++++++++
+>  Documentation/rust/general-information.rst |  77 +++++
+>  Documentation/rust/index.rst               |  20 ++
+>  Documentation/rust/logo.svg                | 357 +++++++++++++++++++++
+I think you agreed splitting SVG part into its own patch with
+a proper copying info, etc.  Let me see...  So, here is the link:
 
-This should be checking for "f" and "d" ISA extensions since "FPU" is
-not an ISA extension name.
+https://lore.kernel.org/lkml/CANiq72mLtvWJ5peSTpYQ8AeLEskga6Pda8Q7Daysv2pfycnyxA@mail.gmail.com/
 
-> +}
+I might have missed v5 of this patch series.
+That might be because v5's 15/20 was not accepted by linux-doc's
+lore archive (maybe) due to its size despite it had Cc: linux-doc.
+v6's 18/23 was also rejected.
+
+>  Documentation/rust/quick-start.rst         | 230 +++++++++++++
+>  11 files changed, 1040 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/rust/arch-support.rst
+>  create mode 100644 Documentation/rust/coding-guidelines.rst
+>  create mode 100644 Documentation/rust/general-information.rst
+>  create mode 100644 Documentation/rust/index.rst
+>  create mode 100644 Documentation/rust/logo.svg
+>  create mode 100644 Documentation/rust/quick-start.rst
+
+I have some alternative ideas for table formatting in ReST.
+
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+> new file mode 100644
+> index 000000000000..482757a1f3d0
+> --- /dev/null
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -0,0 +1,34 @@
+> +Arch Support
+> +============
 > +
->  #endif
-> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-> index 0a3f4f95c555..362cb18d12d5 100644
-> --- a/arch/riscv/include/asm/switch_to.h
-> +++ b/arch/riscv/include/asm/switch_to.h
-> @@ -8,6 +8,7 @@
->
->  #include <linux/jump_label.h>
->  #include <linux/sched/task_stack.h>
-> +#include <asm/cpufeature.h>
->  #include <asm/processor.h>
->  #include <asm/ptrace.h>
->  #include <asm/csr.h>
-> @@ -56,13 +57,7 @@ static inline void __switch_to_aux(struct task_struct *prev,
->         fstate_restore(next, task_pt_regs(next));
->  }
->
-> -extern struct static_key_false cpu_hwcap_fpu;
-> -static __always_inline bool has_fpu(void)
-> -{
-> -       return static_branch_likely(&cpu_hwcap_fpu);
-> -}
->  #else
-> -static __always_inline bool has_fpu(void) { return false; }
->  #define fstate_save(task, regs) do { } while (0)
->  #define fstate_restore(task, regs) do { } while (0)
->  #define __switch_to_aux(__prev, __next) do { } while (0)
-> @@ -75,7 +70,7 @@ extern struct task_struct *__switch_to(struct task_struct *,
->  do {                                                   \
->         struct task_struct *__prev = (prev);            \
->         struct task_struct *__next = (next);            \
-> -       if (has_fpu())                                  \
-> +       if (system_supports_fpu())                                      \
->                 __switch_to_aux(__prev, __next);        \
->         ((last) = __switch_to(__prev, __next));         \
->  } while (0)
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index e6c72cad0c1c..1edf3c3f8f62 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -22,10 +22,6 @@ unsigned long elf_hwcap __read_mostly;
->  /* Host ISA bitmap */
->  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->
-> -#ifdef CONFIG_FPU
-> -__ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
-> -#endif
-> -
->  DECLARE_BITMAP(cpu_hwcaps, RISCV_NCAPS);
->  EXPORT_SYMBOL(cpu_hwcaps);
->
-> @@ -254,8 +250,8 @@ void __init riscv_fill_hwcap(void)
->         pr_info("riscv: ELF capabilities %s\n", print_str);
->
->  #ifdef CONFIG_FPU
-> -       if (elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D))
-> -               static_branch_enable(&cpu_hwcap_fpu);
-> +       if (!(elf_hwcap & (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D)))
-> +               cpus_set_cap(RISCV_HAS_NO_FPU);
->  #endif
->         enable_cpu_capabilities();
->         static_branch_enable(&riscv_const_caps_ready);
-> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> index 504b496787aa..c9cd0b42299e 100644
-> --- a/arch/riscv/kernel/process.c
-> +++ b/arch/riscv/kernel/process.c
-> @@ -88,7 +88,7 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
->         unsigned long sp)
->  {
->         regs->status = SR_PIE;
-> -       if (has_fpu()) {
-> +       if (system_supports_fpu()) {
->                 regs->status |= SR_FS_INITIAL;
->                 /*
->                  * Restore the initial value to the FP register
-> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-> index 9f4e59f80551..96aa593a989e 100644
-> --- a/arch/riscv/kernel/signal.c
-> +++ b/arch/riscv/kernel/signal.c
-> @@ -90,7 +90,7 @@ static long restore_sigcontext(struct pt_regs *regs,
->         /* sc_regs is structured the same as the start of pt_regs */
->         err = __copy_from_user(regs, &sc->sc_regs, sizeof(sc->sc_regs));
->         /* Restore the floating-point state. */
-> -       if (has_fpu())
-> +       if (system_supports_fpu())
->                 err |= restore_fp_state(regs, &sc->sc_fpregs);
->         return err;
->  }
-> @@ -143,7 +143,7 @@ static long setup_sigcontext(struct rt_sigframe __user *frame,
->         /* sc_regs is structured the same as the start of pt_regs */
->         err = __copy_to_user(&sc->sc_regs, regs, sizeof(sc->sc_regs));
->         /* Save the floating-point state. */
-> -       if (has_fpu())
-> +       if (system_supports_fpu())
->                 err |= save_fp_state(regs, &sc->sc_fpregs);
->         return err;
->  }
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> +Currently, the Rust compiler (``rustc``) uses LLVM for code generation,
+> +which limits the supported architectures that can be targeted. In addition,
+> +support for building the kernel with LLVM/Clang varies (please see
+> +Documentation/kbuild/llvm.rst). This support is needed for ``bindgen``
+> +which uses ``libclang``.
+> +
+> +Below is a general summary of architectures that currently work. Level of
+> +support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+> +
+> +.. list-table::
+> +   :widths: 10 10 10
+> +   :header-rows: 1
+> +
+> +   * - Architecture
+> +     - Level of support
+> +     - Constraints
+> +   * - ``arm``
+> +     - Maintained
+> +     - ``armv6`` and compatible only, ``RUST_OPT_LEVEL >= 2``
+> +   * - ``arm64``
+> +     - Maintained
+> +     - None
+> +   * - ``powerpc``
+> +     - Maintained
+> +     - ``ppc64le`` only, ``RUST_OPT_LEVEL < 2`` requires ``CONFIG_THREAD_SHIFT=15``
+> +   * - ``riscv``
+> +     - Maintained
+> +     - ``riscv64`` only
+> +   * - ``x86``
+> +     - Maintained
+> +     - ``x86_64`` only
 
-Regards,
-Anup
+Excerpt from Section "list tables" in
+Documentation/doc-guide/sphinx.rst:
+
+> The list-table formats can be useful for tables that are not easily laid
+> out in the usual Sphinx ASCII-art formats.  These formats are nearly
+> impossible for readers of the plain-text documents to understand, though,
+> and should be avoided in the absence of a strong justification for their
+> use.
+
+So here are a couple of alternative ways to represent the table
+
+* ASCII-art format:
+
+============ ================ ==========================================
+Architecture Level of support Constraints
+============ ================ ==========================================
+``arm``      Maintained       ``armv6`` and compatible only,
+                              ``RUST_OPT_LEVEL >= 2``
+``arm64``    Maintained       None
+``powerpc``  Maintained       ``ppc64le`` only, ``RUST_OPT_LEVEL < 2``
+                              requires ``CONFIG_THREAD_SHIFT=15``
+``riscv``    Maintained       ``riscv64`` only
+``x86``      Maintained       ``x86_64`` only
+============ ================ ==========================================
+
+* Literal block format:
+
+::
+
+ Architecture  Level of support  Constraints
+ ------------  ----------------  -------------------------------------
+ arm           Maintained        armv6 and compatible only,
+                                 RUST_OPT_LEVEL >= 2
+ arm64         Maintained        None
+ powerpc       Maintained        ppc64le only, RUST_OPT_LEVEL < 2
+                                 requires CONFIG_THREAD_SHIFT=15
+ riscv         Maintained        riscv64 only
+ x86           Maintained        x86_64 only
+
+
+"::" above the table marks the start of a literal block.
+Indents are important for la iteral block to work.
+A literal block ends at a line which has the same indent as
+the preceding paragraph, in this case with no indent, or at
+the end of file.
+
+As you see, those inline-literal markers of ``xxxx``, which are
+distracting when the .rst file is read as plain-text, are not
+necessary in the literal-block approach.  And you can directly
+tweak line breaks in the Constraints column in the final HTML
+and PDF docs.
+
+In my opinion, the literal-block approach should be the most
+reasonable choice here. Of course its your call which one
+to choose.
+
+        Thanks, Akira

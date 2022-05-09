@@ -2,41 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A51B51FD89
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8BD51FD8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiEINMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S235198AbiEINM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbiEINMO (ORCPT
+        with ESMTP id S235149AbiEINMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:12:14 -0400
-Received: from outbound-smtp55.blacknight.com (outbound-smtp55.blacknight.com [46.22.136.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776E923F3A1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:08:18 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp55.blacknight.com (Postfix) with ESMTPS id ED95DFA78E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:08:16 +0100 (IST)
-Received: (qmail 17402 invoked from network); 9 May 2022 13:08:16 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 9 May 2022 13:08:16 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [RFC PATCH 0/6] Drain remote per-cpu directly v2
-Date:   Mon,  9 May 2022 14:07:59 +0100
-Message-Id: <20220509130805.20335-1-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.34.1
+        Mon, 9 May 2022 09:12:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203EA23F3A1;
+        Mon,  9 May 2022 06:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0yNOraBv1neVOBjF4rkQmGA1UClv6oQqF7sKwICGE3I=; b=Z7V1jYDJDcZyxzkkJvsA6Rj/A7
+        ZFep02+0m2gHdW8PQqrUQRCt9yzI5iYf4UsAOeD/NQVAsGXBAxj47alVWFjiTQQ4we618L0hmE2bf
+        /iXZAcSyy4VPeAgQLDMSfiwvo10xAdBZklFk3FW1/eqH9RpfEfFCb0alyQROJh9Gsza4x8c/VQv67
+        cKvuwwQXZW3McI2jZ39xAsTJw4G3XSudWOwFruL7RuoSFTl72KhSWDZQaf2eJEdKizCV3cAJiMc7R
+        HrFIkAi2SVsxbx4XCO9+o+J46KFGR6bA9kyP5A7QeBjwKrnE1P4cM4aCWOJdGVmrNCnhNND71LGyy
+        7SmbKzsA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1no37K-003SfG-0r; Mon, 09 May 2022 13:08:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D6940300385;
+        Mon,  9 May 2022 15:07:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE4F42026963D; Mon,  9 May 2022 15:07:59 +0200 (CEST)
+Date:   Mon, 9 May 2022 15:07:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, rrichter@amd.com, mingo@redhat.com,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        tglx@linutronix.de, bp@alien8.de, irogers@google.com,
+        yao.jin@linux.intel.com, james.clark@arm.com, leo.yan@linaro.org,
+        kan.liang@linux.intel.com, ak@linux.intel.com, eranian@google.com,
+        like.xu.linux@gmail.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v2 3/8] perf/amd/ibs: Add support for L3 miss filtering
+Message-ID: <YnkSL5QwwFxnWM/0@hirez.programming.kicks-ass.net>
+References: <20220509044914.1473-1-ravi.bangoria@amd.com>
+ <20220509044914.1473-4-ravi.bangoria@amd.com>
+ <YnkDfRIRyztvXv6o@hirez.programming.kicks-ass.net>
+ <d4486cd1-e4dc-3120-97ec-dad922bd8430@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4486cd1-e4dc-3120-97ec-dad922bd8430@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,59 +68,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog since v1
-o Fix unsafe RT locking scheme
-o Use spin_trylock on UP PREEMPT_RT
+On Mon, May 09, 2022 at 06:05:53PM +0530, Ravi Bangoria wrote:
+> 
+> On 09-May-22 5:35 PM, Peter Zijlstra wrote:
+> > On Mon, May 09, 2022 at 10:19:09AM +0530, Ravi Bangoria wrote:
+> >> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> >> index b06e4c573add..a24b637a6e1d 100644
+> >> --- a/arch/x86/include/asm/perf_event.h
+> >> +++ b/arch/x86/include/asm/perf_event.h
+> >> @@ -391,6 +391,7 @@ struct pebs_xmm {
+> >>  #define IBS_CAPS_OPBRNFUSE		(1U<<8)
+> >>  #define IBS_CAPS_FETCHCTLEXTD		(1U<<9)
+> >>  #define IBS_CAPS_OPDATA4		(1U<<10)
+> >> +#define IBS_CAPS_ZEN4IBSEXTENSIONS	(1U<<11)
+> >>  
+> >>  #define IBS_CAPS_DEFAULT		(IBS_CAPS_AVAIL		\
+> >>  					 | IBS_CAPS_FETCHSAM	\
+> > 
+> > Would you mind terribly if I do:
+> > 
+> >   's/IBS_CAPS_ZEN4IBSEXTENSIONS/IBS_CAPS_ZEN4/'
+> > 
+> > on it? Per the IBS_ suffix, we're already talking about IBS, per the
+> > CAPS thing we're talking about capabilities and I'm thinking that makes
+> > EXTENTION somewhat redundant, which then leaves:
+> > 
+> >   IBS_CAPS_ZEN4
+> 
+> Yeah, IBS_CAPS_ZEN4 is better. Let me know if you want me to respin.
 
-This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-per-cpu lists drain support" -- avoid interference of a high priority
-task due to a workqueue item draining per-cpu page lists. While many
-workloads can tolerate a brief interruption, it may be cause a real-time
-task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-the draining in non-deterministic.
-
-Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-The local_lock on its own prevents migration and the IRQ disabling protects
-from corruption due to an interrupt arriving while a page allocation is
-in progress. The locking is inherently unsafe for remote access unless
-the CPU is hot-removed.
-
-This series adjusts the locking. A spinlock is added to struct
-per_cpu_pages to protect the list contents while local_lock_irq continues
-to prevent migration and IRQ reentry. This allows a remote CPU to safely
-drain a remote per-cpu list.
-
-This series is a partial series. Follow-on work should allow the
-local_irq_save to be converted to a local_irq to avoid IRQs being
-disabled/enabled in most cases. Consequently, there are some TODO comments
-highlighting the places that would change if local_irq was used. However,
-there are enough corner cases that it deserves a series on its own
-separated by one kernel release and the priority right now is to avoid
-interference of high priority tasks.
-
-Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
-	and when it is storing per-cpu pages.
-
-Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
-	this is not necessary but it avoids per_cpu_pages consuming another
-	cache line.
-
-Patch 3 is a preparation patch to avoid code duplication.
-
-Patch 4 is a simple micro-optimisation that improves code flow necessary for
-	a later patch to avoid code duplication.
-
-Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
-	relying on local_lock to prevent migration, stabilise the pcp
-	lookup and prevent IRQ reentrancy.
-
-Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
-
- include/linux/mm_types.h |   5 +
- include/linux/mmzone.h   |  12 +-
- mm/page_alloc.c          | 342 +++++++++++++++++++++++++--------------
- 3 files changed, 230 insertions(+), 129 deletions(-)
-
--- 
-2.34.1
-
+Nah, I just edited the patch, all good.

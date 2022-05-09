@@ -2,220 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E232552007D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC71052007F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237850AbiEIPBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S237522AbiEIPBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbiEIPAp (ORCPT
+        with ESMTP id S237949AbiEIPBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:00:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D90133248;
-        Mon,  9 May 2022 07:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652108202; x=1683644202;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=31R3RkSDML7s+wze/ImFmkHlM+4bq7Pfsi18f4WVb20=;
-  b=GobCaBN0BXdIE8shnMZkfFr/Vn4axT9RmbHogcDlDoQMml0iBozSmiuy
-   w/88jx3cJd8Mvh5CP7WFEaHRyx5KXsTcHPlnLSO5hUAoupoNVWISZyXYf
-   3iu5BA76qNMVhHAr8IJUwaAJnT6Wn7C/R/0OLc7Elqz+Ln09o94OocMdi
-   b74A1iQF5AyBoNDb4Eo0vqvgVoSOkiSAIYnH6EZ909j2Pk3animv8jdlG
-   y6UKfbp0arJ2T7PT6T81vBRL2NMWhVmf2gqgkuKtWdWOzN0MZy/q+yYBT
-   tG2EG/NSGA4whHnWapk3tHzdxKPVOy/GMDRVsk5VHRIXVS5iYnPfXQ1mH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294297234"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="294297234"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:56:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="592616370"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 07:56:30 -0700
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 9 May 2022 07:56:29 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Mon, 9 May 2022 07:56:29 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.46) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Mon, 9 May 2022 07:56:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HcNA07MeFHBpsr0YzWpol46ZDFO6KfmLyHUI8fsKvKIgTK9X6mUilIFWi8dZGN0IWEE7t2GO+vhgYN5aE+S7884DaWfGWNKaJWXdC4ixxzrmsTDmYCT2efM8Ip5EjZxyojrCirvMu1KCnJFAPR2/HhvwH59TkRzbLw82Nx27XGKQ8pcHFGDJ5FzhBcMy+m7mLrLvRKul7aHt0uIJwGHHu6vf0QJtgveMyfisZ3JclJgCGEBO52HmJhHrS8InQQH/A1o9Ul9cgWONtW3n5m5JLPknIeEraIsHN3r6ulDH9NCbnuR3W2x3Bz/71PD+4kFbMX4oYgk6offxAHWHEl21vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SR+iUVOqBae8sr5JYxKNBeBEm1Adkj8U63qKO8G6DOw=;
- b=S/6q21QxnF/h2tEP119eMdZI1CidjmwVXqg1vCo/GAGJqtXcI9baYKNqi7JalDeb0OEkSy1QfJp98R31gWnNpuAaQEDFQo4JzsH6Uw6Gzbq+q9/JBjLSA+O3D1F9Quyx2PRLb8IGuR3TNFDg9v2zRYYKqy/pSCbU0LSrrl0qbXuE7+JIKprCJuTpLn0BhSh8BdPIipb9BZ/6yr5Jc0N9+ytAi1OWT7vjK2fj8NS4iPiY30wGT2eo5p6D8uVVxB2hbAzI1PpGUcdoK8G/ZmvVtttijD15nPLcwK6QOlri5UwWGhD2aHV6S7+E7MZvgMpXyKNRZYQeSvKq8fJMf2imbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3180.namprd11.prod.outlook.com (2603:10b6:5:9::13) by
- BN9PR11MB5356.namprd11.prod.outlook.com (2603:10b6:408:11d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
- 2022 14:56:28 +0000
-Received: from DM6PR11MB3180.namprd11.prod.outlook.com
- ([fe80::b1fa:393c:9fb6:6871]) by DM6PR11MB3180.namprd11.prod.outlook.com
- ([fe80::b1fa:393c:9fb6:6871%5]) with mapi id 15.20.5227.022; Mon, 9 May 2022
- 14:56:28 +0000
-Message-ID: <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
-Date:   Mon, 9 May 2022 16:56:23 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        <dri-devel@lists.freedesktop.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20220505220413.365977-1-javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0085.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:190::18) To DM6PR11MB3180.namprd11.prod.outlook.com
- (2603:10b6:5:9::13)
+        Mon, 9 May 2022 11:01:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7693927A899;
+        Mon,  9 May 2022 07:57:09 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x18so14082481plg.6;
+        Mon, 09 May 2022 07:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=Rv24537FAid4FkoG5vC//ersbcU5Q/QTrNuy2uhLE+c=;
+        b=YPkDSwQ5S0E7Oy1AUcGX1O14/o7qtUFAXUSXV/GU1bvmxUPafqgmsbqufLfn3pDvUz
+         KinPrlyrMM7g948dadsAtTQTbqkM0/oO4bsBTGY3Rt3uBP0jxW3EXKeWmgsguxTtOqLk
+         Ya0E4HH3YiQerNLit6T2CBwt6UPs8VV4vcP10SD/AhQpiJMwRQbR0guT8hMe9MaoMnTW
+         dzcvjEWgkvi4gdG4lVMVqzgWP7q4aghJFTwJ7qiGoR3ChpqZSSJpfu02kWGRrOw5+vwA
+         c5Esi9//CD67WHWnFWrSa8QFRdAAJ0OTP7+K8TfQ8ln4En7SfcAeJyHu4sGEOPQfmUnD
+         lN9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=Rv24537FAid4FkoG5vC//ersbcU5Q/QTrNuy2uhLE+c=;
+        b=N34x0eL3m+Cu9fks1aKN1puGOwwJ24UlZoEuI/onmBoW6/HmxZoDtb7Z7cgpmrupMu
+         tigkTWFEGHCdOKVk2Hly+vcZwkoKrmFLX9shm6YjFJvqCkjAWOpsbTdUsJcTR0oe4KIF
+         3bEpM7OrRvip7bVy3NfJV8xcErP2EYTRANwfZpZKPdrVPwGeGxH2oeaslzPKapc4g1qa
+         8q6+1DFmi8/Z6ifOwaFV1VEJGqck5wWNIaxfbFgiGAFNCInbu6ysGYCzdwOoQnkg574B
+         A1PUw6cU9xA6GD93lR4Xz4ns7ooAKWmjwyIx0sjA3KLm7ny6rz85b5bfdxnPwrBZ1ShR
+         yI4w==
+X-Gm-Message-State: AOAM531/l5ox8XQTrsWvu0oAa3U90fogP4UPgSo5kbtKvmsUHv43i2eo
+        vaJctF68HviASfHWVA6y+Zc=
+X-Google-Smtp-Source: ABdhPJwrkAzjNvukP+xrbe/mrqvr3+QVoCnL9nosgzjDlSCxY5RDZLM/k5624oZsIpeWrJEh6LhFcQ==
+X-Received: by 2002:a17:90b:4c10:b0:1dc:8289:7266 with SMTP id na16-20020a17090b4c1000b001dc82897266mr26873370pjb.190.1652108228929;
+        Mon, 09 May 2022 07:57:08 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id hi1-20020a17090b30c100b001da3780bfd3sm133322pjb.0.2022.05.09.07.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 07:57:08 -0700 (PDT)
+Message-ID: <92a7010c-5bb2-65df-edde-0ca88e035c2e@gmail.com>
+Date:   Mon, 9 May 2022 23:56:59 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d78f92dc-5226-4f30-fcd4-08da31cc1865
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5356:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR11MB535643532FB9E3D586EEA0C5EBC69@BN9PR11MB5356.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZedM0L5nTDCp4ZhVwc5XiaQ3QoaPDZLFt2P6bZ5XxYtAHcrpftC21irryAj+77AQzF6xcKJr2hdga3/Qlv4CBRyFIYK6+Se6JtYpMDM+sFEMRWri6EnXhVyAf0YL2joOQrAv16cPG9vudrA+eY0Xc1KexZxe/1xRGAOf78PaSE3KA2I0tmagzd8d/PpG0jvH0ca++iIUqt/pMBavupuOzqWxRR0/P2TyAmO3tP0cKId4zV4FTwIyz1FvW3j9pXVXtHxe5sHcDq6wme0rcSCykeywPFY4KUGDJDFu1RXDXI6VENyB6LY9sOUbOkhk8pEkTa4tvGH29+RA8pI+AQ0y4GX5180xcplC2lPxybabJtWnyIwwxA78iBkRl6sUdnZ1j4L51Zo429jRT21asM58iA+l2pKyF6DAFCrPoZdiwk3y2SFN+TWuURjtbOYI2PczmpZNzssiJveNNCQ43jHNBFbFTd8PL/RiXzhOseBYcixFoE/7YQ2sn9W/1lFzgF/DJw/Jts3RnEMRVy5ncIztv5vvktJ56kyk6Gtw33y5oY//Ey8krm2Lr9cHOf3Yct/iHFcYVXb2UKByMRbqMIgvsQvv6a4Cp9dO6MsiMq3gqYRpgoej4KW1V2deJa3EHnrw7r1w3oCwOhlazJdwFI/7z5aShC2/QWSVta4QaKDYoNg6owUhVFpL8o2qvw4cIJfusf7Fm+lIuAmS0OVK3huIEj2JXmkpret48QMwhY1nEDw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3180.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(26005)(107886003)(2616005)(186003)(4326008)(31686004)(66476007)(66556008)(8676002)(66946007)(44832011)(54906003)(5660300002)(36756003)(2906002)(316002)(38100700002)(508600001)(6666004)(36916002)(6486002)(31696002)(86362001)(53546011)(6506007)(8936002)(82960400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXNnRXU2eTZaR3ZxMzhZR25xQjlIWlk0VC9leVd3UVlsbmtCbUFtTWNEMStW?=
- =?utf-8?B?b3ZBOVVKMXhsdTZmQnJRa0RoMjdaNlgxbE83ek5SR09mOVNjL1NIL2pMdlJK?=
- =?utf-8?B?YXJmOGJLeEJZdndLb0c0dkVxTDNlUVZicUo4ckpweU5XalNNbDFma1UvWWl2?=
- =?utf-8?B?ZlY1a0hJNVJ1bzNrRWVIdUhjTXRobTlwTzZRRVlVYW5scEhsNDFuTmVlQXVS?=
- =?utf-8?B?RG9rQlVMUG44UVNwVGtMVjE5TTNidDJibHI4RlNYVytIcm5LK2NkZXo2ajFB?=
- =?utf-8?B?RDZvUVJ5dGFrZUx6Nk5VUFA4bmY2VGQweEN0Qzg5K1RjZzU0U0tpS2R2cFJm?=
- =?utf-8?B?THhkRExRZEllS1MzUmpoR2ZMaWRxR3l1UVlWalYxU1J2MS9jYThaczY2NnQx?=
- =?utf-8?B?SmdIdEZ2U2VzRGppaldqYUJjSm5PQ2tVekMzcEFCOWZqQ2pJeS9KL2NZSGR3?=
- =?utf-8?B?bjFMRTliYkpYS3YrMkVDaHByNERnN0JNeGVrNUZqZWhVSlUvNEdoTXB0K2tB?=
- =?utf-8?B?NFpveThPc3I1WUdNZXhMWnpFY1pJMkxsVUE3K2Q5MzBSUmZ2bjBrdEZZVTh4?=
- =?utf-8?B?a2QyRGV0NEdTTzRsTG9jcHg3UE9SUFRHQWlvYkFDdXA2amR5UWRrcmlUSHFK?=
- =?utf-8?B?TWNwVVl6SnV2Nkw1SHlXRWZCbFo1U3NHbkNjWWZqMGVTRXJ6cHhnUFcva0M5?=
- =?utf-8?B?STZSMmFYclgyakc0a3dHRnZRQ2E0aUp6dnZZTjAvRW8ya3hlLzhJR25POEZz?=
- =?utf-8?B?dUM3aUlPUXJaOWd3VVB5dzUzVjBNZmxoZHdWc3diWndSNTNOeXMwYzZNTFZ5?=
- =?utf-8?B?RTVkV3A1SW9RaUhpVWYrUnZNVWx4YUJFZlBUbUFOTENPVGRvMDJ2cklCVTVa?=
- =?utf-8?B?THBqWlZwakxDY2xJVVczWmNzR1l6RWQ3UDNWelpFZk93Rm1YaFluc0hQNlQv?=
- =?utf-8?B?REFxeVRUTHNMekU2aFBSSUxFNmFST1NMekFLODE2SVVGQTJPeEFXL1NSZ1ZR?=
- =?utf-8?B?d2hZVHA1aldaRGl4S3pDTVNvOEY0dHRTWjZMcUJqeUZxTStneHIycXpJNWd1?=
- =?utf-8?B?QkVtU1JidlZaRDB6eU9EdEhrNGVoazNSVXAzNWJzcDgrbFE1YWR2QzB6bzh2?=
- =?utf-8?B?anFSTXh5K2dpOGxjemwvYzRDV3Y3a0FQVkgvblJLYngzYzVNdnNvdVBaT2xH?=
- =?utf-8?B?cTVua0xHdGNaTnZFdWdDeUh6N3NiTjRldEdBVEhvcmd0SWFtcXhDNUxrMVls?=
- =?utf-8?B?Z0xzaVkzMGZidFdDcTh1V2VubktXblhjRXZCRSt5UlAvQ3BXb3YxY1lvejdI?=
- =?utf-8?B?Rmc0ZHJmUEJ4ZVFZYUx1eHUvWFhnTXU3V2ROVG9SQTdWaVBNd3M3SHlHZXg3?=
- =?utf-8?B?TVdKSjJnZk9mcGtWMEl4ZldjeHV4aFlwK3QrWWs2VjF3b0hYRkRBOHR1YjdT?=
- =?utf-8?B?ZDk4UEgva3dxY1hFOE03cTQ0cmxISUFwWnFMRlBDSGZnRlVnSyt3SU5hTk1T?=
- =?utf-8?B?U2hJWmx3b1VtMUsyV3Q5dHFLaUNvaHkzdGFDVHE3OXljVWU1Vnd5L0l3elN5?=
- =?utf-8?B?U28vU21sdThUd1FFc0dOMXV5d1BmT0loc2VSb0JqT21zRmlzYWxnSlJ4N1Q2?=
- =?utf-8?B?OHlvaUgwZi9mRnBPTHhBb2RKSmwzallQV3JveUZRN0JvN3F5cExXTWIyWHdR?=
- =?utf-8?B?ZEtFNmp2TG9TN3RqVGtndDhwS0hGYVBRelU0dTFhaEdwNkVKY2xnVCs1WGhi?=
- =?utf-8?B?Y1RFbElYbys0WU9yTVQ1VTNpVVdyWkl5L2FLUG5RZ05wY1VmNkpBbEhYTURL?=
- =?utf-8?B?cUd6Zk04TG9XWnZYcXFIOUNKUnRQZWdxZHF6TWVsa3JSVzMwbFNhaU9OMGVF?=
- =?utf-8?B?bnVCWE5OazAzSFlMOUpnQ2dGd0F4cmlpbm43WjlMa21rbkpGdTVlQlo4TElt?=
- =?utf-8?B?Z1hUd3E0TWMxMFNYSmp3eU12STJ6K3Fxd1hpZWsrSjJ2emZ5bElwYUNpRzZ3?=
- =?utf-8?B?WFZGcS9HQytkSGRXVUtkQWRFeWJIeGhicWdha1krY29UZG8yalE0S3BoQWNy?=
- =?utf-8?B?WjdQK3RLS1VBZDc0bm9NcGpNNGxPS2M1UGtaTmhleEJ3Y09kbG9Jb1gvNHpo?=
- =?utf-8?B?SkxwSkx5K0JSMUNOSU1xSFcxSU96UVFQSTBmdWNkcXVTbm9nTFl4OXhidkpj?=
- =?utf-8?B?Sldmc3kwMUIwRFlkbU12MUpKMnFFN1lsWjZUMnFJUVR0RmlSVXI0SUgrTVBE?=
- =?utf-8?B?eWJ5WEdlS3NNU3VCVlk5S01lcmhaMGdYZXpLbWRtYXI3VHVKellvMkpuVkNO?=
- =?utf-8?B?N016SHNha09pdzJMMDVibS8zNGxGRHF2a3VXU25jSVc0VEFwY0YwSDdKRzBm?=
- =?utf-8?Q?/HOwpXXtOt33I2Bk=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d78f92dc-5226-4f30-fcd4-08da31cc1865
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3180.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 14:56:28.1741
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jPcTPPRb8m1EEsdQ7IMpTxg5u+M8NCIymFOAlg/jEQ2ByezU+XpC/QqNY/9GGpfxhtbZdkfRs7vSuhcQDmpSXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5356
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Wu XiangCheng <bobwxc@email.cn>, Daniel Xu <dxu@dxuuu.xyz>,
+        Gary Guo <gary@garyguo.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yuki Okushi <jtitor@2k36.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Julian Merkle <me@jvmerkle.de>, Finn Behrens <me@kloenk.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>
+References: <20220507052451.12890-19-ojeda@kernel.org>
+ <7e9c2e77-8b70-6e15-3f3d-905ab42b0fcd@gmail.com>
+ <CANiq72mBVo4+htxVjY0wB1Y3GO2PEUiZjZKRYT8ddwx84-hAtg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CANiq72mBVo4+htxVjY0wB1Y3GO2PEUiZjZKRYT8ddwx84-hAtg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.05.2022 00:04, Javier Martinez Canillas wrote:
-> From: Daniel Vetter <daniel.vetter@ffwll.ch>
-> 
-> Most fbdev drivers have issues with the fb_info lifetime, because call to
-> framebuffer_release() from their driver's .remove callback, rather than
-> doing from fbops.fb_destroy callback.
-> 
-> Doing that will destroy the fb_info too early, while references to it may
-> still exist, leading to a use-after-free error.
-> 
-> To prevent this, check the fb_info reference counter when attempting to
-> kfree the data structure in framebuffer_release(). That will leak it but
-> at least will prevent the mentioned error.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
-> 
-> (no changes since v1)
-> 
->   drivers/video/fbdev/core/fbsysfs.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/video/fbdev/core/fbsysfs.c b/drivers/video/fbdev/core/fbsysfs.c
-> index 8c1ee9ecec3d..c2a60b187467 100644
-> --- a/drivers/video/fbdev/core/fbsysfs.c
-> +++ b/drivers/video/fbdev/core/fbsysfs.c
-> @@ -80,6 +80,10 @@ void framebuffer_release(struct fb_info *info)
->   {
->   	if (!info)
->   		return;
-> +
-> +	if (WARN_ON(refcount_read(&info->count)))
-> +		return;
-> +
+[+To: Jon]
 
-Regarding drm:
-What about drm_fb_helper_fini? It calls also framebuffer_release and is 
-called often from _remove paths (checked intel/radeon/nouveau). I guess 
-it should be fixed as well. Do you plan to fix it?
+On Mon, 9 May 2022 12:41:28 +0200,
+Miguel Ojeda wrote:
+> Hi Akira,
+> 
+> On Mon, May 9, 2022 at 6:02 AM Akira Yokosawa <akiyks@gmail.com> wrote:
+>>
+>> I think you agreed splitting SVG part into its own patch with
+>> a proper copying info, etc.  Let me see...  So, here is the link:
+> 
+> Yes, sorry, will do (in fact, it should have been there in v5 too).
+> 
+> By the way, the Linux SVG logo (used to make the one here) is pending
+> in the linux-doc ML.
 
+So you mean the following post:
 
-Regarding fb drivers, just for stats:
-git grep -p framebuffer_release | grep _remove | wc -l
-Suggests there is at least 70 incorrect users of this :)
+    https://lore.kernel.org/lkml/20220207014418.GA28724@kernel.org/
 
-Regards
-Andrzej
+I'm not sure why Jon has not responded.
+
+Jon, was there any issue on this patch?
+
+> 
+>> I might have missed v5 of this patch series.
+>> That might be because v5's 15/20 was not accepted by linux-doc's
+>> lore archive (maybe) due to its size despite it had Cc: linux-doc.
+>> v6's 18/23 was also rejected.
+> 
+> Yes, a few patches get rejected in several lists. We were told this
+> was fine as long as LKML gets them (the cover letter has the lists in
+> Cc).
+> 
+>> I have some alternative ideas for table formatting in ReST.
+> 
+> I was following the LLVM one, but it makes sense to use the other ones
+> where possible. I can send a patch for that one too.
+> 
+>> So here are a couple of alternative ways to represent the table
+>>
+>> * ASCII-art format:
+>> * Literal block format:
+> 
+> Thanks for taking the time to format the examples, it is useful :)
+Glad you like it.  ;-)
+
+        Thanks, Akira
+
+> 
+>> As you see, those inline-literal markers of ``xxxx``, which are
+>> distracting when the .rst file is read as plain-text, are not
+>> necessary in the literal-block approach.  And you can directly
+> 
+> I agree, it can be better (it is one reason I find Markdown a bit more
+> readable since it uses a single backquote for that instead of two).
+> 
+>> In my opinion, the literal-block approach should be the most
+>> reasonable choice here. Of course its your call which one
+>> to choose.
+> 
+> Yeah, that sounds reasonable. I will take a look.
+> 
+> Thanks for the review!
+> 
+> Cheers,
+> Miguel

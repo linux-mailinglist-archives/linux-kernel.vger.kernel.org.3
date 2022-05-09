@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E461D520143
+	by mail.lfdr.de (Postfix) with ESMTP id 98377520142
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238485AbiEIPjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        id S238526AbiEIPje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238479AbiEIPjJ (ORCPT
+        with ESMTP id S238470AbiEIPjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:39:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF373238D4B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:35:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB5661124
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 15:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84829C385AE;
-        Mon,  9 May 2022 15:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652110514;
-        bh=Mle490mRLYD1uOY6//loxrGHridIrCPCq+9Qs76hjQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QXE1HhNrLDx0R388qjxET29z813TIgsyhzSko5nVZcBSvji2X5q0e1IvCPi3/7+dA
-         PCfXSxXXDzfLDaqXwclcT9XS+GScR6/21jkNWgLUeAlkcmoH5pGTK8HOwM9ib25unN
-         +6ihTdH6GaDoWQqltEAjWLhsB1cRa/rF43umc10Cq1focb/CgiQYbUrAcieIZMkhGa
-         DOX15CAh/SQe8dX10lch+rC9lZZNp7BLIlp2Zriq+h1oz6lDu+PhR4GCOfVeyjJ1Y3
-         f+DnavUwIZ+7ODRO1VxAzzzhzGYuwq0RZi5KhrHW0v2ernel715H6oASfUBNnBX4OF
-         F0LnzHuGcYoRg==
-Date:   Mon, 9 May 2022 16:35:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: ARM Scalable Matrix Extension is ARMv9-A
-Message-ID: <Ynk0rgKMdJuR/aB1@sirena.org.uk>
-References: <df002b0ff3cb89954d5a2c39a5dd8528d45771f3.1652103603.git.geert+renesas@glider.be>
+        Mon, 9 May 2022 11:39:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022B53BBDF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652110537; x=1683646537;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XS/v6rosssf0DyqOwJ5B9g1oPnMSnoSeVg0C434Vg+0=;
+  b=l3ZvzI1Z7j5iQbsxCEG9JBi7p2MMFWlgbcPDff/96Q6WE2yA7OBm0qgS
+   ZcL1irRH98zazbNz9IaLztyKqv4RpRHycXcVig23UK5j5IbX67/KwK03U
+   hMcPyDAkQRKCDMRM4WIEV8Zus4tDqrZQc8paFCWazjgw7tqRF0y3c2KS7
+   gb3bW6GkHZ3G+/jRsVWbhbfKSt+yVxeDdjhyo2XJjGXccCeEdq5MXal4v
+   TFQmrFrl084pcdKpn9816R7PIFpwhMauv0ZevYJMnTVxk3c5qADB/q3n8
+   RPjJlvIZJsQ7uEir1EYmh6O6vQw5KrFEQJvy/Bf+N+Ymz6D+bIV9BCHeX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="332120017"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="332120017"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 08:35:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="813525451"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 09 May 2022 08:35:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id D7E0ED1; Mon,  9 May 2022 18:35:34 +0300 (EEST)
+Date:   Mon, 9 May 2022 18:35:34 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Kai Huang <kai.huang@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+Message-ID: <20220509153534.i6v4xcb2g24ia2i4@black.fi.intel.com>
+References: <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+ <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+ <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+ <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
+ <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+ <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
+ <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
+ <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
+ <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
+ <4506e2c2-af4b-623d-5618-48269e65c295@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9jRs+tTqM5TK8W78"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <df002b0ff3cb89954d5a2c39a5dd8528d45771f3.1652103603.git.geert+renesas@glider.be>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4506e2c2-af4b-623d-5618-48269e65c295@intel.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 09, 2022 at 07:14:20AM -0700, Dave Hansen wrote:
+> On 5/9/22 05:09, Kirill A. Shutemov wrote:
+> > Private->Shared conversion is destructive. You have to split SEPT, flush
+> > TLB. Backward conversion even more costly.
+> > 
+> > Rule of thumb is avoid conversion where possible. DMA API is there for
+> > you.
+> 
+> Kirill, I understand that the DMA API is a quick fix today.  But is it
+> _really_ the right long-term interface?
 
---9jRs+tTqM5TK8W78
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes, I think so.
 
-On Mon, May 09, 2022 at 03:40:30PM +0200, Geert Uytterhoeven wrote:
-> The help text for the config option to enable support for the ARM
-> Scalable Matrix Extension does not mention the specification baseline
-> for this extension.  Make it clear this is an extension for the ARMv9-A
-> architecture, so users know when it is safe to disable this option,
-> which is enabled by default.
+> There will surely come a time when TDX I/O devices won't be using fixed
+> bounce buffers.  What will the quote generation code do then?  How will
+> we know to come back around and fix this up?
 
-If this is important we should probably also do it for SVE, it was
-introduced along with v8.2 but that's not called out in Kconfig.
+VirtIO will not go away with TDX I/O in picture. TDX I/O will be addition
+to existing stuff, not replacement.
 
-> Fixes: a1f4ccd25cc25625 ("arm64/sme: Provide Kconfig for SME")
+And we have hooks in place to accommodate this: force_dma_unencrypted()
+will return false for devices capable of TDX I/O. While the rest of
+devices, including VirtIO and attestation, keep using existing paths with
+swiotlb.
 
-Fixes?
+> Does SEV or the s390 ultravisor need anything like this?
 
---9jRs+tTqM5TK8W78
-Content-Type: application/pgp-signature; name="signature.asc"
+At quick glance sev-guest.c uses set_memory_decrypted()/encrypted() for
+allocation and freeing shared memory. I consider it inferior to using DMA
+API.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5NK0ACgkQJNaLcl1U
-h9DhJAf/Upz6fZRKqxjZKOspl3F2+5E4whiZVwjP2eXqebtqLUegbDGmsDbW9mac
-oO2oGKs008qZc0zidMFXEsm5FbHkCq6R/h9uJ0jUQEaPw5l7r9tGSKGhWGxkOeTC
-tG+5mj1sMkklYWOKGpmWrSctnExGrZmU6sba1g9fiexAQfwFFugGRi7rTtQzXy0A
-iGYabJqQygbJlHhlpTQynmRNG2eHU164VnvmspJCBZ7T1IiMIj4zyjbt17tvnXhO
-0INxBWkuIlN0QRLtPQ7Ia7Jitxl2bMEcGn5qQgfkwEjaqAtn9My13RLec64ToobM
-6Y5XFxkSYM+cu/DYK/VYcwfvIPMVzA==
-=lB4v
------END PGP SIGNATURE-----
-
---9jRs+tTqM5TK8W78--
+-- 
+ Kirill A. Shutemov

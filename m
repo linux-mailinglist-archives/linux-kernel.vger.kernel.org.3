@@ -2,134 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045BC51F3E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF9A51F3E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiEIFiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S230285AbiEIFh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbiEIFeU (ORCPT
+        with ESMTP id S231927AbiEIFgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:34:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2080381A3;
-        Sun,  8 May 2022 22:30:26 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nnvyO-0007xl-7n; Mon, 09 May 2022 07:30:20 +0200
-Message-ID: <cbf8a730-a169-f2e9-3041-e530dfe42ad6@leemhuis.info>
-Date:   Mon, 9 May 2022 07:30:19 +0200
+        Mon, 9 May 2022 01:36:05 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF959149170
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:32:10 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so7599224wmn.1
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 22:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LcfykvzzxOiiw+jUTB5oG4jSYC/kWrfsWiX4vYPyo9M=;
+        b=kcIUmvvtYBneIxYWYiv7+ZFh4noeZ8Am8LxJbwy0tzXZr9y8d+KI/QsxlJYsuNmM08
+         OGVALXNd+CoIDFW0iCeuANfBqIyQS40FLvfNaMi065NgKl77XGww480iffDwl6iePFnE
+         /vJB/ZxTrHlkneSUP3qUDzxPQAp3k9HVD/gzvdtZ1VCKGBwXgKM82C1otDJIg0CsWkjK
+         vsabX+kfPaNfmRig6dYdjkMY9DINlp5EnFbw/ugfF3n9ZVJn+hGULwm5aCit+DiPEilU
+         PCSa4bC99EGefh/P+fD5m0E04J6FnoNl2PNtaY0heLJiAHpFynaawAWRjO/PVQgC5jjR
+         TvSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LcfykvzzxOiiw+jUTB5oG4jSYC/kWrfsWiX4vYPyo9M=;
+        b=iJDpceZyz7JoaYgY0gGuIgCFWOgt1culGYrEDm90GxS2m82XR8A44YldhSws/LHtmR
+         J0HSh7M31PoS4ub613QDPae7p0ndyWpSpTyzGjSLn4kZ8pc0SCewyYSAe2Zma9vElPT0
+         WVZ3dLJYjuH8os0wRMDVkH3Hjk36a4v2ouAmYY7PTy51jYZCi5TuLq1zcwf6bCs0r8Qv
+         oJxJQgplIUcr+LT6+sVvVvyKBB0ecMrFX1kurYwGU5jNDjv50AuZvZ/SoRks3y1gwLOm
+         dxyNkk4TzYuJYAqghHcnV4Hsm/syaj00vO2MvIQB9mm2pEAGlji/FJDVPJF7bV4YgLW9
+         y7iQ==
+X-Gm-Message-State: AOAM532OCXfxW1FXiXI7uhA2Zw1+rufBO0+hIGoAxnDwO8/TaRF84wCf
+        ylzJ3hOxZjRt0V9rLiC6+aCNRb+XPyXPrBALVgq+QQ==
+X-Google-Smtp-Source: ABdhPJxcZ1/tgNOui63k7ToPoh6qdNSpLhheGOV0wgT4W9krBezLdETiXX52tCZksOb5ycmvbLFkw5ri8O5JCMC9+GA=
+X-Received: by 2002:a05:600c:3caa:b0:394:8fb8:716 with SMTP id
+ bg42-20020a05600c3caa00b003948fb80716mr3550006wmb.105.1652074328778; Sun, 08
+ May 2022 22:32:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: regression v5.13..v5.15: USB hub stopped working -- DMAR fault
- when connected usb hub
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Piotr_Pi=c3=b3rkowski?= <qba100@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <237660ea-794e-8347-4e1a-869ccef9ba3c@leemhuis.info>
-In-Reply-To: <237660ea-794e-8347-4e1a-869ccef9ba3c@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1652074227;303e07b4;
-X-HE-SMSGID: 1nnvyO-0007xl-7n
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220420112450.155624-1-apatel@ventanamicro.com>
+ <20220420112450.155624-3-apatel@ventanamicro.com> <CAOnJCUJ3KzJdqLa3zXUd+YEa00_W1P7aNWY0ibpvO9jaqarOtA@mail.gmail.com>
+In-Reply-To: <CAOnJCUJ3KzJdqLa3zXUd+YEa00_W1P7aNWY0ibpvO9jaqarOtA@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 9 May 2022 11:01:57 +0530
+Message-ID: <CAAhSdy1gyJekSvUtZ6TQutTryGATupjP3YEzEts-QJ_DifJVjw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] RISC-V: KVM: Add Sv57x4 mode support for G-stage
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On Wed, May 4, 2022 at 7:44 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > Latest QEMU supports G-stage Sv57x4 mode so this patch extends KVM
+> > RISC-V G-stage handling to detect and use Sv57x4 mode when available.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/csr.h |  1 +
+> >  arch/riscv/kvm/main.c        |  3 +++
+> >  arch/riscv/kvm/mmu.c         | 11 ++++++++++-
+> >  3 files changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> > index e935f27b10fd..cc40521e438b 100644
+> > --- a/arch/riscv/include/asm/csr.h
+> > +++ b/arch/riscv/include/asm/csr.h
+> > @@ -117,6 +117,7 @@
+> >  #define HGATP_MODE_SV32X4      _AC(1, UL)
+> >  #define HGATP_MODE_SV39X4      _AC(8, UL)
+> >  #define HGATP_MODE_SV48X4      _AC(9, UL)
+> > +#define HGATP_MODE_SV57X4      _AC(10, UL)
+> >
+> >  #define HGATP32_MODE_SHIFT     31
+> >  #define HGATP32_VMID_SHIFT     22
+> > diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> > index c374dad82eee..1549205fe5fe 100644
+> > --- a/arch/riscv/kvm/main.c
+> > +++ b/arch/riscv/kvm/main.c
+> > @@ -105,6 +105,9 @@ int kvm_arch_init(void *opaque)
+> >         case HGATP_MODE_SV48X4:
+> >                 str = "Sv48x4";
+> >                 break;
+> > +       case HGATP_MODE_SV57X4:
+> > +               str = "Sv57x4";
+> > +               break;
+> >         default:
+> >                 return -ENODEV;
+> >         }
+> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> > index dc0520792e31..8823eb32dcde 100644
+> > --- a/arch/riscv/kvm/mmu.c
+> > +++ b/arch/riscv/kvm/mmu.c
+> > @@ -751,14 +751,23 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
+> >  void kvm_riscv_gstage_mode_detect(void)
+> >  {
+> >  #ifdef CONFIG_64BIT
+> > +       /* Try Sv57x4 G-stage mode */
+> > +       csr_write(CSR_HGATP, HGATP_MODE_SV57X4 << HGATP_MODE_SHIFT);
+> > +       if ((csr_read(CSR_HGATP) >> HGATP_MODE_SHIFT) == HGATP_MODE_SV57X4) {
+> > +               gstage_mode = (HGATP_MODE_SV57X4 << HGATP_MODE_SHIFT);
+> > +               gstage_pgd_levels = 5;
+> > +               goto skip_sv48x4_test;
+> > +       }
+> > +
+> >         /* Try Sv48x4 G-stage mode */
+> >         csr_write(CSR_HGATP, HGATP_MODE_SV48X4 << HGATP_MODE_SHIFT);
+> >         if ((csr_read(CSR_HGATP) >> HGATP_MODE_SHIFT) == HGATP_MODE_SV48X4) {
+> >                 gstage_mode = (HGATP_MODE_SV48X4 << HGATP_MODE_SHIFT);
+> >                 gstage_pgd_levels = 4;
+> >         }
+> > -       csr_write(CSR_HGATP, 0);
+> > +skip_sv48x4_test:
+> >
+> > +       csr_write(CSR_HGATP, 0);
+> >         __kvm_riscv_hfence_gvma_all();
+> >  #endif
+> >  }
+> > --
+> > 2.25.1
+> >
+>
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-@kernel developers: you might want to consider ignoring this, the
-reporter provided additional information in the ticket and it looks a
-lot like it's not a regression. For details see:
-https://bugzilla.kernel.org/show_bug.cgi?id=215906#c4
+Queued this patch for 5.19
 
-Sorry for the noise.
+Thanks,
+Anup
 
-Ciao, Thorsten
-
-On 05.05.22 15:31, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org that afaics nobody
-> acted upon since it was reported about a week ago. That's why I decided
-> to forward it to a few maintainers and mailing lists. To quote from
-> https://bugzilla.kernel.org/show_bug.cgi?id=215906 :
-> 
->> Since kernel 5.15 (with kernel 5.13 I see no problem) I have a problem with my USB hub. The device stops working shortly after starting the system.
->> In dmesg log I see DMAR fault on usb controller
->>
->>
->> [kwi27 22:03] usb 5-1.2: new high-speed USB device number 3 using xhci_hcd
->> [  +0,100440] usb 5-1.2: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
->> [  +0,000004] usb 5-1.2: New USB device strings: Mfr=0, Product=1, SerialNumber=0
->> [  +0,000002] usb 5-1.2: Product: USB 2.0 Hub
->> [  +0,001002] hub 5-1.2:1.0: USB hub found
->> [  +0,000133] hub 5-1.2:1.0: 4 ports detected
->> [  +0,702453] usb 5-1.2.2: new full-speed USB device number 4 using xhci_hcd
->> [  +0,471198] usb 5-1.2.2: New USB device found, idVendor=047f, idProduct=c025, bcdDevice= 1.35
->> [  +0,000004] usb 5-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->> [  +0,000002] usb 5-1.2.2: Product: Plantronics C320-M
->> [  +0,000001] usb 5-1.2.2: Manufacturer: Plantronics
->> [  +0,000001] usb 5-1.2.2: SerialNumber: B13D8BE491B04E73AEB4C95E162DBE2B
->> [  +0,255862] mc: Linux media interface: v0.10
->> [  +0,001057] input: Plantronics Plantronics C320-M as /devices/pci0000:00/0000:00:1c.5/0000:04:00.0/usb5/5-1/5-1.2/5-1.2.2/5-1.2.2:1.3/0003:047F:C025.0004/input/input21
->> [  +0,060275] plantronics 0003:047F:C025.0004: input,hiddev1,hidraw3: USB HID v1.11 Device [Plantronics Plantronics C320-M] on usb-0000:04:00.0-1.2.2/input3
->> [  +0,859655] usb 5-1.2.2: Warning! Unlikely big volume range (=8192), cval->res is probably wrong.
->> [  +0,000003] usb 5-1.2.2: [11] FU [Sidetone Playback Volume] ch = 1, val = 0/8192/1
->> [  +0,584234] usbcore: registered new interface driver snd-usb-audio
->> [  +0,229229] xhci_hcd 0000:04:00.0: WARNING: Host System Error
->> [  +0,000014] DMAR: DRHD: handling fault status reg 2
->> [  +0,000004] DMAR: [DMA Read NO_PASID] Request device [04:00.0] fault addr 0xfffca000 [fault reason 0x06] PTE Read access is not set
->> [  +0,031993] xhci_hcd 0000:04:00.0: Host halt failed, -110
->> [kwi27 22:04] xhci_hcd 0000:04:00.0: xHCI host not responding to stop endpoint command.
->> [  +0,000003] xhci_hcd 0000:04:00.0: USBSTS: HSE EINT
->> [  +0,032011] xhci_hcd 0000:04:00.0: Host halt failed, -110
->> [  +0,000002] xhci_hcd 0000:04:00.0: xHCI host controller not responding, assume dead
->> [  +0,000017] xhci_hcd 0000:04:00.0: HC died; cleaning up
->> [  +0,000042] usb 5-1: USB disconnect, device number 2
->> [  +0,000003] usb 5-1.2: USB disconnect, device number 3
->> [  +0,000002] usb 5-1.2.2: USB disconnect, device number 4
->> [  +0,000114] usb 5-1.2.2: 1:0: usb_set_interface failed (-110)
->> [  +0,000016] usb 5-1.2.2: 1:1: usb_set_interface failed (-19)
->> [  +0,000011] usb 5-1.2.2: 1:0: usb_set_interface failed (-19)
-> See the ticket for details and further comments. According to the latest
-> one the problem is still present in 5.18-rc5.
-> 
-> Was this issue discussed or even addressed somewhere already? Or does
-> anyone at least have a good idea what might be causing this problem?
-> @reporter: If neither is the case, you most likely will need to perform
-> a bisection with git to identify the change causing the problem.
-> 
-> Anyway, could one of the kernel developers among the recipients please
-> help with this? BTW, I was unsure where to send this to the DMA/IOMMU
-> maintainers or the USB/xhci maintainers. I settled for the latter; I
-> apologize in advance if that was the wrong choice.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I defsdal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
-> 
-> P.P.S: to get this tracked by the the Linux kernel regression tracking bot:
-> 
-> #regzbot introduced: v5.13..v5.15
-> #regzbot from: Piotr Piórkowski <qba100@gmail.com>
-> #regzbot title: usb/dma/iommu/???: USB hub stopped working -- DMAR fault
-> when connected usb hub
-> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215906
-> #regzbot monitor:
-> https://lore.kernel.org/all/bug-215906-208809@https.bugzilla.kernel.org%2F/
+>
+> --
+> Regards,
+> Atish

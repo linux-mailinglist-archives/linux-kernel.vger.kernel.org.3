@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D2351F542
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3841851F540
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbiEIHZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        id S234802AbiEIHZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236324AbiEIHUH (ORCPT
+        with ESMTP id S236483AbiEIHVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:20:07 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4088BC06
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:16:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ks9so18560772ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=/q4d3OHrZvdq1tcu5svJ1FaMMKQIyrlKNH4TSyE5QtM=;
-        b=mlL24byEHKNHhJD39spMy4tFbcQfcy8DCRoyWl+71T77EMUcEHWqYdlEHlmfA1IIkI
-         ctwfNOdUTwHff30O3qav9Rlkcklgh2WdsOwicVaTOL2foZ7anYprqmnmNFjPH3fbi83f
-         vVOncC1zPkceGlm6AmQ4bQMeqe+upmwsKelJBX4mls2c0h5p1kdRu9cZTTgma1KMUr2s
-         aGr4vxSSb/BCNWDZG5z5z+Rm6KjozlnM23Z23ghY84QEOiwQUMZTQglnfWkmukjjlyTX
-         TOvOzy2sOnLP5SIew4eWkX/oe6XjLxHVk5JLpgvMuDCdbqMt2p6ujPh24bbx0azI4aAI
-         tTWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/q4d3OHrZvdq1tcu5svJ1FaMMKQIyrlKNH4TSyE5QtM=;
-        b=gqeIQeXx31absCOZKTryDe59BqJSpHV/9VqQSIVfPJYXKobwhYzTAJFjeehZwxZHW4
-         blGegB5/wFSmKsPeg57Z26C1aqp8OQR4XDA3GPvr6dK/lvntwedWLjrfV+JdHXUG9od9
-         v2jNaf9Ao1E4Os0r1eC4pRMXrOQ/wd/xOs284bCdX6KdVPXh2TNSacMpt4xJ2h8ICsgk
-         +cyOGMb1eDGECz6caIAiH9kfbBBST4F6vFmP2ZvD0fCnOlIX01KYc4DywlEdsBH+llTy
-         Oz0psBfllcyIX+rOTOqZ1yUziHT1/moOgcBVVjOWeQZullD9x1SZ306yKRjLL9ZyEo+f
-         /IOQ==
-X-Gm-Message-State: AOAM5306+HrkdIPO13mvh0ichzJTe0mtbCyQJcCbk4K8SK6mDGDyJCeV
-        DAwdvn3e2ue4XTeZbOheHXfvOA==
-X-Google-Smtp-Source: ABdhPJx11KaoIOBoxzezk7OjBrcz0m+M7R7hALB4LLuEiqyNltMkiAXGFjD3aRSGOCHjRpGmCIX/vQ==
-X-Received: by 2002:a17:906:2a19:b0:6fa:7525:45d8 with SMTP id j25-20020a1709062a1900b006fa752545d8mr3201491eje.768.1652080554493;
-        Mon, 09 May 2022 00:15:54 -0700 (PDT)
-Received: from [192.168.0.242] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y1-20020a50eb01000000b0042617ba6392sm5845956edp.28.2022.05.09.00.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:15:53 -0700 (PDT)
-Message-ID: <703ef9c7-40b2-6b57-82de-c66c2a1e8268@linaro.org>
-Date:   Mon, 9 May 2022 09:15:53 +0200
+        Mon, 9 May 2022 03:21:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240C012609
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IQlZz/h5atycWEAD+yUb3i16NDy1Qyycxp+32Nqj2f8=; b=Bt171fII0kKQtSprI3kJJ7QBvb
+        8xWEHRUWSLTEL63TEdThGtconyY4PBBcq9bY6BXapEanBFko11TDGtvmn3rgWiUxM4exBhwGUDy5w
+        VRDeFnZAaMOPpMWGE3EWM1/00ZypElWHZwcm4dhKc+yMBXJYEXVuNkEw8mx0L95qA5CMk5D6TLNbN
+        eD3DBQ7mDSVe7f2MtG7DMOXfh1S/Xthy8Gt93C4sND48EpGku9AhXpW6hamyEYjrYuoMU+Kzf+GNU
+        cbYOE+b4lwTVYRzj1yR/h2SZq6MCf4LNBj3y1XTX+HunJj6aa9MvtZL3qWLVrlX1aF8rOBD+zaKPK
+        1qrCmLsg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnxdV-003Dti-Nt; Mon, 09 May 2022 07:16:53 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B82BF980E93; Mon,  9 May 2022 09:16:52 +0200 (CEST)
+Date:   Mon, 9 May 2022 09:16:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+Message-ID: <20220509071652.GE76023@worktop.programming.kicks-ass.net>
+References: <20220508144733.91343-1-feng.tang@intel.com>
+ <20220509045839.GA40730@shbuild999.sh.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 08/11] dt-bindings: clock: qcom: ipq8074: add USB GDSCs
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, bjorn.andersson@linaro.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tdas@codeaurora.org, absahu@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220507202948.397271-1-robimarko@gmail.com>
- <20220507202948.397271-8-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220507202948.397271-8-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509045839.GA40730@shbuild999.sh.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/05/2022 22:29, Robert Marko wrote:
-> Add bindings for the USB GDSCs found in IPQ8074 GCC.
+On Mon, May 09, 2022 at 12:58:39PM +0800, Feng Tang wrote:
+> Sorry, just spotted some typos, here is the updated version
 > 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  include/dt-bindings/clock/qcom,gcc-ipq8074.h | 3 +++
->  1 file changed, 3 insertions(+)
 > 
+> From ee8e3d772c623d27d79c43da5a76fb6252175aba Mon Sep 17 00:00:00 2001
+> From: Feng Tang <feng.tang@intel.com>
+> Date: Sun, 8 May 2022 20:22:12 +0800
+> Subject: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+> 
+> Currently when HW provides the tsc freq info through MSR or CPUID(0x15),
+> the info will be taken as the 'best guess', and kernel will set the
+> X86_FEATURE_TSC_KNOWN_FREQ flag and skip the HW timer based recalibration,
+> which works pretty well.
+> 
+> And there is still very few corner case that the freq info is not
+> accurate enough with small deviation from the actual value, like on
+> a product with early buggy version of firmware or on some
+> pre-production hardware.
+> 
+> Add an option 'recalibrate' for 'tsc' kernel parameter to force the
+> tsc freq recalibration with HPET/PM_TIMER, and warn if the deviation
+> from previous value is more than about 500 PPM.
+> 
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Why isn't 'tsc_early_khz=' not working for you? Afaict that will
+override calibrate_tsc() when provided and as such can be used on these
+early platforms for provide the right value until such time that the
+firmware is fixed.

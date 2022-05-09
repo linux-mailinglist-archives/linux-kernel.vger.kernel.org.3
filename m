@@ -2,199 +2,762 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947D451F444
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BD451F46F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiEIF6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S234779AbiEIGH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 02:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiEIFvZ (ORCPT
+        with ESMTP id S235437AbiEIGDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:51:25 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120049.outbound.protection.outlook.com [40.107.12.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0039013F1DC;
-        Sun,  8 May 2022 22:47:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XQhFau0SwrgAHIcmtaOwyxjMc7uN5VuUQxrsaXaB/15AWjNnK6BWEjPEJUSaPNSBefcw3hRuT0dgMCXvZ9g7mCl4tlgc9+iW/pCqIp6xqmQVTxTad/XQSIQQpzZE5KiLGyCvOr3gx3C4RbsX2vzT+Qdi0bEmTZYySZZhYrD4mkTUZvfS0FkWNuLZG8ifP+hRjHKNaEIHHuHnxbxGMVdZPIJZoc5LfFdDieMH75bNx6HLKQlAfE95q/8hySqnsObB373NA+1mwhYF1fFscztb93o+3aflfxFhxMRtaJFalPL3EdlDPGb188++zrIdEPztVnU2ppFLs1tdWk/BnFV1aQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Pbvy5dIPWBGJ6kM3iHxkkQRy+MKOcO66JJiaSEXZzo=;
- b=B+ib5FtrZLXWXVV9O6EF503VzPz/cwN0zVKbdrhxc6b3EsXtzp0DcBxgWoSYJAvluTC/PBOoj6DpNkDDYLLPfTTbXzejN5oW4n9qF1DTFmesUdSQGPSnhpPzenhrpraFNCP9gKJERRGILR4RPvfh83nY7fANnR+/kxhTjY6W4REVl2ymYuN5JuIqdmfUnQtJV/rj29b3xZ4yDJYDHkaHheXIj778XfehxfHxVa1x98hWC1YBEL8sBr/paLRHrBxaYFguqfkvLoV2Clu8vhRzB1hVCeCRCGKH2OQbuUTiyFOD9Y/v1j02IKg0izv2VHsN3j4L7Mj0lFEprSFJq/ZxOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2277.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b2::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
- 2022 05:46:03 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d%6]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 05:46:03 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Muchun Song <songmuchun@bytedance.com>
-CC:     "dalias@libc.org" <dalias@libc.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>
-Subject: Re: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
- original pte
-Thread-Topic: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
- original pte
-Thread-Index: AQHYYr9IzdY/UNkDFUyCEcmwVx+NYq0U9FUAgAEWTgA=
-Date:   Mon, 9 May 2022 05:46:03 +0000
-Message-ID: <d5055b48-d722-e03d-fc32-16fd76e3fa22@csgroup.eu>
-References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
- <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
- <Ynek+b3k6PVN3x7J@FVFYT0MHHV2J.usts.net>
- <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
-In-Reply-To: <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 09cfb994-b131-4cb5-435f-08da317f3436
-x-ms-traffictypediagnostic: PR1P264MB2277:EE_
-x-microsoft-antispam-prvs: <PR1P264MB22774FF0049DBE8221DF5FBAEDC69@PR1P264MB2277.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7GnWxlTXi5kxcEo3QAB6Pmansvb6Fogbv+ztTujiGoYTCCwtxtZ+I0l9MPuwa+bxrgZv4nic6RAyCojGTvXLeZFya/noD1z1zojjf3nvOMO48PM3K7RAWd9iEM20+k7A46nai65xcvl2TJOvTvzC/bB013VDEWbtwgUDPqlZgjCVxmNrGoHIq3G0rerSDwSahy4ZZGZIk013IkCr2xo7mmKuSwPJty3I/rlpIuZv9vrj8kXMxwFbdbo+RlZUQLkCYfNNjqGz/H9lYyOr4HhAHX9XjJ01TxDX/zn36vWazwf5gIigeIRUHUxTEPH3CN2CDhDR6ImqLXrh3yL0vS8pXSEaP26rHaF5oVyqU4jN7Y5yIjYQIiy2zPnMpEdVSkHOB4rwHp5mbfAF7/x2zKtExwYHhiScqSN+uKwEeo9h35GgLwpqUWAojKxTJ+J0V1Nwk5NNk/gTUjohQhycxMzGSd4qdlJGPMtju4gNt8DXhKUvpkqIyCcuCh7J2K0nzqLwIvDEaTZ/TlKeNCFfJ7qb8rUusKN8zCxyUMphebrToa/7wM8SK5EAOPv8gA4SbybTEwnK/HLM6mvpHxQosNaPq8EbfsFq5Ol1d4Dj3Q4I7Shleuw6SpU9oYyszzBciIdBALIkTzYaIInCgDyJ9mOF1Mycm/y/cS07BjgvwGiF8iqLJ20dis75iq5o7tJbG/4lindiimOIH188tjkCZjNXlGx3h/EveSC1I8S02oqredDOk8d+9RHiuCCkl2uEaX0EQg8GyMgWruD2I1LPHCFM7sB+tGWvH2CwsSPV02w4B+b/JLCPBB3NOW4vOjx3rOsGU+7k10iPZkL7aLoi7BZuNYtZsILc37Sr5mEWiPyWEhY4RZZtx8Il6IfviwlixC5J
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(6512007)(26005)(2616005)(122000001)(66574015)(38100700002)(31686004)(64756008)(36756003)(8676002)(66446008)(4326008)(66556008)(186003)(110136005)(316002)(91956017)(76116006)(54906003)(66946007)(66476007)(53546011)(508600001)(5660300002)(71200400001)(2906002)(86362001)(6506007)(966005)(31696002)(7406005)(8936002)(6486002)(7416002)(83380400001)(44832011)(14583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OW9yRm05YlBhb25lSEFhNnU0VUo5bGxhMlpCNUpKZmNCUmcweEhuQlNneS8z?=
- =?utf-8?B?YzkxWk5WbWhWYlBoUVN0SDNscnQ2RGdrOXdqbDFMUDh4WHFEQ0V1Z1o0WUxF?=
- =?utf-8?B?bmZWMHJGV3VKNVMyNFBRMlhlT3k5Q01mRFJOMlp6NjVLMDJzNk1vMHJEcTlW?=
- =?utf-8?B?UDJKcWdQanhWUG5oamJvS01XeUJQbmluWmIxT1dPMW4zdldIdHVaS1haRm5I?=
- =?utf-8?B?bkM3azl4Ty9YOTRnUDhaYnJQb29BL1RVaTgza0U0dGZVaEFnUWd5Rm1vQngy?=
- =?utf-8?B?dWRxZXBReTEwUW1tbjZlK2dlOGFYVzZjeGl4cVl5S0x4akdId1M0ckhXSGpx?=
- =?utf-8?B?MHNNYXc4d293RmI2eHpNTEhTSmRISWwvMDVOTGtvUlFXZzhJenU4aXowYnZO?=
- =?utf-8?B?S3dJbjY5OW9DMDkzQU80bkFuWXJjcmNSRGI1R3dGYVpndFV2cnF1YWVFUzB3?=
- =?utf-8?B?UlF4VWJQQVIrZlprbEp1Z3hRRy9KRytzbzFma1BOTjdmQzVGa0NTci85QU40?=
- =?utf-8?B?R2J0eHY0aUZsS0dkQ1F1dUpqTXlXbXRqQmJWYlBLK1l0b1BKeEpvekl2V0ZB?=
- =?utf-8?B?L2JZT0xZVzgzKzE4QmR0cCtJV0FKL1VlRzJYeGJVRHZrdDhScVNVemJwN1J1?=
- =?utf-8?B?VEpmV0tXOUhCSXZSMnlVY3NWcGlVbjF1LzJGOVRkZFo1WUFzazVuQysxRGU1?=
- =?utf-8?B?OEtWQllRdkk3VlMyeHFsNmpaeHNGWUsrbHdFSWtLcFIvMjlIRHpsMlJKWmF6?=
- =?utf-8?B?eXRmejI2RmIvL0xNMFdBMTZBRHpERzRWbVM4Z3ZwK09YMUpjMVB0STVyNTE1?=
- =?utf-8?B?aEJwRFNNb3BWV3VOYUJDR0d2SUhtQWMzblhQc2htb0F5aHB1V05JcGFMT09Y?=
- =?utf-8?B?RkprM0tCY2NkSmx2VU9QN1pDUWFDUGJ3ZnVWWTlManh5dlZ5Sk9yejBwdnpX?=
- =?utf-8?B?WThnRmlOUG5MMGx2ejNtd1pSNFVzQldUWjlHOXZZcXJZUmtHVnFXRUU4K0xY?=
- =?utf-8?B?aitWTzRwbWpKUnZkd2FadXljMldNczhtZ0E4Qk9EQzN4dG9DcW5yM1FCUFg4?=
- =?utf-8?B?V29GLzltOURDalJVRG51L2ltbGpXSllJcCtzZ09YMnQ2V3huUGpCRlVLeXg3?=
- =?utf-8?B?QjBEcVdHdnhkOXIrOXNuZUU4dkNINk9YZFY0TmRLMm9zTFJKT1dYcDlYWjNX?=
- =?utf-8?B?TklnNHBrcFNnOEZYRyt6Q2YrNDMrVHlVOFVXSDdEdVhYWnl6VzIvTEVXSkJx?=
- =?utf-8?B?dmd2ZG5UZXJWMVQrQUJib29RSjBneVdYbXEvdm5mVGFtMVlDY0sva3B1SWFp?=
- =?utf-8?B?ZkxvMW1HM0xKVGc4bm95WUZPem9ZRXRHQlRYTjg4VVRUK25sWjB0ZitQQ0Mv?=
- =?utf-8?B?bDA3VUpoTy9BNGJmSS9lRXdETWtxSmMweGo2WHVTeDRsdnVqN1ZlN1k2SUg2?=
- =?utf-8?B?bmlXek45ZWxNKzRpai9URWRONGtWc0RHNXg1Q3dPeWovOEdPV1RKU1ViZzhL?=
- =?utf-8?B?MVkvNVVUYitjR01nTmhjNks5YjdtZUlZeDFBbmhjRC8rWE5KcXo0bGl0ZjNS?=
- =?utf-8?B?YkVwMXI1eUJ5THFHZ2k3Rks0NmthalMyb1pXREJEekhSbjdjK0E1WC8yUXRu?=
- =?utf-8?B?em1Ja0xLcEllR0JNQ2hpMHQxR1hqOWlqeXBJV1BjUHI0N01wVnMzdmNNekNJ?=
- =?utf-8?B?d3hsRGdVekxhQmxuWkpCTTA0NGVzbkdvSFV1RER6MTdGVWZtTThmSURHR1pu?=
- =?utf-8?B?OTcrVkU3eVozQUdMendoSFk1WURMa0N3VHJrSEhoc2dKekw0dDdpb1RTczUw?=
- =?utf-8?B?TzJQb2tEenhaZm9Tams4RmJ4R2NRbXR4QjBraW0wRFNhby9aMWJVQlY5VVdl?=
- =?utf-8?B?MUd0dHNXUVZ3bU0xNkdiWGxNU3h2VW04RHcrdlZScXA0UlJTMmsxb0RaWTVX?=
- =?utf-8?B?ZmtIOTFFU2pQcHFyNktqYm8vcDJ6RlZmVmd2V0R0YTM5ekErellmMkUwalM5?=
- =?utf-8?B?US9WeWl1bkJBT242cjdYTGdOcDN5K2NFWFcwS1RPZU93VUhZL2h0TUc2VENR?=
- =?utf-8?B?VlVhNWczOGg1VjE1Y01wbXNtekNSQjk0UlVYWDY2SXQ0UnEzYk13RU13Szk3?=
- =?utf-8?B?VzBnY0M1ZDJTdXMzK25jM0VyN2pCL2EwbWJMc1l5THE4TzFCS1d0V2ROUkRL?=
- =?utf-8?B?V0NkeklGOXZXTEpGWmx6R21hTjJLS2lzWVBablBOaEFUMlZ5K2J5dTEzT3J0?=
- =?utf-8?B?NXdlcHREclZPVDc3RTArMjRTelBBQ0RiUndYeHFHZ2RUeDBJUmZETTVwNGdK?=
- =?utf-8?B?NjRWNWpWY3ZTSS9OYTFoaC9KZnRhY294Ym15dFY2cFlzS1l5MkZLemo2V1Ux?=
- =?utf-8?Q?nv4aKT8EswJt36T3eNUZdBXIzhud3qJlk9vy7?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CE7D7F41D32A944F802D4091ACBCCE5E@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 9 May 2022 02:03:33 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62F7321;
+        Sun,  8 May 2022 22:59:38 -0700 (PDT)
+Received: from mxde.zte.com.cn (unknown [10.35.8.64])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4KxVdN4Bmxz1FhC;
+        Mon,  9 May 2022 13:50:32 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4KxVb75VnTzCFQtN;
+        Mon,  9 May 2022 13:48:35 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4KxVZV4mMQzdmX8w;
+        Mon,  9 May 2022 13:48:02 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4KxVXW3ws8z8RV7H;
+        Mon,  9 May 2022 13:46:19 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 2495kFjl086101;
+        Mon, 9 May 2022 13:46:16 +0800 (GMT-8)
+        (envelope-from zhang.lin16@zte.com.cn)
+Received: from fox-cloudhost8.zte.com.cn (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Mon, 9 May 2022 13:46:15 +0800
+X-Zmail-TransId: 3e816278aaa6010-f4a1c
+From:   zhanglin <zhang.lin16@zte.com.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, brauner@kernel.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        adobriyan@gmail.com, sfr@canb.auug.org.au,
+        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
+        kaleshsingh@google.com, stephen.s.brennan@oracle.com,
+        ohoono.kwon@samsung.com, haolee.swjtu@gmail.com,
+        fweimer@redhat.com, xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
+        jiang.xuexin@zte.com.cn, zealci@zte.com.cn,
+        zhanglin <zhang.lin16@zte.com.cn>
+Subject: [PATCH] fs/proc: add mask_secrets to prevent sensitive information leakage.
+Date:   Mon,  9 May 2022 13:46:13 +0800
+Message-Id: <20220509054613.6620-1-zhang.lin16@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09cfb994-b131-4cb5-435f-08da317f3436
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 05:46:03.2769
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iXZWYOS/hcbjwxX5HShFUmZzOpb0FKKLQOgptGtGHg1igZl9+1ZVVZH2qvDeBL37kuI52CHBoOmA7hGfKzp7i2w4SI9IJ2yVnH0jiM4YkDE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2277
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2495kFjl086101
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 6278ABA7.000 by FangMail milter!
+X-FangMail-Envelope: 1652075432/4KxVdN4Bmxz1FhC/6278ABA7.000/10.35.8.64/[10.35.8.64]/mxde.zte.com.cn/<zhang.lin16@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6278ABA7.000/4KxVdN4Bmxz1FhC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA4LzA1LzIwMjIgw6AgMTU6MDksIEJhb2xpbiBXYW5nIGEgw6ljcml0wqA6DQo+IA0K
-PiANCj4gT24gNS84LzIwMjIgNzowOSBQTSwgTXVjaHVuIFNvbmcgd3JvdGU6DQo+PiBPbiBTdW4s
-IE1heSAwOCwgMjAyMiBhdCAwNTozNjozOVBNICswODAwLCBCYW9saW4gV2FuZyB3cm90ZToNCj4+
-PiBJdCBpcyBpbmNvcnJlY3QgdG8gdXNlIHB0ZXBfY2xlYXJfZmx1c2goKSB0byBudWtlIGEgaHVn
-ZXRsYiBwYWdlDQo+Pj4gdGFibGUgd2hlbiB1bm1hcHBpbmcgb3IgbWlncmF0aW5nIGEgaHVnZXRs
-YiBwYWdlLCBhbmQgd2lsbCBjaGFuZ2UNCj4+PiB0byB1c2UgaHVnZV9wdGVwX2NsZWFyX2ZsdXNo
-KCkgaW5zdGVhZCBpbiB0aGUgZm9sbG93aW5nIHBhdGNoZXMuDQo+Pj4NCj4+PiBTbyB0aGlzIGlz
-IGEgcHJlcGFyYXRpb24gcGF0Y2gsIHdoaWNoIGNoYW5nZXMgdGhlIA0KPj4+IGh1Z2VfcHRlcF9j
-bGVhcl9mbHVzaCgpDQo+Pj4gdG8gcmV0dXJuIHRoZSBvcmlnaW5hbCBwdGUgdG8gaGVscCB0byBu
-dWtlIGEgaHVnZXRsYiBwYWdlIHRhYmxlLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogQmFvbGlu
-IFdhbmcgPGJhb2xpbi53YW5nQGxpbnV4LmFsaWJhYmEuY29tPg0KPj4+IEFja2VkLWJ5OiBNaWtl
-IEtyYXZldHogPG1pa2Uua3JhdmV0ekBvcmFjbGUuY29tPg0KPj4NCj4+IFJldmlld2VkLWJ5OiBN
-dWNodW4gU29uZyA8c29uZ211Y2h1bkBieXRlZGFuY2UuY29tPg0KPiANCj4gVGhhbmtzIGZvciBy
-ZXZpZXdpbmcuDQo+IA0KPj4NCj4+IEJ1dCBvbmUgbml0IGJlbG93Og0KPj4NCj4+IFsuLi5dDQo+
-Pj4gZGlmZiAtLWdpdCBhL21tL2h1Z2V0bGIuYyBiL21tL2h1Z2V0bGIuYw0KPj4+IGluZGV4IDg2
-MDVkN2UuLjYxYTIxYWYgMTAwNjQ0DQo+Pj4gLS0tIGEvbW0vaHVnZXRsYi5jDQo+Pj4gKysrIGIv
-bW0vaHVnZXRsYi5jDQo+Pj4gQEAgLTUzNDIsNyArNTM0Miw3IEBAIHN0YXRpYyB2bV9mYXVsdF90
-IGh1Z2V0bGJfd3Aoc3RydWN0IG1tX3N0cnVjdCANCj4+PiAqbW0sIHN0cnVjdCB2bV9hcmVhX3N0
-cnVjdCAqdm1hLA0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBDbGVhckhQYWdlUmVzdG9yZVJlc2Vy
-dmUobmV3X3BhZ2UpOw0KPj4+IMKgwqDCoMKgwqDCoMKgwqDCoCAvKiBCcmVhayBDT1cgb3IgdW5z
-aGFyZSAqLw0KPj4+IC3CoMKgwqDCoMKgwqDCoCBodWdlX3B0ZXBfY2xlYXJfZmx1c2godm1hLCBo
-YWRkciwgcHRlcCk7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgICh2b2lkKWh1Z2VfcHRlcF9jbGVhcl9m
-bHVzaCh2bWEsIGhhZGRyLCBwdGVwKTsNCj4+DQo+PiBXaHkgYWRkIGEgIih2b2lkKSIgaGVyZT8g
-SXMgdGhlcmUgYW55IHdhcm5pbmcgaWYgbm8gIih2b2lkKSI/DQo+PiBJSVVDLCBJIHRoaW5rIHdl
-IGNhbiByZW1vdmUgdGhpcywgcmlnaHQ/DQo+IA0KPiBJIGRpZCBub3QgbWVldCBhbnkgd2Fybmlu
-ZyB3aXRob3V0IHRoZSBjYXN0aW5nLCBidXQgdGhpcyBpcyBwZXIgTWlrZSdzIA0KPiBjb21tZW50
-WzFdIHRvIG1ha2UgdGhlIGNvZGUgY29uc2lzdGVudCB3aXRoIG90aGVyIGZ1bmN0aW9ucyBjYXN0
-aW5nIHRvIA0KPiB2b2lkIHR5cGUgZXhwbGljaXRseSBpbiBodWdldGxiLmMgZmlsZS4NCj4gDQo+
-IFsxXSANCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzQ5NWM0ZWJlLWE1YjQtYWZiNi00
-Y2IwLTk1NmMxYjE4ZDBjY0BvcmFjbGUuY29tLyANCj4gDQoNCkFzIGZhciBhcyBJIHVuZGVyc3Rh
-bmQsIE1pa2Ugc2FpZCB0aGF0IHlvdSBzaG91bGQgYmUgYWNjb21wYWduaWVkIHdpdGggYSANCmJp
-ZyBmYXQgY29tbWVudCBleHBsYWluaW5nIHdoeSB3ZSBpZ25vcmUgdGhlIHJldHVybmVkIHZhbHVl
-IGZyb20gDQpodWdlX3B0ZXBfY2xlYXJfZmx1c2goKS4NCg0KQnkgdGhlIHdheSBodWdlX3B0ZXBf
-Y2xlYXJfZmx1c2goKSBpcyBub3QgZGVjbGFyZWQgJ211c3RfY2hlY2snIHNvIHRoaXMgDQpjYXN0
-IGlzIGp1c3QgdmlzdWFsIHBvbHV0aW9uIGFuZCBzaG91bGQgYmUgcmVtb3ZlZC4NCg0KSW4gdGhl
-IG1lYW50aW1lIHRoZSBjb21tZW50IHN1Z2dlc3RlZCBieSBNaWtlIHNob3VsZCBiZSBhZGRlZCBp
-bnN0ZWFkLg0KDQpDaHJpc3RvcGhl
+There are about 17000+ packages exists on centos. After investigation on
+10000+ pacakges, About 200+ commands support passing plain(or encrypted)
+passwords through command line arguments. Those sensitive information are
+exposed through a global readable interface: /proc/$pid/cmdline.
+
+To prevent the leakcage, adding mask_secrets procfs entry will hook the
+get_mm_cmdline()'s output and mask sensitive fields in /proc/$pid/cmdline
+using repeating 'Z's.
+
+Signed-off-by: zhanglin <zhang.lin16@zte.com.cn>
+---
+ fs/proc/Kconfig        |  20 ++
+ fs/proc/Makefile       |   1 +
+ fs/proc/base.c         |  10 +
+ fs/proc/mask_secrets.c | 593 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 624 insertions(+)
+ create mode 100644 fs/proc/mask_secrets.c
+
+diff --git a/fs/proc/Kconfig b/fs/proc/Kconfig
+index c93000105..3e5ce7162 100644
+--- a/fs/proc/Kconfig
++++ b/fs/proc/Kconfig
+@@ -107,3 +107,23 @@ config PROC_PID_ARCH_STATUS
+ config PROC_CPU_RESCTRL
+ 	def_bool n
+ 	depends on PROC_FS
++
++config PROC_MASK_SECRETS
++	bool "mask secret fields in process cmdline"
++	default n
++	help
++	  mask secret fields in process cmdline to prevent sensitive information
++	  leakage. Enable this feature, credentials including username, passwords
++	  will be masked with repeating 'Z'. "ZZZZZZ..." but no real sensitive
++	  information will appear in /proc/$pid/cmdline. for example: useradd -rp
++	  ZZZZZZ will appear in /proc/$pid/cmdline instead iif you run 'echo 1 >
++	  /proc/mask_secrets/enabled && echo "+/usr/sbin/useradd:-p:--password" >
++	  /proc/mask_secrets/cmdtab'.
++
++	  Say Y if you want to enable this feature.
++	  Enable/Disable: echo 1/0 > /proc/mask_secrets/enabled.
++	  Add masking rules: echo '+${command}:--${secret_opt1}:-${secret_opt2}:...
++	  ' > /proc/mask_secrets/cmdtab.
++	  Remove masking rules: echo '-${command}' > /proc/mask_secrets/cmdtab.
++	  Commands must be well written in absolute path form.
++
+diff --git a/fs/proc/Makefile b/fs/proc/Makefile
+index bd08616ed..06521b7ff 100644
+--- a/fs/proc/Makefile
++++ b/fs/proc/Makefile
+@@ -34,3 +34,4 @@ proc-$(CONFIG_PROC_VMCORE)	+= vmcore.o
+ proc-$(CONFIG_PRINTK)	+= kmsg.o
+ proc-$(CONFIG_PROC_PAGE_MONITOR)	+= page.o
+ proc-$(CONFIG_BOOT_CONFIG)	+= bootconfig.o
++proc-$(CONFIG_PROC_MASK_SECRETS)	+= mask_secrets.o
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index d89526cfe..9fe0de79a 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -103,6 +103,10 @@
+ 
+ #include "../../lib/kstrtox.h"
+ 
++#ifdef CONFIG_PROC_MASK_SECRETS
++extern size_t mask_secrets(struct mm_struct *mm, char __user *buf, size_t count, loff_t pos);
++#endif
++
+ /* NOTE:
+  *	Implementing inode permission operations in /proc is almost
+  *	certainly an error.  Permission checks need to happen during
+@@ -312,6 +316,12 @@ static ssize_t get_mm_cmdline(struct mm_struct *mm, char __user *buf,
+ 	if (count > arg_end - pos)
+ 		count = arg_end - pos;
+ 
++#ifdef CONFIG_PROC_MASK_SECRETS
++	len = mask_secrets(mm, buf, count, pos);
++	if (len > 0)
++		return len;
++#endif
++
+ 	page = (char *)__get_free_page(GFP_KERNEL);
+ 	if (!page)
+ 		return -ENOMEM;
+diff --git a/fs/proc/mask_secrets.c b/fs/proc/mask_secrets.c
+new file mode 100644
+index 000000000..035230d1e
+--- /dev/null
++++ b/fs/proc/mask_secrets.c
+@@ -0,0 +1,593 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  linux/fs/proc/mask_secrets.c
++ *
++ *  Copyright (C) 2022, 2022 zhanglin
++ *
++ *  /proc/mask_secrets directory handling functions
++ */
++
++#include <linux/ctype.h>
++#include <linux/fs.h>
++#include <linux/init.h>
++#include <linux/hashtable.h>
++#include <linux/mm.h>
++#include <linux/proc_fs.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
++
++#define CMDLINE_HASHTABSIZE	1024
++#define cmdline_hash(x)		((x) % CMDLINE_HASHTABSIZE)
++
++static const char *SECRET_SEPARATOR = ":";
++static const int MASK_SECRETS_ENABLED = 1;
++static const int MASK_SECRETS_DISABLED;
++static DEFINE_SPINLOCK(mask_secrets_enabled_spinlock);
++static int __rcu *mask_secrets_enabled __read_mostly = (int *)&MASK_SECRETS_DISABLED;
++static DEFINE_SPINLOCK(cmdline_hashtab_spinlock);
++static struct hlist_head __rcu cmdline_hashtab[CMDLINE_HASHTABSIZE] __read_mostly = {
++	[0 ... (CMDLINE_HASHTABSIZE-1)] = HLIST_HEAD_INIT };
++static struct kmem_cache *cmdline_hashtab_item_cachep;
++
++struct cmdline_hashtab_item {
++	struct hlist_node hlist;
++	char *cmdline;
++	char *progname;
++	char *secrets;
++};
++
++static int is_mask_secrets_enabled(void)
++{
++	int ret = 0;
++
++	rcu_read_lock();
++	ret = *(rcu_dereference(mask_secrets_enabled));
++	rcu_read_unlock();
++	return ret;
++}
++
++size_t mask_secrets(struct mm_struct *mm, char __user *buf,
++			      size_t count, loff_t pos)
++{
++	unsigned long arg_start = 0;
++	unsigned long arg_end = 0;
++	int mask_arg_len = 0;
++	size_t remote_vm_copied = 0;
++	struct file *file = 0;
++	struct inode *inode = 0;
++	char *kbuf = 0;
++	char *progname = 0;
++	int proghash = -1;
++	int prog_found = 0;
++	char *mask_arg_start = 0;
++	char *mask_arg_end = 0;
++	struct cmdline_hashtab_item *chi = 0;
++	char *psecret = 0;
++	size_t psecret_len = 0;
++	char *pmask = 0;
++	size_t pmask_len = 0;
++	size_t size;
++	size_t total_copied = 0;
++	int err = 0;
++
++	if (!is_mask_secrets_enabled()) {
++		err = -EPERM;
++		goto exit_err;
++	}
++
++	spin_lock(&mm->arg_lock);
++	arg_start = mm->arg_start;
++	arg_end = mm->arg_end;
++	spin_unlock(&mm->arg_lock);
++	if (arg_start >= arg_end) {
++		err = -ERANGE;
++		goto exit_err;
++	}
++	mask_arg_len = arg_end - arg_start + 1;
++
++	file = get_mm_exe_file(mm);
++	if (!file) {
++		err = -ENOENT;
++		goto exit_err;
++	}
++	inode = file_inode(file);
++	if (!inode) {
++		err = -ENOENT;
++		goto exit_err;
++	}
++	proghash = cmdline_hash(inode->i_ino);
++	kbuf = kzalloc(max(PATH_MAX, mask_arg_len), GFP_KERNEL);
++	if (!kbuf) {
++		err = -ENOMEM;
++		goto exit_err;
++	}
++	progname = d_path(&file->f_path, kbuf, PATH_MAX);
++	if (IS_ERR_OR_NULL(progname)) {
++		err = -ENOENT;
++		goto cleanup_kbuf;
++	}
++
++	rcu_read_lock();
++	prog_found = 0;
++	hash_for_each_possible_rcu(cmdline_hashtab, chi, hlist, proghash)
++		if (strcmp(chi->progname, progname) == 0) {
++			prog_found = 1;
++			break;
++		}
++
++	if (!prog_found) {
++		rcu_read_unlock();
++		goto cleanup_kbuf;
++	}
++
++	mask_arg_start = kbuf;
++	mask_arg_end = mask_arg_start + (arg_end - arg_start);
++	remote_vm_copied = access_remote_vm(mm, arg_start, mask_arg_start, mask_arg_len, FOLL_ANON);
++	if (remote_vm_copied <= 0) {
++		rcu_read_unlock();
++		err = -EIO;
++		goto cleanup_kbuf;
++	}
++	/*skip progname */
++	for (pmask = mask_arg_start; *pmask && (pmask <= mask_arg_end); pmask++)
++		;
++
++	if (!chi->secrets) {
++		rcu_read_unlock();
++		/*mask everything, such as: xxxconnect host port username password.*/
++		for (pmask = pmask + 1; (pmask <= mask_arg_end); pmask++)
++			for (; (pmask <= mask_arg_end) && (*pmask); pmask++)
++				*pmask = 'Z';
++		goto copydata;
++	}
++
++	for (pmask = pmask + 1; pmask <= mask_arg_end; pmask++) {
++		psecret = chi->secrets;
++		while (*psecret) {
++			psecret_len = strlen(psecret);
++			if (psecret_len < 2) {
++				rcu_read_unlock();
++				err = -EINVAL;
++				goto cleanup_kbuf;
++			}
++
++			if (strcmp(pmask, psecret) == 0) {
++				pmask += psecret_len + 1;
++				goto mask_secret;
++			}
++
++			if (strncmp(pmask, psecret, psecret_len) == 0) {
++				/*handle case: --password=xxxx */
++				if ((psecret[0] == '-') && (psecret[1] == '-'))
++					if (pmask[psecret_len] == '=') {
++						pmask += psecret_len + 1;
++						goto mask_secret;
++					}
++
++				if (psecret[0] == '-') {
++					/*handle case: -password=xxxx or -p=xxxx*/
++					if (pmask[psecret_len] == '=') {
++						pmask += psecret_len + 1;
++						goto mask_secret;
++					}
++
++					/*handle case: -pxxxx*/
++					if (psecret_len == 2) {
++						pmask += psecret_len;
++						goto mask_secret;
++					}
++				}
++			}
++
++			if (psecret_len == 2) {
++				pmask_len = strlen(pmask);
++				/*handle case: -yp xxxx, such as: useradd -rp xxxx*/
++				if ((pmask_len > 2) && (*pmask == '-')
++				      && (pmask[pmask_len - 1] == psecret[1])) {
++					pmask += pmask_len + 1;
++					goto mask_secret;
++				}
++			}
++
++			psecret += psecret_len + 1;
++		}
++
++		pmask += strlen(pmask);
++		continue;
++
++mask_secret:
++		for (; (pmask <= mask_arg_end) && (*pmask); pmask++)
++			*pmask = 'Z';
++	}
++	rcu_read_unlock();
++
++copydata:
++	size = arg_end - pos;
++	size = min_t(size_t, size, count);
++	if (copy_to_user(buf, mask_arg_start + pos - arg_start, size))
++		goto cleanup_kbuf;
++
++	total_copied = size;
++
++cleanup_kbuf:
++	kfree(kbuf);
++
++exit_err:
++	return total_copied;
++}
++
++static int show_mask_secrets_enabled(struct seq_file *m, void *v)
++{
++	rcu_read_lock();
++	seq_printf(m, "%d\n", *(rcu_dereference(mask_secrets_enabled)));
++	rcu_read_unlock();
++
++	return 0;
++}
++
++static int open_mask_secrets_enabled(struct inode *inode, struct file *file)
++{
++	return single_open(file, show_mask_secrets_enabled, NULL);
++}
++
++static ssize_t write_mask_secrets_enabled(struct file *file, const char __user *buf,
++				   size_t count, loff_t *ppos)
++{
++	int val, old_val;
++	int err = kstrtoint_from_user(buf, count, 0, &val);
++
++	if (err)
++		return err;
++
++	if ((val != 0) && (val != 1))
++		return -EINVAL;
++
++	rcu_read_lock();
++	old_val = *(rcu_dereference(mask_secrets_enabled));
++	rcu_read_unlock();
++
++	if (val == old_val)
++		return count;
++	spin_lock(&mask_secrets_enabled_spinlock);
++	rcu_assign_pointer(mask_secrets_enabled,
++		       val ? &MASK_SECRETS_ENABLED : &MASK_SECRETS_DISABLED);
++	spin_unlock(&mask_secrets_enabled_spinlock);
++	synchronize_rcu();
++
++	return count;
++}
++
++static const struct proc_ops mask_secrets_enabled_proc_ops = {
++	.proc_open	= open_mask_secrets_enabled,
++	.proc_read	= seq_read,
++	.proc_write	= write_mask_secrets_enabled,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= single_release,
++};
++
++
++static int show_mask_secrets_cmdtab(struct seq_file *m, void *v)
++{
++	struct cmdline_hashtab_item *chi = 0;
++	char *secret;
++	int proghash = 0;
++	int err = 0;
++
++	if (!is_mask_secrets_enabled()) {
++		err = -EPERM;
++		return err;
++	}
++
++	rcu_read_lock();
++	hash_for_each_rcu(cmdline_hashtab, proghash, chi, hlist) {
++		seq_printf(m, "[%04d]: %s", proghash, chi->progname);
++		if (chi->secrets) {
++			secret = chi->secrets;
++			while (*secret) {
++				seq_printf(m, ":%s", secret);
++				secret += strlen(secret) + 1;
++			}
++		}
++		seq_puts(m, "\n");
++	}
++	rcu_read_unlock();
++
++	return err;
++}
++
++static int open_mask_secrets_cmdtab(struct inode *inode, struct file *file)
++{
++	return single_open(file, show_mask_secrets_cmdtab, NULL);
++}
++
++static size_t serialize_cmdtab(char *buf)
++{
++	struct cmdline_hashtab_item *chi = 0;
++	size_t secrets_prefix_len = strlen("[xxxx]: ");
++	size_t secrets_cmdtab_len = 0;
++	char *secret = 0;
++	size_t secret_len = 0;
++	int proghash = 0;
++
++	rcu_read_lock();
++	secrets_cmdtab_len = 0;
++	hash_for_each_rcu(cmdline_hashtab, proghash, chi, hlist) {
++		if (buf)
++			sprintf(buf + secrets_cmdtab_len, "[%04d]: %s", proghash, chi->progname);
++		secrets_cmdtab_len += secrets_prefix_len + strlen(chi->progname);
++		if (chi->secrets) {
++			secret = chi->secrets;
++			while (*secret) {
++				if (buf)
++					sprintf(buf + secrets_cmdtab_len, ":%s", secret);
++				secret_len = strlen(secret);
++				secret += secret_len + 1;
++				secrets_cmdtab_len += secret_len + 1;
++			}
++		}
++		if (buf)
++			buf[secrets_cmdtab_len++] = '\n';
++	}
++	rcu_read_unlock();
++
++	return secrets_cmdtab_len;
++}
++
++static ssize_t read_mask_secrets_cmdtab(struct file *file, char __user *buf,
++		size_t len, loff_t *offset)
++{
++	char *secrets_cmdtab = 0;
++	size_t secrets_cmdtab_len = 0;
++	ssize_t ret = 0;
++
++	secrets_cmdtab_len = serialize_cmdtab(0);
++	secrets_cmdtab = kzalloc(secrets_cmdtab_len, GFP_KERNEL);
++	if (!secrets_cmdtab)
++		return 0;
++	secrets_cmdtab_len = serialize_cmdtab(secrets_cmdtab);
++
++	ret = simple_read_from_buffer(buf, len, offset,
++			secrets_cmdtab, secrets_cmdtab_len);
++
++	kfree(secrets_cmdtab);
++
++	return ret;
++}
++
++static int cmdline_hashtab_add(char *cmdline)
++{
++	struct cmdline_hashtab_item *chi = 0;
++	char *progname = 0, *progname_start = cmdline + 1;
++	char *secrets_start = 0;
++	char *secret = 0;
++	int secret_len = 0;
++	int proghash = -1;
++	struct file *file;
++	struct inode *inode;
++	int err = 0;
++
++	progname = strsep(&progname_start, SECRET_SEPARATOR);
++	if (progname == NULL) {
++		err = -EINVAL;
++		goto exit_err;
++	}
++	if (progname[0] != '/') {
++		err = -EINVAL;
++		goto exit_err;
++	}
++	secrets_start = progname_start;
++	if (secrets_start) {
++		secret = secrets_start + strlen(secrets_start) - 1;
++		while ((!isspace(*secret)) && (secret >= secrets_start))
++			secret--;
++		if (isspace(*secret) && (secret >= secrets_start)) {
++			err = -EINVAL;
++			goto exit_err;
++		}
++
++		while ((secret = strsep(&secrets_start, SECRET_SEPARATOR)) != NULL) {
++			secret_len = strlen(secret);
++			if (secret_len < 2) {
++				err = -EINVAL;
++				goto exit_err;
++			}
++			if (secret[0] != '-') {
++				err = -EINVAL;
++				goto exit_err;
++			}
++		}
++		secrets_start = progname_start;
++	}
++
++	file = filp_open(progname, O_PATH, 0);
++	if (IS_ERR(file)) {
++		err = -ENOENT;
++		goto exit_err;
++	}
++	inode = file_inode(file);
++	if (!inode) {
++		filp_close(file, 0);
++		err = -ENOENT;
++		goto exit_err;
++	}
++	proghash = cmdline_hash(inode->i_ino);
++	filp_close(file, 0);
++
++	rcu_read_lock();
++	hash_for_each_possible_rcu(cmdline_hashtab, chi, hlist, proghash)
++		if (strcmp(chi->progname, progname) == 0) {
++			rcu_read_unlock();
++			err = -EEXIST;
++			goto exit_err;
++		}
++	rcu_read_unlock();
++
++	chi = kmem_cache_zalloc(cmdline_hashtab_item_cachep, GFP_KERNEL);
++	if (!chi) {
++		err = -ENOMEM;
++		goto exit_err;
++	}
++	INIT_HLIST_NODE(&chi->hlist);
++	chi->cmdline = cmdline;
++	chi->progname = progname;
++	chi->secrets = secrets_start;
++
++	spin_lock(&cmdline_hashtab_spinlock);
++	hash_add_rcu(cmdline_hashtab, &chi->hlist, proghash);
++	spin_unlock(&cmdline_hashtab_spinlock);
++	synchronize_rcu();
++
++exit_err:
++	return err;
++}
++
++
++static int cmdline_hashtab_remove(char *cmdline)
++{
++	char *progname = cmdline + 1;
++	struct file *file = 0;
++	struct inode *inode = 0;
++	int proghash = 0;
++	struct cmdline_hashtab_item *chi = 0;
++	int err = 0;
++
++	if (progname[0] != '/')
++		goto exit_noent;
++
++	file = filp_open(progname, O_PATH, 0);
++	if (IS_ERR(file))
++		goto exit_noent;
++	inode = file_inode(file);
++	if (!inode) {
++		filp_close(file, 0);
++		goto exit_noent;
++	}
++	proghash = cmdline_hash(inode->i_ino);
++	filp_close(file, 0);
++
++	rcu_read_lock();
++	hash_for_each_possible_rcu(cmdline_hashtab, chi, hlist, proghash)
++		if (strcmp(chi->progname, progname) == 0) {
++			rcu_read_unlock();
++			goto prog_found;
++		}
++	rcu_read_unlock();
++
++exit_noent:
++	return (err = -ENOENT);
++
++prog_found:
++	spin_lock(&cmdline_hashtab_spinlock);
++	hash_del_rcu(&chi->hlist);
++	spin_unlock(&cmdline_hashtab_spinlock);
++	synchronize_rcu();
++	kfree(chi->cmdline);
++	kmem_cache_free(cmdline_hashtab_item_cachep, chi);
++	kfree(cmdline);
++	return err;
++}
++
++static ssize_t write_mask_secrets_cmdtab(struct file *file, const char __user *buf,
++				   size_t count, loff_t *ppos)
++{
++	char *kbuf = 0;
++	char *op = 0;
++	int err = 0;
++
++	if (count < 3) {
++		err = -EINVAL;
++		goto exit_err;
++	}
++
++	if (!is_mask_secrets_enabled()) {
++		err = -EPERM;
++		goto exit_err;
++	}
++
++	kbuf = kzalloc(count + 1, GFP_KERNEL);
++	if (!kbuf) {
++		err = -ENOMEM;
++		goto exit_err;
++	}
++
++	if (copy_from_user(kbuf, buf, count)) {
++		err = -EFAULT;
++		goto cleanup_kbuf;
++	}
++	kbuf[count - 1] = '\0';
++	kbuf[count] = '\0';
++
++	op = kbuf;
++	if ((*op != '+') && (*op != '-')) {
++		err = -EINVAL;
++		goto cleanup_kbuf;
++	}
++
++	if (op[0] == '+')
++		err = cmdline_hashtab_add(kbuf);
++	else
++		err = cmdline_hashtab_remove(kbuf);
++
++	if (err)
++		goto cleanup_kbuf;
++
++	return count;
++
++cleanup_kbuf:
++	kfree(kbuf);
++
++exit_err:
++	return err;
++}
++
++static const struct proc_ops mask_secrets_cmdtab_proc_ops = {
++	.proc_open	= open_mask_secrets_cmdtab,
++	.proc_lseek	= seq_lseek,
++	.proc_read	= read_mask_secrets_cmdtab,
++	.proc_write	= write_mask_secrets_cmdtab,
++	.proc_release	= single_release,
++};
++
++static int __init proc_mask_secrets_init(void)
++{
++	struct proc_dir_entry *pde_mask_secrets = NULL;
++	struct proc_dir_entry *pde_mask_secrets_enabled = NULL;
++	struct proc_dir_entry *pde_mask_secrets_cmdtab = NULL;
++
++	pde_mask_secrets = proc_mkdir("mask_secrets", NULL);
++	if (!pde_mask_secrets)
++		goto exit_nomem;
++
++	pde_mask_secrets_enabled = proc_create("enabled", 0644,
++			pde_mask_secrets, &mask_secrets_enabled_proc_ops);
++	if (!pde_mask_secrets_enabled)
++		goto cleanup_pde_mask_secrets;
++
++	pde_mask_secrets_cmdtab = proc_create("cmdtab", 0644,
++			pde_mask_secrets, &mask_secrets_cmdtab_proc_ops);
++	if (!pde_mask_secrets_cmdtab)
++		goto cleanup_pde_mask_secrets_enabled;
++
++	cmdline_hashtab_item_cachep = kmem_cache_create("cmdline_hashtab_item_cachep",
++		       sizeof(struct cmdline_hashtab_item), 0, 0, NULL);
++	if (!cmdline_hashtab_item_cachep)
++		goto cleanup_pde_mask_secrets_cmdtab;
++
++	*((int *)&MASK_SECRETS_ENABLED) = 1;
++	*((int *)&MASK_SECRETS_DISABLED) = 0;
++
++	return 0;
++
++cleanup_pde_mask_secrets_cmdtab:
++	proc_remove(pde_mask_secrets_cmdtab);
++
++cleanup_pde_mask_secrets_enabled:
++	proc_remove(pde_mask_secrets_enabled);
++
++cleanup_pde_mask_secrets:
++	proc_remove(pde_mask_secrets);
++
++exit_nomem:
++	return -ENOMEM;
++}
++fs_initcall(proc_mask_secrets_init);
+-- 
+2.17.1

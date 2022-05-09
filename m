@@ -2,187 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD2251F830
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2409A51F835
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiEIJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S237273AbiEIJd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236972AbiEIJWb (ORCPT
+        with ESMTP id S235033AbiEIJYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:22:31 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B381CD24B;
-        Mon,  9 May 2022 02:18:38 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2498UabE017146;
-        Mon, 9 May 2022 11:18:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=C3wiR7qnEracRhKpAOx6YtBI+f6gCjQnqQN7TEosXEg=;
- b=z4glVLFgaqVLSpAbV0C/Y+xgGVW14z9XjRfrPXP0nwtS45E5FSNi+uyJ9oBpuwwQUR4e
- wUtLT/i/oAVJlHVSDSNJFCL6o6+4D3U1OgiwE9iILIjv6P38TwsaA7taUkCGWawqhEcz
- u2lT3y5wAPOJ6XVvqYHmcdgAH91TJ+gcD7v/y+8wKHDnx1Xldzfk6Qx+eOBSlMJlUohX
- YIeft7N+pD7u5McO6wc3zT01184mjh86EKB9hgvzTyC6OvKVTuqJBivhNI1AMihC1uf5
- I4gA97fE/1SJI1jhW6LgaZC5r/j3I3C32YBTrEJrNAzKJJ6d73MdIzIM9q8e4J7Sz/BC MQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwdw8tfu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 May 2022 11:18:35 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E0B78100038;
-        Mon,  9 May 2022 11:18:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D793C21513B;
-        Mon,  9 May 2022 11:18:34 +0200 (CEST)
-Received: from [10.201.20.246] (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 9 May
- 2022 11:18:34 +0200
-Message-ID: <b7a3db59-201d-a5fb-f416-e1d60d79762f@foss.st.com>
-Date:   Mon, 9 May 2022 11:18:33 +0200
+        Mon, 9 May 2022 05:24:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90486102BB3;
+        Mon,  9 May 2022 02:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41DC6B80D3A;
+        Mon,  9 May 2022 09:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1730C385B1;
+        Mon,  9 May 2022 09:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652088050;
+        bh=34I44iElGDvsO9vc/1qouhwKhN0J+6JwjUlz5LWtXAI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eno68cp5BdLmo+JTajkGm38tQmu+Eu/sq4rus3H3PeZDczMGh25dLxlkSQhTCYwgQ
+         bRSLqPg8rs4UxHU6e7yF1XLfcomJY4t0M7NMNiC9YtBbODRwVUTlx6SW6lDf0enn7E
+         9T9hamdgtefEwrz8+kx7empoAncF4wZJu/I5T1Hjl1mb2ZQEe72n8XmzgBvOAR4FsF
+         4QojwyHucRdJFVdQrU9P2vZjh98K5479MIIg8a5HnWmlKqwdDQVV0uS/nEg6JHs7sL
+         SWvP2H4iaApf/cjEfM2MMVxMergCCfxcFrfDgR/c+QhRf9pO7X20IS+nIspNDiA9e7
+         v1X+v2ctmzR9A==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f83983782fso137203507b3.6;
+        Mon, 09 May 2022 02:20:50 -0700 (PDT)
+X-Gm-Message-State: AOAM530tFO+0vMwt+MVACNPqL1sy1PK48sBbQlPhguw4jkOm/w7HXEqg
+        kZFEHVNCQdAMD/nBxzAFJIE4+T1V8+jV1dsq9vA=
+X-Google-Smtp-Source: ABdhPJypbDFv1BZy0AnqQqgdzqwp622v39ahPgaEWut11CbwJXiKPfgoUvAUkAv6K8MS2PyK6H3dw0atDtfrf+Gmhno=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr11712705ywd.495.1652088049944; Mon, 09
+ May 2022 02:20:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] rpmsg: virtio: set dst address on first message received
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20220315153856.3117676-1-arnaud.pouliquen@foss.st.com>
- <20220506171222.GA2816011@p14s>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220506171222.GA2816011@p14s>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-57-schnelle@linux.ibm.com> <s5hczgnm6ia.wl-tiwai@suse.de>
+In-Reply-To: <s5hczgnm6ia.wl-tiwai@suse.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 9 May 2022 11:20:33 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3_ppFRY7y4TL21kXfthcbFJmjMivfmH2r4Cqy_vAiesA@mail.gmail.com>
+Message-ID: <CAK8P3a3_ppFRY7y4TL21kXfthcbFJmjMivfmH2r4Cqy_vAiesA@mail.gmail.com>
+Subject: Re: [RFC v2 31/39] sound: add HAS_IOPORT dependencies
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-09_03,2022-05-09_01,2022-02-23_01
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mathieu,
+On Mon, May 9, 2022 at 10:53 AM Takashi Iwai <tiwai@suse.de> wrote:
+> On Fri, 29 Apr 2022 15:50:54 +0200, Niklas Schnelle wrote:
 
-On 5/6/22 19:12, Mathieu Poirier wrote:
-> On Tue, Mar 15, 2022 at 04:38:56PM +0100, Arnaud Pouliquen wrote:
->> when a rpmsg channel has been locally created with a destination address
-> 
-> s/when/Wen
-> 
-> Also, please be more specific about the "locally created" part, i.e
-> rpmsg_ctrldev_ioctl() -> rpmsg_create_channel().  Otherwise it is really hard to
-> understand the context of this change.
-> 
->> set to RPMSG_ADDR_ANY, a name service announcement message is sent to
->> the remote side. Then the destination address is never updated, making it
->> impossible to send messages to the remote.
->>
->> An example of kernel trace observed:
->> rpmsg_tty virtio0.rpmsg-tty.29.-1: invalid addr (src 0x1d, dst 0xffffffff)
->>
->> Implement same strategy than the open-amp library:
->> On the reception of the first message, if the destination address is
->> RPMSG_ADDR_ANY, then set it to address of the remote endpoint that
->> send the message.
->>
-> 
-> I would have expected a "Fixes:" tag.
+> >
+> >  config SND_OPL3_LIB
+> >       tristate
+> > +     depends on HAS_IOPPORT
+> >       select SND_TIMER
+> >       select SND_HWDEP
+> >       select SND_SEQ_DEVICE if SND_SEQUENCER != n
+>
+> Both of those are the items to be reverse-selected, so cannot fulfill
+> the dependency with depends-on.  That is, the items that select those
+> should have the dependency on HAS_IOPORT instead.
+>
+> That is, a change like below:
+>
+> > --- a/sound/isa/Kconfig
+> > +++ b/sound/isa/Kconfig
+> > @@ -31,7 +31,7 @@ if SND_ISA
+> >
+> >  config SND_ADLIB
+> >       tristate "AdLib FM card"
+> > -     select SND_OPL3_LIB
+> > +     depends on SND_OPL3_LIB
+>
+> ... won't work.  CONFIG_SND_OPL3_LIB is not enabled by itself but only
+> to be selected.
 
-Difficult to give a reference. For me the issue exists since the creation
-of the rpmsg virtio bus. A driver can create a channel that generates a NS
-announcement leading to this issue.
-The issue as been highlighted by the creation of the  RPMSG_CREATE_DEV_IOCTL
-control.
+Right, I missed that in my review. Not sure if this was a mistake in
+my original patch or if it started in a later version.
 
-> 
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>
->> ---
->> Remark:
->> An alternative (or a complement?) could be to add a NS bind/unbind in
->> the NS announcement channel (in rpmsg_ns.c).
->> This would allow the local and/or the remote processor to inform the
->> remote side the the service announced in bound.
->> ---
->>  drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
->> index 3ede25b1f2e4..99d2119cc164 100644
->> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
->> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
->> @@ -708,6 +708,7 @@ static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
->>  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
->>  			     struct rpmsg_hdr *msg, unsigned int len)
->>  {
->> +	struct rpmsg_device *rpdev;
->>  	struct rpmsg_endpoint *ept;
->>  	struct scatterlist sg;
->>  	bool little_endian = virtio_is_little_endian(vrp->vdev);
->> @@ -746,6 +747,15 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
->>  	mutex_unlock(&vrp->endpoints_lock);
->>  
->>  	if (ept) {
->> +		rpdev = ept->rpdev;
->> +		if (rpdev->ept == ept && rpdev->dst == RPMSG_ADDR_ANY) {
-> 
-> Please add a comment to explain the first part of the if() clause.  It took me
-> quite some time to understand. 
-> 
->> +			/*
->> +			 * First message received from the remote side on the default endpoint,
->> +			 * update channel destination address.
->> +			 */
->> +			rpdev->dst = msg->src;
-> 
-> This triggers a bot warning and should be addressed.  If it can't be addressed add
-> a comment that clearly explains why so that we don't end up receiving patches
-> for it every 4 weeks.
+I think for the ISA drivers, I would still add 'depends on HAS_IOPORT'
+to both CONFIG_SND_ISA and CONFIG_SND_OPL3_LIB if only to
+make it easier to understand, even though CONFIG_ISA requires
+HAS_IOPORT already, and CONFIG_SND_OPL3_LIB cannot be
+selected by itself.
 
-Oops, I missed it, thanks for pointing it out.
+For the PCI drivers, I think we need to add the same dependency
+on anything that either selects SND_OPL3_LIB or calls inb()/outb()
+directly.
 
-
-Concerning the patch itself as discussed in RP open-amp meeting. I wonder if this issue
-could be addressed by the flow control[1][2][3], or if needed in any case.
-
-I propose to send a V2 when ready to propose in parallel the flow control.
-So both can be addressed at same time to have a global picture of the way to address the
-use case..
-
-Thanks,
-Arnaud
-
-[1] POC Linux code:
-https://github.com/arnopo/linux/commits/signalling
-
-[2] openamp library associated code:
-https://github.com/arnopo/open-amp/commits/flow_ctrl
-
-[3] overview presentation
-https://drive.google.com/file/d/1CLU3ybI3oSBGvor18AQ-HOzOJ2nOppEb/view
-
-
-> 
-> Thanks,
-> Mathieu
-> 
->> +		}
->> +
->>  		/* make sure ept->cb doesn't go away while we use it */
->>  		mutex_lock(&ept->cb_lock);
->>  
->> -- 
->> 2.25.1
->>
+       Arnd

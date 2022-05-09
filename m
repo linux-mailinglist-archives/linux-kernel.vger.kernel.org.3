@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05645203CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 868CE5203D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbiEIRzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S239796AbiEIR4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238449AbiEIRzB (ORCPT
+        with ESMTP id S239788AbiEIR4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:55:01 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0359E4A923
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:51:04 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s27so17989671ljd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:51:04 -0700 (PDT)
+        Mon, 9 May 2022 13:56:41 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C23C2BFBE7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:52:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id bx33so7117817ljb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Z6h/UbBcSsy6Cwv/zRBUg+8oIkiwnR5qcB1QDqTp6w8=;
-        b=lOajRfE7fyP+ep3MKFGW9mQh4e9I1Uiq21usbZezTUhM7EFdhg1SnvvNjY4eG59ULs
-         V4Owko+szwUqUWwUMOPZ7L4L7x5m3g1Mm7rbCdqAjqtaLm5FvW/K5dfZdN0XW5hf65HO
-         78imLtJfT6cP2hesjWXVSZsQU4pIUmnZcKDPw9almOyM+aeGj7565UrKRLWpVcmNrEwe
-         xJkgCcUXrlopAOgqZYayw1LQ0mSuw5EChiwGNUaBuTsB3BXNrjGOYu+K76TLXsRGHsBe
-         eQK1QSxvGw/P89SyjP0B19ZHce6iDYv7Nz+kMtnMo+aOblb0/ntvWz3HsYVV84q3HMkk
-         YVZg==
+        bh=VAaeELHVcQouTEd0XSCIAgD8jqgghoqAvViW4eNJ0ec=;
+        b=b4o6yjanW6bwSXzeQddKdzJxs16LrwT2UIXAETG9ofvsVHdkcnTr0T5o6JTUSUSE2i
+         qgKhEe/Z5Xcja1V2L0Ue+Ehk04kB2pz9pB82cVQgO4nOKfeuxKNE7ZICwRtrlSHV16Hw
+         9+nUcwNaRkCd/xkufp5ozkCgdLhZhB1SK+7yBNQVXdtA2Vz1Hm7UikX9VjShaRZmrcjo
+         RfhzezkdcQuRk7C2Bwo/Ph8L1kFONuZVoW5r0wh7jyQY2m44LBYr2tsA+1VzbA94c3nX
+         IWMAZGr+UJW++q+lNKw7iUm90EVcYp8LIeNNadEwWcFLagXSZ2Xx2ESyUnGyoaBHSeZB
+         ou8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Z6h/UbBcSsy6Cwv/zRBUg+8oIkiwnR5qcB1QDqTp6w8=;
-        b=JIspd7CatPWhV5NI4w6eeXwuUCkxr9v/FQCj8qW3dfqngQ/Fb3lJ4qK1I6Z3enrOh3
-         teiIWvWXp2kM7AlC6QIrEYZLypAbQq3I2wzEAn74/URhkyXyc1f2QMq3fX7XEjFLJTzm
-         uOVNfeQu+3y96Axw2yFTuYIRbOAW6gbKLR6q5lN/cVY4FdNBBGAIb1AWxaaAHwjSNBlj
-         g6OvX9K4q4wGNI4omdnZlte3BjpBMInrQdWDiCkFvNdWlJol35hv/EXUfpjTQ6x4/que
-         I71JrhlGPxjKy2F6/URTvMY9nzRBVht6sAMTMXtwRytmHgkrtUk4uc+Yj8t7y/oxqz99
-         LRyQ==
-X-Gm-Message-State: AOAM532sfycjtVYrmmUrvAd3MfSadynjj+E6ArUfY4872XTTi6jf92Sk
-        lLJ9YYQRDu6/IuejKU3gcFsEmNBsNesD59GL23KDUQ==
-X-Google-Smtp-Source: ABdhPJzH0GFY+4K8szx4KHcz2z6G62DNfHvef1hX/KTMFMx//VA0v3aill5VeXt5HmS0uJd9IHn4xVPu7N0kN8BJZnI=
-X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
- x8-20020a2ea7c8000000b0024f700a4df5mr11176691ljp.472.1652118662391; Mon, 09
- May 2022 10:51:02 -0700 (PDT)
+        bh=VAaeELHVcQouTEd0XSCIAgD8jqgghoqAvViW4eNJ0ec=;
+        b=x1gcSqV9aMP/Kf4HQjub6wb5o5ihtfO91Z3T7RWbe1JxjriWDNoIcDLi/qmBBkPNZF
+         aKTjTiHGFYbenrmJXYaHbGSnO29+1QBpIHP/HhO6bsiKFdgb3+SfzSJMASKOckICVSF6
+         C9SvWEKewj0O/ZxfbvTbHcxPndrlsAKuIqwwtPHSEnFU67QxYcJO9v16UIHxVDCeoF/e
+         GejsGYiQ/gMlTn7fZY58nIjoGzXmCF4EHW/vJ7xKAg1KTVG+yLM6SOyhtztJ+9jDhJbC
+         OIuX4HOVcdrB9TFIKdNrdrnHmy91li07zSfFGJqJm4F3pTN6ZzyJ2ETsFFGjB69RvLpi
+         Rd6g==
+X-Gm-Message-State: AOAM531k2jOhLHRF8f1SqBPXaXmUvqikrAtyI3pGM/nhJcltRLLUY56Y
+        yJP6zMPgMsTFSRHx/jHvlIDwbBqzj/8KIflc1TU0pw==
+X-Google-Smtp-Source: ABdhPJxLDecK/fKBw2N/qZ9TbLTDtmzVJuxz6GHpR6z+gjd7Z7RShlYqQPsE9j+pLQmgJXqupOfPVeK3DlL9oESmh5A=
+X-Received: by 2002:a2e:9345:0:b0:24b:451:7ce1 with SMTP id
+ m5-20020a2e9345000000b0024b04517ce1mr11278276ljh.258.1652118762240; Mon, 09
+ May 2022 10:52:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-7-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-7-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 9 May 2022 10:50:50 -0700
-Message-ID: <CAKwvOdm_oSLHddWWSzF5UuYrLCsAwF8AwbUGotUnPvV+6JkSkg@mail.gmail.com>
-Subject: Re: [PATCH v4 06/14] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>
+References: <20220507052451.12890-1-ojeda@kernel.org> <20220507052451.12890-24-ojeda@kernel.org>
+ <202205070050.A870AEAC6@keescook> <YnYqHSVakm1EAo5a@kroah.com>
+In-Reply-To: <YnYqHSVakm1EAo5a@kroah.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 9 May 2022 10:52:30 -0700
+Message-ID: <CAHRSSExk=cnJDUdxChf3H283rumV1M_SL4T9seSLEBVDxcrhzw@mail.gmail.com>
+Subject: Re: [PATCH v6 23/23] [RFC] drivers: android: Binder IPC in Rust
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Wayne Campbell <wcampbell1995@gmail.com>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -73,107 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, May 7, 2022 at 1:13 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
-> index 07a36a874dca..51ce72ce80fa 100644
-> --- a/include/asm-generic/export.h
-> +++ b/include/asm-generic/export.h
-> @@ -2,6 +2,14 @@
->  #ifndef __ASM_GENERIC_EXPORT_H
->  #define __ASM_GENERIC_EXPORT_H
+> On Sat, May 07, 2022 at 12:55:17AM -0700, Kees Cook wrote:
+> > On Sat, May 07, 2022 at 07:24:21AM +0200, Miguel Ojeda wrote:
+> > > From: Wedson Almeida Filho <wedsonaf@google.com>
+> > >
+> > > A port to Rust of the Android Binder IPC mechanism.
+> > >
+> > > This module is a work in progress and will be sent for review later
+> > > on, as well as separately from the Rust support.
+> >
+> > Is any functionality missing for this driver compared to the C driver?
 >
-> +/*
-> + * This comment block is used by fixdep. Please do not remove.
-
-I don't know much about fixdep. How does that work, if you could summarize?
-
-> + *
-> + * When CONFIG_MODVERSIONS is changed from n to y, all source files having
-> + * EXPORT_SYMBOL variants must be re-compiled because genksyms is run as a
-> + * side effect of the .o build rule.
-> + */
-> +
->  #ifndef KSYM_FUNC
->  #define KSYM_FUNC(x) x
->  #endif
-> @@ -12,9 +20,6 @@
->  #else
->  #define KSYM_ALIGN 4
->  #endif
-> -#ifndef KCRC_ALIGN
-> -#define KCRC_ALIGN 4
-> -#endif
-
-The #ifndef is there because arch/m68k/include/asm/export.h:1 defines
-KCRC_ALIGN. You should delete that, too.
-
-> diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
-> index 4827c5abe5b7..6e6933ae7911 100644
-> --- a/scripts/genksyms/genksyms.c
-> +++ b/scripts/genksyms/genksyms.c
-> @@ -33,7 +33,7 @@ char *cur_filename;
->  int in_source_file;
+> There is no binderfs support, which would be a major regression if it
+> were to be added.
 >
->  static int flag_debug, flag_dump_defs, flag_reference, flag_dump_types,
-> -          flag_preserve, flag_warnings, flag_rel_crcs;
-> +          flag_preserve, flag_warnings;
+> And odds are the new binder additions in the past few months are
+> probably not included here either.
 >
->  static int errors;
->  static int nsyms;
-> @@ -681,10 +681,7 @@ void export_symbol(const char *name)
->                         fputs(">\n", debugfile);
+> There is a binder regression test in Android that can be run to test all
+> of this to see what is missing.  That should be a good test of
+> compatibility.
+
+There are a set of tests in the Android tree at
+frameworks/libs/native/binder/tests, but just booting and having a
+usable device with this version replacing the C version is pretty
+impressive. Can you boot and run a real device with this?
+
 >
->                 /* Used as a linker script. */
-
-^ Does this comment still apply?
-
-> -               printf(!flag_rel_crcs ? "__crc_%s = 0x%08lx;\n" :
-> -                      "SECTIONS { .rodata : ALIGN(4) { "
-> -                      "__crc_%s = .; LONG(0x%08lx); } }\n",
-> -                      name, crc);
-> +               printf("__crc_%s = 0x%08lx;\n", name, crc);
->         }
->  }
+> thanks,
 >
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index eceb3ee7ec06..6aee2401f3ad 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -88,11 +88,6 @@ modpost_link()
->                 gen_initcalls
->                 lds="-T .tmp_initcalls.lds"
->
-> -               if is_enabled CONFIG_MODVERSIONS; then
-> -                       gen_symversions
-
-^ this is the only caller of gen_symversions, right? Then
-gen_symversions can be cleaned up, too?
-
-> -                       lds="${lds} -T .tmp_symversions.lds"
-> -               fi
-> -
->                 # This might take a while, so indicate that we're doing
->                 # an LTO link
->                 info LTO ${1}
-> @@ -183,6 +178,10 @@ vmlinux_link()
->                 libs="${KBUILD_VMLINUX_LIBS}"
->         fi
->
-> +       if is_enabled CONFIG_MODULES; then
-> +               objs="${objs} .vmlinux.export.o"
-> +       fi
-> +
->         if [ "${SRCARCH}" = "um" ]; then
->                 wl=-Wl,
->                 ld="${CC}"
-> @@ -312,6 +311,7 @@ cleanup()
->         rm -f vmlinux.o
->         rm -f .vmlinux.d
->         rm -f .vmlinux.objs
-> +       rm -f .vmlinux.export.c
-
-Probably can drop the `rm -f .tmp_symversions.lds` here, too?
--- 
-Thanks,
-~Nick Desaulniers
+> greg k-h

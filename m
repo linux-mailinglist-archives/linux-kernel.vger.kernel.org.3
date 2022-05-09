@@ -2,242 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C51E51FDEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532E651FDFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbiEINWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S235534AbiEINYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235526AbiEINWi (ORCPT
+        with ESMTP id S235472AbiEINYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:22:38 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48A2244F25;
-        Mon,  9 May 2022 06:18:44 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id g184so9524368pgc.1;
-        Mon, 09 May 2022 06:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u5qUGj6TkUHNHFMic3usSXTRRtjySZFw0zGgaGW/wF4=;
-        b=ShZ2wxuiybBMtW3FWvdh6RLZuwBd4gU1HMyZiDxnEOgpry6Rj8Mj530IJ4kCkPv3bQ
-         JTWfuATbW4QCOpS7jXig/8L2v5y3pFgsIhyp9l5LkK27oDsmiIpemJVnca0c1Q+v9BHF
-         1xkBn5kWV81pu0IY84zyGIOQPdHLWrLak1qzTRD+6wbkVNPNsgcgjiyHYUGHZb2SjGZy
-         BK+4nxJafN6y2rlYhW5T1dhZJNOX0M/Vxo9Op+LO8LSGChu3cmcMNrXgyWjpN3jpIoLj
-         8wxjk2uCx+7LEohE58aEApy2bsShzAp910cgoXgFAilTUrpGKg9vF7ejgGiRhan6Qn3e
-         YscA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u5qUGj6TkUHNHFMic3usSXTRRtjySZFw0zGgaGW/wF4=;
-        b=i05RZVvHN3eL5VvGQrTappE86+SfwQPw1HetDexP0s/iY2TOmUAr/nqvbAokORoFyo
-         rPSZzyJU1WbRuaFtEEDOw2Dk4QKZR9KpnhzeocPD7Bv5UoBrkRh+b0aOeJ9Uxk/X/opO
-         lQI/wBEk7x5SUa7OGBLRBTM3DSOzae+UVK01ivAuVnC5WBu5KCZ5PgR/IvbhttjeW9bc
-         Aus0REjkiUupThb1HrVLs32sVzCLuYP8jaA0EWpMuXfYPUJpLL2xB99detHWMnMegGTA
-         b1Ko3AAaPuG1hLppDn/WjEjqZRByrnzMSBg1RikOExburwOGhfxcWJcpXRgH8bAlhDry
-         xvDw==
-X-Gm-Message-State: AOAM531Tm6L9t+F2R9hGmy+q7nlwQ/zn5OWY2LcqsFzJItmURpCnYZSw
-        QxidNMVyk8KuLoAZAMd5PJU=
-X-Google-Smtp-Source: ABdhPJyoW4yKa/hH6Q1NGvG7lyAsgatg6JMl9V+3WRHs5B+lPA/y6gzIJzb/QLYOdKIkbPFxW7yGZg==
-X-Received: by 2002:a63:2486:0:b0:3ab:84c3:864a with SMTP id k128-20020a632486000000b003ab84c3864amr13068540pgk.358.1652102324175;
-        Mon, 09 May 2022 06:18:44 -0700 (PDT)
-Received: from ELIJAHBAI-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902c08400b0015e981111d5sm7038007pld.234.2022.05.09.06.17.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 06:18:13 -0700 (PDT)
-From:   Haimin Zhang <tcs.kernel@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Haimin Zhang <tcs_kernel@tencent.com>,
-        TCS Robot <tcs_robot@tencent.com>
-Subject: [PATCH v2] fs/pipe: Deinitialize the watch_queue when pipe is freed
-Date:   Mon,  9 May 2022 21:17:26 +0800
-Message-Id: <20220509131726.59664-1-tcs.kernel@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Mon, 9 May 2022 09:24:20 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8D02B164F;
+        Mon,  9 May 2022 06:20:24 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 721AB24000F;
+        Mon,  9 May 2022 13:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652102423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=y7L8IXjll2ibs1Pq+8JUi3yNC6QwoYztmxRCyu+uIOA=;
+        b=g/UzFF5z6XL+JtY1ikiRwY7vWTXyqrlRwwZK7NbuEUXLMo6k88hv822hWeXpI0qsnGlLgn
+        kXIz5vzrYxIFT0fCV+wF7Gyg30oZB47xEATDxhRuGt81Ga+QAww+Sll//9huuc3tExvcgS
+        oP6F7iQHboKI8ICKPisSuEyfKlMgbsxKhq6tMr0kqYCR7omnI3l3ZHj3thOjaDVraqKLvP
+        f+eqbii4j3KpkgyDnx1GMT0eXF6m2OZsj6sk5gLy/4oIMUDeXjhiyNTlxfw6GuebzguQB3
+        QPqEKFomJVRxvT14fS6TP5XwLJbVWwhIYmCGskTmWDWtsBEuzXdC8WuvtGScLQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v4 00/12] add support for Renesas RZ/N1 ethernet subsystem devices
+Date:   Mon,  9 May 2022 15:18:48 +0200
+Message-Id: <20220509131900.7840-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs_kernel@tencent.com>
+The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+(most notably) a switch, two GMACs, and a MII converter [1]. This
+series adds support for the switch and the MII converter.
 
-Add a new function call to deinitialize the watch_queue of a freed pipe.
-When a pipe node is freed, it doesn't make pipe->watch_queue->pipe null.
-Later when function post_one_notification is called, it will use this
-field, but it has been freed and watch_queue->pipe is a dangling pointer.
-It makes a uaf issue.
-Check wqueu->defunct before pipe check since pipe becomes invalid once all
-watch queues were cleared.
+The MII converter present on this SoC has been represented as a PCS
+which sit between the MACs and the PHY. This PCS driver is probed from
+the device-tree since it requires to be configured. Indeed the MII
+converter also contains the registers that are handling the muxing of
+ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
 
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
----
-The following is the callstacks:
-1. The pipe was created as follows:
-```
- kmalloc build/../include/linux/slab.h:581 [inline]
- kzalloc build/../include/linux/slab.h:714 [inline]
- alloc_pipe_info+0x105/0x590 build/../fs/pipe.c:790
- get_pipe_inode build/../fs/pipe.c:881 [inline]
- create_pipe_files+0x8d/0x880 build/../fs/pipe.c:913
- __do_pipe_flags build/../fs/pipe.c:962 [inline]
- do_pipe2+0x96/0x1b0 build/../fs/pipe.c:1010
- __do_sys_pipe2 build/../fs/pipe.c:1028 [inline]
- __se_sys_pipe2 build/../fs/pipe.c:1026 [inline]
- __x64_sys_pipe2+0x50/0x70 build/../fs/pipe.c:1026
- do_syscall_x64 build/../arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 build/../arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-```
-2. The pipe was freed as follows:
-```
- kfree+0xd6/0x4d0 build/../mm/slub.c:4552
- put_pipe_info build/../fs/pipe.c:711 [inline]
- pipe_release+0x2b6/0x310 build/../fs/pipe.c:734
- __fput+0x277/0x9d0 build/../fs/file_table.c:317
- task_work_run+0xdd/0x1a0 build/../kernel/task_work.c:164
- resume_user_mode_work build/../include/linux/resume_user_mode.h: 49 [inline]
- exit_to_user_mode_loop build/../kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 build/../kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work build/../kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x60 build/../kernel/entry/common.c:294
- do_syscall_64+0x42/0x80 build/../arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-```
-3. The dangling pointer was used:
-```
- __lock_acquire+0x3eb0/0x56c0 build/../kernel/locking/lockdep.c:4899
- lock_acquire build/../kernel/locking/lockdep.c:5641 [inline]
- lock_acquire+0x1ab/0x510 build/../kernel/locking/lockdep.c:5606
- __raw_spin_lock_irq build/../include/linux/spinlock_api_smp.h:119 [inline]
- _raw_spin_lock_irq+0x32/0x50 build/../kernel/locking/spinlock.c:170
- spin_lock_irq build/../include/linux/spinlock.h:374 [inline]
- post_one_notification.isra.0+0x59/0x990 build/../kernel/watch_queue.c:86
- remove_watch_from_object+0x35a/0x9d0 build/../kernel/watch_queue.c:527
- remove_watch_list build/../include/linux/watch_queue.h:115 [inline]
- key_gc_unused_keys.constprop.0+0x2e5/0x600 build/../security/keys/gc.c:135
- key_garbage_collector+0x3d7/0x920 build/../security/keys/gc.c:297
- process_one_work+0x996/0x1610 build/../kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 build/../kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 build/../kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 build/../arch/x86/entry/entry_64.S:298
-```
+The switch driver is based on DSA and exposes 4 ports + 1 CPU
+management port. It include basic bridging support as well as FDB and
+statistics support.
 
- fs/pipe.c                   |  4 +++-
- include/linux/watch_queue.h |  5 +++++
- kernel/watch_queue.c        | 34 ++++++++++++++++++++++++++++++----
- 3 files changed, 38 insertions(+), 5 deletions(-)
+This series needs commits 14f11da778ff6421 ("soc: renesas: rzn1: Select
+PM and PM_GENERIC_DOMAINS configs") and ed66b37f916ee23b ("ARM: dts:
+r9a06g032: Add missing '#power-domain-cells'") which are available on
+the renesas-devel tree in order to enable generic power domain on
+RZ/N1.
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index e140ea150bbb..d0e9d8697810 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -844,8 +844,10 @@ void free_pipe_info(struct pipe_inode_info *pipe)
- 			pipe_buf_release(pipe, buf);
- 	}
- #ifdef CONFIG_WATCH_QUEUE
--	if (pipe->watch_queue)
-+	if (pipe->watch_queue) {
-+		watch_queue_deinit(pipe);
- 		put_watch_queue(pipe->watch_queue);
-+	}
- #endif
- 	if (pipe->tmp_page)
- 		__free_page(pipe->tmp_page);
-diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
-index 3b9a40ae8bdb..e5086b195fb7 100644
---- a/include/linux/watch_queue.h
-+++ b/include/linux/watch_queue.h
-@@ -90,6 +90,7 @@ extern long watch_queue_set_size(struct pipe_inode_info *, unsigned int);
- extern long watch_queue_set_filter(struct pipe_inode_info *,
- 				   struct watch_notification_filter __user *);
- extern int watch_queue_init(struct pipe_inode_info *);
-+extern int watch_queue_deinit(struct pipe_inode_info *);
- extern void watch_queue_clear(struct watch_queue *);
- 
- static inline void init_watch_list(struct watch_list *wlist,
-@@ -129,6 +130,10 @@ static inline int watch_queue_init(struct pipe_inode_info *pipe)
- 	return -ENOPKG;
- }
- 
-+static inline int watch_queue_deinit(struct pipe_inode_info *pipe)
-+{
-+	return -ENOPKG;
-+}
- #endif
- 
- #endif /* _LINUX_WATCH_QUEUE_H */
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 230038d4f908..4357511880f5 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -80,13 +80,22 @@ static bool post_one_notification(struct watch_queue *wqueue,
- 	unsigned int head, tail, mask, note, offset, len;
- 	bool done = false;
- 
--	if (!pipe)
-+	if (!kref_get_unless_zero(&wqueue->usage))
- 		return false;
- 
--	spin_lock_irq(&pipe->rd_wait.lock);
--
--	if (wqueue->defunct)
-+	spin_lock_bh(&wqueue->lock);
-+	if (wqueue->defunct) {
-+		spin_unlock_bh(&wqueue->lock);
- 		goto out;
-+	}
-+	spin_unlock_bh(&wqueue->lock);
-+
-+	if (!pipe) {
-+		put_watch_queue(wqueue);
-+		return false;
-+	}
-+
-+	spin_lock_irq(&pipe->rd_wait.lock);
- 
- 	mask = pipe->ring_size - 1;
- 	head = pipe->head;
-@@ -123,6 +132,7 @@ static bool post_one_notification(struct watch_queue *wqueue,
- 	done = true;
- 
- out:
-+	put_watch_queue(wqueue);
- 	spin_unlock_irq(&pipe->rd_wait.lock);
- 	if (done)
- 		kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
-@@ -663,3 +673,19 @@ int watch_queue_init(struct pipe_inode_info *pipe)
- 	pipe->watch_queue = wqueue;
- 	return 0;
- }
-+
-+/*
-+ * Deinitialise a watch queue
-+ */
-+int watch_queue_deinit(struct pipe_inode_info *pipe)
-+{
-+	struct watch_queue *wqueue;
-+
-+	if (pipe) {
-+		wqueue = pipe->watch_queue;
-+		if (wqueue)
-+			wqueue->pipe = NULL;
-+		pipe->watch_queue = NULL;
-+	}
-+	return 0;
-+}
+Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
+
+-----
+Changes in V4:
+- Add ETH_P_DSA_A5PSW in uapi/linux/if_ether.h
+- PCS:
+  - Use devm_pm_runtime_enable() instead of pm_runtime_enable()
+- Switch:
+  - Return -EOPNOTSUPP and set extack when multiple bdridge are created
+  - Remove error messages in fdb_del if entry does not exists
+  - Add compatibility with "ethernet-ports" device-tree property
+- Tag driver:
+  - Use ETH_ZLEN as padding len
+
+Changes in V3:
+- PCS:
+  - Fixed reverse christmas tree declaration
+  - Remove spurious pr_err
+  - Use pm_runtime functions
+- Tag driver:
+  - Remove packed attribute from the tag struct
+- Switch:
+  - Fix missing spin_unlock in fdb_dump in case of error
+  - Add static qualifier to dsa_switch_ops
+  - Add missing documentation for hclk and clk members of struct a5psw
+  - Changed types of fdb_entry to u16 to discard GCC note on char
+    packed bitfields and add reserved field
+- Added Reviewed-by tag from Florian Fainelli
+
+Changes in V2:
+- PCS:
+  - Fix Reverse Christmas tree declaration
+  - Removed stray newline
+  - Add PCS remove function and disable clocks in them
+  - Fix miic_validate function to return correct values
+  - Split PCS CONV_MODE definition
+  - Reordered phylink_pcs_ops in definition order
+  - Remove interface setting in miic_link_up
+  - Remove useless checks for invalid interface/speed and error prints
+  - Replace phylink_pcs_to_miic_port macro by a static function
+  - Add comment in miic_probe about platform_set_drvdata
+- Bindings:
+ - Fix wrong path for mdio.yaml $ref
+ - Fix yamllint errors
+- Tag driver:
+  - Squashed commit that added tag value with tag driver
+  - Add BUILD_BUG_ON for tag size
+  - Split control_data2 in 2 16bits values
+- Switch:
+  - Use .phylink_get_caps instead of .phylink_validate and fill
+    supported_interface correctly
+  - Use fixed size (ETH_GSTRING_LEN) string for stats and use memcpy
+  - Remove stats access locking since RTNL lock is used in upper layers
+  - Check for non C45 addresses in mdio_read/write and return
+    -EOPNOTSUPP
+  - Add get_eth_mac_stats, get_eth_mac_ctrl_stat, get_rmon_stats
+  - Fix a few indentation problems
+  - Remove reset callback from MDIO bus operation
+  - Add phy/mac/rmon stats
+- Add get_rmon_stat to dsa_ops
+
+Clément Léger (12):
+  net: dsa: add support for ethtool get_rmon_stats()
+  net: dsa: add Renesas RZ/N1 switch tag driver
+  dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
+  net: pcs: add Renesas MII converter driver
+  dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port
+    switch
+  net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
+  net: dsa: rzn1-a5psw: add statistics support
+  net: dsa: rzn1-a5psw: add FDB support
+  ARM: dts: r9a06g032: describe MII converter
+  ARM: dts: r9a06g032: describe GMAC2
+  ARM: dts: r9a06g032: describe switch
+  MAINTAINERS: add Renesas RZ/N1 switch related driver entry
+
+ .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  132 ++
+ .../bindings/net/pcs/renesas,rzn1-miic.yaml   |  162 +++
+ MAINTAINERS                                   |   11 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |   64 +
+ drivers/net/dsa/Kconfig                       |    9 +
+ drivers/net/dsa/Makefile                      |    1 +
+ drivers/net/dsa/rzn1_a5psw.c                  | 1065 +++++++++++++++++
+ drivers/net/dsa/rzn1_a5psw.h                  |  259 ++++
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    1 +
+ drivers/net/pcs/pcs-rzn1-miic.c               |  505 ++++++++
+ include/dt-bindings/net/pcs-rzn1-miic.h       |   33 +
+ include/linux/pcs-rzn1-miic.h                 |   18 +
+ include/net/dsa.h                             |    5 +
+ include/uapi/linux/if_ether.h                 |    1 +
+ net/dsa/Kconfig                               |    7 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/slave.c                               |   13 +
+ net/dsa/tag_rzn1_a5psw.c                      |  113 ++
+ 19 files changed, 2408 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.c
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.h
+ create mode 100644 drivers/net/pcs/pcs-rzn1-miic.c
+ create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
+ create mode 100644 include/linux/pcs-rzn1-miic.h
+ create mode 100644 net/dsa/tag_rzn1_a5psw.c
+
 -- 
-2.27.0
+2.36.0
 

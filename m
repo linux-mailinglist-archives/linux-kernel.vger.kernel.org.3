@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9D85201D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C208E5201EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238774AbiEIQEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S238796AbiEIQHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238782AbiEIQEs (ORCPT
+        with ESMTP id S238783AbiEIQHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:04:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DCB4348C;
-        Mon,  9 May 2022 09:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=K4xQBj4Av+1aVjNhecQZcLi4H026zPkK8lu/o3+s21g=; b=rOjuL7YPniMy57b1u6dI1Hc5gO
-        rKc00pRpI9pgmRtNEEcVp95ObH3NAvHKO0BxqgakABdsxT9w+vcSkLYMwRjeF2Rt45LH5W1qKAuIZ
-        ee+AO/YgQEUbFIHFmMFnIqyY9ChcwENCGmSHKicuGx7ma8Eo8+/LYP6uojVxFJ2e0tYnpVbdQnl0O
-        dSaNJ0/D4luEL4aN9muESKMxTtgGFq9TtirNLRMve3iMs5/T6IrrvEKXu4E4UHYhdpG9273XhLFVO
-        V3RsnWiOJ/sGCXTDhAGHTasPCLV5P0mqttJVyO3vg1+8boxC98anD2srszHHJ8zSGlIWP+W+fdPuq
-        9i0DKLEQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1no5oR-00CbQM-Sb; Mon, 09 May 2022 16:00:44 +0000
-Message-ID: <8e3ecd00-1c73-7481-fec2-158528b2798f@infradead.org>
-Date:   Mon, 9 May 2022 09:00:37 -0700
+        Mon, 9 May 2022 12:07:15 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3391024D597;
+        Mon,  9 May 2022 09:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=2KEf0T4CWmhmQoo31/SJzrrqOdQJI02kJMyMKQSb7lQ=; b=R4
+        09Do7jt6UfVkMNteQRzXOmQs/aJIanozNpVoC7ZXWqQUxuNjFbRTZrnqsTAaHj5WKLpV0dtm5YGpn
+        coZVSugG5VlQoOmd0fvXfjV+UBk9i+uJaKrnKuKTXxdKnf+XMBghDklpfv9/PNiieVfEZ95nC8XSw
+        thCx7Q0+WbcuCoU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1no5qZ-001y6d-Me; Mon, 09 May 2022 18:02:55 +0200
+Date:   Mon, 9 May 2022 18:02:55 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     LABBE Corentin <clabbe@baylibre.com>
+Cc:     alexandre.torgue@foss.st.com, broonie@kernel.org,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/6] dt-bindings: net: Add documentation for phy-supply
+Message-ID: <Ynk7L07VH/RFVzl6@lunn.ch>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-4-clabbe@baylibre.com>
+ <YnkGV8DyTlCuT92R@lunn.ch>
+ <YnkWl+xYCX8r9DE7@Red>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220509092312.254354-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnkWl+xYCX8r9DE7@Red>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 09, 2022 at 03:26:47PM +0200, LABBE Corentin wrote:
+> Le Mon, May 09, 2022 at 02:17:27PM +0200, Andrew Lunn a écrit :
+> > On Mon, May 09, 2022 at 07:48:54AM +0000, Corentin Labbe wrote:
+> > > Add entries for the 2 new phy-supply and phy-io-supply.
+> > > 
+> > > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > > ---
+> > >  .../devicetree/bindings/net/ethernet-phy.yaml          | 10 ++++++++++
+> > >  1 file changed, 10 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > > index ed1415a4381f..2a6b45ddf010 100644
+> > > --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > > +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > > @@ -153,6 +153,16 @@ properties:
+> > >        used. The absence of this property indicates the muxers
+> > >        should be configured so that the external PHY is used.
+> > >  
+> > > +  phy-supply:
+> > > +    description:
+> > > +      Phandle to a regulator that provides power to the PHY. This
+> > > +      regulator will be managed during the PHY power on/off sequence.
+> > > +
+> > > +  phy-io-supply:
+> > > +    description:
+> > > +      Phandle to a regulator that provides power to the PHY. This
+> > > +      regulator will be managed during the PHY power on/off sequence.
+> > 
+> > If you need two differently named regulators, you need to make it clear
+> > how they differ. My _guess_ would be, you only need the io variant in
+> > order to talk to the PHY registers. However, to talk to a link
+> > partner, you need the other one enabled as well. Which means handling
+> > that regulator probably should be in the PHY driver, so it is enabled
+> > only when the interface is configured up.
+> > 
+> 
+> If I enable only the IO one, stmmac fail to reset, so both are needed to be up.
+> I tried also to keep the "phy" one handled by stmmac (by removing patch 2), this lead to the PHY to not be found by MDIO scan.
+> Proably because stmmac enable the "phy" before the "phy-io".
+> 
+> For the difference between the 2, according to my basic read (I am bad a it) of the shematic
+> https://linux-sunxi.org/images/5/50/OrangePi_3_Schematics_v1.5.pdf
+> phy-io(ephy-vdd25) seems to (at least) power MDIO bus.
 
+So there is nothing in the data sheet of the RTL8211E to suggest you
+can uses these different power supplies independently. The naming
+'phy-io-supply' is very specific to RTL8211E, but you are defining a
+generic binding here. I don't know the regulator binding, it is
+possible to make phy-supply a list?
 
-On 5/9/22 02:23, Ming Lei wrote:
-> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
-> index fdb81f2794cd..3893ccd82e8a 100644
-> --- a/drivers/block/Kconfig
-> +++ b/drivers/block/Kconfig
-> @@ -408,6 +408,13 @@ config BLK_DEV_RBD
->  
->  	  If unsure, say N.
->  
-> +config BLK_DEV_USER_BLK_DRV
-> +	bool "Userspace block driver"
-> +	select IO_URING
-> +	default y
+	 Andrew
 
-Any "default y" driver is highly questionable and needs to be justified.
-
-Also: why is it bool instead of tristate?
-
-> +	help
-> +          io uring based userspace block driver.
-
--- 
-~Randy

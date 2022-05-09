@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AE55205E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52C15205DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiEIUdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 16:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S229770AbiEIUcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 16:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiEIUdg (ORCPT
+        with ESMTP id S229489AbiEIUb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 16:33:36 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326922C5108;
-        Mon,  9 May 2022 13:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652127578;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=SBaBb5ku3Zc6QOsULhZnMQK6VkkGuN4gnq4axlkQKFk=;
-    b=Dv8/bL2/NzmgNugIUYSykCh2WPTWR5OctQC9knBmSSpIiahEES7bbyYZ29iaIiP0fM
-    B9bsoiefHhAuEgOTB1RQR3IA1ipkOaFlmizBgZaBCxsEIQBooV3Fm4AwbWVUEx0qJgj5
-    mGoCGHyuCjT/WRHK9PjVlIjl+yeklJwY1J3ccdRdMUuXAxzYLSVGEgYCGTNNAFXGOlGP
-    c56NQElTLt92NT93Z+Upg1deI3Dlwt6V5NHGPYkyXpXm6QpjH6UH5qLr5eJy40I6emPP
-    bcXJ05azaQh7LAIis6pZeVjEYTk1eWMHm2EVXAihA2U+sqirFJ3nsLZXiM/gzZ870CLA
-    TpqA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8IRUA=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.44.0 SBL|AUTH)
-    with ESMTPSA id e48d97y49KJb1Ld
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 9 May 2022 22:19:37 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: Question about SC16IS752 device tree.
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <04bd0853-7e34-5210-f1b5-f3ea8c35e484@wanyeetech.com>
-Date:   Mon, 9 May 2022 22:19:36 +0200
-Cc:     Paul Cercueil <paul@crapouillou.net>, jringle@gridpoint.com,
-        shc_work@mail.ru, Rob Herring <robh@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-serial@vger.kernel.org,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <501852E6-6934-4BB2-850C-B53A07580568@goldelico.com>
-References: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
- <ZYNMBR.VDVV3VHFQBMO1@crapouillou.net>
- <04bd0853-7e34-5210-f1b5-f3ea8c35e484@wanyeetech.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Mon, 9 May 2022 16:31:58 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA88D5A;
+        Mon,  9 May 2022 13:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=obE3GvP5MiFalr+zUuFTsVYAipwQCABa5LeNZRhk2iw=; b=hyHleL2qGRNzf/f0LIaT4+nAG0
+        7ldV8Th5xj9XD3zKxtMqCjfCZP2P548K9Exfs7scwOVT0ZO9/3RK9VKgXfcFNU6WMvqJt39n9f/rE
+        A5Jccm7RiR00kZn9xF6tW/7+VAqZVW+gfhAj6r5bor8oNoU2pl7RfV50UHpDpKF2C3R+C91DoeIge
+        Avvgcyb5d7MGKgcrfgZacnrnxMQB7dTTw3xRD0IcAP1H0l/I2RB1n2hlhAtWeKcdxM3WSrGeWweiy
+        OrgEmgnYUArHP0/C0B2f1z9ccASxFScvthsYLfDqH5+vOixi6KccN7kUPSPBpRKklhGB/i4CE3muW
+        VjWMN+tA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60654)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1no9rt-0003i3-Uw; Mon, 09 May 2022 21:20:34 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1no9rq-0005Oe-CL; Mon, 09 May 2022 21:20:30 +0100
+Date:   Mon, 9 May 2022 21:20:30 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 04/12] net: pcs: add Renesas MII converter
+ driver
+Message-ID: <Ynl3jpuJFqXLscvE@shell.armlinux.org.uk>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+ <20220509131900.7840-5-clement.leger@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509131900.7840-5-clement.leger@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,32 +81,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-> Am 09.05.2022 um 20:41 schrieb Zhou Yanjie =
-<zhouyanjie@wanyeetech.com>:
->=20
-> Hi Paul,
->=20
-> On 2022/5/10 =E4=B8=8A=E5=8D=882:13, Paul Cercueil wrote:
->> I can't say for sure that it's your problem, but your bluetooth nodes =
-are missing "reg" properties.=20
->=20
->=20
-> Unfortunately it doesn't seem to be the problem here, I added "reg" =
-and
-> the problem persists, and I've looked at other device trees that =
-contain
-> "brcm,bcm43438-bt", none of them use "reg", and "reg" is not mentioned =
-in
-> neither "Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt" =
-nor
-> "Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml".
+On Mon, May 09, 2022 at 03:18:52PM +0200, Clément Léger wrote:
+> +#define MIIC_PRCMD			0x0
+> +#define MIIC_ESID_CODE			0x4
+> +
+> +#define MIIC_MODCTRL			0x20
+> +#define MIIC_MODCTRL_SW_MODE		GENMASK(4, 0)
+> +
+> +#define MIIC_CONVCTRL(port)		(0x100 + (port) * 4)
+> +
+> +#define MIIC_CONVCTRL_CONV_SPEED	GENMASK(1, 0)
+> +#define CONV_MODE_10MBPS		0
+> +#define CONV_MODE_100MBPS		BIT(0)
+> +#define CONV_MODE_1000MBPS		BIT(1)
 
-what happens if you remove the serdev children from DTS? Does the driver =
-create two separate /dev/tty ports? And do they work?
+I think this is an inappropriate use of the BIT() macro. BIT() should be
+used for single bit rather than for field values.
 
-Maybe the sc16is752 driver does not separate them for child nodes, i.e. =
-while "reg" should be added it may not be handled?
+You seem to have a two bit field in bits 1 and 0 of a register, which
+has the values of:
+0 - 10MBPS
+1 - 100MBPS
+2 - 1GBPS
 
-BR,
-Nikolaus
+I'd guess 3 is listed as "undefined", "do not use" or something similar?
 
+> +
+> +#define MIIC_CONVCTRL_CONV_MODE		GENMASK(3, 2)
+> +#define CONV_MODE_MII			0
+> +#define CONV_MODE_RMII			BIT(0)
+> +#define CONV_MODE_RGMII			BIT(1)
+
+This looks similar. a 2-bit field in bits 3 and 2 taking values:
+0 - MII
+1 - RMII
+2 - RGMII
+
+...
+
+> +static int miic_config(struct phylink_pcs *pcs, unsigned int mode,
+> +		       phy_interface_t interface,
+> +		       const unsigned long *advertising, bool permit)
+> +{
+> +	u32 speed = CONV_MODE_10MBPS, conv_mode = CONV_MODE_MII, val;
+> +	struct miic_port *miic_port = phylink_pcs_to_miic_port(pcs);
+> +	struct miic *miic = miic_port->miic;
+> +	int port = miic_port->port;
+> +
+> +	switch (interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		conv_mode = CONV_MODE_RMII;
+> +		speed = CONV_MODE_100MBPS;
+> +		break;
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +		conv_mode = CONV_MODE_RGMII;
+> +		speed = CONV_MODE_1000MBPS;
+> +		break;
+> +	case PHY_INTERFACE_MODE_MII:
+
+I'm not sure why you need to initialise "speed" and "conv_mode" above
+when you could set them here.
+
+Thanks. 
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

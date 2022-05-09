@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332215206C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D675206C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiEIVmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S230049AbiEIVnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiEIVme (ORCPT
+        with ESMTP id S229700AbiEIVnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:42:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40FEABF66
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:38:39 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id t13so13089007pgn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 14:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hEal1fzA7Cb6EVB7wLpuE+1jBjav8uqTWNmWNSLdPPM=;
-        b=mfk/cb7RNKP6+nHTNwOcOjPLUBR4aoeuA3mnGv0IUwXDr1Ujp98W34C2EvCbcKGbUg
-         +xtsae0h3SD4iH7NDkEbPHLfZNP1uvGFtCHLTxBcEGyawYXYyn2hyGN2ua+qGkI2ZmYN
-         9ERzDdNqXb9KtaHLnTmEFLn5K81AHaUSvNV7Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hEal1fzA7Cb6EVB7wLpuE+1jBjav8uqTWNmWNSLdPPM=;
-        b=gO4AwubnwgmsLSe3aZH3oaec5M2BZKHjsZxb94CzHCWYqNLK8rkkCQA6St20oNoZCK
-         PRecAhxTrn1AqtoNMsjo010PjkPw27J2cBvcQOIKK4BNFi7/HTEV4SuNu/YCozEjMOgr
-         CLv7/m8FfuFYNGEjTaEucscGYwXUPsFXco8PXC41v/6jUupNsxeXoJe4wDrCiWtYXRuZ
-         qZfHR2biiFSfBpVMg8XnM2GT5zGGo09+x81t+ATQxZUciJK+rnPjmyih/U3SonlQbuAc
-         9cr8LaPs5J8UF5qOpGegi/ObJL4qhApKWJxx/PQeRDh1fUYRyZnaPvmpYsZJjlDUFEvo
-         k2OA==
-X-Gm-Message-State: AOAM530kmMUkl/5HNiixXZ7CYQrLGTDOVfTKfwAizNLACfGJGHeyy+oQ
-        C4r7GTmu6dvibxa3XFCyi4LTEg==
-X-Google-Smtp-Source: ABdhPJx60tGBlAHyzZZAcgMzRcFzvYJ65r/xUfb28gP+vABmu2ZnfueyUR+aVfnAOHnZ2YyKOkpd6w==
-X-Received: by 2002:a05:6a00:2181:b0:4f6:f1b1:1ba7 with SMTP id h1-20020a056a00218100b004f6f1b11ba7mr17818642pfi.73.1652132319432;
-        Mon, 09 May 2022 14:38:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b0015e8d4eb1fasm356965plk.68.2022.05.09.14.38.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 14:38:39 -0700 (PDT)
-Date:   Mon, 9 May 2022 14:38:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     ira.weiny@intel.com
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH V10 14/44] mm/pkeys: Introduce pks_set_readwrite()
-Message-ID: <202205091304.434A9B45@keescook>
-References: <20220419170649.1022246-1-ira.weiny@intel.com>
- <20220419170649.1022246-15-ira.weiny@intel.com>
+        Mon, 9 May 2022 17:43:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12B512E311
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:39:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DF3E6173E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:39:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01498C385BF;
+        Mon,  9 May 2022 21:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652132345;
+        bh=Dbtg2A5V81LNmPefQmULq927PV8gft+l2ipWRJFWT7s=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=g6CDK1MLOQhA5reDjuBvvixu6InPhbiwWfeAZ5S82+Fc/OqF7xH0FzXZyX3xU7AvA
+         THUskIIobad3C2c1jIiWb5tED9BreTCOydBjR07o4GVyQ6HVsmZkCmP8X13OKX9uKL
+         QlQcfONiRYujYaVQVbN7fiH4OQrUUaVgHzF2VFvd9WoTilIg3mDK777XuqJUFr4kmB
+         0+YmguCnzd6IrDslQpUJya1uJpn7xzGeDy/uSWZc8sdJz0XQf8D85pJDtz2sUSimFZ
+         b8kMsnGKfIDP+oR4ylKYZzCXlxTxFdTfxEVh5iQl3o8wkIjGJZoZhTpQ4FufPaYADl
+         xGyGpsgabRJzg==
+Date:   Mon, 9 May 2022 14:39:04 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH V2 3/7] xen/grant-dma-ops: Add option to restrict memory
+ access under Xen
+In-Reply-To: <1651947548-4055-4-git-send-email-olekstysh@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2205091421370.43560@ubuntu-linux-20-04-desktop>
+References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com> <1651947548-4055-4-git-send-email-olekstysh@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419170649.1022246-15-ira.weiny@intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/mixed; BOUNDARY="8323329-1745592087-1652131303=:43560"
+Content-ID: <alpine.DEB.2.22.394.2205091439000.43560@ubuntu-linux-20-04-desktop>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,223 +64,437 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:06:19AM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> When kernel code needs access to a PKS protected page they will need to
-> change the protections for the pkey to Read/Write.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I'm excited to have this infrastructure available! It'll finally give us
-the "write rarely" infrastructure we've needed:
-https://github.com/KSPP/linux/issues/130
+--8323329-1745592087-1652131303=:43560
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.DEB.2.22.394.2205091439001.43560@ubuntu-linux-20-04-desktop>
 
+On Sat, 7 May 2022, Oleksandr Tyshchenko wrote:
+> From: Juergen Gross <jgross@suse.com>
 > 
-> Define pks_set_readwrite() to update the specified pkey.  Define
-> pks_update_protection() as a helper to do the heavy lifting and allow
-> for subsequent pks_set_*() calls.
+> Introduce Xen grant DMA-mapping layer which contains special DMA-mapping
+> routines for providing grant references as DMA addresses to be used by
+> frontends (e.g. virtio) in Xen guests.
 > 
-> Define PKEY_READ_WRITE rather than use a magic value of '0' in
-> pks_update_protection().
+> Add the needed functionality by providing a special set of DMA ops
+> handling the needed grant operations for the I/O pages.
 > 
-> Finally, ensure preemption is disabled for pks_write_pkrs() because the
-> context of this call can not generally be predicted.
+> The subsequent commit will introduce the use case for xen-grant DMA ops
+> layer to enable using virtio devices in Xen guests in a safe manner.
 > 
-> pks.h is created to avoid conflicts and header dependencies with the
-> user space pkey code.
-> 
-> Add documentation.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+
+
 > ---
-> changes for v9
-> 	Move MSR documentation note to this patch
-> 	move declarations to incline/linux/pks.h
-> 	from rick edgecombe
-> 		change pkey type to u8
-> 	validate pkey range in pks_update_protection
-> 	from 0day
-> 		fix documentation link
-> 	from dave hansen
-> 		s/pks_mk_*/pks_set_*/
-> 		use pkey
-> 		s/pks_saved_pkrs/pkrs/
+> Changes RFC -> V1:
+>    - squash with almost all changes from commit (except handling "xen,dev-domid"
+>      property):
+>      "[PATCH 4/6] virtio: Various updates to xen-virtio DMA ops layer"
+>    - update commit subject/description and comments in code
+>    - leave only single Kconfig option XEN_VIRTIO and remove architectural
+>      dependencies
+>    - introduce common xen_has_restricted_virtio_memory_access() in xen.h
+>      and update arch_has_restricted_virtio_memory_access() for both
+>      Arm and x86 to call new helper
+>    - use (1ULL << 63) instead of 0x8000000000000000ULL for XEN_GRANT_ADDR_OFF
+>    - implement xen_virtio_dma_map(unmap)_sg() using example in swiotlb-xen.c
+>    - optimize padding by moving "broken" field in struct xen_virtio_data
+>    - remove unneeded per-device spinlock
+>    - remove the inclusion of virtio_config.h
+>    - remane everything according to the new naming scheme:
+>      s/virtio/grant_dma
+>    - add new hidden config option XEN_GRANT_DMA_OPS
 > 
-> changes for v8
-> 	define pkey_read_write
-> 	make the call inline
-> 	clean up the names
-> 	use pks_write_pkrs() with preemption disabled
-> 	split this out from 'add pks kernel api'
-> 	include documentation in this patch
+> Changes V1 -> V2:
+>    - fix checkpatch.pl warnings
+>    - remove the inclusion of linux/pci.h
+>    - rework to use xarray for data context
+>    - remove EXPORT_SYMBOL_GPL(xen_grant_setup_dma_ops);
+>    - remove the line of * after SPDX-License-Identifier
+>    - split changes into grant-dma-ops.c and arch_has_restricted_virtio_memory_access()
+>      and update commit subject/description accordingly
+>    - remove "default n" for config XEN_VIRTIO
+>    - implement xen_grant_dma_alloc(free)_pages()
 > ---
->  Documentation/core-api/protection-keys.rst | 15 +++++++++++
->  arch/x86/mm/pkeys.c                        | 31 ++++++++++++++++++++++
->  include/linux/pks.h                        | 31 ++++++++++++++++++++++
->  include/uapi/asm-generic/mman-common.h     |  1 +
->  4 files changed, 78 insertions(+)
->  create mode 100644 include/linux/pks.h
+>  drivers/xen/Kconfig         |   4 +
+>  drivers/xen/Makefile        |   1 +
+>  drivers/xen/grant-dma-ops.c | 314 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/xen/xen-ops.h       |   8 ++
+>  4 files changed, 327 insertions(+)
+>  create mode 100644 drivers/xen/grant-dma-ops.c
 > 
-> diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-> index fe63acf5abbe..3af92e1cbffd 100644
-> --- a/Documentation/core-api/protection-keys.rst
-> +++ b/Documentation/core-api/protection-keys.rst
-> @@ -142,3 +142,18 @@ Adding pages to a pkey protected domain
+> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
+> index 120d32f..313a9127 100644
+> --- a/drivers/xen/Kconfig
+> +++ b/drivers/xen/Kconfig
+> @@ -335,4 +335,8 @@ config XEN_UNPOPULATED_ALLOC
+>  	  having to balloon out RAM regions in order to obtain physical memory
+>  	  space to create such mappings.
 >  
->  .. kernel-doc:: arch/x86/include/asm/pgtable_types.h
->          :doc: PKS_KEY_ASSIGNMENT
+> +config XEN_GRANT_DMA_OPS
+> +	bool
+> +	select DMA_OPS
 > +
-> +Changing permissions of individual keys
-> +---------------------------------------
-> +
-> +.. kernel-doc:: include/linux/pks.h
-> +        :identifiers: pks_set_readwrite
-> +
-> +MSR details
-> +~~~~~~~~~~~
-> +
-> +WRMSR is typically an architecturally serializing instruction.  However,
-> +WRMSR(MSR_IA32_PKRS) is an exception.  It is not a serializing instruction and
-> +instead maintains ordering properties similar to WRPKRU.  Thus it is safe to
-> +immediately use a mapping when the pks_set*() functions returns.  Check the
-> +latest SDM for details.
-> diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-> index 39e4c2cbc279..e4cbc79686ea 100644
-> --- a/arch/x86/mm/pkeys.c
-> +++ b/arch/x86/mm/pkeys.c
-> @@ -6,6 +6,7 @@
->  #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
->  #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
->  #include <linux/pkeys.h>                /* PKEY_*                       */
-> +#include <linux/pks.h>
->  #include <linux/pks-keys.h>
->  #include <uapi/asm-generic/mman-common.h>
->  
-> @@ -275,4 +276,34 @@ void pks_setup(void)
->  	cr4_set_bits(X86_CR4_PKS);
->  }
->  
+>  endmenu
+> diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
+> index 5aae66e..1a23cb0 100644
+> --- a/drivers/xen/Makefile
+> +++ b/drivers/xen/Makefile
+> @@ -39,3 +39,4 @@ xen-gntalloc-y				:= gntalloc.o
+>  xen-privcmd-y				:= privcmd.o privcmd-buf.o
+>  obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+= xen-front-pgdir-shbuf.o
+>  obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+= unpopulated-alloc.o
+> +obj-$(CONFIG_XEN_GRANT_DMA_OPS)		+= grant-dma-ops.o
+> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> new file mode 100644
+> index 00000000..29ad7bf
+> --- /dev/null
+> +++ b/drivers/xen/grant-dma-ops.c
+> @@ -0,0 +1,314 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * Do not call this directly, see pks_set*().
+> + * Xen grant DMA-mapping layer - contains special DMA-mapping routines
+> + * for providing grant references as DMA addresses to be used by frontends
+> + * (e.g. virtio) in Xen guests
 > + *
-> + * @pkey: Key for the domain to change
-> + * @protection: protection bits to be used
-> + *
-> + * Protection utilizes the same protection bits specified for User pkeys
-> + *     PKEY_DISABLE_ACCESS
-> + *     PKEY_DISABLE_WRITE
-> + *
+> + * Copyright (c) 2021, Juergen Gross <jgross@suse.com>
 > + */
-> +void pks_update_protection(u8 pkey, u8 protection)
-
-For better security, I think this should be a static inline, not a
-callable (i.e. as a non-inline it could be the target of a control
-flow attack).
-
+> +
+> +#include <linux/module.h>
+> +#include <linux/dma-map-ops.h>
+> +#include <linux/of.h>
+> +#include <linux/pfn.h>
+> +#include <linux/xarray.h>
+> +#include <xen/xen.h>
+> +#include <xen/grant_table.h>
+> +
+> +struct xen_grant_dma_data {
+> +	/* The ID of backend domain */
+> +	domid_t dev_domid;
+> +	/* Is device behaving sane? */
+> +	bool broken;
+> +};
+> +
+> +static DEFINE_XARRAY(xen_grant_dma_devices);
+> +
+> +#define XEN_GRANT_DMA_ADDR_OFF	(1ULL << 63)
+> +
+> +static inline dma_addr_t grant_to_dma(grant_ref_t grant)
 > +{
-> +	u32 pkrs;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> +		return;
-> +
-> +	if (WARN_ON_ONCE(pkey >= PKS_KEY_MAX))
-> +		return;
-
-I think this should enforce arguments being __builtin_constant_p(). i.e.
-making sure that all callers of pks_update_protection() are using a
-compile-time constant value. That makes it so that the caller location
-and key become hard-coded (i.e. further reduction in risk to becoming a
-control-flow gadget: the inlining of a const value means no arguments
-any more). For example:
-
-	BUILD_BUG_ON(!__builtin_constant_p(pkey));
-	BUILD_BUG_ON(!__builtin_constant_p(protection));
-
-(I think the test code will need some tweaking, but it should be
-possible to adjust it.)
-
-> +
-> +	pkrs = current->thread.pkrs;
-> +	current->thread.pkrs = pkey_update_pkval(pkrs, pkey,
-> +						 protection);
-> +	preempt_disable();
-> +	pks_write_pkrs(current->thread.pkrs);
-> +	preempt_enable();
-
-To resist cross-thread attacks, please:
-
-- make pkey_update_pkval() also an inline
-- use the pkrs variable directly and store it back only after the write
-
-For example:
-
-	preempt_disable();
-	pkrs = pkey_update_pkval(current->thread.pkrs,
-				 pkey, protection);
-	pks_write_pkrs(pkrs);
-	current->thread.pkrs = pkrs;
-	preempt_enable();
-
-This means that the pkey/protection relationship always lives in a
-CPU-local register and cannot be manipulated by another CPU before the
-msr write completes. Better yet would be:
-
-	preempt_disable();
-	rdmsrl(MSR_IA32_PKRS, pkrs);
-	pkrs = pkey_update_pkval(pkrs, pkey, protection);
-	pks_write_pkrs(pkrs);
-	current->thread.pkrs = pkrs;
-	preempt_enable();
-
-Then cross-thread attacks cannot corrupt the _other_ PKS keys (i.e.
-write the desired changes to target's current->thread.kprs and trigger
-an update to a different pkey, resulting in flushing the attacker's
-changes to that CPU's pkey state.
-
-> +/**
-> + * pks_set_readwrite() - Make the domain Read/Write
-> + * @pkey: the pkey for which the access should change.
-> + *
-> + * Allow all access, read and write, to the domain specified by pkey.  This is
-> + * not a global update and only affects the current running thread.
-> + */
-> +static inline void pks_set_readwrite(u8 pkey)
-> +{
-> +	pks_update_protection(pkey, PKEY_READ_WRITE);
+> +	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
 > +}
-
-While adding these, can you please also add pks_set_nowrite()? This
-will be needed for protecting writes to memory that should be otherwise
-readable.
-
-With these changes it should be possible to protect the kernel's page
-table entries from "stray" writes. :)
-
--Kees
-
 > +
-> +#else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
+> +static inline grant_ref_t dma_to_grant(dma_addr_t dma)
+> +{
+> +	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> PAGE_SHIFT);
+> +}
 > +
-> +static inline void pks_set_readwrite(u8 pkey) {}
+> +static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
+> +{
+> +	struct xen_grant_dma_data *data;
 > +
-> +#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
+> +	xa_lock(&xen_grant_dma_devices);
+> +	data = xa_load(&xen_grant_dma_devices, (unsigned long)dev);
+> +	xa_unlock(&xen_grant_dma_devices);
 > +
-> +#endif /* _LINUX_PKS_H */
-> diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> index 6c1aa92a92e4..f179544bd33a 100644
-> --- a/include/uapi/asm-generic/mman-common.h
-> +++ b/include/uapi/asm-generic/mman-common.h
-> @@ -80,6 +80,7 @@
->  /* compatibility flags */
->  #define MAP_FILE	0
+> +	return data;
+> +}
+> +
+> +/*
+> + * DMA ops for Xen frontends (e.g. virtio).
+> + *
+> + * Used to act as a kind of software IOMMU for Xen guests by using grants as
+> + * DMA addresses.
+> + * Such a DMA address is formed by using the grant reference as a frame
+> + * number and setting the highest address bit (this bit is for the backend
+> + * to be able to distinguish it from e.g. a mmio address).
+> + *
+> + * Note that for now we hard wire dom0 to be the backend domain. In order
+> + * to support any domain as backend we'd need to add a way to communicate
+> + * the domid of this backend, e.g. via Xenstore, via the PCI-device's
+> + * config space or DT/ACPI.
+> + */
+> +static void *xen_grant_dma_alloc(struct device *dev, size_t size,
+> +				 dma_addr_t *dma_handle, gfp_t gfp,
+> +				 unsigned long attrs)
+> +{
+> +	struct xen_grant_dma_data *data;
+> +	unsigned int i, n_pages = PFN_UP(size);
+> +	unsigned long pfn;
+> +	grant_ref_t grant;
+> +	void *ret;
+> +
+> +	data = find_xen_grant_dma_data(dev);
+> +	if (!data)
+> +		return NULL;
+> +
+> +	if (unlikely(data->broken))
+> +		return NULL;
+> +
+> +	ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
+> +	if (!ret)
+> +		return NULL;
+> +
+> +	pfn = virt_to_pfn(ret);
+> +
+> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
+> +		free_pages_exact(ret, n_pages * PAGE_SIZE);
+> +		return NULL;
+> +	}
+> +
+> +	for (i = 0; i < n_pages; i++) {
+> +		gnttab_grant_foreign_access_ref(grant + i, data->dev_domid,
+> +				pfn_to_gfn(pfn + i), 0);
+> +	}
+> +
+> +	*dma_handle = grant_to_dma(grant);
+> +
+> +	return ret;
+> +}
+> +
+> +static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
+> +			       dma_addr_t dma_handle, unsigned long attrs)
+> +{
+> +	struct xen_grant_dma_data *data;
+> +	unsigned int i, n_pages = PFN_UP(size);
+> +	grant_ref_t grant;
+> +
+> +	data = find_xen_grant_dma_data(dev);
+> +	if (!data)
+> +		return;
+> +
+> +	if (unlikely(data->broken))
+> +		return;
+> +
+> +	grant = dma_to_grant(dma_handle);
+> +
+> +	for (i = 0; i < n_pages; i++) {
+> +		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
+> +			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
+> +			data->broken = true;
+> +			return;
+> +		}
+> +	}
+> +
+> +	gnttab_free_grant_reference_seq(grant, n_pages);
+> +
+> +	free_pages_exact(vaddr, n_pages * PAGE_SIZE);
+> +}
+> +
+> +static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
+> +					      dma_addr_t *dma_handle,
+> +					      enum dma_data_direction dir,
+> +					      gfp_t gfp)
+> +{
+> +	void *vaddr;
+> +
+> +	vaddr = xen_grant_dma_alloc(dev, size, dma_handle, gfp, 0);
+> +	if (!vaddr)
+> +		return NULL;
+> +
+> +	return virt_to_page(vaddr);
+> +}
+> +
+> +static void xen_grant_dma_free_pages(struct device *dev, size_t size,
+> +				     struct page *vaddr, dma_addr_t dma_handle,
+> +				     enum dma_data_direction dir)
+> +{
+> +	xen_grant_dma_free(dev, size, page_to_virt(vaddr), dma_handle, 0);
+> +}
+> +
+> +static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
+> +					 unsigned long offset, size_t size,
+> +					 enum dma_data_direction dir,
+> +					 unsigned long attrs)
+> +{
+> +	struct xen_grant_dma_data *data;
+> +	unsigned int i, n_pages = PFN_UP(size);
+> +	grant_ref_t grant;
+> +	dma_addr_t dma_handle;
+> +
+> +	if (WARN_ON(dir == DMA_NONE))
+> +		return DMA_MAPPING_ERROR;
+> +
+> +	data = find_xen_grant_dma_data(dev);
+> +	if (!data)
+> +		return DMA_MAPPING_ERROR;
+> +
+> +	if (unlikely(data->broken))
+> +		return DMA_MAPPING_ERROR;
+> +
+> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant))
+> +		return DMA_MAPPING_ERROR;
+> +
+> +	for (i = 0; i < n_pages; i++) {
+> +		gnttab_grant_foreign_access_ref(grant + i, data->dev_domid,
+> +				xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
+> +	}
+> +
+> +	dma_handle = grant_to_dma(grant) + offset;
+> +
+> +	return dma_handle;
+> +}
+> +
+> +static void xen_grant_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
+> +				     size_t size, enum dma_data_direction dir,
+> +				     unsigned long attrs)
+> +{
+> +	struct xen_grant_dma_data *data;
+> +	unsigned int i, n_pages = PFN_UP(size);
+> +	grant_ref_t grant;
+> +
+> +	if (WARN_ON(dir == DMA_NONE))
+> +		return;
+> +
+> +	data = find_xen_grant_dma_data(dev);
+> +	if (!data)
+> +		return;
+> +
+> +	if (unlikely(data->broken))
+> +		return;
+> +
+> +	grant = dma_to_grant(dma_handle);
+> +
+> +	for (i = 0; i < n_pages; i++) {
+> +		if (unlikely(!gnttab_end_foreign_access_ref(grant + i))) {
+> +			dev_alert(dev, "Grant still in use by backend domain, disabled for further use\n");
+> +			data->broken = true;
+> +			return;
+> +		}
+> +	}
+> +
+> +	gnttab_free_grant_reference_seq(grant, n_pages);
+> +}
+> +
+> +static void xen_grant_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
+> +				   int nents, enum dma_data_direction dir,
+> +				   unsigned long attrs)
+> +{
+> +	struct scatterlist *s;
+> +	unsigned int i;
+> +
+> +	if (WARN_ON(dir == DMA_NONE))
+> +		return;
+> +
+> +	for_each_sg(sg, s, nents, i)
+> +		xen_grant_dma_unmap_page(dev, s->dma_address, sg_dma_len(s), dir,
+> +				attrs);
+> +}
+> +
+> +static int xen_grant_dma_map_sg(struct device *dev, struct scatterlist *sg,
+> +				int nents, enum dma_data_direction dir,
+> +				unsigned long attrs)
+> +{
+> +	struct scatterlist *s;
+> +	unsigned int i;
+> +
+> +	if (WARN_ON(dir == DMA_NONE))
+> +		return -EINVAL;
+> +
+> +	for_each_sg(sg, s, nents, i) {
+> +		s->dma_address = xen_grant_dma_map_page(dev, sg_page(s), s->offset,
+> +				s->length, dir, attrs);
+> +		if (s->dma_address == DMA_MAPPING_ERROR)
+> +			goto out;
+> +
+> +		sg_dma_len(s) = s->length;
+> +	}
+> +
+> +	return nents;
+> +
+> +out:
+> +	xen_grant_dma_unmap_sg(dev, sg, i, dir, attrs | DMA_ATTR_SKIP_CPU_SYNC);
+> +	sg_dma_len(sg) = 0;
+> +
+> +	return -EIO;
+> +}
+> +
+> +static int xen_grant_dma_supported(struct device *dev, u64 mask)
+> +{
+> +	return mask == DMA_BIT_MASK(64);
+> +}
+> +
+> +static const struct dma_map_ops xen_grant_dma_ops = {
+> +	.alloc = xen_grant_dma_alloc,
+> +	.free = xen_grant_dma_free,
+> +	.alloc_pages = xen_grant_dma_alloc_pages,
+> +	.free_pages = xen_grant_dma_free_pages,
+> +	.mmap = dma_common_mmap,
+> +	.get_sgtable = dma_common_get_sgtable,
+> +	.map_page = xen_grant_dma_map_page,
+> +	.unmap_page = xen_grant_dma_unmap_page,
+> +	.map_sg = xen_grant_dma_map_sg,
+> +	.unmap_sg = xen_grant_dma_unmap_sg,
+> +	.dma_supported = xen_grant_dma_supported,
+> +};
+> +
+> +void xen_grant_setup_dma_ops(struct device *dev)
+> +{
+> +	struct xen_grant_dma_data *data;
+> +	uint32_t dev_domid;
+> +
+> +	data = find_xen_grant_dma_data(dev);
+> +	if (data) {
+> +		dev_err(dev, "Xen grant DMA data is already created\n");
+> +		return;
+> +	}
+> +
+> +	/* XXX The dom0 is hardcoded as the backend domain for now */
+> +	dev_domid = 0;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		goto err;
+> +
+> +	data->dev_domid = dev_domid;
+> +
+> +	if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
+> +			GFP_KERNEL))) {
+> +		dev_err(dev, "Cannot store Xen grant DMA data\n");
+> +		goto err;
+> +	}
+> +
+> +	dev->dma_ops = &xen_grant_dma_ops;
+> +
+> +	return;
+> +
+> +err:
+> +	dev_err(dev, "Сannot set up Xen grant DMA ops, retain platform DMA ops\n");
+> +}
+> +
+> +MODULE_DESCRIPTION("Xen grant DMA-mapping layer");
+> +MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+> index a3584a3..4f9fad5 100644
+> --- a/include/xen/xen-ops.h
+> +++ b/include/xen/xen-ops.h
+> @@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) { }
 >  
-> +#define PKEY_READ_WRITE		0x0
->  #define PKEY_DISABLE_ACCESS	0x1
->  #define PKEY_DISABLE_WRITE	0x2
->  #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
+>  #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
+>  
+> +#ifdef CONFIG_XEN_GRANT_DMA_OPS
+> +void xen_grant_setup_dma_ops(struct device *dev);
+> +#else
+> +static inline void xen_grant_setup_dma_ops(struct device *dev)
+> +{
+> +}
+> +#endif /* CONFIG_XEN_GRANT_DMA_OPS */
+> +
+>  #endif /* INCLUDE_XEN_OPS_H */
 > -- 
-> 2.35.1
+> 2.7.4
 > 
-
--- 
-Kees Cook
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+--8323329-1745592087-1652131303=:43560--

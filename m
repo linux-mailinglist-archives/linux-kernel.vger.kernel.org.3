@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0981A51F964
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F12751F9B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiEIKLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S233224AbiEIKZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiEIKLG (ORCPT
+        with ESMTP id S229863AbiEIKZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:11:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9F32230BE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:07:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652090503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gt+cvbCbyLotyPdsbicw1w5GlF7vpXCKgcu2KrPitAs=;
-        b=0yW2QJjKbh6RIXg/TYy6onbYbjrDa7jADEB++j1Q6Dp4zsctEuJP9tNdyO4ObDLUMraguX
-        J5+Nh0sjYRx6LBQH/tgPqL5/ntUHPaY3ytX+f2ejusaTjZZzbNuZ1w7rhlv2MsbaDgTgaG
-        88n7J5r8j8mgWkr+ZGY29irknJE10DxF5HggrYm0gJcAS+/fBqyHDPf6NbB5/3BFi+cdEv
-        dcOkd/HtVMyoOfHSxRCs+C2jYj5SNZyhT92gE6KfnZ8lXlehJx0OyQt5m5FI+GMbHu+lm0
-        RquHkM2H/ZPiMn6LofLwlGNge+ywzO3h6nBzDHStzqPMX8aSk3xSQD7Dyw9O0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652090503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gt+cvbCbyLotyPdsbicw1w5GlF7vpXCKgcu2KrPitAs=;
-        b=Mf4/N4Q2KwfTw7g6yTvX49DKOcIQGYdAZdhWwcBEGASiC9CJIgmdsnIkcW7JacLpzhBKX9
-        n6XD3pyvwBDUNZAg==
-To:     Feng Tang <feng.tang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
-Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
-In-Reply-To: <20220509073003.GB40730@shbuild999.sh.intel.com>
-References: <20220508144733.91343-1-feng.tang@intel.com>
- <20220509045839.GA40730@shbuild999.sh.intel.com>
- <20220509071652.GE76023@worktop.programming.kicks-ass.net>
- <20220509073003.GB40730@shbuild999.sh.intel.com>
-Date:   Mon, 09 May 2022 12:01:42 +0200
-Message-ID: <87h75zrpmh.ffs@tglx>
+        Mon, 9 May 2022 06:25:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1BF93B019;
+        Mon,  9 May 2022 03:21:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A21EB1480;
+        Mon,  9 May 2022 03:02:28 -0700 (PDT)
+Received: from [10.57.1.248] (unknown [10.57.1.248])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BFCF3F66F;
+        Mon,  9 May 2022 03:02:26 -0700 (PDT)
+Message-ID: <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
+Date:   Mon, 9 May 2022 11:02:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
+To:     Will Deacon <will@kernel.org>,
+        Besar Wicaksono <bwicaksono@nvidia.com>
+Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
+        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
+        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Michael Williams (ATG)" <Michael.Williams@arm.com>
+References: <20220509002810.12412-1-bwicaksono@nvidia.com>
+ <20220509092843.GB26264@willie-the-truck>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220509092843.GB26264@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Feng,
+Cc: Mike Williams, Mathieu Poirier
 
-On Mon, May 09 2022 at 15:30, Feng Tang wrote:
-> On Mon, May 09, 2022 at 09:16:52AM +0200, Peter Zijlstra wrote:
->> On Mon, May 09, 2022 at 12:58:39PM +0800, Feng Tang wrote:
->> > And there is still very few corner case that the freq info is not
->> > accurate enough with small deviation from the actual value, like on
->> > a product with early buggy version of firmware or on some
->> > pre-production hardware.
->> >
->> > Add an option 'recalibrate' for 'tsc' kernel parameter to force the
->> > tsc freq recalibration with HPET/PM_TIMER, and warn if the deviation
->> > from previous value is more than about 500 PPM.
->> > 
->> > Signed-off-by: Feng Tang <feng.tang@intel.com>
->> 
->> Why isn't 'tsc_early_khz=' not working for you? Afaict that will
->> override calibrate_tsc() when provided and as such can be used on these
->> early platforms for provide the right value until such time that the
->> firmware is fixed.
->
-> For the early platforms, the problem we met is we don't know what
-> is the 'correct' tsc-freq, and the value from MSR/CUPID could be wrong. 
->
-> And there was some generation, that after enabling some feature, each
-> instance of HW will have slightly different frequency, so there is
-> no central "one for all" value to set for 'tsc_early_khz'.
->
-> This option is more like a way to double-check the correctness of
-> tsc-freq got from MSR/CPUID(0x15).
+On 09/05/2022 10:28, Will Deacon wrote:
+> On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
+>> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
+>> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
+>> Performance Monitoring Unit table (APMT) specification below:
+>>   * ARM Coresight PMU:
+>>          https://developer.arm.com/documentation/ihi0091/latest
+>>   * APMT: https://developer.arm.com/documentation/den0117/latest
+>>
+>> Notes:
+>>   * There is a concern on the naming of the PMU device.
+>>     Currently the driver is probing "arm-coresight-pmu" device, however the APMT
+>>     spec supports different kinds of CoreSight PMU based implementation. So it is
+>>     open for discussion if the name can stay or a "generic" name is required.
+>>     Please see the following thread:
+>>     http://lists.infradead.org/pipermail/linux-arm-kernel/2022-May/740485.html
+>>
+>> Besar Wicaksono (2):
+>>    perf: coresight_pmu: Add support for ARM CoreSight PMU driver
+>>    perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
+>>
+>>   arch/arm64/configs/defconfig                  |    1 +
+>>   drivers/perf/Kconfig                          |    2 +
+>>   drivers/perf/Makefile                         |    1 +
+>>   drivers/perf/coresight_pmu/Kconfig            |   10 +
+>>   drivers/perf/coresight_pmu/Makefile           |    7 +
+>>   .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317 +++++++++++++++++
+>>   .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
+>>   .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
+>>   .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
+>>   9 files changed, 1802 insertions(+)
+> 
+> How does this interact with all the stuff we have under
+> drivers/hwtracing/coresight/?
 
-If at all it's a workaround for the inability and ignorance of firmware
-people. The crystal frequency and the TSC/crystal ratio _are_ known to
-the system designer and firmware people. It's really not asked too much
-to put the correct values into CPUID(0x15) and have proper quality
-control to ensure the correctness.
+Absolutely zero, except for the name. The standard
+is named "CoreSight PMU" which is a bit unfortunate,
+given the only link, AFAIU, with the "CoreSight" architecture
+is the Lock Access Register(LAR). For reference, the
+drivers/hwtracing/coresight/ is purely "CoreSight" self-hosted
+tracing and the PMU is called "cs_etm" (expands to coresight etm).
+Otherwise the standard doesn't have anything to do with what
+exists already in the kernel.
 
-The whole argument about early firmware and pre-production hardware is
-bogus. It's 2022 and we are debating this problem for more than a decade
-now and still hardware and firmware people think they can do what they
-want and it all can be "fixed" in software. It's not rocket science to
-get this straight.
+That said, I am concerned that the "coresight_pmu" is easily confused
+with what exists today. Given that this is more of a "PMU" standard
+for the IPs in the Arm world, it would be better to name it as such
+avoiding any confusion with the existing PMUs.
 
-Aside of that HPET has become unrealiable and PM timer is not guaranteed
-to be there either. So we really do not need a mechanism to enforce
-recalibration against something which is not guaranteed to provide
-sensible information.
+One potential recommendation for the name is, "Arm PMU"  (The ACPI table 
+is named Arm PMU Table). But then that could be clashing with the 
+armv8_pmu :-(.
 
-Thanks,
+Some of the other options are :
 
-        tglx
+"Arm Generic PMU"
+"Arm Uncore PMU"
+"Arm PMU"
+
+Suzuki
+
+> 
+> Will
+

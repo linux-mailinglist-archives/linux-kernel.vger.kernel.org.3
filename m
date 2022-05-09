@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA1C51FDCD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC5551FDDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbiEINS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
+        id S235378AbiEINSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbiEINSD (ORCPT
+        with ESMTP id S235324AbiEINSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 09:18:03 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C9B2A805D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ED72A805B
         for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:14:08 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxhSS4WW9zhZ19;
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxhSS5802zhZ3L;
         Mon,  9 May 2022 21:13:28 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -29,9 +29,9 @@ CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
         <surenb@google.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 01/15] mm/swap: use helper is_swap_pte() in swap_vma_readahead
-Date:   Mon, 9 May 2022 21:14:02 +0800
-Message-ID: <20220509131416.17553-2-linmiaohe@huawei.com>
+Subject: [PATCH 02/15] mm/swap: use helper macro __ATTR_RW
+Date:   Mon, 9 May 2022 21:14:03 +0800
+Message-ID: <20220509131416.17553-3-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220509131416.17553-1-linmiaohe@huawei.com>
 References: <20220509131416.17553-1-linmiaohe@huawei.com>
@@ -51,8 +51,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use helper is_swap_pte() to check whether pte is swap entry to make code
-more clear. Minor readability improvement.
+Use helper macro __ATTR_RW to define vma_ra_enabled_attr to make code more
+clear. Minor readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
@@ -60,20 +60,20 @@ Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/mm/swap_state.c b/mm/swap_state.c
-index 577c2848ae49..240b39ed5922 100644
+index 240b39ed5922..9f99d8137ffd 100644
 --- a/mm/swap_state.c
 +++ b/mm/swap_state.c
-@@ -818,9 +818,7 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 	for (i = 0, pte = ra_info.ptes; i < ra_info.nr_pte;
- 	     i++, pte++) {
- 		pentry = *pte;
--		if (pte_none(pentry))
--			continue;
--		if (pte_present(pentry))
-+		if (!is_swap_pte(pentry))
- 			continue;
- 		entry = pte_to_swp_entry(pentry);
- 		if (unlikely(non_swap_entry(entry)))
+@@ -881,9 +881,7 @@ static ssize_t vma_ra_enabled_store(struct kobject *kobj,
+ 
+ 	return count;
+ }
+-static struct kobj_attribute vma_ra_enabled_attr =
+-	__ATTR(vma_ra_enabled, 0644, vma_ra_enabled_show,
+-	       vma_ra_enabled_store);
++static struct kobj_attribute vma_ra_enabled_attr = __ATTR_RW(vma_ra_enabled);
+ 
+ static struct attribute *swap_attrs[] = {
+ 	&vma_ra_enabled_attr.attr,
 -- 
 2.23.0
 

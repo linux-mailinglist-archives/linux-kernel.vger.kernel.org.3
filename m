@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D951FFE2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29F951FFC6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237385AbiEIOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S236992AbiEIOan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237061AbiEIOix (ORCPT
+        with ESMTP id S237071AbiEIOaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:38:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186CF2A76B5
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:35:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 9 May 2022 10:30:39 -0400
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E9E198758
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:26:44 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 7FAF9201A9;
+        Mon,  9 May 2022 16:26:42 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ogE-C3U51zax; Mon,  9 May 2022 16:26:42 +0200 (CEST)
+Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C6F615FA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AC8C385AF;
-        Mon,  9 May 2022 14:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652106899;
-        bh=vfDKNwLVPbOGrvBsC/bFHFyH9ByxjZk7Ny2bY3inWbM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uQMwhwbUUnAYDeU++/wgIqkeNZBLHJbf4vMQP3gzxkpB844FBoWNBm7/rABZXhYbb
-         y80q28vwC0lHQsVKNbnuRokPCXjavY1s3HiZRWGfLa9iqs17PEVV4J8svIomw/wlm+
-         Sq0ef9UE3VvBex/8y+iXuEkyOlM7ebQRcemtcw9krX5jZV11zF8a5T0S/dM2RyAgK4
-         0ruHLnRwU5TYL7hKuRvGeQkBQmaHSFj+4rNF+RNQh45T4GAOuD8nnKrelvJXHdrLuU
-         MuntnYMOO70yE1B9QhQTsn75W0OfuIC4nsU461yplhBtOmr4MZ64PkiY4oxbrvFiVD
-         Jd10kMiGCcfZA==
-Date:   Mon, 9 May 2022 22:26:20 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 0/4] unified way to use static key and optimize
- pgtable_l4_enabled
-Message-ID: <YnkkjC065kCTtHBC@xhacker>
-References: <20220508160749.984-1-jszhang@kernel.org>
- <CAAhSdy1qri5L9pVcZO8areB=TXMSJBg2+cTNMZGQ3g+3Qhxmfg@mail.gmail.com>
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 7FAF8201A5;
+        Mon,  9 May 2022 16:26:42 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.95)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1no4LS-002SUz-MI;
+        Mon, 09 May 2022 16:26:42 +0200
+Date:   Mon, 9 May 2022 16:26:42 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, speakup@linux-speakup.org
+Subject: Re: [PATCHv2] speakup: Generate speakupmap.h automatically
+Message-ID: <20220509142642.gsi5cppgadc2gojy@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        speakup@linux-speakup.org
+References: <20220430003934.fkua7vwoz6heigrp@begin>
+ <20220430073321.6b4lvrrt7buzh7dp@begin>
+ <YnkfeyobcOOgDGkH@kroah.com>
+ <20220509140705.n3eei4r5ko6bbex4@begin>
+ <Ynki154mxF+2L8WH@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAhSdy1qri5L9pVcZO8areB=TXMSJBg2+cTNMZGQ3g+3Qhxmfg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ynki154mxF+2L8WH@kroah.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,36 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 10:07:16AM +0530, Anup Patel wrote:
-> On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > Currently, riscv has several features which may not be supported on all
-> > riscv platforms, for example, FPU, SV48, SV57 and so on. To support
-> > unified kernel Image style, we need to check whether the feature is
-> > suportted or not. If the check sits at hot code path, then performance
-> > will be impacted a lot. static key can be used to solve the issue. In
-> > the past, FPU support has been converted to use static key mechanism.
-> > I believe we will have similar cases in the future. For example, the
-> > SV48 support can take advantage of static key[1].
-> >
-> > patch1 is a simple W=1 warning fix.
-> > patch2 introduces an unified mechanism to use static key for riscv cpu
-> > features.
-> > patch3 converts has_cpu() to use the mechanism.
-> > patch4 uses the mechanism to optimize pgtable_l4|[l5]_enabled.
-> >
-> > [1] http://lists.infradead.org/pipermail/linux-riscv/2021-December/011164.html
+Greg KH, le lun. 09 mai 2022 16:19:03 +0200, a ecrit:
+> On Mon, May 09, 2022 at 04:07:05PM +0200, Samuel Thibault wrote:
+> > Greg KH, le lun. 09 mai 2022 16:04:43 +0200, a ecrit:
+> > > Any reason you can't add the code in utils.c into genmap.c and then
+> > > merge into makemapdata.c to make this a single .c file that does both
+> > > things?
+> > 
+> > Yes: genmap is a tool that end-users can use without needing the Linux
+> > source code, while makemapdata needs it.
 > 
-> Overall, using a script to generate CPU capabilities seems a bit
-> over-engineered to me. We already have RISC-V ISA extension
+> But who will run genmap?
 
-Not all riscv features are *ISA* extensions. For example, SV48 and SV57
-are not ISA extensions. IIRC, I asked this question before, here are
-Atish's comments:
+I guess you meant makemapdata?
 
-https://lore.kernel.org/linux-riscv/CAHBxVyF65jC_wvxcD6bueqpCY8-Kbahu1yxsSoBmO1s15dGkSQ@mail.gmail.com/
+Long-term-wise this patchset will need a bit of work to properly install
+the genmap tool so the user can call it.  I'm here mostly making sure
+to put into the Linux kernel how speakupmap.h is generated (rather
+than the currently very magic file), while at the same time keeping
+the separation between makemapdata and genmap that will make sense
+longterm-wise.
 
-> parsing infrastructure which can be easily extended to support
-> static key arrays.
-> 
-
+Samuel

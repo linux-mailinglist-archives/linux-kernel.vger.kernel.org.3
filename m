@@ -2,65 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5F251FC66
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECDE51FC6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiEIMSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S234006AbiEIMTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiEIMSs (ORCPT
+        with ESMTP id S233957AbiEIMTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:18:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1686C24DC0E;
-        Mon,  9 May 2022 05:14:50 -0700 (PDT)
-X-UUID: f275fa1f0dca4e9e94cd0b790f38b09c-20220509
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:1f2ad65d-5bd2-47ba-b63c-923c8f5161d7,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:b315c116-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: f275fa1f0dca4e9e94cd0b790f38b09c-20220509
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1362283811; Mon, 09 May 2022 20:14:46 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 9 May 2022 20:14:45 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 9 May 2022 20:14:45 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 9 May 2022 20:14:45 +0800
-Message-ID: <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI
- dt-bindings
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>, <krzk+dt@kernel.org>
-CC:     <cw00.choi@samsung.com>, <robh+dt@kernel.org>,
-        <kyungmin.park@samsung.com>, <khilman@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 9 May 2022 20:14:44 +0800
-In-Reply-To: <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
-References: <20220425125546.4129-1-johnson.wang@mediatek.com>
-         <20220425125546.4129-2-johnson.wang@mediatek.com>
-         <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 9 May 2022 08:19:18 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2086.outbound.protection.outlook.com [40.107.212.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8A9102745;
+        Mon,  9 May 2022 05:15:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YmTumVib2YC3ig8vHdQHpGnxiq+gy4nTtkjd5kYluxBWYXpeGvarMdG10qGchcU/122rYtDKGU8KYO1bO+WuaqbCvcDWEdLzGGuYmBVaFdSSMHO6kElw+8yM0gr0i3dDWC+xjTqRzrQwn6T3BBB3jp0pYuFjVvV7CKwIheSOlprEcTcvH7pWYU7nuPCEhiPw6ChKIS6l9IvOvFys3lbqLiy+hDF/TGuC1N6nwJIqyRTOSpW4dEDoPY9QFm5IkrHPgyb8rge5mTGivfS6HCF4A8+bXUQOqC35ms5ByFUHIOr4zifAyBb/I61w/LWALeLovyMS4MkV06cSrQqebYo8Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uLVYYAbl+tXjs07LoIkuHUi1pxH6H9NU5B5wc0rR0DU=;
+ b=CYTHIoA72nawTkNUP2e156SKGFTHVQolyQaz5iWQ0Lu0WgqqOgwEyJDSdACaRuud36L9gnUPm3lMWojmqkugXrsTcbBtOlAVwYK1qOo5fO5n7m3To6lkB7XfNNFnomDSTPJ7/YCCc6xepI240pWATSBuvGtpD/zgoGg+1TpQ0RfpUEz1iyYPEbsmccHGIwNeEFS/H6w0rx0pL307TIeH2oxCP/gZAktLLplnX2pyHyfTv/hMnAwkUMM7kSXKhzT5qJKWCATScQml0mlBjke+TrZyA/V11kxGSzQHAhcdXb+pBhHyifyGQmdrYwolzWGn7xhgL9hOUuU6ctTRjG22/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=microchip.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uLVYYAbl+tXjs07LoIkuHUi1pxH6H9NU5B5wc0rR0DU=;
+ b=jCho9z4YAtz5N9/47eHcR2ju3sVUw9hWUvfbH44r0coYAvCpRCoKOZMu+oBjXgwoIbcfn2Didyp/lmkM+73aT0CnRtbuy6/fH3rBcDV7PsZSxz4gkSGfIvKdVv9f+6Nxpvi5fXpxxf3+jT+5pmYrKY7c0wD5vYY4dScxJ8y4ZP0=
+Received: from DM6PR05CA0040.namprd05.prod.outlook.com (2603:10b6:5:335::9) by
+ BYAPR02MB5592.namprd02.prod.outlook.com (2603:10b6:a03:9b::26) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.23; Mon, 9 May 2022 12:15:18 +0000
+Received: from DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::3f) by DM6PR05CA0040.outlook.office365.com
+ (2603:10b6:5:335::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.14 via Frontend
+ Transport; Mon, 9 May 2022 12:15:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT033.mail.protection.outlook.com (10.13.4.101) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Mon, 9 May 2022 12:15:18 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 9 May 2022 05:15:17 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 9 May 2022 05:15:17 -0700
+Envelope-to: nicolas.ferre@microchip.com,
+ davem@davemloft.net,
+ claudiu.beznea@microchip.com,
+ kuba@kernel.org,
+ dumazet@google.com,
+ pabeni@redhat.com,
+ netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ harinikatakamlinux@gmail.com
+Received: from [10.140.6.13] (port=58186 helo=xhdharinik40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <harini.katakam@xilinx.com>)
+        id 1no2IH-00029q-17; Mon, 09 May 2022 05:15:17 -0700
+From:   Harini Katakam <harini.katakam@xilinx.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <claudiu.beznea@microchip.com>, <kuba@kernel.org>,
+        <dumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
+        <harini.katakam@xilinx.com>, <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH] net: macb: Disable macb pad and fcs for fragmented packets
+Date:   Mon, 9 May 2022 17:45:13 +0530
+Message-ID: <20220509121513.30549-1-harini.katakam@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 404f98a3-edab-4cf7-2069-08da31b594cd
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5592:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB559234A1FC0BE8812EB0287CC9C69@BYAPR02MB5592.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5/S3GIXpNbeP87GsmWQUcvOdlDuUQiGQ1vZfZhw9WBgfdzr3zX/jAdduYlQ72uiYCbqRoUU6UTJl90IeL+gEvEqQCTvKXvKtgtsv8Ma6zupJfYa5+b6li5rGHaNHgsc7VXcdnzjlZupMkwxNugjrlIH5vrUMlspsYWVM/Xd6PCXhJD3yOQG8uQkD+TBQ/PvooYftNNBBcEx1h71a5zbdLyHscOx5c6pCqtHesbKp6FwjMIfa2JGRzcXgWT0M1PTgSJtyKP0n1EFv/EZoq617NOdsnc+qPjz7KtS/s5qnHamkslZq0actUt1nufq5UBA3gv44D5INRmuOZy/5loUIS7EDcljF2Ope9MWAHHyEHqq/Q5rQaHEQY0UGQfmv4dbJPXV2TkJp2uHu38rqChgI37SJNsq76Z6Tl51avYP0gxJGElPud82gg2WrTNPORtng+LVzQSmDKGTt74MsL8zAid2SB0STp+R99lV9PmKLymj3Z4q/gdFcUmkw3xZbB03QNB8dhHGdu7Yj9mIRRt+68nX+VyclPnU9A2wmuKzSnyBWDJn08ub5cc+qjkGBhGPJApANNzuWghXMEfzkd7YjAy8uujV5ijZeNIk2zevV0O3qB0RFBjnESBHdw5Gj5+4ok7fI5smsaStZ9VlU/UxRqei4leNvxC4G9dDZtRj6iLbJQMhbL5A+VZi4WrN+Ru3EF9OjyUHV5CV6Fkf9Rrt5tQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(26005)(2616005)(82310400005)(9786002)(107886003)(186003)(356005)(1076003)(5660300002)(8676002)(44832011)(70586007)(47076005)(4326008)(70206006)(54906003)(36756003)(2906002)(316002)(110136005)(83380400001)(8936002)(7696005)(6666004)(508600001)(7636003)(36860700001)(40460700003)(426003)(336012)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 12:15:18.0878
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 404f98a3-edab-4cf7-2069-08da31b594cd
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5592
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,233 +114,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+data_len in skbuff represents bytes resident in fragment lists or
+unmapped page buffers. For such packets, when data_len is non-zero,
+skb_put cannot be used - this will throw a kernel bug. Hence do not
+use macb_pad_and_fcs for such fragments.
 
-On Tue, 2022-04-26 at 11:18 +0800, Chen-Yu Tsai wrote:
-> On Mon, Apr 25, 2022 at 8:56 PM Johnson Wang <
-> johnson.wang@mediatek.com> wrote:
-> > 
-> > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
-> > 
-> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > ---
-> >  .../bindings/interconnect/mediatek,cci.yaml   | 139
-> > ++++++++++++++++++
-> >  1 file changed, 139 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > new file mode 100644
-> > index 000000000000..e5221e17d11b
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > @@ -0,0 +1,139 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDlQ9pSDO$
-> >  
-> > +$schema: 
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDoE9YHyu$
-> >  
-> > +
-> > +title: MediaTek Cache Coherent Interconnect (CCI) frequency and
-> > voltage scaling
-> > +
-> > +maintainers:
-> > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > +
-> > +description: |
-> > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine
-> > used by
-> > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
-> > voltage in
-> > +  hardware. It can also optimize the voltage to reduce the power
-> > consumption.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8183-cci
-> > +      - mediatek,mt8186-cci
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description:
-> > +          The multiplexer for clock input of CPU cluster.
-> 
-> of the bus, not CPU cluster.
+Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+---
+ drivers/net/ethernet/cadence/macb_main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thanks for your suggestion.
-I will correct it in the next version.
-
-> 
-> > +      - description:
-> > +          A parent of "cpu" clock which is used as an intermediate
-> > clock source
-> > +          when the original CPU is under transition and not stable
-> > yet.
-> 
-> This really should be handled in the clk controller, and not by every
-> device
-> that happens to take a clock from a mux with upstream PLLs that can
-> change
-> in clock rate. The end device hardware only takes one clock input.
-> That's it.
-> 
-
-To make this intermediate clock works properly, this driver is also
-responsible for handling the Vproc voltage and ensures the voltage is
-high enough to support intermediate clock rate.
-
-If we move intermediate clock rate control to clock driver, then
-intermediate voltage control may be handled by the clock driver itself
-as well.
-
-We believe that is not reasonable because clock driver shouldn't handle
-voltage control. On the other hand, DVFS driver is more suitable for
-doing this job.
-
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: cci
-> > +      - const: intermediate
-> > +
-> > +  operating-points-v2: true
-> > +  opp-table: true
-> > +
-> > +  proc-supply:
-> > +    description:
-> > +      Phandle of the regulator for CCI that provides the supply
-> > voltage.
-> > +
-> > +  sram-supply:
-> > +    description:
-> > +      Phandle of the regulator for sram of CCI that provides the
-> > supply
-> > +      voltage. When it presents, the cci devfreq driver needs to
-> > do
-> 
-> When it is present, the implementation needs to ...
-> 
-> ChenYu
-
-I will modify it in the next version.
-
-BRs,
-Johnson Wang
-
-> 
-> > +      "voltage tracking" to step by step scale up/down Vproc and
-> > Vsram to fit
-> > +      SoC specific needs. When absent, the voltage scaling flow is
-> > handled by
-> > +      hardware, hence no software "voltage tracking" is needed.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - clocks
-> > +  - clock-names
-> > +  - operating-points-v2
-> > +  - proc-supply
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/mt8183-clk.h>
-> > +    cci: cci {
-> > +        compatible = "mediatek,mt8183-cci";
-> > +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-> > +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-> > +        clock-names = "cci", "intermediate";
-> > +        operating-points-v2 = <&cci_opp>;
-> > +        proc-supply = <&mt6358_vproc12_reg>;
-> > +    };
-> > +
-> > +    cci_opp: opp-table-cci {
-> > +        compatible = "operating-points-v2";
-> > +        opp-shared;
-> > +        opp2_00: opp-273000000 {
-> > +            opp-hz = /bits/ 64 <273000000>;
-> > +            opp-microvolt = <650000>;
-> > +        };
-> > +        opp2_01: opp-338000000 {
-> > +            opp-hz = /bits/ 64 <338000000>;
-> > +            opp-microvolt = <687500>;
-> > +        };
-> > +        opp2_02: opp-403000000 {
-> > +            opp-hz = /bits/ 64 <403000000>;
-> > +            opp-microvolt = <718750>;
-> > +        };
-> > +        opp2_03: opp-463000000 {
-> > +            opp-hz = /bits/ 64 <463000000>;
-> > +            opp-microvolt = <756250>;
-> > +        };
-> > +        opp2_04: opp-546000000 {
-> > +            opp-hz = /bits/ 64 <546000000>;
-> > +            opp-microvolt = <800000>;
-> > +        };
-> > +        opp2_05: opp-624000000 {
-> > +            opp-hz = /bits/ 64 <624000000>;
-> > +            opp-microvolt = <818750>;
-> > +        };
-> > +        opp2_06: opp-689000000 {
-> > +            opp-hz = /bits/ 64 <689000000>;
-> > +            opp-microvolt = <850000>;
-> > +        };
-> > +        opp2_07: opp-767000000 {
-> > +            opp-hz = /bits/ 64 <767000000>;
-> > +            opp-microvolt = <868750>;
-> > +        };
-> > +        opp2_08: opp-845000000 {
-> > +            opp-hz = /bits/ 64 <845000000>;
-> > +            opp-microvolt = <893750>;
-> > +        };
-> > +        opp2_09: opp-871000000 {
-> > +            opp-hz = /bits/ 64 <871000000>;
-> > +            opp-microvolt = <906250>;
-> > +        };
-> > +        opp2_10: opp-923000000 {
-> > +            opp-hz = /bits/ 64 <923000000>;
-> > +            opp-microvolt = <931250>;
-> > +        };
-> > +        opp2_11: opp-962000000 {
-> > +            opp-hz = /bits/ 64 <962000000>;
-> > +            opp-microvolt = <943750>;
-> > +        };
-> > +        opp2_12: opp-1027000000 {
-> > +            opp-hz = /bits/ 64 <1027000000>;
-> > +            opp-microvolt = <975000>;
-> > +        };
-> > +        opp2_13: opp-1092000000 {
-> > +            opp-hz = /bits/ 64 <1092000000>;
-> > +            opp-microvolt = <1000000>;
-> > +        };
-> > +        opp2_14: opp-1144000000 {
-> > +            opp-hz = /bits/ 64 <1144000000>;
-> > +            opp-microvolt = <1025000>;
-> > +        };
-> > +        opp2_15: opp-1196000000 {
-> > +            opp-hz = /bits/ 64 <1196000000>;
-> > +            opp-microvolt = <1050000>;
-> > +        };
-> > +    };
-> > --
-> > 2.18.0
-> > 
-> > 
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > 
-https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDvdNpOFZ$
-> >  
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index 6434e74c04f1..0b03305ad6a0 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -1995,7 +1995,8 @@ static unsigned int macb_tx_map(struct macb *bp,
+ 			ctrl |= MACB_BF(TX_LSO, lso_ctrl);
+ 			ctrl |= MACB_BF(TX_TCP_SEQ_SRC, seq_ctrl);
+ 			if ((bp->dev->features & NETIF_F_HW_CSUM) &&
+-			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl)
++			    skb->ip_summed != CHECKSUM_PARTIAL && !lso_ctrl &&
++			    (skb->data_len == 0))
+ 				ctrl |= MACB_BIT(TX_NOCRC);
+ 		} else
+ 			/* Only set MSS/MFS on payload descriptors
+@@ -2091,9 +2092,11 @@ static int macb_pad_and_fcs(struct sk_buff **skb, struct net_device *ndev)
+ 	struct sk_buff *nskb;
+ 	u32 fcs;
+ 
++	/* Not available for GSO and fragments */
+ 	if (!(ndev->features & NETIF_F_HW_CSUM) ||
+ 	    !((*skb)->ip_summed != CHECKSUM_PARTIAL) ||
+-	    skb_shinfo(*skb)->gso_size)	/* Not available for GSO */
++	    skb_shinfo(*skb)->gso_size ||
++	    ((*skb)->data_len > 0))
+ 		return 0;
+ 
+ 	if (padlen <= 0) {
+-- 
+2.17.1
 

@@ -2,173 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067B451FADE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0BB51FADA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiEILHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S231774AbiEILIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiEILHk (ORCPT
+        with ESMTP id S231738AbiEILIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:07:40 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83381AEC68
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:03:45 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220509110344euoutp0103eb068a13a16cb1a6ba8dd917e6e8ef~tavGyFmFq2949529495euoutp01u
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:03:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220509110344euoutp0103eb068a13a16cb1a6ba8dd917e6e8ef~tavGyFmFq2949529495euoutp01u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652094224;
-        bh=yWShTPSkbQKj4QHpHFbjnb4RBP2j9pvCoyESFCCbICs=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=MoXFG2L7uR4en57keuyTTLvbGSc2sYOP4EbcJ3Id8LhxDtRjOTKEb6q8rjc2gcnZD
-         ctX6BjvQTcJ/XSNiJ5ECNYG2VQf3hfJUuJ2AK1BrbDn2y8lMmoySYzRW8XQ+DbWCRL
-         MISAac3Ceu8eQe4AEckbGiEOE7TGXm5zzYUShfT8=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220509110343eucas1p17f10fe921ea74d5a57e4d959c892d06b~tavGLcX-J0659106591eucas1p1G;
-        Mon,  9 May 2022 11:03:43 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 58.8A.10009.F05F8726; Mon,  9
-        May 2022 12:03:43 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220509110343eucas1p136eb9833a9bbd0fb318c60dc246dfbff~tavFmYQjD1972519725eucas1p10;
-        Mon,  9 May 2022 11:03:43 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220509110343eusmtrp254cef33f07a685690c0ca325b781458c~tavFjCyPs1597715977eusmtrp2T;
-        Mon,  9 May 2022 11:03:43 +0000 (GMT)
-X-AuditID: cbfec7f2-e7fff70000002719-69-6278f50f8aae
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BB.43.09522.F05F8726; Mon,  9
-        May 2022 12:03:43 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220509110343eusmtip28e3f84fbe79d5a007a31ae369dd2facc~tavFXOD8J2741827418eusmtip2C;
-        Mon,  9 May 2022 11:03:43 +0000 (GMT)
-Received: from [106.110.32.130] (106.110.32.130) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Mon, 9 May 2022 12:03:41 +0100
-Message-ID: <26ccce4c-da31-4e53-b71f-38adaea852a2@samsung.com>
-Date:   Mon, 9 May 2022 13:03:36 +0200
+        Mon, 9 May 2022 07:08:02 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ED11F7E01;
+        Mon,  9 May 2022 04:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1652094250; x=1683630250;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=075BsDc5HXl7kI8wpEo4V8pVRoj8X6Y+Wcpcup/WQ8Q=;
+  b=UuNbkJpTadYJ2XUEMbZc+xccGI5rY3u6oufxdY3322NfZhg8iMOKFHtn
+   REXRFtTnKXL6D2trS9L8iBHAiMN0iNCnhiZ7+x6vGwJvalyOazlZaRBf7
+   /QjuGl9tTwYJGMTp2MZmqpEhorsI/JO83GiIt9EKL/c9Pi/jeHljGq8j+
+   w=;
+X-IronPort-AV: E=Sophos;i="5.91,211,1647302400"; 
+   d="scan'208";a="86603329"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 09 May 2022 11:03:53 +0000
+Received: from EX13D08EUB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com (Postfix) with ESMTPS id 2A3E88A98D;
+        Mon,  9 May 2022 11:03:52 +0000 (UTC)
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D08EUB002.ant.amazon.com (10.43.166.232) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 9 May 2022 11:03:50 +0000
+Received: from dev-dsk-mheyne-1b-c1524648.eu-west-1.amazon.com (10.15.60.66)
+ by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP Server id
+ 15.0.1497.32 via Frontend Transport; Mon, 9 May 2022 11:03:49 +0000
+Received: by dev-dsk-mheyne-1b-c1524648.eu-west-1.amazon.com (Postfix, from userid 5466572)
+        id CA7E841131; Mon,  9 May 2022 11:03:48 +0000 (UTC)
+From:   Maximilian Heyne <mheyne@amazon.de>
+CC:     Maximilian Heyne <mheyne@amazon.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next v3] drivers, ixgbe: export vf statistics
+Date:   Mon, 9 May 2022 11:03:39 +0000
+Message-ID: <20220509110340.100814-1-mheyne@amazon.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH v3 11/11] dm-zoned: ensure only power of 2 zone sizes
- are allowed
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jaegeuk@kernel.org>, <hare@suse.de>, <dsterba@suse.com>,
-        <axboe@kernel.dk>, <hch@lst.de>, <snitzer@kernel.org>
-CC:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        <bvanassche@acm.org>, <linux-fsdevel@vger.kernel.org>,
-        <matias.bjorling@wdc.com>, Jens Axboe <axboe@fb.com>,
-        <gost.dev@samsung.com>, <jonathan.derrick@linux.dev>,
-        <jiangbo.365@bytedance.com>, <linux-nvme@lists.infradead.org>,
-        <dm-devel@redhat.com>, Naohiro Aota <naohiro.aota@wdc.com>,
-        <linux-kernel@vger.kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Alasdair Kergon <agk@redhat.com>,
-        <linux-block@vger.kernel.org>, Chaitanya Kulkarni <kch@nvidia.com>,
-        Keith Busch <kbusch@kernel.org>, <linux-btrfs@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <7f1bd653-6f75-7c0d-9a82-e8992b1476e4@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.110.32.130]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfVBUVRztvvf27WNr5e1KcmdhqlmzKQySIZlLJIMN5Yum7ybKf3CBNyvG
-        h7PrBizGNwgELFCBLsssgZXuUosgygqrsskigRIgtK5jyLhIQnwJGLgM1vK04b/zu+ec+zvn
-        zqVwcTMpoeKTDrGKJFmClBQQZ2wrV/09l1JjdhhcO5DpNxuOHnbYSGS8qSFR1dwKjio1R/nI
-        daUfR5aZGh76fTkbQx31lRg6aezCkNOkxVHJxTkCncwbw9HqWCAaW3QQqNI6AtD4sBZDFsd2
-        NHj7BB91WHoINHRORyL9j+N8VF6whCN7+ThAFd0tPPTL1CyBLjt8wn2YoWvvMGuXG0mmIneG
-        z/T/eYpghq6omGZDEcl8n/UdzrQcz2Tar2eRTGnuDMmY80d5zOz5YZIxnR4mmJbedKa85RSP
-        WWh+5gPRXsHrcWxC/Jes4pWwfYL95XoLcfAGP/XWwHEsC1STxcCDgvSr8NeJSX4xEFBi+gSA
-        N4bqHg2LABaW6jBuWACwM3+V/9jydVENzhE/AbhwxE7+rxqw9PPcKjF9DsDSpgPFgKKEdBg0
-        XPrcDQn6ediu83QrhLQI9hxzEm78NP0ZrNL2rUfaTEfBS111uBvjtDd0OPXrIbxoA4CNU671
-        XTj9Aw82tZ3H3JeStB/MLloP50G/BR9MLmCc+SWYf9bF5/Cz8Oy0DnfLIS2FNUMBXJev4M+2
-        vvXGkHYKYPNKFc4REXCkIgdweDOc7D79qLwvfGjWYxxOh+N2F86Z8wDUmE0ktyAUlvUlcJrd
-        sN7xF+CON0H7tIiLswlWnqnGy8E27Yan0G6orN3QQLuhQR0gDMCbVSkT5awyMIlNCVDKEpWq
-        JHlAbHJiM/jvW/eudd9rA7WT8wFWgFHACiCFS72EF8pSY8TCOFmamlUkRytUCazSCnwoQuot
-        jI1vkolpuewQ+wXLHmQVj1mM8pBkYdH2Lff/8G1/Tz4dtKaK1FmfClnad8B215RzWPT3tokQ
-        h7orLjNYEnVvmtKYO0eDdj5X2PtaODX6TY9ak73H0/ThTuO14OX5idqGpV1B8vfv7oq/FTrb
-        lmZPbjQJfd+stDDmf2oNXgXtERmu25kdNXyZwAunpWkZEYUxF9TJL4zubY1ku3InE/SK4DtT
-        b8cc1gfPRz4o+HaOFEfVBdpyQ6olx4ySrS8vO3YbRSrP1ScGt4dX7cn9xBn10ZEcPEVUpw6V
-        Z8x3D76YM9Iwb894937rnbISaWxow83WPmfJ1ScH/FfYi3nK6M4gffJ45BvqT1NWP66tH6bT
-        r/tNh23JXIzwlxLK/bJAP1yhlP0LTkX9F0UEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBKsWRmVeSWpSXmKPExsVy+t/xe7r8XyuSDGY/5bFYf+oYs8X/PcfY
-        LFbf7WezmPbhJ7PFpP4Z7Ba/z55nttj7bjarxYUfjUwWexZNYrJYufook8WT9bOYLXoOfGCx
-        WNnykNniz0NDi4dfbrFYTDp0jdHi6dVZTBZ7b2lbXHq8gt1iz96TLBaXd81hs5i/7Cm7xYS2
-        r8wWNyY8ZbSYeHwzq8W61+9ZLE7cknaQ9rh8xdvj34k1bB4Tm9+xe5y/t5HF4/LZUo9NqzrZ
-        PBY2TGX22Lyk3mP3zQY2j97md2weO1vvs3q833eVzWP9lqssHptPV3tM2LyR1ePzJrkAwSg9
-        m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jAnz97IU
-        3GaveHBxCVMD43S2LkZODgkBE4nuztnMXYxcHEICSxklPh+cwgqRkJH4dOUjO4QtLPHnWhcb
-        RNFHoKJlD1ghnF2MEj8ermDqYuTg4BWwk1h1JBLEZBFQkdg9hx+kl1dAUOLkzCcsILaoQITE
-        g91nweYLC4RLrHm7hRHEZhYQl7j1ZD4TyEgRgVWMEmte/wZbxiywmFXi4ux37BDLfjFK/Plz
-        nBlkA5uAlkRjJ9h1nAJuEr9efWaCmKQp0br9NzuELS+x/e0csHIJASWJ2Zf1IJ6plXh1fzfj
-        BEbRWUjum4XkjllIJs1CMmkBI8sqRpHU0uLc9NxiQ73ixNzi0rx0veT83E2MwCS37djPzTsY
-        5736qHeIkYmD8RCjBAezkgjv/r6KJCHelMTKqtSi/Pii0pzU4kOMpsAwmsgsJZqcD0yzeSXx
-        hmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTI1Gr6XlD9xkr7WRumrH
-        erXQi1n1yNeLO0rEb8Z18xlM0VexrOKfVenwKnSpAOt1URW7lbMll386WJl90mlyWOikWXnn
-        Pkk7/NeyC7/VFdf+Z5UjP8ev3wblbiFJU3WWL1oWU6510PRaLut0Y2XtykWTesw2X+w7Fih9
-        xv3jwdSX/1+mLrwQtcfhBOMaxZVGnNP2f/86f1dhZNjuvHW1DNmFCr9bKreqLeHxiqx5bzVZ
-        KePNc678L1V2mxff+3G3SfqOYJ1iS+vb9zpm537aa1WqMZ5ffNEqyFHkxZKUSQ6ZYROKHlVw
-        c359zmCXwOn38uoF9v71t1pXRSrrxUoXvN3/cEVx7J1Dlq1yUYXqSizFGYmGWsxFxYkAFaDj
-        FvsDAAA=
-X-CMS-MailID: 20220509110343eucas1p136eb9833a9bbd0fb318c60dc246dfbff
-X-Msg-Generator: CA
-X-RootMTR: 20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a
-References: <20220506081105.29134-1-p.raghav@samsung.com>
-        <CGME20220506081118eucas1p17f3c29cc36d748c3b5a3246f069f434a@eucas1p1.samsung.com>
-        <20220506081105.29134-12-p.raghav@samsung.com>
-        <7f1bd653-6f75-7c0d-9a82-e8992b1476e4@opensource.wdc.com>
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> ---
->>  drivers/md/dm-zone.c | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/md/dm-zone.c b/drivers/md/dm-zone.c
->> index 3e7b1fe15..27dc4ddf2 100644
->> --- a/drivers/md/dm-zone.c
->> +++ b/drivers/md/dm-zone.c
->> @@ -231,6 +231,18 @@ static int dm_revalidate_zones(struct mapped_device *md, struct dm_table *t)
->>  	struct request_queue *q = md->queue;
->>  	unsigned int noio_flag;
->>  	int ret;
->> +	struct block_device *bdev = md->disk->part0;
->> +	sector_t zone_sectors;
->> +	char bname[BDEVNAME_SIZE];
->> +
->> +	zone_sectors = bdev_zone_sectors(bdev);
->> +
->> +	if (!is_power_of_2(zone_sectors)) {
->> +		DMWARN("%s: %s only power of two zone size supported\n",
->> +		       dm_device_name(md),
->> +		       bdevname(bdev, bname));
->> +		return 1;
-> 
-> return -EINVAL;
-> 
-> The error propagates to dm_table_set_restrictions() so a proper error code must
-> be returned.
-> 
-Good point. I will add this in the next rev.
+This change retrieves network metrics for virtual functions from the
+device and exports them via the iproute2 interface.
+
+The code for retrieving the statistics from the device is taken from the
+out-of-tree driver.  The feature was introduced with version 2.0.75.7,
+so the diff between this version and the previous version 2.0.72.4 was
+used to identify required changes. The export via ethtool is omitted in
+favor of using the standard ndo_get_vf_stats interface.
+
+Per-VF statistics can now be printed, for instance, via
+
+  ip --statistics link show dev eth0
+
+Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
+---
+v2: implemented the ndo_get_vf_stats callback
+v3: as per discussion, removed the ethtool changes
+
+ drivers/net/ethernet/intel/ixgbe/ixgbe.h      | 34 ++++++++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 86 +++++++++++++++++++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_type.h |  7 ++
+ 3 files changed, 127 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe.h b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
+index 921a4d977d65..48444ab9e0b1 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe.h
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
+@@ -167,12 +167,46 @@ enum ixgbe_tx_flags {
+ #define IXGBE_82599_VF_DEVICE_ID        0x10ED
+ #define IXGBE_X540_VF_DEVICE_ID         0x1515
+ 
++#define UPDATE_VF_COUNTER_32bit(reg, last_counter, counter)	\
++	{							\
++		u32 current_counter = IXGBE_READ_REG(hw, reg);	\
++		if (current_counter < last_counter)		\
++			counter += 0x100000000LL;		\
++		last_counter = current_counter;			\
++		counter &= 0xFFFFFFFF00000000LL;		\
++		counter |= current_counter;			\
++	}
++
++#define UPDATE_VF_COUNTER_36bit(reg_lsb, reg_msb, last_counter, counter) \
++	{								 \
++		u64 current_counter_lsb = IXGBE_READ_REG(hw, reg_lsb);	 \
++		u64 current_counter_msb = IXGBE_READ_REG(hw, reg_msb);	 \
++		u64 current_counter = (current_counter_msb << 32) |	 \
++			current_counter_lsb;				 \
++		if (current_counter < last_counter)			 \
++			counter += 0x1000000000LL;			 \
++		last_counter = current_counter;				 \
++		counter &= 0xFFFFFFF000000000LL;			 \
++		counter |= current_counter;				 \
++	}
++
++struct vf_stats {
++	u64 gprc;
++	u64 gorc;
++	u64 gptc;
++	u64 gotc;
++	u64 mprc;
++};
++
+ struct vf_data_storage {
+ 	struct pci_dev *vfdev;
+ 	unsigned char vf_mac_addresses[ETH_ALEN];
+ 	u16 vf_mc_hashes[IXGBE_MAX_VF_MC_ENTRIES];
+ 	u16 num_vf_mc_hashes;
+ 	bool clear_to_send;
++	struct vf_stats vfstats;
++	struct vf_stats last_vfstats;
++	struct vf_stats saved_rst_vfstats;
+ 	bool pf_set_mac;
+ 	u16 pf_vlan; /* When set, guest VLAN config not allowed. */
+ 	u16 pf_qos;
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index c4a4954aa317..f60d8b425f61 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -5548,6 +5548,47 @@ static int ixgbe_non_sfp_link_config(struct ixgbe_hw *hw)
+ 	return ret;
+ }
+ 
++/**
++ * ixgbe_clear_vf_stats_counters - Clear out VF stats after reset
++ * @adapter: board private structure
++ *
++ * On a reset we need to clear out the VF stats or accounting gets
++ * messed up because they're not clear on read.
++ **/
++static void ixgbe_clear_vf_stats_counters(struct ixgbe_adapter *adapter)
++{
++	struct ixgbe_hw *hw = &adapter->hw;
++	int i;
++
++	for (i = 0; i < adapter->num_vfs; i++) {
++		adapter->vfinfo[i].last_vfstats.gprc =
++			IXGBE_READ_REG(hw, IXGBE_PVFGPRC(i));
++		adapter->vfinfo[i].saved_rst_vfstats.gprc +=
++			adapter->vfinfo[i].vfstats.gprc;
++		adapter->vfinfo[i].vfstats.gprc = 0;
++		adapter->vfinfo[i].last_vfstats.gptc =
++			IXGBE_READ_REG(hw, IXGBE_PVFGPTC(i));
++		adapter->vfinfo[i].saved_rst_vfstats.gptc +=
++			adapter->vfinfo[i].vfstats.gptc;
++		adapter->vfinfo[i].vfstats.gptc = 0;
++		adapter->vfinfo[i].last_vfstats.gorc =
++			IXGBE_READ_REG(hw, IXGBE_PVFGORC_LSB(i));
++		adapter->vfinfo[i].saved_rst_vfstats.gorc +=
++			adapter->vfinfo[i].vfstats.gorc;
++		adapter->vfinfo[i].vfstats.gorc = 0;
++		adapter->vfinfo[i].last_vfstats.gotc =
++			IXGBE_READ_REG(hw, IXGBE_PVFGOTC_LSB(i));
++		adapter->vfinfo[i].saved_rst_vfstats.gotc +=
++			adapter->vfinfo[i].vfstats.gotc;
++		adapter->vfinfo[i].vfstats.gotc = 0;
++		adapter->vfinfo[i].last_vfstats.mprc =
++			IXGBE_READ_REG(hw, IXGBE_PVFMPRC(i));
++		adapter->vfinfo[i].saved_rst_vfstats.mprc +=
++			adapter->vfinfo[i].vfstats.mprc;
++		adapter->vfinfo[i].vfstats.mprc = 0;
++	}
++}
++
+ static void ixgbe_setup_gpie(struct ixgbe_adapter *adapter)
+ {
+ 	struct ixgbe_hw *hw = &adapter->hw;
+@@ -5683,6 +5724,7 @@ static void ixgbe_up_complete(struct ixgbe_adapter *adapter)
+ 	adapter->link_check_timeout = jiffies;
+ 	mod_timer(&adapter->service_timer, jiffies);
+ 
++	ixgbe_clear_vf_stats_counters(adapter);
+ 	/* Set PF Reset Done bit so PF/VF Mail Ops can work */
+ 	ctrl_ext = IXGBE_READ_REG(hw, IXGBE_CTRL_EXT);
+ 	ctrl_ext |= IXGBE_CTRL_EXT_PFRSTD;
+@@ -7270,6 +7312,32 @@ void ixgbe_update_stats(struct ixgbe_adapter *adapter)
+ 	netdev->stats.rx_length_errors = hwstats->rlec;
+ 	netdev->stats.rx_crc_errors = hwstats->crcerrs;
+ 	netdev->stats.rx_missed_errors = total_mpc;
++
++	/* VF Stats Collection - skip while resetting because these
++	 * are not clear on read and otherwise you'll sometimes get
++	 * crazy values.
++	 */
++	if (!test_bit(__IXGBE_RESETTING, &adapter->state)) {
++		for (i = 0; i < adapter->num_vfs; i++) {
++			UPDATE_VF_COUNTER_32bit(IXGBE_PVFGPRC(i),
++					adapter->vfinfo[i].last_vfstats.gprc,
++					adapter->vfinfo[i].vfstats.gprc);
++			UPDATE_VF_COUNTER_32bit(IXGBE_PVFGPTC(i),
++					adapter->vfinfo[i].last_vfstats.gptc,
++					adapter->vfinfo[i].vfstats.gptc);
++			UPDATE_VF_COUNTER_36bit(IXGBE_PVFGORC_LSB(i),
++					IXGBE_PVFGORC_MSB(i),
++					adapter->vfinfo[i].last_vfstats.gorc,
++					adapter->vfinfo[i].vfstats.gorc);
++			UPDATE_VF_COUNTER_36bit(IXGBE_PVFGOTC_LSB(i),
++					IXGBE_PVFGOTC_MSB(i),
++					adapter->vfinfo[i].last_vfstats.gotc,
++					adapter->vfinfo[i].vfstats.gotc);
++			UPDATE_VF_COUNTER_32bit(IXGBE_PVFMPRC(i),
++					adapter->vfinfo[i].last_vfstats.mprc,
++					adapter->vfinfo[i].vfstats.mprc);
++		}
++	}
+ }
+ 
+ /**
+@@ -8995,6 +9063,23 @@ static void ixgbe_get_stats64(struct net_device *netdev,
+ 	stats->rx_missed_errors	= netdev->stats.rx_missed_errors;
+ }
+ 
++static int ixgbe_ndo_get_vf_stats(struct net_device *netdev, int vf,
++				  struct ifla_vf_stats *vf_stats)
++{
++	struct ixgbe_adapter *adapter = netdev_priv(netdev);
++
++	if (vf < 0 || vf >= adapter->num_vfs)
++		return -EINVAL;
++
++	vf_stats->rx_packets = adapter->vfinfo[vf].vfstats.gprc;
++	vf_stats->rx_bytes   = adapter->vfinfo[vf].vfstats.gorc;
++	vf_stats->tx_packets = adapter->vfinfo[vf].vfstats.gptc;
++	vf_stats->tx_bytes   = adapter->vfinfo[vf].vfstats.gotc;
++	vf_stats->multicast  = adapter->vfinfo[vf].vfstats.mprc;
++
++	return 0;
++}
++
+ #ifdef CONFIG_IXGBE_DCB
+ /**
+  * ixgbe_validate_rtr - verify 802.1Qp to Rx packet buffer mapping is valid.
+@@ -10311,6 +10396,7 @@ static const struct net_device_ops ixgbe_netdev_ops = {
+ 	.ndo_set_vf_rss_query_en = ixgbe_ndo_set_vf_rss_query_en,
+ 	.ndo_set_vf_trust	= ixgbe_ndo_set_vf_trust,
+ 	.ndo_get_vf_config	= ixgbe_ndo_get_vf_config,
++	.ndo_get_vf_stats	= ixgbe_ndo_get_vf_stats,
+ 	.ndo_get_stats64	= ixgbe_get_stats64,
+ 	.ndo_setup_tc		= __ixgbe_setup_tc,
+ #ifdef IXGBE_FCOE
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
+index 6da9880d766a..7f7ea468ffa9 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
+@@ -2533,6 +2533,13 @@ enum {
+ #define IXGBE_PVFTXDCTL(P)	(0x06028 + (0x40 * (P)))
+ #define IXGBE_PVFTDWBAL(P)	(0x06038 + (0x40 * (P)))
+ #define IXGBE_PVFTDWBAH(P)	(0x0603C + (0x40 * (P)))
++#define IXGBE_PVFGPRC(x)	(0x0101C + (0x40 * (x)))
++#define IXGBE_PVFGPTC(x)	(0x08300 + (0x04 * (x)))
++#define IXGBE_PVFGORC_LSB(x)	(0x01020 + (0x40 * (x)))
++#define IXGBE_PVFGORC_MSB(x)	(0x0D020 + (0x40 * (x)))
++#define IXGBE_PVFGOTC_LSB(x)	(0x08400 + (0x08 * (x)))
++#define IXGBE_PVFGOTC_MSB(x)	(0x08404 + (0x08 * (x)))
++#define IXGBE_PVFMPRC(x)	(0x0D01C + (0x40 * (x)))
+ 
+ #define IXGBE_PVFTDWBALn(q_per_pool, vf_number, vf_q_index) \
+ 		(IXGBE_PVFTDWBAL((q_per_pool)*(vf_number) + (vf_q_index)))
+-- 
+2.32.0
+
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+

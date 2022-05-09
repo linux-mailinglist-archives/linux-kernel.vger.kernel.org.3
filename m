@@ -2,133 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEB351F834
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0494351F77C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbiEIJdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S237426AbiEII6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237362AbiEII60 (ORCPT
+        with ESMTP id S236595AbiEIIwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:58:26 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FDF1FB2CD;
-        Mon,  9 May 2022 01:54:33 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 49986CA961;
-        Mon,  9 May 2022 08:47:29 +0000 (UTC)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1050240007;
-        Mon,  9 May 2022 08:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652086045;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 9 May 2022 04:52:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780961D0D5;
+        Mon,  9 May 2022 01:48:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 348B01FA06;
+        Mon,  9 May 2022 08:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652086123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ivoK15iFFrCyokd4/a45dZRdTsG0bp4wFqdXqPeAM7k=;
-        b=L+gPH//MEtnEnPB2S1YMtTVv5CEds3o+9pQNMRNwd3Unh17uEomiSh3BUwXgPTpTUxf0Dt
-        49guFFmxTUU+2rqXdBlDOzrVC0g1rpe50N70z04SiHxB/ZREv5OZbGyXxBYeCxNtFEZ0UE
-        Cablq2dqsLtAQCwAPcXAsLbVKnVnWIDhMgTPnH0MksYm8/OntgDPUFD7s9UY6qrjPoh1Q6
-        nzGM/iIdld711XjfVFIw8O9G4gjHWvm6XFdq1suGGT/D7fFKebNnSm6t+RD452gO/IkHGG
-        U0kXhck429GabN3N4WKAtnSEIbvAxOJc3NikFYbSIILE/7aIVmHFOTYon75M2A==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Robert Marko <robert.marko@sartura.hr>, andrew@lunn.ch,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pali@kernel.org, marek.behun@nic.cz
-Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH v2 1/2] arm64: dts: uDPU: update partition table
-In-Reply-To: <20220322105857.1107016-1-robert.marko@sartura.hr>
-References: <20220322105857.1107016-1-robert.marko@sartura.hr>
-Date:   Mon, 09 May 2022 10:47:18 +0200
-Message-ID: <87mtfrrt2h.fsf@BL-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=XREMqynW/xsoTG/Ro19s3qT72KUQkPR/IVuvheXTmgs=;
+        b=Az8Vv25UR5pgLI3x7A3tQ3wA+W6gRjvAqDYJmNBCl18nRpnjNFCcDak0ZtVc0565FP9mZB
+        xtfaTtIDMMJ0npgI+GH7mZE3ehFa3rsPT+c+NF41oFulz9GG7020zYqunmWbKrTsCQX4os
+        Dkw9JwgPL42mICBRSORsVcBxSe6OT48=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652086123;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XREMqynW/xsoTG/Ro19s3qT72KUQkPR/IVuvheXTmgs=;
+        b=psk9BisxVfaRzk4GKoEoS7EfF3uiiHK6RSy6OvYqOMsCg0/Ou5oUk5t1gsjKaJiRuiR9s5
+        LnQGk5XRfr701QDg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 097F72C141;
+        Mon,  9 May 2022 08:48:41 +0000 (UTC)
+Date:   Mon, 09 May 2022 10:48:41 +0200
+Message-ID: <s5hee13m6qe.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "David Airlie" <airlied@linux.ie>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Kai Vehmanen" <kai.vehmanen@intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
+        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v5 2/2] ALSA: hda - identify when audio is provided by a video driver
+In-Reply-To: <4a0f0e351941201d00b2cd8e2157d3b0181dc19e.1651348913.git.mchehab@kernel.org>
+References: <cover.1651348913.git.mchehab@kernel.org>
+        <4a0f0e351941201d00b2cd8e2157d3b0181dc19e.1651348913.git.mchehab@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Marko <robert.marko@sartura.hr> writes:
+On Sat, 30 Apr 2022 22:04:55 +0200,
+Mauro Carvalho Chehab wrote:
+> 
+> On some devices, the hda driver needs to hook into a video driver,
+> in order to be able to properly access the audio hardware and/or
+> the power management function.
+> 
+> That's the case of several snd_hda_intel devices that depends on
+> i915 driver.
+> 
+> Ensure that a proper reference between the snd-hda driver needing
+> such binding is shown at /proc/modules, in order to allow userspace
+> to know about such binding.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-> Partition currently called "uboot" does not only contain U-boot, but
-> rather it contains TF-A, U-boot and U-boot environment.
->
-> So, to avoid accidentally deleting the U-boot environment which is
-> located at 0x180000 split the partition.
->
-> "uboot" is not the correct name as you can't boot these boards with U-boot
-> only, TF-A must be present as well, so rename the "uboot" partition to
-> "firmware".
->
-> While we are here, describe the NOR node as "spi-flash@0" instead of
-> "m25p80@0" which is the old SPI-NOR driver name.
->
-> This won't break booting for existing devices as the SoC-s BootROM is not
-> partition aware at all, it will simply try booting from 0x0 of the
-> boot device that is set by bootstrap pins.
->
-> This will however prevent accidental or automated flashing of just U-boot
-> to the partition.
->
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
-> Changes in v2:
-> * Update the commit description by adressing ABI breaking concerns
+Maybe I was too late to the game (just back from vacation), but FWIW:
 
-Applied on mvebu/dt64
-
-Thanks,
-
-Gregory
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
 
-> ---
->  arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> index 95d46e8d081c..ac64949bb53e 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> @@ -99,7 +99,7 @@ &spi0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&spi_quad_pins>;
->  
-> -	m25p80@0 {
-> +	spi-flash@0 {
->  		compatible = "jedec,spi-nor";
->  		reg = <0>;
->  		spi-max-frequency = <54000000>;
-> @@ -108,10 +108,15 @@ partitions {
->  			compatible = "fixed-partitions";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			/* only bootloader is located on the SPI */
-> +
->  			partition@0 {
-> -				label = "uboot";
-> -				reg = <0 0x400000>;
-> +				label = "firmware";
-> +				reg = <0x0 0x180000>;
-> +			};
-> +
-> +			partition@180000 {
-> +				label = "u-boot-env";
-> +				reg = <0x180000 0x10000>;
->  			};
->  		};
->  	};
-> -- 
-> 2.35.1
->
+thanks,
 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Takashi

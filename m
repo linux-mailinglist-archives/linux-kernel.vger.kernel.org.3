@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5736D51F241
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25DE51F26A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiEIBaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S235470AbiEIBbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234319AbiEIAHj (ORCPT
+        with ESMTP id S234318AbiEIAHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 20:07:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942ADDEF1
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=UER95YhL/LdSDTOz/ulO8m1XkwQ4O0+2EBlTjF/ksUc=; b=ov63tU4N3g/lMAU9V7LrP+vhfa
-        iJdiZomwAYWqTcm6mrl/mT25qG6BE5WoNCQ/SBnPGJdw9Mk2wkcpY08+8xNVi0FgqacZ7MsJl2Sja
-        IXMSwW9v4+Bc9smCeKr7X/DxrQUFbGPaTi9LP/r+R7kzFtN4J5zEVaCIPIGieIn7ygKRtuNwo7qmp
-        knKqv20dxmrvqr3Qup2PUm49b0pheF3oCEqXVTqvyij3EwlOPlnb02zk85MAWlbhhgU6tML3O/q7r
-        CgZeoxeYwscxuLcvi9RSOfQ3jPPbJlp4tzTG/lOafR1SpJ/VsHmvqnunCsLarCd09KxDhflyfIQEQ
-        //QBuf5w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nnqrz-002whA-Ar; Mon, 09 May 2022 00:03:23 +0000
-Message-ID: <65c92404-1d6f-6969-89bf-20b8eefaeff6@infradead.org>
-Date:   Sun, 8 May 2022 17:03:16 -0700
+        Sun, 8 May 2022 20:07:22 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCB33DEF1;
+        Sun,  8 May 2022 17:03:29 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 88BAC52DCAB;
+        Mon,  9 May 2022 10:03:28 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nnqs2-009h1M-Jk; Mon, 09 May 2022 10:03:26 +1000
+Date:   Mon, 9 May 2022 10:03:26 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Carel Si <beibei.si@intel.com>
+Cc:     lkp@intel.com, linux-kernel@vger.kernel.org, lkp@lists.01.org,
+        fengwei.yin@intel.com, linux-xfs@vger.kernel.org,
+        oliver.sang@intel.com
+Subject: Re: [LKP] Re: [xfs]  32678f1513:  aim7.jobs-per-min -5.6% regression
+Message-ID: <20220509000326.GN1098723@dread.disaster.area>
+References: <20220502082018.1076561-2-david@fromorbit.com>
+ <20220506092250.GI23061@xsang-OptiPlex-9020>
+ <20220506212924.GJ1098723@dread.disaster.area>
+ <20220507110941.GA10880@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared
- function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
- declarations
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        Florian Eckert <fe@dev.tdt.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <202205080416.vzIXy16B-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202205080416.vzIXy16B-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220507110941.GA10880@linux.intel.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=62785a51
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=8nJEP1OIZ-IA:10 a=oZkIemNP1mAA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
+        a=7-415B0cAAAA:8 a=OIWXXrKM4WwZCH1KPDMA:9 a=wPNLvfGTeEIA:10
+        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,82 +53,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Sat, May 07, 2022 at 07:09:46PM +0800, Carel Si wrote:
+> Hi Dave,
+> 
+> On Sat, May 07, 2022 at 07:29:24AM +1000, Dave Chinner wrote:
+> > On Fri, May 06, 2022 at 05:22:50PM +0800, kernel test robot wrote:
+> > > 
+> > > 
+> > > Greeting,
+> > > 
+> > > FYI, we noticed a -5.6% regression of aim7.jobs-per-min due to commit:
+> > > 
+> > > 
+> > > commit: 32678f151338b9a321e9e27139a63c81f353acb7 ("[PATCH 1/4] xfs: detect self referencing btree sibling pointers")
+> > > url: https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
+> > > base: https://git.kernel.org/cgit/fs/xfs/xfs-linux.git for-next
+> > > patch link: https://lore.kernel.org/linux-xfs/20220502082018.1076561-2-david@fromorbit.com
+> > 
+> > Well, that answers the concern I had about the impact of 
+> > changing the way endian conversions were done in that patch.
+> > 
+> > > a44a027a8b2a20fe 32678f151338b9a321e9e27139a 
+> > > ---------------- --------------------------- 
+> > >          %stddev     %change         %stddev
+> > >              \          |                \  
+> > >     464232            -5.6%     438315        aim7.jobs-per-min
+> > ....
+> > >       0.13 ±  5%      +0.2        0.33 ±  6%  perf-profile.children.cycles-pp.__xfs_btree_check_sblock
+> > ....
+> > >       0.11 ±  4%      +0.2        0.30 ±  5%  perf-profile.self.cycles-pp.__xfs_btree_check_sblock
+> > 
+> > Because there is it, right at the bottom of the profile.
+> > 
+> > Can you try the patch below and see if that fixes the issue?
+> 
+> We tested below patch, it didn't fix the issue, still has -6.4% regression [1] 
+> comparing to a44a027a8b ("Merge tag 'large-extent-counters-v9' of 
+> https://github.com/chandanr/linux into xfs-5.19-for-next"). 
 
-Adding TO: and CC: that are at end of message but are not
-included originally.
+Really? It made the regression *worse*?
 
+Oh, wait, *that* wasn't in the last set of profiles:
 
-On 5/7/22 13:54, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   30c8e80f79329617012f07b09b70114592092ea4
-> commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-> date:   8 weeks ago
-> config: mips-randconfig-r022-20220507 (https://download.01.org/0day-ci/archive/20220508/202205080416.vzIXy16B-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project af4cf1c6b8ed0d8102fc5e69acdc2fcbbcdaa9a7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
->            ^
->>> drivers/hwmon/ltq-cputemp.c:23:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
->                        ^
->    drivers/hwmon/ltq-cputemp.c:28:2: error: call to undeclared function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
->            ^
->    drivers/hwmon/ltq-cputemp.c:28:14: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->            ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) & ~CGU_TEMP_PD, CGU_GPHY1_CR);
->                        ^
->    drivers/hwmon/ltq-cputemp.c:39:12: error: call to undeclared function 'ltq_cgu_r32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->                    value = (ltq_cgu_r32(CGU_GPHY1_CR) >> 9) & 0x01FF;
->                             ^
->    drivers/hwmon/ltq-cputemp.c:92:24: error: use of undeclared identifier 'SOC_TYPE_VR9_2'
->            if (ltq_soc_type() != SOC_TYPE_VR9_2)
->                                  ^
->    6 errors generated.
-> 
-> 
-> vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
-> 
-> 7074d0a9275860 Florian Eckert 2017-09-01  20  
-> 7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
-> 7074d0a9275860 Florian Eckert 2017-09-01  22  {
-> 7074d0a9275860 Florian Eckert 2017-09-01 @23  	ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
-> 7074d0a9275860 Florian Eckert 2017-09-01  24  }
-> 7074d0a9275860 Florian Eckert 2017-09-01  25  
-> 
-> :::::: The code at line 23 was first introduced by commit
-> :::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
-> 
-> :::::: TO: Florian Eckert <fe@dev.tdt.de>
-> :::::: CC: Guenter Roeck <linux@roeck-us.net>
+....
+>      35.30 ±  4%      +1.3       36.59 ±  3%      +1.9       37.24 ±  3%  perf-profile.children.cycles-pp.osq_lock
+>      36.88 ±  4%      +1.3       38.19 ±  2%      +1.9       38.83 ±  3%  perf-profile.children.cycles-pp.rwsem_optimistic_spin
+>      37.40 ±  4%      +1.4       38.77 ±  2%      +2.0       39.35 ±  3%  perf-profile.children.cycles-pp.rwsem_down_write_slowpath
+....
+>       1.89 ±  3%      +0.1        1.96 ±  4%      +0.0        1.90 ±  2%  perf-profile.self.cycles-pp.rwsem_spin_on_owner
+>       0.11 ±  4%      +0.2        0.30 ±  5%      +0.2        0.29        perf-profile.self.cycles-pp.__xfs_btree_check_sblock
+>      35.08 ±  4%      +1.3       36.33 ±  2%      +1.9       37.01 ±  3%  perf-profile.self.cycles-pp.osq_lock
 
-This driver builds fine if I change it from SOC_FALCON to SOC_XWAY.
-Maybe its Kconfig entry should be stronger?
+This test is hammering an rwsem which is them spinning on exclusive
+write locks somewhere. That's where all the increase in system time
+has come from, and that's what's causing the difference in
+perofrmance. I bet this test is hammering single file write IO from
+all 96 CPUs at once, and that's where all the problems start.
 
-config SENSORS_LTQ_CPUTEMP
-	bool "Lantiq cpu temperature sensor driver"
--	depends on LANTIQ
-+	depends on SOC_XWAY
+IOWs, this likley has nothing to with the btree validation change,
+and everything to do with the system being driven into a lock and
+cacheline contention corner. When there is lock contention like this
+on a large CPU count system, we can't infer anything at all from any
+other measurement because the cacheline contention skews
+everything...
 
-?
+I'm not going to look at this any further, and I think I'm going to
+ignore AIM7 write test regressions in future until the test is
+reconfigured to avoid this sort of "100 cpus all trying to do
+buffered writes to the same file" contention issue.
+
+Cheers,
+
+Dave.
 
 -- 
-~Randy
+Dave Chinner
+david@fromorbit.com

@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C4751F323
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645EB51F326
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiEID7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S235001AbiEID71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234318AbiEIDzl (ORCPT
+        with ESMTP id S234509AbiEID4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:55:41 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C971A043
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:51:46 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id v12so17586925wrv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 20:51:46 -0700 (PDT)
+        Sun, 8 May 2022 23:56:40 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD6A1AF28
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:52:06 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so7526025wme.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 20:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kY8j3urZiYftEoIWj6itnjrLji/bjKW8y+9+36z3Zcs=;
-        b=x1Timy6cr18MwlxY9CF20GOJ+EnM2i6uvBz1w/xy/gkEKH0DgUot6cF7QhnrQn6KL8
-         9Ry9NGv/m6fXIAOBPNitKX7+Oup8CPJBsSoYtximCtydKFwTLK5grzqVsIph+N7vJIEC
-         eyzDRFYZxht7POr0XFGsw7Qu/aBfAre1m7VjYbJOCOfMXCV5WKmcHQtGg6dCGuD4Ye5w
-         PMSwN6Q2BpYNmhg+hSklRbTVHJJKcN5+aQCvAopHMDtQXrKjkd1UdaXrNZ1QOY2TtcAb
-         1jH0OOjse1qPAJijLMVZJr58Z27OUbdb91gOA+mMQcYgrGFNEIPpMXgGXqsnFeV1gOTS
-         Dqcg==
+        bh=l12WE5mp9PhO1IPRjTjpwmDGOQ7wb/4a5m9y3nBGeOA=;
+        b=pvxaieywYUVpcXk0gT3Q+TKVFmt3IoMc62S6eEy129dttwYSJqT9gWsXPzLeg+zFPI
+         PLe7o1fK9XGaF1Qesmimu/v+hehti1bDynbD4bKR/jpI1CYfNzYt6QF2rR7GxoW4FJ9t
+         0kHZGsLEq7+bVTe4bIW5WVDYJL3zfzvAl63bDcfyCH/k73KZYhfI5iQeSZkRXci8yJCi
+         mS1IfKYGnAxTSiGDmgemHWf/sStPKQ4nK5xMhXbQTNxlK0z2CaBgcTbNJJ3WQ/p4E6hh
+         QjQGB47vH+kz7OiQHuN41JmNpw6cK7sULCd4ksimYRZehABS2BXGakngjKeoHtaH4av5
+         AklQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kY8j3urZiYftEoIWj6itnjrLji/bjKW8y+9+36z3Zcs=;
-        b=rvL0Wh+pKSGcodGKxzeYnQbzqgVx3eWx0686hJiQYD0E1OY5469D9ehl4ILbhCHLg5
-         pU5iSEUCQETf2WDmBv+VmZ1NonZClVwSrasfJ+bzjlY1mUN0sdxxi2rsVBKGLw0oaz0B
-         PRpXKZZPHjy/Cj3AsSPks20agB+0pCz208zXf4q+kCn+jQ7WBEfPJVxwsONhXMVqeAb+
-         31xmpb63+3sdNu6aTNAEjAfyCnL7+w+QTv3kEAbA2fyw7lyTPWZ7iCPaYDQD49UmRrTQ
-         hMvXwcQGGpWURSXha/GG/cgej+lX2S4OnNy5hMO9Z/5KRx6Zn3YQ5u9EdVt/2kuvH8ru
-         I7NA==
-X-Gm-Message-State: AOAM531V47hTYeoEiwhiqlswYuLmA2Li9o2R9ax7P6tAnznaL7m1mqtT
-        RWXFdojT00RHe0BBhgnDNKuyvdbgAfYNQa649GyvFg==
-X-Google-Smtp-Source: ABdhPJzGALp9+kp1rOS/bBcWeW4rsd2dKqwnGmnsPp3YJ+N0Itw9CLsIZkoFqr5YwhcZF3R01ErVkbi/Wfw0+uHyIOo=
-X-Received: by 2002:a5d:6483:0:b0:20c:5c21:5c8c with SMTP id
- o3-20020a5d6483000000b0020c5c215c8cmr12089506wri.86.1652068280641; Sun, 08
- May 2022 20:51:20 -0700 (PDT)
+        bh=l12WE5mp9PhO1IPRjTjpwmDGOQ7wb/4a5m9y3nBGeOA=;
+        b=ru5QqPtDYYJl/5a7sSgpdtoSjHHuLsYfZ4Bh7L/n3e6lWy5xeR5o0mD/FKbc7kvPRE
+         vhegORkaioleG1//KdZ7TPbAvhPg6rnbFQ1xwCMVvjFYFTG7PNayrOHtNbe4I/VhbwOe
+         YttMeldXTkqdpV8c6EYFGO9hL4Y6FU6cwEuI0J9yb/rAGDqx1gB4ShYPXqHQ9i0mWvI6
+         HaSJhpahcUOEOswLCI/bmwY/5G+akzL7ZiTkElW/psmbnxy4Hv1tC5PTfUU1vNEi+l8R
+         38hv3iD+IHPe3Ms01v/pljPhjiLsaw5Yi0ZAXDDDpZUuVCtdgPY79eWG/Do9zNkEM0dH
+         FawQ==
+X-Gm-Message-State: AOAM533O2ElYSHm6i5JI01wTHBIAc/8YWxszkpdViwVvt4/Yn/E8ZVy1
+        6BWTVmm1grHTaumFUAa0xoIlbsLlw7XF1TLTEv8sgg==
+X-Google-Smtp-Source: ABdhPJwC1APi3CYSHkdsQEXeqQMbYX056D1XGJXeGfizpAHDTp/Hd2oR5snXTCoQWjC29wCqNqBAMXzIclLr3fpNcSY=
+X-Received: by 2002:a05:600c:4fd5:b0:394:55ae:32c7 with SMTP id
+ o21-20020a05600c4fd500b0039455ae32c7mr20677459wmq.73.1652068323237; Sun, 08
+ May 2022 20:52:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220509012121.40031-1-samuel@sholland.org>
-In-Reply-To: <20220509012121.40031-1-samuel@sholland.org>
+References: <20220508160749.984-1-jszhang@kernel.org> <20220508160749.984-2-jszhang@kernel.org>
+In-Reply-To: <20220508160749.984-2-jszhang@kernel.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 9 May 2022 09:21:09 +0530
-Message-ID: <CAAhSdy0U23M1wL9xxh20w23xEY-MjxoxxdXVy50G7p8=eXxWKw@mail.gmail.com>
-Subject: Re: [PATCH] clocksource/drivers/riscv: Events are stopped during CPU suspend
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Dmitriy Cherkasov <dmitriy@oss-tech.org>,
+Date:   Mon, 9 May 2022 09:21:52 +0530
+Message-ID: <CAAhSdy2-L+eSE5P+-TG94exgTsDp8wPiuhD23fZQ88nukoNj-w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] riscv: mm: init: make pt_ops_set_[early|late|fixmap]
+ static
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+        kasan-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
@@ -72,15 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 6:51 AM Samuel Holland <samuel@sholland.org> wrote:
+On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
 >
-> Some implementations of the SBI time extension depend on hart-local
-> state (for example, CSRs) that are lost or hardware that is powered
-> down when a CPU is suspended. To be safe, the clockevents driver
-> cannot assume that timer IRQs will be received during CPU suspend.
+> These three functions are only used in init.c, so make them static.
+> Fix W=1 warnings like below:
 >
-> Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> arch/riscv/mm/init.c:721:13: warning: no previous prototype for function
+> 'pt_ops_set_early' [-Wmissing-prototypes]
+>    void __init pt_ops_set_early(void)
+>                ^
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
 Looks good to me.
 
@@ -90,28 +96,40 @@ Regards,
 Anup
 
 > ---
+>  arch/riscv/mm/init.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
->  drivers/clocksource/timer-riscv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-> index 1767f8bf2013..593d5a957b69 100644
-> --- a/drivers/clocksource/timer-riscv.c
-> +++ b/drivers/clocksource/timer-riscv.c
-> @@ -34,7 +34,7 @@ static int riscv_clock_next_event(unsigned long delta,
->  static unsigned int riscv_clock_event_irq;
->  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
->         .name                   = "riscv_timer_clockevent",
-> -       .features               = CLOCK_EVT_FEAT_ONESHOT,
-> +       .features               = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
->         .rating                 = 100,
->         .set_next_event         = riscv_clock_next_event,
->  };
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 05ed641a1134..5f3f26dd9f21 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -849,7 +849,7 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
+>   * MMU is not enabled, the page tables are allocated directly using
+>   * early_pmd/pud/p4d and the address returned is the physical one.
+>   */
+> -void __init pt_ops_set_early(void)
+> +static void __init pt_ops_set_early(void)
+>  {
+>         pt_ops.alloc_pte = alloc_pte_early;
+>         pt_ops.get_pte_virt = get_pte_virt_early;
+> @@ -871,7 +871,7 @@ void __init pt_ops_set_early(void)
+>   * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
+>   * but it will be used as described above.
+>   */
+> -void __init pt_ops_set_fixmap(void)
+> +static void __init pt_ops_set_fixmap(void)
+>  {
+>         pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
+>         pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
+> @@ -889,7 +889,7 @@ void __init pt_ops_set_fixmap(void)
+>   * MMU is enabled and page table setup is complete, so from now, we can use
+>   * generic page allocation functions to setup page table.
+>   */
+> -void __init pt_ops_set_late(void)
+> +static void __init pt_ops_set_late(void)
+>  {
+>         pt_ops.alloc_pte = alloc_pte_late;
+>         pt_ops.get_pte_virt = get_pte_virt_late;
 > --
-> 2.35.1
+> 2.34.1
 >
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv

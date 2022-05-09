@@ -2,175 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA5651F5C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7902251F6CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 10:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbiEIH4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S236209AbiEII0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236573AbiEIHxH (ORCPT
+        with ESMTP id S236303AbiEIIRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:53:07 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025CB14C76F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:49:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j15so18215951wrb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=q/wAy1TbeV5Udmm91pas07M2plXYLkR5RXGzDlfWEKs=;
-        b=Mz1U3xqaHzLf32jHaFUq5wH5UT6+YXlAZPhIPFuRedkXRkRdOeYm6T5Sf4ZeCe5W/a
-         XTqwpmUYrJcOkXvnkKoB7Ce/bTPuGRI8wkuPhY1W78BYk5dB/rmCRRoUUg015Qu92LLh
-         VBHZ06pkjyW4KEjczSJQBSwtoXnVx3i8cX+bhdWV/f0Hat/8+DjZbIH1QJ02cqvrjh6E
-         /DGL6om7h5LGaqo7+b4GZSo24Rt0Px0MC12dRvbog2yJPVjc8imq5h20UFv2z4zT5pdE
-         fWhPA3VnJMfdV/dVtUvXJOW7rvYFb0GavCDb/7KrcDegzW8gOLRliFSBhFBBEoxvD/HM
-         hvyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=q/wAy1TbeV5Udmm91pas07M2plXYLkR5RXGzDlfWEKs=;
-        b=PapW0Yh/6Sz2bTrSEI6NdOWRF3eEzois31n/Yd1hnXSu+akYXdpIQU3VCV6OiBJWda
-         iEu8gYTH+AJqP6Y/50Ziok+irj8VA1PjW5gtD1eIMRnaYWnJPZGqg5fOsNTVHnhhk7x2
-         0X0YQA3yA+61iaK25W7a+8njzkZFI8WfrbcmjlCvzoGDjWI7vhxj2eiSBIwLZoMjn9QC
-         hsBT04DZNiOvsbA/p7fBPvNMS3r1aVoCTjFGBQI/gPf6vmG1geYP5U+Ht418Srlo8e1c
-         9PhPHTVwXsrnX1utBjvP7GO3za34PW/2BhaaLmRBFf8/hctZk+PZ9LWtsI5Fh5KYpTPF
-         LGkw==
-X-Gm-Message-State: AOAM5322Q59STebcPN9dqQsR27nAEAKX2Lokeq39Ji98VbaMsk7MbQZM
-        qjGCeOYV5OLmWnjI9LRgvNI0dw==
-X-Google-Smtp-Source: ABdhPJzL/bzJC/0GZFFuu0/iBuWDwc79RvZ2RpR+JFTjPC3wz1nhPclk6lVJ8xe3Uqv4ZuISsOMxUg==
-X-Received: by 2002:adf:eb87:0:b0:20c:a5b5:6731 with SMTP id t7-20020adfeb87000000b0020ca5b56731mr12936661wrn.199.1652082552477;
-        Mon, 09 May 2022 00:49:12 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id bw22-20020a0560001f9600b0020c5253d8d8sm11784768wrb.36.2022.05.09.00.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 00:49:12 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     alexandre.torgue@foss.st.com, andrew@lunn.ch, broonie@kernel.org,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, joabreu@synopsys.com,
-        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
-        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
-        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev,
-        =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 6/6] arm64: dts: allwinner: orange-pi-3: Enable ethernet
-Date:   Mon,  9 May 2022 07:48:57 +0000
-Message-Id: <20220509074857.195302-7-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220509074857.195302-1-clabbe@baylibre.com>
-References: <20220509074857.195302-1-clabbe@baylibre.com>
+        Mon, 9 May 2022 04:17:11 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E83C1595BE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:12:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KxYCf71WDzCsP6;
+        Mon,  9 May 2022 15:46:54 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 15:51:39 +0800
+Subject: Re: [PATCH v2 3/4] mm/migration: return errno when isolate_huge_page
+ failed
+To:     Muchun Song <songmuchun@bytedance.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Huang Ying <ying.huang@intel.com>,
+        Christoph Hellwig <hch@lst.de>, <dhowells@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Hildenbrand <david@redhat.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-4-linmiaohe@huawei.com>
+ <YmvNqWhC0uBwJ2yF@FVFYT0MHHV2J.usts.net>
+ <09ccdbac-c267-15de-0d81-57e211dea6d2@huawei.com>
+ <CAMZfGtVeFj_qh6e7DzNnN7jdXwXhBwqxPCwnq26V2ziHDxTiFA@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <bf4e383e-243a-115f-aed9-3cce4399aac5@huawei.com>
+Date:   Mon, 9 May 2022 15:51:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZfGtVeFj_qh6e7DzNnN7jdXwXhBwqxPCwnq26V2ziHDxTiFA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondřej Jirman <megi@xff.cz>
+On 2022/5/9 12:21, Muchun Song wrote:
+> On Mon, May 9, 2022 at 11:24 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> On 2022/4/29 19:36, Muchun Song wrote:
+>>> On Mon, Apr 25, 2022 at 09:27:22PM +0800, Miaohe Lin wrote:
+>>>> We might fail to isolate huge page due to e.g. the page is under migration
+>>>> which cleared HPageMigratable. So we should return -EBUSY in this case
+>>>> rather than always return 1 which could confuse the user. Also we make
+>>>> the prototype of isolate_huge_page consistent with isolate_lru_page to
+>>>> improve the readability.
+>>>>
+>>>> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
+>>>> Suggested-by: Huang Ying <ying.huang@intel.com>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  include/linux/hugetlb.h |  6 +++---
+>>>>  mm/gup.c                |  2 +-
+>>>>  mm/hugetlb.c            | 11 +++++------
+>>>>  mm/memory-failure.c     |  2 +-
+>>>>  mm/mempolicy.c          |  2 +-
+>>>>  mm/migrate.c            |  5 +++--
+>>>>  6 files changed, 14 insertions(+), 14 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>>>> index 04f0186b089b..306d6ef3fa22 100644
+>>>> --- a/include/linux/hugetlb.h
+>>>> +++ b/include/linux/hugetlb.h
+>>>> @@ -170,7 +170,7 @@ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+>>>>                                              vm_flags_t vm_flags);
+>>>>  long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
+>>>>                                              long freed);
+>>>> -bool isolate_huge_page(struct page *page, struct list_head *list);
+>>>> +int isolate_huge_page(struct page *page, struct list_head *list);
+>>>>  int get_hwpoison_huge_page(struct page *page, bool *hugetlb);
+>>>>  int get_huge_page_for_hwpoison(unsigned long pfn, int flags);
+>>>>  void putback_active_hugepage(struct page *page);
+>>>> @@ -376,9 +376,9 @@ static inline pte_t *huge_pte_offset(struct mm_struct *mm, unsigned long addr,
+>>>>      return NULL;
+>>>>  }
+>>>>
+>>>> -static inline bool isolate_huge_page(struct page *page, struct list_head *list)
+>>>> +static inline int isolate_huge_page(struct page *page, struct list_head *list)
+>>>
+>>> Since you already touched all the call sites, how about renaming this
+>>> to hugetlb_isolate()? I've always felt that huge_page is not a
+>>> straightforward and clear name since we also have another type of
+>>> huge page (THP).  I think hugetlb is more specific.
+>>>
+>>
+>> Sorry for late respond. This suggestion looks good to me. But is isolate_hugetlb more suitable?
+>> This could make it more consistent with isolate_lru_page? What do you think?
+>>
+> 
+> There is also a function named folio_isolate_lru(). My initial consideration was
+> making it consistent with folio_isolate_lru(). isolate_hugetlb looks good to me
+> as well.
 
-Orange Pi 3 has two regulators that power the Realtek RTL8211E
-PHY. According to the datasheet, both regulators need to be enabled
-at the same time, or that "phy-io" should be enabled slightly earlier
-than "phy" regulator.
+I see. Many thanks for your explanation. :)
 
-RTL8211E/RTL8211EG datasheet says:
-
-  Note 4: 2.5V (or 1.8/1.5V) RGMII power should be risen simultaneously
-  or slightly earlier than 3.3V power. Rising 2.5V (or 1.8/1.5V) power
-  later than 3.3V power may lead to errors.
-
-The timing is set in DT via startup-delay-us.
-
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- .../dts/allwinner/sun50i-h6-orangepi-3.dts    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-index c45d7b7fb39a..fd1d4f5bbc83 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-@@ -13,6 +13,7 @@ / {
- 	compatible = "xunlong,orangepi-3", "allwinner,sun50i-h6";
- 
- 	aliases {
-+		ethernet0 = &emac;
- 		serial0 = &uart0;
- 		serial1 = &uart1;
- 	};
-@@ -55,6 +56,15 @@ led-1 {
- 		};
- 	};
- 
-+	reg_gmac_2v5: gmac-2v5 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "gmac-2v5";
-+		regulator-min-microvolt = <2500000>;
-+		regulator-max-microvolt = <2500000>;
-+		enable-active-high;
-+		gpio = <&pio 3 6 GPIO_ACTIVE_HIGH>; /* PD6 */
-+	};
-+
- 	reg_vcc5v: vcc5v {
- 		/* board wide 5V supply directly from the DC jack */
- 		compatible = "regulator-fixed";
-@@ -113,6 +123,33 @@ &ehci3 {
- 	status = "okay";
- };
- 
-+&emac {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ext_rgmii_pins>;
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ext_rgmii_phy>;
-+	status = "okay";
-+};
-+
-+&mdio {
-+	ext_rgmii_phy: ethernet-phy@1 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+		/*
-+		 * The board uses 2.5V RGMII signalling. Power sequence to enable
-+		 * the phy is to enable GMAC-2V5 and GMAC-3V (aldo2) power rails
-+		 * at the same time and to wait 100ms. The driver enables phy-io
-+		 * first. Delay is achieved with enable-ramp-delay on reg_aldo2.
-+		 */
-+		phy-io-supply = <&reg_gmac_2v5>;
-+		phy-supply = <&reg_aldo2>;
-+
-+		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
-+		reset-assert-us = <15000>;
-+		reset-deassert-us = <40000>;
-+	};
-+};
-+
- &gpu {
- 	mali-supply = <&reg_dcdcc>;
- 	status = "okay";
-@@ -211,6 +248,7 @@ reg_aldo2: aldo2 {
- 				regulator-min-microvolt = <3300000>;
- 				regulator-max-microvolt = <3300000>;
- 				regulator-name = "vcc33-audio-tv-ephy-mac";
-+				regulator-enable-ramp-delay = <100000>;
- 			};
- 
- 			/* ALDO3 is shorted to CLDO1 */
--- 
-2.35.1
+> 
+> Thanks.
+> .
+> 
 

@@ -2,166 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BBE51FB32
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130B51FB33
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiEIL0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S232670AbiEIL01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbiEIL0U (ORCPT
+        with ESMTP id S233069AbiEIL0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:26:20 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018EC2528A;
+        Mon, 9 May 2022 07:26:19 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019DF1AF8EF;
         Mon,  9 May 2022 04:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I5w1l7kr42Qgl1B7paAXQrUp55JqRTIxrpC92Io5gcY=; b=LxIUWFwus+tGPEynRScRh9gh6Y
-        X64jWNjxl8Rt/cXVIAgJZhVY7crrfM4xLN7KDgzNu4d+wAzPhGOYUS1RWkm/+Ru6pPOmp3D+bASwq
-        KcpyRNECMOiaLhUWIXy/NGttEEIWsoZrNYkMsqN/JG9jBDDkN80LIVOytHIwMHTgKWT1RW3FBXJm2
-        B/VGxApqBfe/9R5adpqBf17LKdW4zbp18Hxmv5cgdRxw8nixjx/64X/lk+ry/Y/d6BeJuije5qhX9
-        w1Z3hWajT/AuogLRkzyB47Y5HjbYB4p+2vEFWsZf4jWJvyQVvfkcQyqRoBXkhC3E7Ekyv+9yw0Ic4
-        ZkDjCY1g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1no1Sk-00CXFw-VS; Mon, 09 May 2022 11:22:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D241300385;
-        Mon,  9 May 2022 13:22:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 58C562026968A; Mon,  9 May 2022 13:22:00 +0200 (CEST)
-Date:   Mon, 9 May 2022 13:22:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Collingbourne <pcc@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        andrew.cooper3@citrix.com, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
-Message-ID: <Ynj5WLYnuWs/3oZW@hirez.programming.kicks-ass.net>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-2-joao@overdrivepizza.com>
- <20220429013704.4n4lmadpstdioe7a@treble>
- <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
- <20220503220244.vyz5flk3gg3y6rbw@treble>
- <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
- <YnKx5a9WvJ1UhWPm@google.com>
- <YnLDGcJGKfqi5+8w@hirez.programming.kicks-ass.net>
- <202205080033.82AB3703C3@keescook>
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f7c57ee6feso140409107b3.2;
+        Mon, 09 May 2022 04:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JHcyRb0A9TdQ3ZPZeebW28t674FP8onCU6WazLElK4U=;
+        b=Cg6+le4ubJ1hcAxrmpylHiTdhVQUuoVW9aEA+iFxxELX6T+A4h3sE6HzJqz6D1834F
+         Vx852sLUvU75YM1EVCdR4NV8kKrypKVn92RyNlAOS9M/o44QTnUE20FPvKpm1XQxUYJW
+         g//yWu3fDYLTb3vTadJXQak2SIfU1HZVuqSYA+8SMRH0lJUUni9hHCXB+GiXgxj30JQY
+         MPMpNGvS1vf3cEx7wxeGs6k9pFp1EISW9qGofMa6X6OK8pYs754hPRo/DOu9uAAaW7jG
+         NgZlSz7Ib0BwyYgSAhHCydm2MqJkySpOzsONRp9HWwW6epPyZkaSeuT7JdHX8TdYf29i
+         NHbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JHcyRb0A9TdQ3ZPZeebW28t674FP8onCU6WazLElK4U=;
+        b=THmvn6kXYdofFrj4qm8fQwp5y0YmBbeXk8JFdgXKhbAjztLpacIzRCZbV6c4Lqi2cy
+         0jKzvNNW5L7jMQPEf2/ZkZmq7sJhc+XUgEzUqkt15sahWYnzNsbP1OSO9BcsTE4Ts1ob
+         lBAhMc3Z83B64rmHlY4j50lwQYRmKk4KisfgjrRepys9sgpUANW5zIu4c2PV2WidvwCw
+         yOCbgq4abS9gfSelI/yp+YBKwWxMtqZbPCPTCdNcMWU4a9C63HJegtrP8xfUneyjhdTF
+         1iEwjz63do/vRQdxPqQ07+8Voy9fR0HZS6yfJ/h4ui6Uw3HblKBiAbez6vl/nlf6V3FZ
+         CWdA==
+X-Gm-Message-State: AOAM531AD7NPx3E82HyC6mRERZy8/Tjk4JIxvfdo+JsF9EskP72XhM1a
+        XU7dLV5Uys/b8vp1a4DD6wdYjZ+BnSpUbaJpuDQ=
+X-Google-Smtp-Source: ABdhPJz3TmYnVu7MVB0CYjUmpfm9sDvGiFsAxvCb7o+aew79C34oQx2aF8SKyaY9aCiZum4rKA8OI5Xm2KcEiO3AYls=
+X-Received: by 2002:a05:690c:89:b0:2d7:fb7d:db7 with SMTP id
+ be9-20020a05690c008900b002d7fb7d0db7mr14793757ywb.219.1652095341920; Mon, 09
+ May 2022 04:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205080033.82AB3703C3@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220507170440.64005-1-linux@fw-web.de> <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
+ <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de> <2509116.Lt9SDvczpP@phil>
+ <trinity-7f04b598-0300-4f3c-80e7-0c2145e8ba8f-1652011928036@3c-app-gmx-bap68>
+ <CAMdYzYrG8bK-Yo15RjhhCQKS4ZQW53ePu1q4gbGxVVNKPJHBWg@mail.gmail.com> <41d6b00f-d8ac-ca54-99db-ea99c9049e0a@linaro.org>
+In-Reply-To: <41d6b00f-d8ac-ca54-99db-ea99c9049e0a@linaro.org>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 9 May 2022 07:22:11 -0400
+Message-ID: <CAMdYzYomJPxQ7cnUuP_T7-rVbYPeZwr13Dy6b=PP4ijqQfh5gg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and add
+ rgmii-mode to mt7531
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 01:29:13AM -0700, Kees Cook wrote:
-> On Wed, May 04, 2022 at 08:16:57PM +0200, Peter Zijlstra wrote:
-> > 	FineIBT						kCFI
-> > 
-> > __fineibt_\hash:
-> > 	xor	\hash, %r10	# 7
-> > 	jz	1f		# 2
-> > 	ud2			# 2
-> > 1:	ret			# 1
-> > 	int3			# 1
-> > 
-> > 
-> > __cfi_\sym:					__cfi_\sym:
-> > 							int3; int3				# 2
-> > 	endbr			# 4			mov	\hash, %eax			# 5
-> > 	call	__fineibt_\hash	# 5			int3; int3				# 2
-> > \sym:						\sym:
-> > 	...						...
-> > 
-> > 
-> > caller:						caller:
-> > 	movl	\hash, %r10d	# 6			cmpl	\hash, -6(%r11)			# 8
-> > 	sub	$9, %r11	# 4			je	1f				# 2
-> > 	call	*%r11		# 3			ud2					# 2
-> > 	.nop 4			# 4 (or fixup r11)	call	__x86_indirect_thunk_r11	# 5
-> 
-> This looks good!
-> 
-> And just to double-check my understanding here... \sym is expected to
-> start with endbr with IBT + kCFI?
+On Mon, May 9, 2022 at 2:48 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 08/05/2022 19:04, Peter Geis wrote:
+> > On Sun, May 8, 2022 at 8:12 AM Frank Wunderlich <frank-w@public-files.de> wrote:
+> >>>
+> >>> I think the issue is more for the description itself.
+> >>>
+> >>> Devicetree is only meant to describe the hardware and does in general don't
+> >>> care how any firmware (Linux-kernel, *BSD, etc) handles it. So going with
+> >>> "the kernel does it this way" is not a valid reason for a binding change ;-) .
+>
+> Exactly. The argument in commit msg was not matching the change, because
+> driver implementation should not be (mostly) a reason for such changes.
+>
+> >>>
+> >>> Instead in general want to reason that there are boards without this reset
+> >>> facility and thus make it optional for those.
+> >>
+> >> if only the wording is the problem i try to rephrase it from hardware PoV.
+> >>
+> >> maybe something like this?
+> >>
+> >> https://github.com/frank-w/BPI-R2-4.14/commits/5.18-mt7531-mainline2/Documentation/devicetree/bindings/net/dsa/mediatek%2Cmt7530.yaml
+>
+> Looks ok.
+>
+> >>
+> >> Another way is maybe increasing the delay after the reset (to give more time all
+> >> come up again), but imho it is no good idea resetting the gmac/mdio-bus from the
+> >> child device.
+> >>
+> >> have not looked into the gmac driver if this always  does the initial reset to
+> >> have a "clean state". In this initial reset the switch will be resetted too
+> >> and does not need an additional one which needs the gmac/mdio initialization
+> >> to be done again.
+> >
+> > For clarification, the reset gpio line is purely to reset the phy.
+> > If having the switch driver own the reset gpio instead of the gmac
+> > breaks initialization that means there's a bug in the gmac driver
+> > handling phy init.
+> > In testing I've seen issues moving the reset line to the mdio node
+> > with other phys and the stmmac gmac driver, so I do believe this is
+> > the case.
+>
+> Yes, this seems reasonable, although Frank mentioned that reset is
+> shared with gmac, so it resets some part of it as well?
 
-Ah, the thinking was that 'if IBT then FineIBT', so the combination of
-kCFI and IBT is of no concern. And since FineIBT will have the ENDBR in
-the __cfi_\sym thing, \sym will not need it.
+No, the gpio-reset line is purely to reset the phy. The stmmac gmac
+driver handles it because it seems initialization failures occur if
+it's handled by the mdio drivers. I suspect this is due to a
+difference between when the driver initializes the phy vs when the
+driver triggers the reset.
+They had tried to attach the gpio binding to both the gmac node and
+the mdio node at the same time when only one can own it. Having it
+owned by the switch driver on the mdio node leads to the same
+initialization failures we see in other mdio drivers.
 
-But thinking about this now I suppose __nocfi call symbols will stlil
-need the ENDBR on. Objtool IBT validation would need to either find
-ENDBR or a matching __cfi_\sym I suppose.
-
-So I was talking to Joao on IRC the other day, and I realized that if
-kCFI generates code as per the above, then we can do FineIBT purely
-in-kernel. That is; have objtool generate a section of __cfi_\sym
-locations. Then use the .retpoline_sites and .cfi_sites to rewrite kCFI
-into the FineIBT form in multi pass:
-
- - read all the __cfi_\sym sites and collect all unique hash values
-
- - allocate (module) memory and write __fineibt_\hash functions for each
-   unique hash value found
-
- - rewrite callers; nop out kCFI
-
- - rewrite all __cfi_\sym
-
- - rewrite all callers
-
- - enable IBT
-
-And the same on module load I suppose.
-
-But I've only thought about this, not actually implemented it, so who
-knows what surprises are lurking there :-)
-
-> Random extra thoughts... feel free to ignore. :) Given that both CFI
-> schemes depend on an attacker not being able to construct an executable
-> memory region that either starts with endbr (for FineIBT) or starts with
-> hash & 2 bytes (for kCFI), we should likely take another look at where
-> the kernel uses PAGE_KERNEL_EXEC.
-> 
-> It seems non-specialized use is entirely done via module_alloc(). Obviously
-> modules need to stay as-is. So we're left with other module_alloc()
-> callers: BPF JIT, ftrace, and kprobes.
-> 
-> Perhaps enabling CFI should tie bpf_jit_harden (which performs constant
-> blinding) to the value of bpf_jit_enable? (i.e. either use BPF VM which
-> reads from non-exec memory, or use BPF JIT with constant blinding.)
-> 
-> I *think* all the kprobes and ftrace stuff ends up using constructed
-> direct calls, though, yes? So if we did bounds checking, we could
-> "exclude" them as well as the BPF JIT. Though I'm not sure how
-> controllable the content written to the kprobes and ftrace regions are,
-> though?
-
-Both ftrace and kprobe only write fairly simple tramplines based off of
-a template. Neither has indirect calls.
-
-> For exclusion, we could separate actual modules from the other
-> module_alloc() users by maybe allocating in opposite directions from the
-> randomized offset and check indirect calls against the kernel text bounds
-> and the new modules-only bounds. Sounds expensive, though. Maybe PKS,
-> but I can't imagine 2 MSR writes per indirect call would be fast. Hmm...
-
-I'm not sure what problem you're trying to solve..
+>
+>
+>
+>
+> Best regards,
+> Krzysztof

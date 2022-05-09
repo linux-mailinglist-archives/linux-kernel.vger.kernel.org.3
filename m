@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BAD51FA85
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA7651FA8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiEIKyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S230443AbiEIK4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiEIKyd (ORCPT
+        with ESMTP id S231810AbiEIK4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:54:33 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E32233A58;
-        Mon,  9 May 2022 03:50:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 341A21F43B9C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652093437;
-        bh=MIuLmVe6TIzgT754hZGMYSoOyD19xD3PkF1IXcgoh98=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MaHkG/E3YW6LJ0G4SAtovaqL+jdNBJVE7a3iT0Iu++K4sfapfWhqcY5cd+EZQZ27y
-         Ix+vNnxkEsWHplam96f531sR+hi1mAfSJmaWeZZwumwaL0LqXAEg01wFCvsX7V2UqP
-         da0oJ+fb2xi8Ff8KGf3utMwi7s/1Wn8IbkI1R9eBH/aiJ2ReDRQm1dUgxi1FRIzA1+
-         k7aOXbcYKAgy7KgwXBMme94SXNGKXIE3oH68474nZ+sw1kjQMLKkGxGLjksK+8eyk9
-         kSvfIcy8xIdcRhbz4pWKX1dpug9cAiF7pnmLnnBMksfdu9TNixAiUJ1q0zX5U/V6KS
-         tGBvfTnFh9vUw==
-Message-ID: <85fcdcd0-e7c5-5192-9113-c69f9c3a6385@collabora.com>
-Date:   Mon, 9 May 2022 12:50:33 +0200
+        Mon, 9 May 2022 06:56:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F04239B2C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:52:16 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N3sye-1nwZfH1eoi-00zmO3; Mon, 09 May 2022 12:51:55 +0200
+Message-ID: <02be1caf-1f17-7c81-4167-ade690cb6e41@i2se.com>
+Date:   Mon, 9 May 2022 12:51:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 3/3] dt-bindings: mediatek: add ethdr definition for
- mt8195
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] staging: vchiq_arm: get rid of global device
+ structure
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-Cc:     "airlied@linux.ie" <airlied@linux.ie>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20220509044302.27878-1-rex-bc.chen@mediatek.com>
- <20220509044302.27878-4-rex-bc.chen@mediatek.com>
- <46bc32df-e4e8-ac47-426d-8056714f0d5c@linaro.org>
- <5462209c5afb0a638ed777ec1829bb2717c8d76e.camel@mediatek.com>
- <98505974-afad-9639-d4f2-814097b0523b@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <98505974-afad-9639-d4f2-814097b0523b@linaro.org>
+To:     Adrien Thierry <athierry@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220502183045.206519-1-athierry@redhat.com>
+ <20220502183045.206519-3-athierry@redhat.com>
+ <8483a250-da97-1875-4ea3-598f46ae96ce@i2se.com> <YnQTPmNAvpbQl5Ws@fedora>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <YnQTPmNAvpbQl5Ws@fedora>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:cQEfP+WKAagTTaWNIYaA0g3+6RiwmN+CXbxpj5WFv4ukO5e8j/8
+ QBg9Sxtl08kbLIDV0Wx4CbYFlb/XKvLmUYhg7Rvm8hnGE9MCOja9dMGYxlAB8N9EveBEgAO
+ njy/wlFPalpOIvDf58BpdqjCFSwMmqxD173W69Gqm5XwZllNYdShSxFvR7QkLl5qV0tcxxV
+ JOlgGBVaNJs+TD6qLkiDQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gps63oi8aLU=:BsZvN1PVCYlPgjPdjjM602
+ I5eoAMluwhN/WTIz1ZTaf82mdnz3Cje/dp0hF4OyeWUZuTgJxlAlHTAWTIGu6LM1SM79IcUS6
+ zFNLvVQFfWGvyJ4ZDAUiOT3OugiDDj7LQpdLOQRu3n7v9eB0HRdTalPWa8FS7fZF0I91lla3N
+ RQoGxuvoaDRLwAx8z/UGuShLZU5eYf5vcCBPC7cjd8/LaWtAefgH2OdVYUbiu1b285VlegiGk
+ O3X2RUgBRl14xZDR0mZ/pwwbxxQmPHRMy70wkiTeYsDnSRaYbDATjdIC1Zu0fd8GA1c73kdyQ
+ TNh8FUcNgas36DTqbC9Ar5/+gVhIJW0aeWn5Fk/UWQ435MYpPP/kdk1mc4U5N0JCPM9NJDU6E
+ R3i7t8QohuWu9nWq57QqTS1oTw3X8fbpmjagxuh0G1K5n3UKu0TMO1mnom4GaiVf+FFAbeRgH
+ vZ7wj7S8CRdVgJ3GkDmclGyGerM9ZkoFml1TynrInnuGZ92OxMgAbV28aCuCh1sRjb3W6UqYA
+ we6VQZdsSBapIcIaMXGDwssawUoxyQRAvQpqIzhdnKXD8srdy0rnAZ6qD9DpX/tLblFX3sdOB
+ iRvpusrIg150lp1yRKaOjXGEcNOkw7eTJNj5K0aJICnJciEhMdUajo8xVeVWIN37KZtf6c4Y+
+ eqJtPTsZHeTa7CbMjGy0TTJQBEwIHPBs7TcejBCKpBOCRjps5uD7eS3QVxRWXmC2VAJAI2rMh
+ 4CRIovzFmhTSVJiw
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/05/22 12:44, Krzysztof Kozlowski ha scritto:
-> On 09/05/2022 10:54, Rex-BC Chen wrote:
->>>> +    soc {
->>>> +        #address-cells = <2>;
->>>> +        #size-cells = <2>;
->>>> +
->>>> +        disp_ethdr@1c114000 {
->>>
->>> No underscores in node name. Generic node names, so display-
->>> controller?
->>>
->>
->> OK, we will change the node name to ethdr like in dts
->> like this:
->> ethdr0: ethdr@1c114000 {
->> ...
->> }
-> 
-> Is "ethdr" a generic name? Is it an abbreviation of "EnergyTrace™ High
-> Dynamic Range"? If yes, it also looks specific to Texas Instruments...
-> 
-> Best regards,
-> Krzysztof
+Hi Adrien,
 
+Am 05.05.22 um 20:11 schrieb Adrien Thierry:
+> Hi Stefan,
+>
+> Thanks for your feedback.
+>
+>> i understand the motivation, but could you please explain more in detail
+>> why you decided to add vchiq_instance instead of device reference? I
+>> think vchiq_instance is a more internal structure which should be
+>> avoided in kernel consumers like bcm2835-audio or mmal.
+> I used the vchiq_instance instead of the device reference because in order
+> to get rid of the vchiq_states array (patch 3/3 [1]), I needed another way
+> to access the vchiq_state in the 'handle_to_service' function. So I passed
+> the vchiq_instance to it (I could also have passed the state directly
+> instead of the instance), and this propagated in the caller chain all the
+> way up to 'vchiq_bulk_transmit' and friends which are used in the
+> bcm2835-audio consumer.
 
-That's mediatek-drm, and this refers to the HDR block in the display IP...
+Okay, in this case please add this explanation to the commit message.
 
-Though, I have no idea of what "ET" stands for in "ETHDR", so, it would be
-definitely nice if MediaTek can write the meaning in the description, like
+Best regards
 
-description:
-   ETHDR (E??? T??? High Dynamic Range) is designed for HDR video and ...blah
-
-Cheers,
-Angelo
+>    Please let me know if you see a better way of
+> doing this :)
+>
+> Thanks,
+>
+> Adrien
+>
+> [1] https://lore.kernel.org/all/20220502183045.206519-4-athierry@redhat.com/
+>

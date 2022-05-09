@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FE952046B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A231520469
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240162AbiEISXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S240173AbiEISXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240150AbiEISXf (ORCPT
+        with ESMTP id S240150AbiEISXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:23:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D28213C4FE;
-        Mon,  9 May 2022 11:19:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADDFA61627;
-        Mon,  9 May 2022 18:19:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3FBC385B2;
-        Mon,  9 May 2022 18:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652120377;
-        bh=sEtyjmgOrjIs5NYv5HPC0xk/tdYrRW3tbsJDYBclXYk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QxjxEobBOscR/f/wqE5KqFFibxHBYEbMltpkRKBAnS7TIDyAfo31CyGMDkGQg/3J2
-         CSgYm/b4Um//Ob7QXYzVoPwq7Z+JBR8dbsnNgYaeueJZy8t17DNMQygwvpK3Ztd4sp
-         iqilsKMgPqHknWIpd4XUmv70r9KdcevXWafnn9Kxcc4NQn0UAwBjC7LxSYF0TC0gmK
-         qL4VqlqrmaY02ut3JmWVbdGokASWh1yIDvabGmSm3M115Vb5a1oR0FMSqdD65VgbO7
-         atMKHSrq1S2Ghayfh4VZYne1f6GlRhNOm8OTjChJMqHU6gc4Hf6nbzZyDnK2jaYSap
-         Q7aUkUZatZjPA==
-Date:   Mon, 9 May 2022 19:19:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jiaxin.yu@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, shane.chien@mediatek.com,
-        linux-mediatek@lists.infradead.org, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, kernel@collabora.com, tzungbi@google.com
-Subject: Re: [PATCH 0/3] Add missing dt-binding properties for audio
- components on mt8192-asurada
-Message-ID: <YnlbMjTEORFSbxXS@sirena.org.uk>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
- <165211666198.1065748.1151009730882312510.b4-ty@kernel.org>
- <20220509181629.ettskdxfvwvqaq76@notapiano>
+        Mon, 9 May 2022 14:23:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA552CE237
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652120383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PDFIEGAmMkYI3lcSgWTP/D9Zx+5IJKr94HLnqcFoXoI=;
+        b=JbkIx0gcvx3iZGAwdftphW2Z3cWIeQjcYZBbAdYcn670P275YxucVpr2hCIcRaSWw/UOrS
+        XlYRFKEm5pMx2VL/y7tMCdYfAsTclyjvw8/cm5urj8HOYh9MbjNrSsTR9U3RjKMhZsrdUA
+        7KuXUbzlVtZ7rjAQ3mTSH3l0m0kIuPY=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-627-pqgms_YLNM-tXpkbHb7qnA-1; Mon, 09 May 2022 14:19:42 -0400
+X-MC-Unique: pqgms_YLNM-tXpkbHb7qnA-1
+Received: by mail-qt1-f197.google.com with SMTP id o16-20020ac87c50000000b002f3b8cd6a7fso12683458qtv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:19:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=PDFIEGAmMkYI3lcSgWTP/D9Zx+5IJKr94HLnqcFoXoI=;
+        b=Y5xe6BeMQLCD4CRKzkt0adXSoYooax7lSEfHHJ6ZfSpXY0pIRnklDKa8Euicxdux5a
+         zsgz8zb8Ll0d3rQ/Xv4rMGOXPei/92C/qC3Tad8JyLsYeIjY3yFSwPLTW1rP8gappy+1
+         6SRowucagFEOCe1VJCJQFv9HGS4fmUFBwDBWoGqhjAzA1vxFniYwq/vi5FXpRFLDOCgt
+         TW986U4HWBgYbCRmFuu9kkN4YAaCM27Edu5F8ws/SSViBwyBHK52RdaG5+ZwXxxqLlT7
+         JcFCWY5Z6l5V5sF60rz0XAAdwiHObWijvUnfRo9QGqcR0mmsniOTNVgDIuM6JZs8Rioy
+         Kwlw==
+X-Gm-Message-State: AOAM533clxgpQUiihbdzFuB4etGHcXOGRSqewrC91k13yBdwUqasWBB/
+        dpBgo4NgWbG7Yg7LIgrNPoPV+aTs0S017EClJpK67w5xpbMJiew4jnvy5O+g/QlfZKeIDLpM08p
+        8QRSkO5OKS4qapwgHuCnCKOiM
+X-Received: by 2002:ad4:594b:0:b0:45a:9692:14a3 with SMTP id eo11-20020ad4594b000000b0045a969214a3mr14821467qvb.107.1652120381817;
+        Mon, 09 May 2022 11:19:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxTKWoBx8hf4aO9oeLuMx3Wy5UIKOWsPo4PTItAkI7mNq7lPxt1S1WQ+QbyFWj4uh2wXeAczA==
+X-Received: by 2002:ad4:594b:0:b0:45a:9692:14a3 with SMTP id eo11-20020ad4594b000000b0045a969214a3mr14821445qvb.107.1652120381597;
+        Mon, 09 May 2022 11:19:41 -0700 (PDT)
+Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
+        by smtp.gmail.com with ESMTPSA id y7-20020ac87c87000000b002f39b99f67csm8127235qtv.22.2022.05.09.11.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 11:19:41 -0700 (PDT)
+Message-ID: <1deeebc415c188c35f090048f32d7dacd93b14b1.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau: reorder nouveau_drm_device_fini
+From:   Lyude Paul <lyude@redhat.com>
+To:     Mark Menzynski <mmenzyns@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        nouveau <nouveau@lists.freedesktop.org>
+Date:   Mon, 09 May 2022 14:19:39 -0400
+In-Reply-To: <82c9b246bcbe544036d2fc0873f15f8483947a57.camel@redhat.com>
+References: <20220504171851.17188-1-mmenzyns@redhat.com>
+         <7574d491866ffa7c1a4607885b76140ba4206477.camel@redhat.com>
+         <CA+i2r=uKq=CWts-6wXh2qqy6=vEVHLY0vRBxzcA-mg0P8wXOZg@mail.gmail.com>
+         <82c9b246bcbe544036d2fc0873f15f8483947a57.camel@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4y1TD9hR4+zXz6BZ"
-Content-Disposition: inline
-In-Reply-To: <20220509181629.ettskdxfvwvqaq76@notapiano>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +87,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Also JFYI Mark - I just realized that your email client is defaulting to
+sending HTML mail when you reply to me, that doesn't really make it onto the
+mailing list at all so you probably want to fix that.
 
---4y1TD9hR4+zXz6BZ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also - I misspoke here again, I think it should actually be a call to
+drm_kms_helper_poll_fini() instead since that will both cancel the output poll
+worker and update dev->mode_config.poll_enabled to prevent the output poll
+worker from starting up again. The documentation doesn't say it's fine to call
+drm_kms_helper_poll_disable() after that, but it seems to be safe from looking
+at the code - and I think someone just generally forgot to write docs for
+drm_kms_helper_poll_fini()…
 
-On Mon, May 09, 2022 at 02:16:29PM -0400, N=EDcolas F. R. A. Prado wrote:
+On Mon, 2022-05-09 at 13:59 -0400, Lyude Paul wrote:
+> On Mon, 2022-05-09 at 15:13 +0200, Mark Menzynski wrote:
+> > I think there are no direct issues with initialization in the state how it
+> > is now. I suspect it's because "drm_kms_helper_poll_enable()" starts the
+> > first worker thread with a delay, which gives enough time to initialize
+> > required resources. I changed the initialization part to keep it
+> > consistent with the finish part, which is the one causing troubles.
+> 
+> I think I may have misspoke on what the issue was here since I was about to
+> leave work. The MST bit might not actually be an issue, however I think
+> nouveau_fbcon_init() being called before nouveau_display_init() would be an
+> issue since nouveau_fbcon_init() can trigger a modeset - and we can't
+> perform modesets before nouveau_display_init() has set things up.
+> 
+> Looking at the docs for drm_kms_helper_poll_disable() - I think the actual
+> fix here (to ensure that we still call drm_kms_helper_poll_disable() at the
+> right time during suspend) would be to actually add another call to
+> drm_kms_helper_poll_disable() into nouveau_fbcon_fini() before we call
+> nouveau_fbcon_accel_fini() and everything after. This should make sure that
+> we stop the output polling work early on driver unload, and since the docs
+> mention that it's OK to disable polling more then once with
+> drm_kms_helper_poll_disable() I don't see any issues with that.
+> 
+> 
+> > 
+> > I am not sure where I could move "drm_kms_helper_poll_enable/disable()",
+> > since it is defined in "drm/drm_probe_helper.c", which is only included in
+> > "nouveau_display.c" and "nouveau_connector.c". Both creating a new
+> > function in "nouveau_display.c", and including "probe_helper.h" and using
+> > poll_enable in a different file like "nouveau_fbcon.c" seem like too big
+> > changes for such small fix. I don't know.
+> > 
+> > Can this new proposed order break something in the finish part as well?
+> > Maybe it would be just better to change the order of "nouveau_drm_finish"
+> > and keep the current order of "noueau_drm_init"?
+> > 
+> > On Thu, May 5, 2022 at 9:57 PM Lyude Paul <lyude@redhat.com> wrote:
+> > > Hmm, I think we might just need to move the drm_kms_helper_poll_enable()
+> > > call
+> > > to the end here instead of all of nouveau_display_init(). I realized
+> > > this
+> > > because in nouveau_display_init() it seems that we actually rely on
+> > > nouveau_display_init() to setup hotplug interrupts - which we do
+> > > actually need
+> > > this early on in the driver probe process.
+> > > 
+> > > That being said though, drm_kms_helper_poll_enable() shouldn't be
+> > > required for
+> > > MST short HPD IRQs from working so moving that instead should work.
+> > > 
+> > > On Wed, 2022-05-04 at 19:18 +0200, Mark Menzynski wrote:
+> > > > Resources needed for output poll workers are destroyed in
+> > > > nouveau_fbcon_fini() before output poll workers are cleared in
+> > > > nouveau_display_fini(). This means there is a time between fbcon_fini
+> > > > and display_fini, where if output poll happens, it crashes.
+> > > > 
+> > > > BUG: KASAN: use-after-free in
+> > > > __drm_fb_helper_initial_config_and_unlock.cold+0x1f3/0x291
+> > > > [drm_kms_helper]
+> > > > 
+> > > > Cc: Ben Skeggs <bskeggs@redhat.com>
+> > > > Cc: Karol Herbst <kherbst@redhat.com>
+> > > > Cc: Lyude Paul <lyude@redhat.com>
+> > > > Cc: David Airlie <airlied@linux.ie>
+> > > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> > > > Cc: "Christian König" <christian.koenig@amd.com>
+> > > > Cc: dri-devel@lists.freedesktop.org
+> > > > Cc: nouveau@lists.freedesktop.org
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Cc: linux-media@vger.kernel.org
+> > > > Cc: linaro-mm-sig@lists.linaro.org
+> > > > Signed-off-by: Mark Menzynski <mmenzyns@redhat.com>
+> > > > ---
+> > > >  drivers/gpu/drm/nouveau/nouveau_drm.c | 17 ++++++++---------
+> > > >  1 file changed, 8 insertions(+), 9 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > > > b/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > > > index 561309d447e0..773efdd20d2f 100644
+> > > > --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > > > +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > > > @@ -588,12 +588,6 @@ nouveau_drm_device_init(struct drm_device *dev)
+> > > >         if (ret)
+> > > >                 goto fail_dispctor;
+> > > >  
+> > > > -       if (dev->mode_config.num_crtc) {
+> > > > -               ret = nouveau_display_init(dev, false, false);
+> > > > -               if (ret)
+> > > > -                       goto fail_dispinit;
+> > > > -       }
+> > > > -
+> > > >         nouveau_debugfs_init(drm);
+> > > >         nouveau_hwmon_init(dev);
+> > > >         nouveau_svm_init(drm);
+> > > > @@ -601,6 +595,12 @@ nouveau_drm_device_init(struct drm_device *dev)
+> > > >         nouveau_fbcon_init(dev);
+> > > >         nouveau_led_init(dev);
+> > > >  
+> > > > +       if (dev->mode_config.num_crtc) {
+> > > > +               ret = nouveau_display_init(dev, false, false);
+> > > > +               if (ret)
+> > > > +                       goto fail_dispinit;
+> > > > +       }
+> > > > +
+> > > >         if (nouveau_pmops_runtime()) {
+> > > >                 pm_runtime_use_autosuspend(dev->dev);
+> > > >                 pm_runtime_set_autosuspend_delay(dev->dev, 5000);
+> > > > @@ -641,15 +641,14 @@ nouveau_drm_device_fini(struct drm_device *dev)
+> > > >                 pm_runtime_forbid(dev->dev);
+> > > >         }
+> > > >  
+> > > > +       if (dev->mode_config.num_crtc)
+> > > > +               nouveau_display_fini(dev, false, false);
+> > > >         nouveau_led_fini(dev);
+> > > >         nouveau_fbcon_fini(dev);
+> > > >         nouveau_dmem_fini(drm);
+> > > >         nouveau_svm_fini(drm);
+> > > >         nouveau_hwmon_fini(dev);
+> > > >         nouveau_debugfs_fini(drm);
+> > > > -
+> > > > -       if (dev->mode_config.num_crtc)
+> > > > -               nouveau_display_fini(dev, false, false);
+> > > >         nouveau_display_destroy(dev);
+> > > >  
+> > > >         nouveau_accel_fini(drm);
+> > > 
+> 
 
-> this series wasn't supposed to be merged yet, I'm in the process of prepa=
-ring
-> and sending a v2. Well, for patch 1 at least, which needs some improvemen=
-ts
-> still. Patches 2 and 3 weren't going to be changed, so those would be fin=
-e to
-> keep merged if you want.=20
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-Please send a revert for the first patch with appropriate changelog if
-you want it dropping.
-
---4y1TD9hR4+zXz6BZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5WzIACgkQJNaLcl1U
-h9DR5Af/TprbNPs5eG3YL7V+LKRWqR7r5/vg4Mv3tT5GnibQHJMnJKNy2UouZxTo
-rkacxPv3r1VyUUeK8zHUkyzJrNx2E3UkAlpZ1lwC/HERm66keB5ugaBQpSDEj9/p
-ACsF6I1K/fAJq4cwI0vhDWWUXG5Ha0veDao+qfUaTVOyn4EsHCB21OBnsJFRTuLN
-26cIS9fHHyxKc055J2rLi4LqpTdxVOuuuJXkD4ScZmflZkEfH1Nea8JMeCnPnXXy
-AANm+RFzCi2lMMAO8BCv8PQCbuDxJHXCbx71WenqSS0Cd+r3VlGv5u19fZRGuv0z
-k8nbklED1MQtWoNvx67Kz6aY9MpB1w==
-=BxKV
------END PGP SIGNATURE-----
-
---4y1TD9hR4+zXz6BZ--

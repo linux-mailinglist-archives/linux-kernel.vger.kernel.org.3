@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0257B51FDC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E3A51FDBD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbiEINNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S235294AbiEINOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbiEINNA (ORCPT
+        with ESMTP id S235184AbiEINOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:13:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90C1E2A7688
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652101742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9C8drEYqngKOm3nncV9RRJ4ZJYInBOQKfqINsG0BQFA=;
-        b=WTWlWkUqRPMyTrEfzmeQjHaZBU3j8KbueY6mLhWF8iNg8r787smSwLsTQnuRBH+0Rxef7k
-        s9d8BEd8lPoKeiLE7lsBSizdEL3W9o5FfDMxjf45oIlc9AjTbGpNHe4JpjvkU0W7jJjqoZ
-        5heN4khFypWH8x7QU77gK7JWIszfUEo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-KQMTzUUtOm211bSr8Hp74w-1; Mon, 09 May 2022 09:09:01 -0400
-X-MC-Unique: KQMTzUUtOm211bSr8Hp74w-1
-Received: by mail-wm1-f71.google.com with SMTP id p24-20020a1c5458000000b003945d2ffc6eso4242201wmi.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 06:09:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9C8drEYqngKOm3nncV9RRJ4ZJYInBOQKfqINsG0BQFA=;
-        b=5bkqkXyOKJAGjUdybF+wTQNzOVg6Komt8WHVc+VEH87J/eIzn4xsh5uomTdsNIq+Ve
-         paFSZTw5/2l/qAIybqOf3ymcglZyDQfa9292SbDAVsKnp5pFqxLkzyrBTeBBv3OCYCIF
-         bWmu41bJzmpvOuGiyBtu7s7ENgQgM4lBWj5ZGhM+GpoMnb6n7JzmxWgSR8bhZYbuQE/L
-         pqVEGPHifKQajaRPgtgbabJPK/iddXsz4jhMJI2drJPg765/raV03GkPMmqWCQvYqMcv
-         tXy2T9tc747ojqQpqMoQy7kqCaUsN2UoGzW95R1c+2g5YVvWij8LGR/gOEPhzjWg+MMy
-         4ipg==
-X-Gm-Message-State: AOAM530lmi/gsoIB/xN0+oOIdULuvizle2epBZ7pQ0vRDDKRd182SWqn
-        KNf5LTpxid8RnzMWgBIZHmyXBBbPBQHoJ7XVaOl/a+ZGbUki34PU03iK6W+s+MLEdYnSJeR4c/9
-        1m4OSmA3rb46yGtclI4ZrYDNmgu3V+bRvzCjAdYDGMbK70UJwjjAQAyUPs8QVc1G4qSWtCVgOnC
-        k=
-X-Received: by 2002:a05:6000:1869:b0:20c:5362:1295 with SMTP id d9-20020a056000186900b0020c53621295mr14079759wri.700.1652101740457;
-        Mon, 09 May 2022 06:09:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyDG6lbGPaq84WzEwCdXcOkQUQu+pRyyBz43QQu3IUWtgwSbAp0rMkkKwCQUS43pMkFMDHl0A==
-X-Received: by 2002:a05:6000:1869:b0:20c:5362:1295 with SMTP id d9-20020a056000186900b0020c53621295mr14079728wri.700.1652101740162;
-        Mon, 09 May 2022 06:09:00 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z22-20020a05600c0a1600b003942a244eddsm13120297wmp.34.2022.05.09.06.08.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 06:08:59 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org
-Subject: [PATCH] drm/todo: Add entry for converting kselftests to kunit
-Date:   Mon,  9 May 2022 15:08:46 +0200
-Message-Id: <20220509130846.694397-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 9 May 2022 09:14:43 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97322519;
+        Mon,  9 May 2022 06:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=c6E44QfcLWCPcpfVVn8DZm/tazb9qDNjecxU8jgjjwM=; b=JQ1X+XDjDPRoAxPLkbe9tWes8w
+        l11iC7oa/HVnyRK3qB7UvK9JEgQqPIREqD5654T0lMLes3kGheOm/R45s0nxu4hyBPxmCTVnzlJkN
+        ZvlwDaZFuWVIh4IaLUzoP+QdJvpm215SH2+0rVomODoRdVpIAavgxOQl3rDnkTMN+fyPnfNOV7B7S
+        PwRkKHJor0sF94EKnip9+x+OMSUvYBWlrOB2NiCodRGVM8ztswBp00gdyDLuMLY0TLuRV/nOMh+Z7
+        dku4FKzrs/p9E3LkAgwz4nFi/oHL/EcQWXaMAdDUro5POIL0/IvuDCL2llWo8K6mm9F1PYJhGhMV8
+        hibQS8tw==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1no39b-0005V6-KV; Mon, 09 May 2022 15:10:24 +0200
+Message-ID: <65f24bc5-2211-0139-ee12-b2608e81ceb1@igalia.com>
+Date:   Mon, 9 May 2022 10:09:21 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 09/30] coresight: cpu-debug: Replace mutex with
+ mutex_trylock on panic notifier
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-10-gpiccoli@igalia.com>
+ <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many of the kselftests in DRM can be converted to kunit tests instead,
-since that framework is more suitable for unit testing.
+On 28/04/2022 05:11, Suzuki K Poulose wrote:
+> Hi Guilherme,
+> 
+> On 27/04/2022 23:49, Guilherme G. Piccoli wrote:
+>> The panic notifier infrastructure executes registered callbacks when
+>> a panic event happens - such callbacks are executed in atomic context,
+>> with interrupts and preemption disabled in the running CPU and all other
+>> CPUs disabled. That said, mutexes in such context are not a good idea.
+>>
+>> This patch replaces a regular mutex with a mutex_trylock safer approach;
+>> given the nature of the mutex used in the driver, it should be pretty
+>> uncommon being unable to acquire such mutex in the panic path, hence
+>> no functional change should be observed (and if it is, that would be
+>> likely a deadlock with the regular mutex).
+>>
+>> Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
+>> Cc: Leo Yan <leo.yan@linaro.org>
+>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Cc: Mike Leach <mike.leach@linaro.org>
+>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> How would you like to proceed with queuing this ? I am happy
+> either way. In case you plan to push this as part of this
+> series (I don't see any potential conflicts) :
+> 
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-Suggested-by: Maxime Ripard <maxime@cerno.tech>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+Hi Suzuki, some other maintainers are taking the patches to their next
+branches for example. I'm working on V2, and I guess in the end would be
+nice to reduce the size of the series a bit.
 
- Documentation/gpu/todo.rst | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+So, do you think you could pick this one for your coresight/next branch
+(or even for rc cycle, your call - this is really a fix)?
+This way, I won't re-submit this one in V2, since it's gonna be merged
+already in your branch.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 10bfb50908d1..513b20ccef1e 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -617,6 +617,17 @@ Contact: Javier Martinez Canillas <javierm@redhat.com>
- 
- Level: Intermediate
- 
-+Convert Kernel Selftests (kselftest) to KUnit tests when appropriate
-+--------------------------------------------------------------------
-+
-+Many of the `Kselftest <https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html>`_
-+tests in DRM could be converted to Kunit tests instead, since that framework
-+is more suitable for unit testing.
-+
-+Contact: Javier Martinez Canillas <javierm@redhat.com>
-+
-+Level: Starter
-+
- Enable trinity for DRM
- ----------------------
- 
--- 
-2.35.1
+Thanks in advance,
 
+
+Guilherme

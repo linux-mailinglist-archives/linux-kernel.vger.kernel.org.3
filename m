@@ -2,212 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9588F52048B
+	by mail.lfdr.de (Postfix) with ESMTP id E148252048C
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240170AbiEISc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S240186AbiEISdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbiEISc0 (ORCPT
+        with ESMTP id S240185AbiEISdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:32:26 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3387223DEE7;
-        Mon,  9 May 2022 11:28:31 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id b32so9846647ljf.1;
-        Mon, 09 May 2022 11:28:31 -0700 (PDT)
+        Mon, 9 May 2022 14:33:39 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AC52B09D8
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:29:44 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y41so8137935pfw.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OFdiQee2JaVK1VRbgYxKSyD1ZYs2T7Lr+mUcAYmmUBg=;
-        b=eqYIxO4CVOAKfJpKOtOJtdbINiSrGUbU745/vjdjpsFIwmPBGnDlOWL81NLzOHvD1R
-         SbTSiQEtpYjlMvj13r6/+LvsU0xKdC9M2Zmo9dMEy5EBsFiA0gd5gceX/JfPqJMXyQiM
-         prPPkPi9TAXIlE+wDq26j6PTNDwoeYhJGNmHNRPALsCeEM6sflT5xjcNZXASgDoZCG5b
-         galcxO28f32DbPrU5KCJjHh8bmcD56M6pD3tz1XDH+/Rc2FhSouNIP0q/gj5uvKOKlti
-         KKRKxMQj5Rbu12KpKtYn8+wO8lXax2n33JeZYDTTzjCFUytQxTvd4n1zj/1AV9h+UIt2
-         DyCw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HT8JD8HOTg70SDyIzNGh8qklo/ybWwxwLyVZIAu4uKc=;
+        b=XcvLTWGxN4frUHzM4LzCHdAuFx3DpO20/OXKwC2zVshCYLJaALwhqZIRXwaXuun6OA
+         gwtIPYUj8zYlJGRfZpiR/xVyPUYBP58JmN68uPjbdKjbpGg3Th2W16JOjKWNOB3LxWd4
+         iWp1/IaoAx7+oCYctKVczAa6fFdOvkoVFg2hPG/ks0+DECCoo14DWpdUleauO0QAY/Lb
+         uaTxBtvLt1hevoDrFbYIppb2fVwy+IdqvduULR3vLQn9RJYoI75+KKP/4kbExVvFgkpv
+         n4DvUXLPNOOLQpaVSAgsIGfPY9P7auJjP9FtCLlZMZOI979Eeeres3CyWxbQibIJYuVQ
+         H0+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OFdiQee2JaVK1VRbgYxKSyD1ZYs2T7Lr+mUcAYmmUBg=;
-        b=3Ww8+Ex8F19YUgnHNmxN7Gs1CxTGzgW2WFjn83OqCMDQMoPiFHoKwZSyyOjEhLc9JB
-         DfhGOJHMIFHTp7lAg0XBdRAdUbeutKdPqw1QmwXHU4BdciTaHoDCOMlh7zFx6Ecj7+Fv
-         Ok7avvb7BPBk4RxCtBzOyYjTk0NkgNEehhD974dmEhcQDcKvnlGFecFdNwc30AK9twQG
-         fLRD1gsadhD+pGzNYhpb2EDEjXn4GxaeMdUYii3Qh3OE4Q3wDiUy9uUzIbcnabQHRyuE
-         M6ByHiDfqLReDaWmBgt0FMKhKlAPo9x/du+4zUrMCKSi4rSIznbcqiDjIIoObCbn9yhy
-         YecA==
-X-Gm-Message-State: AOAM531bOcE8xiP9Iozc0TNBGTXKLJl/yfbXXPOXVrehpHvAjpMhs/y4
-        Ov4Bj74c5WdWSlC0b6mgZqg=
-X-Google-Smtp-Source: ABdhPJyQn+SpozsKk+RJ2UlJlYU3NfCIrChcGSiMMdQfm0YSWeWiFnBEa4gk5LZJsHd7SBgL3UclHw==
-X-Received: by 2002:a2e:a550:0:b0:250:5ae3:c172 with SMTP id e16-20020a2ea550000000b002505ae3c172mr11247867ljn.265.1652120909327;
-        Mon, 09 May 2022 11:28:29 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id be37-20020a056512252500b0047255d211d7sm2011625lfb.262.2022.05.09.11.28.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HT8JD8HOTg70SDyIzNGh8qklo/ybWwxwLyVZIAu4uKc=;
+        b=OIOddgv+GEJZ6ErKZFNCsGtV3yeuq7c/yfL+kqMCj0d1usdk7Oml8Ls4Vtz2TV42no
+         TcuAeDNgnYG2J/eLP1SppA730Yr/iz6H5t/E+oAE7vfNS1pNxzzHj/O5i+SNZ1k6XBmR
+         MxE/RfbQ+ZwVKJj6S7piDWZlp2B8qHYQxdXUbEydew2qotg4YhZUt1DNfhSeirFPz9EI
+         +PfB8Q+hq3hZrBlKZZ3+TI7KXRrlgvdx1pLpx6uyLJSaXksVoNjXD8N4zKMSOG4h+uh9
+         RdPZVgoGBySumwa/pXxf7g+qABVd1/BRxtba87z9YgrtLTdHWI72ygWKwokWm0ULcbac
+         fpGA==
+X-Gm-Message-State: AOAM5328ZG9H9mKsGmlGFdv843pr3rglLo0yBuuFCXel8MbUT8rIOx4L
+        jZcc9DaaHSU17UiAPYO0qvV2Iw==
+X-Google-Smtp-Source: ABdhPJzSD1S4Vbwz090UVw92it+rCH+3IIV0yVjA3VXqDucYwpY7LMkmNRSFkJFpxGMCjeM1K3cCpA==
+X-Received: by 2002:a05:6a00:16c7:b0:4f7:e497:69b8 with SMTP id l7-20020a056a0016c700b004f7e49769b8mr17070165pfc.6.1652120984019;
+        Mon, 09 May 2022 11:29:44 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170902aa9400b0015ebbaccc46sm177241plr.159.2022.05.09.11.29.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 11:28:28 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Mon, 9 May 2022 20:28:26 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Alison Chaiken <achaiken@aurora.tech>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
- context
-Message-ID: <YnldSkaWu40cVimj@pc638.lan>
-References: <YnVLQozNFvgk3olP@pc638.lan>
- <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnY33nq5jl6FLFOu@pc638.lan>
- <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
- <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
- <20220509033740.GM1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSbWetMt2_-m4G9Nt5S8ybATihB+5FMJMMo3jKDG4pPjg@mail.gmail.com>
- <20220509181417.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 09 May 2022 11:29:43 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     kvm@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3] RISC-V: KVM: Introduce ISA extension register
+Date:   Mon,  9 May 2022 11:29:37 -0700
+Message-Id: <20220509182937.1881849-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509181417.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, May 09, 2022 at 01:17:00PM -0400, Joel Fernandes wrote:
-> > On Sun, May 8, 2022 at 11:37 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >
-> > > On Sun, May 08, 2022 at 08:17:49PM -0400, Joel Fernandes wrote:
-> > > > On Sun, May 8, 2022 at 5:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >  [...]
-> > > > > > Also, I think it is wrong to assume that a certain kind of system will
-> > > > > > always have a certain number of callbacks to process at a time. That
-> > > > > > seems prone to poor design due to assumptions which may not always be
-> > > > > > true.
-> > > > >
-> > > > > Who was assuming that?  Uladzislau was measuring rather than assuming,
-> > > > > if that was what you were getting at.  Or if you are thinking about
-> > > > > things like qhimark, your point is exactly why there is both a default
-> > > > > (which has worked quite well for a very long time) and the ability to
-> > > > > adjust based on the needs of your specific system.
-> > > >
-> > > > I was merely saying that based on measurements make assumptions, but
-> > > > in the real world the assumption may not be true, then everything
-> > > > falls apart. Instead I feel, callback threads should be RT only if 1.
-> > > > As you mentioned, the time based thing. 2. If the CB list is long and
-> > > > there's lot of processing. But instead, if it is made a CONFIG option,
-> > > > then that forces a fixed behavior which may fall apart in the real
-> > > > world. I think adding more CONFIGs and special cases is more complex
-> > > > but that's my opinion.
-> > >
-> > > Again, exactly what problem are you trying to solve?
-> > >
-> > > From what I can see, Uladzislau's issue can be addressed by statically
-> > > setting the rcuo kthreads to SCHED_OTHER at boot time.  The discussion
-> > > is on exactly how RCU is to be informed of this, at kernel build time.
-> > >
-> > > > > > Can we not have 2 sets of RCU offload threads, one which operate at RT
-> > > > > > and only process few callbacks at a time, while another which is the
-> > > > > > lower priority CFS offload thread - executes whenever there is a lot
-> > > > > > of CBs pending? Just a thought.
-> > > > >
-> > > > > How about if we start by solving the problems we know that we have?
-> > > >
-> > > > I don't know why you would say that, because we are talking about
-> > > > solving the specific problem Vlad's patch addresses, not random
-> > > > problems. Which is that, Android wants to run expedited GPs, but when
-> > > > the callback list is large, the RT nocb thread can starve other
-> > > > things. Did I misunderstand the patch? If so, sorry about that but
-> > > > that's what my email was discussing. i.e. running of CBs in RT
-> > > > threads. I suck at writing well as I clearly miscommunicated.
-> > >
-> > > OK.
-> > >
-> > > Why do you believe that this needs anything other than small adjustments
-> > > the defaults of existing Kconfig options?  Or am I completely missing
-> > > the point of your proposal?
-> > >
-> > > > > > Otherwise, I feel like we might be again proliferating CONFIG options
-> > > > > > and increasing burden on the user to get it the CONFIG right.
-> > > > >
-> > > > > I bet that we will solve this without adding any new Kconfig options.
-> > > > > And I bet that the burden is at worst on the device designer, not on
-> > > > > the user.  Plus it is entirely possible that there might be a way to
-> > > > > automatically configure things to handle what we know about today,
-> > > > > again without adding Kconfig options.
-> > > >
-> > > > Yes, agreed.
-> > >
-> > > If I change my last sentence to read as follows, are we still in
-> > > agreement?
-> > >
-> > >         Plus it is entirely possible that there might be a way to
-> > >         automatically configure things to handle what we know about today,
-> > >         again without adding Kconfig options and without changing runtime
-> > >         code beyond that covered by Uladzislau's patch.
-> > 
-> > Yes, actually the automatic configuration of things is what I meant,
-> > that's the "problem" I was referring to, where the system does the
-> > right thing for a broader range of systems, without requiring the
-> > users to find RCU issues and hand-tune them (that requires said users
-> > to have tracing and debugging skills and get lucky finding a problem).
-> > To be fair, I did not propose any solutions to such problems either,
-> > it is just some ideas. I don't like knobs too much and I don't trust
-> > users or system designers to get them right most of the time.
-> > 
-> > In that sense,  I don't think making rcuo threads run as RT or not
-> > (which this patch does) is really fixing the problems. In one case,
-> > you might have priority inversion, in another case you might cause
-> > starvation. Probably what is needed is best of both worlds. That said,
-> > I don't have better solutions right now than what I mentioned, which
-> > is to assign priorities to the callbacks themselves and run them in
-> > threads of different priorities.
-> > 
-> > For the record, I am not against the patch or anything like that (and
-> > even if I was, I am not sure that it matters for merging :P)
-> 
-> Fair enough!
-> 
-> And for the record at this end, I would not be surprised if in 2032
-> RCU offloaded callback invocation has sophisticated dynamic tuning of
-> priorities and much else besides.  But one step at a time!  ;-)
-> 
-hh... It is hard to comment because i am a bit lost in this big conversation :)
+Currently, there is no provision for vmm (qemu-kvm or kvmtool) to
+query about multiple-letter ISA extensions. The config register
+is only used for base single letter ISA extensions.
 
-What i have got so far. Joel does not like adding extra *_CONFIG
-options, actually me too since it becomes more complicated thus
-it requires more specific attention from users. I prefer to make
-the code common but it is not possible sometimes to make it common,
-because we have different kind of kernels and workloads.
+A new ISA extension register is added that will allow the vmm
+to query about any ISA extension one at a time. It is enabled for
+both single letter or multi-letter ISA extensions. The ISA extension
+register is useful to if the vmm requires to retrieve/set single
+extension while the config register should be used if all the base
+ISA extension required to retrieve or set.
 
-From the other hand the patch splits the BOOSTING logic into two peaces
-because driving the grace periods kthreads in RT priority is not a big
-issue because their run-times are short. Whereas running the "kthreads-callbacks"
-in the RT context can be long so we end up in throttled situation for
-other workloads.
+For any multi-letter ISA extensions, the new register interface
+must be used.
 
-I see that Paul would like to keep it for CONFIG_PREEMPT_RT, because it
-was mainly designed for that kind of kernels. So we can align with Alison
-patch and her decision, so i do not see any issues. So far RT folk seems
-does not mind in having "callback-kthreads" as SCHED_FIFO :)
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+Changes from v2->v3:
+1. Fixed the comment style.
+2. Fixed the kvm_riscv_vcpu_get_reg_isa_ext function.
+---
+ arch/riscv/include/uapi/asm/kvm.h | 20 +++++++
+ arch/riscv/kvm/vcpu.c             | 99 +++++++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+)
 
-Do you agree with start from keeping it ON for CONFIG_PREEMPT_RT conf.
-by default and OFF for other cases?
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index f808ad1ce500..92bd469e2ba6 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -82,6 +82,23 @@ struct kvm_riscv_timer {
+ 	__u64 state;
+ };
+ 
++/**
++ * ISA extension IDs specific to KVM. This is not the same as the host ISA
++ * extension IDs as that is internal to the host and should not be exposed
++ * to the guest. This should always be contiguous to keep the mapping simple
++ * in KVM implementation.
++ */
++enum KVM_RISCV_ISA_EXT_ID {
++	KVM_RISCV_ISA_EXT_A = 0,
++	KVM_RISCV_ISA_EXT_C,
++	KVM_RISCV_ISA_EXT_D,
++	KVM_RISCV_ISA_EXT_F,
++	KVM_RISCV_ISA_EXT_H,
++	KVM_RISCV_ISA_EXT_I,
++	KVM_RISCV_ISA_EXT_M,
++	KVM_RISCV_ISA_EXT_MAX,
++};
++
+ /* Possible states for kvm_riscv_timer */
+ #define KVM_RISCV_TIMER_STATE_OFF	0
+ #define KVM_RISCV_TIMER_STATE_ON	1
+@@ -123,6 +140,9 @@ struct kvm_riscv_timer {
+ #define KVM_REG_RISCV_FP_D_REG(name)	\
+ 		(offsetof(struct __riscv_d_ext_state, name) / sizeof(__u64))
+ 
++/* ISA Extension registers are mapped as type 7 */
++#define KVM_REG_RISCV_ISA_EXT		(0x07 << KVM_REG_RISCV_TYPE_SHIFT)
++
+ #endif
+ 
+ #endif /* __LINUX_KVM_RISCV_H */
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index 7461f964d20a..0875beaa1973 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -365,6 +365,101 @@ static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
+ 	return 0;
+ }
+ 
++/* Mapping between KVM ISA Extension ID & Host ISA extension ID */
++static unsigned long kvm_isa_ext_arr[] = {
++	RISCV_ISA_EXT_a,
++	RISCV_ISA_EXT_c,
++	RISCV_ISA_EXT_d,
++	RISCV_ISA_EXT_f,
++	RISCV_ISA_EXT_h,
++	RISCV_ISA_EXT_i,
++	RISCV_ISA_EXT_m,
++};
++
++static int kvm_riscv_vcpu_get_reg_isa_ext(struct kvm_vcpu *vcpu,
++					  const struct kvm_one_reg *reg)
++{
++	unsigned long __user *uaddr =
++			(unsigned long __user *)(unsigned long)reg->addr;
++	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
++					    KVM_REG_SIZE_MASK |
++					    KVM_REG_RISCV_ISA_EXT);
++	unsigned long reg_val = 0;
++	unsigned long host_isa_ext;
++
++	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
++		return -EINVAL;
++
++	if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
++		return -EINVAL;
++
++	host_isa_ext = kvm_isa_ext_arr[reg_num];
++	if (__riscv_isa_extension_available(&vcpu->arch.isa, host_isa_ext))
++		reg_val = 1; /* Mark the given extension as available */
++
++	if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
++		return -EFAULT;
++
++	return 0;
++}
++
++static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
++					  const struct kvm_one_reg *reg)
++{
++	unsigned long __user *uaddr =
++			(unsigned long __user *)(unsigned long)reg->addr;
++	unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
++					    KVM_REG_SIZE_MASK |
++					    KVM_REG_RISCV_ISA_EXT);
++	unsigned long reg_val;
++	unsigned long host_isa_ext;
++	unsigned long host_isa_ext_mask;
++
++	if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
++		return -EINVAL;
++
++	if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
++		return -EINVAL;
++
++	if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
++		return -EFAULT;
++
++	host_isa_ext = kvm_isa_ext_arr[reg_num];
++	if (!__riscv_isa_extension_available(NULL, host_isa_ext))
++		return	-EOPNOTSUPP;
++
++	if (host_isa_ext >= RISCV_ISA_EXT_BASE &&
++	    host_isa_ext < RISCV_ISA_EXT_MAX) {
++		/*
++		 * Multi-letter ISA extension. Currently there is no provision
++		 * to enable/disable the multi-letter ISA extensions for guests.
++		 * Return success if the request is to enable any ISA extension
++		 * that is available in the hardware.
++		 * Return -EOPNOTSUPP otherwise.
++		 */
++		if (!reg_val)
++			return -EOPNOTSUPP;
++		else
++			return 0;
++	}
++
++	/* Single letter base ISA extension */
++	if (!vcpu->arch.ran_atleast_once) {
++		host_isa_ext_mask = BIT_MASK(host_isa_ext);
++		if (!reg_val && (host_isa_ext_mask & KVM_RISCV_ISA_DISABLE_ALLOWED))
++			vcpu->arch.isa &= ~host_isa_ext_mask;
++		else
++			vcpu->arch.isa |= host_isa_ext_mask;
++		vcpu->arch.isa &= riscv_isa_extension_base(NULL);
++		vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
++		kvm_riscv_vcpu_fp_reset(vcpu);
++	} else {
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
+ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
+ 				  const struct kvm_one_reg *reg)
+ {
+@@ -382,6 +477,8 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
+ 	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
+ 		return kvm_riscv_vcpu_set_reg_fp(vcpu, reg,
+ 						 KVM_REG_RISCV_FP_D);
++	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
++		return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
+ 
+ 	return -EINVAL;
+ }
+@@ -403,6 +500,8 @@ static int kvm_riscv_vcpu_get_reg(struct kvm_vcpu *vcpu,
+ 	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
+ 		return kvm_riscv_vcpu_get_reg_fp(vcpu, reg,
+ 						 KVM_REG_RISCV_FP_D);
++	else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
++		return kvm_riscv_vcpu_get_reg_isa_ext(vcpu, reg);
+ 
+ 	return -EINVAL;
+ }
+-- 
+2.36.0
 
---
-Uladzislau Rezki

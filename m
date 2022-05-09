@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D696E51FFD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69D951FFE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbiEIObf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S237385AbiEIOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbiEIObL (ORCPT
+        with ESMTP id S237061AbiEIOix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:31:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2486D1D500A;
-        Mon,  9 May 2022 07:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652106437; x=1683642437;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3ojOsUB0BmRtwo5gMeoeGrNl3U9+C7e6Z5b5OxtO0A8=;
-  b=YMNsIjAsIzcwmyjD6vw0WO6/IuANKAru9fAmr9QLJUe9EHqRQxaRyoF2
-   JIqxW8TcY/XiqaiIk7jOhzpq3h3t6txGcAykxCjVJ5u8XhLWufUUh7NOD
-   ckrKIEYnIAOtA6y9oalDbwGNXAldu/2dSkJtF+tfUVRh8OTbKIkLMHilW
-   29VEtr/RX0y7fgPpyCabMu8zDrADYb46MwrOght0CUrpizhzYZmLkG5Qy
-   8Km3T5y0VNOuqhBT1StGF5vubdjQLHq7dFaVYMgwJbf63Z4J3I4XncNfh
-   6NZV9A5whl8rWzQtCojCGbicCQp2FqG0EQSyoN48STOlv3hmGFDKyQoRO
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="163251770"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2022 07:27:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 9 May 2022 07:27:16 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 9 May 2022 07:27:14 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        Mon, 9 May 2022 10:38:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186CF2A76B5
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:35:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C6F615FA
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AC8C385AF;
+        Mon,  9 May 2022 14:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652106899;
+        bh=vfDKNwLVPbOGrvBsC/bFHFyH9ByxjZk7Ny2bY3inWbM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uQMwhwbUUnAYDeU++/wgIqkeNZBLHJbf4vMQP3gzxkpB844FBoWNBm7/rABZXhYbb
+         y80q28vwC0lHQsVKNbnuRokPCXjavY1s3HiZRWGfLa9iqs17PEVV4J8svIomw/wlm+
+         Sq0ef9UE3VvBex/8y+iXuEkyOlM7ebQRcemtcw9krX5jZV11zF8a5T0S/dM2RyAgK4
+         0ruHLnRwU5TYL7hKuRvGeQkBQmaHSFj+4rNF+RNQh45T4GAOuD8nnKrelvJXHdrLuU
+         MuntnYMOO70yE1B9QhQTsn75W0OfuIC4nsU461yplhBtOmr4MZ64PkiY4oxbrvFiVD
+         Jd10kMiGCcfZA==
+Date:   Mon, 9 May 2022 22:26:20 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v5 10/10] riscv: dts: icicle: sort nodes alphabetically
-Date:   Mon, 9 May 2022 15:26:11 +0100
-Message-ID: <20220509142610.128590-11-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220509142610.128590-1-conor.dooley@microchip.com>
-References: <20220509142610.128590-1-conor.dooley@microchip.com>
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 0/4] unified way to use static key and optimize
+ pgtable_l4_enabled
+Message-ID: <YnkkjC065kCTtHBC@xhacker>
+References: <20220508160749.984-1-jszhang@kernel.org>
+ <CAAhSdy1qri5L9pVcZO8areB=TXMSJBg2+cTNMZGQ3g+3Qhxmfg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAAhSdy1qri5L9pVcZO8areB=TXMSJBg2+cTNMZGQ3g+3Qhxmfg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,180 +66,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The icicle device tree is in a "random" order, so clean it up and sort
-its elements alphabetically to match the newly added PolarBerry dts.
+On Mon, May 09, 2022 at 10:07:16AM +0530, Anup Patel wrote:
+> On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > Currently, riscv has several features which may not be supported on all
+> > riscv platforms, for example, FPU, SV48, SV57 and so on. To support
+> > unified kernel Image style, we need to check whether the feature is
+> > suportted or not. If the check sits at hot code path, then performance
+> > will be impacted a lot. static key can be used to solve the issue. In
+> > the past, FPU support has been converted to use static key mechanism.
+> > I believe we will have similar cases in the future. For example, the
+> > SV48 support can take advantage of static key[1].
+> >
+> > patch1 is a simple W=1 warning fix.
+> > patch2 introduces an unified mechanism to use static key for riscv cpu
+> > features.
+> > patch3 converts has_cpu() to use the mechanism.
+> > patch4 uses the mechanism to optimize pgtable_l4|[l5]_enabled.
+> >
+> > [1] http://lists.infradead.org/pipermail/linux-riscv/2021-December/011164.html
+> 
+> Overall, using a script to generate CPU capabilities seems a bit
+> over-engineered to me. We already have RISC-V ISA extension
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../boot/dts/microchip/mpfs-icicle-kit.dts    | 104 +++++++++---------
- 1 file changed, 52 insertions(+), 52 deletions(-)
+Not all riscv features are *ISA* extensions. For example, SV48 and SV57
+are not ISA extensions. IIRC, I asked this question before, here are
+Atish's comments:
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-index 9cd1a30edf2c..044982a11df5 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-@@ -43,23 +43,57 @@ ddrc_cache_hi: memory@1000000000 {
- 	};
- };
- 
--&refclk {
--	clock-frequency = <125000000>;
-+&core_pwm0 {
-+	status = "okay";
- };
- 
--&mmuart1 {
-+&gpio2 {
-+	interrupts = <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>,
-+		     <53>, <53>, <53>, <53>;
- 	status = "okay";
- };
- 
--&mmuart2 {
-+&i2c0 {
- 	status = "okay";
- };
- 
--&mmuart3 {
-+&i2c1 {
- 	status = "okay";
- };
- 
--&mmuart4 {
-+&i2c2 {
-+	status = "okay";
-+};
-+
-+&mac0 {
-+	phy-mode = "sgmii";
-+	phy-handle = <&phy0>;
-+	status = "okay";
-+};
-+
-+&mac1 {
-+	phy-mode = "sgmii";
-+	phy-handle = <&phy1>;
-+	status = "okay";
-+
-+	phy1: ethernet-phy@9 {
-+		reg = <9>;
-+		ti,fifo-depth = <0x1>;
-+	};
-+
-+	phy0: ethernet-phy@8 {
-+		reg = <8>;
-+		ti,fifo-depth = <0x1>;
-+	};
-+};
-+
-+&mbox {
- 	status = "okay";
- };
- 
-@@ -78,74 +112,43 @@ &mmc {
- 	status = "okay";
- };
- 
--&spi0 {
--	status = "okay";
--};
--
--&spi1 {
--	status = "okay";
--};
--
--&qspi {
-+&mmuart1 {
- 	status = "okay";
- };
- 
--&i2c0 {
-+&mmuart2 {
- 	status = "okay";
- };
- 
--&i2c1 {
-+&mmuart3 {
- 	status = "okay";
- };
- 
--&i2c2 {
-+&mmuart4 {
- 	status = "okay";
- };
- 
--&mac0 {
--	phy-mode = "sgmii";
--	phy-handle = <&phy0>;
-+&pcie {
- 	status = "okay";
- };
- 
--&mac1 {
--	phy-mode = "sgmii";
--	phy-handle = <&phy1>;
-+&qspi {
- 	status = "okay";
--
--	phy1: ethernet-phy@9 {
--		reg = <9>;
--		ti,fifo-depth = <0x1>;
--	};
--
--	phy0: ethernet-phy@8 {
--		reg = <8>;
--		ti,fifo-depth = <0x1>;
--	};
- };
- 
--&gpio2 {
--	interrupts = <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>,
--		     <53>, <53>, <53>, <53>;
--	status = "okay";
-+&refclk {
-+	clock-frequency = <125000000>;
- };
- 
- &rtc {
- 	status = "okay";
- };
- 
--&usb {
-+&spi0 {
- 	status = "okay";
--	dr_mode = "host";
- };
- 
--&mbox {
-+&spi1 {
- 	status = "okay";
- };
- 
-@@ -153,10 +156,7 @@ &syscontroller {
- 	status = "okay";
- };
- 
--&pcie {
--	status = "okay";
--};
--
--&core_pwm0 {
-+&usb {
- 	status = "okay";
-+	dr_mode = "host";
- };
--- 
-2.35.2
+https://lore.kernel.org/linux-riscv/CAHBxVyF65jC_wvxcD6bueqpCY8-Kbahu1yxsSoBmO1s15dGkSQ@mail.gmail.com/
+
+> parsing infrastructure which can be easily extended to support
+> static key arrays.
+> 
 

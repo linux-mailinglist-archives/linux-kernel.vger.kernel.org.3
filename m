@@ -2,62 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A0051FEA6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE3A51FE99
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbiEINrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S236205AbiEINrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236470AbiEINrH (ORCPT
+        with ESMTP id S236500AbiEINq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:47:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30DBC2689C6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652103787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cFbwZW49pkw4yye95MvglQVhO0vrHkh9u5V8p01SIsk=;
-        b=O/J1Klw/JjitrmNfJBYGNAOt10YyXJU7aVH7HkF/SQ33yq+O8AV0sxGe5rX3IGaKL6xvix
-        oiaPbsamwzNyyRcDj+ohHxyAJKv9eCEf6NuSm5nlxLo9EFbwyDXJkNcLu2FTl3VND6W1KF
-        cbi3yCnSJIs7Obg09TpK7PZnsfSwHKw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-gJZrXA4sNPqjqkKLdKWf8A-1; Mon, 09 May 2022 09:43:03 -0400
-X-MC-Unique: gJZrXA4sNPqjqkKLdKWf8A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F37A01C161D6;
-        Mon,  9 May 2022 13:42:44 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B72D463E15;
-        Mon,  9 May 2022 13:42:41 +0000 (UTC)
-Message-ID: <a60d885cf4b0b11aca730273ff317546362bff83.camel@redhat.com>
-Subject: Re: [PATCH v4 10/15] KVM: SVM: Introduce helper functions to
- (de)activate AVIC and x2AVIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com,
-        kernel test robot <lkp@intel.com>
-Date:   Mon, 09 May 2022 16:42:41 +0300
-In-Reply-To: <20220508023930.12881-11-suravee.suthikulpanit@amd.com>
-References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
-         <20220508023930.12881-11-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 9 May 2022 09:46:59 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434BA26A726
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:42:47 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n10so26913451ejk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 06:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Sw3X1IvartbYB0KHGJUY3ruuCDgguNnfxUDPf/paEoU=;
+        b=Fp0TOFfXdyZrX9kqJ6ScQKvNpL2ENEpXFErSYpxZlrX/BXE/UgQATPXsLqrOxLVvGt
+         gd59SZ9ejyuZuxhAhU1QtI2W4oMGnB2C92SW9k256cGT4MQ5hBzN2BRPLPDT0ecKzgVD
+         UP0N6xAPTvW37XoT039JILqFu00XvZyAC5JUw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Sw3X1IvartbYB0KHGJUY3ruuCDgguNnfxUDPf/paEoU=;
+        b=3SBK3MK2+uZelVD0DP2/tf2gtOBb7f+4oQyMbE/GMRSsEVyQ/7Hdg1OQZg9rAoaeys
+         1ilULNTUU4ToQgNeVSp9kRSfZtEWNeSNg2pNglMMgoFYyDKFDyRVBM07QZkAskDsyIW/
+         s5WMRbW5dC+8AhDohm97XHQZKFuaHv5ONwKWl2gHlDH2Ajfkz847OtCG0hcXdobzLn+Y
+         va3ioxpFa2JdRocLTnBW+Fhco6Gs31xcndXriR0PO7HGObP1/CVcuRjtHxdhEH8oDoz0
+         BCl7tu0ukjiiK3iceqNLKIosQlT2F50hKsXuOfUDvZxkxthfi5GvOgU8d0CePPGLPz90
+         L36A==
+X-Gm-Message-State: AOAM5304uR6nEgSxFlGTkDhw0TTAYJbrSMBKBB3//mjlWcyiRe/6jsCv
+        zA8gMReNdLQ8alTGAlUI6w22Iw==
+X-Google-Smtp-Source: ABdhPJz1+/1GhzO9unpWf/pPYWTjTjoI2gshZAF+/OPndqdsPJfr1TO6/cGn1zz0Lo4HN84e1wqgoA==
+X-Received: by 2002:a17:907:7242:b0:6f5:2ca3:f1cd with SMTP id ds2-20020a170907724200b006f52ca3f1cdmr13570151ejc.480.1652103765634;
+        Mon, 09 May 2022 06:42:45 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id j19-20020aa7c0d3000000b004275cef32efsm6327163edp.6.2022.05.09.06.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 06:42:44 -0700 (PDT)
+Date:   Mon, 9 May 2022 15:42:42 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Daniel Stone <daniel@fooishbar.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Message-ID: <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-11-dmitry.osipenko@collabora.com>
+ <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
+ <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
+ <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
+ <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
+ <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
+ <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+ <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+ <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,205 +120,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-05-07 at 21:39 -0500, Suravee Suthikulpanit wrote:
-> Refactor the current logic for (de)activate AVIC into helper functions,
-> and also add logic for (de)activate x2AVIC. The helper function are used
-> when initializing AVIC and switching from AVIC to x2AVIC mode
-> (handled by svm_refresh_spicv_exec_ctrl()).
+On Fri, May 06, 2022 at 01:49:12AM +0300, Dmitry Osipenko wrote:
+> On 5/5/22 11:12, Daniel Vetter wrote:
+> > On Wed, May 04, 2022 at 06:56:09PM +0300, Dmitry Osipenko wrote:
+> >> On 5/4/22 11:21, Daniel Vetter wrote:
+> >> ...
+> >>>>> - Maybe also do what you suggest and keep a separate lock for this, but
+> >>>>>   the fundamental issue is that this doesn't really work - if you share
+> >>>>>   buffers both ways with two drivers using shmem helpers, then the
+> >>>>>   ordering of this vmap_count_mutex vs dma_resv_lock is inconsistent and
+> >>>>>   you can get some nice deadlocks. So not a great approach (and also the
+> >>>>>   reason why we really need to get everyone to move towards dma_resv_lock
+> >>>>>   as _the_ buffer object lock, since otherwise we'll never get a
+> >>>>>   consistent lock nesting hierarchy).
+> >>>>
+> >>>> The separate locks should work okay because it will be always the
+> >>>> exporter that takes the dma_resv_lock. But I agree that it's less ideal
+> >>>> than defining the new rules for dma-bufs since sometime you will take
+> >>>> the resv lock and sometime not, potentially hiding bugs related to lockings.
+> >>>
+> >>> That's the issue, some importers need to take the dma_resv_lock for
+> >>> dma_buf_vmap too (e.g. to first nail the buffer in place when it's a
+> >>> dynamic memory manager). In practice it'll work as well as what we have
+> >>> currently, which is similarly inconsistent, except with per-driver locks
+> >>> instead of shared locks from shmem helpers or dma-buf, so less obvious
+> >>> that things are inconsistent.
+> >>>
+> >>> So yeah if it's too messy maybe the approach is to have a separate lock
+> >>> for vmap for now, land things, and then fix up dma_buf_vmap in a follow up
+> >>> series.
+> >>
+> >> The amdgpu driver was the fist who introduced the concept of movable
+> >> memory for dma-bufs. Now we want to support it for DRM SHMEM too. For
+> >> both amdgpu ttm and shmem drivers we will want to hold the reservation
+> >> lock when we're touching moveable buffers. The current way of denoting
+> >> that dma-buf is movable is to implement the pin/unpin callbacks of the
+> >> dma-buf ops, should be doable for shmem.
+> > 
+> > Hm that sounds like a bridge too far? I don't think we want to start
+> > adding moveable dma-bufs for shmem, thus far at least no one asked for
+> > that. Goal here is just to streamline the locking a bit and align across
+> > all the different ways of doing buffers in drm.
+> > 
+> > Or do you mean something else and I'm just completely lost?
 > 
-> When an AVIC-enabled guest switches from APIC to x2APIC mode during
-> runtime, the SVM driver needs to perform the following steps:
+> I'm talking about aligning DRM locks with the dma-buf locks. The problem
+> is that the convention of dma-bufs isn't specified yet. In particular
+> there is no convention for the mapping operations.
 > 
-> 1. Set the x2APIC mode bit for AVIC in VMCB along with the maximum
-> APIC ID support for each mode accodingly.
+> If we want to switch vmapping of shmem to use reservation lock, then
+> somebody will have to hold this lock for dma_buf_vmap() and the locking
+> convention needs to be specified firmly.
+
+Ah yes that makes sense.
+
+> In case of dynamic buffers, we will also need to specify whether
+> dma_buf_vmap() should imply the implicit pinning by exporter or the
+> buffer must be pinned explicitly by importer before dma_buf_vmap() is
+> invoked.
 > 
-> 2. Disable x2APIC MSRs interception in order to allow the hardware
-> to virtualize x2APIC MSRs accesses.
+> Perhaps I indeed shouldn't care about this for this patchset. The
+> complete locking model of dma-bufs must be specified first.
+
+Hm I thought vmap is meant to pin itself, and not rely on any other
+pinning done already. And from a quick look through the long call chain
+for amd (which is currently the only driver supporting dynamic dma-buf)
+that seems to be the case.
+
+But yeah the locking isn't specificied yet, and that makes it a bit a mess
+:-(
+
+> >> A day ago I found that mapping of imported dma-bufs is broken at least
+> >> for the Tegra DRM driver (and likely for others too) because driver
+> >> doesn't assume that anyone will try to mmap imported buffer and just
+> >> doesn't handle this case at all, so we're getting a hard lockup on
+> >> touching mapped memory because we're mapping something else than the
+> >> dma-buf.
+> > 
+> > Huh that sounds bad, how does this happen? Pretty much all pieces of
+> > dma-buf (cpu vmap, userspace mmap, heck even dma_buf_attach) are optional
+> > or at least can fail for various reasons. So exporters not providing mmap
+> > support is fine, but importers then dying is not.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/include/asm/svm.h |  6 +++++
->  arch/x86/kvm/svm/avic.c    | 54 ++++++++++++++++++++++++++++++++++----
->  arch/x86/kvm/svm/svm.c     |  6 ++---
->  arch/x86/kvm/svm/svm.h     |  1 +
->  4 files changed, 58 insertions(+), 9 deletions(-)
+> Those drivers that die don't have userspace that uses dma-bufs
+> extensively. I noticed it only because was looking at this code too much
+> for the last days.
 > 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 4c26b0d47d76..f5525c0e03f7 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -256,6 +256,7 @@ enum avic_ipi_failure_cause {
->  	AVIC_IPI_FAILURE_INVALID_BACKING_PAGE,
->  };
->  
-> +#define AVIC_PHYSICAL_MAX_INDEX_MASK	GENMASK_ULL(9, 0)
->  
->  /*
->   * For AVIC, the max index allowed for physical APIC ID
-> @@ -500,4 +501,9 @@ DEFINE_GHCB_ACCESSORS(sw_exit_info_2)
->  DEFINE_GHCB_ACCESSORS(sw_scratch)
->  DEFINE_GHCB_ACCESSORS(xcr0)
->  
-> +struct svm_direct_access_msrs {
-> +	u32 index;   /* Index of the MSR */
-> +	bool always; /* True if intercept is initially cleared */
-> +};
-> +
->  #endif
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index a82981722018..ad2ef6c00559 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -69,6 +69,51 @@ struct amd_svm_iommu_ir {
->  	void *data;		/* Storing pointer to struct amd_ir_data */
->  };
->  
-> +static inline void avic_set_x2apic_msr_interception(struct vcpu_svm *svm, bool disable)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < MAX_DIRECT_ACCESS_MSRS; i++) {
-> +		int index = direct_access_msrs[i].index;
-> +
-> +		if ((index < APIC_BASE_MSR) ||
-> +		    (index > APIC_BASE_MSR + 0xff))
-> +			continue;
-> +		set_msr_interception(&svm->vcpu, svm->msrpm, index,
-> +				     !disable, !disable);
-> +	}
-> +}
-> +
-> +static void avic_activate_vmcb(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = svm->vmcb01.ptr;
-> +
-> +	vmcb->control.int_ctl &= ~(AVIC_ENABLE_MASK | X2APIC_MODE_MASK);
-> +	vmcb->control.avic_physical_id &= ~AVIC_PHYSICAL_MAX_INDEX_MASK;
-> +
-> +	vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +	if (apic_x2apic_mode(svm->vcpu.arch.apic)) {
-> +		vmcb->control.int_ctl |= X2APIC_MODE_MASK;
-> +		vmcb->control.avic_physical_id |= X2AVIC_MAX_PHYSICAL_ID;
-> +		/* Disabling MSR intercept for x2APIC registers */
-> +		avic_set_x2apic_msr_interception(svm, false);
-> +	} else {
-> +		vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
-> +		/* Enabling MSR intercept for x2APIC registers */
-> +		avic_set_x2apic_msr_interception(svm, true);
-> +	}
-> +}
-> +
-> +static void avic_deactivate_vmcb(struct vcpu_svm *svm)
-> +{
-> +	struct vmcb *vmcb = svm->vmcb01.ptr;
-> +
-> +	vmcb->control.int_ctl &= ~(AVIC_ENABLE_MASK | X2APIC_MODE_MASK);
-> +	vmcb->control.avic_physical_id &= ~AVIC_PHYSICAL_MAX_INDEX_MASK;
-> +
-> +	/* Enabling MSR intercept for x2APIC registers */
-> +	avic_set_x2apic_msr_interception(svm, true);
-> +}
->  
->  /* Note:
->   * This function is called from IOMMU driver to notify
-> @@ -185,13 +230,12 @@ void avic_init_vmcb(struct vcpu_svm *svm, struct vmcb *vmcb)
->  	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
-> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->  	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
->  
->  	if (kvm_apicv_activated(svm->vcpu.kvm))
-> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +		avic_activate_vmcb(svm);
->  	else
-> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
-> +		avic_deactivate_vmcb(svm);
->  }
->  
->  static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
-> @@ -1082,9 +1126,9 @@ void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->  		 * accordingly before re-activating.
->  		 */
->  		avic_apicv_post_state_restore(vcpu);
-> -		vmcb->control.int_ctl |= AVIC_ENABLE_MASK;
-> +		avic_activate_vmcb(svm);
->  	} else {
-> -		vmcb->control.int_ctl &= ~AVIC_ENABLE_MASK;
-> +		avic_deactivate_vmcb(svm);
->  	}
->  	vmcb_mark_dirty(vmcb, VMCB_AVIC);
->  
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 9066568fd19d..96a1fc1a1d1b 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -74,10 +74,8 @@ static uint64_t osvw_len = 4, osvw_status;
->  
->  static DEFINE_PER_CPU(u64, current_tsc_ratio);
->  
-> -static const struct svm_direct_access_msrs {
-> -	u32 index;   /* Index of the MSR */
-> -	bool always; /* True if intercept is initially cleared */
-> -} direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
-> +const struct svm_direct_access_msrs
-> +direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
->  	{ .index = MSR_STAR,				.always = true  },
->  	{ .index = MSR_IA32_SYSENTER_CS,		.always = true  },
->  	{ .index = MSR_IA32_SYSENTER_EIP,		.always = false },
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 5ed958863b81..bb5bf70de3b2 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -600,6 +600,7 @@ void nested_vmcb02_compute_g_pat(struct vcpu_svm *svm);
->  void svm_switch_vmcb(struct vcpu_svm *svm, struct kvm_vmcb_info *target_vmcb);
->  
->  extern struct kvm_x86_nested_ops svm_nested_ops;
-> +extern const struct svm_direct_access_msrs direct_access_msrs[];
->  
->  /* avic.c */
->  
+> Drivers that don't die either map imported BOs properly or don't allow
+> mapping at all.
 
+Ah yeah driver bugs as explanation makes sense :-/
 
-So I did some testing, and reviewed this code again with regard to nesting, 
-and now I see that it has CVE worthy bug, so have to revoke my Reviewed-By.
+> >> My plan is to move the dma-buf management code to the level of DRM core
+> >> and make it aware of the reservation locks for the dynamic dma-bufs.
+> >> This way we will get the proper locking for dma-bufs and fix mapping of
+> >> imported dma-bufs for Tegra and other drivers.
+> > 
+> > So maybe we're completely talking past each another, or coffee is not
+> > working here on my end, but I've no idea what you mean.
+> > 
+> > We do have some helpers for taking care of the dma_resv_lock dance, and
+> > Christian König has an rfc patch set to maybe unify this further. But that
+> > should be fairly orthogonal to reworking shmem (it might help a bit with
+> > reworking shmem though).
+> 
+> The reservation lock itself doesn't help much shmem, IMO. It should help
+> only in the context of dynamic dma-bufs and today we don't have a need
+> in the dynamic shmem dma-bufs.
+> 
+> You were talking about making DRM locks consistent with dma-buf locks,
+> so I thought that yours main point of making use of reservation locks
+> for shmem is to prepare to the new locking scheme.
+> 
+> I wanted to try to specify the dma-buf locking convention for mapping
+> operations because it's missing right now and it should affect how DRM
+> should take the reservation locks, but this is not easy to do as I see now.
+> 
+> Could you please point at the Christian's RFC patch? He posted too many
+> patches, can't find it :) I'm curious to take a look.
 
-This is what happens:
+https://lore.kernel.org/dri-devel/20220504074739.2231-1-christian.koenig@amd.com/
 
-On nested VM entry, *request to inhibit AVIC is done*, and then nested msr bitmap
-is calculated, still with all X2AVIC msrs open,
+Wrt this patch series here I'm wondering whether we could do an interim
+solution that side-steps the dma_buf_vmap mess.
 
-1. nested_svm_vmrun -> enter_svm_guest_mode -> kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-2. nested_svm_vmrun -> nested_svm_vmrun_msrpm
+- in shmem helpers pin any vmapped buffer (it's how dma-buf works too),
+  and that pinning would be done under dma_resv_lock (like with other
+  drivers using dma_resv_lock for bo protection)
 
+- switch over everything else except vmap code to dma_resv_lock, but leave
+  vmap locking as-is
 
-But the nested guest will be entered without AVIC active 
-(since we don't yet support nested avic and it is optional anyway), thus if the nested guest
-also doesn't intercept those msrs, it will gain access to the *host* x2apic msrs. Ooops.
+- shrinker then only needs to trylock dma_resv_trylock in the shrinker,
+  which can check for pinned buffer and that's good enough to exclude
+  vmap'ed buffer. And it avoids mixing the vmap locking into the new
+  shrinker code and driver interfaces.
 
-I think the easist way to fix this for now, is to make nested_svm_vmrun_msrpm
-never open access to x2apic msrs regardless of the host bitmap value, but in the long
-term the whole thing needs to be refactored.
+This still leaves the vmap locking mess as-is, but I think that's a mess
+that's orthogonal to shrinker work.
 
-
-Another thing I noted is that avic_deactivate_vmcb should not touch avic msrs
-when avic_mode == AVIC_MODE_X1, it is just a waste of time.
-
-Also updating these msr intercepts is pointless if the guest doesn't use x2apic.
-
-Same it true while entering the nested guest - AVIC is inhibited, but there is
-no need to update the msr intercepts in L1 msr bitmap, since this bitmap isn't
-used by the CPU and vise versa while returing back to L1 from the nested guest.
-
-However optimizing all of this should also be done very carefully to 
-avoid issue like the above.
-
-I need to think on how to correctly fix/refactor all of this to be honest.
-
-Best regards,
-	Maxim levitsky
-
-
-
+Thoughts?
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C94B52081E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA6152081D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiEIXIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S232118AbiEIXH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiEIXHy (ORCPT
+        with ESMTP id S229490AbiEIXHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 19:07:54 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829992BA98D
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BB12BA987
         for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:03:59 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so374913wme.4
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e93bbb54f9so16407271fac.12
         for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vyafeJfYpqQbqdoHrA1fN3LqRreGi4FxMomb25eWjK4=;
-        b=26/cqxbeh4t6qAscNA3ZWelzvHUyARyEvVA+R9jdswx7ahq6O9Z+R45YsctYS5mQbd
-         OuJHF8sFgU8zootMXXXCDfUZb46RI35jaZ5ysXiG4x/j35O0t0IFQA/DSXA6WOSLie6R
-         YOkF3/fJnpGdGYDJ8rr92shH5DyrKC/OFmSt3OTiFRwileaOeDJ9y9rK2GpbXyvZQAFp
-         LH19UhR5ky39xunEvHuIuucNXPVSLBA6KJ4qG7LQjq5ZasX3rHW3e1bVq53tml8bi1hB
-         OTtl1XNDybxXIBVudyqxg+9cWdtGOf8GzIrYQdKTklMdeBZSaOW9GjRKGhhJ3xUv2v55
-         sDbg==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TwRG+JFhON5lLu3KLkH+RkE4aoR4GwpF0SJGcrPkzyY=;
+        b=GaUBnzSymG2bC277lQirDdnIofVnOiKg59bWVuHjGiY8uhiH+k8q7VSwTdNCpicNnn
+         FljsK+MAT1P/0QQ/xzrWsyhbf/M+PQTiRj/qAcVmJc5EZHoX9uPlyvwaPERrICUXidzY
+         qtYmMmE2g65NpGUcmiUdS/BmjzZ5oAp1SqeRVr/FtmYMVXqI18tN5w3kFFfeGFtrvgsz
+         h40H+GZd52rHUVkbWadP5NWxBCIiWSKo3kNJDokGzHLDaLlVomnq4Bpmhl+y0paz3ohA
+         d4ghGCOWY+lkgXuDCV79yqnkiKav65pPKkpgH9iPUQnTrkLhHJjdhfAhTEQ/CdKJiyEL
+         NldA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vyafeJfYpqQbqdoHrA1fN3LqRreGi4FxMomb25eWjK4=;
-        b=nbMshQRF8fNNnZs5ytkFGggIVyH5GgND3c/agqMI1op+T6ZnJWTcxXjOSecW1T4cTN
-         VndYOXmQ3Sa3fjMJdzywBvfmaYGEY6p5TzwbKf76q/CHBPJ9lfGm0nwqcNmLrBTOy/6W
-         nMjCqSdAEAzI31gX9N6b30qrWD1evxUk0I6x2EVTMozNRPEVkoc/y6L9sK2zq1iRP70L
-         rtirLk/UKu001s6TfucQ7iLvJ7/ni5UGrxV1QYfmY78BzSW4W61FOZs/w1q0rSev71i8
-         IHKYvfghl6GI4TlYkYCAjSmsGnM1ZX6W9MUEmpzWlfqltAK23uuPY1EGiNIG1InsBeRP
-         yZwQ==
-X-Gm-Message-State: AOAM5336p6Al+57kCubp+U+2V+FZ4IkFX79FP1t7H3rlQnuizsQ1QfnM
-        Tg6X4tV0YQvRrtVz5tNWk5wFYg==
-X-Google-Smtp-Source: ABdhPJx78AHOLFDMn4SydQInL+fnhbMdaYxc0HhvM4yLtjTUKgOoLV8UTlyr4RHdnrLtZVFe0dQC0g==
-X-Received: by 2002:a7b:cc13:0:b0:38e:67e3:db47 with SMTP id f19-20020a7bcc13000000b0038e67e3db47mr25028508wmh.133.1652137438092;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TwRG+JFhON5lLu3KLkH+RkE4aoR4GwpF0SJGcrPkzyY=;
+        b=FCEBHxcQWtFcDM4Nepc8XHtfU+cyPxR53xfi/2JQ+if2/+D9b5SacolSKH7Tm3FBB7
+         syWFfX9lM2FuVYOqC33Jea+2cg6s7sEjahKH4wRPNPMZxfqtzoG8RdU2PoPmjm5M5ge5
+         ht6v42RBtwLhHMfFLLe9EgbM1TwggDG3hFeol4vDvu8/FWD7jD0Tn7C7XdjPEeybBOAr
+         uUD5QJpCMj6+NeYhlyJsYKa7PluFuY+a/l7v1CpNCHClFazCkE7OMkreQq5BjwDrTSCJ
+         KA5SS0OPx3HwNBcm0J1YwYgfwxzL0OZQrGkGcPV0u07SNagW1lNe5om03e+yzqQhSK2B
+         kLsQ==
+X-Gm-Message-State: AOAM5303wkwAHiPskfPM/liIJf9GO1KhBfx1Y5OtxOtPPS6mkcwNZn/v
+        igvwmxzcEIOVu+kf2uBZUhU=
+X-Google-Smtp-Source: ABdhPJz0AUi/lSjzbJwldFJPTY+Tz8+srjQrApVXHeg0fpacOKanvnLx2DJs+jqbRrVakVSqOIimfw==
+X-Received: by 2002:a05:6870:d69c:b0:de:9925:2baa with SMTP id z28-20020a056870d69c00b000de99252baamr8518578oap.279.1652137438887;
         Mon, 09 May 2022 16:03:58 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003945237fea1sm743058wms.0.2022.05.09.16.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 16:03:57 -0700 (PDT)
-Date:   Tue, 10 May 2022 00:03:55 +0100
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 3/3] block: remove last remaining traces of IDE
- documentation
-Message-ID: <Ynmd23nhC3KHHX1i@equinox>
-References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
- <20220427132436.12795-4-paul.gortmaker@windriver.com>
- <87wnfaa8ce.fsf@meer.lwn.net>
- <20220427165917.GE12977@windriver.com>
- <YmsmnGb3JNjH54Xb@equinox>
- <20220506153241.GH12977@windriver.com>
- <YnVgxEcRTQPu/DHE@equinox>
- <87bkw6cpvo.fsf@meer.lwn.net>
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f13-20020a4a9d4d000000b0035eb4e5a6c6sm5451114ook.28.2022.05.09.16.03.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 16:03:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4b2a51ec-5643-3429-8271-6d44b9f002b6@roeck-us.net>
+Date:   Mon, 9 May 2022 16:03:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkw6cpvo.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: drivers/hwmon/ltq-cputemp.c:23:2: error: call to undeclared
+ function 'ltq_cgu_w32'; ISO C99 and later do not support implicit function
+ declarations
+Content-Language: en-US
+To:     Florian Eckert <fe@dev.tdt.de>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+References: <202205080416.vzIXy16B-lkp@intel.com>
+ <65c92404-1d6f-6969-89bf-20b8eefaeff6@infradead.org>
+ <81b9b2cd3f981b6206e9d8c52b3306b3@dev.tdt.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <81b9b2cd3f981b6206e9d8c52b3306b3@dev.tdt.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:17:31PM -0600, Jonathan Corbet wrote:
-> Phillip Potter <phil@philpotter.co.uk> writes:
+On 5/9/22 01:17, Florian Eckert wrote:
 > 
-> > I was yes, the point I was trying to make (poorly) is that your patch
-> > conflicts with Randy's patch which itself is not yet in linux-next, as
-> > normally I send everything together at the start of the merge window to
-> > Jens, as I don't have my own kernel.org tree yet, and usually I only get
-> > one or two patches in a cycle anyway.
-> >
-> > This is not your fault, you couldn't have been expected to know this in
-> > retrospect, and I should probably look into getting my own tree/GPG key
-> > sorted to alleviate this problem in future.
-> >
-> > In the meantime, if you're comfortable with the idea, I can just resolve
-> > the conflict myself when I send the patches onto Jens this time and
-> > include patch 3/3 pre-fixed up. Merge window will be fairly soon anyway.
+>>>
+>>> vim +/ltq_cgu_w32 +23 drivers/hwmon/ltq-cputemp.c
+>>>
+>>> 7074d0a9275860 Florian Eckert 2017-09-01  20
+>>> 7074d0a9275860 Florian Eckert 2017-09-01  21  static void ltq_cputemp_enable(void)
+>>> 7074d0a9275860 Florian Eckert 2017-09-01  22  {
+>>> 7074d0a9275860 Florian Eckert 2017-09-01 @23     ltq_cgu_w32(ltq_cgu_r32(CGU_GPHY1_CR) | CGU_TEMP_PD, CGU_GPHY1_CR);
+>>> 7074d0a9275860 Florian Eckert 2017-09-01  24  }
+>>> 7074d0a9275860 Florian Eckert 2017-09-01  25
+>>>
+>>> :::::: The code at line 23 was first introduced by commit
+>>> :::::: 7074d0a92758603369655ef5d4f49e6caaae0b4e hwmon: (ltq-cputemp) add cpu temp sensor driver
+>>>
+>>> :::::: TO: Florian Eckert <fe@dev.tdt.de>
+>>> :::::: CC: Guenter Roeck <linux@roeck-us.net>
+>>
+>> This driver builds fine if I change it from SOC_FALCON to SOC_XWAY.
+>> Maybe its Kconfig entry should be stronger?
+>>
+>> config SENSORS_LTQ_CPUTEMP
+>>     bool "Lantiq cpu temperature sensor driver"
+>> -    depends on LANTIQ
+>> +    depends on SOC_XWAY
 > 
-> So I'm a little confused by the state of everything at this point, but
-> I'm assuming that I need not worry about taking these changes through
-> docs-next.  Please let me know if that's not correct.
-> 
-> Thanks,
-> 
-> jon
+> Fine with me. I think it's better to narrow it down.
 
-Dear Jon,
+I'll be happy to accept a patch doing that.
 
-Yes, that's right. Makes sense for the whole series to go together, so I
-will fix up patch 3 to apply alongside Randy's patch (which I see you've
-taken now) and send the whole lot through to Jens as the merge window
-opens. Thanks.
+Guenter
 
-All the best,
-Phil

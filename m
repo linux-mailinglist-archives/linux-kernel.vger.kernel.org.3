@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC5551FDDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A0751FDCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbiEINSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S235343AbiEINSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiEINSD (ORCPT
+        with ESMTP id S235321AbiEINSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 09:18:03 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ED72A805B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421352A805C
         for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:14:08 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxhSS5802zhZ3L;
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxhSS5m4xzhZ2P;
         Mon,  9 May 2022 21:13:28 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 21:13:59 +0800
+ 2022 21:14:00 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
@@ -29,9 +29,9 @@ CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
         <surenb@google.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 02/15] mm/swap: use helper macro __ATTR_RW
-Date:   Mon, 9 May 2022 21:14:03 +0800
-Message-ID: <20220509131416.17553-3-linmiaohe@huawei.com>
+Subject: [PATCH 03/15] mm/swap: fold __swap_info_get() into its sole caller
+Date:   Mon, 9 May 2022 21:14:04 +0800
+Message-ID: <20220509131416.17553-4-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220509131416.17553-1-linmiaohe@huawei.com>
 References: <20220509131416.17553-1-linmiaohe@huawei.com>
@@ -51,29 +51,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use helper macro __ATTR_RW to define vma_ra_enabled_attr to make code more
-clear. Minor readability improvement.
+Fold __swap_info_get() into its sole caller to make code more clear.
+Minor readability improvement.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/swap_state.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ mm/swapfile.c | 24 ++++++------------------
+ 1 file changed, 6 insertions(+), 18 deletions(-)
 
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index 240b39ed5922..9f99d8137ffd 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -881,9 +881,7 @@ static ssize_t vma_ra_enabled_store(struct kobject *kobj,
- 
- 	return count;
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 05ca79e68d63..0aee6286d6a7 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1123,7 +1123,7 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
+ 	return n_ret;
  }
--static struct kobj_attribute vma_ra_enabled_attr =
--	__ATTR(vma_ra_enabled, 0644, vma_ra_enabled_show,
--	       vma_ra_enabled_store);
-+static struct kobj_attribute vma_ra_enabled_attr = __ATTR_RW(vma_ra_enabled);
  
- static struct attribute *swap_attrs[] = {
- 	&vma_ra_enabled_attr.attr,
+-static struct swap_info_struct *__swap_info_get(swp_entry_t entry)
++static struct swap_info_struct *_swap_info_get(swp_entry_t entry)
+ {
+ 	struct swap_info_struct *p;
+ 	unsigned long offset;
+@@ -1138,8 +1138,13 @@ static struct swap_info_struct *__swap_info_get(swp_entry_t entry)
+ 	offset = swp_offset(entry);
+ 	if (offset >= p->max)
+ 		goto bad_offset;
++	if (data_race(!p->swap_map[swp_offset(entry)]))
++		goto bad_free;
+ 	return p;
+ 
++bad_free:
++	pr_err("%s: %s%08lx\n", __func__, Unused_offset, entry.val);
++	goto out;
+ bad_offset:
+ 	pr_err("%s: %s%08lx\n", __func__, Bad_offset, entry.val);
+ 	goto out;
+@@ -1152,23 +1157,6 @@ static struct swap_info_struct *__swap_info_get(swp_entry_t entry)
+ 	return NULL;
+ }
+ 
+-static struct swap_info_struct *_swap_info_get(swp_entry_t entry)
+-{
+-	struct swap_info_struct *p;
+-
+-	p = __swap_info_get(entry);
+-	if (!p)
+-		goto out;
+-	if (data_race(!p->swap_map[swp_offset(entry)]))
+-		goto bad_free;
+-	return p;
+-
+-bad_free:
+-	pr_err("%s: %s%08lx\n", __func__, Unused_offset, entry.val);
+-out:
+-	return NULL;
+-}
+-
+ static struct swap_info_struct *swap_info_get_cont(swp_entry_t entry,
+ 					struct swap_info_struct *q)
+ {
 -- 
 2.23.0
 

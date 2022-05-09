@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857A1520309
+	by mail.lfdr.de (Postfix) with ESMTP id D179352030A
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239341AbiEIRAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S239346AbiEIRAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239330AbiEIRA2 (ORCPT
+        with ESMTP id S239330AbiEIRAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:00:28 -0400
+        Mon, 9 May 2022 13:00:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2876654000;
-        Mon,  9 May 2022 09:56:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C526F127193;
+        Mon,  9 May 2022 09:56:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B888E614F5;
-        Mon,  9 May 2022 16:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCA4C385B1;
-        Mon,  9 May 2022 16:56:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B4F161535;
+        Mon,  9 May 2022 16:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307B2C385B1;
+        Mon,  9 May 2022 16:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652115387;
-        bh=NT/NSm+ixv4NTnm+bzYUbh8NWftsy0GkupiwFftUrCw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EtvoF8IpfrUKSdvwW8V1qeHxhWfkW598IrjNsAqteSHaADCcEdw4x8KXDr3TbpGco
-         +yggH/xodb4xZyPEnEeIc8mWLqDjS4iXNJXSCuBQpOQ/fSanq8ns6RptBh90cQlffa
-         ZydWP2ygHERY2FiBF7EYP2PUX0oJed77PI+PtGtAug8JPiOmVIAJvSdJSVF0l2WgT3
-         wW5f+Mu+92KTr/DOaR7Nqi5mZ7fd/NZ7bLFFprVwVSRAaFOoxIjPeDgJTM5EOXSyV1
-         crJcVua2rcdRuwnbPejGtAvrTv7VAS/uq+3pJDH8Q5DUtKss9HWmbgKe7fxadeJAws
-         EJ34J+Ehy52jg==
-Date:   Mon, 9 May 2022 18:56:20 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, alsa-devel@alsa-project.org,
-        mauro.chehab@linux.intel.com, David Airlie <airlied@linux.ie>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Takashi Iwai <tiwai@suse.com>, dri-devel@lists.freedesktop.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        linux-modules@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v5 1/2] module: update dependencies at
- try_module_get()
-Message-ID: <20220509185620.05567716@coco.lan>
-In-Reply-To: <YnRDIfthGJXdY23h@intel.intel>
-References: <cover.1651348913.git.mchehab@kernel.org>
-        <ad2a9fe66cf502e2e2e2325f1f04d0fae36aa82b.1651348913.git.mchehab@kernel.org>
-        <YnRDIfthGJXdY23h@intel.intel>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        s=k20201202; t=1652115402;
+        bh=ma7KAt89IfR03ZZVvYgYcIHD1fN0+zc6+GsP1F0gGzM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BCDBv2RszqfGdCRpA+zNo6nDPlRAGB4Um5Q05dhrDATW6+VY9oikBbL1zqEEv1Jn7
+         S+EIpoJvQVYeXmM8tFhEkKKx2Py1/Sj8lsjxi4v1FYlb9XfOeyCfDdkEsj8rcYdLCX
+         Yjc1DwuItizN4NHPa5fH4f/H/I5rpkFNVCTLa2JS4re+x+jFUqTvmRIBDYZaOUZxKx
+         I2VD9a3K+OINYZeowh3qGTK0kabNNRpINVXSGQCJRCzX7YWFJF6SZ0Drs/GNHxIzVf
+         CYgE+QW/LGYPdDnCLrrc2Xo+l7I7IpZe1gZEE3hoyHKAMeyoG8EitIDQ1xDzGK/onX
+         21/6jYDVL1WKA==
+Date:   Mon, 9 May 2022 17:56:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     LABBE Corentin <clabbe@baylibre.com>, alexandre.torgue@foss.st.com,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/6] dt-bindings: net: Add documentation for phy-supply
+Message-ID: <YnlHwpiow9Flgzas@sirena.org.uk>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-4-clabbe@baylibre.com>
+ <YnkGV8DyTlCuT92R@lunn.ch>
+ <YnkWl+xYCX8r9DE7@Red>
+ <Ynk7L07VH/RFVzl6@lunn.ch>
+ <Ynk9ccoVh32Deg45@sirena.org.uk>
+ <YnlDbbegQ1IbbaHy@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8w1oAQG8zH7Npult"
+Content-Disposition: inline
+In-Reply-To: <YnlDbbegQ1IbbaHy@lunn.ch>
+X-Cookie: Boycott meat -- suck your thumb.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,98 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, 5 May 2022 23:35:29 +0200
-Andi Shyti <andi.shyti@linux.intel.com> escreveu:
 
-> Hi Mauro,
-> 
-> [...]
-> 
-> > +static int ref_module_dependency(struct module *mod, struct module *this)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!this || !this->name)
-> > +		return -EINVAL;
-> > +
-> > +	if (mod == this)
-> > +		return 0;
-> > +
-> > +	mutex_lock(&module_mutex);
-> > +
-> > +	ret = ref_module(this, mod);
-> > +
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +	if (ret)
-> > +		goto ret;
-> > +
-> > +	ret = sysfs_create_link(mod->holders_dir,
-> > +				&this->mkobj.kobj, this->name);
-> > +#endif
-> > +
-> > +ret:
-> > +	mutex_unlock(&module_mutex);
-> > +	return ret;
-> > +}
-> > +
-> >  /* Clear the unload stuff of the module. */
-> >  static void module_unload_free(struct module *mod)
-> >  {
-> > @@ -841,24 +886,16 @@ void __module_get(struct module *module)
-> >  }
-> >  EXPORT_SYMBOL(__module_get);
-> >  
-> > -bool try_module_get(struct module *module)
-> > +bool try_module_get_owner(struct module *module, struct module *this)
-> >  {
-> > -	bool ret = true;
-> > +	int ret = __try_module_get(module);
-> >  
-> > -	if (module) {
-> > -		preempt_disable();
-> > -		/* Note: here, we can fail to get a reference */
-> > -		if (likely(module_is_live(module) &&
-> > -			   atomic_inc_not_zero(&module->refcnt) != 0))
-> > -			trace_module_get(module, _RET_IP_);
-> > -		else
-> > -			ret = false;
-> > +	if (ret)
-> > +		ref_module_dependency(module, this);  
-> 
-> do we care about the return value here?
+--8w1oAQG8zH7Npult
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I don't think it should care about the return value, as a failure to
-create a sysfs node for the holder or to add it to the holders list
-is not fatal: modules can still continue working without that.
+On Mon, May 09, 2022 at 06:38:05PM +0200, Andrew Lunn wrote:
 
-Also, I opted to be conservative here: currently, not creating these
-doesn't cause try_module_get() to fail. I'm not sure what would be the
-impact if this starts to fail.
+> So we have a collection of regulators, varying in numbers between
+> different PHYs, with different vendor names and purposes. In general,
+> they all should be turned on. Yet we want them named so it is clear
+> what is going on.
 
-So, right now, I'm opting to just ignore the return value. Perhaps
-in the future this could a warning (similarly to what sysfs create
-link does).
+> Is there a generic solution here so that the phylib core can somehow
+> enumerate them and turn them on, without actually knowing what they
+> are called because they have vendor specific names in order to be
+> clear what they are?
 
-Regards,
-Mauro
+> There must be a solution to this, phylib cannot be the first subsystem
+> to have this requirement, so if you could point to an example, that
+> would be great.
 
-> 
-> Andi
-> 
-> >  
-> > -		preempt_enable();
-> > -	}
-> >  	return ret;
-> >  }
-> > -EXPORT_SYMBOL(try_module_get);
-> > +EXPORT_SYMBOL(try_module_get_owner);
-> >  
-> >  void module_put(struct module *module)
-> >  {
-> > -- 
-> > 2.35.1  
+No, it's not really come up much before - generally things with
+regulator control that have generic drivers tend not to be sophisticated
+enough to have more than one supply, or to be on an enumerable bus where
+the power is part of the bus specification so have the power specified
+as part of the bus.  You'd need to extend the regulator bindings to
+support parallel array of phandles and array of names properties like
+clocks have as an option like you were asking for, which would doubtless
+be fun for validation but is probably the thing here.
 
+--8w1oAQG8zH7Npult
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mauro
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5R8IACgkQJNaLcl1U
+h9DsBgf/dLCjimiHfZ3BVIqJ24wTWXFg5dJk+Jp65LrpXJ6qSG86NuEHpNdoLTbZ
+9y2PhDrkyF9y28KpLHo26UuISE9N74k2L/ZNzJrsqCVTc933fJ+JaViuvhx+LsdY
+ZXlZG27WBycLjVGqW3BVqiN1h8xFIJZ+4I/LYr832cUHnPrQu+JpoJpvsMjrge3+
+iSm3dqO1KZEGCaw8lK4MlGRS8ZoPBUA1lc4h2yvU8zpJc0OfIq5LU0p0DlggMlLE
+ag0ct9nkNKD96unqDxXIYscDNf/9Kv2UjXR4M18yNnmLDZr4bDuiQAB+L+2jKzbR
+dyOk2GxUf6FtgeOrdPmWMPuAn4+YWw==
+=EKEu
+-----END PGP SIGNATURE-----
+
+--8w1oAQG8zH7Npult--

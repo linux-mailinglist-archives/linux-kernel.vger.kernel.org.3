@@ -2,167 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B63A52058E
+	by mail.lfdr.de (Postfix) with ESMTP id 0B21352058D
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbiEIT6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S240747AbiEIT7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240677AbiEIT6M (ORCPT
+        with ESMTP id S240739AbiEIT7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:58:12 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EEB2764E6;
-        Mon,  9 May 2022 12:54:16 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id AA9D9936; Mon,  9 May 2022 14:54:14 -0500 (CDT)
-Date:   Mon, 9 May 2022 14:54:14 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, Christian Brauner <brauner@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Micah Morton <mortonm@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Message-ID: <20220509195414.GA30894@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-2-stefanb@linux.ibm.com>
+        Mon, 9 May 2022 15:59:01 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ABE7223B
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:55:05 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so586052pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 12:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
+        b=DB5AMq154uPVEABPd/Ht20m9xAuHdLPAIpLNbV2AUd+Xl3o5PSogp22tXDaf8adH/V
+         thnCPnxPBairN5psa5Q3YUT6K4ogh3mhaBxf8XJNroaaR0CdTMSXlGfdIopfPo7ebDAN
+         AEoxTBUl1A2BS1estbYeGlGjmqCX74SR2d4XY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
+        b=2J6YM1wwf2UxSx9W+D6qbg9vSJUvC923ltoY8BTMn3D3f4KAX491yfH2CG8Ea/24A9
+         7JI3Qd0CEfD9HISHDo5553DDAFHySC12axx67sIYQkHz8kQdoY8Ng5wnK5p2YiRXkUNM
+         lpmkDWo2nIYu/cC22KJwBqIvCiG5ulibj66Ez0bEWjmeFnfINn3kvgd11z7hgnoBpMyw
+         1vjfAnFaUPwzrHIaWWcgzU2q1kVUkiVQ6GVOrItm2pwYbQ4G/CoHWRKD5RhNNzpr5Rer
+         hit4wonGgIKjfZRjWccu8AgY5z9DkIB/QfBaiTgoZ0GKQdQg0BhLIjtud3w77tkfGsQ1
+         aMXg==
+X-Gm-Message-State: AOAM530hQOZz/mrlAyFkct0xlnTdTfhQLZZWCjZYMlyB/s6WwmD2ytq2
+        63MzRzKH/EGTBEWyl3+HKLozfQ==
+X-Google-Smtp-Source: ABdhPJweHWgd7qc2MqEdODa2jlyfVzb0XNyTHa8rV9JgRxEzF16wLYb7GsZAb9n2TCoNDkBKkyCnUw==
+X-Received: by 2002:a17:90b:314e:b0:1dc:d143:a15d with SMTP id ip14-20020a17090b314e00b001dcd143a15dmr20698782pjb.111.1652126105085;
+        Mon, 09 May 2022 12:55:05 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:753:614a:caf8:e14d])
+        by smtp.gmail.com with UTF8SMTPSA id w19-20020a170903311300b0015e8d4eb2a2sm229445plc.236.2022.05.09.12.55.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 12:55:04 -0700 (PDT)
+Date:   Mon, 9 May 2022 12:55:03 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, ohad@wizery.com,
+        agross@kernel.org, mathieu.poirier@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        evgreen@chromium.org, dianders@chromium.org, swboyd@chromium.org,
+        krzysztof.kozlowski@canonical.com
+Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add proxy interconnect
+ requirements for modem
+Message-ID: <Ynlxlz7brLWZFRnd@google.com>
+References: <1652082798-5855-1-git-send-email-quic_sibis@quicinc.com>
+ <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220420140633.753772-2-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
-> From: Christian Brauner <brauner@kernel.org>
+On Mon, May 09, 2022 at 01:23:18PM +0530, Sibi Sankar wrote:
+> Add interconnects that are required to be proxy voted upon during modem
+> bootup on SC7280 SoCs.
 > 
-> When securityfs creates a new file or directory via
-> securityfs_create_dentry() it will take an additional reference on the
-> newly created dentry after it has attached the new inode to the new
-> dentry and added it to the hashqueues.
-> If we contrast this with debugfs which has the same underlying logic as
-> securityfs. It uses a similar pairing as securityfs. Where securityfs
-> has the securityfs_create_dentry() and securityfs_remove() pairing,
-> debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> 
-> In contrast to securityfs, debugfs doesn't take an additional reference
-> on the newly created dentry in __debugfs_create_file() which would need
-> to be put in debugfs_remove().
-> 
-> The additional dget() isn't a problem per se. In the current
-> implementation of securityfs each created dentry pins the filesystem via
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-Is 'via' an extra word here or is there a missing word?
-
-I'll delay the rest of my response as the missing word may answer my
-remaining question :)
-
-> until it is removed. Since it is virtually guaranteed that there is at
-> least one user of securityfs that has created dentries the initial
-> securityfs mount cannot go away until all dentries have been removed.
-> 
-> Since most of the users of the initial securityfs mount don't go away
-> until the system is shutdown the initial securityfs won't go away when
-> unmounted. Instead a mount will usually surface the same superblock as
-> before. The additional dget() doesn't matter in this scenario since it
-> is required that all dentries have been cleaned up by the respective
-> users before the superblock can be destroyed, i.e. superblock shutdown
-> is tied to the lifetime of the associated dentries.
-> 
-> However, in order to support ima namespaces we need to extend securityfs
-> to support being mounted outside of the initial user namespace. For
-> namespaced users the pinning logic doesn't make sense. Whereas in the
-> initial namespace the securityfs instance and the associated data
-> structures of its users can't go away for reason explained earlier users
-> of non-initial securityfs instances do go away when the last users of
-> the namespace are gone.
-> 
-> So for those users we neither want to duplicate the pinning logic nor
-> make the global securityfs instance display different information based
-> on the namespace. Both options would be really messy and hacky.
-> 
-> Instead we will simply give each namespace its own securityfs instance
-> similar to how each ipc namespace has its own mqueue instance and all
-> entries in there are cleaned up on umount or when the last user of the
-> associated namespace is gone.
-> 
-> This means that the superblock's lifetime isn't tied to the dentries.
-> Instead the last umount, without any fds kept open, will trigger a clean
-> shutdown. But now the additional dget() gets in the way. Instead of
-> being able to rely on the generic superblock shutdown logic we would
-> need to drop the additional dentry reference during superblock shutdown
-> for all associated users. That would force the use of a generic
-> coordination mechanism for current and future users of securityfs which
-> is unnecessary. Simply remove the additional dget() in
-> securityfs_dentry_create().
-> 
-> In securityfs_remove() we will call dget() to take an additional
-> reference on the dentry about to be removed. After simple_unlink() or
-> simple_rmdir() have dropped the dentry refcount we can call d_delete()
-> which will either turn the dentry into negative dentry if our earlier
-> dget() is the only reference to the dentry, i.e. it has no other users,
-> or remove it from the hashqueues in case there are additional users.
-> 
-> All of these changes should not have any effect on the userspace
-> semantics of the initial securityfs mount.
-> 
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> Cc: John Johansen <john.johansen@canonical.com>
-> Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-> Cc: Micah Morton <mortonm@chromium.org>
-> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/inode.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/inode.c b/security/inode.c
-> index 6c326939750d..13e6780c4444 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -159,7 +159,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
->  		inode->i_fop = fops;
->  	}
->  	d_instantiate(dentry, inode);
-> -	dget(dentry);
->  	inode_unlock(dir);
->  	return dentry;
->  
-> @@ -302,10 +301,12 @@ void securityfs_remove(struct dentry *dentry)
->  	dir = d_inode(dentry->d_parent);
->  	inode_lock(dir);
->  	if (simple_positive(dentry)) {
-> +		dget(dentry);
->  		if (d_is_dir(dentry))
->  			simple_rmdir(dir, dentry);
->  		else
->  			simple_unlink(dir, dentry);
-> +		d_delete(dentry);
->  		dput(dentry);
->  	}
->  	inode_unlock(dir);
-> -- 
-> 2.34.1
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

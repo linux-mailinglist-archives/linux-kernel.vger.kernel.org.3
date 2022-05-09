@@ -2,116 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C3051F5E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E614951F60A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236841AbiEIHyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S236688AbiEIHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiEIHkG (ORCPT
+        with ESMTP id S236268AbiEIHjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:40:06 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2071.outbound.protection.outlook.com [40.107.100.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C74A1461;
-        Mon,  9 May 2022 00:36:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ntMR60SvsoJLKcTAyc54LvAUEa5B3qw7DjcMfaEhwwsbpw9vG+F8ejYm0eMdRDgGx0ZFlB7grBxnueXNV6MEzyZpB+WcCZwAmI6zEdcTd51i7tmfzsWYTkZRnLoxayd4UH4o0ChxHGlNwtygoUAPr/hf8SLweqA8WsYU0QkgC60yPkxd/o8YQJfaP/6U4QfkMBYd2qFaLIxp+8+XPUU8kmL6GqWs0srawzTZ3h2qpMpwLT77OyhR6PnGfVw6iWrQqgtFRgrmC78qImbrAt4DilvQTw38jUeZCX64PJp5Cmx40AwLxpYBv+8FJLaYQbRtUUOqPuCTk8pjOtZDN6M6XA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MvqJ02TnpENRUTIsplNLQCWRqp3jILwdvV62G90TeRo=;
- b=iNkSzLH6H04PDdvaW+m1aCqG7EUuaiOnZnmChmgp7jJcbTBy6LN6R0tVvxF8GF+fxP8n5BXwg9PpFMVdUxKPe6Z31ZC/hsONXkEbTxC3IR2FFlr8kJVqQN0drMnK2dt2zPeloFHg16gvihkJ76OjH6S0pdy2cw+5aWeBgRnLk4Ei8KK+s74ranB3SrK7xGHqP7kb8ZfGT0CfwKilQtTIqjIotlBTXda6hH61Rx3PlKw4wosFoq5Xsqete8eFR1spyJ9OR8+29jRBCQAtwicBjctQSql6Y1mJeYEc02IWAHMPzJUVuuSoIl1fBYf6iDs5Uuo8Fa75ZdhCp6FYH1LQNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Mon, 9 May 2022 03:39:05 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B1A1E8
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:35:11 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so15186028edw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MvqJ02TnpENRUTIsplNLQCWRqp3jILwdvV62G90TeRo=;
- b=XbWMuxiaIdpRdCxjTnAHh+Mfy0lqLdcs83sO99xH7/de0QvlwLvNC5b2daaQ8Q2WZFz7LWpTjh8quwdRQN29QQ6JL6Bcb1uNgL+uKdKJ9WOm2m0JiJjslukIzIs9hgDkfGYCSnBLxj4jP837yxVOTjsFsyW6byB+FrXTK21b6XQ=
-Received: from DM6PR04CA0006.namprd04.prod.outlook.com (2603:10b6:5:334::11)
- by BY5PR02MB6082.namprd02.prod.outlook.com (2603:10b6:a03:1fe::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Mon, 9 May
- 2022 07:35:01 +0000
-Received: from DM3NAM02FT059.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:334:cafe::4b) by DM6PR04CA0006.outlook.office365.com
- (2603:10b6:5:334::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
- Transport; Mon, 9 May 2022 07:35:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT059.mail.protection.outlook.com (10.13.4.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5227.15 via Frontend Transport; Mon, 9 May 2022 07:35:00 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 9 May 2022 00:35:00 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 9 May 2022 00:35:00 -0700
-Envelope-to: cgel.zte@gmail.com,
- jic23@kernel.org,
- lars@metafoo.de,
- linux-iio@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- lv.ruyi@zte.com.cn,
- zealci@zte.com.cn
-Received: from [10.254.241.50] (port=37252)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nnxv2-000Dyx-11; Mon, 09 May 2022 00:35:00 -0700
-Message-ID: <c19cce8d-ca99-4993-435d-1a4e53543713@xilinx.com>
-Date:   Mon, 9 May 2022 09:34:57 +0200
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6jbURD8Ey2jd/vwDhR1u6Z9PNW187Y1F9ebai4/UsoU=;
+        b=L74itdn5Wcx/56Pz2s1h8uLsLuSZhFw0Z98BIInddU6cGZRn0/kl5pwPoWyNvnhm3m
+         vwVUWJsUGJwVSsy3ob82PnHB7WVgTowC/+TDjuzwyPXHjePgr6qadNIXDCVt4n5EVaLm
+         T3uXj/kmBzdJVjy63+STw5j3OHd/7srnA4DBs5c7ZaDYu8+onYOveOpqfCnWFWbsiJKG
+         mMsxNmwWouQpVZAW19AkVU/nMrve3qEtgUrZ1nNoJ6D+TgaBl1gy+pCmlN8ym7fqYauY
+         pkKrNO7RaXfR7qCTju5FKt4YSAZbD0t8/wEM5fAybnXyGljplV5MWNrPUtkvmboeIorO
+         v0jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6jbURD8Ey2jd/vwDhR1u6Z9PNW187Y1F9ebai4/UsoU=;
+        b=plIjwAssam50oENagZf7Sodjb7itWXq6YgIkCffu3VqHmPWtcR9RP1BM1b4ewLmHta
+         v3J64uXuaYjQo86DQXHBTyKkLrcOH1o0sk9rVLCVpVUSAjqFbyGwD94iNZc/vFUKF+uH
+         efrLio/WbOAaCiDPpm7AYOMeohFyXrILLcSglLY0aZ5fn96bQEdwMyy/X8iZyM4Crzys
+         uVTYilrJOKVyzRU9A+ch1zhDymihN1SwFa9mCan6gxkFgK43wmvX8w7KUCGMKry99CW9
+         yTM2SOTtAiPx6KStKVpWPmM2HjQK0El83NAjM7r41RURguIhiQsOJiQQUz8bfYqkO8vq
+         RM1A==
+X-Gm-Message-State: AOAM5305XrLJdQYDwYgC0X5C7jrcjYRtwN55XlYJBE9eFvGsRmtYTrkI
+        XuO2FV22txajQDH7DXwhXOUJYw==
+X-Google-Smtp-Source: ABdhPJzYO8cmNC9uBKCClx5X3DrATjSonDW6UXPxBkrSLm3jIm2wX91BBa+d8YB3/zGFnWnOLUhhZA==
+X-Received: by 2002:aa7:d416:0:b0:425:f5c7:d633 with SMTP id z22-20020aa7d416000000b00425f5c7d633mr15808452edq.105.1652081708825;
+        Mon, 09 May 2022 00:35:08 -0700 (PDT)
+Received: from [192.168.0.242] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ze11-20020a170906ef8b00b006f3ef214e43sm4773108ejb.169.2022.05.09.00.35.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 00:35:08 -0700 (PDT)
+Message-ID: <46bc32df-e4e8-ac47-426d-8056714f0d5c@linaro.org>
+Date:   Mon, 9 May 2022 09:35:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] iio: adc: fix return error variable
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 3/3] dt-bindings: mediatek: add ethdr definition for
+ mt8195
 Content-Language: en-US
-To:     <cgel.zte@gmail.com>, <jic23@kernel.org>, <lars@metafoo.de>
-CC:     <anand.ashok.dumbre@xilinx.com>, <michal.simek@xilinx.com>,
-        <manish.narani@xilinx.com>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220509072405.1118019-1-lv.ruyi@zte.com.cn>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220509072405.1118019-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de
+Cc:     airlied@linux.ie, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
+        nancy.lin@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220509044302.27878-1-rex-bc.chen@mediatek.com>
+ <20220509044302.27878-4-rex-bc.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220509044302.27878-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5258545a-1ca4-4769-fdf5-08da318e6d05
-X-MS-TrafficTypeDiagnostic: BY5PR02MB6082:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR02MB608274A308DB13E3406CADE9C6C69@BY5PR02MB6082.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eErOMalYHkTq9dS4ox707RxnQhXZ+1yS5buprsdu3kh0EG7oM+br1X9J139fQUkuxQI7je3GvX8qnRxpJ9avK1VPUxnbDrTzQ0liTf+LibApF5UrWJbUeXfaOIUs4QyFjwt1xPIBstT97/9Gevp6U+sESn78ehwWyuKYX5IZyINrg/6TrJUzO9cYYwLLGDii/1z5txiIlsM2AXrOKkJMM4vfbX8LttvMxea6foYkRP3C8bKR3neQRr/9D7kJ4wZDQqMn/Yfa+mSmGfWSR2ZBewj8YphhpbCpkX93ixOu0jffDvQEaQb9Ysw3pIrq8gwjf+E/qKzuYfc6YGRW594ka9c6bcWRWD4oMQVDg1QxN7IiRJJWAb/YRi5GRyvOy4Ws1NrIpwpHEDMP6ofdVy+1T0ey52KO1Oi47Db7LyNksw17tT4LfQKyk4KuCahD0p5fBtweyv1cfT8TbI9tx0d4BAi00dRDU4S90Ig8rjAu1H7IuC9goUrHfoeODiAawticFHn8yF7D/i5ZpszEGcDFOn8wc3lPYruV6rariHNEOwWQU0RcpCNt5VpBZkB4vLyqtbF74APOy0BLRum0ng0cgofsvUtalsE0kQyD/7SUeqot01yF9iPii7ET0LXhUZ/KxV+jhHBorcObcaCM/lLpvEptpYjH289B/K9oLgJ74BkfraIfOz034kX+33z54EZ7oW2tyL3JQHPD7k117cPhYxvv2jEXHVUf9/XnDeYJV1I=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(82310400005)(44832011)(36756003)(356005)(7636003)(31696002)(2616005)(4744005)(83380400001)(8936002)(53546011)(110136005)(9786002)(70586007)(70206006)(54906003)(4326008)(8676002)(31686004)(336012)(36860700001)(26005)(426003)(40460700003)(47076005)(508600001)(2906002)(5660300002)(6666004)(186003)(316002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 07:35:00.9635
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5258545a-1ca4-4769-fdf5-08da318e6d05
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT059.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6082
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,35 +83,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/9/22 09:24, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On 09/05/2022 06:43, Rex-BC Chen wrote:
+> From: "Nancy.Lin" <nancy.lin@mediatek.com>
 > 
-> Return irq instead of ret which always equals to zero here.
+> Add vdosys1 ETHDR definition.
 > 
-> Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->   drivers/iio/adc/xilinx-ams.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../display/mediatek/mediatek,ethdr.yaml      | 191 ++++++++++++++++++
+>  1 file changed, 191 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
 > 
-> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-> index a55396c1f8b2..a7687706012d 100644
-> --- a/drivers/iio/adc/xilinx-ams.c
-> +++ b/drivers/iio/adc/xilinx-ams.c
-> @@ -1409,7 +1409,7 @@ static int ams_probe(struct platform_device *pdev)
->   
->   	irq = platform_get_irq(pdev, 0);
->   	if (irq < 0)
-> -		return ret;
-> +		return irq;
->   
->   	ret = devm_request_irq(&pdev->dev, irq, &ams_irq, 0, "ams-irq",
->   			       indio_dev);
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+> new file mode 100644
+> index 000000000000..65f22fba9fed
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+> @@ -0,0 +1,191 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,ethdr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Ethdr Device Tree Bindings
 
-Reviewed-by: Michal Simek <michal.simek@amd.com>
+s/Device Tree Bindings//
 
-Thanks,
-Michal
+You need to add some description of a device. What is a Ethdr?
+
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Philipp Zabel <p.zabel@pengutronix.de>
+> +
+> +description:
+> +  ETHDR is designed for HDR video and graphics conversion in the external display path.
+> +  It handles multiple HDR input types and performs tone mapping, color space/color
+> +  format conversion, and then combine different layers, output the required HDR or
+> +  SDR signal to the subsequent display path. This engine is composed of two video
+> +  frontends, two graphic frontends, one video backend and a mixer. ETHDR has two
+> +  DMA function blocks, DS and ADL. These two function blocks read the pre-programmed
+> +  registers from DRAM and set them to HW in the v-blanking period.
+
+Block does not look like wrapped at 80.
+
+> +
+> +properties:
+> +  compatible:
+> +    items:
+
+One item, so no items.
+
+> +      - const: mediatek,mt8195-disp-ethdr
+> +
+> +  reg:
+> +    maxItems: 7
+> +
+> +  reg-names:
+> +    items:
+> +      - const: mixer
+> +      - const: vdo_fe0
+> +      - const: vdo_fe1
+> +      - const: gfx_fe0
+> +      - const: gfx_fe1
+> +      - const: vdo_be
+> +      - const: adl_ds
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    description: The compatible property is DMA function blocks.
+
+I don't understand this at all.
+
+> +      Should point to the respective IOMMU block with master port as argument,
+> +      see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
+> +      details.
+
+Just skip the description, it's same everywhere.
+
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    items:
+> +      - description: mixer clock
+> +      - description: video frontend 0 clock
+> +      - description: video frontend 1 clock
+> +      - description: graphic frontend 0 clock
+> +      - description: graphic frontend 1 clock
+> +      - description: video backend clock
+> +      - description: autodownload and menuload clock
+> +      - description: video frontend 0 async clock
+> +      - description: video frontend 1 async clock
+> +      - description: graphic frontend 0 async clock
+> +      - description: graphic frontend 1 async clock
+> +      - description: video backend async clock
+> +      - description: ethdr top clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: mixer
+> +      - const: vdo_fe0
+> +      - const: vdo_fe1
+> +      - const: gfx_fe0
+> +      - const: gfx_fe1
+> +      - const: vdo_be
+> +      - const: adl_ds
+> +      - const: vdo_fe0_async
+> +      - const: vdo_fe1_async
+> +      - const: gfx_fe0_async
+> +      - const: gfx_fe1_async
+> +      - const: vdo_be_async
+> +      - const: ethdr_top
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    items:
+> +      - description: video frontend 0 async reset
+> +      - description: video frontend 1 async reset
+> +      - description: graphic frontend 0 async reset
+> +      - description: graphic frontend 1 async reset
+> +      - description: video backend async reset
+> +
+> +  reset-names:
+> +    items:
+> +      - const: vdo_fe0_async
+> +      - const: vdo_fe1_async
+> +      - const: gfx_fe0_async
+> +      - const: gfx_fe1_async
+> +      - const: vdo_be_async
+> +
+> +  mediatek,gce-client-reg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: The register of display function block to be set by gce.
+> +      There are 4 arguments in this property, gce node, subsys id, offset and
+> +      register size. The subsys id is defined in the gce header of each chips
+> +      include/include/dt-bindings/gce/<chip>-gce.h, mapping to the register of
+> +      display function block.
+> +    items:
+> +      items:
+> +        - description: phandle of GCE
+> +        - description: GCE subsys id
+> +        - description: register offset
+> +        - description: register size
+> +    minItems: 7
+> +    maxItems: 7
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - power-domains
+> +  - resets
+> +  - mediatek,gce-client-reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/gce/mt8195-gce.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    #include <dt-bindings/reset/mt8195-resets.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        disp_ethdr@1c114000 {
+
+No underscores in node name. Generic node names, so display-controller?
+
+
+Best regards,
+Krzysztof

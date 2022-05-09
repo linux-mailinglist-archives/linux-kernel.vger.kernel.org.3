@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD1351FDDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324FC51FDD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbiEINTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S235543AbiEINTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiEINSH (ORCPT
+        with ESMTP id S235351AbiEINSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 09:18:07 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3442A9743
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA002A9742
         for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:14:13 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxhSn5gd7zhZ26;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxhSn6J88zhZ3L;
         Mon,  9 May 2022 21:13:45 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -29,9 +29,9 @@ CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
         <surenb@google.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 12/15] mm/swap: fix the obsolete comment for SWP_TYPE_SHIFT
-Date:   Mon, 9 May 2022 21:14:13 +0800
-Message-ID: <20220509131416.17553-13-linmiaohe@huawei.com>
+Subject: [PATCH 13/15] mm/swap: clean up the comment of find_next_to_unuse
+Date:   Mon, 9 May 2022 21:14:14 +0800
+Message-ID: <20220509131416.17553-14-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220509131416.17553-1-linmiaohe@huawei.com>
 References: <20220509131416.17553-1-linmiaohe@huawei.com>
@@ -51,32 +51,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 3159f943aafd ("xarray: Replace exceptional entries"), there
-is only one bit of 'type' can be shifted up. Update the corresponding
-comment.
+Since commit 10a9c496789f ("mm: simplify try_to_unuse"), frontswap
+parameter is removed. Update the corresponding comment.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- include/linux/swapops.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/swapfile.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 7db424e2dcb1..bb7afd03a324 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -13,10 +13,10 @@
-  * get good packing density in that tree, so the index should be dense in
-  * the low-order bits.
-  *
-- * We arrange the `type' and `offset' fields so that `type' is at the seven
-+ * We arrange the `type' and `offset' fields so that `type' is at the six
-  * high-order bits of the swp_entry_t and `offset' is right-aligned in the
-  * remaining bits.  Although `type' itself needs only five bits, we allow for
-- * shmem/tmpfs to shift it all up a further two bits: see swp_to_radix_entry().
-+ * shmem/tmpfs to shift it all up a further one bit: see swp_to_radix_entry().
-  *
-  * swp_entry_t's are *never* stored anywhere in their arch-dependent format.
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index d5d3e2d03d28..7ead5fb96d9d 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2007,9 +2007,9 @@ static int unuse_mm(struct mm_struct *mm, unsigned int type)
+ }
+ 
+ /*
+- * Scan swap_map (or frontswap_map if frontswap parameter is true)
+- * from current position to next entry still in use. Return 0
+- * if there are no inuse entries after prev till end of the map.
++ * Scan swap_map from current position to next entry still in use.
++ * Return 0 if there are no inuse entries after prev till end of
++ * the map.
   */
+ static unsigned int find_next_to_unuse(struct swap_info_struct *si,
+ 					unsigned int prev)
 -- 
 2.23.0
 

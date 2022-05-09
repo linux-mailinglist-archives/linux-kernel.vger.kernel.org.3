@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ABF51FA03
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D8A51FA00
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiEIKfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S229997AbiEIKgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiEIKex (ORCPT
+        with ESMTP id S231818AbiEIKgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:34:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 739E52A2F4E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652092211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ifIovOYqUdORRjYP2T8sN9gqRG2FPawReokv1bujppM=;
-        b=fTPfs6EAJm4ITzTOkmK9ax/jK/uO1pUz+Vu2RuhHmm1K0Y9p2akknZGPab0y1+lQJS6qor
-        YPLg7VH/CuvqQZFcPv5RG72mjQog6j+cL3u+nbSTKkB+Lbp7HhCqrXNigpFvRkpo499CcM
-        D/ns1sVocwvWyXSFqLwPetM/V62UFy0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-ILJmc7k2M0mIQx4SK2oPuQ-1; Mon, 09 May 2022 06:30:08 -0400
-X-MC-Unique: ILJmc7k2M0mIQx4SK2oPuQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43D15100BAA0;
-        Mon,  9 May 2022 10:30:08 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2F4931468D40;
-        Mon,  9 May 2022 10:30:06 +0000 (UTC)
-Message-ID: <815c41ebfbe8876d2f2e8bbc779a035b66eeeafd.camel@redhat.com>
-Subject: Re: [PATCH v4 08/15] KVM: x86: Deactivate APICv on vCPU with APIC
- disabled
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Mon, 09 May 2022 13:30:05 +0300
-In-Reply-To: <b553737e9f7b587cd1ce598e276c1c9117fa2a98.camel@redhat.com>
-References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
-         <20220508023930.12881-9-suravee.suthikulpanit@amd.com>
-         <b553737e9f7b587cd1ce598e276c1c9117fa2a98.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 9 May 2022 06:36:15 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7986D200F52;
+        Mon,  9 May 2022 03:32:21 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id b19so18770489wrh.11;
+        Mon, 09 May 2022 03:32:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2sYDLhBqgK1eJ+0rBvVHI+WzqwEFLfQswJVDMagdYSQ=;
+        b=HYNcmJ8Edd8pMk5ofM5OCaHGFvtJ/vFBox8A9Aq1O7P/D4QfZl8aGNQ5CbNkqvw6xi
+         C1zjLKYhcVeC/vMX2h6mh55PsUhkhyQuhm3P18bcW6tCVw+XQMuWHHqEnOcTH79Yl3rS
+         Jr8lO3O7P7wf+K/WxNbiIMi/a4of+11M3aCGD5KajbprFISmpv5UfjY51RJNZuN9a/ss
+         2Mu8NbwoTQU3yjjrUeoSPOdbtU/grfmX1stgUjAnIYAis51VHa5/sSDo/frygQdusrMl
+         8eYUB4YWIz8zftfWogr0CvyFRAg0FhTR9kWhLICTDDHfcK9Hr087hPUCl0SLPmMYycj0
+         aEHA==
+X-Gm-Message-State: AOAM533vyyVfjHLjsCRJEt718aikH2xtM6+nEuX7fKP5D4Nhl09/ipk3
+        9PjbLkgEzhguw8ILB8ntqbfEB/d0eOLFSg==
+X-Google-Smtp-Source: ABdhPJwBbEjldU3ovsXYo5ZFog5JJGQdbFcO1n50ahxbCUJLiYFrBoenDbdWAdsQ1Lw2D5uf/b/Pnw==
+X-Received: by 2002:a5d:4045:0:b0:20a:cac6:d33d with SMTP id w5-20020a5d4045000000b0020acac6d33dmr13782215wrp.657.1652092315717;
+        Mon, 09 May 2022 03:31:55 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05600016c300b0020c5253d8cesm10356372wrf.26.2022.05.09.03.31.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 03:31:55 -0700 (PDT)
+Message-ID: <f55e96d0-6683-0aef-4d4c-5c635e85aabd@kernel.org>
+Date:   Mon, 9 May 2022 12:31:54 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] tty: n_gsm: fix invalid gsmtty_write_room() result
+Content-Language: en-US
+To:     "D. Starke" <daniel.starke@siemens.com>,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220504081733.3494-1-daniel.starke@siemens.com>
+ <20220504081733.3494-3-daniel.starke@siemens.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220504081733.3494-3-daniel.starke@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-09 at 13:18 +0300, Maxim Levitsky wrote:
-> On Sat, 2022-05-07 at 21:39 -0500, Suravee Suthikulpanit wrote:
-> > APICv should be deactivated on vCPU that has APIC disabled.
-> > Therefore, call kvm_vcpu_update_apicv() when changing
-> > APIC mode, and add additional check for APIC disable mode
-> > when determine APICV activation,
-> > 
-> > Suggested-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> > ---
-> >  arch/x86/kvm/lapic.c | 4 +++-
-> >  arch/x86/kvm/x86.c   | 4 +++-
-> >  2 files changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 8b8c4a905976..680824d7aa0d 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2346,8 +2346,10 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
-> >  	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
-> >  		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-> >  
-> > -	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE))
-> > +	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
-> > +		kvm_vcpu_update_apicv(vcpu);
-> >  		static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
+On 04. 05. 22, 10:17, D. Starke wrote:
+> From: Daniel Starke <daniel.starke@siemens.com>
 > 
-> As futher optimization, we might even get rid of .set_virtual_apic_mode
-> and do all of this in kvm_vcpu_update_apicv.
-> But no need to this now.
-> 
-> 
-> > +	}
-> >  
-> >  	apic->base_address = apic->vcpu->arch.apic_base &
-> >  			     MSR_IA32_APICBASE_BASE;
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 8ee8c91fa762..77e49892dea1 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9836,7 +9836,9 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
-> >  
-> >  	down_read(&vcpu->kvm->arch.apicv_update_lock);
-> >  
-> > -	activate = kvm_vcpu_apicv_activated(vcpu);
-> > +	/* Do not activate APICV when APIC is disabled */
-> > +	activate = kvm_vcpu_apicv_activated(vcpu) &&
-> > +		   (kvm_get_apic_mode(vcpu) != LAPIC_MODE_DISABLED);
-> >  
-> >  	if (vcpu->arch.apicv_active == activate)
-> >  		goto out;
-> 
-> Looks good!
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
+> gsmtty_write() does not prevent the user to use the full fifo size of 4096
+> bytes as allocated in gsm_dlci_alloc(). However, gsmtty_write_room() tries
+> to limit the return value by 'TX_SIZE' and returns a negative value if the
+> fifo has more than 'TX_SIZE' bytes stored. This is obviously wrong as
+> 'TX_SIZE' is defined as 512.
+> Define 'TX_SIZE' to the fifo size and use it accordingly for allocation to
+> keep the current behavior. Return the correct remaining size of the fifo in
+> gsmtty_write_room() via kfifo_avail().
 
-Sorry for a duplicated reply - I tried to cancel it
-to correct a typo, but I was too late I see.
+Right.
 
-Best regards,
-	Maxim Levitsky
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
+> Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>   drivers/tty/n_gsm.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index bcb714031d69..fd8b86dde525 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -137,6 +137,7 @@ struct gsm_dlci {
+>   	int retries;
+>   	/* Uplink tty if active */
+>   	struct tty_port port;	/* The tty bound to this DLCI if there is one */
+> +#define TX_SIZE		4096    /* Must be power of 2. */
+
+Only that I'd not put the macro definition here. But outside the structure.
+
+>   	struct kfifo fifo;	/* Queue fifo for the DLCI */
+>   	int adaption;		/* Adaption layer in use */
+>   	int prev_adaption;
+> @@ -1731,7 +1732,7 @@ static struct gsm_dlci *gsm_dlci_alloc(struct gsm_mux *gsm, int addr)
+>   		return NULL;
+>   	spin_lock_init(&dlci->lock);
+>   	mutex_init(&dlci->mutex);
+> -	if (kfifo_alloc(&dlci->fifo, 4096, GFP_KERNEL) < 0) {
+> +	if (kfifo_alloc(&dlci->fifo, TX_SIZE, GFP_KERNEL) < 0) {
+>   		kfree(dlci);
+>   		return NULL;
+>   	}
+> @@ -2976,8 +2977,6 @@ static struct tty_ldisc_ops tty_ldisc_packet = {
+>    *	Virtual tty side
+>    */
+>   
+> -#define TX_SIZE		512
+> -
+>   /**
+>    *	gsm_modem_upd_via_data	-	send modem bits via convergence layer
+>    *	@dlci: channel
+> @@ -3217,7 +3216,7 @@ static unsigned int gsmtty_write_room(struct tty_struct *tty)
+>   	struct gsm_dlci *dlci = tty->driver_data;
+>   	if (dlci->state == DLCI_CLOSED)
+>   		return 0;
+> -	return TX_SIZE - kfifo_len(&dlci->fifo);
+> +	return kfifo_avail(&dlci->fifo);
+>   }
+>   
+>   static unsigned int gsmtty_chars_in_buffer(struct tty_struct *tty)
+
+
+-- 
+js
+suse labs

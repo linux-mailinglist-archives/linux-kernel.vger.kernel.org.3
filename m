@@ -2,69 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B7051F4F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4300551F507
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbiEIHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S235612AbiEIHFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235686AbiEIGvj (ORCPT
+        with ESMTP id S231962AbiEIGxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 02:51:39 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941A815A3F5
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 23:47:46 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id e5so11238258pgc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 23:47:46 -0700 (PDT)
+        Mon, 9 May 2022 02:53:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B6719877D
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 23:49:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id g6so24882755ejw.1
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 23:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9+O2wWIYtSN6v7D3S7HE43AVtnFz4Fs9gpTHjGdIAXw=;
-        b=CUJD3MGxQAYTxanRS7RRy74vpVXIeCRYmEdhWDRMPZvHt5RsJQJ9hSjWBYftdA6WYo
-         XHgX/WXibp+3rMcavpaO63pgoqCAtpvnI4pSinQ1hQw9iEDB12co5iR8TDckzT+1Ir2i
-         MdEOUh7N3Ufhy0Se3m+kBvF4a8A8ZvYTP68yMvOd4u5+1XNJlAYcpY3CTQFZMzB6NlN0
-         onh14jDg3iHYft88hVA5HzlZkvVxYt6j1pFXj92Cjxlx8/Tk47p/dF3Hhb2tCc2Dvupv
-         KOL0wWCFFCleYu0k6KRIqYb2uFHl1YvedkWiWbb2Nr2Uy5fJClzoLSSfg5KC5R8QFdbx
-         M2Ag==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q1uIYNMhCGy4rHwwDKHArD0ERJS+cdwEigc/mkUrZDE=;
+        b=Mb0zfiXOc10IiOZfJPPokzGs7XcA/7jpw/OIqiOD+eKHEEsR1Q8LBthkF/q+eCNL29
+         CNGF1orY/xbxnus7pNzHJc2rJ4hOzmuJys+rDQCMyCEucN8qhlKgNcvURUdntg2LzHu7
+         7E7lQyEi2FDEMzsqYFb2X+SLS1EAc6JlpK5VkFRL+zO5uZKLmlpNioK4Fj60HzsZN1vX
+         ec7l2HQWwDeLv+WTTo+80RDvwoc1NYTcGHJmLSv7VC6l6mmS2ZGxNipWSLC08vksFOL0
+         /M3W0fCxSW7ck/tuBf9nezQw4LZIk2fYn+hF5ajNJZzP/Ex0N+VLa979LoJK3QdeyuSK
+         l13g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9+O2wWIYtSN6v7D3S7HE43AVtnFz4Fs9gpTHjGdIAXw=;
-        b=VJqqZ+9+N1zxoMb0phnlUoxkAay/g7VcO3PbQbt9RGzrousKmnDIKXEOen1Ee2Yn/M
-         KREsC39PqHFjbaX7U4384Or+tXoxGPDWnN+qQYlr5uk328lolZCpw4mGP7YR97XONO9G
-         JbkrKZmFhb0iE5bghKAXNLcXk00fXDi8SHwZgHpIs1DYChkEqMxoL4nBYNzMSBBl1WQM
-         hJTKY8NJNAjcEmEMEszgQeYzMEtxuh9rMr4KmfpJScRLe1pjNeTXEMr3fAGPCg1PIcUl
-         C/88JMDd+jI4xe989LVuTkTXngxoFP72j4WgkkRF/Pw+TTQfFFrEarEWSJkd9bgSgGiJ
-         h1bA==
-X-Gm-Message-State: AOAM5320a3RVUCQ8ttmNoJ830B47TMwNJjxOXCLtmobLBiQaPSeRgRDj
-        BY147DYppTbwfix245aHmBEpc7UWz2nrT+PegTbQlg==
-X-Google-Smtp-Source: ABdhPJzeywHjNPgQ2e8+81H3HxjJ5160+Mo9DrU73UpmHrLc0o39xzUzzFM8Zj7+8U49t8aaXxSFYLrk6xvGEzi9l8g=
-X-Received: by 2002:a63:f4e:0:b0:382:1e31:79e8 with SMTP id
- 14-20020a630f4e000000b003821e3179e8mr12395833pgp.167.1652078860816; Sun, 08
- May 2022 23:47:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q1uIYNMhCGy4rHwwDKHArD0ERJS+cdwEigc/mkUrZDE=;
+        b=0++coBNxRdKJnndKAOWqnOVr4s7dWh3AZfV6NJvsbTfos0/1FeMyp3mQy8bpz1Wdnz
+         MxEKniWplbHnxGP90bDrzJ2ICTN/rTVUPDo3wH7gVj49SQVzi6JgNPH1wYQAwM/JhsIT
+         EHrCYcnDhJxhWbx5eECpQ6Hb54BEi1M/YGqxOVvrs3cF3yutKRVxqLNe/iLzXvk4EGW6
+         eFGSKhwJmvHhoKZHKmEpbTkjgLnxwSj79FYrHkEQrL2WY1t1cmI5VxDBD5cNUlsoQqNM
+         pUXEi+EvRrIm0FiVyW97QEhtlI3yp69FnUEmsgVym55s+KVU4ByeS9WpBtd4PnYfttyq
+         ai5A==
+X-Gm-Message-State: AOAM5306S8dqnU7JaO22vvZXEUNdhCCNDikLgUe+ABaB2z69nBWDfbdI
+        VNtNDJEg1JchKdnkAjCKsUqkWQ==
+X-Google-Smtp-Source: ABdhPJyVxgI4jg1+VhdIEC/Y1keifAQgLTtp3IHMJw9n628QQP1fmw3bGVB7LsEt9DCpBaOcdsvJsw==
+X-Received: by 2002:a17:907:1623:b0:6f6:e9ce:9926 with SMTP id hb35-20020a170907162300b006f6e9ce9926mr10073326ejc.360.1652078934509;
+        Sun, 08 May 2022 23:48:54 -0700 (PDT)
+Received: from [192.168.0.242] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e1-20020a1709062c0100b006f3ef214dafsm4714932ejh.21.2022.05.08.23.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 23:48:53 -0700 (PDT)
+Message-ID: <41d6b00f-d8ac-ca54-99db-ea99c9049e0a@linaro.org>
+Date:   Mon, 9 May 2022 08:48:52 +0200
 MIME-Version: 1.0
-References: <20220502104144.91806-1-manivannan.sadhasivam@linaro.org>
- <20220502104144.91806-6-manivannan.sadhasivam@linaro.org> <CAMZdPi_i60TqszUL+=ocMn-4veyoGRQoOGD_B4YiEpz_uWE+ZQ@mail.gmail.com>
- <20220504081720.GB5446@thinkpad> <CAMZdPi9oA4SSYGSPw9tCmQ=GhwhCgdYz+=rQiUzu1tNbo80ceQ@mail.gmail.com>
- <20220504155855.GA3507@thinkpad> <514326aa-49eb-2b07-b99e-53899722c7e2@quicinc.com>
- <c9ac9fbf-d94e-feea-e762-95eeae8f5a74@quicinc.com>
-In-Reply-To: <c9ac9fbf-d94e-feea-e762-95eeae8f5a74@quicinc.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Mon, 9 May 2022 08:47:06 +0200
-Message-ID: <CAMZdPi_NwN_y7AQMu47NoFDFtgxoV8TPdRdxqm5+GmT0uUZh+g@mail.gmail.com>
-Subject: Re: [PATCH 5/5] bus: mhi: host: Remove redundant dma_wmb() before ctx
- wp update
-To:     Hemant Kumar <quic_hemantk@quicinc.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_bbhatt@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 5/6] dt-bindings: net: dsa: make reset optional and add
+ rgmii-mode to mt7531
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+References: <20220507170440.64005-1-linux@fw-web.de>
+ <06157623-4b9c-6f26-e963-432c75cfc9e5@linaro.org>
+ <DC0D3996-DFFE-4E71-B843-8D34C613D498@public-files.de>
+ <2509116.Lt9SDvczpP@phil>
+ <trinity-7f04b598-0300-4f3c-80e7-0c2145e8ba8f-1652011928036@3c-app-gmx-bap68>
+ <CAMdYzYrG8bK-Yo15RjhhCQKS4ZQW53ePu1q4gbGxVVNKPJHBWg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMdYzYrG8bK-Yo15RjhhCQKS4ZQW53ePu1q4gbGxVVNKPJHBWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,134 +102,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hemant,
+On 08/05/2022 19:04, Peter Geis wrote:
+> On Sun, May 8, 2022 at 8:12 AM Frank Wunderlich <frank-w@public-files.de> wrote:
+>>>
+>>> I think the issue is more for the description itself.
+>>>
+>>> Devicetree is only meant to describe the hardware and does in general don't
+>>> care how any firmware (Linux-kernel, *BSD, etc) handles it. So going with
+>>> "the kernel does it this way" is not a valid reason for a binding change ;-) .
 
-On Fri, 6 May 2022 at 20:02, Hemant Kumar <quic_hemantk@quicinc.com> wrote:
->
-> Hi Loic,
->
-> On 5/6/2022 10:41 AM, Hemant Kumar wrote:
-> > Hi Loic,
-> >
-> > On 5/4/2022 8:58 AM, Manivannan Sadhasivam wrote:
-> >> On Wed, May 04, 2022 at 11:25:33AM +0200, Loic Poulain wrote:
-> >>> On Wed, 4 May 2022 at 10:17, Manivannan Sadhasivam
-> >>> <manivannan.sadhasivam@linaro.org>  wrote:
-> >>>> Hi Loic,
-> >>>>
-> >>>> On Wed, May 04, 2022 at 09:21:20AM +0200, Loic Poulain wrote:
-> >>>>> Hi Mani,
-> >>>>>
-> >>>>> On Mon, 2 May 2022 at 12:42, Manivannan Sadhasivam
-> >>>>> <manivannan.sadhasivam@linaro.org>  wrote:
-> >>>>>> The endpoint device will only read the context wp when the host rings
-> >>>>>> the doorbell.
-> >>>>> Are we sure about this statement? what if we update ctxt_wp while the
-> >>>>> device is still processing the previous ring? is it going to continue
-> >>>>> processing the new ctxt_wp or wait for a new doorbell interrupt? what
-> >>>>> about burst mode in which we don't ring at all (ring_db is no-op)?
-> >>>>>
-> >>>> Good point. I think my statement was misleading. But still this scenario won't
-> >>>> happen as per my undestanding. Please see below.
-> >>>>
-> >>>>>> And moreover the doorbell write is using writel(). This
-> >>>>>> guarantess that the prior writes will be completed before ringing
-> >>>>>> doorbell.
-> >>>>> Yes but the barrier is to ensure that descriptor/ring content is
-> >>>>> updated before we actually pass it to device ownership, it's not about
-> >>>>> ordering with the doorbell write, but the memory coherent ones.
-> >>>>>
-> >>>> I see a clear data dependency between writing the ring element and updating the
-> >>>> context pointer. For instance,
-> >>>>
-> >>>> ```
-> >>>> struct mhi_ring_element *mhi_tre;
-> >>>>
-> >>>> mhi_tre = ring->wp;
-> >>>> /* Populate mhi_tre */
-> >>>> ...
-> >>>>
-> >>>> /* Increment wp */
-> >>>> ring->wp += el_size;
-> >>>>
-> >>>> /* Update ctx wp */
-> >>>> ring->ctx_wp = ring->iommu_base + (ring->wp - ring->base);
-> >>>> ```
-> >>>>
-> >>>> This is analogous to:
-> >>>>
-> >>>> ```
-> >>>> Read PTR A;
-> >>>> Update PTR A;
-> >>>> Increment PTR A;
-> >>>> Write PTR A to PTR B;
-> >>>> ```
-> >>> Interesting point, but shouldn't it be more correct to translate it as:
-> >>>
-> >>> 1. Write PTR A to PTR B (mhi_tre);
-> >>> 2. Update PTR B DATA;
-> >>> 3. Increment PTR A;
-> >>> 4. Write PTR A to PTR C;
-> >>>
-> >>> In that case, it looks like line 2. has no ordering constraint with 3.
-> >>> & 4? whereas the following guarantee it:
-> >>>
-> >>> 1. Write PTR A to PTR B (mhi_tre);
-> >>> 2. Update PTR B DATA;
-> >>> 3. Increment PTR A;
-> >>> dma_wmb()
-> >>> 4. Write PTR A to PTR C;
-> >>>
-> >>> To be honest, compiler optimization is beyond my knowledge, so I don't
-> >>> know if a specific compiler arch/version could be able to mess up the
-> >>> sequence or not. But this pattern is really close to what is described
-> >>> for dma_wmb() usage in Documentation/memory-barriers.txt. That's why I
-> >>> challenged this change and would be conservative, keeping the explicit
-> >>> barrier.
-> >>>
-> >> Hmm. Since I was reading the memory model and going through the MHI code, I
-> >> _thought_ that this dma_wmb() is redundant. But I missed the fact that the
-> >> updating to memory pointed by "wp" happens implicitly via a pointer. So that
-> >> won't qualify as a direct dependency.
-> >>
-> >>>> Here, because of the data dependency due to "ring->wp", the CPU or compiler
-> >>>> won't be ordering the instructions. I think that's one of the reason we never
-> >>>> hit any issue due to this.
-> >>> You may be right here about the implicit ordering guarantee... So if
-> >>> you're sure, I think it would deserve an inline comment to explain why
-> >>> we don't need a memory barrier as in the 'usual' dma descriptor update
-> >>> sequences.
-> >>>
-> >> I think the barrier makes sense now. Sorry for the confusion and thanks for the
-> >> explanations.
-> >>
-> >> Thanks,
-> >> Mani
-> >>
-> >>> Loic
-> >
-> > You made a good point. After following your conversation, in case of
-> > burst mode is enabled and currently
-> >
-> > we are in polling mode, does it make sense to move dma_wmb after
-> > updating channel WP context ?
-> >
-> > DB ring is going to get skipped when we are in pilling mode.
-> >
-> > instead of dma_wmb();
-> > *ring->ctxt_wp  =  cpu_to_le64(db);
-> >
-> > *ring->ctxt_wp  =  cpu_to_le64(db); dma_wmb();
-> >
-> > Thanks,
-> > Hemant
-> >
-> i think i spoke too fast. I think we dont need to worry about the
-> polling mode as the context_wp update would happen at some point of time
-> and that does not require dma_wmb after update context wp.
+Exactly. The argument in commit msg was not matching the change, because
+driver implementation should not be (mostly) a reason for such changes.
 
-Exactly. It's also important to remember that a barrier only ensures
-operations ordering and not committing.
+>>>
+>>> Instead in general want to reason that there are boards without this reset
+>>> facility and thus make it optional for those.
+>>
+>> if only the wording is the problem i try to rephrase it from hardware PoV.
+>>
+>> maybe something like this?
+>>
+>> https://github.com/frank-w/BPI-R2-4.14/commits/5.18-mt7531-mainline2/Documentation/devicetree/bindings/net/dsa/mediatek%2Cmt7530.yaml
 
-Regards,
-Loic
+Looks ok.
+
+>>
+>> Another way is maybe increasing the delay after the reset (to give more time all
+>> come up again), but imho it is no good idea resetting the gmac/mdio-bus from the
+>> child device.
+>>
+>> have not looked into the gmac driver if this always  does the initial reset to
+>> have a "clean state". In this initial reset the switch will be resetted too
+>> and does not need an additional one which needs the gmac/mdio initialization
+>> to be done again.
+> 
+> For clarification, the reset gpio line is purely to reset the phy.
+> If having the switch driver own the reset gpio instead of the gmac
+> breaks initialization that means there's a bug in the gmac driver
+> handling phy init.
+> In testing I've seen issues moving the reset line to the mdio node
+> with other phys and the stmmac gmac driver, so I do believe this is
+> the case.
+
+Yes, this seems reasonable, although Frank mentioned that reset is
+shared with gmac, so it resets some part of it as well?
+
+
+
+
+Best regards,
+Krzysztof

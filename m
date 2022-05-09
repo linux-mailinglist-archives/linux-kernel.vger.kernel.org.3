@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CA151F30D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC7F51F31A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiEIDwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S233676AbiEIDwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiEIDrd (ORCPT
+        with ESMTP id S233338AbiEIDrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:47:33 -0400
+        Sun, 8 May 2022 23:47:35 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3176186E06
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:43:41 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8F93D5C0114;
-        Sun,  8 May 2022 23:43:40 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C8D74DEC
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:43:42 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9AD2E5C0115;
+        Sun,  8 May 2022 23:43:41 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 08 May 2022 23:43:40 -0400
+  by compute2.internal (MEProxy); Sun, 08 May 2022 23:43:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1652067820; x=1652154220; bh=cR
-        qjRcNVYtqC51Nn/ZV3tYv8+W5V46C9d1O6IJ4rhWE=; b=SOrY909sBDtvCDGLCq
-        mRkl4pc4UCfiUxpk/pPVcZpEUEASplhDWeb8Qig0cK2ddOzwgwEyCHkVar5UJZco
-        sxI/SfbwPL31fYNE5sDIvlKs3aHZnR8u/KDDvw4wOQHD3nrU9NTfMSAF0vePaC7C
-        tuFzON0lzlUShBKzS/cSZOzzSPWRRLef7MCVxScNkNjhE+Vayo9J03OAKXGNKpbf
-        5atrE/GuToHnnkkF9qZ1lGS3zM9yibyCozX44GQ+64q5imRg5upAs4AqEYwAW6H+
-        lItGQFBPJq3dIK8ejF0gNNkMVMVOxysvcNRGnA2OZm5IM7Ltm33dIqZ+6uSFpH79
-        VPaQ==
+        :subject:subject:to:to; s=fm2; t=1652067821; x=1652154221; bh=/2
+        9rtCFFrhMq7Dm0L/1ahNgZdkKRCrzt5ZSJjaaJ7o4=; b=pml44wNydIpx6sIAHs
+        QutFDoKw+jCtahf93JAI2UzQkHx8pxJc7ge66fT7SvrhOBQuwoAUZxyKQBl8btEh
+        BYbQjjDUPPxoBF9g/0ACHSU9E+N4hu6Rf3M/qMKTRxV4TZSV5NR1W4xotiypXbQ1
+        vnHI2cusAcXs+NhIMwqjYA/s1zduVRR/iBVQEIuDJrrFeh37QlHFCWEV+TnysPIr
+        B9lD9Cj2IrUya1DeMf3CExgyB0XPwNX0PqodEFaNqxmXQTOoDK76fEVdjq3/XYBX
+        OuWtT6yA42ILLi9KJ7Hi1iY1iUzzlbIPgaqt2nvRCjin/CI6dbFJT/UN5tyLgoU3
+        rOTA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1652067820; x=1652154220; bh=cRqjRcNVYtqC51Nn/ZV3tYv8+W5V46C9d1O
-        6IJ4rhWE=; b=uNmHDBSBOtjRDuRpgzvVwde0VP7Dpg1JBV5pXsbFZhy7VmI3USt
-        nCEvwcwUsNtJTWUlaNSvUbtaqIyiVArwHWgMrvFJ7j3O587CUL+aPe3dqPaubyVc
-        VWeEoDqZREt7MvXeTalkWED0zoVZ5sgeJ3hr8ytRHZ1Qdz3hCaHz4S6ODZ3ROsHx
-        oXOZ/9tINy42gFbn/gzeCDpp/5j5Znl0SNlJ9A/dgopL5gsWBpTmxoCYGv0jpMT/
-        3KJycWKqMXQBaS2jf9ALtV4Ma4d2uWHOKHP/B/eDPdOFXgY2uaYITE6zBiPHjH0J
-        mPH72NlNuCuPHzFVDqIZP9/m/TmFtUw2Myw==
-X-ME-Sender: <xms:7I14Yj2Eptfgee3x6VL6mTx4hEMXYqvS5aohVuPwvVTYQEn-L1vZaw>
-    <xme:7I14YiE454L8T1975bjTnxMgHfjxXyMwn9v4G_0TK4sf_fsjxALpYfvfBFloj9zDY
-    UMuOG1bBN8eBZ-1UA>
-X-ME-Received: <xmr:7I14Yj7krMxADt78Rh6AZWB5_ZCy63lIKGh-ee72F1UT51uvDGEq5HutAaqgasZIpCVq2IPZMs-j0Lb2L1QotySsZP-ICTvi0yu66g3mDkLiO_FGfO2VVesqbiFGMMwEV58Pfw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekgdejhecutefuodetggdotefrodftvf
+        1652067821; x=1652154221; bh=/29rtCFFrhMq7Dm0L/1ahNgZdkKRCrzt5ZS
+        JjaaJ7o4=; b=F5EJGKjhgjYiMng4/n8TtMnPjEZ1TLztMgYNwJXbI5qi3EJuwid
+        jOx+ZNcXcgAHZWOWjXFYjQchpO7hxa79iDd2FruWGeXa6sqH8RqSLRrQ8MtOaxw1
+        svD8YkLU4nK4ekOr5TVcodRSvRFslGq+EYwaS1R1hG7RWkFKGd/dZahEtV/XqVzQ
+        YjOEtvbIvnuWW7snrLHz6GRCIddoYqsWTkoKs4lyIGdJS6cZgodpTI4t9LRdRsGj
+        VtlpcQ5/+iRh1/NwdAOBi2qsTVvHyzy5KkRbDlM1oeYXfHu4gC2Wc5uyhpPM0syp
+        szwrq6pNyQ7tGT2EeKmnvINAZGiHLx2iVFw==
+X-ME-Sender: <xms:7Y14YmEESqvVCuF8oy4RX1zWLGMohKBfRlUJKQLwSOyrbpunpt8JGw>
+    <xme:7Y14YnUf1d1OArytOZnuh8qADLeWxttJrTT4dvWVErvP1Kr9u6qLGD5tvT59QKfX5
+    JOb3U8SzANRZtzIpQ>
+X-ME-Received: <xmr:7Y14YgLbPVvm5Hvrjq6yxLQrCsGDsWsdZ0ztwYuEs_9UYHVNH9k7QVoi56g8PhJFO-GRM4Jh0Ct9wzStbIyYdUsmkfCTv84nO8KVKpRPiFxDQ9B9V0l6Gl3weszMfEcOuS1PVQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekgdejiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
@@ -55,12 +55,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekgdejhecutefuodetggdote
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
     feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:7I14Yo1OuOw5pn4TvQP80f3s1MJe1bamroihr7w_eHmtwGfxjaBCTA>
-    <xmx:7I14YmHkS02UozCCB-9R0M_Q56c5RA36hOYsElKxgnuK5Dvdj73XsQ>
-    <xmx:7I14Yp__0UDbDcbGQ4q9eRXFFO8J3nTXb0Guze9kwXJOgS8LEHYv2g>
-    <xmx:7I14YiEbpAzWoPDSHBdhC9pwQOLBMWt9v9eV4N_Aqwz7x2harDjnJw>
+X-ME-Proxy: <xmx:7Y14YgF41VKTEU3VBDJl3CzjTlMOgrzD0O5LMmMw7BiiNkIcjgLAVw>
+    <xmx:7Y14YsXC5MnXadZNwC5VnGWWmTPLONt_9Fzmk0AorOGl-K-jgxdUaw>
+    <xmx:7Y14YjOI5mHJUxlZwYRYk2Z5M8NiZcQ8-Ih_leB7ALFMLJbfNr7_Uw>
+    <xmx:7Y14YtV8ggjvNp-j6HIIsp_QyYwo7xxyt4gI_TnXkhPqnzMs6YhWQQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 8 May 2022 23:43:39 -0400 (EDT)
+ 8 May 2022 23:43:40 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Wei Xu <xuwei5@hisilicon.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH 4/5] irqchip/sifive-plic: Make better use of the effective affinity mask
-Date:   Sun,  8 May 2022 22:43:32 -0500
-Message-Id: <20220509034333.60017-5-samuel@sholland.org>
+Subject: [PATCH 5/5] irqchip/sifive-plic: Separate the enable and mask operations
+Date:   Sun,  8 May 2022 22:43:33 -0500
+Message-Id: <20220509034333.60017-6-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220509034333.60017-1-samuel@sholland.org>
 References: <20220509034333.60017-1-samuel@sholland.org>
@@ -94,102 +94,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PLIC driver already updates the effective affinity mask in its
-.irq_set_affinity callback. Take advantage of that information to only
-touch bits (and take spinlocks) for the specific relevant hart contexts.
+The PLIC has two per-IRQ checks before sending an IRQ to a hart context.
+First, it checks that the IRQ's priority is nonzero. Then, it checks
+that the enable bit is set for that combination of IRQ and context.
 
-First, make sure the effective affinity mask is set before IRQ startup.
-Since this mask already takes priv->lmask into account, checking that
-mask later is no longer needed (and handler->present is equivalent to
-the bit being set in priv->lmask).
+Currently, the PLIC driver sets both the priority value and the enable
+bit in its (un)mask operations. However, modifying the enable bit is
+problematic for two reasons:
+  1) The enable bits are packed, so changes are not atomic and require
+     taking a spinlock.
+  2) The following requirememnt from the PLIC spec, which explains the
+     racy (un)mask operations in plic_irq_eoi():
 
-Then, when (un)masking or changing affinity, only clear/set the enable
-bits in the specific old/new context(s). The cpumask operations in
-plic_irq_unmask() are not needed because they duplicate the code in
-plic_set_affinity().
+       If the completion ID does not match an interrupt source
+       that is currently enabled for the target, the completion
+       is silently ignored.
+
+Both of these problems are solved by using the priority value to mask
+IRQs. Each IRQ has a separate priority register, so writing the priority
+value is atomic. And since the enable bit remains set while an IRQ is
+masked, the EOI operation works normally. The enable bits are still used
+to control the IRQ's affinity.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/irqchip/Kconfig           |  1 +
- drivers/irqchip/irq-sifive-plic.c | 26 ++++++++------------------
- 2 files changed, 9 insertions(+), 18 deletions(-)
+ drivers/irqchip/irq-sifive-plic.c | 53 +++++++++++++++++++------------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index bc90500a7573..56ef2fc6d2eb 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -529,6 +529,7 @@ config SIFIVE_PLIC
- 	bool "SiFive Platform-Level Interrupt Controller"
- 	depends on RISCV
- 	select IRQ_DOMAIN_HIERARCHY
-+	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
- 	help
- 	   This enables support for the PLIC chip found in SiFive (and
- 	   potentially other) RISC-V systems.  The PLIC controls devices
 diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index bb87e4c3b88e..bf7d5bee0c0c 100644
+index bf7d5bee0c0c..53d266a571be 100644
 --- a/drivers/irqchip/irq-sifive-plic.c
 +++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -109,31 +109,18 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
+@@ -103,9 +103,7 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
+ 				   struct irq_data *d, int enable)
+ {
+ 	int cpu;
+-	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
+ 
+-	writel(enable, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
  	for_each_cpu(cpu, mask) {
  		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
  
--		if (handler->present &&
--		    cpumask_test_cpu(cpu, &handler->priv->lmask))
--			plic_toggle(handler, d->hwirq, enable);
-+		plic_toggle(handler, d->hwirq, enable);
+@@ -113,16 +111,37 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
  	}
  }
  
- static void plic_irq_unmask(struct irq_data *d)
+-static void plic_irq_unmask(struct irq_data *d)
++static void plic_irq_enable(struct irq_data *d)
  {
--	struct cpumask amask;
--	unsigned int cpu;
--	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
--
--	cpumask_and(&amask, &priv->lmask, cpu_online_mask);
--	cpu = cpumask_any_and(irq_data_get_affinity_mask(d),
--					   &amask);
--	if (WARN_ON_ONCE(cpu >= nr_cpu_ids))
--		return;
--	plic_irq_toggle(cpumask_of(cpu), d, 1);
-+	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 1);
+ 	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 1);
  }
  
- static void plic_irq_mask(struct irq_data *d)
+-static void plic_irq_mask(struct irq_data *d)
++static void plic_irq_disable(struct irq_data *d)
  {
--	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
--
--	plic_irq_toggle(&priv->lmask, d, 0);
-+	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 0);
+ 	plic_irq_toggle(irq_data_get_effective_affinity_mask(d), d, 0);
  }
  
++static void plic_irq_unmask(struct irq_data *d)
++{
++	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
++
++	writel(1, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
++}
++
++static void plic_irq_mask(struct irq_data *d)
++{
++	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
++
++	writel(0, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
++}
++
++static void plic_irq_eoi(struct irq_data *d)
++{
++	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
++
++	writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
++}
++
  #ifdef CONFIG_SMP
-@@ -154,11 +141,13 @@ static int plic_set_affinity(struct irq_data *d,
+ static int plic_set_affinity(struct irq_data *d,
+ 			     const struct cpumask *mask_val, bool force)
+@@ -141,32 +160,21 @@ static int plic_set_affinity(struct irq_data *d,
  	if (cpu >= nr_cpu_ids)
  		return -EINVAL;
  
--	plic_irq_toggle(&priv->lmask, d, 0);
--	plic_irq_toggle(cpumask_of(cpu), d, !irqd_irq_masked(d));
-+	plic_irq_mask(d);
+-	plic_irq_mask(d);
++	plic_irq_disable(d);
  
  	irq_data_update_effective_affinity(d, cpumask_of(cpu));
  
-+	if (!irqd_irq_masked(d))
-+		plic_irq_unmask(d);
-+
+-	if (!irqd_irq_masked(d))
+-		plic_irq_unmask(d);
++	if (!irqd_irq_disabled(d))
++		plic_irq_enable(d);
+ 
  	return IRQ_SET_MASK_OK_DONE;
  }
  #endif
-@@ -184,6 +173,7 @@ static struct irq_chip plic_chip = {
- #ifdef CONFIG_SMP
- 	.irq_set_affinity = plic_set_affinity,
- #endif
-+	.flags		= IRQCHIP_AFFINITY_PRE_STARTUP,
- };
  
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+-static void plic_irq_eoi(struct irq_data *d)
+-{
+-	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+-
+-	if (irqd_irq_masked(d)) {
+-		plic_irq_unmask(d);
+-		writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+-		plic_irq_mask(d);
+-	} else {
+-		writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+-	}
+-}
+-
+ static struct irq_chip plic_chip = {
+ 	.name		= "SiFive PLIC",
++	.irq_enable	= plic_irq_enable,
++	.irq_disable	= plic_irq_disable,
+ 	.irq_mask	= plic_irq_mask,
+ 	.irq_unmask	= plic_irq_unmask,
+ 	.irq_eoi	= plic_irq_eoi,
+@@ -372,8 +380,11 @@ static int __init plic_init(struct device_node *node,
+ 			i * CONTEXT_ENABLE_SIZE;
+ 		handler->priv = priv;
+ done:
+-		for (hwirq = 1; hwirq <= nr_irqs; hwirq++)
++		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
+ 			plic_toggle(handler, hwirq, 0);
++			writel(1, priv->regs + PRIORITY_BASE +
++				  hwirq * PRIORITY_PER_ID);
++		}
+ 		nr_handlers++;
+ 	}
+ 
 -- 
 2.35.1
 

@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D5851F61D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA28751F5A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiEIHwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S236829AbiEIHyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235861AbiEIHpE (ORCPT
+        with ESMTP id S235877AbiEIHpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 03:45:04 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415A123179;
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413361A055;
         Mon,  9 May 2022 00:41:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VCgwzGy_1652082063;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VCgwzGy_1652082063)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 09 May 2022 15:41:04 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        yinxin.x@bytedance.com, zhangjiachen.jaycee@bytedance.com,
-        zhujia.zj@bytedance.com
-Subject: [PATCH v11 22/22] erofs: change to use asynchronous io for fscache readpage/readahead
-Date:   Mon,  9 May 2022 15:40:28 +0800
-Message-Id: <20220509074028.74954-23-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220509074028.74954-1-jefflexu@linux.alibaba.com>
-References: <20220509074028.74954-1-jefflexu@linux.alibaba.com>
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxY4z6mFdz4xdK;
+        Mon,  9 May 2022 17:41:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652082068;
+        bh=i0aeTdQw+3JrPXHk8PlA8SvtwJ+ifxuMK43yX2iCLSQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VAFmLUDaiqLp5Qsrmgm5VS629PvqFw5tpiWzQv8pgKhY7ql1tRLh2eWx9FML/WanV
+         HxO8udSPblN+aSlj8QdXAw5ydeXAXHxuLHOJiPfvyK7Xt2NN1njefRZvQ7KHtrUdIr
+         LqVqq/uv45cthYyZv4+Y6RA+HqJyIzMAYHyjoXDhcJ4Gm+vEl1kkm5UtqAsV94/iTK
+         ynC9CpivVEe5b0kt428smcMEimLXctjvCj+kbhWo2u9Gp2PRBGV5dCURVGrJ4X7WPc
+         wfTH9ojKQkLCZyCPn3dO1Q54KNgbnfNqxkElv5dFUTnsMZ0/qfSI34WFe/3GNUpZTv
+         ZyfmNpg77bHuw==
+Date:   Mon, 9 May 2022 17:41:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Daeho Jeong <daehojeong@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the folio tree with the f2fs tree
+Message-ID: <20220509174106.323ac148@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/soev6gK5Yjbb8FVlyI=yQq/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,367 +52,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Yin <yinxin.x@bytedance.com>
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Use asynchronous io to read data from fscache may greatly improve IO
-bandwidth for sequential buffer read scenario.
+Hi all,
 
-Change erofs_fscache_read_folios to erofs_fscache_read_folios_async,
-and read data from fscache asynchronously.
-Make .readpage()/.readahead() to use this new helper.
+Today's linux-next merge of the folio tree got a conflict in:
 
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
-Reviewed-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/fscache.c | 239 +++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 199 insertions(+), 40 deletions(-)
+  fs/f2fs/data.c
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index a402d8f0a063..f23fde003c6d 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -5,57 +5,203 @@
- #include <linux/fscache.h>
- #include "internal.h"
- 
-+static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
-+					     loff_t start, size_t len)
-+{
-+	struct netfs_io_request *rreq;
-+
-+	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
-+	if (!rreq)
-+		return ERR_PTR(-ENOMEM);
-+
-+	rreq->start	= start;
-+	rreq->len	= len;
-+	rreq->mapping	= mapping;
-+	INIT_LIST_HEAD(&rreq->subrequests);
-+	refcount_set(&rreq->ref, 1);
-+
-+	return rreq;
-+}
-+
-+static void erofs_fscache_put_request(struct netfs_io_request *rreq)
-+{
-+	if (refcount_dec_and_test(&rreq->ref)) {
-+		if (rreq->cache_resources.ops)
-+			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-+		kfree(rreq);
-+	}
-+}
-+
-+static void erofs_fscache_put_subrequest(struct netfs_io_subrequest *subreq)
-+{
-+	if (refcount_dec_and_test(&subreq->ref)) {
-+		erofs_fscache_put_request(subreq->rreq);
-+		kfree(subreq);
-+	}
-+}
-+
-+static void erofs_fscache_clear_subrequests(struct netfs_io_request *rreq)
-+{
-+	struct netfs_io_subrequest *subreq;
-+
-+	while (!list_empty(&rreq->subrequests)) {
-+		subreq = list_first_entry(&rreq->subrequests,
-+				struct netfs_io_subrequest, rreq_link);
-+		list_del(&subreq->rreq_link);
-+		erofs_fscache_put_subrequest(subreq);
-+	}
-+}
-+
-+static void erofs_fscache_rreq_unlock_folios(struct netfs_io_request *rreq)
-+{
-+	struct netfs_io_subrequest *subreq;
-+	struct folio *folio;
-+	unsigned int iopos;
-+	pgoff_t start_page = rreq->start / PAGE_SIZE;
-+	pgoff_t last_page = ((rreq->start + rreq->len) / PAGE_SIZE) - 1;
-+	bool subreq_failed = false;
-+
-+	XA_STATE(xas, &rreq->mapping->i_pages, start_page);
-+
-+	subreq = list_first_entry(&rreq->subrequests,
-+				  struct netfs_io_subrequest, rreq_link);
-+	iopos = 0;
-+	subreq_failed = (subreq->error < 0);
-+
-+	rcu_read_lock();
-+	xas_for_each(&xas, folio, last_page) {
-+		unsigned int pgpos = (folio_index(folio) - start_page) * PAGE_SIZE;
-+		unsigned int pgend = pgpos + folio_size(folio);
-+		bool pg_failed = false;
-+
-+		for (;;) {
-+			if (!subreq) {
-+				pg_failed = true;
-+				break;
-+			}
-+
-+			pg_failed |= subreq_failed;
-+			if (pgend < iopos + subreq->len)
-+				break;
-+
-+			iopos += subreq->len;
-+			if (!list_is_last(&subreq->rreq_link, &rreq->subrequests)) {
-+				subreq = list_next_entry(subreq, rreq_link);
-+				subreq_failed = (subreq->error < 0);
-+			} else {
-+				subreq = NULL;
-+				subreq_failed = false;
-+			}
-+			if (pgend == iopos)
-+				break;
-+		}
-+
-+		if (!pg_failed)
-+			folio_mark_uptodate(folio);
-+
-+		folio_unlock(folio);
-+	}
-+	rcu_read_unlock();
-+}
-+
-+static void erofs_fscache_rreq_complete(struct netfs_io_request *rreq)
-+{
-+	erofs_fscache_rreq_unlock_folios(rreq);
-+	erofs_fscache_clear_subrequests(rreq);
-+	erofs_fscache_put_request(rreq);
-+}
-+
-+static void erofc_fscache_subreq_complete(void *priv,
-+		ssize_t transferred_or_error, bool was_async)
-+{
-+	struct netfs_io_subrequest *subreq = priv;
-+	struct netfs_io_request *rreq = subreq->rreq;
-+
-+	if (IS_ERR_VALUE(transferred_or_error))
-+		subreq->error = transferred_or_error;
-+
-+	if (atomic_dec_and_test(&rreq->nr_outstanding))
-+		erofs_fscache_rreq_complete(rreq);
-+
-+	erofs_fscache_put_subrequest(subreq);
-+}
-+
- /*
-  * Read data from fscache and fill the read data into page cache described by
-- * @start/len, which shall be both aligned with PAGE_SIZE. @pstart describes
-+ * @rreq, which shall be both aligned with PAGE_SIZE. @pstart describes
-  * the start physical address in the cache file.
-  */
--static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
--				     struct address_space *mapping,
--				     loff_t start, size_t len,
-+static int erofs_fscache_read_folios_async(struct fscache_cookie *cookie,
-+				     struct netfs_io_request *rreq,
- 				     loff_t pstart)
- {
- 	enum netfs_io_source source;
--	struct netfs_io_request rreq = {};
--	struct netfs_io_subrequest subreq = { .rreq = &rreq, };
--	struct netfs_cache_resources *cres = &rreq.cache_resources;
--	struct super_block *sb = mapping->host->i_sb;
-+	struct super_block *sb = rreq->mapping->host->i_sb;
-+	struct netfs_io_subrequest *subreq;
-+	struct netfs_cache_resources *cres = &rreq->cache_resources;
- 	struct iov_iter iter;
-+	loff_t start = rreq->start;
-+	size_t len = rreq->len;
- 	size_t done = 0;
- 	int ret;
- 
-+	atomic_set(&rreq->nr_outstanding, 1);
-+
- 	ret = fscache_begin_read_operation(cres, cookie);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	while (done < len) {
--		subreq.start = pstart + done;
--		subreq.len = len - done;
--		subreq.flags = 1 << NETFS_SREQ_ONDEMAND;
-+		subreq = kzalloc(sizeof(struct netfs_io_subrequest), GFP_KERNEL);
-+		if (subreq) {
-+			INIT_LIST_HEAD(&subreq->rreq_link);
-+			refcount_set(&subreq->ref, 2);
-+			subreq->rreq = rreq;
-+			refcount_inc(&rreq->ref);
-+		} else {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
-+		subreq->start = pstart + done;
-+		subreq->len	=  len - done;
-+		subreq->flags = 1 << NETFS_SREQ_ONDEMAND;
- 
--		source = cres->ops->prepare_read(&subreq, LLONG_MAX);
--		if (WARN_ON(subreq.len == 0))
-+		list_add_tail(&subreq->rreq_link, &rreq->subrequests);
-+
-+		source = cres->ops->prepare_read(subreq, LLONG_MAX);
-+		if (WARN_ON(subreq->len == 0))
- 			source = NETFS_INVALID_READ;
- 		if (source != NETFS_READ_FROM_CACHE) {
- 			erofs_err(sb, "failed to fscache prepare_read (source %d)",
- 				  source);
- 			ret = -EIO;
-+			subreq->error = ret;
-+			erofs_fscache_put_subrequest(subreq);
- 			goto out;
- 		}
- 
--		iov_iter_xarray(&iter, READ, &mapping->i_pages,
--				start + done, subreq.len);
--		ret = fscache_read(cres, subreq.start, &iter,
--				   NETFS_READ_HOLE_FAIL, NULL, NULL);
-+		atomic_inc(&rreq->nr_outstanding);
-+
-+		iov_iter_xarray(&iter, READ, &rreq->mapping->i_pages,
-+				start + done, subreq->len);
-+
-+		ret = fscache_read(cres, subreq->start, &iter,
-+				   NETFS_READ_HOLE_FAIL,
-+				   erofc_fscache_subreq_complete, subreq);
-+		if (ret == -EIOCBQUEUED)
-+			ret = 0;
- 		if (ret) {
- 			erofs_err(sb, "failed to fscache_read (ret %d)", ret);
- 			goto out;
- 		}
- 
--		done += subreq.len;
-+		done += subreq->len;
- 	}
- out:
--	fscache_end_operation(cres);
-+	if (atomic_dec_and_test(&rreq->nr_outstanding))
-+		erofs_fscache_rreq_complete(rreq);
-+
- 	return ret;
- }
- 
-@@ -64,6 +210,7 @@ static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
- 	int ret;
- 	struct folio *folio = page_folio(page);
- 	struct super_block *sb = folio_mapping(folio)->host->i_sb;
-+	struct netfs_io_request *rreq;
- 	struct erofs_map_dev mdev = {
- 		.m_deviceid = 0,
- 		.m_pa = folio_pos(folio),
-@@ -73,11 +220,13 @@ static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
- 	if (ret)
- 		goto out;
- 
--	ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
--			folio_mapping(folio), folio_pos(folio),
--			folio_size(folio), mdev.m_pa);
--	if (!ret)
--		folio_mark_uptodate(folio);
-+	rreq = erofs_fscache_alloc_request(folio_mapping(folio),
-+				folio_pos(folio), folio_size(folio));
-+	if (IS_ERR(rreq))
-+		goto out;
-+
-+	return erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-+				rreq, mdev.m_pa);
- out:
- 	folio_unlock(folio);
- 	return ret;
-@@ -117,6 +266,7 @@ static int erofs_fscache_readpage(struct file *file, struct page *page)
- 	struct super_block *sb = inode->i_sb;
- 	struct erofs_map_blocks map;
- 	struct erofs_map_dev mdev;
-+	struct netfs_io_request *rreq;
- 	erofs_off_t pos;
- 	loff_t pstart;
- 	int ret;
-@@ -149,10 +299,15 @@ static int erofs_fscache_readpage(struct file *file, struct page *page)
- 	if (ret)
- 		goto out_unlock;
- 
-+
-+	rreq = erofs_fscache_alloc_request(folio_mapping(folio),
-+				folio_pos(folio), folio_size(folio));
-+	if (IS_ERR(rreq))
-+		goto out_unlock;
-+
- 	pstart = mdev.m_pa + (pos - map.m_la);
--	ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
--			folio_mapping(folio), folio_pos(folio),
--			folio_size(folio), pstart);
-+	return erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-+				rreq, pstart);
- 
- out_uptodate:
- 	if (!ret)
-@@ -162,15 +317,16 @@ static int erofs_fscache_readpage(struct file *file, struct page *page)
- 	return ret;
- }
- 
--static void erofs_fscache_unlock_folios(struct readahead_control *rac,
--					size_t len)
-+static void erofs_fscache_advance_folios(struct readahead_control *rac,
-+					size_t len, bool unlock)
- {
- 	while (len) {
- 		struct folio *folio = readahead_folio(rac);
--
- 		len -= folio_size(folio);
--		folio_mark_uptodate(folio);
--		folio_unlock(folio);
-+		if (unlock) {
-+			folio_mark_uptodate(folio);
-+			folio_unlock(folio);
-+		}
- 	}
- }
- 
-@@ -192,6 +348,7 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
- 	do {
- 		struct erofs_map_blocks map;
- 		struct erofs_map_dev mdev;
-+		struct netfs_io_request *rreq;
- 
- 		pos = start + done;
- 		map.m_la = pos;
-@@ -211,7 +368,7 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
- 					offset, count);
- 			iov_iter_zero(count, &iter);
- 
--			erofs_fscache_unlock_folios(rac, count);
-+			erofs_fscache_advance_folios(rac, count, true);
- 			ret = count;
- 			continue;
- 		}
-@@ -237,15 +394,17 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
- 		if (ret)
- 			return;
- 
--		ret = erofs_fscache_read_folios(mdev.m_fscache->cookie,
--				rac->mapping, offset, count,
--				mdev.m_pa + (pos - map.m_la));
-+		rreq = erofs_fscache_alloc_request(rac->mapping, offset, count);
-+		if (IS_ERR(rreq))
-+			return;
- 		/*
--		 * For the error cases, the folios will be unlocked when
--		 * .readahead() returns.
-+		 * Drop the ref of folios here. Unlock them in
-+		 * rreq_unlock_folios() when rreq complete.
- 		 */
-+		erofs_fscache_advance_folios(rac, count, false);
-+		ret = erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-+					rreq, mdev.m_pa + (pos - map.m_la));
- 		if (!ret) {
--			erofs_fscache_unlock_folios(rac, count);
- 			ret = count;
- 		}
- 	} while (ret > 0 && ((done += ret) < len));
--- 
-2.27.0
+between commit:
 
+  3d7ad9c30607 ("f2fs: change the current atomic write way")
+
+from the f2fs tree and commit:
+
+  bd5533ee6fb4 ("f2fs: Convert to release_folio")
+
+from the folio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/f2fs/data.c
+index 54a7a8ad994d,8f38c26bb16c..000000000000
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@@ -3313,103 -3314,8 +3314,102 @@@ unlock_out
+  	return err;
+  }
+ =20
+ +static int __find_data_block(struct inode *inode, pgoff_t index,
+ +				block_t *blk_addr)
+ +{
+ +	struct dnode_of_data dn;
+ +	struct page *ipage;
+ +	struct extent_info ei =3D {0, };
+ +	int err =3D 0;
+ +
+ +	ipage =3D f2fs_get_node_page(F2FS_I_SB(inode), inode->i_ino);
+ +	if (IS_ERR(ipage))
+ +		return PTR_ERR(ipage);
+ +
+ +	set_new_dnode(&dn, inode, ipage, ipage, 0);
+ +
+ +	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
+ +		dn.data_blkaddr =3D ei.blk + index - ei.fofs;
+ +	} else {
+ +		/* hole case */
+ +		err =3D f2fs_get_dnode_of_data(&dn, index, LOOKUP_NODE);
+ +		if (err) {
+ +			dn.data_blkaddr =3D NULL_ADDR;
+ +			err =3D 0;
+ +		}
+ +	}
+ +	*blk_addr =3D dn.data_blkaddr;
+ +	f2fs_put_dnode(&dn);
+ +	return err;
+ +}
+ +
+ +static int __reserve_data_block(struct inode *inode, pgoff_t index,
+ +				block_t *blk_addr, bool *node_changed)
+ +{
+ +	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
+ +	struct dnode_of_data dn;
+ +	struct page *ipage;
+ +	int err =3D 0;
+ +
+ +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, true);
+ +
+ +	ipage =3D f2fs_get_node_page(sbi, inode->i_ino);
+ +	if (IS_ERR(ipage)) {
+ +		err =3D PTR_ERR(ipage);
+ +		goto unlock_out;
+ +	}
+ +	set_new_dnode(&dn, inode, ipage, ipage, 0);
+ +
+ +	err =3D f2fs_get_block(&dn, index);
+ +
+ +	*blk_addr =3D dn.data_blkaddr;
+ +	*node_changed =3D dn.node_changed;
+ +	f2fs_put_dnode(&dn);
+ +
+ +unlock_out:
+ +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, false);
+ +	return err;
+ +}
+ +
+ +static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ +			struct page *page, loff_t pos, unsigned int len,
+ +			block_t *blk_addr, bool *node_changed)
+ +{
+ +	struct inode *inode =3D page->mapping->host;
+ +	struct inode *cow_inode =3D F2FS_I(inode)->cow_inode;
+ +	pgoff_t index =3D page->index;
+ +	int err =3D 0;
+ +	block_t ori_blk_addr;
+ +
+ +	/* If pos is beyond the end of file, reserve a new block in COW inode */
+ +	if ((pos & PAGE_MASK) >=3D i_size_read(inode))
+ +		return __reserve_data_block(cow_inode, index, blk_addr,
+ +					node_changed);
+ +
+ +	/* Look for the block in COW inode first */
+ +	err =3D __find_data_block(cow_inode, index, blk_addr);
+ +	if (err)
+ +		return err;
+ +	else if (*blk_addr !=3D NULL_ADDR)
+ +		return 0;
+ +
+ +	/* Look for the block in the original inode */
+ +	err =3D __find_data_block(inode, index, &ori_blk_addr);
+ +	if (err)
+ +		return err;
+ +
+ +	/* Finally, we should reserve a new block in COW inode for the update */
+ +	err =3D __reserve_data_block(cow_inode, index, blk_addr, node_changed);
+ +	if (err)
+ +		return err;
+ +
+ +	if (ori_blk_addr !=3D NULL_ADDR)
+ +		*blk_addr =3D ori_blk_addr;
+ +	return 0;
+ +}
+ +
+  static int f2fs_write_begin(struct file *file, struct address_space *mapp=
+ing,
+- 		loff_t pos, unsigned len, unsigned flags,
+- 		struct page **pagep, void **fsdata)
++ 		loff_t pos, unsigned len, struct page **pagep, void **fsdata)
+  {
+  	struct inode *inode =3D mapping->host;
+  	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
+@@@ -3617,24 -3525,33 +3617,26 @@@ void f2fs_invalidate_folio(struct foli
+  	folio_detach_private(folio);
+  }
+ =20
+- int f2fs_release_page(struct page *page, gfp_t wait)
++ bool f2fs_release_folio(struct folio *folio, gfp_t wait)
+  {
+- 	/* If this is dirty page, keep PagePrivate */
+- 	if (PageDirty(page))
+- 		return 0;
++ 	struct f2fs_sb_info *sbi;
++=20
++ 	/* If this is dirty folio, keep private data */
++ 	if (folio_test_dirty(folio))
++ 		return false;
+ =20
+- 	if (test_opt(F2FS_P_SB(page), COMPRESS_CACHE)) {
+- 		struct inode *inode =3D page->mapping->host;
+ -	/* This is atomic written page, keep Private */
+ -	if (page_private_atomic(&folio->page))
+ -		return false;
+ -
++ 	sbi =3D F2FS_M_SB(folio->mapping);
++ 	if (test_opt(sbi, COMPRESS_CACHE)) {
++ 		struct inode *inode =3D folio->mapping->host;
+ =20
+- 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(F2FS_I_SB(inode)))
+- 			clear_page_private_data(page);
++ 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(sbi))
++ 			clear_page_private_data(&folio->page);
+  	}
+ =20
+- 	clear_page_private_gcing(page);
++ 	clear_page_private_gcing(&folio->page);
+ =20
+- 	detach_page_private(page);
+- 	set_page_private(page, 0);
+- 	return 1;
++ 	folio_detach_private(folio);
++ 	return true;
+  }
+ =20
+  static bool f2fs_dirty_data_folio(struct address_space *mapping,
+
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ4xZIACgkQAVBC80lX
+0GzH4wf8CfB5UhGgK1r0d7qDhleUR0fDcn55O+7IuMrIXIZfdlprqTBQMnR/pdNg
+JuM1PeDYrF1fHcH5mbwTMlv8GrBcGrM2pk50QQVAReCdsq12A6nX9YaWZ9wvmYUT
+Cwpz1dvIZ3kPqHcXYFgexwMct2K77D9TjPIIQfWP6Q2495bMam6f/ujmgDFvvKWX
+a4P44ozobnTFjb97dIhsoLAso6/Wv2Wr9VkzJ36LhfXZH2C224x/iiYI9Wdl+ziX
+U4CdS9wI38XvhLNxj24qdUja5zEvOFS6MCfPEfwo2lNbUX1j0NIwdiOO0PQ44fXI
+Rr9Thx+nyf5yg9mcg/oMITwDS1z3Iw==
+=aTeQ
+-----END PGP SIGNATURE-----
+
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/--

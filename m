@@ -2,140 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B36251FF88
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133C451FF96
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236866AbiEIOVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S237090AbiEIOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiEIOVT (ORCPT
+        with ESMTP id S236905AbiEIOVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:21:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7A320131D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:17:16 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gh6so27178168ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+8+QqXVKL5wTk1USxhSJy91rHhDM1q+WdZU6lGP6JQ4=;
-        b=Se5eMb8Ygo8+NTsu2WGGmLwSiZe3RssFpzMyc+7jXSDykSJnAVSZVnd/OngGPWZciL
-         TqOhSSgSmDT040EiixkOlRjSjs+ukuyf54/dNj07uwd2adCU7iAHQeyZ6NPWcbIYVPwR
-         pnseMj0cI03Ui9b5xM9w/yOlvf2/OlxlznUm1jexmSPMmaEiax93PQoJ/G6Q+n7fow9z
-         IeuitDasdXBRSpB+6VIA+P3OanKlTTP+m6n8bakAwn+q9cJfZqwF1lR8LLdZPHpM+15i
-         QZvAmWZBOy2/SBull0eHOksCzYbIomn1nr2T6ttdbSEDr1YAhsbO0VVKPlHOwot8XrnA
-         S8LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+8+QqXVKL5wTk1USxhSJy91rHhDM1q+WdZU6lGP6JQ4=;
-        b=zPS/1cFUbKZF2yUZG2zYwfeoBshwDaeCI4DjUxdu5zFkZRpAoHhImGqw//PsHMg1Pq
-         VXcH4XoU0z9k5SjxTKiTsxxMBZ5wVCPDxL790K5YwjTDcRJz32v0NbsHC/6Hgy+4hAQt
-         ampOY6LpXS8IdEB/PkdQW8/mtoxW2Crc94evougXKQkcB7C6+zMqjWqLShmdx8iMpcVz
-         mO/3adkn21+SdVOCzDYyzXZczg7KsP0O1vTDcq4W7nRxLvtie6lccprdV5Iti5vL3FRh
-         cdPu9lvm77aHchtzIfu0PjgIWRLloyhl0JW8qPHJnVAp9/ZcAUeAM1NA6qQqCQo3gcG4
-         89uA==
-X-Gm-Message-State: AOAM533hQBw93xtMHuB/oYVLpkzwLPU+yLmkPOL3uQ+H7sPyPEDOfU2o
-        EOpa1qckpAOHMSXYHo+x2gUju60Z7s15SD00NfvM6w==
-X-Google-Smtp-Source: ABdhPJz4oPKheaglIPZCKrUFsKejt51Mh50V9/DGs7u8F7syBlw3wHnbVvg9K8d9bl9luUK/vJye5kZrXA5cwi3Keig=
-X-Received: by 2002:a17:907:a0c8:b0:6f7:492e:e74c with SMTP id
- hw8-20020a170907a0c800b006f7492ee74cmr11393092ejc.670.1652105834875; Mon, 09
- May 2022 07:17:14 -0700 (PDT)
+        Mon, 9 May 2022 10:21:22 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2086.outbound.protection.outlook.com [40.107.236.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8AA2044C8;
+        Mon,  9 May 2022 07:17:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bTh1uTPssXf91BaT0PzDMWxSXiFBcKiq5tvHLMEH9uRQrw/sfftcq5+f0DsrW0J/zDyI68+V9zvBfSzJbX8Gdqtf65XcYHfChB3TgZbkjASDRwTmUK7eKnQ6DRHWaUW6CBa2QZUoDpFvUfNFMSYu0Hf73YvjgPwz31PSOSlGwfWqGise+yO3JC4Q/VbRnQXbPvhLWBlO6RHugMp4WQyKL0D3982GLAsDAQeSPL7wcR4Zwd71BrqZrETtRVCsKAYD8nP6EAglg+ecTQZNlyrLBOmXNeyNbREPI0p4d2tsb517G8eZV/42yJsnZT0F5psS7saXJJFbenXlksRzP9RWiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ChsgT1BknTbDT6cYZIEKT43oemuREX/tCoABYafNBEQ=;
+ b=UuOu//Pi/5OT36dRS6Dm4jPvWQk5lyi9H/2jxqxS91gSvCCIGDgbmknkRX2aZ7aApULM2ISNGeP2qmiftB06GThpkPN8sjiv7S9JN4g475TC79qxerdwC5T7sUbOmUISrUNDmRvCoD93uphUTs+tTzE7nfGs5ZPSAICViq/8/FuqQ1qPlJ07if4RN489yWc1qedJVnE62Mh9FmwBzvdKMZX40z5+/gQcWkfaWQ2tc+06lY9tp5QEGeW64LNGrzLNnLXVHM7FOOXdXob9p6o2O4a8pQyqgpvyH8XJxa/2uhjBN2k2Efe+lV47xvuhNd3E0A3IbGekhP6tS3fh7ByyAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arm.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ChsgT1BknTbDT6cYZIEKT43oemuREX/tCoABYafNBEQ=;
+ b=glxjijBhlOnYuHFYSU+3ml1VWPux+h1ThDDxgvyC1y8BQg38f+nESY69UNh7lAPv+E0t/P04nXO4JDlh8XgbEHnS4IUF43vX7P91eGXd4tDDFXh+dCwRgg8i8chvO3Qxr7+gRgnjI7U6y9ZREdXs2dHtS8CKj1ymR2SuAw7wBIs=
+Received: from MW4PR04CA0317.namprd04.prod.outlook.com (2603:10b6:303:82::22)
+ by CH0PR12MB5187.namprd12.prod.outlook.com (2603:10b6:610:ba::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
+ 2022 14:17:25 +0000
+Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::5c) by MW4PR04CA0317.outlook.office365.com
+ (2603:10b6:303:82::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22 via Frontend
+ Transport; Mon, 9 May 2022 14:17:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Mon, 9 May 2022 14:17:24 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 09:17:23 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>, Sudeep Holla <sudeep.holla@arm.com>,
+        "Jassi Brar" <jassisinghbrar@gmail.com>,
+        "open list:ACPI PCC(Platform Communication Channel) MAILBO..." 
+        <linux-acpi@vger.kernel.org>,
+        "open list:MAILBOX API" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mailbox: pcc: Fix an invalid-load caught by the address sanitizer
+Date:   Mon, 9 May 2022 09:17:16 -0500
+Message-ID: <20220509141716.1270-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220508202544.501981-1-frattaroli.nicolas@gmail.com> <20220508202544.501981-4-frattaroli.nicolas@gmail.com>
-In-Reply-To: <20220508202544.501981-4-frattaroli.nicolas@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Mon, 9 May 2022 11:17:03 -0300
-Message-ID: <CAAEAJfC5aoFmk7hKZ-CSv1=RhzO8YU38Abz8PhD26MvV+X0r-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4ffe8db1-420a-47ca-72fd-08da31c6a3e9
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5187:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5187984CB5E4491871BE0586E2C69@CH0PR12MB5187.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a+qvcgiCEjscx2ss+Avgx10vHWQ625aohXYP66HkSQPTrHbrLl95Ma0wMlhyx51H4NHuCYPAwghHhCOaM+BrHnGm1F8DQIXWjT7SaxxKNs3If3NEW9J7W9krysX7giedS/y+pN0pnDugh1WmmDObVMiCfewJOH0WwDv5z1kW/T3KC0Do7U/hdxGPxriv4K3r5JF3eOHSLQJMr0z45gTuKkJ2AR+qk9N+GY1X1NHksL0Y6wJKiQgGKh3Y+MwgJ4QlLgu9bLNFYV6U/l/u/W76Tmxs75lsLNr4QMBxlYebs+8YFUUTTPf0pG6ZpU7GxceCuv+Hm3tMQsveWqzLiGaWEugn/KPBAkKXyHFtXHdPKNxaRQ+MA7eXBTYlRbZWbnedmeT0Td2NTSPhzBijlEL3JFUy4xJolGutkxlCITUnOnEsGlfdMFbbm3DZ1Eox7dd4Ea4fnCV8VS+6uqeahZmSi8Ey2PHiPTjSDKihXdTb7WLWMBYjoypL2kyJ044nndqDGkck9gwmk4jIM6hnD18wVHcy4skUuZkuYl7CfKhqDYrJCLCEjS/7SONpqa4CI+H5tdTn78vr+nNkbFzOr7TKtXjnAn3J0EY9Y9A47M7LrmVuhFSvmRZoKdd6MWodmYXhyFrcOJZt/ihr6R//hdI7YpJKo2/LxD3c2wdWRi9PE4/DEhTVckRbR60YAIIlKKNrehQok2wgisbQk3BZ8SzgVIhPLeYTHpuKiJYPp346H6mYdnL3B6pgwqzusYQd7gxnGdTJNGvRiwde5bWG63lRfUBB9Quye5sHydE2lxy6u+8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(2616005)(8676002)(1076003)(47076005)(426003)(336012)(508600001)(70206006)(186003)(83380400001)(966005)(86362001)(26005)(6666004)(316002)(82310400005)(7696005)(110136005)(36860700001)(356005)(40460700003)(16526019)(8936002)(81166007)(44832011)(2906002)(36756003)(15650500001)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 14:17:24.7742
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ffe8db1-420a-47ca-72fd-08da31c6a3e9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5187
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+`pcc_mailbox_probe` doesn't initialize all memory that has been allocated
+before the first time that one of it's members `txdone_irq` may be
+accessed.
 
-On Sun, May 8, 2022 at 5:26 PM Nicolas Frattaroli
-<frattaroli.nicolas@gmail.com> wrote:
->
-> The RK3566 and RK3568 come with a dedicated Hantro instance solely for
-> encoding. This patch adds a node for this to the device tree, along with
-> a node for its MMU.
->
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 7cdef800cb3c..2e3c9e1887e3 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -508,6 +508,27 @@ gpu: gpu@fde60000 {
->                 status = "disabled";
->         };
->
-> +       vepu: video-codec@fdee0000 {
-> +               compatible = "rockchip,rk3568-vepu";
-> +               reg = <0x0 0xfdee0000 0x0 0x800>;
-> +               interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> +               interrupt-names = "vepu";
+This leads to a an invalid load any time that this member is accessed:
+[    2.429769] UBSAN: invalid-load in drivers/mailbox/pcc.c:684:22
+[    2.430324] UBSAN: invalid-load in drivers/mailbox/mailbox.c:486:12
+[    4.276782] UBSAN: invalid-load in drivers/acpi/cppc_acpi.c:314:45
 
-It this block "encoder only" and if so, maybe we should remove the
-"interrupt-names" [1]?
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215587
+Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into pcc_mbox_probe")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/mailbox/pcc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The driver is able to handle it. See:
+diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+index ed18936b8ce6..ebfa33a40fce 100644
+--- a/drivers/mailbox/pcc.c
++++ b/drivers/mailbox/pcc.c
+@@ -654,7 +654,7 @@ static int pcc_mbox_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
+-	pcc_mbox_ctrl = devm_kmalloc(dev, sizeof(*pcc_mbox_ctrl), GFP_KERNEL);
++	pcc_mbox_ctrl = devm_kzalloc(dev, sizeof(*pcc_mbox_ctrl), GFP_KERNEL);
+ 	if (!pcc_mbox_ctrl) {
+ 		rc = -ENOMEM;
+ 		goto err;
+-- 
+2.25.1
 
-https://elixir.bootlin.com/linux/latest/source/drivers/staging/media/hantro/hantro_drv.c#L962
-
-You might have to adjust the dt-bindings for this.
-
-[1] https://lore.kernel.org/linux-media/20210324151715.GA3070006@robh.at.kernel.org/
-
-Thanks,
-Ezequiel
-
-> +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
-> +               clock-names = "aclk", "hclk";
-> +               iommus = <&vepu_mmu>;
-> +               power-domains = <&power RK3568_PD_RGA>;
-> +       };
-> +
-> +       vepu_mmu: iommu@fdee0800 {
-> +               compatible = "rockchip,rk3568-iommu";
-> +               reg = <0x0 0xfdee0800 0x0 0x40>;
-> +               interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
-> +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
-> +               clock-names = "aclk", "iface";
-> +               power-domains = <&power RK3568_PD_RGA>;
-> +               #iommu-cells = <0>;
-> +       };
-> +
->         sdmmc2: mmc@fe000000 {
->                 compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
->                 reg = <0x0 0xfe000000 0x0 0x4000>;
-> --
-> 2.36.0
->
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip

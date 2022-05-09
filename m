@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A64520168
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8076B52016B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbiEIPuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S238582AbiEIPuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238517AbiEIPtt (ORCPT
+        with ESMTP id S238533AbiEIPtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:49:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FEC3EA88
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:45:49 -0700 (PDT)
+        Mon, 9 May 2022 11:49:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865C0EAB87;
+        Mon,  9 May 2022 08:45:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 163F7B8172F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 15:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3729C385AE;
-        Mon,  9 May 2022 15:45:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28A4CB8172F;
+        Mon,  9 May 2022 15:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72BBC385B1;
+        Mon,  9 May 2022 15:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652111146;
-        bh=+ri0BCQo8aTMYSl+J6NJ61kJS7xKTHp40FlfBs7hKl0=;
+        s=k20201202; t=1652111151;
+        bh=g20W+7CygqgPEo++WiNMlzpLIcKmzLF46O4/qXIfbeE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=o2uBT/CcMwG2eToTf6sxro/YVEvhhGh6rDiRFNA+71Bc7xT7yjErEhqeXTg+WdsTc
-         C4cGuZ954gAvO+foCuBuJ5KGv828k1iOOUHIrpK64OlV354gJ7y5/oJg57USGzV4kt
-         G6mEZrQRMh0VD0rlVBEf71p9nP08nRbmC/zGAxL430vTyDGsmb9iJw5bwtUnOiN38l
-         N7IV4vc3QvjcWpGeTH5Wgtt/RROi6zhxlVNmXgh8gByvJGFyIfQge2O7pYGFE3yvnU
-         9EuiXyLfrDJ9Egmg21GoO+hANczrfjvVidbsp0IYOkIAQoj7qwXlZ0f1Cn7Y2Lt4oy
-         xblz5XGl2WdRg==
+        b=PXTH2xOmwnr8cyQfqMEkeiAKskYwcZvW+kQVPF7iVwN7rovAaa6Uj6CtNTOinXz1n
+         Fugmy0ob0HHRMcWBfGBhEWnqNbeOXs8YGTPysL7VVHB+XZR6Hq4Kup1rex96Lt5Pv3
+         o246cwOl3lWlZ6IBrD1P/JZ0lekB9E4QFkoHR0GBObDqN/AaDAMZxeGh9kdFYU6Ksy
+         6XpqRo1B1yZIvT+5ArLYYWJiH6ZN3W1YtnQ9J5TcgVj4BC30zCx0WQZp4MHEPXjyEr
+         38U9lpEWlcWO/lio3Je8MGdpxWGGjD80qswC7btwvcZVuahdDSfMbqnDdo1qaszUx8
+         YzZYwDABJ/7Ow==
 From:   Mark Brown <broonie@kernel.org>
-To:     marex@denx.de, linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, dan.carpenter@oracle.com
-In-Reply-To: <20220509003035.225272-1-marex@denx.de>
-References: <20220509003035.225272-1-marex@denx.de>
-Subject: Re: [PATCH] regmap: Add missing map->bus check
-Message-Id: <165211114563.774560.685568820972872583.b4-ty@kernel.org>
-Date:   Mon, 09 May 2022 16:45:45 +0100
+To:     linux-spi@vger.kernel.org, yangyingliang@huawei.com,
+        linux-kernel@vger.kernel.org
+Cc:     han.xu@nxp.com, Ashish.Kumar@nxp.com
+In-Reply-To: <20220505093954.1285615-1-yangyingliang@huawei.com>
+References: <20220505093954.1285615-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
+Message-Id: <165211115053.774621.2081571560850333629.b4-ty@kernel.org>
+Date:   Mon, 09 May 2022 16:45:50 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,19 +54,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 02:30:35 +0200, Marek Vasut wrote:
-> The map->bus can be NULL here, add the missing NULL pointer check.
+On Thu, 5 May 2022 17:39:54 +0800, Yang Yingliang wrote:
+> It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
+> we need check the return value.
 > 
 > 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] regmap: Add missing map->bus check
-      commit: 5c422f0b970d287efa864b8390a02face404db5d
+[1/1] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
+      commit: a2b331ac11e1cac56f5b7d367e9f3c5796deaaed
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

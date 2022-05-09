@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7C051F418
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1A451F431
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234240AbiEIFoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
+        id S235227AbiEIFrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbiEIFk4 (ORCPT
+        with ESMTP id S235087AbiEIFqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:40:56 -0400
+        Mon, 9 May 2022 01:46:53 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AC2158D4C
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:37:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA54315E75A
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:43:00 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KxVKF4cbHz9sTH;
-        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4KxVKh15P4z9sWM;
+        Mon,  9 May 2022 07:36:56 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fkr_kpJCzgbX; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+        with ESMTP id 868ZzAbfAgVE; Mon,  9 May 2022 07:36:56 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF3rCJz9sSv;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF6WrXz9sWD;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 73C9E8B792;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D431C8B778;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id upHjl707mpSh; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+        with ESMTP id zfxjU5nf4LtZ; Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3A9D68B76C;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8742A8B798;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aSOr1591223
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aTJX1591227
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Mon, 9 May 2022 07:36:29 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aS8h1591222;
-        Mon, 9 May 2022 07:36:28 +0200
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aTln1591226;
+        Mon, 9 May 2022 07:36:29 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -50,14 +50,14 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         naveen.n.rao@linux.vnet.ibm.com
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v3 04/25] powerpc/ftrace: Use is_offset_in_branch_range()
-Date:   Mon,  9 May 2022 07:36:02 +0200
-Message-Id: <912ae51782f5a53c44e435497c8c3fb5cc632387.1652074503.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v3 05/25] powerpc/code-patching: Inline create_branch()
+Date:   Mon,  9 May 2022 07:36:03 +0200
+Message-Id: <69851cc9a7bf8f03d025e6d29e165f2d0bd3bb6e.1652074503.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1652074503.git.christophe.leroy@csgroup.eu>
 References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074581; l=1631; s=20211009; h=from:subject:message-id; bh=OWDdhcCtR60EJOCWc6cwIHh4xDhD5orD3drnjJOkPJg=; b=AISHgv8tS7wKPDrY7M9+uR7wcr56R2cPYVaMYJ90vojA3PHJ/RHRYAgrkN4eBPOPZa+HUs+HK3V0 LA/PLxcnBvWClEjtHEh+StZAETBKqJ3sCA4+bGUKQhGGxuPdw+hH
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074581; l=2728; s=20211009; h=from:subject:message-id; bh=d2swIJrMmUDKV+uH13vJ0j/DNa2ajgVmApWQwP8siB0=; b=Z5Jll7/9z25GY0FND2b02eHhlHnW3KCgNNePBgJIm27iAC4z/tdn0RU4s56Ml0Tu0+G6PBjGjNYp sjHBTg4CB3PosHQT2R6Hp/G0eH/TdF+9+VaWvMTt2hRRjqOr6ma0
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -69,52 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use is_offset_in_branch_range() instead of create_branch()
-to check if a target is within branch range.
+create_branch() is a good candidate for inlining because:
+- Flags can be folded in.
+- Range tests are likely to be already done.
 
-This patch together with the previous one improves
-ftrace activation time by 7%
+Hence reducing the create_branch() to only a set of instructions.
+
+So inline it.
+
+It improves ftrace activation by 10%.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/kernel/trace/ftrace.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ arch/powerpc/include/asm/code-patching.h | 22 ++++++++++++++++++++--
+ arch/powerpc/lib/code-patching.c         | 20 --------------------
+ 2 files changed, 20 insertions(+), 22 deletions(-)
 
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index 3ce3697e8a7c..41c45b9c7f39 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -89,11 +89,9 @@ ftrace_modify_code(unsigned long ip, ppc_inst_t old, ppc_inst_t new)
-  */
- static int test_24bit_addr(unsigned long ip, unsigned long addr)
- {
--	ppc_inst_t op;
- 	addr = ppc_function_entry((void *)addr);
- 
--	/* use the create_branch to verify that this offset can be branched */
--	return create_branch(&op, (u32 *)ip, addr, 0) == 0;
-+	return is_offset_in_branch_range(addr - ip);
+diff --git a/arch/powerpc/include/asm/code-patching.h b/arch/powerpc/include/asm/code-patching.h
+index e7c5df50cb4e..4260e89f62b1 100644
+--- a/arch/powerpc/include/asm/code-patching.h
++++ b/arch/powerpc/include/asm/code-patching.h
+@@ -49,8 +49,26 @@ static inline bool is_offset_in_cond_branch_range(long offset)
+ 	return offset >= -0x8000 && offset <= 0x7fff && !(offset & 0x3);
  }
  
- static int is_bl_op(ppc_inst_t op)
-@@ -261,7 +259,6 @@ __ftrace_make_nop(struct module *mod,
- static unsigned long find_ftrace_tramp(unsigned long ip)
+-int create_branch(ppc_inst_t *instr, const u32 *addr,
+-		  unsigned long target, int flags);
++static inline int create_branch(ppc_inst_t *instr, const u32 *addr,
++				unsigned long target, int flags)
++{
++	long offset;
++
++	*instr = ppc_inst(0);
++	offset = target;
++	if (! (flags & BRANCH_ABSOLUTE))
++		offset = offset - (unsigned long)addr;
++
++	/* Check we can represent the target in the instruction format */
++	if (!is_offset_in_branch_range(offset))
++		return 1;
++
++	/* Mask out the flags and target, so they don't step on each other. */
++	*instr = ppc_inst(0x48000000 | (flags & 0x3) | (offset & 0x03FFFFFC));
++
++	return 0;
++}
++
+ int create_cond_branch(ppc_inst_t *instr, const u32 *addr,
+ 		       unsigned long target, int flags);
+ int patch_branch(u32 *addr, unsigned long target, int flags);
+diff --git a/arch/powerpc/lib/code-patching.c b/arch/powerpc/lib/code-patching.c
+index 58262c7e447c..7adbdb05fee7 100644
+--- a/arch/powerpc/lib/code-patching.c
++++ b/arch/powerpc/lib/code-patching.c
+@@ -230,26 +230,6 @@ bool is_conditional_branch(ppc_inst_t instr)
+ }
+ NOKPROBE_SYMBOL(is_conditional_branch);
+ 
+-int create_branch(ppc_inst_t *instr, const u32 *addr,
+-		  unsigned long target, int flags)
+-{
+-	long offset;
+-
+-	*instr = ppc_inst(0);
+-	offset = target;
+-	if (! (flags & BRANCH_ABSOLUTE))
+-		offset = offset - (unsigned long)addr;
+-
+-	/* Check we can represent the target in the instruction format */
+-	if (!is_offset_in_branch_range(offset))
+-		return 1;
+-
+-	/* Mask out the flags and target, so they don't step on each other. */
+-	*instr = ppc_inst(0x48000000 | (flags & 0x3) | (offset & 0x03FFFFFC));
+-
+-	return 0;
+-}
+-
+ int create_cond_branch(ppc_inst_t *instr, const u32 *addr,
+ 		       unsigned long target, int flags)
  {
- 	int i;
--	ppc_inst_t instr;
- 
- 	/*
- 	 * We have the compiler generated long_branch tramps at the end
-@@ -270,8 +267,7 @@ static unsigned long find_ftrace_tramp(unsigned long ip)
- 	for (i = NUM_FTRACE_TRAMPS - 1; i >= 0; i--)
- 		if (!ftrace_tramps[i])
- 			continue;
--		else if (create_branch(&instr, (void *)ip,
--				       ftrace_tramps[i], 0) == 0)
-+		else if (is_offset_in_branch_range(ftrace_tramps[i] - ip))
- 			return ftrace_tramps[i];
- 
- 	return 0;
 -- 
 2.35.1
 

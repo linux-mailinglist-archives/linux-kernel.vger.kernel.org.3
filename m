@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17A55201E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B065201DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238789AbiEIQIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S238851AbiEIQJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiEIQIh (ORCPT
+        with ESMTP id S238810AbiEIQJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:08:37 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035324DC4D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:04:41 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id v11so12633455pff.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UdDrFvMTPlFEuDpVKn6UuLvbfztwhknrVS+8QAPpwmc=;
-        b=J3EEQLp2oqp41altc+Q/q8W3s+Sp3eLTohaUdz2/+Rwdmd4uuvgFyd7339k5RbOF5J
-         i0AaAoLjX0X1wJgDB49H/+8/KghhdbUfVuMXZ6wcyVjMekL1Y4tpKKCuRDSlVjO38mEI
-         kqbccxnmKopU6x3mIy/nRdpyecpwLAQhFCSofqR1aHqCAmthMpMQ5pATK2xOQOOiA3t5
-         kS0E483Ul9E+JueJIPeLdAW7+AqXJqBFvvA8X6iSYaWjtxkdccVYu/7JwmC5bb+fTWfl
-         3bcuz8MH0oRmoCEcgkEZ+/fcai/GFTzVp9fGDggQyEr+sNilKVrNN0dXynuqcIzL0ed8
-         WPWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UdDrFvMTPlFEuDpVKn6UuLvbfztwhknrVS+8QAPpwmc=;
-        b=7QxjkRAwD/ewkQQ1lyFn6aVxxtV6EUvI161weaF6VoQxCNifdLQPHO3hgZV3zcK3R0
-         xHXzSEm3DOJtim0dNyGGXRpH7iFfBT0VpixcX4L2cC0U3rF2/DCIgd2vR6YxTir6YpQ/
-         jIttxYZ/tfu+DOTvhbv/EmAWqBRo14QOoNH1Tpg6bhmPlIRHI4mtg13WZoP66IqnCaeC
-         9E0mqZCwDXWL6eIcASFJx/XZhYESK9NhKy5zM8CEs2vhugrWaO2bfPITdIBHnRhTnIc/
-         bQSuKZO4OPPVKW8EIOi6CSuSTmhpEGvsAIArt73FS8SVfjs9K8AU7L9J+AbJeYNy8ROY
-         8VHQ==
-X-Gm-Message-State: AOAM532VGDQTorVhJMItad+KTklkSh/gZPrPBDVWTd85OOCCvC1wo4ok
-        hdl0ElXH9Xr4chU1pqVux7H8lA==
-X-Google-Smtp-Source: ABdhPJwMqknPNBUBGaG7wAm1Hvz84PnOG/5jowsuGzw29PwBE4WkdUvnp59PCpFdWkXcrI/bAl0vIA==
-X-Received: by 2002:aa7:9085:0:b0:510:90d1:f445 with SMTP id i5-20020aa79085000000b0051090d1f445mr11764534pfa.67.1652112281331;
-        Mon, 09 May 2022 09:04:41 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902dac100b0015e8d4eb2dfsm7330090plx.297.2022.05.09.09.04.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 09:04:39 -0700 (PDT)
-Date:   Mon, 9 May 2022 10:04:37 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: remoteproc: st,stm32-rproc: Fix
- phandle-array parameters description
-Message-ID: <20220509160437.GA3043772@p14s>
-References: <20220505113639.1344281-1-arnaud.pouliquen@foss.st.com>
+        Mon, 9 May 2022 12:09:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EEF25559A;
+        Mon,  9 May 2022 09:05:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 020CD21C20;
+        Mon,  9 May 2022 16:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652112314; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1VmlmF9biRWWD6ZEOc5OuT2DALSgkEXHN2KQCnNQUrA=;
+        b=uqvsFZjKSPYUAd/1JTKF2JfUJXSzml6s+fX81jFhQG3nyXl+cEqw0Uhf+tewhR5YtXM9AG
+        8Tf3eIk3oGyXwRDljjGhn7XWjfbXgsY9ahLXMHfyaeKJrfm1QqZ2ezKvMCwmaA+r+4w2Ep
+        2+BWIVXZZveC+0mLZMzgXWYsytvAySE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652112314;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1VmlmF9biRWWD6ZEOc5OuT2DALSgkEXHN2KQCnNQUrA=;
+        b=AF499xLUiRXWmvkOAQ8mtFhUb4QTEZQ8M1au1m8ezGfNJCVmJ2pheW9wNpJj77ljPOE2AA
+        9EdqKSJ6QA8t/dAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9C7A13AA5;
+        Mon,  9 May 2022 16:05:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XhB5MLk7eWLuKwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 09 May 2022 16:05:13 +0000
+Message-ID: <627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz>
+Date:   Mon, 9 May 2022 18:05:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505113639.1344281-1-arnaud.pouliquen@foss.st.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more
+ consistent
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, songliubraving@fb.com, riel@surriel.com,
+        willy@infradead.org, ziy@nvidia.com, tytso@mit.edu,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220404200250.321455-1-shy828301@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220404200250.321455-1-shy828301@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,70 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:36:39PM +0200, Arnaud Pouliquen wrote:
-> Replace the FIXME by appropriate description.
-> 
-> Fixes: 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/remoteproc/st,stm32-rproc.yaml      | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
+On 4/4/22 22:02, Yang Shi wrote:
+>  include/linux/huge_mm.h        | 14 ++++++++++++
+>  include/linux/khugepaged.h     | 59 ++++++++++++---------------------------------------
+>  include/linux/sched/coredump.h |  3 ++-
+>  kernel/fork.c                  |  4 +---
+>  mm/huge_memory.c               | 15 ++++---------
+>  mm/khugepaged.c                | 76 +++++++++++++++++++++++++++++++++++++-----------------------------
+>  mm/mmap.c                      | 14 ++++++++----
+>  mm/shmem.c                     | 12 -----------
+>  8 files changed, 88 insertions(+), 109 deletions(-)
+ 
+Resending my general feedback from mm-commits thread to include the
+public ML's:
 
-I have applied this patch.
+There's modestly less lines in the end, some duplicate code removed,
+special casing in shmem.c removed, that's all good as it is. Also patch 8/8
+become quite boring in v3, no need to change individual filesystems and also
+no hook in fault path, just the common mmap path. So I would just handle
+patch 6 differently as I just replied to it, and acked the rest.
 
-Thanks,
-Mathieu
+That said it's still unfortunately rather a mess of functions that have
+similar names. transhuge_vma_enabled(vma). hugepage_vma_check(vma),
+transparent_hugepage_active(vma), transhuge_vma_suitable(vma, addr)?
+So maybe still some space for further cleanups. But the series is fine as it
+is so we don't have to wait for it now.
 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-> index be3d9b0e876b..da50f0e99fe2 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-> @@ -43,8 +43,8 @@ properties:
->      items:
->        - items:
->            - description: Phandle of syscon block
-> -          - description: FIXME
-> -          - description: FIXME
-> +          - description: The offset of the trust zone setting register
-> +          - description: The field mask of the trust zone state
->  
->    interrupts:
->      description: Should contain the WWDG1 watchdog reset interrupt
-> @@ -101,8 +101,8 @@ properties:
->      items:
->        - items:
->            - description: Phandle of syscon block
-> -          - description: FIXME
-> -          - description: FIXME
-> +          - description: The offset of the power setting register
-> +          - description: The field mask of the PDDS selection
->  
->    st,syscfg-m4-state:
->      $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> @@ -111,8 +111,8 @@ properties:
->      items:
->        - items:
->            - description: Phandle of syscon block with the tamp register
-> -          - description: FIXME
-> -          - description: FIXME
-> +          - description: The offset of the tamp register
-> +          - description: The field mask of the Cortex-M4 state
->  
->    st,syscfg-rsc-tbl:
->      $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> @@ -122,8 +122,8 @@ properties:
->      items:
->        - items:
->            - description: Phandle of syscon block with the tamp register
-> -          - description: FIXME
-> -          - description: FIXME
-> +          - description: The offset of the tamp register
-> +          - description: The field mask of the Cortex-M4 resource table address
->  
->    st,auto-boot:
->      $ref: /schemas/types.yaml#/definitions/flag
-> -- 
-> 2.25.1
-> 
+We could also consider that the tracking of which mm is to be scanned is
+modelled after ksm which has its own madvise flag, but also no "always"
+mode. What if for THP we only tracked actual THP madvised mm's, and in
+"always" mode just scanned all vm's, would that allow ripping out some code
+perhaps, while not adding too many unnecessary scans? If some processes are
+being scanned without any effect, maybe track success separately, and scan
+them less frequently etc. That could be ultimately more efficinet than
+painfully tracking just *eligibility* for scanning in "always" mode?
+
+Even more radical thing to consider (maybe that's a LSF/MM level topic, too
+bad :) is that we scan pagetables in ksm, khugepaged, numa balancing, soon
+in MGLRU, and I probably forgot something else. Maybe time to think about
+unifying those scanners?
+ 
+

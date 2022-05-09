@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BD1520643
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3767520642
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 22:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiEIVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
+        id S229889AbiEIVCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiEIVCs (ORCPT
+        with ESMTP id S229508AbiEIVCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:02:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F812B8D24;
-        Mon,  9 May 2022 13:58:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 564EA1F42F48
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652129932;
-        bh=j+wdfrc3FXi43X0VkODadFay6bg9FKNBstYCTMpecA8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U74Ljn728Csp+ET2xThho9d1REqGnsswajm8GHfb67k2/RQZQWrjH38iHELrF44Nj
-         xjNY6xlKH4B+68AQjDzJ4U9UXWZJZvRQXVg+CE577q+KjYL03FmMa/3TLtBWPFbaJc
-         CZtRlFSbP4P6LvKc4+03hk9wBfEX4V83iyBOVw4o1AuuX92sETE6/YrYOK5HC+RLse
-         usJnlXHQmatb4Tr1cmtTPqJ7rXIY3//R6J9m5ZXiAvwzZW6PwC2awkxQcnstozW5iT
-         i1yFHZ/MGA/PZzO3rWICOJ8hBGFEU41lmBA6aSosZ+mnNFsx4iQ1oOlQOIjrv9EE/V
-         Tc+X6cFr8gC1Q==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties
-Date:   Mon,  9 May 2022 16:58:47 -0400
-Message-Id: <20220509205847.607076-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 9 May 2022 17:02:45 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9932B8D24
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 13:58:51 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id a23-20020a4ad5d7000000b0035ee70da7a9so2779892oot.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 13:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=yJKJ2ATgX9mu3/IffO/J0EaKq/jvo17mocUEhwCAE60=;
+        b=XSieEDeLW/rwABKUVPDCvXH0w6sECAEnkGHzfrpHucsx1SHRgM/dcBpPOgHjWjsqCb
+         leo0ETy5XMaX5kEfyv+oImCvgn/Nr2Cc8dOl33/gdLVYmaNnfeGnl1hjnE945VnzLQv+
+         BbtHxr0VqtYXncjJAAbHq+uy1Wp20P5IVOeeI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=yJKJ2ATgX9mu3/IffO/J0EaKq/jvo17mocUEhwCAE60=;
+        b=jINZHkSIR41o8oX4v7UQv2MDu6HXQHybOWzNArk46ZdpGBLFSxNkzAHfJWjWGoDeUB
+         ZuqdZkCPJEAVyrhUCgDEtfwOHWZ0T0vJ0YEv/7box7NC19kGowy5E88ceoWRLbOruP91
+         oy3NeYEaTXblOya/Zb+pgzatqajK7PNTyI3WSTPzCc3EV8kWakkn3u518YoJ11tleeN6
+         FG171/yttvHg5SD+O0fZThpaPc5tk3nMIFy5Ce9YcNlR7ESpaMcghF0uAtHSv8qgjtDN
+         aMziExxrg0Kg/Cuo/KFXLAsyr6ePq0zRXdi9maQoxiZPfUyE5Un1zmMUVzLq83M59KmR
+         sOWA==
+X-Gm-Message-State: AOAM533DmzF2Y9gHNt7Svk22iISyYtGVIzh9PB7YzpLX8AzK/ek2gnfr
+        WB8UQzCi28l1T31k1yoAb1/v23BAsGXcgXQiqrn5ew==
+X-Google-Smtp-Source: ABdhPJwgrl6Fn8gygCe1A38ovT3ghIsMz7Z+cffAmaDb1TNKssJHWbHAPz8jQeXiKh9qKc+zQcnEutlFHA7Nq+3CFlQ=
+X-Received: by 2002:a4a:6b49:0:b0:329:99cd:4fb8 with SMTP id
+ h9-20020a4a6b49000000b0032999cd4fb8mr6472783oof.25.1652129930567; Mon, 09 May
+ 2022 13:58:50 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 9 May 2022 16:58:49 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <8e472c9e-2076-bc25-5912-8433adf7b579@arbitrary.ch>
+References: <8e472c9e-2076-bc25-5912-8433adf7b579@arbitrary.ch>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 9 May 2022 16:58:49 -0400
+Message-ID: <CAE-0n53Ou1qgueFZ7zL-rFwsit6XJnYZkRtggdx3XXvL7HWrow@mail.gmail.com>
+Subject: Re: [PATCH] Decouple slub_debug= from no_hash_pointers again
+To:     Peter Gerber <peter@arbitrary.ch>,
+        kernel-hardening@lists.openwall.com,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        Petr Mladek <pmladek@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,60 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Mediatek AFE PCM controller for MT8192 allows two I2S interfaces to
-share the same clock and act as a single interface with both input and
-output. Add patterns for these properties in the dt-binding. The
-property is split into two patterns in order to allow all valid
-interface pairings.
+Quoting Peter Gerber (2022-05-08 07:56:29)
+> While, as mentioned in 792702911f58, no_hash_pointers is what
+> one wants for debugging, this option is also used for hardening.
+>
+> Various places recommend or use slub_debug for hardening:
+>
+> a) The Kernel Self Protection Project lists slub_debug as
+>    a recommended setting. [1]
+> b) Debian offers package hardening-runtime [2] which enables
+>    slub_debug for hardening.
+> c) Security- and privacy-oriented Tails enables slub_debug
+>    by default [3].
+>
+> I understand that encountering hashed pointers during debugging
+> is most unwanted. Thus, I updated the documentation to make
+> it as clear as possible that no_hash_pointers is what one
+> wants when using slub_debug for debugging. I also added a
+> mentioned of the hardening use case in order to discourage
+> any other, well-meant, tries to disable hashing with slub_debug.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
----
-The series from v1 of this patch was merged although some changes were
-still needed in this patch, so the v1 of this patch was reverted [1] and
-this standalone commit addresses the feedback from v1 and readds the
-property.
-
-[1] https://lore.kernel.org/all/20220509185625.580811-1-nfraprado@collabora.com
-
-v1: https://lore.kernel.org/all/20220429203039.2207848-2-nfraprado@collabora.com/
-
-Changes in v2:
-- Added "mediatek," prefix to property
-- Rewrote and added more information to property description
-- Split into two patterns to validate that output-input pairings are
-  done
-
- .../bindings/sound/mt8192-afe-pcm.yaml           | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-index 7a25bc9b8060..2abf43c6c2c3 100644
---- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-@@ -54,6 +54,22 @@ properties:
-       - const: aud_infra_clk
-       - const: aud_infra_26m_clk
- 
-+patternProperties:
-+  "^mediatek,i2s[13579]-share$":
-+    description:
-+      Each I2S interface has a single data line, input if its index is even or
-+      output if the index is odd. An input and an output I2S interface can be
-+      used together as if they were a single I2S interface with both input and
-+      output data lines by sharing the same clock. This property represents this
-+      pairing. The value should be the name of the interface whose clock is
-+      used, and the property name the other interface that depends on this
-+      clock.
-+    pattern: "^I2S[0268]$"
-+
-+  "^mediatek,i2s[0268]-share$":
-+    description: Same as above.
-+    pattern: "^I2S[13579]$"
-+
- required:
-   - compatible
-   - interrupts
--- 
-2.36.0
-
+Why not add a CONFIG_HARDENED_SLUB option that enables poisoning and
+also makes slub debugging not print any messages to the kernel log
+containing object internal details? Then it can be enabled in the kernel
+config to harden slub and if the flag is enabled we don't hash pointers
+based on 'slub_debug' existing on the commandline? And maybe add some
+commandline argument like 'slub_debug=H' for "hardened" so it can be
+turned off as well if it is built into the config.

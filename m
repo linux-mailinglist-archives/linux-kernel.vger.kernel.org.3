@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690EE51F47E
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAFB51F480
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiEIGan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 02:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S234628AbiEIGbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 02:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbiEIG16 (ORCPT
+        with ESMTP id S233381AbiEIG2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 02:27:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2FC17EC2A;
-        Sun,  8 May 2022 23:24:05 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24913ULR023542;
-        Mon, 9 May 2022 06:22:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=EUzciikRinO769+UPV9+5CaGF8IJ3vz6NtwLfqJarCs=;
- b=R0lntO0fsG6s5mi6rKgJO2Hnd9PMz1IPd57GnsFqu1uY8qDN8qHbvVomKp12dttiMA/q
- +UfgnDND4Xw8REPSsc0jQeBswH5LiIgPZSJ+j6KycC0T5N7tkfQUfImu8vm+9Tf/TTOw
- 5N4plEZQRM9pdi9tk4wV78kyR7BgYvVPSdeZEHLMKOXExVBSWd8UV7fUSgeelByXHBmc
- T5Q8LKJcXc7DMmWTW9rFC1ksNECrU8WExj34a1XYmMnKrGDEq7xDqfVhINT9XSSaFvr4
- NPsWPrLy388G/zYNMYjWd6p8MOqbjbseSDAlcOhsD82QE+JNWwpiImqSijHcDghAARZ2 WA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fx256b9sq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 May 2022 06:22:57 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2496021N004374;
-        Mon, 9 May 2022 06:22:50 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3fwg1hsjf2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 May 2022 06:22:50 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2496Mm3x52625870
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 May 2022 06:22:48 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14D4C4203F;
-        Mon,  9 May 2022 06:22:48 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1657142041;
-        Mon,  9 May 2022 06:22:46 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.35.189])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon,  9 May 2022 06:22:45 +0000 (GMT)
-Date:   Mon, 9 May 2022 11:52:42 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     fstests@vger.kernel.org
-Cc:     riteshh@linux.ibm.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] common/rc: Modify _require_batched_discard to improve
- test coverage
-Message-ID: <YnizMg+ALwVJYNLS@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20220401055713.634842-1-ojaswin@linux.ibm.com>
+        Mon, 9 May 2022 02:28:55 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DC611C376;
+        Sun,  8 May 2022 23:24:36 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id d5so17929811wrb.6;
+        Sun, 08 May 2022 23:24:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qtvtpCHrfy93i/AbWxDWLtbfIRHMiPM8nYvhcA78xXU=;
+        b=EPLAdtTpo2QZPtF2HbhduxU07sw9IF/EKlpG8DpfANtmltO8i+qX/XRcT04MGwGa9t
+         T+LubQfynbX3Sk+O85op+0oiECyD2NFTWEnHYoibSI+1P1Th5vmUXZDGd8AJjMlZGsk6
+         n8GmuDWWx19WEwnRmsPHX3Y3rcji05hLrlsjkYXUyAMViqzCSQMSnupqDdm+GbQavEHq
+         exaBK1AX6jZZ3w+dx2ah4PWiRg+LWKam7Vg0Cd3rHYe4plH2s+1ltyusTrwHDEkMP/NC
+         Kzy0utxmjBnf4cBt16rLNjaYvnW+sXAzCuja/5Wwml87m6Y84ym8WthUomaXUaEFurAi
+         X3KA==
+X-Gm-Message-State: AOAM5304wMcrO9hQoJwAkJDDFEtxC4f9f1nsS+ZIuXbTy68wgh69FNxL
+        ibVtMlLA1lSIY4kpvJ02tks=
+X-Google-Smtp-Source: ABdhPJzfvVlWA7RIQyopwXpPTSq2utg0p+L5RrRy+sJq+0WsgQO9SYb4Y1so1BcxBaPDuOS4HG5wxg==
+X-Received: by 2002:a5d:4148:0:b0:20a:d2de:d960 with SMTP id c8-20020a5d4148000000b0020ad2ded960mr12454920wrq.61.1652077421131;
+        Sun, 08 May 2022 23:23:41 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d67ca000000b0020c5253d8cfsm12156105wrw.27.2022.05.08.23.23.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 23:23:40 -0700 (PDT)
+Message-ID: <a36ad1b1-a6e1-4a80-cedf-a18dbab06fd4@kernel.org>
+Date:   Mon, 9 May 2022 08:23:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401055713.634842-1-ojaswin@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wYsTgguTGl8YPMEWgt8VXt3DtmAafGiO
-X-Proofpoint-ORIG-GUID: wYsTgguTGl8YPMEWgt8VXt3DtmAafGiO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-09_01,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- adultscore=0 clxscore=1011 impostorscore=0 bulkscore=0 mlxlogscore=490
- priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205090035
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5.17 000/225] 5.17.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220504153110.096069935@linuxfoundation.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On 04. 05. 22, 18:43, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.6 release.
+> There are 225 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
 
-Please do let me know if there are any reviews or comments on this patch.
+After the drop of "ASoC: Intel: sof_es8336: Add a quirk for Huawei 
+Matebook D15", openSUSE configs¹⁾ all green.
 
-Thank you,
-Ojaswin
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
 
-On Fri, Apr 01, 2022 at 11:27:13AM +0530, Ojaswin Mujoo wrote:
-> A recent ext4 patch discussed [1] that some devices (eg LVMs) can
-> have a discard granularity as big as 42MB which makes it larger
-> than the group size of ext4 FS with 1k BS. This causes the FITRIM
-> IOCTL to fail on filesystems like ext4.
-> 
-> This case was not correctly handle by "_require_batched_discard" as
-> it incorrectly interpreted the FITRIM failure as fs not supporting
-> the IOCTL. This caused the tests like generic/260 to incorectly
-> report "not run" instead of "failed" in case of large discard
-> granularity.
-> 
-> Fix "_require_batched_discard" to use a more accurate method
-> to determine if discard is supported.
-> 
-> [1] commit 173b6e383d2
->     ext4: avoid trim error on fs with small groups
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> ---
->  common/rc | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/common/rc b/common/rc
-> index e2d3d72a..97386342 100644
-> --- a/common/rc
-> +++ b/common/rc
-> @@ -3858,7 +3858,13 @@ _require_batched_discard()
->  		exit 1
->  	fi
->  	_require_fstrim
-> -	$FSTRIM_PROG $1 > /dev/null 2>&1 || _notrun "FITRIM not supported on $1"
-> +
-> +	$FSTRIM_PROG $1 2>&1 | grep -q "not supported"
-> +	RET=$?
-> +	if [ "$RET" = "0" ]
-> +	then
-> +		_notrun "FITRIM not supported on $1"
-> +	fi
->  }
->  
->  _require_dumpe2fs()
-> -- 
-> 2.27.0
-> 
+¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+
+-- 
+js
+suse labs

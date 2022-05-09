@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595D251FACE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7A951FABF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiEILFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S231777AbiEILF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiEILFG (ORCPT
+        with ESMTP id S231643AbiEILFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:05:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69686223867
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:01:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso16701282pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:01:12 -0700 (PDT)
+        Mon, 9 May 2022 07:05:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C5226880
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:01:15 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n8so13515183plh.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Tr6+NBI5Dp7/pv2IhiUO3+bTmtkrDRJXLmbHS2KDzto=;
-        b=29UqZuhw9+M3t42ulPc2ZSmZykQBVXN33MMQFuKE/0R1Kyd39m/lC7COmCnwOidfAn
-         Q267MfGBvY6H1Sqo7KBGDIh2ogS6Nvs0Vp2+NTBA6iHpGp0Vqv7b9wjdw20bZhaIhYme
-         MUnYF0YnyGufZYUokA6v2jORmdAYEHKj1mZ4qiBRigG706w+qBN6N0Dj/pkxfuyl4sm1
-         nvjZDHIZPMD2JDnE6iw3Cp709ZCkXTre51LDkijO2HYNDuzVH89m5rzNiWlI2QuBb6a3
-         6H38ONV6LkPtY2fNEoyzRQnQFgZSjmYNH6A8j3Mez/Sp4GRaKiOv8V9Ck/XrnEg7jFXK
-         XbjQ==
+        bh=t0KsZv2R4FmOpyzJ37nNuFGF3hEBVQUSZOEw7FIgU2A=;
+        b=yjtzA8SItPH7R6S1S+OGpTA8lpujjgtHSpoSwPxtQUypZnh+LhhkrVjtjaxYiSIVAp
+         iVo3fIPQGwplTUrHyLZm+y+PW7GyXKOyGCa/Mk5TpRRWgY8ampXvMrn3BYumiT5GRlHB
+         BAPwL6edGJN/fGAQUqu92vb6/tAVD3lhNQBVMpBoHpI0a8/1mEJZcCGlQmMGNkMSwbsr
+         17l7fH1SLbbetWfYC50CRYmCDeskVHYFWSZYWmXLz1WuvE0MByPEXHTARY5dFhTICCxG
+         mR3NVxFDYHIgork84g9o9A8HXp9wLBJY+kZqiVmveHEhPszocewvWXXDYls9OOPHvKg2
+         7ZLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Tr6+NBI5Dp7/pv2IhiUO3+bTmtkrDRJXLmbHS2KDzto=;
-        b=yyC+mOP6HzRc1XH82i7Nf46JUM+kL5nue8sO6h8DeNK6liMlY/hbOBY5g5vRk2eUAh
-         pm7GmqK43qsBQqTFJzJOCWbuBhg29dwuZrXFIHpoGkriHGvH1MNdMbh9lnwPIQ4CysV6
-         jiO/WaA2JwPUXp5I2O9dUyaw/dxSMJhdquEfmy8zCh5sXALDi7xHZXqsUTprMpRiUyC2
-         a3MHvr2Vtsmqve+U6khz39OSZPuTHnqLA2mGpeiMJ7WQilJCV6hzd/d94F860WqGv1ca
-         x7f7O20PgFT9/VzBRkMNZAKy8A/mdddF6GHoJeF1UMvtmD1U/ixjCIzd8tcxHjlvgzLx
-         o2Zw==
-X-Gm-Message-State: AOAM5325L3IMo9OsjTO0/t4dAAyVOGIPaZRDpSJ0yNby9PbeBZhfHg+i
-        uGnA/w/NaVisYsKOLCw6+mnrXA==
-X-Google-Smtp-Source: ABdhPJyU6HCZrGSz6lqIXae9RRYvrGcjZLnJUViQxdva/SCNkBkiHGP9a4t1FymjNKczWy+XWRGMIw==
-X-Received: by 2002:a17:90b:38c7:b0:1dc:77aa:e3d5 with SMTP id nn7-20020a17090b38c700b001dc77aae3d5mr25428577pjb.51.1652094071883;
-        Mon, 09 May 2022 04:01:11 -0700 (PDT)
+        bh=t0KsZv2R4FmOpyzJ37nNuFGF3hEBVQUSZOEw7FIgU2A=;
+        b=VaVi7y01ySUK0yNenjjGG8biIKinbKbvVQrwF1dbVk1RhRs7NaGoD7MGvEH0lo9Qnd
+         LehuExYc8hgAQ5Qwvyde4k1ix9rqkVKjbYhKYnFtGn8u0+Uq2kJ9fUwHLpd9u22/qTvb
+         yfTpzGLbfS623jGqVx/NGdO7RozaWQ5sEw5VoshzayEJV0Xuk7S8mfX7HQQoGDy3rlXo
+         iuHFQuxzLbziyQq7x4s25yKlDdykmZxwzMn6CkCdbiCI9sr0dg9DqkhBWcGNFRkd3nZY
+         zFYOuYzjBY3SucpIfR4flNs3KraHKroxaRA+NyFwfzmFwHpvo07HYPGelZUyy0qEFfHz
+         Yxvw==
+X-Gm-Message-State: AOAM533zugyPyRByOwGHZ8KuoSV8c0Bn5uJGu+XQuOwWg1JkmL5dkXYd
+        ZfYXDuTjXoPiLjF2BwWbpbiWcAqe9X53xg==
+X-Google-Smtp-Source: ABdhPJx/WzlB7PylnxnAdFCim/SskrKr0osvOo6sFRdb5OtHidyhPLSUg7ojKRvRf81iZeBPIyd+DQ==
+X-Received: by 2002:a17:90a:f2ce:b0:1d9:a18f:87f3 with SMTP id gt14-20020a17090af2ce00b001d9a18f87f3mr25860804pjb.213.1652094074838;
+        Mon, 09 May 2022 04:01:14 -0700 (PDT)
 Received: from always-x1.www.tendawifi.com ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170902968c00b0015e8d4eb244sm6813303plp.142.2022.05.09.04.01.09
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902968c00b0015e8d4eb244sm6813303plp.142.2022.05.09.04.01.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 04:01:11 -0700 (PDT)
+        Mon, 09 May 2022 04:01:14 -0700 (PDT)
 From:   zhenwei pi <pizhenwei@bytedance.com>
 To:     akpm@linux-foundation.org, naoya.horiguchi@nec.com
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH v2 4/5] mm/hwpoison: disable hwpoison filter during removing
-Date:   Mon,  9 May 2022 18:56:40 +0800
-Message-Id: <20220509105641.491313-5-pizhenwei@bytedance.com>
+Subject: [PATCH v2 5/5] mm/memory-failure.c: simplify num_poisoned_pages_inc/dec
+Date:   Mon,  9 May 2022 18:56:41 +0800
+Message-Id: <20220509105641.491313-6-pizhenwei@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220509105641.491313-1-pizhenwei@bytedance.com>
 References: <20220509105641.491313-1-pizhenwei@bytedance.com>
@@ -69,29 +69,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hwpoison filter is enabled by hwpoison-inject module, after removing
-this module, hwpoison filter still works. What is worse, user can not
-find the debugfs entries to know this.
+Originally, do num_poisoned_pages_inc() in memory failure routine,
+use num_poisoned_pages_dec() to rollback the number if filtered/
+cancelled.
 
-Disable the hwpoison filter during removing hwpoison-inject module.
+Suggested by Naoya, do num_poisoned_pages_inc() only in
+action_result(), this make this clear and simple.
 
 Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
 ---
- mm/hwpoison-inject.c | 1 +
- 1 file changed, 1 insertion(+)
+ mm/memory-failure.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/mm/hwpoison-inject.c b/mm/hwpoison-inject.c
-index bb0cea5468cb..5c0cddd81505 100644
---- a/mm/hwpoison-inject.c
-+++ b/mm/hwpoison-inject.c
-@@ -65,6 +65,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(unpoison_fops, NULL, hwpoison_unpoison, "%lli\n");
- 
- static void pfn_inject_exit(void)
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index ed280ef5473d..2d590cba412c 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1133,6 +1133,7 @@ static void action_result(unsigned long pfn, enum mf_action_page_type type,
  {
-+	hwpoison_filter_enable = 0;
- 	debugfs_remove_recursive(hwpoison_dir);
- }
+ 	trace_memory_failure_event(pfn, type, result);
  
++	num_poisoned_pages_inc();
+ 	pr_err("Memory failure: %#lx: recovery action for %s: %s\n",
+ 		pfn, action_page_types[type], action_name[result]);
+ }
+@@ -1588,8 +1589,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 		goto out;
+ 	}
+ 
+-	num_poisoned_pages_inc();
+-
+ 	/*
+ 	 * Handling free hugepage.  The possible race with hugepage allocation
+ 	 * or demotion can be prevented by PageHWPoison flag.
+@@ -1815,7 +1814,6 @@ int memory_failure(unsigned long pfn, int flags)
+ 	}
+ 
+ 	hpage = compound_head(p);
+-	num_poisoned_pages_inc();
+ 
+ 	/*
+ 	 * We need/can do nothing about count=0 pages.
+@@ -1839,7 +1837,6 @@ int memory_failure(unsigned long pfn, int flags)
+ 					/* We lost the race, try again */
+ 					if (retry) {
+ 						ClearPageHWPoison(p);
+-						num_poisoned_pages_dec();
+ 						retry = false;
+ 						goto try_again;
+ 					}
+@@ -1915,8 +1912,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 	 */
+ 	if (PageCompound(p)) {
+ 		if (retry) {
+-			if (TestClearPageHWPoison(p))
+-				num_poisoned_pages_dec();
++			ClearPageHWPoison(p);
+ 			unlock_page(p);
+ 			put_page(p);
+ 			flags &= ~MF_COUNT_INCREASED;
+@@ -1938,8 +1934,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 	page_flags = p->flags;
+ 
+ 	if (hwpoison_filter(p)) {
+-		if (TestClearPageHWPoison(p))
+-			num_poisoned_pages_dec();
++		TestClearPageHWPoison(p);
+ 		unlock_page(p);
+ 		put_page(p);
+ 		res = -EOPNOTSUPP;
 -- 
 2.20.1
 

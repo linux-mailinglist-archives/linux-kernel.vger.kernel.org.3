@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFB951F8AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9481D51F8DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiEIJzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S230033AbiEIJxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238203AbiEIJpd (ORCPT
+        with ESMTP id S239527AbiEIJqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:45:33 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DD27161;
-        Mon,  9 May 2022 02:41:36 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso10440034wma.0;
-        Mon, 09 May 2022 02:41:36 -0700 (PDT)
+        Mon, 9 May 2022 05:46:31 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E9421E03;
+        Mon,  9 May 2022 02:42:33 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id d132so6642170vke.0;
+        Mon, 09 May 2022 02:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2zdJr1D4+tOVKDyCMf5btV9F16hwBzLta+dcq/GYO3o=;
+        b=d8vnpsUJmFdQOs7ehYldCku6+vzQBhhGng4fPhDRY+TfRBQy12C2DVVQaCjn8T6waC
+         JOoeiQ/HdzWNEVpzLD7bzNnBOkLosvKImmK3Z9P6Kgf9U6YOWtkINzab8q3UZ0V+7sM1
+         pTLWnnePfezNoV35397EyOs353V1ANpZiqGZS/1kNREI5llWBziHCssLZIozoAcqtcpl
+         WUPTjbNdYZiV1nA8N/C+PA5zScP/vDvXs2bn/PlzLSlJ+zeocl9RMk/TjYRb+cuskof2
+         Nc6Hd5XxRsAyF89YPU0BZjT5bX9pwNTRlgLhTzpfGX04E8+9iBlIDbmGmnAdQm5eeE22
+         Ugcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MIo4iJaNWWiT8L0aREHccyFQKBU+YIpBaS+29bvc/oc=;
-        b=CljfGAPOH+8alNnaPgQ/ZfOeWWCyDXqWHuFhGjBWPlxXe37Lt6k538+7qYpiz24Uxh
-         wwCnpfootpzp2ttGz1SYDaY7+99KCpsz+fl5o1BG5x26uGCJl7WBi9pFJjh8xxmFF4A6
-         sfeVUHaFyqhkPTbuggUYfTosqoZ22ySb3B/8IkPYFoX6Dn/pwD0bemYob/2cu7I+NfHi
-         D424KCaeTqVKYsMI1omxqI3JViqArtz2hVFrQUv0MNcYF+W/ts0rP9ccBbXprFueBxqw
-         Vtall6hKoE7EYpGehq4xKEj3ijfm1tt/d1HlyDySG+5W0tIiDYhmM5WRzmDIlec7zksg
-         pRvQ==
-X-Gm-Message-State: AOAM533KIFwgy+QVhvkpxh3AYNikqIrIyQ27BWhMOFcfuqzwOeS77UP1
-        /bOyxv5AlGam4Z60i8hhRaI=
-X-Google-Smtp-Source: ABdhPJz/KKcTrgbBKiQDbLem0UVallm03r9n1V5yq/fpMjCoclkduFXgbKOowrI9BpO7enF+NSOlDA==
-X-Received: by 2002:a7b:c4c8:0:b0:394:26c5:b79e with SMTP id g8-20020a7bc4c8000000b0039426c5b79emr15176076wmk.15.1652089180818;
-        Mon, 09 May 2022 02:39:40 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id w7-20020adfee47000000b0020c5253d8efsm10503017wro.59.2022.05.09.02.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 02:39:40 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:39:38 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v6 00/23] Rust support
-Message-ID: <20220509093938.fdrh5hhhreqi46wn@liuwe-devbox-debian-v2>
-References: <20220507052451.12890-1-ojeda@kernel.org>
- <202205070056.ACC3C3D@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2zdJr1D4+tOVKDyCMf5btV9F16hwBzLta+dcq/GYO3o=;
+        b=O2uAOvPsBzBtdxDtKv0OLrO+QURTF3Hx0TaMrX97F6r8o92rnzNkCWt5rvrc/a0ZtP
+         gOd/bJzxz1nhywYAczlc63aLOmu+ne0w60znJeUBTy3wIGgT745itO53AeLcVJh67Mhj
+         quWcw7x9t5Jpv7xsqRBgx2GUFG36D2GXs8Y9f+TC4UNqfRL+CK5VZ6/QRjLtHFtrLGna
+         Vh/vnrGNwHUuG4z8Ms2d4DxFACV3FwaH0AlF4AMQwhKQPS2hECtJsjJ0bQdqYDmiBeH9
+         bXmLN3zx4W3wW98lPNEdtw9E/ZHg2gso+qgmq7wPiFQY5NyRnI5zIV2UUNbh7u+EK/5q
+         jVJQ==
+X-Gm-Message-State: AOAM531P3wMb6Y8ZGeakHrtXQVhyUJsQTCYT4YTmcJfsvfC43+V33jBp
+        wd+2AdyEBS8Yc9iaBIvkkZ6AD8rJfPx5rZdzL+4=
+X-Google-Smtp-Source: ABdhPJy8bywY0kXJ/mx1I4wIiEKnh1GL1ArVlZ2TTvmpxfraOvBQWZWf3Mp07c0n2sMkpQwh9ja2zkO6/cSgfrmMBNg=
+X-Received: by 2002:a1f:ae08:0:b0:352:6e83:e963 with SMTP id
+ x8-20020a1fae08000000b003526e83e963mr7568288vke.0.1652089291126; Mon, 09 May
+ 2022 02:41:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205070056.ACC3C3D@keescook>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220505134731.5295-1-jing.xia@unisoc.com> <Yni42sWLMFITtfmz@infradead.org>
+In-Reply-To: <Yni42sWLMFITtfmz@infradead.org>
+From:   jing xia <jing.xia.mail@gmail.com>
+Date:   Mon, 9 May 2022 17:41:20 +0800
+Message-ID: <CAN=25QM6Q1gQWzS27pBEpYokTpKXDamOVTrku40yy=YYGt=tTA@mail.gmail.com>
+Subject: Re: [PATCH] writeback: Avoid skipping inode writeback
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jing Xia <jing.xia@unisoc.com>, viro@zeniv.linux.org.uk,
+        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 01:06:18AM -0700, Kees Cook wrote:
-> On Sat, May 07, 2022 at 07:23:58AM +0200, Miguel Ojeda wrote:
-> > ## Patch series status
-> > 
-> > The Rust support is still to be considered experimental. However,
-> > support is good enough that kernel developers can start working on the
-> > Rust abstractions for subsystems and write drivers and other modules.
-> 
-> I'd really like to see this landed for a few reasons:
-> 
-> - It's under active development, and I'd rather review the changes
->   "normally", incrementally, etc. Right now it can be hard to re-review
->   some of the "mostly the same each version" patches in the series.
-> 
-> - I'd like to break the catch-22 of "ask for a new driver to be
->   written in rust but the rust support isn't landed" vs "the rust
->   support isn't landed because there aren't enough drivers". It
->   really feels like "release early, release often" is needed here;
->   it's hard to develop against -next. :)
+On Mon, May 9, 2022 at 2:46 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Thu, May 05, 2022 at 09:47:31PM +0800, Jing Xia wrote:
+> >       if (!(inode->i_state & I_DIRTY_ALL))
+> >               inode_cgwb_move_to_attached(inode, wb);
+> > +     else if (!(inode->i_state & I_SYNC_QUEUED) && (inode->i_state & I_DIRTY))
+>
+> Please turn this into
+>
+>         else if ((inode->i_state & I_DIRTY) &&
+>                  !(inode->i_state & I_SYNC_QUEUED))
+>
+> to keep it a little more readable.
+>
+> Otherwise looks good:
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-+1 to both points. :-)
+Ok. And thanks for the review.

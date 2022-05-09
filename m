@@ -2,280 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2334F51F9A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF7651F9CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiEIKS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S231939AbiEIK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiEIKSQ (ORCPT
+        with ESMTP id S231791AbiEIK2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:18:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851C2802E6;
-        Mon,  9 May 2022 03:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7099B810E2;
-        Mon,  9 May 2022 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAD1C385A8;
-        Mon,  9 May 2022 10:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652091209;
-        bh=wBJvO4HerbOZOXHADib6WRnFN6eunqN7EJxDAkRDG+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OnC9RYumXnoFHXkHt6nmVW6qygKLUzh8wozP6NP1Xd9b9bOXvwdH6P/YDQIYkAqXE
-         TC9du22P4WaOj6ynzSFpHkxa0DYh4kOFs6rhAh+XSHdHCCBvh1FFRwuL73VtQWgE60
-         xQvKixt5h3+CvLqLW4c8vMCd2TcajIu5PxnwuORlTmGsZlctrl/jr7DjG9h1tJy/m9
-         wVFEIHylrNbyFzeedD7AJjD657kIWexWoMq95pFxzV6+GWJNdSjgvlyQqxSSx9f9Qv
-         bn/S7T/m9Rn3pWK5nkKNECL0l8Dh6A1uPQzULBwoGDFnzO+RSMtCuhO4Zabe9T4y0L
-         KKIFgDzXSkfmw==
-Date:   Mon, 9 May 2022 12:13:23 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] binder: add BINDER_GET_EXTENDED_ERROR ioctl
-Message-ID: <20220509101323.myik2aqngjcepqix@wittgenstein>
-References: <20220429235644.697372-1-cmllamas@google.com>
- <20220429235644.697372-3-cmllamas@google.com>
+        Mon, 9 May 2022 06:28:09 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A4228F7EE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1652091813; x=1683627813;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:mime-version:content-transfer-encoding:subject;
+  bh=6QgrGcyp4Mk+3G0VkFn4Q4LxCcjPCl+ZDoGb2wNFrMo=;
+  b=iSii5ImtOUmOu18wgSko8b9EWesLZE7WdNY63aCsRT9gOJ/HYpIY88CI
+   eSxP9DzrX7HQ0Pqj1YLq+R0/2n7GC+X1y1gvBoml4JijgD8h98L1TO9m9
+   J15Yxq1ZreY0nkUIJCASbfoxQfwrBYr9ocmlSL3zvNmzyAMxSRI+pYzuO
+   c=;
+X-IronPort-AV: E=Sophos;i="5.91,211,1647302400"; 
+   d="scan'208";a="196437020"
+Subject: Re: [PATCH] mm/damon/reclaim: Use resource_size function on resource object
+Thread-Topic: [PATCH] mm/damon/reclaim: Use resource_size function on resource object
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 09 May 2022 10:13:51 +0000
+Received: from EX13D13EUB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id 797CB416C4;
+        Mon,  9 May 2022 10:13:49 +0000 (UTC)
+Received: from EX13D13EUB001.ant.amazon.com (10.43.166.101) by
+ EX13D13EUB001.ant.amazon.com (10.43.166.101) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Mon, 9 May 2022 10:13:48 +0000
+Received: from EX13D13EUB001.ant.amazon.com ([10.43.166.101]) by
+ EX13D13EUB001.ant.amazon.com ([10.43.166.101]) with mapi id 15.00.1497.033;
+ Mon, 9 May 2022 10:13:48 +0000
+From:   "Boehme, Markus" <markubo@amazon.de>
+To:     "jiapeng.chong@linux.alibaba.com" <jiapeng.chong@linux.alibaba.com>,
+        "sj@kernel.org" <sj@kernel.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "damon@lists.linux.dev" <damon@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "abaci@linux.alibaba.com" <abaci@linux.alibaba.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Thread-Index: AQHYYiihB0USfzggdUSRxWlPJRltUq0WVp2A
+Date:   Mon, 9 May 2022 10:13:48 +0000
+Message-ID: <5a9268fcd7bb829414da20aecd06d9e1d47a3489.camel@amazon.de>
+References: <20220507153833.45600-1-sj@kernel.org>
+In-Reply-To: <20220507153833.45600-1-sj@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.160.180]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AB10E6E853AF69478F7EAEC9785FF1D0@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220429235644.697372-3-cmllamas@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:56:41PM +0000, Carlos Llamas wrote:
-> Provide a userspace mechanism to pull precise error information upon
-> failed operations. Extending the current error codes returned by the
-> interfaces allows userspace to better determine the course of action.
-> This could be for instance, retrying a failed transaction at a later
-> point and thus offloading the error handling from the driver.
-> 
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> ---
+KEtlZXBpbmcgU0oncyBtYWlsIGZvciBjb250ZXh0LCBzaW5jZSBvcmlnaW5hbCBwYXRjaCBzZWVt
+cyB0byBub3QgaGF2ZQ0KZ29uZSB0byB0aGUgREFNT04gbGlzdC4pDQoNCk9uIFNhdCwgMjAyMi0w
+NS0wNyBhdCAxNTozOCArMDAwMCwgU2VvbmdKYWUgUGFyayB3cm90ZToNCj4gT24gU2F0LCA3IE1h
+eSAyMDIyIDExOjI1OjEyICswODAwIEppYXBlbmcgQ2hvbmcgPGppYXBlbmcuY2hvbmdAbGludXgu
+YWxpYmFiYS5jb20+IHdyb3RlOg0KPiANCj4gPiBGaXggdGhlIGZvbGxvd2luZyBjb2NjaWNoZWNr
+IHdhcm5pbmdzOg0KPiA+IA0KPiA+IC4vbW0vZGFtb24vcmVjbGFpbS5jOjI0MTozMC0zMzogV0FS
+TklORzogU3VzcGljaW91cyBjb2RlLiByZXNvdXJjZV9zaXplDQo+ID4gaXMgbWF5YmUgbWlzc2lu
+ZyB3aXRoIHJlcy4NCj4gDQo+IE5pdC4gIEknZCBwcmVmZXIgaGF2aW5nIHRoaXMga2luZCBvZiBw
+cm9ncmFtIG91dHB1dHMgaW4gY29tbWl0IG1lc3NhZ2UgYmUNCj4gaW5kZW50ZWQgYW5kIG5vdCBi
+cm9rZW4sIGxpa2UgYmVsb3c6DQo+IA0KPiAgICAgLi9tbS9kYW1vbi9yZWNsYWltLmM6MjQxOjMw
+LTMzOiBXQVJOSU5HOiBTdXNwaWNpb3VzIGNvZGUuIHJlc291cmNlX3NpemUgaXMgbWF5YmUgbWlz
+c2luZyB3aXRoIHJlcy4NCj4gDQo+ID4gUmVwb3J0ZWQtYnk6IEFiYWNpIFJvYm90IDxhYmFjaUBs
+aW51eC5hbGliYWJhLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBKaWFwZW5nIENob25nIDxqaWFw
+ZW5nLmNob25nQGxpbnV4LmFsaWJhYmEuY29tPg0KPiANCj4gT3RoZXIgdGhhbiB0aGUgbml0LA0K
+PiANCj4gUmV2aWV3ZWQtYnk6IFNlb25nSmFlIFBhcmsgPHNqQGtlcm5lbC5vcmc+DQo+IA0KPiAN
+Cj4gVGhhbmtzLA0KPiBTSg0KPiANCj4gPiAtLS0NCj4gPiAgbW0vZGFtb24vcmVjbGFpbS5jIHwg
+MiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkN
+Cj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvbW0vZGFtb24vcmVjbGFpbS5jIGIvbW0vZGFtb24vcmVj
+bGFpbS5jDQo+ID4gaW5kZXggZjM3YzVkNGIyN2ZhLi44ZWZiZmIyNGYzYTEgMTAwNjQ0DQo+ID4g
+LS0tIGEvbW0vZGFtb24vcmVjbGFpbS5jDQo+ID4gKysrIGIvbW0vZGFtb24vcmVjbGFpbS5jDQo+
+ID4gQEAgLTIzOCw3ICsyMzgsNyBAQCBzdGF0aWMgaW50IHdhbGtfc3lzdGVtX3JhbShzdHJ1Y3Qg
+cmVzb3VyY2UgKnJlcywgdm9pZCAqYXJnKQ0KPiA+ICB7DQo+ID4gICAgICAgc3RydWN0IGRhbW9u
+X3JlY2xhaW1fcmFtX3dhbGtfYXJnICphID0gYXJnOw0KPiA+IA0KPiA+IC0gICAgIGlmIChhLT5l
+bmQgLSBhLT5zdGFydCA8IHJlcy0+ZW5kIC0gcmVzLT5zdGFydCkgew0KPiA+ICsgICAgIGlmIChh
+LT5lbmQgLSBhLT5zdGFydCA8IHJlc291cmNlX3NpemUocmVzKSkgew0KPiA+ICAgICAgICAgICAg
+ICAgYS0+c3RhcnQgPSByZXMtPnN0YXJ0Ow0KPiA+ICAgICAgICAgICAgICAgYS0+ZW5kID0gcmVz
+LT5lbmQ7DQo+ID4gICAgICAgfQ0KPiA+IC0tDQo+ID4gMi4yMC4xLjcuZzE1MzE0NGMNCg0KVGhp
+cyBpcyBub3QganVzdCBmaXhpbmcgdGhlIHdhcm5pbmcsIGJ1dCBjaGFuZ2luZyB0aGUgY2FsY3Vs
+YXRpb24NCnNsaWdodGx5IHRvIGNvcnJlY3RseSBkZXRlcm1pbmUgc2l6ZSAocmVzLT5lbmQgbm90
+IHBvaW50aW5nIG9uZSBiZXlvbmQNCnRoZSBlbmQsIGJ1dCB0byB0aGUgbGFzdCBhZGRyZXNzIGlu
+IHRoZSByZWdpb24pLiBGb3IgZmluZGluZyB0aGUNCmJpZ2dlc3QgcmVnaW9uIGl0IGRvZXNuJ3Qg
+bWF0dGVyIGJlaW5nIG9mZiBieSBvbmUgY29uc2lzdGVudGx5LCBidXQNCmp1c3QgZml4aW5nIG9u
+ZSBzaWRlIG9mIHRoZSBjb21wYXJpc29uIGNoYW5nZXMgYmVoYXZpb3IgaW4gdGhlIHByZXNlbmNl
+DQpvZiB0d28gZXF1YWwgcmVnaW9ucy4gV2hlbiBmaXhpbmcgYm90aCBzaWRlcywgdGhlICJzdHJ1
+Y3QNCmRhbW9uX3JlY2xhaW1fcmFtX3dhbGtfYXJnIiBtaWdodCBqdXN0IGJlIHJlcGxhY2VkIHdp
+dGggYSAic3RydWN0DQpyZXNvdXJjZSIsIHRvby4NCg0KTWFya3VzDQoKCgpBbWF6b24gRGV2ZWxv
+cG1lbnQgQ2VudGVyIEdlcm1hbnkgR21iSApLcmF1c2Vuc3RyLiAzOAoxMDExNyBCZXJsaW4KR2Vz
+Y2hhZWZ0c2Z1ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFlZ2VyLCBKb25hdGhhbiBXZWlzcwpFaW5n
+ZXRyYWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIgMTQ5MTczIEIK
+U2l0ejogQmVybGluClVzdC1JRDogREUgMjg5IDIzNyA4NzkKCgo=
 
-One comment below otherwise looks good to me,
-Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-
->  drivers/android/binder.c            | 60 +++++++++++++++++++++++++++++
->  drivers/android/binder_internal.h   |  3 ++
->  include/uapi/linux/android/binder.h | 16 ++++++++
->  3 files changed, 79 insertions(+)
-> 
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index f0885baa53a1..b9df0c8a68d3 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -147,6 +147,13 @@ module_param_call(stop_on_user_error, binder_set_stop_on_user_error,
->  			binder_stop_on_user_error = 2; \
->  	} while (0)
->  
-> +#define binder_set_extended_error(ee, _id, _command, _param) \
-> +	do { \
-> +		(ee)->id = _id; \
-> +		(ee)->command = _command; \
-> +		(ee)->param = _param; \
-> +	} while (0)
-> +
->  #define to_flat_binder_object(hdr) \
->  	container_of(hdr, struct flat_binder_object, hdr)
->  
-> @@ -2697,6 +2704,24 @@ static struct binder_node *binder_get_node_refs_for_txn(
->  	return target_node;
->  }
->  
-> +static void binder_set_txn_from_error(struct binder_transaction *t, int id,
-> +				      uint32_t command, int32_t param)
-> +{
-> +	struct binder_thread *from = binder_get_txn_from_and_acq_inner(t);
-> +
-> +	if (!from) {
-> +		/* annotation for sparse */
-> +		__release(&from->proc->inner_lock);
-> +		return;
-> +	}
-> +
-> +	/* don't override existing errors */
-> +	if (from->ee.command == BR_OK)
-> +		binder_set_extended_error(&from->ee, id, command, param);
-> +	binder_inner_proc_unlock(from->proc);
-> +	binder_thread_dec_tmpref(from);
-> +}
-> +
->  static void binder_transaction(struct binder_proc *proc,
->  			       struct binder_thread *thread,
->  			       struct binder_transaction_data *tr, int reply,
-> @@ -2742,6 +2767,10 @@ static void binder_transaction(struct binder_proc *proc,
->  	e->offsets_size = tr->offsets_size;
->  	strscpy(e->context_name, proc->context->name, BINDERFS_MAX_NAME);
->  
-> +	binder_inner_proc_lock(proc);
-> +	binder_set_extended_error(&thread->ee, t_debug_id, BR_OK, 0);
-> +	binder_inner_proc_unlock(proc);
-> +
->  	if (reply) {
->  		binder_inner_proc_lock(proc);
->  		in_reply_to = thread->transaction_stack;
-> @@ -3487,10 +3516,16 @@ static void binder_transaction(struct binder_proc *proc,
->  
->  	BUG_ON(thread->return_error.cmd != BR_OK);
->  	if (in_reply_to) {
-> +		binder_set_txn_from_error(in_reply_to, t_debug_id,
-> +				return_error, return_error_param);
->  		thread->return_error.cmd = BR_TRANSACTION_COMPLETE;
->  		binder_enqueue_thread_work(thread, &thread->return_error.work);
->  		binder_send_failed_reply(in_reply_to, return_error);
->  	} else {
-> +		binder_inner_proc_lock(proc);
-> +		binder_set_extended_error(&thread->ee, t_debug_id,
-> +				return_error, return_error_param);
-> +		binder_inner_proc_unlock(proc);
->  		thread->return_error.cmd = return_error;
->  		binder_enqueue_thread_work(thread, &thread->return_error.work);
->  	}
-> @@ -4628,6 +4663,7 @@ static struct binder_thread *binder_get_thread_ilocked(
->  	thread->return_error.cmd = BR_OK;
->  	thread->reply_error.work.type = BINDER_WORK_RETURN_ERROR;
->  	thread->reply_error.cmd = BR_OK;
-> +	thread->ee.command = BR_OK;
->  	INIT_LIST_HEAD(&new_thread->waiting_thread_node);
->  	return thread;
->  }
-> @@ -5066,6 +5102,25 @@ static int binder_ioctl_get_freezer_info(
->  	return 0;
->  }
->  
-> +static int binder_ioctl_get_extended_error(struct binder_thread *thread,
-> +					   void __user *ubuf)
-> +{
-> +	struct binder_extended_error *ee = &thread->ee;
-> +
-> +	binder_inner_proc_lock(thread->proc);
-> +	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
-> +		binder_inner_proc_unlock(thread->proc);
-> +		return -EFAULT;
-> +	}
-> +
-> +	ee->id = 0;
-> +	ee->command = BR_OK;
-> +	ee->param = 0;
-> +	binder_inner_proc_unlock(thread->proc);
-> +
-> +	return 0;
-> +}
-
-Fwiw, could be:
-
-static int binder_ioctl_get_extended_error(struct binder_thread *thread,
-					   void __user *ubuf)
-{
-	int ret;
-	struct binder_extended_error *ee = &thread->ee;
-
-	binder_inner_proc_lock(thread->proc);
-	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
-		ret = -EFAULT;
-	} else {
-		ee->id = 0;
-		ee->command = BR_OK;
-		ee->param = 0;
-	}
-	binder_inner_proc_unlock(thread->proc);
-
-	return ret;
-}
-
-> +
->  static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  {
->  	int ret;
-> @@ -5274,6 +5329,11 @@ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->  		binder_inner_proc_unlock(proc);
->  		break;
->  	}
-> +	case BINDER_GET_EXTENDED_ERROR:
-> +		ret = binder_ioctl_get_extended_error(thread, ubuf);
-> +		if (ret < 0)
-> +			goto err;
-> +		break;
->  	default:
->  		ret = -EINVAL;
->  		goto err;
-> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
-> index d6b6b8cb7346..7c366a854125 100644
-> --- a/drivers/android/binder_internal.h
-> +++ b/drivers/android/binder_internal.h
-> @@ -480,6 +480,8 @@ struct binder_proc {
->   *                        (only accessed by this thread)
->   * @reply_error:          transaction errors reported by target thread
->   *                        (protected by @proc->inner_lock)
-> + * @ee:                   extended error information from this thread
-> + *                        (protected by @proc->inner_lock)
->   * @wait:                 wait queue for thread work
->   * @stats:                per-thread statistics
->   *                        (atomics, no lock needed)
-> @@ -504,6 +506,7 @@ struct binder_thread {
->  	bool process_todo;
->  	struct binder_error return_error;
->  	struct binder_error reply_error;
-> +	struct binder_extended_error ee;
->  	wait_queue_head_t wait;
->  	struct binder_stats stats;
->  	atomic_t tmp_ref;
-> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-> index 11157fae8a8e..e6ee8cae303b 100644
-> --- a/include/uapi/linux/android/binder.h
-> +++ b/include/uapi/linux/android/binder.h
-> @@ -236,6 +236,21 @@ struct binder_frozen_status_info {
->  	__u32            async_recv;
->  };
->  
-> +/* struct binder_extened_error - extended error information
-> + * @id:		identifier for the failed operation
-> + * @command:	command as defined by binder_driver_return_protocol
-> + * @param:	parameter holding a negative errno value
-> + *
-> + * Used with BINDER_GET_EXTENDED_ERROR. This extends the error information
-> + * returned by the driver upon a failed operation. Userspace can pull this
-> + * data to properly handle specific error scenarios.
-> + */
-> +struct binder_extended_error {
-> +	__u32	id;
-> +	__u32	command;
-> +	__s32	param;
-> +};
-> +
->  #define BINDER_WRITE_READ		_IOWR('b', 1, struct binder_write_read)
->  #define BINDER_SET_IDLE_TIMEOUT		_IOW('b', 3, __s64)
->  #define BINDER_SET_MAX_THREADS		_IOW('b', 5, __u32)
-> @@ -249,6 +264,7 @@ struct binder_frozen_status_info {
->  #define BINDER_FREEZE			_IOW('b', 14, struct binder_freeze_info)
->  #define BINDER_GET_FROZEN_INFO		_IOWR('b', 15, struct binder_frozen_status_info)
->  #define BINDER_ENABLE_ONEWAY_SPAM_DETECTION	_IOW('b', 16, __u32)
-> +#define BINDER_GET_EXTENDED_ERROR	_IOWR('b', 17, struct binder_extended_error)
->  
->  /*
->   * NOTE: Two special error codes you should check for when calling
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
-> 

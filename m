@@ -2,208 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90869520131
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B66520125
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiEIPfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S238356AbiEIPfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiEIPfE (ORCPT
+        with ESMTP id S238342AbiEIPf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:35:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97AB1BA8DD;
-        Mon,  9 May 2022 08:31:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A4D501F8BF;
-        Mon,  9 May 2022 15:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652110268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=igEnia1tol6glVUoyn10KI3rw75C75d7JZ9YLtfjPjQ=;
-        b=QHi7ODxi6sV1GnUBYfFXpN2LvnelDKO8MGmi0P2SP2UFND2Q4G97+JRiqAebDgCb4+aqSG
-        EWJSGCuJCIMLtHmTx64+lwvi9vT0XlsqQ0eIhMq/cRCjEn1kj5MEktxbt1RjshrgFWViZr
-        yJaMVoje7iD7w5OJ/kDRGbmPDVu3UE0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652110268;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=igEnia1tol6glVUoyn10KI3rw75C75d7JZ9YLtfjPjQ=;
-        b=9pGE77TIQOxARadLqLQXaLJUtFIWzEX+aLRKug6Hh28AJdm02uCApsyISgCTm9HTepwYbS
-        DExFi3yQkApP2kCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 637EA132C0;
-        Mon,  9 May 2022 15:31:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hJaRF7wzeWIsHQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 09 May 2022 15:31:08 +0000
-Message-ID: <f304299d-e533-ed18-e247-6dec928ce3b0@suse.cz>
-Date:   Mon, 9 May 2022 17:31:08 +0200
+        Mon, 9 May 2022 11:35:28 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3D714677D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:31:33 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id y2so25600216ybi.7
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 08:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RF6NlJgBC2duKXQ/qm8aP7sq/2Tq7ZiMGqrzTmGWNqU=;
+        b=pa3FHCoGa+7oq2sUGs7BEuDitGhL3+5eQHvzemtAVZKt9B3hGPB9JL0mKMHVpySsKF
+         ix9tDji4hV6ZarBd/2WiUVrE5ujAFKMi+WD/i46ImLcUtjQRYrR1NGa0P7Yum8D7tkav
+         +w5FehzivW1Jd5jyq8bhuEJkX4X70bwNctHW7md8YKOw8H5gZOXj6mNJChYrH5eSWLf6
+         aLeW2ULDZwd46rkLVUbXKKQ/eQ8DqQcFBF2V4rJgLLWcBLe8WWTOfP/HO2gW9Agy3FqE
+         cDx6xTWSeArTrAKLRlaBa52GgZFTswYWgxgo5NE8KQX0XW1ZwvbLx7KcahzY5RzljmC8
+         AVxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RF6NlJgBC2duKXQ/qm8aP7sq/2Tq7ZiMGqrzTmGWNqU=;
+        b=clfdTDGbvJFhscxCe05+I4v5N+cBKZvuLgj2/aVCidZK3gpbX04YYVdFD/dFBobXhU
+         UMyJ9S9XvwI+Tt6l6YLCUN2VpI8nG0agQhPdymlIKFkxINeQ/5pjZIrsR3vACXKEdt3a
+         ZtBGxM7FNHqRUrsCxzjajgbJ4m0oQ66/Av2dBvEjiKvTmmjON+V10OO0IFrXDa/EB3xp
+         wFPnXtiZnXrUe7oIkV5Km2420EHxJ8trPGKuZPymrqqagwdr/HXa7SF/+p30J21BcYez
+         r3XyenQsyWZiSIe4MCJz7PeC/Gs++RYxFjLeMkWt1A8wyhLBC0fvyKjnLwB4bVpvNTtE
+         NCyw==
+X-Gm-Message-State: AOAM531itpmzwo69ffBvWjAbg2Ctz6OA2aJ/M72NBE+x0aBsQ8kO1rNy
+        I8wplr4yZp7+zSagL5VDwnphS7N9MZs4wgUFWZ0=
+X-Google-Smtp-Source: ABdhPJxMhTuD/EyviRB9SuDpP+3lk3z4uR0numqtMQJnVRcO5e84FhSTojhe+vQt1aGiwVf2h9zkgOPie09gZakgTeY=
+X-Received: by 2002:a25:e7c5:0:b0:64a:718d:2f78 with SMTP id
+ e188-20020a25e7c5000000b0064a718d2f78mr12838239ybh.564.1652110292668; Mon, 09
+ May 2022 08:31:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, songliubraving@fb.com, riel@surriel.com,
-        willy@infradead.org, ziy@nvidia.com, tytso@mit.edu,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220404200250.321455-1-shy828301@gmail.com>
- <20220404200250.321455-7-shy828301@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [v3 PATCH 6/8] mm: khugepaged: move some khugepaged_* functions
- to khugepaged.c
-In-Reply-To: <20220404200250.321455-7-shy828301@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505122331.42696-1-wuyun.abel@bytedance.com>
+ <CADjb_WTRYjSD8z0BCE=u322iJmQVuEq5cUMTZO6ij9V-=ViY-w@mail.gmail.com>
+ <53fcde27-7dd2-5150-633b-4e2acc37bb6f@bytedance.com> <CADjb_WRmXh0tj7nZZR3QybhLxtoxZBy6OMKRNygtKOx-wUPxZA@mail.gmail.com>
+In-Reply-To: <CADjb_WRmXh0tj7nZZR3QybhLxtoxZBy6OMKRNygtKOx-wUPxZA@mail.gmail.com>
+From:   Chen Yu <yu.chen.surf@gmail.com>
+Date:   Mon, 9 May 2022 23:31:21 +0800
+Message-ID: <CADjb_WTfXDrKzAs09+Gf-xqrFuFBoi=9=Egy0_M5rU9a21+eRg@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/fair: filter out overloaded cpus in SIS
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Josh Don <joshdon@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 22:02, Yang Shi wrote:
-> To reuse hugepage_vma_check() for khugepaged_enter() so that we could
-> remove some duplicate code.  But moving hugepage_vma_check() to
-> khugepaged.h needs to include huge_mm.h in it, it seems not optimal to
-> bloat khugepaged.h.
-> 
-> And the khugepaged_* functions actually are wrappers for some non-inline
-> functions, so it seems the benefits are not too much to keep them inline.
-> 
-> So move the khugepaged_* functions to khugepaged.c, any callers just
-> need to include khugepaged.h which is quite small.  For example, the
-> following patches will call khugepaged_enter() in filemap page fault path
-> for regular filesystems to make readonly FS THP collapse more consistent.
-> The  filemap.c just needs to include khugepaged.h.
+On Mon, May 9, 2022 at 11:21 PM Chen Yu <yu.chen.surf@gmail.com> wrote:
+>
+> On Sun, May 8, 2022 at 1:50 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+> >
+> > Hi Chen,
+> >
+> > On 5/8/22 12:09 AM, Chen Yu Wrote:
+> [cut]
+> > >> @@ -81,8 +81,20 @@ struct sched_domain_shared {
+> > >>          atomic_t        ref;
+> > >>          atomic_t        nr_busy_cpus;
+> > >>          int             has_idle_cores;
+> > >> +
+> > >> +       /*
+> > >> +        * Tracking of the overloaded cpus can be heavy, so start
+> > >> +        * a new cacheline to avoid false sharing.
+> > >> +        */
+> > > Although we put the following items into different cache line compared to
+> > > above ones, is it possible that there is still cache false sharing if
+> > > CPU1 is reading nr_overloaded_cpus while
+> > > CPU2 is updating overloaded_cpus?
+> >
+> > I think it's not false sharing, it's just cache contention. But yes,
+> > it is still possible if the two items mixed with others (by compiler)
+> > in one cacheline, which seems out of our control..
+> >
+> My understanding is that, since nr_overloaded_cpus starts with a new
+> cache line,  overloaded_cpus is very likely to be in the same cache line.
+> Only If the write to nr_overloaded_cpus mask is not frequent(maybe tick based
+> update is not frequent), the read of nr_overloaded_cpus can survive from cache
+> false sharing, which is mainly read by SIS.  I have a stupid thought
+> that if nr_overloaded_cpus
+> mask and nr_overloaded_cpus could be put to 2 cache lines.
+Not exactly, as overloaded_cpus and nr_overloaded_cpus are updated at the same
+time, it is not a false sharing case.
 
-This last part is inaccurate in v3?
-
-> Acked-by: Song Liu <song@kernel.org>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-
-I think moving the tiny wrappers is unnecessary.
-
-How about just making hugepage_vma_check() not static and declare it in
-khugepaged.h, then it can be used from khugepaged_enter() in the same file
-and AFAICS no need to include huge_mm.h there?
-
-> ---
->  include/linux/khugepaged.h | 37 ++++++-------------------------------
->  mm/khugepaged.c            | 20 ++++++++++++++++++++
->  2 files changed, 26 insertions(+), 31 deletions(-)
-> 
-> diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-> index 0423d3619f26..6acf9701151e 100644
-> --- a/include/linux/khugepaged.h
-> +++ b/include/linux/khugepaged.h
-> @@ -2,10 +2,6 @@
->  #ifndef _LINUX_KHUGEPAGED_H
->  #define _LINUX_KHUGEPAGED_H
->  
-> -#include <linux/sched/coredump.h> /* MMF_VM_HUGEPAGE */
-> -#include <linux/shmem_fs.h>
-> -
-> -
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->  extern struct attribute_group khugepaged_attr_group;
->  
-> @@ -16,6 +12,12 @@ extern void __khugepaged_enter(struct mm_struct *mm);
->  extern void __khugepaged_exit(struct mm_struct *mm);
->  extern void khugepaged_enter_vma_merge(struct vm_area_struct *vma,
->  				       unsigned long vm_flags);
-> +extern void khugepaged_fork(struct mm_struct *mm,
-> +			    struct mm_struct *oldmm);
-> +extern void khugepaged_exit(struct mm_struct *mm);
-> +extern void khugepaged_enter(struct vm_area_struct *vma,
-> +			     unsigned long vm_flags);
-> +
->  extern void khugepaged_min_free_kbytes_update(void);
->  #ifdef CONFIG_SHMEM
->  extern void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr);
-> @@ -33,36 +35,9 @@ static inline void collapse_pte_mapped_thp(struct mm_struct *mm,
->  #define khugepaged_always()				\
->  	(transparent_hugepage_flags &			\
->  	 (1<<TRANSPARENT_HUGEPAGE_FLAG))
-> -#define khugepaged_req_madv()					\
-> -	(transparent_hugepage_flags &				\
-> -	 (1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG))
->  #define khugepaged_defrag()					\
->  	(transparent_hugepage_flags &				\
->  	 (1<<TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG))
-> -
-> -static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-> -{
-> -	if (test_bit(MMF_VM_HUGEPAGE, &oldmm->flags))
-> -		__khugepaged_enter(mm);
-> -}
-> -
-> -static inline void khugepaged_exit(struct mm_struct *mm)
-> -{
-> -	if (test_bit(MMF_VM_HUGEPAGE, &mm->flags))
-> -		__khugepaged_exit(mm);
-> -}
-> -
-> -static inline void khugepaged_enter(struct vm_area_struct *vma,
-> -				   unsigned long vm_flags)
-> -{
-> -	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags))
-> -		if ((khugepaged_always() ||
-> -		     (shmem_file(vma->vm_file) && shmem_huge_enabled(vma)) ||
-> -		     (khugepaged_req_madv() && (vm_flags & VM_HUGEPAGE))) &&
-> -		    !(vm_flags & VM_NOHUGEPAGE) &&
-> -		    !test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
-> -			__khugepaged_enter(vma->vm_mm);
-> -}
->  #else /* CONFIG_TRANSPARENT_HUGEPAGE */
->  static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
->  {
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index b69eda934d70..ec5b0a691d87 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -556,6 +556,26 @@ void __khugepaged_exit(struct mm_struct *mm)
->  	}
->  }
->  
-> +void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-> +{
-> +	if (test_bit(MMF_VM_HUGEPAGE, &oldmm->flags))
-> +		__khugepaged_enter(mm);
-> +}
-> +
-> +void khugepaged_exit(struct mm_struct *mm)
-> +{
-> +	if (test_bit(MMF_VM_HUGEPAGE, &mm->flags))
-> +		__khugepaged_exit(mm);
-> +}
-> +
-> +void khugepaged_enter(struct vm_area_struct *vma, unsigned long vm_flags)
-> +{
-> +	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
-> +	    khugepaged_enabled())
-> +		if (hugepage_vma_check(vma, vm_flags))
-> +			__khugepaged_enter(vma->vm_mm);
-> +}
-> +
->  static void release_pte_page(struct page *page)
->  {
->  	mod_node_page_state(page_pgdat(page),
-
+-- 
+Thanks,
+Chenyu

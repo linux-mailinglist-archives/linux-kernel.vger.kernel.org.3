@@ -2,181 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FB85201FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C617E5201FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238948AbiEIQNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S238967AbiEIQN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238893AbiEIQNH (ORCPT
+        with ESMTP id S238893AbiEIQN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:13:07 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC322764F1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:09:12 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id f4so15837952iov.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fCvLOr8+eHkzeHyWMYW7RF71t3Gl1LCKsc2kzaAVZOM=;
-        b=QlT+8onnX75/tEvfJkYh9kLNZ+hsPPZPdpIbHZXl8kpppooGxKYmuoC6vLZclgirkt
-         wTUJPGqs70408FK5mHAO6rN9wR9jArSexSqpr6Zv4jIqknRuMdyECi9FKHFSFDVoLPPl
-         pZDYCqKxHpQUtd2fiQH7UKzkf1FxOOgh+o8EheT71+7rFS7zEoRna5dzBgP8KNcJCJVt
-         0ALV6L2qoolorwBEsM8jk2TyDagowC44jDNzNgJ317AhCVW3oR+3ULHcLKoc/ehyGVSe
-         PNDbAyAOih/dVPedbHz/cvsnG+m6NWT9W+OBW0zbsEnECBTCokUFrm5/lL3Qqa8HR5w7
-         dCvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fCvLOr8+eHkzeHyWMYW7RF71t3Gl1LCKsc2kzaAVZOM=;
-        b=s71We/o1xEmHdBKnAts/5l3vE4l36dnuNVkcBwebJ+avtEcJ8e/7/lnP8p9DWu0f8F
-         l3qGVhn4LcTzRkQhI0QuMT37sWrwlfcxpU+6FlfFENpyTygFWyeD5mqBaTbQW84wLsFR
-         Cd2a+GEyv1dE5+UiSjSq+EDj/n3n4BvBr9ZEEOCe7I6mC9u+m+CM65h6LEXfE1qKMAAt
-         5iAXM8XbbR7/tR5oWWFlvhQ4qs4pv2BjEGw2GGDovCRbse+R0nEuRLtftNDNDbfO9nou
-         l6wTufVLWdCQavBFyb+0QNQ2Q3omGBRXm10KhZU38P76fhQk5X4o872eUPLi7r6qr/he
-         qIaQ==
-X-Gm-Message-State: AOAM530fmllIErVx3RTWBZxnisOTTa+DRshz9YvwxEBpI0rT2BUvfkTw
-        9O8d0Ud5A3WVcYY/+luGECBJVU5vowNIyA==
-X-Google-Smtp-Source: ABdhPJwzjjBY5XZM0KYyqpPJe2/GevSYJOkjWwTkr5Kimpk+Ej1+gNb4IcMUqD9aX0MOZbgLExD9rg==
-X-Received: by 2002:a05:6638:372c:b0:32b:604c:ec04 with SMTP id k44-20020a056638372c00b0032b604cec04mr7108749jav.84.1652112552162;
-        Mon, 09 May 2022 09:09:12 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id cp20-20020a056638481400b0032b75b98013sm3695366jab.148.2022.05.09.09.09.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 09:09:11 -0700 (PDT)
-Message-ID: <9c833e12-fd09-fe7d-d4f2-e916c6ce4524@kernel.dk>
-Date:   Mon, 9 May 2022 10:09:10 -0600
+        Mon, 9 May 2022 12:13:26 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045B627B30B;
+        Mon,  9 May 2022 09:09:29 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 629021BF203;
+        Mon,  9 May 2022 16:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652112566;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i7GSStgwKryZEOP1Jjq0CJbbm9/kTv+zC1i/HUwHXXA=;
+        b=Q3qHIfx01n4Z6VYb2ZeeD61UZj+SKoqZj/bmrMCXYMZbH02VhkUroQXvu6VEtLpX0el+ZZ
+        /M1Hf1oLfxfe9fgJlQvh4HxcXjJu100FCXHWOl2cVEj4LLGy+jgjGjjt/k5WK/m/aTgf1t
+        uTA5lv+FV/06uzWOikWHCPlpmAZULsl0Am9b8duDWm7Qhryo6xVgA+oCa3GVjKvQdHp27F
+        tllENT/8s1aW+B5NzJU8CJ1BM9bDXHczllL5wztlYqAgSkzLVcIgFvk/OnaLxKYoYckZsp
+        YQ3jgjHOjS9ZoR7jbWY+A/YAYi7zrnVVxqwwJF+Qq+1kkzVWdcpvwlsDDPZvVg==
+Date:   Mon, 9 May 2022 18:09:17 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 0/3] add dynamic PCI device of_node creation for overlay
+Message-ID: <20220509180917.0f0ae851@xps-bootlin>
+In-Reply-To: <f9b0cbf1-dde2-ff97-cca0-5d2895734f91@gmail.com>
+References: <20220427094502.456111-1-clement.leger@bootlin.com>
+        <96db62bb-18be-f44a-6f53-05b22319f23a@gmail.com>
+        <20220509141634.16158c38@xps-bootlin>
+        <f9b0cbf1-dde2-ff97-cca0-5d2895734f91@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220509092312.254354-1-ming.lei@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 3:23 AM, Ming Lei wrote:
-> This is the driver part of userspace block driver(ubd driver), the other
-> part is userspace daemon part(ubdsrv)[1].
-> 
-> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> shared cmd buffer for storing io command, and the buffer is read only for
-> ubdsrv, each io command is indexed by io request tag directly, and
-> is written by ubd driver.
-> 
-> For example, when one READ io request is submitted to ubd block driver, ubd
-> driver stores the io command into cmd buffer first, then completes one
-> IORING_OP_URING_CMD for notifying ubdsrv, and the URING_CMD is issued to
-> ubd driver beforehand by ubdsrv for getting notification of any new io request,
-> and each URING_CMD is associated with one io request by tag.
-> 
-> After ubdsrv gets the io command, it translates and handles the ubd io
-> request, such as, for the ubd-loop target, ubdsrv translates the request
-> into same request on another file or disk, like the kernel loop block
-> driver. In ubdsrv's implementation, the io is still handled by io_uring,
-> and share same ring with IORING_OP_URING_CMD command. When the target io
-> request is done, the same IORING_OP_URING_CMD is issued to ubd driver for
-> both committing io request result and getting future notification of new
-> io request.
-> 
-> Another thing done by ubd driver is to copy data between kernel io
-> request and ubdsrv's io buffer:
-> 
-> 1) before ubsrv handles WRITE request, copy the request's data into
-> ubdsrv's userspace io buffer, so that ubdsrv can handle the write
-> request
-> 
-> 2) after ubsrv handles READ request, copy ubdsrv's userspace io buffer
-> into this READ request, then ubd driver can complete the READ request
-> 
-> Zero copy may be switched if mm is ready to support it.
-> 
-> ubd driver doesn't handle any logic of the specific user space driver,
-> so it should be small/simple enough.
+Le Mon, 9 May 2022 10:56:36 -0500,
+Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
 
-This is pretty interesting! Just one small thing I noticed, since you
-want to make sure batching is Good Enough:
+> > Hi Frank,
+> >=20
+> > This work uses the kernel space interface (of_overlay_fdt_apply())
+> > and the device tree overlay is builtin the driver. This interface
+> > was used until recently by rcu-dcar driver. While the only user
+> > (sic), this seems to work pretty well and I was able to use it
+> > successfully. =20
+>=20
+> Yes, of_overlay_fdt_apply() was used by one driver.  But that driver
+> was explicitly recognized as a grandfathered exception, and not an
+> example for other users.  It was finally removed in 5.18-rc1.
 
-> +static blk_status_t ubd_queue_rq(struct blk_mq_hw_ctx *hctx,
-> +		const struct blk_mq_queue_data *bd)
-> +{
-> +	struct ubd_queue *ubq = hctx->driver_data;
-> +	struct request *rq = bd->rq;
-> +	struct ubd_io *io = &ubq->ios[rq->tag];
-> +	struct ubd_rq_data *data = blk_mq_rq_to_pdu(rq);
-> +	blk_status_t res;
-> +
-> +	if (ubq->aborted)
-> +		return BLK_STS_IOERR;
-> +
-> +	/* this io cmd slot isn't active, so have to fail this io */
-> +	if (WARN_ON_ONCE(!(io->flags & UBD_IO_FLAG_ACTIVE)))
-> +		return BLK_STS_IOERR;
-> +
-> +	/* fill iod to slot in io cmd buffer */
-> +	res = ubd_setup_iod(ubq, rq);
-> +	if (res != BLK_STS_OK)
-> +		return BLK_STS_IOERR;
-> +
-> +	blk_mq_start_request(bd->rq);
-> +
-> +	/* mark this cmd owned by ubdsrv */
-> +	io->flags |= UBD_IO_FLAG_OWNED_BY_SRV;
-> +
-> +	/*
-> +	 * clear ACTIVE since we are done with this sqe/cmd slot
-> +	 *
-> +	 * We can only accept io cmd in case of being not active.
-> +	 */
-> +	io->flags &= ~UBD_IO_FLAG_ACTIVE;
-> +
-> +	/*
-> +	 * run data copy in task work context for WRITE, and complete io_uring
-> +	 * cmd there too.
-> +	 *
-> +	 * This way should improve batching, meantime pinning pages in current
-> +	 * context is pretty fast.
-> +	 */
-> +	task_work_add(ubq->ubq_daemon, &data->work, TWA_SIGNAL);
-> +
-> +	return BLK_STS_OK;
-> +}
+I noticed that unfortunately.
 
-It'd be better to use bd->last to indicate what kind of signaling you
-need here. TWA_SIGNAL will force an immediate transition if the app is
-running in userspace, which may not be what you want. Also see:
+>=20
+> You may have used of_overlay_fdt_apply() in a specific use case at
+> a specific kernel version, but if you read through the references
+> I provided you will find that applying overlays after the kernel
+> boots is a fragile endeavor, with expectations of bugs and problems
+> being exposed as usage is changed (simple example is that my adding
+> some overlay notifier unittests exposed yet another memory leak).
+>=20
+> The reference that I provided also shows how the overlay code is
+> being improved over time.  Even with improvements, it will remain
+> fragile.
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.19/io_uring&id=e788be95a57a9bebe446878ce9bf2750f6fe4974
+Acked.
 
-But regardless of signaling needed, you don't need it except if bd->last
-is true. Would need a commit_rqs() as well, but that's trivial.
+>=20
+> >=20
+> > Moreover, this support targets at using this with PCI devices. This
+> > devices are really well contained and do not interfere with other
+> > devices. This actually consists in adding a complete subtree into
+> > the existing device-tree and thus it limits the interactions between
+> > potentially platform provided devices and PCI ones. =20
+>=20
+> Yes, that it is very important that you have described this fact, both
+> here and in other emails.  Thank you for that information, it does
+> help understanding the alternatives.
+>=20
+> I've hesitated in recommending a specific solution before better
+> understanding the architecture of your pcie board and drivers, but
+> I've delayed too long, so I am going to go ahead and mention one
+> possibility at the risk of not yet fully understanding the situation.
+>=20
+> On the surface, it appears that your need might be well met by having
+> a base devicetree that describes all of the pcie nodes, but with each
+> node having a status of "disabled" so that they will not be used.
+> Have a devicetree overlay describing the pcie card (as you proposed),
+> where the overlay also includes a status of "ok" for the pcie node.
+> Applying the overlay, with a method of redirecting the target to a
+> specific pcie node would change the status of the pcie node to enable
+> its use.  (You have already proposed a patch to modify
+> of_overlay_fdt_apply() to allow a modified target, so not a new
+> concept from me.)  My suggestion is to apply the overlay devicetree
+> to the base devicetree before the combined FDT devicetree is passed
+> to the kernel at boot.  The overlay apply could be done by several
+> different entities.  It could be before the bootloader executes, it
+> could be done by the bootloader, it could be done by a shim between
+> the bootloader and the kernel.  This method avoids all of the issues
+> of applying an overlay to a running system that I find problematic.
+> It is also a method used by the U-boot bootloader, as an example.
 
-More importantly, what prevents ubq->ubq_daemon from going away after
-it's been assigned? I didn't look at the details, but is this relying on
-io_uring being closed to cancel pending requests? That should work, but
-we need some way to ensure that ->ubq_daemon is always valid here.
+Ok, that is actually possible on a system that is given a device-tree
+by the bootloader. But on a system that is desrcibed using ACPI (such
+as the x86), this is much more difficult (at least to my knowledge)...
+We want this feature to be easy to use for the end user. Adding such
+configuration which also differs between various architecture is
+clearly not so easy to setup.
 
--- 
-Jens Axboe
+Moreover, since the PCI is meant to be "Plug and Play", such
+configuration would completely break that. If the user switches the
+PCIe card from one slot to another, the bootloader configuration will
+need to be modified. This seems a big no way for me (and for the user).
+
+>=20
+> The other big issue is mixing ACPI and devicetree on a single system.
+> Historically, the Linux devicetree community has not been receptive
+> to the ides of that mixture.  Your example might be a specific case
+> where the two can be isolated from each other, or maybe not.  (For
+> disclosure, I am essentially ACPI ignorant.)  I suspect that mixing
+> ACPI and devicetree is a recipe for disaster in the general case.
+
+Agreed, on that fact, it did raised some eyebrows, and it was for that
+specific concern that initially, I proposed the fwnode solution.
+Honestly, the fwnode conversion represent a lot of work (hundreds of
+lines easily) + requires a conversion of all the subsystem that are not
+fwnode ready (spoiler: almost all of them are not ready).=20
+
+After implementing Rob's solution, the device-tree overlay really seems
+the cleaner to me and requires much less modifications.
+
+>=20
+> More to come later as I finish reading through the various threads.
+
+Ok, thanks for your time !
+
+Cl=C3=A9ment
+
+>=20
+> -Frank
 

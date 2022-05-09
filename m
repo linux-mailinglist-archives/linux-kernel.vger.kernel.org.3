@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C803C520023
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A3A520024
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbiEIOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S237579AbiEIOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237533AbiEIOrY (ORCPT
+        with ESMTP id S237514AbiEIOr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:47:24 -0400
+        Mon, 9 May 2022 10:47:29 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4F321BA8C8;
-        Mon,  9 May 2022 07:43:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 230F41C83DE;
+        Mon,  9 May 2022 07:43:35 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1F87153B;
-        Mon,  9 May 2022 07:43:29 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE8F21480;
+        Mon,  9 May 2022 07:43:34 -0700 (PDT)
 Received: from e121896.arm.com (unknown [10.57.4.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 61FD93F73D;
-        Mon,  9 May 2022 07:43:27 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9F3353F73D;
+        Mon,  9 May 2022 07:43:32 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org, broonie@kernel.org
@@ -33,9 +33,9 @@ Cc:     german.gomez@arm.com, James Clark <james.clark@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>, linux-doc@vger.kernel.org
-Subject: [PATCH v1 1/6] perf: arm64: Add SVE vector granule register to user regs
-Date:   Mon,  9 May 2022 15:42:49 +0100
-Message-Id: <20220509144257.1623063-2-james.clark@arm.com>
+Subject: [PATCH v1 2/6] arm64/sve: Add Perf extensions documentation
+Date:   Mon,  9 May 2022 15:42:50 +0100
+Message-Id: <20220509144257.1623063-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220509144257.1623063-1-james.clark@arm.com>
 References: <20220509144257.1623063-1-james.clark@arm.com>
@@ -50,115 +50,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dwarf based unwinding in a function that pushes SVE registers onto
-the stack requires the unwinder to know the length of the SVE register
-to calculate the stack offsets correctly. This was added to the Arm
-specific Dwarf spec as the VG pseudo register[1].
-
-Add the vector length at position 46 if it's requested by userspace and
-SVE is supported. If it's not supported then fail to open the event.
-
-The vector length must be on each sample because it can be changed
-at runtime via a prctl or ptrace call. Also by adding it as a register
-rather than a separate attribute, minimal changes will be required in an
-unwinder that already indexes into the register list.
-
-[1]: https://github.com/ARM-software/abi-aa/blob/main/aadwarf64/aadwarf64.rst
+Document that the VG register is available in Perf samples
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- arch/arm64/include/uapi/asm/perf_regs.h |  7 +++++-
- arch/arm64/kernel/perf_regs.c           | 30 +++++++++++++++++++++++--
- drivers/perf/arm_pmu.c                  |  2 +-
- 3 files changed, 35 insertions(+), 4 deletions(-)
+ Documentation/arm64/sve.rst | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/include/uapi/asm/perf_regs.h b/arch/arm64/include/uapi/asm/perf_regs.h
-index d54daafa89e3..fd157f46727e 100644
---- a/arch/arm64/include/uapi/asm/perf_regs.h
-+++ b/arch/arm64/include/uapi/asm/perf_regs.h
-@@ -36,6 +36,11 @@ enum perf_event_arm_regs {
- 	PERF_REG_ARM64_LR,
- 	PERF_REG_ARM64_SP,
- 	PERF_REG_ARM64_PC,
--	PERF_REG_ARM64_MAX,
-+
-+	/* Extended/pseudo registers */
-+	PERF_REG_ARM64_VG = 46, // SVE Vector Granule
-+
-+	PERF_REG_ARM64_MAX = PERF_REG_ARM64_PC + 1,
-+	PERF_REG_ARM64_EXTENDED_MAX = PERF_REG_ARM64_VG + 1
- };
- #endif /* _ASM_ARM64_PERF_REGS_H */
-diff --git a/arch/arm64/kernel/perf_regs.c b/arch/arm64/kernel/perf_regs.c
-index f6f58e6265df..b4eece3eb17d 100644
---- a/arch/arm64/kernel/perf_regs.c
-+++ b/arch/arm64/kernel/perf_regs.c
-@@ -9,9 +9,27 @@
- #include <asm/perf_regs.h>
- #include <asm/ptrace.h>
+diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+index 9d9a4de5bc34..67e65bf66883 100644
+--- a/Documentation/arm64/sve.rst
++++ b/Documentation/arm64/sve.rst
+@@ -402,6 +402,24 @@ The regset data starts with struct user_sve_header, containing:
+ * Modifying the system default vector length does not affect the vector length
+   of any existing process or thread that does not make an execve() call.
  
-+static u64 perf_ext_regs_value(int idx)
-+{
-+	switch (idx) {
-+	case PERF_REG_ARM64_VG:
-+		if (WARN_ON_ONCE(!system_supports_sve()))
-+			return 0;
++10.  Perf extensions
++--------------------------------
 +
-+		/*
-+		 * Vector granule is current length in bits of SVE registers
-+		 * divided by 64.
-+		 */
-+		return (task_get_sve_vl(current) * 8) / 64;
-+	default:
-+		WARN_ON_ONCE(true);
-+		return 0;
-+	}
-+}
++* The arm64 specific DWARF standard [5] added the VG (Vector Granule) register
++  at index 46. This register is used for DWARF unwinding when variable length
++  SVE registers are pushed onto the stack.
 +
- u64 perf_reg_value(struct pt_regs *regs, int idx)
- {
--	if (WARN_ON_ONCE((u32)idx >= PERF_REG_ARM64_MAX))
-+	if (WARN_ON_ONCE((u32)idx >= PERF_REG_ARM64_EXTENDED_MAX))
- 		return 0;
- 
- 	/*
-@@ -51,6 +69,9 @@ u64 perf_reg_value(struct pt_regs *regs, int idx)
- 	if ((u32)idx == PERF_REG_ARM64_PC)
- 		return regs->pc;
- 
-+	if ((u32)idx >= PERF_REG_ARM64_MAX)
-+		return perf_ext_regs_value(idx);
++* Its value is equivalent to the current vector length (VL) in bits divided by
++  64.
 +
- 	return regs->regs[idx];
- }
- 
-@@ -58,7 +79,12 @@ u64 perf_reg_value(struct pt_regs *regs, int idx)
- 
- int perf_reg_validate(u64 mask)
- {
--	if (!mask || mask & REG_RESERVED)
-+	u64 reserved_mask = REG_RESERVED;
++* The value is included in Perf samples in the regs[46] field if
++  PERF_SAMPLE_REGS_USER is set and the sample_regs_user mask has bit 46 set.
 +
-+	if (system_supports_sve())
-+		reserved_mask &= ~(1ULL << PERF_REG_ARM64_VG);
++* The value is the current value at the time the sample was taken, and it can
++  change over time.
 +
-+	if (!mask || mask & reserved_mask)
- 		return -EINVAL;
++* If the system doesn't support SVE when perf_event_open is called with these
++  settings, the event will fail to open.
  
- 	return 0;
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 59d3980b8ca2..3f07df5a7e95 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -894,7 +894,7 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
- 		 * pmu::filter_match callback and pmu::event_init group
- 		 * validation).
- 		 */
--		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS,
-+		.capabilities	= PERF_PMU_CAP_HETEROGENEOUS_CPUS | PERF_PMU_CAP_EXTENDED_REGS,
- 	};
- 
- 	pmu->attr_groups[ARMPMU_ATTR_GROUP_COMMON] =
+ Appendix A.  SVE programmer's model (informative)
+ =================================================
+@@ -543,3 +561,5 @@ References
+     http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
+     http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
+     Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
++
++[5] https://github.com/ARM-software/abi-aa/blob/main/aadwarf64/aadwarf64.rst
 -- 
 2.28.0
 

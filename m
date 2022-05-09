@@ -2,130 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFCA51F2C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 04:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464B351F2C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiEIC7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 22:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S230445AbiEIDFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiEIC55 (ORCPT
+        with ESMTP id S232041AbiEIDAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 22:57:57 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4DD8164B
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 19:54:05 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1113286pjq.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 19:54:05 -0700 (PDT)
+        Sun, 8 May 2022 23:00:38 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0080A82D02
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 19:56:45 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id x18so17562075wrc.0
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 19:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
-        b=lvu0tqEAYL4lMpXHlUzMzuGrVzNiSN1F7GkTpaXG15DPrHT1CKlKmPTSyxU7h/NV/j
-         kUWsTNFP/67CPMC2uOZi3lJkE0lLp5sDkHR5Vg4ZoLQibwozZlVvVrWAmrcTfYRpX//B
-         IUvdewS9yYA2LSGRsdHGz3Vy9in8L82rvGFwD3Zc8rtXp9G3nFfXed3dmePb2uW74wWS
-         gjRGNoAkLLOEaS+JIVqDdXS8Khp2rr6+h+bGKqkjlK7OSgl+ubpQebutmaP5tiQRi8Kq
-         5jTLundScFrLcZoaaz36HUq3ybV0gU6aQtsrRhtprHTBJRtzsvzNZ5USFQbLHaHia+ap
-         v4wA==
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zGLs8GoeHHxow0QHkE6WAhpRqq163am1P8u8l/0Qawg=;
+        b=bAwc46bgzRfoc2DLiYdlzCkJPvcTGnfgzRzweu1C2fVcg65WP1trATs3acTrH2BCpt
+         81BISgEST0FFiyAi91rjBzJ2CcK8WtoctbuwX8fVb6oHVQkkPjJti5aNXrfLRwEwdBwh
+         Pooh4iBSsUnxbSHf7vQeTOP+CzQZbTv++VBlRsCQdHVNNn2ASO5mLA/QefvHvWD+6s0a
+         eUj93XWAurLLDFWehur4TNlOEyKlCHm5EZoURSXu6c1XR7zzsn21bwm7Xhp36MO+emEL
+         WZSA6YWOrVmJ2oan2T0b2rg6BfN2ZIYMVD5tTFdyhEhhJ+6MnkGdDRz3FeTqBXkviG3a
+         arKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
-        b=uwc8GOXxzAVOptfAoEPeWPTXfwkGbXb+kRV8MrDBNau51XVnlkJAcxiIuZPS4rx5oH
-         xY+DaWaC9YKlw3BdoJfgZoPO0SYtqKLPoV0Uy+7zTJgJoLBVWWZxehg0g1Q7z2w1YuDt
-         xA7fVXAZyETznEIG0hMeewiTyDrzv7SxkRppY5Gj6vb96Q/WvJwZUl+y9HMZSh4DexbZ
-         Tkl1g+iV7pjn+jN7FDBaNZLf/elJKEBlizOQPL/XnlYUcCkarCROAKut58YY6yXHT9Vh
-         dj2X+D6yLzWR/reZYbvNWZlNmvMFEjIPDPgbRE/u+8NkKWmtYak0ybxnbbjyksyDrSne
-         0NEw==
-X-Gm-Message-State: AOAM533lEF8EU2wI5d9FAsPStY9jjZOmKOIQBYJFcM7UQ6hACIrPZphd
-        MqohMT/x0YAYgQpLBEZgyyLaJg==
-X-Google-Smtp-Source: ABdhPJy7zWNcQupxAcYMUNYtQ/R40mo+W7VEUJcoJcHH9ByfyOdtqYbfEKoLlg6WSLCwLEQ+8OB54A==
-X-Received: by 2002:a17:902:d2c9:b0:15e:b28d:8ad2 with SMTP id n9-20020a170902d2c900b0015eb28d8ad2mr14262241plc.94.1652064845269;
-        Sun, 08 May 2022 19:54:05 -0700 (PDT)
-Received: from localhost ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170902e29200b0015e8d4eb258sm5783241plc.162.2022.05.08.19.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 19:54:04 -0700 (PDT)
-Date:   Mon, 9 May 2022 10:54:00 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/3] Introduce new huge_ptep_get_access_flags()
- interface
-Message-ID: <YniCSGvBeUq3yxCg@FVFYT0MHHV2J.usts.net>
-References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
- <Ynf5Aje8FXlPdOSl@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynf5Aje8FXlPdOSl@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zGLs8GoeHHxow0QHkE6WAhpRqq163am1P8u8l/0Qawg=;
+        b=aQd5NTbn1gQoxAMcnS7AgXvtnJCcgl3nIClTIM1F3AlNeFlAIPJY1ZnjmK60CLmskJ
+         Q1D3ZEmGPifoJgSj91JL2INDYe0qJDjsiq/bYEWF+Z633VsUvdO/eC0QEAIpAKlcxXMf
+         9aTSMpKgclv0FeR7ivSQYjkisCqSr9CmOkugx0x2/vBbYa1I0BCoizgKg975Ty9j8rpT
+         69QJcQsixuNNoLiqMMViG/BGJyvDurscwn8OvrTja/5rl0qYFVKN9eqT6Wm1zAvls+Gp
+         sG3thUcSZa8S97F3KZ6qvlEOOVawoR/hayTtTLrODeUzddKEhnjFv6E/akmeAw61xI8B
+         gFuw==
+X-Gm-Message-State: AOAM53204jmQ6791MaNamXEmZEXZrVlksY9MQYNQhTa+F8+Mg/8cnncF
+        dSBdLouuNaHxFQFI9vkEotIKog==
+X-Google-Smtp-Source: ABdhPJy059/eM8oV+XQ+w8slguW1SE1QSeWz1ma5e97+6eHR1i6LQS94bQGbba8RybbXFq3PKp2VTw==
+X-Received: by 2002:a5d:584a:0:b0:20c:45fe:b02e with SMTP id i10-20020a5d584a000000b0020c45feb02emr11717800wrf.504.1652065004531;
+        Sun, 08 May 2022 19:56:44 -0700 (PDT)
+Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
+        by smtp.gmail.com with ESMTPSA id q20-20020a7bce94000000b0039456fb80b3sm13680708wmj.43.2022.05.08.19.56.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 08 May 2022 19:56:44 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] clocksource/drivers/riscv: Events are stopped during CPU
+ suspend
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20220509012121.40031-1-samuel@sholland.org>
+Date:   Mon, 9 May 2022 03:56:43 +0100
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Dmitriy Cherkasov <dmitriy@oss-tech.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <878D1D3C-E8F1-4B37-93F1-B3560E3F271E@jrtc27.com>
+References: <20220509012121.40031-1-samuel@sholland.org>
+To:     Samuel Holland <samuel@sholland.org>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 06:08:18PM +0100, Matthew Wilcox wrote:
-> On Sun, May 08, 2022 at 04:58:51PM +0800, Baolin Wang wrote:
-> > As Mike pointed out [1], the huge_ptep_get() will only return one specific
-> > pte value for the CONT-PTE or CONT-PMD size hugetlb on ARM64 system, which
-> > will not take into account the subpages' dirty or young bits of a CONT-PTE/PMD
-> > size hugetlb page. That will make us miss dirty or young flags of a CONT-PTE/PMD
-> > size hugetlb page for those functions that want to check the dirty or
-> > young flags of a hugetlb page. For example, the gather_hugetlb_stats() will
-> > get inaccurate dirty hugetlb page statistics, and the DAMON for hugetlb monitoring
-> > will also get inaccurate access statistics.
-> > 
-> > To fix this issue, one approach is that we can define an ARM64 specific huge_ptep_get()
-> > implementation, which will take into account any subpages' dirty or young bits.
-> > However we should add a new parameter for ARM64 specific huge_ptep_get() to check
-> > how many continuous PTEs or PMDs in this CONT-PTE/PMD size hugetlb, that means we
-> > should convert all the places using huge_ptep_get(), meanwhile most places using
-> > huge_ptep_get() did not care about the dirty or young flags at all.
-> > 
-> > So instead of changing the prototype of huge_ptep_get(), this patch set introduces
-> > a new huge_ptep_get_access_flags() interface and define an ARM64 specific implementation,
-> > that will take into account any subpages' dirty or young bits for CONT-PTE/PMD size
-> > hugetlb page. And we can only change to use huge_ptep_get_access_flags() for those
-> > functions that care about the dirty or young flags of a hugetlb page.
-> 
-> I question whether this is the right approach.  I understand that
-> different hardware implementations have different requirements here,
-> but at least one that I'm aware of (AMD Zen 2/3) requires that all
-> PTEs that are part of a contig PTE must have identical A/D bits.  Now,
-> you could say that's irrelevant because it's x86 and we don't currently
-> support contPTE on x86, but I wouldn't be surprised to see that other
-> hardware has the same requirement.
-> 
-> So what if we make that a Linux requirement?  Setting a contPTE dirty or
-> accessed becomes a bit more expensive (although still one/two cachelines,
-> so not really much more expensive than a single write).  Then there's no
-> need to change the "get" side of things because they're always identical.
-> 
-> It does mean that we can't take advantage of hardware setting A/D bits,
-> unless hardware can be persuaded to behave this way.  I don't have any
-> ARM specs in front of me to check.
->
+On 9 May 2022, at 02:21, Samuel Holland <samuel@sholland.org> wrote:
+>=20
+> Some implementations of the SBI time extension depend on hart-local
+> state (for example, CSRs) that are lost or hardware that is powered
+> down when a CPU is suspended. To be safe, the clockevents driver
+> cannot assume that timer IRQs will be received during CPU suspend.
+>=20
+> Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
 
-I have looked at the comments in get_clear_flush() (in arch/arm64/mm/hugetlbpage.c).
-That says:
+Surely that=E2=80=99s not right? A commit from 2018 can=E2=80=99t have =
+been expected to
+predict the future, I would expect this to be one of the patches adding
+suspend to RISC-V which came years later.
 
-	/*
-	 * If HW_AFDBM is enabled, then the HW could turn on
-	 * the dirty or accessed bit for any page in the set,
-	 * so check them all.
-	 */
+Jess
 
-Unfortunately, the AD bits are not identical in all subpages.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>=20
+> drivers/clocksource/timer-riscv.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clocksource/timer-riscv.c =
+b/drivers/clocksource/timer-riscv.c
+> index 1767f8bf2013..593d5a957b69 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -34,7 +34,7 @@ static int riscv_clock_next_event(unsigned long =
+delta,
+> static unsigned int riscv_clock_event_irq;
+> static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) =3D =
+{
+> 	.name			=3D "riscv_timer_clockevent",
+> -	.features		=3D CLOCK_EVT_FEAT_ONESHOT,
+> +	.features		=3D CLOCK_EVT_FEAT_ONESHOT | =
+CLOCK_EVT_FEAT_C3STOP,
+> 	.rating			=3D 100,
+> 	.set_next_event		=3D riscv_clock_next_event,
+> };
+> --=20
+> 2.35.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Thanks.

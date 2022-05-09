@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791BA51FCED
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2668F51FCF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbiEIMfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S234654AbiEIMhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiEIMfh (ORCPT
+        with ESMTP id S234488AbiEIMhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:35:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E5D262653;
-        Mon,  9 May 2022 05:31:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C7AA01F948;
-        Mon,  9 May 2022 12:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652099501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D3NP2+AfAwypB8dY0Q7Ug6eLsoFCTz9seHAEXMlM3rE=;
-        b=ytxhXz4/4X/4ZUocjQYzh7Hr0W6tRQwbt9YKELwp2fkTQy/AbU5PuIOisC6RWWGKXGlIoj
-        jP0uhhlOEZkzUXWku7fLVF8BiLEYVIY2ia8rkLziXFx7z1rJU8CWWGlJzjb8GzLsZ9tbn5
-        oTHGnOCv2vK/30agcRle8RU5PymF+sk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652099501;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D3NP2+AfAwypB8dY0Q7Ug6eLsoFCTz9seHAEXMlM3rE=;
-        b=xjCMniOCStfULiGuvDqMybVagZXS58I0G6UrDb7F7bEXtB5AoQt/PKxZwcJvlCbP7xybJM
-        JpEPL2tDrpGLqHAA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A99522C141;
-        Mon,  9 May 2022 12:31:41 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4BC83A062A; Mon,  9 May 2022 14:31:38 +0200 (CEST)
-Date:   Mon, 9 May 2022 14:31:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     yebin <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_writepages
-Message-ID: <20220509123138.n3tmpybh2jf3x2eg@quack3.lan>
-References: <20220505135708.2629657-1-yebin10@huawei.com>
- <20220505154713.nig6rj76p2gl5mm7@quack3.lan>
- <6274797D.6050303@huawei.com>
- <20220506085034.akzobmffzosg7rem@quack3.lan>
- <6275192C.5080300@huawei.com>
+        Mon, 9 May 2022 08:37:38 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21BD28BDC9;
+        Mon,  9 May 2022 05:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=L3p0/83L4yDVyZoegOtsQfWmJV/6wtv6TZoOXChWFJg=; b=Gm1PabHNS+/VMjWNpRDgN0q7Gz
+        okgDM+2WHp5z93ZUGeQzJtlj40ch1Djul+F9LKvzWURwbafLBOoP/NgGu9GSmPuuE28KOgN2Dlog/
+        GHXl8dWWFH9IUIBQmU28gspF2npPpEWaJ19eWl8SzxR3mk4Q/F4kmhrZuCV0rVMHSE4nkq5aDi9ss
+        tskoNSlPr3h/0gKp/FmRCE42MZtPYeJf36WeID1+imZk2dUy5vrTX2Nb6oqUW3HqWx20YRVV7+Jqn
+        2U5xO3lqX+ogULZEqtYM74LQ/XjYNOdW70A5rw6LBK7UHwdRlT2URD08Y6BIbm5BwJqTO8MAols4i
+        vbgjN92g==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1no2ZO-0002Vw-CD; Mon, 09 May 2022 14:32:58 +0200
+Message-ID: <b5a1370c-1319-24d1-6b2a-629e5c8915ed@igalia.com>
+Date:   Mon, 9 May 2022 09:32:27 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6275192C.5080300@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 01/30] x86/crash,reboot: Avoid re-disabling VMX in all
+ CPUs on crash/restart
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, vkuznets@redhat.com
+Cc:     kexec@lists.infradead.org, pmladek@suse.com, bhe@redhat.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, will@kernel.org,
+        "David P . Reed" <dpreed@deepplum.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-2-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220427224924.592546-2-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,137 +83,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 06-05-22 20:48:44, yebin wrote:
-> On 2022/5/6 16:50, Jan Kara wrote:
-> > On Fri 06-05-22 09:27:25, yebin wrote:
-> > > On 2022/5/5 23:47, Jan Kara wrote:
-> > > > On Thu 05-05-22 21:57:08, Ye Bin wrote:
-> > > > > we got issue as follows:
-> > > > > EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-> > > > > ------------[ cut here ]------------
-> > > > > kernel BUG at fs/ext4/inode.c:2708!
-> > > > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> > > > > CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-> > > > > RIP: 0010:ext4_writepages+0x1977/0x1c10
-> > > > > RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-> > > > > RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-> > > > > RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-> > > > > RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-> > > > > R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-> > > > > R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-> > > > > FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-> > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-> > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > Call Trace:
-> > > > >    <TASK>
-> > > > >    do_writepages+0x130/0x3a0
-> > > > >    filemap_fdatawrite_wbc+0x83/0xa0
-> > > > >    filemap_flush+0xab/0xe0
-> > > > >    ext4_alloc_da_blocks+0x51/0x120
-> > > > >    __ext4_ioctl+0x1534/0x3210
-> > > > >    __x64_sys_ioctl+0x12c/0x170
-> > > > >    do_syscall_64+0x3b/0x90
-> > > > > 
-> > > > > It may happen as follows:
-> > > > > 1. write inline_data inode
-> > > > > vfs_write
-> > > > >     new_sync_write
-> > > > >       ext4_file_write_iter
-> > > > >         ext4_buffered_write_iter
-> > > > >           generic_perform_write
-> > > > > 	  ext4_da_write_begin
-> > > > > 	    ext4_da_write_inline_data_begin -> If inline data size too
-> > > > > 	    small will allocate block to write, then mapping will has
-> > > > > 	    dirty page
-> > > > > 	    	ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-> > > > > 2. fallocate
-> > > > > do_vfs_ioctl
-> > > > >     ioctl_preallocate
-> > > > >       vfs_fallocate
-> > > > >         ext4_fallocate
-> > > > >           ext4_convert_inline_data
-> > > > > 	  ext4_convert_inline_data_nolock
-> > > > > 	    ext4_map_blocks -> fail will goto restore data
-> > > > > 	    ext4_restore_inline_data
-> > > > > 	      ext4_create_inline_data
-> > > > > 	      ext4_write_inline_data
-> > > > > 	      ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-> > > > > 3. writepages
-> > > > > __ext4_ioctl
-> > > > >     ext4_alloc_da_blocks
-> > > > >       filemap_flush
-> > > > >         filemap_fdatawrite_wbc
-> > > > >           do_writepages
-> > > > > 	  ext4_writepages
-> > > > > 	    if (ext4_has_inline_data(inode))
-> > > > > 	      BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
-> > > > > 
-> > > > > To solved this issue, record origin 'EXT4_STATE_MAY_INLINE_DATA' flag, then pass
-> > > > > value to 'ext4_restore_inline_data', 'ext4_restore_inline_data' will
-> > > > > decide to if recovery 'EXT4_STATE_MAY_INLINE_DATA' flag according to parameter.
-> > > > > 
-> > > > > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > > > I think this will get also fixed by a patch from your colleague I've
-> > > > reviewed here [1], won't it?
-> > > > 
-> > > > [1] https://lore.kernel.org/all/20220428165725.mvjh6mx7gr5vekqe@quack3.lan
-> > > > 
-> > > The issue I fixed is not the same as the isuue my colleague fixed.
-> > OK, maybe I've jumped to conclusion too early but the fix I've referenced
-> > above will protect ext4_convert_inline_data() in ext4_fallocate() with
-> > inode->i_rwsem so I think the race you describe with ext4_da_write_begin()
-> > cannot happen. The inline conversion path with be entered either from
-> > ext4_da_write_begin() or from ext4_fallocate() but not from both. If I'm
-> > missing something, please explain how you think the problem happens with
-> > the above fix applied... Thanks!
-> > 
-> > 								Honza
-> It's happen as follows:
-> step1:
-> ext4_file_write_iter
->   ext4_buffered_write_iter
->     generic_perform_write
->       ext4_da_write_begin
->         if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
->           ext4_da_write_inline_data_begin
->             ext4_da_convert_inline_data_to_extent
->               __block_write_begin
->               ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->             ->clear EXT4_STATE_MAY_INLINE_DATA flag,  If inline data size
-> too
->         small will allocate block to write, then mapping will has dirty page
+On 27/04/2022 19:48, Guilherme G. Piccoli wrote:
+> In the panic path we have a list of functions to be called, the panic
+> notifiers - such callbacks perform various actions in the machine's
+> last breath, and sometimes users want them to run before kdump. We
+> have the parameter "crash_kexec_post_notifiers" for that. When such
+> parameter is used, the function "crash_smp_send_stop()" is executed
+> to poweroff all secondary CPUs through the NMI-shootdown mechanism;
+> part of this process involves disabling virtualization features in
+> all CPUs (except the main one).
 > 
->       ext4_da_write_end
->         generic_write_end
+> Now, in the emergency restart procedure we have also a way of
+> disabling VMX in all CPUs, using the same NMI-shootdown mechanism;
+> what happens though is that in case we already NMI-disabled all CPUs,
+> the emergency restart fails due to a second addition of the same items
+> in the NMI list, as per the following log output:
 > 
-> step2：
-> vfs_fallocate
->   ext4_fallocate
->     ext4_convert_inline_data
->       if (ext4_has_inline_data(inode))  -> This condition is satisfied
->         ext4_convert_inline_data_nolock
->           ext4_map_blocks -> fail will goto restore data
->           ext4_restore_inline_data
->            ext4_create_inline_data
->            ext4_write_inline_data
->            ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-> step3:
-> do_writepages
->   ext4_writepages
->     if (ext4_has_inline_data(inode))
->       BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+> sysrq: Trigger a crash
+> Kernel panic - not syncing: sysrq triggered crash
+> [...]
+> Rebooting in 2 seconds..
+> list_add double add: new=<addr1>, prev=<addr2>, next=<addr1>.
+> ------------[ cut here ]------------
+> kernel BUG at lib/list_debug.c:29!
+> invalid opcode: 0000 [#1] PREEMPT SMP PTI
 > 
-> As we call "ext4_destroy_inline_data" to destory inline data when delay
-> allocation.  So，if we call fallocate before writepages while
-> ext4_map_blocks return failed, will lead to above issue.  This issue does
-> not require concurrency conditions.
+> In order to reproduce the problem, users just need to set the kernel
+> parameter "crash_kexec_post_notifiers" *without* kdump set in any
+> system with the VMX feature present.
+> 
+> Since there is no benefit in re-disabling VMX in all CPUs in case
+> it was already done, this patch prevents that by guarding the restart
+> routine against doubly issuing NMIs unnecessarily. Notice we still
+> need to disable VMX locally in the emergency restart.
+> 
+> Fixes: ed72736183c4 ("x86/reboot: Force all cpus to exit VMX root if VMX is supported)
+> Fixes: 0ee59413c967 ("x86/panic: replace smp_send_stop() with kdump friendly version in panic path")
+> Cc: David P. Reed <dpreed@deepplum.com>
+> Cc: Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  arch/x86/include/asm/cpu.h |  1 +
+>  arch/x86/kernel/crash.c    |  8 ++++----
+>  arch/x86/kernel/reboot.c   | 14 ++++++++++++--
+>  3 files changed, 17 insertions(+), 6 deletions(-)
+> 
 
-Aha, I see now. Thanks for explanation and sorry for being a bit dense.
-I'll have a look at your original patch.
+Hi Paolo / Sean / Vitaly, sorry for the ping.
+But do you think this fix is OK from the VMX point-of-view?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I'd like to send a V2 of this set soon, so any review here is highly
+appreciated!
+
+Cheers,
+
+
+Guilherme
+

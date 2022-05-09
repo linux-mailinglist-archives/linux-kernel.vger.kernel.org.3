@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F961520257
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A8952025D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbiEIQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S239060AbiEIQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239026AbiEIQaH (ORCPT
+        with ESMTP id S239035AbiEIQaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:30:07 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAF01FC2FB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:26:13 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id i12-20020a17090a64cc00b001dccafbd493so6434501pjm.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:26:13 -0700 (PDT)
+        Mon, 9 May 2022 12:30:09 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838DF1FD853
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:26:15 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id q3-20020a17090a304300b001dd2130b435so1142256pjl.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=24ZXTLzrcb04Vr94e2BinqljFa5PLSd+pPp++TfBpV4=;
-        b=P2MUNiyZ52zkfiPjcTS8SbrOv+J4pIHeiuXQFaZnESg+NLVcCU4AR/+fuZgpSBJHvE
-         rej/pBP0q29OlurWs27cZq38903lkbwzGDQrWMriEBwcQEe3UtVPAayTBp96OwiKgap+
-         LxnYhTuP4ZWRpIebRHdev99As+Py+mvlCVMd3D2qN5Qmpq8aghskctCe/hfEfC249O+L
-         3n0gWT+eovPuEaB24iPZEmL9XqbtVwLE//FTCfavnJqsLwR6eOuJ/ZgMEPsWRJFbX9I8
-         dfcd2f2RR2knl9FJNgaSc9pfkr2xrKpX4HOJPcQnVcrbmwKGZvCTvtme2vs6Y1WphhFs
-         dGIg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ramO0+cEkxqJX3F8coHgv6jkuFbFeK102oolsavMu20=;
+        b=dzr2hls94IW3ClUuA2BSr4qrrnhWvuyEZI8nmXUIdiJHGzCNV42d2pewDNyyq80z8v
+         bWsUx/m5Ue/BW1YKhvz5ey2N7GtbjeXfSalL431rTrIhm9CbPH2N7m/FTSxFsyeD3qUp
+         vXJqArAH9zH6NJ6jgi3AYOdxSAZQ/zZ5hPibtfe7o8lwCwTgu6Cz50/+wdJ7XGjzpShB
+         ARsg0FK+LbtIxB0pYfEVUWq8IWxV5K/BYzouxazPSfK7emCZnaAacA2ohaNp1x+3aIGa
+         jyR/0vEsVlbDWN+XzL8wXDCFCcrU9hSGVTMq87y7rn8FTavQQDuIBOI5u0j2wnP/e64n
+         LqNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=24ZXTLzrcb04Vr94e2BinqljFa5PLSd+pPp++TfBpV4=;
-        b=1i6Le++w7DZOmpiduqndEaS6ICDFM+cDnEjf9F29xiHHfPJaJpFaRkQ9GH4IG7lDDJ
-         qjUrA8Ae4vrf9FvUzI4ANPmrCWK6JmXc9qpIO1hi3sztEQVFO47Umk5w058lkDzWHb1M
-         URLEKzlthizyIYGxxbGCtSRSzHiVbd2KH40vNkUpWaK+ZeDaMVntJRlyYWyH0nCSfz/J
-         qWVMTJRTYU08VAEo+PKXmNI60VnXZ9ghh0RiKzr8fuU0c1Afb1IAaQttQEPPSAdeEwFo
-         obpDVAXvmVw8ylKJbskvNlt/VYRYMSvd6yiEPduBTUvqsG/tLiN8fu+RB3P9Lue/tVTo
-         IPvQ==
-X-Gm-Message-State: AOAM530FtiGaYxvPTtiHlX4sV/brdnqi1JmWar8De1rJxZ9snRBBiRAq
-        PtXTt3k0K57OtHXls79NDT1lsza3gBE=
-X-Google-Smtp-Source: ABdhPJw1MOqIa/OCx3HluxWiZNUBlyVCmiV5/bxnPcSifyQh0atyvanFNrvtWw7hQl7rFciI7mrRmNlka6M=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ramO0+cEkxqJX3F8coHgv6jkuFbFeK102oolsavMu20=;
+        b=h0tlR0Laynn26TG/mzCAxukkf5GfaLnyU6fo0ii5rYQqoK+d+S9yI9ekvXTeLv0g8z
+         ByUYGlehUjbCTy4mh8KntsxlADEgH9fjtM6fWPF0Yk4KozpJST6cwOPqk/gYh3p/qvXC
+         ONh7XY26e5z53Lle0nDdlpfkQSoG9qfDg35leSqzjDmb0dMG4KCPmB60/YXyt9/hGZ1C
+         UjjYYvz9DYfIlANlL6K/fRh3TeUzX3W/01rvjy6JxnrCQ78IVHCPFCof09+LXUAyVKCq
+         W5SHEsrcO+1EPOwAZeFE/6xVYrhfaqcHgtJi4UFT81myWsf11FhkH2YHWuKb0IuSrLMz
+         3dDQ==
+X-Gm-Message-State: AOAM5330S22d84dxnYy2oBmPc7sY6FimmHnUypC/+HzJZIiFhmnRQedO
+        1ZzoYOdgraCE7gPPgeFd+Z5HGQSlSvE=
+X-Google-Smtp-Source: ABdhPJzdjvmm33Xww7qbolbHONdNzfLPiXVqOOHjncbxPv2g5srfZyPR6YVyWtFPJJJKmTvTXT956abVHGQ=
 X-Received: from oupton3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:21eb])
- (user=oupton job=sendgmr) by 2002:a17:902:e94e:b0:15b:22a7:f593 with SMTP id
- b14-20020a170902e94e00b0015b22a7f593mr17113726pll.148.1652113573120; Mon, 09
- May 2022 09:26:13 -0700 (PDT)
-Date:   Mon,  9 May 2022 16:25:57 +0000
-Message-Id: <20220509162559.2387784-1-oupton@google.com>
+ (user=oupton job=sendgmr) by 2002:a17:902:e74d:b0:15e:94f7:611e with SMTP id
+ p13-20020a170902e74d00b0015e94f7611emr17008035plf.37.1652113574927; Mon, 09
+ May 2022 09:26:14 -0700 (PDT)
+Date:   Mon,  9 May 2022 16:25:58 +0000
+In-Reply-To: <20220509162559.2387784-1-oupton@google.com>
+Message-Id: <20220509162559.2387784-2-oupton@google.com>
 Mime-Version: 1.0
+References: <20220509162559.2387784-1-oupton@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 0/2] KVM: arm64: Minor pKVM cleanups
+Subject: [PATCH 1/2] KVM: arm64: pkvm: Drop unnecessary FP/SIMD trap handler
 From:   Oliver Upton <oupton@google.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -67,19 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I was reading through some of the pKVM stuff to get an idea of how it
-handles feature registers and spotted a few minor nits.
+The pVM-specific FP/SIMD trap handler just calls straight into the
+generic trap handler. Avoid the indirection and just call the hyp
+handler directly.
 
-Applies cleanly to 5.18-rc5.
+Note that the BUILD_BUG_ON() pattern is repeated in
+pvm_init_traps_aa64pfr0(), which is likely a better home for it.
 
-Oliver Upton (2):
-  KVM: arm64: pkvm: Drop unnecessary FP/SIMD trap handler
-  KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
+No functional change intended.
 
- arch/arm64/kvm/hyp/nvhe/switch.c   | 19 +------------------
- arch/arm64/kvm/hyp/nvhe/sys_regs.c |  3 ---
- 2 files changed, 1 insertion(+), 21 deletions(-)
+Signed-off-by: Oliver Upton <oupton@google.com>
+---
+ arch/arm64/kvm/hyp/nvhe/switch.c | 19 +------------------
+ 1 file changed, 1 insertion(+), 18 deletions(-)
 
+diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+index 6410d21d8695..3dee2ad96e10 100644
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -175,23 +175,6 @@ static bool kvm_handle_pvm_sys64(struct kvm_vcpu *vcpu, u64 *exit_code)
+ 		kvm_handle_pvm_sysreg(vcpu, exit_code));
+ }
+ 
+-/**
+- * Handler for protected floating-point and Advanced SIMD accesses.
+- *
+- * Returns true if the hypervisor has handled the exit, and control should go
+- * back to the guest, or false if it hasn't.
+- */
+-static bool kvm_handle_pvm_fpsimd(struct kvm_vcpu *vcpu, u64 *exit_code)
+-{
+-	/* Linux guests assume support for floating-point and Advanced SIMD. */
+-	BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_FP),
+-				PVM_ID_AA64PFR0_ALLOW));
+-	BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_ASIMD),
+-				PVM_ID_AA64PFR0_ALLOW));
+-
+-	return kvm_hyp_handle_fpsimd(vcpu, exit_code);
+-}
+-
+ static const exit_handler_fn hyp_exit_handlers[] = {
+ 	[0 ... ESR_ELx_EC_MAX]		= NULL,
+ 	[ESR_ELx_EC_CP15_32]		= kvm_hyp_handle_cp15_32,
+@@ -207,7 +190,7 @@ static const exit_handler_fn pvm_exit_handlers[] = {
+ 	[0 ... ESR_ELx_EC_MAX]		= NULL,
+ 	[ESR_ELx_EC_SYS64]		= kvm_handle_pvm_sys64,
+ 	[ESR_ELx_EC_SVE]		= kvm_handle_pvm_restricted,
+-	[ESR_ELx_EC_FP_ASIMD]		= kvm_handle_pvm_fpsimd,
++	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
+ 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
+ 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
+ 	[ESR_ELx_EC_PAC]		= kvm_hyp_handle_ptrauth,
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

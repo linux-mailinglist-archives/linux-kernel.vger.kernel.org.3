@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A8952025D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B1A52026E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239060AbiEIQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S239068AbiEIQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbiEIQaJ (ORCPT
+        with ESMTP id S239041AbiEIQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:30:09 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838DF1FD853
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:26:15 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id q3-20020a17090a304300b001dd2130b435so1142256pjl.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:26:15 -0700 (PDT)
+        Mon, 9 May 2022 12:30:12 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1D320132C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:26:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f825f8c944so124609447b3.15
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:26:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ramO0+cEkxqJX3F8coHgv6jkuFbFeK102oolsavMu20=;
-        b=dzr2hls94IW3ClUuA2BSr4qrrnhWvuyEZI8nmXUIdiJHGzCNV42d2pewDNyyq80z8v
-         bWsUx/m5Ue/BW1YKhvz5ey2N7GtbjeXfSalL431rTrIhm9CbPH2N7m/FTSxFsyeD3qUp
-         vXJqArAH9zH6NJ6jgi3AYOdxSAZQ/zZ5hPibtfe7o8lwCwTgu6Cz50/+wdJ7XGjzpShB
-         ARsg0FK+LbtIxB0pYfEVUWq8IWxV5K/BYzouxazPSfK7emCZnaAacA2ohaNp1x+3aIGa
-         jyR/0vEsVlbDWN+XzL8wXDCFCcrU9hSGVTMq87y7rn8FTavQQDuIBOI5u0j2wnP/e64n
-         LqNg==
+        bh=xGoqp6X+CPpEHo725m8Wu+g1erF1chW9bMEShQucuQI=;
+        b=N0Zb4Gxa4HC1uAASPa5PNvN6IZjx7J7GkqJJxcHMPKOV18yjIl3pcEmceZOJesdcnG
+         QyYuP15OLQgQAzxZvOx9T/u4IcSod9jZabxpWQQRxegBDjAddti9A+I5FItlHEwguaJN
+         TpTsFWnpbz8e2DrUL88byAshOTHwqCzr3yK86hOE/LVy9b/KYkpySe/p+6GKXer9+ZsT
+         AJn8WeUun7zv6Aus63gh3Xr1mdIhrS9YxFDp64pMHUMFpR3ooGR2iVg+ijhT2AzXWlvC
+         0smRDvmncy7dBiwIBRAlq8Ds4xGlgiZR/k0QeJkvUFeyICFF+QBvChLD1FP9jVkilG9n
+         6zEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ramO0+cEkxqJX3F8coHgv6jkuFbFeK102oolsavMu20=;
-        b=h0tlR0Laynn26TG/mzCAxukkf5GfaLnyU6fo0ii5rYQqoK+d+S9yI9ekvXTeLv0g8z
-         ByUYGlehUjbCTy4mh8KntsxlADEgH9fjtM6fWPF0Yk4KozpJST6cwOPqk/gYh3p/qvXC
-         ONh7XY26e5z53Lle0nDdlpfkQSoG9qfDg35leSqzjDmb0dMG4KCPmB60/YXyt9/hGZ1C
-         UjjYYvz9DYfIlANlL6K/fRh3TeUzX3W/01rvjy6JxnrCQ78IVHCPFCof09+LXUAyVKCq
-         W5SHEsrcO+1EPOwAZeFE/6xVYrhfaqcHgtJi4UFT81myWsf11FhkH2YHWuKb0IuSrLMz
-         3dDQ==
-X-Gm-Message-State: AOAM5330S22d84dxnYy2oBmPc7sY6FimmHnUypC/+HzJZIiFhmnRQedO
-        1ZzoYOdgraCE7gPPgeFd+Z5HGQSlSvE=
-X-Google-Smtp-Source: ABdhPJzdjvmm33Xww7qbolbHONdNzfLPiXVqOOHjncbxPv2g5srfZyPR6YVyWtFPJJJKmTvTXT956abVHGQ=
+        bh=xGoqp6X+CPpEHo725m8Wu+g1erF1chW9bMEShQucuQI=;
+        b=me2ZD/+/gznvKhH1JT8MWEZqjMlf3pWQ3EehW23+jT7sF73LGc2gbdEKV0xVJkZyQ8
+         56OE9+FXT4fyiayn/4iJmC/CDOKPMxSwXfJTI7gurCkSSgwtY29eEEhR8aEwDpLWT4ql
+         PIhMweeWnDAlzYn4a3BDqPJPzy5OSAA0ISls/V9tSZHf0LeqrZG3ZIimBhMJt3+PwErh
+         vT7M8sdszp3GXWvJWxtYgvnw64NSRQJHcQBZ3l1OLL7AgXn89fAza0SLGuOpORZsp5Gb
+         4eBSTTPLwR+/TASZBUTqWqV56G2257qTW8drMqxCW9wBbV2e8GE/KElV60srwLDLHroO
+         LD9Q==
+X-Gm-Message-State: AOAM530FlXCYBvAAQxskTgFIE0enDxcaYapY7lU01DQqSfolpuY3hs5/
+        3Rj0GoxNgO8VNaPQESJL3713L8JJb+0=
+X-Google-Smtp-Source: ABdhPJwbEmmNk02jHZlxW+mCJH3BMBXB3kvXc9tx+Zc+AF6gVkBuuuHex37mMcuOHpy47pgj2Z6U4qDyQ2M=
 X-Received: from oupton3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:21eb])
- (user=oupton job=sendgmr) by 2002:a17:902:e74d:b0:15e:94f7:611e with SMTP id
- p13-20020a170902e74d00b0015e94f7611emr17008035plf.37.1652113574927; Mon, 09
- May 2022 09:26:14 -0700 (PDT)
-Date:   Mon,  9 May 2022 16:25:58 +0000
+ (user=oupton job=sendgmr) by 2002:a25:3157:0:b0:649:b216:bb4e with SMTP id
+ x84-20020a253157000000b00649b216bb4emr14278182ybx.387.1652113576747; Mon, 09
+ May 2022 09:26:16 -0700 (PDT)
+Date:   Mon,  9 May 2022 16:25:59 +0000
 In-Reply-To: <20220509162559.2387784-1-oupton@google.com>
-Message-Id: <20220509162559.2387784-2-oupton@google.com>
+Message-Id: <20220509162559.2387784-3-oupton@google.com>
 Mime-Version: 1.0
 References: <20220509162559.2387784-1-oupton@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH 1/2] KVM: arm64: pkvm: Drop unnecessary FP/SIMD trap handler
+Subject: [PATCH 2/2] KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
 From:   Oliver Upton <oupton@google.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -64,64 +64,37 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pVM-specific FP/SIMD trap handler just calls straight into the
-generic trap handler. Avoid the indirection and just call the hyp
-handler directly.
-
-Note that the BUILD_BUG_ON() pattern is repeated in
-pvm_init_traps_aa64pfr0(), which is likely a better home for it.
+FEAT_SVE is already masked by the fixed configuration for
+ID_AA64PFR0_EL1; don't try and mask it at runtime.
 
 No functional change intended.
 
 Signed-off-by: Oliver Upton <oupton@google.com>
 ---
- arch/arm64/kvm/hyp/nvhe/switch.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 6410d21d8695..3dee2ad96e10 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -175,23 +175,6 @@ static bool kvm_handle_pvm_sys64(struct kvm_vcpu *vcpu, u64 *exit_code)
- 		kvm_handle_pvm_sysreg(vcpu, exit_code));
- }
+diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+index 33f5181af330..3f5d7bd171c5 100644
+--- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
++++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+@@ -90,9 +90,6 @@ static u64 get_pvm_id_aa64pfr0(const struct kvm_vcpu *vcpu)
+ 	u64 set_mask = 0;
+ 	u64 allow_mask = PVM_ID_AA64PFR0_ALLOW;
  
--/**
-- * Handler for protected floating-point and Advanced SIMD accesses.
-- *
-- * Returns true if the hypervisor has handled the exit, and control should go
-- * back to the guest, or false if it hasn't.
-- */
--static bool kvm_handle_pvm_fpsimd(struct kvm_vcpu *vcpu, u64 *exit_code)
--{
--	/* Linux guests assume support for floating-point and Advanced SIMD. */
--	BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_FP),
--				PVM_ID_AA64PFR0_ALLOW));
--	BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_ASIMD),
--				PVM_ID_AA64PFR0_ALLOW));
+-	if (!vcpu_has_sve(vcpu))
+-		allow_mask &= ~ARM64_FEATURE_MASK(ID_AA64PFR0_SVE);
 -
--	return kvm_hyp_handle_fpsimd(vcpu, exit_code);
--}
--
- static const exit_handler_fn hyp_exit_handlers[] = {
- 	[0 ... ESR_ELx_EC_MAX]		= NULL,
- 	[ESR_ELx_EC_CP15_32]		= kvm_hyp_handle_cp15_32,
-@@ -207,7 +190,7 @@ static const exit_handler_fn pvm_exit_handlers[] = {
- 	[0 ... ESR_ELx_EC_MAX]		= NULL,
- 	[ESR_ELx_EC_SYS64]		= kvm_handle_pvm_sys64,
- 	[ESR_ELx_EC_SVE]		= kvm_handle_pvm_restricted,
--	[ESR_ELx_EC_FP_ASIMD]		= kvm_handle_pvm_fpsimd,
-+	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
- 	[ESR_ELx_EC_PAC]		= kvm_hyp_handle_ptrauth,
+ 	set_mask |= get_restricted_features_unsigned(id_aa64pfr0_el1_sys_val,
+ 		PVM_ID_AA64PFR0_RESTRICT_UNSIGNED);
+ 
 -- 
 2.36.0.512.ge40c2bad7a-goog
 

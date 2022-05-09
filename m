@@ -2,95 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3B75207E0
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1025207E1
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 00:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiEIWkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 18:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S231951AbiEIWlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 18:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiEIWkM (ORCPT
+        with ESMTP id S229510AbiEIWkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 18:40:12 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84781F2D4F;
-        Mon,  9 May 2022 15:36:17 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id v65so16757295oig.10;
-        Mon, 09 May 2022 15:36:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c1M6wqhWWv3BpYBqrk6no0d2EvsycYmqX1VGhpzRGEI=;
-        b=tqDFTe1O9Ipx9pNZMMfm86YT87caCTcNfyt6zeoVAYmHFp0EMeLBRdEjacoHQLUJN1
-         +HxNkdP0K137pXAse6EyH8XXL7PCiF+qhep6eoeGSKqMHfmqj+FoWQ7sCoxfMz9zzhQ4
-         bsIj2QmFyurMaazleqY+eNYk6Uu7+BFMGQmgZc9slRbQgQzpmAu9EU0229lQk+XmoTvn
-         T3BmWQNY4oggXk6hkCi1zxeNsTeHH+3GFW6rjiVMlAiB2DrLEmeznH7mLxbi0s+vTlhq
-         zXQGaJYNIBLdfsoj+IYSfd2Qy83IWxy8kKhWhRvUxHnTBGtFo/DHtGow/t3g08lTUVYv
-         whAw==
-X-Gm-Message-State: AOAM533+p/U9lCHNtPeL+diDmG277dx6wVrBZrGABcS6n0qW92Q3izbT
-        4itqtKfTqekF+IYuZJ4zAg==
-X-Google-Smtp-Source: ABdhPJwSvKg6NdOMWBJFDdtLoIBBQirxE56XmsbpySMSeXjq7HMZUZDlUFltYh7Kr/XklHJvznIbgg==
-X-Received: by 2002:a05:6808:11c4:b0:2d9:c395:f15e with SMTP id p4-20020a05680811c400b002d9c395f15emr11975287oiv.47.1652135776986;
-        Mon, 09 May 2022 15:36:16 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g4-20020a9d6184000000b0060603221250sm5139319otk.32.2022.05.09.15.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 15:36:16 -0700 (PDT)
-Received: (nullmailer pid 335215 invoked by uid 1000);
-        Mon, 09 May 2022 22:36:15 -0000
-Date:   Mon, 9 May 2022 17:36:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     allen-kh.cheng@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        chun-jie.chen@mediatek.com, devicetree@vger.kernel.org,
-        ikjn@chromium.org, krzk+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, matthias.bgg@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding
- of mt8192 clock
-Message-ID: <YnmXX0DldjhmbjY3@robh.at.kernel.org>
-References: <YnGjScfQA9axBYBO@robh.at.kernel.org>
- <20220505053111.13924-1-miles.chen@mediatek.com>
+        Mon, 9 May 2022 18:40:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E94E1F35FD;
+        Mon,  9 May 2022 15:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PZmP1cM/c+8QGucBjjYm6BgXSDyzdF3V//pAMnScE4Q=; b=jNg3toyUZcapZZcG6PXU3WHgsC
+        gwvC44L7AK2D/8EVuckSRBbyxGYZYFW0p/9EXQwoMMDaqqMtPwUFpO0Qr5Uh3A+MIO3wW+ZX2v1dE
+        7qkaJ3OI/FycKPh5gXDsQt23E25SYM0GXiwaDKUho3mmbHjH4f/VRnmOFzKKuGii5ZgRrb+NAwgFJ
+        srRnHUaji4kdrGBL+ajqB6Rb8cpysB//JlJz6C1u20+jmba71Jn8zLGCl9e05l3UUhIaKKpxDisSF
+        aoRMGe5PsbJ5xOgiqGE14hg+Ojj7JGIzd6PywlDxZqi7O0yKeStX6ME0WCP6+w6+kuaz5olkuTavc
+        89iVUi+A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1noBzp-00GaoX-Ql; Mon, 09 May 2022 22:36:53 +0000
+Date:   Mon, 9 May 2022 15:36:53 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] test_firmware: fix end of loop test in upload_read_show()
+Message-ID: <YnmXhaSMqi5k7KV7@bombadil.infradead.org>
+References: <YnOm+9tEN+xerpov@kili>
+ <YnPFh6ULhhPloue2@bombadil.infradead.org>
+ <20220505130251.GV4031@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505053111.13924-1-miles.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220505130251.GV4031@kadam>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:31:11PM +0800, Miles Chen wrote:
-> Hi Rob,
-> 
-> >> From: Matthias Brugger <matthias.bgg@gmail.com>
-> >> 
-> >> The msdc gate is part of the MMC driver. Delete the binding description
-> >> of this node.
+On Thu, May 05, 2022 at 04:02:51PM +0300, Dan Carpenter wrote:
+> The patch applies to today's, May 5, linux-next just fine but I think
+> I need to re-write the commit message to make the bug more clear.
+
+Odd not for me.
+
+> On Thu, May 05, 2022 at 05:39:35AM -0700, Luis Chamberlain wrote:
+> > On Thu, May 05, 2022 at 01:29:15PM +0300, Dan Carpenter wrote:
+> > > If we iterate through a loop using list_for_each_entry() without
+> > > hitting a break, then the iterator points to bogus memory.  The
+> > > if (tst->name != test_fw_config->upload_name) { will likely still work
+> > > but technically it's an out of bounds read.
+> > > 
+> > > Fixes: a31ad463b72d ("test_firmware: Add test support for firmware upload")
+> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > ---
+> > >  lib/test_firmware.c | 11 +++++++----
+> > >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+> > > index 76115c1a2629..c82b65947ce6 100644
+> > > --- a/lib/test_firmware.c
+> > > +++ b/lib/test_firmware.c
+> > > @@ -1392,7 +1392,8 @@ static ssize_t upload_read_show(struct device *dev,
+> > >  				struct device_attribute *attr,
+> > >  				char *buf)
+> > >  {
+> > > -	struct test_firmware_upload *tst;
+> > > +	struct test_firmware_upload *tst = NULL;
+> > > +	struct test_firmware_upload *tst_iter;
+> > >  	int ret = -EINVAL;
+> > >  
+> > >  	if (!test_fw_config->upload_name) {
+> > > @@ -1401,11 +1402,13 @@ static ssize_t upload_read_show(struct device *dev,
+> > >  	}
+> > >  
+> > >  	mutex_lock(&test_fw_mutex);
 > > 
-> >An ABI break is okay because ...?
+> > Note the mutex lock.
+> > 
 > 
-> Sorry for that, 
+> This lock is fine.
 > 
-> If the mediatek,mt8192-msdc part is removed from the driver, 
+> > > -	list_for_each_entry(tst, &test_upload_list, node)
+> > > -		if (tst->name == test_fw_config->upload_name)
+> > > +	list_for_each_entry(tst_iter, &test_upload_list, node)
+> > 
+> > If a lock is held I can't see how the premise of this patch is
+> > correct and we ensure we don't remove entries while holdingg
+> > the lock.
+> > 
+> > Generalizing this problem seems like a bigger issue, no?
+> > 
+> 
+> It has nothing to do with the look.  The problem is using the list
+> iterator outside of the loop.
 
-That's an ABI break too. You just need to explain why as Matthias did in 
-the commit message if the ABI break is okay.
+Ah the new infamous list iterator violation bug..
 
-> Is it ok to keep "mediatek,mt8192-msdc" in the binding document? or 
-> we should add '# deprecated' to "mediatek,mt8192-msdc" and keep the example.
+> > Additionally this patch doesn't apply at all on linux-next.
+> > 
+> >   Luis
+> > 
+> > > +		if (tst_iter->name == test_fw_config->upload_name) {
+> > > +			tst = tst_iter;
+> > >  			break;
+> > > +		}
+> > >  
+> > > -	if (tst->name != test_fw_config->upload_name) {
+> > > +	if (!tst) {
+> 
+> This test is reading out of bounds.  Another fix would be to write it
+> as:
+> 
+> 	if (list_entry_is_head(tst, &test_upload_list, node)) {
+> 
+> But there is a desire to make it impossible to access the list iterator
+> outside the loop.  Linus was drafting alternative list macros but I
+> don't know the status of that.
 
-We do that sometimes, but depends on the situation.
+Fine to get these fixes merged, but it would seem test firmware
+would be low on the list of places to fix. Either way I'm happy
+for this to go in.
 
-Rob
+Greg, want to pick it up?
+
+  Luis

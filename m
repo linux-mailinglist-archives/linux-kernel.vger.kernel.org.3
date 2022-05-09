@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95375200B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1715200B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbiEIPJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S237971AbiEIPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237917AbiEIPJB (ORCPT
+        with ESMTP id S237911AbiEIPJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:09:01 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A4BCE201E8E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:05:07 -0700 (PDT)
-Received: (qmail 126511 invoked by uid 1000); 9 May 2022 11:05:06 -0400
-Date:   Mon, 9 May 2022 11:05:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
-Message-ID: <YnktokC8Uk9j53yO@rowland.harvard.edu>
-References: <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
- <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
- <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
- <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
- <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
- <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
- <YnaR8LaaPTdLTiok@rowland.harvard.edu>
- <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
- <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
- <CAMuHMdVi6jCi=tRBNjBodVcA48ygiqPACQcmHx+1HRYnArJ9tQ@mail.gmail.com>
+        Mon, 9 May 2022 11:09:22 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58822685DC;
+        Mon,  9 May 2022 08:05:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 9355F1F441A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652108725;
+        bh=jwx7aoAOlo/IJzWJjPvpl/xGpjbHcHsD07r0sZmj1yw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n/4nJIvMOj5TT2NzwztqbxeysgjE5CI478h4wmebsMpDRzoIVTxsDchO+oiTYWCiI
+         Bzg4sk/GWak+7NvQQ42YzSfavD5nj0lANWuukpPi+bepSoaSP78RTUbh/uZB1XC4kN
+         aLQld3NcAGSH55Sc67tAAZBAmAJybBE6JktNuTKhLRJgJNHeqW9q7jKCbGT+tTZ9Wg
+         CdoTa1kCmp49YK82c/w4GWdbvHVh3ctGY54Yx421gzvUqlEKfPi0Zl83OtvsqsQak1
+         RaPU151VNrRhR2Aoe+NfL8U/7vR+VMqVvc/jqe8JsKUyzuojOiE0Ma5Pw2MTWcOCOY
+         nuW65r2mHlW3A==
+Date:   Mon, 9 May 2022 11:05:17 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Tzung-Bi Shih <tzungbi@google.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
+ exclusive to mt819x
+Message-ID: <20220509150517.ij5lev2mlcem2epx@notapiano>
+References: <20220506213226.257859-1-nfraprado@collabora.com>
+ <20220506213226.257859-2-nfraprado@collabora.com>
+ <CA+Px+wXQjys8xvTSSJkLXoGp4yQnANbKWBtfuxiYi0UX6DH0jw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVi6jCi=tRBNjBodVcA48ygiqPACQcmHx+1HRYnArJ9tQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+Px+wXQjys8xvTSSJkLXoGp4yQnANbKWBtfuxiYi0UX6DH0jw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:42:01PM +0200, Geert Uytterhoeven wrote:
-> Hi Alan,
+On Mon, May 09, 2022 at 10:27:18AM +0800, Tzung-Bi Shih wrote:
+> On Sat, May 7, 2022 at 5:32 AM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          enum:
+> > +            - mediatek,mt8192-scp
+> > +            - mediatek,mt8195-scp
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 3
+> > +          maxItems: 3
+> > +        reg-names:
+> > +          items:
+> > +            - const: sram
+> > +            - const: cfg
+> > +            - const: l1tcm
 > 
-> On Mon, May 9, 2022 at 4:15 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > On Mon, May 09, 2022 at 09:46:25AM +0200, Geert Uytterhoeven wrote:
-> > > > Geert:
-> > > >
-> > > > Can you test the patch below?  It ought to fix the problem (although it
-> > >
-> > > Thanks!
-> > >
-> > > root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
-> > > total 0
-> > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
-> > > ../../../devices/platform/soc/e659c000.usb/gadget.0
-> > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
-> > > ../../../devices/platform/soc/ee020000.usb/gadget.1
-> > > lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
-> > > ../../../devices/platform/soc/e6590000.usb/gadget.2
-> > >
-> > > Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > >
-> > > LGTM, so
-> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >
-> > Thanks!
-> >
-> > > > might end up causing other problems down the line...)
-> > >
-> > > Can you please elaborate? I'm not too familiar with UBS gadgets.
-> >
-> > I was concerned about the fact that changing the name of a file,
-> > directory, or symbolic link in sysfs means changing a user API, and so
-> > it might cause some existing programs to fail.  That would be a
-> > regression.
-> >
-> > Perhaps the best way to work around the problem is to leave the name set
-> > to "gadget" if the ID number is 0, while adding the ID number on to the
-> > name if the value is > 0.  What do you think?
-> 
-> Oh, you mean the "gadget.N" subdirs, which are the targets of the
-> symlinks above? These were indeed named "gadget" before.
-> 
-> Would it be possible to append the ".N" suffixes only to the actual
-> symlinks, while keeping the target directory names unchanged?
-> E.g. /sys/bus/gadget/devices/gadget.0 ->
-> ../../../devices/platform/soc/e659c000.usb/gadget
+> "l1tcm" should be optional.  Does it make more sense by using "minItems: 2"?
 
-No, it's not possible.  Or at least, not without significant changes to 
-the driver core.  Besides, people expect these names to be the same.
+Hi Tzung-Bi,
 
-Alan Stern
+thank you for the information. I did notice from the driver code that l1tcm was
+treated as optional for mt8192, but since I wasn't sure if that was intended, I
+kept it as required for the mt8192/mt8195 binding, since making it optional
+later wouldn't break the ABI, but the opposite would.
+
+But yes, since it is indeed optional for those platforms, I will lower minItems
+to 2 for them in the next version.
+
+Thanks,
+Nícolas

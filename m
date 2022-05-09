@@ -2,180 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED53E51FAE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480E851FAD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiEILGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        id S231818AbiEILHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbiEILG1 (ORCPT
+        with ESMTP id S231738AbiEILHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:06:27 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDA22A2C9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:02:33 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220509110231euoutp02c1140ee3ba2df639112d087578028ada~tauCj5vNA2728127281euoutp02-
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:02:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220509110231euoutp02c1140ee3ba2df639112d087578028ada~tauCj5vNA2728127281euoutp02-
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652094151;
-        bh=eRnf0CoH5S13LsLZ+gUV4c+ed3W57A7GuWCrr3sgnIo=;
-        h=Date:Subject:To:From:In-Reply-To:References:From;
-        b=C2KdSO3Ny3yn2BBrMvJBgM6QAcEz1k6M5zTBDCpVAzatXp/552glV1roZ14kxS1VO
-         mxS8a4YApT+Ns1Ta1PYec+La4T8knbMEqJ4t0s42GS1m1PtVv65YihMR/yvSWPfQcp
-         Oekkj0IVMBjmOpZthQb3RcpGgWfAR6G85MRU0rBg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220509110230eucas1p2bc1a54ccf4681a1cab65ccec40854f50~tauB8kytl1526915269eucas1p2W;
-        Mon,  9 May 2022 11:02:30 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id BE.10.10260.6C4F8726; Mon,  9
-        May 2022 12:02:30 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220509110230eucas1p13e606c51930d58a88555e9c10ddc0095~tauBZ0unJ0402604026eucas1p17;
-        Mon,  9 May 2022 11:02:30 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220509110230eusmtrp11af182cc213b7913b637d177288f7a8a~tauBYoRRA2398323983eusmtrp1z;
-        Mon,  9 May 2022 11:02:30 +0000 (GMT)
-X-AuditID: cbfec7f5-bddff70000002814-98-6278f4c6cd7d
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1A.4A.09404.5C4F8726; Mon,  9
-        May 2022 12:02:30 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220509110229eusmtip154a297efbad58824866a49dc0219bcbb~tauBMVgfz1376713767eusmtip1-;
-        Mon,  9 May 2022 11:02:29 +0000 (GMT)
-Received: from [106.110.32.130] (106.110.32.130) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Mon, 9 May 2022 12:02:28 +0100
-Message-ID: <c712f0d9-c7f8-172d-8bba-ca6d639bd7c0@samsung.com>
-Date:   Mon, 9 May 2022 13:02:23 +0200
+        Mon, 9 May 2022 07:07:01 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60045.outbound.protection.outlook.com [40.107.6.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E958F2317FF;
+        Mon,  9 May 2022 04:03:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UY26TIh4P6PxL43Rszw225Ukp93ZF56YSYZPRraiwVawEc+ftztfDcgQLmpueh6NLzEwoyFQhyy+7KxkEmHoDGp7K7v6Rw/4vX7qi+Ql/0ucwK/xQHYXG3IKV2Wtnx/lo08621yJCu0Iljk5ZDsvYV/ghDJeKUEKxT+A4HI1l0m6E7q4fBqaX3HHzuzhz3LVW712F6oJKbxHrd3v9JEcHuKYqcm+DFb4eSFfQe5xl7pKIMBoAsS6mPXMQ5dHsRXb21nTNxZ7xPdd7jKPMlKZQJScJqx4Y/8BeOdIG0zsHnO1OZlXcvM5FPLX7ocUWpYujzoNifjYg0+wL4HOphvgDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZHspxwN5EIklWPhnur9KyFhKkfZPyCulTx6tif3oYnQ=;
+ b=Gh7dUmzBZVnM3F4hoOoM3tGvGBYypdZiBW9Ngl6k2VlY/83T2Js0KiD/ETGpSuX0ldZ9vH4Bllu0wWjLZRjr2fqYab8e2v/mxhAv0s0nJ969lTVzAccr0RBRg2uVsGH/ZJ2PwmCOzu5QL1XhTWhPBtuph3HSW41rvh3mWK0f/DIzzpzHDgsauMXBYYk2CrhzgIuZcefq4TINvMzm4vbeY2r9O/UnYMeV6Y/YHwKvCuo857matoWyGHEhKaw560etrvXmy0e+e9/dc4hz6Je9jqH792KzqNq+BzDcV4doQoNSV7dDHXXkD7Ojh5pwRAD7mh4c115MEYwQjAZFBt/jZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZHspxwN5EIklWPhnur9KyFhKkfZPyCulTx6tif3oYnQ=;
+ b=gEPejjT8o4RtuQbSDtdmAxG4tffbPIIOVM4/IyqHyjJMHqFdb45lknUafiufYqSdMO387AuMiVEwuXe6rIXlRU4CF79VrmoWhVEFYAO7mCOwWwjuRiHgQ9yUkfCbY6envIXdJnMiXyPn6hQN5aeWfbWFXCtLWnXA+WujlgPNWEqRUxfPTdVP2OmgJtvcXBdgm4qwRnMeiOtyJsJWRYoBPeyhKGGiBxrAqdHNPB7+eb7FG5TQN5pljPl60XT1gzaMe3LgNGBd0GeWhdwXtSguW1/aPEAB2VOS/s6rnTd/YYVmemyXrrgyLERgAwbnGBHJxW3pPLaxZbYvEEMndi0cWw==
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:395::21)
+ by AM6PR10MB1912.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:209:3c::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
+ 2022 11:03:06 +0000
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::99a1:b485:c2b1:7ee0]) by DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::99a1:b485:c2b1:7ee0%3]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 11:03:05 +0000
+From:   "Starke, Daniel" <daniel.starke@siemens.com>
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/3] tty: n_gsm: fix mux activation issues in gsm_config()
+Thread-Topic: [PATCH 2/3] tty: n_gsm: fix mux activation issues in
+ gsm_config()
+Thread-Index: Adhjk9Mfxk/desayQOWbiqS+kvKvxg==
+Date:   Mon, 9 May 2022 11:03:05 +0000
+Message-ID: <DB9PR10MB588149B7E9A31D3476762776E0C69@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2022-05-09T11:03:03Z;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Privileged;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=d8458585-4c24-4c3a-8d9b-a26596864e7e;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
+document_confidentiality: Restricted
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8f855522-38d6-45d6-88da-08da31ab7e94
+x-ms-traffictypediagnostic: AM6PR10MB1912:EE_
+x-microsoft-antispam-prvs: <AM6PR10MB19126026CA2D76F33E5ABCFDE0C69@AM6PR10MB1912.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wbiHmrRSXY/9WY0IXs3yfDVXGP2HQAwa+BY/o+Dm2/2NA1KbJESV4WCCr270jfvcZAslQnBuJUk4d9hrUZuQhLBGgleDJS+NiygDdhUv5N4Ve6OhBszLeOXmxBujN/YQ2Txs2Biwy28fFRfVVYPcf1YnenQo9BMPzrKhOizppIMCDyxcbYrVMH8ZElpWvk9am1jMPRHfem6JP7grOIyAn9wofOE5yyPh4PU4qBYNjvu8v5gdtDi4Xv3SHjcVZ6oQ02eTAOZYNbbywrSc7pZyIelo0BF7BX0wnnmZiGArHOsaNuBpj92IusxHfXA8Av9klVfIKxdkpQ1uI4pYjz/gc6HYAYTaan8PN8/YpnCYTGLC6ROx7wph29CS0cU37bWFY9anVkiWJmEBSzcWaef2nAFGfiZP7BQkktmAlNGhgyFHM/R8ZAEfB3IT71mBEUjM4R/FHmp1wxuTacCBxRS2d5vuBiZRhVR0g2YIXXs5C0mXbw6BxfcW7sZMWs7fazIy0+scnegP3g2H7qVIVGJ4lyRJobBZYzLBfgV8AcGugBADsrvzIpd5igYV28tEsIuqdjnc802BvTPH5d2CLYIvnPiun5U2Pppb0NnWEWVGeX2xzs+pc3A6bfYQeSifHN8fROGfhqMTJ636GYhZb9ccNnE2QxDgVMgGJozCitnMFcJBNGwod017anDfIhYNK0pfntcvAI1CSZKG98QE/86Gsw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(55016003)(186003)(9686003)(122000001)(66556008)(4744005)(4326008)(8676002)(64756008)(66446008)(66476007)(66946007)(76116006)(52536014)(33656002)(5660300002)(2906002)(110136005)(316002)(8936002)(82960400001)(38070700005)(6506007)(7696005)(508600001)(38100700002)(55236004)(71200400001)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dXJRakd0bERQLzkwQkZPOFlqK05NQmNYVlpJZmpiN2kydm91YlkwbE53SWZV?=
+ =?utf-8?B?ZWZzNWJ6RlFxd2JuSm42N2Z5UnBmTDMyZmJTeHVVZWtJNDBRb2RCbENqTjMz?=
+ =?utf-8?B?bk85dXA1RTFaNUlxS1pUM1dRNm1zOG16eTFUSnYzb080ME5EVVZIWmtpMDBj?=
+ =?utf-8?B?UVdNVmp4TDl4ZzlaNjVWUWhZRTkwQ2RBZmhESVNkQVBya3h1R1djYlRpUTZL?=
+ =?utf-8?B?YjcrbHZvdXRaT0tpeWRqVnFmZGZQMXRmNVRqNTNUSjFObzZPNnRlaWJDTzJo?=
+ =?utf-8?B?a2NIbzJCMTE4cFQrYmFicEVKckpDSUNLZ3IzNFQ5Q2FmeFNMODBPOUhrNTNH?=
+ =?utf-8?B?T3l3T3RWZ1QrK0VuVXZMSENVS2dsOWl5N0VWaUVzaEw4ajZuVHRKUzBkcWVk?=
+ =?utf-8?B?NmRkK0xZeTlyeE81QTllYWlwOTZURmlPWnhkMUJaNWZzSWFrdm9QaWdKNk9r?=
+ =?utf-8?B?bjNlL1VzdXFGaE9kNFRSMlZoZUxKZ1lwTk44dzd6eUpkY0NKQ3JQQ0FSTm42?=
+ =?utf-8?B?YmtpYnUyZlRqaFlleDdJMW0rbmRvSE5IQ0RXRmtOdHhqZWtRR1V4ejFRRVNI?=
+ =?utf-8?B?MjBqeUF5MnprWjl0alpZWWhxa2lOaDB3N01WRU13T09ySnFDcVNYVEFtZWdU?=
+ =?utf-8?B?NWZNMGwycTZHSXhtdWhwYW5rT0V1V2hQV0xqME5lS202UlhOUnZRbGFxL1dQ?=
+ =?utf-8?B?bHlDN3VpNDNRQ20reUxJOVFrQ3oraVZQNlpGdlRwTUo2dy9YUjd2L0YvK1Fi?=
+ =?utf-8?B?TVgrcXAxQWxQN3pRUXY1dmE2Zk9MTm5DVHRHdVZLeE1hV3dESlJoVnhaWGZm?=
+ =?utf-8?B?YkVhVlNTOHFIZWJGa3JuNDBrOS81MWlYWDJ0ZHZLSGE5OEZuR0V6dTdNZDFD?=
+ =?utf-8?B?M3BMRWZjSWlXd2R0clF6cFd5bGYzMmJxUXBKUSs3Mk1LSm93QVZ2M0Z0c3hJ?=
+ =?utf-8?B?eWp6Q2hTV2JVQ0FvNkNBR3o0VHZ4elpmUmRCbEc4dC90VTFsSjVBTXh3bGxm?=
+ =?utf-8?B?OG83ejNVOW03SlBsdjZrUm1iN1VJcE8zK2pEK1VxU0ZjdWFpQXhJMnBnanR6?=
+ =?utf-8?B?bGppTlZWVXZPVUlUMzBGaXB0alRhNHBpbXAwL3hvNGs1bjRqUUN2SzZrYmxo?=
+ =?utf-8?B?SjYwR1ovZlhuTVRhMzdqYlQ0d24rV01yVzFWc21acVBLNzg1ZkZialFBcmFF?=
+ =?utf-8?B?M0FpYkRubERlNlQwU25hVzYvU2twNlk1bDV4OUtiNmloVVd4SVMvQ0hHSU93?=
+ =?utf-8?B?ZlBBdUZ1V1NrWDZ3OVBrc0Y1L2g5UFg0aUhyNHZpRmZpajdaZEJMQkR0Yk9s?=
+ =?utf-8?B?OHJzM25WczBya1RPZ3BuaHNVT0VuNHhNYWlnckpMeUZzejFQSkc0OCs4OFNm?=
+ =?utf-8?B?VUg1MDBLczhQb01kRDN6MzVtWDFEY0g0Mll3bER1NzZxR3ZkVUJqUXhRY2ZX?=
+ =?utf-8?B?T0d4YnBEMitpdUk3S2VqZm9WYUUwNWZXa2M1ejVZbTlEcTU0ZEtqd3Y1Vk5R?=
+ =?utf-8?B?cmtmOEZTc0NNTCtpNU4xTkdCV1pyWk5RTXBPajVPeEZPc0hLNHhqY01Sa0xN?=
+ =?utf-8?B?b1Vqenc5b1ozdmRWSCtFd0prb0JXaFNLaTlWOVdHdVJvMEk1RkRjWlhWSlVJ?=
+ =?utf-8?B?UWIxK3FVRGpYbjB5V0NMSzVYSXhLNU9sekVsUXZ4MkhkOVFFcTV4NDJBTmpZ?=
+ =?utf-8?B?dWlzRkszSnc5dDlocloyRjA5dTM1UVU4VGJJeW95eVRnSllPL1VuUmNybVV5?=
+ =?utf-8?B?ZlZWWUdra2N6UUtXYnFjdHpOQVM5ZUxhRjhiWkR4S0NmRW5iSzUvNWpzKzZQ?=
+ =?utf-8?B?VElpOVh4aVd0N01kQjJGUlE4UXdEemVaTm82NDNkS1VYMU5mTnZwZVpqWmtv?=
+ =?utf-8?B?TktrdGZBUHRuM0dGT3prbmNhNDFwK3NXd2QyRUhiNWcrUngvWFBLYVlSV093?=
+ =?utf-8?B?WGJyWk1oSWhMRDdTSVE0NHlXMDFMaU9UUDg1VW02TDZJTWIwdzNCdFZxR3FU?=
+ =?utf-8?B?aW44Tk5RU2xpOXJlVlZLcjVGSGpWV3VUMndWMWZCVjhJVi9JR2NHUmV2Wk45?=
+ =?utf-8?B?d3ZHVHZadWdXKy8wOWVqWW1PZ3ZuQ0FwZlYxM0ZTK2FZZkNSMmZFTG1zalZM?=
+ =?utf-8?B?QVFoMmtJTVBLazJFa0hLanQ2ZFNZYms4Wjh1RWxHOFpWZ041NWorcE0zZC9n?=
+ =?utf-8?B?QVlpME10Y0ZDYmVRTE1VbkNOeFBBYVJwRnRJYVAvOXF1Rm8rdk16c0xCcFdl?=
+ =?utf-8?B?V2pZODI0OFZwWTQvTVllL0lXbzBldUZlWXY5WlBzSktHOXc3RHZ1WXcvU3Ey?=
+ =?utf-8?B?SFhpUHprR09QNVY0Ynh0NXV2SW1iSXNzOWRrTTdCQnFGZXN3WXZOVHpaM0Zu?=
+ =?utf-8?Q?i6v4SGcMTuLj8+6A=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH v3 00/11] support non power of 2 zoned devices
-Content-Language: en-US
-To:     <dsterba@suse.cz>, <jaegeuk@kernel.org>, <hare@suse.de>,
-        <dsterba@suse.com>, <axboe@kernel.dk>, <hch@lst.de>,
-        <damien.lemoal@opensource.wdc.com>, <snitzer@kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        <bvanassche@acm.org>, <linux-fsdevel@vger.kernel.org>,
-        <matias.bjorling@wdc.com>, Jens Axboe <axboe@fb.com>,
-        <gost.dev@samsung.com>, <jonathan.derrick@linux.dev>,
-        <jiangbo.365@bytedance.com>, <linux-nvme@lists.infradead.org>,
-        <dm-devel@redhat.com>, Naohiro Aota <naohiro.aota@wdc.com>,
-        <linux-kernel@vger.kernel.org>,
-        Johannes Thumshirn <jth@kernel.org>,
-        "Sagi Grimberg" <sagi@grimberg.me>,
-        Alasdair Kergon <agk@redhat.com>,
-        <linux-block@vger.kernel.org>, Chaitanya Kulkarni <kch@nvidia.com>,
-        "Keith Busch" <kbusch@kernel.org>, <linux-btrfs@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <20220506100054.GZ18596@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.110.32.130]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxzN7Xt9fXS2PIqGK7CQVVGp4Wtj5C4jZANlL9M/TAzJdHFbkRcg
-        lootMAZzlKFuIqO0CrqKA/kYlI/yObCUyuy0CNSxyWCsKoMAGcOJ6IqUwGCUhwn/nXvO+f3u
-        OTeXxERNhDeZJE9lFHKpTEzw8Xbr4kCg1ZERF9K7ugM19lkxtNplJVDdIzWBiucWMaRVX+Gh
-        pXsDGDLPXuWiX5w5HFSxtICjrnItB+nr7nDQZKMOQ/k/zuFIf2YcQ8vjoWjcYceR1jIM0NSQ
-        joPM9r3o/kQND3WZe3E02FlCoNLvp3io8Nw8hjQ9rVxkePwUR3ftPu/40IO/HaBX7tYTtCZ3
-        lkcPjDbj9OC9NLql9jxBX1cVYXRrZTZt+kNF0N/kzhK08eyfXPrpzSGCbmwbwmlb2W0e3dqf
-        RRe2NnMPiY7yI+IZWVI6owiO/ISfOHyxnZMy7Z5xf95IqEDTljxAkpAKg8UmrzzgRoqoGgBv
-        mw7nAf4adgDYOqLG2cO/AP78zAReDuht4SxfDWDVl80YO71mmq4LZoVOAC8VGAiXIKAiYUdR
-        9boJp3ZCU7MesLwH7P12EnfhbdQHsFhnW/d7UlGwcPSrdYxRXtA+WcpxLd1KNRBworue50pB
-        UBKYc57n8rhRgXCix7nhD4BnO5Z4LPaDHU9KMDa0GF4dDHLRkDoNG6w2nmslpIb4cKzsGo8V
-        9kGHdXUDe8KZnrYN7Av7L+bjLM6CUyNLGDt8BkC1sZFgL3gbFthkrOddONo5z2VpIRx54sHG
-        EUJt++WNOAL49TlRIdip2/QQuk2FdZvK6DaVKQN4LfBi0pTJCYzyDTnzaZBSmqxMkycEHT+Z
-        3ALWPnX/Ss/8DVAz8yzIAjgksABIYuKtgu6CjDiRIF76WSajOPmxIk3GKC3Ah8TFXoLjSU1S
-        EZUgTWVOMEwKo3ipckg3bxUntjPQua+9suJ9o8fy7MHKNw0hGTNfNK647X19LMLTmZN+qkn+
-        alqk4724OXdHwLbdVZ3+RfuDB7cbnZ7cajIsn/x8j9Gv31+uLXFvS7rmd/1ovYw7Fhsvs/+X
-        u/81SUBVgi1st/lWbNCCUBtdduTYFsPl3pXttb4Xok+I/4nCUjQNwo+iZQ9M4ELeYvCOW/CA
-        RGARMznx3jHZiY+UHlkfdv/6sHzMOuDve6cl6xXDcLrxhwc1wgVl+KFjmbumIzw0Haee75E8
-        PK0PqDWXhP+kualKPQxivlOXymOk9sy/Z0L7XvQ9l9zoann8+3KFueCvK28RUnF538GxqDB9
-        SMiLbG93Ma5MlIZKMIVS+j9fHR+FQwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLKsWRmVeSWpSXmKPExsVy+t/xu7rHvlQkGfSsZbRYf+oYs8X/PcfY
-        LFbf7WezmPbhJ7PFpP4Z7Ba/z55nttj7bjarxYUfjUwWi39/Z7HYs2gSk8XK1UeZLJ6sn8Vs
-        0XPgA4vFypaHzBZ/HhpaPPxyi8Vi0qFrjBZPr85isth7S9vi0uMV7BZ79p5ksbi8aw6bxfxl
-        T9ktJrR9ZbaYeHwzq8W61+9ZLE7cknaQ9rh8xdvj34k1bB4Tm9+xe5y/t5HF4/LZUo9NqzrZ
-        PBY2TGX22Lyk3mP3zQY2j97md2weO1vvs3q833eVzWP9lqssHmcWHGH32Hy62mPC5o2sAUJR
-        ejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehnXJm9j
-        KnjBX3Hp6062BsYNPF2MHBwSAiYSK8+YdTFycQgJLGWUaD13mrWLkRMoLiPx6cpHdghbWOLP
-        tS42iKKPjBJPu6ayQji7GCU+z77JDFLFK2AnsX3qcjCbRUBFYvfGlYwQcUGJkzOfsIDYogIR
-        Eg92nwXbICzgJDHhXjsbiM0sIC5x68l8JpChIgJr2SQe71/DDrFhA6PEjmXTGEFuZRPQkmjs
-        BDuJU0BX4vHxH1DNmhKt23+zQ9jyEtvfzmGGeE1JYvZlPYgPaiVe3d/NOIFRZBaSk2YhWT0L
-        yaRZSCYtYGRZxSiSWlqcm55bbKRXnJhbXJqXrpecn7uJEZjOth37uWUH48pXH/UOMTJxMB5i
-        lOBgVhLh3d9XkSTEm5JYWZValB9fVJqTWnyI0RQYLhOZpUST84EJNa8k3tDMwNTQxMzSwNTS
-        zFhJnNezoCNRSCA9sSQ1OzW1ILUIpo+Jg1OqgUnytc+ZJTIRTpWOMzxXHFJzrH6i9rUxoGv/
-        HRnttxeEa+zOiTtf2DZt6Xtrf0fZJ1v5dhabvV96ftvl1W/SpIpFGmNkbIR6FjyevGrKLfFU
-        Mfu5PX49a0ptmfuDtH9s/eVZeDvovERPtdOqF07vE8W0twuw/pi+ONmE7c3KmglNXjo7zpmF
-        b07VvaHy+NMXxy7+85/KTi9ePWdFRmOk9/XksBeTwx9H6E98aiJV+oGbvyot+9/M2NLf4eo+
-        /jLe05bk2F7fwcLFdP8p6+qZAm9UPfYLv7+44F9FH3/lfMkXt3dYHnzoFsVyQOO26/e95w8Y
-        zO+NZGr9pCXZkfJQ4ezy68+5BY8xGWb2vg080qbEUpyRaKjFXFScCADdeNjb8AMAAA==
-X-CMS-MailID: 20220509110230eucas1p13e606c51930d58a88555e9c10ddc0095
-X-Msg-Generator: CA
-X-RootMTR: 20220506081106eucas1p181e83ef352eb8bfb1752bee0cf84020f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220506081106eucas1p181e83ef352eb8bfb1752bee0cf84020f
-References: <CGME20220506081106eucas1p181e83ef352eb8bfb1752bee0cf84020f@eucas1p1.samsung.com>
-        <20220506081105.29134-1-p.raghav@samsung.com>
-        <20220506100054.GZ18596@suse.cz>
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f855522-38d6-45d6-88da-08da31ab7e94
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 11:03:05.8710
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G19X78qOXMT5o15PSoynkuwE+QlsF73AALwqSowzQOQ58niv96CUHFLEEpETxkN6qkjhP8BgFHxytGPHbMTA0Ml8I+qPQkmqgeWxB89krMQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB1912
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-06 12:00, David Sterba wrote:
->>   The current approach for npo2 devices is to place the superblock mirror
->>   zones near   512GB and 4TB that is **aligned to the zone size**.
-> 
-> I don't like that, the offsets have been chosen so the values are fixed
-> and also future proof in case the zone size increases significantly. The
-> natural alignment of the pow2 zones makes it fairly trivial.
-> 
-> If I understand correctly what you suggest, it would mean that if zone
-> is eg. 5G and starts at 510G then the superblock should start at 510G,
-> right? And with another device that has 7G zone size the nearest
-> multiple is 511G. And so on.
-> 
-> That makes it all less predictable, depending on the physical device
-> constraints that are affecting the logical data structures of the
-> filesystem. We tried to avoid that with pow2, the only thing that
-> depends on the device is that the range from the super block offsets is
-> always 2 zones.
-> 
-> I really want to keep the offsets for all zoned devices the same and
-> adapt the code that's handling the writes. This is possible with the
-> non-pow2 too, the first write is set to the expected offset, leaving the
-> beginning of the zone unused.
-> 
-I agree. Having a known place for superblocks is important for recovery
-tools. We were thinking along the lines of what you have suggested. I
-will add this support in the next revision.
->>   This
->>   is of no issue for normal operation as we keep track where the superblock
->>   mirror are placed but this can cause an issue with recovery tools for
->>   zoned devices as they expect mirror superblock to be in 512GB and 4TB.
-> 
-> Yeah the tools need to be updated, btrfs-progs and suite of blk* in
-> util-linux.
-> 
->>   Note that ATM, recovery tools such as `btrfs check` does not work for
->>   image dumps for zoned devices even for po2 zone sizes.
-> 
-> I thought this worked, but if you find something that does not please
-> report that to Johannes or Naohiro.
-Ok. Thanks.
+PiA+ICAgc3RhdGljIGludCBnc21fY29uZmlnKHN0cnVjdCBnc21fbXV4ICpnc20sIHN0cnVjdCBn
+c21fY29uZmlnICpjKQ0KPiA+ICAgew0KPiA+ICsJaW50IHJldCA9IDA7DQo+IA0KPiBXaHkgaXMg
+dGhlIGluaXRpYWxpemF0aW9uIG5lZWRlZD8gWW91IGNhbiBhcyB3ZWxsIGRlY2xhcmUgdGhlIHZh
+cmlhYmxlIG9ubHkgaW5zaWRlIHRoZSBpZiBiZWxvdy4NCg0KWW91IGFyZSByaWdodCwgdGhpcyB3
+YXMgdW5uZWVkZWQuIEJ1dCB0aGlzIHBhdGNoIHdhcyBhbHJlYWR5IGluY2x1ZGVkIGluDQp0aGUg
+dHR5LWxpbnVzIGJyYW5jaC4gU2hhbGwgSSByZXN1Ym1pdCBpdCBuZXZlcnRoZWxlc3M/DQoNCkJl
+c3QgcmVnYXJkcywNCkRhbmllbCBTdGFya2UNCg==

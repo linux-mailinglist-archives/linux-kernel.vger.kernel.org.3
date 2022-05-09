@@ -2,86 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFEE5203AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B975203AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbiEIRcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S239726AbiEIRdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239662AbiEIRct (ORCPT
+        with ESMTP id S239707AbiEIRdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:32:49 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE9D27EBB1
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:28:54 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j15so20476104wrb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:28:54 -0700 (PDT)
+        Mon, 9 May 2022 13:33:11 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B942802C3;
+        Mon,  9 May 2022 10:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E1bopt98I3waHgLq149Sd9tf4yf2YLICVLzIky9yT44=;
-        b=awdyFHQXUThM7hZBNq5IZTN2yJXos41Ya6tdkWwTzxJoXZ0oRrWN63N4bIybTRPTCU
-         slhLnNquBMhiKHxO85fAmOUkj0Cqr7W5TZu0U3U27hkyk4Xyopzb60ZGA5vRuDBuzfB4
-         zP9izLcfs4u1vjx8MF++iTi3nuWkCmUx8zZbUAgXi9mYLApQEZwSs0YgLH3Jg3vkVPMg
-         zVao8W3/ENV4LORtI8hoIL0RmVinhd/oFFRlqwolgIhSk78XhMI/E2bY4o1OSsWVFLvO
-         eWjT5OA7Vs719cDFD1/MYmJE5RGaveizFjji6AhMi2OqE2C6ml+h/FhHSVQGDNPRbfo2
-         eYyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E1bopt98I3waHgLq149Sd9tf4yf2YLICVLzIky9yT44=;
-        b=dU5cic/Le6DnvAg4B4wm3Z0XO7j+pu0xqY1cf0OkBVPplypREiCaNDFri5XWDzxYPm
-         x10lS7bwlArhrdhpM2DUUaC/au8Ci7H+4tKvmLNNa54q7fMfLMm9Lv4GDnarc+flcI3U
-         Xw/GpuinNo8etf5vO9Eqp/1EkzolsOqcVwC6lnFhNmykuKyv9GfXuGdqG1NDh4YZ5Y9U
-         47BlhNvd0srq5yj6ugXgre6JbWzQAIimlF9xlENIslWefdpYqHhJiTOhQWoOfaB6brf3
-         iyf76qOEEDZbqE/OSq4toRha9QFSotFno/avL2L86U4hfMX8LdwqHMIVJKTNQ6kTH0qc
-         2X6w==
-X-Gm-Message-State: AOAM530bmxboo+FifEy2QmUnH328taUZf+F2KBhe/O+a7ochbNOzwAql
-        jM8e/tYj03T2WYehhAovsa6tyz+V5UHh25peswttag==
-X-Google-Smtp-Source: ABdhPJx5Yp1mhs3PbL+YlzJ8QfnGAWyT+iIEUSGvXjh60h9PdXr4MWUOuogBwUQBI9DBINxcHoUXY1U4apmuSGmazwE=
-X-Received: by 2002:adf:f30a:0:b0:20a:e193:6836 with SMTP id
- i10-20020adff30a000000b0020ae1936836mr14940551wro.654.1652117332485; Mon, 09
- May 2022 10:28:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220505043846.3165303-1-irogers@google.com> <87b89e2c-da5c-52c3-40dc-448e874cb5d8@linux.intel.com>
- <CAP-5=fVHhWu1uJHnTfFYWvM02_F-bFBZaaOYo8zPRiA=ODRxGQ@mail.gmail.com>
- <12c03e85-cb48-d264-5f04-e9bf9faaf739@linux.intel.com> <CAP-5=fW9Cp3ShO=tTQddDWXz+nrSip99HrNW7Wv5_Qsy1UT7bw@mail.gmail.com>
- <83417b72-4872-072a-2328-a88d2bb90858@linux.intel.com>
-In-Reply-To: <83417b72-4872-072a-2328-a88d2bb90858@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 9 May 2022 10:28:40 -0700
-Message-ID: <CAP-5=fXnYUnbT89q9W0Ax3d-26jbL5Mcd7O5X=JcXq9FnOUm7Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf evlist: Keep topdown counters in weak group
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652117357; x=1683653357;
+  h=from:to:cc:subject:date:message-id;
+  bh=w8WwiKdUcDjQO2d2znxaFZegHXKvmkZZDdebrvYoFpk=;
+  b=TYD0qEn1toU0uBBWTkhdHJzWA0BkMmIuh4oN1PxsqISFdrZdQ4ZQRZ/v
+   Bug0T85g5srE3CTStWYoF5MuZZ7JSzYM7g6Yq4DhzuBot7fjKAbiemn1b
+   LfHwTl6pwUgZpc4W7OTlPIp8M0HYaHlWUWhV0ANDuQ4XLLjprbLvfMv8/
+   E=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 09 May 2022 10:29:16 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 09 May 2022 10:29:15 -0700
+X-QCInternal: smtphost
+Received: from hu-c-spathi-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.108.59])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 09 May 2022 22:58:59 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 212714)
+        id 19C663D62; Mon,  9 May 2022 22:58:58 +0530 (+0530)
+From:   Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+To:     will@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+Subject: [PATCH V3] arm64: perf: Retain PMCR.X of PMCR_EL0 during reset
+Date:   Mon,  9 May 2022 22:58:50 +0530
+Message-Id: <1652117330-21976-1-git-send-email-quic_c_spathi@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,91 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 12:44 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 5/5/2022 2:31 PM, Ian Rogers wrote:
-> >>> So I think fixing all of these should be a follow up. I am working to
-> >>> get access to an Alderlake system, could we land this first?
-> >>>
-> >> I think we can use pmu_name to replace the "cpu" to fix the issue for
-> >> the hybrid platform. For a hybrid platform, the pmu_name is either
-> >> cpu_atom or cpu_core.
-> >>
-> >> Besides, the topdown events may have a PMU prefix, e.g.,
-> >> cpu_core/topdown-be-bound/. The strcasecmp may not work well for this case.
-> >>
-> >> How about the below patch?
-> >> If it's OK for you, could you please merge it into your V2 patch set?
-> >> I can do the test on a ADL system.
-> >>
-> >> diff --git a/tools/perf/arch/x86/util/evsel.c
-> >> b/tools/perf/arch/x86/util/evsel.c
-> >> index 40b171de2086..551ae2bab70e 100644
-> >> --- a/tools/perf/arch/x86/util/evsel.c
-> >> +++ b/tools/perf/arch/x86/util/evsel.c
-> >> @@ -33,11 +33,12 @@ void arch_evsel__fixup_new_cycles(struct
-> >> perf_event_attr *attr)
-> >>
-> >>    bool arch_evsel__must_be_in_group(const struct evsel *evsel)
-> >>    {
-> >> -       if ((evsel->pmu_name && strcmp(evsel->pmu_name, "cpu")) ||
-> >> -           !pmu_have_event("cpu", "slots"))
-> >> +       const char *pmu_name = evsel->pmu_name ? evsel->pmu_name : "cpu";
-> >> +
-> >> +       if (!pmu_have_event(pmu_name, "slots"))
-> >>                  return false;
-> > Hmm. The idea with this test is to see if the architecture supports
-> > topdown events before going further. There's a similar test in all the
-> > arch_evlist functions. I think with cpu_core this needs to become:
-> >
->
-> The case is a little bit different here. For the arch_evlist functions,
-> the input is the evlist, not the specific evsel. So we have to check all
-> the possible PMU names which are "cpu" and "cpu_core". Then we decide
-> whether going further.
->
-> The input of the evsel__must_be_in_group() is the evsel. The PMU name is
-> stored in the evsel->pmu_name. I don't think we need to check all the
-> possible PMU names. Using evsel->pmu_name should be good enough.
->
-> > if (!pmu_have_event("cpu", "slots") && !pmu_have_event("cpu_core", "slots") )
-> >
-> > But we should add a helper function for this. It is odd to have this
-> > change supporting Alderlake but the existing evlist work not. Perhaps
-> > we should just wait until Zhengjun's patches land.
->
-> Yes, a helper function is good for the arch_evlist functions. But I
-> don't think this patch needs the helper function. Zhengjun's patches are
-> to fix the other topdown issues on ADL. There is no dependency between
-> this patch and zhengjun's patches.
->
-> Thanks,
-> Kan
+Preserve the bit PMCR.X of PMCR_EL0 during PMU reset to export
+PMU events. as it could be set before PMU initialization.
 
-TL;DR I think we can move forward with landing these patches to fix Icelake.
+Exporting events could result in additional power consumption
+so making it configurable.
 
-For Alderlake/hybrid we have a problem. To determine what happens with
-grouping we need to know does the CPU have topdown events? This is a
-runtime question for doing perf_event_open and so an arch test and
-weak symbol are appropriate. For Icelake we are determining the
-presence of topdown events by looking at the special PMU cpu. For
-Alderlake the same information can be found by looking at the PMUs
-cpu_core and cpu_atom, but how to discover those PMU names? It is
-already somewhat concerning that we've hard coded "cpu" and we don't
-want to have an ever growing list of PMU names.
+Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+---
+Changes since V2:
+	Done below changes as per Will's comments
+	- enabling pmcr_x now configurable with kernel parameters and
+	  by default it is disabled.
+	
+Changes since V1:
+	- Preserving only PMCR_X bit as per Robin Murphy's comment.
+---
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+ arch/arm64/kernel/perf_event.c                  | 13 +++++++++++++
+ 2 files changed, 17 insertions(+)
 
-We have similarly hard coded "cpu" in the topology code here:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/cputopo.c?h=tmp.perf/core#n18
-Is this unreasonable given cpu is already supposed to be ABI stable:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/Documentation/ABI/stable/sysfs-devices-system-cpu?h=tmp.perf/core
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index de3da15..cf3410e 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5150,6 +5150,10 @@
+ 			Useful for devices that are detected asynchronously
+ 			(e.g. USB and MMC devices).
+ 
++	retain_pmcr_x
++			[KNL] Retain export bit of PMCR_EL0 that is getting reset
++			during pmu reset.
++
+ 	retain_initrd	[RAM] Keep initrd memory after extraction
+ 
+ 	rfkill.default_state=
+diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+index cb69ff1..1ac251f 100644
+--- a/arch/arm64/kernel/perf_event.c
++++ b/arch/arm64/kernel/perf_event.c
+@@ -34,6 +34,7 @@
+ #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_ACCESS		0xEC
+ #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_MISS		0xED
+ 
++static int export_pmu_events  __read_mostly;
+ /*
+  * ARMv8 Architectural defined events, not all of these may
+  * be supported on any given implementation. Unsupported events will
+@@ -1025,6 +1026,14 @@ static int armv8pmu_filter_match(struct perf_event *event)
+ 	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
+ }
+ 
++static int __init retain_pmcr_x(char *str)
++{
++	export_pmu_events = 1;
++	return 0;
++}
++
++early_param("retain_pmcr_x", retain_pmcr_x);
++
+ static void armv8pmu_reset(void *info)
+ {
+ 	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
+@@ -1047,6 +1056,10 @@ static void armv8pmu_reset(void *info)
+ 	if (armv8pmu_has_long_event(cpu_pmu))
+ 		pmcr |= ARMV8_PMU_PMCR_LP;
+ 
++	/* Preserve PMCR_X to export PMU events */
++	if (export_pmu_events)
++		pmcr |= (armv8pmu_pmcr_read() & ARMV8_PMU_PMCR_X);
++
+ 	armv8pmu_pmcr_write(pmcr);
+ }
+ 
+-- 
+2.7.4
 
-It is hard to say what the right hybrid fix is here. I should get a
-system I can poke shortly. I'd also like to compare what's in sysfs
-for Alderlake with ARM's big.little approach. I can imagine we need a
-function that returns a list of CPU like PMUs for probing. Ideally we
-could work this out from sysfs and use some stable ABI.
-
-Thanks,
-Ian

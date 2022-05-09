@@ -2,59 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467BE51FB6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DB351FB66
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiEILlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        id S232920AbiEILlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiEILlG (ORCPT
+        with ESMTP id S233020AbiEILli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:41:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F120790E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652096230; x=1683632230;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BTdze0j7Y7DYaHJ4hcIwyYPi09SBZVQyG+qJOqDK++g=;
-  b=V18wMMvnQesZslYMg/koeilxWZFRcu+QUU8TVlPcMbd7cz6pXIkchvS+
-   FV+I+EKRCU6hdQPLYB29b2GflFOV1M5YLY8+oNp8A/+eSwXTSCI0T2Aw8
-   fIsq6Zot9De8QAIFXspPHEWxGLC5WMhRGQsnP9TODd2Nypvv7N8lvBTng
-   3/c6o5KgJM8/Ac8kx746oFeszKYYh12nmaP1oD3mnWc5wnFShRi8lYV1P
-   twrV/K+miFYdcB+HXY4n7DFFLf6/do1BGLMMQO/i7DQ/Cm6EbqxZPPiAb
-   DL+FRtn0t8l+eSQ+nXs94Ij0DVoO2SN67oYNemjoye9ExQwf4AUUmK+lA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="329616994"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="329616994"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:37:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="540544648"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 May 2022 04:37:09 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no1hM-000GTe-UW;
-        Mon, 09 May 2022 11:37:08 +0000
-Date:   Mon, 9 May 2022 19:36:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 34/106] kernel/events/uprobes.c:793:22:
- error: 'struct address_space' has no member named 'ops'; did you mean
- 'a_ops'?
-Message-ID: <202205091929.FnbrVrc0-lkp@intel.com>
+        Mon, 9 May 2022 07:41:38 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CAF20CA53
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:37:44 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id w4so18992279wrg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gAzu2oiPvwqDB6ep9R1plS1D4PVcvCYJK3SA9c2e6ws=;
+        b=qqvp+rBczXImCRA7dY3ksVgcIYOoCRNkhZh8dUkwnUaE6zBq3kosz6kzlRPsVtkrVh
+         fi89vQWHfCtzTFSSPcI4qGrHmmqQqZp3Y1xdSPOMzj/XttPjPsSdT0uMiurDKkT+CKry
+         wcmLg42/Gp4QeLb8uSZ980jvJ6fytVkf3554JhzfyR76MceEHrfSLWis3M/RMqpr7zbT
+         8ooy880qikdpMxCfg+89iBm9iawogCICZCIrAGzXcX+f0lxXtb0uW6+4QdhcE3dXLViO
+         Svcwj7x7To+03kEZVSxEIE6W1481+u4l9/e4xJG4TsSrKwMCy8G5JaW2OhZg5A1qRjUA
+         TuLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gAzu2oiPvwqDB6ep9R1plS1D4PVcvCYJK3SA9c2e6ws=;
+        b=5x/lvfauErGXRlSPzsv8ViemeJdrQdHHbTiU5PDPCtHNboioyjNOXpvJeLBKZ0UvoT
+         hYqLSTydxbOSJqKajWnT/VDJO/dPRMx0t0PoPUyBs/urt2J0wU7FpfXAjYadkseFZ989
+         FodmFhBDYhaVD7nF6cvEgQFXiB00nsPPHpyrRbnmGkYBJlnncQ+kiKNhlZMrtIehVeEs
+         7ISiWBqEKeAe7eaxkL4guIc8lY9RfbhhJf6NH2UXGoJV67oY8RtqXrBFbj0XJ2a+NYfv
+         U7MIe1OMpF5DsVMmmIaeh0nckA9+RolAP5M8WM9DE5SyxXV4KYv9fZHjnbajsriok7bA
+         o3dg==
+X-Gm-Message-State: AOAM532G7g7orM2sou+pIQVJFkFXiC+qQ6+I8yXwbSFmpdSfrFeG0jlU
+        VR0s8bsLFjXqf4eXn3OP72POJQ==
+X-Google-Smtp-Source: ABdhPJxC9fqJgM9+wwtN9ii5TWwn07S+AweGvci74XJz8sCoa7YTp5luuS887vQ/F30mfWkuVpSA9Q==
+X-Received: by 2002:a05:6000:1681:b0:20c:5aa2:ae14 with SMTP id y1-20020a056000168100b0020c5aa2ae14mr13246647wrd.443.1652096262849;
+        Mon, 09 May 2022 04:37:42 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id az11-20020a05600c600b00b003942a244f3asm15270053wmb.19.2022.05.09.04.37.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 04:37:42 -0700 (PDT)
+Message-ID: <0972c833-432d-a850-958f-0d4f482e25a4@linaro.org>
+Date:   Mon, 9 May 2022 13:37:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
+ before use
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
+ <20220508194333.2170161-3-j.neuschaefer@gmx.net>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220508194333.2170161-3-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,62 +91,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   aa4aa19cc518a24bec4de5ff7caaf212d0091805
-commit: 0e03bd90d662c215ce99813a175df0e4fd074f5c [34/106] fs: Introduce aops->read_folio
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220509/202205091929.FnbrVrc0-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout 0e03bd90d662c215ce99813a175df0e4fd074f5c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the willy-pagecache/for-next HEAD aa4aa19cc518a24bec4de5ff7caaf212d0091805 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   kernel/events/uprobes.c: In function '__copy_insn':
->> kernel/events/uprobes.c:793:22: error: 'struct address_space' has no member named 'ops'; did you mean 'a_ops'?
-     793 |         if (mapping->ops->read_folio || mapping->a_ops->readpage)
-         |                      ^~~
-         |                      a_ops
+On 08/05/2022 21:43, Jonathan Neuschäfer wrote:
+> In the WPCM450 SoC, the clocks for each timer can be gated individually.
+> To prevent the timer 1 clock from being gated, enable it explicitly.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
 
 
-vim +793 kernel/events/uprobes.c
+Applied, thanks
 
-   783	
-   784	static int __copy_insn(struct address_space *mapping, struct file *filp,
-   785				void *insn, int nbytes, loff_t offset)
-   786	{
-   787		struct page *page;
-   788		/*
-   789		 * Ensure that the page that has the original instruction is populated
-   790		 * and in page-cache. If ->readpage == NULL it must be shmem_mapping(),
-   791		 * see uprobe_register().
-   792		 */
- > 793		if (mapping->ops->read_folio || mapping->a_ops->readpage)
-   794			page = read_mapping_page(mapping, offset >> PAGE_SHIFT, filp);
-   795		else
-   796			page = shmem_read_mapping_page(mapping, offset >> PAGE_SHIFT);
-   797		if (IS_ERR(page))
-   798			return PTR_ERR(page);
-   799	
-   800		copy_from_page(page, offset, insn, nbytes);
-   801		put_page(page);
-   802	
-   803		return 0;
-   804	}
-   805	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

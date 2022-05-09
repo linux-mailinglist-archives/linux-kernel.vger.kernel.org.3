@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979C7520547
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198E552054F
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240577AbiEIT2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
+        id S240592AbiEITa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240567AbiEIT2r (ORCPT
+        with ESMTP id S240567AbiEITaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:28:47 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD1513C344;
-        Mon,  9 May 2022 12:24:52 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id r11so26762857ybg.6;
-        Mon, 09 May 2022 12:24:52 -0700 (PDT)
+        Mon, 9 May 2022 15:30:24 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4B0CC4;
+        Mon,  9 May 2022 12:26:29 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2f7b815ac06so156333137b3.3;
+        Mon, 09 May 2022 12:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6eYHL3htjuqUuc5ZQAjLpv+iz8OHLUbS2twjBjqyVGo=;
-        b=SwjaZh6vcE92Xn0LoEo7La82fpVvifhHHOOOtoSaO0qtVMWhhQO7NFtCA+W7ueMH+M
-         UNhOVFDlLv4V+R3GmEyvXHkBFVuPvW+X06/re+MJg4Jzi9jf0O2kDTWkFeViJFH4FlXd
-         l3d9fiLGN4RqHklQBYYJ8gy3+b63lX1mY0Uq0CyZRu+4NlSIr52I3wKuo9yunabgJGlC
-         xEAONdLCFfFeeVFvXQUqItnPfucuaZO1Q/SjFbFwHYrdJQPNJP/CYKUrWpEqjG5lFYo1
-         KCIgQKapovTiYYADVfhtSbdjzqR932TDqMOOXUWpZ+QN9lZXtKBOzL/VFQHrp0ErJXIy
-         Rzlw==
+        bh=cwT8TRwwzgeB1cCXJc6QViy1iG1+RNFet3Yocv4TFEE=;
+        b=F3/Td3pGGIimKtAVPNXBwC109dTcvYtqE1fTsRdyd+2qp+6+ecgYzaDmb+avXzJgSl
+         CRg994ex340NoIq4vBGKOtrKl4WJ2U5BbS0dwx5Mk2VcqQE9iizZ7oeNT/x48oTlwJbT
+         4mwwoWr1bgdoHqSsUAav6EbjdLm/pMOhGarUbdmxb6tHSzETMXmR29JpVu2oRrwNH2ou
+         UuutntjcfBEji2KxMnk6eW8Olx1yfQFPvHr13zx8YOucMnG3mjgC5sP67f8PgtpkF7op
+         vnPMUOgoY3+XvBA7XinwoHuHTJq9K4upFI/qYVvLjw2F6VTJnrsDPXIJLYhy9kBHMV9l
+         YruA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6eYHL3htjuqUuc5ZQAjLpv+iz8OHLUbS2twjBjqyVGo=;
-        b=WQCf3t6o9i3HfBr+ATGjJW2sfpLFpSIwZcP81PqMiHxrkGZTd+GKM7ESWl4ecofGMC
-         7ogXnbdUWmwQEMnJfnQTtNqCvgz0pdBc99KYjHTD22svV2OxL4MJTuFo1AmdXuSAbPz7
-         U9U3yMVBlfM9ZjvNsSjLwTqMFkpPvyhXLZ2aBbJtqo9sgEgqpOPEN33LdKTR7JjXmIII
-         Nu+MjnNBIPSJ2BRtcZWoe+8R/dzycYKzvP1JYRl+vvK0PXv/Lt7ULheXrf0DFopU3zR5
-         ySmIT1DotCc5Q6Q7zY6W4XUtwt657xc8cpwZ2eGgb1KfwR1KOo3TAoPv3d69G7s7fe1A
-         Jf9w==
-X-Gm-Message-State: AOAM5322LAhOA5LgCCBOLeFMEULmE51ioknf76guTq3f8xmPFI6uYBJ0
-        OX+uYGX1s5c6w3DCyXxHI4mliK1NnCpXq/v2gpiW+aT5bu3C5w==
-X-Google-Smtp-Source: ABdhPJxbmv4gl3f8BwWDkVhsiQ2Vn2r1krelgX6Sd+Ncpn/ySOC77iTTCE/WHZiKyq2Epq7UMwxIZ7X0KGZlyCNt8Ng=
-X-Received: by 2002:a25:83d1:0:b0:648:725c:6a05 with SMTP id
- v17-20020a2583d1000000b00648725c6a05mr14335902ybm.218.1652124292128; Mon, 09
- May 2022 12:24:52 -0700 (PDT)
+        bh=cwT8TRwwzgeB1cCXJc6QViy1iG1+RNFet3Yocv4TFEE=;
+        b=BUMWr7IIm2cQ7CXgkWSAlYmdJI4SIbPyye4lxK5kDiQmpFVJjygOwXMeQgrq63vf2g
+         BCNY/+Y2Gv0WVdWAy4EqG6iMUjfLawPx+YkZjl0VEv36/Ec3lfs3KuVkEYbHEZJtOcaH
+         ckcipHyreaA64Mt6sC1cmR9FUa2qoJZZQmX6kqYJu2ldcoOpoYMJPw+ugjJKls6QfUT3
+         vMkjP6xsGfZmTj8fzS2zViUb8iVDAIKHKzaynzFhgCjuXXePtp7xTekb24lWzjCS2mbu
+         cKpkPImzyjYQdaAQPFQOdT1lxwg0wPxMV/oRAeSPhyNLBlXMim0E8BJKa9cAJM+ToJgC
+         YzRw==
+X-Gm-Message-State: AOAM531PYjNcJy/McwIv8KgQz/OlssmhakW3qMucgaWIKGcJHEsMoKzH
+        A4faW/fAsHgiw4XHn3ClfoAdwDngawtoDqR/yeU=
+X-Google-Smtp-Source: ABdhPJwxE3KV0SiZFumxrvBU0FNmwjoLKE6kPa3NaQiLUdRZLafHYGC7kaJ7AhPuZ5xb9a/k7NPmgkmkqnP7Gw2Ikhs=
+X-Received: by 2002:a0d:dd16:0:b0:2f4:dc1e:e0d8 with SMTP id
+ g22-20020a0ddd16000000b002f4dc1ee0d8mr16180775ywe.413.1652124388856; Mon, 09
+ May 2022 12:26:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220509050953.11005-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220509050953.11005-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922B58BB70B92813041745786C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdVuLq1Q2KB7gFQ5MsQmyUTv4yuu-GUBVn_xGwKhUwYQZg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVuLq1Q2KB7gFQ5MsQmyUTv4yuu-GUBVn_xGwKhUwYQZg@mail.gmail.com>
+ <20220509050953.11005-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB59228AE4AF4EE53C382E8BA986C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CA+V-a8syBvN7czRA7tq0TJSmUcBzmgjLrFmizHD6Ycp5kLXJWw@mail.gmail.com> <OS0PR01MB5922AFCAFF0F2BAA57E7A88486C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922AFCAFF0F2BAA57E7A88486C69@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 9 May 2022 20:24:25 +0100
-Message-ID: <CA+V-a8uG8qzzWj+=6EhzSd5j8NC3bpf=9tU9jgxzK8Cg75BTtw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+Date:   Mon, 9 May 2022 20:26:02 +0100
+Message-ID: <CA+V-a8sHOsXkCA59S-HNruSNRwivSG7rcKbPkmQgBtMYgF_Wzw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to
+ handle GPIO interrupt
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -82,119 +82,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Hi Biju,
 
-Thank you for the review.
-
-On Mon, May 9, 2022 at 10:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Mon, May 9, 2022 at 9:01 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
 >
-> On Mon, May 9, 2022 at 9:22 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > Subject: [PATCH v2 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller
-> > > driver
+> Hi Prabhakar,
+>
+> > Subject: Re: [PATCH v2 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain
+> > to handle GPIO interrupt
+> >
+> > Hi Biju,
+> >
+> > Thank you for the review.
+> >
+> > On Mon, May 9, 2022 at 7:49 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > > >
-> > > Add a driver for the Renesas RZ/G2L Interrupt Controller.
+> > > Hi Prabhakar,
 > > >
-> > > This supports external pins being used as interrupts. It supports one line
-> > > for NMI, 8 external pins and 32 GPIO pins (out of 123) to be used as IRQ
-> > > lines.
+> > > Thanks for the patch.
 > > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > Subject: [PATCH v2 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ
+> > > > domain to handle GPIO interrupt
+> > > >
+> > > > Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
+> > > >
+> > > > GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
+> > > > used as IRQ lines at given time. Selection of pins as IRQ lines is
+> > > > handled by IA55 (which is the IRQC block) which sits in between the
+> > GPIO and GIC.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > >  drivers/pinctrl/renesas/pinctrl-rzg2l.c | 205
+> > > > ++++++++++++++++++++++++
+> > > >  1 file changed, 205 insertions(+)
+> > > >
+> > > > diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > index a48cac55152c..275dfec74329 100644
+> > > > --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+> > > > @@ -9,8 +9,10 @@
+> > > >  #include <linux/clk.h>
+> > > >  #include <linux/gpio/driver.h>
+> > > >  #include <linux/io.h>
+> > > > +#include <linux/interrupt.h>
+> > > >  #include <linux/module.h>
+> > > >  #include <linux/of_device.h>
+> > > > +#include <linux/of_irq.h>
+> > > >  #include <linux/pinctrl/pinconf-generic.h>  #include
+> > > > <linux/pinctrl/pinconf.h>  #include <linux/pinctrl/pinctrl.h> @@
+> > > > -89,6
+> > > > +91,7 @@
+> > > >  #define PIN(n)                       (0x0800 + 0x10 + (n))
+> > > >  #define IOLH(n)                      (0x1000 + (n) * 8)
+> > > >  #define IEN(n)                       (0x1800 + (n) * 8)
+> > > > +#define ISEL(n)                      (0x2c80 + (n) * 8)
+> > > >  #define PWPR                 (0x3014)
+> > > >  #define SD_CH(n)             (0x3000 + (n) * 4)
+> > > >  #define QSPI                 (0x3008)
+> > > > @@ -112,6 +115,10 @@
+> > > >  #define RZG2L_PIN_ID_TO_PORT_OFFSET(id)      (RZG2L_PIN_ID_TO_PORT(id)
+> > +
+> > > > 0x10)
+> > > >  #define RZG2L_PIN_ID_TO_PIN(id)              ((id) %
+> > RZG2L_PINS_PER_PORT)
+> > > >
+> > > > +#define RZG2L_TINT_MAX_INTERRUPT     32
+> > > > +#define RZG2L_TINT_IRQ_START_INDEX   9
+> > > > +#define RZG2L_PACK_HWIRQ(t, i)               (((t) << 16) | (i))
+> > > > +
+> > > >  struct rzg2l_dedicated_configs {
+> > > >       const char *name;
+> > > >       u32 config;
+> > > > @@ -137,6 +144,9 @@ struct rzg2l_pinctrl {
+> > > >
+> > > >       struct gpio_chip                gpio_chip;
+> > > >       struct pinctrl_gpio_range       gpio_range;
+> > > > +     DECLARE_BITMAP(tint_slot, RZG2L_TINT_MAX_INTERRUPT);
+> > > > +     spinlock_t                      bitmap_lock;
+> > > > +     unsigned int                    hwirq[RZG2L_TINT_MAX_INTERRUPT];
+> > > >
+> > > >       spinlock_t                      lock;
+> > > >  };
+> > > > @@ -883,6 +893,8 @@ static int rzg2l_gpio_get(struct gpio_chip
+> > > > *chip, unsigned int offset)
+> > > >
+> > > >  static void rzg2l_gpio_free(struct gpio_chip *chip, unsigned int
+> > > > offset) {
+> > > > +     unsigned int virq;
+> > > > +
+> > > >       pinctrl_gpio_free(chip->base + offset);
+> > > >
+> > > >       /*
+> > > > @@ -890,6 +902,10 @@ static void rzg2l_gpio_free(struct gpio_chip
+> > > > *chip, unsigned int offset)
+> > > >        * drive the GPIO pin as an output.
+> > > >        */
+> > > >       rzg2l_gpio_direction_input(chip, offset);
+> > > > +
+> > > > +     virq = irq_find_mapping(chip->irq.domain, offset);
+> > > > +     if (virq)
+> > > > +             irq_dispose_mapping(virq);
+> > > >  }
+> > > >
+> > > >  static const char * const rzg2l_gpio_names[] = { @@ -1104,14
+> > > > +1120,193 @@ static struct {
+> > > >       }
+> > > >  };
+> > > >
+> > > > +static int rzg2l_gpio_get_gpioint(unsigned int virq) {
+> > > > +     unsigned int gpioint = 0;
+> > > > +     unsigned int i = 0;
+> > > > +     u32 port, bit;
+> > > > +
+> > > > +     port = virq / 8;
+> > > > +     bit = virq % 8;
+> > > > +
+> > > > +     if (port >= ARRAY_SIZE(rzg2l_gpio_configs))
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     for (i = 0; i < port; i++)
+> > > > +             gpioint +=
+> > > > + RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[i]);
+> > > > +
+> > > > +     if (bit >= RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[i]))
+> > > > +             return -EINVAL;
+> > >
+> > > May be combine this statement to above with
+> > >
+> > > || (bit >= RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[port]))
+> > >                 return -EINVAL;
+> > >
+> > The reason I have kept it outside the loop is that I'll have to check it
+> > only once at the end of the loop instead of repeating the check every time
+> > in the loop.
 >
-> > > --- /dev/null
-> > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> I meant above for loop, so that validation happens before the for loop??
 >
-> > > +static void rzg2l_irqc_irq_disable(struct irq_data *d) {
-> > > +     unsigned int hw_irq = irqd_to_hwirq(d);
-> > > +
-> > > +     if (hw_irq >= IRQC_TINT_START && hw_irq <= IRQC_TINT_COUNT) {
-> > > +             struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-> > > +             u32 offset = hw_irq - IRQC_TINT_START;
-> > > +             u32 tssr_offset = TSSR_OFFSET(offset);
-> > > +             u8 tssr_index = TSSR_INDEX(offset);
-> > > +             u32 reg;
-> > > +
-> > > +             raw_spin_lock(&priv->lock);
-> > > +             reg = readl_relaxed(priv->base + TSSR(tssr_index));
-> > > +             reg &= ~(TSSEL_MASK << tssr_offset);
-> > > +             writel_relaxed(reg, priv->base + TSSR(tssr_index));
-> > > +             raw_spin_unlock(&priv->lock);
-> > > +     }
-> > > +     irq_chip_disable_parent(d);
-> > > +}
+> if (port >= ARRAY_SIZE(rzg2l_gpio_configs)) || (bit >= RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[port]))
+>         return -EINVAL;
 >
-> > > +static int rzg2l_tint_set_edge(struct irq_data *d, unsigned int type) {
-> > > +     struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-> > > +     unsigned int hwirq = irqd_to_hwirq(d);
-> > > +     u32 titseln = hwirq - IRQC_TINT_START;
-> > > +     u32 offset;
-> > > +     u8 sense;
-> > > +     u32 reg;
-> > > +
-> > > +     switch (type & IRQ_TYPE_SENSE_MASK) {
-> > > +     case IRQ_TYPE_EDGE_RISING:
-> > > +             sense = TITSR_TITSEL_EDGE_RISING;
-> > > +             break;
-> > > +
-> > > +     case IRQ_TYPE_EDGE_FALLING:
-> > > +             sense = TITSR_TITSEL_EDGE_FALLING;
-> > > +             break;
-> > > +
-> > > +     default:
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> >
-> > > +     if (titseln < TITSR0_MAX_INT) {
-> > > +             offset = TITSR0;
-> > > +     } else {
-> > > +             titseln /= TITSEL_WIDTH;
-> > > +             offset  = TITSR1;
-> > > +     }
-> >
-> > as TITSR0 (0x24) and TITSR1(0x28) are contiguous address location
-> >
-> > May be like others, above declare it as
-> > u32 offset = TITSR0; ??
-> >
-> > and here
-> >  if ((titseln >= TITSR0_MAX_INT) {
-> >         titseln /= TITSEL_WIDTH;
-> >         offset  += 4;
-> >  }
->
-> Why "titseln /= TITSEL_WIDTH"?
-> Shouldn't that be "titseln -= TITSR0_MAX_INT"?
-
-Ouch, that should be "titseln -= TITSR0_MAX_INT".
-
-> Do I need more coffee?
->
-> Can't you define TITSR_{OFFSET,INDEX}() helper macros, like for
-> TSSR above?
->
-you mean a macro to get the TITSELx offset?
+Got that, will update in v3.
 
 Cheers,
 Prabhakar
-
-> > > +
-> > > +     raw_spin_lock(&priv->lock);
-> > > +     reg = readl_relaxed(priv->base + offset);
-> > > +     reg &= ~(IRQ_MASK << (titseln * TITSEL_WIDTH));
-> > > +     reg |= sense << (titseln * TITSEL_WIDTH);
-> > > +     writel_relaxed(reg, priv->base + offset);
-> > > +     raw_spin_unlock(&priv->lock);
-> > > +
-> > > +     return 0;
-> > > +}
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds

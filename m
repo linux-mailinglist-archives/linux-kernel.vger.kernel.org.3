@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D54251F347
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2492051F378
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiEIEQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S232701AbiEIE1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbiEIEKm (ORCPT
+        with ESMTP id S234220AbiEIERT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:10:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9239BAF8
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:06:49 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j14so12715112plx.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:06:49 -0700 (PDT)
+        Mon, 9 May 2022 00:17:19 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D391A11922A;
+        Sun,  8 May 2022 21:13:25 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso11719142pjb.5;
+        Sun, 08 May 2022 21:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i8fTOca+12ZBwL8GFn68r89tRt5Zov30Zcvy0gFIx3s=;
-        b=7oatG6weF86vW9pYog/WbnQv4ca5m77rm6XTxoXr1wXD+MeQ64n02aa13Lj0IMGWDh
-         0jcAZ1/E8rhHmjwEiLH/wurqHwo7x7/oZPYnCacuSWGecYOh1cK7FR/f3ATgGUHe2XoH
-         alZRF5CLU74LfUYGYSIuPW6xCoE9yhYrt5aPGmZHPMFjbnAa5HGvTb+BGlG1lzOEp7hA
-         36hA/3+gDs89H4Ko4WXpK9eOIJ7FvaCtE+d5TzIwgk5OffyCSOeBgBkeqs8WGQvukk6n
-         Rziui08UqLz3/L11wKnIDNIsOSawBpoleO3JIuQk/5rZjNynFDwVMrI47wZqmUxCKfmZ
-         bBpw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i4ZmSEZyae107M7woQKre9aBPoaep2udL6cDHmolvx4=;
+        b=EelE4Sk2rLVbk1vLK9xnYcqXSyseWXVcrB40eFirQUnctT0lgrGQBnNU9A2L6k+bb7
+         OjDg+CYdzVjkdzqvx5z0D/d1zRh6WjH0+7K8OQrg1yKK/yaIsti73fDLvugPzgRgE98p
+         Po61z8180HgTwzAO1H7b46taafqDlg2GeN2Z8lI+6hpgcfQhlQV2ivduSA92N8HYX79q
+         6qN07SFMZpwKLDRQr2aKIJiRfiaTUsp0HBUDbIAPm+s4S8xU32heA+KWOUxMF3xvaVvn
+         fTGg+jDPKbodCq8Vtpj2sSfKIvQXG4tMqXOx/iBl9keMTJkMEduWgBvuxY1EFLa/QuB1
+         Egqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i8fTOca+12ZBwL8GFn68r89tRt5Zov30Zcvy0gFIx3s=;
-        b=iSD/ZPQ2wmALNY3C6cV/VMUR3qslfn898rQFZUPAgLduukevHPs/lfcXfgBX80fBO5
-         FsZwGvh09yHMfKkx2nRbxgc4h/k4q6OAFgz9AZsWtMHF9dzmA881JiAFmeAPVIkt8YCj
-         gfC0DzcW2oEvv80xCyg6G7AIHExyzijX/2DMb0Hp1W1zmB2S83oJ3ynJYtcV9NJukuGv
-         n5qVNgneMC2VWY2tw4Oqf9aFA+1A6wB8RCD7siO8VhUyebGTEfMUEZ+9YuFg27RugKaq
-         ioP9gcK50KmJmkZe6oYmau8r9UPB5FTzev9IXmscgKTn4GfgqNtUHvWlWaMl+3/uves5
-         iMiA==
-X-Gm-Message-State: AOAM532WuCvN62bzTKA9RhdLYmY6mnUZYuOaglO/Roj+Nj1fCRX38lJk
-        Y/7WyskqwRW0o9plTyCDBq6cOg==
-X-Google-Smtp-Source: ABdhPJzXNNNMoKGLlNS0rEzt5xQj0NLF+6rNIW0g3Nng1UFaP6z9LjY7xwl48st6GzktvUM1QgACdw==
-X-Received: by 2002:a17:902:758a:b0:15e:ef4f:fed5 with SMTP id j10-20020a170902758a00b0015eef4ffed5mr12919922pll.1.1652069208384;
-        Sun, 08 May 2022 21:06:48 -0700 (PDT)
-Received: from localhost ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902ab8400b0015e8d4eb1f8sm5831321plr.66.2022.05.08.21.06.46
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i4ZmSEZyae107M7woQKre9aBPoaep2udL6cDHmolvx4=;
+        b=ULAP5IHq7nPoYoWagFHgca4TVzdX6PcHk8CSjbkKR2uql9cD4ftNojc6sDAtfNhzfZ
+         gs/DPPBF5eSecSP3E4ww3H44ebF++e4mmUXt3x5NkFLak2WpbRH3wtZtd8GW9OWLSWd0
+         UWzdHQP1nMXIxwvrGBoGFowdggGALWfO0jFPLtC0/Y2+D4jK1EvCVQhlBIJ5rHYhxRjq
+         ZiOq91IbI6Zwh9dfRLzZ3KiprRZZnVRDBcp6kzibUtK9HuJELV32pavYPlvcKevQkpR3
+         Sbm2ew4AaFuVPdMMzxOeqQaXYi23P0R7wmDGgfZJxQrOoYycYttrYaX6evgudR7cUa/k
+         oKqA==
+X-Gm-Message-State: AOAM533s9h/53jyabYEWfvDRyFjQ2Ea7mZpZr1UXzprsOKkXkJjsRPe4
+        9OjfTEYK5H2IfIkBAq3rnZgdH70RPRsx
+X-Google-Smtp-Source: ABdhPJwA12GMNtxipiY1QrrqNCB1QXJ3EJmQp3Iv9uD5xQEH9BSDFsZL5vlxX/0LpgkUo1SfW2hNOg==
+X-Received: by 2002:a17:903:1211:b0:15e:8208:8cc0 with SMTP id l17-20020a170903121100b0015e82088cc0mr14708514plh.52.1652069600512;
+        Sun, 08 May 2022 21:13:20 -0700 (PDT)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id m19-20020a17090a7f9300b001cd60246575sm11478545pjl.17.2022.05.08.21.13.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 21:06:47 -0700 (PDT)
-Date:   Mon, 9 May 2022 12:06:43 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
- original pte
-Message-ID: <YniTU+iT/pV5j/41@FVFYT0MHHV2J.usts.net>
-References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
- <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
- <Ynek+b3k6PVN3x7J@FVFYT0MHHV2J.usts.net>
- <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
+        Sun, 08 May 2022 21:13:20 -0700 (PDT)
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     linux-ia64@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Pingfan Liu <kernelfans@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kexec@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCHv3 0/2] cpu/hotplug: Keep cpu hotplug disabled until the rebooting cpu is stable
+Date:   Mon,  9 May 2022 12:13:03 +0800
+Message-Id: <20220509041305.15056-1-kernelfans@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 09:09:55PM +0800, Baolin Wang wrote:
-> 
-> 
-> On 5/8/2022 7:09 PM, Muchun Song wrote:
-> > On Sun, May 08, 2022 at 05:36:39PM +0800, Baolin Wang wrote:
-> > > It is incorrect to use ptep_clear_flush() to nuke a hugetlb page
-> > > table when unmapping or migrating a hugetlb page, and will change
-> > > to use huge_ptep_clear_flush() instead in the following patches.
-> > > 
-> > > So this is a preparation patch, which changes the huge_ptep_clear_flush()
-> > > to return the original pte to help to nuke a hugetlb page table.
-> > > 
-> > > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> > > Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > 
-> > Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> Thanks for reviewing.
-> 
-> > 
-> > But one nit below:
-> > 
-> > [...]
-> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > > index 8605d7e..61a21af 100644
-> > > --- a/mm/hugetlb.c
-> > > +++ b/mm/hugetlb.c
-> > > @@ -5342,7 +5342,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
-> > >   		ClearHPageRestoreReserve(new_page);
-> > >   		/* Break COW or unshare */
-> > > -		huge_ptep_clear_flush(vma, haddr, ptep);
-> > > +		(void)huge_ptep_clear_flush(vma, haddr, ptep);
-> > 
-> > Why add a "(void)" here? Is there any warning if no "(void)"?
-> > IIUC, I think we can remove this, right?
-> 
-> I did not meet any warning without the casting, but this is per Mike's
-> comment[1] to make the code consistent with other functions casting to void
-> type explicitly in hugetlb.c file.
->
+For the arches (arm/arm64/ia64/riscv), which relies on the cpu hot-removing
+mechanism to implement "kexec -e", it is important to make sure that the
+rebooting happens on a valid online cpu. And this logic should have been
+guaranteed in migrate_to_reboot_cpu().
 
-Got it. I see hugetlb.c per this rule, while others do not.
- 
-> [1]
-> https://lore.kernel.org/all/495c4ebe-a5b4-afb6-4cb0-956c1b18d0cc@oracle.com/
-> 
+But the current code has either contradict (resolved by [2/2]) or
+redundancy (resolved by [1/2]) about the logic.
+
+V2 -> V3:
+Taking in [2/2], which also has problem with the valid rebooting
+cpu. (I had sent three patches for different arches. But maybe it is
+better to collapse them into one and collect acks from different arches'
+maintainers )
+
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Vincent Donnefort <vincent.donnefort@arm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: YueHaibing <yuehaibing@huawei.com>
+Cc: Baokun Li <libaokun1@huawei.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: kexec@lists.infradead.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+To: linux-ia64@vger.kernel.org
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Collingbourne <pcc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>
+To: linux-arm-kernel@lists.infradead.org
+To: linux-kernel@vger.kernel.org
+
+Pingfan Liu (2):
+  cpu/hotplug: Keep cpu hotplug disabled until the rebooting cpu is
+    stable
+  arm/arm64/ia64: kexec: fix the primary cpu passed to
+    smp_shutdown_nonboot_cpus()
+
+ arch/arm/kernel/reboot.c    |  2 +-
+ arch/arm64/kernel/process.c |  2 +-
+ arch/ia64/kernel/process.c  |  2 +-
+ kernel/cpu.c                | 16 ++++++++++------
+ kernel/kexec_core.c         | 10 ++++------
+ 5 files changed, 17 insertions(+), 15 deletions(-)
+
+-- 
+2.31.1
+

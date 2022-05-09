@@ -2,105 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CAC520563
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0114E52045A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240627AbiEITn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S240096AbiEISVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiEITnw (ORCPT
+        with ESMTP id S240103AbiEISUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:43:52 -0400
-X-Greylist: delayed 2246 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 12:39:56 PDT
-Received: from a4-5.smtp-out.eu-west-1.amazonses.com (a4-5.smtp-out.eu-west-1.amazonses.com [54.240.4.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9816D5CE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ob2ngmaigrjtzxgmrxn2h6b3gszyqty3; d=urbackup.org; t=1652120094;
-        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=moCKIlR1VoGBDZv7bxLTB0rBLKiRz1QcPC33EzoNnt0=;
-        b=C4lPPFd/BL1NLovwh7MWYmrvYs820UC3KP7QN8CoQZTJ0GLWjcnwO2NN8zxHEE58
-        h7eL/Ie+WMnJRxCiGE+kr6LE2RFcFOaZd+FrNuV/YgRDvQ/24XsOLFRhz7pM9KLNqr9
-        BJKdJ44XvY6fhWNkjCYti4tvQZp0UKjPHsozKq6Y=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ihchhvubuqgjsxyuhssfvqohv7z3u4hn; d=amazonses.com; t=1652120094;
-        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
-        bh=moCKIlR1VoGBDZv7bxLTB0rBLKiRz1QcPC33EzoNnt0=;
-        b=lzPMZQwKC5VH4ANqtvKfzIX194vwwB+Oxsf4b+F2oMy/se9Bm89BPKWK17ZFrroA
-        pVWEXnsGs0foBMQ6lfAlmY/LNDP8rHU6HUS/g6GPtPG0Kd+qBMeXlXWfk116ct69ces
-        abUhf0RTuXETFcMXYvXMsHVyKPv/u6+sWTxdHSdU=
-Message-ID: <01020180aa080721-08a3231e-71b7-4fb2-a411-cac2cbf85ae3-000000@eu-west-1.amazonses.com>
-Date:   Mon, 9 May 2022 18:14:54 +0000
+        Mon, 9 May 2022 14:20:53 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD05D95483
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:16:57 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id z15so5770974uad.7
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CEWD095MTOxfk6m8EXeU/SEynd8zoPXbmNPb5cx6VuQ=;
+        b=yFRVfUfbRFn1oqm8PM9R8gvlByUtyrnryPwjZZr9Mmza9c+/JOUHoEbVxImTSQldPS
+         Vmjyl0CYzISDW164eQCf3kjn91i/O0V89uJVSBB1lk7hv7VBCpX0x47NPVT3kE9URxoI
+         TiZWnEj6Qd247uEAl2KpfA3TrQnhNB6Y9VP1o4c3zxomXFrf77FKS9kdcpzXQor5eVKd
+         Vepju0L3AW9dA75mRUnV7lRajkMVhMCAY1shjObVGi/pbB/BpKjypoxUIHuMHb6mPLlJ
+         UZyxkcEjaaRvrrwalTcsezt1toWlWjFUaIeE87oDish+BEw6UGIo7CWNZlJ3teVLYejB
+         Cq/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CEWD095MTOxfk6m8EXeU/SEynd8zoPXbmNPb5cx6VuQ=;
+        b=J/iBU/rdK7kESdDga57xfKFMK8Tcog5/7/lLVzpRv5ojzcCwd4lTyCeb60TxlaUF1c
+         ViRtIgeObaj0JEO15VKkAR83X4K+3cbgfZgAYcC26KmjzDG/T6y/Gd6i8/IH0nM0Qx5T
+         N3w7CS26CtI5JlZ9u5r2gGXUgsQjEaHyeS1rcUQrnTqBrQRDXOjQ2WJye9xA4cICZl7i
+         bs5u2ch7t35A8rWgRu5iekLVCNmNEIu5HXuZ03xLUoLD4thDwRYEB8JTLRdeUJLlR3YD
+         hvCRrkzaBAQRuyqxa1yDZLpGdurekGgLzgZIzMErmUQV6B7gA4+z5XoPMsoFGxzC5ob8
+         2eKA==
+X-Gm-Message-State: AOAM532m3/WN/6XJMwZNrlxKWzylgCGEGaiaA5xNCw3ziBXI8yfxROgd
+        wnIf2M5JnSDq9jq0MLuvCsDtzGADyvdvX0jPNOk0
+X-Google-Smtp-Source: ABdhPJwNvAMpqlS3sdklxAuAC6zwn8wlVqWIiEXGzvYdYIvDQRAl2UcE4uvhIBKD3Y/dAq6ICiiF8pgDhTQ+K3aQRvU=
+X-Received: by 2002:a05:6130:3a1:b0:365:84fa:2f57 with SMTP id
+ az33-20020a05613003a100b0036584fa2f57mr10300866uab.62.1652120216817; Mon, 09
+ May 2022 11:16:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Martin Raiber <martin@urbackup.org>
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
-In-Reply-To: <20220509092312.254354-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Feedback-ID: 1.eu-west-1.zKMZH6MF2g3oUhhjaE2f3oQ8IBjABPbvixQzV8APwT0=:AmazonSES
-X-SES-Outgoing: 2022.05.09-54.240.4.5
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20200527165718.129307-1-briannorris@chromium.org>
+ <YmPadTu8CfEARfWs@xps> <CA+ASDXPeJ6fD9hvc0Nq_RY05YRdSP77U_96vUZcTYgkQKY9Bvg@mail.gmail.com>
+In-Reply-To: <CA+ASDXPeJ6fD9hvc0Nq_RY05YRdSP77U_96vUZcTYgkQKY9Bvg@mail.gmail.com>
+From:   Cale Collins <ccollins@gateworks.com>
+Date:   Mon, 9 May 2022 11:16:19 -0700
+Message-ID: <CAG2Q2vXce2V3Y6MnPhV6obcNWyQzyusMTL=5oCQLRNh2_ffNYA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
+To:     Brian Norris <briannorris@chromium.org>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     Patrick Steinhardt <ps@pks.im>,
+        ath10k <ath10k@lists.infradead.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Stephen McCarthy <stephen.mccarthy@pctel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.05.2022 11:23 Ming Lei wrote:
-> This is the driver part of userspace block driver(ubd driver), the other
-> part is userspace daemon part(ubdsrv)[1].
->
-> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> shared cmd buffer for storing io command, and the buffer is read only for
-> ubdsrv, each io command is indexed by io request tag directly, and
-> is written by ubd driver.
->
-> For example, when one READ io request is submitted to ubd block driver, ubd
-> driver stores the io command into cmd buffer first, then completes one
-> IORING_OP_URING_CMD for notifying ubdsrv, and the URING_CMD is issued to
-> ubd driver beforehand by ubdsrv for getting notification of any new io request,
-> and each URING_CMD is associated with one io request by tag.
->
-> After ubdsrv gets the io command, it translates and handles the ubd io
-> request, such as, for the ubd-loop target, ubdsrv translates the request
-> into same request on another file or disk, like the kernel loop block
-> driver. In ubdsrv's implementation, the io is still handled by io_uring,
-> and share same ring with IORING_OP_URING_CMD command. When the target io
-> request is done, the same IORING_OP_URING_CMD is issued to ubd driver for
-> both committing io request result and getting future notification of new
-> io request.
->
-> Another thing done by ubd driver is to copy data between kernel io
-> request and ubdsrv's io buffer:
->
-> 1) before ubsrv handles WRITE request, copy the request's data into
-> ubdsrv's userspace io buffer, so that ubdsrv can handle the write
-> request
->
-> 2) after ubsrv handles READ request, copy ubdsrv's userspace io buffer
-> into this READ request, then ubd driver can complete the READ request
->
-> Zero copy may be switched if mm is ready to support it.
->
-> ubd driver doesn't handle any logic of the specific user space driver,
-> so it should be small/simple enough.
->
-> [1] ubdsrv
-> https://github.com/ming1/ubdsrv/commits/devel
+Hello Brian and Kalle,
 
-Great! It would be interesting to do some tests on how much faster (IOPS) this is than doing this via fuse: https://github.com/uroni/fuseuring
+I'm experiencing an issue very similar to this.  The regulatory domain
+settings wouldn't allow me to create an AP on 5ghz bands on kernels
+newer than 5.10 when using a WLE900VX (QCA9984) radio.  I bisected the
+kernel and ultimately landed on the regression that Brian patched.  I
+applied the patch and that resolved the issue from 5.4 up to 5.10.
+For versions later than that I encountered the same problem.  I tried
+to bisect again but PCI is broken for the ARM board(s) I'm using in
+many of the RC's, I'm pretty new to all of this and it was just over
+my head. I saw Kalle pushed Brian's patch a few weeks ago, so I
+figured the politics behind how the regulatory domain should be
+addressed was decided at that point.  I cherry picked Brian's patch
+onto 5.17 to test, the results are below.  Can someone help me figure
+out what I can do to get 5ghz APs back?
+
+If there's any more information I can provide please let me know, I
+wanted to keep things on the shorter side.
+
+cale@cale:~/builds/upstream/linux$ git log --oneline
+5c12efe9e783 (HEAD) Revert "ath: add support for special 0x0 regulatory domain"
+f443e374ae13 (tag: v5.17) Linux 5.17
+
+#On my ARM64 board
+
+root@focal-ventana:~# uname -a
+Linux focal-ventana 5.17.0-00001-g5c12efe9e783 #1 SMP Wed Apr 6
+16:33:54 PDT 2022 armv7l armv7l armv7l GNU/Linux
 
 
+root@focal-ventana:~# ls /sys/class/net/
+can0  eth0  lo  sit0  wlp6s0
+
+root@focal-ventana:~# iw phy phy0 info | grep " MHz \[" | grep -v "no
+IR\|disabled"
+            * 2412 MHz [1] (20.0 dBm)
+            * 2417 MHz [2] (20.0 dBm)
+            * 2422 MHz [3] (20.0 dBm)
+            * 2427 MHz [4] (20.0 dBm)
+            * 2432 MHz [5] (20.0 dBm)
+            * 2437 MHz [6] (20.0 dBm)
+            * 2442 MHz [7] (20.0 dBm)
+            * 2447 MHz [8] (20.0 dBm)
+            * 2452 MHz [9] (20.0 dBm)
+            * 2457 MHz [10] (20.0 dBm)
+            * 2462 MHz [11] (20.0 dBm)
+
+
+root@focal-ventana:~# iw reg get
+global
+country 00: DFS-UNSET
+    (2402 - 2472 @ 40), (N/A, 20), (N/A)
+    (2457 - 2482 @ 20), (N/A, 20), (N/A), AUTO-BW, NO-IR
+    (2474 - 2494 @ 20), (N/A, 20), (N/A), NO-OFDM, NO-IR
+    (5170 - 5250 @ 80), (N/A, 20), (N/A), AUTO-BW, NO-IR
+    (5250 - 5330 @ 80), (N/A, 20), (0 ms), DFS, AUTO-BW, NO-IR
+    (5490 - 5730 @ 160), (N/A, 20), (0 ms), DFS, NO-IR
+    (5735 - 5835 @ 80), (N/A, 20), (N/A), NO-IR
+    (57240 - 63720 @ 2160), (N/A, 0), (N/A)
+
+phy#0
+country 99: DFS-UNSET
+    (2402 - 2472 @ 40), (N/A, 20), (N/A)
+    (5140 - 5360 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
+    (5715 - 5860 @ 80), (N/A, 30), (N/A), PASSIVE-SCAN
+
+#dmesg |grep ath output
+
+    [    5.724215] ath10k_pci 0000:06:00.0: enabling device (0140 -> 0142)
+    [    5.732439] ath10k_pci 0000:06:00.0: pci irq msi oper_irq_mode
+2 irq_mode 0 reset_mode 0
+    [   17.573591] ath10k_pci 0000:06:00.0: qca988x hw2.0 target
+0x4100016c chip_id 0x043202ff sub 0000:0000
+    [   17.573707] ath10k_pci 0000:06:00.0: kconfig debug 0 debugfs 0
+tracing 0 dfs 0 testmode 0
+    [   17.575118] ath10k_pci 0000:06:00.0: firmware ver
+10.2.4-1.0-00047 api 5 features no-p2p,raw-mode,mfp,allows-mesh-bcast
+crc32 35bd9258
+    [   17.637397] ath10k_pci 0000:06:00.0: board_file api 1 bmi_id
+N/A crc32 bebc7c08
+    [   18.849651] ath10k_pci 0000:06:00.0: htt-ver 2.1 wmi-op 5
+htt-op 2 cal otp max-sta 128 raw 0 hwcrypto 1
+
+Best regards,
+
+Cale Collins
+
+
+Cale Collins
+Field Applications Engineer II
+Gateworks Corporation
+(805)781-2000 x37
+3026 S. Higuera, San Luis Obispo, CA 93401
+www.gateworks.com
+
+
+
+On Mon, Apr 25, 2022 at 11:55 AM Brian Norris <briannorris@chromium.org> wrote:
+>
+> Hi Patrick,
+>
+> On Sat, Apr 23, 2022 at 3:52 AM Patrick Steinhardt <ps@pks.im> wrote:
+> > This revert is in fact causing problems on my machine. I have a QCA9984,
+> > which exports two network interfaces. While I was able to still use one
+> > of both NICs for 2.4GHz, I couldn't really use the other card to set up
+> > a 5GHz AP anymore because all frequencies were restricted. This has
+> > started with v5.17.1, to which this revert was backported.
+> >
+> > Reverting this patch again fixes the issue on my system. So it seems
+> > like there still are cards out there in the wild which have a value of
+> > 0x0 as their regulatory domain.
+> >
+> > Quoting from your other mail:
+> >
+> > > My understanding was that no QCA modules *should* be shipped with a
+> > > value of 0 in this field. The instance I'm aware of was more or less a
+> > > manufacturing error I think, and we got Qualcomm to patch it over in
+> > > software.
+> >
+> > This sounds like the issue should've already been fixed in firmware,
+> > right?
+>
+> See the original patch:
+> https://git.kernel.org/linus/2dc016599cfa9672a147528ca26d70c3654a5423
+>
+> "Tested with QCA6174 SDIO with firmware WLAN.RMH.4.4.1-00029."
+>
+> That patch was only tested for QCA6174 SDIO, and the 6174 firmware has
+> since been updated. So none of that really applies to QCA9984. I
+> suppose your device was also not working before v5.6 either, and IIUC,
+> according to Qualcomm your hardware is a manufacturing error (i.e.,
+> invalid country code).
+>
+> I don't know what to tell you exactly, other than that the original
+> patch was wrong/unnecessary (and broke various existing systems) so it
+> should be reverted. I'm not quite sure how to fix the variety of
+> hardware out there (like yours) that may be using non-conforming
+> EEPROM settings. It would seem to me that we might need some more
+> targeted way of addressing broken hardware, rather than changing this
+> particular default workaround. I'm honestly not that familiar with
+> this Qualcomm regulatory stuff though, so my main contribution was
+> just to suggest reverting (i.e., don't break what used to work); I'm
+> not as savvy on providing alternative "fixes" for you.
+>
+> (That said: I *think* what's happening is that in the absence of a
+> proper EEPROM code, ath drivers fall back to a default=US country
+> code, and without further information to know you're compliant,
+> regulatory rules disallow initiating radiation (such as, an AP) on
+> 5GHz.)
+>
+> >  I've added the relevant dmesg
+> > snippets though in case I'm mistaken:
+>
+> With what kernel? That looks like pre-v5.17.1. The "broken"
+> (post-5.17.1) logs might be a bit more informative.
+>
+> Sorry,
+> Brian

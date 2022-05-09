@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864C751F4A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652F251F4D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbiEIGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 02:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S235720AbiEIGkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 02:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiEIGec (ORCPT
+        with ESMTP id S235360AbiEIGfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 02:34:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF0A2ED
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 23:30:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ADF2B80EA8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B594C385AB;
-        Mon,  9 May 2022 06:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652077836;
-        bh=DXieFXLBq4ieE8RkkoZNSW7FjctpJuOTdLRbxH7qdmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JhehAjvyCcEicKiJYLuxM7jPXqRXdGrDQ7YZxKRrouELMebcz7yCCBUice324qwyw
-         Rtuw+alC+f5y6hO4rLt3/aEMUNzSA0nsL0Ec3D8YAaapVa8uB6cO1n7txMmJPSItyk
-         v68AKRI2x4bc98kxfcR3Ea+XijDESyg1xQUXnrQR2hdztrkqMPAGmlAPQkowRlGhNH
-         6QZm7MYN+sUCL1mAPqreqyfJI/M365LdiTl3Dsh4/nCGKbIknaHd9zEiVRHBZnnTv4
-         6M3jmnZvrev9JhCcVhJc05QjwCr5s4/qLUpJZm3z8wv7U4WaT3w+gcBZt9aWg3YwnQ
-         Je4iUr+fKIT7Q==
-Date:   Mon, 9 May 2022 12:00:32 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com
-Subject: Re: [PATCH] soundwire: cadence: recheck device0 attachment after
- status change
-Message-ID: <Yni1CKb20D99kAce@matsya>
-References: <20220420023039.14144-1-yung-chuan.liao@linux.intel.com>
+        Mon, 9 May 2022 02:35:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9690E87204;
+        Sun,  8 May 2022 23:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=o+pQ2wGG2YVWS04fCC8y8+WAIR
+        OMv/pg4hxMPTD5mPiCT91kL+mAyrLelwTcwQ07UY9WfUCxctEn/0fZ+K6CnVCzuGg3JC3G8zkg+Yl
+        6WlVZyz4KU4W7nzIiD1myHbqCRByD7J59wpGzBohi7UMmJ5MPQjRWTNe9M1IHLbNSe1747n8AA4TF
+        4bM6O/7hSbCgH42ZfLYGmyFALaHZvcqYXWJPWpwkU6r87XSNhTpH3vjhzuBCn/StFI5LgwFkUXzYV
+        PQIFWOA940r35Nxv7DVXtr6tXAEI9VQfACQXdaRWXH0xCOPX4/txiFZADLOBqCBQf1F46BPDj/iQZ
+        ZIIwvI6g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nnwv5-00Cgzc-Gk; Mon, 09 May 2022 06:30:59 +0000
+Date:   Sun, 8 May 2022 23:30:59 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org,
+        linux-s390@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH v3 1/2] kernel: add platform_has() infrastructure
+Message-ID: <Yni1IxTY5lxDj9aU@infradead.org>
+References: <20220504155703.13336-1-jgross@suse.com>
+ <20220504155703.13336-2-jgross@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420023039.14144-1-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220504155703.13336-2-jgross@suse.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-04-22, 10:30, Bard Liao wrote:
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> 
-> This patch adds a status check after device0 attachment to solve race
-> conditions observed during attachment with multiple devices per link
-> 
-> The sequence is the following
-> 
-> 1) deviceA attaches as device0
-> 
-> 2) the hardware detects a device0 status change and throws an
->  interrupt.
-> 
-> 3) the interrupt handler schedules the work function
-> 
-> 4) the workqueue starts, we read the status
-> slave0 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT0);
-> slave1 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT1);
-> 
-> we deal with the status change and program deviceA device number to a
-> non-zero value.
-> 
-> 5) deviceB attaches as device0, the device0 status seen by the
-> hardware does not change.
-> 
-> 6) we clear the CDNS_MCP_SLAVE_INTSTAT0/1 registers -> we will never detect
-> deviceB!
-> 
-> This patch suggest re-checking in a loop the device0 status with a
-> PING frame, i.e. using the real device0 status instead of information
-> on status changes.
+Looks good:
 
-Applied, thanks
-
--- 
-~Vinod
+Reviewed-by: Christoph Hellwig <hch@lst.de>

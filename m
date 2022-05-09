@@ -2,104 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3265151F318
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6F051F308
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbiEIDwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S232087AbiEIDt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbiEIDkv (ORCPT
+        with ESMTP id S233289AbiEIDlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:40:51 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4A262103
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:36:59 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id k1so12670272pll.4
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 20:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
-        b=QkF9M8J123UteR1cPxuEawzImVx/iLdvIryVF9OwDpcPLWaPm82wa1yD3XJwXIQ8bc
-         JgAUvGxNueEjxQfFn8SAxLGZ+evF351ZGLIRh/hxEMh1SFIht86dRGKTn1Ps5UvHDtUO
-         oy+vqQjHwapTDEzUg+VRkeDQYNRAdp1/2X9udHLwt0Rxla4648nfPRi5AVaM/V5pO/Z/
-         An094rUi2hY0/JxXSUdNKQnsJ7da2J5ljxaYVJljw6xtkApiPAw+dOR78oKmdF1QqiIA
-         LTyVkYUmAVOVx1XaJHWU7fSIlwSKueBNcS88V3FNIfQEhkamsHjpQZekP6XFbNdl5Zr9
-         rMTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
-        b=wexOa2A3gpjLHsWhWzSaevAyrfobt0qt4PxnOuKnWkksCf0Hjl5baLC9+VRRUkCnA1
-         CaDMVhs8FyAZH4juKkKol/ywhaH0h+zbrojKS/qhoQtTMSpBw8s8wOFYZext8e2q2cA1
-         lDiyxQGQ0tOmGgQcbFz8/qDapqKpZIFOvI1c2vcbtFf8u8PDwae8mpvhv6OH1uf5ZB50
-         fj/E6raEna9enQUFrUYLsu52UI9yxNZU56Rp6kg/75sHLl/oXvVsDhldxLoLbgOKV2wb
-         yFPlKS0OPokjoVyFpTazr7cQ0StxOycncGNSJBKBGkHRhfYGTxGK4laKUDSjXuh3Nlt0
-         5EiQ==
-X-Gm-Message-State: AOAM531RamapyGb643+e0rTDygcR8IO6+6BrBle/XhQxl+2Wll1MuSpc
-        py94IRxaqkqF4drMAgD/YHavlA==
-X-Google-Smtp-Source: ABdhPJyYXA+HSxshWIHyeWTIGwpaZOw21UOu7nN+qsNb530j9mXYoo+2hFP4+z4p+EG/f+8DEUXFPA==
-X-Received: by 2002:a17:90b:606:b0:1d9:5dd5:1489 with SMTP id gb6-20020a17090b060600b001d95dd51489mr24257701pjb.171.1652067418724;
-        Sun, 08 May 2022 20:36:58 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a0002c200b0050dc7628143sm7265847pft.29.2022.05.08.20.36.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 20:36:57 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:06:55 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        Sun, 8 May 2022 23:41:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833B766CA4
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652067449; x=1683603449;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A8hPcJAwAOv3y9+r5NnNKJG55OgN9t9//di8+1ioCcA=;
+  b=U+CXyp+VLIjXIJ1K9OJlq4vF8IayJvTMY/KcCtOHaHwyKSzZQ0d2fS7B
+   8ZpWjhOkMr8iAouWYPG8QFT6U9rKopXK6z9iiUnzLBFA+luwWfcVFKMgu
+   IJ9b8XYASle/xVF+Ep/Vhiz9lCdIyOsfCwjIxs/WT7QnoNfYCINjpRv6m
+   IFONg35kQQwctEyaxOu4Lyl11WCRJnKvHu8wXRClrpTKWpMW9IinSCm2h
+   N80g3RFabtt6EgD9Agdzq9tUQfvu0cOay8aCb2EBilvcXlT9ZA18O396a
+   Hx0MSdHQe7B7pF4AmBC5DvAY0d877+Q3xOZrjctopDTjbTreHGE3dPpZy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="268585320"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="268585320"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:37:29 -0700
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="550815845"
+Received: from cbfoste1-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.62.77])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:37:24 -0700
+Message-ID: <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: fix typo when cpufreq device remove
-Message-ID: <20220509033655.f2fsbis72hrjft6q@vireshk-i7>
-References: <20220506170832.33386-1-schspa@gmail.com>
+Date:   Mon, 09 May 2022 15:37:22 +1200
+In-Reply-To: <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
+References: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
+         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
+         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
+         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+         <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
+         <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506170832.33386-1-schspa@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-05-22, 01:08, Schspa Shi wrote:
-> This should check cpufreq_driver->exit pointer before call this function
+On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
+> On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
+> > Kirill, what's your opinion?
 > 
-> Fixes: 91a12e91dc39 ("cpufreq: Allow light-weight tear down and bring up of
-> CPUs")
+> I said before that I think DMA API is the right tool here.
 > 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 43dfaa8124e2..0f59c8ec2b39 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1661,7 +1661,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
->  
->  	if (cpumask_empty(policy->real_cpus)) {
->  		/* We did light-weight exit earlier, do full tear down now */
-> -		if (cpufreq_driver->offline)
-> +		if (cpufreq_driver->exit)
->  			cpufreq_driver->exit(policy);
->  
->  		cpufreq_policy_free(policy);
+> Speculation about future of DMA in TDX is irrelevant here. If semantics
+> change we will need to re-evaluate all users. VirtIO uses DMA API and it
+> is conceptually the same use-case: communicate with the host.
 
-NAK.
+Virtio is designed for device driver to use, so it's fine to use DMA API. And
+real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
+assumption.
 
-The code is doing fine and there is a comment above it on why it is
-doing it this way.
+DMA API has it's limitations.  I don't see the protocol to convert GPA from
+private to shared is so complicated (see below), and I think regardless this
+attestation use case, it's perhaps worth to provide an additional simple
+infrastructure for such case so it can be used when needed.
+
+> 
+> But vmap() + set_memory_decrypted() also works and Sathya already has code
+> for it. I'm fine with this.
+
+Dave said (again) he wanted to avoid breaking up direct mapping.
+
+https://lore.kernel.org/lkml/5d34ac93-09dc-ea93-bffe-f3995647cd5b@linux.intel.com/T/#m37778b8af5d72c3db79e3cfa4b46ee37836f771c
+
+So we need to use seither use DMA API (which already breaks direct-mapping for
+swiotlb), or we use vmap() + MapGPA() as I mentioned below.
+
+> 
+> Going a step below to manual MapGPA() is just wrong. We introduced
+> abstructions for a reason. Protocol of changing GPA status is not trivial.
+> We should not spread it across all kernel codebase.
+> 
+
+I kinda disagree with this.  In fact, the protocol of changing GPA status isn't
+that complicated.  TD guest can have both private and shared mappings to the
+same GPA simultaneously.  We don't need to change all the mappings when
+converting private page to shared.
+
+For instance, we can use vmap() to have a shared mapping to a page, while the
+page is still mapped as private in direct-mapping.  TD uses MapGPA() to tell VMM
+which mapping it wants to use, and it just needs to guarantee that the private
+(direct) mapping won't be used.  Speculative fetch using the direct mapping is
+fine, as long as the core won't consume the data.  The only thing we need to
+guarantee is we need to flush any dirty cachelines before MapGPA(). My
+understanding is we don't even need to flush the TLB of the private mapping.
+
+And reading the GHCI MapGPA() again, to me MapGPA() itself requires VMM to
+guarantee the TLB and cache flush:
+
+"
+If the GPA (range) was already mapped as an active, private page, the host VMM
+may remove the private page from the TD by following the “Removing TD Private
+Pages” sequence in the Intel TDX-module specification [3] to safely block the
+mapping(s), flush the TLB and cache, and remove the mapping(s). The VMM is
+designed to be able to then map the specified GPA (range) in the shared-EPT
+structure and allow the TD to access the page(s) as a shared GPA (range).
+"
+
+You can see the cache flush is guaranteed by VMM.
+
+Btw, the use of word "may" in "host VMM may remove..." in above paragraph is
+horrible.  It should use "must", just like to the "converting shared to private"
+case:
+
+"
+If the Start GPA specified is a private GPA (GPA.S bit is clear), this MapGPA
+TDG.VP.VMCALL can be used to help request the host VMM map the specific, private
+page(s) (which mapping may involve converting the backing-physical page from a
+shared page to a private page). As intended in this case, the VMM must unmap the
+GPA from the shared-EPT region and invalidate the TLB and caches for the TD
+vcpus to help ensure no stale mappings and cache contents exist.
+"
+
+As you can see "must" is used in "the VMM must unmap the GPA from the shared-EPT
+...".
+
+So I don't see why TD guest kernel cannot have a simple protocol to vmap() a
+page (or couple of pages) as shared on-demand, like below:
+
+	page = alloc_page();
+
+	addr = vmap(page,  pgprot_decrypted(PAGE_KERNEL));
+
+	clflush_cache_range(page_address(page), PAGE_SIZE);
+
+	MapGPA(page_to_phys(page) | cc_mkdec(0), PAGE_SIZE);
+
+And we can even avoid above clflush_cache_range() if I understand correctly.
+
+Or  I missed something?
+
 
 -- 
-viresh
+Thanks,
+-Kai
+
+

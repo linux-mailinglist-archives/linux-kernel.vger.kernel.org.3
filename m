@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C6251F43D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7C051F418
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiEIFoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S234240AbiEIFoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbiEIFj6 (ORCPT
+        with ESMTP id S233737AbiEIFk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:39:58 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41F939166
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:36:05 -0700 (PDT)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id DA84C2FD39;
-        Mon,  9 May 2022 05:36:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id B49131E;
-        Mon,  9 May 2022 05:36:01 +0000 (UTC)
-Message-ID: <918affc0a0a91dab08647696ed6587021264f25f.camel@perches.com>
-Subject: Re: [PATCH] KVM: selftests: riscv: Remove unneeded semicolon
-From:   Joe Perches <joe@perches.com>
-To:     Anup Patel <anup@brainfault.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        KVM General <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Date:   Sun, 08 May 2022 22:36:01 -0700
-In-Reply-To: <CAAhSdy15CE5ZUROH-mOwhpR0AuwsK8h+8W-Kd0jxwsTixpQOQg@mail.gmail.com>
-References: <20220506094512.116729-1-jiapeng.chong@linux.alibaba.com>
-         <CAAhSdy15CE5ZUROH-mOwhpR0AuwsK8h+8W-Kd0jxwsTixpQOQg@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 9 May 2022 01:40:56 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AC2158D4C
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:37:01 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KxVKF4cbHz9sTH;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fkr_kpJCzgbX; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF3rCJz9sSv;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 73C9E8B792;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id upHjl707mpSh; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3A9D68B76C;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aSOr1591223
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 9 May 2022 07:36:29 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aS8h1591222;
+        Mon, 9 May 2022 07:36:28 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        naveen.n.rao@linux.vnet.ibm.com
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3 04/25] powerpc/ftrace: Use is_offset_in_branch_range()
+Date:   Mon,  9 May 2022 07:36:02 +0200
+Message-Id: <912ae51782f5a53c44e435497c8c3fb5cc632387.1652074503.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: q34mkbymsd5c8i4guxezgn8qm5yedycu
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: B49131E
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/6eHbjh40QHHy98IswUgEhKu3HfsOuVzY=
-X-HE-Tag: 1652074561-122139
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074581; l=1631; s=20211009; h=from:subject:message-id; bh=OWDdhcCtR60EJOCWc6cwIHh4xDhD5orD3drnjJOkPJg=; b=AISHgv8tS7wKPDrY7M9+uR7wcr56R2cPYVaMYJ90vojA3PHJ/RHRYAgrkN4eBPOPZa+HUs+HK3V0 LA/PLxcnBvWClEjtHEh+StZAETBKqJ3sCA4+bGUKQhGGxuPdw+hH
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-09 at 10:37 +0530, Anup Patel wrote:
-> On Fri, May 6, 2022 at 3:15 PM Jiapeng Chong
-> <jiapeng.chong@linux.alibaba.com> wrote:
-> > 
-> > Fix the following coccicheck warnings:
-> > 
-> > ./tools/testing/selftests/kvm/lib/riscv/processor.c:353:3-4: Unneeded
-> > semicolon.
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> 
-> In future, please CC kvm-riscv@lists.infradead.org for KVM RISC-V related
-> patches.
+Use is_offset_in_branch_range() instead of create_branch()
+to check if a target is within branch range.
 
-Perhaps add or update some MAINTAINERS entry as this list is not
-currently specified by:
+This patch together with the previous one improves
+ftrace activation time by 7%
 
-$ ./scripts/get_maintainer.pl -f tools/testing/selftests/kvm/lib/riscv/processor.c --nogit --nogit-fallback
-Paolo Bonzini <pbonzini@redhat.com> (supporter:KERNEL VIRTUAL MACHINE (KVM))
-Shuah Khan <shuah@kernel.org> (maintainer:KERNEL SELFTEST FRAMEWORK)
-Paul Walmsley <paul.walmsley@sifive.com> (supporter:RISC-V ARCHITECTURE)
-Palmer Dabbelt <palmer@dabbelt.com> (supporter:RISC-V ARCHITECTURE)
-Albert Ou <aou@eecs.berkeley.edu> (supporter:RISC-V ARCHITECTURE)
-kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM))
-linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
-linux-kernel@vger.kernel.org (open list)
-$
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/kernel/trace/ftrace.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index 3ce3697e8a7c..41c45b9c7f39 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -89,11 +89,9 @@ ftrace_modify_code(unsigned long ip, ppc_inst_t old, ppc_inst_t new)
+  */
+ static int test_24bit_addr(unsigned long ip, unsigned long addr)
+ {
+-	ppc_inst_t op;
+ 	addr = ppc_function_entry((void *)addr);
+ 
+-	/* use the create_branch to verify that this offset can be branched */
+-	return create_branch(&op, (u32 *)ip, addr, 0) == 0;
++	return is_offset_in_branch_range(addr - ip);
+ }
+ 
+ static int is_bl_op(ppc_inst_t op)
+@@ -261,7 +259,6 @@ __ftrace_make_nop(struct module *mod,
+ static unsigned long find_ftrace_tramp(unsigned long ip)
+ {
+ 	int i;
+-	ppc_inst_t instr;
+ 
+ 	/*
+ 	 * We have the compiler generated long_branch tramps at the end
+@@ -270,8 +267,7 @@ static unsigned long find_ftrace_tramp(unsigned long ip)
+ 	for (i = NUM_FTRACE_TRAMPS - 1; i >= 0; i--)
+ 		if (!ftrace_tramps[i])
+ 			continue;
+-		else if (create_branch(&instr, (void *)ip,
+-				       ftrace_tramps[i], 0) == 0)
++		else if (is_offset_in_branch_range(ftrace_tramps[i] - ip))
+ 			return ftrace_tramps[i];
+ 
+ 	return 0;
+-- 
+2.35.1
 

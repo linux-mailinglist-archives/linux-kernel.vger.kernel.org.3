@@ -2,154 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476435202F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BE2520303
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiEIQ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S239397AbiEIQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239305AbiEIQ4a (ORCPT
+        with ESMTP id S239305AbiEIQ7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:56:30 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A202AACCA
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:52:36 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id e12so26025563ybc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UXiFk325eT/uin6juY8MDs9uDbcZ0rRGYF4uwLrhYoM=;
-        b=CU57t1DGavqfk6REfm4jRrmgtCHhA9Bxhq2YKjsvtcug8qNwcUw80SzW3L1amX/eub
-         aWHrplchw1istxVlUaUqAhQHIEM8hsceFJO5JdyQz47ykHSStdl3M0N1JESaF9e0u5ET
-         upwfQlac2YdqILyIu5hYCpNmJDkQ6jcNcvVSPUfOJR5QX3UaEFzcUOY5WJlp44FK8QKq
-         kAJJMWIH9muaZmmyuxcPnCOPkOrgn8pItEUdQcV8XOUyXlezRsYugSSsA9pqfGIOaQcO
-         2+0WkYzqIPwPTT/I+Wky0adhyCLHO6M8xSl9FA8nkJWQ7OdR+VbR7QCM7s9ZqkuxB5N4
-         qpEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UXiFk325eT/uin6juY8MDs9uDbcZ0rRGYF4uwLrhYoM=;
-        b=hmktVChq+VUQ2WKR4sMTT5+3KjuFa/BhrSP3oppF18sKt2FCEozDBOiZ1ui5qdnNYy
-         TciW7DmZ9JVCe9O4ws+SOvakLycbOppZxb4/GHBe0IvhssOSUZ+fSggtBvyAxrjmwu1K
-         k6bHydqDIO0ISZQPzI37wvJEghF05eTtqhylL90ZoK69FPuaQzZ2h21PiUV/4Lc4m9s6
-         /0BBHIc2lCtmlTGjgKA++KuGGC0dBTbGbEQw4YDYwlOGh1CuVI78cQ2VuXznryyK4Bhj
-         MCmt3hvsbaI+pSdBRZn3YbufLDwKCJSdOkxRHjao+pZPxQfCElknwDhT+5tiwEBU/08z
-         uBDQ==
-X-Gm-Message-State: AOAM533GqeF2lM0pKnM37B7+8Cb//y7RgEKEwOjJiEPgpsUkb3ua23mh
-        6sii11+X3CT/Tjx8zUpl9dffcWH/YI2xmN83rfVzjw==
-X-Google-Smtp-Source: ABdhPJzD5+vOjoR45J8vJybqt5bFVkZynODUV+GbSK3Xg47Qljq/cxhdIWBHvAQIVHV3k2CB3K52qDrkMO0vgvJva+4=
-X-Received: by 2002:a25:e7d1:0:b0:645:7216:d9d0 with SMTP id
- e200-20020a25e7d1000000b006457216d9d0mr14454488ybh.307.1652115155053; Mon, 09
- May 2022 09:52:35 -0700 (PDT)
+        Mon, 9 May 2022 12:59:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF32B24F4;
+        Mon,  9 May 2022 09:55:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9806138B;
+        Mon,  9 May 2022 16:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724D6C385BD;
+        Mon,  9 May 2022 16:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652115315;
+        bh=H9ZzoCsU7OPFUVgovkRT4qyt5DBVCY0Rle9z2kImzrk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eijuKVmjFWQILCm+d4ejW1OnRFrE2oH1rPX5DzgPA4UNvJXhmSkQvi+zEF/6MLRzr
+         hcYxot6V+PMCx6l1T9bcxi+1TDJTNszcZLLY31TSV5DXKL9Ho4Ok2lPezUH3IMNzcw
+         cIY724cFq+e4gmMB6ri1hvMvyiCAqWYC1rdbQMh34v9szEb9jOXQlfTMRp3rZRYehX
+         4+YoCOo0ghgT6X1ce8QPu0akgUsYBybZJDHa1yCHcm6UYSPradmWLZJGdogEBAIAOh
+         cAt6UVpojzv+oRDwzEtNFBW9H+hP44EdlVihopWHkIw4SwhDZz4Lzf3ZcYeaghsiLW
+         J2mrZxaI3zAxQ==
+Received: by mail-pl1-f172.google.com with SMTP id n8so14450657plh.1;
+        Mon, 09 May 2022 09:55:15 -0700 (PDT)
+X-Gm-Message-State: AOAM530iWMAGzK79mtEgInt6L1DLY4RSlqIqJ0N2BAXGdua/AMrZuTcN
+        CH6/aKnCADeqG+VS/GFlz2WyTJVW5iae27bNuQ==
+X-Google-Smtp-Source: ABdhPJykBkhHUMt8k4qEM3EG8Muzu5edkjXzGUFd+xneIQ1RUYzfb43ThAvp2F2oq+zfpsKhmllOfvQ8ieanSR38mM0=
+X-Received: by 2002:a17:902:7c0a:b0:15e:f63b:9a14 with SMTP id
+ x10-20020a1709027c0a00b0015ef63b9a14mr13293242pll.35.1652115314773; Mon, 09
+ May 2022 09:55:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
- <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
- <87k0ayhc43.ffs@tglx> <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
- <87h762h5c2.ffs@tglx> <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
-In-Reply-To: <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 9 May 2022 18:51:59 +0200
-Message-ID: <CAG_fn=X8mc9-_-S-+b9HuF4_-PhN3=1umu5twY8oYn1OgRhuLg@mail.gmail.com>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+References: <20220504154033.750511-1-clement.leger@bootlin.com>
+ <20220504154033.750511-3-clement.leger@bootlin.com> <YnQo+mdDBuoKA6Fq@robh.at.kernel.org>
+ <20220506124339.2c772fa0@fixe.home>
+In-Reply-To: <20220506124339.2c772fa0@fixe.home>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 9 May 2022 11:55:02 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+RvygJDe5mug2b9E-gD7LfDt9dBmCx0rOSUEY1yWwHtw@mail.gmail.com>
+Message-ID: <CAL_Jsq+RvygJDe5mug2b9E-gD7LfDt9dBmCx0rOSUEY1yWwHtw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] of: dynamic: add of_node_alloc() and of_node_free()
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        David Hildenbrand <david@redhat.com>,
+        Ohhoon Kwon <ohoono.kwon@samsung.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 6:50 PM Alexander Potapenko <glider@google.com> wrote:
+On Fri, May 6, 2022 at 5:45 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@bootl=
+in.com> wrote:
 >
-> > The callchain is:
+> Le Thu, 5 May 2022 14:43:54 -0500,
+> Rob Herring <robh@kernel.org> a =C3=A9crit :
+>
+> > On Wed, May 04, 2022 at 05:40:32PM +0200, Cl=C3=A9ment L=C3=A9ger wrote=
+:
+> > > Add functions which allows to create and free nodes.
+> > >
+> > > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > > ---
+> > >  drivers/of/dynamic.c | 59 ++++++++++++++++++++++++++++++++++++------=
+--
+> > >  include/linux/of.h   |  9 +++++++
+> > >  2 files changed, 58 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> > > index e8700e509d2e..ec28e5ba2969 100644
+> > > --- a/drivers/of/dynamic.c
+> > > +++ b/drivers/of/dynamic.c
+> > > @@ -455,6 +455,54 @@ struct property *__of_prop_dup(const struct prop=
+erty *prop, gfp_t allocflags)
+> > >                              prop->length, allocflags);
+> > >  }
+> > >
+> > > +/**
+> > > + * of_node_free - Free a node allocated dynamically.
+> > > + * @node:  Node to be freed
+> > > + */
+> > > +void of_node_free(const struct device_node *node)
+> > > +{
+> > > +   kfree(node->full_name);
+> > > +   kfree(node->data);
+> > > +   kfree(node);
+> > > +}
+> > > +EXPORT_SYMBOL(of_node_free);
 > >
-> >   asm_sysvec_apic_timer_interrupt               <- ASM entry in gate
-> >      sysvec_apic_timer_interrupt(regs)          <- noinstr C entry point
-> >         irqentry_enter(regs)                    <- unpoisons @reg
-> >         __sysvec_apic_timer_interrupt(regs)     <- the actual handler
-> >            set_irq_regs(regs)                   <- stores regs
-> >            local_apic_timer_interrupt()
-> >              ...
-> >              tick_handler()                     <- One of the 4 variants
-> >                 regs = get_irq_regs();          <- retrieves regs
-> >                 update_process_times(user_tick = user_mode(regs))
-> >                    account_process_tick(user_tick)
-> >                       irqtime_account_process_tick(user_tick)
-> > line 382:                } else if { user_tick }   <- KMSAN complains
-> >
-> > I'm even more confused now.
+> > This shouldn't be needed. Nodes are refcounted, so any caller should
+> > just do a put.
 >
-> Ok, I think I know what's going on.
->
-> Indeed, calling kmsan_unpoison_memory() in irqentry_enter() was
-> supposed to be enough, but we have code in kmsan_unpoison_memory() (as
-> well as other runtime functions) that checks for kmsan_in_runtime()
-> and bails out to prevent potential recursion if KMSAN code starts
-> calling itself.
->
-> kmsan_in_runtime() is implemented as follows:
->
-> ==============================================
-> static __always_inline bool kmsan_in_runtime(void)
-> {
->   if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
->     return true;
->   return kmsan_get_context()->kmsan_in_runtime;
-> }
-> ==============================================
-> (see the code here:
-> https://lore.kernel.org/lkml/20220426164315.625149-13-glider@google.com/#Z31mm:kmsan:kmsan.h)
->
-> If we are running in the task context (in_task()==true),
-> kmsan_get_context() returns a per-task `struct *kmsan_ctx`.
-> If `in_task()==false` and `hardirq_count()>>HARDIRQ_SHIFT==1`, it
-> returns a per-CPU one.
-> Otherwise kmsan_in_runtime() is considered true to avoid dealing with
-> nested interrupts.
->
-> So in the case when `hardirq_count()>>HARDIRQ_SHIFT` is greater than
-> 1, kmsan_in_runtime() becomes a no-op, which leads to false positives.
-Should be "kmsan_unpoison_memory() becomes a no-op..."
+> Acked. Do you want the name to be allocated as part of the node
+> allocation also ?
+
+Yeah, I think that would be fine.
+
+Rob

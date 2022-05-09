@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6299F520429
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C20C520423
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbiEISJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S240012AbiEISJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239944AbiEISJZ (ORCPT
+        with ESMTP id S239974AbiEISJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:09:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841442878FD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:05:30 -0700 (PDT)
+        Mon, 9 May 2022 14:09:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A0B289BF4
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:05:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EBCB615D7
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C6FC385B4;
-        Mon,  9 May 2022 18:05:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 998AEB818DF
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFC9C385B2;
+        Mon,  9 May 2022 18:05:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652119529;
-        bh=GNYW0f/0zhn3bNQV9q7pmTN0Wu2f6KlNa5abquY9vdA=;
+        s=k20201202; t=1652119532;
+        bh=Kf5T/f0XKjbYWD/C6hVkJzR5NvVs2HNYRz/qFkL+TjE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=NacPhBskHAN4/3dE2A/9GW4Of2q4u87w654c1DT0X2jVS1stteLCl3si0gz3hWTAN
-         IkuNw42c1oEwSNPAQi3OqpUvAuasU+IkNiOLiGlhUEKNajPqWUPuPcHT/Hof+VnphJ
-         HgwcQXnCdmIPE9eXPEJAdnRySH5v7mueDVP26yCtj9T9D0reRkQNpQmlvK6CSPAket
-         DMh5p6PRNzBP6Zsc3wN2l4Q7Z4kShMr0iTjLxO3v/ap3ZeFjQ8gvXb645tMyevJ0vV
-         lwig9qFOd5yR6yURhawMB1gsSMxMo/nfOzDdiSuE7bsfVyT4g+XIhJ/jT23fMG2Wm1
-         VkyOnNyGw5CWw==
+        b=kMNw81pkTL4sG8Wuk7JEHYFIO0qbaJknS/iK55lckBFARqfzLyO6pRMx4Z1wC9nzN
+         8OQjcYHu+N+N8P8AoDXEnFDQhFR+sGvoJ3K9iLyyPB50yvudUUWumkIQiA6a4pjzo0
+         FgwGKfxKug410pw97pmvs9Uj34mBsW+I1ypxepI6ExayyeoroF2hi9in6IWkDQ5A3w
+         dJrY5Kr3tOowIVUTem+dISVXh0zxSzHoFoEYpcd8xDG8+gJyRULyANdH/dsU6cKkgb
+         n25kFx++efiOYW/1kJ1vjP8oec7wpSj2aOQIgQQ774ByTG8Ys94XJRq9Ybyd3wy+Cz
+         11gWG0Ntne4dw==
 From:   Mark Brown <broonie@kernel.org>
 To:     lgirdwood@gmail.com, yuehaibing@huawei.com,
         Arnd Bergmann <arnd@arndb.de>,
@@ -40,11 +40,11 @@ To:     lgirdwood@gmail.com, yuehaibing@huawei.com,
         tiwai@suse.com
 Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220507021424.12180-1-yuehaibing@huawei.com>
-References: <20220507021424.12180-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH v2 -next] ASoC: mediatek: mt8195: Fix build warning without CONFIG_OF
-Message-Id: <165211952680.1181242.3361665632308552172.b4-ty@kernel.org>
-Date:   Mon, 09 May 2022 19:05:26 +0100
+In-Reply-To: <20220509120918.9000-1-yuehaibing@huawei.com>
+References: <20220509120918.9000-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH v3 -next] ASoC: mediatek: mt8195: Fix build warning without CONFIG_OF
+Message-Id: <165211952969.1181242.10041450382891029022.b4-ty@kernel.org>
+Date:   Mon, 09 May 2022 19:05:29 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,7 +58,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 May 2022 10:14:24 +0800, YueHaibing wrote:
+On Mon, 9 May 2022 20:09:18 +0800, YueHaibing wrote:
 > sound/soc/mediatek/mt8195/mt8195-mt6359.c:1639:32: warning: ‘mt8195_mt6359_max98390_rt5682_card’ defined but not used [-Wunused-variable]
 >  1639 | static struct mt8195_card_data mt8195_mt6359_max98390_rt5682_card = {
 >       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

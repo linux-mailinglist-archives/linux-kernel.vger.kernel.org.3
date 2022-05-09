@@ -2,130 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB94B51F544
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFD851F537
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiEIHZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S234915AbiEIHYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236096AbiEIHK1 (ORCPT
+        with ESMTP id S236691AbiEIHMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:10:27 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79A3129C46;
-        Mon,  9 May 2022 00:06:19 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n18so13020782plg.5;
-        Mon, 09 May 2022 00:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TpYwJcXRaIAY1k5rPDvLOqhWDmi+BbqeQlb+s24HDcw=;
-        b=Vis/qG7syPrRj7MJmr6XusGF1w0FsYmjRQUKo6AxzIX9iTBhKUjgYVt9/JJ5VKV5OB
-         dhGhVmgLhyzSqajb4MCy+yNTpoOYteyKktq+Q47v2xLAo9dskJU6W2j5Bl8jSLm1cGKw
-         i+PxumYQ+2RGd7w6j12wwg5S8balfnuUsBxjDB52+olz7KM8lC43LRUpxBSm6ligrDSO
-         He3RCMi36ZQgrys5AK2JZusAfQzytIywDuKyKcLA/6ErbTVVX3LjLkMqlEn1i8XHQAOJ
-         9mksis1hjztmQy7GTasflBTkR5t2yxS3qOO2asvVYuJRwZpkiA02sZBhfIggI4cIpBI2
-         Rs6g==
+        Mon, 9 May 2022 03:12:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C9331882FC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652080049;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XJB9Em6I7OuLyYTTBEaXQS40dd84xL6H6gQSfOQOSK4=;
+        b=GRWs4DQhY6XpTeJ7ZW1bxIl80mIb0FxZhyKyGvDQXNyNwE5UkCfSdfamx09eAPqsKmgELt
+        WyHuzD1QMBU/xnXDiPhxLSofk9ZVvvfi6Z+yc3+elG7wBRRx/M+1MMue0ArkBvd7coIezP
+        cfjQj9hXNBtL4p6ZfrYuWJFAlKA50U8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-I4uv_tb0MsyKB94sLR_YhA-1; Mon, 09 May 2022 03:07:27 -0400
+X-MC-Unique: I4uv_tb0MsyKB94sLR_YhA-1
+Received: by mail-wr1-f72.google.com with SMTP id p18-20020adf9592000000b00207bc12decbso5410536wrp.21
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:07:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TpYwJcXRaIAY1k5rPDvLOqhWDmi+BbqeQlb+s24HDcw=;
-        b=aObjCDqQZ/sQEk6BFpA0w5z4qWurcWW+brXEBW7Tr3Ub5fEjzpF8P4hKeS1E2isA5x
-         UcqyB+P8JUXyMEjjngk5tVWpQhMyv41tO3TfuMVZvtrW1/2GkeaYz0gmtkTkVU2Qk8QO
-         JdDIzbCfffJtsGmekPkq5Buq9sgnDlkcnCkWSYoYU1LBS2hceWAXlzetnRMFoe9kjN8L
-         AtPUDjTxKgUwmA+VRyMVYb1HV6rcysqw7EJNiFT7T7XsHa8264HXaOAt/4AJfBQkTa1U
-         j0sLomTvsovSpb0OJsYtLPE7wuEERa5IDGfKlsaPDwl1YLExGbJulFvCF5ozZEIKTA4I
-         eG9w==
-X-Gm-Message-State: AOAM531k2Y4ATqjOM6QUktIzrTfxScCFZCndwBuFAkxED+x5qriQGM4K
-        dL4FExeYXRLNzCNnfRbv00Q=
-X-Google-Smtp-Source: ABdhPJwMFMWeKl+V8HsC0r0UdnVtNqwrvhckrl6oIpafBmg/UzA8AVCYLe6eHSuPGqYHGYs8PBntSA==
-X-Received: by 2002:a17:90b:3686:b0:1dd:1c31:50cb with SMTP id mj6-20020a17090b368600b001dd1c3150cbmr3286453pjb.203.1652079941283;
-        Mon, 09 May 2022 00:05:41 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.86])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170902cf0600b0015e8d4eb2e1sm6250768plg.299.2022.05.09.00.05.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 00:05:40 -0700 (PDT)
-Message-ID: <c313e9c9-97eb-8273-5bb7-553692e8e2f5@gmail.com>
-Date:   Mon, 9 May 2022 15:05:33 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XJB9Em6I7OuLyYTTBEaXQS40dd84xL6H6gQSfOQOSK4=;
+        b=TpbXynN+9lNNZM7C/TPyrtCBv/J+5FUmbTq6skr/szt6asUpeFaRu923wj6rYZe2CZ
+         IOG11+lgPKCSnXqYCRqOP/ow0qs2u1bslWqTg/exFW71FnzKYpL7aHTX1WKLRdpOfMaG
+         TvPr6xodiV4HesJ/ino+P7ENIP/NX+H3g6xGOc8Urf+GDoDC6cV4EFtCkmJWJW8i6z5f
+         SeyaxWhOxxbNJ75s0HmgP1WmQFBLVwJGYcAVG6+lm0KseteyHo9MZ9+P30XqrlGPDk2I
+         adZrPA+9ufNg4keNyyTAxhlGnOh/73WYNsxYfcw/77eUr5JfRZcl5O7Wfm0hhJylqaBI
+         JmDQ==
+X-Gm-Message-State: AOAM533pTzjGjwXzC0qqJPdvzJHb89uJ4jt3Sij64jjh5KhMGSPtaB7E
+        MJxC+HUDYMshiAlnyg0lFmiOi0iVNQT6oTj2FOl7fd2ftRcj12SGcP2Fy6unDNgVLb3ZPIYtn9G
+        6Ci841PBm4tiyiJie/tRv1jgL
+X-Received: by 2002:a7b:cf04:0:b0:394:27c8:d28a with SMTP id l4-20020a7bcf04000000b0039427c8d28amr20487766wmg.94.1652080046256;
+        Mon, 09 May 2022 00:07:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCyHCGQCbWEwWZ/UHI0DnttZzMiYsb/44YfiPVnJDRlGYZi1SIGptJp+PDbsNZyHEwx15Iog==
+X-Received: by 2002:a7b:cf04:0:b0:394:27c8:d28a with SMTP id l4-20020a7bcf04000000b0039427c8d28amr20487743wmg.94.1652080045958;
+        Mon, 09 May 2022 00:07:25 -0700 (PDT)
+Received: from redhat.com ([2.53.130.81])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c1d0600b003942a244f34sm15441415wms.13.2022.05.09.00.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 00:07:24 -0700 (PDT)
+Date:   Mon, 9 May 2022 03:07:18 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     kvm <kvm@vger.kernel.org>, Gautam Dawar <gautam.dawar@xilinx.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Dinan Gunawardena <dinang@xilinx.com>, tanuj.kamde@amd.com,
+        habetsm.xilinx@gmail.com, ecree.xilinx@gmail.com,
+        eperezma <eperezma@redhat.com>, Gautam Dawar <gdawar@xilinx.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eli Cohen <elic@nvidia.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Subject: Re: [PATCH v2 00/19] Control VQ support in vDPA
+Message-ID: <20220509030656-mutt-send-email-mst@kernel.org>
+References: <20220330180436.24644-1-gdawar@xilinx.com>
+ <CACGkMEsPTui8XDLvvLCq4myx1gWh=W1=W_9tXe+Lps5ExdE4+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v4 5/7] perf/x86/amd/core: Add PerfMonV2 counter control
-Content-Language: en-US
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
-        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org
-References: <cover.1651058600.git.sandipan.das@amd.com>
- <5c30d99af03fff90e2fc3165755d18d14bdb229f.1651058600.git.sandipan.das@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <5c30d99af03fff90e2fc3165755d18d14bdb229f.1651058600.git.sandipan.das@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEsPTui8XDLvvLCq4myx1gWh=W1=W_9tXe+Lps5ExdE4+g@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/4/2022 7:31 pm, Sandipan Das wrote:
+On Mon, May 09, 2022 at 11:42:10AM +0800, Jason Wang wrote:
+> On Thu, Mar 31, 2022 at 2:05 AM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
+> >
+> > Hi All:
+> >
+> > This series tries to add the support for control virtqueue in vDPA.
+> >
+> > Control virtqueue is used by networking device for accepting various
+> > commands from the driver. It's a must to support multiqueue and other
+> > configurations.
+> >
+> > When used by vhost-vDPA bus driver for VM, the control virtqueue
+> > should be shadowed via userspace VMM (Qemu) instead of being assigned
+> > directly to Guest. This is because Qemu needs to know the device state
+> > in order to start and stop device correctly (e.g for Live Migration).
+> >
+> > This requies to isolate the memory mapping for control virtqueue
+> > presented by vhost-vDPA to prevent guest from accessing it directly.
+> >
+> > To achieve this, vDPA introduce two new abstractions:
+> >
+> > - address space: identified through address space id (ASID) and a set
+> >                  of memory mapping in maintained
+> > - virtqueue group: the minimal set of virtqueues that must share an
+> >                  address space
+> >
+> > Device needs to advertise the following attributes to vDPA:
+> >
+> > - the number of address spaces supported in the device
+> > - the number of virtqueue groups supported in the device
+> > - the mappings from a specific virtqueue to its virtqueue groups
+> >
+> > The mappings from virtqueue to virtqueue groups is fixed and defined
+> > by vDPA device driver. E.g:
+> >
+> > - For the device that has hardware ASID support, it can simply
+> >   advertise a per virtqueue group.
+> > - For the device that does not have hardware ASID support, it can
+> >   simply advertise a single virtqueue group that contains all
+> >   virtqueues. Or if it wants a software emulated control virtqueue, it
+> >   can advertise two virtqueue groups, one is for cvq, another is for
+> >   the rest virtqueues.
+> >
+> > vDPA also allow to change the association between virtqueue group and
+> > address space. So in the case of control virtqueue, userspace
+> > VMM(Qemu) may use a dedicated address space for the control virtqueue
+> > group to isolate the memory mapping.
+> >
+> > The vhost/vhost-vDPA is also extend for the userspace to:
+> >
+> > - query the number of virtqueue groups and address spaces supported by
+> >   the device
+> > - query the virtqueue group for a specific virtqueue
+> > - assocaite a virtqueue group with an address space
+> > - send ASID based IOTLB commands
+> >
+> > This will help userspace VMM(Qemu) to detect whether the control vq
+> > could be supported and isolate memory mappings of control virtqueue
+> > from the others.
+> >
+> > To demonstrate the usage, vDPA simulator is extended to support
+> > setting MAC address via a emulated control virtqueue.
+> >
+> > Please review.
+> 
+> Michael, this looks good to me, do you have comments on this?
+> 
+> Thanks
 
->   static void amd_pmu_add_event(struct perf_event *event)
->   {
->   	if (needs_branch_stack(event))
-> @@ -1216,6 +1251,11 @@ static int __init amd_core_pmu_init(void)
->   		x86_pmu.num_counters = ebx.split.num_core_pmc;
->   
->   		amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
-> +
-> +		/* Update PMC handling functions */
-> +		x86_pmu.enable_all = amd_pmu_v2_enable_all;
-> +		x86_pmu.disable_all = amd_pmu_v2_disable_all;
-> +		x86_pmu.enable = amd_pmu_v2_enable_event;
->   	}
 
-Considering the below part of code also run on the PerfMonV2 host
+I'll merge this for next.
 
-whatever the guest PMU version, how about updating these two use cases as well 
-in this patch ?
-
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 262e39a85031..2f7c62e46314 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -1469,8 +1469,8 @@ void amd_pmu_enable_virt(void)
-         cpuc->perf_ctr_virt_mask = 0;
-
-         /* Reload all events */
--       amd_pmu_disable_all();
--       x86_pmu_enable_all(0);
-+       amd_pmu.disable_all();
-+       amd_pmu.enable_all(0);
-  }
-  EXPORT_SYMBOL_GPL(amd_pmu_enable_virt);
-
-@@ -1487,7 +1487,7 @@ void amd_pmu_disable_virt(void)
-         cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
-
-         /* Reload all events */
--       amd_pmu_disable_all();
--       x86_pmu_enable_all(0);
-+       amd_pmu.disable_all();
-+       amd_pmu.enable_all(0);
-  }
-  EXPORT_SYMBOL_GPL(amd_pmu_disable_virt);
+> >
+> > Changes since RFC v2:
+> >
+> > - Fixed memory leak for asid 0 in vhost_vdpa_remove_as()
+> > - Removed unnecessary NULL check for iotlb in vhost_vdpa_unmap() and
+> >   changed its return type to void.
+> > - Removed insignificant used_as member field from struct vhost_vdpa.
+> > - Corrected the iommu parameter in call to vringh_set_iotlb() from
+> >   vdpasim_set_group_asid()
+> > - Fixed build errors with vdpa_sim_net
+> > - Updated alibaba, vdpa_user and virtio_pci vdpa parent drivers to
+> >   call updated vDPA APIs and ensured successful build
+> > - Tested control (MAC address configuration) and data-path using
+> >   single virtqueue pair on Xilinx (now AMD) SN1022 SmartNIC device
+> >   and vdpa_sim_net software device using QEMU release at [1]
+> > - Removed two extra blank lines after set_group_asid() in
+> >   include/linux/vdpa.h
+> >
+> > Changes since v1:
+> >
+> > - Rebased the v1 patch series on vhost branch of MST vhost git repo
+> >   git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/log/?h=vhost
+> > - Updates to accommodate vdpa_sim changes from monolithic module in
+> >   kernel used v1 patch series to current modularized class (net, block)
+> >   based approach.
+> > - Added new attributes (ngroups and nas) to "vdpasim_dev_attr" and
+> >   propagated them from vdpa_sim_net to vdpa_sim
+> > - Widened the data-type for "asid" member of vhost_msg_v2 to __u32
+> >   to accommodate PASID
+> > - Fixed the buildbot warnings
+> > - Resolved all checkpatch.pl errors and warnings
+> > - Tested both control and datapath with Xilinx Smartnic SN1000 series
+> >   device using QEMU implementing the Shadow virtqueue and support for
+> >   VQ groups and ASID available at [1]
+> >
+> > Changes since RFC:
+> >
+> > - tweak vhost uAPI documentation
+> > - switch to use device specific IOTLB really in patch 4
+> > - tweak the commit log
+> > - fix that ASID in vhost is claimed to be 32 actually but 16bit
+> >   actually
+> > - fix use after free when using ASID with IOTLB batching requests
+> > - switch to use Stefano's patch for having separated iov
+> > - remove unused "used_as" variable
+> > - fix the iotlb/asid checking in vhost_vdpa_unmap()
+> >
+> > [1] Development QEMU release with support for SVQ, VQ groups and ASID:
+> >   github.com/eugpermar/qemu/releases/tag/vdpa_sw_live_migration.d%2F
+> >   asid_groups-v1.d%2F00
+> >
+> > Thanks
+> >
+> > Gautam Dawar (19):
+> >   vhost: move the backend feature bits to vhost_types.h
+> >   virtio-vdpa: don't set callback if virtio doesn't need it
+> >   vhost-vdpa: passing iotlb to IOMMU mapping helpers
+> >   vhost-vdpa: switch to use vhost-vdpa specific IOTLB
+> >   vdpa: introduce virtqueue groups
+> >   vdpa: multiple address spaces support
+> >   vdpa: introduce config operations for associating ASID to a virtqueue
+> >     group
+> >   vhost_iotlb: split out IOTLB initialization
+> >   vhost: support ASID in IOTLB API
+> >   vhost-vdpa: introduce asid based IOTLB
+> >   vhost-vdpa: introduce uAPI to get the number of virtqueue groups
+> >   vhost-vdpa: introduce uAPI to get the number of address spaces
+> >   vhost-vdpa: uAPI to get virtqueue group id
+> >   vhost-vdpa: introduce uAPI to set group ASID
+> >   vhost-vdpa: support ASID based IOTLB API
+> >   vdpa_sim: advertise VIRTIO_NET_F_MTU
+> >   vdpa_sim: factor out buffer completion logic
+> >   vdpa_sim: filter destination mac address
+> >   vdpasim: control virtqueue support
+> >
+> >  drivers/vdpa/alibaba/eni_vdpa.c      |   2 +-
+> >  drivers/vdpa/ifcvf/ifcvf_main.c      |   8 +-
+> >  drivers/vdpa/mlx5/net/mlx5_vnet.c    |  11 +-
+> >  drivers/vdpa/vdpa.c                  |   5 +
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 100 ++++++++--
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |   3 +
+> >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 169 +++++++++++++----
+> >  drivers/vdpa/vdpa_user/vduse_dev.c   |   3 +-
+> >  drivers/vdpa/virtio_pci/vp_vdpa.c    |   2 +-
+> >  drivers/vhost/iotlb.c                |  23 ++-
+> >  drivers/vhost/vdpa.c                 | 267 +++++++++++++++++++++------
+> >  drivers/vhost/vhost.c                |  23 ++-
+> >  drivers/vhost/vhost.h                |   4 +-
+> >  drivers/virtio/virtio_vdpa.c         |   2 +-
+> >  include/linux/vdpa.h                 |  44 ++++-
+> >  include/linux/vhost_iotlb.h          |   2 +
+> >  include/uapi/linux/vhost.h           |  26 ++-
+> >  include/uapi/linux/vhost_types.h     |  11 +-
+> >  18 files changed, 563 insertions(+), 142 deletions(-)
+> >
+> > --
+> > 2.30.1
+> >
 

@@ -2,143 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F6752020B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0F8520210
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238870AbiEIQRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S238885AbiEIQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238834AbiEIQRE (ORCPT
+        with ESMTP id S238834AbiEIQRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:17:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CAE1207CE;
-        Mon,  9 May 2022 09:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rZghxSDGJRnTA1V5fHeY5N/IGkekF30aGyZzBmUuzOM=; b=2fPGkyBGi5ndMgLuyzr1kdszFT
-        gQy0rNZIjpU/1qdy1kLY1CSSwSGbGblQZyIrY2Vp2QzFxy/IUWsHv/uVz2KP8nNSDpTjP0MBAhmzU
-        ayLTDPbvdprpjM3OLK6HIgXbIXPUiCu4Fdx8aHcJN9fc48SPnF3JRACyGZcy+4i+Amf8xa1ZGaUMk
-        wzsOKPDqmhlbsj7kfy0Jgwt2hPgW85/BeLTZarV16owS0xNbMznoh/DtkrAnpXF7WVZTLVqDIuXVq
-        IcRNwEQoKiyCrSIHBp3humZEwzJuiVtSU/Qh97PO6ZHASozsnxtwLotOJfV1irff8OhED1NxRqzjS
-        xp7Nckbw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1no60N-00FIZY-UC; Mon, 09 May 2022 16:13:03 +0000
-Date:   Mon, 9 May 2022 09:13:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
-        christophe.leroy@csgroup.eu
-Subject: Re: request_module DoS
-Message-ID: <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
-References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
- <874k1zt0ec.fsf@mpe.ellerman.id.au>
+        Mon, 9 May 2022 12:17:25 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12C31BDDA8
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652112810; x=1683648810;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QbP6qqb6nRewydwlAAGi0onfGm51kHMVECSNbBIu3n8=;
+  b=bnliK+baWZrLCprwmB6s+xT4Qk1Xz9PUvubpMK7LEg+G0rZHIkAOGsCI
+   4XxBvaWKhoMH4Qlxi9u36Xx2PdYBaKVL7RnTwxtTU4lgCmqg8kdgFu1OK
+   cEYHrGx2+oSPvkzs6l67nGdUmUHsSrMjxF6zNSESfMJGGHrMmuY+oPtn/
+   dz5yZ/NK0yTYx/2VcI9Fy1PFv6d6fxTlCh/bGs0NSykatCtuNlMGBlFfh
+   scq/uDuPdvVpDzD7OyasC5sQgBLkHhYilaTjgzBgYYLEo1MOwqcxCgAB2
+   qqzEgHHNhLTc3JrOwkjLKAf4GEJEt899/CbCBgxc39FrU5s4G+axSRxnk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249631880"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="249631880"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 09:13:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="738243827"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 09:13:25 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1no60i-000GeE-KI;
+        Mon, 09 May 2022 16:13:24 +0000
+Date:   Tue, 10 May 2022 00:13:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v3 10/13] drivers/opp/core.c:1297:8:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202205100055.CcUduSmT-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874k1zt0ec.fsf@mpe.ellerman.id.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:23:39PM +1000, Michael Ellerman wrote:
-> Herbert Xu <herbert@gondor.apana.org.au> writes:
-> > Hi:
-> >
-> > There are some code paths in the kernel where you can reliably
-> > trigger a request_module of a non-existant module.  For example,
-> > if you attempt to load a non-existent crypto algorithm, or create
-> > a socket of a non-existent network family, it will result in a
-> > request_module call that is guaranteed to fail.
-> >
-> > As user-space can do this repeatedly, it can quickly overwhelm
-> > the concurrency limit in kmod.  This in itself is expected,
-> > however, at least on some platforms this appears to result in
-> > a live-lock.  Here is an example triggered by stress-ng on ppc64:
-> >
-> > [  529.853264] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
-> ...
-> > [  580.414590] __request_module: 25 callbacks suppressed
-> > [  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-> > [  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
-> > [  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
-> > [  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
-> > [  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
-> > [  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
-> > [  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
-> > [  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
-> > [  580.423148] CFAR: 0000000000000c00 IRQMASK: 1 
-> >                GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000 
-> >                GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060 
-> >                GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000 
-> >                GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8 
-> >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-> >                GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff 
-> >                GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000 
-> >                GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0 
-> > [  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
-> > [  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
-> > [  580.423173] Call Trace:
-> > [  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
-> > [  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
-> > [  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
-> > [  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
-> > [  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
-> > [  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
-> > [  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
-> > [  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
-> > [  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
-> > [  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
-> > [  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
-> > [  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
-> > [  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
-> > [  580.423213] --- interrupt: 3000 at 0x7fff9b824464
-> > [  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
-> > [  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
-> > [  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
-> > [  580.423221] IRQMASK: 0 
-> >                GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004 
-> >                GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000 
-> >                GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> >                GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8 
-> >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
-> >                GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8 
-> >                GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650 
-> >                GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0 
-> > [  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
-> > [  580.423237] LR [0000000000000000] 0x0
-> > [  580.423238] --- interrupt: 3000
-> > [  580.423239] Instruction dump:
-> > [  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24 
-> > [  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120 
-> >
-> > Would it be possible to modify kmod so that in such cases that
-> > request_module calls fail more quickly rather than repeatedly
-> > obtaining a spinlock that appears to be under high contention?
-> 
-> If you run stress-ng with a timeout does the system eventually recover?
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
+head:   22a49fd92d5e31234d4174cdf1fdade79f38ae3d
+commit: ff3c34983e1cca80d8c081ea99e0117c5c38c6c3 [10/13] PM: opp: allow control of multiple clocks
+config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100055.CcUduSmT-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/krzk/linux/commit/ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
+        git checkout ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
 
-OK the respective stress-ng test should be something like:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-./stress-ng --af-alg 8192
+All warnings (new ones prefixed by >>):
 
-I had left this running overnight on x86_64 without issues:
+>> drivers/opp/core.c:1297:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (opp_table->clks)
+                               ^~~~~~~~~~~~~~~
+   drivers/opp/core.c:1335:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/opp/core.c:1297:4: note: remove the 'if' if its condition is always true
+                           if (opp_table->clks)
+                           ^~~~~~~~~~~~~~~~~~~~
+   drivers/opp/core.c:1280:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-sudo ./tools/testing/selftests/kmod/kmod.sh -t 0009
 
-Going to leave the above stress-ng call running in a loop to see
-if I can reproduce the live lock on x86_64.
+vim +1297 drivers/opp/core.c
 
-  Luis
+  1263	
+  1264	/**
+  1265	 * dev_pm_opp_set_rate() - Configure new OPP based on frequency
+  1266	 * @dev:	 device for which we do this operation
+  1267	 * @target_freq: frequency to achieve
+  1268	 *
+  1269	 * This configures the power-supplies to the levels specified by the OPP
+  1270	 * corresponding to the target_freq, and programs the clock to a value <=
+  1271	 * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
+  1272	 * provided by the opp, should have already rounded to the target OPP's
+  1273	 * frequency.
+  1274	 */
+  1275	int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+  1276	{
+  1277		struct opp_table *opp_table;
+  1278		unsigned long freq = 0, temp_freq;
+  1279		struct dev_pm_opp *opp = NULL;
+  1280		int ret;
+  1281	
+  1282		opp_table = _find_opp_table(dev);
+  1283		if (IS_ERR(opp_table)) {
+  1284			dev_err(dev, "%s: device's opp table doesn't exist\n", __func__);
+  1285			return PTR_ERR(opp_table);
+  1286		}
+  1287	
+  1288		if (target_freq) {
+  1289			/*
+  1290			 * For IO devices which require an OPP on some platforms/SoCs
+  1291			 * while just needing to scale the clock on some others
+  1292			 * we look for empty OPP tables with just a clock handle and
+  1293			 * scale only the clk. This makes dev_pm_opp_set_rate()
+  1294			 * equivalent to a clk_set_rate()
+  1295			 */
+  1296			if (!_get_opp_count(opp_table)) {
+> 1297				if (opp_table->clks)
+  1298					ret = _generic_set_opp_clk_only(dev,
+  1299									opp_table->clks[0],
+  1300									target_freq);
+  1301				goto put_opp_table;
+  1302			}
+  1303	
+  1304			if (opp_table->clks)
+  1305				freq = clk_round_rate(opp_table->clks[0], target_freq);
+  1306			if ((long)freq <= 0)
+  1307				freq = target_freq;
+  1308	
+  1309			/*
+  1310			 * The clock driver may support finer resolution of the
+  1311			 * frequencies than the OPP table, don't update the frequency we
+  1312			 * pass to clk_set_rate() here.
+  1313			 */
+  1314			temp_freq = freq;
+  1315			opp = _find_freq_ceil(opp_table, &temp_freq);
+  1316			if (IS_ERR(opp)) {
+  1317				ret = PTR_ERR(opp);
+  1318				dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
+  1319					__func__, freq, ret);
+  1320				goto put_opp_table;
+  1321			}
+  1322			/*
+  1323			 * opp->rates are used for scaling clocks, so be sure accurate
+  1324			 * 'freq' is used, instead what was defined via e.g. Devicetree.
+  1325			 */
+  1326			opp->rates[0] = freq;
+  1327		}
+  1328	
+  1329		ret = _set_opp(dev, opp_table, opp, freq);
+  1330	
+  1331		if (target_freq)
+  1332			dev_pm_opp_put(opp);
+  1333	put_opp_table:
+  1334		dev_pm_opp_put_opp_table(opp_table);
+  1335		return ret;
+  1336	}
+  1337	EXPORT_SYMBOL_GPL(dev_pm_opp_set_rate);
+  1338	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

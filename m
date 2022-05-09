@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DA651F9DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6140451F9EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiEIKdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        id S231260AbiEIKfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiEIKcY (ORCPT
+        with ESMTP id S231610AbiEIKej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:32:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A91724EA2B;
-        Mon,  9 May 2022 03:27:53 -0700 (PDT)
-Received: from canpemm100008.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KxclT20G8zfbQ1;
-        Mon,  9 May 2022 18:26:13 +0800 (CST)
-Received: from dggpeml500026.china.huawei.com (7.185.36.106) by
- canpemm100008.china.huawei.com (7.192.104.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 9 May 2022 18:27:23 +0800
-Received: from dggpeml500026.china.huawei.com ([7.185.36.106]) by
- dggpeml500026.china.huawei.com ([7.185.36.106]) with mapi id 15.01.2375.024;
- Mon, 9 May 2022 18:27:22 +0800
-From:   shaozhengchao <shaozhengchao@huawei.com>
-To:     =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-CC:     "weiyongjun (A)" <weiyongjun1@huawei.com>,
-        yuehaibing <yuehaibing@huawei.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggYnBmLW5leHRdIHNhbXBsZXMvYnBmOiBjaGVjayBk?=
- =?utf-8?Q?etach_prog_exist_or_not_in_xdp=5Ffwd?=
-Thread-Topic: [PATCH bpf-next] samples/bpf: check detach prog exist or not in
- xdp_fwd
-Thread-Index: AQHYYz67ysyf9xnyEEa5gXY59XVHBq0VxqsAgACPrJA=
-Date:   Mon, 9 May 2022 10:27:22 +0000
-Message-ID: <f9c85578b94a4a38b3f7b9c796810a30@huawei.com>
-References: <20220509005105.271089-1-shaozhengchao@huawei.com>
- <87pmknyr6b.fsf@toke.dk>
-In-Reply-To: <87pmknyr6b.fsf@toke.dk>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.178.66]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 9 May 2022 06:34:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B4042A4A05
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652092102;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6H/6ecBRlSRkZDMv8ER1vowHrJ0f9/tbpgvVRebvDPM=;
+        b=UJPIUnrze52s7YC4EyRFMk7Y+36tS4tBSuzHgVqFErqn4RlVnfzZvKwO7AP55fUYStfOm3
+        W0ZN2D4TYP/85v4OxGoToiRGvjsd7Kyoss+mIljsoHX5L6HmgcViXf7myPEeP98N8aScV6
+        35XGyR1ElsXx3QsmTeqpyu7HaRoasIE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-JrX56wR3PXCIMLTqmToTCQ-1; Mon, 09 May 2022 06:28:19 -0400
+X-MC-Unique: JrX56wR3PXCIMLTqmToTCQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 49B48185A794;
+        Mon,  9 May 2022 10:28:19 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35B00C27EB6;
+        Mon,  9 May 2022 10:28:17 +0000 (UTC)
+Message-ID: <506fc55bd1001e0ffb4c5b20edd057fe7b8dcfb4.camel@redhat.com>
+Subject: Re: [PATCH v4 00/15] Introducing AMD x2AVIC and hybrid-AVIC modes
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Mon, 09 May 2022 13:28:16 +0300
+In-Reply-To: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
+References: <20220508023930.12881-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +63,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IFRva2UgSMO4aWxhbmQtSsO4cmdl
-bnNlbiBbbWFpbHRvOnRva2VAa2VybmVsLm9yZ10gDQrlj5HpgIHml7bpl7Q6IDIwMjLlubQ15pyI
-OeaXpSAxNzo0Ng0K5pS25Lu25Lq6OiBzaGFvemhlbmdjaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdl
-aS5jb20+OyBicGZAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51
-eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBhc3RAa2VybmVsLm9yZzsgZGFuaWVsQGlvZ2VhcmJv
-eC5uZXQ7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFAa2VybmVsLm9yZzsgaGF3a0BrZXJuZWwu
-b3JnOyBqb2huLmZhc3RhYmVuZEBnbWFpbC5jb207IGFuZHJpaUBrZXJuZWwub3JnOyBrYWZhaUBm
-Yi5jb207IHNvbmdsaXVicmF2aW5nQGZiLmNvbTsgeWhzQGZiLmNvbTsga3BzaW5naEBrZXJuZWwu
-b3JnDQrmioTpgIE6IHdlaXlvbmdqdW4gKEEpIDx3ZWl5b25nanVuMUBodWF3ZWkuY29tPjsgc2hh
-b3poZW5nY2hhbyA8c2hhb3poZW5nY2hhb0BodWF3ZWkuY29tPjsgeXVlaGFpYmluZyA8eXVlaGFp
-YmluZ0BodWF3ZWkuY29tPg0K5Li76aKYOiBSZTogW1BBVENIIGJwZi1uZXh0XSBzYW1wbGVzL2Jw
-ZjogY2hlY2sgZGV0YWNoIHByb2cgZXhpc3Qgb3Igbm90IGluIHhkcF9md2QNCg0KWmhlbmdjaGFv
-IFNoYW8gPHNoYW96aGVuZ2NoYW9AaHVhd2VpLmNvbT4gd3JpdGVzOg0KDQo+IEJlZm9yZSBkZXRh
-Y2ggdGhlIHByb2csIHdlIHNob3VsZCBjaGVjayBkZXRhY2ggcHJvZyBleGlzdCBvciBub3QuDQoN
-CklmIHdlJ3JlIGFkZGluZyBzdWNoIGEgY2hlY2sgd2Ugc2hvdWxkIGFsc28gY2hlY2sgdGhhdCBp
-dCdzIHRoZSAqcmlnaHQqIHByb2dyYW0uIEkuZS4sIHF1ZXJ5IHRoZSBJRCBmb3IgdGhlIHByb2dy
-YW0gbmFtZSBhbmQgY2hlY2sgdGhhdCBpdCBtYXRjaGVzIHdoYXQgdGhlIHByb2dyYW0gYXR0YWNo
-ZWQsIHRoZW4gb2J0YWluIGFuIGZkIGFuZCBwYXNzIHRoYXQgYXMgWERQX0VYUEVDVEVEX0ZEIG9u
-IGRldGFjaCB0byBtYWtlIHN1cmUgaXQgd2Fzbid0IHN3YXBwZWQgb3V0IGluIHRoZSBtZWFudGlt
-ZS4uLg0KDQotVG9rZQ0KDQpUaGFuayB5b3UgZm9yIHlvdXIgcmVwbHkuIFdoZW4gZmluaXNoIHJ1
-bm5pbmcgeGRwX2Z3ZCB0byBhdHRhdGNoIHByb2csIHRoZSBwcm9ncmFtIHdpbGwgZXhpdCBhbmQg
-Y2FuJ3Qgc3RvcmUgZmQgYXMgWERQX0VYUEVDVEVEX0ZELiANCg0KSSB0aGluayB0aGUgc2FtcGxl
-IHhkcF9md2QgLWQgaXMganVzdCBkZXRhY2ggcHJvZyBhbmQgZG9uJ3QgY2FyZSBpZiB0aGUgZmQg
-aXMgZXhwZWN0ZWQuDQoNCi16aGVuZ2NoYW8gc2hhbyANCg==
+On Sat, 2022-05-07 at 21:39 -0500, Suravee Suthikulpanit wrote:
+> Introducing support for AMD x2APIC virtualization. This feature is
+> indicated by the CPUID Fn8000_000A EDX[14], and it can be activated
+> by setting bit 31 (enable AVIC) and bit 30 (x2APIC mode) of VMCB
+> offset 60h.
+> 
+> With x2AVIC support, the guest local APIC can be fully virtualized in
+> both xAPIC and x2APIC modes, and the mode can be changed during runtime.
+> For example, when AVIC is enabled, the hypervisor set VMCB bit 31
+> to activate AVIC for each vCPU. Then, it keeps track of each vCPU's
+> APIC mode, and updates VMCB bit 30 to enable/disable x2APIC
+> virtualization mode accordingly.
+> 
+> Besides setting bit VMCB bit 30 and 31, for x2AVIC, kvm_amd driver needs
+> to disable interception for the x2APIC MSR range to allow AVIC hardware
+> to virtualize register accesses.
+> 
+> This series also introduce a partial APIC virtualization (hybrid-AVIC)
+> mode, where APIC register accesses are trapped (i.e. not virtualized
+> by hardware), but leverage AVIC doorbell for interrupt injection.
+> This eliminates need to disable x2APIC in the guest on system without
+> x2AVIC support. (Note: suggested by Maxim)
+> 
+> Regards,
+> Suravee
+> 
+> Testing for v4:
+>   * Tested booting a Linux VM with x2APIC physical and logical modes upto 512 vCPUs.
+>   * Test enable AVIC in L0 with xAPIC and x2AVIC modes in L1 and launch L2 guest
+>   * Test partial AVIC mode by launching a VM with x2APIC mode
+> 
+> Changes from v3:
+> (https://lore.kernel.org/lkml/ff67344c0efe06d1422aa84e56738a0812c69bfc.camel@redhat.com/T/)
+>  * Patch  3 : Update logic force_avic
+>  * Patch  8 : Move logic for handling APIC disable to common code (new)
+>  * Patch  9 : Only call avic_refresh_apicv_exec_ctrl
+>  * Patch 12 : Remove APICV_INHIBIT_REASON_X2APIC, and add more comment for hybrid-AVIC mode
+> 
+> Suravee Suthikulpanit (15):
+>   x86/cpufeatures: Introduce x2AVIC CPUID bit
+>   KVM: x86: lapic: Rename [GET/SET]_APIC_DEST_FIELD to
+>     [GET/SET]_XAPIC_DEST_FIELD
+>   KVM: SVM: Detect X2APIC virtualization (x2AVIC) support
+>   KVM: SVM: Update max number of vCPUs supported for x2AVIC mode
+>   KVM: SVM: Update avic_kick_target_vcpus to support 32-bit APIC ID
+>   KVM: SVM: Do not support updating APIC ID when in x2APIC mode
+>   KVM: SVM: Adding support for configuring x2APIC MSRs interception
+>   KVM: x86: Deactivate APICv on vCPU with APIC disabled
+>   KVM: SVM: Refresh AVIC configuration when changing APIC mode
+>   KVM: SVM: Introduce helper functions to (de)activate AVIC and x2AVIC
+>   KVM: SVM: Do not throw warning when calling avic_vcpu_load on a
+>     running vcpu
+>   KVM: SVM: Introduce hybrid-AVIC mode
+>   KVM: x86: Warning APICv inconsistency only when vcpu APIC mode is
+>     valid
+>   KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible
+>   KVM: SVM: Add AVIC doorbell tracepoint
+> 
+>  arch/x86/hyperv/hv_apic.c          |   2 +-
+>  arch/x86/include/asm/apicdef.h     |   4 +-
+>  arch/x86/include/asm/cpufeatures.h |   1 +
+>  arch/x86/include/asm/kvm_host.h    |   1 -
+>  arch/x86/include/asm/svm.h         |  21 +++-
+>  arch/x86/kernel/apic/apic.c        |   2 +-
+>  arch/x86/kernel/apic/ipi.c         |   2 +-
+>  arch/x86/kvm/lapic.c               |   6 +-
+>  arch/x86/kvm/svm/avic.c            | 191 ++++++++++++++++++++++++++---
+>  arch/x86/kvm/svm/svm.c             |  56 +++++----
+>  arch/x86/kvm/svm/svm.h             |   6 +-
+>  arch/x86/kvm/trace.h               |  18 +++
+>  arch/x86/kvm/x86.c                 |   8 +-
+>  13 files changed, 262 insertions(+), 56 deletions(-)
+> 
+
+Patch series looks good.
+
+I will smoke test it today on my normal AVIC, just in case.
+
+Did you had a chance to look at my comments on your report
+that nesting got broken by my nested PAUSE filtering patch?
+
+I tried to reproduce it on my side, so far no luck.
+
+I tried to oversubscribe L1, by booting a VM with 16 vCPUs
+all pinned to single physical CPU, and then booting a nested guest 
+in it with about the same amount of vCPUs. Slow but it did work.
+
+
+Also did you had a chance to look for my comments about the AMD's manual
+asking the user to flush guest's TLB when changing apic backing page,
+regardless of ASID?
+
+Best regards,
+	Maxim Levitsky
+
+
+
+
+

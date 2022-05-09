@@ -2,169 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1636F51F961
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0981A51F964
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiEIKMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S231148AbiEIKLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiEIKM3 (ORCPT
+        with ESMTP id S233003AbiEIKLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:12:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368CF233A6A;
-        Mon,  9 May 2022 03:08:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A54AAB80D3C;
-        Mon,  9 May 2022 10:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308F7C385A8;
-        Mon,  9 May 2022 10:01:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652090465;
-        bh=Xj+BxxtzqKq6ClC+lgtNkIEjRLg+0U/DyE+0EsHanR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rVhyEI4DCCNX9EpA2cYe+oghmzpR+KJ7NQEvWTwkt57PG8e+pkVTuXwkv68g1h8ty
-         X0d530Fm1dTEXvRXxQo84SlftXYiVkh6cviQ9dYCER0QlBP6uf83H4OEoiPXZFyh/y
-         831mCcvaiHL8kyxFd9ZkztQaBJQV1AKE8sqHtYI12swbA6JHnt/fURNh7iDnXA/025
-         Zbnoj/7G6qtsBV6hdnhu3VLlfjJtadyE0ZW6ckVDMUKZvdDf2Omi4GgcMKYXtlg+W0
-         2Nny282doe/wTCMPH/Zs+Uc79huxL3X5FjzwT7h6qM4vt1n0cH0b3/qcH2hhclM/Ao
-         JOLdtch+eOtmQ==
-Date:   Mon, 9 May 2022 12:00:58 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux API <linux-api@vger.kernel.org>
-Subject: Re: [PATCH V9 13/24] LoongArch: Add system call support
-Message-ID: <20220509100058.vmrgn5fkk3ayt63v@wittgenstein>
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-14-chenhuacai@loongson.cn>
- <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
- <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
- <CAK8P3a0DqQcApv8aa2dgBS5At=tEkN7cnaskoUeXDi2-Bu9Rnw@mail.gmail.com>
- <20220507121104.7soocpgoqkvwv3gc@wittgenstein>
+        Mon, 9 May 2022 06:11:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9F32230BE
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:07:08 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652090503;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gt+cvbCbyLotyPdsbicw1w5GlF7vpXCKgcu2KrPitAs=;
+        b=0yW2QJjKbh6RIXg/TYy6onbYbjrDa7jADEB++j1Q6Dp4zsctEuJP9tNdyO4ObDLUMraguX
+        J5+Nh0sjYRx6LBQH/tgPqL5/ntUHPaY3ytX+f2ejusaTjZZzbNuZ1w7rhlv2MsbaDgTgaG
+        88n7J5r8j8mgWkr+ZGY29irknJE10DxF5HggrYm0gJcAS+/fBqyHDPf6NbB5/3BFi+cdEv
+        dcOkd/HtVMyoOfHSxRCs+C2jYj5SNZyhT92gE6KfnZ8lXlehJx0OyQt5m5FI+GMbHu+lm0
+        RquHkM2H/ZPiMn6LofLwlGNge+ywzO3h6nBzDHStzqPMX8aSk3xSQD7Dyw9O0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652090503;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gt+cvbCbyLotyPdsbicw1w5GlF7vpXCKgcu2KrPitAs=;
+        b=Mf4/N4Q2KwfTw7g6yTvX49DKOcIQGYdAZdhWwcBEGASiC9CJIgmdsnIkcW7JacLpzhBKX9
+        n6XD3pyvwBDUNZAg==
+To:     Feng Tang <feng.tang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+In-Reply-To: <20220509073003.GB40730@shbuild999.sh.intel.com>
+References: <20220508144733.91343-1-feng.tang@intel.com>
+ <20220509045839.GA40730@shbuild999.sh.intel.com>
+ <20220509071652.GE76023@worktop.programming.kicks-ass.net>
+ <20220509073003.GB40730@shbuild999.sh.intel.com>
+Date:   Mon, 09 May 2022 12:01:42 +0200
+Message-ID: <87h75zrpmh.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220507121104.7soocpgoqkvwv3gc@wittgenstein>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 07, 2022 at 02:11:04PM +0200, Christian Brauner wrote:
-> On Sat, Apr 30, 2022 at 12:34:52PM +0200, Arnd Bergmann wrote:
-> > On Sat, Apr 30, 2022 at 12:05 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > On Sat, Apr 30, 2022 at 5:45 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > >
-> > > > > This patch adds system call support and related uaccess.h for LoongArch.
-> > > > >
-> > > > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > > > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> > > > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> > > > >    bit platforms still use newstat now.
-> > > > >
-> > > > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > > > > A: The latest glibc release (2.34) has some basic support for clone3 but
-> > > > >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> > > > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> > > > >    related applications can still not work perfectly with clone3. E.g.,
-> > > > >    Chromium sandbox cannot work at all and there is no solution for it,
-> > > > >    which is more terrible than the fork() story [1].
-> > > > >
-> > > > > [1] https://chromium-review.googlesource.com/c/chromium/src/+/2936184
-> > > >
-> > > > I still think these have to be removed. There is no mainline glibc or musl
-> > > > port yet, and neither of them should actually be required. Please remove
-> > > > them here, and modify your libc patches accordingly when you send those
-> > > > upstream.
-> > >
-> > > If this is just a problem that can be resolved by upgrading
-> > > glibc/musl, I will remove them. But the Chromium problem (or sandbox
-> > > problem in general) seems to have no solution now.
-> > 
-> > I added Christian Brauner to Cc now, maybe he has come across the
-> > sandbox problem before and has an idea for a solution.
-> 
-> (I just got back from LSFMM so I'll reply in more detail next week. I'm
-> still pretty jet-lagged.)
+Feng,
 
-Right, I forgot about the EPERM/ENOSYS sandbox thread.
+On Mon, May 09 2022 at 15:30, Feng Tang wrote:
+> On Mon, May 09, 2022 at 09:16:52AM +0200, Peter Zijlstra wrote:
+>> On Mon, May 09, 2022 at 12:58:39PM +0800, Feng Tang wrote:
+>> > And there is still very few corner case that the freq info is not
+>> > accurate enough with small deviation from the actual value, like on
+>> > a product with early buggy version of firmware or on some
+>> > pre-production hardware.
+>> >
+>> > Add an option 'recalibrate' for 'tsc' kernel parameter to force the
+>> > tsc freq recalibration with HPET/PM_TIMER, and warn if the deviation
+>> > from previous value is more than about 500 PPM.
+>> > 
+>> > Signed-off-by: Feng Tang <feng.tang@intel.com>
+>> 
+>> Why isn't 'tsc_early_khz=' not working for you? Afaict that will
+>> override calibrate_tsc() when provided and as such can be used on these
+>> early platforms for provide the right value until such time that the
+>> firmware is fixed.
+>
+> For the early platforms, the problem we met is we don't know what
+> is the 'correct' tsc-freq, and the value from MSR/CUPID could be wrong. 
+>
+> And there was some generation, that after enabling some feature, each
+> instance of HW will have slightly different frequency, so there is
+> no central "one for all" value to set for 'tsc_early_khz'.
+>
+> This option is more like a way to double-check the correctness of
+> tsc-freq got from MSR/CPUID(0x15).
 
-Kees and I gave a talk about this problem at LPC 2019 (see [2]). The
-proposed solutions back then was to add basic deep argument inspection
-for first-level pointers to seccomp.
+If at all it's a workaround for the inability and ignorance of firmware
+people. The crystal frequency and the TSC/crystal ratio _are_ known to
+the system designer and firmware people. It's really not asked too much
+to put the correct values into CPUID(0x15) and have proper quality
+control to ensure the correctness.
 
-There are problems with this approach such as not useable on
-second-level pointers (although we concluded that's ok) and if the input
-args are very large copying stuff from within seccomp becomes rather
-costly and in general the various approaches seemed handwavy at the
-time.
+The whole argument about early firmware and pre-production hardware is
+bogus. It's 2022 and we are debating this problem for more than a decade
+now and still hardware and firmware people think they can do what they
+want and it all can be "fixed" in software. It's not rocket science to
+get this straight.
 
-If seccomp were to be made to support some basic form of eBPF such that
-it can still be safely called by unprivileged users then this would
-likely be easier to do (famous last words) but given that the stance has
-traditionally bee to not port seccomp it remains a tricky patch.
+Aside of that HPET has become unrealiable and PM timer is not guaranteed
+to be there either. So we really do not need a mechanism to enforce
+recalibration against something which is not guaranteed to provide
+sensible information.
 
-Some time after that I talked to Mathieu Desnoyers about this issue who
-used another angle of attack. The idea seems less complicated to me.
-Instead of argument inspection we introduce basic syscall argument
-checksumming for seccomp. It would only be done when seccomp is
-interested in syscall input args and checksumming would be per syscall
-argument. It would be validated within the syscall when it actually
-reads the arguments; again, only if seccomp is used. If the checksums
-mismatch an error is returned or the calling process terminated.
+Thanks,
 
-There's one case that deserves mentioning: since we introduced the
-seccomp notifier we do allow advanced syscall interception and we do use
-it extensively in various projects.
-
-Roughly, it works by allowing a userspace process (the "supervisor") to
-listen on a seccomp fd. The seccomp fd is an fd referring to the filter
-of a target task (the "supervisee"). When the supervisee performs a
-syscall listed in the seccomp notify filter the supervisor will receive
-a notification on the seccomp fd for the filter.
-
-I mention this because it is possible for the supervisor to e.g.
-intercept an bpf() system call and then modify/create/attach a bpf
-program for the supervisee and then update fields in the supervisee's
-bpf struct that was passed to the bpf() syscall by it. So the supervisor
-might rewrite syscall args and continue the syscall (In general, it's
-not recommeneded because of TOCTOU. But still doable in certain
-scenarios where we can guarantee that this is safe even if syscall args
-are rewritten to something else by a MIT attack.).
-
-Arguably, the checksumming approach could even be made to work with this
-if the seccomp fd learns a new ioctl() or similar to safely update the
-checksum.
-
-I can try and move a poc for this up the todo list.
-
-Without an approach like this certain sandboxes will fallback to
-ENOSYSing system calls they can't filter. This is a generic problem
-though with clone3() being one promiment example.
-
-[2]: https://www.youtube.com/watch?v=PnOSPsRzVYM&list=PLVsQ_xZBEyN2Ol7y8axxhbTsG47Va3Se2
+        tglx

@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0B351FCCD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D74F51FCDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234518AbiEIMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S234575AbiEIMdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiEIMcb (ORCPT
+        with ESMTP id S234532AbiEIMdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:32:31 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75192725E6
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 05:28:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j15so19250577wrb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 05:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=oxwEnL8tYbpZa93pTl+04/zezbNDACZhddwdl89j/+juWscKypVaLXadWCeH/GMhPb
-         iq5W32P3VuG1D+IxSNtyeOqeDY6AAreVCq6kGRFQj7uKO0FuLB3vGaDDzHm75exwlFla
-         oJIUrYf5XsqxkiiMpEdh1Q9KM855CDl8xMBiD9pXNNoI+3+LKZnPfMXToiHiQ9UvtNm8
-         J+CfhpqXdKNS/1VpTsPLMAT5FYI6eArkZkIZ6b5HIay2BDbEeu21ILuzDiQZR/E/Rz6B
-         oF4AI1BDOjsjksMI/DqR6QB97HoJ2xs3CzUBcEE1+97Yggugcbn0TvzwJ7EjSC63gfEY
-         SQgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=3hrSdY81hV5dFfkTgxayr9bJAhcuddGXPFluA1VxC4Ge2UsD/C4vesfS1x9MlU/XMw
-         pQ8uKNVhIGzOGPPdwJ24IeP7Jp0rziXhEmFVfgNmzgmwX3RO9o0kMe+z7JS04j4+cvnE
-         x/kZigta59hSA1epPODZnXOfhQ3eaSqTVz9d8dnY8/OIrWrmY0JL+G8Xtjg9Bk9yvBae
-         5qs7kp1/q4cLEdXu/eieVMwgRWSarurF+IyR0IkY5dgBt2t4A2z8rzRhBY+u3n4BflsX
-         u4XjHrMSDrCuojP4V7P282h+o61AfnBNU6zI26UyFYQcxetTYWP9K71eJPQbyD6JtzNN
-         F7fA==
-X-Gm-Message-State: AOAM53296pzerAqWaqB+2AulwUAlhR32a7ftB/fGy3uzQgF4jJus5cwl
-        cLiTtM/K1JE25qrK6c/+HWUSz7FkHEbDjM6wGN8=
-X-Google-Smtp-Source: ABdhPJwq/Ls1ob1HQVAyK91/BvyAxSlSlPo5toShElpE3hNSmYJfXZ/287hQ4BZb+eqX1BL1fSihPscEAHAhmrVA00Q=
-X-Received: by 2002:a5d:6d04:0:b0:20c:52de:9ce4 with SMTP id
- e4-20020a5d6d04000000b0020c52de9ce4mr14514237wrq.572.1652099314841; Mon, 09
- May 2022 05:28:34 -0700 (PDT)
+        Mon, 9 May 2022 08:33:14 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6817F273F48;
+        Mon,  9 May 2022 05:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652099360; x=1683635360;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qMvEPRtoB+d3/whBmM3c2zEnnc5nXdnRsTyVqxph14o=;
+  b=l8IF8etC+HnM3NycSrq2EyBFo0nnIvGjH1fmlyBsQclF4RUmeRDMc0Hh
+   JaatiTlRh3iOWZLvbBWT3DAoUzzq6/AC+nG6P7YOx8B1rLhWjpo6J5ufq
+   Kork1mcj3jjL9tMl1EueOnbEYt8mGReqTcaaMVv4bzwW8FkNPxC/2Qm+M
+   7RGw+sO/nv40UFfIiJ4WLYgrhUW3ro4OZjc8jDxz9NkIwypsJnCWic+It
+   tfdJdIakkP+4yt7QTjKhMCV72AfibfBmppE03BSTQVlymB8ngJZ5h6Pxe
+   fspPJ0ZuZe7rs3YU34S8QOTtcm6OBuIhbmPrDwhddRpLhhWZ9JZlh4C1N
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="269172496"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="269172496"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:29:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="738142548"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 05:29:11 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1no2Vi-000GVC-Dp;
+        Mon, 09 May 2022 12:29:10 +0000
+Date:   Mon, 9 May 2022 20:28:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH v1] vdpa: Do not count the pages that were already pinned
+ in the vhost-vDPA
+Message-ID: <202205092058.if9wModg-lkp@intel.com>
+References: <20220509071426.155941-1-lulu@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:6409:0:0:0:0:0 with HTTP; Mon, 9 May 2022 05:28:33 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <khanadbul01@gmail.com>
-Date:   Mon, 9 May 2022 05:28:33 -0700
-Message-ID: <CALr78wWw=o8tKQxWT0f3NTWUiUDKuiYgVNW0s2CputB4_Fqwmg@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:42e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4791]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [khanadbul01[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [khanadbul01[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509071426.155941-1-lulu@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cindy,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on mst-vhost/linux-next]
+[also build test ERROR on linux/master linus/master v5.18-rc6]
+[cannot apply to next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+config: x86_64-randconfig-a014-20220509 (https://download.01.org/0day-ci/archive/20220509/202205092058.if9wModg-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/4225cc2a756b75d1e0ff7ca2a593bada42def380
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
+        git checkout 4225cc2a756b75d1e0ff7ca2a593bada42def380
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "interval_tree_remove" [drivers/vhost/vhost_vdpa.ko] undefined!
+>> ERROR: modpost: "interval_tree_insert" [drivers/vhost/vhost_vdpa.ko] undefined!
+>> ERROR: modpost: "interval_tree_iter_first" [drivers/vhost/vhost_vdpa.ko] undefined!
+
 -- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+0-DAY CI Kernel Test Service
+https://01.org/lkp

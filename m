@@ -2,135 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BEA5204F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16345204F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240453AbiEITN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        id S240457AbiEITOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240446AbiEITNY (ORCPT
+        with ESMTP id S240446AbiEITOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:13:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD642CCD09;
-        Mon,  9 May 2022 12:09:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652123368;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VawBhkp/iVX6wIchfdV6yUwkO3Wiahi7D6DYX4ALtEQ=;
-        b=oVLpbua2F51imTuUaCqhV2+tynkaE/0W46R/u/Ylc4zzKQfAnTT/f4Im++Ucg+RkNzJ/hN
-        bEb6OMwxPx9QUDW7IRFzZRDzOsB56DTxlJgMj6RHuJHo8gvEEVPHdbctzCpWazF/ISy7W1
-        HHlZSqzEpUDDYolJhc/j3GV/wUFpAJCGwSpFqnC2uH1frWVxJscfbfPgWJ36FCRFx8e5zT
-        DDIpU3jiZemHAXmIHkg0+z8xM6suFIuf3rgTfbP4WXfmcxXMMmldoM1HFAK2qXThGOQeHt
-        5Jv67t5NZPZaiGZLeAYLTWiFZxEbhrcarUsXRocx2XPwesDlfNDM7EpqRONy5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652123368;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VawBhkp/iVX6wIchfdV6yUwkO3Wiahi7D6DYX4ALtEQ=;
-        b=UvZgazfQq/GqF7NhfTSquz3f+mV65lytaY+y7GU3ZJ4yfzTagDuVaUmX92GGwEBcJlNJHW
-        zAnfw07wpj9oXcAg==
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-In-Reply-To: <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
-References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-29-glider@google.com> <87a6c6y7mg.ffs@tglx>
- <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx>
- <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx>
- <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
- <87k0ayhc43.ffs@tglx>
- <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
- <87h762h5c2.ffs@tglx>
- <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
-Date:   Mon, 09 May 2022 21:09:27 +0200
-Message-ID: <871qx2r09k.ffs@tglx>
+        Mon, 9 May 2022 15:14:21 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64C293B79;
+        Mon,  9 May 2022 12:10:26 -0700 (PDT)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1no8lt-0002U9-KO; Mon, 09 May 2022 15:10:17 -0400
+Message-ID: <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
+Subject: Re: [RFC] sched,livepatch: call stop_one_cpu in
+ klp_check_and_switch_task
+From:   Rik van Riel <riel@surriel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com, kernel-team@fb.com
+Date:   Mon, 09 May 2022 15:10:16 -0400
+In-Reply-To: <20220509180004.zmvhz65xlncwqrrc@treble>
+References: <20220507174628.2086373-1-song@kernel.org>
+         <20220509115227.6075105e@imladris.surriel.com>
+         <20220509180004.zmvhz65xlncwqrrc@treble>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-8fjrMtbSQtuvFTIamLXF"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09 2022 at 18:50, Alexander Potapenko wrote:
-> Indeed, calling kmsan_unpoison_memory() in irqentry_enter() was
-> supposed to be enough, but we have code in kmsan_unpoison_memory() (as
-> well as other runtime functions) that checks for kmsan_in_runtime()
-> and bails out to prevent potential recursion if KMSAN code starts
-> calling itself.
->
-> kmsan_in_runtime() is implemented as follows:
->
-> ==============================================
-> static __always_inline bool kmsan_in_runtime(void)
-> {
->   if ((hardirq_count() >> HARDIRQ_SHIFT) > 1)
->     return true;
->   return kmsan_get_context()->kmsan_in_runtime;
-> }
-> ==============================================
-> (see the code here:
-> https://lore.kernel.org/lkml/20220426164315.625149-13-glider@google.com/#Z31mm:kmsan:kmsan.h)
->
-> If we are running in the task context (in_task()==true),
-> kmsan_get_context() returns a per-task `struct *kmsan_ctx`.
-> If `in_task()==false` and `hardirq_count()>>HARDIRQ_SHIFT==1`, it
-> returns a per-CPU one.
-> Otherwise kmsan_in_runtime() is considered true to avoid dealing with
-> nested interrupts.
->
-> So in the case when `hardirq_count()>>HARDIRQ_SHIFT` is greater than
-> 1, kmsan_in_runtime() becomes a no-op, which leads to false positives.
 
-But, that'd only > 1 when there is a nested interrupt, which is not the
-case. Interrupt handlers keep interrupts disabled. The last exception from
-that rule was some legacy IDE driver which is gone by now.
+--=-8fjrMtbSQtuvFTIamLXF
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-So no, not a good explanation either.
+On Mon, 2022-05-09 at 11:00 -0700, Josh Poimboeuf wrote:
+> On Mon, May 09, 2022 at 11:52:27AM -0400, Rik van Riel wrote:
+> > Does this look like an approach that could work?
+> >=20
+> > @@ -315,6 +321,9 @@ static bool klp_try_switch_task(struct
+> > task_struct *task)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case -EBUSY:=C2=A0=C2=
+=A0=C2=A0=C2=A0/* klp_check_and_switch_task() */
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0pr_debug("%s: %s:%d is running\n",
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ __func__, task->comm, task->pid);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/* Preempt the task from the second KLP switch
+> > attempt. */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (klp_signals_cnt)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0stop_o=
+ne_cpu(task_cpu(task),
+> > kpatch_dummy_fn, NULL);
+>=20
+> I must be missing something, how is briefly preempting a kthread
+> supposed to actually transition it?=C2=A0 Won't it likely go back to
+> running
+> on the CPU before the next periodic klp_transition_work_fn() check?
+>=20
+That's the kind of feedback I was hoping for ;)
 
-Thanks,
+I looked around the code a little bit, and it seems
+that only the idle tasks can transition to another KLP
+while they are running?
 
-        tglx
+That makes me wonder how the kworker thread that runs
+the klp switching code transitions itself...
+
+Should kernel threads that can use a lot of CPU have
+something in their outer loop to transition KLPs,
+just like the idle task does?
+
+--=20
+All Rights Reversed.
+
+--=-8fjrMtbSQtuvFTIamLXF
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmJ5ZxgACgkQznnekoTE
+3oMAbQf/atY56IVjx2ggJ6AXEZS/hq956KtUV6M0CHWL4+JGly/8Y+CFt/FDHy6U
+00r89Uty7vv6OxL++mjjfOGg7o9FGDogg1dIqRaQwX++uXk493ixmvlQE77g6WtJ
+lfk+pOtJyDwUaEiJkwHjv7MCbQBYBiwwZB4eZH/mlMwo1xNt8ten1YOOGojRmDfv
+hwxvs25AHNIDv3PUIK5YuyBR7n6/bkUgh3Wuw1zj8kQ05LgcM4obHLvjDvFcBLRW
+TbmyFC8ODY1Vq3gcWieLAlmPG9vkgzI/ESE8OYIg90xGfChbwUE8hQPrqZO5z3Y4
+/n2eqP2EBSmCD7g0cz25Ite2R82cgQ==
+=+Vcf
+-----END PGP SIGNATURE-----
+
+--=-8fjrMtbSQtuvFTIamLXF--

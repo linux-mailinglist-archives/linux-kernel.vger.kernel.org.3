@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55BD51F337
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D54251F347
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiEIELg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S232125AbiEIEQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiEIEJ1 (ORCPT
+        with ESMTP id S232421AbiEIEKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:09:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C60C0D5CE5
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652069129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FKpZ+Ah3zelx5R9OuHUazNjKjbfFkmtgJjzbVYW/aR4=;
-        b=cG9OCCIvS4aBKtV49/E14WLT6dsvRBKIwVo1SHswme58mptqloh7xTVwd7xEPR6Wp84/wo
-        qB0fLXVqd6eUvDm7FjPnFXDMny8U/McNUp6FW+8kubZHygi+QIvuaQJ7TapipChlHtgA3A
-        +DRoevMj+CwO9Pv1IJNheqGcRXLqpxI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-DKEPQ_o2MQWLJ-6UYvp_0A-1; Mon, 09 May 2022 00:05:25 -0400
-X-MC-Unique: DKEPQ_o2MQWLJ-6UYvp_0A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0C52185A794;
-        Mon,  9 May 2022 04:05:24 +0000 (UTC)
-Received: from localhost (ovpn-13-212.pek2.redhat.com [10.72.13.212])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B78CB40D1B9A;
-        Mon,  9 May 2022 04:05:23 +0000 (UTC)
-Date:   Mon, 9 May 2022 12:05:21 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
- for arm64
-Message-ID: <YniTAbNIfaLKhFWK@MiWiFi-R3L-srv>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
- <20220506114402.365-7-thunder.leizhen@huawei.com>
- <20220506231451.GB122876@MiWiFi-R3L-srv>
- <6e662eae-e788-13d3-368a-e88ed159fc85@huawei.com>
- <YnXn87JnfUxI2lC2@MiWiFi-R3L-srv>
- <Yna5AVli1IIUd2kg@arm.com>
+        Mon, 9 May 2022 00:10:42 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9239BAF8
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:06:49 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id j14so12715112plx.3
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i8fTOca+12ZBwL8GFn68r89tRt5Zov30Zcvy0gFIx3s=;
+        b=7oatG6weF86vW9pYog/WbnQv4ca5m77rm6XTxoXr1wXD+MeQ64n02aa13Lj0IMGWDh
+         0jcAZ1/E8rhHmjwEiLH/wurqHwo7x7/oZPYnCacuSWGecYOh1cK7FR/f3ATgGUHe2XoH
+         alZRF5CLU74LfUYGYSIuPW6xCoE9yhYrt5aPGmZHPMFjbnAa5HGvTb+BGlG1lzOEp7hA
+         36hA/3+gDs89H4Ko4WXpK9eOIJ7FvaCtE+d5TzIwgk5OffyCSOeBgBkeqs8WGQvukk6n
+         Rziui08UqLz3/L11wKnIDNIsOSawBpoleO3JIuQk/5rZjNynFDwVMrI47wZqmUxCKfmZ
+         bBpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i8fTOca+12ZBwL8GFn68r89tRt5Zov30Zcvy0gFIx3s=;
+        b=iSD/ZPQ2wmALNY3C6cV/VMUR3qslfn898rQFZUPAgLduukevHPs/lfcXfgBX80fBO5
+         FsZwGvh09yHMfKkx2nRbxgc4h/k4q6OAFgz9AZsWtMHF9dzmA881JiAFmeAPVIkt8YCj
+         gfC0DzcW2oEvv80xCyg6G7AIHExyzijX/2DMb0Hp1W1zmB2S83oJ3ynJYtcV9NJukuGv
+         n5qVNgneMC2VWY2tw4Oqf9aFA+1A6wB8RCD7siO8VhUyebGTEfMUEZ+9YuFg27RugKaq
+         ioP9gcK50KmJmkZe6oYmau8r9UPB5FTzev9IXmscgKTn4GfgqNtUHvWlWaMl+3/uves5
+         iMiA==
+X-Gm-Message-State: AOAM532WuCvN62bzTKA9RhdLYmY6mnUZYuOaglO/Roj+Nj1fCRX38lJk
+        Y/7WyskqwRW0o9plTyCDBq6cOg==
+X-Google-Smtp-Source: ABdhPJzXNNNMoKGLlNS0rEzt5xQj0NLF+6rNIW0g3Nng1UFaP6z9LjY7xwl48st6GzktvUM1QgACdw==
+X-Received: by 2002:a17:902:758a:b0:15e:ef4f:fed5 with SMTP id j10-20020a170902758a00b0015eef4ffed5mr12919922pll.1.1652069208384;
+        Sun, 08 May 2022 21:06:48 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ab8400b0015e8d4eb1f8sm5831321plr.66.2022.05.08.21.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 21:06:47 -0700 (PDT)
+Date:   Mon, 9 May 2022 12:06:43 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
+ original pte
+Message-ID: <YniTU+iT/pV5j/41@FVFYT0MHHV2J.usts.net>
+References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
+ <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
+ <Ynek+b3k6PVN3x7J@FVFYT0MHHV2J.usts.net>
+ <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yna5AVli1IIUd2kg@arm.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/22 at 07:22pm, Catalin Marinas wrote:
-> On Sat, May 07, 2022 at 11:30:59AM +0800, Baoquan He wrote:
-> > On 05/07/22 at 09:41am, Leizhen (ThunderTown) wrote:
-> > > On 2022/5/7 7:14, Baoquan He wrote:
-> > > > On 05/06/22 at 07:44pm, Zhen Lei wrote:
-> > > >> Now arm64 has added support for "crashkernel=X,high" and
-> > > >> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
-> > > >> "crashkernel=Y,low" is not specified.
-> > > >>
-> > > >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > > >> ---
-> > > >>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
-> > > >>  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > >>
-> > > >> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > >> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
-> > > >> --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > >> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > >> @@ -808,7 +808,7 @@
-> > > >>  			Documentation/admin-guide/kdump/kdump.rst for an example.
-> > > >>  
-> > > >>  	crashkernel=size[KMG],high
-> > > >> -			[KNL, X86-64] range could be above 4G. Allow kernel
-> > > >> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
-> > > >>  			to allocate physical memory region from top, so could
-> > > >>  			be above 4G if system have more than 4G ram installed.
-> > > >>  			Otherwise memory region will be allocated below 4G, if
-> > > >> @@ -821,7 +821,7 @@
-> > > >>  			that require some amount of low memory, e.g. swiotlb
-> > > >>  			requires at least 64M+32K low memory, also enough extra
-> > > >>  			low memory is needed to make sure DMA buffers for 32-bit
-> > > >> -			devices won't run out. Kernel would try to allocate at
-> > > >> +			devices won't run out. Kernel would try to allocate
-> > > >>  			at least 256M below 4G automatically.
-> > > >>  			This one let user to specify own low range under 4G
-> > > >>  			for second kernel instead.
-> > > >> @@ -829,6 +829,11 @@
-> > > >>  			It will be ignored when crashkernel=X,high is not used
-> > > >>  			or memory reserved is below 4G.
-> > > >>  
-> > > >> +			[KNL, ARM64] range in low memory.
-> > > >> +			This one let user to specify a low range in DMA zone for
-> > > >                                           ^ not needed,
-> > > >                         Maybe Catalin can fix it when merging.
+On Sun, May 08, 2022 at 09:09:55PM +0800, Baolin Wang wrote:
+> 
+> 
+> On 5/8/2022 7:09 PM, Muchun Song wrote:
+> > On Sun, May 08, 2022 at 05:36:39PM +0800, Baolin Wang wrote:
+> > > It is incorrect to use ptep_clear_flush() to nuke a hugetlb page
+> > > table when unmapping or migrating a hugetlb page, and will change
+> > > to use huge_ptep_clear_flush() instead in the following patches.
 > > > 
-> > > Delete "This one let user to" or the entire sentence? I understand it to be the former.
+> > > So this is a preparation patch, which changes the huge_ptep_clear_flush()
+> > > to return the original pte to help to nuke a hugetlb page table.
+> > > 
+> > > Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> > > Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 > > 
-> > Oh, I mean the 'to' is not needed. "This one let user specify ....". The
-> > 'to' is a grammer mistake.
+> > Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 > 
-> Slightly more correct is "This one lets the user specify..."
+> Thanks for reviewing.
 > 
-> I can fix them up when applying.
+> > 
+> > But one nit below:
+> > 
+> > [...]
+> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > > index 8605d7e..61a21af 100644
+> > > --- a/mm/hugetlb.c
+> > > +++ b/mm/hugetlb.c
+> > > @@ -5342,7 +5342,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+> > >   		ClearHPageRestoreReserve(new_page);
+> > >   		/* Break COW or unshare */
+> > > -		huge_ptep_clear_flush(vma, haddr, ptep);
+> > > +		(void)huge_ptep_clear_flush(vma, haddr, ptep);
+> > 
+> > Why add a "(void)" here? Is there any warning if no "(void)"?
+> > IIUC, I think we can remove this, right?
+> 
+> I did not meet any warning without the casting, but this is per Mike's
+> comment[1] to make the code consistent with other functions casting to void
+> type explicitly in hugetlb.c file.
+>
 
-Right, thx.
-
+Got it. I see hugetlb.c per this rule, while others do not.
+ 
+> [1]
+> https://lore.kernel.org/all/495c4ebe-a5b4-afb6-4cb0-956c1b18d0cc@oracle.com/
+> 

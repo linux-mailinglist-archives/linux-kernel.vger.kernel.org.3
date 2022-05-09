@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D38951F410
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA0F51F413
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbiEIFtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S233257AbiEIFoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235012AbiEIFqk (ORCPT
+        with ESMTP id S231927AbiEIFhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:46:40 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273F815E746
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:42:46 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KxVKb6ZH6z9sW5;
-        Mon,  9 May 2022 07:36:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3P-IuZ94XPXD; Mon,  9 May 2022 07:36:51 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF6Mvxz9sW9;
-        Mon,  9 May 2022 07:36:33 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D126A8B774;
-        Mon,  9 May 2022 07:36:33 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 62giFMHnIRrU; Mon,  9 May 2022 07:36:33 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 880A58B799;
-        Mon,  9 May 2022 07:36:33 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aUjE1591251
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 9 May 2022 07:36:30 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aU4U1591250;
-        Mon, 9 May 2022 07:36:30 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        naveen.n.rao@linux.vnet.ibm.com
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v3 11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and PPC64
-Date:   Mon,  9 May 2022 07:36:09 +0200
-Message-Id: <96f53c237316dab4b1b8c682685266faa92da816.1652074503.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1652074503.git.christophe.leroy@csgroup.eu>
-References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+        Mon, 9 May 2022 01:37:45 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B921550EF
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:33:47 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id t6so17815055wra.4
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 22:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PLUNZth0Gzu0RXkdCxlC7YsvIKkko3pZWci/8TjWfsg=;
+        b=1fEjcPA9ZwqimNLicimZh7D54btJlReV6ttUi5sPPHZnlucnlayki28FnMUzJ/QL9Y
+         M3c5KF+PPpNktxtj878OD+pC4SkuQy2P6dLZQYUe2Cujk0Gb7K/0i0a8L3+IV/hrdY4w
+         clL8WGuArZLzgWuOlj6y5KUXWtm0lP97uo8OZdfkDmwLMoLvksx9f6ufrBVKNZkXmh5d
+         nyuQNHzTw/00jpMFdO8AU/V3rp4KrVfb5sHGTxhTXdr+wSJhwyUxsMYI6zF73msEMXuS
+         oNnwgVMaQmo1HLNVjh1tA9fH8g64Xjq73hzz8gXkMiEDk3tyUN8wHgrRYsJh1psS5+Rt
+         GXfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PLUNZth0Gzu0RXkdCxlC7YsvIKkko3pZWci/8TjWfsg=;
+        b=rDScGcW3BC95VMIyaEZMGhUBSeW+0dAS6hRjuRF0NCGRHoBszMWz4L/wq4IoEu0hXQ
+         31p6cXTlcLQwA21t41bJzU/nnzZG/weMfeJTV2q3zrK5lCICCu5bQJkV+BPCuv4u7Aro
+         0QQTXsC9amyQSM8jldrOhChttNtB5O3ITSfNi4EfDmgKgAVe//BrFyA/UNhESLoGHhJt
+         PPXFXW0x86Qh7k/UhZ1ynFjX93vJFT3+HXOeMhq5kUZU9NZsCPAAto8PFywMNBRKNk93
+         28tzteRrn+AlqxYS1WGvfz6glW6k93uZfqQ3FgxUgi9tg34pOHnDbLTGapKO8DOP/U2f
+         ulqQ==
+X-Gm-Message-State: AOAM533XYtG3HZNAL0aJuPlidyfnVW7eh9xzY9iV6PPynP6ySornEmgr
+        9VrRZ0+9hLhqgCGpjdt2SB+6YPcYnFPG11IlujU9KQ==
+X-Google-Smtp-Source: ABdhPJwm5HiGVrJo6H6A2ZwkRwo0cXAPq+C8yDH3Ar/UxfL9RCxY1/yZPp8l+hlWdvpp1E/Vv7lPAPz1K2H2BhU6/ug=
+X-Received: by 2002:a05:6000:12d1:b0:20a:d901:3828 with SMTP id
+ l17-20020a05600012d100b0020ad9013828mr11892146wrx.313.1652074425312; Sun, 08
+ May 2022 22:33:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074581; l=5657; s=20211009; h=from:subject:message-id; bh=kjbdQgVSoXinGhSt3swSZOi5xLdbYAjoi00hLjURjbg=; b=PJLn3ghzOyJ3VzJSZ1km0z6eeHzmzy4xpCe/bhbw/GDR1aGWtL78xYOzY1TqcAOdW+uxAkvP4A3A /iHj2UrpBCUqCSHFmov2JwgrM659EkGBWMw5qJY54RR6gcHzp3r0
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220420112450.155624-1-apatel@ventanamicro.com>
+ <20220420112450.155624-6-apatel@ventanamicro.com> <CAOnJCU+yd7hqauHRYwnPqNKEgfy5FK06ezR64aH0Hm2AcNNadw@mail.gmail.com>
+In-Reply-To: <CAOnJCU+yd7hqauHRYwnPqNKEgfy5FK06ezR64aH0Hm2AcNNadw@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 9 May 2022 11:03:34 +0530
+Message-ID: <CAAhSdy1vwQ6BmjzvSuJHc8V37U78PPjGS19+XEQHHqE1=nQRpg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] RISC-V: KVM: Reduce KVM_MAX_VCPUS value
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,200 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since c93d4f6ecf4b ("powerpc/ftrace: Add module_trampoline_target()
-for PPC32"), __ftrace_make_nop() for PPC32 is very similar to the
-one for PPC64.
+On Wed, May 4, 2022 at 7:45 AM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > Currently, the KVM_MAX_VCPUS value is 16384 for RV64 and 128
+> > for RV32.
+> >
+> > The KVM_MAX_VCPUS value is too high for RV64 and too low for
+> > RV32 compared to other architectures (e.g. x86 sets it to 1024
+> > and ARM64 sets it to 512). The too high value of KVM_MAX_VCPUS
+> > on RV64 also leads to VCPU mask on stack consuming 2KB.
+> >
+> > We set KVM_MAX_VCPUS to 1024 for both RV64 and RV32 to be
+> > aligned other architectures.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/kvm_host.h | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> > index 806f74dc0bfc..61d8b40e3d82 100644
+> > --- a/arch/riscv/include/asm/kvm_host.h
+> > +++ b/arch/riscv/include/asm/kvm_host.h
+> > @@ -16,8 +16,7 @@
+> >  #include <asm/kvm_vcpu_fp.h>
+> >  #include <asm/kvm_vcpu_timer.h>
+> >
+> > -#define KVM_MAX_VCPUS                  \
+> > -       ((HGATP_VMID_MASK >> HGATP_VMID_SHIFT) + 1)
+> > +#define KVM_MAX_VCPUS                  1024
+> >
+> >  #define KVM_HALT_POLL_NS_DEFAULT       500000
+> >
+> > --
+> > 2.25.1
+> >
+>
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-Same for __ftrace_make_call().
+Queued this patch for 5.19
 
-Make them common.
+Thanks,
+Anup
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2:
-- Fixed comment to -mprofile-kernel versus -mkernel_profile
-- Replaced a couple of #ifdef with CONFIG_PPC64_ELF_ABI_V1 as suggested by Naveen.
----
- arch/powerpc/kernel/trace/ftrace.c | 108 +++--------------------------
- 1 file changed, 8 insertions(+), 100 deletions(-)
-
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index 0b199fc9cfd3..531da4d93c58 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -114,7 +114,6 @@ static unsigned long find_bl_target(unsigned long ip, ppc_inst_t op)
- }
- 
- #ifdef CONFIG_MODULES
--#ifdef CONFIG_PPC64
- static int
- __ftrace_make_nop(struct module *mod,
- 		  struct dyn_ftrace *rec, unsigned long addr)
-@@ -154,10 +153,11 @@ __ftrace_make_nop(struct module *mod,
- 		return -EINVAL;
- 	}
- 
--#ifdef CONFIG_MPROFILE_KERNEL
--	/* When using -mkernel_profile there is no load to jump over */
-+	/* When using -mprofile-kernel or PPC32 there is no load to jump over */
- 	pop = ppc_inst(PPC_RAW_NOP());
- 
-+#ifdef CONFIG_PPC64
-+#ifdef CONFIG_MPROFILE_KERNEL
- 	if (copy_inst_from_kernel_nofault(&op, (void *)(ip - 4))) {
- 		pr_err("Fetching instruction at %lx failed.\n", ip - 4);
- 		return -EFAULT;
-@@ -201,6 +201,7 @@ __ftrace_make_nop(struct module *mod,
- 		return -EINVAL;
- 	}
- #endif /* CONFIG_MPROFILE_KERNEL */
-+#endif /* PPC64 */
- 
- 	if (patch_instruction((u32 *)ip, pop)) {
- 		pr_err("Patching NOP failed.\n");
-@@ -209,48 +210,6 @@ __ftrace_make_nop(struct module *mod,
- 
- 	return 0;
- }
--
--#else /* !PPC64 */
--static int
--__ftrace_make_nop(struct module *mod,
--		  struct dyn_ftrace *rec, unsigned long addr)
--{
--	ppc_inst_t op;
--	unsigned long ip = rec->ip;
--	unsigned long tramp, ptr;
--
--	if (copy_from_kernel_nofault(&op, (void *)ip, MCOUNT_INSN_SIZE))
--		return -EFAULT;
--
--	/* Make sure that that this is still a 24bit jump */
--	if (!is_bl_op(op)) {
--		pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
--		return -EINVAL;
--	}
--
--	/* lets find where the pointer goes */
--	tramp = find_bl_target(ip, op);
--
--	/* Find where the trampoline jumps to */
--	if (module_trampoline_target(mod, tramp, &ptr)) {
--		pr_err("Failed to get trampoline target\n");
--		return -EFAULT;
--	}
--
--	if (ptr != addr) {
--		pr_err("Trampoline location %08lx does not match addr\n",
--		       tramp);
--		return -EINVAL;
--	}
--
--	op = ppc_inst(PPC_RAW_NOP());
--
--	if (patch_instruction((u32 *)ip, op))
--		return -EPERM;
--
--	return 0;
--}
--#endif /* PPC64 */
- #endif /* CONFIG_MODULES */
- 
- static unsigned long find_ftrace_tramp(unsigned long ip)
-@@ -437,13 +396,12 @@ int ftrace_make_nop(struct module *mod,
- }
- 
- #ifdef CONFIG_MODULES
--#ifdef CONFIG_PPC64
- /*
-  * Examine the existing instructions for __ftrace_make_call.
-  * They should effectively be a NOP, and follow formal constraints,
-  * depending on the ABI. Return false if they don't.
-  */
--#ifndef CONFIG_MPROFILE_KERNEL
-+#ifdef CONFIG_PPC64_ELF_ABI_V1
- static int
- expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
- {
-@@ -465,7 +423,7 @@ expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
- static int
- expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
- {
--	/* look for patched "NOP" on ppc64 with -mprofile-kernel */
-+	/* look for patched "NOP" on ppc64 with -mprofile-kernel or ppc32 */
- 	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP())))
- 		return 0;
- 	return 1;
-@@ -484,8 +442,10 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 	if (copy_inst_from_kernel_nofault(op, ip))
- 		return -EFAULT;
- 
-+#ifdef CONFIG_PPC64_ELF_ABI_V1
- 	if (copy_inst_from_kernel_nofault(op + 1, ip + 4))
- 		return -EFAULT;
-+#endif
- 
- 	if (!expected_nop_sequence(ip, op[0], op[1])) {
- 		pr_err("Unexpected call sequence at %p: %s %s\n",
-@@ -531,58 +491,6 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 
- 	return 0;
- }
--
--#else  /* !CONFIG_PPC64: */
--static int
--__ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
--{
--	int err;
--	ppc_inst_t op;
--	u32 *ip = (u32 *)rec->ip;
--	struct module *mod = rec->arch.mod;
--	unsigned long tramp;
--
--	/* read where this goes */
--	if (copy_inst_from_kernel_nofault(&op, ip))
--		return -EFAULT;
--
--	/* It should be pointing to a nop */
--	if (!ppc_inst_equal(op,  ppc_inst(PPC_RAW_NOP()))) {
--		pr_err("Expected NOP but have %s\n", ppc_inst_as_str(op));
--		return -EINVAL;
--	}
--
--	/* If we never set up a trampoline to ftrace_caller, then bail */
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
--	if (!mod->arch.tramp || !mod->arch.tramp_regs) {
--#else
--	if (!mod->arch.tramp) {
--#endif
--		pr_err("No ftrace trampoline\n");
--		return -EINVAL;
--	}
--
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
--	if (rec->flags & FTRACE_FL_REGS)
--		tramp = mod->arch.tramp_regs;
--	else
--#endif
--		tramp = mod->arch.tramp;
--	/* create the branch to the trampoline */
--	err = create_branch(&op, ip, tramp, BRANCH_SET_LINK);
--	if (err) {
--		pr_err("REL24 out of range!\n");
--		return -EINVAL;
--	}
--
--	pr_devel("write to %lx\n", rec->ip);
--
--	if (patch_instruction(ip, op))
--		return -EPERM;
--
--	return 0;
--}
--#endif /* CONFIG_PPC64 */
- #endif /* CONFIG_MODULES */
- 
- static int __ftrace_make_call_kernel(struct dyn_ftrace *rec, unsigned long addr)
--- 
-2.35.1
-
+>
+> --
+> Regards,
+> Atish

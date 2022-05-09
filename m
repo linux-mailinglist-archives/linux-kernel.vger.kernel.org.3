@@ -2,138 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC6D51F3AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA07151F3AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbiEIFBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S229976AbiEIFFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiEIE7n (ORCPT
+        with ESMTP id S234615AbiEIFD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:59:43 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AA0BBF;
-        Sun,  8 May 2022 21:55:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id AEF995C00F9;
-        Mon,  9 May 2022 00:55:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 09 May 2022 00:55:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652072146; x=
-        1652158546; bh=rqjpnOUJzRgcRrP/waTDuMu336TXRB4V1nDMgbHbydc=; b=a
-        7f31izfTJ1lTX/4z7eDmjD2P0VUB6s6tYswG7DhZ60X3xb6Qy4UOTdlYLgRqaabY
-        Zv6DjzlpJA/nEfRECtqdfRjY9uktz+TUqpTpxTSLCoIurwuJo2gCa/z0BJGKRsqx
-        bbvYMpZqyNeCKTC0y+6xA/FpNMrbKuZyzcEtIGtbTEmkKVJ6JTjEHADwNTLaMyo8
-        1W5fATtOxe6RvBak0ZWVNy43I5ayO9X2NqpUBlcC5OjLPC7eXqBwJ3IgNW7lsPwl
-        lRY0H7525sbjJfGIzTkfJQXcQz5iNxb48SEs8V4ckA/bo4nOMrS26MJEmjmFjzps
-        1yzdbxqfOZCw5+OqN7LrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652072146; x=1652158546; bh=rqjpnOUJzRgcR
-        rP/waTDuMu336TXRB4V1nDMgbHbydc=; b=CQzJ7jh2Oy1GvhjybovNkgAjl9bQs
-        pmHgxRYueLygNkQZp9BWsk5R3S8qBMktThk3udJjARdwTvwfW1LPls+a794Cb7fI
-        RIJWKrEROsMejphBM8bEjpUPHHlmV3AP8/W8icLgB2lN6JbHc1nq5XfY20kRFGzW
-        WRCzWsCaBqDVpxdMgamNLmgSPxiU8viCvLH2qKEkmRA6+0mcXNtT+9fcMilqBepm
-        EGtvAgEMw/HiO/sbtrnYUHFs6oV/zJ3yu3HxKslGHBSrEcXK2aOxxh11yrFmDmK8
-        PoOB3GAgjCBXjRqoGlNzGz/c404o4JkeY0oE+cu47KPYO8wtjRl5CfwNA==
-X-ME-Sender: <xms:0J54YuSYKVcBpRkMEHBJLCJN_FQkolnHaEa6B4ng-05z6M6m4F4-UA>
-    <xme:0J54YjwNOW610eWDfBM2nhHBM8OIJ4ROnLgxF-oAZpbIuQf1BQGEez0TA5vXkfOnu
-    srlY6VVKMq_LK_9yw>
-X-ME-Received: <xmr:0J54Yr3i3mIc8tIYJ0NimEkZSR1f47XNcJP3pdxsTPR9kw5QH4q63ecJwXbSJQuO3bfGN3sv-ZV2OwZJnZuLgaXhsFZPJTLWXbxoBeaf4YTmtuPbUo5_PXPkmg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekgdeltdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhephfffheejteegffefheetjedvleethedugefgheeifeekffegueeg
-    ieeikeegjeeinecuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgr
-    mhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:0J54YqDEu4nx7CbO87WnQdOvi3EVFNEnhHve04UvRKUuRIKp6fx-NA>
-    <xmx:0J54Yng8XpfovBEVT8ETtJ-M_mR-S7K302BuPtpMgu08klqlgfrHcg>
-    <xmx:0J54Ymor-mzCHXt5ekYfXXkajWS1kziT-MXAM3HjBmOdrNN8aXvMDw>
-    <xmx:0p54YmNNy6U-e8BJsKfxePJEJtwDrn4sDVJExauy2mpq4yI-Zk3mBQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 May 2022 00:55:44 -0400 (EDT)
-Subject: Re: [PATCH] arm64: dts: allwinner: h6: Enable CPU opp tables for
- OrangePi One Plus
-To:     Chukun Pan <amadeus@jmu.edu.cn>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, x@xff.cz
-References: <ANAAfQDrFEUw2aEo5XZZDqq2.1.1652016541476.Hmail.201821123082@jmu.edu.cn>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <63e88351-2242-b2bf-3e72-1db66cd9d9bf@sholland.org>
-Date:   Sun, 8 May 2022 23:55:43 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 9 May 2022 01:03:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24AC140C5E
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652072371; x=1683608371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QowfcDwX1Qu6eNkdT00DPdit0NoLxgLoaz5qS9tATYc=;
+  b=JOWZwi+otpbvb+5egXjJjYLWXoFKsFaCk39h3TwGpGRpXrDKzG+/mygo
+   z9dZ2L1MB49b5MQCMZ2QWp8rivEyeCJxG6n8FxyX2GstdPUjZZN9TtJa3
+   tmzEtU5gWFoDnPiy14P9AEcOEe+LEarrtDTG3KpIXGkcVzBiksWNHDBvA
+   AwhXF/zssmfph+/gY8wtgMRDiubWDMm/ANoobuxcO5swfkhcbL+G3mUiV
+   Qs0DCpPYdUhr70eWcUyIj61rL0Q/dTMo7ff9iiluoKUhEILfdb1MWdtSq
+   IbU+cNjx4jvlPJAcw/MdbicONgAZ4htYAR5my4gc4Z5qtIjf4618bSj92
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="256469142"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="256469142"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 21:58:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="737989613"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga005.jf.intel.com with ESMTP; 08 May 2022 21:58:40 -0700
+Date:   Mon, 9 May 2022 12:58:39 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     paulmck@kernel.org, rui.zhang@intel.com, len.brown@intel.com,
+        tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+Message-ID: <20220509045839.GA40730@shbuild999.sh.intel.com>
+References: <20220508144733.91343-1-feng.tang@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <ANAAfQDrFEUw2aEo5XZZDqq2.1.1652016541476.Hmail.201821123082@jmu.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220508144733.91343-1-feng.tang@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chukun,
+Sorry, just spotted some typos, here is the updated version
 
-On 5/8/22 8:29 AM, Chukun Pan wrote:
->> The AXP805 datasheet has this information in the description for REG 1A.
->> DVM is disabled by default, and when it is enabled, the default ramp rate
->> is 10mV/15.625 us == 640 uV/us.
->>
->> Did you notice any instability without this delay?
+
+From ee8e3d772c623d27d79c43da5a76fb6252175aba Mon Sep 17 00:00:00 2001
+From: Feng Tang <feng.tang@intel.com>
+Date: Sun, 8 May 2022 20:22:12 +0800
+Subject: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+
+Currently when HW provides the tsc freq info through MSR or CPUID(0x15),
+the info will be taken as the 'best guess', and kernel will set the
+X86_FEATURE_TSC_KNOWN_FREQ flag and skip the HW timer based recalibration,
+which works pretty well.
+
+And there is still very few corner case that the freq info is not
+accurate enough with small deviation from the actual value, like on
+a product with early buggy version of firmware or on some
+pre-production hardware.
+
+Add an option 'recalibrate' for 'tsc' kernel parameter to force the
+tsc freq recalibration with HPET/PM_TIMER, and warn if the deviation
+from previous value is more than about 500 PPM.
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+---
+ .../admin-guide/kernel-parameters.txt         |  5 +++
+ arch/x86/kernel/tsc.c                         | 34 ++++++++++++++++---
+ 2 files changed, 35 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed..1e06196a591e 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5981,6 +5981,11 @@
+ 			in situations with strict latency requirements (where
+ 			interruptions from clocksource watchdog are not
+ 			acceptable).
++			[x86] recalibrate: force to do freq recalibration with
++			a HW timer (HPET or PM_TIMER). When HW provides tsc freq
++			info through MSR or CPUID(0x15), kernel will take it as
++			the 'best guess', but there is corner case that the info
++			could be wrong, and need a double check through HW timer.
+ 
+ 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
+ 			value instead. Useful when the early TSC frequency discovery
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..5cf62a58754a 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -48,6 +48,8 @@ static DEFINE_STATIC_KEY_FALSE(__use_tsc);
+ 
+ int tsc_clocksource_reliable;
+ 
++static int __read_mostly tsc_force_recalibrate;
++
+ static u32 art_to_tsc_numerator;
+ static u32 art_to_tsc_denominator;
+ static u64 art_to_tsc_offset;
+@@ -303,6 +305,8 @@ static int __init tsc_setup(char *str)
+ 		mark_tsc_unstable("boot parameter");
+ 	if (!strcmp(str, "nowatchdog"))
+ 		no_tsc_watchdog = 1;
++	if (!strcmp(str, "recalibrate"))
++		tsc_force_recalibrate = 1;
+ 	return 1;
+ }
+ 
+@@ -1374,6 +1378,25 @@ static void tsc_refine_calibration_work(struct work_struct *work)
+ 	else
+ 		freq = calc_pmtimer_ref(delta, ref_start, ref_stop);
+ 
++	/* Will hit this only if tsc_force_recalibrate has been set */
++	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
++
++		/* Warn if the deviation exceeds 500 ppm */
++		if (abs(tsc_khz - freq) > (tsc_khz >> 11)) {
++			pr_warn("Warning: TSC freq calibrated by CPUID/MSR differs from what is calibrated by HW timer, please check with vendor!!\n");
++			pr_info("Previous calibrated TSC freq:\t %lu.%03lu MHz\n",
++				(unsigned long)tsc_khz / 1000,
++				(unsigned long)tsc_khz % 1000);
++		}
++
++		pr_info("TSC freq recalibrated by [%s]:\t %lu.%03lu MHz\n",
++			hpet ? "HPET" : "PM_TIMER",
++			(unsigned long)freq / 1000,
++			(unsigned long)freq % 1000);
++
++		return;
++	}
++
+ 	/* Make sure we're within 1% */
+ 	if (abs(tsc_khz - freq) > tsc_khz/100)
+ 		goto out;
+@@ -1407,8 +1430,10 @@ static int __init init_tsc_clocksource(void)
+ 	if (!boot_cpu_has(X86_FEATURE_TSC) || !tsc_khz)
+ 		return 0;
+ 
+-	if (tsc_unstable)
+-		goto unreg;
++	if (tsc_unstable) {
++		clocksource_unregister(&clocksource_tsc_early);
++		return 0;
++	}
+ 
+ 	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
+ 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
+@@ -1421,9 +1446,10 @@ static int __init init_tsc_clocksource(void)
+ 		if (boot_cpu_has(X86_FEATURE_ART))
+ 			art_related_clocksource = &clocksource_tsc;
+ 		clocksource_register_khz(&clocksource_tsc, tsc_khz);
+-unreg:
+ 		clocksource_unregister(&clocksource_tsc_early);
+-		return 0;
++
++		if (!tsc_force_recalibrate)
++			return 0;
+ 	}
+ 
+ 	schedule_delayed_work(&tsc_irqwork, 0);
+-- 
+2.27.0
+
+
+Thanks,
+Feng
+
+On Sun, May 08, 2022 at 10:47:33PM +0800, Feng Tang wrote:
+> Currently when HW provides the tsc freq info through MSR or CPUID(0x15),
+> the info will be taken as the 'best guess', and kernel will set the
+> X86_FEATURE_TSC_KNOWN_FREQ flag and skip the HW timer based recalibration,
+> which works pretty well.
 > 
-> Actually I write this based on the commit https://github.com/torvalds/linux/commit/ebae33c
-> ("arm64: dts: allwinner: h6: Enable CPU opp tables for Orange Pi 3") and https://github.com/
-> torvalds/linux/commit/fe79ea5 ("arm64: dts: allwinner: h6: Enable CPU opp tables for Pine
-> H64"), so I think it's necessary to add this delay.
-
-Thanks for the context! I think the suggestion comes originally from here:
-https://lore.kernel.org/lkml/20200405115138.vrrvv7spnv6ifm6x@core.my.home/
-
-From my reading of that thread, there appear to have been no reliability issues
-before adding this change. It was just based on the available information at the
-time.
-
-On the other hand, adding this property will cause the CPU to spin for up to
-112us in _regulator_do_set_voltage() during each CPU frequency change. So this
-adds a lot of latency, which I would like to avoid if possible.
-
-Regards,
-Samuel
-
->>> @@ -216,6 +222,7 @@ reg_dcdcc: dcdcc {
->>>  				regulator-enable-ramp-delay = <32000>;
->>>  				regulator-min-microvolt = <810000>;
->>>  				regulator-max-microvolt = <1080000>;
->>> +				regulator-ramp-delay = <2500>;
->>
->> This change is not related to CPU frequency scaling, so it belongs in a separate
->> patch (if it is needed).
+> And there is still very few corner case that the freq info is not
+> accurate enough will small deviation from the actual value, like on
+> a product with early version (fix needed) of firmware or some
+> pre-production hardware.
 > 
-> The two commits mentioned above also add this delay to dcdcc regulator.
-> If there is a need for a separate patch, I will send these separately.
+> Add an option 'recalibrate' for 'tsc' kernel parameter to force the
+> tsc freq recalibration with HPET/PM_TIMER, and warn if the deviation
+> from previous value is more than about 500 PPM.
 > 
-> Thanks,
-> Chukun
-> 
-> 
-
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  5 +++
+>  arch/x86/kernel/tsc.c                         | 35 ++++++++++++++++---
+>  2 files changed, 36 insertions(+), 4 deletions(-)

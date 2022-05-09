@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703C651F843
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AF651F8A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238004AbiEIJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S238458AbiEIJgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237940AbiEIJVY (ORCPT
+        with ESMTP id S237966AbiEIJIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:21:24 -0400
-Received: from mail.codelabs.ch (mail.codelabs.ch [IPv6:2a02:168:860f:1::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453A71A0AFE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:17:29 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.codelabs.ch (Postfix) with ESMTP id C21CD220002;
-        Mon,  9 May 2022 11:07:15 +0200 (CEST)
-Received: from mail.codelabs.ch ([127.0.0.1])
-        by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PsW_K7vs4HTv; Mon,  9 May 2022 11:07:14 +0200 (CEST)
-Received: from zaphod.codelabs.ch (unknown [192.168.10.129])
-        by mail.codelabs.ch (Postfix) with ESMTPSA id 115D2220001;
-        Mon,  9 May 2022 11:07:14 +0200 (CEST)
-From:   Adrian-Ken Rueegsegger <ken@codelabs.ch>
-To:     dave.hansen@linux.intel.com, osalvador@suse.de
-Cc:     david@redhat.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Adrian-Ken Rueegsegger <ken@codelabs.ch>
-Subject: Unhandled page fault in vmemmap_populate on x86_64
-Date:   Mon,  9 May 2022 11:06:36 +0200
-Message-Id: <20220509090637.24152-1-ken@codelabs.ch>
+        Mon, 9 May 2022 05:08:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2165E1DFD99
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652087057; x=1683623057;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MhR3GL37aD2094muc0mbYoEzyBnN3ng+SbxKNMGBHqU=;
+  b=kfnDIQq6l5FAf068cePBn4mr0i3enrEiYE8d8flSbLsmP97+2HLUi4y4
+   urpqrg8lLUnvxDME1H+lwbW2RxlESaQf2oMiGWQbc/mjqzc7Qd5G5zOak
+   2rfdvn9YxmAiqcCFbUNc1kwIaDY3Jphlk2PdWWri4Ut/jge1npN61zNQ6
+   tuTn9EpGldHKaR831aY4F/3/mwYfNnlr43Ytpiizc+flYfe0ZB1HjphY2
+   fVqkOQDKIOP+hswhhltGG1TiijtV0jmhjzc488uVTEVDgsKu+WAiqsspM
+   +tL+r6oYLCv5OAVZScM6FoTpSFZSJfYCyl7X9bmK9ygtbjrHCcCDy2sl5
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="163213415"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2022 02:04:15 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 9 May 2022 02:04:14 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 9 May 2022 02:04:13 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <daniel.lezcano@linaro.org>, <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 2/3] clocksource/drivers/timer-microchip-pit64b: use mchp_pit64b_{suspend, resume}
+Date:   Mon, 9 May 2022 12:06:36 +0300
+Message-ID: <20220509090637.4058399-3-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220509090637.4058399-1-claudiu.beznea@microchip.com>
+References: <20220509090637.4058399-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Use mchp_pit64b_suspend() and mchp_pit64b_resume() to disable or
+enable timers clocks on init and remove specific
+clk_prepare_{disable, enable} calls. This is ok also for clockevent timer
+as proper clock enable, disable is done on .set_state_oneshot,
+.set_state_periodic, .set_state_shutdown calls.
 
-While running Linux 5.15.32/x86_64 (with some out-of-tree patches) on top of
-Muen [1], I came across a BUG/page fault triggered in vmemmap_populate:
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ drivers/clocksource/timer-microchip-pit64b.c | 24 ++++----------------
+ 1 file changed, 5 insertions(+), 19 deletions(-)
 
-[    0.000000] BUG: unable to handle page fault for address: ffffea0001e00000
-[    0.000000] #PF: supervisor write access in kernel mode
-[    0.000000] #PF: error_code(0x0002) - not-present page
-[    0.000000] PGD 1003a067 P4D 1003a067 PUD 10039067 PMD 0 
-[    0.000000] Oops: 0002 [#1] SMP PTI
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.32-muen #1
-[    0.000000] RIP: 0010:vmemmap_populate+0x181/0x218
-[    0.000000] Code: 00 a9 ff ff 1f 00 0f 84 a1 00 00 00 e8 91 f7 ff ff b9 0e 00 00 00 31 c0 48 89 ef f3 ab 48 85 f6 74 0a b0 fd 48 89 ef 48 89 f1 <f3> aa 4d 85 c0 74 7c 48 89 1d 2e e2 05 00 eb 73 48 83 3c 24 00 0f
-[    0.000000] RSP: 0000:ffffffff82003e00 EFLAGS: 00010006
-[    0.000000] RAX: 00000000000000fd RBX: ffffea0001e00000 RCX: 0000000000180000
-[    0.000000] RDX: ffffea0000540000 RSI: 00000000001c0000 RDI: ffffea0001e00000
-[    0.000000] RBP: ffffea0001dc0000 R08: 0000000000000000 R09: 0000000088000000
-[    0.000000] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-[    0.000000] R13: ffffea0001f80000 R14: ffffea0001dc0000 R15: ffff888010039070
-[    0.000000] FS:  0000000000000000(0000) GS:ffffffff823ea000(0000) knlGS:0000000000000000
-[    0.000000] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    0.000000] CR2: ffffea0001e00000 CR3: 000000000200a000 CR4: 00000000000406b0
-[    0.000000] DR0: 000000000000003a DR1: 0000000000000003 DR2: 0000000000000000
-[    0.000000] DR3: ffffea0001e00000 DR6: 000000000200a000 DR7: ffffffff82003d58
-[    0.000000] Call Trace:
-[    0.000000]  <TASK>
-[    0.000000]  ? __populate_section_memmap+0x3a/0x47
-[    0.000000]  ? sparse_init_nid+0xc9/0x174
-[    0.000000]  ? sparse_init+0x1c1/0x1d2
-[    0.000000]  ? paging_init+0x5/0xa
-[    0.000000]  ? setup_arch+0x740/0x810
-[    0.000000]  ? start_kernel+0x43/0x5bb
-[    0.000000]  ? secondary_startup_64_no_verify+0xb0/0xbb
-[    0.000000]  </TASK>
-[    0.000000] Modules linked in:
-[    0.000000] CR2: ffffea0001e00000
-[    0.000000] random: get_random_bytes called from init_oops_id+0x1d/0x2c with crng_init=0
-[    0.000000] ---[ end trace 44fe402cfef775de ]---
+diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksource/timer-microchip-pit64b.c
+index b51259395ac3..f50705698283 100644
+--- a/drivers/clocksource/timer-microchip-pit64b.c
++++ b/drivers/clocksource/timer-microchip-pit64b.c
+@@ -344,6 +344,7 @@ static int __init mchp_pit64b_init_clksrc(struct mchp_pit64b_timer *timer,
+ 	if (!cs)
+ 		return -ENOMEM;
+ 
++	mchp_pit64b_resume(timer);
+ 	mchp_pit64b_reset(timer, ULLONG_MAX, MCHP_PIT64B_MR_CONT, 0);
+ 
+ 	mchp_pit64b_cs_base = timer->base;
+@@ -365,8 +366,7 @@ static int __init mchp_pit64b_init_clksrc(struct mchp_pit64b_timer *timer,
+ 		pr_debug("clksrc: Failed to register PIT64B clocksource!\n");
+ 
+ 		/* Stop timer. */
+-		writel_relaxed(MCHP_PIT64B_CR_SWRST,
+-			       timer->base + MCHP_PIT64B_CR);
++		mchp_pit64b_suspend(timer);
+ 		kfree(cs);
+ 
+ 		return ret;
+@@ -450,19 +450,10 @@ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
+ 	if (ret)
+ 		goto irq_unmap;
+ 
+-	ret = clk_prepare_enable(timer.pclk);
+-	if (ret)
+-		goto irq_unmap;
+-
+-	if (timer.mode & MCHP_PIT64B_MR_SGCLK) {
+-		ret = clk_prepare_enable(timer.gclk);
+-		if (ret)
+-			goto pclk_unprepare;
+-
++	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
+ 		clk_rate = clk_get_rate(timer.gclk);
+-	} else {
++	else
+ 		clk_rate = clk_get_rate(timer.pclk);
+-	}
+ 	clk_rate = clk_rate / (MCHP_PIT64B_MODE_TO_PRES(timer.mode) + 1);
+ 
+ 	if (clkevt)
+@@ -471,15 +462,10 @@ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
+ 		ret = mchp_pit64b_init_clksrc(&timer, clk_rate);
+ 
+ 	if (ret)
+-		goto gclk_unprepare;
++		goto irq_unmap;
+ 
+ 	return 0;
+ 
+-gclk_unprepare:
+-	if (timer.mode & MCHP_PIT64B_MR_SGCLK)
+-		clk_disable_unprepare(timer.gclk);
+-pclk_unprepare:
+-	clk_disable_unprepare(timer.pclk);
+ irq_unmap:
+ 	irq_dispose_mapping(irq);
+ io_unmap:
+-- 
+2.34.1
 
-Announcing an available RAM region at 0x88000000 to Linux (via e820) triggered
-the issue while placing it at 0x70000000 did not hit the bug. Since the problem
-had not been observed with 5.10, I did a bisect which pointed to commit
-8d400913c231 ("x86/vmemmap: handle unpopulated sub-pmd ranges") as the culprit.
-Further debugging showed that the #PF originates from vmemmap_use_new_sub_pmd
-in arch/x86/mm/init_64.c. In the error case the condition
-!IS_ALIGNED(start, PMD_SIZE) evaluates to true and the page-fault is caused by
-the memset marking the preceding region as unused:
-
-    if (!IS_ALIGNED(start, PMD_SIZE))
-        memset((void *)start, PAGE_UNUSED,
-               start - ALIGN_DOWN(start, PMD_SIZE));
-
-If I am not mistaken, the start variable is the wrong address to use here,
-since it points to the beginning of the range that is to be *used*. Instead the
-"start" of the PMD should be used, i.e. ALIGN_DOWN(start, PMD_SIZE). Looking at
-arch/s390/mm/vmem.c, vmemmap_use_new_sub_pmd seems to confirm this. Is the
-above analysis correct or did I misread the code?
-
-The attached patch fixes the observed issue for me.
-
-Regards,
-Adrian
-
-PS: When replying please include my address as to/cc since I am not subscribed
-to LKML, thanks!
-
-[1] - https://muen.sk

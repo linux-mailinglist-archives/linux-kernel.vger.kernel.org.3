@@ -2,123 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4618D51FB02
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A268F51FB00
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbiEILOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S232172AbiEILOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiEILOD (ORCPT
+        with ESMTP id S232214AbiEILOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:14:03 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CDD1A35AD;
-        Mon,  9 May 2022 04:10:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kxdk63Qrpz4xVP;
-        Mon,  9 May 2022 21:10:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652094606;
-        bh=/qHqi6CIlVAK8cEtoXLHzVPPEY/m87bHDdtlNB5349Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n7Q8jjFxtz/r9vgYGv3BI9yqnzHQ/uHvrQdlDzdx0bCyR+I3UJFErc/og3hF4Os6l
-         pFeZBnTpL16hA3lkvYSkBYuWQWAt7iOpVYqOnCi2mA13rKbMPuI2OgRILUn1QUHd64
-         Cm+16z2ftD+Bs+R+SqD8wBMRf/5LOUW6TWfq+gwMeLangYUXdgbzKLIaAuJmB10L2f
-         47fNiQFDXjq8SRUdIndgeXamgh2tQIrU4UVyKJWrTify/qM0esAU9IYIcpVvvbqIR8
-         jK3JzFZ1daWT8IeT0twj1moXnF43VB9PlOTqh4NvfKrqqGIvS8tozN1Otgtb2ETjXL
-         v78VaT6EKAAMQ==
-Date:   Mon, 9 May 2022 21:10:04 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20220509211004.2c2073ef@canb.auug.org.au>
+        Mon, 9 May 2022 07:14:17 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD281A4085;
+        Mon,  9 May 2022 04:10:21 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1no1HJ-0005hU-GK; Mon, 09 May 2022 13:10:13 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org,
+        Conor Dooley <mail@conchuod.ie>
+Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
+        daire.mcnamara@microchip.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, palmer@rivosinc.com, arnd@arndb.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 8/8] riscv: dts: microchip: add the sundance polarberry
+Date:   Mon, 09 May 2022 13:10:12 +0200
+Message-ID: <8060906.T7Z3S40VBb@diego>
+In-Reply-To: <20220504203051.1210355-9-mail@conchuod.ie>
+References: <20220504203051.1210355-1-mail@conchuod.ie> <20220504203051.1210355-9-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dJ8ZH9q2ElXtmQQNIpu.DHQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/dJ8ZH9q2ElXtmQQNIpu.DHQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Am Mittwoch, 4. Mai 2022, 22:30:52 CEST schrieb Conor Dooley:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Add a minimal device tree for the PolarFire SoC based Sundance
+> PolarBerry.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/boot/dts/microchip/Makefile        |  1 +
+>  .../dts/microchip/mpfs-polarberry-fabric.dtsi | 16 +++
+>  .../boot/dts/microchip/mpfs-polarberry.dts    | 97 +++++++++++++++++++
+>  3 files changed, 114 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+>  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> 
+> diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
+> index af3a5059b350..39aae7b04f1c 100644
+> --- a/arch/riscv/boot/dts/microchip/Makefile
+> +++ b/arch/riscv/boot/dts/microchip/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
+> +dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
+>  obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+> new file mode 100644
+> index 000000000000..49380c428ec9
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
+> +
+> +/ {
+> +	fabric_clk3: fabric-clk3 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <62500000>;
+> +	};
+> +
+> +	fabric_clk1: fabric-clk1 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <125000000>;
+> +	};
+> +};
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> new file mode 100644
+> index 000000000000..1cad5b0d42e1
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
+> +
+> +/dts-v1/;
+> +
+> +#include "mpfs.dtsi"
+> +#include "mpfs-polarberry-fabric.dtsi"
+> +
+> +/* Clock frequency (in Hz) of the rtcclk */
+> +#define MTIMER_FREQ	1000000
+> +
+> +/ {
+> +	model = "Sundance PolarBerry";
+> +	compatible = "sundance,polarberry", "microchip,mpfs";
+> +
+> +	aliases {
+> +		ethernet0 = &mac1;
+> +		serial0 = &mmuart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	cpus {
+> +		timebase-frequency = <MTIMER_FREQ>;
+> +	};
+> +
+> +	ddrc_cache_lo: memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x80000000 0x0 0x2e000000>;
+> +	};
+> +
+> +	ddrc_cache_hi: memory@1000000000 {
+> +		device_type = "memory";
+> +		reg = <0x10 0x00000000 0x0 0xC0000000>;
+> +	};
+> +};
+> +
+> +/*
+> + * phy0 is connected to mac0, but the port itself is on the (optional) carrier
+> + * board.
+> + */
+> +&mac0 {
+> +	status = "disabled";
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy0>;
 
-Hi all,
+nit: it makes it was easier recognizing the status if it's in the
+same place all the time (for example as the last property)
+like in &mmc below.
 
-After merging the crypto tree, today's linux-next build (powerpc
-pseries_le_defconfig) failed like this:
+Though that may just be my preference ;-) .
+The other option would be to adhere to stricter sorting
+because right now status is neither in one place nor sorted.
 
-ccnI8W1t.s: Assembler messages:
-ccnI8W1t.s: Error: .size expression for aes_p8_set_encrypt_key does not eva=
-luate to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_set_encrypt_key does not ev=
-aluate to a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_set_decrypt_key does not eva=
-luate to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_set_decrypt_key does not ev=
-aluate to a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_encrypt does not evaluate to=
- a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_encrypt does not evaluate t=
-o a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_decrypt does not evaluate to=
- a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_decrypt does not evaluate t=
-o a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_cbc_encrypt does not evaluat=
-e to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_cbc_encrypt does not evalua=
-te to a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_ctr32_encrypt_blocks does no=
-t evaluate to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_ctr32_encrypt_blocks does n=
-ot evaluate to a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_xts_encrypt does not evaluat=
-e to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_xts_encrypt does not evalua=
-te to a constant
-ccnI8W1t.s: Error: .size expression for aes_p8_xts_decrypt does not evaluat=
-e to a constant
-ccnI8W1t.s: Error: .size expression for .aes_p8_xts_decrypt does not evalua=
-te to a constant
 
-Caused by commit
+> +};
+> +
+> +&mac1 {
+> +	status = "okay";
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy1>;
 
-  b52455a73db9 ("crypto: vmx - Align the short log with Makefile cleanups")
+nit (1): same as above
+nit (2): blank line between properties and subnodes makes
+  everything more readable.
 
-I have reverted that commit for today.
+> +	phy1: ethernet-phy@5 {
+> +		reg = <5>;
+> +		ti,fifo-depth = <0x01>;
+> +	};
 
---=20
-Cheers,
-Stephen Rothwell
+nit: blank line?
 
---Sig_/dJ8ZH9q2ElXtmQQNIpu.DHQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Otherwise:
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
------BEGIN PGP SIGNATURE-----
+> +	phy0: ethernet-phy@4 {
+> +		reg = <4>;
+> +		ti,fifo-depth = <0x01>;
+> +	};
+> +};
+> +
+> +&mbox {
+> +	status = "okay";
+> +};
+> +
+> +&mmc {
+> +	bus-width = <4>;
+> +	disable-wp;
+> +	cap-sd-highspeed;
+> +	cap-mmc-highspeed;
+> +	card-detect-delay = <200>;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +	sd-uhs-sdr12;
+> +	sd-uhs-sdr25;
+> +	sd-uhs-sdr50;
+> +	sd-uhs-sdr104;
+> +	status = "okay";
+> +};
+> +
+> +&mmuart0 {
+> +	status = "okay";
+> +};
+> +
+> +&refclk {
+> +	clock-frequency = <125000000>;
+> +};
+> +
+> +&rtc {
+> +	status = "okay";
+> +};
+> +
+> +&syscontroller {
+> +	status = "okay";
+> +};
+> 
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ49owACgkQAVBC80lX
-0GyQ4QgAoNjkcducKaeQumbLOUCXvejE/P/q1srJ5cIUU+6mYUlZScpENVQiyGN6
-AGPeQ7q7L4Z9TLkCnHTVMR8PH8JqwJmwLTSXOlMxbdR5MH9sct5nzEWGBTRWFz6+
-TCqJRPvhQ1+VUsqZ5qW2cjZnXd14lSetMLyiS+lLpqMLPu6IqyIU6nzSUIZ9Lwv6
-8j7KuqAyCGSe738sT/9oG5ciflRx4IreQkN0SO8+FTG8XneF8HnxlJiRbj8STgAb
-cRggfSMgFki3feL68+WdJYwy9h9PjatoDtzEEDI3VcG1+oUV85oZwFy8UJTUq537
-ia6jTe6cwg9B1TJ+ysZ0dRNEvs8t0g==
-=hUec
------END PGP SIGNATURE-----
 
---Sig_/dJ8ZH9q2ElXtmQQNIpu.DHQ--
+
+

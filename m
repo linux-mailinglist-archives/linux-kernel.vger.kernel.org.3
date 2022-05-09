@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19AF51FBAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7A251FBB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiEILx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S233407AbiEIL4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiEILxz (ORCPT
+        with ESMTP id S233464AbiEILy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:53:55 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BE7233A60;
-        Mon,  9 May 2022 04:50:01 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d25so12028715pfo.10;
-        Mon, 09 May 2022 04:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=P8Pt48qpDGet0WO3ZKzHwCy7mbKSUJ/hQ+8osFnMYxw=;
-        b=Mz5DtpZT7eJ7E/sQndaERILByLw6Fh8Cb0uCLHC2jqIiIasnF30mUpf/BujTN+KEU7
-         wL93G7XaVrUzmUcbOz8Bnira9GvY8g51aHwbtV/gWUgBdISHGEaWFDwwlSPPqMQVnHoi
-         RrbtTIMr/jUNj/JjITw8S3tXf1C3iWJcaVdiHnrGDGhWa6fqJ4kVVRIQbIXdCI8Ng6JO
-         6jLTLzznBp6t3rREyZFuXByuSAM05e25sLPiVS4HXLrWwlJCIyWjnAS3DkTG93q28CbE
-         c9ktfxeVwphxBbcJRqG1yoNTMGFgLyueDnKtbT9B2Tm3F4Fz3UvBOGOQNOHmLIvwwxRq
-         qnVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=P8Pt48qpDGet0WO3ZKzHwCy7mbKSUJ/hQ+8osFnMYxw=;
-        b=C9D7ONLXldXZ9vix2Y5crxJA4znAkc9G4OHaPVwJ/budCbuHMz5FRzgNji+DGGBDIv
-         NPwJlLCEAZ96b/r0aoLynUMlgwTS0EtuEuZFlEaUKHI4pBj56MWQR5jotDyxLF5UHJWH
-         xUCuLM6GfWaoLs9sfBjR4nPREeOelQcgFrDaCopLoGM+rXt4LimhAL1ePAqXNgsvm9cl
-         nA1YTNORhMB1xhwAtQ1WIh9771ZKjnK3FN1SJjuUS9e3mFY00+GsBpScBQRYgFxxHRpU
-         Ro9QssV1yDXpSIQ4tqd3Qbm4bf50iWruFOCrXAQbKjTLgRjGdmbRcRBRhKv+Rx3NMnSt
-         y2Hg==
-X-Gm-Message-State: AOAM530olwVhdCe2jwKFN7MANGtwXaLeQU78hx3YLeHctYm5Y90RwjUG
-        2G3+M5Lzk0go//i7b3LTAF+jUKvqC0ZjO1+W
-X-Google-Smtp-Source: ABdhPJyKtWbdfxfuTYbyjipaToniwqfDmdzUjccHsrWp0pbRq7kPVBMCe3+tK5J2L98uV3ZTDaHNUA==
-X-Received: by 2002:a62:31c1:0:b0:50a:4909:2691 with SMTP id x184-20020a6231c1000000b0050a49092691mr15959938pfx.64.1652097001285;
-        Mon, 09 May 2022 04:50:01 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:6:8000::206? ([2404:f801:9000:18:efed::206])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a0002c200b0050dc7628143sm8299420pft.29.2022.05.09.04.49.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 04:50:00 -0700 (PDT)
-Message-ID: <419605e8-6275-8459-801e-979ea042e5d7@gmail.com>
-Date:   Mon, 9 May 2022 19:49:53 +0800
+        Mon, 9 May 2022 07:54:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FBB1312A7
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:50:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B720261225
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D88FC385AB;
+        Mon,  9 May 2022 11:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652097033;
+        bh=b4aTBZ4v+rVQoWlkbu6lUJp1RJHxYYLupXeHe22aK+E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PlNdM41fWWZMMZ5VmLAz0aq7w+uOUXEjhHnW6/VgxfsZMoyrZEny2Hkk0t+Qv65VK
+         Aj8zV/bpPwgdiVytEIyiebz+eM7UwsQiIejW1ruXiyORKicJHyx39i5753qVcKZKlB
+         /bGzM/mn/8gwltwCt0274kMqGFL/a2QWaY1zOPYn+f5PfNRs80fuUoZb53eo0vyYUi
+         SJf1xPUdJiVa5yYAvrwkBL9jW1ugsH/fByazvJobZTvXZzsrMCaCqV9ESFKrgA1Nmn
+         IygHhchmdKOTVFwPQM7Vf5JivhSD2Ks2GjaxTh2CgBtZpo7rp/rteudTZB27n7F3V4
+         Ciy68yOBXKDyw==
+Date:   Mon, 9 May 2022 12:50:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        matthias.bgg@gmail.com, tzungbi@google.com,
+        angelogioacchino.delregno@collabora.com, trevor.wu@mediatek.com,
+        arnd@arndb.de, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: mediatek: mt8195: Fix build warning without
+ CONFIG_OF
+Message-ID: <YnkAAx3VAXCMFOTn@sirena.org.uk>
+References: <20220507021424.12180-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH V2 0/2] swiotlb: Add child io tlb mem support
-Content-Language: en-US
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     hch@infradead.org, robin.murphy@arm.com
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
-        andi.kleen@intel.com, kirill.shutemov@intel.com,
-        m.szyprowski@samsung.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com
-References: <20220502125436.23607-1-ltykernel@gmail.com>
-Organization: Microsft
-In-Reply-To: <20220502125436.23607-1-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dR5KuFyvd2qk11zt"
+Content-Disposition: inline
+In-Reply-To: <20220507021424.12180-1-yuehaibing@huawei.com>
+X-Cookie: Anger is momentary madness.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/2022 8:54 PM, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Traditionally swiotlb was not performance critical because it was only
-> used for slow devices. But in some setups, like TDX/SEV confidential
-> guests, all IO has to go through swiotlb. Currently swiotlb only has a
-> single lock. Under high IO load with multiple CPUs this can lead to
-> significant lock contention on the swiotlb lock.
-> 
-> This patch adds child IO TLB mem support to resolve spinlock overhead
-> among device's queues. Each device may allocate IO tlb mem and setup
-> child IO TLB mem according to queue number. The number child IO tlb
-> mem maybe set up equal with device queue number and this helps to resolve
-> swiotlb spinlock overhead among devices and queues.
-> 
-> Patch 2 introduces IO TLB Block concepts and swiotlb_device_allocate()
-> API to allocate per-device swiotlb bounce buffer. The new API Accepts
-> queue number as the number of child IO TLB mem to set up device's IO
-> TLB mem.
 
-Gentile ping...
+--dR5KuFyvd2qk11zt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
-> 
-> Tianyu Lan (2):
->    swiotlb: Add Child IO TLB mem support
->    Swiotlb: Add device bounce buffer allocation interface
-> 
->   include/linux/swiotlb.h |  40 ++++++
->   kernel/dma/swiotlb.c    | 290 ++++++++++++++++++++++++++++++++++++++--
->   2 files changed, 317 insertions(+), 13 deletions(-)
-> 
+On Sat, May 07, 2022 at 10:14:24AM +0800, YueHaibing wrote:
+> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1639:32: warning: =E2=80=98mt81=
+95_mt6359_max98390_rt5682_card=E2=80=99 defined but not used [-Wunused-vari=
+able]
+>  1639 | static struct mt8195_card_data mt8195_mt6359_max98390_rt5682_card=
+ =3D {
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This doesn't apply against current code, please check and resend (it
+looks like you have additional patches in your tree, am doesn't know the
+base SHA1s?).
+
+--dR5KuFyvd2qk11zt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5AAIACgkQJNaLcl1U
+h9CSpAf+JWlnlwHrSebKB8rGFYewj7XuvxJYOCgKGxDjC0jGkchj3AvBNkFD2Kq1
+oKVPST+oVCaXX3JrpiWXMJzRjyokDkQsXjQFuQ3xOLDyuohNk/lwI6KKLk04edeh
+0DIySvexNYhTyNPrP3MjLrYvb9VTLJVSiNpmkCFBjg0ZMd3mZu37nmpMwXsE0HFu
+go20cHPF9WoxMI6KUBmYD2sWaVqJzwXbnZBpY0Nf+HABKDX2tnjtXNqje7eAJ8Ai
+WwiEC0IYZh1tmINQ87V4TahiDHNu7Sx+gFzEL410N557iw7AR/HLjxcdpUulA1zY
+CcLY4c5Cj+UjV8DRBrLtzzxzZmEzcw==
+=GTnm
+-----END PGP SIGNATURE-----
+
+--dR5KuFyvd2qk11zt--

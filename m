@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843325204EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFB8520523
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240389AbiEITHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S240508AbiEITUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiEITHk (ORCPT
+        with ESMTP id S240486AbiEITUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:07:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05E3294483
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:03:45 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652123023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=NIOsonAWv5DdAuk0vq0Sjr+GFj0uOYtGmSbHPX0iOHw=;
-        b=ExwVr8gNiMoVwLvh0/cOO0WzwT6Oc9BNbj6TAA9MlTckiCb+sbpw4sH4z2ktIm1QngzusQ
-        qa5lxFwhiamuzz0jJODev0yBbadwishMPFTT1m2AEApOv82CeMLlQAeFHAcAokhl6UvHjK
-        AzQ0lFV3vYSTLgoUGR0MUlXIDXZZhRbPPKRXZ+u/RHr+s6T9TwPShdwHtGBrfg9+f4sKfH
-        mgsD6r0CuDn/xKCCAkP6zutOP+E7sq9iGXL9+B5NDoBfRCXtVkbblz41fNTTmCOtWRCFrV
-        X6/irYPwoU7wwrmbaRROGgv5X0nXAnuv+w10bubCeM5ney9A6+9i21mrVHqjmQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652123023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=NIOsonAWv5DdAuk0vq0Sjr+GFj0uOYtGmSbHPX0iOHw=;
-        b=YcfPz75VQFwoueIgPKJWPPVEGHM3xa9KNLVfpsExUs/dpMt6igEwAaaOQW52uiFBpYcGHG
-        NiCp7zzD5vPptXDg==
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>
-Subject: lockdep: Delete local_irq_enable_in_hardirq()
-Date:   Mon, 09 May 2022 21:03:43 +0200
-Message-ID: <8735hir0j4.ffs@tglx>
+        Mon, 9 May 2022 15:20:01 -0400
+X-Greylist: delayed 712 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 12:16:04 PDT
+Received: from relay-b03.edpnet.be (relay-b03.edpnet.be [212.71.1.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5736D6353D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:16:03 -0700 (PDT)
+X-ASG-Debug-ID: 1652123048-15c435381a966b00001-xx1T2L
+Received: from srv21.vandijck-laurijssen.be (77.109.97.42.adsl.dyn.edpnet.net [77.109.97.42]) by relay-b03.edpnet.be with ESMTP id evQvZkMsT4fx48c7; Mon, 09 May 2022 21:04:08 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.97.42.adsl.dyn.edpnet.net[77.109.97.42]
+X-Barracuda-Apparent-Source-IP: 77.109.97.42
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 0E1DA1063BE;
+        Mon,  9 May 2022 21:04:08 +0200 (CEST)
+Date:   Mon, 9 May 2022 21:04:06 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
+ was already claimed
+Message-ID: <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
+ was already claimed
+Mail-Followup-To: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
+X-Barracuda-Connect: 77.109.97.42.adsl.dyn.edpnet.net[77.109.97.42]
+X-Barracuda-Start-Time: 1652123048
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1034
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.97894
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No more users and there is no desire to grow new ones.
+On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote:
+> This is not explicitly stated in SAE J1939-21 and some tools used for
+> ISO-11783 certification do not expect this wait.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- include/linux/interrupt.h |   18 ------------------
- 1 file changed, 18 deletions(-)
+IMHO, the current behaviour is not explicitely stated, but nor is the opposite.
+And if I'm not mistaken, this introduces a 250msec delay.
 
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -222,24 +222,6 @@ devm_request_any_context_irq(struct devi
- 
- extern void devm_free_irq(struct device *dev, unsigned int irq, void *dev_id);
- 
--/*
-- * On lockdep we dont want to enable hardirqs in hardirq
-- * context. Use local_irq_enable_in_hardirq() to annotate
-- * kernel code that has to do this nevertheless (pretty much
-- * the only valid case is for old/broken hardware that is
-- * insanely slow).
-- *
-- * NOTE: in theory this might break fragile code that relies
-- * on hardirq delivery - in practice we dont seem to have such
-- * places left. So the only effect should be slightly increased
-- * irqs-off latencies.
-- */
--#ifdef CONFIG_LOCKDEP
--# define local_irq_enable_in_hardirq()	do { } while (0)
--#else
--# define local_irq_enable_in_hardirq()	local_irq_enable()
--#endif
--
- bool irq_has_action(unsigned int irq);
- extern void disable_irq_nosync(unsigned int irq);
- extern bool disable_hardirq(unsigned int irq);
+1. If you want to avoid the 250msec gap, you should avoid to contest the same address.
+
+2. It's a balance between predictability and flexibility, but if you try to accomplish both,
+as your patch suggests, there is slight time-window until the current owner responds,
+in which it may be confusing which node has the address. It depends on how much history
+you have collected on the bus.
+
+I'm sure that this problem decreases with increasing processing power on the nodes,
+but bigger internal queues also increase this window.
+
+It would certainly help if you describe how the current implementation fails.
+
+Would decreasing the dead time to 50msec help in such case.
+
+Kind regards,
+Kurt

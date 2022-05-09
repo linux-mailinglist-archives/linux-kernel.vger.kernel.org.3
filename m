@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D8D51F8B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA5951F921
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiEIJfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S236595AbiEIJeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236996AbiEII4k (ORCPT
+        with ESMTP id S236554AbiEII5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:56:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3978F20139C;
-        Mon,  9 May 2022 01:52:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 106CD1042;
-        Mon,  9 May 2022 01:52:47 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13E2E3F66F;
-        Mon,  9 May 2022 01:52:45 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:52:42 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Chukun Pan <amadeus@jmu.edu.cn>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: allwinner: define USB3 Ethernet on NanoPi
- R1S H5
-Message-ID: <20220509095242.1de7a682@donnerap.cambridge.arm.com>
-In-Reply-To: <20220508152505.7762-1-amadeus@jmu.edu.cn>
-References: <4393725.LvFx2qVVIh@kista>
-        <20220508152505.7762-1-amadeus@jmu.edu.cn>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
-MIME-Version: 1.0
+        Mon, 9 May 2022 04:57:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304AE202B26;
+        Mon,  9 May 2022 01:53:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9125E21B3D;
+        Mon,  9 May 2022 08:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652086413; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dfcvUUdqksgvYc8rVDLHC5DOBo/kU2XO+VX1eeG4aV8=;
+        b=A34L+qWnS4KTuUIJIOdn/Oy0lRYM0k4tu6TprpUGGmO4q2IG6PgANqhT26b8ERa1UPxmL3
+        +i1ltyuQDR6b3JXdcEzOXVh1KYWhR2Zwt+tTJHHP3RNo/us6IFdzvOCkW7gcDMpTyzgCvx
+        xJwG93EwlvMl01wRmSewhq2A5QaBHXU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652086413;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dfcvUUdqksgvYc8rVDLHC5DOBo/kU2XO+VX1eeG4aV8=;
+        b=UKYq4/y/oVRFARjOiTG0UlZFJ7CNosy5fO4czqcNJLtcbGcYGz4OJwlbgEGhzVQm3iPfhB
+        Fx+12pZoeT2rmkDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 79C5C2C141;
+        Mon,  9 May 2022 08:53:33 +0000 (UTC)
+Date:   Mon, 09 May 2022 10:53:33 +0200
+Message-ID: <s5hczgnm6ia.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND)
+Subject: Re: [RFC v2 31/39] sound: add HAS_IOPORT dependencies
+In-Reply-To: <20220429135108.2781579-57-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+        <20220429135108.2781579-57-schnelle@linux.ibm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  8 May 2022 23:25:05 +0800
-Chukun Pan <amadeus@jmu.edu.cn> wrote:
-
-Hi,
-
-> > > --- a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
-> > > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
-> > > @@ -21,7 +21,8 @@ / {
-> > >  
-> > >  	aliases {
-> > >  		ethernet0 = &emac;
-> > > -		ethernet1 = &rtl8189etv;
-> > > +		ethernet1 = &rtl8153;
-> > > +		ethernet2 = &rtl8189etv;  
+On Fri, 29 Apr 2022 15:50:54 +0200,
+Niklas Schnelle wrote:
 > 
-> > Additionally, it's not a good idea to change order of ethernet nodes. It can 
-> > affect mac address assigning procedure in bootloader.  
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them. For SND_OPL3_LIB this adds its first
+> dependency so drivers currently selecting it unconditionally need to
+> depend on it instead.
 > 
-> There is no eth1addr in uboot, so this doesn't affect the mac address.
-
-Really? I don't have a board at hand to double check, but the code I read
-here says otherwise:
-https://source.denx.de/u-boot/u-boot/-/blob/master/board/sunxi/board.c#L791-813
-There it checks for up to four ethernet aliases and assigns MAC addresses
-to them, using the index in the lowest byte.
-So this would change the MAC address of the WiFi adapter.
-
-Am I missing something?
-
-> The network order in the kernel is eth0(emac) / eth1(rtl8153) / wlan0,
-
-Regardless of the fact that you shouldn't rely on indexes in device names,
-wouldn't that be that same, regardless of the order of USB and WiFi?
-
-Cheers,
-Andre
-
-> so I think it would be better to change it this way.
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  sound/drivers/Kconfig |  5 ++++
+>  sound/isa/Kconfig     | 44 ++++++++++++++---------------
+>  sound/pci/Kconfig     | 64 +++++++++++++++++++++++++++++--------------
+>  3 files changed, 70 insertions(+), 43 deletions(-)
 > 
-> Thanks,
-> Chukun
-> 
-> 
+> diff --git a/sound/drivers/Kconfig b/sound/drivers/Kconfig
+> index ca4cdf666f82..4d250e619786 100644
+> --- a/sound/drivers/Kconfig
+> +++ b/sound/drivers/Kconfig
+> @@ -1,10 +1,12 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config SND_MPU401_UART
+>  	tristate
+> +	depends on HAS_IOPORT
+>  	select SND_RAWMIDI
+>  
+>  config SND_OPL3_LIB
+>  	tristate
+> +	depends on HAS_IOPPORT
+>  	select SND_TIMER
+>  	select SND_HWDEP
+>  	select SND_SEQ_DEVICE if SND_SEQUENCER != n
 
+Both of those are the items to be reverse-selected, so cannot fulfill
+the dependency with depends-on.  That is, the items that select those
+should have the dependency on HAS_IOPORT instead.
+
+That is, a change like below:
+
+> --- a/sound/isa/Kconfig
+> +++ b/sound/isa/Kconfig
+> @@ -31,7 +31,7 @@ if SND_ISA
+>  
+>  config SND_ADLIB
+>  	tristate "AdLib FM card"
+> -	select SND_OPL3_LIB
+> +	depends on SND_OPL3_LIB
+
+... won't work.  CONFIG_SND_OPL3_LIB is not enabled by itself but only
+to be selected.
+
+
+thanks,
+
+Takashi

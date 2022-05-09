@@ -2,75 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20D0520453
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715E452044B
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiEISRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S240079AbiEISSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbiEISRi (ORCPT
+        with ESMTP id S240071AbiEISSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:17:38 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ECA7EA09
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:13:43 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id e15so16241653iob.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 11:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nbP4UxLudGGNXmlugF8xlwUjdH1zs5seOC29q5oKmlM=;
-        b=PybJiJI+d6ApKBe4iSRLaK6vywNjH97JUmHy6z+pDyFUQ52ijVw8IzHkt19i9PfCex
-         /CiILaWaKuwS1WOkuZwboqWsSpJtluUcdtf+e3vK32dHeUvErjB6yip3QLAHx4vpT1TC
-         ZIVSlvVQoqPXFMA3VgPK0AxnURv2ZcP7jRI9eGIQ/pRztwh/vkHfZSQlsPWN6fLN5E8m
-         J3NvcRuxxd+jsPb5WiKXDoRZ6wgXDWwevVTWPfJoXK1xD4NzXej2tv9QO2/JjUqz5P5F
-         jKcXf7Dy3dHKtd6cNYyqVBx9obL5nsM1In1c0CvffbEZk7y5sZ5R/kPXPim2HCsT8zx+
-         jADQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nbP4UxLudGGNXmlugF8xlwUjdH1zs5seOC29q5oKmlM=;
-        b=QRSU6VMDv1zrt/qojgF22gCoihKuDyuzMkWYPywdtG/VANyOIxeRZir7bKJe9qVAI1
-         hFRfvLtU8lTpLyFP3aNhD1vEZSMn+irL0v+qQZcSljV/xl+jfscr7+LxN4RcjzdTMmCy
-         prQHne+azS0FxTx9Z6h/cbyPrDmCEjjsoVYwG/nsIpXxst9AfmCPIZjTD2oGfoWrSMq1
-         8l7N6frXyvdbHFDYh/MDU6PAaaPV4Wnu21Ti5fFs8Vt+UtyjVhLhR3MUEB4qZUtaM6rj
-         Vx0xyLCdyuGknHv2dYHXuFJdBkQD6ZxMaougzDIaHVih7VJj5pwz1/OmEyoKl4bQu2eY
-         ZzIw==
-X-Gm-Message-State: AOAM5318QG9X/CG+qGrmyKM7RAEw8L4hNd0FBBvF3r7tyJM0+UmAz6qr
-        TdyNjj5T3xKrFnkT+A9T/xxmgQ==
-X-Google-Smtp-Source: ABdhPJxpiF7pEVwsiiKNfZHLI9HL8Q///9vvlshdKdDVPVDb+qc+pwHj7s9deiXYZWA3j7ytvjkfIA==
-X-Received: by 2002:a05:6602:2e82:b0:65a:a33e:6d3f with SMTP id m2-20020a0566022e8200b0065aa33e6d3fmr7341288iow.44.1652120022527;
-        Mon, 09 May 2022 11:13:42 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id v4-20020a92ab04000000b002cfa97470c1sm980351ilh.21.2022.05.09.11.13.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 11:13:42 -0700 (PDT)
-Message-ID: <14b5e588-3df8-fbdc-d4df-ae9187c18812@kernel.dk>
-Date:   Mon, 9 May 2022 12:13:41 -0600
+        Mon, 9 May 2022 14:18:03 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2B115A748;
+        Mon,  9 May 2022 11:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1652120038; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q08TgslIn6eORzOBSw1hAVwzwQyEcKAc7I4FfWcW9U8=;
+        b=XlgMzX49aN+IcfB28mMSy7oQaPsYX+vLvJo9a/o1HEoaIUjNEFKdsOKQIRnOuGpty5YLjx
+        PukijtE/cS9ziOHmw3xP38S5GeHzhDF7IkvK5M1kANVQbopmExcjOVvZfRnJ5KTQo47jHQ
+        YIqy9G63Aw/2vCMvJBs7qibxslg9VAA=
+Date:   Mon, 09 May 2022 19:13:47 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: Question about SC16IS752 device tree.
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     jringle@gridpoint.com, shc_work@mail.ru,
+        Rob Herring <robh@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-serial@vger.kernel.org,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-Id: <ZYNMBR.VDVV3VHFQBMO1@crapouillou.net>
+In-Reply-To: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
+References: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
- <8e3ecd00-1c73-7481-fec2-158528b2798f@infradead.org>
- <87bkw6lgoo.fsf@collabora.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87bkw6lgoo.fsf@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +52,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 12:11 PM, Gabriel Krisman Bertazi wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
-> 
->> On 5/9/22 02:23, Ming Lei wrote:
->>> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
->>> index fdb81f2794cd..3893ccd82e8a 100644
->>> --- a/drivers/block/Kconfig
->>> +++ b/drivers/block/Kconfig
->>> @@ -408,6 +408,13 @@ config BLK_DEV_RBD
->>>  
->>>  	  If unsure, say N.
->>>  
->>> +config BLK_DEV_USER_BLK_DRV
->>> +	bool "Userspace block driver"
->>> +	select IO_URING
->>> +	default y
->>
->> Any "default y" driver is highly questionable and needs to be justified.
->>
->> Also: why is it bool instead of tristate?
-> 
-> I think it's only bool because it depends on task_work_add, which is
-> not exported to modules.  It is something to be fixed for sure, can
-> that function just be exported?
+Hi Zhou,
 
-There might (rightfully) be resistance to doing that, as it's one of
-this interfaces that's a bit tricky to use correctly and still have it
-be efficient and not introduce dependency loops...
+Le mar., mai 10 2022 at 02:08:28 +0800, Zhou Yanjie=20
+<zhouyanjie@wanyeetech.com> a =E9crit :
+> Hi folks,
+>=20
+> I encountered a problem when using the SC16IS752 to expand the serial=20
+> port.
+> I connected two Bluetooth modules to the two serial ports extended by=20
+> the
+> SC16IS752. The device tree is as follows:
+>=20
+> &ssi0 {
+>     status =3D "okay";
+>=20
+>     num-cs =3D <2>;
+>=20
+>     pinctrl-names =3D "default";
+>     pinctrl-0 =3D <&pins_ssi0>;
+>=20
+>     sc16is752: expander@0 {
+>         compatible =3D "nxp,sc16is752";
+>         reg =3D <0>; /* CE0 */
+>=20
+>         spi-rx-bus-width =3D <1>;
+>         spi-tx-bus-width =3D <1>;
+>         spi-max-frequency =3D <6000000>;
+>=20
+>         clocks =3D <&exclk_sc16is752>;
+>=20
+>         interrupt-parent =3D <&gpb>;
+>         interrupts =3D <18 IRQ_TYPE_EDGE_FALLING>;
+>=20
+>         gpio-controller;
+>         #gpio-cells =3D <2>;
+>=20
+>         bluetooth@0 {
+>             compatible =3D "brcm,bcm43438-bt";
+>             max-speed =3D <1000000>;
+>=20
+>             device-wakeup-gpios =3D <&gpc 26 GPIO_ACTIVE_HIGH>;
+>             reset-gpios =3D <&gpb 17 GPIO_ACTIVE_LOW>;
+>         };
+>=20
+>         bluetooth@1 {
+>             compatible =3D "brcm,bcm43438-bt";
+>=20
+>             device-wakeup-gpios =3D <&gpc 28 GPIO_ACTIVE_HIGH>;
+>             reset-gpios =3D <&gpb 19 GPIO_ACTIVE_LOW>;
+>         };
+>     };
+> };
+>=20
+>=20
+>=20
+> There are the following error messages after startup:
+>=20
+> [    0.548417] serial serial0-0: controller busy
+> [    0.553572] serial serial0-0: failure adding device. status -EBUSY
+> [    0.559764] serial serial0: tty port ttySC0 registered
+> [    0.565545] spi0.0: ttySC1 at I/O 0x1 (irq =3D 18, base_baud =3D=20
+> 3000000) is a SC16IS752
+> [    0.573987] serial serial1-0: controller busy
+> [    0.578351] serial serial1-0: failure adding device. status -EBUSY
+> [    0.585003] serial serial1: tty port ttySC1 registered
+>=20
+> And only the module connected to the first serial port (ttySC0) can=20
+> work normally.
 
-But this is very much RFC and in progress stuff, so I don't really think
-we need to pay much attention to that at this point.
+I can't say for sure that it's your problem, but your bluetooth nodes=20
+are missing "reg" properties.
 
--- 
-Jens Axboe
+Cheers,
+-Paul
+
+>=20
+>=20
+>=20
+> If I change the device tree to:
+>=20
+> &ssi0 {
+>     status =3D "okay";
+>=20
+>     num-cs =3D <2>;
+>=20
+>     pinctrl-names =3D "default";
+>     pinctrl-0 =3D <&pins_ssi0>;
+>=20
+>     sc16is752: expander@0 {
+>         compatible =3D "nxp,sc16is752";
+>         reg =3D <0>; /* CE0 */
+>=20
+>         spi-rx-bus-width =3D <1>;
+>         spi-tx-bus-width =3D <1>;
+>         spi-max-frequency =3D <6000000>;
+>=20
+>         clocks =3D <&exclk_sc16is752>;
+>=20
+>         interrupt-parent =3D <&gpb>;
+>         interrupts =3D <18 IRQ_TYPE_EDGE_FALLING>;
+>=20
+>         gpio-controller;
+>         #gpio-cells =3D <2>;
+>=20
+>         bluetooth@0 {
+>             compatible =3D "brcm,bcm43438-bt";
+>             max-speed =3D <1000000>;
+>=20
+>             device-wakeup-gpios =3D <&gpc 26 GPIO_ACTIVE_HIGH>;
+>             reset-gpios =3D <&gpb 17 GPIO_ACTIVE_LOW>;
+>         };
+>     };
+> };
+>=20
+> Then there will be no error message, and the module connected to the=20
+> first
+> serial port (ttySC0) can also work normally.
+>=20
+>=20
+>=20
+> After tracing, the problem seems to be in "serdev_device_add()" (line=20
+> 111) of
+> "drivers/tty/serdev/core.c":
+>=20
+> int serdev_device_add(struct serdev_device *serdev)
+> {
+>     struct serdev_controller *ctrl =3D serdev->ctrl;
+>     struct device *parent =3D serdev->dev.parent;
+>     int err;
+>=20
+>     dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
+>=20
+>     /* Only a single slave device is currently supported. */
+>     if (ctrl->serdev) {
+>         dev_err(&serdev->dev, "controller busy\n");
+>         return -EBUSY;
+>     }
+>     ctrl->serdev =3D serdev;
+>=20
+>     err =3D device_add(&serdev->dev);
+>     if (err < 0) {
+>         dev_err(&serdev->dev, "Can't add %s, status %pe\n",
+>             dev_name(&serdev->dev), ERR_PTR(err));
+>         goto err_clear_serdev;
+>     }
+>=20
+>     dev_dbg(&serdev->dev, "device %s registered\n",=20
+> dev_name(&serdev->dev));
+>=20
+>     return 0;
+>=20
+> err_clear_serdev:
+>     ctrl->serdev =3D NULL;
+>     return err;
+> }
+> EXPORT_SYMBOL_GPL(serdev_device_add);
+>=20
+>=20
+>=20
+> Is there any way to correctly describe the device mounted on the=20
+> second
+> serial port (ttySC1) in the device tree? Or how do I need to modify=20
+> the
+> "drivers/tty/serdev/core.c" to make the SC16IS752 still work properly
+> with two child nodes mounted?
+>=20
+> Thanks and beset regards!
+
 

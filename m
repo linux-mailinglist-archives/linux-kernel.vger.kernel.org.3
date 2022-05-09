@@ -2,131 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9866520047
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BCA520054
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237758AbiEIOvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S237582AbiEIOx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237715AbiEIOvW (ORCPT
+        with ESMTP id S237061AbiEIOxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:51:22 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7094D24BB2B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:47:28 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so27302913ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YReIlo2SA3OXXKOlZqVzpBGAEFmTXwOCuNhJW0SaYWY=;
-        b=y0ykTPwUXzT2B12UESk2c0mNSFQvN19HIPC41BgWOWm9eApr1uFuPMRCsUTLEs11CI
-         muoGtMrqLjqf5PFE0+nt1zB/vVkfRloOupyM7xusCrQWJi+ynB9xH2wA6Wvsmpm0+PLg
-         nsBUUB+OA7phZqFyQEUOieLzoNavymWASJaVSaveRwZGAwERjslwj6Z+qc62VqsVnr84
-         Nx3wJJs9GBiHVjxLFT+vk05g48a+flBS/lMy/MNEJK86ZAS0I961yNQglucmXV1YNix1
-         bggkMitanpVmRFCJ1KAg9t2SU7fCqKhhqzIFzqtA7+H5v9sHkRMN+pm2RwjSGlj++0O5
-         8zMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YReIlo2SA3OXXKOlZqVzpBGAEFmTXwOCuNhJW0SaYWY=;
-        b=NtCzinnVwZnpm91nyr6CnZVHM+XAuhBk8JMZy1gaz7hf39mF9elbWhclgFo/LeM/Dt
-         4XlW5g7PKCELj1T+4vIc/0A/wHv1a7Lwc6bzCjtH65aVy3O1mKJmeUrx+MIxFEFqoFeV
-         tXgEG8mUx6f6RgJ23XVS5ZvZN6pioKds7h5k6yktDdvxF32ZDUpktiD70svA5SJJeN64
-         3ls1guPx/+reSJTvHmIA6mwBOow//aRJtbISfglFQduFfmibs9S5PkVZ8OGTGU7XLNuL
-         6TxDjA9BpPaonL+wLW6xltvCV+REsgjBdUhOPLeyyDdrNtbnTeK8kwhb8pZIxOq/b7/r
-         Pv+Q==
-X-Gm-Message-State: AOAM533Qv2M+8SKdkoxhIvbkzCzgccM/obfhoLgobutdxDP38ZQEoWP1
-        ivXEwtICn6AUE45VRkH2ZqYqHA==
-X-Google-Smtp-Source: ABdhPJwUe+Mhortp2BoeLfOz+JnBpHFhsaIHaA71zlpV1VUi6ZcfHMF4GT0uGgC1stNA9o4EZpyHQw==
-X-Received: by 2002:a17:906:ece3:b0:6f3:da10:138a with SMTP id qt3-20020a170906ece300b006f3da10138amr15043405ejb.438.1652107646916;
-        Mon, 09 May 2022 07:47:26 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05640207c900b0042617ba637bsm6451828edy.5.2022.05.09.07.47.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 07:47:26 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sdm630: order interrupts according to bindings
-Date:   Mon,  9 May 2022 16:47:14 +0200
-Message-Id: <20220509144714.144154-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
-References: <20220509144714.144154-1-krzysztof.kozlowski@linaro.org>
+        Mon, 9 May 2022 10:53:20 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEEE24D630;
+        Mon,  9 May 2022 07:49:24 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KxkTk0NJ3z67Yv4;
+        Mon,  9 May 2022 22:44:42 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 16:49:22 +0200
+Received: from [10.47.80.57] (10.47.80.57) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 15:49:21 +0100
+Message-ID: <fd2cdc06-5d88-306a-3ee1-7aef3e3b8921@huawei.com>
+Date:   Mon, 9 May 2022 15:50:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     "Ewan D. Milne" <emilne@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Doug Gilbert" <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <james.smart@broadcom.com>
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+ <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+ <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
+ <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+ <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
+ <Yl+wJ7xSHzWmR+bR@infradead.org>
+ <d09faf74-a52e-8d93-cf26-08b43b12c564@huawei.com>
+ <24bfb681-faec-3567-3089-9cd5ee182710@linaro.org>
+ <1bb53912-c5c3-7690-e82f-cf356ca87404@huawei.com>
+ <6f28acde-2177-0bc7-b06d-c704153489c0@linaro.org>
+ <4510c5dc-3d7d-fc5f-cb80-34da7dbaaa8e@huawei.com>
+ <d01c29c1-bb5a-281d-ef71-9c7b39e28d23@linaro.org>
+In-Reply-To: <d01c29c1-bb5a-281d-ef71-9c7b39e28d23@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.80.57]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CAMSS DTSI device node, which came after the bindings were merged,
-got the interrupts ordered differently then specified in the bindings:
+On 09/05/2022 14:20, Krzysztof Kozlowski wrote:
+> On 09/05/2022 13:28, John Garry wrote:
+>>
+>> For some reason I cannot fetch your git due to "error: RPC failed ..."
+>> which I think is a timeout. I seem to have this problem recently
+>> whenever a linux.git clone has branches based on linux-next.git . Maybe
+>> a git config issue for me...
+> 
+> Just to be sure - the link was not a git remote, but direct link for a
+> web browser. The repo is:
+> https://github.com/krzk/linux.git
+> branch: n/qcom-ufs-opp-cleanups-v2
+> 
 
-  sdm630-sony-xperia-nile-pioneer.dtb: camss@ca00000: interrupt-names:0: 'csid0' was expected
+OK, I'll double check. Regardless I'll sort my own IT issues :)
 
-Reordering them to match bindings should not cause ABI issues, because
-the driver relies on names, not ordering.
+>>> However this does not solve the problem. The SHT has "module" which gets
+>>> incremented/decremented. Exactly like in case of other drivers
+>>> (driver->owner).
+>>
+>> Ah, I missed that this could be a problem. So we have this member to
+>> stop the SCSI host driver being removed when we have disks mounted, etc.
+>>
+>> But isn't scsi_host_template.module just a pointer to the local driver
+>> module data (and that data gets incremented/decremented)? I am looking
+>> at the THIS_MODULE definition in export.h:
+> 
+> Yes, it is just a pointer, just like 'struct device_driver.owner' is.
+> 
+>>
+>> extern stuct module __this_module;
+>> #define THIS_MODULE(&__this_module)
+>>
+>> However I do see scsi_device_dev_release(), which does:
+>>
+>> sdp->host->hostt->module = NULL
+>>
+>> I am not sure how necessary that really is. I would need to check further.
+> 
+>>
+>> Did you see if there other places which set hostt->module dynamically?
+> 
+> I think all SHT set it statically. 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Incidentally I did notice that the ata ahci driver does not set sht->module.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 594a802e9429..2c540476a8be 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1870,23 +1870,23 @@ camss: camss@ca00000 {
- 				    "ispif",
- 				    "vfe0",
- 				    "vfe1";
--			interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
--				     <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
--				     <GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
--				     <GIC_SPI 296 IRQ_TYPE_EDGE_RISING>,
-+			interrupts = <GIC_SPI 296 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 297 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 298 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 299 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 309 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 314 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 315 IRQ_TYPE_EDGE_RISING>;
--			interrupt-names = "csiphy0",
--					  "csiphy1",
--					  "csiphy2",
--					  "csid0",
-+			interrupt-names = "csid0",
- 					  "csid1",
- 					  "csid2",
- 					  "csid3",
-+					  "csiphy0",
-+					  "csiphy1",
-+					  "csiphy2",
- 					  "ispif",
- 					  "vfe0",
- 					  "vfe1";
--- 
-2.32.0
+> Then it is being dynamically
+> incremented when needed and in scsi_device_dev_release() is being
+> nullified (as you mentioned above).
+> 
+> I guess this SHT->module is actually duplicating what most of drivers
+> (e.g. PCI, platform, USB) are doing. If I understand correctly, the
+> Scsi_Host is instantiated by the probe of a driver (pci_driver,
+> virtio_driver etc), therefore the SHT->module could be simply stored in
+> Scsi_Host.
 
+If you check scsi_device_dev_release(), we try to do a 'get' - if it 
+fails, then we nullify hostt->module. I think that is important as then 
+we call execute_in_process_context(), whose worker does the 'put'. 
+However, the 'put' will get upset if the refcnt was 0, which it would be 
+if the earlier 'get' fails - hence the nullify is to avoid that 
+possibility. So whatever you do needs to handle that. Details are in 
+f2b85040
+
+Thanks,
+john

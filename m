@@ -2,128 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0A951F2D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB5151F2E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiEIDRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S231670AbiEIDZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiEIDPX (ORCPT
+        with ESMTP id S232795AbiEIDSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:15:23 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F67586AEF;
-        Sun,  8 May 2022 20:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652065890; x=1683601890;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=p8urheBXbOU7HRdMjgj249wzbQxrt5Hj0ai6+bM7SsU=;
-  b=m0BEsNOyJ2zLwDXAUvQawRsU05SLRNNp3/hzwQNQIy09ww3mA8LfRzhD
-   MCBjm1CqSVZyeAiG0Gamwwso16bamP2RmRy9TCPlscTyYou57nkCzzBKc
-   gmvgpNeat7b3jztDpW9ubYkzGxO7RcQ4vKI5CD2QjGipPqR4TgN8PmM6a
-   M=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 08 May 2022 20:11:30 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:11:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 8 May 2022 20:11:28 -0700
-Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 8 May 2022 20:11:24 -0700
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <bjorn.andersson@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <sboyd@kernel.org>, <agross@kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <mka@chromium.org>, Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH] remoteproc: sysmon: Wait for SSCTL service to come up
-Date:   Mon, 9 May 2022 08:41:07 +0530
-Message-ID: <1652065867-5669-1-git-send-email-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Sun, 8 May 2022 23:18:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8614712FC;
+        Sun,  8 May 2022 20:14:21 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxR5n6RftzGpfg;
+        Mon,  9 May 2022 11:11:25 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 11:14:12 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 11:14:12 +0800
+Message-ID: <e8715911-f835-059d-27f8-cc5f5ad30a07@huawei.com>
+Date:   Mon, 9 May 2022 11:14:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.10 v3] locking/csd_lock: fix csdlock_debug cause arm64
+ boot panic
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>, <stable@vger.kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <namit@vmware.com>,
+        <gor@linux.ibm.com>, <rdunlap@infradead.org>, <sashal@kernel.org>
+References: <20220507084510.14761-1-chenzhongjin@huawei.com>
+ <YnZAO+3Rhj0gwq38@kroah.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YnZAO+3Rhj0gwq38@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SSCTL service comes up after a finite time when the remote Q6 comes
-out of reset. Any graceful shutdowns requested during this period will
-be a NOP and abrupt tearing down of the glink channel might lead to pending
-transactions on the remote Q6 side and will ultimately lead to a fatal
-error. Fix this by waiting for the SSCTL service when a graceful shutdown
-is requested.
+Hi Greg,
 
-Fixes: 1fb82ee806d1 ("remoteproc: qcom: Introduce sysmon")
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
- drivers/remoteproc/qcom_sysmon.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Since the patch:
+https://lore.kernel.org/all/20210420093559.23168-1-catalin.marinas@arm.com/
+has forced CONFIG_SPARSEMEM_VMEMMAP=y from 5.12, it's not necessary to include
+this patch on master.
 
-diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-index 9fca81492863..a9f04dd83ab6 100644
---- a/drivers/remoteproc/qcom_sysmon.c
-+++ b/drivers/remoteproc/qcom_sysmon.c
-@@ -41,6 +41,7 @@ struct qcom_sysmon {
- 	struct completion comp;
- 	struct completion ind_comp;
- 	struct completion shutdown_comp;
-+	struct completion ssctl_comp;
- 	struct mutex lock;
- 
- 	bool ssr_ack;
-@@ -445,6 +446,8 @@ static int ssctl_new_server(struct qmi_handle *qmi, struct qmi_service *svc)
- 
- 	svc->priv = sysmon;
- 
-+	complete(&sysmon->ssctl_comp);
-+
- 	return 0;
- }
- 
-@@ -501,6 +504,7 @@ static int sysmon_start(struct rproc_subdev *subdev)
- 		.ssr_event = SSCTL_SSR_EVENT_AFTER_POWERUP
- 	};
- 
-+	reinit_completion(&sysmon->ssctl_comp);
- 	mutex_lock(&sysmon->state_lock);
- 	sysmon->state = SSCTL_SSR_EVENT_AFTER_POWERUP;
- 	blocking_notifier_call_chain(&sysmon_notifiers, 0, (void *)&event);
-@@ -545,6 +549,11 @@ static void sysmon_stop(struct rproc_subdev *subdev, bool crashed)
- 	if (crashed)
- 		return;
- 
-+	if (sysmon->ssctl_instance) {
-+		if (!wait_for_completion_timeout(&sysmon->ssctl_comp, HZ / 2))
-+			dev_err(sysmon->dev, "timeout waiting for ssctl service\n");
-+	}
-+
- 	if (sysmon->ssctl_version)
- 		sysmon->shutdown_acked = ssctl_request_shutdown(sysmon);
- 	else if (sysmon->ept)
-@@ -631,6 +640,7 @@ struct qcom_sysmon *qcom_add_sysmon_subdev(struct rproc *rproc,
- 	init_completion(&sysmon->comp);
- 	init_completion(&sysmon->ind_comp);
- 	init_completion(&sysmon->shutdown_comp);
-+	init_completion(&sysmon->ssctl_comp);
- 	mutex_init(&sysmon->lock);
- 	mutex_init(&sysmon->state_lock);
- 
--- 
-2.7.4
+However this problem still exist on 5.10 stable, so either we can backport the
+above patch to 5.10, or independently apply mine.
+
+I'm not sure if backporting one exist patch is better, but that patch only
+changed configs without any fix for old builds.
+
+If you have any advice please tell me.
+
+Thanks!
+Chen
+
+On 2022/5/7 17:47, Greg KH wrote:
+> On Sat, May 07, 2022 at 04:45:10PM +0800, Chen Zhongjin wrote:
+>> csdlock_debug is a early_param to enable csd_lock_wait
+>> feature.
+>>
+>> It uses static_branch_enable in early_param which triggers
+>> a panic on arm64 with config:
+>> CONFIG_SPARSEMEM=y
+>> CONFIG_SPARSEMEM_VMEMMAP=n
+>>
+>> The log shows:
+>> Unable to handle kernel NULL pointer dereference at
+>> virtual address ", '0' <repeats 16 times>, "
+>> ...
+>> Call trace:
+>> __aarch64_insn_write+0x9c/0x18c
+>> ...
+>> static_key_enable+0x1c/0x30
+>> csdlock_debug+0x4c/0x78
+>> do_early_param+0x9c/0xcc
+>> parse_args+0x26c/0x3a8
+>> parse_early_options+0x34/0x40
+>> parse_early_param+0x80/0xa4
+>> setup_arch+0x150/0x6c8
+>> start_kernel+0x8c/0x720
+>> ...
+>> Kernel panic - not syncing: Oops: Fatal exception
+>>
+>> Call trace inside __aarch64_insn_write:
+>> __nr_to_section
+>> __pfn_to_page
+>> phys_to_page
+>> patch_map
+>> __aarch64_insn_write
+>>
+>> Here, with CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section returns
+>> NULL and makes the NULL dereference because mem_section is
+>> initialized in sparse_init after parse_early_param stage.
+>>
+>> So, static_branch_enable shouldn't be used inside early_param.
+>> To avoid this, I changed it to __setup and fixed this.
+>>
+>> Reported-by: Chen jingwen <chenjingwen6@huawei.com>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>> Change v2 -> v3:
+>> Add module name in title
+>>
+>> Change v1 -> v2:
+>> Fix return 1 for __setup
+>> ---
+>>
+>>  kernel/smp.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/smp.c b/kernel/smp.c
+>> index 65a630f62363..381eb15cd28f 100644
+>> --- a/kernel/smp.c
+>> +++ b/kernel/smp.c
+>> @@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
+>>  	if (val)
+>>  		static_branch_enable(&csdlock_debug_enabled);
+>>  
+>> -	return 0;
+>> +	return 1;
+>>  }
+>> -early_param("csdlock_debug", csdlock_debug);
+>> +__setup("csdlock_debug=", csdlock_debug);
+>>  
+>>  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
+>>  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
+>> -- 
+>> 2.17.1
+>>
+> 
+> 
+> <formletter>
+> 
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+> 
+> </formletter>
+> .
 

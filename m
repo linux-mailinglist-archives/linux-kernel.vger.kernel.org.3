@@ -2,394 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FA751F2C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 04:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFCA51F2C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 04:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiEIDAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S229729AbiEIC7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 22:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiEIC5q (ORCPT
+        with ESMTP id S229585AbiEIC55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 22:57:46 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F167719DF;
-        Sun,  8 May 2022 19:53:54 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id j6so9904564qkp.9;
-        Sun, 08 May 2022 19:53:54 -0700 (PDT)
+        Sun, 8 May 2022 22:57:57 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4DD8164B
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 19:54:05 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1113286pjq.2
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 19:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=AV0eCAcM4dwQEL2GYa+8ylnliPw/IllGlpfo370R8veFGqCZINAxqbvS7tANJ2s101
-         hqpowH7o2P1pFracXHKx/CFSSdKuDTQXovwowr4M2wabCy9szm+KmIlFL3q2XVP9aSFD
-         euwnuzZhA0WJTHPb7z/Uyl6lOIjxAQRO6XfiogAA1qmX/hRLF+RfjujPcVeU9N47JyqJ
-         OyE28U2bGJlE8aYPrC0FVFBZYKdD3vZwr6JNPThX8buSxKqGRR3MZbWEWSvMminsWp6l
-         xjgximImsPkhRHnAnBBDRdfAWOBekT+9n9Dd5qkxMLoEch5PPmEkKAUNCoElVpTo+Kkh
-         SPPg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
+        b=lvu0tqEAYL4lMpXHlUzMzuGrVzNiSN1F7GkTpaXG15DPrHT1CKlKmPTSyxU7h/NV/j
+         kUWsTNFP/67CPMC2uOZi3lJkE0lLp5sDkHR5Vg4ZoLQibwozZlVvVrWAmrcTfYRpX//B
+         IUvdewS9yYA2LSGRsdHGz3Vy9in8L82rvGFwD3Zc8rtXp9G3nFfXed3dmePb2uW74wWS
+         gjRGNoAkLLOEaS+JIVqDdXS8Khp2rr6+h+bGKqkjlK7OSgl+ubpQebutmaP5tiQRi8Kq
+         5jTLundScFrLcZoaaz36HUq3ybV0gU6aQtsrRhtprHTBJRtzsvzNZ5USFQbLHaHia+ap
+         v4wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=FwCRDuNUoEwuNH7NZSQYW0sHGuw8WIWtlMynqG2PZfBVUVnUGWn3uffO7mCRqBSJXz
-         XKNoTXAbyrBXkhQNgpXBAd3IhC5n43qod/hooE8zL3eIwnGqvoEVnsdYEbIJblff5lwz
-         57Gq0VxORH8qO89YKC8kMkXqe/YzlogREcrMSitcjGkNfsl11/fJy96LsXeO7WyN2x1v
-         ebrXBGJjEK6T4E2jFdFtCkfGBxaHrmY2FvXeWu1JEiAJjlVmIbbVnwKzgkPbL3M1gaGM
-         Fr9CUQP11Sm3GuntB9PTepd1qGpdeDfSQ8Yj/FVVOOk3CW+ILrlsT/i33QETPDMgCce5
-         FMPQ==
-X-Gm-Message-State: AOAM533s2teMsVsoPXxU3a8QS5uT+zWp+X7PtTsvPi5xpaoA4zDLsYQ3
-        YWmOvNW4rE4Vinlg0rgfTjjnA6ENsGUrJBD/btU=
-X-Google-Smtp-Source: ABdhPJxcLQ/dM1ItCcc01DCsbquqlE4w8IbwGnFnYAlwRZQbOLCKc6tQdBjxm5j6pTgbELgQk1Va1n/i48Ro1zrORrM=
-X-Received: by 2002:a37:ad16:0:b0:6a0:1468:4513 with SMTP id
- f22-20020a37ad16000000b006a014684513mr10207672qkm.96.1652064833037; Sun, 08
- May 2022 19:53:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
+        b=uwc8GOXxzAVOptfAoEPeWPTXfwkGbXb+kRV8MrDBNau51XVnlkJAcxiIuZPS4rx5oH
+         xY+DaWaC9YKlw3BdoJfgZoPO0SYtqKLPoV0Uy+7zTJgJoLBVWWZxehg0g1Q7z2w1YuDt
+         xA7fVXAZyETznEIG0hMeewiTyDrzv7SxkRppY5Gj6vb96Q/WvJwZUl+y9HMZSh4DexbZ
+         Tkl1g+iV7pjn+jN7FDBaNZLf/elJKEBlizOQPL/XnlYUcCkarCROAKut58YY6yXHT9Vh
+         dj2X+D6yLzWR/reZYbvNWZlNmvMFEjIPDPgbRE/u+8NkKWmtYak0ybxnbbjyksyDrSne
+         0NEw==
+X-Gm-Message-State: AOAM533lEF8EU2wI5d9FAsPStY9jjZOmKOIQBYJFcM7UQ6hACIrPZphd
+        MqohMT/x0YAYgQpLBEZgyyLaJg==
+X-Google-Smtp-Source: ABdhPJy7zWNcQupxAcYMUNYtQ/R40mo+W7VEUJcoJcHH9ByfyOdtqYbfEKoLlg6WSLCwLEQ+8OB54A==
+X-Received: by 2002:a17:902:d2c9:b0:15e:b28d:8ad2 with SMTP id n9-20020a170902d2c900b0015eb28d8ad2mr14262241plc.94.1652064845269;
+        Sun, 08 May 2022 19:54:05 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170902e29200b0015e8d4eb258sm5783241plc.162.2022.05.08.19.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 19:54:04 -0700 (PDT)
+Date:   Mon, 9 May 2022 10:54:00 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH 0/3] Introduce new huge_ptep_get_access_flags()
+ interface
+Message-ID: <YniCSGvBeUq3yxCg@FVFYT0MHHV2J.usts.net>
+References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
+ <Ynf5Aje8FXlPdOSl@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
- <202204271737.oAuTwqZH-lkp@intel.com> <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
- <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com> <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Mon, 9 May 2022 11:53:16 +0900
-Message-ID: <CAGTfZH2Oc6ADQtFiNqa+R=rDPPrKAyEUw_9DY54trr7kU34_Rw@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce
- MediaTek CCI devfreq driver
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     "Chen, Rong A" <rong.a.chen@intel.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        kernel test robot <lkp@intel.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, krzk+dt@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynf5Aje8FXlPdOSl@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
-
-On Mon, May 9, 2022 at 10:53 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+On Sun, May 08, 2022 at 06:08:18PM +0100, Matthew Wilcox wrote:
+> On Sun, May 08, 2022 at 04:58:51PM +0800, Baolin Wang wrote:
+> > As Mike pointed out [1], the huge_ptep_get() will only return one specific
+> > pte value for the CONT-PTE or CONT-PMD size hugetlb on ARM64 system, which
+> > will not take into account the subpages' dirty or young bits of a CONT-PTE/PMD
+> > size hugetlb page. That will make us miss dirty or young flags of a CONT-PTE/PMD
+> > size hugetlb page for those functions that want to check the dirty or
+> > young flags of a hugetlb page. For example, the gather_hugetlb_stats() will
+> > get inaccurate dirty hugetlb page statistics, and the DAMON for hugetlb monitoring
+> > will also get inaccurate access statistics.
+> > 
+> > To fix this issue, one approach is that we can define an ARM64 specific huge_ptep_get()
+> > implementation, which will take into account any subpages' dirty or young bits.
+> > However we should add a new parameter for ARM64 specific huge_ptep_get() to check
+> > how many continuous PTEs or PMDs in this CONT-PTE/PMD size hugetlb, that means we
+> > should convert all the places using huge_ptep_get(), meanwhile most places using
+> > huge_ptep_get() did not care about the dirty or young flags at all.
+> > 
+> > So instead of changing the prototype of huge_ptep_get(), this patch set introduces
+> > a new huge_ptep_get_access_flags() interface and define an ARM64 specific implementation,
+> > that will take into account any subpages' dirty or young bits for CONT-PTE/PMD size
+> > hugetlb page. And we can only change to use huge_ptep_get_access_flags() for those
+> > functions that care about the dirty or young flags of a hugetlb page.
+> 
+> I question whether this is the right approach.  I understand that
+> different hardware implementations have different requirements here,
+> but at least one that I'm aware of (AMD Zen 2/3) requires that all
+> PTEs that are part of a contig PTE must have identical A/D bits.  Now,
+> you could say that's irrelevant because it's x86 and we don't currently
+> support contPTE on x86, but I wouldn't be surprised to see that other
+> hardware has the same requirement.
+> 
+> So what if we make that a Linux requirement?  Setting a contPTE dirty or
+> accessed becomes a bit more expensive (although still one/two cachelines,
+> so not really much more expensive than a single write).  Then there's no
+> need to change the "get" side of things because they're always identical.
+> 
+> It does mean that we can't take advantage of hardware setting A/D bits,
+> unless hardware can be persuaded to behave this way.  I don't have any
+> ARM specs in front of me to check.
 >
-> On Thu, Apr 28, 2022 at 7:39 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
-> > On 4/27/2022 6:11 PM, Johnson Wang wrote:
-> > > On Wed, 2022-04-27 at 17:25 +0800, kernel test robot wrote:
-> > >> Hi Johnson,
-> > >>
-> > >> Thank you for the patch! Perhaps something to improve:
-> > >>
-> > >> [auto build test WARNING on robh/for-next]
-> > >> [also build test WARNING on linus/master v5.18-rc4 next-20220427]
-> > >> [If your patch is applied to the wrong git tree, kindly drop us a
-> > >> note.
-> > >> And when submitting patch, we suggest to use '--base' as documented
-> > >> in
-> > >>
-> > > https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMS_s9zEZ$
-> > >>   ]
-> > >>
-> > >> url:
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMc1U_tqz$
-> > >>
-> > >> base:
-> > >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMUzTprof$
-> > >>    for-next
-> > >> config: hexagon-allyesconfig (
-> > >> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMaVRzbSL$
-> > >>   )
-> > >> compiler: clang version 15.0.0 (
-> > >> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMRqw5IY-$
-> > >> $  1cddcfdc3c683b393df1a5c9063252eb60e52818)
-> > >> reproduce (this is a W=1 build):
-> > >>          wget
-> > >> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMQLiD-i9$
-> > >>    -O ~/bin/make.cross
-> > >>          chmod +x ~/bin/make.cross
-> > >>          #
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMU5yd7Y2$
-> > >>
-> > >>          git remote add linux-review
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMW4ldtnH$
-> > >>
-> > >>          git fetch --no-tags linux-review Johnson-Wang/Introduce-
-> > >> MediaTek-CCI-devfreq-driver/20220425-205820
-> > >>          git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
-> > >>          # save the config file
-> > >>          mkdir build_dir && cp config build_dir/.config
-> > >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
-> > >> W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/
-> > >> drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
-> > >>
-> > >> If you fix the issue, kindly add following tag as appropriate
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >>
-> > >> All warnings (new ones prefixed by >>):
-> > >>
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named
-> > >> 'parent_type' in 'struct devfreq_passive_data'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>             ~~~~~~~~~~~~  ^
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared
-> > >> identifier 'CPUFREQ_PARENT_DEV'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>                                         ^
-> > >>>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format
-> > >>>> specifies type 'int' but the argument has type 'long' [-Wformat]
-> > >>
-> > >>                             PTR_ERR(drv->devfreq));
-> > >>                             ^~~~~~~~~~~~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:144:65: note: expanded from macro
-> > >> 'dev_err'
-> > >>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev,
-> > >> dev_fmt(fmt), ##__VA_ARGS__)
-> > >>                                                                    ~~~
-> > >>       ^~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:110:23: note: expanded from macro
-> > >> 'dev_printk_index_wrap'
-> > >>                     _p_func(dev, fmt,
-> > >> ##__VA_ARGS__);                       \
-> > >>                                  ~~~    ^~~~~~~~~~~
-> > >>     1 warning and 2 errors generated.
-> > >>
-> > >>
-> > >> vim +379 drivers/devfreq/mtk-cci-devfreq.c
-> > >>
-> > >>     255
-> > >>     256      static int mtk_ccifreq_probe(struct platform_device
-> > >> *pdev)
-> > >>     257      {
-> > >>     258              struct device *dev = &pdev->dev;
-> > >>     259              struct mtk_ccifreq_drv *drv;
-> > >>     260              struct devfreq_passive_data *passive_data;
-> > >>     261              struct dev_pm_opp *opp;
-> > >>     262              unsigned long rate, opp_volt;
-> > >>     263              int ret;
-> > >>     264
-> > >>     265              drv = devm_kzalloc(dev, sizeof(*drv),
-> > >> GFP_KERNEL);
-> > >>     266              if (!drv)
-> > >>     267                      return -ENOMEM;
-> > >>     268
-> > >>     269              drv->dev = dev;
-> > >>     270              drv->soc_data = (const struct
-> > >> mtk_ccifreq_platform_data *)
-> > >>     271                                      of_device_get_match_dat
-> > >> a(&pdev->dev);
-> > >>     272              mutex_init(&drv->reg_lock);
-> > >>     273              platform_set_drvdata(pdev, drv);
-> > >>     274
-> > >>     275              drv->cci_clk = devm_clk_get(dev, "cci");
-> > >>     276              if (IS_ERR(drv->cci_clk)) {
-> > >>     277                      ret = PTR_ERR(drv->cci_clk);
-> > >>     278                      return dev_err_probe(dev, ret,
-> > >>     279                                           "failed to get cci
-> > >> clk: %d\n", ret);
-> > >>     280              }
-> > >>     281
-> > >>     282              drv->inter_clk = devm_clk_get(dev,
-> > >> "intermediate");
-> > >>     283              if (IS_ERR(drv->inter_clk)) {
-> > >>     284                      ret = PTR_ERR(drv->inter_clk);
-> > >>     285                      dev_err_probe(dev, ret,
-> > >>     286                                    "failed to get
-> > >> intermediate clk: %d\n", ret);
-> > >>     287                      goto out_free_resources;
-> > >>     288              }
-> > >>     289
-> > >>     290              drv->proc_reg =
-> > >> devm_regulator_get_optional(dev, "proc");
-> > >>     291              if (IS_ERR(drv->proc_reg)) {
-> > >>     292                      ret = PTR_ERR(drv->proc_reg);
-> > >>     293                      dev_err_probe(dev, ret,
-> > >>     294                                    "failed to get proc
-> > >> regulator: %d\n", ret);
-> > >>     295                      goto out_free_resources;
-> > >>     296              }
-> > >>     297
-> > >>     298              ret = regulator_enable(drv->proc_reg);
-> > >>     299              if (ret) {
-> > >>     300                      dev_err(dev, "failed to enable proc
-> > >> regulator\n");
-> > >>     301                      goto out_free_resources;
-> > >>     302              }
-> > >>     303
-> > >>     304              drv->sram_reg = regulator_get_optional(dev,
-> > >> "sram");
-> > >>     305              if (IS_ERR(drv->sram_reg))
-> > >>     306                      drv->sram_reg = NULL;
-> > >>     307              else {
-> > >>     308                      ret = regulator_enable(drv->sram_reg);
-> > >>     309                      if (ret) {
-> > >>     310                              dev_err(dev, "failed to enable
-> > >> sram regulator\n");
-> > >>     311                              goto out_free_resources;
-> > >>     312                      }
-> > >>     313              }
-> > >>     314
-> > >>     315              /*
-> > >>     316               * We assume min voltage is 0 and tracking
-> > >> target voltage using
-> > >>     317               * min_volt_shift for each iteration.
-> > >>     318               * The retry_max is 3 times of expeted
-> > >> iteration count.
-> > >>     319               */
-> > >>     320              drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv-
-> > >>> soc_data->sram_max_volt,
-> > >>     321                                                     drv-
-> > >>> soc_data->proc_max_volt),
-> > >>     322                                                 drv-
-> > >>> soc_data->min_volt_shift);
-> > >>     323
-> > >>     324              ret = clk_prepare_enable(drv->cci_clk);
-> > >>     325              if (ret)
-> > >>     326                      goto out_free_resources;
-> > >>     327
-> > >>     328              ret = clk_prepare_enable(drv->inter_clk);
-> > >>     329              if (ret)
-> > >>     330                      goto out_disable_cci_clk;
-> > >>     331
-> > >>     332              ret = dev_pm_opp_of_add_table(dev);
-> > >>     333              if (ret) {
-> > >>     334                      dev_err(dev, "failed to add opp table:
-> > >> %d\n", ret);
-> > >>     335                      goto out_disable_inter_clk;
-> > >>     336              }
-> > >>     337
-> > >>     338              rate = clk_get_rate(drv->inter_clk);
-> > >>     339              opp = dev_pm_opp_find_freq_ceil(dev, &rate);
-> > >>     340              if (IS_ERR(opp)) {
-> > >>     341                      ret = PTR_ERR(opp);
-> > >>     342                      dev_err(dev, "failed to get
-> > >> intermediate opp: %d\n", ret);
-> > >>     343                      goto out_remove_opp_table;
-> > >>     344              }
-> > >>     345              drv->inter_voltage =
-> > >> dev_pm_opp_get_voltage(opp);
-> > >>     346              dev_pm_opp_put(opp);
-> > >>     347
-> > >>     348              rate = U32_MAX;
-> > >>     349              opp = dev_pm_opp_find_freq_floor(drv->dev,
-> > >> &rate);
-> > >>     350              if (IS_ERR(opp)) {
-> > >>     351                      dev_err(dev, "failed to get opp\n");
-> > >>     352                      ret = PTR_ERR(opp);
-> > >>     353                      goto out_remove_opp_table;
-> > >>     354              }
-> > >>     355
-> > >>     356              opp_volt = dev_pm_opp_get_voltage(opp);
-> > >>     357              dev_pm_opp_put(opp);
-> > >>     358              ret = mtk_ccifreq_set_voltage(drv, opp_volt);
-> > >>     359              if (ret) {
-> > >>     360                      dev_err(dev, "failed to scale to
-> > >> highest voltage %lu in proc_reg\n",
-> > >>     361                              opp_volt);
-> > >>     362                      goto out_remove_opp_table;
-> > >>     363              }
-> > >>     364
-> > >>     365              passive_data = devm_kzalloc(dev, sizeof(struct
-> > >> devfreq_passive_data),
-> > >>     366                                          GFP_KERNEL);
-> > >>     367              if (!passive_data) {
-> > >>     368                      ret = -ENOMEM;
-> > >>     369                      goto out_remove_opp_table;
-> > >>     370              }
-> > >>     371
-> > >>     372              passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>     373              drv->devfreq = devm_devfreq_add_device(dev,
-> > >> &mtk_ccifreq_profile,
-> > >>     374                                                     DEVFREQ_
-> > >> GOV_PASSIVE,
-> > >>     375                                                     passive_
-> > >> data);
-> > >>     376              if (IS_ERR(drv->devfreq)) {
-> > >>     377                      ret = -EPROBE_DEFER;
-> > >>     378                      dev_err(dev, "failed to add devfreq
-> > >> device: %d\n",
-> > >>   > 379                              PTR_ERR(drv->devfreq));
-> > >>     380                      goto out_remove_opp_table;
-> > >>     381              }
-> > >>     382
-> > >>     383              drv->opp_nb.notifier_call =
-> > >> mtk_ccifreq_opp_notifier;
-> > >>     384              ret = dev_pm_opp_register_notifier(dev, &drv-
-> > >>> opp_nb);
-> > >>     385              if (ret) {
-> > >>     386                      dev_err(dev, "failed to register opp
-> > >> notifier: %d\n", ret);
-> > >>     387                      goto out_remove_devfreq_device;
-> > >>     388              }
-> > >>     389              return 0;
-> > >>     390
-> > >>     391      out_remove_devfreq_device:
-> > >>     392              devm_devfreq_remove_device(dev, drv->devfreq);
-> > >>     393
-> > >>     394      out_remove_opp_table:
-> > >>     395              dev_pm_opp_of_remove_table(dev);
-> > >>     396
-> > >>     397      out_disable_inter_clk:
-> > >>     398              clk_disable_unprepare(drv->inter_clk);
-> > >>     399
-> > >>     400      out_disable_cci_clk:
-> > >>     401              clk_disable_unprepare(drv->cci_clk);
-> > >>     402
-> > >>     403      out_free_resources:
-> > >>     404              if (regulator_is_enabled(drv->proc_reg))
-> > >>     405                      regulator_disable(drv->proc_reg);
-> > >>     406              if (drv->sram_reg && regulator_is_enabled(drv-
-> > >>> sram_reg))
-> > >>     407                      regulator_disable(drv->sram_reg);
-> > >>     408
-> > >>     409              if (!IS_ERR(drv->proc_reg))
-> > >>     410                      regulator_put(drv->proc_reg);
-> > >>     411              if (!IS_ERR(drv->sram_reg))
-> > >>     412                      regulator_put(drv->sram_reg);
-> > >>     413              if (!IS_ERR(drv->cci_clk))
-> > >>     414                      clk_put(drv->cci_clk);
-> > >>     415              if (!IS_ERR(drv->inter_clk))
-> > >>     416                      clk_put(drv->inter_clk);
-> > >>     417
-> > >>     418              return ret;
-> > >>     419      }
-> > >>     420
-> > >>
-> > >
-> > > Hi "kernel test robot",
-> > >
-> > > Thanks for your review.
-> > >
-> > > This patch is based on chanwoo/devfreq-testing[1]
-> > > [1]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
-> >
-> > Hi Johnson,
-> >
-> > Thanks for the feedback, we'll take a look too.
->
-> I think the last patch on that branch might be broken.
 
-You mean the patch[1]. Without this patch[1], there are no problems?
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=ea1011fba665b95fc28f682c9b131799a88b11ae
+I have looked at the comments in get_clear_flush() (in arch/arm64/mm/hugetlbpage.c).
+That says:
 
-When you tested these patches with patchset[2] without last patch[1]
-if there are no problems, please reply to patchset[2] with your Tested-by tag.
-[2] https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
+	/*
+	 * If HW_AFDBM is enabled, then the HW could turn on
+	 * the dirty or accessed bit for any page in the set,
+	 * so check them all.
+	 */
 
+Unfortunately, the AD bits are not identical in all subpages.
 
---
-Best Regards,
-Chanwoo Choi
+Thanks.

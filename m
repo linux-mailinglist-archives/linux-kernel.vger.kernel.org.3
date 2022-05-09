@@ -2,163 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFF751FF32
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2D051FF3A
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbiEIONP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S236847AbiEIOP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiEIONI (ORCPT
+        with ESMTP id S236766AbiEIOP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:13:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1E9B2A18A2;
-        Mon,  9 May 2022 07:09:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BE2A1480;
-        Mon,  9 May 2022 07:09:13 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 945423F73D;
-        Mon,  9 May 2022 07:09:10 -0700 (PDT)
-Date:   Mon, 9 May 2022 15:09:07 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     alexandre.torgue@foss.st.com, andrew@lunn.ch, broonie@kernel.org,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, joabreu@synopsys.com,
-        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
-        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
-        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 2/6] net: stmmac: dwmac-sun8i: remove regulator
-Message-ID: <20220509150907.6cf9c4d1@donnerap.cambridge.arm.com>
-In-Reply-To: <20220509074857.195302-3-clabbe@baylibre.com>
-References: <20220509074857.195302-1-clabbe@baylibre.com>
-        <20220509074857.195302-3-clabbe@baylibre.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Mon, 9 May 2022 10:15:26 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11AB122B53;
+        Mon,  9 May 2022 07:11:31 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id B709068AFE; Mon,  9 May 2022 16:11:24 +0200 (CEST)
+Date:   Mon, 9 May 2022 16:11:22 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Conor.Dooley@microchip.com
+Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, hch@lst.de,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: linux-next: Tree for May 3
+Message-ID: <20220509141122.GA14555@lst.de>
+References: <20220503172926.08215c77@canb.auug.org.au> <3f94c9a8-c927-5cc0-7d67-4b21c3d9dbaf@microchip.com> <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a424be9-380f-f99c-4126-25a00eba0271@microchip.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  9 May 2022 07:48:53 +0000
-Corentin Labbe <clabbe@baylibre.com> wrote:
+On Mon, May 09, 2022 at 01:33:07PM +0000, Conor.Dooley@microchip.com wrote:
+> @Christoph, I know /nothing/ about swiotlb, so if you have any
+> suggestions for debugging that you would like me to try, let me
+> know please.
 
-Hi,
+Hi Conor,
 
-> Now regulator is handled by phy core, there is no need to handle it in
-> stmmac driver.
+sorry for dropping this on the flor.  I was at LSF/MM least week and
+my plan to go through my backlog today didn't go to plan as I unepectedly
+spent half the day at doctors appointments.
 
-I don't think you can do that, since we definitely need to maintain
-compatibility with *older* DTs.
-Is there a real need for this patch, or is it just a cleanup?
-I mean we should be able to keep both approaches in, and the respective
-board and DT version selects which it is using.
-
-Cheers,
-Andre
-
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 37 +------------------
->  1 file changed, 2 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> index f834472599f7..17888813c707 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> @@ -17,7 +17,6 @@
->  #include <linux/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> -#include <linux/regulator/consumer.h>
->  #include <linux/regmap.h>
->  #include <linux/stmmac.h>
->  
-> @@ -59,7 +58,6 @@ struct emac_variant {
->  
->  /* struct sunxi_priv_data - hold all sunxi private data
->   * @ephy_clk:	reference to the optional EPHY clock for the internal PHY
-> - * @regulator:	reference to the optional regulator
->   * @rst_ephy:	reference to the optional EPHY reset for the internal PHY
->   * @variant:	reference to the current board variant
->   * @regmap:	regmap for using the syscon
-> @@ -69,7 +67,6 @@ struct emac_variant {
->   */
->  struct sunxi_priv_data {
->  	struct clk *ephy_clk;
-> -	struct regulator *regulator;
->  	struct reset_control *rst_ephy;
->  	const struct emac_variant *variant;
->  	struct regmap_field *regmap_field;
-> @@ -568,29 +565,11 @@ static int sun8i_dwmac_init(struct platform_device *pdev, void *priv)
->  {
->  	struct net_device *ndev = platform_get_drvdata(pdev);
->  	struct sunxi_priv_data *gmac = priv;
-> -	int ret;
->  
-> -	if (gmac->regulator) {
-> -		ret = regulator_enable(gmac->regulator);
-> -		if (ret) {
-> -			dev_err(&pdev->dev, "Fail to enable regulator\n");
-> -			return ret;
-> -		}
-> -	}
-> -
-> -	if (gmac->use_internal_phy) {
-> -		ret = sun8i_dwmac_power_internal_phy(netdev_priv(ndev));
-> -		if (ret)
-> -			goto err_disable_regulator;
-> -	}
-> +	if (gmac->use_internal_phy)
-> +		return sun8i_dwmac_power_internal_phy(netdev_priv(ndev));
->  
->  	return 0;
-> -
-> -err_disable_regulator:
-> -	if (gmac->regulator)
-> -		regulator_disable(gmac->regulator);
-> -
-> -	return ret;
->  }
->  
->  static void sun8i_dwmac_core_init(struct mac_device_info *hw,
-> @@ -1034,9 +1013,6 @@ static void sun8i_dwmac_exit(struct platform_device *pdev, void *priv)
->  
->  	if (gmac->variant->soc_has_internal_phy)
->  		sun8i_dwmac_unpower_internal_phy(gmac);
-> -
-> -	if (gmac->regulator)
-> -		regulator_disable(gmac->regulator);
->  }
->  
->  static void sun8i_dwmac_set_mac_loopback(void __iomem *ioaddr, bool enable)
-> @@ -1157,15 +1133,6 @@ static int sun8i_dwmac_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> -	/* Optional regulator for PHY */
-> -	gmac->regulator = devm_regulator_get_optional(dev, "phy");
-> -	if (IS_ERR(gmac->regulator)) {
-> -		if (PTR_ERR(gmac->regulator) == -EPROBE_DEFER)
-> -			return -EPROBE_DEFER;
-> -		dev_info(dev, "No regulator found\n");
-> -		gmac->regulator = NULL;
-> -	}
-> -
->  	/* The "GMAC clock control" register might be located in the
->  	 * CCU address range (on the R40), or the system control address
->  	 * range (on most other sun8i and later SoCs).
-
+The commit looks like a somewhat unusual culprit for a boot failure,
+so any chance you could do another manual verifiation pass where
+you checkout 6424e31b1c05 and then the commit before it (i.e. as
+git checkout 6424e31b1c05^) to make sure it really is this commits?
+Some of the commits around it just seems like more likely culprits to
+me, so I'd like to really be 100% sure here.  In the meantime I'll
+look through the patch.  Also you don't happen to have earlycon support
+on this plaform to see if there are any interesting messages on the
+serial console?

@@ -2,38 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BF351F98A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0DE51F9A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbiEIKUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S232370AbiEIKVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiEIKUd (ORCPT
+        with ESMTP id S234121AbiEIKVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:20:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C608174939;
-        Mon,  9 May 2022 03:16:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C0E61063;
-        Mon,  9 May 2022 03:16:13 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3D4073F66F;
-        Mon,  9 May 2022 03:16:12 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, will@kernel.org, bhelgaas@google.com,
-        robh@kernel.org
-Cc:     iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iommu/dma: Explicitly sort PCI DMA windows
-Date:   Mon,  9 May 2022 11:16:08 +0100
-Message-Id: <35661036a7e4160850895f9b37f35408b6a29f2f.1652091160.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.35.3.dirty
+        Mon, 9 May 2022 06:21:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6810A18430F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652091438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8rAG+hhLyyADjfWKc/qIMa3fRClDqyFw6+rAc7ZUweE=;
+        b=TBY0qSgrMGaSblfpeABrbY52GYWqUpAD6/5ERWkmHINoqzkTfYmNY854ethXRQjzU3uNIm
+        IA2egAh9lQVLHeyi/z7ejkUHwzpJ6ZNLSDkA/79Ch6/3vBUlWaOcz0kltJGz2iTN4KPcwE
+        EIwojyGUMPiaVFIJ/Zkk/b2ad2FqFpg=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-L_zjo35DOUi2bLfkt6TIZQ-1; Mon, 09 May 2022 06:17:17 -0400
+X-MC-Unique: L_zjo35DOUi2bLfkt6TIZQ-1
+Received: by mail-ej1-f70.google.com with SMTP id qa15-20020a170907868f00b006f4c89bf2e3so6305402ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 03:17:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8rAG+hhLyyADjfWKc/qIMa3fRClDqyFw6+rAc7ZUweE=;
+        b=1ZQ6nr07egpGvR4wynCeqpQdxePXsfrWGXLtcXsTQeaFbNariLYTSbyDPZTV+5aaGC
+         zTf2OsoqHuQa/q1sC/e2IjN80lbl0fKB/Lr+CtE5oAL2CRmSD2ARea2ksOkVzibFKfZ6
+         Ke69OUa22P6R/vTsWSCJ72byAxs1isc3GQL5IobecZpFKShWPGTG2PP1vJfdQtSirgSK
+         rB4bco8c1+tjrHCrhGKU2DEoLZtuvFM8mkdjxzT0hYPeoHOPNrc1XLl0KTvEZCSgTrcU
+         RVKiY+P1onQNtLEGj/6vgFt2M+aLgpohMnNWRjTXxVRmNZ4PHb7q4sikZH+t54aacg3g
+         bPAQ==
+X-Gm-Message-State: AOAM530yYakNAI5FdQXE5nk3zM9D/+dIiIuQK5ehf02LaRZqjwgJQZ2G
+        IFJBSPjJ25hotgRkMwp3u/JKRpKDXOEHFCw8DMH4e7azQn8HJA2e6jaqsSXmlQf6bgA29Xjk6gH
+        4fJyZaMvNl5iAM/sczUmy5CHNMzgALavmaPxwIOkz
+X-Received: by 2002:a50:d08b:0:b0:425:eb86:f36d with SMTP id v11-20020a50d08b000000b00425eb86f36dmr16301831edd.235.1652091436040;
+        Mon, 09 May 2022 03:17:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwWF5i0r1wWzRnyta1jc1Xzs8fjC2bR2GTrVWYAaiAIuMqphiWE9pkwqenZGV0+CFmZVoPSFTydmMUJBGOVC04=
+X-Received: by 2002:a50:d08b:0:b0:425:eb86:f36d with SMTP id
+ v11-20020a50d08b000000b00425eb86f36dmr16301818edd.235.1652091435909; Mon, 09
+ May 2022 03:17:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220508130944.17860-1-vdronoff@gmail.com> <3f16033ef08063ef9fcb707010e78bd0@linux.ibm.com>
+In-Reply-To: <3f16033ef08063ef9fcb707010e78bd0@linux.ibm.com>
+From:   Vlad Dronov <vdronov@redhat.com>
+Date:   Mon, 9 May 2022 12:17:04 +0200
+Message-ID: <CAMusb+Q11JMyOXV0iy4VLJ8yST7L0QrmDUJWOpnvsBxfBzjrdA@mail.gmail.com>
+Subject: Re: [PATCH] s390/crypto: add crypto library interface for ChaCha20
+To:     freude@linux.ibm.com
+Cc:     Patrick Steuer <patrick.steuer@de.ibm.com>,
+        Harald Freudenberger <freude@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,95 +81,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Originally, creating the dma_ranges resource list in pre-sorted fashion
-was the simplest and most efficient way to enforce the order required by
-iova_reserve_pci_windows(). However since then at least one PCI host
-driver is now re-sorting the list for its own probe-time processing,
-which doesn't seem entirely unreasonable, so that basic assumption no
-longer holds. Make iommu-dma robust and get the sort order it needs by
-explicitly sorting, which means we can also save the effort at creation
-time and just build the list in whatever natural order the DT had.
+Hi, Harald,
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+Thank you for your response, review and an ACK. Let me ask Herbert if
+he would agree
+to add your Reviewed-by and submit (so I do not send v2 just for this).
 
-v2: Clean up now-unused local variable
+Best regards,
+Vladis
 
- drivers/iommu/dma-iommu.c | 13 ++++++++++++-
- drivers/pci/of.c          |  8 +-------
- 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 09f6e1c0f9c0..d05538af4fe9 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -20,6 +20,7 @@
- #include <linux/iommu.h>
- #include <linux/iova.h>
- #include <linux/irq.h>
-+#include <linux/list_sort.h>
- #include <linux/mm.h>
- #include <linux/mutex.h>
- #include <linux/pci.h>
-@@ -414,6 +415,15 @@ static int cookie_init_hw_msi_region(struct iommu_dma_cookie *cookie,
- 	return 0;
- }
- 
-+static int iommu_dma_ranges_sort(void *priv, const struct list_head *a,
-+		const struct list_head *b)
-+{
-+	struct resource_entry *res_a = list_entry(a, typeof(*res_a), node);
-+	struct resource_entry *res_b = list_entry(b, typeof(*res_b), node);
-+
-+	return res_a->res->start > res_b->res->start;
-+}
-+
- static int iova_reserve_pci_windows(struct pci_dev *dev,
- 		struct iova_domain *iovad)
- {
-@@ -432,6 +442,7 @@ static int iova_reserve_pci_windows(struct pci_dev *dev,
- 	}
- 
- 	/* Get reserved DMA windows from host bridge */
-+	list_sort(NULL, &bridge->dma_ranges, iommu_dma_ranges_sort);
- 	resource_list_for_each_entry(window, &bridge->dma_ranges) {
- 		end = window->res->start - window->offset;
- resv_iova:
-@@ -440,7 +451,7 @@ static int iova_reserve_pci_windows(struct pci_dev *dev,
- 			hi = iova_pfn(iovad, end);
- 			reserve_iova(iovad, lo, hi);
- 		} else if (end < start) {
--			/* dma_ranges list should be sorted */
-+			/* DMA ranges should be non-overlapping */
- 			dev_err(&dev->dev,
- 				"Failed to reserve IOVA [%pa-%pa]\n",
- 				&start, &end);
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index cb2e8351c2cc..8f0ebaf9ae85 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -369,7 +369,6 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
- 
- 	dev_dbg(dev, "Parsing dma-ranges property...\n");
- 	for_each_of_pci_range(&parser, &range) {
--		struct resource_entry *entry;
- 		/*
- 		 * If we failed translation or got a zero-sized region
- 		 * then skip this range
-@@ -393,12 +392,7 @@ static int devm_of_pci_get_host_bridge_resources(struct device *dev,
- 			goto failed;
- 		}
- 
--		/* Keep the resource list sorted */
--		resource_list_for_each_entry(entry, ib_resources)
--			if (entry->res->start > res->start)
--				break;
--
--		pci_add_resource_offset(&entry->node, res,
-+		pci_add_resource_offset(ib_resources, res,
- 					res->start - range.pci_addr);
- 	}
- 
--- 
-2.35.3.dirty
+On Mon, May 9, 2022 at 12:10 PM Harald Freudenberger
+<freude@linux.ibm.com> wrote:
+>
+> On 2022-05-08 15:09, Vladis Dronov wrote:
+> > From: Vladis Dronov <vdronov@redhat.com>
+> >
+> > Implement a crypto library interface for the s390-native ChaCha20
+> > cipher
+> > algorithm. This allows us to stop to select CRYPTO_CHACHA20 and instead
+> > select CRYPTO_ARCH_HAVE_LIB_CHACHA. This allows BIG_KEYS=y not to build
+> > a whole ChaCha20 crypto infrastructure as a built-in, but build a
+> > smaller
+> > CRYPTO_LIB_CHACHA instead.
+> >
+> > Make CRYPTO_CHACHA_S390 config entry to look like similar ones on other
+> > architectures. Remove CRYPTO_ALGAPI select as anyway it is selected by
+> > CRYPTO_SKCIPHER.
+> >
+> > Add a new test module and a test script for ChaCha20 cipher and its
+> > interfaces. Here are test results on an idle z15 machine:
+> >
+> > ...skip...
+>
+> Hello Vladis
+> Thanks for your work. Please add my
+> Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+>
+> however, always the question who will pick and forward this patch ?
+> To me this looks like most parts are common so I would suggest that
+> Herbert Xu  will pick this patch.
+>
 

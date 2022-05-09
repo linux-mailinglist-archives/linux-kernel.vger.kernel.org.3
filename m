@@ -2,148 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A8751FC65
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5F251FC66
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbiEIMSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
+        id S233924AbiEIMSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiEIMSU (ORCPT
+        with ESMTP id S233844AbiEIMSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:18:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D52D243114
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 05:14:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1F1E6CE139A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 12:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10817C385A8;
-        Mon,  9 May 2022 12:14:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cC6uzlGa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652098461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O/BKpcOEFNX5x0VyAYt5xlL+z4SLHlgYqvS0K3MbZCA=;
-        b=cC6uzlGafl0qjGEztX7mnO9BAtTlTS40fnpJREtGRiW9DxFBcLRS8Gcx0zZs3eEe5tHKw8
-        ZDp9wOj7ZU9gYQ5QFW+7T4Xeo8L1gkR7X21b7gwBBbQavRTAfzWmhgXzwipMqjjyTOkxXz
-        uP0ULyv5cKSIlLyVJkqfR63KjjEsfoM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0b0b478b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 9 May 2022 12:14:21 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH 2/2] random: move initialization out of reseeding hot path
-Date:   Mon,  9 May 2022 14:14:09 +0200
-Message-Id: <20220509121409.529788-2-Jason@zx2c4.com>
-In-Reply-To: <20220509121409.529788-1-Jason@zx2c4.com>
-References: <20220509121409.529788-1-Jason@zx2c4.com>
+        Mon, 9 May 2022 08:18:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1686C24DC0E;
+        Mon,  9 May 2022 05:14:50 -0700 (PDT)
+X-UUID: f275fa1f0dca4e9e94cd0b790f38b09c-20220509
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:1f2ad65d-5bd2-47ba-b63c-923c8f5161d7,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:b315c116-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: f275fa1f0dca4e9e94cd0b790f38b09c-20220509
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1362283811; Mon, 09 May 2022 20:14:46 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 9 May 2022 20:14:45 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 9 May 2022 20:14:45 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 9 May 2022 20:14:45 +0800
+Message-ID: <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>, <krzk+dt@kernel.org>
+CC:     <cw00.choi@samsung.com>, <robh+dt@kernel.org>,
+        <kyungmin.park@samsung.com>, <khilman@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 9 May 2022 20:14:44 +0800
+In-Reply-To: <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
+References: <20220425125546.4129-1-johnson.wang@mediatek.com>
+         <20220425125546.4129-2-johnson.wang@mediatek.com>
+         <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialization happens once -- by way of credit_init_bits() -- and then
-it never happens again. Therefore, it doesn't need to be in
-crng_reseed(), which is a hot path that is called multiple times. It
-also doesn't make sense to have there, as initialization activity is
-better associated with initialization routines.
+Hi Chen-Yu,
 
-After the prior commit, crng_reseed() now won't be called by multiple
-concurrent callers, which means that we can safely move the
-"finialize_init" logic into crng_init_bits() unconditionally.
+On Tue, 2022-04-26 at 11:18 +0800, Chen-Yu Tsai wrote:
+> On Mon, Apr 25, 2022 at 8:56 PM Johnson Wang <
+> johnson.wang@mediatek.com> wrote:
+> > 
+> > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+> > 
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > ---
+> >  .../bindings/interconnect/mediatek,cci.yaml   | 139
+> > ++++++++++++++++++
+> >  1 file changed, 139 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > new file mode 100644
+> > index 000000000000..e5221e17d11b
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > @@ -0,0 +1,139 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDlQ9pSDO$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDoE9YHyu$
+> >  
+> > +
+> > +title: MediaTek Cache Coherent Interconnect (CCI) frequency and
+> > voltage scaling
+> > +
+> > +maintainers:
+> > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > +
+> > +description: |
+> > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine
+> > used by
+> > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
+> > voltage in
+> > +  hardware. It can also optimize the voltage to reduce the power
+> > consumption.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8183-cci
+> > +      - mediatek,mt8186-cci
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description:
+> > +          The multiplexer for clock input of CPU cluster.
+> 
+> of the bus, not CPU cluster.
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 43 +++++++++++++++++++------------------------
- 1 file changed, 19 insertions(+), 24 deletions(-)
+Thanks for your suggestion.
+I will correct it in the next version.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 79409cf27a25..1598bb40376e 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -266,7 +266,6 @@ static void crng_reseed(void)
- 	unsigned long flags;
- 	unsigned long next_gen;
- 	u8 key[CHACHA_KEY_SIZE];
--	bool finalize_init = false;
- 
- 	extract_entropy(key, sizeof(key));
- 
-@@ -283,28 +282,9 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (!crng_ready()) {
--		crng_init = CRNG_READY;
--		finalize_init = true;
--	}
-+	crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
- 	memzero_explicit(key, sizeof(key));
--	if (finalize_init) {
--		process_random_ready_list();
--		wake_up_interruptible(&crng_init_wait);
--		kill_fasync(&fasync, SIGIO, POLL_IN);
--		pr_notice("crng init done\n");
--		if (unseeded_warning.missed) {
--			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
--				  unseeded_warning.missed);
--			unseeded_warning.missed = 0;
--		}
--		if (urandom_warning.missed) {
--			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
--				  urandom_warning.missed);
--			urandom_warning.missed = 0;
--		}
--	}
- }
- 
- /*
-@@ -836,10 +816,25 @@ static void credit_init_bits(size_t nbits)
- 		new = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.init_bits, orig, new) != orig);
- 
--	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS)
--		crng_reseed();
--	else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
-+	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
-+		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
-+		process_random_ready_list();
-+		wake_up_interruptible(&crng_init_wait);
-+		kill_fasync(&fasync, SIGIO, POLL_IN);
-+		pr_notice("crng init done\n");
-+		if (unseeded_warning.missed) {
-+			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
-+				  unseeded_warning.missed);
-+			unseeded_warning.missed = 0;
-+		}
-+		if (urandom_warning.missed) {
-+			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
-+				  urandom_warning.missed);
-+			urandom_warning.missed = 0;
-+		}
-+	} else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
-+		/* Check if crng_init is CRNG_EMPTY, to avoid race with crng_reseed(). */
- 		if (crng_init == CRNG_EMPTY) {
- 			extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_init = CRNG_EARLY;
--- 
-2.35.1
+> 
+> > +      - description:
+> > +          A parent of "cpu" clock which is used as an intermediate
+> > clock source
+> > +          when the original CPU is under transition and not stable
+> > yet.
+> 
+> This really should be handled in the clk controller, and not by every
+> device
+> that happens to take a clock from a mux with upstream PLLs that can
+> change
+> in clock rate. The end device hardware only takes one clock input.
+> That's it.
+> 
+
+To make this intermediate clock works properly, this driver is also
+responsible for handling the Vproc voltage and ensures the voltage is
+high enough to support intermediate clock rate.
+
+If we move intermediate clock rate control to clock driver, then
+intermediate voltage control may be handled by the clock driver itself
+as well.
+
+We believe that is not reasonable because clock driver shouldn't handle
+voltage control. On the other hand, DVFS driver is more suitable for
+doing this job.
+
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: cci
+> > +      - const: intermediate
+> > +
+> > +  operating-points-v2: true
+> > +  opp-table: true
+> > +
+> > +  proc-supply:
+> > +    description:
+> > +      Phandle of the regulator for CCI that provides the supply
+> > voltage.
+> > +
+> > +  sram-supply:
+> > +    description:
+> > +      Phandle of the regulator for sram of CCI that provides the
+> > supply
+> > +      voltage. When it presents, the cci devfreq driver needs to
+> > do
+> 
+> When it is present, the implementation needs to ...
+> 
+> ChenYu
+
+I will modify it in the next version.
+
+BRs,
+Johnson Wang
+
+> 
+> > +      "voltage tracking" to step by step scale up/down Vproc and
+> > Vsram to fit
+> > +      SoC specific needs. When absent, the voltage scaling flow is
+> > handled by
+> > +      hardware, hence no software "voltage tracking" is needed.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - clocks
+> > +  - clock-names
+> > +  - operating-points-v2
+> > +  - proc-supply
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/mt8183-clk.h>
+> > +    cci: cci {
+> > +        compatible = "mediatek,mt8183-cci";
+> > +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+> > +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
+> > +        clock-names = "cci", "intermediate";
+> > +        operating-points-v2 = <&cci_opp>;
+> > +        proc-supply = <&mt6358_vproc12_reg>;
+> > +    };
+> > +
+> > +    cci_opp: opp-table-cci {
+> > +        compatible = "operating-points-v2";
+> > +        opp-shared;
+> > +        opp2_00: opp-273000000 {
+> > +            opp-hz = /bits/ 64 <273000000>;
+> > +            opp-microvolt = <650000>;
+> > +        };
+> > +        opp2_01: opp-338000000 {
+> > +            opp-hz = /bits/ 64 <338000000>;
+> > +            opp-microvolt = <687500>;
+> > +        };
+> > +        opp2_02: opp-403000000 {
+> > +            opp-hz = /bits/ 64 <403000000>;
+> > +            opp-microvolt = <718750>;
+> > +        };
+> > +        opp2_03: opp-463000000 {
+> > +            opp-hz = /bits/ 64 <463000000>;
+> > +            opp-microvolt = <756250>;
+> > +        };
+> > +        opp2_04: opp-546000000 {
+> > +            opp-hz = /bits/ 64 <546000000>;
+> > +            opp-microvolt = <800000>;
+> > +        };
+> > +        opp2_05: opp-624000000 {
+> > +            opp-hz = /bits/ 64 <624000000>;
+> > +            opp-microvolt = <818750>;
+> > +        };
+> > +        opp2_06: opp-689000000 {
+> > +            opp-hz = /bits/ 64 <689000000>;
+> > +            opp-microvolt = <850000>;
+> > +        };
+> > +        opp2_07: opp-767000000 {
+> > +            opp-hz = /bits/ 64 <767000000>;
+> > +            opp-microvolt = <868750>;
+> > +        };
+> > +        opp2_08: opp-845000000 {
+> > +            opp-hz = /bits/ 64 <845000000>;
+> > +            opp-microvolt = <893750>;
+> > +        };
+> > +        opp2_09: opp-871000000 {
+> > +            opp-hz = /bits/ 64 <871000000>;
+> > +            opp-microvolt = <906250>;
+> > +        };
+> > +        opp2_10: opp-923000000 {
+> > +            opp-hz = /bits/ 64 <923000000>;
+> > +            opp-microvolt = <931250>;
+> > +        };
+> > +        opp2_11: opp-962000000 {
+> > +            opp-hz = /bits/ 64 <962000000>;
+> > +            opp-microvolt = <943750>;
+> > +        };
+> > +        opp2_12: opp-1027000000 {
+> > +            opp-hz = /bits/ 64 <1027000000>;
+> > +            opp-microvolt = <975000>;
+> > +        };
+> > +        opp2_13: opp-1092000000 {
+> > +            opp-hz = /bits/ 64 <1092000000>;
+> > +            opp-microvolt = <1000000>;
+> > +        };
+> > +        opp2_14: opp-1144000000 {
+> > +            opp-hz = /bits/ 64 <1144000000>;
+> > +            opp-microvolt = <1025000>;
+> > +        };
+> > +        opp2_15: opp-1196000000 {
+> > +            opp-hz = /bits/ 64 <1196000000>;
+> > +            opp-microvolt = <1050000>;
+> > +        };
+> > +    };
+> > --
+> > 2.18.0
+> > 
+> > 
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > 
+https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDvdNpOFZ$
+> >  
 

@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29EE520444
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491AF520445
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiEISNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S240048AbiEISN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239999AbiEISNq (ORCPT
+        with ESMTP id S240047AbiEISNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:13:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B551E45055
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652119792; x=1683655792;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r1IUId8yuQjqJHP70NeoADjEBW/27W4PnJMCiW3EteU=;
-  b=Q/EFjx67xbX3un2ORL3tt/SDnbV2CVf+zMuMNAO7jmrUtSXvMBMor0Ac
-   UCy1JyQs04khe5sAeRxx21gv3av77QC0hSBF+RFwpQAf6axMorPPTICWu
-   mDoS2MWvzBY0pX3iEpmiGETnqG1PfeIN14g9+qGhnUUdfel7ka87s6G7L
-   lI3vxS5Qyd0TvtY5ebZlEsKowKqakUmgnfSvjVwVMWH5m5OiNTp1lEtw+
-   h6mk4MISMHSld28dzUMRjEayrMZPjlUMPEJwWsMPjrpBs5Wo9hFEfIL3C
-   miqppAJ729TQWPSprS5t7sDZbJLefMUutlLWoUyWH5aWIsAQrDPz0IUNf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266718934"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="266718934"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:09:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="813583659"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 May 2022 11:09:51 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no7pO-000Gkw-Kf;
-        Mon, 09 May 2022 18:09:50 +0000
-Date:   Tue, 10 May 2022 02:09:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/trace/stages/init.h:2:23: warning:
- 'str__irq_vectors__trace_system_name' defined but not used
-Message-ID: <202205100242.TCazrhkS-lkp@intel.com>
+        Mon, 9 May 2022 14:13:52 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8816EEB8;
+        Mon,  9 May 2022 11:09:57 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1737B1EC01E0;
+        Mon,  9 May 2022 20:09:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652119792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=L9Ar+ydmc7t38d3TuBxUw1cNUzBjweI6t/LwvKD8DEI=;
+        b=LlSfo//agkPEyJ0VR6GE3fKki2x2cRN11SSjWMpSJewrU9LoSBPDq4g68zlEIa7ZJqVooK
+        7/okTqr92ZIgaEVYqIDjMkXwMDwpvqyzVMegVpsryiVt197V2FLQbN+f4mX3CoHpVfV+Ix
+        RcmZ1bN5m+R8fx9+MZPIt56mfAvUvOY=
+Date:   Mon, 9 May 2022 20:09:55 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jonathan McDowell <noodles@fb.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
+Message-ID: <YnlY87wm6WmQjs7m@zn.tnic>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnjvfNs5pgWiomWx@noodles-fedora.dhcp.thefacebook.com>
+ <0960C132-581C-4881-8948-C566657C3998@alien8.de>
+ <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9be9ed2612b5aedb52a2c240edb1630b6b743cb6
-commit: af6b9668e85ffd1502aada8036ccbf4dbd481708 tracing: Move the defines to create TRACE_EVENTS into their own files
-date:   8 weeks ago
-config: i386-randconfig-s002-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100242.TCazrhkS-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=af6b9668e85ffd1502aada8036ccbf4dbd481708
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout af6b9668e85ffd1502aada8036ccbf4dbd481708
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+On Mon, May 09, 2022 at 05:46:22PM +0000, Jonathan McDowell wrote:
+> Device tree on x86 doesn't seem to be a thing;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Not a thing? What does that even mean?
 
-All warnings (new ones prefixed by >>):
+We have arch/x86/kernel/devicetree.c which adds some minimal devicetree
+support.
 
-   In file included from include/trace/trace_events.h:27,
-                    from include/trace/define_trace.h:102,
-                    from arch/x86/include/asm/trace/irq_vectors.h:383,
-                    from arch/x86/kernel/irq.c:27:
->> include/trace/stages/init.h:2:23: warning: 'str__irq_vectors__trace_system_name' defined but not used [-Wunused-const-variable=]
-       2 | #define __app__(x, y) str__##x##y
-         |                       ^~~~~
-   include/trace/stages/init.h:3:21: note: in expansion of macro '__app__'
-       3 | #define __app(x, y) __app__(x, y)
-         |                     ^~~~~~~
-   include/trace/stages/init.h:5:29: note: in expansion of macro '__app'
-       5 | #define TRACE_SYSTEM_STRING __app(TRACE_SYSTEM_VAR,__trace_system_name)
-         |                             ^~~~~
-   include/trace/stages/init.h:8:27: note: in expansion of macro 'TRACE_SYSTEM_STRING'
-       8 |         static const char TRACE_SYSTEM_STRING[] =       \
-         |                           ^~~~~~~~~~~~~~~~~~~
-   include/trace/stages/init.h:11:1: note: in expansion of macro 'TRACE_MAKE_SYSTEM_STR'
-      11 | TRACE_MAKE_SYSTEM_STR();
-         | ^~~~~~~~~~~~~~~~~~~~~
+> none of the distros I regularly use enable CONFIG_OF for x86, I can
+> only find 2 32-bit x86 platforms that actually select it and none of
+> the plumbing for kexec on x86 ties in device tree.
 
+And? That can get changed and enabled and so on.
 
-vim +/str__irq_vectors__trace_system_name +2 include/trace/stages/init.h
+> I agree for platforms that make active use of device tree that's the
+> appropriate path, but it doesn't seem to be the case for x86.
 
-   > 2	#define __app__(x, y) str__##x##y
-     3	#define __app(x, y) __app__(x, y)
-     4	
+I'm not sure what you're aim here is?
+
+You want to pass that IMA measurement to the kexec kernel with minimal
+changes, i.e., change only the kernel?
+
+Why can't distros be also changed to use devicetree for the IMA
+measurement, like the other arches do? Why does x86 need to do it
+differently?
+
+We also pass info to the kexec kernel by reading it from sysfs
+and having kexec tools pass it to the kexec-ed kernel, see
+Documentation/ABI/testing/sysfs-firmware-efi-runtime-map
+
+kexec(8) itself can do:
+
+kexec -l kernel-image --append=command-line-options
+			^^^^^^^^^^^^^^^^^
+
+and add those cmdline options which are dug out from the first kernel.
+
+So is there any particular reason/pressing need to pass the measurement
+with setup_data?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

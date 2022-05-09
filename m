@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0F8520210
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A104B52020D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238885AbiEIQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S238905AbiEIQSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238834AbiEIQRZ (ORCPT
+        with ESMTP id S238861AbiEIQSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:17:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12C31BDDA8
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652112810; x=1683648810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QbP6qqb6nRewydwlAAGi0onfGm51kHMVECSNbBIu3n8=;
-  b=bnliK+baWZrLCprwmB6s+xT4Qk1Xz9PUvubpMK7LEg+G0rZHIkAOGsCI
-   4XxBvaWKhoMH4Qlxi9u36Xx2PdYBaKVL7RnTwxtTU4lgCmqg8kdgFu1OK
-   cEYHrGx2+oSPvkzs6l67nGdUmUHsSrMjxF6zNSESfMJGGHrMmuY+oPtn/
-   dz5yZ/NK0yTYx/2VcI9Fy1PFv6d6fxTlCh/bGs0NSykatCtuNlMGBlFfh
-   scq/uDuPdvVpDzD7OyasC5sQgBLkHhYilaTjgzBgYYLEo1MOwqcxCgAB2
-   qqzEgHHNhLTc3JrOwkjLKAf4GEJEt899/CbCBgxc39FrU5s4G+axSRxnk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249631880"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="249631880"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 09:13:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="738243827"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 09:13:25 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no60i-000GeE-KI;
-        Mon, 09 May 2022 16:13:24 +0000
-Date:   Tue, 10 May 2022 00:13:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v3 10/13] drivers/opp/core.c:1297:8:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202205100055.CcUduSmT-lkp@intel.com>
+        Mon, 9 May 2022 12:18:15 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB714270CBB
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:14:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id j4-20020a92c204000000b002caad37af3fso7854743ilo.22
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:14:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=VvQlc8+EhhLI7M/YO/8cWqo6JKCATXD6JgKcPNZMDLY=;
+        b=EIBOjmcEysaBq+hGxqYtbDeN8/Veaq+YiGbDpm8V+oVyp9s4NkQUxO7h+nFAB1HwAg
+         RVVOrBr+rOU/PZK2SwLLfe5b3tWZN47HSwa9qyeysveugSArMOb80lAEQimfe0pdB0DF
+         PI80LmOAAlN1JTOT2GT/ncLawEVwZhZsl17kGON4tjo6AsdawBg5AP7Qo0WTNuzGbA98
+         lYdUWRT+sEbg6WGPbn9z5B3Ki/F9/OBVOnyZK8VFN3HkpG0DWNIeBSE/Ogia5TrGcac3
+         kUO6y96+ymtmof0m5vSKj0Zs016JT/exnwTWWMaJ/KAE5LM166yhXct+YDKj2jJYdqL/
+         VGHw==
+X-Gm-Message-State: AOAM532aN/V/iGlCINCA5ooo69mwQfP1sWglrlum3tC9VzrvJYZnt+By
+        PcTCNyK4DoA7geGEFMqitx+xZyGiRLI2STK7OshQL57KATWT
+X-Google-Smtp-Source: ABdhPJwdSGns/yjn6V4PBmzYy6jqV8HGYcg/jOneHbZMN6wBxGVRugH46O1z8O+EkYnLaq9djxvi95f+dUKwdL79dHfH92Z/Pclc
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3487:b0:32b:e72f:8f6c with SMTP id
+ t7-20020a056638348700b0032be72f8f6cmr4463447jal.98.1652112860205; Mon, 09 May
+ 2022 09:14:20 -0700 (PDT)
+Date:   Mon, 09 May 2022 09:14:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000029572505de968021@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in bio_poll
+From:   syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, axboe@kernel.dk,
+        bpf@vger.kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,124 +57,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v3
-head:   22a49fd92d5e31234d4174cdf1fdade79f38ae3d
-commit: ff3c34983e1cca80d8c081ea99e0117c5c38c6c3 [10/13] PM: opp: allow control of multiple clocks
-config: arm-randconfig-r015-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100055.CcUduSmT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/krzk/linux/commit/ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v3
-        git checkout ff3c34983e1cca80d8c081ea99e0117c5c38c6c3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    c5eb0a61238d Linux 5.18-rc6
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=112bf03ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
+dashboard link: https://syzkaller.appspot.com/bug?extid=99938118dfd9e1b0741a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12311571f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177a2e86f00000
 
->> drivers/opp/core.c:1297:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                           if (opp_table->clks)
-                               ^~~~~~~~~~~~~~~
-   drivers/opp/core.c:1335:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/opp/core.c:1297:4: note: remove the 'if' if its condition is always true
-                           if (opp_table->clks)
-                           ^~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c:1280:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in bio_poll+0x275/0x3c0 block/blk-core.c:942
+Read of size 4 at addr ffff8880751d92b4 by task syz-executor486/3607
+
+CPU: 0 PID: 3607 Comm: syz-executor486 Not tainted 5.18.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ bio_poll+0x275/0x3c0 block/blk-core.c:942
+ __iomap_dio_rw+0x10ee/0x1ae0 fs/iomap/direct-io.c:658
+ iomap_dio_rw+0x38/0x90 fs/iomap/direct-io.c:681
+ ext4_dio_write_iter fs/ext4/file.c:566 [inline]
+ ext4_file_write_iter+0xe4d/0x1510 fs/ext4/file.c:677
+ call_write_iter include/linux/fs.h:2050 [inline]
+ do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
+ do_iter_write+0x182/0x700 fs/read_write.c:852
+ vfs_writev+0x1aa/0x630 fs/read_write.c:925
+ do_pwritev+0x1b6/0x270 fs/read_write.c:1022
+ __do_sys_pwritev2 fs/read_write.c:1081 [inline]
+ __se_sys_pwritev2 fs/read_write.c:1072 [inline]
+ __x64_sys_pwritev2+0xeb/0x150 fs/read_write.c:1072
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f6846af7e69
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffe8df3bb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: ffffffffffffffda RBX: 0000000000008ff2 RCX: 00007f6846af7e69
+RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000003
+R10: 0000000000001400 R11: 0000000000000246 R12: 00007fffe8df3bdc
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:ffffea0001d47640 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x751d9
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001e3d2c8 ffffea00008b7a48 0000000000000000
+raw: 0000000000000000 00000000000c0000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x92880(GFP_NOWAIT|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_NOMEMALLOC), pid 3605, tgid 3605 (syz-executor486), ts 36797088171, free_ts 37121806576
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+ slab_alloc_node mm/slub.c:3183 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+ kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3242
+ mempool_alloc+0x146/0x350 mm/mempool.c:392
+ bio_alloc_bioset+0x31d/0x4e0 block/bio.c:492
+ bio_alloc include/linux/bio.h:426 [inline]
+ iomap_dio_bio_iter+0x9bc/0x14c0 fs/iomap/direct-io.c:314
+ iomap_dio_iter fs/iomap/direct-io.c:435 [inline]
+ __iomap_dio_rw+0x84a/0x1ae0 fs/iomap/direct-io.c:591
+ iomap_dio_rw+0x38/0x90 fs/iomap/direct-io.c:681
+ ext4_dio_write_iter fs/ext4/file.c:566 [inline]
+ ext4_file_write_iter+0xe4d/0x1510 fs/ext4/file.c:677
+ call_write_iter include/linux/fs.h:2050 [inline]
+ do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
+ do_iter_write+0x182/0x700 fs/read_write.c:852
+ vfs_writev+0x1aa/0x630 fs/read_write.c:925
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
+ rcu_do_batch kernel/rcu/tree.c:2535 [inline]
+ rcu_core+0x7b1/0x1880 kernel/rcu/tree.c:2786
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+
+Memory state around the buggy address:
+ ffff8880751d9180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880751d9200: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8880751d9280: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                     ^
+ ffff8880751d9300: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880751d9380: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
 
-vim +1297 drivers/opp/core.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-  1263	
-  1264	/**
-  1265	 * dev_pm_opp_set_rate() - Configure new OPP based on frequency
-  1266	 * @dev:	 device for which we do this operation
-  1267	 * @target_freq: frequency to achieve
-  1268	 *
-  1269	 * This configures the power-supplies to the levels specified by the OPP
-  1270	 * corresponding to the target_freq, and programs the clock to a value <=
-  1271	 * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
-  1272	 * provided by the opp, should have already rounded to the target OPP's
-  1273	 * frequency.
-  1274	 */
-  1275	int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-  1276	{
-  1277		struct opp_table *opp_table;
-  1278		unsigned long freq = 0, temp_freq;
-  1279		struct dev_pm_opp *opp = NULL;
-  1280		int ret;
-  1281	
-  1282		opp_table = _find_opp_table(dev);
-  1283		if (IS_ERR(opp_table)) {
-  1284			dev_err(dev, "%s: device's opp table doesn't exist\n", __func__);
-  1285			return PTR_ERR(opp_table);
-  1286		}
-  1287	
-  1288		if (target_freq) {
-  1289			/*
-  1290			 * For IO devices which require an OPP on some platforms/SoCs
-  1291			 * while just needing to scale the clock on some others
-  1292			 * we look for empty OPP tables with just a clock handle and
-  1293			 * scale only the clk. This makes dev_pm_opp_set_rate()
-  1294			 * equivalent to a clk_set_rate()
-  1295			 */
-  1296			if (!_get_opp_count(opp_table)) {
-> 1297				if (opp_table->clks)
-  1298					ret = _generic_set_opp_clk_only(dev,
-  1299									opp_table->clks[0],
-  1300									target_freq);
-  1301				goto put_opp_table;
-  1302			}
-  1303	
-  1304			if (opp_table->clks)
-  1305				freq = clk_round_rate(opp_table->clks[0], target_freq);
-  1306			if ((long)freq <= 0)
-  1307				freq = target_freq;
-  1308	
-  1309			/*
-  1310			 * The clock driver may support finer resolution of the
-  1311			 * frequencies than the OPP table, don't update the frequency we
-  1312			 * pass to clk_set_rate() here.
-  1313			 */
-  1314			temp_freq = freq;
-  1315			opp = _find_freq_ceil(opp_table, &temp_freq);
-  1316			if (IS_ERR(opp)) {
-  1317				ret = PTR_ERR(opp);
-  1318				dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
-  1319					__func__, freq, ret);
-  1320				goto put_opp_table;
-  1321			}
-  1322			/*
-  1323			 * opp->rates are used for scaling clocks, so be sure accurate
-  1324			 * 'freq' is used, instead what was defined via e.g. Devicetree.
-  1325			 */
-  1326			opp->rates[0] = freq;
-  1327		}
-  1328	
-  1329		ret = _set_opp(dev, opp_table, opp, freq);
-  1330	
-  1331		if (target_freq)
-  1332			dev_pm_opp_put(opp);
-  1333	put_opp_table:
-  1334		dev_pm_opp_put_opp_table(opp_table);
-  1335		return ret;
-  1336	}
-  1337	EXPORT_SYMBOL_GPL(dev_pm_opp_set_rate);
-  1338	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

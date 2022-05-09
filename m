@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108CE51FF49
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B760E51FF56
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237045AbiEIOS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S237057AbiEIOS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236931AbiEIOSV (ORCPT
+        with ESMTP id S237011AbiEIOS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:18:21 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0490022783A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652105667; x=1683641667;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Oe24jF5S+737BHd5NL8BZuv8MDPXY+iO/QF978VXlH4=;
-  b=QMIL7H4EO9s0Ohj77yE5hmp06VdhPAWrkcnq5h0OZtbcCQYEMLgC3eHH
-   H1s2BiDTvY0R59JX7lqNI0Og8p83x2/ajhC87zaPOTPqun8QH6FhHWMrY
-   xFW8cAITIiNa7q6K69mXB4TMO5wr76/D7Xl1NHk6xzTYxm0Pacab6RNwP
-   vecYwglK9lwpxqLxEg752NXBOA1BkyIhCyUVPzEXWA6hdDShKLluv5WYN
-   s4j+KEaJNvHtxzOT/9z3ppr1umODiCmJphu5Pe7Vfm6ztHIzExUHnNtNg
-   Di5GUvPuk2KMJC9qEtVJWCONWfk/x8nepRX8jgmjaxcFL4vnMJQIRUd8k
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="251107509"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="251107509"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:14:23 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="634043857"
-Received: from dmansurr-mobl.amr.corp.intel.com (HELO [10.212.251.158]) ([10.212.251.158])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:14:21 -0700
-Message-ID: <4506e2c2-af4b-623d-5618-48269e65c295@intel.com>
-Date:   Mon, 9 May 2022 07:14:20 -0700
+        Mon, 9 May 2022 10:18:56 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 48E082B275E
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:15:02 -0700 (PDT)
+Received: (qmail 124832 invoked by uid 1000); 9 May 2022 10:15:01 -0400
+Date:   Mon, 9 May 2022 10:15:01 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+Message-ID: <Ynkh5eKtfxU+AyZX@rowland.harvard.edu>
+References: <YmSc29YZvxgT5fEJ@rowland.harvard.edu>
+ <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu>
+ <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg>
+ <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu>
+ <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+ <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
- <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
- <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
- <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
- <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
- <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
- <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
- <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
- <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
- <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 05:09, Kirill A. Shutemov wrote:
-> Private->Shared conversion is destructive. You have to split SEPT, flush
-> TLB. Backward conversion even more costly.
+On Mon, May 09, 2022 at 09:46:25AM +0200, Geert Uytterhoeven wrote:
+> > Geert:
+> >
+> > Can you test the patch below?  It ought to fix the problem (although it
 > 
-> Rule of thumb is avoid conversion where possible. DMA API is there for
-> you.
+> Thanks!
+> 
+> root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
+> total 0
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
+> ../../../devices/platform/soc/e659c000.usb/gadget.0
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
+> ../../../devices/platform/soc/ee020000.usb/gadget.1
+> lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
+> ../../../devices/platform/soc/e6590000.usb/gadget.2
+> 
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> LGTM, so
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Kirill, I understand that the DMA API is a quick fix today.  But is it
-_really_ the right long-term interface?
+Thanks!
 
-There will surely come a time when TDX I/O devices won't be using fixed
-bounce buffers.  What will the quote generation code do then?  How will
-we know to come back around and fix this up?
+> > might end up causing other problems down the line...)
+> 
+> Can you please elaborate? I'm not too familiar with UBS gadgets.
 
-Does SEV or the s390 ultravisor need anything like this?
+I was concerned about the fact that changing the name of a file, 
+directory, or symbolic link in sysfs means changing a user API, and so 
+it might cause some existing programs to fail.  That would be a 
+regression.
+
+Perhaps the best way to work around the problem is to leave the name set 
+to "gadget" if the ID number is 0, while adding the ID number on to the 
+name if the value is > 0.  What do you think?
+
+Alan Stern

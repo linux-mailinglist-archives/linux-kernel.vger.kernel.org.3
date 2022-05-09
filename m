@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D3D51FAB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2449851FAB4
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiEILCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S231446AbiEILEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiEILCt (ORCPT
+        with ESMTP id S231462AbiEILEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:02:49 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09460134819
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:58:56 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id e10so13455371vsr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 03:58:55 -0700 (PDT)
+        Mon, 9 May 2022 07:04:30 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D12222411
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:00:35 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g20so15812049edw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
-        b=LXo08+TD/q5mkRf5vNGKogVnr637jR9Ua+By1H5XbnhHsCL92j1rao8jehJYBFhsIq
-         ma617lT5Ig6BmNHLLwYw8RQydzbj0NC1wzhyk5NFUH2eTaMXm6IxKxGGGNjfQEtO8mTI
-         8WQvj54k0T5Q7oUste8wkfr5W2leiyra4UGHbDog/yAG/56lAQPEitjRLyvg6XOIvEp8
-         Ev5eUYfuZbC9Y/UGSugMurwCfRW0fOqPzs/H+AGyKNJaFHuDh/LN5bijZ15AN+S0Vxni
-         gVUURhww3Xwx/Ocy1GjwM/9znn0RJQS6UXQMTBRooPLPQcz7AWwvmlaDtxxQPuRiDjvb
-         Qt9Q==
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lf42AyRLj9ezHOycAE5i27vr8gxZcqJtgnUheMPg1+A=;
+        b=i8a6tbbrKIDyrwUul2SdCdPIlT2gGtoU+Wx7rhVu2CSx91gfRyeqFwZsStWCmu2W0T
+         oQ4D4eM59L0XlTJWDLhj5RuyiaPFBN+rK6zeiccFGNcehsN++urUXCpjPT40KrtOX9eh
+         D7+YfOlekj1O+TP22sW3CT7AvsOOLf9fTpZg2M2jzSslDb3VqfAqA6tYv9UXJDrbHS51
+         TTVzkq6czk4JrKv+OmBRupOXrhMnFXru5XdBbVv9u49J4ffd4AuAmI6vxfVWSDnIETtd
+         /ZjcniJbWJTWyZquh0UcAzkMghquoif0Q/3mmutvzTpkLuIll06MtVgJkRTeCGvnpYNY
+         H9Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
-        b=LueQrtt2NmsBgt4N/d9IGvhQ0No67t3iikWrUkudqMbt9gA+B5s7NoHCxFXWrHpFgX
-         +7P0PcdZFQ1ENqM0rGlzVjl6CLrYibMeLir9UyZMpPvmuRdRF/a8cpQ3Z2grDvFgieAu
-         irc3+u4xJ0WOKJd+WjlVG3TNzKtrC/S4WGiG/2h9CvQjhhJ/ZCZyiH7vd5GJL6tEXKlo
-         OEb+Q4rUi71De3fBIPQJm2KzM8RzNcER4durabxIwIP6j5qU5V1Vf+fcbCBqf4W3Tb4q
-         dXWdf4GPIXuvpes/AWnV4lYAWhlek2in1Lpb1EbgLX7Odx0a9OQPmR/I2fZOLhlV1BZT
-         4jDg==
-X-Gm-Message-State: AOAM532HqK6JTborYvsTyziURxSuyFkjQKyV+xG917/5+B9zEMxa4l2W
-        L05LBU7Pt8eBKJGF06RIHMIyGtdKdDhgQJqIr4c=
-X-Google-Smtp-Source: ABdhPJwspcVY7XHTgRdnqVzQjggSh3CsWAN2HqaVIQgBKhRO6/yNq5TYQqJXrsZGebnZChtaKaEuhIioR/zKWK42Euk=
-X-Received: by 2002:a05:6102:2052:b0:32d:162c:2663 with SMTP id
- q18-20020a056102205200b0032d162c2663mr7065002vsr.52.1652093934822; Mon, 09
- May 2022 03:58:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lf42AyRLj9ezHOycAE5i27vr8gxZcqJtgnUheMPg1+A=;
+        b=Hu7gd1jRDz0V6n4elVCCTjvm94jrlDVNMaSjIlciYFLeiZ6rhL7hw6RMT5pqGag4/c
+         w0IFfKFbUKQQq1Z+nMgBhNd0a8k36apfNkWmaPX3O9Rgy77mMQH9qLAUy1yVtXcAjoYN
+         Kk635NEnAXGz0GC3QpdBpCIrQwUXRWAEurJqXuKwC90pf6r3oHISnHhTmQnOZcRmcRL5
+         LJXdKBc4YXD77yGjAMzbm1msNU5yubKvnQwiCzaHV6uB0LFU01hs14/xUSoP1mPNQS13
+         tzGJUQ2StTs6t05N+yWynO2ZzMleg4660X9FzhKe2IW3+FwEm5+JezlrbzQu8RygHlFU
+         TmZg==
+X-Gm-Message-State: AOAM530sSXIzIzYwwDKYbzU3fSeaKXcjOiqkQK4d/hFauuZbcQmULbHA
+        +UaMaKk49nLnrXl4angK4Z2OnA==
+X-Google-Smtp-Source: ABdhPJzT+yPGdXIkkLR4DHE771vRbCE9ujGxJNlacbE/Xug2f9v2LVa/yYkJ5ZCp3TfpxqSkWZvvdA==
+X-Received: by 2002:aa7:c3ca:0:b0:425:ecfc:4258 with SMTP id l10-20020aa7c3ca000000b00425ecfc4258mr17007599edr.266.1652094034469;
+        Mon, 09 May 2022 04:00:34 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpezg-94-253-144-244-cbl.xnet.hr. [94.253.144.244])
+        by smtp.googlemail.com with ESMTPSA id hw7-20020a170907a0c700b006f3ef214e73sm4963822ejc.217.2022.05.09.04.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 04:00:34 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, shawnguo@kernel.org,
+        linus.walleij@linaro.org, kostap@marvell.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, pali@kernel.org,
+        marek.behun@nic.cz
+Cc:     Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH 1/2] dt-bindings: vendor-prefixes: add Methode Electronics
+Date:   Mon,  9 May 2022 13:00:27 +0200
+Message-Id: <20220509110028.144226-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Sender: mrsnicolemarois8@gmail.com
-Received: by 2002:a59:ad29:0:b0:2ba:1a7c:5596 with HTTP; Mon, 9 May 2022
- 03:58:54 -0700 (PDT)
-From:   Miss Qing Yu <qing9560yu@gmail.com>
-Date:   Mon, 9 May 2022 10:58:54 +0000
-X-Google-Sender-Auth: EEg5yUDYeTd_qjJ2CHj7CnEY8c4
-Message-ID: <CAAadsjtbdKwFcb91LAnyjWc=9rCYDfadaBQkYQyVrgfB-Y-0uw@mail.gmail.com>
-Subject: Hello!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_NAME_FM_MR_MRS,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e41 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsnicolemarois8[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsnicolemarois8[at]gmail.com]
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.2 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
-will not survive it with the critical condition am in because all
-vaccines has been given to me but to no avian, am a China woman but I
-base here in France because am married here and I have no child for my
-late husband and now am a widow. My reason of communicating you is
-that i have $9.2million USD which was deposited in BNP Paribas Bank
-here in France by my late husband which am the next of kin to and I
-want you to stand as the replacement beneficiary beneficiary.
+Add vendor prefix for Methode Electronics, Inc. (https://www.methode.com)
 
-Can you handle the process?
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Mrs Yu. Ging Yunnan.
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..e5ec476f54cd 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -764,6 +764,8 @@ patternProperties:
+     description: Cisco Meraki, LLC
+   "^merrii,.*":
+     description: Merrii Technology Co., Ltd.
++  "^methode,.*":
++    description: Methode Electronics, Inc.
+   "^micrel,.*":
+     description: Micrel Inc.
+   "^microchip,.*":
+-- 
+2.36.0
+

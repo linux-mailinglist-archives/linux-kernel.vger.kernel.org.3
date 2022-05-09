@@ -2,67 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E773D5204C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0CC5204C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbiEISzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240319AbiEISyx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240295AbiEISyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 9 May 2022 14:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240216AbiEISyt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 9 May 2022 14:54:49 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE43624089;
-        Mon,  9 May 2022 11:50:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D6A1AF20
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652122257; x=1683658257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gbqICmbaOtGfvvCdwChjlUERTqzIpQt2gv8Ac5SrYF8=;
-  b=c3tRwsVhccHqV9zfKzOpCmeRj60k+UI4TozU3WL39h8gUbs7eYGVZWhj
-   A0S0fFaa40p3u60r/VyPZIjzrRZPCgeTiD/DxY6WUZ+0p8us8GZDA6Oak
-   dPTb4gAPn46417jw7T7gYTe5F6GTLvT3CI5iKIxLfoNO2FUXYgu4W49yy
-   c/pVDHQiu9eyZ2CSKN9wkwDq9cDu3e1lKkM1/Wrmu1o6Rw1ZEDe4HiEJa
-   wY4PMHvIEteiPXKq7zKVqTbYEyCJDXqMfUWoTKsC4EMEs36TLAPzAkTYc
-   uDbtYp0rc/S+ZFYTYv139J7c9+9pVWe38o6U1/2lEUZJACGu7wLleg/q7
+  t=1652122254; x=1683658254;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G49Hulu3ioqnykK7y88D6Yayvp+sdPAw6mjkylAaETI=;
+  b=nXaGiHhitAd9OnpQkwRL3iBN8s/XyYbBnoK1WyHJe6Ji5wboy/HqPIOG
+   O/11OVZJ3j9qdm10seS2vnVuH4Qok8c+wc9cMrr3eZD6fSTnMPDHCVb2e
+   MAdA6wn42LeiTzfg2msUSeCwN/faC41iiGHe6y4OttfQBN7Os31PTUBVJ
+   MvWxa9ptWw313B28fcjesFKl2Hu88Ow7v1eYkxvCOGBaoYMbeFVZFruuF
+   8KUYRLaBxO99Qn/vch8iLnETzZ3rzD4BYmuZqw2AlsyFxe/2VFlsSJEpw
+   8ps1OmnlKX5CSESKJI2fdmp01nM8iGHd/nBgw4RP0wugzbDQGdvvMfpAH
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249042688"
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249042681"
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="249042688"
+   d="scan'208";a="249042681"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:50:57 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 11:50:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="570296321"
+   d="scan'208";a="570296319"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
   by fmsmga007.fm.intel.com with ESMTP; 09 May 2022 11:50:52 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1no8T6-000Gn9-1F;
+        id 1no8T6-000Gn6-0D;
         Mon, 09 May 2022 18:50:52 +0000
-Date:   Tue, 10 May 2022 02:50:15 +0800
+Date:   Tue, 10 May 2022 02:50:17 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     zhanglin <zhang.lin16@zte.com.cn>, linux-kernel@vger.kernel.org
+To:     Ricky WU <ricky_wu@realtek.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-fsdevel@vger.kernel.org, brauner@kernel.org,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        adobriyan@gmail.com, sfr@canb.auug.org.au,
-        zhengqi.arch@bytedance.com, ebiederm@xmission.com,
-        kaleshsingh@google.com, stephen.s.brennan@oracle.com,
-        ohoono.kwon@samsung.com, haolee.swjtu@gmail.com,
-        fweimer@redhat.com, xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        jiang.xuexin@zte.com.cn, zealci@zte.com.cn,
-        zhanglin <zhang.lin16@zte.com.cn>
-Subject: Re: [PATCH] fs/proc: add mask_secrets to prevent sensitive
- information leakage.
-Message-ID: <202205100257.6jjTnf0b-lkp@intel.com>
-References: <20220509054613.6620-1-zhang.lin16@zte.com.cn>
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ricky Wu <Ricky_wu@realtek.com>
+Subject: [char-misc:char-misc-testing 2/25]
+ drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202205100220.WyAyhKap-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509054613.6620-1-zhang.lin16@zte.com.cn>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,222 +65,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhanglin,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linux/master]
-[also build test WARNING on akpm-mm/mm-everything hnaz-mm/master linus/master v5.18-rc6 next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/zhanglin/fs-proc-add-mask_secrets-to-prevent-sensitive-information-leakage/20220509-140823
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
-config: x86_64-randconfig-r031-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100257.6jjTnf0b-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-misc-testing
+head:   33a1c6618677fe33f8e84cb7bedc45abbce89a50
+commit: b1c5f3085149e9643b125eb10aae0e74644d7dcc [2/25] misc: rtsx: add rts5261 efuse function
+config: riscv-randconfig-c006-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100220.WyAyhKap-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8d1c429178d1ee0c447ee68f4e7b602c5df911f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhanglin/fs-proc-add-mask_secrets-to-prevent-sensitive-information-leakage/20220509-140823
-        git checkout f8d1c429178d1ee0c447ee68f4e7b602c5df911f
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=b1c5f3085149e9643b125eb10aae0e74644d7dcc
+        git remote add char-misc https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git
+        git fetch --no-tags char-misc char-misc-testing
+        git checkout b1c5f3085149e9643b125eb10aae0e74644d7dcc
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/proc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/cardreader/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   fs/proc/mask_secrets.c:71:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-           int err = 0;
-               ^
->> fs/proc/mask_secrets.c:49:8: warning: no previous prototype for function 'mask_secrets' [-Wmissing-prototypes]
-   size_t mask_secrets(struct mm_struct *mm, char __user *buf,
-          ^
-   fs/proc/mask_secrets.c:49:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   size_t mask_secrets(struct mm_struct *mm, char __user *buf,
-   ^
-   static 
-   2 warnings generated.
+>> drivers/misc/cardreader/rts5261.c:406:13: warning: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (efuse_valid == 0) {
+                      ^~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:412:30: note: uninitialized use occurs here
+           pci_read_config_dword(pdev, setting_reg2, &lval2);
+                                       ^~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:406:9: note: remove the 'if' if its condition is always true
+           } else if (efuse_valid == 0) {
+                  ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable 'setting_reg2' to silence this warning
+           u16 setting_reg1, setting_reg2;
+                                         ^
+                                          = 0
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   error: A dwo section may not contain relocations
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
 
-vim +/mask_secrets +49 fs/proc/mask_secrets.c
+vim +406 drivers/misc/cardreader/rts5261.c
 
-    48	
-  > 49	size_t mask_secrets(struct mm_struct *mm, char __user *buf,
-    50				      size_t count, loff_t pos)
-    51	{
-    52		unsigned long arg_start = 0;
-    53		unsigned long arg_end = 0;
-    54		int mask_arg_len = 0;
-    55		size_t remote_vm_copied = 0;
-    56		struct file *file = 0;
-    57		struct inode *inode = 0;
-    58		char *kbuf = 0;
-    59		char *progname = 0;
-    60		int proghash = -1;
-    61		int prog_found = 0;
-    62		char *mask_arg_start = 0;
-    63		char *mask_arg_end = 0;
-    64		struct cmdline_hashtab_item *chi = 0;
-    65		char *psecret = 0;
-    66		size_t psecret_len = 0;
-    67		char *pmask = 0;
-    68		size_t pmask_len = 0;
-    69		size_t size;
-    70		size_t total_copied = 0;
-    71		int err = 0;
-    72	
-    73		if (!is_mask_secrets_enabled()) {
-    74			err = -EPERM;
-    75			goto exit_err;
-    76		}
-    77	
-    78		spin_lock(&mm->arg_lock);
-    79		arg_start = mm->arg_start;
-    80		arg_end = mm->arg_end;
-    81		spin_unlock(&mm->arg_lock);
-    82		if (arg_start >= arg_end) {
-    83			err = -ERANGE;
-    84			goto exit_err;
-    85		}
-    86		mask_arg_len = arg_end - arg_start + 1;
-    87	
-    88		file = get_mm_exe_file(mm);
-    89		if (!file) {
-    90			err = -ENOENT;
-    91			goto exit_err;
-    92		}
-    93		inode = file_inode(file);
-    94		if (!inode) {
-    95			err = -ENOENT;
-    96			goto exit_err;
-    97		}
-    98		proghash = cmdline_hash(inode->i_ino);
-    99		kbuf = kzalloc(max(PATH_MAX, mask_arg_len), GFP_KERNEL);
-   100		if (!kbuf) {
-   101			err = -ENOMEM;
-   102			goto exit_err;
-   103		}
-   104		progname = d_path(&file->f_path, kbuf, PATH_MAX);
-   105		if (IS_ERR_OR_NULL(progname)) {
-   106			err = -ENOENT;
-   107			goto cleanup_kbuf;
-   108		}
-   109	
-   110		rcu_read_lock();
-   111		prog_found = 0;
-   112		hash_for_each_possible_rcu(cmdline_hashtab, chi, hlist, proghash)
-   113			if (strcmp(chi->progname, progname) == 0) {
-   114				prog_found = 1;
-   115				break;
-   116			}
-   117	
-   118		if (!prog_found) {
-   119			rcu_read_unlock();
-   120			goto cleanup_kbuf;
-   121		}
-   122	
-   123		mask_arg_start = kbuf;
-   124		mask_arg_end = mask_arg_start + (arg_end - arg_start);
-   125		remote_vm_copied = access_remote_vm(mm, arg_start, mask_arg_start, mask_arg_len, FOLL_ANON);
-   126		if (remote_vm_copied <= 0) {
-   127			rcu_read_unlock();
-   128			err = -EIO;
-   129			goto cleanup_kbuf;
-   130		}
-   131		/*skip progname */
-   132		for (pmask = mask_arg_start; *pmask && (pmask <= mask_arg_end); pmask++)
-   133			;
-   134	
-   135		if (!chi->secrets) {
-   136			rcu_read_unlock();
-   137			/*mask everything, such as: xxxconnect host port username password.*/
-   138			for (pmask = pmask + 1; (pmask <= mask_arg_end); pmask++)
-   139				for (; (pmask <= mask_arg_end) && (*pmask); pmask++)
-   140					*pmask = 'Z';
-   141			goto copydata;
-   142		}
-   143	
-   144		for (pmask = pmask + 1; pmask <= mask_arg_end; pmask++) {
-   145			psecret = chi->secrets;
-   146			while (*psecret) {
-   147				psecret_len = strlen(psecret);
-   148				if (psecret_len < 2) {
-   149					rcu_read_unlock();
-   150					err = -EINVAL;
-   151					goto cleanup_kbuf;
-   152				}
-   153	
-   154				if (strcmp(pmask, psecret) == 0) {
-   155					pmask += psecret_len + 1;
-   156					goto mask_secret;
-   157				}
-   158	
-   159				if (strncmp(pmask, psecret, psecret_len) == 0) {
-   160					/*handle case: --password=xxxx */
-   161					if ((psecret[0] == '-') && (psecret[1] == '-'))
-   162						if (pmask[psecret_len] == '=') {
-   163							pmask += psecret_len + 1;
-   164							goto mask_secret;
-   165						}
-   166	
-   167					if (psecret[0] == '-') {
-   168						/*handle case: -password=xxxx or -p=xxxx*/
-   169						if (pmask[psecret_len] == '=') {
-   170							pmask += psecret_len + 1;
-   171							goto mask_secret;
-   172						}
-   173	
-   174						/*handle case: -pxxxx*/
-   175						if (psecret_len == 2) {
-   176							pmask += psecret_len;
-   177							goto mask_secret;
-   178						}
-   179					}
-   180				}
-   181	
-   182				if (psecret_len == 2) {
-   183					pmask_len = strlen(pmask);
-   184					/*handle case: -yp xxxx, such as: useradd -rp xxxx*/
-   185					if ((pmask_len > 2) && (*pmask == '-')
-   186					      && (pmask[pmask_len - 1] == psecret[1])) {
-   187						pmask += pmask_len + 1;
-   188						goto mask_secret;
-   189					}
-   190				}
-   191	
-   192				psecret += psecret_len + 1;
-   193			}
-   194	
-   195			pmask += strlen(pmask);
-   196			continue;
-   197	
-   198	mask_secret:
-   199			for (; (pmask <= mask_arg_end) && (*pmask); pmask++)
-   200				*pmask = 'Z';
-   201		}
-   202		rcu_read_unlock();
-   203	
-   204	copydata:
-   205		size = arg_end - pos;
-   206		size = min_t(size_t, size, count);
-   207		if (copy_to_user(buf, mask_arg_start + pos - arg_start, size))
-   208			goto cleanup_kbuf;
-   209	
-   210		total_copied = size;
-   211	
-   212	cleanup_kbuf:
-   213		kfree(kbuf);
-   214	
-   215	exit_err:
-   216		return total_copied;
-   217	}
-   218	
+   359	
+   360	static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
+   361	{
+   362		struct pci_dev *pdev = pcr->pci;
+   363		u32 lval1, lval2, i;
+   364		u16 setting_reg1, setting_reg2;
+   365		u8 valid, efuse_valid, tmp;
+   366	
+   367		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
+   368			REG_EFUSE_POR | REG_EFUSE_POWER_MASK,
+   369			REG_EFUSE_POR | REG_EFUSE_POWERON);
+   370		udelay(1);
+   371		rtsx_pci_write_register(pcr, RTS5261_EFUSE_ADDR,
+   372			RTS5261_EFUSE_ADDR_MASK, 0x00);
+   373		rtsx_pci_write_register(pcr, RTS5261_EFUSE_CTL,
+   374			RTS5261_EFUSE_ENABLE | RTS5261_EFUSE_MODE_MASK,
+   375			RTS5261_EFUSE_ENABLE);
+   376	
+   377		/* Wait transfer end */
+   378		for (i = 0; i < MAX_RW_REG_CNT; i++) {
+   379			rtsx_pci_read_register(pcr, RTS5261_EFUSE_CTL, &tmp);
+   380			if ((tmp & 0x80) == 0)
+   381				break;
+   382		}
+   383		rtsx_pci_read_register(pcr, RTS5261_EFUSE_READ_DATA, &tmp);
+   384		efuse_valid = ((tmp & 0x0C) >> 2);
+   385		pcr_dbg(pcr, "Load efuse valid: 0x%x\n", efuse_valid);
+   386	
+   387		pci_read_config_dword(pdev, PCR_SETTING_REG2, &lval2);
+   388		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, lval2);
+   389		/* 0x816 */
+   390		valid = (u8)((lval2 >> 16) & 0x03);
+   391	
+   392		rtsx_pci_write_register(pcr, RTS5261_REG_PME_FORCE_CTL,
+   393			REG_EFUSE_POR, 0);
+   394		pcr_dbg(pcr, "Disable efuse por!\n");
+   395	
+   396		if (efuse_valid == 2 || efuse_valid == 3) {
+   397			if (valid == 3) {
+   398				/* Bypass efuse */
+   399				setting_reg1 = PCR_SETTING_REG1;
+   400				setting_reg2 = PCR_SETTING_REG2;
+   401			} else {
+   402				/* Use efuse data */
+   403				setting_reg1 = PCR_SETTING_REG4;
+   404				setting_reg2 = PCR_SETTING_REG5;
+   405			}
+ > 406		} else if (efuse_valid == 0) {
+   407			// default
+   408			setting_reg1 = PCR_SETTING_REG1;
+   409			setting_reg2 = PCR_SETTING_REG2;
+   410		}
+   411	
+   412		pci_read_config_dword(pdev, setting_reg2, &lval2);
+   413		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg2, lval2);
+   414	
+   415		if (!rts5261_vendor_setting_valid(lval2)) {
+   416			/* Not support MMC default */
+   417			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
+   418			pcr_dbg(pcr, "skip fetch vendor setting\n");
+   419			return;
+   420		}
+   421	
+   422		if (!rts5261_reg_check_mmc_support(lval2))
+   423			pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
+   424	
+   425		pcr->rtd3_en = rts5261_reg_to_rtd3(lval2);
+   426	
+   427		if (rts5261_reg_check_reverse_socket(lval2))
+   428			pcr->flags |= PCR_REVERSE_SOCKET;
+   429	
+   430		pci_read_config_dword(pdev, setting_reg1, &lval1);
+   431		pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", setting_reg1, lval1);
+   432	
+   433		pcr->aspm_en = rts5261_reg_to_aspm(lval1);
+   434		pcr->sd30_drive_sel_1v8 = rts5261_reg_to_sd30_drive_sel_1v8(lval1);
+   435		pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(lval1);
+   436	
+   437		if (setting_reg1 == PCR_SETTING_REG1) {
+   438			/* store setting */
+   439			rtsx_pci_write_register(pcr, 0xFF0C, 0xFF, (u8)(lval1 & 0xFF));
+   440			rtsx_pci_write_register(pcr, 0xFF0D, 0xFF, (u8)((lval1 >> 8) & 0xFF));
+   441			rtsx_pci_write_register(pcr, 0xFF0E, 0xFF, (u8)((lval1 >> 16) & 0xFF));
+   442			rtsx_pci_write_register(pcr, 0xFF0F, 0xFF, (u8)((lval1 >> 24) & 0xFF));
+   443			rtsx_pci_write_register(pcr, 0xFF10, 0xFF, (u8)(lval2 & 0xFF));
+   444			rtsx_pci_write_register(pcr, 0xFF11, 0xFF, (u8)((lval2 >> 8) & 0xFF));
+   445			rtsx_pci_write_register(pcr, 0xFF12, 0xFF, (u8)((lval2 >> 16) & 0xFF));
+   446	
+   447			pci_write_config_dword(pdev, PCR_SETTING_REG4, lval1);
+   448			lval2 = lval2 & 0x00FFFFFF;
+   449			pci_write_config_dword(pdev, PCR_SETTING_REG5, lval2);
+   450		}
+   451	}
+   452	
 
 -- 
 0-DAY CI Kernel Test Service

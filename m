@@ -2,45 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F34E51F296
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 04:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F0C51F297
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 04:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiEICBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 22:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S230216AbiEICJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 22:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiEIB4b (ORCPT
+        with ESMTP id S233966AbiEICGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 21:56:31 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21760433BF;
-        Sun,  8 May 2022 18:52:35 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VCc7SF0_1652061151;
-Received: from 30.32.96.14(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCc7SF0_1652061151)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 09 May 2022 09:52:32 +0800
-Message-ID: <31e0001e-5274-742b-0cd9-318f5c2e068f@linux.alibaba.com>
-Date:   Mon, 9 May 2022 09:53:12 +0800
+        Sun, 8 May 2022 22:06:24 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5973031522
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 19:02:31 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id v11so11030157pff.6
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 19:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UBgd03YNSMHF2YxZI7eb6ybQEEaYpSlyO0Ot8Fm1Dn4=;
+        b=RwTZ8E8Qdlcmn2IDIfSXeh8qA/ZW7KSo4MzH/9AC2ei0ar7lT4yEhHctLBxv7DzClh
+         vw4FjcWfr3tE101Vyu9By+KwSSqj+Z/2w7qSmI7ZxI7wxqzVb8Nr14P4qs321iIotbjs
+         WVNiUjH1hzgINsKeOpT8pMTS3AB1rGBi/fQjosnt31D93kBkHs0sWKT9xmWYnEk3u5Br
+         54WMZYNSOBNk2rr/k1ATmvug8wOLU03YhzkPQkcRZPutQzqwE6/6GwwScdTkPRZ+83cA
+         gop3MhucGSnKNoI4kbbrTBirDh5PmDAXw4ykHyjnvIyzSTx1z2CuP94WJyyl/hSAJ4Ls
+         aVKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UBgd03YNSMHF2YxZI7eb6ybQEEaYpSlyO0Ot8Fm1Dn4=;
+        b=AhmjAAzuiL1JqrAaoyrbN3mlkTMDm92iMrsNxPmm4ruN+N+VUjzplPRAhHl78+evNE
+         2wYZrciJd74316SpJj3LwtlU3nRKZXpaViD37OpN1QwebF2aOM8KthbFaavOnois7WeX
+         i8iD34MjFUed49hQ0i8v5GSgvHIgN851Q7raY7MEj84RsqZVRtGbR4V+lntcTkaNLrjQ
+         EiWuIWNyxjWB8S36xyCzhiBzrIQrBTqD0YonlO9REAUbGR86LpYMH2ji3lUChz2Lcg1k
+         ffy0+AizmY/deD9KoRPaCbrtEYCyIbCljB6APfmHST7c/PXuX+m+Zd1DrVQOv3deKA3K
+         Edaw==
+X-Gm-Message-State: AOAM532CwOXkRr76w0a2tbsM0Bxm1B2i+uXUbJHVjiN+zPPZbr3WhLST
+        ALGmSzoEP9JZHKya1fbmY4Q=
+X-Google-Smtp-Source: ABdhPJxAzUWKLMbuZDA+c+OuAARJhrxCsQ4d4NUeLcLNsVK06gVJdrawbo8qRfxEig208x+K/Bj1ZQ==
+X-Received: by 2002:a63:5c6:0:b0:3ab:a0ef:9711 with SMTP id 189-20020a6305c6000000b003aba0ef9711mr11259845pgf.426.1652061750825;
+        Sun, 08 May 2022 19:02:30 -0700 (PDT)
+Received: from localhost.localdomain ([103.197.71.140])
+        by smtp.gmail.com with ESMTPSA id k7-20020a056a00134700b0050dc76281b6sm7608740pfu.144.2022.05.08.19.02.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 19:02:30 -0700 (PDT)
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+To:     linux@dominikbrodowski.net, Jonathan.Cameron@huawei.com,
+        broonie@kernel.org, arnd@arndb.de, lukas.bulwahn@gmail.com,
+        daniel@zonque.org
+Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] pcmcia: add MIPS_DB1XXX dependence
+Date:   Mon,  9 May 2022 10:02:22 +0800
+Message-Id: <20220509020222.1219813-1-starzhangzsd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH 0/3] Introduce new huge_ptep_get_access_flags()
- interface
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
- <Ynf5Aje8FXlPdOSl@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <Ynf5Aje8FXlPdOSl@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,63 +70,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Shida Zhang <zhangshida@kylinos.cn>
+
+drivers/pcmcia/db1xxx_ss.c uses the bcsr_xxxx() from
+arch/mips/alchemy/devboards/bcsr.c, which causes a link
+error:
+
+drivers/pcmcia/db1xxx_ss.c:(.text+0x2b4): undefined reference to `bcsr_read'
+mips-linux-gnu-ld: ../drivers/pcmcia/db1xxx_ss.c:(.text+0x2fc): undefined reference to `bcsr_read'
+drivers/pcmcia/db1xxx_ss.c:(.text+0x374): undefined reference to `bcsr_read'
+mips-linux-gnu-ld: ../drivers/pcmcia/db1xxx_ss.c:(.text+0x380): undefined reference to `bcsr_read'
+drivers/pcmcia/db1xxx_ss.c:(.text+0x534): undefined reference to `bcsr_read'
+drivers/pcmcia/db1xxx_ss.c:(.text+0xcc8): undefined reference to `bcsr_mod'
 
 
-On 5/9/2022 1:08 AM, Matthew Wilcox wrote:
-> On Sun, May 08, 2022 at 04:58:51PM +0800, Baolin Wang wrote:
->> As Mike pointed out [1], the huge_ptep_get() will only return one specific
->> pte value for the CONT-PTE or CONT-PMD size hugetlb on ARM64 system, which
->> will not take into account the subpages' dirty or young bits of a CONT-PTE/PMD
->> size hugetlb page. That will make us miss dirty or young flags of a CONT-PTE/PMD
->> size hugetlb page for those functions that want to check the dirty or
->> young flags of a hugetlb page. For example, the gather_hugetlb_stats() will
->> get inaccurate dirty hugetlb page statistics, and the DAMON for hugetlb monitoring
->> will also get inaccurate access statistics.
->>
->> To fix this issue, one approach is that we can define an ARM64 specific huge_ptep_get()
->> implementation, which will take into account any subpages' dirty or young bits.
->> However we should add a new parameter for ARM64 specific huge_ptep_get() to check
->> how many continuous PTEs or PMDs in this CONT-PTE/PMD size hugetlb, that means we
->> should convert all the places using huge_ptep_get(), meanwhile most places using
->> huge_ptep_get() did not care about the dirty or young flags at all.
->>
->> So instead of changing the prototype of huge_ptep_get(), this patch set introduces
->> a new huge_ptep_get_access_flags() interface and define an ARM64 specific implementation,
->> that will take into account any subpages' dirty or young bits for CONT-PTE/PMD size
->> hugetlb page. And we can only change to use huge_ptep_get_access_flags() for those
->> functions that care about the dirty or young flags of a hugetlb page.
-> 
-> I question whether this is the right approach.  I understand that
-> different hardware implementations have different requirements here,
-> but at least one that I'm aware of (AMD Zen 2/3) requires that all
-> PTEs that are part of a contig PTE must have identical A/D bits.  Now,
-> you could say that's irrelevant because it's x86 and we don't currently
-> support contPTE on x86, but I wouldn't be surprised to see that other
-> hardware has the same requirement.
+So add MIPS_DB1XXX dependence.
 
-Yes, so on x86, we can use the default huge_ptep_get(). But for ARM64, 
-unfortunately the A/D bits of a contig PTE is independent, that's why we 
-want a ARM64 specific huge_ptep_get().
+Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+---
+Changes from v1:
+- Rewrite the commit message.
+---
+ drivers/pcmcia/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> So what if we make that a Linux requirement?  Setting a contPTE dirty or
-> accessed becomes a bit more expensive (although still one/two cachelines,
-> so not really much more expensive than a single write).  Then there's no
-> need to change the "get" side of things because they're always identical.
-> 
-> It does mean that we can't take advantage of hardware setting A/D bits,
-> unless hardware can be persuaded to behave this way.  I don't have any
-> ARM specs in front of me to check.
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index 2ce261cfff8e..04b51cb67fbf 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -151,7 +151,7 @@ config TCIC
+ 
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+-	depends on MIPS_ALCHEMY && PCMCIA
++	depends on MIPS_ALCHEMY && MIPS_DB1XXX && PCMCIA
+ 	help
+ 	  Enable this driver of you want PCMCIA support on your Alchemy
+ 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
+-- 
+2.30.2
 
-I hope the hardware can make sure the contPTE are always identical, 
-however in fact like I said the A/D bits setting of a contig PTE by 
-hardware is independent in a contig-PTE size hugetlb page, they are not 
-always identical.
-
- From my testing, if I monitored a contig-PTE size hugetlb page with 
-DAMON, and I only modified the subpages of the contig-PTE size hugetlb 
-page. The result is I can not monitor any accesses, but actually there are.
-
-So I think an ARM64 specific huge_ptep_get() implementation seems the 
-right way as Muchun suggested?
-
-Thanks.

@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B356520721
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3CD52072C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiEIV4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S231180AbiEIV6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiEIVz4 (ORCPT
+        with ESMTP id S231898AbiEIV40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:55:56 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE59B2CF2A2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:49:35 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id d127-20020a633685000000b003ab20e589a8so7905861pga.22
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 14:49:35 -0700 (PDT)
+        Mon, 9 May 2022 17:56:26 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7012D3D68
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:50:03 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id ch13so922101ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 14:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Y0bm740K5+F6biKf1anieq/YyEnbNkxKhtJ2NmAXxf4=;
-        b=aSchQdcqnmMb/VjA10rMe3/jVjjMT/JZX6/FYRJyK6VZCBKgNmWGVqzqjDPq4sm18f
-         feiEx05SXqX4mNbxsyK0x05JjPEvq0xh239aehUwjkmRGTbRakYFecinOJgy14/z9Zzj
-         33dF5DW43DXTiTEzJhEhw5U2jPDCCkbFN+sk4BhGowgddy2H9waNWiols9Tco5aRev6x
-         w6D5fdiKELFOebJOln+qHSV54+VmvSe1kLXoKhVrMXloF9qzCnpuqMyeNIzqBRs67wWf
-         P6gqlxTZNZjg7yzulRhn69Cjv1Fx7uIqvkRXZUpxUq//wPNu9fVg3l17uyjr+/b2mPS8
-         1zmw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aKEvNnMqJr+Ji3wzZ+kyxqDQgYFrf7j1orREUwNHbE8=;
+        b=Gr/9HTJiYOlDX6fetpo8rWY8vmbwB2ZeETv9WvSLj426WRc41qKOI2DbQDQw8wYrzl
+         VMkbaUCWqEmmuWQSf6QXc97xXftjTcTkNiUat2bVrWg6KDJXGw/3EnKvR23vtrc5ek2d
+         Huti8ge5p5gr7z/EQS1UOwMrLB+8Lu6MhHhnjLpWSnbfclaxyHzXbK5+ay0dnHO1rWd4
+         zn6yEsKKzT44KtGADaFlK2syri+0W8SljEmBB7/ZYrDE3Ubp9EhoqnPOcO8VAtgffMbT
+         vxJMvDlQ8kCM7to3VeTwl0W7qseqYQC11parqS+l1gc0hV4AXHRC6AZMIGvKz12lcw7b
+         0hOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Y0bm740K5+F6biKf1anieq/YyEnbNkxKhtJ2NmAXxf4=;
-        b=ffcYqlAyfCXjmGFhydCsIbw7v/1zO1lDrviy8lxEACUhbnn2J0By+czqdaprqMzI0b
-         SN19AyphjRJtwU8/4icd9gq4rK8ud/RNLIfrRdiklAPs4NZhu1bI5cWChNELDeNeMdrw
-         8Nq9GlkfHBg2ls1x4VZO/B77+LV1e8odhiCM1EymJ6+KsaCJNperOQrFtFYCGTNi60m9
-         yoj1E+OI3Oh5qJIs6IQm677gMX06/BoUXtO0i59yuXLL/JXbcgbFg2mKDB0DG/6pSaOY
-         OCcLSld9w5DblR3u3JJsHcqH0ActgH04zwFeP6mFrtWfSmhNCvKKssqzk1HbMR/AhPcS
-         DWzQ==
-X-Gm-Message-State: AOAM532tbFruAVyiQSdFP2QX5rfMYh90Ih3L4mdcOfU3RkkRARJcH5LW
-        MDK6EyStBvNDzsAIri+vatT4CJm5Zn7uYA==
-X-Google-Smtp-Source: ABdhPJwyTRI9THI5Gqo+5ll5l+vfaNn1LrixYDdSQE27lSRAXBNR5d7F6x17NOR/h4f72zkObxGlEhqwkrNyeA==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90a:7acd:b0:1dd:12d7:5204 with SMTP
- id b13-20020a17090a7acd00b001dd12d75204mr8606517pjl.145.1652132975207; Mon,
- 09 May 2022 14:49:35 -0700 (PDT)
-Date:   Mon,  9 May 2022 21:49:30 +0000
-Message-Id: <20220509214930.3573518-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH] driver core: location: Add "back" as a possible output for panel
-From:   Won Chung <wonchung@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Won Chung <wonchung@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aKEvNnMqJr+Ji3wzZ+kyxqDQgYFrf7j1orREUwNHbE8=;
+        b=S9KtW3drsqT0Qmxf/Po9tFOX8h647HpltMh6HxTRmxUk7/fWbnFTjw1Sa5V4xAcXyy
+         FLQm5C5v/8Mwa7MxkNhGBD9dZYc8wZTXeOXPPMdvYai+E3NMX1DVv52NuJZI2hSqysY4
+         7W/nqCukLudVVR/TsBVXhz5N2S1XjTSz7s4PUFG1/pv3ZQqfy4mk3HB+0ZZxDbI9+QZe
+         Z2f41uhnNkzprDmnhE5Q14g7Zw7CuAfrTcJT/djk8NcmXZPDFIzfH9AlBkrF/YrtpgvI
+         Pr7msZ5Xu4bov7hgxRMMt1OMJ71CHMBBHDbJ2yziEcJXlEwEh1OZXMMbib1TZ4b8vs1s
+         lpag==
+X-Gm-Message-State: AOAM532ir6gbCuz6ktTjI2LoWQsjmc71oUbTJ/42tTp1dCc5w8xn4Up7
+        Cmt1XuhwonISD+YPhG09lw3ARAowV6n9B8wbiVBVbw==
+X-Google-Smtp-Source: ABdhPJykPbx/03p5//2jQ4C7Er1AEW64JcawHsesvTbhr6ztpX0AZiQPHHfGXfUFyhECCsGvdqV3kvR9V0bNS63hXS4=
+X-Received: by 2002:a17:907:9813:b0:6fa:78b0:9be2 with SMTP id
+ ji19-20020a170907981300b006fa78b09be2mr6269780ejc.159.1652133001507; Mon, 09
+ May 2022 14:50:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <1652125797-2043-1-git-send-email-quic_charante@quicinc.com>
+In-Reply-To: <1652125797-2043-1-git-send-email-quic_charante@quicinc.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Mon, 9 May 2022 14:49:50 -0700
+Message-ID: <CABdmKX2V55tA-Or6Dd+bpbcv3fDHps_+zHHJQwhz819LX_2RSQ@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: call dma_buf_stats_setup after dmabuf is in
+ valid list
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Hridya Valsaraju <hridya@google.com>, daniel.vetter@ffwll.ch,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add "back" as a possible panel output when _PLD output from ACPI
-indicates back panel.
+On Mon, May 9, 2022 at 12:50 PM Charan Teja Kalla
+<quic_charante@quicinc.com> wrote:
+>
+> From: Charan Teja Reddy <quic_charante@quicinc.com>
+>
+> When dma_buf_stats_setup() fails, it closes the dmabuf file which
+> results into the calling of dma_buf_file_release() where it does
+> list_del(&dmabuf->list_node) with out first adding it to the proper
+> list. This is resulting into panic in the below path:
+> __list_del_entry_valid+0x38/0xac
+> dma_buf_file_release+0x74/0x158
+> __fput+0xf4/0x428
+> ____fput+0x14/0x24
+> task_work_run+0x178/0x24c
+> do_notify_resume+0x194/0x264
+> work_pending+0xc/0x5f0
+>
+> Fix it by moving the dma_buf_stats_setup() after dmabuf is added to the
+> list.
+>
+> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
+> Signed-off-by: Charan Teja Reddy <quic_charante@quicinc.com>
 
-Fixes: 6423d2951087 ("driver core: Add sysfs support for physical location of a device")
-Signed-off-by: Won Chung <wonchung@google.com>
----
- drivers/base/physical_location.c | 3 +++
- 1 file changed, 3 insertions(+)
+Tested-by: T.J. Mercier <tjmercier@google.com>
+Acked-by: T.J. Mercier <tjmercier@google.com>
 
-diff --git a/drivers/base/physical_location.c b/drivers/base/physical_location.c
-index fbd9f9839e92..2b60d2b51684 100644
---- a/drivers/base/physical_location.c
-+++ b/drivers/base/physical_location.c
-@@ -56,6 +56,9 @@ static ssize_t panel_show(struct device *dev, struct device_attribute *attr,
- 	case DEVICE_PANEL_FRONT:
- 		panel = "front";
- 		break;
-+	case DEVICE_PANEL_BACK:
-+		panel = "back";
-+		break;
- 	default:
- 		panel = "unknown";
- 	}
--- 
-2.36.0.512.ge40c2bad7a-goog
-
+> ---
+>  drivers/dma-buf/dma-buf.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 602b12d..a6fc96e 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -543,10 +543,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+>         file->f_mode |= FMODE_LSEEK;
+>         dmabuf->file = file;
+>
+> -       ret = dma_buf_stats_setup(dmabuf);
+> -       if (ret)
+> -               goto err_sysfs;
+> -
+>         mutex_init(&dmabuf->lock);
+>         INIT_LIST_HEAD(&dmabuf->attachments);
+>
+> @@ -554,6 +550,10 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+>         list_add(&dmabuf->list_node, &db_list.head);
+>         mutex_unlock(&db_list.lock);
+>
+> +       ret = dma_buf_stats_setup(dmabuf);
+> +       if (ret)
+> +               goto err_sysfs;
+> +
+>         return dmabuf;
+>
+>  err_sysfs:
+> --
+> 2.7.4
+>

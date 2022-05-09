@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5300D5208C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A61E520923
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiEIXiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S233098AbiEIXjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbiEIXhx (ORCPT
+        with ESMTP id S232705AbiEIXhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:37:53 -0400
+        Mon, 9 May 2022 19:37:55 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036AE22A8B2;
-        Mon,  9 May 2022 16:33:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0553A24BB30;
+        Mon,  9 May 2022 16:33:31 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id EB6021F43062
+        with ESMTPSA id DDF821F430B3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139206;
-        bh=ADq4GZWEPNK7q9JUz/PJH0s7RkDgF/Hn0bL9XYpd1xY=;
+        s=mail; t=1652139210;
+        bh=YK0F6fR8XWeV2rG0cbTxAWJjHbs9t/ROkX6NXAfeuRc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGyjgFeHS4c4whO9DLRPI4YnH/I1kcxhGjuZMUHWMXxrPTowBH3nsSioG+grbG2E8
-         mnkheS9YppXiE1XFZmpN8+NhD/nzj2UXihmV79dBZXmBvvWVTCKWXHTP8bvClUAXj1
-         4nlNgidw2ooBaq465rODMaKeABNVE6nkuJ7Q8Xm3bGYMUs6PLqgcdGYa5CtQU2PUK/
-         Jza3RN8pd4IlpFmarCSW5s3ufDshdt5+jjA/5gruEo9hsKxIniPgqZA10L6lW8+LoM
-         tuiD7AddByNEUUZsYAIaBWxhshHGAxlCDHWH4Mq16erEhm603eMlSqLobcqsLKpUet
-         qm4lCWHEs4Jdw==
+        b=WX2wLAoFqw2NcqFA+1BgEi+pnSqQ/OT0ntArBclZh3rRdgYWFpNobAvm6ZwR47f5O
+         UVB/nJt08DF0z35eem1y5e29iS6TGa3FlqumDo8Gztlg9RTEy3yXgoM/PdqWZ72qjH
+         BBXHhpZMhXXq1gmyrAUnf9JuPFEL0VuxOWgpl0g7gErLQMCAr8EBR7mlBfM7b/CzpF
+         rbbVZCAv5Su19JHE0dZAYAwszfCQR2CPfwc4wUkYqtr+WKd4w8pxs2RFEPFv5Qa681
+         /mjY+RYiodQ7Rz1Y3p36rejWNrVlI8LiNaH4VL6v6O9rIPyvlE8v1d9uqae+R0n5sB
+         mZdrZdLthuUpw==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -79,9 +79,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 06/27] kernel/reboot: Add stub for pm_power_off
-Date:   Tue, 10 May 2022 02:32:14 +0300
-Message-Id: <20220509233235.995021-7-dmitry.osipenko@collabora.com>
+Subject: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
+Date:   Tue, 10 May 2022 02:32:15 +0300
+Message-Id: <20220509233235.995021-8-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
 References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
@@ -97,32 +97,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add weak stub for the global pm_power_off callback variable. This will
-allow us to remove pm_power_off definitions from arch/ code and transition
-to the new sys-off based API that will replace the global variable.
+Add kernel_can_power_off() helper that replaces open-coded checks of
+the global pm_power_off variable. This is a necessary step towards
+supporting chained power-off handlers.
 
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- kernel/reboot.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/reboot.h |  1 +
+ kernel/reboot.c        | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+index 6b951d68c0c7..c52f77ee4ddd 100644
+--- a/include/linux/reboot.h
++++ b/include/linux/reboot.h
+@@ -149,6 +149,7 @@ extern void kernel_restart_prepare(char *cmd);
+ extern void kernel_restart(char *cmd);
+ extern void kernel_halt(void);
+ extern void kernel_power_off(void);
++extern bool kernel_can_power_off(void);
+ 
+ void ctrl_alt_del(void);
+ 
 diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 9afa99a32d62..eaede35f45e2 100644
+index eaede35f45e2..982e58c11ce8 100644
 --- a/kernel/reboot.c
 +++ b/kernel/reboot.c
-@@ -57,6 +57,12 @@ struct sys_off_handler {
- 	void *list;
- };
+@@ -523,6 +523,18 @@ void do_kernel_power_off(void)
+ 	atomic_notifier_call_chain(&power_off_handler_list, 0, NULL);
+ }
  
-+/*
-+ * Temporary stub that prevents linkage failure while we're in process
-+ * of removing all uses of legacy pm_power_off() around the kernel.
++/**
++ *	kernel_can_power_off - check whether system can be powered off
++ *
++ *	Returns true if power-off handler is registered and system can be
++ *	powered off, false otherwise.
 + */
-+void __weak (*pm_power_off)(void);
++bool kernel_can_power_off(void)
++{
++	return !atomic_notifier_call_chain_is_empty(&power_off_handler_list);
++}
++EXPORT_SYMBOL_GPL(kernel_can_power_off);
 +
- /*
-  * If set, this is used for preparing the system to power off.
-  */
+ /**
+  *	kernel_power_off - power_off the system
+  *
+@@ -581,7 +593,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
+ 	/* Instead of trying to make the power_off code look like
+ 	 * halt when pm_power_off is not set do it the easy way.
+ 	 */
+-	if ((cmd == LINUX_REBOOT_CMD_POWER_OFF) && !pm_power_off)
++	if ((cmd == LINUX_REBOOT_CMD_POWER_OFF) && !kernel_can_power_off())
+ 		cmd = LINUX_REBOOT_CMD_HALT;
+ 
+ 	mutex_lock(&system_transition_mutex);
 -- 
 2.35.1
 

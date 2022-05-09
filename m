@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6598352000A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC43D52000E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237443AbiEIOlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
+        id S237452AbiEIOmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiEIOkx (ORCPT
+        with ESMTP id S237433AbiEIOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:40:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEB2F3EAAF
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652107018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n4x1JmNs0lN7zeQuuaFUFxxo45axmawzrmuIq6d0Zls=;
-        b=EySKNhYcCHL/N+0VN/t2VwlWCmPrMJyr0lv59WdD6nGzyXA1L7/9h0bMQcHd7OKr2TDubW
-        /SOdsyuAaetyXz+N3v5AaKNJVGv2KfVNEaGnf0BXuvZdk11u6Bpw5eqqsCzRHq03BVvZ+D
-        EyCx9A4c5qazkn0RsPki5LkRq79fKIk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-YtOae5DSPCSi59tmlf0qEw-1; Mon, 09 May 2022 10:36:56 -0400
-X-MC-Unique: YtOae5DSPCSi59tmlf0qEw-1
-Received: by mail-wr1-f69.google.com with SMTP id s16-20020adfeb10000000b0020cc4e5e683so1575063wrn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:36:56 -0700 (PDT)
+        Mon, 9 May 2022 10:42:38 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DB92AA2F6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 07:38:43 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u3so19776168wrg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 07:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PJxb32bRzXR/aRLBsR5ItCKULL5H2PbNvFFo631ZV10=;
+        b=PvwMCQIuWgWkIhLrIhWXG1QTXvWF92KgQc1EI2AxsHyY2uMYrt1QArVf58cNX+rcAB
+         cTk5RS+HwQB7V20jNfD2vYmF5aOssv2ddRyXUcVdVPp7edxRIwDC7WDQ2TM+DslRqfTN
+         k19rt6a+fMjaYUGl8SARO3HYtvaK5xrKDGq5iT1RBPEoZMuNPlD66IGp7r6nkP//ZxUM
+         pgSl26YFc0kmow6T7eJGC1qtamYmEt6pCNeaLCG+pUzQ/XmgZUD4Of1INA1D+A76mbvD
+         bMK5Akoyl05V96zTPt4Oa8U9v+eoaFw0GJiXjgMU1oFCENqGfPxLuTz+Ops8hAbu4fb0
+         Gmog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n4x1JmNs0lN7zeQuuaFUFxxo45axmawzrmuIq6d0Zls=;
-        b=J7NMvBgRMAx35g9JPU+sTAILlj05ov2k5PKvK/dFELSTQBQg7v3ZF7lOoMpu+Fra3Y
-         AA86EXNklgb9aLeAmjB/Tmg2f6TsQhzUZc+B/cN9vhavqmZdBB/ZbrzYkoMAMFstbNPH
-         bsd/ka162uAJZgcfh81ut/LQZIoHgDpO9ecQwotUb8D57aCW/GHpyengu9Z2wOBDom4A
-         FYYbfl2qwYz1GMRnbfQv0N9tuvVang/IHSFG62vzNDZgOQIYXDpe4OYExGoCefTpPbkC
-         5yGh1PqQkDSDUzJIrVo/7WHt6o5AwnmSao70ZqkgrulvKOXbbMUxfTRo/7/K3E45NTkj
-         5pzg==
-X-Gm-Message-State: AOAM531Ql1XNKc2OmjwYCtzsrt+mkrfawH97UnnDffIrU4It0QINNC/b
-        11jVDESZngT/l604pdsK/Sx3RDxZi/3+8odNkgaxvU5uU6phUydYhBVNgJzwTc7F+XdJQM+uRIp
-        xzE6z3uNz7fQCt7ybDNYHIAV3
-X-Received: by 2002:a1c:cc08:0:b0:393:e7d2:e580 with SMTP id h8-20020a1ccc08000000b00393e7d2e580mr16812232wmb.145.1652107015560;
-        Mon, 09 May 2022 07:36:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyGrLL/VVSw/WOa5yPynAZPNzHztUeFn+CzxclQK7K/jvA6IsiCIdA26rF3Brew3Axf9EMHww==
-X-Received: by 2002:a1c:cc08:0:b0:393:e7d2:e580 with SMTP id h8-20020a1ccc08000000b00393e7d2e580mr16812218wmb.145.1652107015350;
-        Mon, 09 May 2022 07:36:55 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id j14-20020adfe50e000000b0020c6a524fd5sm12998987wrm.99.2022.05.09.07.36.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 07:36:54 -0700 (PDT)
-Message-ID: <d0c7f668-e7db-f835-b410-6a6af516ceed@redhat.com>
-Date:   Mon, 9 May 2022 16:36:53 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PJxb32bRzXR/aRLBsR5ItCKULL5H2PbNvFFo631ZV10=;
+        b=Z5DWWdkGGKTJxGDf8/i6wV5ZUUjs4wmBBAZw6kdbjKdn5RhXVlK7fQU0fG9XUR8gaa
+         +rYrwE4HeHxaddJFyLXVtmNE3dyfFY3rl71o+h23Cm4n1U6yeGqVXB4o0ux+jUyzFWDY
+         ilUcoUyB3QzyUhUYtH71pJwgYhcRZLLcadpoIHd2uO+2sthA9lmJQGAwR7ibP++BVEjm
+         Rt3BjspMExr5rY6/4tc1IqMxidHlDvvm+AYHkIo07nh8oeCoLqrzJi63/02FAK5qezYr
+         QV0F87CkRfO6YQZuY1RYI3mpLhGpr+CuP/JPc89YWW3Yt2UroSIaIIzHKVteigmqehVo
+         4duw==
+X-Gm-Message-State: AOAM5325CT3vBrfBwtxqFdm9GVJvzCXR2pzsXd2Nfo2Cv6kZeWKSSr7E
+        X6Es491rq52g23Oykxe+Knm7Ng==
+X-Google-Smtp-Source: ABdhPJyLXHiIrMy3/wzvE/usa9gu2UG+1aeyzJbtytc5hHu8886sMKLghPjKsQvBsUd/mh/2HgtqKQ==
+X-Received: by 2002:a5d:6452:0:b0:20c:999d:be77 with SMTP id d18-20020a5d6452000000b0020c999dbe77mr13675304wrw.52.1652107122355;
+        Mon, 09 May 2022 07:38:42 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id m7-20020adffa07000000b0020cb42671aasm6829808wrr.105.2022.05.09.07.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 07:38:41 -0700 (PDT)
+Date:   Mon, 9 May 2022 16:38:38 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     alexandre.torgue@foss.st.com, andrew@lunn.ch, broonie@kernel.org,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, joabreu@synopsys.com,
+        krzysztof.kozlowski+dt@linaro.org, kuba@kernel.org,
+        lgirdwood@gmail.com, linux@armlinux.org.uk, pabeni@redhat.com,
+        peppe.cavallaro@st.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 2/6] net: stmmac: dwmac-sun8i: remove regulator
+Message-ID: <YnknbtzsBQrIV0hx@Red>
+References: <20220509074857.195302-1-clabbe@baylibre.com>
+ <20220509074857.195302-3-clabbe@baylibre.com>
+ <20220509150907.6cf9c4d1@donnerap.cambridge.arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] Revert "fbdev: Make fb_release() return -ENODEV if
- fbdev was unregistered"
-Content-Language: en-US
-To:     public@timruffing.de
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <642f515e-aa71-7c90-a715-e49dcf12baee@redhat.com>
- <20220509140149.34734-1-public@timruffing.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220509140149.34734-1-public@timruffing.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509150907.6cf9c4d1@donnerap.cambridge.arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tim,
+Le Mon, May 09, 2022 at 03:09:07PM +0100, Andre Przywara a écrit :
+> On Mon,  9 May 2022 07:48:53 +0000
+> Corentin Labbe <clabbe@baylibre.com> wrote:
+> 
+> Hi,
+> 
+> > Now regulator is handled by phy core, there is no need to handle it in
+> > stmmac driver.
+> 
+> I don't think you can do that, since we definitely need to maintain
+> compatibility with *older* DTs.
+> Is there a real need for this patch, or is it just a cleanup?
+> I mean we should be able to keep both approaches in, and the respective
+> board and DT version selects which it is using.
+> 
+> Cheers,
+> Andre
+> 
 
-On 5/9/22 16:01, public@timruffing.de wrote:
-> Thanks for this patch. Do you think this can be backported to LTS 5.17.y and
-
-You are welcome.
-
-> 5.15.y, which are still buggy? It's not a big deal for me but others might
-> profit.
->
-> Background:
-> The patch solves a regression from 5.17.1 to 5.17.2 or 5.15.32 and
-> 5.15.33 I was about to report. On my Thinkpad T570, I got random "BUG", "Oops"
-> or even panics when during booting with efifb and plymouthd (and then sometimes
-> also problems when shutting down because). I had bisected the issue to commit
-> 27599aacbaef. I could provide more info but I don't think it's necessary given
-> that either aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a or your better patch now
-> fixes the issue (I tested both, both work for me).
->
-
-The patches to fix the fbdev hot-unplug regression will get merged in mainline
-soon and since all have a Fixes tag, they should get picked for stable as well.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+It is just a cleanup. But yes, probably keeping it will be necessary for easy compatibility.

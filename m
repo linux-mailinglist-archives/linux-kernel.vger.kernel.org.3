@@ -2,103 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98C851FA65
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C662951FA42
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiEIKvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 06:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S229849AbiEIKss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 06:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiEIKu6 (ORCPT
+        with ESMTP id S230274AbiEIKsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 06:50:58 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3CF2D2E0B;
-        Mon,  9 May 2022 03:46:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so8011117wme.3;
-        Mon, 09 May 2022 03:46:36 -0700 (PDT)
+        Mon, 9 May 2022 06:48:30 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6E82D5701;
+        Mon,  9 May 2022 03:42:34 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id c125so14802290iof.9;
+        Mon, 09 May 2022 03:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RUbxlyQv9Rnrcr0jkzwd4nmwPYsVNPj/1DE7vk0W4dU=;
+        b=mJE0VdjpRsTxZTx6Swa30zi8jr6E8MfARPwt1GzzQ07K9cPVY0gRLQxTuuwhsP+1OE
+         Bnk1zeZmKSmjGhp7cHj2GOZb9j/rvF5Q/+W8auc7ldzjnhgL2h/jHQODIpiEFs9qh3tK
+         cP/G3iz/dTOjCdbI1hNs+lFx9ZjInX4RX6DFesdvcjvQCAQqRtWV002eNEK5VwMYcgV1
+         dc8xIeVBhUia8oQaSzQ1ckle87ZDyhAVdvL6GGKlKZvD2wUBFhIsnVxv6tjm6HgrcPKY
+         B2HGCCxzfrZ2HJmqLQsZdrEUm/jtl8bmWhI3NeRiBYEs5djhP3IsVCZshZrE7oLqePbP
+         N5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T3V/lJ4KUDk6qXJayPf/9nDf9cdeXl1HqcM89tsaVpI=;
-        b=c3u+pHWHX+KRBICJluZBGRYy4OlWzlKvluuGrCdgoXGH0a69jGDaP0k5BX/dgB7oYw
-         rfmI/FphL878Amre2FtUZy7e0fOUddHib2whV4Cx8oS2gwvzDLnAmID7U01ziYkBBV8y
-         jBS9h9uqboJuFR3YJ4hVnruqamNMgQ3HUe3HyqcefpqL+uyWDpcEsFYDJkB1+bSFU2cY
-         yRggGixlIfKFY1K5dMk3Dm2nkwcj2zfbFqgnUtA2h6FR5Zrt7Hs1NYmxYjz/Iftc6ufy
-         47w+DIwUXTmb33sPMopKtAdWVqkobUSXvPO943aWqirbgPk0CljZto413gVvu8zfl7mi
-         k81w==
-X-Gm-Message-State: AOAM5302biJV4KkdAKV+pF8hSnToMCN4xXxqnT67krE7SyKI/iH4tGF1
-        Lkg4yUzv7o7ylgFi7XWZ/lpTFo8556Efug==
-X-Google-Smtp-Source: ABdhPJyhgE0jqM93Q9glBx5zr2oitPx34fTQ646NYNBCLlHFa9uKBazTrFpDIlIgdcOjOZ0WNnIALg==
-X-Received: by 2002:a05:600c:4f49:b0:394:8125:8b6 with SMTP id m9-20020a05600c4f4900b00394812508b6mr10898849wmq.80.1652092879195;
-        Mon, 09 May 2022 03:41:19 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id m37-20020a05600c3b2500b003942a244ec5sm12731163wms.10.2022.05.09.03.41.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 03:41:18 -0700 (PDT)
-Message-ID: <b17dde9a-6519-15be-07c6-218b1a1ef416@kernel.org>
-Date:   Mon, 9 May 2022 12:41:17 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RUbxlyQv9Rnrcr0jkzwd4nmwPYsVNPj/1DE7vk0W4dU=;
+        b=k9wC5iMbgvkbBkbKRvAphSs+IwTQDYoYT5WNG2lKrJyG6KTZRuAGt29LrxICEzBJT6
+         C1k9GAEdnB9HyDca8vFiB1m8dReG4sEaGI3fX0I3BTrja50LmbrF1mqsmeHzY114vSJ5
+         Xl3im2aOEo2gJZild6EBkwSAR1cb0pWJREoH+Ud5KI7N5/Im01I8Hnl3N9npqMhkcHsw
+         tkX68mwFhyHQ4qebGw/HplNkQCPv7rrWo9ZHYsNXlfGmyCU6syLO9Rphf0R4nz998lht
+         xVi/y9evmqQ6tpXnDm2s/tKdjEH5Nzz5jv9mR+k/nJOOY2ZXQyT+L/TmzCf7gBmJIKdc
+         qFtg==
+X-Gm-Message-State: AOAM533DtQp3K8cGD2jY+bqydX+jSnkW5mRTyGDbizmZdFYrTr++MB/9
+        RhpgaZTsCbDTQ/w4gsJIfQ2n7N36D8u1wS9sEdO11YJJ
+X-Google-Smtp-Source: ABdhPJxKzpzb9+WG2tCZaHirmDD6/FM40ugx3aBOyzAzMNEUY/Hcd40wj9X4GSSMG5tONefq4BgcVCHeqoCwpvXnjp4=
+X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
+ k16-20020a0566022d9000b0063db41ee4e4mr6088084iow.172.1652092899514; Mon, 09
+ May 2022 03:41:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] tty: n_gsm: fix buffer over-read in gsm_dlci_data()
-Content-Language: en-US
-To:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220504081733.3494-1-daniel.starke@siemens.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220504081733.3494-1-daniel.starke@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220507052451.12890-19-ojeda@kernel.org> <7e9c2e77-8b70-6e15-3f3d-905ab42b0fcd@gmail.com>
+In-Reply-To: <7e9c2e77-8b70-6e15-3f3d-905ab42b0fcd@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 9 May 2022 12:41:28 +0200
+Message-ID: <CANiq72mBVo4+htxVjY0wB1Y3GO2PEUiZjZKRYT8ddwx84-hAtg@mail.gmail.com>
+Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Wu XiangCheng <bobwxc@email.cn>,
+        Jonathan Corbet <corbet@lwn.net>, Daniel Xu <dxu@dxuuu.xyz>,
+        Gary Guo <gary@garyguo.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Yuki Okushi <jtitor@2k36.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Julian Merkle <me@jvmerkle.de>, Finn Behrens <me@kloenk.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 05. 22, 10:17, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> 'len' is decreased after each octet that has its EA bit set to 0, which
-> means that the value is encoded with additional octets. However, the final
-> octet does not decreases 'len' which results in 'len' being one byte too
-> long. A buffer over-read may occur in tty_insert_flip_string() as it tries
-> to read one byte more than the passed content size of 'data'.
-> Decrease 'len' also for the final octet which has the EA bit set to 1 to
-> write the correct number of bytes from the internal receive buffer to the
-> virtual tty.
-> 
-> Fixes: 2e124b4a390c ("TTY: switch tty_flip_buffer_push")
+Hi Akira,
 
-That commit barely introduced the problem.
+On Mon, May 9, 2022 at 6:02 AM Akira Yokosawa <akiyks@gmail.com> wrote:
+>
+> I think you agreed splitting SVG part into its own patch with
+> a proper copying info, etc.  Let me see...  So, here is the link:
 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->   drivers/tty/n_gsm.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index a38b922bcbc1..9b0b435cf26e 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -1658,6 +1658,7 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
->   			if (len == 0)
->   				return;
->   		}
-> +		len--;
->   		slen++;
->   		tty = tty_port_tty_get(port);
->   		if (tty) {
+Yes, sorry, will do (in fact, it should have been there in v5 too).
 
+By the way, the Linux SVG logo (used to make the one here) is pending
+in the linux-doc ML.
 
--- 
-js
-suse labs
+> I might have missed v5 of this patch series.
+> That might be because v5's 15/20 was not accepted by linux-doc's
+> lore archive (maybe) due to its size despite it had Cc: linux-doc.
+> v6's 18/23 was also rejected.
+
+Yes, a few patches get rejected in several lists. We were told this
+was fine as long as LKML gets them (the cover letter has the lists in
+Cc).
+
+> I have some alternative ideas for table formatting in ReST.
+
+I was following the LLVM one, but it makes sense to use the other ones
+where possible. I can send a patch for that one too.
+
+> So here are a couple of alternative ways to represent the table
+>
+> * ASCII-art format:
+> * Literal block format:
+
+Thanks for taking the time to format the examples, it is useful :)
+
+> As you see, those inline-literal markers of ``xxxx``, which are
+> distracting when the .rst file is read as plain-text, are not
+> necessary in the literal-block approach.  And you can directly
+
+I agree, it can be better (it is one reason I find Markdown a bit more
+readable since it uses a single backquote for that instead of two).
+
+> In my opinion, the literal-block approach should be the most
+> reasonable choice here. Of course its your call which one
+> to choose.
+
+Yeah, that sounds reasonable. I will take a look.
+
+Thanks for the review!
+
+Cheers,
+Miguel

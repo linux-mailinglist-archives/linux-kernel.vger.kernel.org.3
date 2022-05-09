@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491AF520445
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981AD52043D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbiEISN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S240067AbiEISPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240047AbiEISNw (ORCPT
+        with ESMTP id S240034AbiEISP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:13:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8816EEB8;
-        Mon,  9 May 2022 11:09:57 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1737B1EC01E0;
-        Mon,  9 May 2022 20:09:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652119792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=L9Ar+ydmc7t38d3TuBxUw1cNUzBjweI6t/LwvKD8DEI=;
-        b=LlSfo//agkPEyJ0VR6GE3fKki2x2cRN11SSjWMpSJewrU9LoSBPDq4g68zlEIa7ZJqVooK
-        7/okTqr92ZIgaEVYqIDjMkXwMDwpvqyzVMegVpsryiVt197V2FLQbN+f4mX3CoHpVfV+Ix
-        RcmZ1bN5m+R8fx9+MZPIt56mfAvUvOY=
-Date:   Mon, 9 May 2022 20:09:55 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        James Morris <jmorris@namei.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-Message-ID: <YnlY87wm6WmQjs7m@zn.tnic>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnjvfNs5pgWiomWx@noodles-fedora.dhcp.thefacebook.com>
- <0960C132-581C-4881-8948-C566657C3998@alien8.de>
- <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
+        Mon, 9 May 2022 14:15:29 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A661DA74;
+        Mon,  9 May 2022 11:11:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 25CCB1F43FBD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652119882;
+        bh=MbPPprIzKvxmhduX4Hn0tkmwmTra/9U7Mk0pwr6WmI8=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=HyIWaVM8jvUSedn2yuZZVY27tqvcE3NVSCaa1N2QDtZFqmI9ptONPMvD3kbpJ/TP6
+         6kv/sRrcWZcdgOPl7YeYdbQ0XZTAyfXswqhh1QF1tIbhfSvdw8jCB1hiQqLr301gf2
+         mP280UWL5V24h/FLNb3ahwsTE4OfxVwAN28qOySm18x3IMOqGr2IWDKUR9h+LsDPw0
+         pK6AgaTe4JzUxf4Chu90loNUrkWjeWEquvsurdO7wdBHCiOQe5nnH02ylm0BFyXygQ
+         7qQVjoWK7znnY8z3Upwj8Pfl30U9voKmuEEm/OsR5+feSGFIyyDT5qeDjl7SAoHzHP
+         vieHl9nu9681w==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
+Organization: Collabora
+References: <20220509092312.254354-1-ming.lei@redhat.com>
+        <8e3ecd00-1c73-7481-fec2-158528b2798f@infradead.org>
+Date:   Mon, 09 May 2022 14:11:19 -0400
+In-Reply-To: <8e3ecd00-1c73-7481-fec2-158528b2798f@infradead.org> (Randy
+        Dunlap's message of "Mon, 9 May 2022 09:00:37 -0700")
+Message-ID: <87bkw6lgoo.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 05:46:22PM +0000, Jonathan McDowell wrote:
-> Device tree on x86 doesn't seem to be a thing;
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-Not a thing? What does that even mean?
+> On 5/9/22 02:23, Ming Lei wrote:
+>> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+>> index fdb81f2794cd..3893ccd82e8a 100644
+>> --- a/drivers/block/Kconfig
+>> +++ b/drivers/block/Kconfig
+>> @@ -408,6 +408,13 @@ config BLK_DEV_RBD
+>>  
+>>  	  If unsure, say N.
+>>  
+>> +config BLK_DEV_USER_BLK_DRV
+>> +	bool "Userspace block driver"
+>> +	select IO_URING
+>> +	default y
+>
+> Any "default y" driver is highly questionable and needs to be justified.
+>
+> Also: why is it bool instead of tristate?
 
-We have arch/x86/kernel/devicetree.c which adds some minimal devicetree
-support.
-
-> none of the distros I regularly use enable CONFIG_OF for x86, I can
-> only find 2 32-bit x86 platforms that actually select it and none of
-> the plumbing for kexec on x86 ties in device tree.
-
-And? That can get changed and enabled and so on.
-
-> I agree for platforms that make active use of device tree that's the
-> appropriate path, but it doesn't seem to be the case for x86.
-
-I'm not sure what you're aim here is?
-
-You want to pass that IMA measurement to the kexec kernel with minimal
-changes, i.e., change only the kernel?
-
-Why can't distros be also changed to use devicetree for the IMA
-measurement, like the other arches do? Why does x86 need to do it
-differently?
-
-We also pass info to the kexec kernel by reading it from sysfs
-and having kexec tools pass it to the kexec-ed kernel, see
-Documentation/ABI/testing/sysfs-firmware-efi-runtime-map
-
-kexec(8) itself can do:
-
-kexec -l kernel-image --append=command-line-options
-			^^^^^^^^^^^^^^^^^
-
-and add those cmdline options which are dug out from the first kernel.
-
-So is there any particular reason/pressing need to pass the measurement
-with setup_data?
+I think it's only bool because it depends on task_work_add, which is not exported to
+modules.  It is something to be fixed for sure, can that function just be exported?
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Gabriel Krisman Bertazi

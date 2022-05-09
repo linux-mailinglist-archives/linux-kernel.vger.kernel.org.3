@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9982452051E
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1D752051D
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240516AbiEITUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S240554AbiEITVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240486AbiEITUm (ORCPT
+        with ESMTP id S240546AbiEITVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:20:42 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C473413B8FA;
-        Mon,  9 May 2022 12:16:47 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-edeb6c3642so15842537fac.3;
-        Mon, 09 May 2022 12:16:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=J9UHLsCgwlEtwC93yM9iNbxfAUErMfSSi5tgfl2OGhA=;
-        b=x4l4b7QYZH/8VG+e8un3hJFaqkzuJYSVh0+KD6z0bqk7/u2fmMA+3I/girlbti7Fyz
-         bj8WFIox0ZRPnPXmR/foBaVfCnewv99VHMD/9u+n8O90OXtq4/jKrkY9n/HYPsdAaYOR
-         1n1XIpk8OugBVOyiTCHhU3C9NfxeikUws3Vct4bZnCmb8CaF8KWFeRspkQ6ML2lMjf8w
-         SfL8Gp6SvJvj4jp9HMclsKhtRCReqXwQmRfDhHrFE2uSmibaerMahNMNgPSIOQt1SDiS
-         2cw08xa4T6QGoHgIQsBkiIMgtDYprWHkGFmHA5WPGZmNL7/+nYXLWoFZeyHc+lHvr3d7
-         gWEA==
-X-Gm-Message-State: AOAM533Rz8fHMu+RjsDU5WSYUvg2nmIi1GeqynmZIZcP6RDd6UrFsTZG
-        4bTQSYdDmgQ1vc6dZwnGIg==
-X-Google-Smtp-Source: ABdhPJyygcw6TMCxSg9TGmvmJfsyB7vAnz1q+HGku1a2ZCtUU9MEEi3VMOYqBXydfOmx6zjApJz/vA==
-X-Received: by 2002:a05:6870:344f:b0:e2:c4c0:86a5 with SMTP id i15-20020a056870344f00b000e2c4c086a5mr8157215oah.189.1652123807049;
-        Mon, 09 May 2022 12:16:47 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id be8-20020a056808218800b00325cf57766bsm4720560oib.1.2022.05.09.12.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 12:16:46 -0700 (PDT)
-Received: (nullmailer pid 27400 invoked by uid 1000);
-        Mon, 09 May 2022 19:16:45 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
-References: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
-Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for "st,stm32mp1-rcc-secure"
-Date:   Mon, 09 May 2022 14:16:45 -0500
-Message-Id: <1652123805.754133.27398.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 9 May 2022 15:21:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1921C0F32;
+        Mon,  9 May 2022 12:17:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB2E96166F;
+        Mon,  9 May 2022 19:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0534C385B2;
+        Mon,  9 May 2022 19:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652123868;
+        bh=rrqSz30f8zO7usei05O3p8suFElpLq4mSl05OR/sTlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tgJYNdPl6zeDpfJg7STc7bqPgPB6QJuhzEfcuHocRr4RaHdC8Kk7+zuLDssdnNzTN
+         zjfi6GK/QYoUrbHkHRTsQBzZiBWOOqWIE30TeREc2qCKl1Fd1dFMbKZE8pOdStXpj/
+         ixZjNs8Shdh+TrD2leMylUFRPtGWpl4qkUZZaKiK0mSoTB/IfsefjmR75HIfNYiLC3
+         k+pRdGrSZBEj79lzXOdc7Ul+FzwV+btTNozLYwQrgEsgiUmMNaxh5b7pdxSfMEfjhx
+         6sa90hPNpKOIhdIy3TO4bII+g/Yf53VMEWTCxmWltecj0hRpUkOXL2wapTohFQ33fe
+         PFzKal7cc63hw==
+Date:   Mon, 9 May 2022 12:17:45 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com, kernel-team@fb.com
+Subject: Re: [RFC] sched,livepatch: call stop_one_cpu in
+ klp_check_and_switch_task
+Message-ID: <20220509191745.yk2txsa4cv3ypf6k@treble>
+References: <20220507174628.2086373-1-song@kernel.org>
+ <20220509115227.6075105e@imladris.surriel.com>
+ <20220509180004.zmvhz65xlncwqrrc@treble>
+ <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 May 2022 15:46:58 +0200, Alexandre Torgue wrote:
-> For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
-> required properties.
+On Mon, May 09, 2022 at 03:10:16PM -0400, Rik van Riel wrote:
+> On Mon, 2022-05-09 at 11:00 -0700, Josh Poimboeuf wrote:
+> > On Mon, May 09, 2022 at 11:52:27AM -0400, Rik van Riel wrote:
+> > > Does this look like an approach that could work?
+> > > 
+> > > @@ -315,6 +321,9 @@ static bool klp_try_switch_task(struct
+> > > task_struct *task)
+> > >         case -EBUSY:    /* klp_check_and_switch_task() */
+> > >                 pr_debug("%s: %s:%d is running\n",
+> > >                          __func__, task->comm, task->pid);
+> > > +               /* Preempt the task from the second KLP switch
+> > > attempt. */
+> > > +               if (klp_signals_cnt)
+> > > +                       stop_one_cpu(task_cpu(task),
+> > > kpatch_dummy_fn, NULL);
+> > 
+> > I must be missing something, how is briefly preempting a kthread
+> > supposed to actually transition it?  Won't it likely go back to
+> > running
+> > on the CPU before the next periodic klp_transition_work_fn() check?
+> > 
+> That's the kind of feedback I was hoping for ;)
 > 
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
+> I looked around the code a little bit, and it seems
+> that only the idle tasks can transition to another KLP
+> while they are running?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Yes.
 
-yamllint warnings/errors:
+> That makes me wonder how the kworker thread that runs
+> the klp switching code transitions itself...
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts:27.33-34 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+See klp_check_and_switch_task(), in addition to checking blocked tasks,
+it also checks the current task.
 
-doc reference errors (make refcheckdocs):
+> Should kernel threads that can use a lot of CPU have
+> something in their outer loop to transition KLPs,
+> just like the idle task does?
 
-See https://patchwork.ozlabs.org/patch/
+Maybe - I suppose this is the first time we've had an issue with
+CPU-bound kthreads.  I didn't know that was a thing ;-)
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Josh

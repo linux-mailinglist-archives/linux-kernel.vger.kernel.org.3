@@ -2,126 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560685206FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB53520713
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiEIVxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S231326AbiEIVzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbiEIVvU (ORCPT
+        with ESMTP id S231305AbiEIVxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:51:20 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A482734EB
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:47:25 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249Bt3ZI026043;
-        Mon, 9 May 2022 16:47:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=pgkInMNM5lIa62Ktk5wuKfnn1hSjdv2G0txAHRzh1uw=;
- b=WgoWhogxzjdN8ooFcZF2UK6U7qiEupaj99PBeC1SlpPctk4Mej6uCYTPlrOz8pdByRGQ
- ttCkHjEnbzgnhYZpkei8lt5D/9jAdL0MaNa4GYgonOYJSW7JBjg5AjSBn01NmAvhb40m
- kLPMt5fyy7LgGMWkaCcJ3jpO9qc1nSo4yUpreQiMBorDDOB6cQOPxG7rYNDameqfxOSH
- 5F/Z/VBI2ZuhTJUGV+jJHoc0P+WgnKCFNTvDbj+ADzCpiaQVVxC5TjjpcBidouKC6eHZ
- T+wNIurSBkYjYpjqteauZDi/YFByMnZHd0F+/oL+h6U4w4cYkbn4We7V2AoTT6TrZ0gB GQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fwp613jeu-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 09 May 2022 16:47:18 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 22:47:14 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Mon, 9 May 2022 22:47:14 +0100
-Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.55])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6890EB10;
-        Mon,  9 May 2022 21:47:14 +0000 (UTC)
-From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        Mon, 9 May 2022 17:53:48 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976672CBF8C;
+        Mon,  9 May 2022 14:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652132924; x=1683668924;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OjuWDuA8wp2pAQhE78hbrB1ZqBopu0NlCqBoV3u9VOM=;
+  b=XoBTw2hh+QTXB8T4ZVkdF914KbEpZdAeK63UZSnuaK7ACsQA53W1Bv95
+   5hAHUXnngUNCDu9uj2MncyYIlTj3vqENLoD+no9uwphcHoNN/MN+PbTI8
+   YKQE16xOcT7nO1hUiGcPaH8WtnKC7KgssxdGRu75Q8VaCoL+1MixrAeGN
+   0=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 09 May 2022 14:48:43 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 14:48:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 9 May 2022 14:48:33 -0700
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 9 May 2022 14:48:31 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
+        <sthemmin@microsoft.com>, <wei.liu@kernel.org>,
+        <decui@microsoft.com>, <lorenzo.pieralisi@arm.com>,
+        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>
+CC:     <jakeo@microsoft.com>, <dazhan@microsoft.com>,
+        <linux-hyperv@vger.kernel.org>, <linux-pci@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v2 26/26] ALSA: hda: cs35l41: Add kernel config to disable firmware autoload
-Date:   Mon, 9 May 2022 22:47:03 +0100
-Message-ID: <20220509214703.4482-27-vitalyr@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
-References: <20220509214703.4482-1-vitalyr@opensource.cirrus.com>
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH 0/2] hyperv compose_msi_msg fixups
+Date:   Mon, 9 May 2022 15:48:20 -0600
+Message-ID: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
-X-Proofpoint-GUID: MBfTHE0xNtPHE-E8JrjwFUa-26pgXtx8
-X-Proofpoint-ORIG-GUID: MBfTHE0xNtPHE-E8JrjwFUa-26pgXtx8
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Binding <sbinding@opensource.cirrus.com>
+While multi-MSI appears to work with pci-hyperv.c, there was a concern about
+how linux was doing the ITRE allocations.  Patch 2 addresses the concern.
 
-By default, the driver will automatically load DSP firmware
-for the amps, if available. Adding this option allows the
-autoload to be optional, which allows for different configurations.
+However, patch 2 exposed an issue with how compose_msi_msg() was freeing a
+previous allocation when called for the Nth time.  Imagine a driver using
+pci_alloc_irq_vectors() to request 32 MSIs.  This would cause compose_msi_msg()
+to be called 32 times, once for each MSI.  With patch 2, MSI0 would allocate
+the ITREs needed, and MSI1-31 would use the cached information.  Then the driver
+uses request_irq() on MSI1-17.  This would call compose_msi_msg() again on those
+MSIs, which would again use the cached information.  Then unmask() would be
+called to retarget the MSIs to the right VCPU vectors.  Finally, the driver
+calls request_irq() on MSI0.  This would call conpose_msi_msg(), which would
+free the block of 32 MSIs, and allocate a new block.  This would undo the
+retarget of MSI1-17, and likely leave those MSIs targeting invalid VCPU vectors.
+This is addressed by patch 1, which is introduced first to prevent a regression.
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
----
- sound/pci/hda/Kconfig       |  7 +++++++
- sound/pci/hda/cs35l41_hda.c | 12 +++++++-----
- 2 files changed, 14 insertions(+), 5 deletions(-)
+Jeffrey Hugo (2):
+  PCI: hv: Reuse existing ITRE allocation in compose_msi_msg()
+  PCI: hv: Fix interrupt mapping for multi-MSI
 
-diff --git a/sound/pci/hda/Kconfig b/sound/pci/hda/Kconfig
-index 1c378cca5dac..c4282dec4dd4 100644
---- a/sound/pci/hda/Kconfig
-+++ b/sound/pci/hda/Kconfig
-@@ -94,6 +94,13 @@ config SND_HDA_PATCH_LOADER
- config SND_HDA_SCODEC_CS35L41
- 	tristate
- 
-+config SND_HDA_SCODEC_CS35L41_DISABLE_FIRMWARE_AUTOSTART
-+	bool "Prevent CS35L41 from starting firmware on boot"
-+	depends on SND_HDA_SCODEC_CS35L41
-+	help
-+	  Say Y here to prevent the CS35L41 HDA driver from loading DSP
-+	  Firmware at boot
-+
- config SND_HDA_CS_DSP_CONTROLS
- 	tristate
- 	depends on CS_DSP
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 70e5354e3950..8b9e966145b5 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -773,11 +773,13 @@ static int cs35l41_hda_bind(struct device *dev, struct device *master, void *mas
- 
- 	cs35l41->firmware_type = HDA_CS_DSP_FW_SPK_PROT;
- 
--	cs35l41->request_fw_load = true;
--	mutex_lock(&cs35l41->fw_mutex);
--	if (cs35l41_smart_amp(cs35l41) < 0)
--		dev_warn(cs35l41->dev, "Cannot Run Firmware, reverting to dsp bypass...\n");
--	mutex_unlock(&cs35l41->fw_mutex);
-+	if (!IS_ENABLED(CONFIG_SND_HDA_SCODEC_CS35L41_DISABLE_FIRMWARE_AUTOSTART)) {
-+		cs35l41->request_fw_load = true;
-+		mutex_lock(&cs35l41->fw_mutex);
-+		if (cs35l41_smart_amp(cs35l41) < 0)
-+			dev_warn(cs35l41->dev, "Cannot Run Firmware, reverting to dsp bypass...\n");
-+		mutex_unlock(&cs35l41->fw_mutex);
-+	}
- 
- 	cs35l41_create_controls(cs35l41);
- 
+ drivers/pci/controller/pci-hyperv.c | 76 ++++++++++++++++++++++++++++---------
+ 1 file changed, 59 insertions(+), 17 deletions(-)
+
 -- 
-2.34.1
+2.7.4
 

@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52DF5209A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A0A5209A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiEIXsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S233274AbiEIXsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbiEIXrc (ORCPT
+        with ESMTP id S233342AbiEIXrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:47:32 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9167D266C84
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:40:15 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
-        by 156.147.23.52 with ESMTP; 10 May 2022 08:40:15 +0900
-X-Original-SENDERIP: 156.147.1.126
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.126 with ESMTP; 10 May 2022 08:40:14 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Tue, 10 May 2022 08:38:38 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, torvalds@linux-foundation.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <20220509233838.GC6047@X58A-UD3R>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
- <YnYd0hd+yTvVQxm5@hyeyoo>
- <20220509001637.GA6047@X58A-UD3R>
- <20220509164712.746e236b@gandalf.local.home>
+        Mon, 9 May 2022 19:47:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A9D1A6AED;
+        Mon,  9 May 2022 16:41:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxyNc5X1vz4xLb;
+        Tue, 10 May 2022 09:41:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652139667;
+        bh=gcj5N2stAh0o9Vt95Mn81SY0ptgejBMeaPn8kPhX/CE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IskjAnQ34Po4cVUZAE/I74cAYu6YSgdVApwykQFzboanpz494inWkUJsFskG+qRLk
+         0UXJayai6PWQ9w6WsZ3nNMgqdr3PWaaB0TXJJrkewk9Jy5e7rCSBrNbVGQdcUiyxS/
+         vk9t4DTfoGkVEjOISJxuz4JgQBm4g+5p1ar40LmhBRmxoSh9CYqWF0uo0dc7Jf9GES
+         E5PedpNys3SUc21Cz8h1UZqFOm9ig6Q0xrCuWts0UyZcatQzh1rVuCCPOpk4xrEUT/
+         33T3YOXXjxm481z1jAAO0lT73YYAc/GWDD6UsFJERIWco2eBRpIMCS7RpXfMcDn41E
+         PIDfrk+GspNfw==
+Date:   Tue, 10 May 2022 09:41:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: linux-next: manual merge of the mvebu tree with the arm-soc tree
+Message-ID: <20220510094102.099d5e54@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509164712.746e236b@gandalf.local.home>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/UMyAxjC44_7frVPl/lvX3xC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:47:12PM -0400, Steven Rostedt wrote:
-> On Mon, 9 May 2022 09:16:37 +0900
-> Byungchul Park <byungchul.park@lge.com> wrote:
-> 
-> > CASE 2.
-> > 
-> >    lock L with depth n
-> >    lock A
-> >    lock_nested L' with depth n + 1
-> >    ...
-> >    unlock L'
-> >    unlock A
-> >    unlock L
-> > 
-> > This case is allowed by Lockdep.
-> > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
-> > 
-> > ---
-> > 
-> > The following scenario would explain why CASE 2 is problematic.
-> > 
-> >    THREAD X			THREAD Y
-> > 
-> >    lock L with depth n
-> > 				lock L' with depth n
-> >    lock A
-> > 				lock A
-> >    lock_nested L' with depth n + 1
-> 
-> I'm confused by what exactly you are saying is a deadlock above.
-> 
-> Are you saying that lock A and L' are inversed? If so, lockdep had better
+--Sig_/UMyAxjC44_7frVPl/lvX3xC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Steven,
+Hi all,
 
-Yes, I was talking about A and L'.
+Today's linux-next merge of the mvebu tree got a conflict in:
 
-> detect that regardless of L. A nested lock associates the the nesting with
+  arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
 
-When I checked Lockdep code, L' with depth n + 1 and L' with depth n
-have different classes in Lockdep.
+between commit:
 
-That's why I said Lockdep cannot detect it. By any chance, has it
-changed so as to consider this case? Or am I missing something?
+  2f00bb4a69c7 ("arm64: dts: marvell: align SPI NOR node name with dtschema=
+")
 
-> the same type of lock. That is, in lockdep nested tells lockdep not to
-> trigger on the L and L' but it will not ignore that A was taken.
+from the arm-soc tree and commit:
 
-It will not ignore A but it would work like this:
+  5e9b59bd3737 ("arm64: dts: uDPU: update partition table")
 
-   THREAD X			THREAD Y
+from the mvebu tree.
 
-   lock Ln
-				lock Ln
-   lock A
-				lock A
-   lock_nested Lm
-				lock_nested Lm
+I fixed it up (I just used the former) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-So, Lockdep considers this case safe, actually not tho.
+--=20
+Cheers,
+Stephen Rothwell
 
-	Byungchul
+--Sig_/UMyAxjC44_7frVPl/lvX3xC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> 
-> -- Steve
-> 
-> 
-> 
-> > 				lock_nested L'' with depth n + 1
-> >    ...				...
-> >    unlock L'			unlock L''
-> >    unlock A			unlock A
-> >    unlock L			unlock L'
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ5po8ACgkQAVBC80lX
+0GwCEAf/Wu+gNxrthCwldhZbPMBGR736gEndrPdbe+LHjRQorx0/rvRp+Tw4qMfY
+MaIC24A1lsgdGsGrb/Pd1Gi9Aw2CHNn12mEgOtO3m4NyYrhJkfkTdlZnWxYUZmEk
+eoclCixyHxHDbnnznvQOuAfDPg4T6vGWPOlqCbTTWLWYiClfQ0uHTZ7kgCG6Sbhw
+IAggLODmAkWch07XwHzUuXgGUc84ksK/XUjgCoYodi1PAUSNXqQTc1mByPuu2oof
+iFzqmhdtwruOxn0m3Hs1tQTvv/vRZCxBAK5lbcxqQ4eypb4ZW02d+LSMdAr5OKWi
+PDO7bJZ7W6cPRzAkq9g/U01HY8R5Fw==
+=+Nzo
+-----END PGP SIGNATURE-----
+
+--Sig_/UMyAxjC44_7frVPl/lvX3xC--

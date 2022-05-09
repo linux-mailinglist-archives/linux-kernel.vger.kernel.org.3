@@ -2,145 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15821520371
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2CA520361
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiEIRWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S239642AbiEIRSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239599AbiEIRWK (ORCPT
+        with ESMTP id S239592AbiEIRSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:22:10 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC5124DC62;
-        Mon,  9 May 2022 10:18:12 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 1B270683; Mon,  9 May 2022 12:12:39 -0500 (CDT)
-Date:   Mon, 9 May 2022 12:12:39 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] capability: add capable_or to test for multiple
- caps with exactly one audit message
-Message-ID: <20220509171239.GA28406@mail.hallyn.com>
-References: <20220217145003.78982-2-cgzones@googlemail.com>
- <20220502160030.131168-1-cgzones@googlemail.com>
- <20220502160030.131168-8-cgzones@googlemail.com>
+        Mon, 9 May 2022 13:18:46 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAB42D86B9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652116492; x=1683652492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yDYZUzAIBQmbl1t48yAu1kdYhisZF0SvLGWJlDrxgD8=;
+  b=TV8Qkn20tNmiGb1qEcqk1YDmzYYfSbfO0myzD43c7AqU19b+j+JjtyOg
+   Mu8TJIAdyFgC4fSl5M53cQU5qnNO93tgDoxTt9hfkAWn1rwXqK28MPiEw
+   bU2xaCQAxI368D4m5OqBiwXNhR2dSAuyCJ3381EqrFeiSrClFWTTP7xuT
+   M5xiPAlxgVpwlk7IMZ3XDlNnHOKh5GMKObtM/yMNCfK2Z2+CIRGBFBjbh
+   ww3IA5IHrwEcbmyyeeQHR77vzR/X62XuFyn6HW16DqXCF3xW1qrJxkipQ
+   wJEmkb6TEavwEWKIyroua8btwSb7bbVnsch4ApMjz+BjVPQY3x+YLL6Pa
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268777978"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="268777978"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 10:14:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="657221890"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2022 10:14:50 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1no6y9-000Gig-B8;
+        Mon, 09 May 2022 17:14:49 +0000
+Date:   Tue, 10 May 2022 01:14:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tal Cohen <talcohen@habana.ai>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 47/47]
+ drivers/misc/habanalabs/common/habanalabs_drv.c:138:41: sparse: sparse:
+ Using plain integer as NULL pointer
+Message-ID: <202205100106.LlBrBvTd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220502160030.131168-8-cgzones@googlemail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 06:00:30PM +0200, Christian Göttsche wrote:
-> Add the interface `capable_or()` as an alternative to or multiple
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   20c59ac5d71e766235e74f353b74e60facd733c8
+commit: 20c59ac5d71e766235e74f353b74e60facd733c8 [47/47] habanalabs: add support for notification via eventfd
+config: alpha-randconfig-s031-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100106.LlBrBvTd-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=20c59ac5d71e766235e74f353b74e60facd733c8
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout 20c59ac5d71e766235e74f353b74e60facd733c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/misc/
 
-How about 'capable_contains_oneof(x, y)' or 'capable_of_one(a, b)'?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> `capable()` calls, like `capable_or(CAP_SYS_NICE, CAP_SYS_ADMIN)`
-> instead of `capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
-> `capable_or()` will in particular generate exactly one audit message,
-> either for the left most capability in effect or, if the task has none,
-> the first one.
-> This is especially helpful with regard to SELinux, where each audit
-> message about a not allowed capability will create an avc denial.
-> Using this function with the least invasive capability as left most
-> argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables policy writers
-> to only allow the least invasive one and SELinux domains pass this check
-> with only capability:sys_nice or capability:sys_admin allowed without
-> any avc denial message.
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> 
-> ---
-> v2:
->    avoid varargs and fix to two capabilities; capable_or3() can be added
->    later if needed
-> ---
->  include/linux/capability.h |  5 +++++
->  kernel/capability.c        | 29 +++++++++++++++++++++++++++++
->  2 files changed, 34 insertions(+)
-> 
-> diff --git a/include/linux/capability.h b/include/linux/capability.h
-> index 65efb74c3585..a16d1edea9b3 100644
-> --- a/include/linux/capability.h
-> +++ b/include/linux/capability.h
-> @@ -207,6 +207,7 @@ extern bool has_ns_capability(struct task_struct *t,
->  extern bool has_capability_noaudit(struct task_struct *t, int cap);
->  extern bool has_ns_capability_noaudit(struct task_struct *t,
->  				      struct user_namespace *ns, int cap);
-> +extern bool capable_or(int cap1, int cap2);
->  extern bool capable(int cap);
->  extern bool ns_capable(struct user_namespace *ns, int cap);
->  extern bool ns_capable_noaudit(struct user_namespace *ns, int cap);
-> @@ -230,6 +231,10 @@ static inline bool has_ns_capability_noaudit(struct task_struct *t,
->  {
->  	return true;
->  }
-> +static inline bool capable_or(int cap1, int cap2)
-> +{
-> +	return true;
-> +}
->  static inline bool capable(int cap)
->  {
->  	return true;
-> diff --git a/kernel/capability.c b/kernel/capability.c
-> index 765194f5d678..cd8f3efe6d08 100644
-> --- a/kernel/capability.c
-> +++ b/kernel/capability.c
-> @@ -435,6 +435,35 @@ bool ns_capable_setid(struct user_namespace *ns, int cap)
->  }
->  EXPORT_SYMBOL(ns_capable_setid);
->  
-> +/**
-> + * capable_or - Determine if the current task has one of two superior capabilities in effect
-> + * @cap1: The capabilities to be tested for first
-> + * @cap2: The capabilities to be tested for secondly
-> + *
-> + * Return true if the current task has at one of the two given superior
 
-s/has at one/has at least one/ ?
+sparse warnings: (new ones prefixed by >>)
+>> drivers/misc/habanalabs/common/habanalabs_drv.c:138:41: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/habanalabs/common/habanalabs_drv.c:250:41: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/misc/habanalabs/common/habanalabs_ioctl.c:650:49: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/habanalabs/common/habanalabs_ioctl.c:668:41: sparse: sparse: Using plain integer as NULL pointer
+--
+>> drivers/misc/habanalabs/common/device.c:291:49: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/habanalabs/common/device.c:369:49: sparse: sparse: Using plain integer as NULL pointer
 
-> + * capabilities currently available for use, false if not.
-> + *
-> + * In contrast to or'ing capable() this call will create exactly one audit
-> + * message, either for @cap1, if it is granted or both are not permitted,
-> + * or @cap2, if it is granted while the other one is not.
-> + *
-> + * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
-> + *
-> + * This sets PF_SUPERPRIV on the task if the capability is available on the
-> + * assumption that it's about to be used.
-> + */
-> +bool capable_or(int cap1, int cap2)
-> +{
-> +	if (ns_capable_noaudit(&init_user_ns, cap1))
-> +		return ns_capable(&init_user_ns, cap1);
-> +
-> +	if (ns_capable_noaudit(&init_user_ns, cap2))
-> +		return ns_capable(&init_user_ns, cap2);
-> +
-> +	return ns_capable(&init_user_ns, cap1);
+vim +138 drivers/misc/habanalabs/common/habanalabs_drv.c
 
-Hm, too bad about the repetition of work, but I guess it has to be
-this way right now.
+   104	
+   105	/*
+   106	 * hl_device_open - open function for habanalabs device
+   107	 *
+   108	 * @inode: pointer to inode structure
+   109	 * @filp: pointer to file structure
+   110	 *
+   111	 * Called when process opens an habanalabs device.
+   112	 */
+   113	int hl_device_open(struct inode *inode, struct file *filp)
+   114	{
+   115		enum hl_device_status status;
+   116		struct hl_device *hdev;
+   117		struct hl_fpriv *hpriv;
+   118		int rc;
+   119	
+   120		mutex_lock(&hl_devs_idr_lock);
+   121		hdev = idr_find(&hl_devs_idr, iminor(inode));
+   122		mutex_unlock(&hl_devs_idr_lock);
+   123	
+   124		if (!hdev) {
+   125			pr_err("Couldn't find device %d:%d\n",
+   126				imajor(inode), iminor(inode));
+   127			return -ENXIO;
+   128		}
+   129	
+   130		hpriv = kzalloc(sizeof(*hpriv), GFP_KERNEL);
+   131		if (!hpriv)
+   132			return -ENOMEM;
+   133	
+   134		hpriv->hdev = hdev;
+   135		filp->private_data = hpriv;
+   136		hpriv->filp = filp;
+   137		hpriv->notifier_event.events_mask = 0;
+ > 138		hpriv->notifier_event.eventfd = 0;
+   139	
+   140		mutex_init(&hpriv->notifier_event.lock);
+   141		mutex_init(&hpriv->restore_phase_mutex);
+   142		kref_init(&hpriv->refcount);
+   143		nonseekable_open(inode, filp);
+   144	
+   145		hl_ctx_mgr_init(&hpriv->ctx_mgr);
+   146		hl_mem_mgr_init(hpriv->hdev->dev, &hpriv->mem_mgr);
+   147	
+   148		hpriv->taskpid = get_task_pid(current, PIDTYPE_PID);
+   149	
+   150		mutex_lock(&hdev->fpriv_list_lock);
+   151	
+   152		if (!hl_device_operational(hdev, &status)) {
+   153			dev_err_ratelimited(hdev->dev,
+   154				"Can't open %s because it is %s\n",
+   155				dev_name(hdev->dev), hdev->status[status]);
+   156	
+   157			if (status == HL_DEVICE_STATUS_IN_RESET)
+   158				rc = -EAGAIN;
+   159			else
+   160				rc = -EPERM;
+   161	
+   162			goto out_err;
+   163		}
+   164	
+   165		if (hdev->is_in_dram_scrub) {
+   166			dev_dbg_ratelimited(hdev->dev,
+   167				"Can't open %s during dram scrub\n",
+   168				dev_name(hdev->dev));
+   169			rc = -EAGAIN;
+   170			goto out_err;
+   171		}
+   172	
+   173		if (hdev->compute_ctx_in_release) {
+   174			dev_dbg_ratelimited(hdev->dev,
+   175				"Can't open %s because another user is still releasing it\n",
+   176				dev_name(hdev->dev));
+   177			rc = -EAGAIN;
+   178			goto out_err;
+   179		}
+   180	
+   181		if (hdev->is_compute_ctx_active) {
+   182			dev_dbg_ratelimited(hdev->dev,
+   183				"Can't open %s because another user is working on it\n",
+   184				dev_name(hdev->dev));
+   185			rc = -EBUSY;
+   186			goto out_err;
+   187		}
+   188	
+   189		rc = hl_ctx_create(hdev, hpriv);
+   190		if (rc) {
+   191			dev_err(hdev->dev, "Failed to create context %d\n", rc);
+   192			goto out_err;
+   193		}
+   194	
+   195		list_add(&hpriv->dev_node, &hdev->fpriv_list);
+   196		mutex_unlock(&hdev->fpriv_list_lock);
+   197	
+   198		hl_debugfs_add_file(hpriv);
+   199	
+   200		atomic_set(&hdev->last_error.cs_write_disable, 0);
+   201		atomic_set(&hdev->last_error.razwi_write_disable, 0);
+   202	
+   203		hdev->open_counter++;
+   204		hdev->last_successful_open_jif = jiffies;
+   205		hdev->last_successful_open_ktime = ktime_get();
+   206	
+   207		return 0;
+   208	
+   209	out_err:
+   210		mutex_unlock(&hdev->fpriv_list_lock);
+   211		hl_mem_mgr_fini(&hpriv->mem_mgr);
+   212		hl_ctx_mgr_fini(hpriv->hdev, &hpriv->ctx_mgr);
+   213		filp->private_data = NULL;
+   214		mutex_destroy(&hpriv->restore_phase_mutex);
+   215		mutex_destroy(&hpriv->notifier_event.lock);
+   216		put_pid(hpriv->taskpid);
+   217	
+   218		kfree(hpriv);
+   219	
+   220		return rc;
+   221	}
+   222	
 
-> +}
-> +EXPORT_SYMBOL(capable_or);
-> +
->  /**
->   * capable - Determine if the current task has a superior capability in effect
->   * @cap: The capability to be tested for
-> -- 
-> 2.36.0
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

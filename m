@@ -2,132 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3CD52072C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A86052072E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiEIV6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S231329AbiEIV6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiEIV40 (ORCPT
+        with ESMTP id S231985AbiEIV43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:56:26 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7012D3D68
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:50:03 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ch13so922101ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 14:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aKEvNnMqJr+Ji3wzZ+kyxqDQgYFrf7j1orREUwNHbE8=;
-        b=Gr/9HTJiYOlDX6fetpo8rWY8vmbwB2ZeETv9WvSLj426WRc41qKOI2DbQDQw8wYrzl
-         VMkbaUCWqEmmuWQSf6QXc97xXftjTcTkNiUat2bVrWg6KDJXGw/3EnKvR23vtrc5ek2d
-         Huti8ge5p5gr7z/EQS1UOwMrLB+8Lu6MhHhnjLpWSnbfclaxyHzXbK5+ay0dnHO1rWd4
-         zn6yEsKKzT44KtGADaFlK2syri+0W8SljEmBB7/ZYrDE3Ubp9EhoqnPOcO8VAtgffMbT
-         vxJMvDlQ8kCM7to3VeTwl0W7qseqYQC11parqS+l1gc0hV4AXHRC6AZMIGvKz12lcw7b
-         0hOg==
+        Mon, 9 May 2022 17:56:29 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1E62C8194
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 14:50:10 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id n8-20020a056e021ba800b002cf15f38e17so8357190ili.7
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 14:50:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aKEvNnMqJr+Ji3wzZ+kyxqDQgYFrf7j1orREUwNHbE8=;
-        b=S9KtW3drsqT0Qmxf/Po9tFOX8h647HpltMh6HxTRmxUk7/fWbnFTjw1Sa5V4xAcXyy
-         FLQm5C5v/8Mwa7MxkNhGBD9dZYc8wZTXeOXPPMdvYai+E3NMX1DVv52NuJZI2hSqysY4
-         7W/nqCukLudVVR/TsBVXhz5N2S1XjTSz7s4PUFG1/pv3ZQqfy4mk3HB+0ZZxDbI9+QZe
-         Z2f41uhnNkzprDmnhE5Q14g7Zw7CuAfrTcJT/djk8NcmXZPDFIzfH9AlBkrF/YrtpgvI
-         Pr7msZ5Xu4bov7hgxRMMt1OMJ71CHMBBHDbJ2yziEcJXlEwEh1OZXMMbib1TZ4b8vs1s
-         lpag==
-X-Gm-Message-State: AOAM532ir6gbCuz6ktTjI2LoWQsjmc71oUbTJ/42tTp1dCc5w8xn4Up7
-        Cmt1XuhwonISD+YPhG09lw3ARAowV6n9B8wbiVBVbw==
-X-Google-Smtp-Source: ABdhPJykPbx/03p5//2jQ4C7Er1AEW64JcawHsesvTbhr6ztpX0AZiQPHHfGXfUFyhECCsGvdqV3kvR9V0bNS63hXS4=
-X-Received: by 2002:a17:907:9813:b0:6fa:78b0:9be2 with SMTP id
- ji19-20020a170907981300b006fa78b09be2mr6269780ejc.159.1652133001507; Mon, 09
- May 2022 14:50:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=s2rmpyNyFEujAf+EJYBoIEjX5MtLaffn8+X0o9N5fgE=;
+        b=ABsG+W09Tqm2UIrN7X/IShObZRCf3p3Owbb6+bgYeUluusQPVoewOLiDNlRl54NAFY
+         E/umYhZ6q3XpAXS195qHG+TR/Yu6wq04a86jwLrqQfFQcbPFT8Sf2wuSjDg0W5io0ewq
+         AEwinTs5Tre1opIKRYDqeWEoFH8ATfKwPAd62gmsmlqIAOZOdlwtshDexC0QRq5tRLjt
+         UiUeDIUpaOEaQ9HrSXzle+VAWOLxMx76/zUGujqLYt0hb++VXe+gd8+bpfGPngXf4LUM
+         YiJ5TuzbUJ2PlV1+xO/00ThDCvIR3OdtZARg8F7KohsxSzNRqnd1O4zZNCA/HK7Mru/2
+         q2Dg==
+X-Gm-Message-State: AOAM533YXY/q5mffxYT/at4YqRlA/dFgkOMc9rCYVM5qXDqzdbncRN7B
+        DXOJqapBHw8l0CVZ+YwnOEYAq5ynaGLHqzztWAf07A5lgsfZ
+X-Google-Smtp-Source: ABdhPJwBVtl04Ej8XUy6iLjBCkDUNPExpqGoo3a5jGV8ypU3eIqqfYkoQPwIMtXgmETBrBFu7BHvBe/1eA2T9oXxg64g8WR0pnz3
 MIME-Version: 1.0
-References: <1652125797-2043-1-git-send-email-quic_charante@quicinc.com>
-In-Reply-To: <1652125797-2043-1-git-send-email-quic_charante@quicinc.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 9 May 2022 14:49:50 -0700
-Message-ID: <CABdmKX2V55tA-Or6Dd+bpbcv3fDHps_+zHHJQwhz819LX_2RSQ@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: call dma_buf_stats_setup after dmabuf is in
- valid list
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hridya Valsaraju <hridya@google.com>, daniel.vetter@ffwll.ch,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:214b:b0:2cf:21fa:cce6 with SMTP id
+ d11-20020a056e02214b00b002cf21facce6mr7280704ilv.160.1652133010262; Mon, 09
+ May 2022 14:50:10 -0700 (PDT)
+Date:   Mon, 09 May 2022 14:50:10 -0700
+In-Reply-To: <00000000000029572505de968021@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032d06e05de9b3136@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
+From:   syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, axboe@kernel.dk,
+        bpf@vger.kernel.org, daniel@iogearbox.net, hch@lst.de,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ming.lei@redhat.com, netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 12:50 PM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> From: Charan Teja Reddy <quic_charante@quicinc.com>
->
-> When dma_buf_stats_setup() fails, it closes the dmabuf file which
-> results into the calling of dma_buf_file_release() where it does
-> list_del(&dmabuf->list_node) with out first adding it to the proper
-> list. This is resulting into panic in the below path:
-> __list_del_entry_valid+0x38/0xac
-> dma_buf_file_release+0x74/0x158
-> __fput+0xf4/0x428
-> ____fput+0x14/0x24
-> task_work_run+0x178/0x24c
-> do_notify_resume+0x194/0x264
-> work_pending+0xc/0x5f0
->
-> Fix it by moving the dma_buf_stats_setup() after dmabuf is added to the
-> list.
->
-> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
-> Signed-off-by: Charan Teja Reddy <quic_charante@quicinc.com>
+syzbot has bisected this issue to:
 
-Tested-by: T.J. Mercier <tjmercier@google.com>
-Acked-by: T.J. Mercier <tjmercier@google.com>
+commit 0f38d76646157357fcfa02f50575ea044830c494
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Tue Oct 12 10:40:45 2021 +0000
 
-> ---
->  drivers/dma-buf/dma-buf.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 602b12d..a6fc96e 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -543,10 +543,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
->         file->f_mode |= FMODE_LSEEK;
->         dmabuf->file = file;
->
-> -       ret = dma_buf_stats_setup(dmabuf);
-> -       if (ret)
-> -               goto err_sysfs;
-> -
->         mutex_init(&dmabuf->lock);
->         INIT_LIST_HEAD(&dmabuf->attachments);
->
-> @@ -554,6 +550,10 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
->         list_add(&dmabuf->list_node, &db_list.head);
->         mutex_unlock(&db_list.lock);
->
-> +       ret = dma_buf_stats_setup(dmabuf);
-> +       if (ret)
-> +               goto err_sysfs;
-> +
->         return dmabuf;
->
->  err_sysfs:
-> --
-> 2.7.4
->
+    blk-mq: cleanup blk_mq_submit_bio
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12506f7ef00000
+start commit:   c5eb0a61238d Linux 5.18-rc6
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11506f7ef00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16506f7ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=78013caa620443d6
+dashboard link: https://syzkaller.appspot.com/bug?extid=99938118dfd9e1b0741a
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1484cbc1f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c7026cf00000
+
+Reported-by: syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com
+Fixes: 0f38d7664615 ("blk-mq: cleanup blk_mq_submit_bio")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025F1520106
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB28520107
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238187AbiEIPYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S238197AbiEIPYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238199AbiEIPYN (ORCPT
+        with ESMTP id S238190AbiEIPYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:24:13 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F77F28FE9E;
-        Mon,  9 May 2022 08:20:19 -0700 (PDT)
-Received: from localhost.localdomain (154.pool92-186-13.dynamic.orange.es [92.186.13.154])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AD3C920EC5B5;
-        Mon,  9 May 2022 08:20:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD3C920EC5B5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1652109618;
-        bh=XfhHrRThZF8aOS0rr6qXUwCmQQucSBuKvTVfiEM2qbk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KfP8DfNAI4MBKVrm9g3GFZPRXm2UsXbAXmZc9kUs++r8+cQlyhl2L3hojSj8kbyi4
-         Vksl/ezacECICq5brWkqXPeiatkBkOPvlSoGfhRmHcvqaLVLc9mAWgvZaAN2kd2Whq
-         xO/hMuKxaUpjSDLfB2hPytjNjVLDSjgFwtltB4lo=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-trace-devel@vger.kernel.org,
-        Francis Laniel <flaniel@linux.microsoft.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Kiss <daniel.kiss@arm.com>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 1/1] arm64: Forget syscall if different from execve*()
-Date:   Mon,  9 May 2022 16:19:57 +0100
-Message-Id: <20220509151958.441240-2-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220509151958.441240-1-flaniel@linux.microsoft.com>
-References: <20220509151958.441240-1-flaniel@linux.microsoft.com>
+        Mon, 9 May 2022 11:24:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4D28FE95
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:20:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5623B816E9
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 15:20:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D957BC385AE;
+        Mon,  9 May 2022 15:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652109606;
+        bh=Otn/1pW+YnVWg2O+X9tl6pzhmsugj4MKdcjS46dn8R0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L1t5LK1ioC0q9YcMSkEliKW70l9F/yrflXmF3DnLS+UrDqiqlHk23XBh2OvB1i6Gh
+         nh43mAnNM71AVPZUz5eFqc7hRzmu/nD8ktyKlYb9/UnKUfPfpfyrVl6/y2iC0eA+qh
+         s7uxSsn+VuaSl4gsY3I3h8ovcFiPn19goJGFaNsUQe62beoaxlN1EKrKNs4IvEUgNW
+         /tg29mJrjLGSeo9TGVWHAGnmP34bbQ8JFkEEAGKVAYD4JaIhNPK6ay+jYfY4iYwDaB
+         kDflRN5wyRe0dkGQmeLneHPVOku3tY0ruRCqmRjU4r2eYREDaS72ThhekUq56YgQQ6
+         9dGOVrtk9eJew==
+Date:   Mon, 9 May 2022 16:20:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH 1/2] ASoC: wm8940: add devicetree support
+Message-ID: <YnkxIe1nVUiKNmdq@sirena.org.uk>
+References: <20220509121055.31103-1-lukma@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="guiHyUClsBYNl/Vo"
+Content-Disposition: inline
+In-Reply-To: <20220509121055.31103-1-lukma@denx.de>
+X-Cookie: Boycott meat -- suck your thumb.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables exeve*() to be traced by syscalls:sys_exit_execve
-tracepoint.
-Previously, calling forget_syscall() would set syscall to -1, which impedes
-this tracepoint to prints its information.
-So, this patch makes call to forget_syscall() conditional by only calling
-it when syscall number is not execve() or execveat().
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
----
- arch/arm64/include/asm/processor.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+--guiHyUClsBYNl/Vo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 73e38d9a540c..e12ceb363d6a 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -34,6 +34,8 @@
- 
- #include <vdso/processor.h>
- 
-+#include <asm-generic/unistd.h>
-+
- #include <asm/alternative.h>
- #include <asm/cpufeature.h>
- #include <asm/hw_breakpoint.h>
-@@ -250,8 +252,12 @@ void tls_preserve_current_state(void);
- 
- static inline void start_thread_common(struct pt_regs *regs, unsigned long pc)
- {
-+	s32 previous_syscall = regs->syscallno;
- 	memset(regs, 0, sizeof(*regs));
--	forget_syscall(regs);
-+	if (previous_syscall == __NR_execve || previous_syscall == __NR_execveat)
-+		regs->syscallno = previous_syscall;
-+	else
-+		forget_syscall(regs);
- 	regs->pc = pc;
- 
- 	if (system_uses_irq_prio_masking())
--- 
-2.25.1
+On Mon, May 09, 2022 at 02:10:55PM +0200, Lukasz Majewski wrote:
 
+> This adds devicetree support to the wm8940 codec driver.
+> With a DT-based kernel, there is no board-specific setting
+> to select the driver so allow it to be manually chosen.
+>=20
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> ---
+>  sound/soc/codecs/Kconfig  | 2 +-
+>  sound/soc/codecs/wm8940.c | 7 +++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+
+You need to provide a binding document for any new bindings you add in
+code.
+
+--guiHyUClsBYNl/Vo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5MSAACgkQJNaLcl1U
+h9ABUAf/QLihyIhlv9B+mH3K/QMNPGVNFnQaQzlyt3XGwFECkKhgxluXAyk0aush
+IKXP04UdPiy/gC0iS3QXlrVDZhV094djNT42xGJzz2H9UKovYZjrYky76j7kduYI
+2WeMoo8KZ5GfxZ5/HfHW+bw168wfH8SGEzuUPMqOs6NZJZ1HgXOeCoc7X+C7QJh7
+d6Q0YKBafi8cYM0Eg48RloS17x5X8xYKYXdpc/ebA4buuM6NjQ83Jb3HN8w3IL/q
+yHi5178payfHMp9JDmFuqc+pTHIcyf9oW4eTVxe2b2BLIZjwciE8ZIU1Y93lJUOO
+7/rn7KPWzBaAgp/v0Uiup/jeelXIuQ==
+=JEQ5
+-----END PGP SIGNATURE-----
+
+--guiHyUClsBYNl/Vo--

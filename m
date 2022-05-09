@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE11751F52C
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E60751F4F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbiEIHGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S235597AbiEIHFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbiEIHCH (ORCPT
+        with ESMTP id S234609AbiEIHDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:02:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63B971A35AA;
-        Sun,  8 May 2022 23:58:13 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axuth4u3hiwqkOAA--.49630S5;
-        Mon, 09 May 2022 14:58:06 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] bpf: Print some info if disable bpf_jit_enable failed
-Date:   Mon,  9 May 2022 14:57:55 +0800
-Message-Id: <1652079475-16684-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1652079475-16684-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1652079475-16684-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Axuth4u3hiwqkOAA--.49630S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrW7KF43Cw4UAF45CryrCrg_yoW8XryUpr
-        48Gr92krZ8X34xG39rAFnaqr13trWUXF1UCrnrCa15X3WDXr9rJrsYgryUKFZFvrWqga43
-        Ar4Iyr9ruaykKa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280
-        aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S
-        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8AwCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bz2NNUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 9 May 2022 03:03:47 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DC2393D7;
+        Sun,  8 May 2022 23:59:54 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j14so13008230plx.3;
+        Sun, 08 May 2022 23:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=ukKPvUkS4+sda6n7hZd5RfiYJTJ8bOEAkMXzOtPmIYQ=;
+        b=RkZKGCXUY3WLo3y2zRC0HADNs7mY1Izvrx0xzLpIlB2hf3bjErAGfhwZoj7SpkH506
+         P5MGGJJI+9l2PmkcWbIcatsvwBsE5iDuFfT4y96sbiBzxojagNVQSZjHGvfhytDdQMdE
+         PO2kSfCjpUsTIvSOLWfa69ZR0857+HjEY2JokReKHoSyhgzfnugX9EjEQQQnKDpejEAh
+         tGUx0wD/aGNVaqW5sPkVOeVDSSAfgPrM0lWalyHC7yf85CJuSN4+Qp5dtH6muyBnhHAT
+         Fu7nSrpciTO4kz/JsFkAynPJwhmFqcu7SkyPdSmHRE2fk7a1n5ujHMPklFJ7onpRrc+r
+         0v2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=ukKPvUkS4+sda6n7hZd5RfiYJTJ8bOEAkMXzOtPmIYQ=;
+        b=PE7HbRkKwz+drFlSXurrTk4jcNjIV4svpgZrYSHJVFsPIJYiPYinukTiqgys0ZicY7
+         cJafQmhYOUX61mQH34ufPxeU3PrQIb0Lrw+GHC0f3sdlpBBItZDTJTbFdH5P8ygfBjYQ
+         zACsWUTGMkFCFZ8tcg9xclZuxHqYUEsBPIi1mTMdpuK4sMnpJa2yl7HiIt+qhhF8Ogse
+         l0VUGmue8HQu30+f5uudeo2Vm6ry+V6kJSqOjMImEJJFoTkj71337ROUr7ytiVWfQOZy
+         ScwGk4FGCqPhawrUNoWmQ8Dg9Lio3VwPyUM/roUzBsNmLlDT/x5c/Lukik96nTkDRH9I
+         eQsQ==
+X-Gm-Message-State: AOAM532IAKOxUqpOQP0PF16i/kFe/84plXFHUTR9qccircDTAugrq1Cb
+        K/pPSHNUUBFd5jbsx5Xcl6+oQSmIRPw=
+X-Google-Smtp-Source: ABdhPJwEWqRa848Y6b0nbhIetgmKuAHRwCdA9NXKfZeIWxhg4L+prw9ifbQbd3A3SFzUkc97mZUjXw==
+X-Received: by 2002:a17:90b:4b42:b0:1dc:15f8:821b with SMTP id mi2-20020a17090b4b4200b001dc15f8821bmr25322886pjb.131.1652079593876;
+        Sun, 08 May 2022 23:59:53 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-19.three.co.id. [116.206.28.19])
+        by smtp.gmail.com with ESMTPSA id a13-20020aa794ad000000b0050dc76281desm7840546pfl.184.2022.05.08.23.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 May 2022 23:59:53 -0700 (PDT)
+Message-ID: <4dd26a0e-819d-8414-8b71-1783e263209c@gmail.com>
+Date:   Mon, 9 May 2022 13:59:48 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
+ __dev_queue_xmit()
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ben Greear <greearb@candelatech.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220507084643.18278-1-bagasdotme@gmail.com>
+ <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com> <Yni6nBTq+0LrBvQN@debian.me>
+In-Reply-To: <Yni6nBTq+0LrBvQN@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A user told me that bpf_jit_enable can be disabled on one system, but he
-failed to disable bpf_jit_enable on the other system:
+On 5/9/22 13:54, Bagas Sanjaya wrote:
+> I'm in favor of this patch. Thanks.
+> 
 
-  # echo 0 > /proc/sys/net/core/bpf_jit_enable
-  bash: echo: write error: Invalid argument
+Oops, I mean I'm in favor of your patch suggestion.
 
-No useful info is available through the dmesg log, a quick analysis shows
-that the issue is related with CONFIG_BPF_JIT_ALWAYS_ON.
-
-When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set
-to 1 and setting any other value than that will return failure.
-
-It is better to print some info to tell the user if disable bpf_jit_enable
-failed.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- net/core/sysctl_net_core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index 059352b..f8a1d450 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -266,6 +266,8 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
- 					   loff_t *ppos)
- {
- 	int ret, jit_enable = *(int *)table->data;
-+	int min = *(int *)table->extra1;
-+	int max = *(int *)table->extra2;
- 	struct ctl_table tmp = *table;
- 
- 	tmp.data = &jit_enable;
-@@ -280,6 +282,10 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
- 			ret = -EPERM;
- 		}
- 	}
-+
-+	if (write && ret && min == max)
-+		pr_info("CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set to 1.\n");
-+
- 	return ret;
- }
- 
 -- 
-2.1.0
-
+An old man doll... just what I always wanted! - Clara

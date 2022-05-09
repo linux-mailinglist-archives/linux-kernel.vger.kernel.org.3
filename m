@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB31351FCA6
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9425951FC9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiEIMZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S234358AbiEIMZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiEIMY6 (ORCPT
+        with ESMTP id S234314AbiEIMZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:24:58 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDED2555A8;
-        Mon,  9 May 2022 05:21:04 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id k25-20020a056830169900b00605f215e55dso9967759otr.13;
-        Mon, 09 May 2022 05:21:04 -0700 (PDT)
+        Mon, 9 May 2022 08:25:01 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08152573E3;
+        Mon,  9 May 2022 05:21:07 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id v65so14916826oig.10;
+        Mon, 09 May 2022 05:21:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=sv2cI5/IIfv5TA9/D1vZuscnav6gHINQOSxljIH5MXs=;
-        b=p/8CkiD6LEAAQPqLNBI2d7HTpuvCZPtmpx0DF5nQok9lBdglM2tM/hFDS31DaN2DTg
-         KiztTXc8s5dLA8afMmYJ10phYBjCh3tTdTczLbWvqZdzRIhV/Y0SDsDBenGAHWYOGDFf
-         Ee5Oqv2DTPZCiN9upPudZMlkg49Y186Q2zzZmQRAJeUiqXSGBk9keps/1hHtpLwinWyx
-         3b15IDgURnIDobvdwdd/CyY5UPAf1x0kTMcCteRjgLGSsELKrE030Ei5+DG1RtcUzM7o
-         QvKg/8KEsVadnOqxK7He6seRYK4xX/eGJdU/fgwDLsq2CpYS1kALPQz5QV8E5oNE9beT
-         0bBw==
-X-Gm-Message-State: AOAM533X5Bo7UHwc+M4rJkR1n0FCPvHHtL0APWqmKtPFfdYNYj6LZvdg
-        2e7QfLw18Izzau8H641yVw==
-X-Google-Smtp-Source: ABdhPJzmgTfUp6EHG/A94h+NBN2R5QfBMhZFGUuuka9lsHg+u9WLwv5BWtw2aG+NwSAp98BLFiz3Zg==
-X-Received: by 2002:a9d:74d8:0:b0:606:42dc:5ce3 with SMTP id a24-20020a9d74d8000000b0060642dc5ce3mr5735048otl.303.1652098863902;
-        Mon, 09 May 2022 05:21:03 -0700 (PDT)
+        bh=eaGt5OyolhplGC6uOu4KJBZNOPQ6VU39njlT+3mB1VQ=;
+        b=a4YiBcQT29zWFdXUbOLhZeGpuX434Hlp4O+8xXADEcJ52B/HT5N0JvVyckFg01leww
+         J8Ko6q9FsCiswpGhrRRBXqx3ZH9k0ZKd0s70K4ljzUThfNDwbE+YKNV5VspFCdXme6R3
+         ANGFjswnuJD1EMZKc3VvZoX08GYvac+NUC1vLE/V6AIEW0kndrASS9k2fRr8YHrNjvah
+         3M+Pmr3znA7B30kgwEcZrTluOxEJH2n/M5bcRuXr7unEN/rt7XVKdbc1So52zsbi1W4J
+         dI4PJZnkMuX6jQaTliw0UWD6NVYIE/XOtKq41CFu2PvHLfGkhNZ3p4OxAYY0rSDZzPtY
+         0Gwg==
+X-Gm-Message-State: AOAM530B078SMYZnJAfM4g9by561p4XG8GE1+uN8AvUq1d2QCUhWDl3V
+        4Kw1at4bZx4x0qByw7F8pbCGrwX7Hg==
+X-Google-Smtp-Source: ABdhPJzk6aBwaYU1fUd7SMLss146WuFEPgsGy12u0eTEobAY+83Gk+1qrXHoH6d1k/T7lx1IxVyHOg==
+X-Received: by 2002:a05:6808:10d6:b0:326:d4b2:83b with SMTP id s22-20020a05680810d600b00326d4b2083bmr1150047ois.92.1652098867014;
+        Mon, 09 May 2022 05:21:07 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 52-20020a9d0eb7000000b0060603221241sm4571643otj.17.2022.05.09.05.21.02
+        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b00325cda1ffb8sm4241847oil.55.2022.05.09.05.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 05:21:03 -0700 (PDT)
-Received: (nullmailer pid 3576229 invoked by uid 1000);
+        Mon, 09 May 2022 05:21:06 -0700 (PDT)
+Received: (nullmailer pid 3576233 invoked by uid 1000);
         Mon, 09 May 2022 12:20:58 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     airlied@linux.ie, robh+dt@kernel.org,
-        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, jason-jh.lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        nancy.lin@mediatek.com, linux-mediatek@lists.infradead.org
-In-Reply-To: <20220509044302.27878-2-rex-bc.chen@mediatek.com>
-References: <20220509044302.27878-1-rex-bc.chen@mediatek.com> <20220509044302.27878-2-rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+To:     Sebastian Ene <sebastianene@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, maz@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        will@kernel.org, qperret@google.com, linux-kernel@vger.kernel.org,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+In-Reply-To: <20220509091103.2220604-2-sebastianene@google.com>
+References: <20220509091103.2220604-1-sebastianene@google.com> <20220509091103.2220604-2-sebastianene@google.com>
+Subject: Re: [PATCH v5 1/2] dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector compatible
 Date:   Mon, 09 May 2022 07:20:58 -0500
-Message-Id: <1652098858.557372.3576228.nullmailer@robh.at.kernel.org>
+Message-Id: <1652098858.579388.3576232.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 09 May 2022 12:43:00 +0800, Rex-BC Chen wrote:
-> From: "Nancy.Lin" <nancy.lin@mediatek.com>
+On Mon, 09 May 2022 09:11:04 +0000, Sebastian Ene wrote:
+> The VCPU stall detection mechanism allows to configure the expiration
+> duration and the internal counter clock frequency measured in Hz.
+> Add these properties in the schema.
 > 
-> Add vdosys1 RDMA definition.
+> While this is a memory mapped virtual device, it is expected to be loaded
+> when the DT contains the compatible: "qemu,vcpu-stall-detector" node.
+> In a protected VM we trust the generated DT nodes and we don't rely on
+> the host to present the hardware peripherals.
 > 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Sebastian Ene <sebastianene@google.com>
 > ---
->  .../display/mediatek/mediatek,mdp-rdma.yaml   | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+>  .../bindings/misc/vcpu_stall_detector.yaml    | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -84,13 +86,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.example.dts:27:18: fatal error: dt-bindings/memory/mt8195-memory-port.h: No such file or directory
-   27 |         #include <dt-bindings/memory/mt8195-memory-port.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/vcpu_stall_detector.yaml: ignoring, error in schema: properties: timeout-sec
+Documentation/devicetree/bindings/misc/vcpu_stall_detector.example.dtb:0:0: /example-0/vmwdt@9030000: failed to match any schema with compatible: ['qemu,vcpu-stall-detector']
 
 doc reference errors (make refcheckdocs):
 

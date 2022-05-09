@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29CF520822
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F7452082A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiEIXKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S232201AbiEIXOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiEIXKf (ORCPT
+        with ESMTP id S229493AbiEIXOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:10:35 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7B684A13
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:06:40 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id v66so16834864oib.3
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l+6bkoiHuyshS+JPXnUMHnBZFV/wfxVAGfO/qzKwoVc=;
-        b=EDaMJuCkGO9CCosE+qnH8oGKjpDPetxRm7tkbzmcq4a77u+65GpDvChVy6LfBsrfq1
-         h2Kh77t3aUvPLi2hbALuOppo6qCSoZMFg1yTBy4JhAwmDbgSfaQ8KHaPw74hAP7DGv85
-         qOReMIXBBvNSBAFkU17Ba4mV1Kvf2LgppS2eK6woeDjg74NFrBU+gj3UC5W38xrENxOU
-         uNvaC75e3FjpNb0FTvqZ3NEucPNrNhpYpAOV7vUhcUMHkn2b5GQ2IG+Xa4ic/2j5pwnC
-         R3A2MUCl9ESFYxG1kqF6phm0X7rptCNa4P9wubP3b2AEeJI7VH3nKMzKa1f/JKykPB3X
-         7Gyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=l+6bkoiHuyshS+JPXnUMHnBZFV/wfxVAGfO/qzKwoVc=;
-        b=nc+k5m6dFCN1ipRssC+SROtcGlhxFSNktyWZYTRql39+s3DjE3VLafXRPShehH1b/s
-         ZISQRvb6IT8TvIqswAEqjMgaAMfo+pPJkHG2QnDpvWF0q8gFloyWAm7I7Houwe+hrFhP
-         9a5c3pMj36F5zTXgMn0woGlIwCY3/wKvmWGKaWtGBZleuwv0fIenHcGHNu/sxqkmM3k1
-         cKjF+ykmMEtppzSJV5zz+48XUAyQ93q2Ad95hJjP9EgXYFguyfGUppjOnJE86ZTfV1Nv
-         qVCovawpOxDl/p7rstipglU+8f6jc9Tj8W4Rdi1gKeEXWhCG5Pf9MHHmMPokieyae3LH
-         2Mdw==
-X-Gm-Message-State: AOAM533U6OMP9c9c1K46BOtFSb08k6SvxVw6x7HfWw5U/c1zo8Y271CW
-        XC/qzAnoDbNmsy4t3O7jhNWPREDL+MpWPQ==
-X-Google-Smtp-Source: ABdhPJzKcIYX/5976/T4yfuPIstXOPasvFjxytdaOsOLNfT6sxeIRz7NsawQfktLpnReRSMKpKJLNw==
-X-Received: by 2002:a05:6808:56b:b0:325:9f5e:3fd4 with SMTP id j11-20020a056808056b00b003259f5e3fd4mr12204429oig.199.1652137599537;
-        Mon, 09 May 2022 16:06:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000eb0e40b4b8sm5069804oae.48.2022.05.09.16.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 16:06:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 May 2022 16:06:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.18-rc6
-Message-ID: <20220509230636.GA1551031@roeck-us.net>
-References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
+        Mon, 9 May 2022 19:14:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D452B29743E;
+        Mon,  9 May 2022 16:10:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7892C611E1;
+        Mon,  9 May 2022 23:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C75FBC385C3;
+        Mon,  9 May 2022 23:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652137811;
+        bh=DYjOzkKhHPeQqTfoxCr+QZ3wi0zP8JSixvmnYJsK1WM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rsqSkG5B1EXLVgaMWZUfF5hjzd8Wq3fhQdXlfBYKpY4Uzyn23/ldQ9Sey8TVb/K/V
+         UD66sRzOwHzDjLLU7r2wOrnFLj1zxM7ocUIZEuU0kO9IwmcDMrsLz9/O/8YHJLQRLJ
+         Y6yXeKTPXMVSJ8D9B8U4UQDKCHp+8tyj6N1wX3QCb9otchfyAUs2tyj/WwmOba+d9H
+         14h6ZVKrvgMI0llZnDYE/hFRke/vk/TAZ59974H/ndplA8wjTG6Yu8J32PdvWFbSrA
+         W/nQLOfRL2/mjMjOttqhebCrPZW7yO5NZa93LfTSN7g81jRFFmmR313TbszQABeYya
+         U4TLWZRj1rTRg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD9D3F0392B;
+        Mon,  9 May 2022 23:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ethernet: tulip: fix missing pci_disable_device() on error in
+ tulip_init_one()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165213781170.14018.4375827334756602076.git-patchwork-notify@kernel.org>
+Date:   Mon, 09 May 2022 23:10:11 +0000
+References: <20220506094250.3630615-1-yangyingliang@huawei.com>
+In-Reply-To: <20220506094250.3630615-1-yangyingliang@huawei.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 02:09:27PM -0700, Linus Torvalds wrote:
-> So 5.18 is looking like it's going to be one of the larger releases in
-> numbers of commits (we'll see where it ends up - it's going to be
-> neck-and-neck with 5.14 right now, but won't be as big as 5.13 was).
-> But despite the merge window being big, the release candidates have
-> generally been quite modest in size, and rc6 continues that trend. I
-> keep expecting the other shoe to drop, but 5.18 just seems to be quite
-> well-behaved.
-> 
-> Let's see if this jinxes it, but nothing looks particularly scary
-> here. rc6 looks to be mostly some driver updates (network drivers and
-> rdma stand out, small random fixes elsewhere), with the usual
-> smattering of architecture updates (x86 kvm fixes, but also a
-> long-standing x86 kernel FP use issue, and a smattering of parisc and
-> powerpc fixes). And some wireguard selftest updates.
-> 
-> The rest is mostly some btrfs fixes, some core networking, and just
-> random small one-offs elsewhere.
-> 
-> Please do go test it all out - because things may look good now, but
-> continued testing is the only thing that will make sure.
-> 
+Hello:
 
-Build results:
-	total: 151 pass: 151 fail: 0
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-... and even the parisc warning is gone now.
+On Fri, 6 May 2022 17:42:50 +0800 you wrote:
+> Fix the missing pci_disable_device() before return
+> from tulip_init_one() in the error handling case.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/ethernet/dec/tulip/tulip_core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Guenter
+Here is the summary with links:
+  - ethernet: tulip: fix missing pci_disable_device() on error in tulip_init_one()
+    https://git.kernel.org/netdev/net/c/51ca86b4c9c7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

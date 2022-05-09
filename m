@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7EA51FB2F
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BBE51FB32
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbiEILZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S232748AbiEIL0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiEILZc (ORCPT
+        with ESMTP id S232417AbiEIL0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:25:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8AE26571
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:21:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A12F06118C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804C1C385A8;
-        Mon,  9 May 2022 11:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652095297;
-        bh=IIvsWODmX0KI3MoORXOy0Ju3TSkGG3RxXgnBJ4rEB7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SeCAK2rYuJDg4HjfqQhuGMfkRZ2uM+bYFA67XcWJP5jgWSXIPZmTEkRJCfnyoiGp/
-         mBO/9QLCbp4XcM/fzCOd9PQm5rqWdQl1MmQACg4SV2NE0SnH76sW5A5E+MejMDuuVy
-         ycxvOITauQA3DzIiRSiAUciE/t5CuXaO+Wr9+y+/IytZMpVBLjmuLJX3vRG/hKhjxX
-         Zpimic9+G8vhSCgFcpQMOzr5pnX7ZAgEq3e+vYadzX0F6HhCTHFUwdxHotbB9Ur4/T
-         ftFiaLcRDICi1/6MWKBw48KgGgXhClXD2vsQsKgUS+wuxpx3Y+1nPKN8K9LsjicyeS
-         f09cWfZE/xJyw==
-Date:   Mon, 9 May 2022 12:21:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/26] ALSA: hda: cirrus: Add initial DSP support and
- firmware loading
-Message-ID: <Ynj5PG0flJhn9iYD@sirena.org.uk>
-References: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
- <YmljEm6jUr3Odsv9@sirena.org.uk>
- <s5hbkw7m6ew.wl-tiwai@suse.de>
+        Mon, 9 May 2022 07:26:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018EC2528A;
+        Mon,  9 May 2022 04:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=I5w1l7kr42Qgl1B7paAXQrUp55JqRTIxrpC92Io5gcY=; b=LxIUWFwus+tGPEynRScRh9gh6Y
+        X64jWNjxl8Rt/cXVIAgJZhVY7crrfM4xLN7KDgzNu4d+wAzPhGOYUS1RWkm/+Ru6pPOmp3D+bASwq
+        KcpyRNECMOiaLhUWIXy/NGttEEIWsoZrNYkMsqN/JG9jBDDkN80LIVOytHIwMHTgKWT1RW3FBXJm2
+        B/VGxApqBfe/9R5adpqBf17LKdW4zbp18Hxmv5cgdRxw8nixjx/64X/lk+ry/Y/d6BeJuije5qhX9
+        w1Z3hWajT/AuogLRkzyB47Y5HjbYB4p+2vEFWsZf4jWJvyQVvfkcQyqRoBXkhC3E7Ekyv+9yw0Ic4
+        ZkDjCY1g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1no1Sk-00CXFw-VS; Mon, 09 May 2022 11:22:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D241300385;
+        Mon,  9 May 2022 13:22:00 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 58C562026968A; Mon,  9 May 2022 13:22:00 +0200 (CEST)
+Date:   Mon, 9 May 2022 13:22:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        andrew.cooper3@citrix.com, samitolvanen@google.com,
+        mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
+Message-ID: <Ynj5WLYnuWs/3oZW@hirez.programming.kicks-ass.net>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-2-joao@overdrivepizza.com>
+ <20220429013704.4n4lmadpstdioe7a@treble>
+ <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
+ <20220503220244.vyz5flk3gg3y6rbw@treble>
+ <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
+ <YnKx5a9WvJ1UhWPm@google.com>
+ <YnLDGcJGKfqi5+8w@hirez.programming.kicks-ass.net>
+ <202205080033.82AB3703C3@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p9Zw1zY8ht5OOUdB"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s5hbkw7m6ew.wl-tiwai@suse.de>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202205080033.82AB3703C3@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 08, 2022 at 01:29:13AM -0700, Kees Cook wrote:
+> On Wed, May 04, 2022 at 08:16:57PM +0200, Peter Zijlstra wrote:
+> > 	FineIBT						kCFI
+> > 
+> > __fineibt_\hash:
+> > 	xor	\hash, %r10	# 7
+> > 	jz	1f		# 2
+> > 	ud2			# 2
+> > 1:	ret			# 1
+> > 	int3			# 1
+> > 
+> > 
+> > __cfi_\sym:					__cfi_\sym:
+> > 							int3; int3				# 2
+> > 	endbr			# 4			mov	\hash, %eax			# 5
+> > 	call	__fineibt_\hash	# 5			int3; int3				# 2
+> > \sym:						\sym:
+> > 	...						...
+> > 
+> > 
+> > caller:						caller:
+> > 	movl	\hash, %r10d	# 6			cmpl	\hash, -6(%r11)			# 8
+> > 	sub	$9, %r11	# 4			je	1f				# 2
+> > 	call	*%r11		# 3			ud2					# 2
+> > 	.nop 4			# 4 (or fixup r11)	call	__x86_indirect_thunk_r11	# 5
+> 
+> This looks good!
+> 
+> And just to double-check my understanding here... \sym is expected to
+> start with endbr with IBT + kCFI?
 
---p9Zw1zY8ht5OOUdB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, the thinking was that 'if IBT then FineIBT', so the combination of
+kCFI and IBT is of no concern. And since FineIBT will have the ENDBR in
+the __cfi_\sym thing, \sym will not need it.
 
-On Mon, May 09, 2022 at 10:55:35AM +0200, Takashi Iwai wrote:
-> Mark Brown wrote:
-> > On Wed, Apr 27, 2022 at 04:06:54PM +0100, Vitaly Rodionov wrote:
-> > > The CS35L41 Amplifier contains a DSP, capable of running firmware.
-> > > The firmware can run algorithms such as Speaker Protection, to ensure
-> > > that playback at high gains do not harm the speakers.
-> > > Adding support for CS35L41 firmware into the CS35L41 HDA driver also
-> > > allows us to support several extra features, such as hiberation=20
-> > > and interrupts.
+But thinking about this now I suppose __nocfi call symbols will stlil
+need the ENDBR on. Objtool IBT validation would need to either find
+ENDBR or a matching __cfi_\sym I suppose.
 
-> > There's a bunch of changes for this driver in the ASoC tree, it looks
-> > like the bits that touch ASoC will need basing off those.
+So I was talking to Joao on IRC the other day, and I realized that if
+kCFI generates code as per the above, then we can do FineIBT purely
+in-kernel. That is; have objtool generate a section of __cfi_\sym
+locations. Then use the .retpoline_sites and .cfi_sites to rewrite kCFI
+into the FineIBT form in multi pass:
 
-> How is the situation for the time being?
-> I've been off in the last weeks, so couldn't follow the whole
-> thread.
+ - read all the __cfi_\sym sites and collect all unique hash values
 
-No change, Vitaly didn't update or respond as far as I remember.  We'll
-need a new version.
+ - allocate (module) memory and write __fineibt_\hash functions for each
+   unique hash value found
 
---p9Zw1zY8ht5OOUdB
-Content-Type: application/pgp-signature; name="signature.asc"
+ - rewrite callers; nop out kCFI
 
------BEGIN PGP SIGNATURE-----
+ - rewrite all __cfi_\sym
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ4+TsACgkQJNaLcl1U
-h9Beagf/as89leek9FmSiElfBkp4f1KqydfalbmNjD8V4is3Iu63RMb4Vba7xepv
-pa05jYfRfhuU7H7fw4Dxy3tOkFWF1Y2qq76HqL+MfC3kFB4sQbBoK8Fujq+c9o4u
-ZgK626VB7WsYimYvzJsKClQPvA4bfkvRaS40uKkUx9vLm6WSCs/JRIAck12sXPUp
-J5Be37OsScV07pZ11wWateu4fFLRDIIz7Xv0QbqKy/Y7U4OAQpKfPJwHIx13II7Y
-5SqL87jRoNYNcBjfVQZaWlZewmfLUedpBB1t9olUZkr9/1k6VgI0HV70HgJ5nnRZ
-SE1JOWGdP+INy/G4JNmGUks5Rx2oqw==
-=I9P/
------END PGP SIGNATURE-----
+ - rewrite all callers
 
---p9Zw1zY8ht5OOUdB--
+ - enable IBT
+
+And the same on module load I suppose.
+
+But I've only thought about this, not actually implemented it, so who
+knows what surprises are lurking there :-)
+
+> Random extra thoughts... feel free to ignore. :) Given that both CFI
+> schemes depend on an attacker not being able to construct an executable
+> memory region that either starts with endbr (for FineIBT) or starts with
+> hash & 2 bytes (for kCFI), we should likely take another look at where
+> the kernel uses PAGE_KERNEL_EXEC.
+> 
+> It seems non-specialized use is entirely done via module_alloc(). Obviously
+> modules need to stay as-is. So we're left with other module_alloc()
+> callers: BPF JIT, ftrace, and kprobes.
+> 
+> Perhaps enabling CFI should tie bpf_jit_harden (which performs constant
+> blinding) to the value of bpf_jit_enable? (i.e. either use BPF VM which
+> reads from non-exec memory, or use BPF JIT with constant blinding.)
+> 
+> I *think* all the kprobes and ftrace stuff ends up using constructed
+> direct calls, though, yes? So if we did bounds checking, we could
+> "exclude" them as well as the BPF JIT. Though I'm not sure how
+> controllable the content written to the kprobes and ftrace regions are,
+> though?
+
+Both ftrace and kprobe only write fairly simple tramplines based off of
+a template. Neither has indirect calls.
+
+> For exclusion, we could separate actual modules from the other
+> module_alloc() users by maybe allocating in opposite directions from the
+> randomized offset and check indirect calls against the kernel text bounds
+> and the new modules-only bounds. Sounds expensive, though. Maybe PKS,
+> but I can't imagine 2 MSR writes per indirect call would be fast. Hmm...
+
+I'm not sure what problem you're trying to solve..

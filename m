@@ -2,172 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA3A51F632
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1B151F5B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbiEIHxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S236771AbiEIHx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbiEIHsU (ORCPT
+        with ESMTP id S233897AbiEIHud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:48:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC951868F6;
-        Mon,  9 May 2022 00:44:27 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id w24so7473665edx.3;
-        Mon, 09 May 2022 00:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wD4wrpiIMTLE9Vqz+Ed9vgX0VrJbTWHSjZ+io20J3fo=;
-        b=h4gJikTU3Cz8vJBBSlLRki+np3eKR0zza5prIh81iPY82uz9IQ1WwVf4Ttfoj/EfHW
-         /sKUaFlIAXGEY2G4ECavw+dI+egGB/GY1UCy+VzvYxX4Ge+YO4LnRatT0KU57boOWXIF
-         qz8oTLtidikzGNd2A8AIHIe1t3Rw3ywQGP8DkK0Iu4Lye9N80V+o6d0E0TQUSmKuppvq
-         rcDwRa5zNXzMGmCSzVk9wLxRKGJjNZ1fQDfhgVPB6D6hGfIIIAAbLK7n5Zwq2qmldcaK
-         WB2w+44qxh9ZHqA+tBhKcErgy+wQFa+CddKHfjqEfB3NpOQJkECSnrHWITLr4yDk9vho
-         Rx+w==
+        Mon, 9 May 2022 03:50:33 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A2617CC87;
+        Mon,  9 May 2022 00:46:38 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id hf18so10439352qtb.0;
+        Mon, 09 May 2022 00:46:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wD4wrpiIMTLE9Vqz+Ed9vgX0VrJbTWHSjZ+io20J3fo=;
-        b=H/ZY4Mrz1TgOJE1fi23EcNPxDXs46LEi+xWvmmCfuXIwW6exR0d8Y61NRoGSRS3k90
-         JHK3A6NAVSk6XvKEFh4wKog/Hble+S4AdnBp3W7UJ56g4jQsZcRe+hdNzRweyQvqfyfJ
-         o+NwcgosH2EJPpXWZ0/DDMXRq34gOGHuoclBv+cwJ35IQKXT973YErqVRqp5tXAsQa5H
-         STuRva/wH8MwDaJPuQjVKuCg3PKF/mZFxlt7EDpBUd5EHuqGqIGKo58NTp4FTU2D+rYV
-         SO9TEzQEyikQTXsMAs+qiJI5im8oIOYtHTvcDDIOvB4e9BXyHhVDrLxSKInroAtpYVNs
-         XD7Q==
-X-Gm-Message-State: AOAM530Nij55NryIHIrFpUzzvhAdbzYIxjzJH+PlgYyh/eIeoveZnTnn
-        7dRxYEFc5AsVYWj69GGgHZg=
-X-Google-Smtp-Source: ABdhPJyV1V8PsnexpLQx6EIdUakk5hqvyL5bQJKgX/ebMB+dvxkgLCe5ZbC6JAhoIEWjVE6VAsC5Sg==
-X-Received: by 2002:a05:6402:1297:b0:428:3848:a89d with SMTP id w23-20020a056402129700b004283848a89dmr16198006edv.94.1652082227109;
-        Mon, 09 May 2022 00:43:47 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id dk20-20020a0564021d9400b0042617ba63c0sm5906742edb.74.2022.05.09.00.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 00:43:46 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:43:44 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCHv5 bpf-next 1/5] kallsyms: Fully export
- kallsyms_on_each_symbol function
-Message-ID: <YnjGMAPFg+sIjrjk@krava>
-References: <20220507125711.2022238-1-jolsa@kernel.org>
- <20220507125711.2022238-2-jolsa@kernel.org>
- <20220509060104.GB16939@lst.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3XPGjru+uW0hOeRykS42TNYyIx8ZkoC8DFG5cF+O4o4=;
+        b=41F9GyWZlsfocB5MenQJl7d0bF5bQN5+OHhw7IwhQxihHqhhYlAwOGtex2kpjR0nap
+         3KGJyib2NQ5zz1sidV1zAHrPdoPy3m2SNZKaCBT9W38BBGzrA1tciu2RylX2SteqAllA
+         LLehhLi/JSu34sDMJ/AaPp6Zkhr7pYzq2WN3PaMe65tShsZni2Fw1RR3wKMxtmo1fY6h
+         ge6NTGekiWrRiRN4KMseD4yqI/ErHE5DvVy7b66yV8g6bEv6Od4TFvfCvislmTHz4quo
+         Dqx11FZoM1WEuPg1p1+f8qanvEPJtnJnb074yBcVtZMAhtiewu5SdbV/t/N7rLKEVQFU
+         9SpA==
+X-Gm-Message-State: AOAM531ngeJfEyi/zsqFB7W0egtP9qBf3rw2rEG70Zf6DPfEbA0a5+81
+        JCeZiiUYHQrqBCmtE5GLjyaaJDlcoISUqQ==
+X-Google-Smtp-Source: ABdhPJy4TyR1k/BcB6Il7OOSsz4Ai0gOSQz4I1J9xfUsRwEOEjElDVeCSVQEoRs/W1+8J27CkS5Y7Q==
+X-Received: by 2002:a05:622a:13d2:b0:2f3:d2aa:7c5a with SMTP id p18-20020a05622a13d200b002f3d2aa7c5amr7638987qtk.155.1652082397698;
+        Mon, 09 May 2022 00:46:37 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id o12-20020ac8554c000000b002f39b99f6a8sm6913691qtr.66.2022.05.09.00.46.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 00:46:37 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f83983782fso134895587b3.6;
+        Mon, 09 May 2022 00:46:37 -0700 (PDT)
+X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
+ s12-20020a819b0c000000b002f4c5227d3cmr12831128ywg.316.1652082396821; Mon, 09
+ May 2022 00:46:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220509060104.GB16939@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YjeEbHL8ITkW692W@rowland.harvard.edu> <YmKt3kH+85kjzdbL@kroah.com>
+ <YmSc29YZvxgT5fEJ@rowland.harvard.edu> <YmSo6fU1FlNq8cOZ@rowland.harvard.edu>
+ <YmSpKpnWR8WWEk/p@rowland.harvard.edu> <YmSpdxaDNeC2BBOf@rowland.harvard.edu>
+ <alpine.DEB.2.22.394.2205031209030.681336@ramsan.of.borg> <YnFCEn45XwDWM/9Y@rowland.harvard.edu>
+ <CAMuHMdVDK0W0T3=+2c1E6wtwy5JTUemTGYyj3PFuVUhK++AzrA@mail.gmail.com>
+ <YnFO0Qr8RY7peFCg@rowland.harvard.edu> <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+In-Reply-To: <YnaR8LaaPTdLTiok@rowland.harvard.edu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 May 2022 09:46:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
+Message-ID: <CAMuHMdUpOiHHMktPk_-NauDW2ufvGThnkFU7Pok376pM6OEyYw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] USB: gadget: Add a new bus for gadgets
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:01:04AM +0200, Christoph Hellwig wrote:
-> I'm not sure how I'm supposed to review just a patch 1 out of 5
-> without the rest.
+Hi Alan,
 
-sorry, I did not think the rest was needed, full patchset is in here:
-  https://lore.kernel.org/bpf/20220507125711.2022238-1-jolsa@kernel.org/
+On Sat, May 7, 2022 at 5:36 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Tue, May 03, 2022 at 11:48:33AM -0400, Alan Stern wrote:
+> > On Tue, May 03, 2022 at 05:27:08PM +0200, Geert Uytterhoeven wrote:
+> > > On Tue, May 3, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > > On Tue, May 03, 2022 at 12:14:30PM +0200, Geert Uytterhoeven wrote:
+> > > > > On Sat, 23 Apr 2022, Alan Stern wrote:
+> > > > > > This patch adds a "gadget" bus and uses it for registering gadgets and
+> > > > > > their drivers.  From now on, bindings will be managed by the driver
+> > > > > > core rather than through ad-hoc manipulations in the UDC core.
+> > > > > >
+> > > > > > As part of this change, the driver_pending_list is removed.  The UDC
+> > > > > > core won't need to keep track of unbound drivers for later binding,
+> > > > > > because the driver core handles all of that for us.
+> > > > > >
+> > > > > > However, we do need one new feature: a way to prevent gadget drivers
+> > > > > > from being bound to more than one gadget at a time.  The existing code
+> > > > > > does this automatically, but the driver core doesn't -- it's perfectly
+> > > > > > happy to bind a single driver to all the matching devices on the bus.
+> > > > > > The patch adds a new bitflag to the usb_gadget_driver structure for
+> > > > > > this purpose.
+> > > > > >
+> > > > > > A nice side effect of this change is a reduction in the total lines of
+> > > > > > code, since now the driver core will do part of the work that the UDC
+> > > > > > used to do.
+> > > > > >
+> > > > > > A possible future patch could add udc devices to the gadget bus, say
+> > > > > > as a separate device type.
+> > > > > >
+> > > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > > >
+> > > > > Thanks for your patch, which is now commit fc274c1e997314bf ("USB:
+> > > > > gadget: Add a new bus for gadgets") in usb-next.
+> > > > >
+> > > > > This patch cause a regression on the Renesas Salvator-XS development
+> > > > > board, as R-Car H3 has multiple USB gadget devices:
+> > > >
+> > > > Then these gadgets ought to have distinct names in order to avoid the
+> > > > conflict below:
+>
+> Geert:
+>
+> Can you test the patch below?  It ought to fix the problem (although it
 
-I'll cc you on full patchset in next version
+Thanks!
 
-> 
-> What I can ѕay without the rest is that the subject line is wrong
-> as nothing is exported, and that you are adding an overly long line.
+root@h3-salvator-xs:~# ls -l /sys/bus/gadget/devices/
+total 0
+lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.0 ->
+../../../devices/platform/soc/e659c000.usb/gadget.0
+lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.1 ->
+../../../devices/platform/soc/ee020000.usb/gadget.1
+lrwxrwxrwx 1 root root 0 Feb 14  2019 gadget.2 ->
+../../../devices/platform/soc/e6590000.usb/gadget.2
 
-right, how about the change below?
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-thanks,
-jirka
+LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+> might end up causing other problems down the line...)
 
----
-Subject: [PATCH] kallsyms: Make kallsyms_on_each_symbol generally available
+Can you please elaborate? I'm not too familiar with UBS gadgets.
 
-Making kallsyms_on_each_symbol generally available, so it can be
-used outside CONFIG_LIVEPATCH option in following changes.
+Gr{oetje,eeting}s,
 
-Rather than adding another ifdef option let's make the function
-generally available (when CONFIG_KALLSYMS option is defined).
+                        Geert
 
-Cc: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- include/linux/kallsyms.h | 7 ++++++-
- kernel/kallsyms.c        | 2 --
- 2 files changed, 6 insertions(+), 3 deletions(-)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ce1bd2fbf23e..ad39636e0c3f 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -65,11 +65,11 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- 	return ptr;
- }
- 
-+#ifdef CONFIG_KALLSYMS
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 				      unsigned long),
- 			    void *data);
- 
--#ifdef CONFIG_KALLSYMS
- /* Lookup the address for a symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name);
- 
-@@ -163,6 +163,11 @@ static inline bool kallsyms_show_value(const struct cred *cred)
- 	return false;
- }
- 
-+static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
-+					  unsigned long), void *data)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /*CONFIG_KALLSYMS*/
- 
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 79f2eb617a62..fdfd308bebc4 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -228,7 +228,6 @@ unsigned long kallsyms_lookup_name(const char *name)
- 	return module_kallsyms_lookup_name(name);
- }
- 
--#ifdef CONFIG_LIVEPATCH
- /*
-  * Iterate over all symbols in vmlinux.  For symbols from modules use
-  * module_kallsyms_on_each_symbol instead.
-@@ -251,7 +250,6 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 	}
- 	return 0;
- }
--#endif /* CONFIG_LIVEPATCH */
- 
- static unsigned long get_symbol_pos(unsigned long addr,
- 				    unsigned long *symbolsize,
--- 
-2.35.3
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

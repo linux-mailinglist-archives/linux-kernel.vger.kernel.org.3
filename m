@@ -2,188 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C480651F27A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2BB51F285
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiEIBdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S234104AbiEIBsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbiEIBbK (ORCPT
+        with ESMTP id S232422AbiEIBlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 21:31:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1084513F63;
-        Sun,  8 May 2022 18:25:19 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxNh16Np0zGpg9;
-        Mon,  9 May 2022 09:22:25 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 9 May 2022 09:25:12 +0800
-Message-ID: <83ed1d6f-84f9-0e47-ddb1-b8cafc12338a@huawei.com>
-Date:   Mon, 9 May 2022 09:25:11 +0800
+        Sun, 8 May 2022 21:41:13 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62690344E5
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 18:37:16 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so451657wms.5
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 18:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Ql2K8wjSf4eSR22uE7Flc4Ghh3WCh6Zkh++Kk33ag4=;
+        b=Ra5fBxl1HbkVvB5WFu32ZS3wUApM4Nh/avRNb5JsMij0zVMYAj/r5UD5SACg1+lUzc
+         /CdemvsyD7QwAU3vt0qcqdu5cEcWfHM+POLTZ4Z5dDSoqive9DkMrZXTjtsOMdE0/yGO
+         P2qO09GGsC8R3xagaeYe16hOIFZ88hQNVU5eqADaFCo0ZJkn7jlIJRrNEOuyksBGLKRP
+         iGG/BE51embL80f3Z9wNI0FJdfyIfiYVkmF4pD9pbsiH+uxfc8D5dZ+caQ+U+OYI1aNu
+         iIYm6HzUVyFFHsyOSM7/n1YK+MMHIZe6sq7uluURvzm+1j1dkQeoMtAEbUF5beBun51y
+         uL+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Ql2K8wjSf4eSR22uE7Flc4Ghh3WCh6Zkh++Kk33ag4=;
+        b=mEi49q19N9eBTA/iQdlseIHrq0snEdoZTxqXEBVf+UeD8vHUOKU7LOWXF12SFDbqww
+         h0s2G0FO1l4YAVYhcBj9/NZEUGfoAM0MKy6nxa9CrJu1JJBpk5qRFn6SqkCUV8+Zc3hp
+         Cz3UIdrOTIQ9zhCF1b2Cn0P+pUaF35yGWwIahPai/bT788JzvcYD193PLruQKe0InyBO
+         mUAnxbbjlEqtO2B2FwJVa6BZR2UhWARKWE0FeatIBLpyYFWIOIYIDUWXrTzBJGw570eG
+         1q9GlixPUEPfS9WmFY+uoRIDZadVeFuHQihwvIE9mLSwDQKKJXgzlbRKG48K8J8kI+W9
+         hrxA==
+X-Gm-Message-State: AOAM532xeuSOuW+eSeEYtbyTCJB0x5fPO+yHeJ4rCz33YGn5nsTyiJKi
+        2zei0Js/Uc81+37n0J4neF5vkdN8ncg4WCXkvYs=
+X-Google-Smtp-Source: ABdhPJwaAqHptNkzX1mdGBUmDwDFFAnn19PIal9Nxh3ELThFCskmaptyyKr2IeXrNo9qfDSm7rRS84Rb5UL97LnYGDY=
+X-Received: by 2002:a05:600c:ad1:b0:38c:8bf6:7d6b with SMTP id
+ c17-20020a05600c0ad100b0038c8bf67d6bmr13755649wmr.84.1652060036236; Sun, 08
+ May 2022 18:33:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] ext4: fix race condition between ext4_write and
- ext4_convert_inline_data
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20220428134031.4153381-1-libaokun1@huawei.com>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-In-Reply-To: <20220428134031.4153381-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220508161827.1014186-1-xiehuan09@gmail.com>
+In-Reply-To: <20220508161827.1014186-1-xiehuan09@gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Mon, 9 May 2022 09:33:44 +0800
+Message-ID: <CAEr6+EC+Kg4AJ=BFxrOSQV+KHj5WSm=1FtYCAPrn1gFnZUk-fg@mail.gmail.com>
+Subject: Re: [PATCH] tracing: Fix possible crash in ftrace_free_ftrace_ops()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A gentle ping.
+I am so sorry to bother you, this may be an invalid patch, kfree can
+return directly from null. ;-)
 
-在 2022/4/28 21:40, Baokun Li 写道:
-> Hulk Robot reported a BUG_ON:
->   ==================================================================
->   EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
->   block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
->   kernel BUG at fs/ext4/ext4_jbd2.c:53!
->   invalid opcode: 0000 [#1] SMP KASAN PTI
->   CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
->   RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
->   RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
->   [...]
->   Call Trace:
->    ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
->    generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
->    ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
->    ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
->    do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
->    do_iter_write+0x107/0x430 fs/read_write.c:861
->    vfs_writev fs/read_write.c:934 [inline]
->    do_pwritev+0x1e5/0x380 fs/read_write.c:1031
->   [...]
->   ==================================================================
+On Mon, May 9, 2022 at 12:18 AM Jeff Xie <xiehuan09@gmail.com> wrote:
 >
-> Above issue may happen as follows:
->             cpu1                     cpu2
-> __________________________|__________________________
-> do_pwritev
->   vfs_writev
->    do_iter_write
->     ext4_file_write_iter
->      ext4_buffered_write_iter
->       generic_perform_write
->        ext4_da_write_begin
->                             vfs_fallocate
->                              ext4_fallocate
->                               ext4_convert_inline_data
->                                ext4_convert_inline_data_nolock
->                                 ext4_destroy_inline_data_nolock
->                                  clear EXT4_STATE_MAY_INLINE_DATA
->                                 ext4_map_blocks
->                                  ext4_ext_map_blocks
->                                   ext4_mb_new_blocks
->                                    ext4_mb_regular_allocator
->                                     ext4_mb_good_group_nolock
->                                      ext4_mb_init_group
->                                       ext4_mb_init_cache
->                                        ext4_mb_generate_buddy  --> error
->         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->                                  ext4_restore_inline_data
->                                   set EXT4_STATE_MAY_INLINE_DATA
->         ext4_block_write_begin
->        ext4_da_write_end
->         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->         ext4_write_inline_data_end
->          handle=NULL
->          ext4_journal_stop(handle)
->           __ext4_journal_stop
->            ext4_put_nojournal(handle)
->             ref_cnt = (unsigned long)handle
->             BUG_ON(ref_cnt == 0)  ---> BUG_ON
+> Currently if the ftrace_allocate_ftrace_ops() return -ENOMEM,
+> the ftrace_free_ftrace_ops() will kfree(NULL).
 >
-> The lock held by ext4_convert_inline_data is xattr_sem, but the lock
-> held by generic_perform_write is i_rwsem. Therefore, the two locks can
-> be concurrent.
+> trace_array_create()
+> {
+>         ...
+>         if (ftrace_allocate_ftrace_ops(tr) < 0)
+>                 goto out_free_tr;
+>         ...
+> out_free_tr:
+>         ftrace_free_ftrace_ops(tr);
+>         ...
+> }
 >
-> To solve above issue, we add inode_lock() for ext4_convert_inline_data().
-> At the same time, move ext4_convert_inline_data() in front of
-> ext4_punch_hole(), remove similar handling from ext4_punch_hole().
+> ftrace_allocate_ftrace_ops()
+> {
+>         ...
+>         ops = kzalloc(sizeof(*ops), GFP_KERNEL);
+>         if (!ops)
+>                 return -ENOMEM;
+>         ...
+> }
 >
-> Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
-> Cc: stable@vger.kernel.org
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ftrace_free_ftrace_ops()
+> {
+>         kfree(tr->ops);
+>         tr->ops = NULL;
+> }
+>
+> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
 > ---
-> V1->V2:
-> 	Increase the range of the inode_lock.
-> V2->V3:
-> 	Move the lock outside the ext4_convert_inline_data().
-> 	And reorganize ext4_fallocate().
+>  kernel/trace/trace_functions.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
->   fs/ext4/extents.c | 10 ++++++----
->   fs/ext4/inode.c   |  9 ---------
->   2 files changed, 6 insertions(+), 13 deletions(-)
+> diff --git a/kernel/trace/trace_functions.c b/kernel/trace/trace_functions.c
+> index 9f1bfbe105e8..d186d6101695 100644
+> --- a/kernel/trace/trace_functions.c
+> +++ b/kernel/trace/trace_functions.c
+> @@ -73,6 +73,9 @@ int ftrace_allocate_ftrace_ops(struct trace_array *tr)
 >
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index e473fde6b64b..474479ce76e0 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -4693,15 +4693,17 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
->   		     FALLOC_FL_INSERT_RANGE))
->   		return -EOPNOTSUPP;
->   
-> +	inode_lock(inode);
-> +	ret = ext4_convert_inline_data(inode);
-> +	inode_unlock(inode);
-> +	if (ret)
-> +		goto exit;
+>  void ftrace_free_ftrace_ops(struct trace_array *tr)
+>  {
+> +       if (!tr->ops)
+> +               return;
 > +
->   	if (mode & FALLOC_FL_PUNCH_HOLE) {
->   		ret = ext4_punch_hole(file, offset, len);
->   		goto exit;
->   	}
->   
-> -	ret = ext4_convert_inline_data(inode);
-> -	if (ret)
-> -		goto exit;
-> -
->   	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
->   		ret = ext4_collapse_range(file, offset, len);
->   		goto exit;
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 646ece9b3455..4779673d733e 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -3967,15 +3967,6 @@ int ext4_punch_hole(struct file *file, loff_t offset, loff_t length)
->   
->   	trace_ext4_punch_hole(inode, offset, length, 0);
->   
-> -	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-> -	if (ext4_has_inline_data(inode)) {
-> -		filemap_invalidate_lock(mapping);
-> -		ret = ext4_convert_inline_data(inode);
-> -		filemap_invalidate_unlock(mapping);
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
->   	/*
->   	 * Write out all dirty pages to avoid race conditions
->   	 * Then release them.
+>         kfree(tr->ops);
+>         tr->ops = NULL;
+>  }
+> --
+> 2.25.1
+>
 
-
+Thanks,
+JeffXie

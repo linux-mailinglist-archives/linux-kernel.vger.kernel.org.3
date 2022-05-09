@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73E652085A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF4052085D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbiEIX2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S232419AbiEIXaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiEIX2Z (ORCPT
+        with ESMTP id S231748AbiEIXac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:28:25 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B7916C5FE
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:24:30 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 4so18849510ljw.11
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:24:29 -0700 (PDT)
+        Mon, 9 May 2022 19:30:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C86366A6
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:26:36 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id b18so26410650lfv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9/2uXldvfYoKX/QsgMzn7huOl5appHYsaoLbp3Ty8ys=;
-        b=J6HtOOIXn+++9tZpxLOu3p9VYF0mdyUdqvhQsO5esN7i/sXmpTP/yO4M9nC18YZ6Mj
-         5fDNgWJFuYgNnzVEHtwaWjR/nzrq9uaMKxaOi054liqU7iEqnkwiZ9eSB9ZNXwSLka2b
-         OWi3F4ycgplHJ7P/nbouHWtaehw+9S4DEdXcufofzqQUcNjDLlkfUi0iM5fmkIeIgfPx
-         X6YXT/3MUf69um4+Jbw7v1vl/8Mw0K5TixG94pZ1N1XgR/rJWARIzw+DrXl78jZ8d//N
-         J43xMqAQk9/TBw55RTFdPFbYGqAkK6SS/T1eOWQvhLARW8uZrIFW+pxjOV8WmimrVK1b
-         rrXA==
+        bh=tmpHn2BifttucGqVA2pQs88xKMtymtLvsGI+R2fbwOs=;
+        b=cOKhyOqtfZHFU1rIBufqPH++gfALfVaWS9hxxxqHxcJiWSnSp+3UesqltlLsWmilqJ
+         LlkskAOKr4q0eUh9MVTjgmBO8LuItY4gEAlICuo9yVPcX94q0pnPU7UOgPkUpAEp1VE0
+         xu03M5t7EV3GgUxEYIBjchesd0kgyDXAldI/citHwCv1vEM7uqe80cimWhI52YLoGNJ4
+         ji2mqCPweXbJzrlz5rmEXpaWyqWIjpd5HDOfKuprKgt7GIoAAoGjftXnTD+8Dp5dlZEP
+         iHB+w9HkAu/jwIIDm/xQ/H/xMOFESUdcH7+hekIFuPCJBfyw9HW7eQUR4YNnjRpCf/PI
+         2QrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9/2uXldvfYoKX/QsgMzn7huOl5appHYsaoLbp3Ty8ys=;
-        b=3L8xS9WZuuV5OESKIui0CS6UDm8tYCgZ321QC3Dh1hCM9YwGLVK2AZNh0JYq1mh+ZZ
-         yAkFNBKHJgYCgN1lZ8H1EDKyXPovoK7nLVCH3F/2DF1+mtP6h4F2+r5H2AJS7YAUxJzu
-         bbo4dkG7bu4tcI4gVQU9HxVMK+B4tU63xbIA/Eh8LvV72wSEipI6aQAFyvIvsWucjhq6
-         gLCu/YcT5V/98GnrMxtfbiPbJyW3kvogSaXjLMTdGcvy1jmiGpkimnp2Qs+8GrrmuBTk
-         QGKQYNiImcWPO3nqdWRWVqdeAbBn2MjJvDRTm0HluCP62PlH24oTjVAAaWl7qZ3DUL5j
-         EroQ==
-X-Gm-Message-State: AOAM533yYrYeHbyFjFByUw5edQiJJpQjC548xBrrMhhlPKnSyc523VEj
-        UhhMh7elU7o1xc6ScUvVyi7YQ52udL1RNQZz8PoYug==
-X-Google-Smtp-Source: ABdhPJzEWFMfMDkJhx3DOXRi1RCESf4tPt23Su+LqDhn2rNxataUfhalMNNxRSEuSe669M7+8nEhNwRRaJLBStfbqe8=
-X-Received: by 2002:a2e:a88b:0:b0:24b:5714:213d with SMTP id
- m11-20020a2ea88b000000b0024b5714213dmr12090006ljq.412.1652138668138; Mon, 09
- May 2022 16:24:28 -0700 (PDT)
+        bh=tmpHn2BifttucGqVA2pQs88xKMtymtLvsGI+R2fbwOs=;
+        b=5hiA9ng3fudI/bliISaZ2j2H1o+gLnK3cwO83voWL955lvZ1srmvUbonhJqBgzCs79
+         atNC2S/iEZ+zS3z9GuKakSnt5RAB600WmoJqSW6pG4+Z5RYkOF8fCaR7SYgPOFzWDEYS
+         MCPhowkBRrLg0vj8iXgb3vqVu7gfmUXOToDBRyX/Jcg1j1JsmknHPOYe/iZkOaFNUVcB
+         cGjJitn5qb/AXWH68JFtR6J9STABwd5+axnkJnZueoIUPWkom9NVdmCcTMKqW5py3/02
+         4kXbZqLhpiV5W5dAmGPEMdRPHTtLYVqdu4rfdZWYTap1tPh6mP2jh/JYLtS2TCga3YQE
+         zT+Q==
+X-Gm-Message-State: AOAM532DfUvj4Y31d4rX5ZRECNFY4bgn6DkqV5ukvL3SqGQNneck7N6y
+        bBQev0oUM4ICHLIHREuRiiQ7vagDlNdwZStOVBiLJw==
+X-Google-Smtp-Source: ABdhPJymMNS66JLXGGCR+OLOK0DR4DpjHCz8PaaZEoPhRhnszwx+FlHC/8/jhTqfJxnqXWGdYF1kceupZleASshkevA=
+X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
+ v15-20020a056512048f00b004723c4794a0mr14343921lfq.579.1652138794681; Mon, 09
+ May 2022 16:26:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220509231901.3852573-1-cmllamas@google.com>
-In-Reply-To: <20220509231901.3852573-1-cmllamas@google.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Mon, 9 May 2022 16:24:15 -0700
-Message-ID: <CAHRSSExZrAEZuxska3kwpXCCv+p2+W_UPYCWbKUAswBjy97iBQ@mail.gmail.com>
-Subject: Re: [PATCH] binder: fix printk format for commands
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
+ <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
+ <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com> <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 9 May 2022 16:26:22 -0700
+Message-ID: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -74,44 +79,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 4:19 PM Carlos Llamas <cmllamas@google.com> wrote:
+On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
 >
-> Make sure we use unsigned format specifier %u for binder commands as
-> most of them are encoded above INT_MAX. This prevents negative values
-> when logging them as in the following case:
+> Hi Nick,
 >
-> [  211.895781] binder: 8668:8668 BR_REPLY 258949 0:0, cmd -2143260157 size 0-0 ptr 0000006e766a8000-0000006e766a8000
+> On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > >
+> > > Instead, I am thinking of just using -fno-builtin-ffs to remove
+> > > the annoying -Wshadow warning. Would that make more sense?
+> >
+> > Perhaps a pragma would be the best tool to silence this instance of
+> > -Wshadow?  I understand what GCC is trying to express, but the kernel
+> > does straddle a weird place between -ffreestanding and a "hosted" env.
 >
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> I was a bit reluctant to propose the use of pragma because I received
+> negative feedback in another patch for using the __diag_ignore()
+> c.f.:
+> https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
+>
+> But the context here is a bit different, I guess. If I receive your support, I
+> am fully OK to silence this with some #pragma.
+>
+> The patch would look as below (I just need to test with clang
+> before submitting).
 
-Acked-by: Todd Kjos <tkjos@google.com>
+Do you have a sense for how many other functions trigger -Wshadow? For
+example, one question I have is:
+Why does ffs() trigger this, but not any of the functions defined in
+lib/string.c (or declared in include/linux/string.h) which surely also
+shadow existing builtins?  I can't see your example being sprinkled
+all over include/linux/string.h as being ok.
 
-> ---
->  drivers/android/binder.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+If it's more than just ffs(), perhaps the GCC developers can split the
+shadowing of builtins into a sub flag under -Wshadow that can then be
+disabled; we do want to shadow these functions, but -Wno-shadow would
+miss warnings on variables being shadowed due to scope.
+
+We've done this in the past with various flags in clang. Rather than
+having semantic analysis trigger the same warning flag for different
+concerns, we split the flag into distinct concerns, and reuse the
+original flag as a group that enables the new flags. This gives
+developers fine grain control over enabling/disabling distinct
+concerns.
+
 >
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index f3b639e89dd8..b4b0e4489bef 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -3984,7 +3984,7 @@ static int binder_thread_write(struct binder_proc *proc,
->                 } break;
+> diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> index a288ecd230ab..e44911253bdf 100644
+> --- a/arch/x86/include/asm/bitops.h
+> +++ b/arch/x86/include/asm/bitops.h
+> @@ -269,6 +269,9 @@ static __always_inline unsigned long
+> __fls(unsigned long word)
+>  #undef ADDR
 >
->                 default:
-> -                       pr_err("%d:%d unknown command %d\n",
-> +                       pr_err("%d:%d unknown command %u\n",
->                                proc->pid, thread->pid, cmd);
->                         return -EINVAL;
->                 }
-> @@ -4490,7 +4490,7 @@ static int binder_thread_read(struct binder_proc *proc,
->                 trace_binder_transaction_received(t);
->                 binder_stat_br(proc, thread, cmd);
->                 binder_debug(BINDER_DEBUG_TRANSACTION,
-> -                            "%d:%d %s %d %d:%d, cmd %d size %zd-%zd ptr %016llx-%016llx\n",
-> +                            "%d:%d %s %d %d:%d, cmd %u size %zd-%zd ptr %016llx-%016llx\n",
->                              proc->pid, thread->pid,
->                              (cmd == BR_TRANSACTION) ? "BR_TRANSACTION" :
->                                 (cmd == BR_TRANSACTION_SEC_CTX) ?
-> --
-> 2.36.0.512.ge40c2bad7a-goog
+>  #ifdef __KERNEL__
+> +__diag_push();
+> +__diag_ignore_all("-Wshadow",
+> +                  "-fno-builtin-foo would remove optimization, just
+> silence it instead");
+>  /**
+>   * ffs - find first set bit in word
+>   * @x: the word to search
+> @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
+>  #endif
+>         return r + 1;
+>  }
+> +__diag_pop(); /* ignore -Wshadow */
 >
+>  /**
+>   * fls - find last set bit in word
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers

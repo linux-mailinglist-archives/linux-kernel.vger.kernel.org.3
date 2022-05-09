@@ -2,189 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387CE520087
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E232552007D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238095AbiEIPBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S237850AbiEIPBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237914AbiEIPAA (ORCPT
+        with ESMTP id S237841AbiEIPAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:00:00 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3524BB29;
-        Mon,  9 May 2022 07:56:01 -0700 (PDT)
+        Mon, 9 May 2022 11:00:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D90133248;
+        Mon,  9 May 2022 07:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652108202; x=1683644202;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=31R3RkSDML7s+wze/ImFmkHlM+4bq7Pfsi18f4WVb20=;
+  b=GobCaBN0BXdIE8shnMZkfFr/Vn4axT9RmbHogcDlDoQMml0iBozSmiuy
+   w/88jx3cJd8Mvh5CP7WFEaHRyx5KXsTcHPlnLSO5hUAoupoNVWISZyXYf
+   3iu5BA76qNMVhHAr8IJUwaAJnT6Wn7C/R/0OLc7Elqz+Ln09o94OocMdi
+   b74A1iQF5AyBoNDb4Eo0vqvgVoSOkiSAIYnH6EZ909j2Pk3animv8jdlG
+   y6UKfbp0arJ2T7PT6T81vBRL2NMWhVmf2gqgkuKtWdWOzN0MZy/q+yYBT
+   tG2EG/NSGA4whHnWapk3tHzdxKPVOy/GMDRVsk5VHRIXVS5iYnPfXQ1mH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="294297234"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="294297234"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 07:56:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="592616370"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 07:56:30 -0700
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 9 May 2022 07:56:29 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 9 May 2022 07:56:29 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.46) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Mon, 9 May 2022 07:56:29 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GXmH2EH9fAxP2jAOPpQn5FSbLCm73Q7RGWddalGMsSN7VYJ91WumVEol4qyUTIK/YfiVZZ3LWxDB24I7wKoRPSZ6VFjR5Ijz2yP2DkWGasGv9kWm8GOGt6AJRR4NSeiZlh+d/ak0OD88qY5ilEvr+wfiVcmdwzk8RYda0ewU+jBMqmRT+iY0sUvcWnfj8zJXkPkl/stj52MxMXg26w1XxzsyhO0eZWcmGQo57CRxxN71vgsYZ+8CfE6uzc+IYmxr5QOFtQKuhI+9i0RuiIQnhoyKSTn9hAqdNw4dWzzVHC+aChjIWKQUNTtSnSn+pbnYJzTc6Aajou+xyGwWNz74Qw==
+ b=HcNA07MeFHBpsr0YzWpol46ZDFO6KfmLyHUI8fsKvKIgTK9X6mUilIFWi8dZGN0IWEE7t2GO+vhgYN5aE+S7884DaWfGWNKaJWXdC4ixxzrmsTDmYCT2efM8Ip5EjZxyojrCirvMu1KCnJFAPR2/HhvwH59TkRzbLw82Nx27XGKQ8pcHFGDJ5FzhBcMy+m7mLrLvRKul7aHt0uIJwGHHu6vf0QJtgveMyfisZ3JclJgCGEBO52HmJhHrS8InQQH/A1o9Ul9cgWONtW3n5m5JLPknIeEraIsHN3r6ulDH9NCbnuR3W2x3Bz/71PD+4kFbMX4oYgk6offxAHWHEl21vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WOP6sdubyHv8i9LkxrD85AO2qRI7kXMvNjTNtlJkwNg=;
- b=DNQSDPy2AVdvakfGWnU4TPE5MvpV7hVucNmpp2I92U2UwTK/0bENlfa7GlashBcaSzskkMVsFNWT3NQAVLeE5hjau9LIatiJ9Th5ubjBoOj7C6cBwdKOmgJjXO2JJ2lH4GTeJQecODR8nBd4FOn9u+cAAo4bICUaWmktG7Sl4kfUwWtJ+214jN30xLYJdmHkT0wutQJW7gCsnpSgwVwg/UlbboanPlo7Nvsq265cyZofAUW/7o2rqFvp9+HlyvBJeulwaqo4Y+n0szMg6nQHua9AvAinifAUPH3pEJ/KtWjry+R1lAW7H3UEyDJMgxfMXOcRpZuzZYzK+Rq2O970GA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WOP6sdubyHv8i9LkxrD85AO2qRI7kXMvNjTNtlJkwNg=;
- b=bXKj9wqHSdkRk3evdlcOMQAjy58iQhUAMf7cuuP/slXIUL6J/yXIBGyrmIddNeaDRpXh4wlEkFDqEj6GJiOwrvAxnqR3jGDIRGGoV8mDmCF1bQJRbv6xx//g+eaQmFE1Gesg9+WZ5OG/a/ISqRTMfzGj968JLAk54AWBNfWKxvA=
-Received: from MW4PR03CA0215.namprd03.prod.outlook.com (2603:10b6:303:b9::10)
- by CH2PR12MB4181.namprd12.prod.outlook.com (2603:10b6:610:a8::16) with
+ bh=SR+iUVOqBae8sr5JYxKNBeBEm1Adkj8U63qKO8G6DOw=;
+ b=S/6q21QxnF/h2tEP119eMdZI1CidjmwVXqg1vCo/GAGJqtXcI9baYKNqi7JalDeb0OEkSy1QfJp98R31gWnNpuAaQEDFQo4JzsH6Uw6Gzbq+q9/JBjLSA+O3D1F9Quyx2PRLb8IGuR3TNFDg9v2zRYYKqy/pSCbU0LSrrl0qbXuE7+JIKprCJuTpLn0BhSh8BdPIipb9BZ/6yr5Jc0N9+ytAi1OWT7vjK2fj8NS4iPiY30wGT2eo5p6D8uVVxB2hbAzI1PpGUcdoK8G/ZmvVtttijD15nPLcwK6QOlri5UwWGhD2aHV6S7+E7MZvgMpXyKNRZYQeSvKq8fJMf2imbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com (2603:10b6:5:9::13) by
+ BN9PR11MB5356.namprd11.prod.outlook.com (2603:10b6:408:11d::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
- 2022 14:55:59 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b9:cafe::17) by MW4PR03CA0215.outlook.office365.com
- (2603:10b6:303:b9::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22 via Frontend
- Transport; Mon, 9 May 2022 14:55:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5227.15 via Frontend Transport; Mon, 9 May 2022 14:55:59 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 09:55:52 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <bp@alien8.de>, <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <Smita.KoralahalliChannabasappa@amd.com>, <muralidhara.mk@amd.com>,
-        <naveenkrishna.chatradhi@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH 18/18] EDAC/amd64: Add get_err_info() into pvt->ops
-Date:   Mon, 9 May 2022 14:55:34 +0000
-Message-ID: <20220509145534.44912-19-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220509145534.44912-1-yazen.ghannam@amd.com>
-References: <20220509145534.44912-1-yazen.ghannam@amd.com>
+ 2022 14:56:28 +0000
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871]) by DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871%5]) with mapi id 15.20.5227.022; Mon, 9 May 2022
+ 14:56:28 +0000
+Message-ID: <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+Date:   Mon, 9 May 2022 16:56:23 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-fbdev@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>,
+        <dri-devel@lists.freedesktop.org>,
+        "Thomas Zimmermann" <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220505220413.365977-1-javierm@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0085.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:190::18) To DM6PR11MB3180.namprd11.prod.outlook.com
+ (2603:10b6:5:9::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 66ea85d1-2c1c-4a13-e817-08da31cc07a2
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4181:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB4181052444433A81010D88BEF8C69@CH2PR12MB4181.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d78f92dc-5226-4f30-fcd4-08da31cc1865
+X-MS-TrafficTypeDiagnostic: BN9PR11MB5356:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR11MB535643532FB9E3D586EEA0C5EBC69@BN9PR11MB5356.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k8gOzJOPJPQ1jDZabKcjg220uNJCwrvkRMkyCOXWPBtrjIFSsD+nlGmGo9fotyQDCUHY3y2Sqx+B4qYV0VETVy+pD6HiWEj1lp6fu5pmqctXreqKcE/TDys43XKrArPFJhhJwtzbknPwul4dEm5EwgUaGNRp6mO5xbi3Qx4dGw56ujoqs5HkyB/mfDdN3UB1A2Ek0Bs2jSswYS7Tj6EiQk8IWTv74vDSoYlZcPCK5bk4NkKpTx8Q6O9hkg0JttZi80HnNFsItRHSjdIt+nxW5rl54RnMrKlQCninLYzLOMb/V9XvysCVF6zv+7uMLLlrXj4KnbxmGiBzsQUUKNNjUi03VSFyy0m268BdEn2X1nu6YDqgUHNhbalgit+DnDSHbgyfuzo3qee6YuDogm99yFMlePtxqRA6N7k5n6YI71cej6/KR6TliCe9dGzXGk/L2ZEmzCxrG7R+EBrsVCQQA6OK7+1+XF6SAMTNpW9RIu6tPIa1O7BuHgsW/rvUuqkwVAKXEmOhKyv0b3rLBnkVIh392MiakGv9lWRpDZDOlZWSWJ9D1wUBSAuDtqdY6dCF7A7pYmWECiFoO/9yjJrZhQc5GpmgJjUisr7PxC1VpUgQ9KPpMLBHp6ZXPmC3w0CJw0bhTUpeAUBuySF3N7pZn/9yjf+I21wJD1d55FHzmo0ZTyiulfpP2B6ft4Fb2NHFkpruSRDoeXB2+68kVMKEEw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(44832011)(2906002)(36756003)(356005)(40460700003)(36860700001)(16526019)(8936002)(81166007)(5660300002)(110136005)(4326008)(1076003)(186003)(83380400001)(70206006)(47076005)(426003)(336012)(508600001)(70586007)(8676002)(2616005)(82310400005)(54906003)(316002)(7696005)(6666004)(86362001)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 14:55:59.5677
+X-Microsoft-Antispam-Message-Info: ZedM0L5nTDCp4ZhVwc5XiaQ3QoaPDZLFt2P6bZ5XxYtAHcrpftC21irryAj+77AQzF6xcKJr2hdga3/Qlv4CBRyFIYK6+Se6JtYpMDM+sFEMRWri6EnXhVyAf0YL2joOQrAv16cPG9vudrA+eY0Xc1KexZxe/1xRGAOf78PaSE3KA2I0tmagzd8d/PpG0jvH0ca++iIUqt/pMBavupuOzqWxRR0/P2TyAmO3tP0cKId4zV4FTwIyz1FvW3j9pXVXtHxe5sHcDq6wme0rcSCykeywPFY4KUGDJDFu1RXDXI6VENyB6LY9sOUbOkhk8pEkTa4tvGH29+RA8pI+AQ0y4GX5180xcplC2lPxybabJtWnyIwwxA78iBkRl6sUdnZ1j4L51Zo429jRT21asM58iA+l2pKyF6DAFCrPoZdiwk3y2SFN+TWuURjtbOYI2PczmpZNzssiJveNNCQ43jHNBFbFTd8PL/RiXzhOseBYcixFoE/7YQ2sn9W/1lFzgF/DJw/Jts3RnEMRVy5ncIztv5vvktJ56kyk6Gtw33y5oY//Ey8krm2Lr9cHOf3Yct/iHFcYVXb2UKByMRbqMIgvsQvv6a4Cp9dO6MsiMq3gqYRpgoej4KW1V2deJa3EHnrw7r1w3oCwOhlazJdwFI/7z5aShC2/QWSVta4QaKDYoNg6owUhVFpL8o2qvw4cIJfusf7Fm+lIuAmS0OVK3huIEj2JXmkpret48QMwhY1nEDw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3180.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(26005)(107886003)(2616005)(186003)(4326008)(31686004)(66476007)(66556008)(8676002)(66946007)(44832011)(54906003)(5660300002)(36756003)(2906002)(316002)(38100700002)(508600001)(6666004)(36916002)(6486002)(31696002)(86362001)(53546011)(6506007)(8936002)(82960400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXNnRXU2eTZaR3ZxMzhZR25xQjlIWlk0VC9leVd3UVlsbmtCbUFtTWNEMStW?=
+ =?utf-8?B?b3ZBOVVKMXhsdTZmQnJRa0RoMjdaNlgxbE83ek5SR09mOVNjL1NIL2pMdlJK?=
+ =?utf-8?B?YXJmOGJLeEJZdndLb0c0dkVxTDNlUVZicUo4ckpweU5XalNNbDFma1UvWWl2?=
+ =?utf-8?B?ZlY1a0hJNVJ1bzNrRWVIdUhjTXRobTlwTzZRRVlVYW5scEhsNDFuTmVlQXVS?=
+ =?utf-8?B?RG9rQlVMUG44UVNwVGtMVjE5TTNidDJibHI4RlNYVytIcm5LK2NkZXo2ajFB?=
+ =?utf-8?B?RDZvUVJ5dGFrZUx6Nk5VUFA4bmY2VGQweEN0Qzg5K1RjZzU0U0tpS2R2cFJm?=
+ =?utf-8?B?THhkRExRZEllS1MzUmpoR2ZMaWRxR3l1UVlWalYxU1J2MS9jYThaczY2NnQx?=
+ =?utf-8?B?SmdIdEZ2U2VzRGppaldqYUJjSm5PQ2tVekMzcEFCOWZqQ2pJeS9KL2NZSGR3?=
+ =?utf-8?B?bjFMRTliYkpYS3YrMkVDaHByNERnN0JNeGVrNUZqZWhVSlUvNEdoTXB0K2tB?=
+ =?utf-8?B?NFpveThPc3I1WUdNZXhMWnpFY1pJMkxsVUE3K2Q5MzBSUmZ2bjBrdEZZVTh4?=
+ =?utf-8?B?a2QyRGV0NEdTTzRsTG9jcHg3UE9SUFRHQWlvYkFDdXA2amR5UWRrcmlUSHFK?=
+ =?utf-8?B?TWNwVVl6SnV2Nkw1SHlXRWZCbFo1U3NHbkNjWWZqMGVTRXJ6cHhnUFcva0M5?=
+ =?utf-8?B?STZSMmFYclgyakc0a3dHRnZRQ2E0aUp6dnZZTjAvRW8ya3hlLzhJR25POEZz?=
+ =?utf-8?B?dUM3aUlPUXJaOWd3VVB5dzUzVjBNZmxoZHdWc3diWndSNTNOeXMwYzZNTFZ5?=
+ =?utf-8?B?RTVkV3A1SW9RaUhpVWYrUnZNVWx4YUJFZlBUbUFOTENPVGRvMDJ2cklCVTVa?=
+ =?utf-8?B?THBqWlZwakxDY2xJVVczWmNzR1l6RWQ3UDNWelpFZk93Rm1YaFluc0hQNlQv?=
+ =?utf-8?B?REFxeVRUTHNMekU2aFBSSUxFNmFST1NMekFLODE2SVVGQTJPeEFXL1NSZ1ZR?=
+ =?utf-8?B?d2hZVHA1aldaRGl4S3pDTVNvOEY0dHRTWjZMcUJqeUZxTStneHIycXpJNWd1?=
+ =?utf-8?B?QkVtU1JidlZaRDB6eU9EdEhrNGVoazNSVXAzNWJzcDgrbFE1YWR2QzB6bzh2?=
+ =?utf-8?B?anFSTXh5K2dpOGxjemwvYzRDV3Y3a0FQVkgvblJLYngzYzVNdnNvdVBaT2xH?=
+ =?utf-8?B?cTVua0xHdGNaTnZFdWdDeUh6N3NiTjRldEdBVEhvcmd0SWFtcXhDNUxrMVls?=
+ =?utf-8?B?Z0xzaVkzMGZidFdDcTh1V2VubktXblhjRXZCRSt5UlAvQ3BXb3YxY1lvejdI?=
+ =?utf-8?B?Rmc0ZHJmUEJ4ZVFZYUx1eHUvWFhnTXU3V2ROVG9SQTdWaVBNd3M3SHlHZXg3?=
+ =?utf-8?B?TVdKSjJnZk9mcGtWMEl4ZldjeHV4aFlwK3QrWWs2VjF3b0hYRkRBOHR1YjdT?=
+ =?utf-8?B?ZDk4UEgva3dxY1hFOE03cTQ0cmxISUFwWnFMRlBDSGZnRlVnSyt3SU5hTk1T?=
+ =?utf-8?B?U2hJWmx3b1VtMUsyV3Q5dHFLaUNvaHkzdGFDVHE3OXljVWU1Vnd5L0l3elN5?=
+ =?utf-8?B?U28vU21sdThUd1FFc0dOMXV5d1BmT0loc2VSb0JqT21zRmlzYWxnSlJ4N1Q2?=
+ =?utf-8?B?OHlvaUgwZi9mRnBPTHhBb2RKSmwzallQV3JveUZRN0JvN3F5cExXTWIyWHdR?=
+ =?utf-8?B?ZEtFNmp2TG9TN3RqVGtndDhwS0hGYVBRelU0dTFhaEdwNkVKY2xnVCs1WGhi?=
+ =?utf-8?B?Y1RFbElYbys0WU9yTVQ1VTNpVVdyWkl5L2FLUG5RZ05wY1VmNkpBbEhYTURL?=
+ =?utf-8?B?cUd6Zk04TG9XWnZYcXFIOUNKUnRQZWdxZHF6TWVsa3JSVzMwbFNhaU9OMGVF?=
+ =?utf-8?B?bnVCWE5OazAzSFlMOUpnQ2dGd0F4cmlpbm43WjlMa21rbkpGdTVlQlo4TElt?=
+ =?utf-8?B?Z1hUd3E0TWMxMFNYSmp3eU12STJ6K3Fxd1hpZWsrSjJ2emZ5bElwYUNpRzZ3?=
+ =?utf-8?B?WFZGcS9HQytkSGRXVUtkQWRFeWJIeGhicWdha1krY29UZG8yalE0S3BoQWNy?=
+ =?utf-8?B?WjdQK3RLS1VBZDc0bm9NcGpNNGxPS2M1UGtaTmhleEJ3Y09kbG9Jb1gvNHpo?=
+ =?utf-8?B?SkxwSkx5K0JSMUNOSU1xSFcxSU96UVFQSTBmdWNkcXVTbm9nTFl4OXhidkpj?=
+ =?utf-8?B?Sldmc3kwMUIwRFlkbU12MUpKMnFFN1lsWjZUMnFJUVR0RmlSVXI0SUgrTVBE?=
+ =?utf-8?B?eWJ5WEdlS3NNU3VCVlk5S01lcmhaMGdYZXpLbWRtYXI3VHVKellvMkpuVkNO?=
+ =?utf-8?B?N016SHNha09pdzJMMDVibS8zNGxGRHF2a3VXU25jSVc0VEFwY0YwSDdKRzBm?=
+ =?utf-8?Q?/HOwpXXtOt33I2Bk=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d78f92dc-5226-4f30-fcd4-08da31cc1865
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3180.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 14:56:28.1741
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66ea85d1-2c1c-4a13-e817-08da31cc07a2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4181
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jPcTPPRb8m1EEsdQ7IMpTxg5u+M8NCIymFOAlg/jEQ2ByezU+XpC/QqNY/9GGpfxhtbZdkfRs7vSuhcQDmpSXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5356
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muralidhara M K <muralidhara.mk@amd.com>
+On 06.05.2022 00:04, Javier Martinez Canillas wrote:
+> From: Daniel Vetter <daniel.vetter@ffwll.ch>
+> 
+> Most fbdev drivers have issues with the fb_info lifetime, because call to
+> framebuffer_release() from their driver's .remove callback, rather than
+> doing from fbops.fb_destroy callback.
+> 
+> Doing that will destroy the fb_info too early, while references to it may
+> still exist, leading to a use-after-free error.
+> 
+> To prevent this, check the fb_info reference counter when attempting to
+> kfree the data structure in framebuffer_release(). That will leak it but
+> at least will prevent the mentioned error.
+> 
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+> 
+> (no changes since v1)
+> 
+>   drivers/video/fbdev/core/fbsysfs.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/video/fbdev/core/fbsysfs.c b/drivers/video/fbdev/core/fbsysfs.c
+> index 8c1ee9ecec3d..c2a60b187467 100644
+> --- a/drivers/video/fbdev/core/fbsysfs.c
+> +++ b/drivers/video/fbdev/core/fbsysfs.c
+> @@ -80,6 +80,10 @@ void framebuffer_release(struct fb_info *info)
+>   {
+>   	if (!info)
+>   		return;
+> +
+> +	if (WARN_ON(refcount_read(&info->count)))
+> +		return;
+> +
 
-GPU Nodes will use a different method to determine the chip select
-and channel of an error. A function pointer should be used rather
-than introduce another branching condition.
+Regarding drm:
+What about drm_fb_helper_fini? It calls also framebuffer_release and is 
+called often from _remove paths (checked intel/radeon/nouveau). I guess 
+it should be fixed as well. Do you plan to fix it?
 
-Prepare for this by adding get_err_info() to pvt->ops. This function is
-only called from the modern code path, so a legacy function is not
-defined.
 
-Use a "umc" prefix for modern systems, since these use Unified Memory
-Controllers (UMCs).
+Regarding fb drivers, just for stats:
+git grep -p framebuffer_release | grep _remove | wc -l
+Suggests there is at least 70 incorrect users of this :)
 
-Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
-[Rebased/reworked patch and reworded commit message]
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
- drivers/edac/amd64_edac.c | 15 ++++++++++-----
- drivers/edac/amd64_edac.h |  1 +
- 2 files changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 248d1082736e..81d165bcd252 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3067,10 +3067,16 @@ static inline void decode_bus_error(int node_id, struct mce *m)
-  * Currently, we can derive the channel number by looking at the 6th nibble in
-  * the instance_id. For example, instance_id=0xYXXXXX where Y is the channel
-  * number.
-+ *
-+ * csrow can be derived from the lower 3 bits of MCA_SYND value.
-+ *
-+ * For DRAM ECC errors, the Chip Select number is given in bits [2:0] of
-+ * the MCA_SYND[ErrorInformation] field.
-  */
--static int find_umc_channel(struct mce *m)
-+static void umc_get_err_info(struct mce *m, struct err_info *err)
- {
--	return (m->ipid & GENMASK(31, 0)) >> 20;
-+	err->channel = (m->ipid & GENMASK(31, 0)) >> 20;
-+	err->csrow = m->synd & 0x7;
- }
- 
- static void decode_umc_error(int node_id, struct mce *m)
-@@ -3092,8 +3098,6 @@ static void decode_umc_error(int node_id, struct mce *m)
- 	if (m->status & MCI_STATUS_DEFERRED)
- 		ecc_type = 3;
- 
--	err.channel = find_umc_channel(m);
--
- 	if (!(m->status & MCI_STATUS_SYNDV)) {
- 		err.err_code = ERR_SYND;
- 		goto log_error;
-@@ -3108,7 +3112,7 @@ static void decode_umc_error(int node_id, struct mce *m)
- 			err.err_code = ERR_CHANNEL;
- 	}
- 
--	err.csrow = m->synd & 0x7;
-+	pvt->ops->get_err_info(m, &err);
- 
- 	if (umc_normaddr_to_sysaddr(m->addr, pvt->mc_node_id, err.channel, &sys_addr)) {
- 		err.err_code = ERR_NORM_ADDR;
-@@ -3757,6 +3761,7 @@ static struct low_ops umc_ops = {
- 	.init_csrows			= umc_init_csrows,
- 	.dump_misc_regs			= umc_dump_misc_regs,
- 	.get_cs_mode			= umc_get_cs_mode,
-+	.get_err_info			= umc_get_err_info,
- 	.setup_mci_misc_attrs		= setup_mci_misc_attrs,
- };
- 
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 1f64c08ae0ce..d5a64b0639bb 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -480,6 +480,7 @@ struct low_ops {
- 	int  (*init_csrows)(struct mem_ctl_info *mci);
- 	void (*dump_misc_regs)(struct amd64_pvt *pvt);
- 	int  (*get_cs_mode)(int dimm, u8 ctrl, struct amd64_pvt *pvt);
-+	void (*get_err_info)(struct mce *m, struct err_info *err);
- };
- 
- int __amd64_read_pci_cfg_dword(struct pci_dev *pdev, int offset,
--- 
-2.25.1
-
+Regards
+Andrzej

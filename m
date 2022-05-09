@@ -2,99 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F268851FB2D
+	by mail.lfdr.de (Postfix) with ESMTP id A522C51FB2C
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiEILYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S232440AbiEILZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiEILYH (ORCPT
+        with ESMTP id S232306AbiEILZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:24:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6619A1CA060;
-        Mon,  9 May 2022 04:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02B7F61181;
-        Mon,  9 May 2022 11:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66A17C385B0;
-        Mon,  9 May 2022 11:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652095213;
-        bh=hxLPtFToauw/CypSw3PgRx03g+BtJcjhzt3UySK+NqY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iwXAgTgqnNjRgc2XeufwA34jE6Zu+gNg8x2zEMG/qMwfUD9IwAAO+6ycA9S3d9fLz
-         yUMn3UPiWbUnonkyrJnOvim4DgiFm8LKgdwaE8CPodKA2CZ8VX9JxoulfPAH2uiQNn
-         Ca29y47QK81l6I8CbkK8ZBMRsZpceCwseyx4QYX42MKQVWeLYivsjYmZ8u5lVYCXrQ
-         vF+ioQKjI28MFxfY+WDFsTIQprmnE/bL2P/gfh9WZGLuPWLEyQNjLMxg6uu8gjJLPG
-         NITydoI5jZ4TysOMGkwUcSM/YqLh26lls4qyj0TaEHxIB93VChQ31lMpxwiTNAlJkm
-         0B/1V3vvgIGkw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 419F0F03929;
-        Mon,  9 May 2022 11:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 9 May 2022 07:25:00 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E427F275D2;
+        Mon,  9 May 2022 04:21:05 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so2011745pjq.2;
+        Mon, 09 May 2022 04:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MPgbgqFyUzi/pFIIl7e5TfJ4g1kI/3PaA6Fy/1JOhfo=;
+        b=LXyc68wE9Tqryc7MXDlYdhdIOKehEozgCEtEPNYYV8YYudUQtKzmgy5hfOIVQTJ9sC
+         KrVakukKljSFGzfObUSuFnO9vFYU3rhBEVlBBzbfH2RSA7bV5GZYYuuoF00hIQjMrdHk
+         8v6Vw2rB4VyXQHMdcfBibLStLlTFqHQOy2xLDWTHyEQZ7iiyoLHWKcA7PKqed5DALb0h
+         QQcms6zuYXy9k9CQ9hCvLfjRc0r1hHy6NPBgnzGNfzV01x2j/kIDBkGKhX2TMEKsddOv
+         kjkRI3D0K1cInlxHRfZVFCs0CA2nifvB5lacSVDUgBCSF6YndZh3xspcW7JNa8hcx3Uj
+         YLtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MPgbgqFyUzi/pFIIl7e5TfJ4g1kI/3PaA6Fy/1JOhfo=;
+        b=ZVIZF0M+kzp+JuuzK5TwL7/SmysClj5kugysySzM/GLI7dTu5kaa5PhyvEGJA37aR0
+         MGPjO1PtmHJ89PG2yKZ73xJKLwN8cbbv/rLWuSSCaLpPPdZSNm+oJJRNvav7hHNuUWk4
+         +LNupWOSnTKZx15C6orxzJH8rDcT4Hi/7M5melQDAE27nsOTsJxXU2dZevbNmnetycXk
+         SKS0/aBPJBg+xCDPK+XcCALLb9gjqjkpObAw2vU8aXFAGAaJlAk/wEBZ8DI3tYRXC/9W
+         PZwY3WOEOIsB98TR4+KtKzcHFmcpseNm4Qr/BF6WO534lXCwelaykfFGNttoDKB/nX8v
+         1tLw==
+X-Gm-Message-State: AOAM530h8K8DXdUojUL0YPV5JTbpr0sW/+C2nZXjJoJulOYAflKfXaeO
+        6PwsguoSjnaLbJhVhfypN/s=
+X-Google-Smtp-Source: ABdhPJxUIbeOoe8L+kkYmJD77E+tXkGv6tUMh90aoncV+NJEaGYXxZ51nNQmZJBWVoSvZWIkMAHBPw==
+X-Received: by 2002:a17:90a:884:b0:1d9:531c:9cd6 with SMTP id v4-20020a17090a088400b001d9531c9cd6mr17211836pjc.211.1652095265364;
+        Mon, 09 May 2022 04:21:05 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00000d00b0050dc7628173sm8461311pfk.77.2022.05.09.04.21.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 04:21:04 -0700 (PDT)
+Date:   Mon, 9 May 2022 20:20:57 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Paran Lee <p4ranlee@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Austin Kim <austindh.kim@gmail.com>
+Subject: Re: [PATCH] slub: kunit catch kmem_cache_alloc failed
+Message-ID: <Ynj5GZuXG6CgCUJp@hyeyoo>
+References: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/7] add ti dp83td510 support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165209521326.15458.16390229009185175258.git-patchwork-notify@kernel.org>
-Date:   Mon, 09 May 2022 11:20:13 +0000
-References: <20220506042357.923026-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220506042357.923026-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506045319.GA28237@DESKTOP-NK4TH6S.localdomain>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri,  6 May 2022 06:23:50 +0200 you wrote:
-> changes v4:
-> - dp83td510: remove unused variables
-> - s/base1/baset1
-> - s/genphy_c45_baset1_read_master_slave/genphy_c45_pma_baset1_read_master_slave
+On Fri, May 06, 2022 at 01:53:19PM +0900, Paran Lee wrote:
+> Catch kmem_cache_alloc failed on slub kunit test.
 > 
-> changes v3:
-> - export reusable code snippets and make use of it in the dp83td510
->   driver
+> Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+> ---
+>  lib/slub_kunit.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> [...]
+> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
+> index 8662dc6cb509..7b80241dd498 100644
+> --- a/lib/slub_kunit.c
+> +++ b/lib/slub_kunit.c
+> @@ -32,6 +32,11 @@ static void test_next_pointer(struct kunit *test)
+>  	struct kmem_cache *s = kmem_cache_create("TestSlub_next_ptr_free", 64, 0,
+>  				SLAB_POISON, NULL);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+> +	if (!p) {
+> +		kunit_err(test, "Allocation failed: %s\n", __func__);
+> +		kmem_cache_destroy(s);
+> +		return;
+> +	}
+>  	unsigned long tmp;
+>  	unsigned long *ptr_addr;
+>  
+> @@ -77,6 +82,11 @@ static void test_first_word(struct kunit *test)
+>  	struct kmem_cache *s = kmem_cache_create("TestSlub_1th_word_free", 64, 0,
+>  				SLAB_POISON, NULL);
 
-Here is the summary with links:
-  - [net-next,v4,1/7] net: phy: genphy_c45_baset1_an_config_aneg: do no set unknown configuration
-    https://git.kernel.org/netdev/net-next/c/a7f0e4bea8ed
-  - [net-next,v4,2/7] net: phy: introduce genphy_c45_pma_baset1_setup_master_slave()
-    https://git.kernel.org/netdev/net-next/c/90532850eb21
-  - [net-next,v4,3/7] net: phy: genphy_c45_pma_baset1_setup_master_slave: do no set unknown configuration
-    https://git.kernel.org/netdev/net-next/c/a04dd88f77a4
-  - [net-next,v4,4/7] net: phy: introduce genphy_c45_pma_baset1_read_master_slave()
-    https://git.kernel.org/netdev/net-next/c/b9a366f3d874
-  - [net-next,v4,5/7] net: phy: genphy_c45_pma_baset1_read_master_slave: read actual configuration
-    https://git.kernel.org/netdev/net-next/c/acb8c5aec2b1
-  - [net-next,v4,6/7] net: phy: export genphy_c45_baset1_read_status()
-    https://git.kernel.org/netdev/net-next/c/2013ad8836ac
-  - [net-next,v4,7/7] net: phy: dp83td510: Add support for the DP83TD510 Ethernet PHY
-    https://git.kernel.org/netdev/net-next/c/165cd04fe253
+Recently SLAB_NO_USER_FLAGS is added for test caches.
+Looks like it's not based on Vlastimil's slab tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
 
-You are awesome, thank you!
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+> +	if (!p) {
+> +		kunit_err(test, "Allocation failed: %s\n", __func__);
+> +		kmem_cache_destroy(s);
+> +		return;
+> +	}
+>  
+>  	kmem_cache_free(s, p);
+>  	*p = 0x78;
+> @@ -92,6 +102,11 @@ static void test_clobber_50th_byte(struct kunit *test)
+>  	struct kmem_cache *s = kmem_cache_create("TestSlub_50th_word_free", 64, 0,
+>  				SLAB_POISON, NULL);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+> +	if (!p) {
+> +		kunit_err(test, "Allocation failed: %s\n", __func__);
+> +		kmem_cache_destroy(s);
+> +		return;
+> +	}
+>  
+>  	kmem_cache_free(s, p);
+>  	p[50] = 0x9a;
+> @@ -108,6 +123,11 @@ static void test_clobber_redzone_free(struct kunit *test)
+>  	struct kmem_cache *s = kmem_cache_create("TestSlub_RZ_free", 64, 0,
+>  				SLAB_RED_ZONE, NULL);
+>  	u8 *p = kmem_cache_alloc(s, GFP_KERNEL);
+> +	if (!p) {
+> +		kunit_err(test, "Allocation failed: %s\n", __func__);
+> +		kmem_cache_destroy(s);
+> +		return;
+> +	}
+>  
+>  	kasan_disable_current();
+>  	kmem_cache_free(s, p);
+> -- 
+> 2.25.1
+> 
+
+To be more paranoid kmem_cache_create() can also fail - but I'm not sure
+these checks are useful for tests.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Hyeonggon

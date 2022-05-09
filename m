@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C615201CF
+	by mail.lfdr.de (Postfix) with ESMTP id AA9D85201D0
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbiEIQDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S238774AbiEIQEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238770AbiEIQDE (ORCPT
+        with ESMTP id S238782AbiEIQEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:03:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE3E2D9EF4;
-        Mon,  9 May 2022 08:59:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86D0FB81252;
-        Mon,  9 May 2022 15:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 414A4C385AE;
-        Mon,  9 May 2022 15:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652111948;
-        bh=3WqpGb4b7mV7spWAV8RawQwEEHkl0hO6Vsc2rKASjFE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bAeqQ9dtNwYyeWxWYzg5ackhrkGBMhf4bHNoqedbzV/xnilOHN1b/RmTrt9xGjaFp
-         dDj3gb4klNyZKJ52zEglFB7ljdxcIbG/ANXaz6SomL0OpB70FiS/aJlDh+y+Ca/xv4
-         u+sEw9DZ8veaERabwo70T/YSiLmflolNCDI38VSNl7icGBVp2Qfmq8myNBSHR9jrrW
-         xaR9oRYA70YQpJdL1Mp0RxciEXp82d3khiwu7FwXMcN94zfrytyB7/jDI0bgupRqYv
-         8i0B1CALTuBBThlQcNgYBL34AIOdNfNbgz5Ics9bNAF3uusUT0nZhS0BbsDziSNtbP
-         G2skyMcXhGy4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D392F03928;
-        Mon,  9 May 2022 15:59:08 +0000 (UTC)
-Subject: Re: [GIT PULL] platform-drivers-x86 for 5.18-4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <d9007c58-71a2-e081-c609-fbf04855b591@redhat.com>
-References: <d9007c58-71a2-e081-c609-fbf04855b591@redhat.com>
-X-PR-Tracked-List-Id: <platform-driver-x86.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d9007c58-71a2-e081-c609-fbf04855b591@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.18-4
-X-PR-Tracked-Commit-Id: 44acfc22c7d055d9c4f8f0974ee28422405b971a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9be9ed2612b5aedb52a2c240edb1630b6b743cb6
-Message-Id: <165211194817.13222.583089385536373493.pr-tracker-bot@kernel.org>
-Date:   Mon, 09 May 2022 15:59:08 +0000
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 9 May 2022 12:04:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DCB4348C;
+        Mon,  9 May 2022 09:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=K4xQBj4Av+1aVjNhecQZcLi4H026zPkK8lu/o3+s21g=; b=rOjuL7YPniMy57b1u6dI1Hc5gO
+        rKc00pRpI9pgmRtNEEcVp95ObH3NAvHKO0BxqgakABdsxT9w+vcSkLYMwRjeF2Rt45LH5W1qKAuIZ
+        ee+AO/YgQEUbFIHFmMFnIqyY9ChcwENCGmSHKicuGx7ma8Eo8+/LYP6uojVxFJ2e0tYnpVbdQnl0O
+        dSaNJ0/D4luEL4aN9muESKMxTtgGFq9TtirNLRMve3iMs5/T6IrrvEKXu4E4UHYhdpG9273XhLFVO
+        V3RsnWiOJ/sGCXTDhAGHTasPCLV5P0mqttJVyO3vg1+8boxC98anD2srszHHJ8zSGlIWP+W+fdPuq
+        9i0DKLEQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1no5oR-00CbQM-Sb; Mon, 09 May 2022 16:00:44 +0000
+Message-ID: <8e3ecd00-1c73-7481-fec2-158528b2798f@infradead.org>
+Date:   Mon, 9 May 2022 09:00:37 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+References: <20220509092312.254354-1-ming.lei@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220509092312.254354-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +56,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 9 May 2022 09:27:51 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.18-4
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9be9ed2612b5aedb52a2c240edb1630b6b743cb6
+On 5/9/22 02:23, Ming Lei wrote:
+> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+> index fdb81f2794cd..3893ccd82e8a 100644
+> --- a/drivers/block/Kconfig
+> +++ b/drivers/block/Kconfig
+> @@ -408,6 +408,13 @@ config BLK_DEV_RBD
+>  
+>  	  If unsure, say N.
+>  
+> +config BLK_DEV_USER_BLK_DRV
+> +	bool "Userspace block driver"
+> +	select IO_URING
+> +	default y
 
-Thank you!
+Any "default y" driver is highly questionable and needs to be justified.
+
+Also: why is it bool instead of tristate?
+
+> +	help
+> +          io uring based userspace block driver.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+~Randy

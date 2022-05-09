@@ -2,140 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D505520320
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97921520326
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbiEIRGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S239442AbiEIRH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239472AbiEIRGj (ORCPT
+        with ESMTP id S239445AbiEIRHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:06:39 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1457228135A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:02:44 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id z12so9722220ilp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 10:02:44 -0700 (PDT)
+        Mon, 9 May 2022 13:07:25 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2055.outbound.protection.outlook.com [40.107.93.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2342BE9FB;
+        Mon,  9 May 2022 10:03:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OVFdR5ayfAW5mb9Z/JYg4QytmlNsWnW2OSg0wGPz8oOfW09ZJX2bdWyHG3W090xhkTz/YsgA42paCFttT5WfxxHjy8aLT70PCItSLDbgs5GlBgskOgPqLFHFbWK2UMDbM7io3DEMRF2RD2JabFYvD6tduD97P5wD3HYnba6cpBq54cAZhztyglyMbDW/itL7mYhrw7qyvaDG4BPG+VjsaY1nl0red0Y+SkzQg3C28kqmg3Dmod/1Ts2eow1zTWwF8noMH38xCX0DosIQKvGDifjDlkHCxuQrfMSX+EIVn3rYw4+EGoHByVGCCITxuwz7TGunNWbxNCIWUCDJzRboCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sbv0Hp0abU0aDG6vWHem3z86IwXQwLQHV8Zmvk79G9Q=;
+ b=BuZPqqXK8LsymOutxEYGSkK5JMDfPOpenQtFAIn3YKyHXq/EEPEBMxoGBn+M3Ba9dytwBdYpzRMqcO5yTg8eKQs55z18U8rdh3KFEyaEZ2tBoJUeeaEBoS0nT6e7OvZ8KHqJ9BBnIz6L2svjCCm9W+cv8pRAmMZ0k87wfXn32KsPGqAaSryNDWhzGk44Ulg1j9Qjaa1QMmbC1LYb1hz6wQTmbPUqkSvz4PJQzegvok6bNycAhCgJKGhLNaWbd8clDtfFw+1Q1stgPFXdnk48RDjsP73rhbjIiwVkgo5HKERQPXveVUW8xjjXA6M3tSmdfLxOEQoT5GRhpz03iHEtdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=rowland.harvard.edu
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=tFM7xIQtCpOuioxyy6/Mgl+Oz5Ak50q4/dFV83odINU=;
-        b=um0dIWhKN/iXCfaGm8+FEYxlBDrzeVkWflwBl3MZDAYiXO0mWKB3mReX2kAQXacZXV
-         ek9euhHPQLReN+sXMA2O630UW13e330/zgAILeukScpL+tsfcs4h1ynpWWQIpk1J4VaS
-         WqpvAdF5PHCEsun6NJxb2Met7nPnrQyCQMjBKD4fF/uFhoqBBDrOhPi9doIOHZuGT1GZ
-         B7qrXMKDPCBTvmAczfP+G9oIxupKr+vrwAX9SMmpHrcTLONGLXcR/v/L3qA2XdZCsM4v
-         6o18/Cbk4lERTRX5a/Ck6T9JoP8tltSGYwr26nH0DnGU1hIRHdm439Q9Fdxf9C+Z3/r3
-         +sUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tFM7xIQtCpOuioxyy6/Mgl+Oz5Ak50q4/dFV83odINU=;
-        b=I+ajodVZaaSSaw5jm1EjLEgfJdmZ5+VoSvO5ZhYpuATl2MA4GUGblisggHjD4qOSBz
-         s8+HxPuads17AjX2cwYGpmJZ+qoq1bZvSFxG6768P5wnqTorpIhhTYAWmIpT+JJmjPWJ
-         B0+vjs52U8F6RbPRKVP1WVxwM8f72unmVamwDQ9e4geArmzEQRiC6nx27qtLg6698nJY
-         4iaDeVAjqQZE1reDSypQL+PYOHJ4TMlVV0w1oGwHDeQzBEgAC6U2hN/MZ6ohVodUymgw
-         srrhjIicFzYZUdB/icrhqb0ex/mPdNLQLiU+0OraXaplFKjr1ibrH8+/00mXRLbJSmKe
-         KedA==
-X-Gm-Message-State: AOAM5339+XY037C/2F2/yx9r2KTOOlGSlZFsmHLErx9C/KLNf9hP5Jrs
-        VU8nTgjjHB3ZYbwGdjOXbLD6+g==
-X-Google-Smtp-Source: ABdhPJwSWLRXskKUk/xSTtlslzuAA/xGA0C0JNmxOobr7l0+SCxm22xrVKrUcAaF6GnHI5NXVzi5IA==
-X-Received: by 2002:a05:6e02:144c:b0:2cf:7a91:50da with SMTP id p12-20020a056e02144c00b002cf7a9150damr6727276ilo.123.1652115763443;
-        Mon, 09 May 2022 10:02:43 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056e020ecd00b002cde6e352dfsm3333827ilk.41.2022.05.09.10.02.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 10:02:42 -0700 (PDT)
-Message-ID: <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk>
-Date:   Mon, 9 May 2022 11:02:41 -0600
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sbv0Hp0abU0aDG6vWHem3z86IwXQwLQHV8Zmvk79G9Q=;
+ b=XKKuR5Gae1NKNDkU5WAmfiFrkkhx+oyUvHB+eFg4xJNzQEKx83tYgqB1AGSms6SnyJiuQJ3m0uux8NKqooJNup9rwc1A7duzudvJ5E+yU4SwpEVGX4L5ugpi5kTQzt2AUhkg8+a7iDklK1ZAi/xZTEIvhjvD0MDZoDeqD1ep0hI=
+Received: from DS7PR05CA0006.namprd05.prod.outlook.com (2603:10b6:5:3b9::11)
+ by BL3PR02MB7857.namprd02.prod.outlook.com (2603:10b6:208:33c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
+ 2022 17:03:27 +0000
+Received: from DM3NAM02FT018.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::bd) by DS7PR05CA0006.outlook.office365.com
+ (2603:10b6:5:3b9::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20 via Frontend
+ Transport; Mon, 9 May 2022 17:03:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT018.mail.protection.outlook.com (10.13.4.68) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Mon, 9 May 2022 17:03:26 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 9 May 2022 10:03:08 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 9 May 2022 10:03:08 -0700
+Envelope-to: git@xilinx.com,
+ stern@rowland.harvard.edu,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+Received: from [10.140.6.18] (port=51690 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <piyush.mehta@xilinx.com>)
+        id 1no6mp-0007cZ-V1; Mon, 09 May 2022 10:03:08 -0700
+From:   Piyush Mehta <piyush.mehta@xilinx.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <michal.simek@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <radheys@xilinx.com>,
+        <git@xilinx.com>, <sivadur@xilinx.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>
+Subject: [PATCH] usb: host: ehci-xilinx: adding description for return value
+Date:   Mon, 9 May 2022 22:32:52 +0530
+Message-ID: <20220509170252.28271-1-piyush.mehta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
-Content-Language: en-US
-To:     syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>
-References: <00000000000029572505de968021@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <00000000000029572505de968021@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cf7cd9ec-86f4-4ff6-1013-08da31ddd589
+X-MS-TrafficTypeDiagnostic: BL3PR02MB7857:EE_
+X-Microsoft-Antispam-PRVS: <BL3PR02MB785799A714073EC4B6677908D4C69@BL3PR02MB7857.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ERKOag0pfgni7O8OYC/xhsFqiEKEWqwlnx4lNpYOR6M3iu2LdSRzEEeGT6hARQoaD7A22cmLyBjNCI0BTEAf4HM6HBkC6tCRd9sZCWDXt/cXB87Unt2M3FC97+q18GZwFXGVEFsZz+R7gZTV/3kSw2dMwAG43qXE0thcGxR4lEPVe6AXNymGwFhOM7E+dCf87aBw44bKYLc7DMrNrApjzO++qSwwAiaxBHnNCOl+oASbqjJRwrp+nTC1gPeV8QC60opW679zkzGEWM+rWrk3/tu1hHZoLWdn7ZjAYU6/VtpkuIpmc0y9J8UsdWiR4LHBI44d4f7JPKvIiDf6dUsE8ih6S0UMWb3qdu2f0aTxvnGXsUZ6OK9NoTe759Jv+i9u7YHecKAgEAlwg5zZtlZ00iNmsTJLoLd28trQNjZZFxFfk8HhF5WaVdu3kRu73ArOkgxv3jQ+eRF0XQfQMVjo9XksCRxf0f9ou1apYAzlN9l1uEDFldAImY0WxequaOBgkwKIuk2QoFpekwEX111Ita01/58dSoOhFHkeNfrOouBCAduyzaUe6EgkL4QCJM1cdsx9Ui5HsUYK5VqRR0Q4GdFSozgm+o/7rJYYyS1bot3igAbPva2Mk7X/YDzknd6dwsjFAyn7Q53myAnehLSgs+u3CjQMXgZaMhUlnPg3eeHb8dnddfL+VXTaeHPfP6gA2uzs0aBOzQ+nkpHX0YXN5frjnAkk4rPtdMH8WFu2HGo=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(356005)(7696005)(6666004)(47076005)(508600001)(186003)(26005)(40460700003)(7636003)(110136005)(36860700001)(82310400005)(54906003)(83380400001)(336012)(426003)(1076003)(107886003)(5660300002)(2616005)(9786002)(8936002)(36756003)(70206006)(2906002)(44832011)(70586007)(316002)(4326008)(8676002)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 17:03:26.5472
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf7cd9ec-86f4-4ff6-1013-08da31ddd589
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT018.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB7857
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 10:14 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c5eb0a61238d Linux 5.18-rc6
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=112bf03ef00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
-> dashboard link: https://syzkaller.appspot.com/bug?extid=99938118dfd9e1b0741a
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12311571f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177a2e86f00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in bio_poll+0x275/0x3c0 block/blk-core.c:942
-> Read of size 4 at addr ffff8880751d92b4 by task syz-executor486/3607
-> 
-> CPU: 0 PID: 3607 Comm: syz-executor486 Not tainted 5.18.0-rc6-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
->  print_report mm/kasan/report.c:429 [inline]
->  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
->  bio_poll+0x275/0x3c0 block/blk-core.c:942
->  __iomap_dio_rw+0x10ee/0x1ae0 fs/iomap/direct-io.c:658
->  iomap_dio_rw+0x38/0x90 fs/iomap/direct-io.c:681
->  ext4_dio_write_iter fs/ext4/file.c:566 [inline]
->  ext4_file_write_iter+0xe4d/0x1510 fs/ext4/file.c:677
->  call_write_iter include/linux/fs.h:2050 [inline]
->  do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
->  do_iter_write+0x182/0x700 fs/read_write.c:852
->  vfs_writev+0x1aa/0x630 fs/read_write.c:925
->  do_pwritev+0x1b6/0x270 fs/read_write.c:1022
->  __do_sys_pwritev2 fs/read_write.c:1081 [inline]
->  __se_sys_pwritev2 fs/read_write.c:1072 [inline]
->  __x64_sys_pwritev2+0xeb/0x150 fs/read_write.c:1072
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f6846af7e69
+This patch resolves kernel-doc warnings to add return value description
+in function comments.
 
-Guys, should we just queue:
+Addressed warnings:
 
-ommit 9650b453a3d4b1b8ed4ea8bcb9b40109608d1faf
-Author: Ming Lei <ming.lei@redhat.com>
-Date:   Wed Apr 20 22:31:10 2022 +0800
+drivers/usb/host/ehci-xilinx-of.c:37: warning: No description found for return value of 'ehci_xilinx_port_handed_over'
+drivers/usb/host/ehci-xilinx-of.c:117: warning: No description found for return value of 'ehci_hcd_xilinx_of_probe'
+drivers/usb/host/ehci-xilinx-of.c:201: warning: No description found for return value of 'ehci_hcd_xilinx_of_remove'
 
-    block: ignore RWF_HIPRI hint for sync dio
+Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+---
+ drivers/usb/host/ehci-xilinx-of.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-up for 5.18 and stable?
-
+diff --git a/drivers/usb/host/ehci-xilinx-of.c b/drivers/usb/host/ehci-xilinx-of.c
+index a9c6d18..0811a5b 100644
+--- a/drivers/usb/host/ehci-xilinx-of.c
++++ b/drivers/usb/host/ehci-xilinx-of.c
+@@ -32,6 +32,8 @@
+  * There are cases when the host controller fails to enable the port due to,
+  * for example, insufficient power that can be supplied to the device from
+  * the USB bus. In those cases, the messages printed here are not helpful.
++ *
++ * Return: Always return 0
+  */
+ static int ehci_xilinx_port_handed_over(struct usb_hcd *hcd, int portnum)
+ {
+@@ -110,6 +112,8 @@ static const struct hc_driver ehci_xilinx_of_hc_driver = {
+  * host controller. Because the Xilinx USB host controller can be configured
+  * as HS only or HS/FS only, it checks the configuration in the device tree
+  * entry, and sets an appropriate value for hcd->has_tt.
++ *
++ * Return: zero on success, negative error code otherwise
+  */
+ static int ehci_hcd_xilinx_of_probe(struct platform_device *op)
+ {
+@@ -194,6 +198,8 @@ static int ehci_hcd_xilinx_of_probe(struct platform_device *op)
+  *
+  * Remove the hcd structure, and release resources that has been requested
+  * during probe.
++ *
++ * Return: Always return 0
+  */
+ static int ehci_hcd_xilinx_of_remove(struct platform_device *op)
+ {
 -- 
-Jens Axboe
+2.7.4
 

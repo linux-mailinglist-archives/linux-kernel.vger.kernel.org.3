@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E4351F775
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8D51F77E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237594AbiEII7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 04:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
+        id S237287AbiEII6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 04:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbiEIIzn (ORCPT
+        with ESMTP id S237186AbiEIIzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 04:55:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583BA1B7AD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 01:51:49 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxZbC663yzGpfG;
-        Mon,  9 May 2022 16:48:55 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 9 May 2022 16:51:42 +0800
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-To:     David Hildenbrand <david@redhat.com>
-CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
-        <cl@linux.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
- <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
-Date:   Mon, 9 May 2022 16:51:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 9 May 2022 04:55:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F17013F1E7;
+        Mon,  9 May 2022 01:52:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652086318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F47FNB3UPmZkk3XgxnsY0dE6OJ5OY97nItlGqfv1nig=;
+        b=MUrIGsX15rb+saRCqWwo7fGrHKkoPeYHsfDkuifsddStxXPK7vpsFeXPM+uJpMeqTJfiX0
+        1wfvYcDEWGBYWqqS9x0s9UYuvpdoshqHwuPmU5LVr55f8b5tQdqSd7PhzQVd7JLteNO3Kp
+        FZvdIIC4eE8GPD/RyItmNBom9EfEdBzWqZ/8FbxDmn3PRSy9tZD/10LWUQwVO199DbUjVA
+        sGJhjPZheZFhX2UkM/V24VEiyCISV6tGDKc0/MzMrrUXEA8lD4rR1vwuUZK2ToZS4+FOMP
+        6gx92yX0NOydhaxgBz9mOjrjjTnasPwhFwIlo6ru1SJHYaZ2YEH2lPPrPhqaaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652086318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F47FNB3UPmZkk3XgxnsY0dE6OJ5OY97nItlGqfv1nig=;
+        b=25QTTNR1gr/qNxOFt4KgxJmy+X+P9qgMg06xzXZUPudpM6mbF6bIcMMOloHobP2e4k15Ss
+        /FpS5Oy7H07w/4BQ==
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/6] irqchip/armada-370-xp: Implement SoC Error interrupts
+In-Reply-To: <20220506185546.n5rl3chyyauy4bjt@pali>
+References: <20220506134029.21470-1-pali@kernel.org>
+ <20220506134029.21470-3-pali@kernel.org> <87mtfu7ccd.wl-maz@kernel.org>
+ <20220506183051.wimo7p4nuqfnl2aj@pali> <8735hmijlu.wl-maz@kernel.org>
+ <20220506185546.n5rl3chyyauy4bjt@pali>
+Date:   Mon, 09 May 2022 10:51:57 +0200
+Message-ID: <87sfpjytoy.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/29 18:07, David Hildenbrand wrote:
-> On 25.04.22 15:27, Miaohe Lin wrote:
->> When non-lru movable page was freed from under us, __ClearPageMovable must
->> have been done. Even if it's not done, ClearPageIsolated here won't hurt
->> as page will be freed anyway. So we can thus remove unneeded lock page and
->> PageMovable check here.
+Pali,
+
+On Fri, May 06 2022 at 20:55, Pali Roh=C3=A1r wrote:
+> On Friday 06 May 2022 19:47:25 Marc Zyngier wrote:
+>> > I'm not rewriting driver or doing big refactor of it, as this is not in
+>> > the scope of the PCIe AER interrupt support.
 >>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> Reviewed-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  mm/migrate.c | 8 ++------
->>  1 file changed, 2 insertions(+), 6 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index b779646665fe..0fc4651b3e39 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1093,12 +1093,8 @@ static int unmap_and_move(new_page_t get_new_page,
->>  		/* page was freed from under us. So we are done. */
->>  		ClearPageActive(page);
->>  		ClearPageUnevictable(page);
->> -		if (unlikely(__PageMovable(page))) {
->> -			lock_page(page);
->> -			if (!PageMovable(page))
->> -				ClearPageIsolated(page);
->> -			unlock_page(page);
->> -		}
->> +		if (unlikely(__PageMovable(page)))
->> +			ClearPageIsolated(page);
->>  		goto out;
->>  	}
-> 
-> Hm, that code+change raises a couple of questions.
-> 
-> We're doing here the same as in putback_movable_pages(). So I guess the
-> difference here is that the caller did release the reference while the
-> page was isolated, while we don't assume the same in
-> putback_movable_pages().
+>> Fair enough. By the same logic, I'm not taking any change to the
+>> driver until it is put in a better shape. Your call.
+>
+> If you are maintainer of this code then it is expected from _you_ to
+> move the current code into _better shape_ as you wrote and expect. And
+> then show us exactly, how new changes in this driver should look like,
+> in examples.
 
-Agree.
+this is not how kernel development works.
 
-> 
-> 
-> Shouldn't whoever owned the page have cleared that? IOW, is it even
-> valid that we see a movable or isolated page here (WARN/BUG?)?
-> 
-> At least for balloon compaction, I remember that __PageMovable() is
-> properly cleared before freeing it via balloon_page_delete().
+Maintainers are not the servants who mop up the mess which random people
+dump into the tree. They are gatekeepers and one of their duties is to
+prevent that mess is created or existing mess is proliferated.
 
-z3fold, zsmalloc will do __ClearPageMovable when the page is going to be released.
-So I think we shouldn't see a movable page here:
+You are asking the maintainer to take your changes, deal with the
+fallout and maintain them for a long time free of charge. So it's a very
+reasonable request from a maintainer to ask for refactoring of existing
+code before adding new functionality to it.
 
-void __ClearPageMovable(struct page *page)
-{
-	VM_BUG_ON_PAGE(!PageMovable(page), page);
-	/*
-	 * Clear registered address_space val with keeping PAGE_MAPPING_MOVABLE
-	 * flag so that VM can catch up released page by driver after isolation.
-	 * With it, VM migration doesn't try to put it back.
-	 */
-	page->mapping = (void *)((unsigned long)page->mapping &
-				PAGE_MAPPING_MOVABLE);
-}
+With such a request the refactoring becomes scope of your work, whether
+you and your manager like it or not. If you don't want to do that extra
+work, then don't expect maintainers to care about your fancy new
+features.
 
-But it seems there is no guarantee for PageIsolated flag. Or am I miss something?
+Marc gave you very reasonable and consice directions how the code should
+be reworked. He spent a lot of time explaining it to you. Again, free of
+charge. Now you expect him to do your homework free of charge, so you
+can get your feature merged? Nice try.
 
-> 
-> 
-> Also, I am not sure how reliable that page count check is here: if we'd
-> have another speculative reference to the page, we might see
-> "page_count(page) > 1" and not take that path, although the previous
-> owner released the last reference.
+Thanks,
 
-IIUC, there should not be such speculative reference. The driver should have taken care
-of it.
-
-Thanks!
-
-> 
-> 
-
+        Thomas

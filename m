@@ -2,94 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D27152032B
+	by mail.lfdr.de (Postfix) with ESMTP id 88FE752032C
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239491AbiEIRIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 13:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S239507AbiEIRJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 13:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239562AbiEIRIL (ORCPT
+        with ESMTP id S239482AbiEIRJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 13:08:11 -0400
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 10:04:12 PDT
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F3462D570E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 10:04:12 -0700 (PDT)
-Received: from localhost.localdomain ([213.215.163.55])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id o6mpnGRcmrvmbo6mpnCu9c; Mon, 09 May 2022 19:03:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1652115789; bh=LVsltK9iEcTGK7OSkzv3VRUP3DRRbW6AQt/m9+GMyVk=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=g8iJ9JJXkLCycAh349eNyL//x1EZ4ypV7vmNaaTbBnEzpJtFNSoIU2vJ5sebw2Hg0
-         kiPc1bVoRiIMfkRJeej3Rsy7yjMvEHctHqCPYYYolh7n/PNHwoiYELhe0AgZk37Fxj
-         2+DZ1IN6eB7sKj72oxdQqMMA6oAWjZJob+4jJlrZBjXuigue8iLiL3Tr++4SVdJkE1
-         XtFkShHxJpdSwLhDaqHDRpt3ukSDhmvrE5s3jgCDWvzoLMRXkxGsquTN6C6VTqFAFd
-         SdXsFSVUEj3+8ekoRhuD0/eseRCAS3eibkRcLIID9FSJVjLVRzANNFJbHutksui0rx
-         NWbCYv+NOIrqQ==
-From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Subject: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr was already claimed
-Date:   Mon,  9 May 2022 19:03:03 +0200
-Message-Id: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 9 May 2022 13:09:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96042D572E;
+        Mon,  9 May 2022 10:05:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5615561549;
+        Mon,  9 May 2022 17:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5104FC385B1;
+        Mon,  9 May 2022 17:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652115913;
+        bh=hPfwttjDKS5VbKLDMyB6qPIDEclzcNRrUVoHj1607Ew=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OTOTLYS0FB6K12s3wLdBAHatQ/gPw/URa7FMCeRwDsRqNkqJ2Vr6MVsOaYgEJfxin
+         fEa1aW13gwgFn8IaUIXGzzovKUgZFdFqT/l+nKslxvB7JK6p47YegfSNx1dKGa+yLZ
+         xapl3b3irJ7GYIs+5LTT1heyYR8yr9LrCJCI184GvvK4T0tjHzQioZSa7n+JFG3+Ua
+         CoM979nY7j+OhgUKDdvlXuEY1LKuo7WY49x3PFowJ4A/CFd8sKxZZsUjbrz2s/kgUZ
+         sXjAt40dxcmeq6ysK6ccLxSe+cme/DiTtqK1D5DEEtcxcn7TFRmTK1zH3dCMf66BOD
+         jFUUB5TZZhpBg==
+Date:   Mon, 9 May 2022 10:05:12 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Akira Yokosawa <akiyks@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ben Greear <greearb@candelatech.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
+ __dev_queue_xmit()
+Message-ID: <20220509100512.719f9225@kernel.org>
+In-Reply-To: <4dd26a0e-819d-8414-8b71-1783e263209c@gmail.com>
+References: <20220507084643.18278-1-bagasdotme@gmail.com>
+        <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com>
+        <Yni6nBTq+0LrBvQN@debian.me>
+        <4dd26a0e-819d-8414-8b71-1783e263209c@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfL3pMpetwi3Y3IAoKunxzsMB5CMuj+1LhO4mLMoLUaFmfbwFEG2Rv4e8f9BIDJC2Y4tMd+YwDb+VnqVfRAzX+jTIwP5Rfvwc3ENHeVCPfCoWW3KJz1ON
- 4NZSj1W1woWxyQzHV6xmnGrt9L8SJiMKs4p32fLTapb/xnJG76SxsQ+2aTXLbbNH64B06SRxEW1bys+wEBrv75kPgHq6vdoV8psVYLhqdHrqbwPDZbOOs6BL
- x7N62RW1X4QvRGhJRBqG0o4wRRf6QG5EfZ5cdqi/07wWjoJMm6jNs4UwzvSxXmtGxecBC58k12zgRxnn44veiKL6Ij2ue48/IgtPhcz8WOtSY3z9W5Cb6QEq
- 54PFEtWwo1nViD92AW4Ojx4wtFlQcjpjVxgLql2gNisVXh4QlI35QJBlzMuQ13QFqIfGUFxfxyvdj6tbR2awlVf7VkkX8zwohPknQLGpHCRC17vno3cTIvxE
- sbTitJCH3BXLd/OlLpPGP62T26BBRfpFMVPnlVNA1IQBw/fS9y95zLGBSWiwgIUnFaFLYN1s5PGrSjY6g2xRtZu3AW69vZBu1P/rzMYOtOJvh9+GMc7w60fx
- 0JFp6nIqSwbgPrHhTCbLfYXhPc7u8L4Klm7BKdgBHPgJf6WIi1oTtS9+1iUp/6wEoQJhE4x8zpN5LBmlJNB5yg88HnjiyXrL57GnwYCiE9LzSg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is not explicitly stated in SAE J1939-21 and some tools used for
-ISO-11783 certification do not expect this wait.
+On Mon, 9 May 2022 13:59:48 +0700 Bagas Sanjaya wrote:
+> On 5/9/22 13:54, Bagas Sanjaya wrote:
+> > I'm in favor of this patch. Thanks.
+> 
+> Oops, I mean I'm in favor of your patch suggestion.
 
-Fixes: 9d71dd0 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
----
- net/can/j1939/address-claim.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/can/j1939/address-claim.c b/net/can/j1939/address-claim.c
-index f33c47327927..1d070c08edf1 100644
---- a/net/can/j1939/address-claim.c
-+++ b/net/can/j1939/address-claim.c
-@@ -165,6 +165,12 @@ static void j1939_ac_process(struct j1939_priv *priv, struct sk_buff *skb)
- 	 * leaving this function.
- 	 */
- 	ecu = j1939_ecu_get_by_name_locked(priv, name);
-+
-+	if (ecu && ecu->addr == skcb->addr.sa) {
-+		/* the address was already claimed with the same name, nothing to do */
-+		goto out_ecu_put;
-+	}
-+
- 	if (!ecu && j1939_address_is_unicast(skcb->addr.sa))
- 		ecu = j1939_ecu_create_locked(priv, name);
- 
--- 
-2.25.1
-
+I think I already said what my preference was. This is a trivial
+matter, let me just send a patch myself.

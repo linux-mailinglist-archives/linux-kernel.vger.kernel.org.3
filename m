@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF42520409
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 19:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B44520411
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239992AbiEISBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S239948AbiEISEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239970AbiEISBg (ORCPT
+        with ESMTP id S239891AbiEISEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:01:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D2C1F7E35;
-        Mon,  9 May 2022 10:57:38 -0700 (PDT)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4KxpmK07cmz4xcY;
-        Tue, 10 May 2022 03:57:37 +1000 (AEST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxpmC2sCwz4xVP;
-        Tue, 10 May 2022 03:57:31 +1000 (AEST)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Potin Lai <potin.lai@quantatw.com>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH v7 11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
-Date:   Mon,  9 May 2022 19:56:16 +0200
-Message-Id: <20220509175616.1089346-12-clg@kaod.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220509175616.1089346-1-clg@kaod.org>
-References: <20220509175616.1089346-1-clg@kaod.org>
+        Mon, 9 May 2022 14:04:07 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E35923109D;
+        Mon,  9 May 2022 11:00:11 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id p18so17202892edr.7;
+        Mon, 09 May 2022 11:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xRBXx928dagw+3e9EPYrB5itePsWk8eOmqf8pq2vamA=;
+        b=RNexsFbRx1gQtdbWYE5hw4OJCI3HtPhqPUD5BUFamEViXuYg5ZmePtst0py1FQddKo
+         JChc+QzblTpxWVJOpOS38IPJ1kKZc2Uf8lJuvh2Wvk8tsJVPJSIijstdRvFLjm30B8kN
+         JRYRTWHjrXWXjVAK3Y6PmVuZcLB1+XuJntTCdHMqPNJ9eW5HKmz74TmtfA2mEDM/be7d
+         vdBDKUE1bAH2yugKRz6iNCqdlTc/J/DkabnHJ+S9DczdhEVf5VeIbG9zwIa/HCeyECz3
+         xUeTSVWL29mSNK6Y5Yw4h/SLWYRJrxxOy7FMZN9cDEEtRCNG2ft4/nfx5fHqdgyzlorW
+         oDag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xRBXx928dagw+3e9EPYrB5itePsWk8eOmqf8pq2vamA=;
+        b=L2s0/sotDe/Zus3qc24u1FpHd9Quk+HsrnZMEes7NetUoWXj0q3wqpPTavNbQpmuDV
+         FS7mqP1GLBRZlAPWSFIToZPpUqzt20B6PW6XIb9HJQBMcmIqSbGyFiCuFnUaI2VJryuV
+         wxlkbhu7QpYTiBlwQKSEjagB2eO0D2jl2TlIQpuHTf0x9TtzNQ5g/M/XCA0aN0FrB1lm
+         EA2A8u+/wGcHsVzr7dL8XMmMWmOIJHIaeD63zuQjpj3MZLoL0RBU1htVthBALkS6wf/v
+         9mew/7H86AjX9vDw/eTptjP3rOayp8ZplKngwQ1+d/Q8PRf9frT82AzN47EiqYUegeiX
+         wHeA==
+X-Gm-Message-State: AOAM533pRa1LkYlChnW8bLCTBXwkhRIexKejzpzVzxgSrP3UW5P+Iph/
+        a3FQTGyRqvPc9tJZzl68Q1/9KjkS5FZ+1PwDWj4yYRNYDZN4ckJfkso=
+X-Google-Smtp-Source: ABdhPJwTVcHGdp+naHV+dUtWIr1b/VP6pyxUqV4WzQ+FWdmKeMBYD9rAUysZKVyHEV9Cb99QhXlNT+9auh6Atk7H9k0=
+X-Received: by 2002:aa7:d350:0:b0:425:e029:da56 with SMTP id
+ m16-20020aa7d350000000b00425e029da56mr18665027edr.296.1652119209687; Mon, 09
+ May 2022 11:00:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com> <d76c13b2-16a0-d53f-0cc9-562fa96f373d@wanadoo.fr>
+In-Reply-To: <d76c13b2-16a0-d53f-0cc9-562fa96f373d@wanadoo.fr>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 9 May 2022 19:59:33 +0200
+Message-ID: <CAHp75Vca60m+mkPDzh022B4pU2sng8-ZLoEK0POLQON3EWjBKg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] serial: 8250_dw: Use devm_add_action_or_reset()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Potin Lai <potin.lai@quantatw.com>
+On Mon, May 9, 2022 at 7:49 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+> Le 09/05/2022 =C3=A0 19:21, Andy Shevchenko a =C3=A9crit :
 
-In AST2600, the unit of SPI CEx decoding range register is 1MB, and end
-address offset is set to the acctual offset - 1MB. If the flash only has
-1MB, the end address will has same value as start address, which will
-causing unexpected errors.
+...
 
-This patch set the decoding size to at least 2MB to avoid decoding errors.
+> > +static void dw8250_clk_disable_unprepare(void *data)
+> > +{
+> > +     clk_disable_unprepare(data);
+> > +}
 
-Tested:
-root@bletchley:~# dmesg | grep "aspeed-smc 1e631000.spi: CE0 window"
-[   59.328134] aspeed-smc 1e631000.spi: CE0 window resized to 2MB (AST2600 Decoding)
-[   59.343001] aspeed-smc 1e631000.spi: CE0 window [ 0x50000000 - 0x50200000 ] 2MB
-root@bletchley:~# devmem 0x1e631030
-0x00100000
+> we already have several time this function in different drivers.
+> Maybe, it would be nice to have something standart for it.
+>
+> A devm_clk_prepare_enable() or something devm-helpers.h ([1])
 
-Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-[ clg : Ported on new spi-mem driver ]
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- drivers/spi/spi-aspeed-smc.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Seems you missed the full story. We tried to add that several times
+[1] and CCF maintainers refused all the time. You may work with them
+to convince them.
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 35f6934847b7..496f3e1e9079 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -474,6 +474,8 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi,
-  *   is correct.
-  */
- static const struct aspeed_spi_data ast2500_spi_data;
-+static const struct aspeed_spi_data ast2600_spi_data;
-+static const struct aspeed_spi_data ast2600_fmc_data;
- 
- static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
- 					 u32 local_offset, u32 size)
-@@ -497,6 +499,17 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
- 			 chip->cs, size >> 20);
- 	}
- 
-+	/*
-+	 * The decoding size of AST2600 SPI controller should set at
-+	 * least 2MB.
-+	 */
-+	if ((aspi->data == &ast2600_spi_data || aspi->data == &ast2600_fmc_data) &&
-+	    size < SZ_2M) {
-+		size = SZ_2M;
-+		dev_info(aspi->dev, "CE%d window resized to %dMB (AST2600 Decoding)",
-+			 chip->cs, size >> 20);
-+	}
-+
- 	aspeed_spi_get_windows(aspi, windows);
- 
- 	/* Adjust this chip window */
--- 
-2.35.1
+[1]: https://lore.kernel.org/linux-clk/20210304221247.488173-2-linux@rasmus=
+villemoes.dk/
+(the latest one AFAIK)
 
+--=20
+With Best Regards,
+Andy Shevchenko

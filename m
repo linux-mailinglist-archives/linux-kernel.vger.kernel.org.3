@@ -2,69 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4659B51F3BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E8E51F3B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiEIFOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
+        id S231901AbiEIFP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiEIFLS (ORCPT
+        with ESMTP id S230252AbiEIFMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:11:18 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE9C50013
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:07:25 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k126so7701465wme.2
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 22:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bdhxBHkeZJKhLSAPI6OAJv4xkfu7sQGGwYGe9PwcdxY=;
-        b=NcUwvkHBJUKCv0MFOi0aoimKs0nJQK03BTN3eOVPeiwTolHlhov3OuBgLwnc613hjZ
-         D+vg5/Kr1EdeTsBtz/UTHpY53F8sayW0x4Z05Q469bh2TCvnRUUM9gSbkyI/Ni1gPQLE
-         RCxch8rhsnYcYKxi3lWtFVyMbCjAqTWJMVsYygV8X/enVf8x71AJ/991FvAQdSsPljg+
-         TMay8lCypCIRilGJdXsvQpOKwT3tF5E7WlIPRSNBm0rPFsFQukMIqSidMBTz4XSQbuZn
-         JfHggLWPByhiIq/F9nBtYUa7lNYxtAxH6l42cHcX/zZc2XJHUtMBSRjaCKbXiTKGd96k
-         F4AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bdhxBHkeZJKhLSAPI6OAJv4xkfu7sQGGwYGe9PwcdxY=;
-        b=QvX9Z5E1g9AGopAI0KEUTx2dQOSXmRcEpuXPybHgJRM/+oBMMk16xCRsZrWTZMPBw9
-         5UpZIr6FR2c6TYtNMr95VudB6Uram3Zzl/dCbxSYRKtdfpFbad+S6XstELGdbF/SrT0t
-         JXTz94Gr1CeHrrB4cqxNGzOnU34k0XevAL961k2f12FWovcVmBP/iPN/6MUKt9/6LDYh
-         VQvrpX5/fxlA3zwmISU3WVYymCNjTyHQMnRbNcZ0Pjh0eUAqbQUvY2FZTYu5c0K0Raxu
-         /hh02IoUKNMHaTfQuLDh29FqgxtBz/Q/6O+HMdDn+Hdijra8MAS6NHEj6EM/9FHQ8Sb4
-         yveQ==
-X-Gm-Message-State: AOAM532seAKmrRyPDB1Lh0ueWtlxOMYXDidT9pS+6+68p4X/ynUD9Axx
-        WbUIQc7INu/K16uIFADKqlNs6c62LUHkf3+fY+Xidg==
-X-Google-Smtp-Source: ABdhPJyRvxJOp8dQf/hnmLk5CPnu/T4DwM8Qpg0kXrVvEiVm0ZjDRLI/md+TzxFB02jc58meQUAs1NVUyDWkIjd5bqw=
-X-Received: by 2002:a05:600c:3caa:b0:394:8fb8:716 with SMTP id
- bg42-20020a05600c3caa00b003948fb80716mr3482746wmb.105.1652072844025; Sun, 08
- May 2022 22:07:24 -0700 (PDT)
+        Mon, 9 May 2022 01:12:31 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07olkn2105.outbound.protection.outlook.com [40.92.15.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD618342;
+        Sun,  8 May 2022 22:08:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O1d3hvk+5hBAEMw0ki4XMOi/acQfG2zFDmPg2ho6/oTdYSHVb9rocnV5Q1ordbrnUfsQ6wvvpkLIs4WtzXwkE+/GODUls5i/wy5e9QdBAzP0CbUb7ru7FiAhp9d6Ms4NVQv0+EFwAFNBjbtR44Me6wOdcTQMppPO6T9kn3NTi7Snlxk+pcokUERt3NgTB3y6F+br92FaAogrHJV4WAlRQ03+AKP76kTsMWjqlL7aubpw8KpytBpGoNqidmfgXG63qSx7LBGaDcCVDYGODXeAwiQbkXScgUEg5QQxmrbXm8DMdYDqK02q5GSXmZ3tzGoWyMi8B0rKJdVONolxrhU6Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X4hYLaRJ7goFB2pH7XIGgHf7rPaDjljSWFZJhCc+sxM=;
+ b=LxkLMqcb64Gh1j8uWNohVwdIonWbSRBCQK1oVJDCTG3T3x0Ie+7vpXSf8qXQ+4A4+0wQiRR2Sku4BD/Cz+B7CCRy93jAM2b557CsSCKsO9eYy+p9R0FOyh7uk/20HdBVzOiWNkkYzMNFDPu3vM2WUxpWLDPFbcWMqyDm8jawxDjgTFQW3RLl0xIfHLdvLWBuEDppeOCs0M90F23sk1TJFIGRF0kBu3VSemRmuJZILzEOTC50vkYB3iI5HVwwO7UkcjzcYUUfumDmCN6YDlKFf0LAo5pdhhu8pebu/YUgZbjtYIrufDmkj1VUdLpFwtedxv+hm8TdossX6NZ++8ea7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
+ by BYAPR02MB4839.namprd02.prod.outlook.com (2603:10b6:a03:51::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Mon, 9 May
+ 2022 05:08:32 +0000
+Received: from BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16]) by BY5PR02MB7009.namprd02.prod.outlook.com
+ ([fe80::303a:ab1:17c1:2d16%9]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 05:08:32 +0000
+Message-ID: <BY5PR02MB7009A604AC912DC78FAF42A5D9C69@BY5PR02MB7009.namprd02.prod.outlook.com>
+Date:   Mon, 9 May 2022 10:38:18 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+To:     krzysztof.kozlowski@linaro.org
+Cc:     airlied@linux.ie, clabbe@baylibre.com, daniel@ffwll.ch,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        fanghao11@huawei.com, jo@jsfamily.in, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org, sam@ravnborg.org,
+        shawnguo@kernel.org, stano.jakubek@gmail.com,
+        thierry.reding@gmail.com, ~postmarketos/upstreaming@lists.sr.ht
+References: <2ab35af2-b067-4243-35ed-a592a7046374@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: display: Add bindings for EBBG FT8719
+Content-Language: en-US
+From:   Joel Selvaraj <jo@jsfamily.in>
+In-Reply-To: <2ab35af2-b067-4243-35ed-a592a7046374@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [u74+zylxvnzsghSPmLvjs/1Tuo1DFy98F5aJcBSEADMOPzYQvTIR4jeFQCrYeYUI]
+X-ClientProxiedBy: PN3PR01CA0102.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:9b::23) To BY5PR02MB7009.namprd02.prod.outlook.com
+ (2603:10b6:a03:236::13)
+X-Microsoft-Original-Message-ID: <d9d6bcd5-9845-e220-c72c-aab5c4c82e93@jsfamily.in>
 MIME-Version: 1.0
-References: <20220506094512.116729-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220506094512.116729-1-jiapeng.chong@linux.alibaba.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 9 May 2022 10:37:12 +0530
-Message-ID: <CAAhSdy15CE5ZUROH-mOwhpR0AuwsK8h+8W-Kd0jxwsTixpQOQg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: riscv: Remove unneeded semicolon
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        KVM General <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 690e3eae-3cb5-491d-0e82-08da3179f5cc
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4839:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4CMa+ehVjkAcETNvhMluL7lTlsftiRbFFPIXSibhau15TQxVj/vI0loXPoneDcfDl9NXFgFJMJpuJNyp1RvmBRQQd6PVr9Fcos7Emi7sq9nzp74giZcLc1YZL9B8AZuFpxrK7Ag+6R+V2xmAS9t9t6mSspNpj/bqHFwkIv+l6BMOmOyg58rA0g7b2zkJimVGviL34BEPRcDmWtFQ9n9ujneSy1W25EQp84lpXg+14Ms4DfNJRYOxXgedNDXIahA/87dth0L5xIZWmD2k7zekkFwX87FRHdgcRquWPhYv/X0zUh6pNZdJXiH6N4GxiBRzNx0BoVcbFEN+mjHSLCop0q2Q/EbB97U8YYOScZ/VSWC33gpcsxl1XB8G5sV6AZNGUA0El+Zk0/79YaXpLU46Vk+9MlqgCEGGv2koInNglnQPUi96JBizOdUpcfbD/Ft/RfgMbTB6WBDcHuTHLd318j2lG68GuhGgOW9j7j1sQlZndfEJUSvNfQwItl1BM83eF+uXzc9uI5Tw9oQoUBu5Esmcc06tV2KnpvDZYXKVRxBZ1vzY3s4n26/YWGnOLiJEoqBj53SN8M+cbOMHnfn0cezVEINm/XLJ/okqH2PSmb/SExCiebHVQr4jWYTxRdPa
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzRqNDFiTzludnNzRGdseXEwTUpCY2ZIOHMyaFQ0TjZuaXRyN011L2I3Z01x?=
+ =?utf-8?B?bnF2VldnT1grS1FtdTFCaW4zeDdmcFFoSVczYkRnQjR3cWpzMXFvOFhZRGMx?=
+ =?utf-8?B?RDM1NUQ1N2tzYWNOenp0WEZiYnNGbnJUbzlNejBKZkwwZFoyLzJHWWxWT2VR?=
+ =?utf-8?B?c1BKQ0QwdWl0UkRENUFyajNtUXo2ZmttNnpJOGdzdzNuZFBIQi9XUUs0RFF1?=
+ =?utf-8?B?VzNjNHd0YUoxd3dCeE1ORlJCaGNOdjFtbUZZYkpnajNUUG9EZ05jUDJIWmQ0?=
+ =?utf-8?B?VXZhU3hHVEFxTjdSQldpYk02aWFMTVRPOTZKSlI1blU4SjZERlgxN3RNOW05?=
+ =?utf-8?B?KzV1dGJ1QWZzKzJTaS9WV0QyZGszdVlXd0g4ZFV1bFFjR05iRnJTcjBQYXRs?=
+ =?utf-8?B?RHlUSzJJcGVWMFNBN3EzRWJzV2h6S0V1Q0kya3psV3RYaUxnM1dxWTlrdDR6?=
+ =?utf-8?B?R1R6R0hFYnhoUkl4Q2xnNmZha2FmUDgwZS9XWmN5cXFRZWRVYXFwQjM3bXJO?=
+ =?utf-8?B?L08rYS9mUlgzQ3ZJYzdDbExYZXRvUXF5elA4UXlmMGJhZWo3WnNjZldkTkg2?=
+ =?utf-8?B?UHgrM3NBU0xPOUhFc2k2eFllVzBGbXd1bzRqNzl0Um9KRzBqUXBYOGNScDFk?=
+ =?utf-8?B?N0R6Q3IrODlWWVhIWWFWRmhiakUzdkovZXFYdmowNGV0ckFwdHpuZWs5R0Zh?=
+ =?utf-8?B?S21ENGRpUWNIODhDekVqdmxCbU9rZExQTUF6UmtDVHg2UTM5VlVLMHM4SnZk?=
+ =?utf-8?B?dU00YWJ4bnlWckVrV1ZvYU91SkVBSDRYMkRvcTZSV0hSSE1hdWsrQjJ0RFJP?=
+ =?utf-8?B?d1J5ZWFKekpiYllqZ3NudWZWUUhQR0p0MHhDUnVhMksvSTJZMlcrenpTZ3Uz?=
+ =?utf-8?B?T0VCTHhKU2FpVExrRjZMQXE0SkEzNXRDaFc4TzdRT014cmEvbXc5dElHaUw1?=
+ =?utf-8?B?TU5NREN1Wm8wOW5HeGJyaEtST1RRR2hYd3dsbmNXL21tTXVqOCtjVkpReTRt?=
+ =?utf-8?B?TzhDeUV6R1ZaK1dGSVVYRDVBRGJpZFlLYlhnbUtHZFhIUCtYQmFkYzZRZW8z?=
+ =?utf-8?B?U1V0cEFwQ3c3RDU1MFI3cnI4ZGFsazNpNkZFOUU0eTJwaHplVFJQT2d5eUJT?=
+ =?utf-8?B?eGFKK1lSMkJsYTdzbGZ3Rll6ZUlOYU9ocDloVGF2S1Z0eklCUlphTU5ZZnJo?=
+ =?utf-8?B?b2ZDMFpRcXhqQ25tb1RPTlpEd0luL2V1YjIzWkRaR0laS213Y0g2ajZyTGRx?=
+ =?utf-8?B?S29PejBZT2Z1djJRa05tdTFjaGhzcjlqVk9vemVoTi9Zb3NOY0ViY0ZoekVk?=
+ =?utf-8?B?UWJSZjl0SmJjMVE4WWtWbWlkb0kxVDA2RGl0dEMwcTg3djlveDEzRzlta3BR?=
+ =?utf-8?B?eTRtQnV0cVZldDFwOFViKzlCdzg4bHdZZ2dCSzc2TXpPMVc5emNNTU5DdU5u?=
+ =?utf-8?B?ZDZnT3cwUjZvQUJXWWFyL0RZUjdETGNWM25YWWhVRGFGYWR6cUhoN1QzNDVD?=
+ =?utf-8?B?aEc5SFpCeFp6TUV2a2p5M1BTMlZaeDJzWTVOOWJBNVVQRDRKeVphK1hxTk1h?=
+ =?utf-8?B?V0dSUWM1ckFKVzNOQlpTWEhHTmd2Qk1JU3pCeThFeHdMajk2cHIyRGU3NVAw?=
+ =?utf-8?B?MW1PTW5TMmhQVCsxZWZNYnN0eGxmREZXM2FhNm5FUHR5cFhuakxKZk91Z2Np?=
+ =?utf-8?B?dXYrZGpaUjFuam5kZ3Q3aW0yRnBYN3pNQTRDWFhNSjBZMENOYXhvbEhrNGVS?=
+ =?utf-8?B?T2RhT0FiUGJaamo5KzhQWjFCVDFpWFp2cENDYzBPTjRmQzJaa3dML1FRRTdn?=
+ =?utf-8?B?UlIwWkxKbDhaQWV4VzNleU9DRnBhZldFbXUrQ3JsYU5pNUR3M2RNZFpnMnpV?=
+ =?utf-8?B?RnlsVWRQcGlDTFVFbEJ6WFlaUzFCNGpmOFNDNWpPZFdBWkszTGx5ek1ibHF6?=
+ =?utf-8?B?TVhJYWtlNDJwY3lPUG45c0E5WWFtNENSZXhjWlFRSU1DZ3hLNkRjdFB4cUcr?=
+ =?utf-8?B?OTY0ZklOUmp3PT0=?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-99c3d.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 690e3eae-3cb5-491d-0e82-08da3179f5cc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 05:08:32.5951
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4839
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +118,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 3:15 PM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Fix the following coccicheck warnings:
->
-> ./tools/testing/selftests/kvm/lib/riscv/processor.c:353:3-4: Unneeded
-> semicolon.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Hi Krzysztof Kozlowski,
 
-In future, please CC kvm-riscv@lists.infradead.org for KVM RISC-V related
-patches.
+A quick question.
 
-I have queued this patch for 5.19
+On 07/05/22 21:02, Krzysztof Kozlowski wrote:
+ >> +  backlight: true
+ >> +  port: true
+ >
+ > Both should not be needed - they come from panel-common.yaml. They might
+ > stay in list
 
-Thanks,
-Anup
+I see that almost 54 panels mention "port: true" and 46 panels mention
+"backlight: true". Almost all panels refer the panel-common.yaml too.
 
-> ---
->  tools/testing/selftests/kvm/lib/riscv/processor.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> index 3961487a4870..e17333518af2 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> @@ -350,7 +350,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
->                 case 7:
->                         id = RISCV_CORE_REG(regs.a7);
->                         break;
-> -               };
-> +               }
->                 set_reg(vm, vcpuid, id, va_arg(ap, uint64_t));
->         }
->
-> --
-> 2.20.1.7.g153144c
->
+So I think specifying them as true is just for extra clarity that
+these properties are usually used by this panel? But I am not very sure.
+
+Should I leave them be? or it's still recommended to remove them?
+
+Best Regards,
+Joel Selvaraj

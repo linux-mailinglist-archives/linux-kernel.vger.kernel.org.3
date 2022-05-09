@@ -2,103 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D74F51FCDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A2D51FCE3
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbiEIMdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S234492AbiEIMf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234532AbiEIMdO (ORCPT
+        with ESMTP id S234475AbiEIMfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:33:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6817F273F48;
-        Mon,  9 May 2022 05:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652099360; x=1683635360;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qMvEPRtoB+d3/whBmM3c2zEnnc5nXdnRsTyVqxph14o=;
-  b=l8IF8etC+HnM3NycSrq2EyBFo0nnIvGjH1fmlyBsQclF4RUmeRDMc0Hh
-   JaatiTlRh3iOWZLvbBWT3DAoUzzq6/AC+nG6P7YOx8B1rLhWjpo6J5ufq
-   Kork1mcj3jjL9tMl1EueOnbEYt8mGReqTcaaMVv4bzwW8FkNPxC/2Qm+M
-   7RGw+sO/nv40UFfIiJ4WLYgrhUW3ro4OZjc8jDxz9NkIwypsJnCWic+It
-   tfdJdIakkP+4yt7QTjKhMCV72AfibfBmppE03BSTQVlymB8ngJZ5h6Pxe
-   fspPJ0ZuZe7rs3YU34S8QOTtcm6OBuIhbmPrDwhddRpLhhWZ9JZlh4C1N
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="269172496"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="269172496"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:29:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="738142548"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 05:29:11 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1no2Vi-000GVC-Dp;
-        Mon, 09 May 2022 12:29:10 +0000
-Date:   Mon, 9 May 2022 20:28:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cindy Lu <lulu@redhat.com>, jasowang@redhat.com, mst@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v1] vdpa: Do not count the pages that were already pinned
- in the vhost-vDPA
-Message-ID: <202205092058.if9wModg-lkp@intel.com>
-References: <20220509071426.155941-1-lulu@redhat.com>
+        Mon, 9 May 2022 08:35:21 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EABA20AE43;
+        Mon,  9 May 2022 05:31:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxgWp3pt1z4xXh;
+        Mon,  9 May 2022 22:31:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652099485;
+        bh=SaSGAWOIlHMiL03aULPz9oOhk6sxCFXHchcnqd+bBpA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PbX2S4d5oYkLXdvSGuVI7LqILlKlaziIAHMrU2vKHXvTe6E99DYJR/x2ZurxyP/Je
+         7aHELqir2k3dFvZPoTSHM/jeMpXpv2+YFxTNhcCZ8Qstt+S9P+pHZYY2oBu5os1xdZ
+         myKlub3bTkUWD6ekYYmZ1R0ueDrjMWqE7lnH6WvdxsyDzIIKvfjsTNeNYFBZ4VD+ye
+         EE4lAHSPR/UlLEivLGaVOUPqxAG4e3qB4rZ4lSA4eVckw92N9TYCr7ZfGgGlhaxhlW
+         TJp6Eb72phdng6mKi+w8+aPbBpiKZUuU6MM/LHyT2FKpLUoCZ1qqLmRxBOZX1rG9wj
+         PNkNm4ObBPm5w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH] bug: Use normal relative pointers in 'struct bug_entry'
+In-Reply-To: <afddb4548e93f6458ec1d9ec185a834c348eda33.1651798983.git.jpoimboe@kernel.org>
+References: <afddb4548e93f6458ec1d9ec185a834c348eda33.1651798983.git.jpoimboe@kernel.org>
+Date:   Mon, 09 May 2022 22:31:14 +1000
+Message-ID: <871qx2ubu5.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509071426.155941-1-lulu@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cindy,
+Josh Poimboeuf <jpoimboe@kernel.org> writes:
+> With CONFIG_GENERIC_BUG_RELATIVE_POINTERS, the addr/file relative
+> pointers are calculated weirdly: based on the beginning of the bug_entry
+> struct address, rather than their respective pointer addresses.
+>
+> Make the relative pointers less surprising to both humans and tools by
+> calculating them the normal way.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+...
+> diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
+> index ecbae1832de3..76252576d889 100644
+> --- a/arch/powerpc/include/asm/bug.h
+> +++ b/arch/powerpc/include/asm/bug.h
+> @@ -13,7 +13,8 @@
+>  #ifdef CONFIG_DEBUG_BUGVERBOSE
+>  .macro __EMIT_BUG_ENTRY addr,file,line,flags
+>  	 .section __bug_table,"aw"
+> -5001:	 .4byte \addr - 5001b, 5002f - 5001b
+> +5001:	 .4byte \addr - .
+> +	 .4byte 5002f - .
+>  	 .short \line, \flags
+>  	 .org 5001b+BUG_ENTRY_SIZE
+>  	 .previous
+> @@ -24,7 +25,7 @@
+>  #else
+>  .macro __EMIT_BUG_ENTRY addr,file,line,flags
+>  	 .section __bug_table,"aw"
+> -5001:	 .4byte \addr - 5001b
+> +5001:	 .4byte \addr - .
+>  	 .short \flags
+>  	 .org 5001b+BUG_ENTRY_SIZE
+>  	 .previous
 
-Thank you for the patch! Yet something to improve:
+Embarrassingly, we have another copy of the logic, used in the C
+versions, they need updating too:
 
-[auto build test ERROR on mst-vhost/linux-next]
-[also build test ERROR on linux/master linus/master v5.18-rc6]
-[cannot apply to next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
+index ecbae1832de3..3fde35fd67f8 100644
+--- a/arch/powerpc/include/asm/bug.h
++++ b/arch/powerpc/include/asm/bug.h
+@@ -49,14 +49,14 @@
+ #ifdef CONFIG_DEBUG_BUGVERBOSE
+ #define _EMIT_BUG_ENTRY				\
+ 	".section __bug_table,\"aw\"\n"		\
+-	"2:\t.4byte 1b - 2b, %0 - 2b\n"		\
++	"2:\t.4byte 1b - ., %0 - .\n"		\
+ 	"\t.short %1, %2\n"			\
+ 	".org 2b+%3\n"				\
+ 	".previous\n"
+ #else
+ #define _EMIT_BUG_ENTRY				\
+ 	".section __bug_table,\"aw\"\n"		\
+-	"2:\t.4byte 1b - 2b\n"			\
++	"2:\t.4byte 1b - .\n"			\
+ 	"\t.short %2\n"				\
+ 	".org 2b+%3\n"				\
+ 	".previous\n"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: x86_64-randconfig-a014-20220509 (https://download.01.org/0day-ci/archive/20220509/202205092058.if9wModg-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/4225cc2a756b75d1e0ff7ca2a593bada42def380
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cindy-Lu/vdpa-Do-not-count-the-pages-that-were-already-pinned-in-the-vhost-vDPA/20220509-152644
-        git checkout 4225cc2a756b75d1e0ff7ca2a593bada42def380
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+With that added it seems to be working correctly for me.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
->> ERROR: modpost: "interval_tree_remove" [drivers/vhost/vhost_vdpa.ko] undefined!
->> ERROR: modpost: "interval_tree_insert" [drivers/vhost/vhost_vdpa.ko] undefined!
->> ERROR: modpost: "interval_tree_iter_first" [drivers/vhost/vhost_vdpa.ko] undefined!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+cheers

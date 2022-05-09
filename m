@@ -2,99 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC17351FD7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9E051FD81
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbiEINFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
+        id S235072AbiEINHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbiEINFe (ORCPT
+        with ESMTP id S234704AbiEINHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:05:34 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA8A23276A;
-        Mon,  9 May 2022 06:01:41 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v11so12186586pff.6;
-        Mon, 09 May 2022 06:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y1VOSZIWCzEJ86cq6oZntFD5lbrlVmxkCTqvxbTsuTg=;
-        b=jgUIdCH57g47g1kCfaLFMEKd8m5jeXbyVawyaJj232M3GU+h8G3dL1Gk9v7nrMMpO2
-         nn7aJa8eFXLCk5tZgGSnluGzwjVN7ZheU0rl8a/Ukt9+s2pknnBXAi4xVYXmkpNQmydg
-         TeJjI/uce80Nd582K7gKB8G2av4nig3agDO/v6hJcHvfNCyeeUbxBeSZp5lkgnRwBalE
-         q8VzetIqmsiXy+wmKubGCBPEa04ZjxSk9gUYSjqfYaa95+vPAPfu3u9jpS9lnU5lm0v3
-         L1bOvrHFJzwCKQovFTQz/liWQ3pugbSfn5WPvY+/A1mgVs66yvqjhDT5tBygAs/Ej+1E
-         6t2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y1VOSZIWCzEJ86cq6oZntFD5lbrlVmxkCTqvxbTsuTg=;
-        b=oxXYZd9P3gqy+Coy0L/kr6LPnNpDT6Qolb23/WTx6d5H0QflgJicZqdyoHRh4gEA5E
-         8LhCchq/goQZSqlw6ScvHg5pcppyY9L9twuQf6Ejuf8LgQblqesRixkwAkJ9pDU/LAGm
-         HZcSwMgJLfvNHqQOsNoxUdHRGiIlEUrZSVVGfoX+Yr3dwEmgv/H4RnlD+TD2iaaM9m5H
-         nUIAHs+dohBqAhP5/UpCjVrJ1uLuB0BKfgDHwajzT9hNZa8A9qnPEDM3u6XitX/WS419
-         qanA0xPb7mMOxWlVGV7XKSMlvkPizT0yhv6lPMI6hf4mqI2MSqZeTDa4GlKqTylK0mPz
-         39Ig==
-X-Gm-Message-State: AOAM533E6TgqmyQSdnhpH8PCfvhb6TVnMefOCT/y0rBNJafzzKELRVWc
-        8QmLRUCBajyWBbtUuUH8zOA=
-X-Google-Smtp-Source: ABdhPJwu0d4G31B2Ybkf88smk0c0f/5f3pumQ7oaxiA37CVPclKAOlLQKZhUVG8BH35wkrDcOq0vsQ==
-X-Received: by 2002:a05:6a00:234f:b0:4f6:f0c0:ec68 with SMTP id j15-20020a056a00234f00b004f6f0c0ec68mr16349283pfj.14.1652101300366;
-        Mon, 09 May 2022 06:01:40 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.89])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b003c6ab6ba06csm2891487pge.79.2022.05.09.06.01.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 06:01:39 -0700 (PDT)
-Message-ID: <78e001bd-42bd-5481-5a19-1a0bcca9a63c@gmail.com>
-Date:   Mon, 9 May 2022 21:01:33 +0800
+        Mon, 9 May 2022 09:07:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D02A3BDC
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:03:27 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652101406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x/zYYkDp46T56YvlQm4HC+fLbVjJRANPrhmHN/ReK5Q=;
+        b=NZ0CicO5dQCrwn1cQlEBnFXfBkpjn7ZGBBw5h5B90dBKvV31xThEGM73JjR9KwKmWlFzvk
+        P/t4wgd0d6X6NmXaH/Ferau02+JWlGQb1/w4e9SXAXLnH3eeHVbGUmamyt8uzxWG7GE4x0
+        VDMzif/2TmU1PZ1m5m0Jto9ZcjbawHDJAGt36nwDZgXyTeZ7+Pxu8y5FNgJ98q3pzI5+mY
+        KYa+M1xJNiSaNVrhpfmDlQnx0RxBeqe5IHjYdzTMJaIl/iwY+5dqtwqV/AGkaA1/l7MHY1
+        +IOwY20s64tr64xjeFCx1l4ms1b02PRwvAWanFoE8buoGv6lp+GtxJMR+9CnKg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652101406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x/zYYkDp46T56YvlQm4HC+fLbVjJRANPrhmHN/ReK5Q=;
+        b=ImyS8LgqMEt8qLtMCih5THBPRvQBDfT0bn+sgJLLGSfMcLuL6PrBEAVB9RBwU3sutiEusc
+        Z7Lx+Ub6dIK+fACA==
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+In-Reply-To: <20220509112235.GD40730@shbuild999.sh.intel.com>
+References: <20220508144733.91343-1-feng.tang@intel.com>
+ <20220509045839.GA40730@shbuild999.sh.intel.com>
+ <20220509071652.GE76023@worktop.programming.kicks-ass.net>
+ <20220509073003.GB40730@shbuild999.sh.intel.com> <87h75zrpmh.ffs@tglx>
+ <20220509112235.GD40730@shbuild999.sh.intel.com>
+Date:   Mon, 09 May 2022 15:03:25 +0200
+Message-ID: <87levarh7m.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v4 3/7] perf/x86/amd/core: Detect PerfMonV2 support
-Content-Language: en-US
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
-        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org
-References: <cover.1651058600.git.sandipan.das@amd.com>
- <8d3e23760726cf6647a98999e1fcd12a37f36a42.1651058600.git.sandipan.das@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <8d3e23760726cf6647a98999e1fcd12a37f36a42.1651058600.git.sandipan.das@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/4/2022 7:31 pm, Sandipan Das wrote:
+Feng,
 
->   	x86_pmu.num_counters	= AMD64_NUM_COUNTERS_CORE;
+On Mon, May 09 2022 at 19:22, Feng Tang wrote:
+> On Mon, May 09, 2022 at 12:01:42PM +0200, Thomas Gleixner wrote:
+>> > This option is more like a way to double-check the correctness of
+>> > tsc-freq got from MSR/CPUID(0x15).
+>> 
+>> If at all it's a workaround for the inability and ignorance of firmware
+>> people. The crystal frequency and the TSC/crystal ratio _are_ known to
+>> the system designer and firmware people. It's really not asked too much
+>> to put the correct values into CPUID(0x15) and have proper quality
+>> control to ensure the correctness.
+>> 
+>> The whole argument about early firmware and pre-production hardware is
+>> bogus. It's 2022 and we are debating this problem for more than a decade
+>> now and still hardware and firmware people think they can do what they
+>> want and it all can be "fixed" in software. It's not rocket science to
+>> get this straight.
+>  
+> I completely understand it, as we've also suffered a lot from such
+> problems. This patch doesn't change any current work flow, and it simply
+> calibrates and prints out the freq info (warn if there is big deviation).
+> It acctually provides SW guys a quick way to argue with HW/FW people:
+> "See! You've given us a wrong number, please fix it", otherwise I heard
+> there was customer long ago  who used atomic clock to prove the
+> deviation.
 
-Thus boot_cpu_has(X86_FEATURE_PERFCTR_CORE) is true.
+Then please say clearly in the changelog what this is about.
 
-> +
-> +	/* Check for Performance Monitoring v2 support */
-> +	if (boot_cpu_has(X86_FEATURE_PERFMON_V2)) {
-> +		/* Update PMU version for later usage */
-> +		x86_pmu.version = 2;
+ "Currently when HW provides the tsc freq info through MSR or
+  CPUID(0x15), the info will be taken as the 'best guess', and kernel
+  will set the X86_FEATURE_TSC_KNOWN_FREQ flag and skip the HW timer
+  based recalibration, which works pretty well.
 
-Is it safe to assume that once AMD CPU has the PERFMON_V2 (or further) bit,
+  And there is still very few corner case that the freq info is not
+  accurate enough will small deviation from the actual value, like on
+  a product with early version (fix needed) of firmware or some
+  pre-production hardware.
 
-it must also have the PERFCTR_CORE bit set ?
+  Add..."
+
+versus:
+
+ "The kernel assumes that the TSC frequency which is provided by the
+  hardware / firmware via MSRs or CPUID(0x15) is correct after applying
+  a few basic consistency checks. This disables the TSC recalibration
+  against HPET or PM timer.
+
+  As a result there is no mechanism to validate that frequency in cases
+  where a firmware or hardware defect is suspected.
+
+  Add..."
+
+Can you spot the difference in intention? The first one sounds like:
+
+    We need to tolerate the hardware/firmware induced crap.
+
+The second one says:
+
+    Provide a mechanism to validate because we cannot trust hardware /
+    firmware.
+
+Hmm?
+
+>> Aside of that HPET has become unrealiable and PM timer is not guaranteed
+>> to be there either. So we really do not need a mechanism to enforce
+>> recalibration against something which is not guaranteed to provide
+>> sensible information.
+>
+> Correct. The HPET on new client platforms turn to be disabled for the
+> PC10 issue, though it's fine on server platforms where tsc accuracy is
+> more important.
+
+TSC accuracy is important in any case. Why would it be more important on
+server platforms? Just because?
+
+> Also even for the disabled HPET case, I remembered that you've once
+> suggested to leverage its capability for calibration, and only disable
+> it before cpu idle framework really starts :)
+
+Correct, but that would only be valid for early boot calibration and not
+accross the recalibration.
+
+That's why we ended up disabling HPET early in case of PC10. See
+hpet_is_pc10_damaged().
+
+Thanks,
+
+        tglx
 

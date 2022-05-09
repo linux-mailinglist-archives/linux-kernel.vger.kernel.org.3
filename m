@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43E751F22A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18BA51F267
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiEIB30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S234653AbiEIBb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbiEIBBq (ORCPT
+        with ESMTP id S236071AbiEIBEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 21:01:46 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2DEBE0A
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:57:53 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id w1so21256638lfa.4
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 17:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uk2GCo4tzO2z68A4aXi5qgjOdRQLhbqgNbxwMMvi8jk=;
-        b=Nql1Yjsic1g62x+3t7bP9sHcXY0u/gU5tmXaF5KQZzfGTru2e4lVe0MtlZA0k3imjr
-         YJxXKkTCdME5QT1vex+PZQooBQh5O0iISkVhcWdtmTb504b90IqPn944ijh9S2yR++u1
-         IQ1fIJlmWrCDlpWRNr+iMvB8UtpS7SN/swZmg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uk2GCo4tzO2z68A4aXi5qgjOdRQLhbqgNbxwMMvi8jk=;
-        b=wtjzD8KhOdMeicYB65U7QjSygkT2o7U4ZSzai94/4q9iJiZWjscf+mADve5p35aj4g
-         kJyjuJLi6Q7GmlMjgu8+BKIPIqvYhCJ8+w7Eb8Nm8S3kmsmI276/zDR0n9p/6CJX8sK1
-         grImbR+JfOx6I9Uy+C3sZVKYPUGcH/N+kSvmXEzi8N+7V86qibWsFM8ZXHrFjQP8MGQ6
-         rBWKQPKMcmPfOnLRHyaRhjIxEgiXpqyadyL4MRX+iSU+PybbyRaxEUSIiYwCsIddlkK9
-         MPetBYmS3TWOO8cFiR3EYDToUKh4uTKr1k3pLK9PD6BsqLtjfM+omvM/Fo7ux30KrWIu
-         T8HA==
-X-Gm-Message-State: AOAM530iDNlOPil4+lu5gdNFIkjvXMtGG04CBTfPGnfVgvpp2iDrF77D
-        9l2kHo4UR5Gj3gNFSSyGA+vLpk/Hg+wunBSmAb2F8g==
-X-Google-Smtp-Source: ABdhPJxYBGZN3P6DUr9QO720p7L7DYzFc6NRLCCRB9YrdPE8dAs6b+kSAN+4GFnljqurF4eRVhDm4HNiVEwm+vNJoIs=
-X-Received: by 2002:a05:6512:220d:b0:473:9ee1:660d with SMTP id
- h13-20020a056512220d00b004739ee1660dmr11065115lfu.326.1652057870802; Sun, 08
- May 2022 17:57:50 -0700 (PDT)
+        Sun, 8 May 2022 21:04:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477CD5F72;
+        Sun,  8 May 2022 18:00:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxNBr1vj5z4ySV;
+        Mon,  9 May 2022 11:00:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652058037;
+        bh=bAQNVmL1nelFRnuEjXuv+vl2PGSNpPyNR00TWGEVLk0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sR5zqKr+L/S1hGh5q7JU8y7RmUcDtP9NVD3MUFGPQ1MALQVAr9kORycj+Ggk1ny/6
+         vXGjnmp2O/DtzypGgnnpzGP/xiJukSL4yp2341pruuaXvvPrEvg67+MIMpev0516ct
+         gaGpdpZs/3pG5n3B7/twHt2eCR/2nKDPwp4VK76CoGkJW+/YS+moz2dBAPUrNTa4En
+         uC9rx6qN1qnXbJUxcRdt0qZMHClUrJYaOY1tOo9xd1TQFHdutnNW3xYdggtqqvV4JZ
+         Bd+ZwyyRZ7Fhk3FbNtKfIQuiCPBKStlBznvV2r3spIc4kVsSxLFwJwNLb6AodhMTlo
+         VkTDd1qufvSwA==
+Date:   Mon, 9 May 2022 11:00:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>, Greg KH <greg@kroah.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Darren Hart <darren@os.amperecomputing.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the jc_docs tree with the
+ driver-core.current tree
+Message-ID: <20220509110034.4fab2013@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220508214500.60446-1-colin.i.king@gmail.com>
-In-Reply-To: <20220508214500.60446-1-colin.i.king@gmail.com>
-From:   Ozgur <ozgurk@ieee.org>
-Date:   Mon, 9 May 2022 04:57:40 +0400
-Message-ID: <CAADfD8wApw_v+uDTijY1K89WRJ_f7tkHmz=6LR086yMjEU4mWQ@mail.gmail.com>
-Subject: Re: [PATCH] x25: remove redundant pointer dev
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Martin Schiller <ms@dev.tdt.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-x25@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/X6MIx4CIhbdU.b+XL7ghsuN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 1:45 AM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> Pointer dev is being assigned a value that is never used, the assignment
-> and the variable are redundant and can be removed. Also replace null check
-> with the preferred !ptr idiom.
->
+--Sig_/X6MIx4CIhbdU.b+XL7ghsuN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi all,
 
-*dev pointer is device assign global linked list and shouldnt be
-touched by the driver so *dev wont get any value right?
-Also seems to use this while network interface is initializing because
-some activation information and stats information is also kept here,
-for example, open *dev will call when ifconfig is called from.
+Today's linux-next merge of the jc_docs tree got a conflict in:
 
-route, link, forward these inital activate and move all values with
-net_device *dev?
+  Documentation/process/embargoed-hardware-issues.rst
 
-Regards
+between commit:
 
-> Cleans up clang scan warning:
-> net/x25/x25_proc.c:94:26: warning: Although the value stored to 'dev' is
-> used in the enclosing expression, the value is never actually read
-> from 'dev' [deadcode.DeadStores]
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  net/x25/x25_proc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/net/x25/x25_proc.c b/net/x25/x25_proc.c
-> index 3bddcbdf2e40..91a2aade3960 100644
-> --- a/net/x25/x25_proc.c
-> +++ b/net/x25/x25_proc.c
-> @@ -79,7 +79,6 @@ static int x25_seq_socket_show(struct seq_file *seq, void *v)
->  {
->         struct sock *s;
->         struct x25_sock *x25;
-> -       struct net_device *dev;
->         const char *devname;
->
->         if (v == SEQ_START_TOKEN) {
-> @@ -91,7 +90,7 @@ static int x25_seq_socket_show(struct seq_file *seq, void *v)
->         s = sk_entry(v);
->         x25 = x25_sk(s);
->
-> -       if (!x25->neighbour || (dev = x25->neighbour->dev) == NULL)
-> +       if (!x25->neighbour || !x25->neighbour->dev)
->                 devname = "???";
->         else
->                 devname = x25->neighbour->dev->name;
-> --
-> 2.35.1
->
+  8bf6e0e3c7de ("Documentation/process: Make groups alphabetical and use ta=
+bs consistently")
+
+from the driver-core.current tree and commit:
+
+  ca3d0b5dfc6b ("Documentation/process: Update ARM contact for embargoed ha=
+rdware issues")
+
+from the jc_docs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/process/embargoed-hardware-issues.rst
+index 98d7bc868f2a,41a2afaaea75..000000000000
+--- a/Documentation/process/embargoed-hardware-issues.rst
++++ b/Documentation/process/embargoed-hardware-issues.rst
+@@@ -244,11 -244,10 +244,11 @@@ disclosure of a particular issue, unles
+  an involved disclosed party. The current ambassadors list:
+ =20
+    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ -  ARM		Catalin Marinas <catalin.marinas@arm.com>
+    AMD		Tom Lendacky <tom.lendacky@amd.com>
+ -  IBM Z         Christian Borntraeger <borntraeger@de.ibm.com>
+ -  IBM Power     Anton Blanchard <anton@linux.ibm.com>
+ +  Ampere	Darren Hart <darren@os.amperecomputing.com>
+-   ARM		Grant Likely <grant.likely@arm.com>
+++  ARM		Catalin Marinas <catalin.marinas@arm.com>
+ +  IBM Power	Anton Blanchard <anton@linux.ibm.com>
+ +  IBM Z		Christian Borntraeger <borntraeger@de.ibm.com>
+    Intel		Tony Luck <tony.luck@intel.com>
+    Qualcomm	Trilok Soni <tsoni@codeaurora.org>
+ =20
+
+--Sig_/X6MIx4CIhbdU.b+XL7ghsuN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ4Z7IACgkQAVBC80lX
+0Gw/owf+PypV8kca5Q4xe/TKAg5fYIM6TKBdruKREMON7ynZuUViYRaTxozBdYzj
+2rtyc+P346QZhfznR7hUqHh+LdaafPtf+M9DI0XSsP8RHRSzsktCHkH31CIhhx95
+JtIUuTA9FiMMYAHQP++U9GmsURv4dUcmills+KnF2j7VaDRB3Ltep4AmzjsafU32
+d0W0l1CmTSkjUQf2YVALcmw8+y++cDaO9Iic08Z+MSGxWVwgQLS6fOBNdu1oBAoj
+Q8l+y+qZM8rLFAQ+x5GYtMssYRbqEirUMeMkUku5H0iddJCxbhPYrDsnMXlaNeWh
+vJotKcy5O/sKXu6dBhCr1ITSJwMDgw==
+=MJi0
+-----END PGP SIGNATURE-----
+
+--Sig_/X6MIx4CIhbdU.b+XL7ghsuN--

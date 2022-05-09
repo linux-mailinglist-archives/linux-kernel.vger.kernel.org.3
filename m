@@ -2,70 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C060851F82B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADA651F8F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiEIJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S238333AbiEIJfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236561AbiEIJ0U (ORCPT
+        with ESMTP id S234771AbiEIJ0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:26:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF571C15E2;
-        Mon,  9 May 2022 02:22:25 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxbGd0bHWzGphT;
-        Mon,  9 May 2022 17:19:37 +0800 (CST)
-Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
- (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 17:22:23 +0800
-From:   Li Zhengyu <lizhengyu3@huawei.com>
-To:     <sboyd@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <manivannan.sadhasivam@linaro.org>, <mturquette@baylibre.com>
-Subject: [PATCH] clk: fixed-rate: Remove redundant if statement
-Date:   Mon, 9 May 2022 17:21:02 +0800
-Message-ID: <20220509092102.140520-1-lizhengyu3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 9 May 2022 05:26:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44A4918C063;
+        Mon,  9 May 2022 02:22:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00EA71480;
+        Mon,  9 May 2022 02:22:48 -0700 (PDT)
+Received: from [10.57.80.111] (unknown [10.57.80.111])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B0153F66F;
+        Mon,  9 May 2022 02:22:44 -0700 (PDT)
+Message-ID: <de0befa1-8376-6891-abe8-12cd898fa5ab@arm.com>
+Date:   Mon, 9 May 2022 10:22:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.157]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] iommu/dma: Fix iova map result check bug
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Ning Li <Ning.Li@mediatek.com>,
+        stable@vger.kernel.org
+References: <20220507085204.16914-1-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220507085204.16914-1-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(np) is always true when (dev || !np) is false, so just remove
-the check.
+On 2022-05-07 09:52, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> The data type of the return value of the iommu_map_sg_atomic
+> is ssize_t, but the data type of iova size is size_t,
+> e.g. one is int while the other is unsigned int.
+> 
+> When iommu_map_sg_atomic return value is compared with iova size,
+> it will force the signed int to be converted to unsigned int, if
+> iova map fails and iommu_map_sg_atomic return error code is less
+> than 0, then (ret < iova_len) is false, which will to cause not
+> do free iova, and the master can still successfully get the iova
+> of map fail, which is not expected.
+> 
+> Therefore, we need to check the return value of iommu_map_sg_atomic
+> in two cases according to whether it is less than 0.
 
-Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
----
- drivers/clk/clk-fixed-rate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Heh, it's always a fun day when I have to go back to the C standard to 
+remind myself of the usual arithmetic conversions. But indeed this seems 
+correct, and even though the double comparisons look a little 
+non-obvious on their own I can't think of an objectively better 
+alternative, so:
 
-diff --git a/drivers/clk/clk-fixed-rate.c b/drivers/clk/clk-fixed-rate.c
-index 45501637705c..ac68a6b40f0e 100644
---- a/drivers/clk/clk-fixed-rate.c
-+++ b/drivers/clk/clk-fixed-rate.c
-@@ -87,7 +87,7 @@ struct clk_hw *__clk_hw_register_fixed_rate(struct device *dev,
- 	hw = &fixed->hw;
- 	if (dev || !np)
- 		ret = clk_hw_register(dev, hw);
--	else if (np)
-+	else
- 		ret = of_clk_hw_register(np, hw);
- 	if (ret) {
- 		kfree(fixed);
--- 
-2.17.1
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
+> Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> Cc: <stable@vger.kernel.org> # 5.15.*
+> ---
+>   drivers/iommu/dma-iommu.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 09f6e1c0f9c0..2932281e93fc 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -776,6 +776,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+>   	unsigned int count, min_size, alloc_sizes = domain->pgsize_bitmap;
+>   	struct page **pages;
+>   	dma_addr_t iova;
+> +	ssize_t ret;
+>   
+>   	if (static_branch_unlikely(&iommu_deferred_attach_enabled) &&
+>   	    iommu_deferred_attach(dev, domain))
+> @@ -813,8 +814,8 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+>   			arch_dma_prep_coherent(sg_page(sg), sg->length);
+>   	}
+>   
+> -	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
+> -			< size)
+> +	ret = iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot);
+> +	if (ret < 0 || ret < size)
+>   		goto out_free_sg;
+>   
+>   	sgt->sgl->dma_address = iova;
+> @@ -1209,7 +1210,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
+>   	 * implementation - it knows better than we do.
+>   	 */
+>   	ret = iommu_map_sg_atomic(domain, iova, sg, nents, prot);
+> -	if (ret < iova_len)
+> +	if (ret < 0 || ret < iova_len)
+>   		goto out_free_iova;
+>   
+>   	return __finalise_sg(dev, sg, nents, iova);

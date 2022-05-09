@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4C7520281
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7DE520289
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239186AbiEIQht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S239125AbiEIQkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiEIQhr (ORCPT
+        with ESMTP id S238936AbiEIQkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:37:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41FFC28ED29
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:33:51 -0700 (PDT)
+        Mon, 9 May 2022 12:40:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 929EB1261C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652114030;
+        s=mimecast20190719; t=1652114170;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zaU6wCec1EMQuT5ULCUqY7NTQ3dkhl3bP6/9uWSpRY0=;
-        b=KY3Hw9tEznsUne+dQbBXq+/NoEr3RtIr45zdpDnhxNaNjvbkpYfmtVoat3P62HT89qp0xh
-        I1Fll234+M1PZrItQgFBQeTaMVGm3Kwl2agyqP4DeHF9GLAqI2WyjLCMXL0kriLLzwnGwO
-        KLMHEL1t6qIQRPzEOHjdEGax8pzIAyA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Eyh+GkUIjInk6dzNgMJ6R+vYntN/YZ9qITuyfspnKDk=;
+        b=SVneceYRMSPO5fOwCPJ28qCtA63pyaJMl4ormru+mSt0KekmCsovRmnn+bsTHFb2cIvtgP
+        36fc5ipygqjK9T+fEMkT1l/mNg+wEKAWgMTPLX1aF+kZD0XTAOc2yboeLU1l+5mbk4t9++
+        ksSk5Lq5M1jzB5vX8yrRLH9kLODTyKs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-nwg_L9_6PgK-3G5k03uY-g-1; Mon, 09 May 2022 12:33:48 -0400
-X-MC-Unique: nwg_L9_6PgK-3G5k03uY-g-1
-Received: by mail-wm1-f72.google.com with SMTP id i131-20020a1c3b89000000b00393fbb0718bso10114521wma.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:33:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zaU6wCec1EMQuT5ULCUqY7NTQ3dkhl3bP6/9uWSpRY0=;
-        b=oC1YBqijEQZbhv+YRVRsy4AaJYyY8I+zllF5RFKEDFOtOmsD1TzV9CMcOBewMN7wS5
-         HOciMPNzqUEBpY2ZDfY+vpviXGj9KYlf9ShJsPKDaHoGIDfLFAAc5odtak1mid7PKE/T
-         XfzCNmfbKbBe0oekjHJibszGhH56+ATJtUhLs1+FmOFTPQUECSUwjmHrryFK2DdW32ax
-         /8v7ZftweLDqz2maIeXUMPjqkMz+wnrqR/hIxhUKpld0YdEdAUwAugM0pefEVjueMmlD
-         9s6WzhMz5w+8RvaPUOKSZDaQbdb4TqAcAbaHlMhHvE+80tQmBsryXx4w5P9YarkMsMot
-         ML/g==
-X-Gm-Message-State: AOAM533bFgzkwKr3NJUdoIC5otzdvodeFzTFVviCNYSeLQQh5E2rYfLs
-        im5Cvmz/9/TLRDIBiwI6eFPwZtkXy50u9Nj3FcBHOR2cq4BP29XOAprVPhqKjQx7+BD4Uu1naEX
-        6WyeLxLC53ICF2sVYajuosfsx
-X-Received: by 2002:a7b:c3c2:0:b0:394:9229:3b40 with SMTP id t2-20020a7bc3c2000000b0039492293b40mr5126308wmj.195.1652114027776;
-        Mon, 09 May 2022 09:33:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz7bKnj6TnYeYMJ8WQEUK1qVaIvYRO7Ss8XM5JhYhOquufFe51hhnCGnSjqUxw1TY5t+U+8cQ==
-X-Received: by 2002:a7b:c3c2:0:b0:394:9229:3b40 with SMTP id t2-20020a7bc3c2000000b0039492293b40mr5126294wmj.195.1652114027554;
-        Mon, 09 May 2022 09:33:47 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h3-20020a5d6883000000b0020c5253d91asm11484506wru.102.2022.05.09.09.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 09:33:47 -0700 (PDT)
-Message-ID: <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
-Date:   Mon, 9 May 2022 18:33:46 +0200
+ us-mta-96-kfTNfK7UN0ae-0bA17BIZg-1; Mon, 09 May 2022 12:36:09 -0400
+X-MC-Unique: kfTNfK7UN0ae-0bA17BIZg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E498803D45;
+        Mon,  9 May 2022 16:36:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D118415F5F;
+        Mon,  9 May 2022 16:36:07 +0000 (UTC)
+Subject: [PATCH 0/6] cifs: Use iov_iters down to the network transport
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        dhowells@redhat.com, Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 09 May 2022 17:36:06 +0100
+Message-ID: <165211416682.3154751.17287804906832979514.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
- <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 17:51, Andrzej Hajda wrote:
 
-[snip]
+Hi Steve,
 
->>>> +
->>> Regarding drm:
->>> What about drm_fb_helper_fini? It calls also framebuffer_release and is
->>> called often from _remove paths (checked intel/radeon/nouveau). I guess
->>> it should be fixed as well. Do you plan to fix it?
->>>
->> I think you are correct. Maybe we need something like the following?
->>
->> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
->> index d265a73313c9..b09598f7af28 100644
->> --- a/drivers/gpu/drm/drm_fb_helper.c
->> +++ b/drivers/gpu/drm/drm_fb_helper.c
->> @@ -631,7 +631,6 @@ void drm_fb_helper_fini(struct drm_fb_helper *fb_helper)
->>          if (info) {
->>                  if (info->cmap.len)
->>                          fb_dealloc_cmap(&info->cmap);
->> -               framebuffer_release(info);
-> 
-> What about cmap? I am not an fb expert, but IMO cmap can be accessed 
-> from userspace as well.
-> 
+Here's a subset of my cifs-experimental branch.  It alters the cifs driver
+to pass iov_iters down to the lowest layers where they can be passed to the
+network transport.
 
-I actually thought about the same but then remembered what Daniel said in [0]
-(AFAIU at least) that these should be done in .remove() so the current code
-looks like matches that and only framebuffer_release() should be moved.
+I've fixed a couple of bugs in it also, including the RCU warning you were
+seeing.  I'm seeing some slow calls, however, but I'm not sure how to debug
+them.  RDMA also needs looking at, but I'm not sure how the RDMA API works.
 
-For vesafb a previous patch proposed to also move a release_region() call to
-.fb_destroy() and Daniel also said that it was iffy and shouldn't be done [1].
+I've pushed the patches here also:
 
-But I'm also not fb expert so happy to move fb_dealloc_cmap() as well if that
-is the correct thing to do.
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-for-sfrench
 
-[0]: https://www.spinics.net/lists/dri-devel/msg346257.html
-[1]: https://www.spinics.net/lists/dri-devel/msg346261.html
+David
+---
+David Howells (6):
+      iov_iter: Add a function to extract an iter's buffers to a bvec iter
+      iov_iter: Add a general purpose iteration function
+      cifs: Add some helper functions
+      cifs: Add a function to read into an iter from a socket
+      cifs: Change the I/O paths to use an iterator rather than a page list
+      cifs: Remove unused code
 
--- 
-Best regards,
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+ fs/cifs/cifsencrypt.c |   40 +-
+ fs/cifs/cifsfs.h      |    3 +
+ fs/cifs/cifsglob.h    |   28 +-
+ fs/cifs/cifsproto.h   |   11 +-
+ fs/cifs/cifssmb.c     |  225 +++++---
+ fs/cifs/connect.c     |   16 +
+ fs/cifs/file.c        | 1263 ++++++++++++++---------------------------
+ fs/cifs/misc.c        |  109 ----
+ fs/cifs/smb2ops.c     |  366 ++++++------
+ fs/cifs/smb2pdu.c     |   12 +-
+ fs/cifs/transport.c   |   37 +-
+ include/linux/uio.h   |    8 +
+ lib/iov_iter.c        |  133 +++++
+ 13 files changed, 935 insertions(+), 1316 deletions(-)
+
 

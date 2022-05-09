@@ -2,68 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7592252066A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22CA520676
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiEIVKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S230194AbiEIVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiEIVKL (ORCPT
+        with ESMTP id S229945AbiEIVLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:10:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD6B269EEA;
-        Mon,  9 May 2022 14:06:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3638661713;
-        Mon,  9 May 2022 21:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8E1C385BA;
-        Mon,  9 May 2022 21:06:06 +0000 (UTC)
-Date:   Mon, 9 May 2022 17:06:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        kbuild-all@lists.01.org, Shakeel Butt <shakeelb@google.com>,
-        kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux-foundation.org>
-Subject: Re: [PATCH] percpu: improve percpu_alloc_percpu event trace
-Message-ID: <20220509170605.2eb7637e@gandalf.local.home>
-In-Reply-To: <e1c09bbb-2c58-a986-c704-1db538da905a@openvz.org>
-References: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
-        <202205070420.aAhuqpYk-lkp@intel.com>
-        <e1c09bbb-2c58-a986-c704-1db538da905a@openvz.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 9 May 2022 17:11:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCF6E7328;
+        Mon,  9 May 2022 14:07:48 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DE5E41F430CB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652130467;
+        bh=74FyHDOOizk+TMT3i3Kx8M2B5GpKxJp/DqS60eMcOH8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hrucb9ZEUOvcrLczb4CqvrxAcAGDIWXe2oBJDiJDfkI30WAO2cPhDUWIM9tHp3Qqi
+         1RAuGwyA4d1JrjsAiVAv8kxuyHm7COrblIg0GIfE7v5rqkOWIV/no3ohYRgkSgIhiJ
+         9/e7vcUnzlL0NiazyVf1JrzpSmSRRr0Hrhff4xbRtsCjCHgzNIZD6aAbvbFiwGqmm4
+         3yXyuxBxjHkpdHwEJZWltTFVMQDf5xEF19BunbEv1aQMolhdUuuUDGpGW+kFywNqy2
+         Q+UJJyqOLju4wg74xYC7JBjtsYmdZK98sEE0tzKv9HHkGGD6qp60N9Tvnn3XUKi9tx
+         0vVlqmd7aaVFw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     daniel.lezcano@linaro.org
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/2] MediaTek SoC ARM/ARM64 System Timer
+Date:   Mon,  9 May 2022 23:07:38 +0200
+Message-Id: <20220509210741.12020-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 7 May 2022 17:51:16 +0300
-Vasily Averin <vvs@openvz.org> wrote:
+In an effort to give some love to the apparently forgotten MT6795 SoC,
+I am upstreaming more components that are necessary to support platforms
+powered by this one apart from a simple boot to serial console.
 
-> The same messages are generated for any other gfp_t argument in trace events.
-> As far as I understand it is not a bug per se,
-> but trace macros lacks __force attribute in 'gfp_t'-> 'unsigned long' casts.
-> The same thing happens with mode_t and with some other places using __print_flags()
-> for __bitwise marked types.
+This series introduces support to start the System Timer for the CPU
+cores found in various MediaTek SoCs including, but not limited to the
+MT6795 Helio X10 - and will most probably unblock many developers for
+the upstreaming of various platforms.
 
-I'm curious as to where the gfp_t to unsigned long is happening in the
-macros?
+For a broad overview of why/what/when, please look at the description
+of patch [2/2] in this series.
 
--- Steve
+Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
+
+Changes in v2:
+ - Added back a lost line in commit 2/2 (sorry, commit didn't get amended...!)
+ - Tested again for safety
+
+AngeloGioacchino Del Regno (2):
+  dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795
+    compatible
+  clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
+
+ .../bindings/timer/mediatek,mtk-timer.txt     |   4 +
+ drivers/clocksource/timer-mediatek.c          | 119 ++++++++++++++++++
+ 2 files changed, 123 insertions(+)
+
+-- 
+2.35.1
+

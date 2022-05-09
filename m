@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520E25209B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA30E5209B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiEIX6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S233202AbiEIX7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiEIX6O (ORCPT
+        with ESMTP id S232632AbiEIX7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:58:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A7024E02D
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652140459; x=1683676459;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pXUUdRhqsIiTh3ALucH8Vwv7KqWGVmWUBhMWs1Y+TAg=;
-  b=ihM4K6zoQDZqtwI+XHR3zG7AX7VywW3JiovJBIw36TfvAxlfG4wr7X8K
-   bGRgwDo/VuNSb77IVnjksTJVF23dpbijSO4kcQCfdbT7KgpJPfrea0Bcl
-   bP083sEyLeAHyBLFNckR4iEy3XlhQAOSbH4BQSTFrq3uU0MPeU5eBKJsm
-   cv3NUprLZSXNU0axOPvwYPU9v22r+Tj5k1nifwVYNpd2Xt6HbKdT/Urc1
-   kk4XThcx20vWu+xhXt2BkEK11+bAC1rsHEH3WXaziPeVcKbG9QY4DFPgp
-   4lQTwELhX9HHUIfdsI7H+j163t+WPiuiJywVnsOEyuK6WbAli0wYscm74
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="329799883"
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="329799883"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 16:54:18 -0700
-X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
-   d="scan'208";a="552118812"
-Received: from abehrenx-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.1.104])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 16:54:14 -0700
-Message-ID: <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        Mon, 9 May 2022 19:59:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2366529B81A
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:55:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id s14so15321996plk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O78xywV/WeUMZw6P+ZnHpCQ7tZ+vR8qII19ouyYA5rU=;
+        b=Es7HhFKCIeaWF1sF/V4rHwVPw2S15afmHGuDUtoTm3zrXHozb/yFik/SGvyGUaGNeR
+         TnOcaBofWYugjbi8ZXo5H9XHRgDHmcSLL09mIW0fOS/u6NHz4rY7S79agxEZF9llteML
+         Q0rw+LCw9kWNiksl3g4o6ky3qE2GkvUh02te31ekng1EC+CY/DHveXzR2idBQHlKQ4vj
+         w6DSePuUpzVBGh0S5hO5X4yyJeXYrcbp7z22jclrug2KK07BCYsgCVycZSkG1OskgbHX
+         oPi2K3EkWB4i39WMP7PlxmrreZKiJy/7P4oFJoW2WpgMAleGo6EOjrRrfP94nQLh2+gj
+         m/6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O78xywV/WeUMZw6P+ZnHpCQ7tZ+vR8qII19ouyYA5rU=;
+        b=rAY5VyYHB5FyGsZ8zb46zH/TUIPMKaouRGmpjwUZFRR6DJwjTLi5MMUAz8T+2B3LI5
+         ayLNUQ0NPKdkUEwSJHBwVFcFM//PPNqYqiqmprNMgUNJRqnl7Er0UyDzDO36QsVNQBS5
+         YrhRj2gBSafFjW8qFkXwmYRUgMZtO6w0lVy/9a+sG1BFChoxvxKk1uZqNhDdz9VtUKoe
+         4FeSCiORVxboVfsCmP/sChTbaoT75ZKbmpnipmtY4nB3/E9n5kdbEPDlRe+2/EL/v+im
+         vsyJ8xT4fdLDT9VpjCaIuVujFvL3zdTrumCLt/AZXHgtMNg7uSy28j0/NKrxrtRF48xX
+         ed1g==
+X-Gm-Message-State: AOAM533pwLylpeQ8n/v6ld5FTH9TM/XiBtROjpTtXGddMjQgoRsRbgwu
+        PZMySNwizVu8FVKrahf0uf0iVw==
+X-Google-Smtp-Source: ABdhPJz8yjL98IB1aOTDK7vwl648g2e2RAZa9hJXMAXstr/QS6XGMFDjVl70LVEPCkEBHXh+0/IgFg==
+X-Received: by 2002:a17:903:228e:b0:15e:9462:b058 with SMTP id b14-20020a170903228e00b0015e9462b058mr18359407plh.64.1652140508432;
+        Mon, 09 May 2022 16:55:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k70-20020a638449000000b003c6445e2aa8sm7212096pgd.4.2022.05.09.16.55.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 16:55:08 -0700 (PDT)
+Date:   Mon, 9 May 2022 23:55:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wei Zhang <zhanwei@google.com>
+Cc:     Suleiman Souhlal <suleiman@google.com>,
+        Sangwhan Moon <sxm@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Tue, 10 May 2022 11:54:12 +1200
-In-Reply-To: <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
-References: <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
-         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
-         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
-         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
-         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
-         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
-         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
-         <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
-         <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
-         <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
-         <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+Subject: Re: [PATCH 1/2] KVM: x86: allow guest to send its _stext for kvm
+ profiling
+Message-ID: <Ynmp2AEOQvWw+CYK@google.com>
+References: <20220412195846.3692374-1-zhanwei@google.com>
+ <20220412195846.3692374-2-zhanwei@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412195846.3692374-2-zhanwei@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-09 at 15:09 +0300, Kirill A. Shutemov wrote:
-> On Mon, May 09, 2022 at 03:37:22PM +1200, Kai Huang wrote:
-> > On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
-> > > On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
-> > > > Kirill, what's your opinion?
-> > > 
-> > > I said before that I think DMA API is the right tool here.
-> > > 
-> > > Speculation about future of DMA in TDX is irrelevant here. If semantics
-> > > change we will need to re-evaluate all users. VirtIO uses DMA API and it
-> > > is conceptually the same use-case: communicate with the host.
-> > 
-> > Virtio is designed for device driver to use, so it's fine to use DMA API. And
-> > real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
-> > assumption.
+On Tue, Apr 12, 2022, Wei Zhang wrote:
+> The profiling buffer is indexed by (pc - _stext) in do_profile_hits(),
+> which doesn't work for KVM profiling because the pc represents an address
+> in the guest kernel. readprofile is broken in this case, unless the guest
+> kernel happens to have the same _stext as the host kernel.
 > 
-> Whether attestation driver uses struct device is implementation detail.
-> I don't see what is you point.
+> This patch adds a new hypercall so guests could send its _stext to the
+> host, which will then be used to adjust the calculation for KVM profiling.
 
-No real DMA is involved in attestation.
+Disclaimer, I know nothing about using profiling.
 
+Why not just omit the _stext adjustment and profile the raw guest RIP?  It seems
+like userspace needs to know about the guest layout in order to make use of profling
+info, so why not report raw info and let host userspace do all adjustments?
+
+> Signed-off-by: Wei Zhang <zhanwei@google.com>
+> ---
+>  arch/x86/kvm/x86.c            | 15 +++++++++++++++
+>  include/linux/kvm_host.h      |  4 ++++
+>  include/uapi/linux/kvm_para.h |  1 +
+>  virt/kvm/Kconfig              |  5 +++++
+>  4 files changed, 25 insertions(+)
 > 
-> > So I don't see why TD guest kernel cannot have a simple protocol to vmap() a
-> > page (or couple of pages) as shared on-demand, like below:
-> > 
-> > 	page = alloc_page();
-> > 
-> > 	addr = vmap(page,  pgprot_decrypted(PAGE_KERNEL));
-> > 
-> > 	clflush_cache_range(page_address(page), PAGE_SIZE);
-> > 
-> > 	MapGPA(page_to_phys(page) | cc_mkdec(0), PAGE_SIZE);
-> > 
-> > And we can even avoid above clflush_cache_range() if I understand correctly.
-> > 
-> > Or  I missed something?
-> 
-> For completeness, cover free path too. Are you going to opencode page
-> accept too?
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 547ba00ef64f..abeacdd5d362 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9246,6 +9246,12 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+>  		vcpu->arch.complete_userspace_io = complete_hypercall_exit;
+>  		return 0;
+>  	}
+> +#ifdef CONFIG_ACCURATE_KVM_PROFILING
+> +	case KVM_HC_GUEST_STEXT:
+> +		vcpu->kvm->guest_stext = a0;
 
-Call __tdx_module_call(TDX_ACCEPT_PAGE, ...) right after MapGPA() to convert
-back to private.  I don't think there is any problem?
+Rather than snapshot the guest offset, snapshot the delta.  E.g.
 
-> 
-> Private->Shared conversion is destructive. You have to split SEPT, flush
-> TLB. Backward conversion even more costly.
+		vcpu->kvm->arch.guest_stext_offset = (unsigned long)_stext - a0;
 
-I think I won't call it destructive.
+Then the profiling flow can just be
 
-And I suggested before, we can allocate a default size buffer (i.e. 4 pages),
-which is large enough to cover all requests for now, during driver
-initialization.  This avoids IOCTL time conversion.  We should still have code
-in the IOCTL to check the request buffer size and when it is larger than the
-default, the old should be freed a larger one should be allocated.  But for now
-this code path will never happen.
+		unsigned long rip;
 
-Btw above is based on assumption that we don't support concurrent IOCTLs.  This
-version Sathya somehow changed to support concurrent IOCTLs but this was a
-surprise as I thought we somehow agreed we don't need to support this.
+		rip = kvm_rip_read(vcpu) + vcpu->kvm->arch.guest_text_offset;
+		profile_hit(KVM_PROFILING, (void *)rip);
 
-Anyway, now I don't have strong opinion here.  To me alloc_pages() +
-set_memory_decrypted() is also fine (seems AMD is using this anyway).   Will let
-Dave to decide.
 
--- 
-Thanks,
--Kai
+> +		ret = 0;
+> +		break;
+> +#endif
+>  	default:
+>  		ret = -KVM_ENOSYS;
+>  		break;
+> @@ -10261,6 +10267,15 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	 */
+>  	if (unlikely(prof_on == KVM_PROFILING)) {
+>  		unsigned long rip = kvm_rip_read(vcpu);
+> +#ifdef CONFIG_ACCURATE_KVM_PROFILING
+
+A Kconfig, and really any #define, is completely unnecessary.  This is all x86
+code, just throw the offest into struct kvm_arch.

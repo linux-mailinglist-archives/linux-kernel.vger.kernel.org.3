@@ -2,206 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596D251FAAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D3D51FAB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiEILDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S230337AbiEILCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiEILD2 (ORCPT
+        with ESMTP id S229525AbiEILCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 07:03:28 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE28E1F35D0;
-        Mon,  9 May 2022 03:59:19 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so13854721fac.9;
-        Mon, 09 May 2022 03:59:19 -0700 (PDT)
+        Mon, 9 May 2022 07:02:49 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09460134819
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 03:58:56 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id e10so13455371vsr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 03:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :organization;
-        bh=BnGXEbV8Y7iEf/Z1438MCDej841Qs2ARKUYBZjaa3vU=;
-        b=O6mFHsaWY71qiihG+2kKl84oGRJitswJMj16CyxEf77+qR58ms5pvkK7yj3mFGw+rw
-         LKVy3uO9FYuNLPxRrodcoEfmkNkx9+BvKACVlEQox6xIRVfu4KkIcEGK19261bHPB6Ld
-         WnMXIrCY2mN1fbwcNP4YuGB4I6Gd4sc0iDsGTfmiNcUqVFHnRi+LznNi3ln09Zaz10Nm
-         5cEH4at/42pQJjhAUCqYBjVfBsZDc7eAdPq/6lNbJZ+CGLt01mRA5ZofN3+grDCFEw5N
-         7vuIRLY4VKpdg9qIZfCyZlU2xVlOn5pD0Ib2HaMe3TMrewlIk7FyN8nZZfdPDMGZWFkN
-         grOw==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
+        b=LXo08+TD/q5mkRf5vNGKogVnr637jR9Ua+By1H5XbnhHsCL92j1rao8jehJYBFhsIq
+         ma617lT5Ig6BmNHLLwYw8RQydzbj0NC1wzhyk5NFUH2eTaMXm6IxKxGGGNjfQEtO8mTI
+         8WQvj54k0T5Q7oUste8wkfr5W2leiyra4UGHbDog/yAG/56lAQPEitjRLyvg6XOIvEp8
+         Ev5eUYfuZbC9Y/UGSugMurwCfRW0fOqPzs/H+AGyKNJaFHuDh/LN5bijZ15AN+S0Vxni
+         gVUURhww3Xwx/Ocy1GjwM/9znn0RJQS6UXQMTBRooPLPQcz7AWwvmlaDtxxQPuRiDjvb
+         Qt9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:organization;
-        bh=BnGXEbV8Y7iEf/Z1438MCDej841Qs2ARKUYBZjaa3vU=;
-        b=7Aksau9TI5dWDNUkHvGdYWEbm6ldSQRVoihf+XH8slug9EZqRG/CaiiwZAsBcGT6ZH
-         TY6ykN+ExvNElhl1SohAm8QsvM+UtiqRrvBDmpWTF6gaDN6Gt0kZT6/KzHautdw+XNhY
-         2HbR9RgOduaPGH7cvF4U4ydkXH0Yh0gnHAXVOABndvgGb4r1GOTZkLZcSn1vuXMove0v
-         P/zztRY+qZjcfgopz/PKwENGUE1CFd0kbzR5y5rlUBbNSqBOALp7k6H9WWnKPeUqka95
-         ngc8c02x3EtosxBxfMTA+4+zK9BjUkEyf+my2f8vNNkAbDASVnEhtkiDQipxw/IRXjOf
-         Q4gg==
-X-Gm-Message-State: AOAM531YwqdRcL/W2iIiYC7OgnUhblqfhNJDIUh0NYhU/sUhvSlCxI7H
-        iPzouIejABwGPA8ZAiRB1iU=
-X-Google-Smtp-Source: ABdhPJwQD9E0L71Ga03OY/y0UOZKyH+0TnrU24+fSBgkLvgZm01UzzugjY2BGBk/64yL2nPJhY3www==
-X-Received: by 2002:a05:6870:240c:b0:ed:a070:eda5 with SMTP id n12-20020a056870240c00b000eda070eda5mr10018042oap.274.1652093959021;
-        Mon, 09 May 2022 03:59:19 -0700 (PDT)
-Received: from DDNINR0360.datadirectnet.com ([219.91.178.243])
-        by smtp.googlemail.com with ESMTPSA id 26-20020aca0d1a000000b00325d7b6cab8sm4199150oin.16.2022.05.09.03.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 03:59:18 -0700 (PDT)
-From:   Dharmendra Singh <dharamhans87@gmail.com>
-To:     miklos@szeredi.hu
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bschubert@ddn.com,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: [PATCH v2 1/1] Allow non-extending parallel direct writes
-Date:   Mon,  9 May 2022 16:28:47 +0530
-Message-Id: <20220509105847.8238-2-dharamhans87@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220509105847.8238-1-dharamhans87@gmail.com>
-References: <20220509105847.8238-1-dharamhans87@gmail.com>
-Organization: DDN STORAGE
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
+        b=LueQrtt2NmsBgt4N/d9IGvhQ0No67t3iikWrUkudqMbt9gA+B5s7NoHCxFXWrHpFgX
+         +7P0PcdZFQ1ENqM0rGlzVjl6CLrYibMeLir9UyZMpPvmuRdRF/a8cpQ3Z2grDvFgieAu
+         irc3+u4xJ0WOKJd+WjlVG3TNzKtrC/S4WGiG/2h9CvQjhhJ/ZCZyiH7vd5GJL6tEXKlo
+         OEb+Q4rUi71De3fBIPQJm2KzM8RzNcER4durabxIwIP6j5qU5V1Vf+fcbCBqf4W3Tb4q
+         dXWdf4GPIXuvpes/AWnV4lYAWhlek2in1Lpb1EbgLX7Odx0a9OQPmR/I2fZOLhlV1BZT
+         4jDg==
+X-Gm-Message-State: AOAM532HqK6JTborYvsTyziURxSuyFkjQKyV+xG917/5+B9zEMxa4l2W
+        L05LBU7Pt8eBKJGF06RIHMIyGtdKdDhgQJqIr4c=
+X-Google-Smtp-Source: ABdhPJwspcVY7XHTgRdnqVzQjggSh3CsWAN2HqaVIQgBKhRO6/yNq5TYQqJXrsZGebnZChtaKaEuhIioR/zKWK42Euk=
+X-Received: by 2002:a05:6102:2052:b0:32d:162c:2663 with SMTP id
+ q18-20020a056102205200b0032d162c2663mr7065002vsr.52.1652093934822; Mon, 09
+ May 2022 03:58:54 -0700 (PDT)
+MIME-Version: 1.0
+Sender: mrsnicolemarois8@gmail.com
+Received: by 2002:a59:ad29:0:b0:2ba:1a7c:5596 with HTTP; Mon, 9 May 2022
+ 03:58:54 -0700 (PDT)
+From:   Miss Qing Yu <qing9560yu@gmail.com>
+Date:   Mon, 9 May 2022 10:58:54 +0000
+X-Google-Sender-Auth: EEg5yUDYeTd_qjJ2CHj7CnEY8c4
+Message-ID: <CAAadsjtbdKwFcb91LAnyjWc=9rCYDfadaBQkYQyVrgfB-Y-0uw@mail.gmail.com>
+Subject: Hello!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,HK_NAME_FM_MR_MRS,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsnicolemarois8[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsnicolemarois8[at]gmail.com]
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.2 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.5 HK_NAME_FM_MR_MRS No description available.
+        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dharmendra Singh <dsingh@ddn.com>
+I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
+will not survive it with the critical condition am in because all
+vaccines has been given to me but to no avian, am a China woman but I
+base here in France because am married here and I have no child for my
+late husband and now am a widow. My reason of communicating you is
+that i have $9.2million USD which was deposited in BNP Paribas Bank
+here in France by my late husband which am the next of kin to and I
+want you to stand as the replacement beneficiary beneficiary.
 
-In general, as of now, in FUSE, direct writes on the same file are
-serialized over inode lock i.e we hold inode lock for the full duration
-of the write request. I could not found in fuse code a comment which
-clearly explains why this exclusive lock is taken for direct writes.
-Our guess is some USER space fuse implementations might be relying
-on this lock for seralization and also it protects for the issues
-arising due to file size assumption or write failures.  This patch
-relaxes this exclusive lock in some cases of direct writes.
+Can you handle the process?
 
-With these changes, we allows non-extending parallel direct writes
-on the same file with the help of a flag called FOPEN_PARALLEL_WRITES.
-If this flag is set on the file (flag is passed from libfuse to fuse
-kernel as part of file open/create), we do not take exclusive lock instead
-use shared lock so that all non-extending writes can run in parallel.
-
-Best practise would be to enable parallel direct writes of all kinds
-including extending writes as well but we see some issues such as
-when one write completes and other fails, how we should truncate(if
-needed) the file if underlying file system does not support holes
-(For file systems which supports holes, there might be a possibility
-of enabling parallel writes for all cases).
-
-FUSE implementations which rely on this inode lock for serialisation
-can continue to do so and this is default behaviour i.e no parallel
-direct writes.
-
-Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
----
- fs/fuse/file.c            | 45 ++++++++++++++++++++++++++++++++++++---
- include/uapi/linux/fuse.h |  2 ++
- 2 files changed, 44 insertions(+), 3 deletions(-)
-
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 829094451774..495138a68306 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -1541,14 +1541,48 @@ static ssize_t fuse_direct_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	return res;
- }
- 
-+static bool fuse_direct_write_extending_i_size(struct kiocb *iocb,
-+					       struct iov_iter *iter)
-+{
-+	struct inode *inode = file_inode(iocb->ki_filp);
-+	loff_t i_size;
-+	loff_t offset;
-+	size_t count;
-+
-+	if (iocb->ki_flags & IOCB_APPEND)
-+		return true;
-+
-+	offset = iocb->ki_pos;
-+	count = iov_iter_count(iter);
-+	i_size = i_size_read(inode);
-+
-+	return offset + count <= i_size ? false : true;
-+}
-+
- static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
- {
- 	struct inode *inode = file_inode(iocb->ki_filp);
-+	struct file *file = iocb->ki_filp;
-+	struct fuse_file *ff = file->private_data;
- 	struct fuse_io_priv io = FUSE_IO_PRIV_SYNC(iocb);
- 	ssize_t res;
-+	bool p_write = ff->open_flags & FOPEN_PARALLEL_WRITES ? true : false;
-+	bool exclusive_lock = !p_write ||
-+			       fuse_direct_write_extending_i_size(iocb, from) ?
-+			       true : false;
-+
-+	/*
-+	 * Take exclusive lock if
-+	 * - parallel writes are disabled.
-+	 * - parallel writes are enabled and i_size is being extended
-+	 * Take shared lock if
-+	 * - parallel writes are enabled but i_size does not extend.
-+	 */
-+	if (exclusive_lock)
-+		inode_lock(inode);
-+	else
-+		inode_lock_shared(inode);
- 
--	/* Don't allow parallel writes to the same file */
--	inode_lock(inode);
- 	res = generic_write_checks(iocb, from);
- 	if (res > 0) {
- 		if (!is_sync_kiocb(iocb) && iocb->ki_flags & IOCB_DIRECT) {
-@@ -1559,7 +1593,10 @@ static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 			fuse_write_update_attr(inode, iocb->ki_pos, res);
- 		}
- 	}
--	inode_unlock(inode);
-+	if (exclusive_lock)
-+		inode_unlock(inode);
-+	else
-+		inode_unlock_shared(inode);
- 
- 	return res;
- }
-@@ -2900,7 +2937,9 @@ fuse_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
- 	kref_put(&io->refcnt, fuse_io_release);
- 
- 	if (iov_iter_rw(iter) == WRITE) {
-+
- 		fuse_write_update_attr(inode, pos, ret);
-+		/* For extending writes we already hold exclusive lock */
- 		if (ret < 0 && offset + count > i_size)
- 			fuse_do_truncate(file);
- 	}
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index d6ccee961891..ee5379d41906 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -301,6 +301,7 @@ struct fuse_file_lock {
-  * FOPEN_CACHE_DIR: allow caching this directory
-  * FOPEN_STREAM: the file is stream-like (no file position at all)
-  * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-+ * FOPEN_PARALLEL_WRITES: Allow concurrent writes on the same inode
-  */
- #define FOPEN_DIRECT_IO		(1 << 0)
- #define FOPEN_KEEP_CACHE	(1 << 1)
-@@ -308,6 +309,7 @@ struct fuse_file_lock {
- #define FOPEN_CACHE_DIR		(1 << 3)
- #define FOPEN_STREAM		(1 << 4)
- #define FOPEN_NOFLUSH		(1 << 5)
-+#define FOPEN_PARALLEL_WRITES	(1 << 6)
- 
- /**
-  * INIT request/reply flags
--- 
-2.17.1
-
+Mrs Yu. Ging Yunnan.

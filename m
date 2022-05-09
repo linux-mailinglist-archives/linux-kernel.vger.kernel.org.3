@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D7251F845
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5008C51F833
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238025AbiEIJeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S237207AbiEIJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237771AbiEIJR4 (ORCPT
+        with ESMTP id S237084AbiEIJaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:17:56 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E9020B57B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:14:01 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:7048:8ec9:5f5b:8cb])
-        by laurent.telenet-ops.be with bizsmtp
-        id UZDc2700P1UlgJi01ZDc2B; Mon, 09 May 2022 11:13:37 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nnzSS-003WbP-Ju; Mon, 09 May 2022 11:13:36 +0200
-Date:   Mon, 9 May 2022 11:13:36 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linux-crypto@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc6B
-In-Reply-To: <20220509084005.4133902-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2205091113010.840289@ramsan.of.borg>
-References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com> <20220509084005.4133902-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 9 May 2022 05:30:23 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C6A1C345D;
+        Mon,  9 May 2022 02:26:28 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3248F200E75;
+        Mon,  9 May 2022 11:26:27 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F09C3200E74;
+        Mon,  9 May 2022 11:26:26 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 510B9180031C;
+        Mon,  9 May 2022 17:26:25 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ASoC: fsl_micfil: Add support for i.MX8MPlus
+Date:   Mon,  9 May 2022 17:14:22 +0800
+Message-Id: <1652087663-1908-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,24 +44,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v5.18-rc6[1] to v5.18-rc5[3], the summaries are:
->  - build errors: +1/-0
+On i.MX8Plus there are two updates for micfil module.
 
-   + /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 109:1
+One is that the output format is S32_LE, only the 24 more
+significative bits have information, the other bits are always
+zero. Add 'formats' variable in soc data to distinguish the
+format on different platform.
+Another is that the fifo depth is 32 entries.
 
-sparc64-gcc11/sparc-allmodconfig
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/fsl_micfil.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a/ (131 out of 138 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/672c0c5173427e6b3e2a9bbb7be51ceeec78093a/ (all 138 configs)
+diff --git a/sound/soc/fsl/fsl_micfil.c b/sound/soc/fsl/fsl_micfil.c
+index e4d1da55293e..25c647ae080a 100644
+--- a/sound/soc/fsl/fsl_micfil.c
++++ b/sound/soc/fsl/fsl_micfil.c
+@@ -55,6 +55,7 @@ struct fsl_micfil_soc_data {
+ 	unsigned int fifo_depth;
+ 	unsigned int dataline;
+ 	bool imx;
++	u64  formats;
+ };
+ 
+ static struct fsl_micfil_soc_data fsl_micfil_imx8mm = {
+@@ -62,10 +63,20 @@ static struct fsl_micfil_soc_data fsl_micfil_imx8mm = {
+ 	.fifos = 8,
+ 	.fifo_depth = 8,
+ 	.dataline =  0xf,
++	.formats = SNDRV_PCM_FMTBIT_S16_LE,
++};
++
++static struct fsl_micfil_soc_data fsl_micfil_imx8mp = {
++	.imx = true,
++	.fifos = 8,
++	.fifo_depth = 32,
++	.dataline =  0xf,
++	.formats = SNDRV_PCM_FMTBIT_S32_LE,
+ };
+ 
+ static const struct of_device_id fsl_micfil_dt_ids[] = {
+ 	{ .compatible = "fsl,imx8mm-micfil", .data = &fsl_micfil_imx8mm },
++	{ .compatible = "fsl,imx8mp-micfil", .data = &fsl_micfil_imx8mp },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, fsl_micfil_dt_ids);
+@@ -659,6 +670,8 @@ static int fsl_micfil_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	fsl_micfil_dai.capture.formats = micfil->soc->formats;
++
+ 	ret = devm_snd_soc_register_component(&pdev->dev, &fsl_micfil_component,
+ 					      &fsl_micfil_dai, 1);
+ 	if (ret) {
+-- 
+2.17.1
 
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds

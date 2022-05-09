@@ -2,119 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7085201F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4214F5201FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 18:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238864AbiEIQMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 12:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S238898AbiEIQMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 12:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiEIQMG (ORCPT
+        with ESMTP id S238850AbiEIQMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 12:12:06 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411A270C8A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 09:08:12 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ks9so21348947ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 09:08:12 -0700 (PDT)
+        Mon, 9 May 2022 12:12:13 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF29270C8A;
+        Mon,  9 May 2022 09:08:19 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ba17so16879052edb.5;
+        Mon, 09 May 2022 09:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOVuzkGtUFMZkUhl8LlnbBPQ227MlE7VyG3byjiP1jw=;
-        b=mQA5pnSW3NegCJ5ZG+24oCq56yDE2BdbIvXVs7LcZWiDb6bgBUUOl7togdgVnSjexP
-         KMWuvadAizO7/gDqhi+GKPU2kFR3v9nn9HSEKYMk/MaNjneK4FNHwD+i9VMSKSgOC5UI
-         7DWsWOXoUG8p8OXWZZrwETGmieiZmeQXwNf3Zo9zE0LmNbztUWIudzmeeAx6rNgoWVSo
-         G3Q2hhkvooCb4Y/GCTNmx8kXFqLsxKxEL5X4dqNz/1IZ4QOT/dVczpTQWq9ajJ4Ia5uF
-         8ceoR0usOt8k2LuMgsLMexR8DBuflKuC6IV9cus4Fv0EUCS/ViJwQQklF8OhoZRCcLDg
-         uxyw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qpVSIRHLciQG1lJnk05gcj0OOBt3+jSZsfgixWYIteE=;
+        b=Mci7nN1U48tC8u15wuILJos0lwuwNF9NQhf2lqJGQGj5DaeLz3B2uwGU2VTGbEpAqK
+         jD6wtJqHoxF+knHnwMuQ8aYufm0kUXlXuM7RQD7pe/YymePBq7itDofWQoGOJOVJ5/IC
+         XkStkfFnLV8dQ2cXCvnkOeiwXOgpIxWyJWi3ESdzwZkNU0bY5cSPWsPSnvVeWubQUEVO
+         cxT742mRgLHSg27CEZ1Ms/+yR0nWMcPcXMIz2OuCr70X0KXnxCJUFNYpuAqLjFwabGNs
+         6Q9qIeCh4D7vkFcEzMFAXR2muOsqFNiHV5628vFEDdU2US00RHiwUuSFTjJWt9ZGxNAj
+         oWOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOVuzkGtUFMZkUhl8LlnbBPQ227MlE7VyG3byjiP1jw=;
-        b=BxTfSZKi5o+73fC2x21qsHQSFyceScrv5GpW8trcCxBGAqF8XqNDm+Tn5j6iDx9DOm
-         Evjcf5wON2i8DZT33MxOUBicJlPqLfis/miAqKwSK0+GoqeX14l2pNZlUjzF7+WmPIU5
-         YsQScTgodyadh4PD4IcGSTO5Ienai8hA6103mX1uyq1xHT5wL4QML3nJsuyLMYXKdHvj
-         tPmn1KCUzUEs49agIEgNAGkfPE7r7rVzVh0eouWOeWTpCWkxPRNVob+6PefLCKMgiFHc
-         BkX4K4pQ8JKaUFRqjXFRM5yBp2JzHzVWeJgXgDug2Lo6fzFoHbYUiupr98lGZtgq/jhB
-         vE2Q==
-X-Gm-Message-State: AOAM532Ogvu9BCw7W5Ys4USZWS9GZWiXOw+1iLq2GWkpzznG8zXd3xxb
-        2TQMT9UX0n1WAEFi0b+fu9NWWg==
-X-Google-Smtp-Source: ABdhPJzdnVrZKcw9d2SLcvlOMJOYlVlkkba+emfNm8k6JJCsHoFH9gvBn4ng6PIjjG5EhiOkU+tr5Q==
-X-Received: by 2002:a17:907:7dab:b0:6f4:6650:395d with SMTP id oz43-20020a1709077dab00b006f46650395dmr14833140ejc.82.1652112490673;
-        Mon, 09 May 2022 09:08:10 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jl8-20020a17090775c800b006f3ef214e2dsm5157631ejc.147.2022.05.09.09.08.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qpVSIRHLciQG1lJnk05gcj0OOBt3+jSZsfgixWYIteE=;
+        b=lM9Yw7ZhCvjleRCNQo2PUSdsAoJWn5mCNs+w7pk2yuSNaUJ5O3Hk0de2ox2XJxM9r9
+         24qln7r2hztTRMtYhX1MSBzjT5jA5fv0uTdm2Rf7U/pjxxhy4ympILZkXGr9NJgx9/hK
+         zCFqDc5xfLdW1E7+rg1ITn+TSD80L22N56vP/QDD3sgnVThMprMy029k3Eo29Cu/pmS4
+         vVAIPAp3uwZfLXRcWfN0jegKwiKGoweMbfWWGfXoIUHV+LKCM6Ppa1keSK3ood1beeJt
+         yCjEIV+4/qwzmL8PqLqJzrz+zMSQFJsFRSfFyx2//85M+Oz2EqrYje54T0qDGeWW5U9y
+         KKog==
+X-Gm-Message-State: AOAM533ze9Hn3kE5iEDwEC68L1+vV/rBncijkN7jgPoOcykviPaZPjLH
+        OsvaFMTmFviwHHkS0ddsR2U=
+X-Google-Smtp-Source: ABdhPJzvNkOIu8i7ui8m8hMrQINj908JMFjiHuM+ZFnTOC2FqTY5Y/ZELRXEwKEXntDSN4d3FRS4qg==
+X-Received: by 2002:a05:6402:1a42:b0:424:20bb:3e37 with SMTP id bf2-20020a0564021a4200b0042420bb3e37mr17707069edb.29.1652112497589;
+        Mon, 09 May 2022 09:08:17 -0700 (PDT)
+Received: from skbuf ([188.25.160.86])
+        by smtp.gmail.com with ESMTPSA id ig11-20020a1709072e0b00b006f3ef214e2csm5339743ejc.146.2022.05.09.09.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 09:08:10 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Thierry Reding <treding@nvidia.com>
-Subject: [GIT PULL] memory: drivers: tegra for v5.19
-Date:   Mon,  9 May 2022 18:08:07 +0200
-Message-Id: <20220509160807.154187-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 09 May 2022 09:08:15 -0700 (PDT)
+Date:   Mon, 9 May 2022 19:08:13 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: Re: [PATCH net-next v4 06/12] net: dsa: rzn1-a5psw: add Renesas
+ RZ/N1 advanced 5 port switch driver
+Message-ID: <20220509160813.stfqb4c2houmfn2g@skbuf>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+ <20220509131900.7840-7-clement.leger@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509131900.7840-7-clement.leger@bootlin.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 09, 2022 at 03:18:54PM +0200, Clément Léger wrote:
+> Add Renesas RZ/N1 advanced 5 port switch driver. This switch handles 5
+> ports including 1 CPU management port. A MDIO bus is also exposed by
+> this switch and allows to communicate with PHYs connected to the ports.
+> Each switch port (except for the CPU management ports) is connected to
+> the MII converter.
+> 
+> This driver includes basic bridging support, more support will be added
+> later (vlan, etc).
+> 
+> Suggested-by: Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>
+> Suggested-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+> +static int a5psw_port_bridge_join(struct dsa_switch *ds, int port,
+> +				  struct dsa_bridge bridge,
+> +				  bool *tx_fwd_offload,
+> +				  struct netlink_ext_ack *extack)
+> +{
+> +	struct a5psw *a5psw = ds->priv;
+> +
+> +	/* We only support 1 bridge device */
+> +	if (a5psw->br_dev && bridge.dev != a5psw->br_dev) {
+> +		NL_SET_ERR_MSG_MOD(extack,
+> +				   "Forwarding offload supported for a single bridge");
 
-Topic branch for Tegra specific memory controller drivers.
+I don't think I saw the dsa_slave_changeupper() patch that avoids
+overwriting the extack when dsa_port_bridge_join() returns -EOPNOTSUPP.
 
-Best regards,
-Krzysztof
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	a5psw->br_dev = bridge.dev;
+> +	a5psw_flooding_set_resolution(a5psw, port, true);
+> +	a5psw_port_mgmtfwd_set(a5psw, port, false);
+> +
+> +	return 0;
 
+By the way, does this switch pass tools/testing/selftests/drivers/net/dsa/no_forwarding.sh?
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> +}
+> +
+> +static void a5psw_port_bridge_leave(struct dsa_switch *ds, int port,
+> +				    struct dsa_bridge bridge)
+> +{
+> +	struct a5psw *a5psw = ds->priv;
+> +
+> +	a5psw_flooding_set_resolution(a5psw, port, false);
+> +	a5psw_port_mgmtfwd_set(a5psw, port, true);
+> +
+> +	/* No more ports bridged */
+> +	if (a5psw->bridged_ports == BIT(A5PSW_CPU_PORT))
+> +		a5psw->br_dev = NULL;
+> +}
+> +
+> +static int a5psw_pcs_get(struct a5psw *a5psw)
+> +{
+> +	struct device_node *ports, *port, *pcs_node;
+> +	struct phylink_pcs *pcs;
+> +	int ret;
+> +	u32 reg;
+> +
+> +	ports = of_get_child_by_name(a5psw->dev->of_node, "ethernet-ports");
+> +	if (!ports)
+> +		ports = of_get_child_by_name(a5psw->dev->of_node, "ports");
+> +
+> +	if (!ports)
+> +		return -EINVAL;
+> +
+> +	for_each_available_child_of_node(ports, port) {
+> +		pcs_node = of_parse_phandle(port, "pcs-handle", 0);
+> +		if (!pcs_node)
+> +			continue;
+> +
+> +		if (of_property_read_u32(port, "reg", &reg)) {
+> +			ret = -EINVAL;
+> +			goto free_pcs;
+> +		}
+> +
+> +		if (reg >= ARRAY_SIZE(a5psw->pcs)) {
+> +			ret = -ENODEV;
+> +			goto free_pcs;
+> +		}
+> +
+> +		pcs = miic_create(pcs_node);
+> +		if (IS_ERR(pcs)) {
+> +			dev_err(a5psw->dev, "Failed to create PCS for port %d\n",
+> +				reg);
+> +			ret = PTR_ERR(pcs);
+> +			goto free_pcs;
+> +		}
+> +
+> +		a5psw->pcs[reg] = pcs;
+> +	}
+> +	of_node_put(ports);
+> +
+> +	return 0;
+> +
+> +free_pcs:
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+The error path is missing of_node_put(ports).
 
-are available in the Git repository at:
+> +	a5psw_pcs_free(a5psw);
+> +
+> +	return ret;
+> +}
+> +
+> +static int a5psw_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *mdio;
+> +	struct dsa_switch *ds;
+> +	struct a5psw *a5psw;
+> +	int ret;
+> +
+> +	a5psw = devm_kzalloc(dev, sizeof(*a5psw), GFP_KERNEL);
+> +	if (!a5psw)
+> +		return -ENOMEM;
+> +
+> +	a5psw->dev = dev;
+> +	spin_lock_init(&a5psw->lk_lock);
+> +	spin_lock_init(&a5psw->reg_lock);
+> +	a5psw->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (!a5psw->base)
+> +		return -EINVAL;
+> +
+> +	ret = a5psw_pcs_get(a5psw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	a5psw->hclk = devm_clk_get(dev, "hclk");
+> +	if (IS_ERR(a5psw->hclk)) {
+> +		dev_err(dev, "failed get hclk clock\n");
+> +		ret = PTR_ERR(a5psw->hclk);
+> +		goto free_pcs;
+> +	}
+> +
+> +	a5psw->clk = devm_clk_get(dev, "clk");
+> +	if (IS_ERR(a5psw->clk)) {
+> +		dev_err(dev, "failed get clk_switch clock\n");
+> +		ret = PTR_ERR(a5psw->clk);
+> +		goto free_pcs;
+> +	}
+> +
+> +	ret = clk_prepare_enable(a5psw->clk);
+> +	if (ret)
+> +		goto free_pcs;
+> +
+> +	ret = clk_prepare_enable(a5psw->hclk);
+> +	if (ret)
+> +		goto clk_disable;
+> +
+> +	mdio = of_get_child_by_name(dev->of_node, "mdio");
+> +	if (of_device_is_available(mdio)) {
+> +		ret = a5psw_probe_mdio(a5psw, mdio);
+> +		if (ret) {
+> +			of_node_put(mdio);
+> +			dev_err(&pdev->dev, "Failed to register MDIO: %d\n",
+> +				ret);
+> +			goto hclk_disable;
+> +		}
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.19
+Missing an of_node_put(mdio) if the device is available and ret == 0.
 
-for you to fetch changes up to 54a85e09f44c5fa322a2d186f50862d09f517225:
+> +	} else {
+> +		of_node_put(mdio);
+> +	}
+> +
+> +	ds = &a5psw->ds;
+> +	ds->dev = &pdev->dev;
+> +	ds->num_ports = A5PSW_PORTS_NUM;
+> +	ds->ops = &a5psw_switch_ops;
+> +	ds->priv = a5psw;
+> +
+> +	ret = dsa_register_switch(ds);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to register DSA switch: %d\n", ret);
+> +		goto hclk_disable;
+> +	}
+> +
+> +	return 0;
+> +
+> +hclk_disable:
+> +	clk_disable_unprepare(a5psw->hclk);
+> +clk_disable:
+> +	clk_disable_unprepare(a5psw->clk);
+> +free_pcs:
+> +	a5psw_pcs_free(a5psw);
+> +
+> +	return ret;
+> +}
+> +
+> +static int a5psw_remove(struct platform_device *pdev)
+> +{
+> +	struct a5psw *a5psw = platform_get_drvdata(pdev);
 
-  memory: tegra: Add MC error logging on Tegra186 onward (2022-05-09 10:46:14 +0200)
+I hate to repeat myself, but drivers in general can be removed after the device
+was shut down. If that happens, you will dereference a platform_get_drvdata()
+which is NULL, as set by yourself in a5psw_shutdown().
 
-----------------------------------------------------------------
-Memory controller drivers for v5.19 - Tegra SoC
-
-Add support for Tegra234 memory controller and for logging memory
-controller errors on Tegra186, Tegra194 and Tegra234.
-
-----------------------------------------------------------------
-Ashish Mhetre (2):
-      memory: tegra: Add memory controller channels support
-      memory: tegra: Add MC error logging on Tegra186 onward
-
-Sameer Pujar (1):
-      memory: tegra: Add APE memory clients for Tegra234
-
-Thierry Reding (1):
-      memory: tegra: Add Tegra234 support
-
- drivers/memory/tegra/Makefile       |   2 +
- drivers/memory/tegra/mc.c           | 137 +++++++++++++++++++++++++++++++-----
- drivers/memory/tegra/mc.h           |  50 ++++++++++++-
- drivers/memory/tegra/tegra186-emc.c |   3 +
- drivers/memory/tegra/tegra186.c     |  39 ++++++++++
- drivers/memory/tegra/tegra194.c     |   9 +++
- drivers/memory/tegra/tegra234.c     | 110 +++++++++++++++++++++++++++++
- include/soc/tegra/mc.h              |   8 ++-
- 8 files changed, 339 insertions(+), 19 deletions(-)
- create mode 100644 drivers/memory/tegra/tegra234.c
+> +
+> +	dsa_unregister_switch(&a5psw->ds);
+> +	a5psw_pcs_free(a5psw);
+> +	clk_disable_unprepare(a5psw->hclk);
+> +	clk_disable_unprepare(a5psw->clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static void a5psw_shutdown(struct platform_device *pdev)
+> +{
+> +	struct a5psw *a5psw = platform_get_drvdata(pdev);
+> +
+> +	if (!a5psw)
+> +		return;
+> +
+> +	dsa_switch_shutdown(&a5psw->ds);
+> +
+> +	platform_set_drvdata(pdev, NULL);
+> +}

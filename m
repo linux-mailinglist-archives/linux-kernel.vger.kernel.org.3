@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DE151F549
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E52C51F5BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 09:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiEIH1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 03:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S236774AbiEIHdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 03:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbiEIH1f (ORCPT
+        with ESMTP id S234780AbiEIHdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 03:27:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36701A492E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652081022; x=1683617022;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PQ0v14kg+YX1kWC50pYpDVGqLmrEAVaJH6iokEaC8JY=;
-  b=GbpR5zmmCirjKYlnT098NQfOFc8TM47tnxxUCEYuWcb1FVKJPAP3jpDS
-   QDz5LUHHlEX6yQ/TdPKHgxJqfsdn0fV0dkXZTdgpohUK+wI2qm/f+yd5D
-   Xz/HBxyJljlyEF3RcAQFdNUmgnUD1TnIjGpzMmepXyVQisHiMzxcaFF7v
-   KEs4eZ6DAkGAdMIN1K8OBHB1kYyDRiIQhVwzXSeSH6Fr1VMz1iGyW3PsI
-   +mNkKaVS7UCEZn/txjqNRfCR8alxiU+CPO6TiEnNA7+i7xaT/6rvzus+V
-   jqZkGVwzcXhwlge+GjWet/nbtAsk8l+srgwA/yVBqf+exQzxXCvAS8Rea
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="162801641"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2022 00:23:42 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 9 May 2022 00:23:40 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 9 May 2022 00:23:38 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux@armlinux.org.uk>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2] ARM: at91: Kconfig: implement PIT64B selection
-Date:   Mon, 9 May 2022 10:26:05 +0300
-Message-ID: <20220509072605.4056145-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 9 May 2022 03:33:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A88FFE70
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 00:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652081274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=V2c9vBmEzL9GnOTwGUFGbuZHpMHymiK976kVFmr4dm0=;
+        b=ZddCWJR8NsmBNVhcHBJSojocLLv+JlfPIf/oPTmo7yjInCa/Fb7rMZqAwWAFIzNEAa6M55
+        Ic8BgKbgVuN7DsjADUv+IkDeXcPobnkh9Uk/bp58b+/EFL312HPJCFiN2QjdI4GJz5ux2Y
+        ujr0USkV1g0Y8LuYPd+mLY2jtia5tVY=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-0EVxRxb_N_qXiPscsywzSQ-1; Mon, 09 May 2022 03:27:53 -0400
+X-MC-Unique: 0EVxRxb_N_qXiPscsywzSQ-1
+Received: by mail-ed1-f72.google.com with SMTP id k13-20020a50ce4d000000b00425e4447e64so7801129edj.22
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 00:27:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=V2c9vBmEzL9GnOTwGUFGbuZHpMHymiK976kVFmr4dm0=;
+        b=HSEWLW4y0dTU63VeRGo77bFRx0NKKS85LZRaJDZBKaRyImLV19yMYJJdYSpE8bC62D
+         vIYuzHxrAa2i9JGsAKeitA1bZGGW/a3uBIAfENiuYSebcbmf9ADAbbXrINpWle4XjZe2
+         xOEBu8jdGILgN2WbeTbx6AtJWqKVcpm+jvCk+YCYvoL4hIx+rGv+PNDAiRX7r4J7DGcX
+         TnjaDBnv1pMdrVnTwBRsTUiyNRw95td/Gi+/BCKAM1RwfHcMBNkBPLko8zfLHTGR1tJ/
+         EcchPVEQPW83FMyTLT5lWz6aWkRgFnKhxnCfNPOTICIRofXAlMjy3fI+NOZOngz9AJBa
+         D6SA==
+X-Gm-Message-State: AOAM5331uyZkSkb32KsW3ZKSeMG3sdfDHnCGhwKSqdzftfL/cLUt6Sfp
+        EO1RNIkpgCyAABCEZvhtkdoTWL8ujbr2riSmZWFSzKbDCn1cLXgc2qFOsA8BezcRYmOvVOs/fu2
+        VH6pr+oeDvco9RICTm1/JGUB2
+X-Received: by 2002:a05:6402:4256:b0:428:39:c6c7 with SMTP id g22-20020a056402425600b004280039c6c7mr15465373edb.374.1652081272625;
+        Mon, 09 May 2022 00:27:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxtLYjqjd+JSRhyz+2aHDlDZujkKSuS44yxRLRXeGdCffdJgodAPLKfV+vb4QTZPqFG8D2GdQ==
+X-Received: by 2002:a05:6402:4256:b0:428:39:c6c7 with SMTP id g22-20020a056402425600b004280039c6c7mr15465361edb.374.1652081272439;
+        Mon, 09 May 2022 00:27:52 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7c04e000000b0042617ba639asm5967014edo.36.2022.05.09.00.27.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 00:27:52 -0700 (PDT)
+Message-ID: <d9007c58-71a2-e081-c609-fbf04855b591@redhat.com>
+Date:   Mon, 9 May 2022 09:27:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 5.18-4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Gross <mgross@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +78,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement PIT64B selection thus it will be available for the necessary
-targets (at the moment SAM9X60 and SAMA7G5) w/o the necessity to
-specify it via defconfig. With this the current CONFIG_TIMER_OF
-dependency of PIT64B driver could be removed.
+Hi Linus,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
+Here is a third round of bug-fixes for platform-drivers-x86
+for 5.18:
 
-Changes in v2:
-- keep only Kconfig changes
+ -  thinkpad_acpi AMD suspend/resume + fan detection fixes
+ -  2 other small fixes
+ -  1 hardware-id addition
 
- arch/arm/mach-at91/Kconfig | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Regards,
 
-diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
-index 279810381256..1531b4625c76 100644
---- a/arch/arm/mach-at91/Kconfig
-+++ b/arch/arm/mach-at91/Kconfig
-@@ -165,6 +165,15 @@ config ATMEL_CLOCKSOURCE_TCB
- 	  to make a single 32-bit timer.
- 	  It can also be used as a clock event device supporting oneshot mode.
- 
-+config MICROCHIP_CLOCKSOURCE_PIT64B
-+	bool "64-bit Periodic Interval Timer (PIT64B) support"
-+	default SOC_SAM9X60 || SOC_SAMA7
-+	select MICROCHIP_PIT64B
-+	help
-+	  Select this to get a high resolution clockevent (SAM9X60) or
-+	  clocksource and clockevent (SAMA7G5) based on Microchip 64-bit
-+	  Periodic Interval Timer.
-+
- config HAVE_AT91_UTMI
- 	bool
- 
--- 
-2.34.1
+Hans
+
+
+The following changes since commit eb2fd9b43fae0c51982ac4229535b6cfd77380db:
+
+  platform/x86/intel: pmc/core: change pmc_lpm_modes to static (2022-04-27 16:55:54 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.18-4
+
+for you to fetch changes up to 44acfc22c7d055d9c4f8f0974ee28422405b971a:
+
+  platform/surface: aggregator: Fix initialization order when compiling as builtin module (2022-05-06 13:05:57 +0200)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v5.18-4
+
+3th set of pdx86 fixes for 5.18:
+ -  thinkpad_acpi AMD suspend/resume + fan detection fixes
+ -  2 other small fixes
+ -  1 hardware-id addition
+
+The following is an automated git shortlog grouped by driver:
+
+platform/surface:
+ -  aggregator: Fix initialization order when compiling as builtin module
+ -  gpe: Add support for Surface Pro 8
+
+platform/x86/intel:
+ -  Fix 'rmmod pmt_telemetry' panic
+
+thinkpad_acpi:
+ -  Correct dual fan probe
+ -  Add a s2idle resume quirk for a number of laptops
+ -  Convert btusb DMI list to quirks
+
+----------------------------------------------------------------
+Mario Limonciello (2):
+      platform/x86: thinkpad_acpi: Convert btusb DMI list to quirks
+      platform/x86: thinkpad_acpi: Add a s2idle resume quirk for a number of laptops
+
+Mark Pearson (1):
+      platform/x86: thinkpad_acpi: Correct dual fan probe
+
+Maximilian Luz (2):
+      platform/surface: gpe: Add support for Surface Pro 8
+      platform/surface: aggregator: Fix initialization order when compiling as builtin module
+
+Prarit Bhargava (1):
+      platform/x86/intel: Fix 'rmmod pmt_telemetry' panic
+
+ drivers/platform/surface/aggregator/core.c |   2 +-
+ drivers/platform/surface/surface_gpe.c     |   8 ++
+ drivers/platform/x86/intel/pmt/telemetry.c |   2 +-
+ drivers/platform/x86/thinkpad_acpi.c       | 175 +++++++++++++++++++++++++++--
+ 4 files changed, 173 insertions(+), 14 deletions(-)
 

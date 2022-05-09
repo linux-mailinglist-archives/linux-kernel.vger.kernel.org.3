@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD2051FEE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9945651FEEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbiEIN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S236546AbiEIN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236485AbiEIN5U (ORCPT
+        with ESMTP id S236657AbiEIN6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:57:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6C12D1C0;
-        Mon,  9 May 2022 06:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Kxxyg1HZnQSs/qeLzfqToEvB7I7JnrqLFn5Ofm/34bY=; b=mkpF3BTb9sYAwjiKkfmAKvRtRR
-        ta5V+lcRSuTlh4plsa5nFCL0LXnihub+nNgTIzgxSU1xT7urt4+VNvXnAP/AnSCOLVBobQsOmhgBW
-        pz/K0YRJlb4ZwMUDrFsRojpY4T2ELh3V6rI11kweNRCSvQz3J/QOhMgVeSNyqbbfrLtI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1no3p5-001x4a-GG; Mon, 09 May 2022 15:53:15 +0200
-Date:   Mon, 9 May 2022 15:53:15 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Mon, 9 May 2022 09:58:49 -0400
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEED1DE571;
+        Mon,  9 May 2022 06:54:54 -0700 (PDT)
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 71EF221114;
+        Mon,  9 May 2022 13:54:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 55AAE2002C;
+        Mon,  9 May 2022 13:54:52 +0000 (UTC)
+Message-ID: <5e44ef1302b722d3bf7fafe55111e76f7173e6be.camel@perches.com>
+Subject: Re: [PATCH] staging: drivers: hid: hid-asus.c: Optimized input
+ logic for keys
+From:   Joe Perches <joe@perches.com>
+To:     Johan Boger <jb@ip.fi>, jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: micrel: Fix incorret variable type in micrel
-Message-ID: <Ynkcy0VhJ/HTfqMU@lunn.ch>
-References: <20220509134951.2327924-1-wanjiabing@vivo.com>
+Date:   Mon, 09 May 2022 06:54:51 -0700
+In-Reply-To: <20220509100258.24764-1-jb@ip.fi>
+References: <20220509100258.24764-1-jb@ip.fi>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509134951.2327924-1-wanjiabing@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: uikmp1cmopecb6ysxgrm8uthrk5qbnkd
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 55AAE2002C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19siEZ6i90BjYKhTg3/vNQyMSOLpCRnlsQ=
+X-HE-Tag: 1652104492-339497
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:49:51PM +0800, Wan Jiabing wrote:
-> In lanphy_read_page_reg, calling __phy_read() might return a negative
-> error code. Use 'int' to check the negative error code.
+On Mon, 2022-05-09 at 12:02 +0200, Johan Boger wrote:
+> Instead of calling asus_map_key_clear() function in each case,
+> we now set a temporary value and clear it after default.
+> Patch was checked by checkpatch and adjusted accordingly.
 
-Hi Wan
+This patch subject is not correct.  This is not a staging patch.
 
-As far as the code goes, this looks good.
+Your commit message is also incomplete as this is modifying comments,
+changing whitespace, and changing brace styles.
 
-Please could you add a Fixes: tag, to indicate where the problem was
-introduced. Please also read the netdev FAQ, so you can correctly set
-the patch subject. This should be against the net tree, since it is a
-fix.
+and IMO:
 
-Thanks
-	Andrew
+Either use a single line case style like:
+
+	case foo: statement; break;
+
+or use a multiple line case style like:
+
+	case foo:
+		statement;
+		break;
+
+but please do not use a mixed case one line and statement; break;
+on another like:
+
+	case foo:
+		statement; break;
+
+Please remember checkpatch is only a guide, it's not the last word
+on style where every message it emits requires an actual code change.
+
+btw: there are _many_ single line case uses in the kernel
+
+$ git grep  -P 'case\s+\w+\s*:\s*\w+' -- '*.[ch]' | wc -l
+7581
+
+
+

@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2A551FCE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C501C51FCEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiEIMgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S234616AbiEIMgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiEIMge (ORCPT
+        with ESMTP id S234528AbiEIMgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:36:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97E70284929
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 05:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652099558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=YyVeP8FyL2hyCQ2N083n40aBu6xoSDc160MDLkcNums=;
-        b=D2thnBq4I5ldVx9ixN6WngV4/0NSuy7DLBvTOONjforAiymfCBcWDxYit2EYKnzRx43muF
-        zjfvIIMbsz6xeeHvSdWs5pJXe8IDkNgRqrPLWBZLF9qvQjnhxUipu2MO6WCKbyAM6b4y4f
-        W0Ndq/+aZ9X9C4yGKwnfBtLHDZjzhVg=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-416-P7URrcIxP8mcowMcXOp81w-1; Mon, 09 May 2022 08:32:37 -0400
-X-MC-Unique: P7URrcIxP8mcowMcXOp81w-1
-Received: by mail-qt1-f199.google.com with SMTP id x10-20020ac8700a000000b002c3ef8fc44cso11943549qtm.8
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 05:32:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YyVeP8FyL2hyCQ2N083n40aBu6xoSDc160MDLkcNums=;
-        b=DuFtbngAGdw8nbrDROjiXNglF8MraQxZcSF7nUS3dvPzr2uv+7cwIfaRURwFnvYg+9
-         XBqXshVQ4zHm+gR399sikBtTDM1jzOnuPiG51nrVjEXySW5wrKL1LQtL80+s646wK2WE
-         B0omgl2/RVfyyC1iCcENQs6MhIgwQii1iF9qcUCOHsU3OME05qxyr1wqyB0+DqU9oAlK
-         ZFaoHZKUgBGvoTPpzDp/x8er8W/NIm0Y/NN+uB7Nv+E7aIfjFhnTYxWY6ebfH3UZpOSC
-         zAoYcCCcYgcnpFNuGn0FTZzz1KvaA+PF+PRxK1TUIe4CUCtTOQOl9CMUeA5DyUW17hvt
-         R8dQ==
-X-Gm-Message-State: AOAM5304D4VsRXNra37+aX5dFg+zozyC6/yPGLcJ8vn1IV+4isYVHPSx
-        V16GJ9KL1BM5PUqa+rRdzyaGWEUp6+FWlAQU4jh5iZOzrp9Bm04mF5YC7DSQPpdGUNzUmtoQmLo
-        9FpvY3+EwUbISewFyLbByLgqD
-X-Received: by 2002:a05:6214:3012:b0:45a:afde:568b with SMTP id ke18-20020a056214301200b0045aafde568bmr12922421qvb.2.1652099556892;
-        Mon, 09 May 2022 05:32:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyR0DnU583XohtUlCS3huesd3t60jnAeqmFyQSwk+kv9UkI5PNlzULAHfpsImS/2Qvu9b+YRQ==
-X-Received: by 2002:a05:6214:3012:b0:45a:afde:568b with SMTP id ke18-20020a056214301200b0045aafde568bmr12922403qvb.2.1652099556686;
-        Mon, 09 May 2022 05:32:36 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id t134-20020a37aa8c000000b0069fc13ce23bsm6818499qke.108.2022.05.09.05.32.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 05:32:36 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     hughd@google.com, akpm@linux-foundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, willy@infradead.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] mm/shmem: restore setting of page variable
-Date:   Mon,  9 May 2022 08:32:32 -0400
-Message-Id: <20220509123232.3428667-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 9 May 2022 08:36:37 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF35284924;
+        Mon,  9 May 2022 05:32:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=VvadgFGR5P7Y1v/cSX7S4UjT+qCj1J/fEEMY6EaLxbE=; b=4DROTrduGydJj/ZaRB/TsSFC78
+        3LscZqNAdYrMMpEP3jgH3vbIaVJyOBHorGQU8yR3rZkRizfb3PRHeXcluKeyidUkeapArws3gBCj7
+        2vGRgVGhklzt19zJV+t7shNPDyG7k3ox9PMeKfXdllIp/o7qrMbAzDKgyc1weMy1Uz5w=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1no2Z3-001wQT-9m; Mon, 09 May 2022 14:32:37 +0200
+Date:   Mon, 9 May 2022 14:32:37 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org, nm@ti.com,
+        ssantosh@kernel.org, s-anna@ti.com,
+        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
+        grygorii.strashko@ti.com, vigneshr@ti.com, kishon@ti.com,
+        robh+dt@kernel.org, afd@ti.com
+Subject: Re: [PATCH 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <YnkJ5bFd72d0FagD@lunn.ch>
+References: <20220506052433.28087-1-p-mohan@ti.com>
+ <20220506052433.28087-3-p-mohan@ti.com>
+ <YnVQW7xpSWEE2/HP@lunn.ch>
+ <f674c56c-0621-f471-9517-5c349940d362@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f674c56c-0621-f471-9517-5c349940d362@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clang build fails with
-mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used here [-Werror,-Wuninitialized]
-  if (!page)
-       ^~~~
+> >> +static void icssg_init_emac_mode(struct prueth *prueth)
+> >> +{
+> >> +	u8 mac[ETH_ALEN] = { 0 };
+> >> +
+> >> +	if (prueth->emacs_initialized)
+> >> +		return;
+> >> +
+> >> +	regmap_update_bits(prueth->miig_rt, FDB_GEN_CFG1, SMEM_VLAN_OFFSET_MASK, 0);
+> >> +	regmap_write(prueth->miig_rt, FDB_GEN_CFG2, 0);
+> >> +	/* Clear host MAC address */
+> >> +	icssg_class_set_host_mac_addr(prueth->miig_rt, mac);
+> > 
+> > Seems an odd thing to do, set it to 00:00:00:00:00:00. You probably
+> > want to add a comment why you do this odd thing.
+> 
+> Actually, this is when the device is configured as a bridge, the host
+> mac address has to be set to zero to while bringing it back to emac
+> mode. I will add a comment to explain this.
 
-In the commit listed in the fixes, there was a change to the
-from
-  page = shmem_alloc_page(..);
-to
-  page = &shmem_alloc_folio(..)->page;
-But in this case, instead of replacing, the setting of page was
-deleted.  So restore page with its new api.
+I don't see any switchdev interface. How does it get into bridge mode?
 
-Fixes: b0bb08b2d5f3 ("mm/shmem: turn shmem_alloc_page() into shmem_alloc_folio()")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- mm/shmem.c | 1 +
- 1 file changed, 1 insertion(+)
+> >> +	} else if (emac->link) {
+> >> +		new_state = true;
+> >> +		emac->link = 0;
+> >> +		/* defaults for no link */
+> >> +
+> >> +		/* f/w should support 100 & 1000 */
+> >> +		emac->speed = SPEED_1000;
+> >> +
+> >> +		/* half duplex may not supported by f/w */
+> >> +		emac->duplex = DUPLEX_FULL;
+> > 
+> > Why set speed and duplex when you have just lost the link? They are
+> > meaningless until the link comes back.
+> 
+> These were just the default values that we added.
+> What do you suggest I put here?
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 7faaa61ff7fa..a2234f19b711 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2334,6 +2334,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 
- 	if (!*pagep) {
- 		ret = -ENOMEM;
-+		page = &shmem_alloc_folio(gfp, info, pgoff)->page;
- 		if (!page)
- 			goto out_unacct_blocks;
- 
--- 
-2.27.0
+Nothing. If the link is down, they are meaningless. If something is
+accessing them when the link is down, that code is broken. So i
+suppose you could give them poison values to help find your broken
+code.
 
+> >> +	for_each_child_of_node(eth_ports_node, eth_node) {
+> >> +		u32 reg;
+> >> +
+> >> +		if (strcmp(eth_node->name, "port"))
+> >> +			continue;
+> >> +		ret = of_property_read_u32(eth_node, "reg", &reg);
+> >> +		if (ret < 0) {
+> >> +			dev_err(dev, "%pOF error reading port_id %d\n",
+> >> +				eth_node, ret);
+> >> +		}
+> >> +
+> >> +		if (reg == 0)
+> >> +			eth0_node = eth_node;
+> >> +		else if (reg == 1)
+> >> +			eth1_node = eth_node;
+> > 
+> > and if reg == 4
+> > 
+> > Or reg 0 appears twice?
+> 
+> In both of the cases that you mentioned, the device tree schema check
+> will fail, hence, we can safely assume that this will be 0 and 1 only.
+
+Nothing forces you to run the scheme checker. It is not run by the
+kernel before it starts accessing the DT blob. You should assume it is
+invalid until you have proven it to be valid.
+
+	Andrew

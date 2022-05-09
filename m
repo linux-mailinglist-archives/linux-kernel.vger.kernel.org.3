@@ -2,110 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F5151FFD9
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D85151FFD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 16:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbiEIO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S237073AbiEIOas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 10:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237151AbiEIO3j (ORCPT
+        with ESMTP id S236923AbiEIOak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 10:29:39 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADB15700;
-        Mon,  9 May 2022 07:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=P7ItdBTC+KXB0aqEwbSMXisX2R2Wb9V+tpF+BUJ3fMQ=; b=afqWOj15+1L7ZOehgz4TDp3T9b
-        MarVdwm0LTk8+i9B4YSy7xFp7vHwG1/w4WbfDff1U5lUjMxS0vk2DRuV0fJ7wbVLLeaMw89VjYM5x
-        WVJwpPzVyva0X5NmUi/i4nuSyMS2YeO8WasLcgi1Y8xImc6fOPpwaaWR9ocIpTn6nZEFaqdopezXx
-        OHjXA1hjw9QuPDRbTOoKOwl5vTqszrquVcmDp1xGYYzEdEOTzOi8SiNmSxJjEIE9o/SJMrBbQG4MO
-        b+UdR8rUhoog9dM2StftHOG35g7VaJwxTPUyd5VBoTJ128N6lfMi0IgW+WU1FzuWQA7pga9h2J0Nf
-        78MmVTaA==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1no4KQ-000BPa-6C; Mon, 09 May 2022 16:25:38 +0200
-Message-ID: <260dccd8-a4f6-882c-8767-5bc27576df14@igalia.com>
-Date:   Mon, 9 May 2022 11:25:06 -0300
+        Mon, 9 May 2022 10:30:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B831CFD1;
+        Mon,  9 May 2022 07:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652106406; x=1683642406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HCdSIoiGs6J+p/OfruwdFMvCF2xJa6k7Z24v4z1d0G4=;
+  b=ieimuAF2XOeLfLl6Nao7HUhSrUP4lBHs55NGo2iCcXnxS09wQoh50S1C
+   gvNEoNnU2+2Dwux0Z06MI2TLZT7KWjSBHQPWEbtjHPolVx26qfGP6HxJ9
+   VUfAx/8uH+XX1h5sZ4lkAbkuOUsDOl72cw27Vh8B4sXA9006DW7invIWQ
+   YZwGfKTbCf4V7355Vrx0hnWg/4jjzKp2Xc7beBPc91R6dR62Xlt5VVZWD
+   4nWqPhd9sAuaI4WAMW2hAtVI9fZusYgzDTPi0SmIGtoDWlE9PdhRpMKPh
+   kxTczioilSe19yy6Jw9Vf6HL17pJ/cH6N9b8rI5VdrOOoF8VGP1wJc4qY
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="162858666"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 May 2022 07:26:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 9 May 2022 07:26:44 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 9 May 2022 07:26:41 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Cyril Jean <Cyril.Jean@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v5 00/10] PolarFire SoC dt for 5.19
+Date:   Mon, 9 May 2022 15:26:01 +0100
+Message-ID: <20220509142610.128590-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, bhe@redhat.com,
-        akpm@linux-foundation.org, bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        kexec@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, pmladek@suse.com
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
- <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
- <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
-In-Reply-To: <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 13:04, Guilherme G. Piccoli wrote:
-> On 27/04/2022 21:28, Randy Dunlap wrote:
->>
->>
->> On 4/27/22 15:49, Guilherme G. Piccoli wrote:
->>> +	crash_kexec_post_notifiers
->>> +			This was DEPRECATED - users should always prefer the
->>
->> 			This is DEPRECATED - users should always prefer the
->>
->>> +			parameter "panic_notifiers_level" - check its entry
->>> +			in this documentation for details on how it works.
->>> +			Setting this parameter is exactly the same as setting
->>> +			"panic_notifiers_level=4".
->>
-> 
-> Thanks Randy, for your suggestion - but I confess I couldn't understand
-> it properly. It's related to spaces/tabs, right? What you suggest me to
-> change in this formatting? Just by looking the email I can't parse.
-> 
-> Cheers,
-> 
-> 
-> Guilherme
+Hey all,
+Got a few PolarFire SoC device tree related changes here for 5.19.
 
-Complete lack of attention from me, apologies!
-The suggestions was s/was/is - already fixed for V2, thanks Randy.
+Firstly, patches 1 & 2 of this series supersede [0] & are unchanged
+compared to that submission, figured it would just be easier to keep
+all the changes in one series.
+
+As discussed on irc, patch 3 removes the duplicated "microchip" from
+the device tree files so that they follow a soc-board.dts & a
+soc{,-fabric}.dtsi format.
+
+Patch 5 makes the fabric dtsi board specific by renaming the file to
+mpfs-icicle-kit-fabric.dtsi & including it in the dts rather than
+mpfs.dtsi. Additionally this will allow other boards to define their
+own reference fabric design. A revision specific compatible, added in
+patch 4, is added to the dt also.
+
+The remainder of the series adds a bare minimum devicetree for the
+Sundance Polarberry.
+
+Thanks,
+Conor.
+
+Changes since v4:
+- Whitespace and status ordering changes in the polarberry dt pointed
+  out by Heiko
+- A new patch for same whitspace and status order changes, but applied
+  to the icicle dt
+- A reordering of the icicle dt alphabetically to match the formatting
+  of the polarberry dt
+
+Changes since v3:
+- remove an extra line of wshitespace added to dt-binding
+- remove unneeded "okay" status & sort status to node end
+- sort polarberry dts entries in ~alphabetical order
+- add a comment explaining why the second mac (mac0) is disabled on
+  polarberry
+
+Changes since v2:
+- make ,icicle-reference compatible with ,mpfs & put it inside the enum
+
+Changes since v1:
+- fixed whitespace problems in the polarberry dts
+- disabled mac0 for the polarberry as its port is on the optional
+  carrier board
+
+Conor Dooley (10):
+  riscv: dts: microchip: remove icicle memory clocks
+  riscv: dts: microchip: move sysctrlr out of soc bus
+  riscv: dts: microchip: remove soc vendor from filenames
+  dt-bindings: riscv: microchip: document icicle reference design
+  riscv: dts: microchip: make the fabric dtsi board specific
+  dt-bindings: vendor-prefixes: add Sundance DSP
+  dt-bindings: riscv: microchip: add polarberry compatible string
+  riscv: dts: microchip: add the sundance polarberry
+  riscv: microchip: icicle: readability fixes
+  riscv: dts: icicle: sort nodes alphabetically
+
+ .../devicetree/bindings/riscv/microchip.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/riscv/boot/dts/microchip/Makefile        |   3 +-
+ ...abric.dtsi => mpfs-icicle-kit-fabric.dtsi} |   2 +
+ ...pfs-icicle-kit.dts => mpfs-icicle-kit.dts} | 105 +++++++++---------
+ .../dts/microchip/mpfs-polarberry-fabric.dtsi |  16 +++
+ .../boot/dts/microchip/mpfs-polarberry.dts    |  99 +++++++++++++++++
+ .../{microchip-mpfs.dtsi => mpfs.dtsi}        |  11 +-
+ 8 files changed, 181 insertions(+), 59 deletions(-)
+ rename arch/riscv/boot/dts/microchip/{microchip-mpfs-fabric.dtsi => mpfs-icicle-kit-fabric.dtsi} (91%)
+ rename arch/riscv/boot/dts/microchip/{microchip-mpfs-icicle-kit.dts => mpfs-icicle-kit.dts} (95%)
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+ rename arch/riscv/boot/dts/microchip/{microchip-mpfs.dtsi => mpfs.dtsi} (98%)
+
+-- 
+2.35.2
+

@@ -2,186 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA3F51F436
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0968E51F41E
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234644AbiEIFnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S234838AbiEIFsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234520AbiEIFj5 (ORCPT
+        with ESMTP id S234621AbiEIFoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:39:57 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217CC37AB6;
-        Sun,  8 May 2022 22:36:02 -0700 (PDT)
-X-UUID: eaf69eb13c7b4e61836ecad789cf549d-20220509
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:8cc222ed-4217-40b0-926a-b7adea8aa0a9,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:31f511b3-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: eaf69eb13c7b4e61836ecad789cf549d-20220509
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2127698123; Mon, 09 May 2022 13:35:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 9 May 2022 13:35:55 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 9 May 2022 13:35:55 +0800
-Message-ID: <445ef1e3ef9d62934e1b84d4fb207705a90d4f34.camel@mediatek.com>
-Subject: Re: [PATCH v6 00/16] Cleanup MediaTek clk reset drivers and support
- MT8192/MT8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 9 May 2022 13:35:55 +0800
-In-Reply-To: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
-References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 9 May 2022 01:44:55 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0670D110312
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:41:03 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KxVKR1HpYz9sVj;
+        Mon,  9 May 2022 07:36:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id o9_dxTuXoPLn; Mon,  9 May 2022 07:36:43 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF5dFVz9sVd;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id ACA588B76E;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id bU37uZxVXqHF; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 51AA28B776;
+        Mon,  9 May 2022 07:36:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aR9w1591206
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 9 May 2022 07:36:27 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aQXb1591205;
+        Mon, 9 May 2022 07:36:26 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        naveen.n.rao@linux.vnet.ibm.com
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v3 00/25] powerpc: ftrace optimisation and cleanup and more [v3]
+Date:   Mon,  9 May 2022 07:35:58 +0200
+Message-Id: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074581; l=3842; s=20211009; h=from:subject:message-id; bh=51wV9eNRVhtkrENuM3ARQMOo9s4nz33TjB7nd9UuZ9k=; b=5cHXoeQUSw6/s49i9T83aDQblwQx/bkwWim71GkTXPcdJAmIQN1FULV+fhrAMAr9boUqwdTVRCC7 ADMcx+S4C56WgZ2JRzvaAMU49HONnidpXa8Utb0gYagb40pokvnE
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 17:38 +0800, Rex-BC Chen wrote:
-> In this series, we cleanup MediaTek clock reset drivers in
-> clk/mediatek
-> folder. MediaTek clock reset driver is used to provide reset control
-> of modules controlled in clk, like infra_ao.
-> 
-> Changes for v6:
-> 1. Add a new patch to support inuput argument index mode.
-> 2. Revise definition in reset.h to index.
-> 
-> Changes for V5:
-> 1. Add all infra reset bits for MT8192 and MT8195.
-> 2. Fix reviewers' comments.
-> 
-> Changes for V4:
-> 1. Abandon the implementation of reset-cell = 2, and use reset index
-> to
->    determine which reset bit is used.
-> 2. Add documentation for enum/structure/function in reset.h.
-> 3. Combine binding/drvier support patch for MT8192 and MT8195.
-> 4. The MT8195 DTS is accepted by Matthias, and I add new DTS patch to
->    support infracfg_ao reset for MT8195. The DTS of MT8195 is still
->    not merged into mainline. Please refer to [1].
-> 
-> [1]: 
-> https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=for-next&id=37f2582883be7218dc69f9af135959a8e93de223
-> 
-> Changes for V3:
-> 1. Modify drivers for reviewers' comments.
-> 2. Add dt-binding patch for MT8192/MT8195 infra.
-> 3. Add reset property of infra node for MT8192.
-> 4. Use original function for simple operation.
-> 
-> Changes for V2:
-> 1. Modify drivers for reviewers' comments.
-> 2. Use simple reset to replace v1.
-> 3. Recover v2 to set_clr.
-> 4. Separate error handling to another patch.
-> 5. Add support for input offset and bit from DT.
-> 6. Add support for MT8192 and MT8195.
-> 
-> Rex-BC Chen (16):
->   clk: mediatek: reset: Add reset.h
->   clk: mediatek: reset: Fix written reset bit offset
->   clk: mediatek: reset: Refine and reorder functions in reset.c
->   clk: mediatek: reset: Extract common drivers to update function
->   clk: mediatek: reset: Merge and revise reset register function
->   clk: mediatek: reset: Revise structure to control reset register
->   clk: mediatek: reset: Support nonsequence base offsets of reset
->     registers
->   clk: mediatek: reset: Support inuput argument index mode
->   clk: mediatek: reset: Change return type for clock reset register
->     function
->   clk: mediatek: reset: Add new register reset function with device
->   clk: mediatek: reset: Add reset support for simple probe
->   dt-bindings: arm: mediatek: Add #reset-cells property for
->     MT8192/MT8195
->   dt-bindings: reset: mediatek: Add infra_ao reset index for
->     MT8192/MT8195
->   clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
->   arm64: dts: mediatek: Add infra #reset-cells property for MT8192
->   arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-> 
->  .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
->  .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
->  drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701.c             |  22 +-
->  drivers/clk/mediatek/clk-mt2712.c             |  22 +-
->  drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
->  drivers/clk/mediatek/clk-mt7622.c             |  22 +-
->  drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
->  drivers/clk/mediatek/clk-mt8135.c             |  22 +-
->  drivers/clk/mediatek/clk-mt8173.c             |  22 +-
->  drivers/clk/mediatek/clk-mt8183.c             |  18 +-
->  drivers/clk/mediatek/clk-mt8192.c             |  29 +++
->  drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  24 +++
->  drivers/clk/mediatek/clk-mtk.c                |   7 +
->  drivers/clk/mediatek/clk-mtk.h                |   9 +-
->  drivers/clk/mediatek/reset.c                  | 198 +++++++++++++---
-> --
->  drivers/clk/mediatek/reset.h                  |  82 ++++++++
->  include/dt-bindings/reset/mt8192-resets.h     |   8 +
->  include/dt-bindings/reset/mt8195-resets.h     |   6 +
->  25 files changed, 491 insertions(+), 94 deletions(-)
->  create mode 100644 drivers/clk/mediatek/reset.h
-> 
-> -- 
-> 2.18.0
-> 
+This series provides optimisation and cleanup of ftrace on powerpc.
 
-Hello Stephen and Michael,
+With this series ftrace activation is about 20% faster on an 8xx.
 
-The drivers of this series are reviewed.
-The binding of this series are also acked.
-Could you spare some time and give us some suggestion?
+At the end of the series come additional cleanups around ppc-opcode,
+that would likely conflict with this series if posted separately.
 
-Thanks!
+Change since v2:
+- The only change in v3 is in patch 21, to fix sparse problems reported by the Robot.
 
-BRs,
-Rex
+Main changes since v1 (details in after each individual patch description):
+- Added 3 patches (8, 9, 10) that convert PPC64_ELF_ABI_v{1/2} macros by CONFIG_PPC64_ELF_ABI_V{1/2}
+- Taken comments from Naveen
+
+Christophe Leroy (25):
+  powerpc/ftrace: Refactor prepare_ftrace_return()
+  powerpc/ftrace: Remove redundant create_branch() calls
+  powerpc/code-patching: Inline is_offset_in_{cond}_branch_range()
+  powerpc/ftrace: Use is_offset_in_branch_range()
+  powerpc/code-patching: Inline create_branch()
+  powerpc/ftrace: Inline ftrace_modify_code()
+  powerpc/ftrace: Use patch_instruction() return directly
+  powerpc: Add CONFIG_PPC64_ELF_ABI_V1 and CONFIG_PPC64_ELF_ABI_V2
+  powerpc: Replace PPC64_ELF_ABI_v{1/2} by CONFIG_PPC64_ELF_ABI_V{1/2}
+  powerpc: Finalise cleanup around ABI use
+  powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and
+    PPC64
+  powerpc/ftrace: Don't include ftrace.o for CONFIG_FTRACE_SYSCALLS
+  powerpc/ftrace: Use CONFIG_FUNCTION_TRACER instead of
+    CONFIG_DYNAMIC_FTRACE
+  powerpc/ftrace: Remove ftrace_plt_tramps[]
+  powerpc/ftrace: Use BRANCH_SET_LINK instead of value 1
+  powerpc/ftrace: Use PPC_RAW_xxx() macros instead of opencoding.
+  powerpc/ftrace: Use size macro instead of opencoding
+  powerpc/ftrace: Simplify expected_nop_sequence()
+  powerpc/ftrace: Minimise number of #ifdefs
+  powerpc/inst: Add __copy_inst_from_kernel_nofault()
+  powerpc/ftrace: Don't use copy_from_kernel_nofault() in
+    module_trampoline_target()
+  powerpc/inst: Remove PPC_INST_BRANCH
+  powerpc/modules: Use PPC_LI macros instead of opencoding
+  powerpc/inst: Remove PPC_INST_BL
+  powerpc/opcodes: Remove unused PPC_INST_XXX macros
+
+ arch/powerpc/Kconfig                     |   2 +-
+ arch/powerpc/Makefile                    |  12 +-
+ arch/powerpc/boot/Makefile               |   2 +
+ arch/powerpc/include/asm/code-patching.h |  65 +++-
+ arch/powerpc/include/asm/ftrace.h        |   4 +-
+ arch/powerpc/include/asm/inst.h          |  13 +-
+ arch/powerpc/include/asm/linkage.h       |   2 +-
+ arch/powerpc/include/asm/module.h        |   2 -
+ arch/powerpc/include/asm/ppc-opcode.h    |  22 +-
+ arch/powerpc/include/asm/ppc_asm.h       |   4 +-
+ arch/powerpc/include/asm/ptrace.h        |   2 +-
+ arch/powerpc/include/asm/sections.h      |  24 +-
+ arch/powerpc/include/asm/types.h         |   8 -
+ arch/powerpc/kernel/fadump.c             |  13 +-
+ arch/powerpc/kernel/head_64.S            |   2 +-
+ arch/powerpc/kernel/interrupt_64.S       |   2 +-
+ arch/powerpc/kernel/kprobes.c            |   6 +-
+ arch/powerpc/kernel/misc_64.S            |   2 +-
+ arch/powerpc/kernel/module.c             |   4 +-
+ arch/powerpc/kernel/module_32.c          |  38 ++-
+ arch/powerpc/kernel/module_64.c          |   7 +-
+ arch/powerpc/kernel/ptrace/ptrace.c      |   6 -
+ arch/powerpc/kernel/trace/Makefile       |   5 +-
+ arch/powerpc/kernel/trace/ftrace.c       | 375 +++++++----------------
+ arch/powerpc/kvm/book3s_interrupts.S     |   2 +-
+ arch/powerpc/kvm/book3s_rmhandlers.S     |   2 +-
+ arch/powerpc/lib/code-patching.c         |  49 +--
+ arch/powerpc/lib/feature-fixups.c        |   2 +-
+ arch/powerpc/net/bpf_jit.h               |   4 +-
+ arch/powerpc/net/bpf_jit_comp.c          |   2 +-
+ arch/powerpc/net/bpf_jit_comp64.c        |   4 +-
+ arch/powerpc/platforms/Kconfig.cputype   |   6 +
+ 32 files changed, 271 insertions(+), 422 deletions(-)
+
+-- 
+2.35.1
 

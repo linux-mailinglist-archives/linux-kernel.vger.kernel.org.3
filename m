@@ -2,160 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DFF51FD6A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD76551FD5C
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 14:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiEIMzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 08:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S235006AbiEIMzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 08:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235019AbiEIMzJ (ORCPT
+        with ESMTP id S234888AbiEIMy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 08:55:09 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB2BF68A2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 05:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652100673; x=1683636673;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nubDSabDiEdWIu3TyuZP2hqIVB7Y6DGDjU308i1v68E=;
-  b=AlQrfTIZNiguygbvLfrutnb3I/dUdXFpHpI531A55vix9szsGXeU2Paa
-   TiLvXiwTHcUPuIXUEjbYhV6ReKYfhe4hoxa23nFbtEnSYc3SxKsx9jvCi
-   F5SMliJ2Br3qq5tasGbaahrqIJp+eMp0zbhUijjIigKKrhD+29ZhUqr/o
-   +jDB7cerbzifD4qvBjHr4Og4sOiXfwzeMth4Cu3sdVPgYwAwuKkd3U4RZ
-   SSykmqTBr82nnR5nhEbhmmcZ83y+xy9O+8v12B7/OYdkB/q6CB5inmj/I
-   6wwYpLSzH5PfWDpBfHl3UOHTazKlOrGlDklHLOHxkLoxFFPE43SMZVvTy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="248939590"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="248939590"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:51:12 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="710511246"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 05:51:10 -0700
-Date:   Mon, 9 May 2022 20:49:22 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        kbuild-all@lists.01.org
-Subject: Re: [PATCH] fs/ufs: Replace kmap() with kmap_local_page()
-Message-ID: <YnkN0rwQD0N3NfmU@rli9-dbox>
-References: <20220508200755.24586-1-fmdefrancesco@gmail.com>
- <202205090835.NEUQ3VKB-lkp@intel.com>
+        Mon, 9 May 2022 08:54:56 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF152BB39;
+        Mon,  9 May 2022 05:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vNWZxas8t1kFoCf13D7/vaEHrhXkMcvheesCeQUODMg=; b=LiRqvKrtw9XJxMP26bz+wzbn1n
+        fBHqZS6c/XR8QMIkcDbMMcoNGulyS43Rfp83nqthIjvwxcC0/rE6EUbNIf51/kQdvFB0MZLjpT1Zt
+        jPlWUhML/RrgwA/8AbWtoLwz1yzaOdGTpwde1q8bM8ZApOffPjJ50hQj+UprMTPvFMZ+3kTukzvDC
+        T+M3aUntgoIptglMOe9noJu8WxIIHyHpxsCC1uL0UNNnEkCrtSTA6MLc7ESoFMKljoD3/1VBzhboF
+        ZG7o2pwmSFhOEypVckR6q5+g5/pOsvXV3qshYFBj5WEOrVLcV95X7vQdrWZ9lJh80TjIodpEGtnLe
+        +KvSh8AA==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1no2qT-0003gn-07; Mon, 09 May 2022 14:50:37 +0200
+Message-ID: <f9c3de3c-1709-a1aa-2ece-c9fbfd5e6d6a@igalia.com>
+Date:   Mon, 9 May 2022 09:50:05 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205090835.NEUQ3VKB-lkp@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 08/30] powerpc/setup: Refactor/untangle panic notifiers
+Content-Language: en-US
+To:     Hari Bathini <hbathini@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        pmladek@suse.com, kexec@lists.infradead.org, bhe@redhat.com,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, akpm@linux-foundation.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-9-gpiccoli@igalia.com>
+ <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:25:00AM +0800, kernel test robot wrote:
-> Hi "Fabio,
+On 05/05/2022 15:55, Hari Bathini wrote:
+> [...] 
+> The change looks good. I have tested it on an LPAR (ppc64).
 > 
-> Thank you for the patch! Perhaps something to improve:
+> Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
 > 
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v5.18-rc6]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e3de3a1cda5fdc3ac42cb0d45321fb254500595f
-> config: riscv-randconfig-r042-20220509 (https://download.01.org/0day-ci/archive/20220509/202205090835.NEUQ3VKB-lkp@intel.com/config)
-> compiler: riscv32-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/e73d9919e2725b216318d5d02b8a184876ab3b11
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
->         git checkout e73d9919e2725b216318d5d02b8a184876ab3b11
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Sorry, kindly ignore this report, which is a false positive. We will
-block such report in future.
+Hi Michael. do you think it's possible to add this one to powerpc/next
+(or something like that), or do you prefer a V2 with his tag?
+Thanks,
 
-> 
-> >> WARNING: modpost: vmlinux.o(.text+0xa76c20): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.LVL13
-> The function rtc_update_irq() references
-> the variable __init .LVL13.
-> This is often because rtc_update_irq lacks a __init
-> annotation or the annotation of .LVL13 is wrong.
-> --
-> >> WARNING: modpost: vmlinux.o(.text+0xb35ab4): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .init.text:.LBE19058
-> The function btintel_send_intel_reset() references
-> the variable __init .LBE19058.
-> This is often because btintel_send_intel_reset lacks a __init
-> annotation or the annotation of .LBE19058 is wrong.
-> --
-> >> WARNING: modpost: vmlinux.o(.text+0xc53984): Section mismatch in reference from the function neigh_table_clear() to the variable .init.text:$x
-> The function neigh_table_clear() references
-> the variable __init $x.
-> This is often because neigh_table_clear lacks a __init
-> annotation or the annotation of $x is wrong.
-> --
-> >> WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF936
-> FATAL: modpost: extable_entry size hasn't been discovered!
-> 
-> Note: the below error/warnings can be found in parent commit:
-> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
-> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
-> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
-> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
-> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
-> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
-> << WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
-> << WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
-> << WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+
+Guilherme

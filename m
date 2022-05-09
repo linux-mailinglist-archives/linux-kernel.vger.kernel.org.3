@@ -2,157 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4909851F385
+	by mail.lfdr.de (Postfix) with ESMTP id E379751F387
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiEIEdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 00:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        id S232721AbiEIEfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiEIEan (ORCPT
+        with ESMTP id S234183AbiEIE35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 00:30:43 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9731059F4;
-        Sun,  8 May 2022 21:26:48 -0700 (PDT)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 2494PhcJ014643;
-        Mon, 9 May 2022 13:25:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2494PhcJ014643
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652070344;
-        bh=DM2Qvk/KSJwggZQc+f9r/EEPApKQ0miaQHjxBSW8IV8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o6XYg2bwQfHrSq3bmQnG8Jpcnk1UTD3FhC5a1TUoXExRLyvujSGeOMFR3dfEqtIxx
-         jZIb9XBWPLHupK1YnU+oibAr0NtF7JrU/xq9ge0bTvQxiXAsf5FSwZf/aBLkzokBSh
-         4pYnoQJrhruoSCAZW5vQpqOKLKRG+TD+bP/cc+wlRqd1lkmZ6G/jPPJMKc6+GeRK0p
-         yWn5WRjoA7b1nUAeCM1kGbAv1dll+XvcerBv59vD5767bpInjYSc63X4ghyeOgNpIk
-         O+3kAqdTjgld9pwF/oKvzQSUpg5noc20wbQuZ1RetnGg5M/PlDZ6Y1JjaznJKcydLK
-         Vxs0cbmmsKiPw==
-X-Nifty-SrcIP: [209.85.216.52]
-Received: by mail-pj1-f52.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15924784pjb.5;
-        Sun, 08 May 2022 21:25:43 -0700 (PDT)
-X-Gm-Message-State: AOAM532XfFh1WmMfSMp+sY5k4d+qirDaMgiWiE+DRPH+6AQNQno3rwId
-        l8o+QZ4Kv6sNE/ZjyX4E+IjGA39jHZfvBylT3uE=
-X-Google-Smtp-Source: ABdhPJz+EyiLX7j6uh3WzqWMOrMkF5hlrWDy6od+IPDFGCNr8NC4vk92cU3B82hmpcsJDxTmnQ5GEcRpm1eC9pqP+d0=
-X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
- q17-20020a170902789100b0015ecae97620mr14626650pll.136.1652070342778; Sun, 08
- May 2022 21:25:42 -0700 (PDT)
+        Mon, 9 May 2022 00:29:57 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5E446B2F
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 21:26:03 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id k14so11037377pga.0
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 21:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mZjP4dNTKy30RT9KsXwzpA3EHoMN585jvCR1XFDuLEc=;
+        b=nBNg+tHZflBjGIS0XPj5Tmj27fS8cL8mQm0nI/LyYEthrACAFVmuVfbXjqcD3sQnTO
+         kmivvn/pU1dK3Y0JdheVKDRZDi/CCl0csGg4Md5G+jbn4Eq6NxU4T+CmjudaxnMQdVez
+         IxSFKuDQmoFDTamIY9S9dXezXOQqnpJKsowXw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mZjP4dNTKy30RT9KsXwzpA3EHoMN585jvCR1XFDuLEc=;
+        b=WTjvBMugFcBkJvwiZM632cvyrlmztLoSnOI8lREBuatbeoXChyAFkqc5IG/eoZSRqF
+         MTmuDslo2UDyIKQbBtqpkemNNe4oAibuXD1rFzFRxji1m7koGChIEmBU/yzWfzESpyoc
+         +MeI9QEhZyaGAzctynT4di752fuxV8k+SG1ziz/oURVZzjvZT3N3SgQolNKTNtn68bSG
+         jz8kb26b199l4bP1gy5IOW2zzqYvSTH3blibQy45pUGFvEcQBsnGnaINCZPxV5PqkFhz
+         VxR53CrQbWt4ibVPt0VfAkAjvVoPHwpZpu4OobrWYJWGi4Z0RNJ8pGjCojIRA+rXcXvl
+         JceQ==
+X-Gm-Message-State: AOAM533RIplrmMv+5u7j20h9iWPxdCemsMHe3IEzH8qAaCoBg5ewCw0c
+        NN/wgxjKDlFZ/MR8bQAprxquAg==
+X-Google-Smtp-Source: ABdhPJzrANxqU33W/Ssp3fR5eUxPwB81F/Oe0FFkPLJbJUxvMEmAwhD7R/7F6MGgzD3ydHD3eRFfdg==
+X-Received: by 2002:a62:7ccc:0:b0:510:4e07:79f3 with SMTP id x195-20020a627ccc000000b005104e0779f3mr13894842pfc.10.1652070363403;
+        Sun, 08 May 2022 21:26:03 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:97ce:ca39:c9e7:b20e])
+        by smtp.gmail.com with ESMTPSA id g10-20020aa7818a000000b0050dc76281a6sm7472520pfi.128.2022.05.08.21.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 21:26:03 -0700 (PDT)
+Date:   Mon, 9 May 2022 12:25:59 +0800
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, johnson.wang@mediatek.com,
+        mka@chromium.org, jia-wei.chang@mediatek.com,
+        andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
+        sibis@codeaurora.org, saravanak@google.com
+Subject: Re: [PATCH v2 5/5] PM / devfreq: passive: Update frequency when
+ start governor
+Message-ID: <YniX1w+oI1eOCmCx@google.com>
+References: <20220507150145.531864-1-cw00.choi@samsung.com>
+ <20220507150145.531864-6-cw00.choi@samsung.com>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 9 May 2022 13:24:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507150145.531864-6-cw00.choi@samsung.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This is the third batch of cleanups in this development cycle.
->
-> Major changes in v4:
->  - Move static EXPORT_SYMBOL check to a script
->  - Some refactoring
->
-> Major changes in v3:
->
->  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
->
-> Major changes in v2:
->
->  - V1 did not work with CONFIG_MODULE_REL_CRCS.
->    I fixed this for v2.
->
->  - Reflect some review comments in v1
->
->  - Refactor the code more
->
->  - Avoid too long argument error
+Hi,
 
-This series is available at
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-lto-cleanup-v4
+On Sun, May 08, 2022 at 12:01:45AM +0900, Chanwoo Choi wrote:
+> If the parent device changes the their frequency before registering
+> the passive device, the passive device cannot receive the notification
+> from parent device and then the passive device cannot be able to
+> set the proper frequency according to the frequency of parent device.
+> 
+> So, when start the passive governor, update the frequency
+> according to the frequency of parent device.
+> 
+> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Link: https://lore.kernel.org/r/20220507150145.531864-6-cw00.choi@samsung.com
+> ---
+>  drivers/devfreq/governor_passive.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index b34dbe750c0a..74d26c193fdb 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -412,6 +412,23 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+>  		if (!p_data->this)
+>  			p_data->this = devfreq;
+>  
+> +		/*
+> +		 * If the parent device changes the their frequency before
+> +		 * registering the passive device, the passive device cannot
+> +		 * receive the notification from parent device and then the
+> +		 * passive device cannot be able to set the proper frequency
+> +		 * according to the frequency of parent device.
+> +		 *
+> +		 * When start the passive governor, update the frequency
+> +		 * according to the frequency of parent device.
+> +		 */
+> +		mutex_lock(&devfreq->lock);
+> +		ret = devfreq_update_target(devfreq, parent->previous_freq);
 
+This crashes when parent is NULL, in the case where parent is cpufreq.
+This is the case with the MTK ccifreq driver, which produces the panic
+and backtrace below [1].
 
+I made a fix for a previous version of this patch:
 
+    https://github.com/wens/linux/commit/f85c1834dd07388abb57a00200c80f7440823a03
 
->
->
-> Masahiro Yamada (14):
->   modpost: remove left-over cross_compile declaration
->   modpost: change the license of EXPORT_SYMBOL to bool type
->   modpost: split the section mismatch checks into section-check.c
->   modpost: add sym_find_with_module() helper
->   modpost: extract symbol versions from *.cmd files
->   kbuild: link symbol CRCs at final link, removing
->     CONFIG_MODULE_REL_CRCS
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format to modpost
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
->   kbuild: add cmd_and_savecmd macro
->   kbuild: rebuild multi-object modules when objtool is updated
->
->  arch/powerpc/Kconfig            |    1 -
->  arch/s390/Kconfig               |    1 -
->  arch/um/Kconfig                 |    1 -
->  include/asm-generic/export.h    |   22 +-
->  include/linux/export-internal.h |   16 +
->  include/linux/export.h          |   30 +-
->  init/Kconfig                    |    4 -
->  kernel/module.c                 |   10 +-
->  scripts/Kbuild.include          |   10 +-
->  scripts/Makefile.build          |  134 +--
->  scripts/Makefile.lib            |    7 -
->  scripts/Makefile.modfinal       |    5 +-
->  scripts/Makefile.modpost        |    9 +-
->  scripts/check-local-export      |   48 +
->  scripts/genksyms/genksyms.c     |   18 +-
->  scripts/link-vmlinux.sh         |   33 +-
->  scripts/mod/Makefile            |    2 +-
->  scripts/mod/modpost.c           | 1499 ++++---------------------------
->  scripts/mod/modpost.h           |   35 +-
->  scripts/mod/section-check.c     | 1222 +++++++++++++++++++++++++
->  20 files changed, 1551 insertions(+), 1556 deletions(-)
->  create mode 100644 include/linux/export-internal.h
->  create mode 100755 scripts/check-local-export
->  create mode 100644 scripts/mod/section-check.c
->
-> --
-> 2.32.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20220508190631.2386038-1-masahiroy%40kernel.org.
+BTW, could you CC me on future revisions? I'm not subscribed to the
+linux-pm mailing list.
 
 
+Regards
+ChenYu
 
--- 
-Best Regards
-Masahiro Yamada
+[1]
+
+Unable to handle kernel read from unreadable memory at virtual address 0000000000000420
+Mem abort info:
+ESR = 0x0000000096000005
+EC = 0x25: DABT (current EL), IL = 32 bits
+SET = 0, FnV = 0
+EA = 0, S1PTW = 0
+FSC = 0x05: level 1 translation fault
+Data abort info:
+ISV = 0, ISS = 0x00000005
+CM = 0, WnR = 0
+[0000000000000420] user address but active_mm is swapper
+Internal error: Oops: 96000005 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 7 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc5-next-20220505-09393-g38dc825c1d73 #155 b348fdb8d61a403eef7a9c5857bc02a261fcb213
+Hardware name: Google juniper sku16 board (DT)
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : devfreq_passive_event_handler (drivers/devfreq/governor_passive.c:426)
+lr : devfreq_passive_event_handler (drivers/devfreq/governor_passive.c:426)
+sp : ffffffc00808ba80
+x29: ffffffc00808ba80 x28: 0000000000000000 x27: ffffffe99bb90458
+x26: 0000000000000010 x25: ffffff80c1843848 x24: ffffff80c1843810
+x23: ffffffe99babf3f5 x22: ffffffe99c278190 x21: ffffff80c0924d80
+x20: ffffff80c1843800 x19: 0000000000000000 x18: 0000000000000000
+x17: 0000000065516d0e x16: 00000000fc90660b x15: 0000000000000018
+x14: 0000000000000000 x13: ffffffffff000000 x12: 0000000000000038
+x11: 0101010101010101 x10: 8000000000000000 x9 : ffffffe99acb8458
+x8 : 0065766973000000 x7 : 0000000000000080 x6 : 0000000000000000
+x5 : 8000000000000000 x4 : 0000000000000000 x3 : ffffff80c1843810
+x2 : ffffff80c0228000 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+devfreq_passive_event_handler (drivers/devfreq/governor_passive.c:426)
+devfreq_add_device (drivers/devfreq/devfreq.c:932)
+devm_devfreq_add_device (drivers/devfreq/devfreq.c:1028)
+mtk_ccifreq_probe (drivers/devfreq/mtk-cci-devfreq.c:366)
+platform_probe (drivers/base/platform.c:1398)
+really_probe (drivers/base/dd.c:542 drivers/base/dd.c:621 drivers/base/dd.c:566)
+__driver_probe_device (drivers/base/dd.c:752)
+driver_probe_device (drivers/base/dd.c:782)
+__driver_attach (drivers/base/dd.c:1143 drivers/base/dd.c:1094)
+bus_for_each_dev (drivers/base/bus.c:301)
+driver_attach (drivers/base/dd.c:1160)
+bus_add_driver (drivers/base/bus.c:619)
+driver_register (drivers/base/driver.c:240)
+__platform_driver_register (drivers/base/platform.c:866)
+mtk_ccifreq_platdrv_init (drivers/devfreq/mtk-cci-devfreq.c:468)
+do_one_initcall (init/main.c:1301)
+kernel_init_freeable (init/main.c:1375 init/main.c:1392 init/main.c:1411 init/main.c:1618)
+kernel_init (init/main.c:1511)
+ret_from_fork (arch/arm64/kernel/entry.S:868)
+Code: f9000eb4 91004298 aa1803e0 940979d4 (f9421261)
+All code
+========
+   0:	f9000eb4 	str	x20, [x21, #24]
+   4:	91004298 	add	x24, x20, #0x10
+   8:	aa1803e0 	mov	x0, x24
+   c:	940979d4 	bl	0x25e75c
+  10:*	f9421261 	ldr	x1, [x19, #1056]		<-- trapping instruction
+
+Code starting with the faulting instruction
+===========================================
+   0:	f9421261 	ldr	x1, [x19, #1056]
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: Oops: Fatal exception
+SMP: stopping secondary CPUs
+Kernel Offset: 0x2992c00000 from 0xffffffc008000000
+PHYS_OFFSET: 0x40000000
+CPU features: 0x000,00324811,00001086
+Memory Limit: none
+PANIC in EL3.
+
+> +		if (ret < 0)
+> +			dev_warn(&devfreq->dev,
+> +			"failed to update devfreq using passive governor\n");
+> +		mutex_unlock(&devfreq->lock);
+> +
+>  		if (p_data->parent_type == DEVFREQ_PARENT_DEV)
+>  			ret = devfreq_passive_register_notifier(devfreq);
+>  		else if (p_data->parent_type == CPUFREQ_PARENT_DEV)
+> 
+> -- 
+> 2.25.1
+> 

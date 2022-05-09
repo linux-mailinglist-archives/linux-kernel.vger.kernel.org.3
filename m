@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C6B5204A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CC15204A7
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbiEISmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S240288AbiEISmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240272AbiEISmj (ORCPT
+        with ESMTP id S240216AbiEISmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:42:39 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50818260867
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:38:44 -0700 (PDT)
+        Mon, 9 May 2022 14:42:40 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232926086B
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 11:38:46 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652121522;
+        t=1652121524;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2z4am8efPkBHe5K6q2zk3FpEuHSEHOPmz0WCK0OizBQ=;
-        b=W7wTrLUT6pcfa+GNzHQSJr6RwTrBgKY7pSyQYtBPdqz4ksSV8Yr5fAs3rpz4B97+6bbg8W
-        brZ0u/I84OUgoI1tSOEmCIe4x2IKx43Kjlhv9+79j36wGsJ37VymFjCiOnOH3Pf3eMJl2a
-        dY72NIvHL5sz3BH0qpSs/suYcaU2khM=
+        bh=G0nsxyzGb1i11ycGLFmpikTl6TwBBRGWt6VA6PTf/VI=;
+        b=MGMq29EFa8FQSOBa6oumVjlBpR2OcRgE4ObbYzl2jTIkeEugSFzKva5kAUVdBmBYGHXCKH
+        5L0j+wlTWkeAq93clx7+ie2Mkn/7ttrWEW2I4TScScRoM/uIVtxtPaOmdKG/4PH2p6xyL8
+        eoQgEswaQWIZITazBVUeekuPoHBqq/8=
 From:   Roman Gushchin <roman.gushchin@linux.dev>
 To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
 Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc:     Dave Chinner <dchinner@redhat.com>, linux-kernel@vger.kernel.org,
         Hillf Danton <hdanton@sina.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v3 5/6] tools: add memcg_shrinker.py
-Date:   Mon,  9 May 2022 11:38:19 -0700
-Message-Id: <20220509183820.573666-6-roman.gushchin@linux.dev>
+Subject: [PATCH v3 6/6] mm: shrinkers: add scan interface for shrinker debugfs
+Date:   Mon,  9 May 2022 11:38:20 -0700
+Message-Id: <20220509183820.573666-7-roman.gushchin@linux.dev>
 In-Reply-To: <20220509183820.573666-1-roman.gushchin@linux.dev>
 References: <20220509183820.573666-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
@@ -52,105 +52,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple tool which prints a sorted list of shrinker lists
-in the following format: (number of objects, shrinker name, cgroup).
-
-Example:
-  $ ./memcg_shrinker.py -n 10
-  2090     sb-sysfs-26          /sys/fs/cgroup/system.slice
-  1809     sb-sysfs-26          /sys/fs/cgroup/system.slice/systemd-udevd.service
-  1044     sb-btrfs:vda2-24     /sys/fs/cgroup/system.slice/system-dbus\x2d:1.3\...
-  861      sb-btrfs:vda2-24     /sys/fs/cgroup/system.slice/system-dbus\x2d:1.3\...
-  804      sb-btrfs:vda2-24     /sys/fs/cgroup/system.slice
-  643      sb-btrfs:vda2-24     /sys/fs/cgroup/system.slice/firewalld.service
-  616      sb-cgroup2-30        /sys/fs/cgroup/init.scope
-  275      sb-sysfs-26          /
-  238      sb-proc-25           /sys/fs/cgroup/system.slice/systemd-journald.service
-  225      sb-proc-25           /sys/fs/cgroup/system.slice/abrtd.service
+Add a scan interface which allows to trigger scanning of a particular
+shrinker and specify memcg and numa node. It's useful for testing,
+debugging and profiling of a specific scan_objects() callback.
+Unlike alternatives (creating a real memory pressure and dropping
+caches via /proc/sys/vm/drop_caches) this interface allows to interact
+with only one shrinker at once. Also, if a shrinker is misreporting
+the number of objects (as some do), it doesn't affect scanning.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- tools/cgroup/memcg_shrinker.py | 71 ++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100755 tools/cgroup/memcg_shrinker.py
+ .../admin-guide/mm/shrinker_debugfs.rst       | 39 +++++++++-
+ mm/shrinker_debug.c                           | 73 +++++++++++++++++++
+ 2 files changed, 108 insertions(+), 4 deletions(-)
 
-diff --git a/tools/cgroup/memcg_shrinker.py b/tools/cgroup/memcg_shrinker.py
-new file mode 100755
-index 000000000000..706ab27666a4
---- /dev/null
-+++ b/tools/cgroup/memcg_shrinker.py
-@@ -0,0 +1,71 @@
-+#!/usr/bin/env python3
-+#
-+# Copyright (C) 2022 Roman Gushchin <roman.gushchin@linux.dev>
-+# Copyright (C) 2022 Meta
+diff --git a/Documentation/admin-guide/mm/shrinker_debugfs.rst b/Documentation/admin-guide/mm/shrinker_debugfs.rst
+index 6783f8190e63..8fecf81d60ee 100644
+--- a/Documentation/admin-guide/mm/shrinker_debugfs.rst
++++ b/Documentation/admin-guide/mm/shrinker_debugfs.rst
+@@ -5,14 +5,16 @@ Shrinker Debugfs Interface
+ ==========================
+ 
+ Shrinker debugfs interface provides a visibility into the kernel memory
+-shrinkers subsystem and allows to get information about individual shrinkers.
++shrinkers subsystem and allows to get information about individual shrinkers
++and interact with them.
+ 
+ For each shrinker registered in the system a directory in **<debugfs>/shrinker/**
+ is created. The directory's name is composed from the shrinker's name and an
+ unique id: e.g. *kfree_rcu-0* or *sb-xfs:vda1-36*.
+ 
+-Each shrinker directory contains the **count** file, which allows to trigger
+-the *count_objects()* callback for each memcg and numa node (if applicable).
++Each shrinker directory contains **count** and **scan** files, which allow to
++trigger *count_objects()* and *scan_objects()* callbacks for each memcg and
++numa node (if applicable).
+ 
+ Usage:
+ ------
+@@ -43,7 +45,7 @@ Usage:
+ 
+     $ cd sb-btrfs\:vda2-24/
+     $ ls
+-    count
++    count            scan
+ 
+ 3. *Count objects*
+ 
+@@ -98,3 +100,32 @@ Usage:
+     2877 84 0
+     293 1 0
+     735 8 0
 +
-+import os
-+import argparse
-+import sys
++4. *Scan objects*
 +
++  The expected input format::
 +
-+def scan_cgroups(cgroup_root):
-+    cgroups = {}
++    <cgroup inode id> <numa id> <number of objects to scan>
 +
-+    for root, subdirs, _ in os.walk(cgroup_root):
-+        for cgroup in subdirs:
-+            path = os.path.join(root, cgroup)
-+            ino = os.stat(path).st_ino
-+            cgroups[ino] = path
++  For a non-memcg-aware shrinker or on a system with no memory
++  cgrups **0** should be passed as cgroup id.
++  ::
 +
-+    # (memcg ino, path)
-+    return cgroups
++    $ cd /sys/kernel/debug/shrinker/
++    $ cd sb-btrfs\:vda2-24/
 +
++    $ cat count | head -n 5
++    1 212 0
++    21 97 0
++    55 802 5
++    2367 2 0
++    225 13 0
 +
-+def scan_shrinkers(shrinker_debugfs):
-+    shrinkers = []
++    $ echo "55 0 200" > scan
 +
-+    for root, subdirs, _ in os.walk(shrinker_debugfs):
-+        for shrinker in subdirs:
-+            count_path = os.path.join(root, shrinker, "count")
-+            with open(count_path) as f:
-+                for line in f.readlines():
-+                    items = line.split(' ')
-+                    ino = int(items[0])
-+                    # (count, shrinker, memcg ino)
-+                    shrinkers.append((int(items[1]), shrinker, ino))
-+    return shrinkers
++    $ cat count | head -n 5
++    1 212 0
++    21 96 0
++    55 752 5
++    2367 2 0
++    225 13 0
+diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+index 28b1c1ab60ef..8f67fef5a643 100644
+--- a/mm/shrinker_debug.c
++++ b/mm/shrinker_debug.c
+@@ -101,6 +101,77 @@ static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+ }
+ DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
+ 
++static int shrinker_debugfs_scan_open(struct inode *inode, struct file *file)
++{
++	file->private_data = inode->i_private;
++	return nonseekable_open(inode, file);
++}
 +
++static ssize_t shrinker_debugfs_scan_write(struct file *file,
++					   const char __user *buf,
++					   size_t size, loff_t *pos)
++{
++	struct shrinker *shrinker = (struct shrinker *)file->private_data;
++	unsigned long nr_to_scan = 0, ino;
++	struct shrink_control sc = {
++		.gfp_mask = GFP_KERNEL,
++	};
++	struct mem_cgroup *memcg = NULL;
++	int nid;
++	char kbuf[72];
++	int read_len = size < (sizeof(kbuf) - 1) ? size : (sizeof(kbuf) - 1);
++	ssize_t ret;
 +
-+def main():
-+    parser = argparse.ArgumentParser(description='Display biggest shrinkers')
-+    parser.add_argument('-n', '--lines', type=int, help='Number of lines to print')
++	if (copy_from_user(kbuf, buf, read_len))
++		return -EFAULT;
++	kbuf[read_len] = '\0';
 +
-+    args = parser.parse_args()
++	if (sscanf(kbuf, "%lu %d %lu", &ino, &nid, &nr_to_scan) < 2)
++		return -EINVAL;
 +
-+    cgroups = scan_cgroups("/sys/fs/cgroup/")
-+    shrinkers = scan_shrinkers("/sys/kernel/debug/shrinker/")
-+    shrinkers = sorted(shrinkers, reverse = True, key = lambda x: x[0])
++	if (nid < 0 || nid >= nr_node_ids)
++		return -EINVAL;
 +
-+    n = 0
-+    for s in shrinkers:
-+        count, name, ino = (s[0], s[1], s[2])
-+        if count == 0:
-+            break
++	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
++		memcg = mem_cgroup_get_from_ino(ino);
++		if (!memcg || IS_ERR(memcg))
++			return -ENOENT;
 +
-+        if ino == 0 or ino == 1:
-+            cg = "/"
-+        else:
-+            try:
-+                cg = cgroups[ino]
-+            except KeyError:
-+                cg = "unknown (%d)" % ino
++		if (!mem_cgroup_online(memcg)) {
++			mem_cgroup_put(memcg);
++			return -ENOENT;
++		}
++	} else {
++		if (ino != 0)
++			return -EINVAL;
++		memcg = NULL;
++	}
 +
-+        print("%-8s %-20s %s" % (count, name, cg))
++	ret = down_read_killable(&shrinker_rwsem);
++	if (ret) {
++		mem_cgroup_put(memcg);
++		return ret;
++	}
 +
-+        n += 1
-+        if args.lines and n >= args.lines:
-+            break
++	sc.nid = nid;
++	sc.memcg = memcg;
++	sc.nr_to_scan = nr_to_scan;
++	sc.nr_scanned = nr_to_scan;
 +
++	shrinker->scan_objects(shrinker, &sc);
 +
-+if __name__ == '__main__':
-+    main()
++	up_read(&shrinker_rwsem);
++	mem_cgroup_put(memcg);
++
++	return ret ? ret : size;
++}
++
++static const struct file_operations shrinker_debugfs_scan_fops = {
++	.owner	 = THIS_MODULE,
++	.open	 = shrinker_debugfs_scan_open,
++	.write	 = shrinker_debugfs_scan_write,
++};
++
+ int shrinker_debugfs_add(struct shrinker *shrinker)
+ {
+ 	struct dentry *entry;
+@@ -130,6 +201,8 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
+ 
+ 	debugfs_create_file("count", 0220, entry, shrinker,
+ 			    &shrinker_debugfs_count_fops);
++	debugfs_create_file("scan", 0440, entry, shrinker,
++			    &shrinker_debugfs_scan_fops);
+ 	return 0;
+ }
+ 
 -- 
 2.35.3
 

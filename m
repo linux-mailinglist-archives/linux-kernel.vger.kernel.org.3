@@ -2,266 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE3A51FE99
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE3C51FE93
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiEINrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S236335AbiEINrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236500AbiEINq7 (ORCPT
+        with ESMTP id S236326AbiEINrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:46:59 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434BA26A726
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:42:47 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id n10so26913451ejk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 06:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Sw3X1IvartbYB0KHGJUY3ruuCDgguNnfxUDPf/paEoU=;
-        b=Fp0TOFfXdyZrX9kqJ6ScQKvNpL2ENEpXFErSYpxZlrX/BXE/UgQATPXsLqrOxLVvGt
-         gd59SZ9ejyuZuxhAhU1QtI2W4oMGnB2C92SW9k256cGT4MQ5hBzN2BRPLPDT0ecKzgVD
-         UP0N6xAPTvW37XoT039JILqFu00XvZyAC5JUw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Sw3X1IvartbYB0KHGJUY3ruuCDgguNnfxUDPf/paEoU=;
-        b=3SBK3MK2+uZelVD0DP2/tf2gtOBb7f+4oQyMbE/GMRSsEVyQ/7Hdg1OQZg9rAoaeys
-         1ilULNTUU4ToQgNeVSp9kRSfZtEWNeSNg2pNglMMgoFYyDKFDyRVBM07QZkAskDsyIW/
-         s5WMRbW5dC+8AhDohm97XHQZKFuaHv5ONwKWl2gHlDH2Ajfkz847OtCG0hcXdobzLn+Y
-         va3ioxpFa2JdRocLTnBW+Fhco6Gs31xcndXriR0PO7HGObP1/CVcuRjtHxdhEH8oDoz0
-         BCl7tu0ukjiiK3iceqNLKIosQlT2F50hKsXuOfUDvZxkxthfi5GvOgU8d0CePPGLPz90
-         L36A==
-X-Gm-Message-State: AOAM5304uR6nEgSxFlGTkDhw0TTAYJbrSMBKBB3//mjlWcyiRe/6jsCv
-        zA8gMReNdLQ8alTGAlUI6w22Iw==
-X-Google-Smtp-Source: ABdhPJz1+/1GhzO9unpWf/pPYWTjTjoI2gshZAF+/OPndqdsPJfr1TO6/cGn1zz0Lo4HN84e1wqgoA==
-X-Received: by 2002:a17:907:7242:b0:6f5:2ca3:f1cd with SMTP id ds2-20020a170907724200b006f52ca3f1cdmr13570151ejc.480.1652103765634;
-        Mon, 09 May 2022 06:42:45 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id j19-20020aa7c0d3000000b004275cef32efsm6327163edp.6.2022.05.09.06.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 06:42:44 -0700 (PDT)
-Date:   Mon, 9 May 2022 15:42:42 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Daniel Stone <daniel@fooishbar.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
-Message-ID: <YnkaUk0mZNuPsZ5r@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-11-dmitry.osipenko@collabora.com>
- <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
- <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
- <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
- <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
- <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
- <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
- <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
+        Mon, 9 May 2022 09:47:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F59A23EB72
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:43:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652103823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wbw2PH2q14vqy2arD6A5/F7F25g9KpGTKHYXn8LUfgQ=;
+        b=rIpSMu4/xnQ6lA1lN8+zpOxJHz49PRCVJM48Iy2uMVDhuWdYiha6FIUZDMcDFsq1b+2qS7
+        cwrNHuX3hSdsrPdgk4Fu2Qox11ZQlIzflEWGDcydkuJUANuN+RW6CguVxPDyF4lng0CDAC
+        8iea3YuBdJV+xfwHOjpEVs9w4JluHqGI02U7qGTqxpG/epTyk0OF+x9qLrvAh935Anmvdn
+        skS9Bs4VHzYRPIeFSY8F8sEbdY9wHB0IYHVJFI59WtOQ/9c3f+w+lGDWFj4TUhTWQKBpVJ
+        KC7xq/qTQjGfAXsYCV0jdWFWeIN8SBaKhAC2IdGxa+eH43UzOlES5tRwk8phVw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652103823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wbw2PH2q14vqy2arD6A5/F7F25g9KpGTKHYXn8LUfgQ=;
+        b=YGrx6stVKx4sWKygF1Mm7p3ObN3wWGYMA/PyZpf7D/6W+duuRmq0sMuxGfe51iGt6Y9hhQ
+        olIm5/J8DYDvLvBA==
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        rui.zhang@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH] x86/tsc: Add option to force HW timer based recalibration
+In-Reply-To: <20220509133622.GE40730@shbuild999.sh.intel.com>
+References: <20220508144733.91343-1-feng.tang@intel.com>
+ <20220509045839.GA40730@shbuild999.sh.intel.com>
+ <20220509071652.GE76023@worktop.programming.kicks-ass.net>
+ <20220509073003.GB40730@shbuild999.sh.intel.com> <87h75zrpmh.ffs@tglx>
+ <20220509112235.GD40730@shbuild999.sh.intel.com> <87levarh7m.ffs@tglx>
+ <20220509133622.GE40730@shbuild999.sh.intel.com>
+Date:   Mon, 09 May 2022 15:43:43 +0200
+Message-ID: <87czgmrfcg.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 01:49:12AM +0300, Dmitry Osipenko wrote:
-> On 5/5/22 11:12, Daniel Vetter wrote:
-> > On Wed, May 04, 2022 at 06:56:09PM +0300, Dmitry Osipenko wrote:
-> >> On 5/4/22 11:21, Daniel Vetter wrote:
-> >> ...
-> >>>>> - Maybe also do what you suggest and keep a separate lock for this, but
-> >>>>>   the fundamental issue is that this doesn't really work - if you share
-> >>>>>   buffers both ways with two drivers using shmem helpers, then the
-> >>>>>   ordering of this vmap_count_mutex vs dma_resv_lock is inconsistent and
-> >>>>>   you can get some nice deadlocks. So not a great approach (and also the
-> >>>>>   reason why we really need to get everyone to move towards dma_resv_lock
-> >>>>>   as _the_ buffer object lock, since otherwise we'll never get a
-> >>>>>   consistent lock nesting hierarchy).
-> >>>>
-> >>>> The separate locks should work okay because it will be always the
-> >>>> exporter that takes the dma_resv_lock. But I agree that it's less ideal
-> >>>> than defining the new rules for dma-bufs since sometime you will take
-> >>>> the resv lock and sometime not, potentially hiding bugs related to lockings.
-> >>>
-> >>> That's the issue, some importers need to take the dma_resv_lock for
-> >>> dma_buf_vmap too (e.g. to first nail the buffer in place when it's a
-> >>> dynamic memory manager). In practice it'll work as well as what we have
-> >>> currently, which is similarly inconsistent, except with per-driver locks
-> >>> instead of shared locks from shmem helpers or dma-buf, so less obvious
-> >>> that things are inconsistent.
-> >>>
-> >>> So yeah if it's too messy maybe the approach is to have a separate lock
-> >>> for vmap for now, land things, and then fix up dma_buf_vmap in a follow up
-> >>> series.
-> >>
-> >> The amdgpu driver was the fist who introduced the concept of movable
-> >> memory for dma-bufs. Now we want to support it for DRM SHMEM too. For
-> >> both amdgpu ttm and shmem drivers we will want to hold the reservation
-> >> lock when we're touching moveable buffers. The current way of denoting
-> >> that dma-buf is movable is to implement the pin/unpin callbacks of the
-> >> dma-buf ops, should be doable for shmem.
-> > 
-> > Hm that sounds like a bridge too far? I don't think we want to start
-> > adding moveable dma-bufs for shmem, thus far at least no one asked for
-> > that. Goal here is just to streamline the locking a bit and align across
-> > all the different ways of doing buffers in drm.
-> > 
-> > Or do you mean something else and I'm just completely lost?
-> 
-> I'm talking about aligning DRM locks with the dma-buf locks. The problem
-> is that the convention of dma-bufs isn't specified yet. In particular
-> there is no convention for the mapping operations.
-> 
-> If we want to switch vmapping of shmem to use reservation lock, then
-> somebody will have to hold this lock for dma_buf_vmap() and the locking
-> convention needs to be specified firmly.
+On Mon, May 09 2022 at 21:36, Feng Tang wrote:
+> On Mon, May 09, 2022 at 03:03:25PM +0200, Thomas Gleixner wrote:
+>> TSC accuracy is important in any case. Why would it be more important on
+>> server platforms? Just because?
+>
+> It was my wild guess, as I thought servers used by enterprise or financial
+> system may care more about the accuracy.
 
-Ah yes that makes sense.
+Guess-ineering is not really leading anywhere. Facts matter.
 
-> In case of dynamic buffers, we will also need to specify whether
-> dma_buf_vmap() should imply the implicit pinning by exporter or the
-> buffer must be pinned explicitly by importer before dma_buf_vmap() is
-> invoked.
-> 
-> Perhaps I indeed shouldn't care about this for this patchset. The
-> complete locking model of dma-bufs must be specified first.
+Thanks,
 
-Hm I thought vmap is meant to pin itself, and not rely on any other
-pinning done already. And from a quick look through the long call chain
-for amd (which is currently the only driver supporting dynamic dma-buf)
-that seems to be the case.
-
-But yeah the locking isn't specificied yet, and that makes it a bit a mess
-:-(
-
-> >> A day ago I found that mapping of imported dma-bufs is broken at least
-> >> for the Tegra DRM driver (and likely for others too) because driver
-> >> doesn't assume that anyone will try to mmap imported buffer and just
-> >> doesn't handle this case at all, so we're getting a hard lockup on
-> >> touching mapped memory because we're mapping something else than the
-> >> dma-buf.
-> > 
-> > Huh that sounds bad, how does this happen? Pretty much all pieces of
-> > dma-buf (cpu vmap, userspace mmap, heck even dma_buf_attach) are optional
-> > or at least can fail for various reasons. So exporters not providing mmap
-> > support is fine, but importers then dying is not.
-> 
-> Those drivers that die don't have userspace that uses dma-bufs
-> extensively. I noticed it only because was looking at this code too much
-> for the last days.
-> 
-> Drivers that don't die either map imported BOs properly or don't allow
-> mapping at all.
-
-Ah yeah driver bugs as explanation makes sense :-/
-
-> >> My plan is to move the dma-buf management code to the level of DRM core
-> >> and make it aware of the reservation locks for the dynamic dma-bufs.
-> >> This way we will get the proper locking for dma-bufs and fix mapping of
-> >> imported dma-bufs for Tegra and other drivers.
-> > 
-> > So maybe we're completely talking past each another, or coffee is not
-> > working here on my end, but I've no idea what you mean.
-> > 
-> > We do have some helpers for taking care of the dma_resv_lock dance, and
-> > Christian König has an rfc patch set to maybe unify this further. But that
-> > should be fairly orthogonal to reworking shmem (it might help a bit with
-> > reworking shmem though).
-> 
-> The reservation lock itself doesn't help much shmem, IMO. It should help
-> only in the context of dynamic dma-bufs and today we don't have a need
-> in the dynamic shmem dma-bufs.
-> 
-> You were talking about making DRM locks consistent with dma-buf locks,
-> so I thought that yours main point of making use of reservation locks
-> for shmem is to prepare to the new locking scheme.
-> 
-> I wanted to try to specify the dma-buf locking convention for mapping
-> operations because it's missing right now and it should affect how DRM
-> should take the reservation locks, but this is not easy to do as I see now.
-> 
-> Could you please point at the Christian's RFC patch? He posted too many
-> patches, can't find it :) I'm curious to take a look.
-
-https://lore.kernel.org/dri-devel/20220504074739.2231-1-christian.koenig@amd.com/
-
-Wrt this patch series here I'm wondering whether we could do an interim
-solution that side-steps the dma_buf_vmap mess.
-
-- in shmem helpers pin any vmapped buffer (it's how dma-buf works too),
-  and that pinning would be done under dma_resv_lock (like with other
-  drivers using dma_resv_lock for bo protection)
-
-- switch over everything else except vmap code to dma_resv_lock, but leave
-  vmap locking as-is
-
-- shrinker then only needs to trylock dma_resv_trylock in the shrinker,
-  which can check for pinned buffer and that's good enough to exclude
-  vmap'ed buffer. And it avoids mixing the vmap locking into the new
-  shrinker code and driver interfaces.
-
-This still leaves the vmap locking mess as-is, but I think that's a mess
-that's orthogonal to shrinker work.
-
-Thoughts?
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+        tglx

@@ -2,94 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E823452096F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52DF5209A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiEIXn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S233411AbiEIXsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiEIXlU (ORCPT
+        with ESMTP id S233303AbiEIXrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:41:20 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E6A262658;
-        Mon,  9 May 2022 16:34:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 3F0BE1F44239
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139289;
-        bh=pGHmFEEjaXj2663JV2ZbLu8gGj/vTytf7TAeEENRqwc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j6TdMpmPOCtsPovulFCfAQHz4uF7UDkPzJj/3CmgFYBImRy8M4O8YGcz4W706uWok
-         oiILXGafhBbX7n+gHJn6RXTuMBUQC8tJ+EhQAGsuO/iXIERVRLzkR/44dQES7yRA6/
-         FtuuqnjfOGSov1+k3mURGR/0OqutTfvEFLoWalI2/ND2VETgVusAQFBX2DfNOA/g7I
-         j0l9XZgvP22CfJfFfA6ZxZIqFh1T34qNRlUcm5bkUIByJGzf9sEM5G0d3YHcPWZak3
-         l8eX2DCnZSObZ31khwPUziOiMTJxqBOzynYhlqeRkrRRR5tLIOpk/iZhwBgqc0RGs9
-         Toz7YL4ixFXdA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 27/27] kernel/reboot: Add devm_register_restart_handler()
-Date:   Tue, 10 May 2022 02:32:35 +0300
-Message-Id: <20220509233235.995021-28-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+        Mon, 9 May 2022 19:47:32 -0400
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9167D266C84
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:40:15 -0700 (PDT)
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.52 with ESMTP; 10 May 2022 08:40:15 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.126 with ESMTP; 10 May 2022 08:40:14 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Tue, 10 May 2022 08:38:38 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
+Message-ID: <20220509233838.GC6047@X58A-UD3R>
+References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
+ <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
+ <YnYd0hd+yTvVQxm5@hyeyoo>
+ <20220509001637.GA6047@X58A-UD3R>
+ <20220509164712.746e236b@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509164712.746e236b@gandalf.local.home>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,66 +69,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devm_register_restart_handler() helper that registers sys-off
-handler using restart mode and with a default priority. Most drivers
-will want to register restart handler with a default priority, so this
-helper will reduce the boilerplate code and make code easier to read and
-follow.
+On Mon, May 09, 2022 at 04:47:12PM -0400, Steven Rostedt wrote:
+> On Mon, 9 May 2022 09:16:37 +0900
+> Byungchul Park <byungchul.park@lge.com> wrote:
+> 
+> > CASE 2.
+> > 
+> >    lock L with depth n
+> >    lock A
+> >    lock_nested L' with depth n + 1
+> >    ...
+> >    unlock L'
+> >    unlock A
+> >    unlock L
+> > 
+> > This case is allowed by Lockdep.
+> > This case is *NOT* allowed by DEPT cuz it's a *DEADLOCK*.
+> > 
+> > ---
+> > 
+> > The following scenario would explain why CASE 2 is problematic.
+> > 
+> >    THREAD X			THREAD Y
+> > 
+> >    lock L with depth n
+> > 				lock L' with depth n
+> >    lock A
+> > 				lock A
+> >    lock_nested L' with depth n + 1
+> 
+> I'm confused by what exactly you are saying is a deadlock above.
+> 
+> Are you saying that lock A and L' are inversed? If so, lockdep had better
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- include/linux/reboot.h |  4 ++++
- kernel/reboot.c        | 22 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+Hi Steven,
 
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index 7c6e1f308f7c..e5d9ef886179 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -145,6 +145,10 @@ int devm_register_power_off_handler(struct device *dev,
- 				    int (*callback)(struct sys_off_data *data),
- 				    void *cb_data);
- 
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data);
-+
- int register_platform_power_off(void (*power_off)(void));
- void unregister_platform_power_off(void (*power_off)(void));
- 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index b790025154ac..2e78bd754a75 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -484,6 +484,28 @@ int devm_register_power_off_handler(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_register_power_off_handler);
- 
-+/**
-+ *	devm_register_restart_handler - Register restart handler
-+ *	@dev: Device that registers callback
-+ *	@callback: Callback function
-+ *	@cb_data: Callback's argument
-+ *
-+ *	Registers resource-managed sys-off handler with a default priority
-+ *	and using restart mode.
-+ *
-+ *	Returns zero on success, or error code on failure.
-+ */
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data)
-+{
-+	return devm_register_sys_off_handler(dev,
-+					     SYS_OFF_MODE_RESTART,
-+					     SYS_OFF_PRIO_DEFAULT,
-+					     callback, cb_data);
-+}
-+EXPORT_SYMBOL_GPL(devm_register_restart_handler);
-+
- static struct sys_off_handler *platform_power_off_handler;
- 
- static int platform_power_off_notify(struct sys_off_data *data)
--- 
-2.35.1
+Yes, I was talking about A and L'.
 
+> detect that regardless of L. A nested lock associates the the nesting with
+
+When I checked Lockdep code, L' with depth n + 1 and L' with depth n
+have different classes in Lockdep.
+
+That's why I said Lockdep cannot detect it. By any chance, has it
+changed so as to consider this case? Or am I missing something?
+
+> the same type of lock. That is, in lockdep nested tells lockdep not to
+> trigger on the L and L' but it will not ignore that A was taken.
+
+It will not ignore A but it would work like this:
+
+   THREAD X			THREAD Y
+
+   lock Ln
+				lock Ln
+   lock A
+				lock A
+   lock_nested Lm
+				lock_nested Lm
+
+So, Lockdep considers this case safe, actually not tho.
+
+	Byungchul
+
+> 
+> -- Steve
+> 
+> 
+> 
+> > 				lock_nested L'' with depth n + 1
+> >    ...				...
+> >    unlock L'			unlock L''
+> >    unlock A			unlock A
+> >    unlock L			unlock L'

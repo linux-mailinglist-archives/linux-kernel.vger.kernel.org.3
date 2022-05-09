@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E7451F42A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E131A51F427
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234769AbiEIFpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S234596AbiEIFsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235235AbiEIFng (ORCPT
+        with ESMTP id S233733AbiEIFns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:43:36 -0400
+        Mon, 9 May 2022 01:43:48 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C113FD5E
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:39:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CC113FD5E
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:39:54 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KxVKM1Pmbz9sSv;
-        Mon,  9 May 2022 07:36:39 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4KxVKQ0ljwz9sTj;
+        Mon,  9 May 2022 07:36:42 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id G8UoWLCdSTTB; Mon,  9 May 2022 07:36:39 +0200 (CEST)
+        with ESMTP id zQX5uZIXMjlY; Mon,  9 May 2022 07:36:42 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF5Nbhz9sTg;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KxVKF5lZdz9sVj;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A8F138B76D;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AF53D8B770;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id d3MkbeER6pAr; Mon,  9 May 2022 07:36:33 +0200 (CEST)
+        with ESMTP id iMMbcD48-7Aj; Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4B1EB8B774;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5DC918B77A;
         Mon,  9 May 2022 07:36:33 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aV8B1591275
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2495aVM41591279
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Mon, 9 May 2022 07:36:31 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aVIP1591274;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2495aVeI1591278;
         Mon, 9 May 2022 07:36:31 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -50,14 +50,14 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         naveen.n.rao@linux.vnet.ibm.com
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v3 17/25] powerpc/ftrace: Use size macro instead of opencoding
-Date:   Mon,  9 May 2022 07:36:15 +0200
-Message-Id: <bb6626e884acffe87b58736291df57db3deaa9b9.1652074503.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v3 18/25] powerpc/ftrace: Simplify expected_nop_sequence()
+Date:   Mon,  9 May 2022 07:36:16 +0200
+Message-Id: <305d22472f1f92127fba09692df6bb5d079a8cd0.1652074503.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1652074503.git.christophe.leroy@csgroup.eu>
 References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074582; l=734; s=20211009; h=from:subject:message-id; bh=HgZAgEzfpoCvC4jitZoURd9Kz09C0R3pxWBfU77ivQQ=; b=MGaBIOxbI9zEAIf4laxeCK9cQ4c0Thmk5sAzySyvMGKbsKeWBjQMEL99ir1mq5Fbmvv0e6aK504D 1QXivr5SDtvEp4Yv8vtYti+b3rt1ur+N30/Nd+a7/Ibz15wV8ZLX
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652074582; l=1521; s=20211009; h=from:subject:message-id; bh=4BswpVslfmWCofUljaPxo8plPyhnTwi3LkFniY9lZ38=; b=ifRvh8SNQExUvpvzJCaMJ/av7HVnvA3GRiAwu93w7a92OhGYkGDDEAxPy9qJCsZW811LXP/TR9VE SauAAWqKCGDYLV9srrglNiA68jExZsDJVQk52GOwizdOK0BYavRn
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -69,26 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0x80000000 is SZ_2G. Use it.
+Avoid ifdefs around expected_nop_sequence().
+
+While at it make it a bool.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/kernel/trace/ftrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/kernel/trace/ftrace.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
 diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index ac3f97dd1729..346b5485e7ef 100644
+index 346b5485e7ef..c34cb394f8a8 100644
 --- a/arch/powerpc/kernel/trace/ftrace.c
 +++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -741,7 +741,7 @@ int __init ftrace_dyn_arch_init(void)
- #endif
- 	long reladdr = addr - kernel_toc_addr();
+@@ -390,24 +390,14 @@ int ftrace_make_nop(struct module *mod,
+  * They should effectively be a NOP, and follow formal constraints,
+  * depending on the ABI. Return false if they don't.
+  */
+-#ifdef CONFIG_PPC64_ELF_ABI_V1
+-static int
+-expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+-{
+-	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) ||
+-	    !ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC)))
+-		return 0;
+-	return 1;
+-}
+-#else
+-static int
+-expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
++static bool expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+ {
+-	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP())))
+-		return 0;
+-	return 1;
++	if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1))
++		return ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) &&
++		       ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC));
++	else
++		return ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP()));
+ }
+-#endif
  
--	if (reladdr > 0x7FFFFFFF || reladdr < -(0x80000000L)) {
-+	if (reladdr >= SZ_2G || reladdr < -SZ_2G) {
- 		pr_err("Address of %ps out of range of kernel_toc.\n",
- 				(void *)addr);
- 		return -1;
+ static int
+ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
 -- 
 2.35.1
 

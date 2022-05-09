@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B3251FABA
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDEA51FAAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 13:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiEILFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 07:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S231621AbiEILFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 07:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbiEILE6 (ORCPT
+        with ESMTP id S231517AbiEILE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 9 May 2022 07:04:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06D7219C17
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:00:59 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v11so11941075pff.6
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:00:59 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E06222C2C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 04:01:02 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so16671946pjv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 04:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JqGcGcuUwLK05LGJI1ajsT/xW0rShgwvLzQMUoOkfkw=;
-        b=EX80u1FgJBDMCHrzbHFVOjvLJY1UUYVtuQOC/wpMOEqIHTAh4jEcrxrWzJW2CQFpPg
-         tauJptGinburWR+S+xrNaby09Sr9vlwlQHzwdrwy0iHshuyXvCgkHYGFu+Aeks0oMXdo
-         iIVG/PtGR/ongrMfBzhfhvJJOHbGZR2SJBqfP8jnR0okDS+NKso52/KTywOTpp4ww5UX
-         PlErlui1S/GuKpm4ZWArZxgrcievn2Eei9iNY/mGvDLmLI8cWpSzDUQwVFmgojyQawfd
-         VCt1692u7d6Z5qvdrYHjGDom0bmizuAfn6zL4r3qKxTI5CG7ICW5E4jW+Td+wI8EfTiT
-         AhRw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hh8Q/KvNuhUqACFeqsQV2T1sVIozPsF9U1lcARGxZeI=;
+        b=ZxSdbIS2ZWZlnQRxzJ9+QdFDYogt3VJySniueW++bzx/HyauWYkmgTLRR+0vFxIGtj
+         KsOT7SkViIB3J13U7og8tKuvd4DS3rawovJxNXug3FgyVblYaj95VZr/TbPrfqkw4OwB
+         uUmJxH4y0zUWiamwK3ZcS8fH8m8MiZ9IWeVtXYghqAQbpeiUTSUONGLNCa+FjIxRkgtr
+         I2AhQ/5O5ZKkCUBup3/zcTMPWw3vY33vj/tT3aaGogUtfI584oTfWsxyQToDzKqqqRVo
+         lmocWhOmcYkeS3M760hkIGGe4Pfgp4ytK+w/4TZHIERGD3ZpSGXjhARW07eLbSCQs6Zf
+         kS5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JqGcGcuUwLK05LGJI1ajsT/xW0rShgwvLzQMUoOkfkw=;
-        b=QNrgdCe6oARGvZRC9chIXl+gfEBgUZUj9gQeLCkhFvvAHBzV2JbdQ2D6U3ios6GOFm
-         NxRoUutQytYhGEVicO2xfh188ZCgOEq9Txvm2zeEn3WW3DPuRI2K+zNObML+yHu0Oxf2
-         H/F5AICknd09rnvU5NN2Cp4+fviPSVaeEMwr1pi4NzYhXnLbPhS8ZMlL4iNIE0XFDAhn
-         I4MiL59P5AW28l4lz/09+9AYOx0dwxh+7LXUuUpHSYJdTavRCiJ3U8Ebf3xfWsEM8xVc
-         jwpe7dGly0A9+dvlMN25W35GDvt+bjNwAga9ybFoRJ5Myw5XgY12/2j//1thxqJGepql
-         M67Q==
-X-Gm-Message-State: AOAM530KCAc9fNPUq36q/tq2Igzqz17Jfnf6KLqMlN68mc5g0FE90XLJ
-        jdB5Ih0ifilEG1MhietsKJ2FkA==
-X-Google-Smtp-Source: ABdhPJwaGUhNTPgReYxZbf915o71BtxX+6pcZwG8eJNzhOfcIaOxs1UXcmb8oyitY4T6NxyuvXZYdw==
-X-Received: by 2002:a63:f1e:0:b0:3c1:d54f:fc47 with SMTP id e30-20020a630f1e000000b003c1d54ffc47mr13164738pgl.51.1652094058513;
-        Mon, 09 May 2022 04:00:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hh8Q/KvNuhUqACFeqsQV2T1sVIozPsF9U1lcARGxZeI=;
+        b=D6hkVJgB2CkV0hWe+o3R++EE55Aw3XKdC75aZgcRUQAubQGhCda9Ms3nXkBMBjEsuM
+         Defh1K1AkSj4Xq8qNaNAxjZGFCKQldOjo/6Jx2ufbqdNnNfBcdrrebjeQXH/nG77pEnx
+         DLqjRt3UrP78ugPy9/3gmMMMroiilUqzkJtS0rU2qlo1ToXWYFEDYLMF3mByQAv6kKGm
+         tq78zjRgu0x5iR3CxHzUy8j9IgM5xU4swbHANCvwk6AqvDLcMM3YOIwd71YzxqxoV2v5
+         TMyxb6s6gDzsfYQOL6EUo0QiNAqpWRnTpCnDII5JbQfx53jXNUgF2IBMSM3iV5hmy5DZ
+         oFgw==
+X-Gm-Message-State: AOAM532eHI1VadcvTMPf2PTdyCDjCdKA0RhiwLWqFYhzEnwBA6pX+EUt
+        lxdgUsgg+rr9NM34oWpe/+Irpg==
+X-Google-Smtp-Source: ABdhPJx+fU8dUrM5IVwoZn/ILMFer/x3N87PdLxZhj/Brm/n0VW9GFWDnNWNGaOBopn9Ncaaz3NanA==
+X-Received: by 2002:a17:902:bc4c:b0:15f:12dc:7c85 with SMTP id t12-20020a170902bc4c00b0015f12dc7c85mr4518856plz.108.1652094061885;
+        Mon, 09 May 2022 04:01:01 -0700 (PDT)
 Received: from always-x1.www.tendawifi.com ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170902968c00b0015e8d4eb244sm6813303plp.142.2022.05.09.04.00.54
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902968c00b0015e8d4eb244sm6813303plp.142.2022.05.09.04.00.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 04:00:57 -0700 (PDT)
+        Mon, 09 May 2022 04:01:01 -0700 (PDT)
 From:   zhenwei pi <pizhenwei@bytedance.com>
 To:     akpm@linux-foundation.org, naoya.horiguchi@nec.com
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH v2 0/5] memory-failure: fix hwpoison_filter
-Date:   Mon,  9 May 2022 18:56:36 +0800
-Message-Id: <20220509105641.491313-1-pizhenwei@bytedance.com>
+Subject: [PATCH v2 1/5] mm/memory-failure.c: move clear_hwpoisoned_pages
+Date:   Mon,  9 May 2022 18:56:37 +0800
+Message-Id: <20220509105641.491313-2-pizhenwei@bytedance.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220509105641.491313-1-pizhenwei@bytedance.com>
+References: <20220509105641.491313-1-pizhenwei@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,54 +69,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- move clear_hwpoisoned_pages() near the definitions of
-  hwpoison_filter*.
-- fix typo.
-- remove "mm/memofy-failure.c: optimize hwpoison_filter".
-- call hwpoison_filter() after get_hwpoison_page().
-- disable hwpoison filter during removing
-- simplify num_poisoned_pages_inc/dec
+clear_hwpoisoned_pages() clears HWPoison flag and decreases the number
+of poisoned pages, this actually works as part of memory failure.
 
-Also add background of this work:
-As well known, the memory failure mechanism handles memory corrupted event, and try to send SIGBUS to the user process which uses this corrupted page.
+Move this function from sparse.c to memory-failure.c, finally there
+is no CONFIG_MEMORY_FAILURE in sparse.c.
 
-For the virtualization case, QEMU catches SIGBUS and tries to inject MCE into the guest, and the guest handles memory failure again. Thus the guest gets the minimal effect from hardware memory corruption.
+Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+---
+ mm/internal.h       | 11 +++++++++++
+ mm/memory-failure.c | 21 +++++++++++++++++++++
+ mm/sparse.c         | 27 ---------------------------
+ 3 files changed, 32 insertions(+), 27 deletions(-)
 
-The further step I'm working on:
-1, try to modify code to decrease poisoned pages in a single place (mm/memofy-failure.c: simplify num_poisoned_pages_dec in this series).
-
-2, try to use page_handle_poison() to handle SetPageHWPoison() and num_poisoned_pages_inc() together. It would be best to call num_poisoned_pages_inc() in a single place too.
-
-3, introduce memory failure notifier list in memory-failure.c: notify the corrupted PFN to someone who registers this list.
-If I can complete [1] and [2] part, [3] will be quite easy(just call notifier list after increasing poisoned page).
-
-4, introduce memory recover VQ for memory balloon device, and registers memory failure notifier list. During the guest kernel handles memory failure, balloon device gets notified by memory failure notifier list, and tells the host to recover the corrupted PFN(GPA) by the new VQ.
-
-5, host side remaps the corrupted page(HVA), and tells the guest side to unpoison the PFN(GPA). Then the guest fixes the corrupted page(GPA) dynamically.
-
-Thanks to Naoya & David for the suggestions!
-
-v1:
-- move clear_hwpoisoned_pages() from sparse.c to memory-failure.c.
-- simplify num_poisoned_pages_dec().
-- call hwpoison_filter() early in memory_failure().
-- add hwpoison_filter for soft offline.
-
-zhenwei pi (5):
-  mm/memory-failure.c: move clear_hwpoisoned_pages
-  mm/memory-failure.c: simplify num_poisoned_pages_dec
-  mm/memory-failure.c: add hwpoison_filter for soft offline
-  mm/hwpoison: disable hwpoison filter during removing
-  mm/memory-failure.c: simplify num_poisoned_pages_inc/dec
-
- mm/hwpoison-inject.c |  1 +
- mm/internal.h        | 11 ++++++
- mm/memory-failure.c  | 85 ++++++++++++++++++++++++--------------------
- mm/page_alloc.c      |  1 -
- mm/sparse.c          | 27 --------------
- 5 files changed, 59 insertions(+), 66 deletions(-)
-
+diff --git a/mm/internal.h b/mm/internal.h
+index cf16280ce132..84dd6aa7ba97 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -634,6 +634,9 @@ static inline int find_next_best_node(int node, nodemask_t *used_node_mask)
+ }
+ #endif
+ 
++/*
++ * mm/memory-failure.c
++ */
+ extern int hwpoison_filter(struct page *p);
+ 
+ extern u32 hwpoison_filter_dev_major;
+@@ -643,6 +646,14 @@ extern u64 hwpoison_filter_flags_value;
+ extern u64 hwpoison_filter_memcg;
+ extern u32 hwpoison_filter_enable;
+ 
++#ifdef CONFIG_MEMORY_FAILURE
++void clear_hwpoisoned_pages(struct page *memmap, int nr_pages);
++#else
++static inline void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
++{
++}
++#endif
++
+ extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
+         unsigned long, unsigned long,
+         unsigned long, unsigned long);
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 27760c19bad7..46d9fb612dcc 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -2401,3 +2401,24 @@ int soft_offline_page(unsigned long pfn, int flags)
+ 
+ 	return ret;
+ }
++
++void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
++{
++	int i;
++
++	/*
++	 * A further optimization is to have per section refcounted
++	 * num_poisoned_pages.  But that would need more space per memmap, so
++	 * for now just do a quick global check to speed up this routine in the
++	 * absence of bad pages.
++	 */
++	if (atomic_long_read(&num_poisoned_pages) == 0)
++		return;
++
++	for (i = 0; i < nr_pages; i++) {
++		if (PageHWPoison(&memmap[i])) {
++			num_poisoned_pages_dec();
++			ClearPageHWPoison(&memmap[i]);
++		}
++	}
++}
+diff --git a/mm/sparse.c b/mm/sparse.c
+index 952f06d8f373..e983c38fac8f 100644
+--- a/mm/sparse.c
++++ b/mm/sparse.c
+@@ -916,33 +916,6 @@ int __meminit sparse_add_section(int nid, unsigned long start_pfn,
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_MEMORY_FAILURE
+-static void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
+-{
+-	int i;
+-
+-	/*
+-	 * A further optimization is to have per section refcounted
+-	 * num_poisoned_pages.  But that would need more space per memmap, so
+-	 * for now just do a quick global check to speed up this routine in the
+-	 * absence of bad pages.
+-	 */
+-	if (atomic_long_read(&num_poisoned_pages) == 0)
+-		return;
+-
+-	for (i = 0; i < nr_pages; i++) {
+-		if (PageHWPoison(&memmap[i])) {
+-			num_poisoned_pages_dec();
+-			ClearPageHWPoison(&memmap[i]);
+-		}
+-	}
+-}
+-#else
+-static inline void clear_hwpoisoned_pages(struct page *memmap, int nr_pages)
+-{
+-}
+-#endif
+-
+ void sparse_remove_section(struct mem_section *ms, unsigned long pfn,
+ 		unsigned long nr_pages, unsigned long map_offset,
+ 		struct vmem_altmap *altmap)
 -- 
 2.20.1
 

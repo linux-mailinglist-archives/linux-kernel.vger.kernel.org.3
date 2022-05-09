@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703DB51F8D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5A951F907
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 12:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbiEIJhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S233914AbiEIJh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiEIJct (ORCPT
+        with ESMTP id S238243AbiEIJfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:32:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971A92218FC;
-        Mon,  9 May 2022 02:28:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 258D6614BB;
-        Mon,  9 May 2022 09:28:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15903C385AC;
-        Mon,  9 May 2022 09:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652088530;
-        bh=3iTqXEKUOS/eqYT5xmR3rSnyJdIWdYq46LxP+sQuJpw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BICeC5sQ707kdEq4a9WRgFtwUBmZVnQYKm/9UM+6cbO0vwlKRG5+j1HUmWQxGhvfw
-         D8LyU/SzBNjV6TJdWk78kSbPwmfUn1xn0b0HR3zGHswQVW20XU+tEiUbQtWoNQVdYa
-         P++wJwIOoY/bJF2yq0JCQSjiVvhqh0FZZDHmFjtrRkFaShr9MGFQSjiLwSUq0bt8I8
-         /6YuDD/d5N7kJvqV4J0fI7dD+r18NuUS4LFZoB1z4Qcap4s9PT5LagrOWQfSXZuXfo
-         n1E4UXBFUKjpq5ei5sg/E6vouI2CBI57Ygh22zsXwKtrgp435QvoOx+mvwLKasSa6j
-         0xoP6TZC6DCTQ==
-Date:   Mon, 9 May 2022 10:28:44 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     catalin.marinas@arm.com, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
-        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
-        suzuki.poulose@arm.com, treding@nvidia.com, jonathanh@nvidia.com,
-        vsethi@nvidia.com
-Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
-Message-ID: <20220509092843.GB26264@willie-the-truck>
-References: <20220509002810.12412-1-bwicaksono@nvidia.com>
+        Mon, 9 May 2022 05:35:40 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D11E028C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:31:47 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 7so11528465pga.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 02:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JpCRaDNZYevpLkY4KOz+K7YSl/uzka5d9oakp3W77tc=;
+        b=HCmVcQ84A1B0mzXMIys8FhK9PENXHAKemAfPPPxoXKFdSh1QQXAzaPKVIqUEZLBs3/
+         H3pOb5uEAcuA5+F3hsUEogfhE/lRjNABeErSGu86+1ArNxEujpz8rVgWRX6v8tqEHwvx
+         0Xqpg/6Ry0GYJyosH55MLUfXrVeFOeBbGMK0uDInQXOaKGgdh2bcfZdABop9RngLLwa+
+         byDloH8cGSO4Dgs0GAKgT2GGWD3uNvjIr77nTWojR1RPoerG/QTxBZopGJZ/enkgNXjI
+         JKPl1sWprQahCNAmvlKDtaIJKpENBTMrQIA16/z2HPN40vin7eLoO7VkkbrQPSCVNvLk
+         7pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JpCRaDNZYevpLkY4KOz+K7YSl/uzka5d9oakp3W77tc=;
+        b=Da2vqOaAz6xpoPlB77z104oVMzlC0el2QH+f+VohjxQSUnDWKgBsb2tgD+0wsHXxxg
+         4EuBflnZplsvHH3DRyeAA6ZvBHh+HlTRy8SbUllnvbyhWD48zygJjLET4ZT6YWQEzusp
+         M7VopKecLjuHl3/VFnfAus4k9S9DRlIo3EcvTi4Egp++IiZPlqF6dhddyMk8Alh+fYWl
+         S13vhGhhC52BRJv+zSA/k3MT0RtesWxnDSLX09w/gizWUgFK1A+dyRtAbqGHxX6ZJUeM
+         duQzQIQoXidAK8YFhgZ63W+DH9FTwI1L8NmJr73vnoza8cOssL8Ybf3HAZz410YzEoAE
+         K24g==
+X-Gm-Message-State: AOAM530bFgkZZ6ZElUCDN8gho7XNWXmyaN4eEDlG+1+8uFlNBUulb+7i
+        SJdUNMIbTDnss6umpMnauT0qVQ==
+X-Google-Smtp-Source: ABdhPJxdD04mCtOjOZoG59KlHgaCvKklPPxlk10wG2ZHb2KCQ4qNWZv9oKioDl7bTyyCDTPNP632lQ==
+X-Received: by 2002:a63:ad0c:0:b0:374:50b4:c955 with SMTP id g12-20020a63ad0c000000b0037450b4c955mr12237883pgf.530.1652088692871;
+        Mon, 09 May 2022 02:31:32 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id n28-20020a056a000d5c00b0050dc7628148sm8110335pfv.34.2022.05.09.02.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 02:31:32 -0700 (PDT)
+Date:   Mon, 9 May 2022 15:01:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     qianfanguijin@163.com, linux-sunxi@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Message-ID: <20220509093130.jegqpe6m7xtbouqa@vireshk-i7>
+References: <20220509084853.17068-1-qianfanguijin@163.com>
+ <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
+ <20220509092306.22ttfunrislztbvh@houat>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220509002810.12412-1-bwicaksono@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220509092306.22ttfunrislztbvh@houat>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,38 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
-> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
-> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
-> Performance Monitoring Unit table (APMT) specification below:
->  * ARM Coresight PMU:
->         https://developer.arm.com/documentation/ihi0091/latest
->  * APMT: https://developer.arm.com/documentation/den0117/latest
+On 09-05-22, 11:23, Maxime Ripard wrote:
+> Hi,
 > 
-> Notes:
->  * There is a concern on the naming of the PMU device.
->    Currently the driver is probing "arm-coresight-pmu" device, however the APMT
->    spec supports different kinds of CoreSight PMU based implementation. So it is
->    open for discussion if the name can stay or a "generic" name is required.
->    Please see the following thread:
->    http://lists.infradead.org/pipermail/linux-arm-kernel/2022-May/740485.html
+> On Mon, May 09, 2022 at 02:41:25PM +0530, Viresh Kumar wrote:
+> > On 09-05-22, 16:48, qianfanguijin@163.com wrote:
+> > > From: qianfan Zhao <qianfanguijin@163.com>
+> > > 
+> > > OPP table value is get from allwinner lichee 3.10 kernel.
+> > > 
+> > > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> > > ---
+> > >  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
+> > >  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+> > >  2 files changed, 48 insertions(+)
+> > 
+> > Applied. Thanks.
 > 
-> Besar Wicaksono (2):
->   perf: coresight_pmu: Add support for ARM CoreSight PMU driver
->   perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
-> 
->  arch/arm64/configs/defconfig                  |    1 +
->  drivers/perf/Kconfig                          |    2 +
->  drivers/perf/Makefile                         |    1 +
->  drivers/perf/coresight_pmu/Kconfig            |   10 +
->  drivers/perf/coresight_pmu/Makefile           |    7 +
->  .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317 +++++++++++++++++
->  .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
->  .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
->  .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
->  9 files changed, 1802 insertions(+)
+> Shouldn't you wait for the maintainers feedback for the DT bits at least?
 
-How does this interact with all the stuff we have under
-drivers/hwtracing/coresight/?
+I should have, will drop it.
 
-Will
+-- 
+viresh

@@ -2,208 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E956C5204A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA635204AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 20:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240262AbiEISne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 14:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S240298AbiEISpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 14:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240216AbiEISnd (ORCPT
+        with ESMTP id S240279AbiEISpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 14:43:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541285251F;
-        Mon,  9 May 2022 11:39:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8D958CE1B1B;
-        Mon,  9 May 2022 18:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08B4C385B2;
-        Mon,  9 May 2022 18:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652121574;
-        bh=XFm119uNAjqRDERrRhFqG0p28+jlG7RXHvmftj4Zo9o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jUZewNrAZscVLv1xUke5X62x7aNKrB9OhZ9JFhSpWuaPD0rX3N5YTPMMlA1f6gV+3
-         MZ/xRlmDru8GjyD6TsEs9zPcXtkpIRHy10b9/2UUeGrZ8rvYoKu0bcpTFr6ToT2Wdy
-         LEB3Faj9n5dDRFqfRLK+QoUX+j9hTsv13p1VZ2sxl0ogR7uINFK780RgeYG0VDev3B
-         K3nIgNqgzkFZT8CUOazKZ/Jk4zfC984/wKTHmeHa/TbtG1UDmAo3wGmBh+JGvDPJIQ
-         tsAX6dyouX9Cg1y1mQhvZRHpM/ixK418vCePQ9SjFMB5GRHpdnynPRU/n7IfTxmszj
-         /lwhWSdenIAzg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 323C25C05F9; Mon,  9 May 2022 11:39:34 -0700 (PDT)
-Date:   Mon, 9 May 2022 11:39:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alison Chaiken <achaiken@aurora.tech>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
- context
-Message-ID: <20220509183934.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnY33nq5jl6FLFOu@pc638.lan>
- <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
- <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
- <20220509033740.GM1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSbWetMt2_-m4G9Nt5S8ybATihB+5FMJMMo3jKDG4pPjg@mail.gmail.com>
- <20220509181417.GO1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnldSkaWu40cVimj@pc638.lan>
+        Mon, 9 May 2022 14:45:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F951595AC;
+        Mon,  9 May 2022 11:41:21 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249ILb2G026338;
+        Mon, 9 May 2022 11:41:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=usv8kPMXl4+KtapWLjLP2/jr4O1xV5aahUPWZCD+RQw=;
+ b=pl/0UGbY/ZR4LqXcKHlhQXpQFWA6+VO/89Hy5XeCzbNVzzbTncYMKxNJdeAeXyH+lDqA
+ XE/hayKjEovVMRdmFX33/XmNMYcBVgw7xSwQYLBNkEYA3hlfkMt2gKUrLqY9AUAFA0IT
+ piLD3DqulIivbTb5nUUFSFuLXY/1QPU1NMI= 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fwr33jgkx-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 May 2022 11:41:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l/tGT0mg2kQaRkB10WNCnGzSf4cWMIGVOW9OOG++xsGw82sjxg7VzRRxAuNgtguYrNCb72Vnk2jS+1y2AWqCQ5uO9Ce6q9BE8/VyeLEO6QKeI535ru06Oazd80rJouVLxgmmHH45IbE5iBEdADDa/d+zRNxuhc3Mf/AMvw1CNc1ig5sxJCODqIUDusMdEiaS7tmOktOnEuVX+xFcsTJ3/SdCInMCao1jav7eBNe6fB60fN02poslEXcGGk4DUSVNEzyqSUaJKcKTAfg+MFJwOI8+IGDUtR65RMDUUQfVwUsFFReDq8R9UEVzVWEZBmVSP/gPSRkbIWOH0gbqNS85nA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=usv8kPMXl4+KtapWLjLP2/jr4O1xV5aahUPWZCD+RQw=;
+ b=Cppt4++Bl8jlzNw9qvnzsFglXNzfFv9diKwvXJZMEB9cb2v71gl3brfUM0VRDDsfCslLU45H4xqdX+jLBEDRtkkffFSnBljvsVaqlugU4uDlu24k4lsPydOjn6A6M+HtkH1v9pBYmxkyXgoyKpHxebFe0j4CHN8+aEmm5pBG6AsETI1y8nydGyRnUaYFm8KkWn7kLEYZDzjnxfgh9RsUe/k1dYCvyWPtd9cGp2DA/5F5smK6bG6KiL0uoHEnIutpbBPbWx5NIZ3a2662rIAuXKPIn0UxE/dLAMiz2qypETMR+GRbS6oLiD461pZ8BDXDXZdY5bOvgIEYau/0zxnl9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
+ by PH7PR15MB5426.namprd15.prod.outlook.com (2603:10b6:510:1fe::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
+ 2022 18:41:17 +0000
+Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::af:a5d5:458b:4f4e]) by SJ0PR15MB4552.namprd15.prod.outlook.com
+ ([fe80::af:a5d5:458b:4f4e%9]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 18:41:17 +0000
+From:   Jonathan McDowell <noodles@fb.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
+Thread-Topic: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
+Thread-Index: AQHYWY4yqojcPM99qUKBDg6v3vLzMa0WbyIAgAAMsgCAAGptgIAABpuAgAAIwgA=
+Date:   Mon, 9 May 2022 18:41:17 +0000
+Message-ID: <YnlgTCyB2ciaD1so@noodles-fedora.dhcp.thefacebook.com>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnjvfNs5pgWiomWx@noodles-fedora.dhcp.thefacebook.com>
+ <0960C132-581C-4881-8948-C566657C3998@alien8.de>
+ <YnlTaawPH6T7LOUs@noodles-fedora.dhcp.thefacebook.com>
+ <YnlY87wm6WmQjs7m@zn.tnic>
+In-Reply-To: <YnlY87wm6WmQjs7m@zn.tnic>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1b5fcfeb-adb7-487e-ab4f-08da31eb80ca
+x-ms-traffictypediagnostic: PH7PR15MB5426:EE_
+x-microsoft-antispam-prvs: <PH7PR15MB542683F451089CCAD059100FC1C69@PH7PR15MB5426.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vKZJZCoKkIfXpkAU7MfvYeK17fGsbZ4/nqpuidRDuqbt3rc4RgIEKIqaTxiQ3r5GNHqqs6HUZ2k51z+hiImtURrOiZYWlQdVA1kxb5Wr9FPWeId61UJbzpCMGo1knDi+RV44frDi3IJi9FYlXWoOEBaujNuGnkfS3QPaKH4MAw2LZMn6sLuo2zJme7uRGr1hySb/KojQEJmO2fB+d5aFCVOu4Qt65nTiXpHiMWsCRXUG7AiAXxikCbRtaFBEcAC0ipHAhMr7fEyIIPuJQFzC26v48eoNe3qW8TWqu6MGhARmEmQhpxRJhxQk7DfZ09uNB7EIVxxoPvZg5c/DKzBNWKiKSrfaL8uCIyH09PAUNe5LrVVTsUHvS2mW0khyZGTrAvA3yvEU8y5rZOMqhgk5Au1ZvQvy+VXSWRsHfyO8FblwddHArA0O36vf8Zo+0GibkHJs2XZnzAXDYfjIyNIP00GW8i2XveAoiHRnEEQxRuPvHu+J3G25E1GB0p0VW305s+oF7WkJD2S6x2SLnOcTZqiPAqOEMHVRH8WDSiuasBU/VN65DLFRUNOgxConB7GFgBzPZrVAdmAuFsYUKf7/lAticO/wAsfklgybjXFG5nVeEVxB6pSEtM8bXrmnYHxfWXN+CKMrGBBNOX5dLcbPBKpV6lH6NTDilG01WVgVHu6NFTsuTMzGwd+IOdBmSC5XtM3WkYXnsU2kG9yk1Qy7fg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(7416002)(508600001)(66946007)(38070700005)(54906003)(6916009)(316002)(8936002)(6506007)(9686003)(26005)(6512007)(8676002)(83380400001)(4326008)(64756008)(86362001)(6486002)(76116006)(66446008)(38100700002)(186003)(66476007)(91956017)(66556008)(122000001)(2906002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?F83e/CRYUWYsuQNxqsLu/92bc+iqFA8PBXTukXbiC8SZ5MkfbOn3jZYx7gvz?=
+ =?us-ascii?Q?LPjofqmgcveDSvpFU8S25D7A23CfNvhO24rJgRUqVo3M2L1d/GETjvgd1k+k?=
+ =?us-ascii?Q?TKIcyv3nFYNNVKJ0LijemwC42NuZ29Cu1Bt55Nz2D3WHj0Kg0PIp0oC07A5N?=
+ =?us-ascii?Q?2SAAE86L5bgfQB3+I5tob7MlVIssrbaEZukzelISSwX6pm9owsaWTI301Wn4?=
+ =?us-ascii?Q?BRF0P/ELq6m8iRiPauMbxZv0U656T8qWDaiJhPHKC1p1NfCJT9wnB1j1cM7+?=
+ =?us-ascii?Q?8CycA5Kv0hMvVZB+cRHT1lzv8Sbh7HzP1Z383swYJgb6d5eO/hQUz9aRQyNj?=
+ =?us-ascii?Q?Bd0LOCXDi3Xb/khhAivvpp4eU3MxpT7rqIaYKp1vhyc+7jwsAQOxGSRaS7q8?=
+ =?us-ascii?Q?IjNiIxTQ5/o9tRrLYK7ijigkz9XDReZhXvK2w+9MBazUR6d7Zn9eBIh5qIXk?=
+ =?us-ascii?Q?FZmv+hAVBX/WPj2F39gSJvtTdUWM+rxnnarPA7dZ74hBZgri8qKBu8zAg3fO?=
+ =?us-ascii?Q?0R/+LUlL23orirDmjFy8nMlq2/8ot6Ax05pqc29vg58/DhqlWsQcGjFYXdz0?=
+ =?us-ascii?Q?MDeD9TkqMi43ZMqHoq7rj6zgcVumd6VhcQE28N24vMsHgHR6RJeI57W6X4li?=
+ =?us-ascii?Q?8yD/qiOhn8siOyPKGHMgT8KAS3tvE5yWzhvlnkFtFgSGcHrAbF9cTNEquaoC?=
+ =?us-ascii?Q?Fh4aPVfZDJ7T/G5Sg6hGj+jEvE5twVhLjzDzxX31Ykx6aOJiCrZVtni8Q2dr?=
+ =?us-ascii?Q?uhk6rCiNW9kD4VO3XIWuYHDcEyBL92BslyCNQjnJop5qSUtnuayo2sBBzSrD?=
+ =?us-ascii?Q?NcBHVVkzZdQHfupf4mw9YxhbHdlfbf446J0sb65FqxU8ZQVZtKCyvaUtPJ10?=
+ =?us-ascii?Q?yAwxx1MnehFo2NctrZWFHtO3Pi4JaUZIXzxsK760GLf209sSPVqEP+yUYqTU?=
+ =?us-ascii?Q?tuMaOx05Vy9TBdW0q9j8WEvrpEIw8DJPghLwEHSF7FU83bpsOfukJoOwKFKb?=
+ =?us-ascii?Q?5jeNo4sIhx6u7/xWSrmBUvthvGw+jpdL44r2t/hOfjhgCMwoc4+Xw3WNzyat?=
+ =?us-ascii?Q?uRedmTnhSQYg7JK6caB7AYc7nlE+DdEFVNlVl7xSC7nmWIkBZ2LOMcVpap2I?=
+ =?us-ascii?Q?MX+wLl3mztnCQdkMll0meUe4J9v7QSgLRLKzox9/uKkrJWAFaxy1IkN3O/hj?=
+ =?us-ascii?Q?mfrOUGgcw0AzmLklN6VpntEj0LYZwcBhU5VvReWkgPyNk/rw0e8DcloaSWKc?=
+ =?us-ascii?Q?BOrqZxAEisDK1hQv5jdNd0t3T31gnXv8F6WJcctWxPpgvUUCdeu/DHhuXL5l?=
+ =?us-ascii?Q?fcqFkxUs6kqL+0JZR4eO63uK60BrcWueMMUF7dGE+b87vm5n/0+L2X+LJdCf?=
+ =?us-ascii?Q?JKGybf/jEIhMDg+hNSPu9LXtCVVVVbjGSmnwIgQ89xlDUMXN4cEbE0D2H9ym?=
+ =?us-ascii?Q?xvHHTZVX4eaBT1yuzscUdv1WNGm35ExZsnwWR5leXvzYho0McDPOuhXKqPok?=
+ =?us-ascii?Q?SM8Y77+c62T1b5jMfe+J7Ls+35UsF0WhGAlc4uLMClaz27ySOOZKgHLqtS7A?=
+ =?us-ascii?Q?mfVnCl54hqsKCqRGC0o4Y2e9JWyGzoKwNfSGNeu02otONbykkpgrjHBWSdzW?=
+ =?us-ascii?Q?uhFkredvK9qq/CSC1ZuO/0k616NcmoXYcq8p8dRv9yAmS7+4pVbVpWq9X9XT?=
+ =?us-ascii?Q?EnLywF8lLHtENX4iALR4o5F3uNevNxRXt4kL8CRBAuFGWCpviHvsD3aW1Riz?=
+ =?us-ascii?Q?/V0ADYCAlw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F6C2ABE3CCEA764FBA07387155284801@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnldSkaWu40cVimj@pc638.lan>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b5fcfeb-adb7-487e-ab4f-08da31eb80ca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 18:41:17.3719
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: POBNxfyilzTr3Wq8TvcVdtsEJ8+gey8CctdgoK1fCsGRGyGrL0nWNpYBGMxF0yfm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR15MB5426
+X-Proofpoint-ORIG-GUID: f5D-41B5BCmoZZAX118l_4MyvJ5nDA_1
+X-Proofpoint-GUID: f5D-41B5BCmoZZAX118l_4MyvJ5nDA_1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-09_05,2022-05-09_02,2022-02-23_01
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:28:26PM +0200, Uladzislau Rezki wrote:
-> > On Mon, May 09, 2022 at 01:17:00PM -0400, Joel Fernandes wrote:
-> > > On Sun, May 8, 2022 at 11:37 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > On Sun, May 08, 2022 at 08:17:49PM -0400, Joel Fernandes wrote:
-> > > > > On Sun, May 8, 2022 at 5:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >  [...]
-> > > > > > > Also, I think it is wrong to assume that a certain kind of system will
-> > > > > > > always have a certain number of callbacks to process at a time. That
-> > > > > > > seems prone to poor design due to assumptions which may not always be
-> > > > > > > true.
-> > > > > >
-> > > > > > Who was assuming that?  Uladzislau was measuring rather than assuming,
-> > > > > > if that was what you were getting at.  Or if you are thinking about
-> > > > > > things like qhimark, your point is exactly why there is both a default
-> > > > > > (which has worked quite well for a very long time) and the ability to
-> > > > > > adjust based on the needs of your specific system.
-> > > > >
-> > > > > I was merely saying that based on measurements make assumptions, but
-> > > > > in the real world the assumption may not be true, then everything
-> > > > > falls apart. Instead I feel, callback threads should be RT only if 1.
-> > > > > As you mentioned, the time based thing. 2. If the CB list is long and
-> > > > > there's lot of processing. But instead, if it is made a CONFIG option,
-> > > > > then that forces a fixed behavior which may fall apart in the real
-> > > > > world. I think adding more CONFIGs and special cases is more complex
-> > > > > but that's my opinion.
-> > > >
-> > > > Again, exactly what problem are you trying to solve?
-> > > >
-> > > > From what I can see, Uladzislau's issue can be addressed by statically
-> > > > setting the rcuo kthreads to SCHED_OTHER at boot time.  The discussion
-> > > > is on exactly how RCU is to be informed of this, at kernel build time.
-> > > >
-> > > > > > > Can we not have 2 sets of RCU offload threads, one which operate at RT
-> > > > > > > and only process few callbacks at a time, while another which is the
-> > > > > > > lower priority CFS offload thread - executes whenever there is a lot
-> > > > > > > of CBs pending? Just a thought.
-> > > > > >
-> > > > > > How about if we start by solving the problems we know that we have?
-> > > > >
-> > > > > I don't know why you would say that, because we are talking about
-> > > > > solving the specific problem Vlad's patch addresses, not random
-> > > > > problems. Which is that, Android wants to run expedited GPs, but when
-> > > > > the callback list is large, the RT nocb thread can starve other
-> > > > > things. Did I misunderstand the patch? If so, sorry about that but
-> > > > > that's what my email was discussing. i.e. running of CBs in RT
-> > > > > threads. I suck at writing well as I clearly miscommunicated.
-> > > >
-> > > > OK.
-> > > >
-> > > > Why do you believe that this needs anything other than small adjustments
-> > > > the defaults of existing Kconfig options?  Or am I completely missing
-> > > > the point of your proposal?
-> > > >
-> > > > > > > Otherwise, I feel like we might be again proliferating CONFIG options
-> > > > > > > and increasing burden on the user to get it the CONFIG right.
-> > > > > >
-> > > > > > I bet that we will solve this without adding any new Kconfig options.
-> > > > > > And I bet that the burden is at worst on the device designer, not on
-> > > > > > the user.  Plus it is entirely possible that there might be a way to
-> > > > > > automatically configure things to handle what we know about today,
-> > > > > > again without adding Kconfig options.
-> > > > >
-> > > > > Yes, agreed.
-> > > >
-> > > > If I change my last sentence to read as follows, are we still in
-> > > > agreement?
-> > > >
-> > > >         Plus it is entirely possible that there might be a way to
-> > > >         automatically configure things to handle what we know about today,
-> > > >         again without adding Kconfig options and without changing runtime
-> > > >         code beyond that covered by Uladzislau's patch.
-> > > 
-> > > Yes, actually the automatic configuration of things is what I meant,
-> > > that's the "problem" I was referring to, where the system does the
-> > > right thing for a broader range of systems, without requiring the
-> > > users to find RCU issues and hand-tune them (that requires said users
-> > > to have tracing and debugging skills and get lucky finding a problem).
-> > > To be fair, I did not propose any solutions to such problems either,
-> > > it is just some ideas. I don't like knobs too much and I don't trust
-> > > users or system designers to get them right most of the time.
-> > > 
-> > > In that sense,  I don't think making rcuo threads run as RT or not
-> > > (which this patch does) is really fixing the problems. In one case,
-> > > you might have priority inversion, in another case you might cause
-> > > starvation. Probably what is needed is best of both worlds. That said,
-> > > I don't have better solutions right now than what I mentioned, which
-> > > is to assign priorities to the callbacks themselves and run them in
-> > > threads of different priorities.
-> > > 
-> > > For the record, I am not against the patch or anything like that (and
-> > > even if I was, I am not sure that it matters for merging :P)
-> > 
-> > Fair enough!
-> > 
-> > And for the record at this end, I would not be surprised if in 2032
-> > RCU offloaded callback invocation has sophisticated dynamic tuning of
-> > priorities and much else besides.  But one step at a time!  ;-)
-> > 
-> hh... It is hard to comment because i am a bit lost in this big conversation :)
+On Mon, May 09, 2022 at 08:09:55PM +0200, Borislav Petkov wrote:
+> On Mon, May 09, 2022 at 05:46:22PM +0000, Jonathan McDowell wrote:
+> > Device tree on x86 doesn't seem to be a thing;
 > 
-> What i have got so far. Joel does not like adding extra *_CONFIG
-> options, actually me too since it becomes more complicated thus
-> it requires more specific attention from users. I prefer to make
-> the code common but it is not possible sometimes to make it common,
-> because we have different kind of kernels and workloads.
+> Not a thing? What does that even mean?
+
+Let me rephrase more verbosely. Device tree on x86 seems to be a rarely
+enabled config option that is only required on a couple of platforms and
+lacks the same level of integration with the x86 boot process (compared
+to PowerPC and ARM64) such that a) there's a lot more code that would
+need to be written to even get to the point that it could be used in the
+same manner for passing the IMA buffer as on other platforms and b) I'm
+not sure whether or not it might introduce other issues due to this lack
+of use/testing.
+
+> We have arch/x86/kernel/devicetree.c which adds some minimal devicetree
+> support.
 > 
-> >From the other hand the patch splits the BOOSTING logic into two peaces
-> because driving the grace periods kthreads in RT priority is not a big
-> issue because their run-times are short. Whereas running the "kthreads-callbacks"
-> in the RT context can be long so we end up in throttled situation for
-> other workloads.
+> > none of the distros I regularly use enable CONFIG_OF for x86, I can
+> > only find 2 32-bit x86 platforms that actually select it and none of
+> > the plumbing for kexec on x86 ties in device tree.
 > 
-> I see that Paul would like to keep it for CONFIG_PREEMPT_RT, because it
-> was mainly designed for that kind of kernels. So we can align with Alison
-> patch and her decision, so i do not see any issues. So far RT folk seems
-> does not mind in having "callback-kthreads" as SCHED_FIFO :)
+> And? That can get changed and enabled and so on.
 > 
-> Do you agree with start from keeping it ON for CONFIG_PREEMPT_RT conf.
-> by default and OFF for other cases?
+> > I agree for platforms that make active use of device tree that's the
+> > appropriate path, but it doesn't seem to be the case for x86.
+> 
+> I'm not sure what you're aim here is?
+> 
+> You want to pass that IMA measurement to the kexec kernel with minimal
+> changes, i.e., change only the kernel?
 
-Yes, please!
+I'd like to be able to take an internal kernel buffer and pass it to the
+newly kexeced kernel, yes. I'd like that to be possible with the
+kexec_file_load() path, which allows for things like kernel signing,
+which I believe precludes providing the data from user space.
 
-This allows your current RCU_NOCB_CPU_CB_BOOST with something like
-this in place of the "default n":
+> Why can't distros be also changed to use devicetree for the IMA
+> measurement, like the other arches do? Why does x86 need to do it
+> differently?
 
-	default y if PREEMPT_RT
-	default n if !PREEMPT_RT
+> We also pass info to the kexec kernel by reading it from sysfs
+> and having kexec tools pass it to the kexec-ed kernel, see
+> Documentation/ABI/testing/sysfs-firmware-efi-runtime-map
 
-There might be a simpler way of doing this, but this would work.
+AFAICT kexec passes EFI details using SETUP_EFI, which is what I
+modelled the SETUP_IMA support on
+(1fec0533693cd74f2d1a46edd29449cfee429df0). In the old syscall variant
+the kexec tools do read /sys/firmware/efi/runtime-map and create a
+setup_data entry of type SETUP_EFI, in the new file based kexec that is
+done inside the kernel in a similar fashion to what I've done with
+SETUP_IMA.
 
-Could you please send a v2 with the requested updates?
+> So is there any particular reason/pressing need to pass the measurement
+> with setup_data?
 
-						Thanx, Paul
+I'm not tied to setup_data but given the concerns I raise above with
+device tree on x86 and the need to handle this in the kernel it seemed
+like a reasonable first approach. You seem to be saying it's not and
+either adding the device tree infrastructure or doing a command line
+hack would be preferable?
+
+J.

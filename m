@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7CC520104
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA2652010D
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 17:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbiEIP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 11:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S238267AbiEIP14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 11:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238402AbiEIP0V (ORCPT
+        with ESMTP id S238479AbiEIP0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 11:26:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06941B0939;
-        Mon,  9 May 2022 08:22:26 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 868521F953;
-        Mon,  9 May 2022 15:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652109745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 9 May 2022 11:26:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8627A293B53
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 08:22:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652109758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=pP5QztUyCubNx+tH5klGWqVF3NAEvm+IujQ+PSfJajo=;
-        b=vCyjAv6DNlOTZIXy6j6NDzuIzyMShgX8w+GIQoJ/KdU+qZykbVHYFmDS8Z/qI+ykS1dslq
-        Szd5WmsGK7b5y0I1T7Pr5P40URHM8a7+j4JzHpOrni0QvghKflsRH88UR1CI5BFuzDiKha
-        rZ6wofRkb2JbudfXiirCkRWjbWcwQdM=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=n6h9yNfq72bzRls8HnUf0w0Kayfm+ufVKotdOqahwGY=;
+        b=ejnBp1v099tNTA3G8COCxb1fNizbUXf9CWbs8dblcwdYv0+CCbFlzYzO3qV3hNGF511e3b
+        zWhNDIYkhhIvUX0pwnhwKeYJ2ZOrYI9ZZnAmfKGg94jVaqWPcoughIsycIwdn7iQFWD8qQ
+        vXtoJymxaAHtX49p0guMRTeaJQxu6Dc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-zWiH30deNgyu3D0kqi9u0A-1; Mon, 09 May 2022 11:22:37 -0400
+X-MC-Unique: zWiH30deNgyu3D0kqi9u0A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 625D22C141;
-        Mon,  9 May 2022 15:22:25 +0000 (UTC)
-Date:   Mon, 9 May 2022 17:22:25 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rik van Riel <riel@fb.com>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
-Message-ID: <YnkxsaOWrxrSQ4D8@alley>
-References: <20220507174628.2086373-1-song@kernel.org>
- <20220509070437.GC76023@worktop.programming.kicks-ass.net>
- <9FA1822F-76EE-4174-86DD-B20F1F8CE7FC@fb.com>
- <20220509093830.GH76023@worktop.programming.kicks-ass.net>
- <0f6a45f80d01e9a5054c7973090a479707bda52f.camel@fb.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8E5C8E6201;
+        Mon,  9 May 2022 15:22:36 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.170])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 79D1C14C3022;
+        Mon,  9 May 2022 15:22:36 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>, jasowang@redhat.com,
+        mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
+        maz@kernel.org, pasic@linux.ibm.com, eperezma@redhat.com,
+        lulu@redhat.com, sgarzare@redhat.com, xuanzhuo@linux.alibaba.com
+Subject: Re: [PATCH V4 1/9] virtio: use virtio_device_ready() in
+ virtio_device_restore()
+In-Reply-To: <20220507071954.14455-2-jasowang@redhat.com>
+Organization: Red Hat GmbH
+References: <20220507071954.14455-1-jasowang@redhat.com>
+ <20220507071954.14455-2-jasowang@redhat.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Mon, 09 May 2022 17:22:34 +0200
+Message-ID: <87bkw64tol.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f6a45f80d01e9a5054c7973090a479707bda52f.camel@fb.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-05-09 14:13:17, Rik van Riel wrote:
-> On Mon, 2022-05-09 at 11:38 +0200, Peter Zijlstra wrote:
-> > On Mon, May 09, 2022 at 08:06:22AM +0000, Song Liu wrote:
-> > > 
-> > > 
-> > > > On May 9, 2022, at 12:04 AM, Peter Zijlstra
-> > > > <peterz@infradead.org> wrote:
-> > > > 
-> > > > On Sat, May 07, 2022 at 10:46:28AM -0700, Song Liu wrote:
-> > > > > Busy kernel threads may block the transition of livepatch. Call
-> > > > > klp_try_switch_task from __cond_resched to make the transition
-> > > > > easier.
-> > > > 
-> > > > What will a PREEMPT=y kernel do? How is it not a problem there,
-> > > > and if
-> > > > it is, this will not help that.
-> > 
-> > Not really. There is no difference between an explicit preemption
-> > point
-> > (cond_resched) or an involuntary preemption point (PREEMPT=y).
-> > 
-> > So unless you can *exactly* say why it isn't a problem on PREEMPT=y,
-> > none of this makes any sense.
-> 
-> I suspect it is a problem on PREEMPT=y too, but is there some sort
-> of fairly light weight (in terms of stuff we need to add to the kernel)
-> solution that could solve both?
-> 
-> Do we have some real time per-CPU kernel threads we could just
-> issue a NOOP call to, which would preempt long-running kernel
-> threads (like a kworker with oodles of work to do)?
-> 
-> Could the stopper workqueue be a suitable tool for this job?
+On Sat, May 07 2022, Jason Wang <jasowang@redhat.com> wrote:
 
-An interesting solution would be to queue irq_work in CPU that
-is occupied by the long-running kernel task.
+> From: Stefano Garzarella <sgarzare@redhat.com>
+>
+> It will allow us to do extension on virtio_device_ready() without
+> duplicating code.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Halil Pasic <pasic@linux.ibm.com>
+> Cc: Cornelia Huck <cohuck@redhat.com>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-It might be queued from klp_try_complete_transition() that
-is called from the regular klp_transition_work_fn().
+I think you forgot my R-b on this and the following patch...
 
-Then the task might try to migrate itself from the irq_work.
-But the problem is that stack_trace_save_tsk_reliable() probably
-will not be able to store a reliable backtrace for the interrupted
-task.
-
-So, we might really need to stop the task (CPU). But there still
-might be problem if stack_trace_save_tsk_reliable() will consider
-the stack as reliable.
-
-Best Regards,
-Petr

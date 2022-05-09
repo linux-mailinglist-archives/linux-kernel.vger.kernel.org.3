@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645EB51F326
+	by mail.lfdr.de (Postfix) with ESMTP id 183EB51F325
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 06:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbiEID71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
+        id S230201AbiEIEJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 00:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbiEID4k (ORCPT
+        with ESMTP id S234179AbiEIEBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:56:40 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD6A1AF28
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:52:06 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so7526025wme.3
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 20:52:06 -0700 (PDT)
+        Mon, 9 May 2022 00:01:37 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F3DFC773
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:57:44 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q76so10948075pgq.10
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 20:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l12WE5mp9PhO1IPRjTjpwmDGOQ7wb/4a5m9y3nBGeOA=;
-        b=pvxaieywYUVpcXk0gT3Q+TKVFmt3IoMc62S6eEy129dttwYSJqT9gWsXPzLeg+zFPI
-         PLe7o1fK9XGaF1Qesmimu/v+hehti1bDynbD4bKR/jpI1CYfNzYt6QF2rR7GxoW4FJ9t
-         0kHZGsLEq7+bVTe4bIW5WVDYJL3zfzvAl63bDcfyCH/k73KZYhfI5iQeSZkRXci8yJCi
-         mS1IfKYGnAxTSiGDmgemHWf/sStPKQ4nK5xMhXbQTNxlK0z2CaBgcTbNJJ3WQ/p4E6hh
-         QjQGB47vH+kz7OiQHuN41JmNpw6cK7sULCd4ksimYRZehABS2BXGakngjKeoHtaH4av5
-         AklQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QA3QBtPI3O1Tfh2czp5nCb1ZHar3YqBZK+8IBbh2GL4=;
+        b=XLrOMOGf7eUqDcGo2C93lcSbcOVHHwJ9AgWvnOp8InbUmMb/p3Scnt+HB8KagrN/tc
+         UjylYfTzYjNZRUfJqWwtyl51PBL3wEUZ8yVf8OR3+euT7YTetZ851DxFJi5YuQa1d7lm
+         uFvF3reXbjEUoD1nBmIOTiCP1wj+Y295CLSSFeA6m+2RBshBptzctNgjEgFWhAwXrvp4
+         XnPP6Ol9tToQu0lWkTS3TxmwTZmuaxWKIUGOdN0RlTCKMvoN8oBPyg/q2Wdv1ESm0ScD
+         es+sg8xzgki86NGN9fG04yl6k6R15szh60hwNjgmJ6mMjNM0k9iyOre+UpjfhNlBEzAv
+         8xYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l12WE5mp9PhO1IPRjTjpwmDGOQ7wb/4a5m9y3nBGeOA=;
-        b=ru5QqPtDYYJl/5a7sSgpdtoSjHHuLsYfZ4Bh7L/n3e6lWy5xeR5o0mD/FKbc7kvPRE
-         vhegORkaioleG1//KdZ7TPbAvhPg6rnbFQ1xwCMVvjFYFTG7PNayrOHtNbe4I/VhbwOe
-         YttMeldXTkqdpV8c6EYFGO9hL4Y6FU6cwEuI0J9yb/rAGDqx1gB4ShYPXqHQ9i0mWvI6
-         HaSJhpahcUOEOswLCI/bmwY/5G+akzL7ZiTkElW/psmbnxy4Hv1tC5PTfUU1vNEi+l8R
-         38hv3iD+IHPe3Ms01v/pljPhjiLsaw5Yi0ZAXDDDpZUuVCtdgPY79eWG/Do9zNkEM0dH
-         FawQ==
-X-Gm-Message-State: AOAM533O2ElYSHm6i5JI01wTHBIAc/8YWxszkpdViwVvt4/Yn/E8ZVy1
-        6BWTVmm1grHTaumFUAa0xoIlbsLlw7XF1TLTEv8sgg==
-X-Google-Smtp-Source: ABdhPJwC1APi3CYSHkdsQEXeqQMbYX056D1XGJXeGfizpAHDTp/Hd2oR5snXTCoQWjC29wCqNqBAMXzIclLr3fpNcSY=
-X-Received: by 2002:a05:600c:4fd5:b0:394:55ae:32c7 with SMTP id
- o21-20020a05600c4fd500b0039455ae32c7mr20677459wmq.73.1652068323237; Sun, 08
- May 2022 20:52:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QA3QBtPI3O1Tfh2czp5nCb1ZHar3YqBZK+8IBbh2GL4=;
+        b=HJ68RwfOHpbr0/vo2T+etrBcqtoS5SGMxPd6b9cn6aJlpni+okVRMfk/90X07UYukc
+         seQyiMZv1PqgVZCwcTMjcH3291jijv9hj6yU4hYB6gOYNSif7A2j+IzWUNBljki628XV
+         +/Fre8Lv6c0d4nE2H2UAay1TWdezrt/pimmWyGu+Y2SJbYEEM7R+qjCVOauqf6UeMYmf
+         o2poklR6Hw8P/Xiwtn7RJhyvMygArMpYLl4BkaQBRI3kj1FbagKXHTbbjLGrKSs2NJLj
+         b7BnFZwpm+LgBcyhqCDOe1i3pXjzYaMo9V/f0DQojEBtfsP2ZarPvQjdUAlJOPuxU15J
+         gzAQ==
+X-Gm-Message-State: AOAM531meqnLbiRU9tk1MwSZR/pfJxNhBMXPakadh2nFFZdtvhrG21J+
+        sk5wmEAc5C8PxH3TRNWRIYjR0A==
+X-Google-Smtp-Source: ABdhPJyfcZT4vyA7LsNd4ftNp8j+EWMdDGp+1rPoJM6Ybs2WwPT8EbYICPTbejvD3GjrYAYUfrqAgA==
+X-Received: by 2002:a62:ce82:0:b0:50d:512f:7b76 with SMTP id y124-20020a62ce82000000b0050d512f7b76mr14401183pfg.79.1652068663103;
+        Sun, 08 May 2022 20:57:43 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b0015e8d4eb1d0sm5961358pls.26.2022.05.08.20.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 20:57:42 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Schspa Shi <schspa@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "cpufreq: Fix possible race in cpufreq online error path"
+Date:   Mon,  9 May 2022 09:27:37 +0530
+Message-Id: <7f505491f4e8207bb5d79b1b7b34a28b6d1f03b6.1652068655.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-References: <20220508160749.984-1-jszhang@kernel.org> <20220508160749.984-2-jszhang@kernel.org>
-In-Reply-To: <20220508160749.984-2-jszhang@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 9 May 2022 09:21:52 +0530
-Message-ID: <CAAhSdy2-L+eSE5P+-TG94exgTsDp8wPiuhD23fZQ88nukoNj-w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] riscv: mm: init: make pt_ops_set_[early|late|fixmap]
- static
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 8, 2022 at 9:46 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> These three functions are only used in init.c, so make them static.
-> Fix W=1 warnings like below:
->
-> arch/riscv/mm/init.c:721:13: warning: no previous prototype for function
-> 'pt_ops_set_early' [-Wmissing-prototypes]
->    void __init pt_ops_set_early(void)
->                ^
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+This reverts commit f346e96267cd76175d6c201b40f770c0116a8a04.
 
-Looks good to me.
+The commit tried to fix a possible real bug but it made it even worse.
+The fix was simply buggy as now an error out to out_offline_policy or
+out_exit_policy will try to release a semaphore which was never taken in
+the first place. This works fine only if we failed late, i.e. via
+out_destroy_policy.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Fixes: f346e96267cd ("cpufreq: Fix possible race in cpufreq online error path")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Regards,
-Anup
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 233e8af48848..fbaa8e6c7d23 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1534,6 +1534,8 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+ 
++	up_write(&policy->rwsem);
++
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1542,9 +1544,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
+ 
+-	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
+-
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
+-- 
+2.31.1.272.g89b43f80a514
 
-> ---
->  arch/riscv/mm/init.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 05ed641a1134..5f3f26dd9f21 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -849,7 +849,7 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
->   * MMU is not enabled, the page tables are allocated directly using
->   * early_pmd/pud/p4d and the address returned is the physical one.
->   */
-> -void __init pt_ops_set_early(void)
-> +static void __init pt_ops_set_early(void)
->  {
->         pt_ops.alloc_pte = alloc_pte_early;
->         pt_ops.get_pte_virt = get_pte_virt_early;
-> @@ -871,7 +871,7 @@ void __init pt_ops_set_early(void)
->   * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
->   * but it will be used as described above.
->   */
-> -void __init pt_ops_set_fixmap(void)
-> +static void __init pt_ops_set_fixmap(void)
->  {
->         pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
->         pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-> @@ -889,7 +889,7 @@ void __init pt_ops_set_fixmap(void)
->   * MMU is enabled and page table setup is complete, so from now, we can use
->   * generic page allocation functions to setup page table.
->   */
-> -void __init pt_ops_set_late(void)
-> +static void __init pt_ops_set_late(void)
->  {
->         pt_ops.alloc_pte = alloc_pte_late;
->         pt_ops.get_pte_virt = get_pte_virt_late;
-> --
-> 2.34.1
->

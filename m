@@ -2,149 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B20520560
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A8520573
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 21:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240608AbiEITkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 15:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+        id S240684AbiEITx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 15:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240564AbiEITkZ (ORCPT
+        with ESMTP id S240677AbiEITxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 15:40:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72200AE274;
-        Mon,  9 May 2022 12:36:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CBC60C5A;
-        Mon,  9 May 2022 19:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA623C385B2;
-        Mon,  9 May 2022 19:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652124988;
-        bh=lbXpF2CBFxt8r9QI1yEWANwIKiW6h9ySSfu5r+RItXE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WwJQsdSTkKOhnWYM5jHl2ukngRRMRxtCHsznGqYFhuMpMYePeboun+nwvXrwBv7eY
-         /A93AFWuLj83PmGU9Pgd6Wx2jhmpZalNh/xubw0u/FTuotUahIlchDF5QgePWy6H5y
-         6eh2vXjx9/gFT5WME5Kqbo3Vmqq0HiZUsejwcUdj3ZFv/AWSCGlVGy9ddjgZk4axKY
-         gQcbcUseXdcwsb+PmKYxEXBfaCO94ADFZMBquvV95sLZuhIzBKYqSf5fBHKOBi79fY
-         5O1a16hHCCJQcQTn+fqbDgE36XMDY7alsN5in+m/YWtIKyA1cpVHU2oYkSLNRR7Ldx
-         vOV/bfofI1ErA==
-Date:   Mon, 9 May 2022 14:45:41 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2][next] x86/mm/pgtable: Fix -Wstringop-overflow warnings
-Message-ID: <20220509194541.GA91598@embeddedor>
+        Mon, 9 May 2022 15:53:55 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F5D18E877;
+        Mon,  9 May 2022 12:49:59 -0700 (PDT)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1no9OD-0005ca-8v; Mon, 09 May 2022 15:49:53 -0400
+Message-ID: <1f94c48b4e0e7d73a689a076f78f0892095b4d89.camel@surriel.com>
+Subject: Re: [RFC] sched,livepatch: call stop_one_cpu in
+ klp_check_and_switch_task
+From:   Rik van Riel <riel@surriel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com, kernel-team@fb.com
+Date:   Mon, 09 May 2022 15:49:52 -0400
+In-Reply-To: <20220509191745.yk2txsa4cv3ypf6k@treble>
+References: <20220507174628.2086373-1-song@kernel.org>
+         <20220509115227.6075105e@imladris.surriel.com>
+         <20220509180004.zmvhz65xlncwqrrc@treble>
+         <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
+         <20220509191745.yk2txsa4cv3ypf6k@treble>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-/zMvygGJfLAsI+n3XX7/"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following -Wstringop-overflow warnings when building with GCC-12.1:
 
-arch/x86/mm/pgtable.c:437:13: warning: 'preallocate_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:440:13: warning: 'preallocate_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:462:9: warning: 'free_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:454:9: warning: 'pgd_prepopulate_pmd' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:455:9: warning: 'pgd_prepopulate_user_pmd' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:464:9: warning: 'free_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
+--=-/zMvygGJfLAsI+n3XX7/
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There is a case in which PREALLOCATED_PMDS, MAX_PREALLOCATED_PMDS,
-PREALLOCATED_USER_PMDS and MAX_PREALLOCATED_USER_PMDS are defined as
-zero:
+On Mon, 2022-05-09 at 12:17 -0700, Josh Poimboeuf wrote:
+> On Mon, May 09, 2022 at 03:10:16PM -0400, Rik van Riel wrote:
+>=20
+>=20
+> > Should kernel threads that can use a lot of CPU have
+> > something in their outer loop to transition KLPs,
+> > just like the idle task does?
+>=20
+> Maybe - I suppose this is the first time we've had an issue with
+> CPU-bound kthreads.=C2=A0 I didn't know that was a thing ;-)
+>=20
+Kworkers have as much work as you want them to do, and with
+things like btrfs compression that can be quite a bit.
 
-204 #else  /* !CONFIG_X86_PAE */
-205 
-206 /* No need to prepopulate any pagetable entries in non-PAE modes. */
-207 #define PREALLOCATED_PMDS       0
-208 #define MAX_PREALLOCATED_PMDS   0
-209 #define PREALLOCATED_USER_PMDS   0
-210 #define MAX_PREALLOCATED_USER_PMDS 0
-211 #endif  /* CONFIG_X86_PAE */
+--=20
+All Rights Reversed.
 
-It seems that GCC is legitimately complaining about the fact that, under
-certain circumstances, u_pmds and pmds are declared as zero-length arrays
-in the stack and, of course, they are not flexible arrays.
+--=-/zMvygGJfLAsI+n3XX7/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-424 pgd_t *pgd_alloc(struct mm_struct *mm)
-425 {
-426         pgd_t *pgd;
-427         pmd_t *u_pmds[MAX_PREALLOCATED_USER_PMDS];
-428         pmd_t *pmds[MAX_PREALLOCATED_PMDS];
-429
+-----BEGIN PGP SIGNATURE-----
 
-Notice that "Accessing elements of zero-length arrays declared in such
-contexts is undefined and may be diagnosed."[1]
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmJ5cGAACgkQznnekoTE
+3oN/vwgAlL+sgfIYzv4Yn8QkvhM+LGFufW9bo9fyeDXE4x1pZZ2Z2k7H6JrQwUee
+fF4fCr+u6d7m5KS3ZhYjbYNEWsmTfDJusHOxn9EExSruLpHZwKVNDeJxBngD1agc
+vb3cj6qTPNiEtv6bxPF0HLCbaGyUSZ52pR7bv/KrcXlykAvCFZ49F5cebludpcGN
+Qe43vPoOouEksejhUceSzCHd9ja1Lb03xif5hvRO7/JyOQX8Sx6/FgNEeltTfwiR
+a8SPD8k51Uaq7d6y6saT+BPmCHa09KEBDi+SQqfDkwW9fn8IIZMtTJtmSNdJ7c3N
+/vqwM04dbcYoV9kmAlzx2OZNFsiOnQ==
+=MMoT
+-----END PGP SIGNATURE-----
 
-We can fix this by checking that MAX_PREALLOCATED_PMDS and MAX_PREALLOCATED_USER_PMDS
-are different than zero, prior to passing u_pmds amd pmds as arguments to any
-function, in this case to functions preallocate_pmds(), pgd_prepopulate_pmd()
-and free_pmds().
-
-This helps with the ongoing efforts to globally enable
--Wstringop-overflow.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-
-Link: https://github.com/KSPP/linux/issues/181
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Check MAX_PREALLOCATED_PMDS and MAX_PREALLOCATED_USER_PMDS
-   instead of using pointer notation.
-   Link: https://lore.kernel.org/linux-hardening/20220401005834.GA182932@embeddedor/
- - Update changelog text.
-
- arch/x86/mm/pgtable.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
-index f16059e9a85e..96c3f402a1da 100644
---- a/arch/x86/mm/pgtable.c
-+++ b/arch/x86/mm/pgtable.c
-@@ -434,14 +434,18 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- 
- 	mm->pgd = pgd;
- 
--	if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
--		goto out_free_pgd;
-+	if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0) {
-+		if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
-+			goto out_free_pgd;
- 
--	if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
--		goto out_free_pmds;
-+		if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
-+			goto out_free_pmds;
- 
--	if (paravirt_pgd_alloc(mm) != 0)
--		goto out_free_user_pmds;
-+		if (paravirt_pgd_alloc(mm) != 0)
-+			goto out_free_user_pmds;
-+	} else {
-+		goto out_free_pgd;
-+	}
- 
- 	/*
- 	 * Make sure that pre-populating the pmds is atomic with
--- 
-2.27.0
-
+--=-/zMvygGJfLAsI+n3XX7/--

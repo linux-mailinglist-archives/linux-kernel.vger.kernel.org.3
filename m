@@ -2,182 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6678051FECE
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5834B51FED1
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbiEINxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S236535AbiEINyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236387AbiEINxJ (ORCPT
+        with ESMTP id S236507AbiEINyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:53:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D1E15EE45
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 06:49:13 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id y21so16372494edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 06:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pZA6yQRMN3Sqlm7PUtuAQxJKWhf1hQnaR/qZnuNhEi0=;
-        b=RIPC3IRUZJgrvWiGdCKAmuBHUkZ0OBMzV6EDRcUlvXefj9BivRsw0ne+BTTqCHs9R2
-         hwuUNmhb/NmvvoaxSwL1J/yqORK7t3Oqo4/Eyq2sx1Lw8D/KenocRGn5CWjgdy8wNq0x
-         MjbCyvfJwjFJHBiPqltgSbkK5uR5Kcv2MiiCY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=pZA6yQRMN3Sqlm7PUtuAQxJKWhf1hQnaR/qZnuNhEi0=;
-        b=kxoz3Ny7D8zrFWBxfFYHHKjWflUtV5Rf/OpaDRRp/0x3/Enph71E7rKB0aPOMhC2Fd
-         hVcDKdBrXx29h2GTbKKjqBrf7FDM1mYWIAnAqmLMcHrTyTi1TMAQYTU9mx7+MBDVOH5z
-         LphR3arRliiIxrl8Nt5ovhtUlMWFexlLB68j7e4IdSOk3C0v0dENCm0gh0+SZ+DA24wg
-         HG32kYf9SWWthGyLqoidQ5Qiew3vOv4jSZdU/qIoIqb8nZ6G1tkjYkmp7x9A1DFwAqTY
-         os2FgJ6y2oOXujOkQ2a80KveZHDbOYadzsYc+jM62J6rqwUyfhMGa5pxtb3jzxO7MO11
-         gTSQ==
-X-Gm-Message-State: AOAM531zv8Nav08msR9r55Ajqg7yROs/kXBIXBE4KCENhFeZmIOcjGsv
-        VhIOMds5MkA8lRB0TcNys8wE1Q==
-X-Google-Smtp-Source: ABdhPJwN2FC/6D0Xgv+EcIAfaOL8WLCDlbLxuaFd6okSeiN7pvVZhHJiCjFLOMMadOc4aiUcFRPQBQ==
-X-Received: by 2002:aa7:c403:0:b0:428:8741:63a2 with SMTP id j3-20020aa7c403000000b00428874163a2mr9798080edq.219.1652104151800;
-        Mon, 09 May 2022 06:49:11 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090651cc00b006f3ef214e41sm3146579ejk.167.2022.05.09.06.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 06:49:11 -0700 (PDT)
-Date:   Mon, 9 May 2022 15:49:09 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] drm/shmem-helper: Add generic memory shrinker
-Message-ID: <Ynkb1U2nNWYPML88@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-12-dmitry.osipenko@collabora.com>
- <e6108e9c-6e67-2d71-0665-654e11d9c3a5@suse.de>
- <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Mon, 9 May 2022 09:54:11 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2123.outbound.protection.outlook.com [40.107.255.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34228247B;
+        Mon,  9 May 2022 06:50:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ijG09zM3HdpFA/4xR426a5jEnV83ccZ25uh3ujJcL15pgiZxgSBkiByES2h3nWvvNcIajxQ+epVIsjmyPr3xO1hRiahxUaIpITPQdvuhZA/ZqrCuS5EHS7ek0shuln+M+O/1STeIe8Gmik0g4hL+GWzUu7ipG0hr3BZjhMa3nEyir4QRI2wY3fQmr0m48E8fJSdT1f80aCWtOfMrtd8r2tIldABeNx/hOR0FgNcIPqRDmPHNWt8HsbAhTS/EG0oz9/h/Ysb9pLowOShp4LBqWa37FeYqxuSI6fF1gJhCPyjmm49X23UBmAXkBT50Q+avGwWQ+fZYS1rU9dNTHzN45Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ou2APw0+lNj7/SHwfv+IqVb8Yty4GFxi4Y+50pv+oII=;
+ b=S45ugQFCaX2MC8uMvLU1bfyIAYIjlIAHVMSaCu0WrKMar2r2JfKy4BuzP0Tm6FXVEVzEMcx2N9OtzgQ9TSISyzMjUgVR5U1SaN+a7vB9bDM6mlpLGEiDteuk7HSNC4f83xq9374kj1eU1P0z3+gaQp2GNoGbDUiVXwqrDByXMG3+f6+lrCmKHidbliGI14LOByvDfPil+tduomcMhkwAXYlQDLAoxaq6VXKKVTVu/HST2wE5PROf/2fZ3+H2xIJyvXwUSOYoJnLxUNCU7iIEv4q63WJe3i7GQqs+T/f9LKluXc3S90c5hfE4+6EdRtTqbRVimRs/DD5LSVR0sG+AQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ou2APw0+lNj7/SHwfv+IqVb8Yty4GFxi4Y+50pv+oII=;
+ b=j6R+Naz73x+X36IqDGzRDufSPWzUnMhhJy++hf7sqgRLnNJEvajWhEFzSA5DSGcboyjSIseR9b1Ywt4tnn3oblKhyM1P2c+vGUvjX4m2s3e8caPmwC10TKTbPLLbjO7GrUh3qBGKureLo2qszi3WPpJiSq6PcK2OvcOYaQj2DVk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ HK0PR06MB2995.apcprd06.prod.outlook.com (2603:1096:203:80::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5227.22; Mon, 9 May 2022 13:50:08 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5227.022; Mon, 9 May 2022
+ 13:50:08 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] net: phy: micrel: Fix incorret variable type in micrel
+Date:   Mon,  9 May 2022 21:49:51 +0800
+Message-Id: <20220509134951.2327924-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.36.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ff97790a-fb64-1e15-74b4-59c807bce0b9@collabora.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0200.apcprd02.prod.outlook.com
+ (2603:1096:201:20::12) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5aa0408a-5b12-47d7-7e35-08da31c2d48a
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2995:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB29951CE6B9CBB078FF4A9D2DABC69@HK0PR06MB2995.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M6hqImYY1cCFey2/Mzy3qDMwga8xEMcsvUJ1JcZ0R7RbuxP3NGXnEWKvbdW1vhfVe9V0xXoia7eerxZpnNEa7Akt57wkLlaLQoFqiJZD6iRrXbeX9r1NKsjzbS/8t2sLMPJZ0FTnGBEL3ifLLKeKoDP5Q+hShJJ6sJ5CJkqQQidGeEdBZ33XKONSIag7CBhAk9WOGKbG/thRdOdciWvwvn+frmq6wbwJSMKMHFw5WItBnhpxLpjmGlqvs6vuQU63Y+t7UGYxUgWJ4IUwuuDz8LPR34zXUpwju8C0lyoFhtetVEk4NXHiO7M4TObjNpRmkL5jOwgcaDT5pPdLpLWckDvsyKZ0XQfETc0lIuWQlCcidhTZPJnI31C2TFvvJ2aXs6yyeJIeHhHQdMENpaWanpJE8hX5VHqo/08Rh5YaQo0x5cRJF0FUCj4aYr2XzhED8teyJ99HXNC5UaNQJQQldI7zUqtra2Veukit2Bj23wTiRY1Zt9W+469RKvFn3g5nk4XiHcx/bLd/ZvOArwCsAOe/C4LDGfy3HGK0OD+7VKpfTcUtEfkOt6z2Fho7xTs5/lfMDO5p6UXAExNM5JFlgAnOAiI+R4VUAh5QwegN043du11fNAoPAuOXHqlGWGSPlsRwEM0KC6qAP4l11ZA/Nvv/fx/wDoaGIWp978gCOtWiSHydqRDUmEMhukHfS5PE9AWP2qGhsL7ErCM5I8ZH0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6486002)(6512007)(26005)(107886003)(2906002)(86362001)(1076003)(186003)(6666004)(6506007)(52116002)(5660300002)(2616005)(83380400001)(36756003)(316002)(4326008)(8676002)(66476007)(66946007)(66556008)(38350700002)(38100700002)(8936002)(110136005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SMw0J/4+EhInY4WZ2farqIdcMyG4avYpk8XQpFp2ltbIILJj1R75gwR7efyM?=
+ =?us-ascii?Q?cOCjkhdjpOeXHAs23RVoqM/0N28+LHXysGQlBJQT9KIrSmul5HTKVyNyb6Wj?=
+ =?us-ascii?Q?GIj+3lYwFxIFjavE/eJNWtTIqaIHb03URWk4yheo2lhxMJJFJVS2EdUBCJKW?=
+ =?us-ascii?Q?FWjDaOjweYwYLDHpC64j433cxiFBie6BJEmi0+Rh9C1p5H0Y909PHFflD4jR?=
+ =?us-ascii?Q?jqBspgVqhKQk3T4vVXQUXiJjaWCShjMlHLWLodbgTcyyeQrCLNlwEhSWTxDP?=
+ =?us-ascii?Q?4aQSc+aZce4zfLJIaCU5Zd+ky10vVqyGIVLyZzGrMpZl5hgDeDYBQgBSH3Mx?=
+ =?us-ascii?Q?0Bez87LF2bloX7+ZZhIJlwmoXOasmiMzklNZr7cfQTs50tWR6EO2QMDcoRps?=
+ =?us-ascii?Q?9JmwP1IkZBAKWZ0ZQqh81DRv7065Be+w8GC0naFQUBB6Txe0zqMYMBzrIhXq?=
+ =?us-ascii?Q?fWeS9UQVQbZlcur80FVoRYnO5IwQeAu3vktPcJnhx2/FGrsdxwFgP3MoH7W/?=
+ =?us-ascii?Q?HRyfezlwrroZFJU4h7UU+lH5FhHtUF790g9peCBRVGiBO2vUyZX+xAPvDrcD?=
+ =?us-ascii?Q?kcar+C1OKuhR2gX1x6e92eMTzrQ4UBFcck8HaTylF0+jVXrORd7yHBes1Jkf?=
+ =?us-ascii?Q?DaskymFcmijb0+/zvxl0FG1kSvzHtxHp+jpRnRnQxyji3bXSPjAN30pqLbyl?=
+ =?us-ascii?Q?Ywb2rHTjTqmypmigu/fWMKHVpZPXMKGxtSN0Nffcp08vW644aP09UvQIFgSS?=
+ =?us-ascii?Q?TOWR39m/8ro1Nf8XzoDFVlspfgKWQf3nrK5cL9WSw4fMJSIaK+mlFrbrckal?=
+ =?us-ascii?Q?BBshyRRHsTFlCbI9dxK5k7yrz2yeJT2ud5duroFHDaRUJvHcxV+D+CTZFCBM?=
+ =?us-ascii?Q?aI0/97bR48zseZAU8S2k0ysXHINTNwaWbob8Z56MJfccjiEa8lmYtdD1zoHW?=
+ =?us-ascii?Q?BSGhr3ntfFGYOEdjo9akW2ZiZ/+vQAGgeXIq9DQy/2IU7KJk+9yblyWvjWK0?=
+ =?us-ascii?Q?S/yHLjBOZoN3ff9ZplK8uCw7tnRS3NbYtxY3tT3UgpGvCYPae6fY6xtU5EQO?=
+ =?us-ascii?Q?ZZLxDBx83qxENaN1p638o1zwM9oXFl+OizzLUMpmXGGSCll2z7V8WMmrRR/x?=
+ =?us-ascii?Q?BJOfa8rRjFeb94/oihmHZ0GeVhWyrbwehtSzGrK3p9Ex9oBWPqbERdbdnUQ7?=
+ =?us-ascii?Q?qYOXaVd5bWNNGdePHo1Pqn8W6+BEwfcPcseiQOaJIwVMqfM1Ne8J0yhyb26Y?=
+ =?us-ascii?Q?9AfuS/CWGOmmFUcsj8nIgBQLNFVZozOKuiJmSCO26f5DqcxBSnYFRa3v/dqa?=
+ =?us-ascii?Q?jH0+ta1fbootgJ3dGRL3FYpT/UeSGC/f+K9sI8dll+HkYaCj2pt0CY6N4Vx1?=
+ =?us-ascii?Q?6L+sh5Ab4ltjHiIUktJq+IplgO+oxFjtpUFmpM8cRrFjQ58VdvOGusHUBIMX?=
+ =?us-ascii?Q?/ClY37Xy9fYgsATCQoBHcTFSHximomRfhFSHgDckhBI8IrbgKFsXttoJsA1K?=
+ =?us-ascii?Q?EzIALfGMuZeZZGW+k0GxTIe9J5nBrhjO7EvFlpYcz2Om5QQ3zwnOh3eiXPLL?=
+ =?us-ascii?Q?lHMhL/64Mu9PedhtnSlDzjEJ505ThnmqSgvh0mqW4gqQgqnPql6nm6yAbkef?=
+ =?us-ascii?Q?gPHcGTCY/fC4Ti33dNgl1SLo989JKQkUINuAFDYlc2UTH8lbCTUlVq4qljvI?=
+ =?us-ascii?Q?4l5r92t6v1PhpP5rr/3wj303SAfH+fcQvDevQxbnW3b1LqoZrDFo8PlCR51A?=
+ =?us-ascii?Q?22J51Qv3eA=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5aa0408a-5b12-47d7-7e35-08da31c2d48a
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 13:50:08.7483
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2m0IP+gz4pjUk1R4cOcL33V1uL8nmw/2h5y/XN6m5ahnjoTpULCnlD2X1Q9TfBMtPkLfeMBGt91cogAaRVpoVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2995
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 03:10:43AM +0300, Dmitry Osipenko wrote:
-> On 5/5/22 11:34, Thomas Zimmermann wrote:
-> > Hi
-> > 
-> > Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
-> >> Introduce a common DRM SHMEM shrinker. It allows to reduce code
-> >> duplication among DRM drivers that implement theirs own shrinkers.
-> >> This is initial version of the shrinker that covers basic needs of
-> >> GPU drivers, both purging and eviction of shmem objects are supported.
-> >>
-> >> This patch is based on a couple ideas borrowed from Rob's Clark MSM
-> >> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
-> >>
-> >> In order to start using DRM SHMEM shrinker drivers should:
-> >>
-> >> 1. Implement new purge(), evict() + swap_in() GEM callbacks.
-> >> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
-> >> 3. Use drm_gem_shmem_set_purgeable_and_evictable(shmem) and alike API
-> >>     functions to activate shrinking of GEMs.
-> > 
-> > Honestly speaking, after reading the patch and the discussion here I
-> > really don't like where all tis is going. The interfaces and
-> > implementation are overengineered.  Descisions about evicting and
-> > purging should be done by the memory manager. For the most part, it's
-> > none of the driver's business.
-> 
-> Daniel mostly suggesting to make interface more flexible for future
-> drivers, so we won't need to re-do it later on. My version of the
-> interface is based on what drivers need today.
-> 
-> Why do you think it's a problem to turn shmem helper into the simple
-> generic memory manager? I don't see how it's better to have drivers
-> duplicating the exactly same efforts and making different mistakes.
-> 
-> The shmem shrinker implementation is mostly based on the freedreno's
-> shrinker and it's very easy to enable generic shrinker for VirtIO and
-> Panfrost drivers. I think in the future freedreno and other drivers
-> could switch to use drm shmem instead of open coding the memory management.
+In lanphy_read_page_reg, calling __phy_read() might return a negative
+error code. Use 'int' to check the negative error code.
 
-Yeah I think we have enough shrinkers all over drm to actually design
-something solid here.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/net/phy/micrel.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-There's also the i915 shrinker and some kinda shrinker in ttm too. So we
-are definitely past the "have 3 examples to make sure you design something
-solid" rule of thumb.
-
-I also have a bit an idea that we could try to glue the shmem shrinker
-into ttm, at least at a very high level that's something that would make
-some sense.
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index a06661c07ca8..c34a93403d1e 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1959,7 +1959,7 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
  
-> > I'd like to ask you to reduce the scope of the patchset and build the
-> > shrinker only for virtio-gpu. I know that I first suggested to build
-> > upon shmem helpers, but it seems that it's easier to do that in a later
-> > patchset.
-> 
-> The first version of the VirtIO shrinker didn't support memory eviction.
-> Memory eviction support requires page fault handler to be aware of the
-> evicted pages, what should we do about it? The page fault handling is a
-> part of memory management, hence to me drm-shmem is already kinda a MM.
-
-Hm I still don't get that part, why does that also not go through the
-shmem helpers? I'm still confused why drivers need to know the difference
-between evition and purging. Or maybe I'm confused again.
--Daniel
+ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ {
+-	u32 data;
++	int data;
+ 
+ 	phy_lock_mdio_bus(phydev);
+ 	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+@@ -2660,8 +2660,7 @@ static int lan8804_config_init(struct phy_device *phydev)
+ 
+ static irqreturn_t lan8814_handle_interrupt(struct phy_device *phydev)
+ {
+-	u16 tsu_irq_status;
+-	int irq_status;
++	int irq_status, tsu_irq_status;
+ 
+ 	irq_status = phy_read(phydev, LAN8814_INTS);
+ 	if (irq_status > 0 && (irq_status & LAN8814_INT_LINK))
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.36.0
+

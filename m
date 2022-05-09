@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22CA520676
+	by mail.lfdr.de (Postfix) with ESMTP id 95442520675
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 23:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiEIVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 17:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S230241AbiEIVLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 17:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiEIVLn (ORCPT
+        with ESMTP id S229975AbiEIVLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 17:11:43 -0400
+        Mon, 9 May 2022 17:11:45 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCF6E7328;
-        Mon,  9 May 2022 14:07:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC861F74A3;
+        Mon,  9 May 2022 14:07:49 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id DE5E41F430CB
+        with ESMTPSA id DAD2D1F430E3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652130467;
-        bh=74FyHDOOizk+TMT3i3Kx8M2B5GpKxJp/DqS60eMcOH8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hrucb9ZEUOvcrLczb4CqvrxAcAGDIWXe2oBJDiJDfkI30WAO2cPhDUWIM9tHp3Qqi
-         1RAuGwyA4d1JrjsAiVAv8kxuyHm7COrblIg0GIfE7v5rqkOWIV/no3ohYRgkSgIhiJ
-         9/e7vcUnzlL0NiazyVf1JrzpSmSRRr0Hrhff4xbRtsCjCHgzNIZD6aAbvbFiwGqmm4
-         3yXyuxBxjHkpdHwEJZWltTFVMQDf5xEF19BunbEv1aQMolhdUuuUDGpGW+kFywNqy2
-         Q+UJJyqOLju4wg74xYC7JBjtsYmdZK98sEE0tzKv9HHkGGD6qp60N9Tvnn3XUKi9tx
-         0vVlqmd7aaVFw==
+        s=mail; t=1652130468;
+        bh=olbInTBcsJ7OBs0Az64gQWO87DN9MjbVGnMzsKIcrgw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Zx5o/pCtkpfsji57HfqegarDPp7mtCGg/vVQN6+xb8LAab9KyntJaL4FPb72jQH3S
+         3vRVnbAhSsBg6AYvSn91839Jgptv5K+LibqCXStqoK5p+Goo3SbrwgDZ00WPpDn6Jq
+         C42O5RmOM3Z+8yoUhp/vE/tZ8S8j6fKSw+BYhgpTLCD3ctJgoJDKsUVooaLkfgGpZb
+         26NRufbQrtWzXDNmVxfm6+PH2KLKq378m5JbAfEutwnjWm4RCpA2kFzTgFAy2RMDgQ
+         QOV676guliZAJIWZN0X5/XsRnMcnaCj6eZhZ99ctglI7O65g5HbUc+S1dZPZMVmkPQ
+         wKEF7tDYncZGQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     daniel.lezcano@linaro.org
@@ -41,10 +41,12 @@ Cc:     tglx@linutronix.de, robh+dt@kernel.org,
         paul.bouchara@somainline.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 0/2] MediaTek SoC ARM/ARM64 System Timer
-Date:   Mon,  9 May 2022 23:07:38 +0200
-Message-Id: <20220509210741.12020-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 1/2] dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795 compatible
+Date:   Mon,  9 May 2022 23:07:39 +0200
+Message-Id: <20220509210741.12020-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220509210741.12020-1-angelogioacchino.delregno@collabora.com>
+References: <20220509210741.12020-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,33 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to give some love to the apparently forgotten MT6795 SoC,
-I am upstreaming more components that are necessary to support platforms
-powered by this one apart from a simple boot to serial console.
+Document the "CPUXGPT" CPU General Purpose Timer, used as ARM/ARM64
+System Timer on MediaTek platforms and add the MT6795 compatible for it.
 
-This series introduces support to start the System Timer for the CPU
-cores found in various MediaTek SoCs including, but not limited to the
-MT6795 Helio X10 - and will most probably unblock many developers for
-the upstreaming of various platforms.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../devicetree/bindings/timer/mediatek,mtk-timer.txt          | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-For a broad overview of why/what/when, please look at the description
-of patch [2/2] in this series.
-
-Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-
-Changes in v2:
- - Added back a lost line in commit 2/2 (sorry, commit didn't get amended...!)
- - Tested again for safety
-
-AngeloGioacchino Del Regno (2):
-  dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795
-    compatible
-  clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
-
- .../bindings/timer/mediatek,mtk-timer.txt     |   4 +
- drivers/clocksource/timer-mediatek.c          | 119 ++++++++++++++++++
- 2 files changed, 123 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+index fbd76a8e023b..2d139d24e535 100644
+--- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
++++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+@@ -2,6 +2,7 @@ MediaTek Timers
+ ---------------
+ 
+ MediaTek SoCs have two different timers on different platforms,
++- CPUX (ARM/ARM64 System Timer)
+ - GPT (General Purpose Timer)
+ - SYST (System Timer)
+ 
+@@ -28,6 +29,9 @@ Required properties:
+ 	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
+ 	* "mediatek,mt6765-timer" for MT6765 and all above compatible timers (SYST)
+ 
++	For those SoCs that use CPUX
++	* "mediatek,mt6795-systimer" for MT6795 compatible timers (CPUX)
++
+ - reg: Should contain location and length for timer register.
+ - clocks: Should contain system clock.
+ 
 -- 
 2.35.1
 

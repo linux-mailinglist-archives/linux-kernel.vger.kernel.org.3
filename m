@@ -2,231 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDC651F83A
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD2051F831
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 11:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiEIJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 05:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
+        id S237142AbiEIJdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 05:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238629AbiEIJL5 (ORCPT
+        with ESMTP id S238238AbiEIJNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 05:11:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8144518A681
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 02:08:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 430B21480;
-        Mon,  9 May 2022 02:08:03 -0700 (PDT)
-Received: from [10.163.34.187] (unknown [10.163.34.187])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 594C83F66F;
-        Mon,  9 May 2022 02:07:54 -0700 (PDT)
-Message-ID: <730c7b4a-663f-d7e3-6e0f-090d322103d4@arm.com>
-Date:   Mon, 9 May 2022 14:39:04 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next v7 5/6] arm64/mm: Enable
- ARCH_SUPPORTS_PAGE_TABLE_CHECK
-Content-Language: en-US
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220507110114.4128854-1-tongtiangen@huawei.com>
- <20220507110114.4128854-6-tongtiangen@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220507110114.4128854-6-tongtiangen@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 9 May 2022 05:13:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84141201EA8;
+        Mon,  9 May 2022 02:09:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9285B810A6;
+        Mon,  9 May 2022 09:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72612C385AB;
+        Mon,  9 May 2022 09:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652087369;
+        bh=rYlTPSQ6FXF7zF9p7LDZTYP/JQglCROOG1/iNS2upeo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fkuJHZv3/usYj/OGKMcXT2qWre9/pHK4qg5n16+A6fFX+IDvUi8SI9RV5GRCWCshT
+         WOZKLk1Y13ZwwbjkGw0qlEfxoSM7yG4L6cvqL0tz5pUhXKX/eXT6GUAvuQxyTtJJne
+         Bx5AuXTil4kjjnugWv8OQJaYJD9DC8tAGIAzbXxipGExl9NWlQGFd7favllpB/NRpN
+         j01O7gs2TjlJiWP9SzMDRzDHYLBR7SKB3NJ8uAkyoTCoH3OhqHlbm35U6YcaUbZKsc
+         /9HtUeroHAVvTdVK4auEZnSnF9hT2mZbP9jd573dccqjDg+HEETQQ0ssMe3zqRjvVW
+         C2n0H3hWWU4RA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nnzOQ-009uuU-VM; Mon, 09 May 2022 10:09:27 +0100
+Date:   Mon, 09 May 2022 10:09:26 +0100
+Message-ID: <87h75z6pix.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org,
+        Octavian Purdila <octavian.purdila@nxp.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
+        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
+        tglx@linutronix.de, tsbogend@alpha.franken.de, vgupta@kernel.org,
+        vladimir.murzin@arm.com, will@kernel.org
+Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
+In-Reply-To: <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
+References: <20211026092504.27071-1-mark.rutland@arm.com>
+        <20211026092504.27071-18-mark.rutland@arm.com>
+        <20220506203242.GA1855@wunner.de>
+        <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mark.rutland@arm.com, lukas@wunner.de, linus.walleij@linaro.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org, octavian.purdila@nxp.com, linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu, catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com, guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com, linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk, nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com, shorne@gmail.com, stefan.kristiansson@saunalahti.fi, tglx@linutronix.de, tsbogend@alpha.franken.de, vgupta@kernel.org, vladimir.murzin@arm.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 09 May 2022 09:54:21 +0100,
+Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> On Fri, May 06, 2022 at 10:32:42PM +0200, Lukas Wunner wrote:
+> > On Tue, Oct 26, 2021 at 10:25:04AM +0100, Mark Rutland wrote:
+> > > Now that entry code handles IRQ entry (including setting the IRQ regs)
+> > > before calling irqchip code, irqchip code can safely call
+> > > generic_handle_domain_irq(), and there's no functional reason for it to
+> > > call handle_domain_irq().
+> > > 
+> > > Let's cement this split of responsibility and remove handle_domain_irq()
+> > > entirely, updating irqchip drivers to call generic_handle_domain_irq().
+> > > 
+> > > For consistency, handle_domain_nmi() is similarly removed and replaced
+> > > with a generic_handle_domain_nmi() function which also does not perform
+> > > any entry logic.
+> > > 
+> > > Previously handle_domain_{irq,nmi}() had a WARN_ON() which would fire
+> > > when they were called in an inappropriate context. So that we can
+> > > identify similar issues going forward, similar WARN_ON_ONCE() logic is
+> > > added to the generic_handle_*() functions, and comments are updated for
+> > > clarity and consistency.
+> > [...]
+> > >  int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq)
+> > >  {
+> > > +	WARN_ON_ONCE(!in_irq());
+> > >  	return handle_irq_desc(irq_resolve_mapping(domain, hwirq));
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+> > 
+> > Why isn't the WARN_ON_ONCE() conditional on handle_enforce_irqctx()?
+> > (See handle_irq_desc() and c16816acd086.)
+> 
+> I did this for consistency with the in_nmi() check in
+> generic_handle_domain_nmi(); I was unaware of commit c16816acd086 and
+> IRQD_HANDLE_ENFORCE_IRQCTX.
+> 
+> I'll have ot leave it to Marc and Thomas as to what we should do there.
+
+My preference would be to not introduce things that result in
+different behaviours for drivers, specially for things that are
+evidently cross-architecture such as USB drivers (which seems to be
+the case here).
+
+I'd rather do something that allows these to be handled in the right
+context such as a self-IPI. This would certainly work for the GIC. No
+idea whether this is valid for x86, which is the other user.
+
+Thanks,
+
+	M.
 
 
-On 5/7/22 16:31, Tong Tiangen wrote:
-> From: Kefeng Wang <wangkefeng.wang@huawei.com>
-> 
-> As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table check")
-> , enable ARCH_SUPPORTS_PAGE_TABLE_CHECK on arm64.
-> 
-> Add additional page table check stubs for page table helpers, these stubs
-> can be used to check the existing page table entries.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-> ---
->  arch/arm64/Kconfig               |  1 +
->  arch/arm64/include/asm/pgtable.h | 61 ++++++++++++++++++++++++++++----
->  2 files changed, 56 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 272c75af9302..3055fb5b3fb4 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -92,6 +92,7 @@ config ARM64
->  	select ARCH_SUPPORTS_ATOMIC_RMW
->  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
->  	select ARCH_SUPPORTS_NUMA_BALANCING
-> +	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
->  	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
->  	select ARCH_WANT_DEFAULT_BPF_JIT
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 8ebf1cec5d90..4e61cde27f9f 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -33,6 +33,7 @@
->  #include <linux/mmdebug.h>
->  #include <linux/mm_types.h>
->  #include <linux/sched.h>
-> +#include <linux/page_table_check.h>
->  
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->  #define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
-> @@ -96,6 +97,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->  #define pte_young(pte)		(!!(pte_val(pte) & PTE_AF))
->  #define pte_special(pte)	(!!(pte_val(pte) & PTE_SPECIAL))
->  #define pte_write(pte)		(!!(pte_val(pte) & PTE_WRITE))
-> +#define pte_user(pte)		(!!(pte_val(pte) & PTE_USER))
->  #define pte_user_exec(pte)	(!(pte_val(pte) & PTE_UXN))
->  #define pte_cont(pte)		(!!(pte_val(pte) & PTE_CONT))
->  #define pte_devmap(pte)		(!!(pte_val(pte) & PTE_DEVMAP))
-> @@ -312,8 +314,8 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
->  		     __func__, pte_val(old_pte), pte_val(pte));
->  }
->  
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pte)
-> +static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-> +				pte_t *ptep, pte_t pte)
->  {
->  	if (pte_present(pte) && pte_user_exec(pte) && !pte_special(pte))
->  		__sync_icache_dcache(pte);
-> @@ -343,6 +345,13 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
->  	set_pte(ptep, pte);
->  }
->  
-> +static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> +			      pte_t *ptep, pte_t pte)
-> +{
-> +	page_table_check_pte_set(mm, addr, ptep, pte);
-> +	return __set_pte_at(mm, addr, ptep, pte);
-> +}
-> +
->  /*
->   * Huge pte definitions.
->   */
-> @@ -454,6 +463,8 @@ static inline int pmd_trans_huge(pmd_t pmd)
->  #define pmd_dirty(pmd)		pte_dirty(pmd_pte(pmd))
->  #define pmd_young(pmd)		pte_young(pmd_pte(pmd))
->  #define pmd_valid(pmd)		pte_valid(pmd_pte(pmd))
-> +#define pmd_user(pmd)		pte_user(pmd_pte(pmd))
-> +#define pmd_user_exec(pmd)	pte_user_exec(pmd_pte(pmd))
->  #define pmd_cont(pmd)		pte_cont(pmd_pte(pmd))
->  #define pmd_wrprotect(pmd)	pte_pmd(pte_wrprotect(pmd_pte(pmd)))
->  #define pmd_mkold(pmd)		pte_pmd(pte_mkold(pmd_pte(pmd)))
-> @@ -501,8 +512,19 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
->  #define pud_pfn(pud)		((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
->  #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
->  
-> -#define set_pmd_at(mm, addr, pmdp, pmd)	set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd))
-> -#define set_pud_at(mm, addr, pudp, pud)	set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud))
-> +static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
-> +			      pmd_t *pmdp, pmd_t pmd)
-> +{
-> +	page_table_check_pmd_set(mm, addr, pmdp, pmd);
-> +	return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-> +}
-> +
-> +static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
-> +			      pud_t *pudp, pud_t pud)
-> +{
-> +	page_table_check_pud_set(mm, addr, pudp, pud);
-> +	return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-> +}
->  
->  #define __p4d_to_phys(p4d)	__pte_to_phys(p4d_pte(p4d))
->  #define __phys_to_p4d_val(phys)	__phys_to_pte_val(phys)
-> @@ -643,6 +665,24 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
->  #define pud_present(pud)	pte_present(pud_pte(pud))
->  #define pud_leaf(pud)		(pud_present(pud) && !pud_table(pud))
->  #define pud_valid(pud)		pte_valid(pud_pte(pud))
-> +#define pud_user(pud)		pte_user(pud_pte(pud))
-> +
-> +#ifdef CONFIG_PAGE_TABLE_CHECK
-> +static inline bool pte_user_accessible_page(pte_t pte)
-> +{
-> +	return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-> +}
-> +
-> +static inline bool pmd_user_accessible_page(pmd_t pmd)
-> +{
-> +	return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> +}
-> +
-> +static inline bool pud_user_accessible_page(pud_t pud)
-> +{
-> +	return pud_present(pud) && pud_user(pud);
-> +}
-> +#endif
->  
->  static inline void set_pud(pud_t *pudp, pud_t pud)
->  {
-> @@ -876,7 +916,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
->  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->  				       unsigned long address, pte_t *ptep)
->  {
-> -	return __pte(xchg_relaxed(&pte_val(*ptep), 0));
-> +	pte_t pte = __pte(xchg_relaxed(&pte_val(*ptep), 0));
-> +
-> +	page_table_check_pte_clear(mm, address, pte);
-> +
-> +	return pte;
->  }
->  
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> @@ -884,7 +928,11 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->  static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
->  					    unsigned long address, pmd_t *pmdp)
->  {
-> -	return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
-> +	pmd_t pmd = __pmd(xchg_relaxed(&pmd_val(*pmdp), 0));
-> +
-> +	page_table_check_pmd_clear(mm, address, pmd);
-> +
-> +	return pmd;
->  }
->  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->  
-> @@ -918,6 +966,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
->  static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
->  		unsigned long address, pmd_t *pmdp, pmd_t pmd)
->  {
-> +	page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
->  	return __pmd(xchg_relaxed(&pmd_val(*pmdp), pmd_val(pmd)));
->  }
->  #endif
+-- 
+Without deviation from the norm, progress is not possible.

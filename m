@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF9A51F3E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6C251F3E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 07:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiEIFh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S234293AbiEIFiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 01:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiEIFgF (ORCPT
+        with ESMTP id S233733AbiEIFg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:36:05 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF959149170
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:32:10 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so7599224wmn.1
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 22:32:10 -0700 (PDT)
+        Mon, 9 May 2022 01:36:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5301110CC
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:32:34 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b19so17794200wrh.11
+        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 22:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LcfykvzzxOiiw+jUTB5oG4jSYC/kWrfsWiX4vYPyo9M=;
-        b=kcIUmvvtYBneIxYWYiv7+ZFh4noeZ8Am8LxJbwy0tzXZr9y8d+KI/QsxlJYsuNmM08
-         OGVALXNd+CoIDFW0iCeuANfBqIyQS40FLvfNaMi065NgKl77XGww480iffDwl6iePFnE
-         /vJB/ZxTrHlkneSUP3qUDzxPQAp3k9HVD/gzvdtZ1VCKGBwXgKM82C1otDJIg0CsWkjK
-         vsabX+kfPaNfmRig6dYdjkMY9DINlp5EnFbw/ugfF3n9ZVJn+hGULwm5aCit+DiPEilU
-         PCSa4bC99EGefh/P+fD5m0E04J6FnoNl2PNtaY0heLJiAHpFynaawAWRjO/PVQgC5jjR
-         TvSA==
+        bh=TtVlY+C8hBffv2WPWsAMedVX+O+Qs5k+jY37q9IS2fI=;
+        b=0vsykZ6evwtInjYhpdg1T3hdzuqsT6eE8R38QmPbmqijiPuhM+01C1O3V6PEv8x1td
+         4mWBAFpOgYgyila+zVnf5YjPy9YR37wmU1+LZde6kEOTD1xtW1GukTWOElwTGFT3c28V
+         mBR0gJjrJmOE2Ml8f5MgvGUNNZQdDAp/et0x9ddlnz+p+i74yUPBB+8ldCkkb8sVEgkF
+         YAxP1zmD2GXOZLOYcwz3jgZj/4ZAmPib00IQhCemqwIoOO2qpTaI1CBsC3hzYzr0M9XH
+         J1znsFDFy2BZU6ctDL6CVlD5z/LAzhU5Uxh7wd7GJ5B+d/Dge1CbcsAR69slnGd81vE1
+         oyMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LcfykvzzxOiiw+jUTB5oG4jSYC/kWrfsWiX4vYPyo9M=;
-        b=iJDpceZyz7JoaYgY0gGuIgCFWOgt1culGYrEDm90GxS2m82XR8A44YldhSws/LHtmR
-         J0HSh7M31PoS4ub613QDPae7p0ndyWpSpTyzGjSLn4kZ8pc0SCewyYSAe2Zma9vElPT0
-         WVZ3dLJYjuH8os0wRMDVkH3Hjk36a4v2ouAmYY7PTy51jYZCi5TuLq1zcwf6bCs0r8Qv
-         oJxJQgplIUcr+LT6+sVvVvyKBB0ecMrFX1kurYwGU5jNDjv50AuZvZ/SoRks3y1gwLOm
-         dxyNkk4TzYuJYAqghHcnV4Hsm/syaj00vO2MvIQB9mm2pEAGlji/FJDVPJF7bV4YgLW9
-         y7iQ==
-X-Gm-Message-State: AOAM532OCXfxW1FXiXI7uhA2Zw1+rufBO0+hIGoAxnDwO8/TaRF84wCf
-        ylzJ3hOxZjRt0V9rLiC6+aCNRb+XPyXPrBALVgq+QQ==
-X-Google-Smtp-Source: ABdhPJxcZ1/tgNOui63k7ToPoh6qdNSpLhheGOV0wgT4W9krBezLdETiXX52tCZksOb5ycmvbLFkw5ri8O5JCMC9+GA=
-X-Received: by 2002:a05:600c:3caa:b0:394:8fb8:716 with SMTP id
- bg42-20020a05600c3caa00b003948fb80716mr3550006wmb.105.1652074328778; Sun, 08
- May 2022 22:32:08 -0700 (PDT)
+        bh=TtVlY+C8hBffv2WPWsAMedVX+O+Qs5k+jY37q9IS2fI=;
+        b=ofzpokFCm94nSJ9qg4sE3P3N+DhJgkzrj5aqy/Xvv7IHvIdTMcWpfn1igPYzXwahdh
+         tKlf57Fcdsy/BapvQ6fK0FoxlAmo6bik96OLLJJfgoQF6L872ux5xuW7huWtsCg1xUQc
+         zotfsO5G+7vTVIGieG2wyg6qdb/Pky7hnF6IhKq7DnmuSPEWlNidkmiS/xl48C/jhf39
+         zTK8wq1UGGmcue/BM3i6qFXldNVm1pOr1EmuvSZBVgvBkrt8Q5bYnjS3pm3hI430Svhr
+         OcE2Q5BEITcBTjmtmSnpbhS6uCXI2YBNQtjVNc4HWInyvJkiNvdD6+FCr59DjdZjFYAb
+         7ldA==
+X-Gm-Message-State: AOAM533rco7MXxnXZf+iJUlL9xNu/9UXVEegYY7fDl76Hkz6AsN68Icx
+        +5PQbXRHUAuSb8o7CUdNCMpcprDZUMaWIUqAH8p0MfYfr+bb8Q==
+X-Google-Smtp-Source: ABdhPJy1pZWq2QSk+ODRo0bbjzB7ThwjgRWpktjes5LTN4O1ngkJ3gctzS/rpBEs6nAGoo+eF0WjnQT4pwOPU56k0Mw=
+X-Received: by 2002:a05:6000:799:b0:20c:6e3c:a28c with SMTP id
+ bu25-20020a056000079900b0020c6e3ca28cmr12234422wrb.346.1652074353208; Sun, 08
+ May 2022 22:32:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220420112450.155624-1-apatel@ventanamicro.com>
- <20220420112450.155624-3-apatel@ventanamicro.com> <CAOnJCUJ3KzJdqLa3zXUd+YEa00_W1P7aNWY0ibpvO9jaqarOtA@mail.gmail.com>
-In-Reply-To: <CAOnJCUJ3KzJdqLa3zXUd+YEa00_W1P7aNWY0ibpvO9jaqarOtA@mail.gmail.com>
+ <20220420112450.155624-4-apatel@ventanamicro.com> <CAOnJCU+sDbJERnrcTUiLowvpfRDJ=-YPkc2dxzbfsD+qFBMUKw@mail.gmail.com>
+In-Reply-To: <CAOnJCU+sDbJERnrcTUiLowvpfRDJ=-YPkc2dxzbfsD+qFBMUKw@mail.gmail.com>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 9 May 2022 11:01:57 +0530
-Message-ID: <CAAhSdy1gyJekSvUtZ6TQutTryGATupjP3YEzEts-QJ_DifJVjw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] RISC-V: KVM: Add Sv57x4 mode support for G-stage
+Date:   Mon, 9 May 2022 11:02:21 +0530
+Message-ID: <CAAhSdy281_AgjQyUXLfF8ZP2SXpyKGVd68XwVEGuQVFoz16_3g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] RISC-V: KVM: Treat SBI HFENCE calls as NOPs
 To:     Atish Patra <atishp@atishpatra.org>
 Cc:     Anup Patel <apatel@ventanamicro.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -78,74 +78,36 @@ On Wed, May 4, 2022 at 7:44 AM Atish Patra <atishp@atishpatra.org> wrote:
 >
 > On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
 > >
-> > Latest QEMU supports G-stage Sv57x4 mode so this patch extends KVM
-> > RISC-V G-stage handling to detect and use Sv57x4 mode when available.
+> > We should treat SBI HFENCE calls as NOPs until nested virtualization
+> > is supported by KVM RISC-V. This will help us test booting a hypervisor
+> > under KVM RISC-V.
 > >
 > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > > ---
-> >  arch/riscv/include/asm/csr.h |  1 +
-> >  arch/riscv/kvm/main.c        |  3 +++
-> >  arch/riscv/kvm/mmu.c         | 11 ++++++++++-
-> >  3 files changed, 14 insertions(+), 1 deletion(-)
+> >  arch/riscv/kvm/vcpu_sbi_replace.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> > index e935f27b10fd..cc40521e438b 100644
-> > --- a/arch/riscv/include/asm/csr.h
-> > +++ b/arch/riscv/include/asm/csr.h
-> > @@ -117,6 +117,7 @@
-> >  #define HGATP_MODE_SV32X4      _AC(1, UL)
-> >  #define HGATP_MODE_SV39X4      _AC(8, UL)
-> >  #define HGATP_MODE_SV48X4      _AC(9, UL)
-> > +#define HGATP_MODE_SV57X4      _AC(10, UL)
-> >
-> >  #define HGATP32_MODE_SHIFT     31
-> >  #define HGATP32_VMID_SHIFT     22
-> > diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> > index c374dad82eee..1549205fe5fe 100644
-> > --- a/arch/riscv/kvm/main.c
-> > +++ b/arch/riscv/kvm/main.c
-> > @@ -105,6 +105,9 @@ int kvm_arch_init(void *opaque)
-> >         case HGATP_MODE_SV48X4:
-> >                 str = "Sv48x4";
-> >                 break;
-> > +       case HGATP_MODE_SV57X4:
-> > +               str = "Sv57x4";
+> > diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
+> > index 0f217365c287..3c1dcd38358e 100644
+> > --- a/arch/riscv/kvm/vcpu_sbi_replace.c
+> > +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
+> > @@ -117,7 +117,11 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
+> >         case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA_VMID:
+> >         case SBI_EXT_RFENCE_REMOTE_HFENCE_VVMA:
+> >         case SBI_EXT_RFENCE_REMOTE_HFENCE_VVMA_ASID:
+> > -       /* TODO: implement for nested hypervisor case */
+> > +               /*
+> > +                * Until nested virtualization is implemented, the
+> > +                * SBI HFENCE calls should be treated as NOPs
+> > +                */
 > > +               break;
 > >         default:
-> >                 return -ENODEV;
+> >                 ret = -EOPNOTSUPP;
 > >         }
-> > diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> > index dc0520792e31..8823eb32dcde 100644
-> > --- a/arch/riscv/kvm/mmu.c
-> > +++ b/arch/riscv/kvm/mmu.c
-> > @@ -751,14 +751,23 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
-> >  void kvm_riscv_gstage_mode_detect(void)
-> >  {
-> >  #ifdef CONFIG_64BIT
-> > +       /* Try Sv57x4 G-stage mode */
-> > +       csr_write(CSR_HGATP, HGATP_MODE_SV57X4 << HGATP_MODE_SHIFT);
-> > +       if ((csr_read(CSR_HGATP) >> HGATP_MODE_SHIFT) == HGATP_MODE_SV57X4) {
-> > +               gstage_mode = (HGATP_MODE_SV57X4 << HGATP_MODE_SHIFT);
-> > +               gstage_pgd_levels = 5;
-> > +               goto skip_sv48x4_test;
-> > +       }
-> > +
-> >         /* Try Sv48x4 G-stage mode */
-> >         csr_write(CSR_HGATP, HGATP_MODE_SV48X4 << HGATP_MODE_SHIFT);
-> >         if ((csr_read(CSR_HGATP) >> HGATP_MODE_SHIFT) == HGATP_MODE_SV48X4) {
-> >                 gstage_mode = (HGATP_MODE_SV48X4 << HGATP_MODE_SHIFT);
-> >                 gstage_pgd_levels = 4;
-> >         }
-> > -       csr_write(CSR_HGATP, 0);
-> > +skip_sv48x4_test:
-> >
-> > +       csr_write(CSR_HGATP, 0);
-> >         __kvm_riscv_hfence_gvma_all();
-> >  #endif
-> >  }
 > > --
 > > 2.25.1
 > >
+>
 >
 > Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
@@ -154,7 +116,6 @@ Queued this patch for 5.19
 Thanks,
 Anup
 
->
 > --
 > Regards,
 > Atish

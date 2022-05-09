@@ -2,164 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D3052081B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C94B52081E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 01:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiEIXGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 19:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S232138AbiEIXIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 19:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbiEIXF5 (ORCPT
+        with ESMTP id S231903AbiEIXHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 19:05:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BD7201B7;
-        Mon,  9 May 2022 16:02:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB7F2B817CC;
-        Mon,  9 May 2022 23:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04756C385C3;
-        Mon,  9 May 2022 23:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652137319;
-        bh=zUbTEVVseYBgx5Ro9Lro0bTRJULUeBVRav353AcrrgM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Opu38XGBpSmjylWzYpuaTyO/7O6xDWE8KmQYoAxguyBW0Kfrm/B+HdK/dVC+4tQsA
-         ICyzr6l+3I5SOTWzDWXvCj2vqj20xGe0xYKsKhnOzatUHCFL33dP+OXaZ0Rnq+ZN3T
-         4VFSjnkCH6fW1KnS8pObJ5d7uJ0Na/AjHxg02C26YwjpMAtQ+pe8XrdjPokxA7Xwjr
-         bSrLyG9oiJ6cLZJTqk+kdOLgfbgDRaoyXShYIav87fl4MzoziZfje6uRQKzsHgT2g4
-         KldGcmx9peJzwVMz97jb7bkoUyABf3bzOEHhyxdFSGcRxJXzRzidOB/65JyF0ppxa5
-         x+884/JMwCwKQ==
-Date:   Mon, 9 May 2022 16:01:57 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Zixuan Fu <r33s3n6@gmail.com>
-Cc:     doshir@vmware.com, pv-drivers@vmware.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: Re: [PATCH] drivers: net: vmxnet3: fix possible NULL pointer
- dereference in vmxnet3_rq_cleanup()
-Message-ID: <20220509160157.3a3778fa@kernel.org>
-In-Reply-To: <20220506133748.2799853-1-r33s3n6@gmail.com>
-References: <20220506133748.2799853-1-r33s3n6@gmail.com>
+        Mon, 9 May 2022 19:07:54 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829992BA98D
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 16:03:59 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so374913wme.4
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 16:03:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vyafeJfYpqQbqdoHrA1fN3LqRreGi4FxMomb25eWjK4=;
+        b=26/cqxbeh4t6qAscNA3ZWelzvHUyARyEvVA+R9jdswx7ahq6O9Z+R45YsctYS5mQbd
+         OuJHF8sFgU8zootMXXXCDfUZb46RI35jaZ5ysXiG4x/j35O0t0IFQA/DSXA6WOSLie6R
+         YOkF3/fJnpGdGYDJ8rr92shH5DyrKC/OFmSt3OTiFRwileaOeDJ9y9rK2GpbXyvZQAFp
+         LH19UhR5ky39xunEvHuIuucNXPVSLBA6KJ4qG7LQjq5ZasX3rHW3e1bVq53tml8bi1hB
+         OTtl1XNDybxXIBVudyqxg+9cWdtGOf8GzIrYQdKTklMdeBZSaOW9GjRKGhhJ3xUv2v55
+         sDbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vyafeJfYpqQbqdoHrA1fN3LqRreGi4FxMomb25eWjK4=;
+        b=nbMshQRF8fNNnZs5ytkFGggIVyH5GgND3c/agqMI1op+T6ZnJWTcxXjOSecW1T4cTN
+         VndYOXmQ3Sa3fjMJdzywBvfmaYGEY6p5TzwbKf76q/CHBPJ9lfGm0nwqcNmLrBTOy/6W
+         nMjCqSdAEAzI31gX9N6b30qrWD1evxUk0I6x2EVTMozNRPEVkoc/y6L9sK2zq1iRP70L
+         rtirLk/UKu001s6TfucQ7iLvJ7/ni5UGrxV1QYfmY78BzSW4W61FOZs/w1q0rSev71i8
+         IHKYvfghl6GI4TlYkYCAjSmsGnM1ZX6W9MUEmpzWlfqltAK23uuPY1EGiNIG1InsBeRP
+         yZwQ==
+X-Gm-Message-State: AOAM5336p6Al+57kCubp+U+2V+FZ4IkFX79FP1t7H3rlQnuizsQ1QfnM
+        Tg6X4tV0YQvRrtVz5tNWk5wFYg==
+X-Google-Smtp-Source: ABdhPJx78AHOLFDMn4SydQInL+fnhbMdaYxc0HhvM4yLtjTUKgOoLV8UTlyr4RHdnrLtZVFe0dQC0g==
+X-Received: by 2002:a7b:cc13:0:b0:38e:67e3:db47 with SMTP id f19-20020a7bcc13000000b0038e67e3db47mr25028508wmh.133.1652137438092;
+        Mon, 09 May 2022 16:03:58 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600c1d0400b003945237fea1sm743058wms.0.2022.05.09.16.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 16:03:57 -0700 (PDT)
+Date:   Tue, 10 May 2022 00:03:55 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH 3/3] block: remove last remaining traces of IDE
+ documentation
+Message-ID: <Ynmd23nhC3KHHX1i@equinox>
+References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
+ <20220427132436.12795-4-paul.gortmaker@windriver.com>
+ <87wnfaa8ce.fsf@meer.lwn.net>
+ <20220427165917.GE12977@windriver.com>
+ <YmsmnGb3JNjH54Xb@equinox>
+ <20220506153241.GH12977@windriver.com>
+ <YnVgxEcRTQPu/DHE@equinox>
+ <87bkw6cpvo.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkw6cpvo.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  6 May 2022 21:37:48 +0800 Zixuan Fu wrote:
-> In vmxnet3_rq_create(), when dma_alloc_coherent() fails, 
-> vmxnet3_rq_destroy() is called. It sets rq->rx_ring[i].base to NULL. Then
-> vmxnet3_rq_create() returns an error to its callers mxnet3_rq_create_all()
-
-                                                      vmxnet3_rq_create_all()
-
-> -> vmxnet3_change_mtu(). Then vmxnet3_change_mtu() calls   
-> vmxnet3_force_close() -> dev_close() in error handling code. And the driver
-> calls vmxnet3_close() -> vmxnet3_quiesce_dev() -> vmxnet3_rq_cleanup_all()
-> -> vmxnet3_rq_cleanup(). In vmxnet3_rq_cleanup(),   
-> rq->rx_ring[ring_idx].base is accessed, but this variable is NULL, causing
-> a NULL pointer dereference.
+On Mon, May 09, 2022 at 04:17:31PM -0600, Jonathan Corbet wrote:
+> Phillip Potter <phil@philpotter.co.uk> writes:
 > 
-> To fix this possible bug, an if statement is added to check whether 
-> rq->rx_ring[ring_idx].base is NULL in vmxnet3_rq_cleanup().
+> > I was yes, the point I was trying to make (poorly) is that your patch
+> > conflicts with Randy's patch which itself is not yet in linux-next, as
+> > normally I send everything together at the start of the merge window to
+> > Jens, as I don't have my own kernel.org tree yet, and usually I only get
+> > one or two patches in a cycle anyway.
+> >
+> > This is not your fault, you couldn't have been expected to know this in
+> > retrospect, and I should probably look into getting my own tree/GPG key
+> > sorted to alleviate this problem in future.
+> >
+> > In the meantime, if you're comfortable with the idea, I can just resolve
+> > the conflict myself when I send the patches onto Jens this time and
+> > include patch 3/3 pre-fixed up. Merge window will be fairly soon anyway.
 > 
-> The error log in our fault-injection testing is shown as follows:
+> So I'm a little confused by the state of everything at this point, but
+> I'm assuming that I need not worry about taking these changes through
+> docs-next.  Please let me know if that's not correct.
 > 
-> [   65.220135] BUG: kernel NULL pointer dereference, address: 0000000000000008
-> ...
-> [   65.222633] RIP: 0010:vmxnet3_rq_cleanup_all+0x396/0x4e0 [vmxnet3]
-> ...
-> [   65.227977] Call Trace:
-> ...
-> [   65.228262]  vmxnet3_quiesce_dev+0x80f/0x8a0 [vmxnet3]
-> [   65.228580]  vmxnet3_close+0x2c4/0x3f0 [vmxnet3]
-> [   65.228866]  __dev_close_many+0x288/0x350
-> [   65.229607]  dev_close_many+0xa4/0x480
-> [   65.231124]  dev_close+0x138/0x230
-> [   65.231933]  vmxnet3_force_close+0x1f0/0x240 [vmxnet3]
-> [   65.232248]  vmxnet3_change_mtu+0x75d/0x920 [vmxnet3]
-> ...
+> Thanks,
 > 
-> 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-> ---
->  drivers/net/vmxnet3/vmxnet3_drv.c | 42 ++++++++++++++++---------------
->  1 file changed, 22 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-> index d9d90baac72a..247fbdfe834a 100644
-> --- a/drivers/net/vmxnet3/vmxnet3_drv.c
-> +++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-> @@ -1667,28 +1667,30 @@ vmxnet3_rq_cleanup(struct vmxnet3_rx_queue *rq,
->  	struct Vmxnet3_RxDesc *rxd;
+> jon
 
-If destroy_all got called presumably we can just check ring 0 is NULL
-and exit early rather than skipping ring by ring?
+Dear Jon,
 
-Either way, please rewrite the change so you don't have to re-indent
-the entire block.
+Yes, that's right. Makes sense for the whole series to go together, so I
+will fix up patch 3 to apply alongside Randy's patch (which I see you've
+taken now) and send the whole lot through to Jens as the merge window
+opens. Thanks.
 
->  	for (ring_idx = 0; ring_idx < 2; ring_idx++) {
-> -		for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
-> -#ifdef __BIG_ENDIAN_BITFIELD
-> -			struct Vmxnet3_RxDesc rxDesc;
-> -#endif
-> -			vmxnet3_getRxDesc(rxd,
-> -				&rq->rx_ring[ring_idx].base[i].rxd, &rxDesc);
-> -
-> -			if (rxd->btype == VMXNET3_RXD_BTYPE_HEAD &&
-> -					rq->buf_info[ring_idx][i].skb) {
-> -				dma_unmap_single(&adapter->pdev->dev, rxd->addr,
-> -						 rxd->len, DMA_FROM_DEVICE);
-> -				dev_kfree_skb(rq->buf_info[ring_idx][i].skb);
-> -				rq->buf_info[ring_idx][i].skb = NULL;
-> -			} else if (rxd->btype == VMXNET3_RXD_BTYPE_BODY &&
-> -					rq->buf_info[ring_idx][i].page) {
-> -				dma_unmap_page(&adapter->pdev->dev, rxd->addr,
-> -					       rxd->len, DMA_FROM_DEVICE);
-> -				put_page(rq->buf_info[ring_idx][i].page);
-> -				rq->buf_info[ring_idx][i].page = NULL;
-> +		if (rq->rx_ring[ring_idx].base) {
-> +			for (i = 0; i < rq->rx_ring[ring_idx].size; i++) {
-> +	#ifdef __BIG_ENDIAN_BITFIELD
-> +				struct Vmxnet3_RxDesc rxDesc;
-> +	#endif
-> +				vmxnet3_getRxDesc(rxd,
-> +					&rq->rx_ring[ring_idx].base[i].rxd, &rxDesc);
-> +
-> +				if (rxd->btype == VMXNET3_RXD_BTYPE_HEAD &&
-> +						rq->buf_info[ring_idx][i].skb) {
-> +					dma_unmap_single(&adapter->pdev->dev, rxd->addr,
-> +							 rxd->len, DMA_FROM_DEVICE);
-> +					dev_kfree_skb(rq->buf_info[ring_idx][i].skb);
-> +					rq->buf_info[ring_idx][i].skb = NULL;
-> +				} else if (rxd->btype == VMXNET3_RXD_BTYPE_BODY &&
-> +						rq->buf_info[ring_idx][i].page) {
-> +					dma_unmap_page(&adapter->pdev->dev, rxd->addr,
-> +						       rxd->len, DMA_FROM_DEVICE);
-> +					put_page(rq->buf_info[ring_idx][i].page);
-> +					rq->buf_info[ring_idx][i].page = NULL;
-> +				}
->  			}
->  		}
-> -
-> +
-
-What's this change?
-
->  		rq->rx_ring[ring_idx].gen = VMXNET3_INIT_GEN;
->  		rq->rx_ring[ring_idx].next2fill =
->  					rq->rx_ring[ring_idx].next2comp = 0;
-
+All the best,
+Phil

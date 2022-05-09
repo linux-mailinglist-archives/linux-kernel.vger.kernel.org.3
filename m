@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AB751F25B
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B6951F268
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 03:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiEIBa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 21:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S234928AbiEIBbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 21:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiEIAVx (ORCPT
+        with ESMTP id S235105AbiEIA3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 20:21:53 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601F6262E
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:17:59 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id z18so13734436iob.5
-        for <linux-kernel@vger.kernel.org>; Sun, 08 May 2022 17:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mC+FUCGE8dHmSEOL195HWoNstxugJQ9rWUm+vklH5X0=;
-        b=noAn0a5ITN/TBqX3KWmwimksk33tXbGAHvROKpZbtc4s9dbOloh/qVrzfgPCx7FtXp
-         OmuqbkoJHqvdVhX8GL8FE99dVBC1Pac3SRSkAcaLCxY+gE7pw9Cmp3O9DQGHs+AXln9y
-         49yJy/1OleGV7hVgGOytcCPZ/PWv1koc+Nfzw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mC+FUCGE8dHmSEOL195HWoNstxugJQ9rWUm+vklH5X0=;
-        b=tInMrf5ORaYR8eWv1QY+/4U4U9kNCD3C08trthN09j3POfcA7d2yzBgEFtZy5GEX6p
-         /dPSfVhaVEVR4gcrUOfuRysS3JTGJDDc2EJ0Mpf+Ah7RHszgwEwaFTakZRz4ELHE1G10
-         TZnqgmxYtqmxVmhGT3UBhbvfBe4eiutjtwkRC6TXp1MENAIH8/IcTjp4GWAEktLfiF+6
-         fTzCR2RkuCOC7POS7IuuxbHcKxU9RSi7MEFi0HVL+tWT5hXANf5ljIHa+z5fB0jzx1gg
-         z+2qOD9Sbhj2aUU6ZmRIa+IsrUinumDUWU6MotF1fIEbkfYYqi84+RHYBByOqWdLYk7E
-         20NA==
-X-Gm-Message-State: AOAM532Sdm/PamzjlRpXc4BHC7pTO/uywKNM/Lhn+sjsk8SKAHKJNeYV
-        kcWKwTFBJvYcunNFLpeAiFAaTXPlMcr2tW1jG3/VdA==
-X-Google-Smtp-Source: ABdhPJyDbl1vzdLQ8pd+bZpJz7/4cqBibtN/Qh6TfzsW+le7S1k0VG3W+LXvE7btHsUO5cSyYcPzFeDqiaUWNvACh2c=
-X-Received: by 2002:a02:9702:0:b0:32b:fc3c:cabb with SMTP id
- x2-20020a029702000000b0032bfc3ccabbmr1327493jai.2.1652055478783; Sun, 08 May
- 2022 17:17:58 -0700 (PDT)
+        Sun, 8 May 2022 20:29:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6AA38BB
+        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 17:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652055942; x=1683591942;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OUEknFDLJeAvSeW9n8FIyps4Ij7FIBWP60EB+06gXqY=;
+  b=F7A9HHNUfnPQ3S7e8TYAr3Am9mzW1z0MO0BrFntUUrD8IoamtyBM5JIc
+   Fp+ClLQacTFzDm6MFihUz753j2VK/Z3lj2EVXZVQ3vpGOz0LkERaPFV/m
+   uk7Iclhz89akA0g5PAXnpNWmIKBLXhWwN90Hu4t1viHe73HoBcIint/rR
+   yHvL90QR8w9MMp0uraJwZaIeWlyaZltY5NFHmBqO5jRUwnWxvPpzQhixt
+   ktiAWjXnJZA+vt52Iqk7QCKJ+ZEnfySKPw5V8PuYcFAqmKvuypsvc2ucH
+   tnNVLTHHthVhD49LDAyAtDUOCK62ZcOlxBnUm/uBYjD7lq2iBLo1M52un
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="331922839"
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="331922839"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 17:25:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
+   d="scan'208";a="655810063"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 May 2022 17:25:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nnrDY-000Fyo-4c;
+        Mon, 09 May 2022 00:25:40 +0000
+Date:   Mon, 9 May 2022 08:25:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Evgeniy Dushistov <dushistov@mail.ru>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: Re: [PATCH] fs/ufs: Replace kmap() with kmap_local_page()
+Message-ID: <202205090835.NEUQ3VKB-lkp@intel.com>
+References: <20220508200755.24586-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-References: <20220505101641.28472-1-urezki@gmail.com> <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnVLQozNFvgk3olP@pc638.lan> <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnY33nq5jl6FLFOu@pc638.lan> <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com> <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 8 May 2022 20:17:49 -0400
-Message-ID: <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT context
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Alison Chaiken <achaiken@aurora.tech>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220508200755.24586-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,91 +66,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 8, 2022 at 5:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
-> > > > > > > One easy way to make this work would be to invert the sense of this
-> > > > > > > Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
-> > > > > > > "n", but then select it somewhere in drivers/android/Kconfig.  But I
-> > > > > > > would not be surprised if there is a better way.
-> > > >
-> > > > In that situation probably we should just enable it by default.
-> > >
-> > > You are within your rights to cause it to be enabled by default -within-
-> > > -Android-.  You are -not- within your rights to break other workloads.
-> > >
-> > > If ChromeOS needs it too, they too can enable it -within- -ChromeOS-.
-> > >
-> > > It is not -that- hard, guys!  ;-)
-> >
-> > I think on the topic of RT, +Steven Rostedt should chime in as well
-> > considering he wrote a good chunk of the RT scheduler ;-). Personally,
-> > I feel the issue of "rcu callback offload" threads running as RT or
-> > not should not be a matter of CONFIG option or the system in concern.
-> > Instead it should be a function of how many callbacks there are to
-> > run.  The reason I say this is, RT threads should not be doing a lot
-> > of work anyway, lest they cause RT throttling and starvation of other
-> > threads.
->
-> This gets complicated surprisingly quickly.  For but one example, you
-> would find yourself wanting time-based boosting, most likely before you
-> wanted boosting based on numbers of callbacks.  And it is all too easy
-> to drive considerably complexity into the mix before proving that it is
-> really needed.  Especially given how rare the need for RCU priority
-> boosting is to begin with.
+Hi "Fabio,
 
-I think this patch does not deal with or change the behavior of
-dynamic priority boosting preempted RCU readers, but rather it makes
-it such that the no-cb offload threads that execute the callbacks. So
-I am not sure why you are talking about the boosting behavior of
-preempted RCU readers? I was referring only to the nocb offload
-kthreads which as I understand, Vlad *does not* want to run at RT
-priority.
+Thank you for the patch! Perhaps something to improve:
 
-> > Also, I think it is wrong to assume that a certain kind of system will
-> > always have a certain number of callbacks to process at a time. That
-> > seems prone to poor design due to assumptions which may not always be
-> > true.
->
-> Who was assuming that?  Uladzislau was measuring rather than assuming,
-> if that was what you were getting at.  Or if you are thinking about
-> things like qhimark, your point is exactly why there is both a default
-> (which has worked quite well for a very long time) and the ability to
-> adjust based on the needs of your specific system.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I was merely saying that based on measurements make assumptions, but
-in the real world the assumption may not be true, then everything
-falls apart. Instead I feel, callback threads should be RT only if 1.
-As you mentioned, the time based thing. 2. If the CB list is long and
-there's lot of processing. But instead, if it is made a CONFIG option,
-then that forces a fixed behavior which may fall apart in the real
-world. I think adding more CONFIGs and special cases is more complex
-but that's my opinion.
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e3de3a1cda5fdc3ac42cb0d45321fb254500595f
+config: riscv-randconfig-r042-20220509 (https://download.01.org/0day-ci/archive/20220509/202205090835.NEUQ3VKB-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e73d9919e2725b216318d5d02b8a184876ab3b11
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-ufs-Replace-kmap-with-kmap_local_page/20220509-040920
+        git checkout e73d9919e2725b216318d5d02b8a184876ab3b11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> > Can we not have 2 sets of RCU offload threads, one which operate at RT
-> > and only process few callbacks at a time, while another which is the
-> > lower priority CFS offload thread - executes whenever there is a lot
-> > of CBs pending? Just a thought.
->
-> How about if we start by solving the problems we know that we have?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I don't know why you would say that, because we are talking about
-solving the specific problem Vlad's patch addresses, not random
-problems. Which is that, Android wants to run expedited GPs, but when
-the callback list is large, the RT nocb thread can starve other
-things. Did I misunderstand the patch? If so, sorry about that but
-that's what my email was discussing. i.e. running of CBs in RT
-threads. I suck at writing well as I clearly miscommunicated.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-> > Otherwise, I feel like we might be again proliferating CONFIG options
-> > and increasing burden on the user to get it the CONFIG right.
->
-> I bet that we will solve this without adding any new Kconfig options.
-> And I bet that the burden is at worst on the device designer, not on
-> the user.  Plus it is entirely possible that there might be a way to
-> automatically configure things to handle what we know about today,
-> again without adding Kconfig options.
+>> WARNING: modpost: vmlinux.o(.text+0xa76c20): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.LVL13
+The function rtc_update_irq() references
+the variable __init .LVL13.
+This is often because rtc_update_irq lacks a __init
+annotation or the annotation of .LVL13 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xb35ab4): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .init.text:.LBE19058
+The function btintel_send_intel_reset() references
+the variable __init .LBE19058.
+This is often because btintel_send_intel_reset lacks a __init
+annotation or the annotation of .LBE19058 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0xc53984): Section mismatch in reference from the function neigh_table_clear() to the variable .init.text:$x
+The function neigh_table_clear() references
+the variable __init $x.
+This is often because neigh_table_clear lacks a __init
+annotation or the annotation of $x is wrong.
+--
+>> WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF936
+FATAL: modpost: extable_entry size hasn't been discovered!
 
-Yes, agreed.
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
+<< WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
+<< WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
+<< WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
+<< WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
+<< WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
+<< WARNING: modpost: vmlinux.o(.text+0xa76d10): Section mismatch in reference from the function rtc_update_irq() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.exit.text+0x9b48): Section mismatch in reference from the function rproc_exit_sysfs() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x141c): Section mismatch in reference from the variable .L0 to the variable .debug_str:.LASF1567
+<< WARNING: modpost: vmlinux.o(.text+0xa7839c): Section mismatch in reference from the function rtc_get_dev_attribute_groups() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2676): Section mismatch in reference from the function ir_raw_get_allowed_protocols() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2cb8): Section mismatch in reference from the function ir_raw_event_prepare() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e16): Section mismatch in reference from the function ir_raw_event_free() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xae2e3a): Section mismatch in reference from the function ir_raw_event_unregister() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xb35172): Section mismatch in reference from the function btintel_enter_mfg() to the variable .init.text:.LBB19521
 
-Thanks,
-Joel
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,160 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B6451F415
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625F851F463
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 08:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbiEIF7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 01:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S232964AbiEIGG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 02:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbiEIF4G (ORCPT
+        with ESMTP id S236319AbiEIGCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 01:56:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827C8128176
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 22:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652075533; x=1683611533;
-  h=message-id:date:subject:references:from:to:cc:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5qbCqjA5b2qUIodPn1yFP9NCrsudDlIgPbDXUuSxqjo=;
-  b=NfKho2XLGAV34/+ENQ+ziITMptBJ1tXoa025y2zDxZzg+JEO3oJ+Uo+3
-   0IM9ORTtKEj/GYmFvtHOqRx4GPUwKYAoaH34qmEBDsqEJnIMKzw6fNJXe
-   UiHCawwlBzDXros2lUiAoNbTNSP5evK1Q11ywyo0gRkBHivqf9ajaCcAH
-   I55qTSPK6hZWgaZKR9a9mqkrTh62c4LGI2PiqpN0VnJak7YZUG8h/0N5A
-   GvmHCHFQuhk26HLYf+p9OEybzb65xJzbDJ/2zqlEKKurX82aZVU3U4C6X
-   mhc3ilWkjlKzdm9mUozqH5KA+JVVR5EXxD4Nm0SZwQ2+IpsYolW8Wa2AA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="269086189"
+        Mon, 9 May 2022 02:02:14 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4001816D4AA;
+        Sun,  8 May 2022 22:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652075902; x=1683611902;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=WoOW5MQpmfBZnYboFFzeXf3X/aeWueR4Ru367m1K1tg=;
+  b=0wpnfz6cPvRQEXC4HG0LdALff1qfskdUlSZP7tvBbH8UebmJv6CjZ/fA
+   PYJVe4wjZVxKZsHnZBt03i2EygJTWB+P1aO0gd9lnCNab2/LxuIXrPqyx
+   QdAF/AbZ49FW1iLavPOVWrIatzlZRkUOVYXx4vKeurzIkfj3/HWhVpTbV
+   fNUUD738HCsiVOr0A2bdxn9djivxoCcxZOLui/KuH8r4fS2JjZTzX0SzO
+   VP54F50o5ZaZ/OnvXQ/LAuQfxz/8BmlgdqhlEW0u7shwP2ts1/SieYnBy
+   nMugJef8UiMZieSgGZpmpNJgSpcWNkxO8TReyabeoH3j27UK20I03UZ6F
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="269086189"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 22:49:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="601795290"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 08 May 2022 22:49:57 -0700
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="162793247"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 May 2022 22:57:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 8 May 2022 22:49:57 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ 15.1.2375.17; Sun, 8 May 2022 22:57:44 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 8 May 2022 22:49:57 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 8 May 2022 22:49:57 -0700
+ 15.1.2375.17 via Frontend Transport; Sun, 8 May 2022 22:57:44 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kdrCw4+rK2R+nQVVi21zu1uLCVj+NsLpC/r/i7roixlF0SqT4m3uV2kAXu1kOqq6EjXx7+h1WlEckfIrSNNJyvIN4wVlYI0b8Biz5iwhe5hcSvJ/y9XlRc85lAX9hkOJVYWx9KWGNPksXtlrbgPfZQHG28HKztAF0mEkj92y/Pc2Z1zpzbrAjHUBVvHh8DFQ2c0zPKJSPfMdFw3buU1GZIQmnJYKCjxcEVNaco7HMHYTmCN1hx7ZxS2ROI3ghnqkd/IvKfGc/m9zsmzERRylgAqeC/nJXrb+aG3V0cLun9UPg1zvYp9Bg8Fj861t8eynGbF1GUxAuGh/sX7Gd1vQBw==
+ b=Ge17jYKcThHt4mZYvPy9qx7y0HdGWXYu/op+zjBXOeiC7g7KMSMcSjwzGuztEk2/NjGidaOjdZPucR1nWYPUxHBmibKRWOs/pld3zQSxNBEZka+bmnezefUS8UDKR/7PApv0AzsMkyX+OnnHY1483UfgadFdwEKkKZZXX1ZyTjtvVtWx4CFABOCGqp3Cno7l1LU1/F1o0UZhKvyWmFOUWC7Hk70G2WMvRVZC2i+N6vko1iJgl428HvovFJH61RCv8qZR4QjLVhbmF1xS34ui2KU1mdibuVjZkucJrsPjFbhF50HzB/+VboLobQfA06q1MqI4unyht7adOIt2qhulFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HKznUDvMI0NEKq+BJLxyAfnDMRxMxv7wO/P1NV3f250=;
- b=KMtIhNB/0gLD2mcWYMKTU7PyjPS+SQjWhYIwnKi9ec9303Pbkptblo0RVs7oWt+VB/sBDY4rj21ezTWHRfbPfhPLOpaUjc3LntDFdi6hhW6zERAuuEBD9Y1w6mOm4vAWLOvv1gaBTSpd/PiGlkAELNnwCsAb1F6GcrEwHkbyNjXvM80NfUhDKoajJy3IkoMFLxcWOQlX1wRP5Mr+bgK80JZPe1UZmcJAsW5aSvqwmSvp2QGtGaeYvjO9oLvnyHLVPKJDHniqWy4TeTeVSjc+avj59IA2bi1k6f9xhulEVI7rPEnNeMoT7iX8bkhnxb6ePhepB1l8CZ1F2dbcjB/GQA==
+ bh=WoOW5MQpmfBZnYboFFzeXf3X/aeWueR4Ru367m1K1tg=;
+ b=a2FP6m+jLdBCt+IzFkJoPP27Dr86om6j9DBtoLfMUPPZ1VlfzW2wquRpICAuFR/3zo56dXX7r3ag82v70oCTGVVr8Ha7ExsYCG4A5g7eK6VlSmEb7W613kemJIHQ9ssRH7bKU2/Q93zCSHPQPQMeQTKdxXHHPuQ7bqR8xFmdPesRFvA5nbndrGd9m/jlPQY6/d2FfNXGjwcGSTM97Uw8p60Uf/zah/0DcIMrCbM0tRkxXAOBUcyqEQGEKuOkid3Yapf2XNmeWW6F//jXlRh/e0bE0AX4a9rTzuTNjKPv+RPwTRE0ss3PPOrWLaFTyez7ER/vkLok3FP5+usB/09AuA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15)
- by CY4PR11MB1734.namprd11.prod.outlook.com (2603:10b6:903:125::20) with
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WoOW5MQpmfBZnYboFFzeXf3X/aeWueR4Ru367m1K1tg=;
+ b=dabjed3N1yh7jt+RZ3WfsXyzZkVThwCU8hufYtxLg9h3LCt77okvcnVwQGVrL4zaBL+OW/tigluFlARFNTgf5BYFn5768mX+6ZvqTVADvmsweB+81MQZRDb0bdyA4srRCnrpeL7LjdAFT2DEPDx8vEAIvgW+zqXcqzBkDji3uPY=
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:95::10)
+ by MWHPR11MB1744.namprd11.prod.outlook.com (2603:10b6:300:10e::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Mon, 9 May
- 2022 05:49:55 +0000
-Received: from MW4PR11MB5933.namprd11.prod.outlook.com
- ([fe80::91fc:35fb:9ebc:81ec]) by MW4PR11MB5933.namprd11.prod.outlook.com
- ([fe80::91fc:35fb:9ebc:81ec%5]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 05:49:54 +0000
-Message-ID: <d4052784-255e-8000-8e8e-e5e29108f39a@intel.com>
-Date:   Mon, 9 May 2022 13:49:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.0
-Subject: [lunn:dsa-ci 22/47] drivers/net/phy/mdio_bus.c:710:9: warning: The
- expression is an uninitialized value. The computed value will also be garbage
- [clang-analyzer-core.uninitialized.Assign]
-References: <202205042049.SwDh4zxv-lkp@intel.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
+ 2022 05:57:39 +0000
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::e906:3e8d:4741:c0f0]) by CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::e906:3e8d:4741:c0f0%6]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 05:57:39 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Eugen.Hristev@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH] ARM: dts: at91: sama7g5: remove interrupt-parent from gic
+ node
+Thread-Topic: [PATCH] ARM: dts: at91: sama7g5: remove interrupt-parent from
+ gic node
+Thread-Index: AQHYY2mwafi0ZFjT0EGsEcUBfnYt4A==
+Date:   Mon, 9 May 2022 05:57:39 +0000
+Message-ID: <f5cc90c5-c822-7db5-8480-593c6cc90659@microchip.com>
+References: <20220503133127.64320-1-eugen.hristev@microchip.com>
+In-Reply-To: <20220503133127.64320-1-eugen.hristev@microchip.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   kernel test robot <yujie.liu@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-In-Reply-To: <202205042049.SwDh4zxv-lkp@intel.com>
-X-Forwarded-Message-Id: <202205042049.SwDh4zxv-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR02CA0210.apcprd02.prod.outlook.com
- (2603:1096:201:20::22) To MW4PR11MB5933.namprd11.prod.outlook.com
- (2603:10b6:303:16a::15)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5ac6f08a-3894-4e2d-056e-08da3180d358
+x-ms-traffictypediagnostic: MWHPR11MB1744:EE_
+x-microsoft-antispam-prvs: <MWHPR11MB1744BE5EB1B2DEE4D2E01B6487C69@MWHPR11MB1744.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0oKBnpQbJ+60/VhGXZum3JQX+jMi26iI8wvfgn/zSEhoL+qSqe2RSOXiJJmP3jWGxSd2KlOkS5aaf3ibnSumqfwbqpTYs0sP/KIk9AmRwJSQiwjNEwEl93ndPWTgZYpY0ooIzwq9XleBMRTZmPOO28kqkkVhkh+p9PsIeQ85cj+Adny6UkIAj79nvaeWEyC31hu98ThwC8fFsV8oAMAZimkIQ5IWAAUkURFCWEehPA/C9YLr4w4+EzHRhK7ahsPEBFWPNTwi9n2X2pwcn373ZguLKp85nR/oop07Z3UbP1d5cxD/zHp+C9doBAi8klRj5lAI3u3eLaHMpsg3cR2qy/9ZvX90MmKQaa9K0Ea054EX+h2OZe8woDaF5KMM8aqfrvLkHy48s9RW3ZRY15RYPZfmY/4nzxsbY+x8SYpqjNekD1ghqVK3/Ax0B62WHHNSRtiXhDjPJi5XhtJOvbMm8zlSon1xH+9lKfRv0qq7TVjfuidgG5muTIvXk/FOdWJvJEWcF8TSBin+Ul6JWZR0SntjJrpX+rl8OlXejTfmEomjc3fNJwAfHIyjpuv0rEKBF8zK0HSx7kn7cPl3Ma+panm2Q4Zp+ua9MW9RbRAV9uZ8ZTibh0htdlu1G+uMa4zno3XiYZ18LdZzGTN+1BRKDx+Zty7V4u1p46OySNQJ9Lw9fpdCeUFBmR7Fki1jKFRUCGmO/MNX4SdWO9YO96dMlN1NMSPunA+oct0wDX+ReWJm8oa45XPmYL0nlvu7yMGvcjyBIwg+82LgcU9diq7GaQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(36756003)(91956017)(31686004)(8936002)(5660300002)(64756008)(8676002)(66446008)(66946007)(66556008)(66476007)(76116006)(4326008)(110136005)(86362001)(38070700005)(38100700002)(31696002)(6486002)(186003)(54906003)(2616005)(83380400001)(53546011)(6506007)(26005)(316002)(122000001)(71200400001)(6512007)(508600001)(107886003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RW4xSU1DYm9Vd0dPZjJhR3V1SEJYSWdtRkJ5R0tpcERDa2w3TjlEZ0YxSDlL?=
+ =?utf-8?B?L00xZG9KRDBkQm1LdG1FOUtLZjVMSUFIeC9Wem80RVBObEtYSmhHSkRyYWVz?=
+ =?utf-8?B?QVkyVHBiRS9oSVIvd3drWlNoUXJxZTlPbGUyUndMZUQzdkNjY0U5NlZ2bk9K?=
+ =?utf-8?B?cW1IWDllbFB5NHdsOW9sU2F2NEtrekdpNnlDanVoclArWUVwZnhOU3N6MklX?=
+ =?utf-8?B?Szc4Vm1IUWFTZEQ0T1VHMzM1Q1BTMmJINHM4RmpaZ25mdURSWVQvZHBPOWdK?=
+ =?utf-8?B?TUFpcFNKOWIxbHl1K3ByWTNNM3VRRllrM1dIUzhTNFNqbXY5Nk9pNXRZY2Vh?=
+ =?utf-8?B?aHBTL3dPVVoxQ2tDSHJiNTZTSVFKaGlTOGRBR3E1bEtuWFg1aC9VZVhOMkJL?=
+ =?utf-8?B?ZUpvb2d5UDFENS92QmI1dnE0VzJyTUN5SEtuaG9QYVZDKzJaWjlYd0ZyS3Np?=
+ =?utf-8?B?Zjg0aXhXbUVPTWl3TEI2Rk9Ednl2OG9tdEJQWHBLbUlMaEtCODU1VFByWDgy?=
+ =?utf-8?B?TDNvTnpodUFDaHoxekJGVkxHekRaNnZ3aTZYd08xUnBzVi93UHJSSjlMVk5y?=
+ =?utf-8?B?ZGRDdjcvaUVLclFtK3pWZ3UwQW83bFAyMzRuRzdqWkRNa2tpVTdreVhZalYw?=
+ =?utf-8?B?N3ZZc2ZsaGJFRmJqd3FtU044SWRqUEYweHdxRkg4TXZuY3dPelFMNDZlNjlC?=
+ =?utf-8?B?aVVVMTFmVzAyLzZQU1hCSDEwTGQzWitZYW9RNjNNcDV6MmpmV0VsR2hra1My?=
+ =?utf-8?B?cjUya2RPbURCRjVqYXp4TDRENUZKS1U0S0ZFUzl5dFdROWN0Y2VLWWRmMzVK?=
+ =?utf-8?B?M2RnV01ZTTdvWmFDREp0QzZQNDNFakVJU2FseVpzdEdQWFg2WHpPUjgwQW5T?=
+ =?utf-8?B?S28rUkJQMDhlNUl0U1Y1Y1p5SEllWFNsQXZmOFNnQU1ES2crQ0J0aEZPQzJ5?=
+ =?utf-8?B?cUZtbGo5OEhIRjlLeWxGVzd0SjZhRWF6YjFhb3ZscnN3NmVJZ2NoLzBmRmJW?=
+ =?utf-8?B?c0xCM05YNkZucnlMdXkzK25reWRTTElkd1l5dXRIdm1IUDB1aTc4Uzh0dUdv?=
+ =?utf-8?B?WVJNSkM5S1hZZG5ZeSs1RWhCNU8wTjFZa3oySTNCc3hYdHQwSE1nTVc3KzBn?=
+ =?utf-8?B?QUxaQitGTitFTmpqdFJ3bVBBd1YzcVk4ZW5rTHpXMnFoRmpjQWt3NjZNQ3pY?=
+ =?utf-8?B?T2ozVSttcTgzd3FHb0h2SGpiNHRmdnAyN3I5bkd0V1FyWXlHSG5kaldnNmFk?=
+ =?utf-8?B?b21CczlwT05YUEozLzdpS3hBcUVJL3lkWUpCUGo3a1dEbnNrNUhxUnZZQWZO?=
+ =?utf-8?B?S2tHWUtmRzRsNDZyVFkyYW1NRXZ2RHgrWFZudE9yZTg1K2JZR21GcEdZaEFj?=
+ =?utf-8?B?aVhLS1Fab0w1MDVsb0JxNUxVWnArVFh5SzAweUNxcGptbGlJNGNJQWxxMnRl?=
+ =?utf-8?B?TjhIS2JDQ2dnblcwTFNON1NORlZyeXV2a0lndjJaeGkzbXFVNTZIaGR4cGUz?=
+ =?utf-8?B?ZG1yaXJJOGI3UEwxZ25CT2JuOEl3bFk4N3ZRWFUyMEhHcUNCRVNWYXphUXAy?=
+ =?utf-8?B?cEhKTVFOUVBwM0lzOWoyMUMwZkp0V2JRd0hNdXJjVjFydnBLRFcwRS9jM0NJ?=
+ =?utf-8?B?MmJleGd0TkJyREQram5aMHB6YXBiOGRPVFFYRHRQcTB5TFBHRkZyWjRCTW5X?=
+ =?utf-8?B?K29xN0M5M1BsYUtFcGhYajk3dDFEbWJyS3pNUk81VnFIQk1abUNGTWJRR3NI?=
+ =?utf-8?B?Y0poZ3JqZEVsdmZFb2FtK2VIUVB4REVVYytDV0Jvbk04UlRWUDd5aVdWeWkr?=
+ =?utf-8?B?ZlVsb2lCRzdQcmNlQzVtT3VReWUrN1JONFRySVpsNkJ3WitXQjFidjVialdM?=
+ =?utf-8?B?Q0F1eis3TStLWU9CbFJ5cHBHOHBSTU9uVHdNd3pGdDRha2N3R0xZYU9ZWC8r?=
+ =?utf-8?B?K1hPaXYwVmNiT3FDd0N6TmMwY1VNWDAraWNwdVQvK1pHTUN2WTVwWmFBNnk4?=
+ =?utf-8?B?Y01ON2xUSjljSHYxVy8vUUs5dGYxdENuN2hOYmxCZ2hlVThsYUF0Z3B3MmNQ?=
+ =?utf-8?B?SEM1dGk1K3ZuSWtqaC8xUy9QeFU0dmR4ZE0yaHRCRDJtWVRZOFd4a2xmNGc3?=
+ =?utf-8?B?VkU0dXJVUGtxQ0ZERHYvaFVwYURUNUdmRE5tZzA0Z0Z6YTlQL0VNMVRiUVY2?=
+ =?utf-8?B?ajBiakdidHlYN2xVZ3RWWkpRZXdpaEFuN3lQcEFRWG5RSUQzL0RDZ0tMOUtC?=
+ =?utf-8?B?aEdweXBpYVBVcUh6bXNpZW42c1NNOWpzdDJBYVFCai94UUFUODlwcFVMaFly?=
+ =?utf-8?B?TWM5cUN4N1I2cnhOOE1wKzkyaEJKK0pIMVJiU1ZxVFBOa0VyMVQ2ZURNTXEz?=
+ =?utf-8?Q?b3AeBXLy8HyhdBR8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <64043AF49BC5754599317370F23C381D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 63000257-7c82-434f-dfd0-08da317fbe18
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1734:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <CY4PR11MB1734A73A580358FD94807639FBC69@CY4PR11MB1734.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Vp6rKK+YEjCj+/fqq4FHimoV5sHDtVAVoh3PGjRmuBmD7TR2/UQTiib/L2vBAmmK2az8Ny7YlFS7CTqH+aMZANBVhgcjgwjXkTaiq+3lM89byFa1mTb8l6L5n996pdjkE4K4LyN2BfoLGejMfZW0WME4YxTtFdsJMQjnq39swdTRo8Aiv/vlQTOyXU6/l2DHc869xRYOjcio2j+AyEq5fAJ5VSw4n06cD1ZojtLqTuefX9Db65cNjARnadjspHyfTTG7B0Wvf6eGmloNOR+qpjbz/y05jBr2f9HZZ6YIqJqWaFOA7L3vEoJpQYacscd8GMAbAQ+mls9TtCnM/CwZqWFa5uOYixnGBKb0aaMhQroMMvSW8EPLhYIVCUrkjvjlGKSMsorliLuIgEi+bNYoDr5iPFXvQqciBBHFyCXRGoWOnQcdlCh4iSMkgVpyT48GcSRlRXelWrlAEUh7alwhLHVurP70R3vwMLUotmxYbN5RvkUGf4p76nKZSQKLAJBzoRf2RXwTX3nZ4gnWgH1GMbQ30fEtwpsgmLzjndVqLFLGnTFrvUs5DvV0o8S7GEXCbXG4g3rRtQHA7j4mvdhCPPGTLXVkAEmDtssrjl8hBAgJlhQubUsZzSJBC8iTEw5j79nJovoCqA/2we8dfUFlAdmb2cVboJYrXuKUn81iaYXFPWJ5onEGxEkgh/jmtGLB+W2thArIwykn64R3f5YaPMDQetOeFNhyOqMS1Dvrpn3n9K57OpZXsn8TGWtMAWJt/dIINvDOGZpsZ1lCb/T/Fw64Qk7PA7XZICLGB7LPa3RzMWczjJixMqninKNiKUok5ri7obfWjA/on6THsdGB/WmOKGbmRE47a0g683Ko2eI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5933.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(83380400001)(31696002)(2616005)(82960400001)(8936002)(8676002)(66946007)(66556008)(4326008)(66476007)(6916009)(31686004)(38100700002)(30864003)(6512007)(966005)(6486002)(26005)(508600001)(4001150100001)(2906002)(5660300002)(6666004)(186003)(6506007)(86362001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVh3ZjhDa3FIWEdkRktVWDl3KzVmdnVLajlwYTJDWlVxQ3VsK3FHN0pFajl1?=
- =?utf-8?B?VW9Tc3QvTU5URGJyWFQvRXo3U2lIY1lhSWRPdmhvLzc2VmovU3lrUlF3akF1?=
- =?utf-8?B?SjNEVlRFeUc5MDQrR1pBSm9SS2JWcmhDR1RGSnFUMDVrUi9pMzRZYVYzdVZw?=
- =?utf-8?B?SXgya29jSUtWUUM2U2s0ck1mRVZTcjhveHE2Q0luUTVJczlMY2NOeGlwN3Jv?=
- =?utf-8?B?WW1za0RCN3NQQjJ1eVVhajAxaTNyQjFtMXpEbk93WmNzd1ArUjdyVklEY0xP?=
- =?utf-8?B?aEEydTZYcGF1cTZPZHd3ZzZLRHdSUzA4aUFWcjVhU01sckZIYW5mNE5Sa04y?=
- =?utf-8?B?ZnJSUWwwN1BSRXVlMDVEQ0FOOWFUVVRRV1pMenhVMjc0d1oyNHE1dERzRUFw?=
- =?utf-8?B?TWVWTmpQYkRjVjlISmpQdnhaVnVraUJCNlVJdzhUTjdGZnpIYitIdU1XR2Z3?=
- =?utf-8?B?LytDSXZhMjd2VHFWMmhyZERLamhtaUtqOHErSTEzdm4yeDNGejBseTVNcjNR?=
- =?utf-8?B?T2VGUnRxN0kvWDkyUDlHK3BZQVBYWjdyc0hoZ1BuSm9yQjAvSHIvblFhdU5a?=
- =?utf-8?B?d3BHbzBYSGIyRlh5VnFyc1Izbnl3UjdGb0Y5UGVkMWFCUjF2cTNpRGZZYUw4?=
- =?utf-8?B?VUk2aFJjVVcyekUrampjbHJ5MFR2bkl1NVd6MVZyVCsrTnBkUTVWcTVDVGYx?=
- =?utf-8?B?a3IyT3ZvNk1YMnRseXNkMGl0MGp0VzdhUHVsbUVRVWkwejd5NGtRR25mUEdZ?=
- =?utf-8?B?cGkvL0tYS2draGFqVXovb00zNm9lbTAxeWZmYS9XNENDajhPVk5sUmJDaUFR?=
- =?utf-8?B?MVNQbXZyeHlkV3J6NndxZEFuTHA4dzV4R2xFZ2UrUVEvRkJQajg2eFFuWHhK?=
- =?utf-8?B?SnZEUHk5Y0hQdWNJa1dueG1sazg2aE8xMHBHUGVVWkRYV2xHeGtyUUVmQVM3?=
- =?utf-8?B?YWgyMFE3UnNoOGJVRW0vYjRmbTlVandBWHI5V2lYQnJ0aStiMUplQWQzbW9B?=
- =?utf-8?B?ZytZYXJkSTJRREd6VmlrRXVzR09XTTNySk5RWjdDR1MvNVBLdGpwNjh5S3J6?=
- =?utf-8?B?blZYV1F1ajhaQTBVTEJDTTlIYzlURGdlRHdTc3VBc1FVQzFvSCt1WEdVamw3?=
- =?utf-8?B?U0Q0RUVGc2pCaVF2NFowcVdoanIzcldiVWZxbTVvbHptS1FPemM4TGsxYVM4?=
- =?utf-8?B?bmFFd0I5ZENBbWFyQlc2TDFwUEkxWUZKU2dmNng0dGNPK2h5ZUM0THNsZlk2?=
- =?utf-8?B?cytNRzI3NVBKN0RVT2hpNXpsZFMybE9tZERsUlpUMGhTUkkwLyt4bUVxYlVP?=
- =?utf-8?B?aEdybHE5Z1JIRFVJVE5XRm9EWU5FNzBYMWR4d1pHZmlGaHk3U1pFSnF0cTNm?=
- =?utf-8?B?aHZEVUU1UkhMakM1ZmRoOTJRdnZhQ1dDS3dyMjUxVjVldG1haUR6RzN4a1dK?=
- =?utf-8?B?TjBUMTd1T3grVzQ5MUVETkNUTEkvakVySC9iTlFmczM5cjJqM2hZaHcwa05z?=
- =?utf-8?B?OE5od0pPdW5PMllVbzc2MDFKNUdLWHZGQXFIdzBWK0pkUTNPb0VYQ1ZhYWlY?=
- =?utf-8?B?YzN3NUl2TkhOMnFLaVVYaGdTWXh1amgxQTlqZFIwMEswUnBkdHErMXhFWVA3?=
- =?utf-8?B?djZtbE0yOU5PUlpFTno0YVgzTXRwbWNjWkFVRmpIYkVxWUlGa2lhNzZrUnM4?=
- =?utf-8?B?MzFBams0K29LV0R6cytIcmwyTmN5Sjg4UFEvYzFTelR5K0RqYTIvWXlBNjJB?=
- =?utf-8?B?ZkRyVnZ1eUIzZTYzWFMzb29HcmJZYityVFhabmNKRlFHRHNyREhMYVJtK1Zx?=
- =?utf-8?B?amQxQitwYlBXcXpTYjZ2MTN0emxzcGVOdkFhMzRvU204RWhtOWpYK2pwNnJq?=
- =?utf-8?B?UU9YcXJRWFNnVklkQ0V0anBxdjFGUFk0bCtjbEltOENwZVNKWEhpY2ptQi95?=
- =?utf-8?B?WWZQYkkxN1VkR3hETUx5eDFPSncrMHlBRnR3WkFmUUtycm9xbnlVR0cwdUVL?=
- =?utf-8?B?bHFpb2d5QjlhaW1taHJVUk11U0c2b1EwM2Jwb3FRdlIyamF3TXRwMXFMOFRK?=
- =?utf-8?B?OXpVY1E0N1ZTQVJRVmwzWlcyOGVwa3F2T3M1SldTZTdldCtpYkNWNXZaamNY?=
- =?utf-8?B?RTk2dDFEWmpEV1ZmTE9PaXZBbGRPVVJyYmtzZXRoT3hJbEN4L3V2VzNFN1pv?=
- =?utf-8?B?V1ZkMWhpdHJBYnRaMFdXN0M2enFFdmRZeUhVdDhpU2VlMCtnYVYyTVlTcGx6?=
- =?utf-8?B?aFVSN3BsWUU3MjA3ZnlqT0xLWG9kRnJIL0xlSFNTVmNMR2pzZUJBWUR6WTR1?=
- =?utf-8?B?ZVRnejBnN1pPM2Y1ZkxQd1J5eE9HNWk5Y09PYnNXWTltYy9UTVEwUT09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63000257-7c82-434f-dfd0-08da317fbe18
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5933.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 05:49:54.9223
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ac6f08a-3894-4e2d-056e-08da3180d358
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 05:57:39.7057
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a2qjcCCumoyjiedGLdY831e2ncatxj4gVmvYSWXEUz3CiE8fFTKmKqnss6Xpx2+GcGCNXkpLJLwdv8V9prl76Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1734
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vRyXMeIYAfpprcL1NYMDiJyBKUlNlrnmn/Z8rXMXKHLig2zWSZzjOCS24X3irf/8k+Q9OnDvmRrVRICdvpgqazCA4npSfu4Y8ipOofAjy4w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1744
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,162 +162,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git dsa-ci
-head:   1149273e5c97f04e2255421372a8a30c75c0b842
-commit: e582444c20a13a52eabf1d982d1f7e96344be2a8 [22/47] net: mdiobus: Rework scanning of bus ready for quirks
-config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220504/202205042049.SwDh4zxv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # https://github.com/lunn/linux/commit/e582444c20a13a52eabf1d982d1f7e96344be2a8
-         git remote add lunn https://github.com/lunn/linux.git
-         git fetch --no-tags lunn dsa-ci
-         git checkout e582444c20a13a52eabf1d982d1f7e96344be2a8
-         # save the config file
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=i386 clang-analyzer
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <yujie.liu@intel.com>
-
-
-clang-analyzer warnings: (new ones prefixed by >>)
-
- >> drivers/net/phy/mdio_bus.c:710:9: warning: The expression is an uninitialized value. The computed value will also be garbage [clang-analyzer-core.uninitialized.Assign]
-            while (--i >= 0) {
-                   ^ ~
-    drivers/net/phy/mdio_bus.c:621:6: note: 'i' declared without an initial value
-            int i, err;
-                ^
-
-vim +710 drivers/net/phy/mdio_bus.c
-
-4ed8df519849887 Andrew Lunn            2022-04-20  603
-b3df0da886ffdb3 Randy Dunlap           2007-03-06  604  /**
-59f069789c98678 Russell King           2015-09-25  605   * __mdiobus_register - bring up all the PHYs on a given bus and attach them to bus
-b3df0da886ffdb3 Randy Dunlap           2007-03-06  606   * @bus: target mii_bus
-59f069789c98678 Russell King           2015-09-25  607   * @owner: module containing bus accessor functions
-e13934563db0470 Andy Fleming           2005-08-24  608   *
-b3df0da886ffdb3 Randy Dunlap           2007-03-06  609   * Description: Called by a bus driver to bring up all the PHYs
-59f069789c98678 Russell King           2015-09-25  610   *   on a given bus, and attach them to the bus. Drivers should use
-59f069789c98678 Russell King           2015-09-25  611   *   mdiobus_register() rather than __mdiobus_register() unless they
-f89df3f381f1e12 Andrew Lunn            2016-01-06  612   *   need to pass a specific owner module. MDIO devices which are not
-fec76125baf7390 Peng Li                2021-03-30  613   *   PHYs will not be brought up by this function. They are expected
-f89df3f381f1e12 Andrew Lunn            2016-01-06  614   *   to be explicitly listed in DT and instantiated by of_mdiobus_register().
-b3df0da886ffdb3 Randy Dunlap           2007-03-06  615   *
-b3df0da886ffdb3 Randy Dunlap           2007-03-06  616   * Returns 0 on success or < 0 on error.
-e13934563db0470 Andy Fleming           2005-08-24  617   */
-3e3aaf649416988 Russell King           2015-09-24  618  int __mdiobus_register(struct mii_bus *bus, struct module *owner)
-e13934563db0470 Andy Fleming           2005-08-24  619  {
-711fdba37a3dd7e Andrew Lunn            2016-01-06  620  	struct mdio_device *mdiodev;
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25 @621  	int i, err;
-69226896ad636b9 Roger Quadros          2017-04-21  622  	struct gpio_desc *gpiod;
-e13934563db0470 Andy Fleming           2005-08-24  623
-effd7e805c90de8 Andrew Lunn            2022-04-02  624  	if (NULL == bus || NULL == bus->name)
-effd7e805c90de8 Andrew Lunn            2022-04-02  625  		return -EINVAL;
-effd7e805c90de8 Andrew Lunn            2022-04-02  626
-effd7e805c90de8 Andrew Lunn            2022-04-02  627  	if (!bus->read != !bus->write)
-effd7e805c90de8 Andrew Lunn            2022-04-02  628  		return -EINVAL;
-effd7e805c90de8 Andrew Lunn            2022-04-02  629
-effd7e805c90de8 Andrew Lunn            2022-04-02  630  	if (!bus->read_c45 != !bus->write_c45)
-effd7e805c90de8 Andrew Lunn            2022-04-02  631  		return -EINVAL;
-effd7e805c90de8 Andrew Lunn            2022-04-02  632
-effd7e805c90de8 Andrew Lunn            2022-04-02  633  	if (!bus->read && !bus->read_c45)
-e13934563db0470 Andy Fleming           2005-08-24  634  		return -EINVAL;
-e13934563db0470 Andy Fleming           2005-08-24  635
-04f41c68f18886a Saravana Kannan        2021-09-15  636  	if (bus->parent && bus->parent->of_node)
-04f41c68f18886a Saravana Kannan        2021-09-15  637  		bus->parent->of_node->fwnode.flags |=
-04f41c68f18886a Saravana Kannan        2021-09-15  638  					FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD;
-04f41c68f18886a Saravana Kannan        2021-09-15  639
-867ae8a7993b26f Florian Fainelli       2021-11-17  640  	WARN(bus->state != MDIOBUS_ALLOCATED &&
-867ae8a7993b26f Florian Fainelli       2021-11-17  641  	     bus->state != MDIOBUS_UNREGISTERED,
-867ae8a7993b26f Florian Fainelli       2021-11-17  642  	     "%s: not in ALLOCATED or UNREGISTERED state\n", bus->id);
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  643
-3e3aaf649416988 Russell King           2015-09-24  644  	bus->owner = owner;
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  645  	bus->dev.parent = bus->parent;
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  646  	bus->dev.class = &mdio_bus_class;
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  647  	bus->dev.groups = NULL;
-036b66879addb28 Stephen Hemminger      2009-02-26  648  	dev_set_name(&bus->dev, "%s", bus->id);
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  649
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  650  	/* We need to set state to MDIOBUS_UNREGISTERED to correctly release
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  651  	 * the device in mdiobus_free()
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  652  	 *
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  653  	 * State will be updated later in this function in case of success
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  654  	 */
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  655  	bus->state = MDIOBUS_UNREGISTERED;
-ca6e11c337daf79 Pavel Skripkin         2021-09-30  656
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  657  	err = device_register(&bus->dev);
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  658  	if (err) {
-8d242488ce4627d Joe Perches            2012-06-09  659  		pr_err("mii_bus %s failed to register\n", bus->id);
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  660  		return -EINVAL;
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  661  	}
-46abc02175b3c24 Lennert Buytenhek      2008-10-08  662
-d1e7fe4d92742dd Adrian Bunk            2008-02-20  663  	mutex_init(&bus->mdio_lock);
-6349084746ff4f5 Michael Walle          2020-05-06  664  	mutex_init(&bus->shared_lock);
-d1e7fe4d92742dd Adrian Bunk            2008-02-20  665
-e0183b974d3008a Mike Looijmans         2021-02-02  666  	/* assert bus level PHY GPIO reset */
-e0183b974d3008a Mike Looijmans         2021-02-02  667  	gpiod = devm_gpiod_get_optional(&bus->dev, "reset", GPIOD_OUT_HIGH);
-69226896ad636b9 Roger Quadros          2017-04-21  668  	if (IS_ERR(gpiod)) {
-0a12ad592955619 Grygorii Strashko      2020-11-19  669  		err = dev_err_probe(&bus->dev, PTR_ERR(gpiod),
-0a12ad592955619 Grygorii Strashko      2020-11-19  670  				    "mii_bus %s couldn't get reset GPIO\n",
-69226896ad636b9 Roger Quadros          2017-04-21  671  				    bus->id);
-e40e2a2e78664fa Thomas Petazzoni       2019-01-16  672  		device_del(&bus->dev);
-0a12ad592955619 Grygorii Strashko      2020-11-19  673  		return err;
-fe0e4052fb11d5c Sergei Shtylyov        2017-06-12  674  	} else	if (gpiod) {
-d396e84c56047b3 Sergei Shtylyov        2017-06-12  675  		bus->reset_gpiod = gpiod;
-6259e0f5478d7a7 Bruno Thomsen          2020-07-30  676  		fsleep(bus->reset_delay_us);
-69226896ad636b9 Roger Quadros          2017-04-21  677  		gpiod_set_value_cansleep(gpiod, 0);
-bb3831294cd5075 Bruno Thomsen          2020-07-30  678  		if (bus->reset_post_delay_us > 0)
-bb3831294cd5075 Bruno Thomsen          2020-07-30  679  			fsleep(bus->reset_post_delay_us);
-69226896ad636b9 Roger Quadros          2017-04-21  680  	}
-69226896ad636b9 Roger Quadros          2017-04-21  681
-c290d1ab12d3385 Florian Fainelli       2020-04-18  682  	if (bus->reset) {
-c290d1ab12d3385 Florian Fainelli       2020-04-18  683  		err = bus->reset(bus);
-c290d1ab12d3385 Florian Fainelli       2020-04-18  684  		if (err)
-c290d1ab12d3385 Florian Fainelli       2020-04-18  685  			goto error_reset_gpiod;
-c290d1ab12d3385 Florian Fainelli       2020-04-18  686  	}
-df0c8d911abf6ba Florian Fainelli       2017-05-11  687
-e582444c20a13a5 Andrew Lunn            2022-04-20  688  	if (bus->probe_capabilities == MDIOBUS_NO_CAP ||
-e582444c20a13a5 Andrew Lunn            2022-04-20  689  	    bus->probe_capabilities == MDIOBUS_C22 ||
-e582444c20a13a5 Andrew Lunn            2022-04-20  690  	    bus->probe_capabilities == MDIOBUS_C22_C45) {
-e582444c20a13a5 Andrew Lunn            2022-04-20  691  		err = mdiobus_scan_bus_c22(bus);
-e582444c20a13a5 Andrew Lunn            2022-04-20  692  		if (err)
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  693  			goto error;
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  694  	}
-e582444c20a13a5 Andrew Lunn            2022-04-20  695
-e582444c20a13a5 Andrew Lunn            2022-04-20  696  	if (bus->probe_capabilities == MDIOBUS_C45 ||
-e582444c20a13a5 Andrew Lunn            2022-04-20  697  	    bus->probe_capabilities == MDIOBUS_C22_C45) {
-e582444c20a13a5 Andrew Lunn            2022-04-20  698  		err = mdiobus_scan_bus_c45(bus);
-e582444c20a13a5 Andrew Lunn            2022-04-20  699  		if (err)
-e582444c20a13a5 Andrew Lunn            2022-04-20  700  			goto error;
-64b1c2b42b555ef Herbert Valerio Riedel 2006-05-10  701  	}
-f896424cbc61225 Matt Porter            2005-11-02  702
-d0281a56b00c63a Florian Fainelli       2017-03-28  703  	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
-648ea0134069cda Florian Fainelli       2017-02-04  704
-e8e5752dc0a56a0 Krzysztof Halasa       2008-12-17  705  	bus->state = MDIOBUS_REGISTERED;
-7590fc6f80ac2cb Florian Fainelli       2022-01-03  706  	dev_dbg(&bus->dev, "probed\n");
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  707  	return 0;
-e13934563db0470 Andy Fleming           2005-08-24  708
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  709  error:
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25 @710  	while (--i >= 0) {
-711fdba37a3dd7e Andrew Lunn            2016-01-06  711  		mdiodev = bus->mdio_map[i];
-711fdba37a3dd7e Andrew Lunn            2016-01-06  712  		if (!mdiodev)
-711fdba37a3dd7e Andrew Lunn            2016-01-06  713  			continue;
-711fdba37a3dd7e Andrew Lunn            2016-01-06  714
-711fdba37a3dd7e Andrew Lunn            2016-01-06  715  		mdiodev->device_remove(mdiodev);
-711fdba37a3dd7e Andrew Lunn            2016-01-06  716  		mdiodev->device_free(mdiodev);
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  717  	}
-c290d1ab12d3385 Florian Fainelli       2020-04-18  718  error_reset_gpiod:
-69226896ad636b9 Roger Quadros          2017-04-21  719  	/* Put PHYs in RESET to save power */
-a010a2f6540ecc3 Florian Fainelli       2017-09-08  720  	if (bus->reset_gpiod)
-d396e84c56047b3 Sergei Shtylyov        2017-06-12  721  		gpiod_set_value_cansleep(bus->reset_gpiod, 1);
-69226896ad636b9 Roger Quadros          2017-04-21  722
-161c8d2f50109b4 Krzysztof Halasa       2008-12-25  723  	device_del(&bus->dev);
-4fd5f812c23c7de Lennert Buytenhek      2008-08-26  724  	return err;
-4fd5f812c23c7de Lennert Buytenhek      2008-08-26  725  }
-3e3aaf649416988 Russell King           2015-09-24  726  EXPORT_SYMBOL(__mdiobus_register);
-4fd5f812c23c7de Lennert Buytenhek      2008-08-26  727
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+T24gMDMuMDUuMjAyMiAxNjozMSwgRXVnZW4gSHJpc3RldiB3cm90ZToNCj4gaW50ZXJydXB0LXBh
+cmVudCBpcyBub3QgdG8gYmUgdXNlZCBhcyBhIGJvb2xlYW4gcHJvcGVydHkuDQo+IEl0IGlzIGFs
+cmVhZHkgcHJlc2VudCBpbiB0aGUgRFQgaW4gdGhlIHByb3BlciB3YXkgaXQncyBzdXBwb3NlZCB0
+byBiZSB1c2VkOg0KPiBpbnRlcnJ1cHQtcGFyZW50ID0gPCZnaWM+Ow0KPiANCj4gVGhpcyBpcyBh
+bHNvIHJlcG9ydGVkIGJ5IGR0YnNfY2hlY2s6DQo+IGFyY2gvYXJtL2Jvb3QvZHRzL2F0OTEtc2Ft
+YTdnNWVrLmR0YjogaW50ZXJydXB0LWNvbnRyb2xsZXJAZThjMTEwMDA6IGludGVycnVwdC1wYXJl
+bnQ6IFRydWUgaXMgbm90IG9mIHR5cGUgJ2FycmF5Jw0KPiAJRnJvbSBzY2hlbWE6IC8ubG9jYWwv
+bGliL3B5dGhvbjMuOC9zaXRlLXBhY2thZ2VzL2R0c2NoZW1hL3NjaGVtYXMvaW50ZXJydXB0cy55
+YW1sDQo+IA0KPiBGaXhlczogNzU0MDYyOWUyZmM3ICgiQVJNOiBkdHM6IGF0OTE6IGFkZCBzYW1h
+N2c1IFNvQyBEVCBhbmQgc2FtYTdnNS1layIpDQo+IFNpZ25lZC1vZmYtYnk6IEV1Z2VuIEhyaXN0
+ZXYgPGV1Z2VuLmhyaXN0ZXZAbWljcm9jaGlwLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUg
+QmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29tPg0KDQo+IC0tLQ0KPiAgYXJjaC9h
+cm0vYm9vdC9kdHMvc2FtYTdnNS5kdHNpIHwgMSAtDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxl
+dGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE3ZzUuZHRz
+aSBiL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE3ZzUuZHRzaQ0KPiBpbmRleCBjZGFhOWM4MjVmNjku
+LmY0ZjE3NDMxNGU0ZSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtYTdnNS5k
+dHNpDQo+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbWE3ZzUuZHRzaQ0KPiBAQCAtOTQ5LDcg
+Kzk0OSw2IEBAIGdpYzogaW50ZXJydXB0LWNvbnRyb2xsZXJAZThjMTEwMDAgew0KPiAgCQkJI2lu
+dGVycnVwdC1jZWxscyA9IDwzPjsNCj4gIAkJCSNhZGRyZXNzLWNlbGxzID0gPDA+Ow0KPiAgCQkJ
+aW50ZXJydXB0LWNvbnRyb2xsZXI7DQo+IC0JCQlpbnRlcnJ1cHQtcGFyZW50Ow0KPiAgCQkJcmVn
+ID0gPDB4ZThjMTEwMDAgMHgxMDAwPiwNCj4gIAkJCQk8MHhlOGMxMjAwMCAweDIwMDA+Ow0KPiAg
+CQl9Ow0KDQo=

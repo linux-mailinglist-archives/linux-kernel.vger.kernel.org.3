@@ -2,183 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6F051F308
-	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9500051F310
+	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 05:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiEIDt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 8 May 2022 23:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S231959AbiEIDvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 8 May 2022 23:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbiEIDlW (ORCPT
+        with ESMTP id S233495AbiEIDle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 8 May 2022 23:41:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833B766CA4
-        for <linux-kernel@vger.kernel.org>; Sun,  8 May 2022 20:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652067449; x=1683603449;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A8hPcJAwAOv3y9+r5NnNKJG55OgN9t9//di8+1ioCcA=;
-  b=U+CXyp+VLIjXIJ1K9OJlq4vF8IayJvTMY/KcCtOHaHwyKSzZQ0d2fS7B
-   8ZpWjhOkMr8iAouWYPG8QFT6U9rKopXK6z9iiUnzLBFA+luwWfcVFKMgu
-   IJ9b8XYASle/xVF+Ep/Vhiz9lCdIyOsfCwjIxs/WT7QnoNfYCINjpRv6m
-   IFONg35kQQwctEyaxOu4Lyl11WCRJnKvHu8wXRClrpTKWpMW9IinSCm2h
-   N80g3RFabtt6EgD9Agdzq9tUQfvu0cOay8aCb2EBilvcXlT9ZA18O396a
-   Hx0MSdHQe7B7pF4AmBC5DvAY0d877+Q3xOZrjctopDTjbTreHGE3dPpZy
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="268585320"
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="268585320"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:37:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,210,1647327600"; 
-   d="scan'208";a="550815845"
-Received: from cbfoste1-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.62.77])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:37:24 -0700
-Message-ID: <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 09 May 2022 15:37:22 +1200
-In-Reply-To: <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
-References: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
-         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
-         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
-         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
-         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
-         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
-         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
-         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
-         <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
-         <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 8 May 2022 23:41:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2F874DD6;
+        Sun,  8 May 2022 20:37:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE5E61003;
+        Mon,  9 May 2022 03:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2247DC385AE;
+        Mon,  9 May 2022 03:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652067461;
+        bh=PXmaQUPKWn6FIRhLSdrppCDTsYvhjxB5E2sIHwZBn6E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ojOg4aCEQ07DdQf6iMb7EjlpRO6Lcea+7YD9FfUrIiww1ip1Yjqd5DcrrKbwAcmRn
+         MCAY7rndRdv1CHaqf8pYILfNNrMJih9CzBy+xH4bYKcKkGtoepGjivPMjgf2W2EnzU
+         bFVXaMNu8xFwENfG46sZP4Os4f+x/GHFPI75u7rPJqZP1LJLqB1pmz8XCiUi3dK3Xs
+         F3ep8yKEeljq3K5z2DyyMVqgMitDFPJhRmwcVADA2+5OA4MzPORr6PAyCXpE/ff5Zx
+         Mj3SIkkMeL0QHUpToCTtxxJYiWJYKvlIB+U7rgPQH9jcHNRoOCxSdbrzAZhXZ8/dA9
+         tFnoh4YfTLa2g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ADAFA5C0741; Sun,  8 May 2022 20:37:40 -0700 (PDT)
+Date:   Sun, 8 May 2022 20:37:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Alison Chaiken <achaiken@aurora.tech>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
+ context
+Message-ID: <20220509033740.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220505101641.28472-1-urezki@gmail.com>
+ <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnVLQozNFvgk3olP@pc638.lan>
+ <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YnY33nq5jl6FLFOu@pc638.lan>
+ <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
+ <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
-> On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
-> > Kirill, what's your opinion?
+On Sun, May 08, 2022 at 08:17:49PM -0400, Joel Fernandes wrote:
+> On Sun, May 8, 2022 at 5:32 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> [...]
+> > > > > > > > One easy way to make this work would be to invert the sense of this
+> > > > > > > > Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
+> > > > > > > > "n", but then select it somewhere in drivers/android/Kconfig.  But I
+> > > > > > > > would not be surprised if there is a better way.
+> > > > >
+> > > > > In that situation probably we should just enable it by default.
+> > > >
+> > > > You are within your rights to cause it to be enabled by default -within-
+> > > > -Android-.  You are -not- within your rights to break other workloads.
+> > > >
+> > > > If ChromeOS needs it too, they too can enable it -within- -ChromeOS-.
+> > > >
+> > > > It is not -that- hard, guys!  ;-)
+> > >
+> > > I think on the topic of RT, +Steven Rostedt should chime in as well
+> > > considering he wrote a good chunk of the RT scheduler ;-). Personally,
+> > > I feel the issue of "rcu callback offload" threads running as RT or
+> > > not should not be a matter of CONFIG option or the system in concern.
+> > > Instead it should be a function of how many callbacks there are to
+> > > run.  The reason I say this is, RT threads should not be doing a lot
+> > > of work anyway, lest they cause RT throttling and starvation of other
+> > > threads.
+> >
+> > This gets complicated surprisingly quickly.  For but one example, you
+> > would find yourself wanting time-based boosting, most likely before you
+> > wanted boosting based on numbers of callbacks.  And it is all too easy
+> > to drive considerably complexity into the mix before proving that it is
+> > really needed.  Especially given how rare the need for RCU priority
+> > boosting is to begin with.
 > 
-> I said before that I think DMA API is the right tool here.
+> I think this patch does not deal with or change the behavior of
+> dynamic priority boosting preempted RCU readers, but rather it makes
+> it such that the no-cb offload threads that execute the callbacks. So
+> I am not sure why you are talking about the boosting behavior of
+> preempted RCU readers? I was referring only to the nocb offload
+> kthreads which as I understand, Vlad *does not* want to run at RT
+> priority.
+
+OK.  Exactly what is the problem that you are trying to solve?  ;-)
+
+And yes, I fully understand that Uladzislau does not want to run the rcuo
+kthreads at RT priority, even in kernels built with CONFIG_RCU_BOOST=y.
+Which makes sense, given that he is looking to solve a very different
+problem than CONFIG_RCU_BOOST was designed to solve.  So adjustments must
+be made.  The discussion is the exact form of the next set of adjustments,
+which I expect to be quite straightforward.
+
+> > > Also, I think it is wrong to assume that a certain kind of system will
+> > > always have a certain number of callbacks to process at a time. That
+> > > seems prone to poor design due to assumptions which may not always be
+> > > true.
+> >
+> > Who was assuming that?  Uladzislau was measuring rather than assuming,
+> > if that was what you were getting at.  Or if you are thinking about
+> > things like qhimark, your point is exactly why there is both a default
+> > (which has worked quite well for a very long time) and the ability to
+> > adjust based on the needs of your specific system.
 > 
-> Speculation about future of DMA in TDX is irrelevant here. If semantics
-> change we will need to re-evaluate all users. VirtIO uses DMA API and it
-> is conceptually the same use-case: communicate with the host.
+> I was merely saying that based on measurements make assumptions, but
+> in the real world the assumption may not be true, then everything
+> falls apart. Instead I feel, callback threads should be RT only if 1.
+> As you mentioned, the time based thing. 2. If the CB list is long and
+> there's lot of processing. But instead, if it is made a CONFIG option,
+> then that forces a fixed behavior which may fall apart in the real
+> world. I think adding more CONFIGs and special cases is more complex
+> but that's my opinion.
 
-Virtio is designed for device driver to use, so it's fine to use DMA API. And
-real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
-assumption.
+Again, exactly what problem are you trying to solve?
 
-DMA API has it's limitations.  I don't see the protocol to convert GPA from
-private to shared is so complicated (see below), and I think regardless this
-attestation use case, it's perhaps worth to provide an additional simple
-infrastructure for such case so it can be used when needed.
+From what I can see, Uladzislau's issue can be addressed by statically
+setting the rcuo kthreads to SCHED_OTHER at boot time.  The discussion
+is on exactly how RCU is to be informed of this, at kernel build time.
 
+> > > Can we not have 2 sets of RCU offload threads, one which operate at RT
+> > > and only process few callbacks at a time, while another which is the
+> > > lower priority CFS offload thread - executes whenever there is a lot
+> > > of CBs pending? Just a thought.
+> >
+> > How about if we start by solving the problems we know that we have?
 > 
-> But vmap() + set_memory_decrypted() also works and Sathya already has code
-> for it. I'm fine with this.
+> I don't know why you would say that, because we are talking about
+> solving the specific problem Vlad's patch addresses, not random
+> problems. Which is that, Android wants to run expedited GPs, but when
+> the callback list is large, the RT nocb thread can starve other
+> things. Did I misunderstand the patch? If so, sorry about that but
+> that's what my email was discussing. i.e. running of CBs in RT
+> threads. I suck at writing well as I clearly miscommunicated.
 
-Dave said (again) he wanted to avoid breaking up direct mapping.
+OK.
 
-https://lore.kernel.org/lkml/5d34ac93-09dc-ea93-bffe-f3995647cd5b@linux.intel.com/T/#m37778b8af5d72c3db79e3cfa4b46ee37836f771c
+Why do you believe that this needs anything other than small adjustments
+the defaults of existing Kconfig options?  Or am I completely missing
+the point of your proposal?
 
-So we need to use seither use DMA API (which already breaks direct-mapping for
-swiotlb), or we use vmap() + MapGPA() as I mentioned below.
-
+> > > Otherwise, I feel like we might be again proliferating CONFIG options
+> > > and increasing burden on the user to get it the CONFIG right.
+> >
+> > I bet that we will solve this without adding any new Kconfig options.
+> > And I bet that the burden is at worst on the device designer, not on
+> > the user.  Plus it is entirely possible that there might be a way to
+> > automatically configure things to handle what we know about today,
+> > again without adding Kconfig options.
 > 
-> Going a step below to manual MapGPA() is just wrong. We introduced
-> abstructions for a reason. Protocol of changing GPA status is not trivial.
-> We should not spread it across all kernel codebase.
-> 
+> Yes, agreed.
 
-I kinda disagree with this.  In fact, the protocol of changing GPA status isn't
-that complicated.  TD guest can have both private and shared mappings to the
-same GPA simultaneously.  We don't need to change all the mappings when
-converting private page to shared.
+If I change my last sentence to read as follows, are we still in
+agreement?
 
-For instance, we can use vmap() to have a shared mapping to a page, while the
-page is still mapped as private in direct-mapping.  TD uses MapGPA() to tell VMM
-which mapping it wants to use, and it just needs to guarantee that the private
-(direct) mapping won't be used.  Speculative fetch using the direct mapping is
-fine, as long as the core won't consume the data.  The only thing we need to
-guarantee is we need to flush any dirty cachelines before MapGPA(). My
-understanding is we don't even need to flush the TLB of the private mapping.
+	Plus it is entirely possible that there might be a way to
+	automatically configure things to handle what we know about today,
+	again without adding Kconfig options and without changing runtime
+	code beyond that covered by Uladzislau's patch.
 
-And reading the GHCI MapGPA() again, to me MapGPA() itself requires VMM to
-guarantee the TLB and cache flush:
-
-"
-If the GPA (range) was already mapped as an active, private page, the host VMM
-may remove the private page from the TD by following the “Removing TD Private
-Pages” sequence in the Intel TDX-module specification [3] to safely block the
-mapping(s), flush the TLB and cache, and remove the mapping(s). The VMM is
-designed to be able to then map the specified GPA (range) in the shared-EPT
-structure and allow the TD to access the page(s) as a shared GPA (range).
-"
-
-You can see the cache flush is guaranteed by VMM.
-
-Btw, the use of word "may" in "host VMM may remove..." in above paragraph is
-horrible.  It should use "must", just like to the "converting shared to private"
-case:
-
-"
-If the Start GPA specified is a private GPA (GPA.S bit is clear), this MapGPA
-TDG.VP.VMCALL can be used to help request the host VMM map the specific, private
-page(s) (which mapping may involve converting the backing-physical page from a
-shared page to a private page). As intended in this case, the VMM must unmap the
-GPA from the shared-EPT region and invalidate the TLB and caches for the TD
-vcpus to help ensure no stale mappings and cache contents exist.
-"
-
-As you can see "must" is used in "the VMM must unmap the GPA from the shared-EPT
-...".
-
-So I don't see why TD guest kernel cannot have a simple protocol to vmap() a
-page (or couple of pages) as shared on-demand, like below:
-
-	page = alloc_page();
-
-	addr = vmap(page,  pgprot_decrypted(PAGE_KERNEL));
-
-	clflush_cache_range(page_address(page), PAGE_SIZE);
-
-	MapGPA(page_to_phys(page) | cc_mkdec(0), PAGE_SIZE);
-
-And we can even avoid above clflush_cache_range() if I understand correctly.
-
-Or  I missed something?
-
-
--- 
-Thanks,
--Kai
-
-
+							Thanx, Paul

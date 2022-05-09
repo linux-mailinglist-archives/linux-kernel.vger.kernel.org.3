@@ -2,205 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EF151FD7C
+	by mail.lfdr.de (Postfix) with ESMTP id BC17351FD7D
 	for <lists+linux-kernel@lfdr.de>; Mon,  9 May 2022 15:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbiEINFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 09:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S235124AbiEINFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 09:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235016AbiEINFD (ORCPT
+        with ESMTP id S235016AbiEINFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 09:05:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610CA3C718;
-        Mon,  9 May 2022 06:01:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1E48B21A6A;
-        Mon,  9 May 2022 13:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652101268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1W1glaT82UhfAqAek9S6C4OBUuGBFNN9mAkUn6Ay0Q=;
-        b=u6+193aG6z+o4BOKRo1ZgKuyTRdUXNFuu4/wDXF5Ne4kE9T64dwUruklmV64im+/3tiX2a
-        +8N/Uv0X80rAL+X1oe0Oi91ea0dJe+zI84RR7/v6ck6wePimqYEPJn40Y8v37Pmh3n1xBW
-        bjUJWAdp9swHZTAgwaqb0CxhCin9GS8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652101268;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1W1glaT82UhfAqAek9S6C4OBUuGBFNN9mAkUn6Ay0Q=;
-        b=8OSm/SjDP8xUIHnnaQvqQc6WV5jtXjPTQ/Lhf5EmnK6uSenc4o1/UsWuVcxz7LktxwI0Oz
-        q0kPq0Wkh7auSNAQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C94612C141;
-        Mon,  9 May 2022 13:01:07 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D3A41A062A; Mon,  9 May 2022 15:01:01 +0200 (CEST)
-Date:   Mon, 9 May 2022 15:01:01 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_writepages
-Message-ID: <20220509130101.7myd6mhwd54fhvq7@quack3.lan>
-References: <20220505135708.2629657-1-yebin10@huawei.com>
+        Mon, 9 May 2022 09:05:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA8A23276A;
+        Mon,  9 May 2022 06:01:41 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id v11so12186586pff.6;
+        Mon, 09 May 2022 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y1VOSZIWCzEJ86cq6oZntFD5lbrlVmxkCTqvxbTsuTg=;
+        b=jgUIdCH57g47g1kCfaLFMEKd8m5jeXbyVawyaJj232M3GU+h8G3dL1Gk9v7nrMMpO2
+         nn7aJa8eFXLCk5tZgGSnluGzwjVN7ZheU0rl8a/Ukt9+s2pknnBXAi4xVYXmkpNQmydg
+         TeJjI/uce80Nd582K7gKB8G2av4nig3agDO/v6hJcHvfNCyeeUbxBeSZp5lkgnRwBalE
+         q8VzetIqmsiXy+wmKubGCBPEa04ZjxSk9gUYSjqfYaa95+vPAPfu3u9jpS9lnU5lm0v3
+         L1bOvrHFJzwCKQovFTQz/liWQ3pugbSfn5WPvY+/A1mgVs66yvqjhDT5tBygAs/Ej+1E
+         6t2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y1VOSZIWCzEJ86cq6oZntFD5lbrlVmxkCTqvxbTsuTg=;
+        b=oxXYZd9P3gqy+Coy0L/kr6LPnNpDT6Qolb23/WTx6d5H0QflgJicZqdyoHRh4gEA5E
+         8LhCchq/goQZSqlw6ScvHg5pcppyY9L9twuQf6Ejuf8LgQblqesRixkwAkJ9pDU/LAGm
+         HZcSwMgJLfvNHqQOsNoxUdHRGiIlEUrZSVVGfoX+Yr3dwEmgv/H4RnlD+TD2iaaM9m5H
+         nUIAHs+dohBqAhP5/UpCjVrJ1uLuB0BKfgDHwajzT9hNZa8A9qnPEDM3u6XitX/WS419
+         qanA0xPb7mMOxWlVGV7XKSMlvkPizT0yhv6lPMI6hf4mqI2MSqZeTDa4GlKqTylK0mPz
+         39Ig==
+X-Gm-Message-State: AOAM533E6TgqmyQSdnhpH8PCfvhb6TVnMefOCT/y0rBNJafzzKELRVWc
+        8QmLRUCBajyWBbtUuUH8zOA=
+X-Google-Smtp-Source: ABdhPJwu0d4G31B2Ybkf88smk0c0f/5f3pumQ7oaxiA37CVPclKAOlLQKZhUVG8BH35wkrDcOq0vsQ==
+X-Received: by 2002:a05:6a00:234f:b0:4f6:f0c0:ec68 with SMTP id j15-20020a056a00234f00b004f6f0c0ec68mr16349283pfj.14.1652101300366;
+        Mon, 09 May 2022 06:01:40 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.89])
+        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b003c6ab6ba06csm2891487pge.79.2022.05.09.06.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 06:01:39 -0700 (PDT)
+Message-ID: <78e001bd-42bd-5481-5a19-1a0bcca9a63c@gmail.com>
+Date:   Mon, 9 May 2022 21:01:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505135708.2629657-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH v4 3/7] perf/x86/amd/core: Detect PerfMonV2 support
+Content-Language: en-US
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
+        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org
+References: <cover.1651058600.git.sandipan.das@amd.com>
+ <8d3e23760726cf6647a98999e1fcd12a37f36a42.1651058600.git.sandipan.das@amd.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <8d3e23760726cf6647a98999e1fcd12a37f36a42.1651058600.git.sandipan.das@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 05-05-22 21:57:08, Ye Bin wrote:
-> we got issue as follows:
-> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-> ------------[ cut here ]------------
-> kernel BUG at fs/ext4/inode.c:2708!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-> RIP: 0010:ext4_writepages+0x1977/0x1c10
-> RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-> RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-> RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-> R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-> R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-> FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  do_writepages+0x130/0x3a0
->  filemap_fdatawrite_wbc+0x83/0xa0
->  filemap_flush+0xab/0xe0
->  ext4_alloc_da_blocks+0x51/0x120
->  __ext4_ioctl+0x1534/0x3210
->  __x64_sys_ioctl+0x12c/0x170
->  do_syscall_64+0x3b/0x90
-> 
-> It may happen as follows:
-> 1. write inline_data inode
-> vfs_write
->   new_sync_write
->     ext4_file_write_iter
->       ext4_buffered_write_iter
->         generic_perform_write
-> 	  ext4_da_write_begin
-> 	    ext4_da_write_inline_data_begin -> If inline data size too
-> 	    small will allocate block to write, then mapping will has
-> 	    dirty page
-> 	    	ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-> 2. fallocate
-> do_vfs_ioctl
->   ioctl_preallocate
->     vfs_fallocate
->       ext4_fallocate
->         ext4_convert_inline_data
-> 	  ext4_convert_inline_data_nolock
-> 	    ext4_map_blocks -> fail will goto restore data
-> 	    ext4_restore_inline_data
-> 	      ext4_create_inline_data
-> 	      ext4_write_inline_data
-> 	      ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-> 3. writepages
-> __ext4_ioctl
->   ext4_alloc_da_blocks
->     filemap_flush
->       filemap_fdatawrite_wbc
->         do_writepages
-> 	  ext4_writepages
-> 	    if (ext4_has_inline_data(inode))
-> 	      BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
-> 
-> To solved this issue, record origin 'EXT4_STATE_MAY_INLINE_DATA' flag, then pass
-> value to 'ext4_restore_inline_data', 'ext4_restore_inline_data' will
-> decide to if recovery 'EXT4_STATE_MAY_INLINE_DATA' flag according to parameter.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+On 27/4/2022 7:31 pm, Sandipan Das wrote:
 
-Thanks for the patch. I agree it will fix the crash you have spotted but
-I'm somewhat wondering whether it would not be simpler to just move the
-call to ext4_destroy_inline_data_nolock() in
-ext4_convert_inline_data_nolock() later, after we have done writing
-data_bh. That way we can completely remove ext4_restore_inline_data() and
-as a consequence avoid problems. What do you think?
+>   	x86_pmu.num_counters	= AMD64_NUM_COUNTERS_CORE;
 
-								Honza
+Thus boot_cpu_has(X86_FEATURE_PERFCTR_CORE) is true.
 
-> ---
->  fs/ext4/inline.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-> index 9c076262770d..407061c79adc 100644
-> --- a/fs/ext4/inline.c
-> +++ b/fs/ext4/inline.c
-> @@ -1125,8 +1125,8 @@ static int ext4_update_inline_dir(handle_t *handle, struct inode *dir,
->  }
->  
->  static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
-> -				     struct ext4_iloc *iloc,
-> -				     void *buf, int inline_size)
-> +				     struct ext4_iloc *iloc, void *buf,
-> +				     int inline_size, bool has_data)
->  {
->  	int ret;
->  
-> @@ -1138,7 +1138,8 @@ static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
->  		return;
->  	}
->  	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
-> -	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-> +	if (has_data)
-> +		ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
->  }
->  
->  static int ext4_finish_convert_inline_dir(handle_t *handle,
-> @@ -1194,6 +1195,7 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->  	struct buffer_head *data_bh = NULL;
->  	struct ext4_map_blocks map;
->  	int inline_size;
-> +	bool has_data;
->  
->  	inline_size = ext4_get_inline_size(inode);
->  	buf = kmalloc(inline_size, GFP_NOFS);
-> @@ -1222,6 +1224,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->  	if (error)
->  		goto out;
->  
-> +	has_data = !!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
 > +
->  	map.m_lblk = 0;
->  	map.m_len = 1;
->  	map.m_flags = 0;
-> @@ -1262,7 +1266,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
->  	unlock_buffer(data_bh);
->  out_restore:
->  	if (error)
-> -		ext4_restore_inline_data(handle, inode, iloc, buf, inline_size);
-> +		ext4_restore_inline_data(handle, inode, iloc, buf,
-> +					 inline_size, has_data);
->  
->  out:
->  	brelse(data_bh);
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +	/* Check for Performance Monitoring v2 support */
+> +	if (boot_cpu_has(X86_FEATURE_PERFMON_V2)) {
+> +		/* Update PMU version for later usage */
+> +		x86_pmu.version = 2;
+
+Is it safe to assume that once AMD CPU has the PERFMON_V2 (or further) bit,
+
+it must also have the PERFCTR_CORE bit set ?
+

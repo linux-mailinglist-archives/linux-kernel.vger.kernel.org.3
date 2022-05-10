@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89552521983
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1035521A96
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245713AbiEJNsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S244994AbiEJN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243894AbiEJNcU (ORCPT
+        with ESMTP id S244843AbiEJNiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C95178562;
-        Tue, 10 May 2022 06:23:21 -0700 (PDT)
+        Tue, 10 May 2022 09:38:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1562CFC;
+        Tue, 10 May 2022 06:26:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7A0E61768;
-        Tue, 10 May 2022 13:23:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6614C385A6;
-        Tue, 10 May 2022 13:23:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3D9CB81DA8;
+        Tue, 10 May 2022 13:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A668C385A6;
+        Tue, 10 May 2022 13:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189000;
-        bh=tm/Y3N1xRtkC0eTpSWQ2qqM2l+6CezNMfRdf2u3uhmA=;
+        s=korg; t=1652189187;
+        bh=O6BESBseo/1PxSG1YQz7m3Aoqpw3BtYVHDjNoochBjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NB9O4CyfeK3PlALCvmuxjZPLP+rJABn/PGfZwIJ/PqoyOBPusDfUAMVgv3djEjS9P
-         NW7FSlG495zv5Ixw7Vv3r3MqFigeYfYXKHzjQ4Znr+BE/UCjivzCVVp7Epn/CviTme
-         lPvXJKw7LTiHfivu5C3joGWquz1AVsysm2oafyhc=
+        b=R98m76OkHffd8PUUgK1hl/zIdF5AqRBrf8y/N5sqPnLr1DIOC22DHfktewRNXnHte
+         kW9IdWriPIhkWoF3/f+skxZlYtRJfiiD8vH9xKr6UKSeAEo3Hia0civfb5W0T+wE61
+         oi47NPfoSOB6J89GS0mbUaUofoAnJq15I7QGA89M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 30/52] bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
-Date:   Tue, 10 May 2022 15:07:59 +0200
-Message-Id: <20220510130730.735895357@linuxfoundation.org>
+        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.10 41/70] net/mlx5: Avoid double clear or set of sync reset requested
+Date:   Tue, 10 May 2022 15:08:00 +0200
+Message-Id: <20220510130734.064449793@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Somnath Kotur <somnath.kotur@broadcom.com>
+From: Moshe Shemesh <moshe@nvidia.com>
 
-commit 13ba794397e45e52893cfc21d7a69cb5f341b407 upstream.
+commit fc3d3db07b35885f238e1fa06b9f04a8fa7a62d0 upstream.
 
-bnxt_open() can fail in this code path, especially on a VF when
-it fails to reserve default rings:
+Double clear of reset requested state can lead to NULL pointer as it
+will try to delete the timer twice. This can happen for example on a
+race between abort from FW and pci error or reset. Avoid such case using
+test_and_clear_bit() to verify only one time reset requested state clear
+flow. Similarly use test_and_set_bit() to verify only one time reset
+requested state set flow.
 
-bnxt_open()
-  __bnxt_open_nic()
-    bnxt_clear_int_mode()
-    bnxt_init_dflt_ring_mode()
-
-RX rings would be set to 0 when we hit this error path.
-
-It is possible for a subsequent bnxt_open() call to potentially succeed
-with a code path like this:
-
-bnxt_open()
-  bnxt_hwrm_if_change()
-    bnxt_fw_init_one()
-      bnxt_fw_init_one_p3()
-        bnxt_set_dflt_rfs()
-          bnxt_rfs_capable()
-            bnxt_hwrm_reserve_rings()
-
-On older chips, RFS is capable if we can reserve the number of vnics that
-is equal to RX rings + 1.  But since RX rings is still set to 0 in this
-code path, we may mistakenly think that RFS is supported for 0 RX rings.
-
-Later, when the default RX rings are reserved and we try to enable
-RFS, it would fail and cause bnxt_open() to fail unnecessarily.
-
-We fix this in 2 places.  bnxt_rfs_capable() will always return false if
-RX rings is not yet set.  bnxt_init_dflt_ring_mode() will call
-bnxt_set_dflt_rfs() which will always clear the RFS flags if RFS is not
-supported.
-
-Fixes: 20d7d1c5c9b1 ("bnxt_en: reliably allocate IRQ table on reset to avoid crash")
-Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 7dd6df329d4c ("net/mlx5: Handle sync reset abort event")
+Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
+Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
+Reviewed-by: Shay Drory <shayd@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |   28 ++++++++++++++-------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -9791,7 +9791,7 @@ static bool bnxt_rfs_capable(struct bnxt
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
+@@ -134,14 +134,19 @@ static void mlx5_stop_sync_reset_poll(st
+ 	del_timer_sync(&fw_reset->timer);
+ }
  
- 	if (bp->flags & BNXT_FLAG_CHIP_P5)
- 		return bnxt_rfs_supported(bp);
--	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp))
-+	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp) || !bp->rx_nr_rings)
- 		return false;
+-static void mlx5_sync_reset_clear_reset_requested(struct mlx5_core_dev *dev, bool poll_health)
++static int mlx5_sync_reset_clear_reset_requested(struct mlx5_core_dev *dev, bool poll_health)
+ {
+ 	struct mlx5_fw_reset *fw_reset = dev->priv.fw_reset;
  
- 	vnics = 1 + bp->rx_nr_rings;
-@@ -11725,10 +11725,9 @@ static int bnxt_init_dflt_ring_mode(stru
- 		goto init_dflt_ring_err;
- 
- 	bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
--	if (bnxt_rfs_supported(bp) && bnxt_rfs_capable(bp)) {
--		bp->flags |= BNXT_FLAG_RFS;
--		bp->dev->features |= NETIF_F_NTUPLE;
--	}
++	if (!test_and_clear_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags)) {
++		mlx5_core_warn(dev, "Reset request was already cleared\n");
++		return -EALREADY;
++	}
 +
-+	bnxt_set_dflt_rfs(bp);
+ 	mlx5_stop_sync_reset_poll(dev);
+-	clear_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags);
+ 	if (poll_health)
+ 		mlx5_start_health_poll(dev);
++	return 0;
+ }
+ 
+ #define MLX5_RESET_POLL_INTERVAL	(HZ / 10)
+@@ -185,13 +190,17 @@ static int mlx5_fw_reset_set_reset_sync_
+ 	return mlx5_reg_mfrl_set(dev, MLX5_MFRL_REG_RESET_LEVEL3, 0, 2, false);
+ }
+ 
+-static void mlx5_sync_reset_set_reset_requested(struct mlx5_core_dev *dev)
++static int mlx5_sync_reset_set_reset_requested(struct mlx5_core_dev *dev)
+ {
+ 	struct mlx5_fw_reset *fw_reset = dev->priv.fw_reset;
+ 
++	if (test_and_set_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags)) {
++		mlx5_core_warn(dev, "Reset request was already set\n");
++		return -EALREADY;
++	}
+ 	mlx5_stop_health_poll(dev, true);
+-	set_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags);
+ 	mlx5_start_sync_reset_poll(dev);
++	return 0;
+ }
+ 
+ static void mlx5_fw_live_patch_event(struct work_struct *work)
+@@ -225,7 +234,9 @@ static void mlx5_sync_reset_request_even
+ 			       err ? "Failed" : "Sent");
+ 		return;
+ 	}
+-	mlx5_sync_reset_set_reset_requested(dev);
++	if (mlx5_sync_reset_set_reset_requested(dev))
++		return;
 +
- init_dflt_ring_err:
- 	bnxt_ulp_irq_restart(bp, rc);
- 	return rc;
+ 	err = mlx5_fw_reset_set_reset_sync_ack(dev);
+ 	if (err)
+ 		mlx5_core_warn(dev, "PCI Sync FW Update Reset Ack Failed. Error code: %d\n", err);
+@@ -325,7 +336,8 @@ static void mlx5_sync_reset_now_event(st
+ 	struct mlx5_core_dev *dev = fw_reset->dev;
+ 	int err;
+ 
+-	mlx5_sync_reset_clear_reset_requested(dev, false);
++	if (mlx5_sync_reset_clear_reset_requested(dev, false))
++		return;
+ 
+ 	mlx5_core_warn(dev, "Sync Reset now. Device is going to reset.\n");
+ 
+@@ -354,10 +366,8 @@ static void mlx5_sync_reset_abort_event(
+ 						      reset_abort_work);
+ 	struct mlx5_core_dev *dev = fw_reset->dev;
+ 
+-	if (!test_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags))
++	if (mlx5_sync_reset_clear_reset_requested(dev, true))
+ 		return;
+-
+-	mlx5_sync_reset_clear_reset_requested(dev, true);
+ 	mlx5_core_warn(dev, "PCI Sync FW Update Reset Aborted.\n");
+ }
+ 
 
 

@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5FE520AF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B1D520AF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiEJCHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S234497AbiEJCHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiEJCHS (ORCPT
+        with ESMTP id S230437AbiEJCHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:07:18 -0400
+        Mon, 9 May 2022 22:07:44 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB30282452
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:03:21 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky1X30h4dzhYxZ;
-        Tue, 10 May 2022 10:02:43 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4BA210B94;
+        Mon,  9 May 2022 19:03:48 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky1V31sFpzGpdn;
+        Tue, 10 May 2022 10:00:59 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 10 May 2022 10:03:19 +0800
-Subject: Re: [PATCH 11/15] mm/swap: add helper swap_offset_available()
-To:     NeilBrown <neilb@suse.de>
-CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <vbabka@suse.cz>, <dhowells@redhat.com>, <apopple@nvidia.com>,
-        <david@redhat.com>, <surenb@google.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220509131416.17553-1-linmiaohe@huawei.com>
- <20220509131416.17553-12-linmiaohe@huawei.com>
- <165214355418.14782.13896859043718755300@noble.neil.brown.name>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <9319a62b-f43d-8ee9-77b9-a1afee7dbc10@huawei.com>
-Date:   Tue, 10 May 2022 10:03:19 +0800
+ 15.1.2375.24; Tue, 10 May 2022 10:03:46 +0800
+CC:     <yangyicong@hisilicon.com>, <weidong.huang@huawei.com>
+Subject: Re: [PATCH] pci: avoid dead lock between device reset and sriov
+ disable
+To:     Jay Zhou <jianjay.zhou@huawei.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
+        <alex.williamson@redhat.com>
+References: <20220404062539.1710-1-jianjay.zhou@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <0b146b52-054d-4f89-961a-65f29037e172@huawei.com>
+Date:   Tue, 10 May 2022 10:03:46 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <165214355418.14782.13896859043718755300@noble.neil.brown.name>
+In-Reply-To: <20220404062539.1710-1-jianjay.zhou@huawei.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
+X-Originating-IP: [10.67.102.169]
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,98 +51,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/10 8:45, NeilBrown wrote:
-> On Mon, 09 May 2022, Miaohe Lin wrote:
->> Add helper swap_offset_available() to remove some duplicated codes.
->> Minor readability improvement.
+On 2022/4/4 14:25, Jay Zhou wrote:
+> Call trace of PF SRIOV disable:
+> sriov_numvfs_store
+>   device_lock <----------------- (1) get the device lock
+>     ->sriov_configure # e.g. vfio_pci_sriov_configure
+>       sriov_disable
+>         pci_cfg_access_lock <--- (4) wait dev->block_cfg_access to be 0
 > 
-> I don't think that putting the spin_lock() inside the inline helper is
-> good for readability.
-> If the function was called
->    swap_offset_available_and_locked()
+> Call trace of PF reset:
+> reset_store
+>   pci_reset_function
+>     pci_dev_lock
+>       pci_cfg_access_lock <----- (2) set dev->block_cfg_access = 1
+>       device_lock <------------- (3) want to get the device lock
+> 
+> These two oprations would wait for each other forever if the
+> code execution sequence is (1)(2)(3)(4).
+> 
+> Let's get the device lock and then the config access lock in
+> pci_dev_lock().
+> 
+> Signed-off-by: Jay Zhou <jianjay.zhou@huawei.com>
 
-Yes, swap_offset_available_and_locked should be more suitable as we do the spin_lock
-inside it. Will do this in next version.
+The patch looks good to me,
 
-Thanks!
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
 
-> 
-> it might be ok.  Otherwise I would rather the spin_lock() was called
-> when the function returned true.
-> 
-> Thanks,
-> NeilBrown
-> 
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/swapfile.c | 33 +++++++++++++++++----------------
->>  1 file changed, 17 insertions(+), 16 deletions(-)
->>
->> diff --git a/mm/swapfile.c b/mm/swapfile.c
->> index c90298a0561a..d5d3e2d03d28 100644
->> --- a/mm/swapfile.c
->> +++ b/mm/swapfile.c
->> @@ -776,6 +776,21 @@ static void set_cluster_next(struct swap_info_struct *si, unsigned long next)
->>  	this_cpu_write(*si->cluster_next_cpu, next);
->>  }
->>  
->> +static inline bool swap_offset_available(struct swap_info_struct *si, unsigned long offset)
->> +{
->> +	if (data_race(!si->swap_map[offset])) {
->> +		spin_lock(&si->lock);
->> +		return true;
->> +	}
->> +
->> +	if (vm_swap_full() && READ_ONCE(si->swap_map[offset]) == SWAP_HAS_CACHE) {
->> +		spin_lock(&si->lock);
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>  static int scan_swap_map_slots(struct swap_info_struct *si,
->>  			       unsigned char usage, int nr,
->>  			       swp_entry_t slots[])
->> @@ -953,15 +968,8 @@ static int scan_swap_map_slots(struct swap_info_struct *si,
->>  scan:
->>  	spin_unlock(&si->lock);
->>  	while (++offset <= READ_ONCE(si->highest_bit)) {
->> -		if (data_race(!si->swap_map[offset])) {
->> -			spin_lock(&si->lock);
->> +		if (swap_offset_available(si, offset))
->>  			goto checks;
->> -		}
->> -		if (vm_swap_full() &&
->> -		    READ_ONCE(si->swap_map[offset]) == SWAP_HAS_CACHE) {
->> -			spin_lock(&si->lock);
->> -			goto checks;
->> -		}
->>  		if (unlikely(--latency_ration < 0)) {
->>  			cond_resched();
->>  			latency_ration = LATENCY_LIMIT;
->> @@ -970,15 +978,8 @@ static int scan_swap_map_slots(struct swap_info_struct *si,
->>  	}
->>  	offset = si->lowest_bit;
->>  	while (offset < scan_base) {
->> -		if (data_race(!si->swap_map[offset])) {
->> -			spin_lock(&si->lock);
->> +		if (swap_offset_available(si, offset))
->>  			goto checks;
->> -		}
->> -		if (vm_swap_full() &&
->> -		    READ_ONCE(si->swap_map[offset]) == SWAP_HAS_CACHE) {
->> -			spin_lock(&si->lock);
->> -			goto checks;
->> -		}
->>  		if (unlikely(--latency_ration < 0)) {
->>  			cond_resched();
->>  			latency_ration = LATENCY_LIMIT;
->> -- 
->> 2.23.0
->>
->>
-> .
-> 
+I met the same problem and tried to fix it in the same way. It's worth to be merged if somebody meets
+the same problem again.
+https://lore.kernel.org/linux-pci/1583489997-17156-1-git-send-email-yangyicong@hisilicon.com/
 
+> ---
+>  drivers/pci/pci.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..61a6db1d21f6 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -5103,19 +5103,19 @@ static int pci_reset_bus_function(struct pci_dev *dev, bool probe)
+>  
+>  void pci_dev_lock(struct pci_dev *dev)
+>  {
+> -	pci_cfg_access_lock(dev);
+>  	/* block PM suspend, driver probe, etc. */
+>  	device_lock(&dev->dev);
+> +	pci_cfg_access_lock(dev);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_dev_lock);
+>  
+>  /* Return 1 on successful lock, 0 on contention */
+>  int pci_dev_trylock(struct pci_dev *dev)
+>  {
+> -	if (pci_cfg_access_trylock(dev)) {
+> -		if (device_trylock(&dev->dev))
+> +	if (device_trylock(&dev->dev)) {
+> +		if (pci_cfg_access_trylock(dev))
+>  			return 1;
+> -		pci_cfg_access_unlock(dev);
+> +		device_unlock(&dev->dev);
+>  	}
+>  
+>  	return 0;
+> @@ -5124,8 +5124,8 @@ EXPORT_SYMBOL_GPL(pci_dev_trylock);
+>  
+>  void pci_dev_unlock(struct pci_dev *dev)
+>  {
+> -	device_unlock(&dev->dev);
+>  	pci_cfg_access_unlock(dev);
+> +	device_unlock(&dev->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_dev_unlock);
+>  
+> 

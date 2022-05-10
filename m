@@ -2,79 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328EC521CCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82676521CD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344809AbiEJOuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S1344607AbiEJOuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344990AbiEJOt1 (ORCPT
+        with ESMTP id S1345073AbiEJOuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:49:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB538B86F;
-        Tue, 10 May 2022 07:09:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E4BEB81B18;
-        Tue, 10 May 2022 14:09:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DCBC385C2;
-        Tue, 10 May 2022 14:09:48 +0000 (UTC)
-Date:   Tue, 10 May 2022 10:09:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Alison Chaiken <achaiken@aurora.tech>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
- context
-Message-ID: <20220510100946.5fdff700@gandalf.local.home>
-In-Reply-To: <20220509183934.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-References: <20220506182425.GC1790663@paulmck-ThinkPad-P17-Gen-1>
-        <YnY33nq5jl6FLFOu@pc638.lan>
-        <20220507223247.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-        <CAEXW_YSyYRSRQwfMTJU1dowMaxrj6Daa17-BMx4syoPV05bZFg@mail.gmail.com>
-        <20220508213222.GL1790663@paulmck-ThinkPad-P17-Gen-1>
-        <CAEXW_YQ9t8gxp9cKCpba+e4NZ6ohPr8jHxJYuqRBFRtvSDa0Lw@mail.gmail.com>
-        <20220509033740.GM1790663@paulmck-ThinkPad-P17-Gen-1>
-        <CAEXW_YSbWetMt2_-m4G9Nt5S8ybATihB+5FMJMMo3jKDG4pPjg@mail.gmail.com>
-        <20220509181417.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-        <YnldSkaWu40cVimj@pc638.lan>
-        <20220509183934.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 10 May 2022 10:50:06 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D06309346;
+        Tue, 10 May 2022 07:10:27 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 4C681890; Tue, 10 May 2022 09:10:25 -0500 (CDT)
+Date:   Tue, 10 May 2022 09:10:25 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Micah Morton <mortonm@chromium.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
+Message-ID: <20220510141025.GA7290@mail.hallyn.com>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-2-stefanb@linux.ibm.com>
+ <20220509195414.GA30894@mail.hallyn.com>
+ <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 11:39:34 -0700
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> This allows your current RCU_NOCB_CPU_CB_BOOST with something like
-> this in place of the "default n":
+On Tue, May 10, 2022 at 12:25:25PM +0200, Christian Brauner wrote:
+> On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
+> > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
+> > > From: Christian Brauner <brauner@kernel.org>
+> > > 
+> > > When securityfs creates a new file or directory via
+> > > securityfs_create_dentry() it will take an additional reference on the
+> > > newly created dentry after it has attached the new inode to the new
+> > > dentry and added it to the hashqueues.
+> > > If we contrast this with debugfs which has the same underlying logic as
+> > > securityfs. It uses a similar pairing as securityfs. Where securityfs
+> > > has the securityfs_create_dentry() and securityfs_remove() pairing,
+> > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
+> > > 
+> > > In contrast to securityfs, debugfs doesn't take an additional reference
+> > > on the newly created dentry in __debugfs_create_file() which would need
+> > > to be put in debugfs_remove().
+> > > 
+> > > The additional dget() isn't a problem per se. In the current
+> > > implementation of securityfs each created dentry pins the filesystem via
+> > 
+> > Is 'via' an extra word here or is there a missing word?
+> > 
+> > I'll delay the rest of my response as the missing word may answer my
+> > remaining question :)
 > 
-> 	default y if PREEMPT_RT
-> 	default n if !PREEMPT_RT
+> It can be both. It should either be removed or it should be followed by
+> "securityfs_create_dentry()". securityfs_create_dentry() takes two
+> references one in lookup_one_len() and another one explicitly via
+> dget(). The latter one isn't needed. Some of that has been covered in an
+> earlier thread:
+> https://lore.kernel.org/lkml/20220105101815.ldsm4s5yx7pmuiil@wittgenstein
 
-BTW, I don't think you need the !PREEMPT_RT, because all configs are
-'n' by  default. That is:
-
-	default y if PREEMPT_RT
-
-should be good enough.
-
--- Steve
+Yes, I saw that two references were being taken.  And near as I can tell,
+the second one was never being dropped.  So if you tell me that before this
+patch the dentries are never freed, then I'm happy.  Otherwise, I'm
+bothered the fact that no matching dput is being deleted in the code (to
+match the extra dget being removed).  So where is the code where the final
+dput was happening, and is it the d_delete() you're adding which is making
+it so that that dput won't be called now?

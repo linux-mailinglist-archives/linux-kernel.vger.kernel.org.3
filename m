@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE89D520FE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD52F521003
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238143AbiEJIrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S238205AbiEJIyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbiEJIrQ (ORCPT
+        with ESMTP id S235005AbiEJIyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:47:16 -0400
-Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACDA2A28DF;
-        Tue, 10 May 2022 01:43:18 -0700 (PDT)
-Received: from mail.csna.de (mail.csna.de [89.27.162.50])
-        by mail.pcs.gmbh with ESMTPA
-        ; Tue, 10 May 2022 10:43:15 +0200
-Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
-        by mail.csna.de with ESMTPA
-        ; Tue, 10 May 2022 10:43:15 +0200
-Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
- EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 10:43:15 +0200
-Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
- EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
- via Frontend Transport; Tue, 10 May 2022 10:43:15 +0200
-Date:   Tue, 10 May 2022 10:43:15 +0200
-From:   Thomas Pfaff <tpfaff@pcs.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>
-Subject: Re: [PATCH v3] irq/core: synchronize irq_thread startup
-In-Reply-To: <87mtg0m2jb.ffs@tglx>
-Message-ID: <e64aa9cb-a1ae-7534-8bf1-446d9d8c512@pcs.com>
-References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com> <87mtg0m2jb.ffs@tglx>
+        Tue, 10 May 2022 04:54:14 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47EED1B5495;
+        Tue, 10 May 2022 01:50:18 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 805DD1C80FD8;
+        Tue, 10 May 2022 16:50:17 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 10
+ May 2022 16:50:17 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Tue, 10 May 2022 16:50:17 +0800
+Message-ID: <47b7ec9f-1ed5-642e-5acc-b1398ca31774@nuvoton.com>
+Date:   Tue, 10 May 2022 16:50:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
-X-KSE-AntiSpam-Interceptor-Info: white sender email list
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 10.05.2022 06:00:00
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for
+ MA35D1
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        <ychuang570808@gmail.com>, "Rob Herring" <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
+        <cfli0@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+ <20220510032558.10304-4-ychuang3@nuvoton.com>
+ <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
+From:   Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,43 +63,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On Mon, 2 May 2022, Thomas Gleixner wrote:
+On 2022/5/10 下午 03:01, Arnd Bergmann wrote:
+> On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
+>> Add the initial device tree files for Nuvoton MA35D1 Soc.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>> +
+>> +/ {
+>> +       model = "Nuvoton MA35D1-EVB";
+>> +       compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
+>> +
+>> +       chosen {
+>> +               stdout-path = "serial0:115200n8";
+>> +       };
+> Something seems to be missing here: you set the console to the serial0
+> alias, but that is not defined anywhere, and the ma35d1.dtsi file does not
+> appear to define any UART at all. Are you still missing the driver for this?
+>
+> Please add a more detailed description in the changelog text above that
+> explains what kind of SoC this is (maybe a link to the product web page,
+> if there is one), and a status of how complete the support is: which drivers
+> are already merged, and which ones are still being worked on?
+>
+>          Arnd
 
-> On Mon, May 02 2022 at 13:28, Thomas Pfaff wrote:
-> > While running
-> > "while /bin/true; do setserial /dev/ttyS0 uart none;
-> > setserial /dev/ttyS0 uart 16550A; done"
-> > on a kernel with threaded irqs, setserial is hung after some calls.
-> >
-> > setserial opens the device, this will install an irq handler if the uart is
-> > not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
-> > Then the device is closed. On close, synchronize_irq() is called by
-> > serial_core.
-> 
-> This comment made me look deeper because I expected that free_irq()
-> would hang.
-> 
-> But free_irq() stopped issuing synchronize_irq() with commit
-> 519cc8652b3a ("genirq: Synchronize only with single thread on
-> free_irq()"). And that turns out to be the root cause of the problem.
-> I should have caught that back then, but in hindsight ....
-> 
+Hi Arnd,
 
-Sorry for coming back to this again late, but this makes me believe that 
-the real problem for the freeze in setserial is that uart_port_shutdown() 
-is calling synchronize_irq() after free_irq(), which is illegal in my 
-opinion.
+The serial driver is ready 
+(https://github.com/OpenNuvoton/MA35D1_linux-5.4.y/blob/master/drivers/tty/serial/ma35d1_serial.c),
+but we have to review the coding style and porting it from Linux 5.4.y 
+to 5.18.
 
-It can be done only before the interrupt thread is stopped, and free_irq() 
-itself is already taking care about synchronizing, no matter if its done by 
-__synchronize_hardirq() or by synchronize_irq(), like it was before commit 
-519cc8652b3a.
-If it is called after free_irq(), the context is already lost.
+In the next patch version, I will added a brief introduction about 
+MA35D1 in the cover-letter [PATCH 0/5].
 
-I am not sure about all the other drivers, but at least serial_core should 
-be fixed if you agree.
+Thanks for your review.
 
-Thanks,
-    Thomas
+Sincerely,
+Jacky Huang
+
 
 

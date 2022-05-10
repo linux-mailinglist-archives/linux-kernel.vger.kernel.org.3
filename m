@@ -2,172 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F335520A88
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3E6520A8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiEJBSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S234128AbiEJBTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiEJBSa (ORCPT
+        with ESMTP id S234115AbiEJBTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:18:30 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3D91847C3
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:14:34 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2f7c57ee6feso163765327b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:14:34 -0700 (PDT)
+        Mon, 9 May 2022 21:19:39 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC369FF1;
+        Mon,  9 May 2022 18:15:42 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-edeb6c3642so16691283fac.3;
+        Mon, 09 May 2022 18:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N2NYOBnGr3oC2HbawPc8n2japmW7gZ/2gS/4kyYGuoc=;
-        b=JbcRYkCc3dNkJImVIJeRCKnH0a6NvUueYeaeMCxC/VbHQDIFXeiIjr+Vka/KYytySi
-         4VGrbeecRB92r3uSg9lmdmodmKIHyDk/f/EHKWY+1aqymATjfKiHLI4auVq+twjRiS3t
-         0Fp3NS8Rg1Dc1R+PWLnyvqNKEfb+Jt14flg0AsKqlbnNJkVx6+FXojBYOSSQcr7r6V1y
-         uRFJC/Jhv0SVw/J2YibBjYzaF4TOX66NsSSlr0EA2BBbvk+eUl//PDfHZNIFk4zjrQql
-         k9Ux2q3vSVs963ZF65F/AJj5dyN1xAO1OSMREGpo7ug+WpXSr5dRyMmlc43WV1chQvHl
-         XnBA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=22X08gP2t/xBpwhITJ9mR4vQg1Gu37dtwLleQ2erYOo=;
+        b=StW4qPkcK9RbvFnzZLoWdVk3jigBeXgmsH12XrwYRbOjDYdRC71zb7O9NYfkCaM4mE
+         WYWDNUYrIZ2+eE/fUat9FfFz3K4H9H94Xo3cxHprfDf1VbwjCMb6K/Ca5Ot8YKobnGHQ
+         D6NlWYfCyScO3r3OQCSJbJFDJxiKsXGkl8hw7bAfsKqXazn/0wUViFDfc4bSDRyEqSnT
+         9F/ETu4p3mjRsBR5fD2J36IjYzJXjb1XiGJgWqQjBsmYLWmMoBg9boataIWLQTPfKuk7
+         ZobRb3V3LKRT2KWz3sCe6JQnnx38GTcvya1w5LnUivqv/dNBJ96B6f68Pvi/dhpj36pR
+         5msw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N2NYOBnGr3oC2HbawPc8n2japmW7gZ/2gS/4kyYGuoc=;
-        b=Xt86yi0H2moyEltYnIAw+615dafwGUNa69o8eNlrD8z8H8mFJ/IWLj3Z/Fzyxrl565
-         lxY0uNF3oBDf4AQVvn5H0I/LTlUU8SkkKwBy8dyV781Wc0L1NMnxS2vOw1Sdx7Tyjt37
-         682Wgut6ZYl0M567RfqIGwBFn3wZzs9raatw0ACdb4allyUO5nO3gNqyvxkAmamBgiL/
-         QlghGKEKuPDeNEETYbmTxuazz1Gi4AOvnMfTmQ6qSrvPCFGjciBCYUU3L8Sj562PtPpQ
-         7m7L99arMuQEht0qNWWVEgKvtdWl9MSB06im7hmghZ99f4pixHUcxIx1AZWYM1TtPJHM
-         9D3A==
-X-Gm-Message-State: AOAM533yl8nGA4fJ4Z2FjU4GOwzzmB92K9vOr7J8ZPpFbzTFVRqfRHDc
-        Qe5ZVbXt+Di20ILy8utxZ6fny8zvFQM4wp+vPC+FmA==
-X-Google-Smtp-Source: ABdhPJz7iKHIfKSmPqUxBSS1zpgdNd/jPtkOnn1arMXMwo1S/LhMZERgYbKqPV4gUn9Z2MyH46ri3/R5PmPGFP3UUhU=
-X-Received: by 2002:a0d:d80e:0:b0:2f8:39d8:1e8c with SMTP id
- a14-20020a0dd80e000000b002f839d81e8cmr17144278ywe.97.1652145273523; Mon, 09
- May 2022 18:14:33 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=22X08gP2t/xBpwhITJ9mR4vQg1Gu37dtwLleQ2erYOo=;
+        b=sqqp/GlY4um1d3+EZ/ycPetZViVk5g9onZEIASKoJZUQyrd2iDDZ9NaQmo5Ta6K9jf
+         AW8MF9SyGKrBbTTaL3ionUqaNDF9pOzVQbdMiRH5g8djrat/PMuJY7MaS2jOR1788+lt
+         L8txW1254DuE/GR0YM8ibd+mNkci1k+RvtAxVnMFO7OehWE5BArL+jy1dvNcbGs/ioyQ
+         0tJiDcqSihcvE9Dmyhmj+vClm7s8iKAQa09sWkHghTsKQMIWi7+GUJdjBn+423vShdoJ
+         1AMNA+pZTrrTYH2i70gNNRnJAwP/2o7VOMfO7mJF7/eV7DOsZbjNvU/ZEXnTHtHA/eUD
+         IdFw==
+X-Gm-Message-State: AOAM5332IEq3vvpxMG82T/04fgo17uJNZJaQq7clYdbjbcaQwHplTib7
+        IvKewubxb50lXLzECWROdwg=
+X-Google-Smtp-Source: ABdhPJycVqB8+h80gi3HgKQjt7NAWhCSBlm+8crCvvvi9tnnLb0Ge/aQTD0/Mu8bEq4aENmTcvSI0Q==
+X-Received: by 2002:a05:6870:a1a0:b0:e2:9331:cc30 with SMTP id a32-20020a056870a1a000b000e29331cc30mr8525902oaf.155.1652145342056;
+        Mon, 09 May 2022 18:15:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x35-20020a4a97e6000000b0035eb4e5a6d2sm5516651ooi.40.2022.05.09.18.15.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 18:15:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e3c78109-8b5e-efe6-b817-2f62c8bc8b1f@roeck-us.net>
+Date:   Mon, 9 May 2022 18:15:39 -0700
 MIME-Version: 1.0
-References: <20220505122331.42696-1-wuyun.abel@bytedance.com>
-In-Reply-To: <20220505122331.42696-1-wuyun.abel@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 9 May 2022 18:14:22 -0700
-Message-ID: <CABk29Ns3KBwLXBSwiSe7Pv2YE9iMg+A1kPpPESWG=KNJu9dz0w@mail.gmail.com>
-Subject: Re: [PATCH v3] sched/fair: filter out overloaded cpus in SIS
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] Watchdog: sp5100_tco: Lower verbosity of disabled
+ watchdog hardware
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jerry.Hoemann@hpe.com
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, ionut_n2001@yahoo.com
+References: <20220509163304.86-1-mario.limonciello@amd.com>
+ <b394bfcf-9f0d-b27c-5bc0-3d628de98755@roeck-us.net>
+ <20220510003339.GA2788@perchik.americas.hpqcorp.net>
+ <b3e1e442-50ef-abd2-5dc8-1c9943ff34ca@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <b3e1e442-50ef-abd2-5dc8-1c9943ff34ca@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
+On 5/9/22 17:37, Mario Limonciello wrote:
+> On 5/9/22 19:33, Jerry Hoemann wrote:
+>> On Mon, May 09, 2022 at 03:55:54PM -0700, Guenter Roeck wrote:
+>>> On 5/9/22 09:33, Mario Limonciello wrote:
+>>>> If watchdog hardware has been disabled, currently the kernel driver
+>>>> will show at err level during probe:
+>>>>
+>>>> "Watchdog hardware is disabled"
+>>>>
+>>>> This is unnecessarily verbose as there is already a -ENODEV returned.
+>>>> Lower the level to debug.
+>>>
+>>> Is it ? Without this message, a user may try to load the driver,
+>>> get an error message, and have no idea why the driver was not
+>>> enabled even though the hardware exists. If anything , -ENODEV
+>>> is less than perfect. Unfortunately there does not seem to be
+>>> a better error code, or at least I don't see one.
+>>>
+>>> Guenter
+>>
+>> Coincidentally, I was looking at this code on Friday.
+>>
+>> Some HPE Proliant servers are disabling the AMD WDT in BIOS.  However,
+>> sp5100_tco was still getting configured.  It was the lack of
+>> "Watchdog hardware is disabled" message that helped clue us into
+>> what was going on (Linux is enabling the WDT anyway.)
+>>
+>> So, I liked that this message exists.
+>>
+>> I'll send an RFC patch for this other issue as it orthogonal.
+>> But just wanted to point out the message is useful.
+> 
+> I personally don't have a problem blacklisting on a system I encounter this. I take anything at "err" level as there is a firmware problem or a hardware problem that should be looked at.
+> 
+> As the message is genuinely useful as Jerry points out how about meeting in the middle at info or notice?
+> 
 
-Overall this looks good, just a couple of comments.
+I really don't want to change it. It does point out a serious issue,
+intentional or not. Anyone concerned or disturbed about the message
+can easily block the module from loading, and others may rely on it.
+ From driver perspective it _is_ an error, and it should be treated
+as such.
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index d4bd299d67ab..79b4ff24faee 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6323,7 +6323,9 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->  static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
->  {
->         struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
-> +       struct sched_domain_shared *sds = sd->shared;
-> +       int nr, nro, weight = sd->span_weight;
-> +       int i, cpu, idle_cpu = -1;
->         struct rq *this_rq = this_rq();
->         int this = smp_processor_id();
->         struct sched_domain *this_sd;
-> @@ -6333,7 +6335,23 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->         if (!this_sd)
->                 return -1;
->
-> +       nro = atomic_read(&sds->nr_overloaded_cpus);
-> +       if (nro == weight)
-> +               goto out;
-
-This assumes that the sd we're operating on here is the LLC domain
-(true for current use). Perhaps to catch future bugs from changing
-this assumption, we could WARN_ON_ONCE(nro > weight).
-
-> +
-> +       nr = min_t(int, weight, p->nr_cpus_allowed);
-> +
-> +       /*
-> +        * It's unlikely to find an idle cpu if the system is under
-> +        * heavy pressure, so skip searching to save a few cycles
-> +        * and relieve cache traffic.
-> +        */
-> +       if (weight - nro < (nr >> 4) && !has_idle_core)
-> +               return -1;
-
-nit: nr / 16 is easier to read and the compiler will do the shifting for you.
-
-Was < intentional vs <= ? With <= you'll be able to skip the search in
-the case where both sides evaluate to 0 (can happen frequently if we
-have no idle cpus, and a task with a small affinity mask).
-
-This will also get a bit confused in the case where the task has many
-cpus allowed, but almost all of them on a different LLC than the one
-we're considering here. Apart from caching the per-LLC
-nr_cpus_allowed, we could instead use cpumask_weight(cpus) below (and
-only do this in the !has_idle_core case to reduce calls to
-cpumask_weight()).
-
-> +
->         cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
-> +       if (nro > 1)
-> +               cpumask_andnot(cpus, cpus, sdo_mask(sds));
-
-Just
-if (nro)
-?
-
-> @@ -6392,6 +6407,9 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->
->                 update_avg(&this_sd->avg_scan_cost, time);
->         }
-> +out:
-> +       if (has_idle_core)
-> +               WRITE_ONCE(sds->has_idle_cores, 0);
-
-nit: use set_idle_cores() instead (or, if you really want to avoid the
-extra sds dereference, add a __set_idle_cores(sds, val) helper you can
-call directly.
-
-> @@ -7904,6 +7922,7 @@ static struct task_struct *detach_one_task(struct lb_env *env)
->                         continue;
->
->                 detach_task(p, env);
-> +               update_overloaded_rq(env->src_rq);
->
->                 /*
->                  * Right now, this is only the second place where
-> @@ -8047,6 +8066,9 @@ static int detach_tasks(struct lb_env *env)
->                 list_move(&p->se.group_node, tasks);
->         }
->
-> +       if (detached)
-> +               update_overloaded_rq(env->src_rq);
-> +
-
-Thinking about this more, I don't see an issue with moving the
-update_overloaded_rq() calls to enqueue/dequeue_task, rather than here
-in the attach/detach_task paths. Overloaded state only changes when we
-pass the boundary of 2 runnable non-idle tasks, so thashing of the
-overloaded mask is a lot less worrisome than if it were updated on the
-boundary of 1 runnable task. The attach/detach_task paths run as part
-of load balancing, which can be on a millisecond time scale.
-
-Best,
-Josh
+Guenter

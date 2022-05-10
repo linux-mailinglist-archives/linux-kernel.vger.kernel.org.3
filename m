@@ -2,176 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A036521445
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984A152144C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241254AbiEJL4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S241290AbiEJL50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiEJL4u (ORCPT
+        with ESMTP id S230463AbiEJL5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:56:50 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AFB26FA62;
-        Tue, 10 May 2022 04:52:53 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so1831266pju.2;
-        Tue, 10 May 2022 04:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A0FdGVbgNiT4qf9UfDKCilymbnIPA66uo0bOacpn5kc=;
-        b=TrL7vgw9hX+FCcAXW++0XCOVJrf3QJUaGJVBqbSUUAypLKKmpB4cuOYtIBhwBMrido
-         OqyotI4LcRe4dMJ+sEuBiPjcoy6u9Gm8LaTMLc4E7CDUGb0NEMsgjYvEUgg7m8U3u0eG
-         uNqKuhwvdn/9hCqYeSgtXmc1eW1Sa1IgzmrTCEpa+QNwe72//BvLag9bFRowZv0amPW+
-         K0zp2D7YNGKRETl1r4545b2dw6ApogYm0APyDJ6wyU5HizQF3DIMoqbhuBwQs7H9835o
-         9Pk6qqzXIs+ZUWEJuKxUj0q5OpeKBpKG9AfN10aApJkGDNEWGTwjKMkXfgA78Uj/xo3I
-         DvJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A0FdGVbgNiT4qf9UfDKCilymbnIPA66uo0bOacpn5kc=;
-        b=V+GbZHTeeuHbhVw0gO7v3wf+caGlLjNp1VYCicnDxhanmyXF5u5lk95mA4lEr2kMkU
-         TtuV6XvyLxjJV1FELbbuOwoy7poEyMMsox8IRA3z32pEoCYcdNEzIVCyn462t2J4RFwF
-         7kXG5KdNO0IhbJnI/KzJzlv3GN4bDhUki364afp4sPjjlS05LCvcjMgmGu7hiEnhe4R8
-         K3v3YZIdLWw3zpkJ5W28VNFQUnYS56PchGPYB7+hpwnjN7Lgj5oJzl4OX3LwcOYsJtyb
-         7tvRTzOqcbrQql3mXmUTsPlLHD+Zk0dR6DN1E8YpqBfsLLASQqrhbwBCEnyJbBhEizQ7
-         YLUA==
-X-Gm-Message-State: AOAM532BITCDh1ovltHuuaQuJKJmYrFb33BPZ8oeddvgqP6BcOq41AWC
-        unWH819BJRMAAi6rUaO9nB4=
-X-Google-Smtp-Source: ABdhPJzpCGfzQ/16cQjuL/Vez63BhmyceYNV0JvhPj7xnj3Zr9CcnvI0VZftKedC7iCHhww0lp68Kw==
-X-Received: by 2002:a17:902:f24c:b0:15c:b564:e4cc with SMTP id j12-20020a170902f24c00b0015cb564e4ccmr20122350plc.137.1652183572783;
-        Tue, 10 May 2022 04:52:52 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170902e38100b0015e8d4eb1c8sm1828887ple.18.2022.05.10.04.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:52:52 -0700 (PDT)
-Message-ID: <627a5214.1c69fb81.1b7fb.47be@mx.google.com>
-X-Google-Original-Message-ID: <20220510115251.GA1357518@cgel.zte@gmail.com>
-Date:   Tue, 10 May 2022 11:52:51 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
-        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
-        linmiaohe@huawei.com, william.kucharski@oracle.com,
-        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
-        songmuchun@bytedance.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
-References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
- <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
- <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
- <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
- <6278fa75.1c69fb81.9c598.f794@mx.google.com>
- <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
- <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
- <Yno3pNQOn1lAMPnu@dhcp22.suse.cz>
+        Tue, 10 May 2022 07:57:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938E327F111;
+        Tue, 10 May 2022 04:53:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47908B81A0A;
+        Tue, 10 May 2022 11:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9E7C385A6;
+        Tue, 10 May 2022 11:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652183604;
+        bh=X1QVwFClp9JxInrjSYxI0mlCNQbr24dNo7/S+95efN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=syghnmj5lzHfIY+E5v4jJE0hutUfRYSXUe1UD9qXPiNu62ZV8BYEt7Ia1EkeeLDCx
+         pq7Uflq901Qrs9jnDOhQlWOjY3FAeP4SlQHwiWDs7D0gBnt35Xsmpl4WY8TZcLvOEf
+         xZqguXt1m8t14Y94scKtgonMzmagKqsm0crte2di4LsGzos3h2SsRYZewWCrfIElYl
+         NhUVaQDq6soEaHe40x80rNFogPlV4Se5aEFRSCPOP1NLvCeHXqJpMD4XkSKhttQpn7
+         AXOQyBkcQij/Kt/rbopkC+0AN5i36i6tMlDxCY7V6doaXUpNfZK8Rhz86L9ONXhfYu
+         9UqXGFdNjabzA==
+Date:   Tue, 10 May 2022 13:53:16 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220510115316.acr6gl5ayqszada6@wittgenstein>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yno3pNQOn1lAMPnu@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:00:04PM +0200, Michal Hocko wrote:
-> On Tue 10-05-22 01:43:38, CGEL wrote:
-> > On Mon, May 09, 2022 at 01:48:39PM +0200, Michal Hocko wrote:
-> > > On Mon 09-05-22 11:26:43, CGEL wrote:
-> > > > On Mon, May 09, 2022 at 12:00:28PM +0200, Michal Hocko wrote:
-> > > > > On Sat 07-05-22 02:05:25, CGEL wrote:
-> > > > > [...]
-> > > > > > If there are many containers to run on one host, and some of them have high
-> > > > > > performance requirements, administrator could turn on thp for them:
-> > > > > > # docker run -it --thp-enabled=always
-> > > > > > Then all the processes in those containers will always use thp.
-> > > > > > While other containers turn off thp by:
-> > > > > > # docker run -it --thp-enabled=never
-> > > > > 
-> > > > > I do not know. The THP config space is already too confusing and complex
-> > > > > and this just adds on top. E.g. is the behavior of the knob
-> > > > > hierarchical? What is the policy if parent memcg says madivise while
-> > > > > child says always? How does the per-application configuration aligns
-> > > > > with all that (e.g. memcg policy madivise but application says never via
-> > > > > prctl while still uses some madvised - e.g. via library).
-> > > > >
-> > > > 
-> > > > The cgroup THP behavior is align to host and totally independent just likes
-> > > > /sys/fs/cgroup/memory.swappiness. That means if one cgroup config 'always'
-> > > > for thp, it has no matter with host or other cgroup. This make it simple for
-> > > > user to understand or control.
-> > > 
-> > > All controls in cgroup v2 should be hierarchical. This is really
-> > > required for a proper delegation semantic.
-> > >
-> > 
-> > Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
-> > Some distributions like Ubuntu is still using cgroup v1.
+On Tue, May 10, 2022 at 05:49:04AM +0200, Miklos Szeredi wrote:
+> On Mon, 9 May 2022 at 14:48, Christian Brauner <brauner@kernel.org> wrote:
 > 
-> cgroup v1 interface is mostly frozen. All new features are added to the
-> v2 interface.
->
-
-So what about we add this interface to cgroup v2?
-
-> > > > If memcg policy madivise but application says never, just like host, the result
-> > > > is no THP for that application.
-> > > > 
-> > > > > > By doing this we could promote important containers's performance with less
-> > > > > > footprint of thp.
-> > > > > 
-> > > > > Do we really want to provide something like THP based QoS? To me it
-> > > > > sounds like a bad idea and if the justification is "it might be useful"
-> > > > > then I would say no. So you really need to come with a very good usecase
-> > > > > to promote this further.
-> > > > 
-> > > > At least on some 5G(communication technology) machine, it's useful to provide
-> > > > THP based QoS. Those 5G machine use micro-service software architecture, in
-> > > > other words one service application runs in one container.
-> > > 
-> > > I am not really sure I understand. If this is one application per
-> > > container (cgroup) then why do you really need per-group setting?
-> > > Does the application is a set of different processes which are only very
-> > > loosely tight?
-> > > 
-> > For micro-service architecture, the application in one container is not a
-> > set of loosely tight processes, it's aim at provide one certain service,
-> > so different containers means different service, and different service
-> > has different QoS demand. 
+> > One comment about this. We really need to have this interface support
+> > giving us mount options like "relatime" back in numeric form (I assume
+> > this will be possible.). It is royally annoying having to maintain a
+> > mapping table in userspace just to do:
+> >
+> > relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
+> > ro       -> MS_RDONLY/MOUNT_ATTR_RDONLY
+> >
+> > A library shouldn't be required to use this interface. Conservative
+> > low-level software that keeps its shared library dependencies minimal
+> > will need to be able to use that interface without having to go to an
+> > external library that transforms text-based output to binary form (Which
+> > I'm very sure will need to happen if we go with a text-based
+> > interface.).
 > 
-> OK, if they are tightly coupled you could apply the same THP policy by
-> an existing prctl interface. Why is that not feasible. As you are noting
-> below...
+> Agreed.
 > 
-> >     5.containers usually managed by compose software, which treats container as
-> > base management unit;
+> >   This pattern of requesting the size first by passing empty arguments,
+> >   then allocating the buffer and then passing down that buffer to
+> >   retrieve that value is really annoying to use and error prone (I do
+> >   of course understand why it exists.).
+> >
+> >   For real xattrs it's not that bad because we can assume that these
+> >   values don't change often and so the race window between
+> >   getxattr(GET_SIZE) and getxattr(GET_VALUES) often doesn't matter. But
+> >   fwiw, the post > pre check doesn't exist for no reason; we do indeed
+> >   hit that race.
 > 
-> ..so the compose software can easily start up the workload by using prctl
-> to disable THP for whatever workloads it is not suitable for.
+> That code is wrong.  Changing xattr size is explicitly documented in
 
-prctl(PR_SET_THP_DISABLE..) can not be elegance to support the semantic we
-need. If only some containers needs THP, other containers and host do not need
-THP. We must set host THP to always first, and call prctl() to close THP for
-host tasks and other containers one by one, in this process some tasks that
-start before we call prctl() may already use THP with no need. 
+When recursively changing the ownership of a filesystem tree for a
+container some xattrs will need to be updated as well.
 
-And compose's semantic treats container as base unit to manage not tasks. See:
-https://docs.docker.com/compose/
+For example, if I have files with POSIX ACLs set which store {g,u}ids
+then the ACL needs to be updated to store the {g,u}id mapped to the
+container so the container can interpret them when started.
 
-If we treat container as lightweight virtual machine things may become clearer:
-this virtual machine has it's own THP policy being set just likes
-/sys/kernel/mm/transparent_hugepage/enabled in host, it has nothing to do
-with host or other virtual machine.
+That is a rather sensitive operation with loads of potentials for bugs.
+So if a POSIX ACL changes beneath the chowning daemon they must be
+conservative because it means that there's concurrent modfication or
+possibly an attack going on.
 
-> -- 
-> Michal Hocko
-> SUSE Labs
+In general, I feel it's a bit easy to judge the code is wrong without
+looking at the concrete scenario.
+
+I'm also unsure how the manpage implies it's not an error condition.
+Afaict, it only implies that the caller needs to handle the case where
+the xattr changes. Whether or not that's an error is up to the caller to
+decide. If the caller expects to be the sole user of a specific
+filesystems then a changing xattr in between should probably be an error
+condition.
+
+But I think we're starting to go on a detour.
+
+> the man page as a non-error condition:
+> 
+>        If size is specified as zero, these calls return the  current  size  of
+>        the  named extended attribute (and leave value unchanged).  This can be
+>        used to determine the size of the buffer that should be supplied  in  a
+>        subsequent  call.   (But, bear in mind that there is a possibility that
+>        the attribute value may change between the two calls,  so  that  it  is
+>        still necessary to check the return status from the second call.)
+> 
+> >
+> >   In addition, it is costly having to call getxattr() twice. Again, for
+> >   retrieving xattrs it often doesn't matter because it's not a super
+> >   common operation but for mount and other info it might matter.
+> 
+> You don't *have* to retrieve the size, it's perfectly valid to e.g.
+> start with a fixed buffer size and double the size until the result
+> fits.
+
+Yes, I understand and accept that. I'm just not fond of such APIs.
+
+> 
+> > * Would it be possible to support binary output with this interface?
+> >   I really think users would love to have an interfact where they can
+> >   get a struct with binary info back.
+> 
+> I think that's bad taste.   fsinfo(2) had the same issue.  As well as
+> mount(2) which still interprets the last argument as a binary blob in
+> certain cases (nfs is one I know of).
+
+In the same vein I could argue it's bad taste that everything gets
+returned as a string. But I do agree that binary blobs through void
+pointers aren't elegant.
+
+I just worry that if we have an interface and there's a legitimate
+subset of users that would be well served by a simple struct for e.g.,
+mount properties any attempt to get something like this in the form of a
+separate system call will be shut down with the argument that we already
+have an interface for this.
+
+So I'd compromise if we have your/any other interface return binary
+blobs. But of course I'd be equally happy if we'd at least expose basic
+mount information in the form of a separate system call.
+
+> 
+> >   Especially for some information at least. I'd really love to have a
+> >   way go get a struct mount_info or whatever back that gives me all the
+> >   details about a mount encompassed in a single struct.
+> 
+> If we want that, then can do a new syscall with that specific struct
+> as an argument.
+
+Ok, that sounds good to me.
+
+> 
+> >   Callers like systemd will have to parse text and will end up
+> >   converting everything from text into binary anyway; especially for
+> >   mount information. So giving them an option for this out of the box
+> >   would be quite good.
+> 
+> What exactly are the attributes that systemd requires?
+
+We keep a repo with ideas for (kernel) extensions - we should probably
+publish that somewhere - but the list we used for a prototype roughly
+contains:
+
+* mount flags MOUNT_ATTR_RDONLY etc.
+* time flags MOUNT_ATTR_RELATIME etc. (could probably be combined with
+  mount flags. We missed the opportunity to make them proper enums
+  separate from other mount flags imho.)
+* propagation "flags" (MS_SHARED)
+* peer group
+* mnt_id of the mount
+* mnt_id of the mount's parent
+* owning userns
+
+There's a bit more advanced stuff systemd would really want but which I
+think is misplaced in a mountinfo system call including:
+* list of primary and auxiliary block device major/minor
+* diskseq value of those device nodes (This is a new block device
+  feature we added that allows preventing device recycling issues when
+  e.g. removing usb devices very quickly and is needed for udev.)
+* uuid/fsid
+* feature flags (O_TMPFILE, RENAME_EXCHANGE supported etc.)
+
+> 
+> >   Interfaces like statx aim to be as fast as possible because we exptect
+> >   them to be called quite often. Retrieving mount info is quite costly
+> >   and is done quite often as well. Maybe not for all software but for a
+> >   lot of low-level software. Especially when starting services in
+> >   systemd a lot of mount parsing happens similar when starting
+> >   containers in runtimes.
+> 
+> Was there ever a test patch for systemd using fsinfo(2)?  I think not.
+> 
+> Until systemd people start to reengineer the mount handing to allow
+> for retrieving a single mount instead of the complete mount table we
+> will never know where the performance bottleneck lies.
+
+I defer to Ian and Karel to answer that. Both did work to prove that
+point triggered by one of your objections to fsinfo() iirc. Karel's
+commits at least are here:
+https://github.com/util-linux/util-linux/tree/topic/fsinfo
+
+> 
+> >
+> > * If we decide to go forward with this interface - and I think I
+> >   mentioned this in the lsfmm session - could we please at least add a
+> >   new system call? It really feels wrong to retrieve mount and other
+> >   information through the xattr interfaces. They aren't really xattrs.
+> 
+> I'd argue with that statement.  These are most definitely attributes.
+> As for being extended, we'd just extended the xattr interface...
+
+I just have a really hard time understanding how this belongs into the
+(f)getxattr() system call family and why it would be a big deal to just
+make this a separate system call.
+
+I saw that Dave has a long mail on the history of all this so maybe
+that'll help me. I hope I get around to reading it in detail today.
+
+> 
+> Naming aside... imagine that read(2) has always been used to retrieve
+> disk data, would you say that reading data from proc feels wrong?
+> And in hindsight, would a new syscall for the purpose make any sense?
+
+I think past interface decisions don't need to always inform future
+interface decisions.
+And fwiw, yes. Imho, there's stuff in proc that should indeed have been
+covered by a dedicated system call instead of a read-like interface.

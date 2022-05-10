@@ -2,82 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA3D522249
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D347452224B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347933AbiEJRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S1347929AbiEJRZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347919AbiEJRZG (ORCPT
+        with ESMTP id S1347937AbiEJRZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:25:06 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED123A1BB;
-        Tue, 10 May 2022 10:21:02 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id m25so19250828oih.2;
-        Tue, 10 May 2022 10:21:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oMzOMHbyZL+xpBkMzkSynF3FtiNncyHat+FTsJFqJKY=;
-        b=nUGKxNtgHCDrU71KcwAm30zju4pEzV5nStIzllUQkojE+80dALxFEmXsA+VLOZhvNK
-         UjV7QleQsyoZAyiHtzGRl8JzUqyIGu/3cffKSsm7B44yU+N8YAJaV3MqkeVl6Tkup1yg
-         bo2Et7zSbJcI5Tgx0b0QYusJBTpOE7Lr5YkyO+cnHkRQxhsH8tH1A3qz9oqOlOIaBkJm
-         C072Ukn9Tld1m7aN2X+YxeZJuIQaFXQykBTYUg+lheV++IXS48z+PFH8/QH7KW6Cxihu
-         bGjmb3iHzonnkhw1lJcJh068X/e6PGQsge7mLvkMQllCL3Xk9g1LfQ+tjggPMm8RCdSm
-         MBXg==
-X-Gm-Message-State: AOAM531uWK1G9HK5dK+zn+i2yosbLquqwzZTdwMbnL5QK5AaR3+jiFaq
-        gjhIz9HYXTjW5mNkosXPUQ==
-X-Google-Smtp-Source: ABdhPJznU/OK4X6N6Bam1z+KQxPFq1bK52J+cIR4GOgkdzKpqKmgFPS7YZjpDW22cMbMfK7vuKe6Lw==
-X-Received: by 2002:aca:502:0:b0:2cd:c24:278f with SMTP id 2-20020aca0502000000b002cd0c24278fmr539112oif.150.1652203262272;
-        Tue, 10 May 2022 10:21:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i9-20020a4aab09000000b0035eb4e5a6ccsm6343573oon.34.2022.05.10.10.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 10:21:01 -0700 (PDT)
-Received: (nullmailer pid 2231680 invoked by uid 1000);
-        Tue, 10 May 2022 17:21:01 -0000
-Date:   Tue, 10 May 2022 12:21:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, hsinyi@chromium.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v10 2/4] dt-bindings: arm: mediatek: Add mt8186 pericfg
- compatible
-Message-ID: <Ynqe/d2+UT1V8Y+3@robh.at.kernel.org>
-References: <20220510075233.5426-1-allen-kh.cheng@mediatek.com>
- <20220510075233.5426-3-allen-kh.cheng@mediatek.com>
+        Tue, 10 May 2022 13:25:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FEB47555
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652203280; x=1683739280;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=08SY71Ng4G0N/rI2hS7Vun0kGMOGwN2roqdqEDegvnE=;
+  b=FBBT3FQsiTv0uCACu5tqI4iNagU6i5C7xS/bTVBn0fWo2an5ePP7M72x
+   o9TI89KheymuFYFpkwyNj5kr5bice4TGRAfSaxjTfNxorZmROOCS6I+Lk
+   WAefj3D2XRpFmIJxROZHHG0NHADexDzD9N8kxYT9YAZpUULXQ4YXzJMyB
+   oaMiYQ0hHSXvmmMj3XZGzHVr/WXZHUReVnjLVFRFqSlVtKHKy8xAwGcs/
+   Er+W8KUClK1EsnczGKETs9PsQVvD3H9Bf5yH/ALxw9MFTZ8C+WZqQ4IaW
+   rxxfysWYluKAojY0eFz05Be9+thjJKGnCN3rmCdaNNt8hYbfKtPXlERSK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="268286920"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="268286920"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 10:21:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="593633218"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.3])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 10:21:17 -0700
+Message-ID: <aba8a38f-3d91-b925-dc26-61a48597089c@intel.com>
+Date:   Tue, 10 May 2022 20:21:12 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510075233.5426-3-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 01/23] perf intel-pt: Add a test for system-wide side
+ band
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-2-adrian.hunter@intel.com>
+ <YnqedF9WI//2oXw2@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YnqedF9WI//2oXw2@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 15:52:31 +0800, Allen-KH Cheng wrote:
-> Add mt8186 pericfg compatible to binding document.
+On 10/05/22 20:18, Arnaldo Carvalho de Melo wrote:
+> Em Fri, May 06, 2022 at 03:25:39PM +0300, Adrian Hunter escreveu:
+>> Add a test for system-wide side band even when tracing selected CPUs.
+>>
+>> Tested-by: Ian Rogers <irogers@google.com>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml       | 1 +
->  1 file changed, 1 insertion(+)
 > 
+> [root@quaco ~]# uname -a
+> Linux quaco 5.16.13-200.fc35.x86_64 #1 SMP PREEMPT Tue Mar 8 22:50:58 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+> [root@quaco ~]# grep -m1 -i "model name" /proc/cpuinfo 
+> model name	: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+> [root@quaco ~]# perf test -v Misc
+>  97: Miscellaneous Intel PT testing                                  :
+> --- start ---
+> test child forked, pid 769475
+> [ perf record: Woken up 1 times to write data ]
+> [ perf record: Captured and wrote 1.352 MB /tmp/tmp.Ty4Rqnz4vz ]
+> [ perf record: Woken up 1 times to write data ]
+> [ perf record: Captured and wrote 1.352 MB /tmp/tmp.Ty4Rqnz4vz ]
+> Linux
+> [ perf record: Woken up 1 times to write data ]
+> [ perf record: Captured and wrote 1.446 MB /tmp/tmp.TnEqenwzZv ]
+> Failed to record MMAP events on CPU 1 when tracing CPU 0
+> test child finished with -1
+> ---- end ----
+> Miscellaneous Intel PT testing: FAILED!
+> [root@quaco ~]# 
+> 
+> Do I need some more recent machine or kernel?
 
-Acked-by: Rob Herring <robh@kernel.org>
+I put it only in the cover letter sorry but "The first patch is a small Intel PT test for system-wide side band.  The
+test fails before the patches are applied, passed afterwards."

@@ -2,141 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1697521F86
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA76521F66
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346395AbiEJPua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S1346287AbiEJPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346253AbiEJPsq (ORCPT
+        with ESMTP id S1346208AbiEJPsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:48:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4592281341;
-        Tue, 10 May 2022 08:44:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B866142F;
-        Tue, 10 May 2022 15:44:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEB8C385CA;
-        Tue, 10 May 2022 15:44:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652197468;
-        bh=21bwpjNudExl89E+GWay/earnO1hhomI8Dv+7vwzFGE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sqpvUS8ZgmHhDeo0KFl0Nkrv41ZmRy2f4Gvezhty9ov9qd4cbBshyOjn1JugpF90R
-         /Q6dnOwktw7rHOMoSADOW1HQSVN/29Yasb9BcL0bvavjyhgG/8BjRyItSoFOkY3AUM
-         lzEtHdFvhNySKf5Ku7mvMzsJJjQwHcXsgt+/ZAQnMg+ct29eZEJn2l9pvcD7m40c8M
-         qWmNfMb21M6PjUb9vbjq4sm7cwOvvkqHkfcER7JdnJoCYI3npaCymLPDIkxh+udnRy
-         bblDgOAo3ghINMD+vgHreEDq6Lik8sUTf88ab7lwagq1VS/lzaJ5Xr897GIT5dDC5Z
-         D/Nt6aSSQlPzw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        James.Bottomley@HansenPartnership.com, dave.anglin@bell.net,
-        linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 21/21] Revert "parisc: Fix patch code locking and flushing"
-Date:   Tue, 10 May 2022 11:43:40 -0400
-Message-Id: <20220510154340.153400-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220510154340.153400-1-sashal@kernel.org>
-References: <20220510154340.153400-1-sashal@kernel.org>
+        Tue, 10 May 2022 11:48:11 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09FB4;
+        Tue, 10 May 2022 08:44:03 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-edeb6c3642so18761843fac.3;
+        Tue, 10 May 2022 08:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RwhvTaPMTXS/r9Tvnic8Vj/MtLD+ZHDCwWAKS1sXAWg=;
+        b=VQ7IuGmdb1SlC/0XtZXIr5zAeGWxfbyxHoFWzy2+8b6P1Xd/Ev8qQ9bUuZ4F5Mg2Th
+         JbvEBIFbi/QW5d+INrvGjuQP5gPMtEVQB5gCVUlTipzrW0kQNls5Em0xz3G1T19PpNf0
+         cU/ehLjXOZ4ck9mhA1SC8pG9BQXxS9Cgkje8Gd8FZZmpieJGDmjg+6zckKG1PYmtwPZS
+         T52Z/FHigzV6six7SFd2lRA75rtqe69yRCJjiuASDXy+LeDQ+q2bwRwQf+2cwXTeTR+t
+         SLX62Wo1xOpGSUnDuAu933ocDrsPhDexNRiYo9ACBqiswkVOzzEUMH65o41nj3UouJ5q
+         LcuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RwhvTaPMTXS/r9Tvnic8Vj/MtLD+ZHDCwWAKS1sXAWg=;
+        b=RJA4d2bcrm1aWS1XSyljgPHu6wrJogn/UKa6h4hhouuCSujaYIC7mARs9d9w5qe8mD
+         0pXtxf4rcffdCcgORNsWhX7O+YvMyN+2zUP9lbA13fjoY8MJPcMo6RbaIwCDkV00qySd
+         TWe5VUg684uHQhTs6183KjIv6K7k7aUppZ5oQ5uSeBikIceAjPKFaIyx2FElBq+yeaKn
+         +DTFR+Gb9N1qLboMEo5W6W7GphjmQi/2jGdqjySUhIbU1/tnqrdSJHme5CpxxRN/1ZqJ
+         YzG4oXfSr8fh/LtvUAqqXICFZMHeDQG6RIUEn1/HZZfelyHyRg54noxdWQ+YPLWUxEGd
+         ApQw==
+X-Gm-Message-State: AOAM531o1n2vCWDTjpVVrdBZQKhrN0lqun0OfURlR0FcmqLA1QUCQYpA
+        Up+JBqLHcL50Ae7ja0sOvGT5QjXak95acOTA8r0=
+X-Google-Smtp-Source: ABdhPJzq7EsizdFxJD9pqNfA33imiXEI04vaxV7qYRPqCUlkNnMEYmisEAnGOvnfsSO7iyfRvrcOd8lNiqIxMUiw/ik=
+X-Received: by 2002:a05:6871:611:b0:ed:9b5e:261f with SMTP id
+ w17-20020a056871061100b000ed9b5e261fmr422216oan.276.1652197442217; Tue, 10
+ May 2022 08:44:02 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510152811.88071-1-schspa@gmail.com>
+ <CAJZ5v0hj_7tGTQm8q4AVqL6F=Y6FzGP=UV7TkbJ=hJk2LPCN1Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hj_7tGTQm8q4AVqL6F=Y6FzGP=UV7TkbJ=hJk2LPCN1Q@mail.gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Tue, 10 May 2022 23:43:50 +0800
+Message-ID: <CAMA88Tpj6Gv6xMajNOtiVpwXd8UdjokMzvXgU9z90uzbF6moSQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: fix race on cpufreq online
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+Rafael J. Wysocki <rafael@kernel.org> =E4=BA=8E2022=E5=B9=B45=E6=9C=8810=E6=
+=97=A5=E5=91=A8=E4=BA=8C 23:35=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, May 10, 2022 at 5:28 PM Schspa Shi <schspa@gmail.com> wrote:
+> >
+> > When cpufreq online failed, policy->cpus are not empty while
+> > cpufreq sysfs file available, we may access some data freed.
+> >
+> > Take policy->clk as an example:
+> >
+> > static int cpufreq_online(unsigned int cpu)
+> > {
+> >   ...
+> >   // policy->cpus !=3D 0 at this time
+> >   down_write(&policy->rwsem);
+> >   ret =3D cpufreq_add_dev_interface(policy);
+> >   up_write(&policy->rwsem);
+> >
+> >   down_write(&policy->rwsem);
+> >   ...
+> >   /* cpufreq nitialization fails in some cases */
+> >   if (cpufreq_driver->get && has_target()) {
+> >     policy->cur =3D cpufreq_driver->get(policy->cpu);
+> >     if (!policy->cur) {
+> >       ret =3D -EIO;
+> >       pr_err("%s: ->get() failed\n", __func__);
+> >       goto out_destroy_policy;
+> >     }
+> >   }
+> >   ...
+> >   up_write(&policy->rwsem);
+> >   ...
+> >
+> >   return 0;
+> >
+> > out_destroy_policy:
+> >         for_each_cpu(j, policy->real_cpus)
+> >                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+> >     up_write(&policy->rwsem);
+> > ...
+> > out_exit_policy:
+> >   if (cpufreq_driver->exit)
+> >     cpufreq_driver->exit(policy);
+> >       clk_put(policy->clk);
+> >       // policy->clk is a wild pointer
+> > ...
+> >                                     ^
+> >                                     |
+> >                             Another process access
+> >                             __cpufreq_get
+> >                               cpufreq_verify_current_freq
+> >                                 cpufreq_generic_get
+> >                                   // acces wild pointer of policy->clk;
+> >                                     |
+> >                                     |
+> > out_offline_policy:                 |
+> >   cpufreq_policy_free(policy);      |
+> >     // deleted here, and will wait for no body reference
+> >     cpufreq_policy_put_kobj(policy);
+> > }
+> >
+> > We can fix it by clear the policy->cpus mask.
+> > Both show_scaling_cur_freq and show_cpuinfo_cur_freq will return an
+> > error by checking this mask, thus avoiding UAF.
+> >
+> > Signed-off-by: Schspa Shi <schspa@gmail.com>
+> >
+> > ---
+> >
+> > Changelog:
+> > v1 -> v2:
+> >         - Fix bad critical region enlarge which causes uninitialized
+> >           unlock.
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 80f535cc8a75..8edfa840dd74 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int cpu)
+> >                 down_write(&policy->rwsem);
+> >                 policy->cpu =3D cpu;
+> >                 policy->governor =3D NULL;
+> > -               up_write(&policy->rwsem);
+> >         } else {
+> >                 new_policy =3D true;
+> >                 policy =3D cpufreq_policy_alloc(cpu);
+> >                 if (!policy)
+> >                         return -ENOMEM;
+> > +               down_write(&policy->rwsem);
+> >         }
+> >
+> >         if (!new_policy && cpufreq_driver->online) {
+>
+> You seem to have missed the down_write() before the
+>
+> cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
+>
+> statement.
+>
+> It needs to be removed, because the semaphore is already being held
+> for writing at that point after the changes above.
+>
 
-[ Upstream commit 6c800d7f55fcd78e17deae5ae4374d8e73482c13 ]
+Sorry for that, I have upload a v3 patch to remove this.
 
-This reverts commit a9fe7fa7d874a536e0540469f314772c054a0323.
-
-Leads to segfaults on 32bit kernel.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > @@ -1533,7 +1533,7 @@ static int cpufreq_online(unsigned int cpu)
+> >         for_each_cpu(j, policy->real_cpus)
+> >                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+> >
+> > -       up_write(&policy->rwsem);
+> > +       cpumask_clear(policy->cpus);
+> >
+> >  out_offline_policy:
+> >         if (cpufreq_driver->offline)
+> > @@ -1542,6 +1542,7 @@ static int cpufreq_online(unsigned int cpu)
+> >  out_exit_policy:
+> >         if (cpufreq_driver->exit)
+> >                 cpufreq_driver->exit(policy);
+> > +       up_write(&policy->rwsem);
+> >
+> >  out_free_policy:
+> >         cpufreq_policy_free(policy);
+> > --
 ---
- arch/parisc/kernel/patch.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/arch/parisc/kernel/patch.c b/arch/parisc/kernel/patch.c
-index e59574f65e64..80a0ab372802 100644
---- a/arch/parisc/kernel/patch.c
-+++ b/arch/parisc/kernel/patch.c
-@@ -40,7 +40,10 @@ static void __kprobes *patch_map(void *addr, int fixmap, unsigned long *flags,
- 
- 	*need_unmap = 1;
- 	set_fixmap(fixmap, page_to_phys(page));
--	raw_spin_lock_irqsave(&patch_lock, *flags);
-+	if (flags)
-+		raw_spin_lock_irqsave(&patch_lock, *flags);
-+	else
-+		__acquire(&patch_lock);
- 
- 	return (void *) (__fix_to_virt(fixmap) + (uintaddr & ~PAGE_MASK));
- }
-@@ -49,7 +52,10 @@ static void __kprobes patch_unmap(int fixmap, unsigned long *flags)
- {
- 	clear_fixmap(fixmap);
- 
--	raw_spin_unlock_irqrestore(&patch_lock, *flags);
-+	if (flags)
-+		raw_spin_unlock_irqrestore(&patch_lock, *flags);
-+	else
-+		__release(&patch_lock);
- }
- 
- void __kprobes __patch_text_multiple(void *addr, u32 *insn, unsigned int len)
-@@ -61,9 +67,8 @@ void __kprobes __patch_text_multiple(void *addr, u32 *insn, unsigned int len)
- 	int mapped;
- 
- 	/* Make sure we don't have any aliases in cache */
--	flush_kernel_dcache_range_asm(start, end);
--	flush_kernel_icache_range_asm(start, end);
--	flush_tlb_kernel_range(start, end);
-+	flush_kernel_vmap_range(addr, len);
-+	flush_icache_range(start, end);
- 
- 	p = fixmap = patch_map(addr, FIX_TEXT_POKE0, &flags, &mapped);
- 
-@@ -76,10 +81,8 @@ void __kprobes __patch_text_multiple(void *addr, u32 *insn, unsigned int len)
- 			 * We're crossing a page boundary, so
- 			 * need to remap
- 			 */
--			flush_kernel_dcache_range_asm((unsigned long)fixmap,
--						      (unsigned long)p);
--			flush_tlb_kernel_range((unsigned long)fixmap,
--					       (unsigned long)p);
-+			flush_kernel_vmap_range((void *)fixmap,
-+						(p-fixmap) * sizeof(*p));
- 			if (mapped)
- 				patch_unmap(FIX_TEXT_POKE0, &flags);
- 			p = fixmap = patch_map(addr, FIX_TEXT_POKE0, &flags,
-@@ -87,10 +90,10 @@ void __kprobes __patch_text_multiple(void *addr, u32 *insn, unsigned int len)
- 		}
- 	}
- 
--	flush_kernel_dcache_range_asm((unsigned long)fixmap, (unsigned long)p);
--	flush_tlb_kernel_range((unsigned long)fixmap, (unsigned long)p);
-+	flush_kernel_vmap_range((void *)fixmap, (p-fixmap) * sizeof(*p));
- 	if (mapped)
- 		patch_unmap(FIX_TEXT_POKE0, &flags);
-+	flush_icache_range(start, end);
- }
- 
- void __kprobes __patch_text(void *addr, u32 insn)
--- 
-2.35.1
-
+BRs
+Schspa Shi

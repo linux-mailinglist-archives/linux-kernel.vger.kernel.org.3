@@ -2,127 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE356520F8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E4D520F92
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbiEJIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S237781AbiEJIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiEJIQc (ORCPT
+        with ESMTP id S232607AbiEJIUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:16:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0E712B025
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:12:34 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso1448362pjw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GgyywbUmtILgp/wvvcsqELPk8sbdswIe5sEtYfMivvE=;
-        b=rNbeIahNNjFADBiapx76jRbHbwNwPqBjvbS/yGH4r1iAKLOzpPaEC9ZDc8hkixik73
-         P5uD0eZRQv8jWs5/sV+8UV3bidqToM98pKnpRIuUkYOfhfstIwTJoPBxA/uz2PdvEQ9I
-         K/m0YsAXA7u2zeUHjBxT7KL5oi8XIhwNZDjqLOxOEEC1GmumbHrC0W6UmwAJ5Nq6F40H
-         ZneAzcK3oab6uJyxJMXx4u1MPuEDb9svPJ0VmuW/xJ2DAjoofz7pBDNWSY6YvAdglEAt
-         GYPDfTst6IAi1aUPvylXif9IxulGpqXGh7TuOP3YdX/TJEfrA/GDsOodVmyIoqrMEjBt
-         kBOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GgyywbUmtILgp/wvvcsqELPk8sbdswIe5sEtYfMivvE=;
-        b=5SlWiLcuOb1Jc8lkOcCaOJNYh0yjq/VPv2Z+MwcCJBag/gSDj3i+XJC84hwMNUTv53
-         Rjean8p8spYRoCYRoouA9Scl3wFxz1AFAabpref1VQ6MSIf7QxnELrW1WvcxPzky5GYY
-         3UgQORqfqTsK0qF8fUckCRnyQP3nHWBWzVK6f+II1rMGKiOG1GvNZIq4Jrnp6xE8M/j5
-         PAasdAPNMllxi819Q7RmFyNEwyxy5wYHYdanbeOnlzXVRqxCHApCV4uGwX+UcykwfSFI
-         ahBoUiixS/9/u5WbXohV1qtwGWP41esfvATFrMkIUn+Z1VPhntrt6EA7ZRfEGwF7u/aW
-         w+nQ==
-X-Gm-Message-State: AOAM530KSVSSqVfQLOPm1KBuXv+YcmkTJmmk+X/o4g0tlMCFdeejqlnL
-        HHaaZ+inyu+sWJ7ECPk6iIlS1Q==
-X-Google-Smtp-Source: ABdhPJwcv12Soh8pLojrYlMpwtpxb8N7+SLb4GnvbtYHqs/lqRSoCcmiAtufKplJ/GKYTHrtAaj0QA==
-X-Received: by 2002:a17:903:410b:b0:15c:fd57:aa34 with SMTP id r11-20020a170903410b00b0015cfd57aa34mr19368857pld.82.1652170354409;
-        Tue, 10 May 2022 01:12:34 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b15-20020a056a0002cf00b0050dc762814dsm10011525pft.39.2022.05.10.01.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 01:12:33 -0700 (PDT)
-Date:   Tue, 10 May 2022 13:42:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: mediatek: Fix potential deadlock problem in
- mtk_cpufreq_set_target
-Message-ID: <20220510081232.4u25qgryszzqblho@vireshk-i7>
-References: <20220510080136.11950-1-wanjiabing@vivo.com>
+        Tue, 10 May 2022 04:20:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D0D2555A4;
+        Tue, 10 May 2022 01:16:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DD4AB81B41;
+        Tue, 10 May 2022 08:16:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A11CC385C9;
+        Tue, 10 May 2022 08:16:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652170597;
+        bh=J7/O303HKOjlJOqWbuNcNBIMSzdGNoVDL+7ArgF5TY8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GbwuMG+HE4H0cOIcAe4pSjFJ44IWpyH1Sm6yie+R2KK8WvA3VSy9MUi5ml2qTYk+B
+         XGD1S3f2zYOoJFJ7a2MfZMjugzayWoAaFv5HIMLYiNQHWrck3wFbVQGTOAnpiEuJ5c
+         EFgdK8K4W9LTXr9sCylO7uTlKx97+cZxX8KwfJZ3GwfRGqbUws6j/mpZkIkoqnjW+H
+         9A66vWv63mwB14+ceOxsFCVG4zJOu5ncrKFDCBTOwY6wnfw5ueKlgNZa734iI86BPk
+         lYci5VtKrmOmo/yjv6W3G9v1MXif/18hhFQlOiGosWKLb6eTl6hU2hmPCvHOFhvV2R
+         Y7aE/UJq0WYeQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1noL2o-00AB98-Mp; Tue, 10 May 2022 09:16:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510080136.11950-1-wanjiabing@vivo.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 10 May 2022 09:16:34 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dave Gerlach <d-gerlach@ti.com>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: dmtimer: ack pending interrupt during suspend on am335x/am437x?
+In-Reply-To: <YniiqM0S+hwsGFni@x1>
+References: <YniiqM0S+hwsGFni@x1>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <7c43bcfd56424d909796977460335f24@misterjones.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: dfustini@baylibre.com, tony@atomide.com, daniel.lezcano@linaro.org, d-gerlach@ti.com, linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-05-22, 16:01, Wan Jiabing wrote:
-> Fix following coccichek error:
-> ./drivers/cpufreq/mediatek-cpufreq.c:199:2-8: preceding lock on line
-> ./drivers/cpufreq/mediatek-cpufreq.c:208:2-8: preceding lock on line
+On 2022-05-09 06:12, Drew Fustini wrote:
+> Hello Daniel, Tony suggested I mail you along with the list to get
+> feedback. I'm attempting to upstream these two patches [1][2] from
+> ti-linux-5.4.y for arch/arm/mach-omap2/timer.c:
+> 96f4c6e2ba8a ("ARM: OMAP2+: timer: Ack pending interrupt during 
+> suspend")
+> 7ae7dd5f8272 ("ARM: OMAP2+: timer: Extend pending interrupt ACK for 
+> gic")
 > 
-> mutex_lock is acquired but not released before return.
-> Use 'goto out' to help releasing the mutex_lock.
+> On the TI AM335x and AM437x SoCs, it is possible for a late interrupt 
+> to
+> be generated which will cause a suspend failure. The first patch makes
+> omap_clkevt_idle() ack the irq both in the timer peripheral register
+> and in the interrupt controller to avoid the issue.
 > 
-> Fixes: c210063b40ac ("cupful: mediatek: Add opp notification support")
+> On AM437x only, the GIC cannot be directly acked using only the irqchip
+> calls. To workaround that, the second patch maps the GIC_CPU_BASE and
+> reads the GIC_CPU_INTACK register before calling irq_eoi to properly 
+> ack
+> the late timer interrupts that show up during suspend.
 
-cupful ??
+This isn´t an Ack. The Ack happens when you read the IAR register
+(Interrupt Acknowledgement Register). Writing to EOI performs at least
+a priority drop, and maybe a deactivation.
 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/cpufreq/mediatek-cpufreq.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Simply writing to EOI doesn´t necessarily solve any problem if the
+GIC is using EOIMode==1, because you´ĺl miss the deactivation.
+
 > 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 75bf21ddf61f..4c6d53c99d79 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -196,7 +196,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  
->  	if (pre_vproc < 0) {
->  		dev_err(cpu_dev, "invalid Vproc value: %d\n", pre_vproc);
-> -		return pre_vproc;
-> +		ret = pre_vproc;
-> +		goto out;
->  	}
->  
->  	freq_hz = freq_table[index].frequency * 1000;
-> @@ -205,7 +206,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  	if (IS_ERR(opp)) {
->  		dev_err(cpu_dev, "cpu%d: failed to find OPP for %ld\n",
->  			policy->cpu, freq_hz);
-> -		return PTR_ERR(opp);
-> +		ret = PTR_ERR(opp);
-> +		goto out;
->  	}
->  	vproc = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
-> -- 
-> 2.35.1
+> However, Tony removed most of arch/arm/mach-omap2/timer.c with:
+> 2ee04b88547a ("ARM: OMAP2+: Drop old timer code for dmtimer and 32k 
+> counter")
+> 
+> The timers are now implemented in drivers/clocksource/timer-ti-dm.c and
+> drivers/clocksource/timer-ti-dm-systimer.c. The function
+> dmtimer_clocksource_suspend() disables the dmtimer and clock but does
+> not ack any interrupts.
+> 
+> Tony suggested the right place to ack the interrupt during suspend is
+> in CPU_CLUSTER_PM_ENTER inside omap_timer_context_notifier().
+> 
+> Do you think that would be an acceptable approach?
 
+The real issue is that you are apparently suspending from within an
+interrupt handler. This is what should be addressed.
+
+Please don´t randomly call into the irqchip code. It will eventually
+break, and sooner rather than later.
+
+         M.
 -- 
-viresh
+Jazz is not dead. It just smells funny...

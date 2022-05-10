@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D65F521A9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278145219D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244488AbiEJOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S244960AbiEJNvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245095AbiEJNia (ORCPT
+        with ESMTP id S243456AbiEJNeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:30 -0400
+        Tue, 10 May 2022 09:34:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06112380F0;
-        Tue, 10 May 2022 06:27:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57657238D75;
+        Tue, 10 May 2022 06:24:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 343BE61765;
-        Tue, 10 May 2022 13:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F10C385A6;
-        Tue, 10 May 2022 13:27:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C3D761768;
+        Tue, 10 May 2022 13:24:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724FEC385C2;
+        Tue, 10 May 2022 13:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189223;
-        bh=gtbfH+T5AoOjAbd4/m5ZRqSJUdNdOLZiOe36gKOgnjI=;
+        s=korg; t=1652189062;
+        bh=dwo1c1VqB1TjhnB+lmO0evpTKYjAmpjBUdoni3XMw14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agp/VSysortu0V2oEzEOSB9lKLpy+oUtyg7WGeC2MTtpOpxtYRcrEB8vmFKvGvoWT
-         lGcpFHmnHU9f7B8yceZ/RTOA6qZss1L66LjbT24KZomJ9gGcbu2Nqg89hHEr/fgaV2
-         aZWu+o2GYkTu1uVAsEw+wCvb9jLnZTVWDfjc/++o=
+        b=uG5P7bC38VJFI5zBaFd5K6kf30OwVzI3+J1FKTrNBYrNbeC3aktHoP0r92ey6A23y
+         RZ9RflW6axqvC2Et0BiLIITkkzvZWmcmLqQZJNygytgFmfsgBiCRt2akiL1n2dBQp6
+         Of5rmVAr6490CjLZtFAna+ADjJUekCF3y+DdmEEQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 52/70] bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
-Date:   Tue, 10 May 2022 15:08:11 +0200
-Message-Id: <20220510130734.385248355@linuxfoundation.org>
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.4 43/52] ALSA: pcm: Fix races among concurrent read/write and buffer changes
+Date:   Tue, 10 May 2022 15:08:12 +0200
+Message-Id: <20220510130731.112125943@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Somnath Kotur <somnath.kotur@broadcom.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 13ba794397e45e52893cfc21d7a69cb5f341b407 upstream.
+commit dca947d4d26dbf925a64a6cfb2ddbc035e831a3d upstream.
 
-bnxt_open() can fail in this code path, especially on a VF when
-it fails to reserve default rings:
+In the current PCM design, the read/write syscalls (as well as the
+equivalent ioctls) are allowed before the PCM stream is running, that
+is, at PCM PREPARED state.  Meanwhile, we also allow to re-issue
+hw_params and hw_free ioctl calls at the PREPARED state that may
+change or free the buffers, too.  The problem is that there is no
+protection against those mix-ups.
 
-bnxt_open()
-  __bnxt_open_nic()
-    bnxt_clear_int_mode()
-    bnxt_init_dflt_ring_mode()
+This patch applies the previously introduced runtime->buffer_mutex to
+the read/write operations so that the concurrent hw_params or hw_free
+call can no longer interfere during the operation.  The mutex is
+unlocked before scheduling, so we don't take it too long.
 
-RX rings would be set to 0 when we hit this error path.
-
-It is possible for a subsequent bnxt_open() call to potentially succeed
-with a code path like this:
-
-bnxt_open()
-  bnxt_hwrm_if_change()
-    bnxt_fw_init_one()
-      bnxt_fw_init_one_p3()
-        bnxt_set_dflt_rfs()
-          bnxt_rfs_capable()
-            bnxt_hwrm_reserve_rings()
-
-On older chips, RFS is capable if we can reserve the number of vnics that
-is equal to RX rings + 1.  But since RX rings is still set to 0 in this
-code path, we may mistakenly think that RFS is supported for 0 RX rings.
-
-Later, when the default RX rings are reserved and we try to enable
-RFS, it would fail and cause bnxt_open() to fail unnecessarily.
-
-We fix this in 2 places.  bnxt_rfs_capable() will always return false if
-RX rings is not yet set.  bnxt_init_dflt_ring_mode() will call
-bnxt_set_dflt_rfs() which will always clear the RFS flags if RFS is not
-supported.
-
-Fixes: 20d7d1c5c9b1 ("bnxt_en: reliably allocate IRQ table on reset to avoid crash")
-Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322170720.3529-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ sound/core/pcm_lib.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -10453,7 +10453,7 @@ static bool bnxt_rfs_capable(struct bnxt
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -1861,9 +1861,11 @@ static int wait_for_avail(struct snd_pcm
+ 		if (avail >= runtime->twake)
+ 			break;
+ 		snd_pcm_stream_unlock_irq(substream);
++		mutex_unlock(&runtime->buffer_mutex);
  
- 	if (bp->flags & BNXT_FLAG_CHIP_P5)
- 		return bnxt_rfs_supported(bp);
--	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp))
-+	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp) || !bp->rx_nr_rings)
- 		return false;
+ 		tout = schedule_timeout(wait_time);
  
- 	vnics = 1 + bp->rx_nr_rings;
-@@ -12481,10 +12481,9 @@ static int bnxt_init_dflt_ring_mode(stru
- 		goto init_dflt_ring_err;
++		mutex_lock(&runtime->buffer_mutex);
+ 		snd_pcm_stream_lock_irq(substream);
+ 		set_current_state(TASK_INTERRUPTIBLE);
+ 		switch (runtime->status->state) {
+@@ -2157,6 +2159,7 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
  
- 	bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
--	if (bnxt_rfs_supported(bp) && bnxt_rfs_capable(bp)) {
--		bp->flags |= BNXT_FLAG_RFS;
--		bp->dev->features |= NETIF_F_NTUPLE;
--	}
-+
-+	bnxt_set_dflt_rfs(bp);
-+
- init_dflt_ring_err:
- 	bnxt_ulp_irq_restart(bp, rc);
- 	return rc;
+ 	nonblock = !!(substream->f_flags & O_NONBLOCK);
+ 
++	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	err = pcm_accessible_state(runtime);
+ 	if (err < 0)
+@@ -2244,6 +2247,7 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 	if (xfer > 0 && err >= 0)
+ 		snd_pcm_update_state(substream, runtime);
+ 	snd_pcm_stream_unlock_irq(substream);
++	mutex_unlock(&runtime->buffer_mutex);
+ 	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
+ }
+ EXPORT_SYMBOL(__snd_pcm_lib_xfer);
 
 

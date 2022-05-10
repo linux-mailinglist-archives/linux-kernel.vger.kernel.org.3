@@ -2,135 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A3C5220F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9D45220E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347210AbiEJQWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S1347211AbiEJQVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347193AbiEJQVr (ORCPT
+        with ESMTP id S1347189AbiEJQVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:21:47 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21D428ED28;
-        Tue, 10 May 2022 09:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DG+kC/U+ySej5D6tfV4OCa8YH0d8ESpuNC4bFJt4RU8=; b=C2KkFYKUIxmXZpa9w2+Tc0j2Ea
-        RFFr76ch465vsOUiMZW1uqZNDnhRYy0QqpFeaougTFG9GOX2EvcKO8NnFtvJdvaTDSvmTGm5I6bLE
-        gx/SYLZAEuVfjx7NJeu1tB8cieKdzixVjql/phg2ZRqRsu9xZgqdP1nbzw6Nv7UUXN3Dua0weQYl6
-        +N3ACyNpHY020LPMtgokauBK3/rzBv0qIzP0VJEueNDPsJdk0Noe60ugWXyfyRTapgsSXBPVXAg4/
-        oobDhrEfQYteiYAwrodL1TGkVGLJREzPqDYfYYN3sh0JBT6vnlq6trf1vxZCJI19NPJiA+YiSFKJe
-        qkMs6K7A==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1noSY8-0008UD-Jz; Tue, 10 May 2022 18:17:24 +0200
-Message-ID: <244a412c-4589-28d1-bb77-d3648d4f0b12@igalia.com>
-Date:   Tue, 10 May 2022 13:16:54 -0300
+        Tue, 10 May 2022 12:21:17 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CBE28B85A
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:17:19 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24A5TVpe021012;
+        Tue, 10 May 2022 11:17:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=zXofkY1bd3XtG154r7H2+Sqnxy0DHw+79gdGYM1CoL8=;
+ b=BJ1IDdv+25911XUZUZVcM8S3KMrQHBK+C6OnpU+dlcsAONI5D2yfYapVUc+x8xKet5HF
+ 8Nm0AQ3/xE55kku8CxO1cAmqZ3xV0GRc0BA0lu0+4tD7Xzd2Urn4hKKV8sjS8Ywecznr
+ VJCgu8a6E7hanZwOx3uI1DHovrB0YffW84JOaqUCK6gu7ArWc76+dvsnOcacYqTO0frc
+ eE89DTQ/xQvuiNftyVXQjZn/1crXyC4nVCy9AW+JTmU315S7bNDFTRv/Ieo4ahK94yqp
+ 5KEuEadPVqiP9BupfFIrcuKp4IRbWGOhCcllvujec+deFYm+N6FDLVwCQU4ZZ1ouhqv+ zw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fwn6nvk88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 10 May 2022 11:17:07 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 17:17:06 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Tue, 10 May 2022 17:17:06 +0100
+Received: from sbinding-cirrus-dsktp.ad.cirrus.com (unknown [198.90.238.24])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2DA6E475;
+        Tue, 10 May 2022 16:17:06 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v1 0/3] ALSA: hda/cs8409: Add support for Odin Laptop Variants
+Date:   Tue, 10 May 2022 17:16:58 +0100
+Message-ID: <20220510161701.851260-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 14/30] panic: Properly identify the panic event to the
- notifiers' callbacks
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-15-gpiccoli@igalia.com> <YnqBsXBImU64PAOL@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YnqBsXBImU64PAOL@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: GOqpgBxOq3tQq_4_EliPVL75yfgzbnSF
+X-Proofpoint-GUID: GOqpgBxOq3tQq_4_EliPVL75yfgzbnSF
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 12:16, Petr Mladek wrote:
-> [...]
-> Hmm, this looks like a hack. PANIC_UNUSED will never be used.
-> All notifiers will be always called with PANIC_NOTIFIER.
-> 
-> The @val parameter is normally used when the same notifier_list
-> is used in different situations.
-> 
-> But you are going to use it when the same notifier is used
-> in more lists. This is normally distinguished by the @nh
-> (atomic_notifier_head) parameter.
-> 
-> IMHO, it is a bad idea. First, it would confuse people because
-> it does not follow the original design of the parameters.
-> Second, the related code must be touched anyway when
-> the notifier is moved into another list so it does not
-> help much.
-> 
-> Or do I miss anything, please?
-> 
-> Best Regards,
-> Petr
+Add support for new Odin Laptop Variants into CS8409 HDA Driver.
 
-Hi Petr, thanks for the review.
+Since these laptops require Speaker Playback Switch, support must be added into
+CS8409 HDA driver. Since CS8409 does not have amplifier parameters for the NID
+associated with the speaker, the HDA driver does not add the switch
+automatically, so the driver needs to add this support manually.
 
-I'm not strong attached to this patch, so we could drop it and refactor
-the code of next patches to use the @nh as identification - but
-personally, I feel this parameter could be used to identify the list
-that called such function, in other words, what is the event that
-triggered the callback. Some notifiers are even declared with this
-parameter called "ev", like the event that triggers the notifier.
+Stefan Binding (3):
+  ALSA: hda/cs8409: Support new Odin Variants
+  ALSA: hda/cs8409: Add Speaker Playback Switch for Cyborg
+  ALSA: hda/cs8409: Add Speaker Playback Switch for Warlock
 
+ sound/pci/hda/patch_cs8409-tables.c | 19 +++++++
+ sound/pci/hda/patch_cs8409.c        | 85 ++++++++++++++++++++++++-----
+ sound/pci/hda/patch_cs8409.h        |  5 ++
+ 3 files changed, 95 insertions(+), 14 deletions(-)
 
-You mentioned 2 cases:
+-- 
+2.25.1
 
-(a) Same notifier_list used in different situations;
-
-(b) Same *notifier callback* used in different lists;
-
-Mine is case (b), right? Can you show me an example of case (a)? You can
-see in the following patches (or grep the kernel) that people are using
-this identification parameter to determine which kind of OOPS trigger
-the callback to condition the execution of the function to specific
-cases. IIUIC, this is more or less what I'm doing, but extending the
-idea for panic notifiers.
-
-Again, as a personal preference, it makes sense to me using id's VS
-comparing pointers to differentiate events/callers.
-
-Cheers,
-
-
-Guilherme

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B776B521835
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E082F52171F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbiEJNdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S238435AbiEJNXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiEJNZQ (ORCPT
+        with ESMTP id S242967AbiEJNVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A3B53A48;
-        Tue, 10 May 2022 06:18:19 -0700 (PDT)
+        Tue, 10 May 2022 09:21:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5071B2C0D14;
+        Tue, 10 May 2022 06:14:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D96761668;
-        Tue, 10 May 2022 13:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68CAEC385A6;
-        Tue, 10 May 2022 13:18:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E293BCE1EE4;
+        Tue, 10 May 2022 13:14:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF482C385C2;
+        Tue, 10 May 2022 13:14:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188698;
-        bh=+grnLIzZYxR/nMl7yAVFrelR1Lzn8s2vGyxaI23KT5E=;
+        s=korg; t=1652188458;
+        bh=ycpbxAto+dh1Mn2Va8iL5uowbHR53RqJ38c0L1VvIxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SN+gw1V2vWdtwEsC9h25w0gqkfq9eQyoKiPY3swXwLkzxjQUKMMUMStmxvRRPnEH7
-         yMAFDU/jKrRh+wR6J7ogvQsP/MjN/X9IZ/6VHiicfJxo0lY8F5CpXz9Evx4w6G9PPu
-         aUk7p1Wi9WDeb5UhlZsijdH3aDelf/bJ+PC/Ij3c=
+        b=vOaJqKiVs9XXV1xPFuubvronSFj0Isp3p3ROLc1iw71oEyrLPC6vPN3fvHt7PJpb2
+         8bybJsykTUVfxuyrawjFpLZVEl0SnC64hwlDKz3BjppRRY/R8lfKKe20pMFRbm5aq5
+         8USUbwb6jaVFM7mzDOGHVa6Xt9ca3YrlkODLiKHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 4.19 15/88] usb: dwc3: core: Fix tx/rx threshold settings
-Date:   Tue, 10 May 2022 15:07:00 +0200
-Message-Id: <20220510130734.190151470@linuxfoundation.org>
+        stable@vger.kernel.org, Zizhuang Deng <sunsetdzz@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.14 15/78] iio: dac: ad5592r: Fix the missing return value.
+Date:   Tue, 10 May 2022 15:07:01 +0200
+Message-Id: <20220510130732.984949266@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,47 +48,41 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Zizhuang Deng <sunsetdzz@gmail.com>
 
-commit f28ad9069363dec7deb88032b70612755eed9ee6 upstream.
+commit b55b38f7cc12da3b9ef36e7a3b7f8f96737df4d5 upstream.
 
-The current driver logic checks against 0 to determine whether the
-periodic tx/rx threshold settings are set, but we may get bogus values
-from uninitialized variables if no device property is set. Properly
-default these variables to 0.
+The third call to `fwnode_property_read_u32` did not record
+the return value, resulting in `channel_offstate` possibly
+being assigned the wrong value.
 
-Fixes: 938a5ad1d305 ("usb: dwc3: Check for ESS TX/RX threshold config")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/cccfce990b11b730b0dae42f9d217dc6fb988c90.1649727139.git.Thinh.Nguyen@synopsys.com
+Fixes: 56ca9db862bf ("iio: dac: Add support for the AD5592R/AD5593R ADCs/DACs")
+Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
+Link: https://lore.kernel.org/r/20220310125450.4164164-1-sunsetdzz@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/iio/dac/ad5592r-base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1213,10 +1213,10 @@ static void dwc3_get_properties(struct d
- 	u8			lpm_nyet_threshold;
- 	u8			tx_de_emphasis;
- 	u8			hird_threshold;
--	u8			rx_thr_num_pkt_prd;
--	u8			rx_max_burst_prd;
--	u8			tx_thr_num_pkt_prd;
--	u8			tx_max_burst_prd;
-+	u8			rx_thr_num_pkt_prd = 0;
-+	u8			rx_max_burst_prd = 0;
-+	u8			tx_thr_num_pkt_prd = 0;
-+	u8			tx_max_burst_prd = 0;
+--- a/drivers/iio/dac/ad5592r-base.c
++++ b/drivers/iio/dac/ad5592r-base.c
+@@ -532,7 +532,7 @@ static int ad5592r_alloc_channels(struct
+ 		if (!ret)
+ 			st->channel_modes[reg] = tmp;
  
- 	/* default to highest possible threshold */
- 	lpm_nyet_threshold = 0xf;
+-		fwnode_property_read_u32(child, "adi,off-state", &tmp);
++		ret = fwnode_property_read_u32(child, "adi,off-state", &tmp);
+ 		if (!ret)
+ 			st->channel_offstate[reg] = tmp;
+ 	}
 
 

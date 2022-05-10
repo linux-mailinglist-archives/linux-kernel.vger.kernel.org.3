@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226A2521BF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5640C521C0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344529AbiEJO06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S1344124AbiEJO2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244609AbiEJNz7 (ORCPT
+        with ESMTP id S245376AbiEJN5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:55:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE83F892;
-        Tue, 10 May 2022 06:38:39 -0700 (PDT)
+        Tue, 10 May 2022 09:57:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA268FD69;
+        Tue, 10 May 2022 06:39:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27323615E9;
-        Tue, 10 May 2022 13:38:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203F9C385D4;
-        Tue, 10 May 2022 13:38:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF96615C8;
+        Tue, 10 May 2022 13:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84271C385C6;
+        Tue, 10 May 2022 13:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189917;
-        bh=BLhaYnSDWTmnxGZlLocs5B2+vyy327FfiGc2UyQUzZc=;
+        s=korg; t=1652189952;
+        bh=9pxyK0GKEphEY4ydetmT/RXOXOC4/m+3r46HStjAp24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DbYJwSl38SknuIwzYral34U0ruJbuEUtVKS/tcjTMVWfosYplvq6tWCgx4r/VqUu6
-         JKiasACzNbfT2bT0ADHo4ZkxqpefP7FGcM6I7vciXBeEIeCj74HobDRsQlpV0AithE
-         6Odpv0llX94nGsClQWT8oQbJBmAJ9KqDcYDSzzO0=
+        b=h5uXKZ3SMw9pYR2OsCxqOzGgExYFbhC2ey5oxCa6odnuqKwGLkIirZRREgTQvPCKp
+         x1sY9fg3kMQl5MOevkL5a/ZLswwLWy1QoNLEN2jjf0ZVbV1Yg8/WrTNAd7HkzqEEQG
+         BfUtF3jFaCXI/3AVlzlmCn158sMWW3T60/daGMaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?q?Jan=20H=C3=B6ppner?= <hoeppner@linux.ibm.com>,
         Stefan Haberland <sth@linux.ibm.com>,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 043/140] s390/dasd: Fix read for ESE with blksize < 4k
-Date:   Tue, 10 May 2022 15:07:13 +0200
-Message-Id: <20220510130742.851866478@linuxfoundation.org>
+Subject: [PATCH 5.17 044/140] s390/dasd: Fix read inconsistency for ESE DASD devices
+Date:   Tue, 10 May 2022 15:07:14 +0200
+Message-Id: <20220510130742.881678224@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -58,58 +58,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jan Höppner <hoeppner@linux.ibm.com>
 
-commit cd68c48ea15c85f1577a442dc4c285e112ff1b37 upstream.
+commit b9c10f68e23c13f56685559a0d6fdaca9f838324 upstream.
 
-When reading unformatted tracks on ESE devices, the corresponding memory
-areas are simply set to zero for each segment. This is done incorrectly
-for blocksizes < 4096.
+Read requests that return with NRF error are partially completed in
+dasd_eckd_ese_read(). The function keeps track of the amount of
+processed bytes and the driver will eventually return this information
+back to the block layer for further processing via __dasd_cleanup_cqr()
+when the request is in the final stage of processing (from the driver's
+perspective).
 
-There are two problems. First, the increment of dst is done using the
-counter of the loop (off), which is increased by blksize every
-iteration. This leads to a much bigger increment for dst as actually
-intended. Second, the increment of dst is done before the memory area
-is set to 0, skipping a significant amount of bytes of memory.
+For this, blk_update_request() is used which requires the number of
+bytes to complete the request. As per documentation the nr_bytes
+parameter is described as follows:
+   "number of bytes to complete for @req".
 
-This leads to illegal overwriting of memory and ultimately to a kernel
-panic.
+This was mistakenly interpreted as "number of bytes _left_ for @req"
+leading to new requests with incorrect data length. The consequence are
+inconsistent and completely wrong read requests as data from random
+memory areas are read back.
 
-This is not a problem with 4k blocksize because
-blk_queue_max_segment_size is set to PAGE_SIZE, always resulting in a
-single iteration for the inner segment loop (bv.bv_len == blksize). The
-incorrectly used 'off' value to increment dst is 0 and the correct
-memory area is used.
+Fix this by correctly specifying the amount of bytes that should be used
+to complete the request.
 
-In order to fix this for blksize < 4k, increment dst correctly using the
-blksize and only do it at the end of the loop.
-
-Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
-Cc: stable@vger.kernel.org # v5.3+
+Fixes: 5e6bdd37c552 ("s390/dasd: fix data corruption for thin provisioned devices")
+Cc: stable@vger.kernel.org # 5.3+
 Signed-off-by: Jan Höppner <hoeppner@linux.ibm.com>
 Reviewed-by: Stefan Haberland <sth@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-4-sth@linux.ibm.com
+Link: https://lore.kernel.org/r/20220505141733.1989450-5-sth@linux.ibm.com
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd_eckd.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/s390/block/dasd.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -3285,12 +3285,11 @@ static int dasd_eckd_ese_read(struct das
- 				cqr->proc_bytes = blk_count * blksize;
- 				return 0;
- 			}
--			if (dst && !skip_block) {
--				dst += off;
-+			if (dst && !skip_block)
- 				memset(dst, 0, blksize);
--			} else {
-+			else
- 				skip_block--;
--			}
-+			dst += blksize;
- 			blk_count++;
- 		}
- 	}
+--- a/drivers/s390/block/dasd.c
++++ b/drivers/s390/block/dasd.c
+@@ -2778,8 +2778,7 @@ static void __dasd_cleanup_cqr(struct da
+ 		 * complete a request partially.
+ 		 */
+ 		if (proc_bytes) {
+-			blk_update_request(req, BLK_STS_OK,
+-					   blk_rq_bytes(req) - proc_bytes);
++			blk_update_request(req, BLK_STS_OK, proc_bytes);
+ 			blk_mq_requeue_request(req, true);
+ 		} else if (likely(!blk_should_fake_timeout(req->q))) {
+ 			blk_mq_complete_request(req);
 
 

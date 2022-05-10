@@ -2,138 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EE7522140
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C835E522143
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347421AbiEJQee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S1347426AbiEJQfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347422AbiEJQe0 (ORCPT
+        with ESMTP id S1347410AbiEJQfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:34:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ACD2A28F7;
-        Tue, 10 May 2022 09:30:22 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so2261380pjb.0;
-        Tue, 10 May 2022 09:30:22 -0700 (PDT)
+        Tue, 10 May 2022 12:35:21 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B560E2638;
+        Tue, 10 May 2022 09:31:23 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-d39f741ba0so18889988fac.13;
+        Tue, 10 May 2022 09:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nmTwo0VlGN7HZAEkbWFLYNGP+DbFScpw15RdeNhAOsM=;
-        b=qMCb6EA6TVj1ZK4i4rl/lUDMseHdpoxbJATbR6ben/NEwzK95Ap98M+yg9DJpq4d7M
-         5BUqzE4bgssTbTyEID5eYtcQ8m3H2eBYuyEE7IlCgmr02G/Zb95HQy3TAZXue71yDlrV
-         M9sC7hSQQO7Sp3yz+9+2N9h+L51HPoafgeMVnx9kL8q6tvHcay5Vwa4U+ERUmeWWZ8v8
-         /aIiRgaZ4N09/kZETp9vIS1yhv0b4xcaqSUjgFbnmnhLD8Q6Les4ZUMPQ380fX8dmkRX
-         gVtg3+LQLp1GFPNB8t1YBRaQbXWrNSPMQio8AAeTYRudwa33AA0M6pN3Ljwh6aj24XCs
-         1/lw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l5yuYOcXtxFPnT+hSOFk4R+Wx1UD+Dnz+QCt4jIhDJw=;
+        b=LmrWGeBWEt6za4DxWeML4RnphfpC9X2RedlPwpf/mArpHbqUS9knZIfSxU2FfRBeU7
+         OFNM+DDKRUBZOyWmZFj1NPwnSfyWJQzS2aLsA6fkj8RZCSCpNrF7lydudkAAS74mFeyl
+         eBbkxGlw6ULkxDP0ASKghMeyYYnZQnTGWPo2rN5/xGUWUf3c80FO4fM/MUZHNyKHYiiM
+         8JPM1MDtA/BI8R0ZpgK/8bjkE07CsZGA/gc3lZkpHvbOzvd7CGHUwNM9aWqaSRCCMAsB
+         nRNcdH1ivhlhf8jQ/AsjDlEnM005SWpK2Ulon5PQPtBZGph1ZXMZZgTePyWpgUyzV6kR
+         +3UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nmTwo0VlGN7HZAEkbWFLYNGP+DbFScpw15RdeNhAOsM=;
-        b=dBIyVwqvG4cX8xYUINsj9kovoKx/dOt7nsHybIu6IbA0jYGfd+JgY8cF5hVTQwSE8S
-         S2UT+at6VUDduLqkqzCN1xUjQLk0mVE89J9m4u3rrMkH9EwYHo7NmaaXhKIepVOruLZH
-         5DqKpYIyYwvSviAeKbv4rYvl2EjUfbg7b1Ga0Io/4+6LIyygVPu9Pi3EiRmO6Md565FQ
-         MCk8otZOyCihPYSe9P38xTReWMA+ysdqKfIPyo6aNV5jp2VXIECCL3eMXfLZU8Pvj/E/
-         Fa/0WXja3sQ35t1dqSYrZnYf0AAM1/cZQed/br1mJVGeAC9L1XmJ6gSADjFNjKuavjhV
-         mdCA==
-X-Gm-Message-State: AOAM532APkKiIDQadlDFbJ5OV1q9PVjFv3i8IBl0ZwrqzzXNDTAFpM8S
-        yWaA2vLsR2oxpCU3hqR/u20=
-X-Google-Smtp-Source: ABdhPJzthHrKIyJiyo3f4D4rf/UY0bGjefzB0w9VP88JxxNfui2ZBhjOs9clpHhgT62RFv260NQxQQ==
-X-Received: by 2002:a17:90b:610:b0:1d9:4008:cfee with SMTP id gb16-20020a17090b061000b001d94008cfeemr752504pjb.71.1652200221607;
-        Tue, 10 May 2022 09:30:21 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id cr11-20020a056a000f0b00b00510c135da63sm1680324pfb.9.2022.05.10.09.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 09:30:21 -0700 (PDT)
-Message-ID: <1b097089-d6e6-5622-15aa-7038b66b1367@gmail.com>
-Date:   Tue, 10 May 2022 09:30:17 -0700
+        bh=l5yuYOcXtxFPnT+hSOFk4R+Wx1UD+Dnz+QCt4jIhDJw=;
+        b=fajTqIeclH0gDgxEJuxNLqiuOexL6eSwxbOOz7Cw+6S7zwW0cVFMB3MvYBrOJMQkvE
+         Gb+bCbIs7hDLH4BoO7o/BL41h4GPZ1JLm50sQWIQl5q8vI82ZaoD0b6zT4V6hzjeKK4B
+         p3zSS9tU30HFuK8DIaiIkdCwA6FTc6jm5BqTvwXJ1Eio2CHKw2aNYBHx0+XSTx3d8Ius
+         9Ig3P9tvpm0+Zinu5MD/D1zX+ndPCzTV9t3VWTsPMHZw4JrJ0nXTNqeIgVTrph53u+Gy
+         awWvlS0bnJfi4gY25gHjtD+t0tIz7V5/wrRhi42NDz/Mp5zJH2EH8qjM3opcBcgmGKVd
+         vCIg==
+X-Gm-Message-State: AOAM5329SkzjCucRCjKUhKmXz3BjWJXwp+vXg3zAVmxH65EO2L417cM1
+        XPnG6JBrFB6qzh9EVDJMjg==
+X-Google-Smtp-Source: ABdhPJwpO40ipWzNEk3kXh2782CfFm6Rqcu6mb2kcWt3XIrWXGjjupQQO9kDGk7dRvWzajrm+/u0Ww==
+X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr506532oac.286.1652200282912;
+        Tue, 10 May 2022 09:31:22 -0700 (PDT)
+Received: from localhost.localdomain (072-177-087-193.res.spectrum.com. [72.177.87.193])
+        by smtp.gmail.com with ESMTPSA id k2-20020a056870570200b000edae17a8cesm5815755oap.3.2022.05.10.09.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 09:31:22 -0700 (PDT)
+From:   Ruiqi Li <guywithanaxe42@gmail.com>
+To:     gustavo.pimentel@synopsys.com, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ruiqi Li <guywithanaxe42@gmail.com>
+Subject: [PATCH 1/1] dmaengine: dw-edma: Removed redundant #ifdef check for 64-bit
+Date:   Tue, 10 May 2022 11:31:17 -0500
+Message-Id: <20220510163117.1761625-1-guywithanaxe42@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net-next v4 00/12] add support for Renesas RZ/N1 ethernet
- subsystem devices
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-References: <20220509131900.7840-1-clement.leger@bootlin.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220509131900.7840-1-clement.leger@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 06:18, Clément Léger wrote:
-> The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
-> (most notably) a switch, two GMACs, and a MII converter [1]. This
-> series adds support for the switch and the MII converter.
-> 
-> The MII converter present on this SoC has been represented as a PCS
-> which sit between the MACs and the PHY. This PCS driver is probed from
-> the device-tree since it requires to be configured. Indeed the MII
-> converter also contains the registers that are handling the muxing of
-> ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
-> 
-> The switch driver is based on DSA and exposes 4 ports + 1 CPU
-> management port. It include basic bridging support as well as FDB and
-> statistics support.
-> 
-> This series needs commits 14f11da778ff6421 ("soc: renesas: rzn1: Select
-> PM and PM_GENERIC_DOMAINS configs") and ed66b37f916ee23b ("ARM: dts:
-> r9a06g032: Add missing '#power-domain-cells'") which are available on
-> the renesas-devel tree in order to enable generic power domain on
-> RZ/N1.
-> 
-> Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
-Build testing this patch set gave me the following Kconfig warnings:
+Commit at 8fc5133d fixed unaligned memory access, which caused both 32
+and 64 bit to be the same.
 
-WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
-   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
-   Selected by [m]:
-   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
+    #ifdef CONFIG_64BIT
+    /* llp is not aligned on 64bit -> keep 32bit accesses */
+    SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+              lower_32_bits(chunk->ll_region.paddr));
+    SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+              upper_32_bits(chunk->ll_region.paddr));
+    #else /* CONFIG_64BIT */
+    SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+              lower_32_bits(chunk->ll_region.paddr));
+    SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+              upper_32_bits(chunk->ll_region.paddr));
+    #endif /* CONFIG_64BIT */
 
-WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
-   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
-   Selected by [m]:
-   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
+This patch removes redundant preprocessor check for 64 bit.
 
-WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
-   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
-   Selected by [m]:
-   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
+Signed-off-by: Ruiqi Li <guywithanaxe42@gmail.com>
+---
+ drivers/dma/dw-edma/dw-edma-v0-core.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-I started off with arm64's defconfig and then enabled all of the DSA 
-drivers.
+diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
+index 33bc1e6c4cf2..d34f344a094b 100644
+--- a/drivers/dma/dw-edma/dw-edma-v0-core.c
++++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
+@@ -415,18 +415,11 @@ void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+ 			  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
+ 		/* Linked list */
+ 
+-		#ifdef CONFIG_64BIT
+ 		/* llp is not aligned on 64bit -> keep 32bit accesses */
+ 		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+ 			  lower_32_bits(chunk->ll_region.paddr));
+ 		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+ 			  upper_32_bits(chunk->ll_region.paddr));
+-		#else /* CONFIG_64BIT */
+-		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+-			  lower_32_bits(chunk->ll_region.paddr));
+-		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+-			  upper_32_bits(chunk->ll_region.paddr));
+-		#endif /* CONFIG_64BIT */
+ 	}
+ 	/* Doorbell */
+ 	SET_RW_32(dw, chan->dir, doorbell,
 -- 
-Florian
+2.36.1
+

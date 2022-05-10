@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F8B521852
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF59E521740
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243468AbiEJNe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S242938AbiEJNWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242904AbiEJNZQ (ORCPT
+        with ESMTP id S241546AbiEJNUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3D11F92A4;
-        Tue, 10 May 2022 06:17:51 -0700 (PDT)
+        Tue, 10 May 2022 09:20:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AABD2BA99F;
+        Tue, 10 May 2022 06:13:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5C119CE1E67;
-        Tue, 10 May 2022 13:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA5CC385C6;
-        Tue, 10 May 2022 13:17:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8621E61574;
+        Tue, 10 May 2022 13:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C41C385C2;
+        Tue, 10 May 2022 13:13:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188668;
-        bh=WmU0JrNCPKKDk0egiaa5q5KGJgNq4xSZSHdSFEerGvw=;
+        s=korg; t=1652188421;
+        bh=LaDG7CapcarKnFOEKMZMJPT3w1lOlsP0oILBZQfjazE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PPlEnqSoMx94214zBzKEiGcNe1xIrXjL2sENyqiSpDTukNZKvzsll2yVoTDJtomDU
-         AIhmaM23wqczcV94c4SfDIvpktRa3yGhKqo6tLDtRoWxRRHgyBskUuytk2a3ETQ/Cq
-         wupYLsnsjVWMV862fSboPwwXLztSjUrFqJaJwk4k=
+        b=keR0KxHlIZRniJmEPvjCDDYQ63tIfR0bK4iTcw+Yf3AQ4nniwL2jhRtK5DDXPnWKZ
+         L2PZhpUXS/YJIK8vmBjkoyjj0+fnW99Afa074rR1H3QRUOEDMTQ/wUIudN90HSflyQ
+         MdnqnmDsmzXmFHc2/oGcI/PLzKEi+GEd+BK7CX1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        William Tu <u9012063@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 32/78] mtd: rawnand: Fix return value check of wait_for_completion_timeout
+Subject: [PATCH 4.9 28/66] ip_gre: Make o_seqno start from 0 in native mode
 Date:   Tue, 10 May 2022 15:07:18 +0200
-Message-Id: <20220510130733.486432722@linuxfoundation.org>
+Message-Id: <20220510130730.590531468@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit 084c16ab423a8890121b902b405823bfec5b4365 ]
+[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
 
-wait_for_completion_timeout() returns unsigned long not int.
-It returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case.
+For GRE and GRETAP devices, currently o_seqno starts from 1 in native
+mode.  According to RFC 2890 2.2., "The first datagram is sent with a
+sequence number of 0."  Fix it.
 
-Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220412083435.29254-1-linmq006@gmail.com
+It is worth mentioning that o_seqno already starts from 0 in collect_md
+mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
+gre_build_header() before getting incremented.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Acked-by: William Tu <u9012063@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/sh_flctl.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ net/ipv4/ip_gre.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/mtd/nand/sh_flctl.c b/drivers/mtd/nand/sh_flctl.c
-index f2ed03ee3035..eac65aff5401 100644
---- a/drivers/mtd/nand/sh_flctl.c
-+++ b/drivers/mtd/nand/sh_flctl.c
-@@ -399,7 +399,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 	dma_addr_t dma_addr;
- 	dma_cookie_t cookie;
- 	uint32_t reg;
--	int ret;
-+	int ret = 0;
-+	unsigned long time_left;
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index fe1801d9f059..eec225c637f0 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -339,14 +339,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
+ 		       __be16 proto)
+ {
+ 	struct ip_tunnel *tunnel = netdev_priv(dev);
+-
+-	if (tunnel->parms.o_flags & TUNNEL_SEQ)
+-		tunnel->o_seqno++;
++	__be16 flags = tunnel->parms.o_flags;
  
- 	if (dir == DMA_FROM_DEVICE) {
- 		chan = flctl->chan_fifo0_rx;
-@@ -440,13 +441,14 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 		goto out;
- 	}
+ 	/* Push GRE header. */
+ 	gre_build_header(skb, tunnel->tun_hlen,
+-			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
+-			 htonl(tunnel->o_seqno));
++			 flags, proto, tunnel->parms.o_key,
++			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
  
--	ret =
-+	time_left =
- 	wait_for_completion_timeout(&flctl->dma_complete,
- 				msecs_to_jiffies(3000));
- 
--	if (ret <= 0) {
-+	if (time_left == 0) {
- 		dmaengine_terminate_all(chan);
- 		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
-+		ret = -ETIMEDOUT;
- 	}
- 
- out:
-@@ -456,7 +458,7 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
- 
- 	dma_unmap_single(chan->device->dev, dma_addr, len, dir);
- 
--	/* ret > 0 is success */
-+	/* ret == 0 is success */
- 	return ret;
+ 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
  }
- 
-@@ -480,7 +482,7 @@ static void read_fiforeg(struct sh_flctl *flctl, int rlen, int offset)
- 
- 	/* initiate DMA transfer */
- 	if (flctl->chan_fifo0_rx && rlen >= 32 &&
--		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE) > 0)
-+		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE))
- 			goto convert;	/* DMA success */
- 
- 	/* do polling transfer */
-@@ -539,7 +541,7 @@ static void write_ec_fiforeg(struct sh_flctl *flctl, int rlen,
- 
- 	/* initiate DMA transfer */
- 	if (flctl->chan_fifo0_tx && rlen >= 32 &&
--		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE) > 0)
-+		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE))
- 			return;	/* DMA success */
- 
- 	/* do polling transfer */
 -- 
 2.35.1
 

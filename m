@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879985219E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4B2521880
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245403AbiEJNwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S244313AbiEJNh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243605AbiEJNfy (ORCPT
+        with ESMTP id S243500AbiEJN04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:35:54 -0400
+        Tue, 10 May 2022 09:26:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29222C0D3E;
-        Tue, 10 May 2022 06:24:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1291F2375EA;
+        Tue, 10 May 2022 06:19:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EFF460C1C;
-        Tue, 10 May 2022 13:24:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505D4C385C2;
-        Tue, 10 May 2022 13:24:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C735615F8;
+        Tue, 10 May 2022 13:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561C9C385A6;
+        Tue, 10 May 2022 13:19:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189095;
-        bh=Lx98zUlyk0W158fveUZIRuOcG6TRDnGJ1FQPgqbBrfk=;
+        s=korg; t=1652188788;
+        bh=Q4Y3SyK/jeyCZmbyzItTJ1Zzlro6NPXoyjvomzCp6lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mQUrdJCjg7S5FvgOf+EEiBmfUhA+grQeyMEJz/2GeMNWuQg2M+hjkpS/YIrtg5Ysg
-         kxdw2YpuUpf4KStFITYySrKlBJtQtm5lcodzxv6e1sxwUuHqDFfI7a3rl8XreX+0TM
-         SqcXgS90fensSp8MXbQCAoHxeuwquyrFmg3878LU=
+        b=JrUML8G4HV2qMta6dzFeo7wJnRUmKewSerGL2AaKKZ7HGWevkha2VSQzU8sh3zIuV
+         NQnQZfTx6JepTnI2me/uOZBl4NCZD5g7glXYY0OPvqciOYVw3WV7AoUiFJTL9MQSte
+         gxD4+BRdjhViDfbt+UBBIqSM7q7prWrvHujPp8H4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.10 11/70] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 45/88] x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
 Date:   Tue, 10 May 2022 15:07:30 +0200
-Message-Id: <20220510130733.198286305@linuxfoundation.org>
+Message-Id: <20220510130735.057838356@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
+[ Upstream commit a6823e4e360fe975bd3da4ab156df7c74c8b07f3 ]
 
-This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
+The first "if" condition in __memcpy_flushcache is supposed to align the
+"dest" variable to 8 bytes and copy data up to this alignment.  However,
+this condition may misbehave if "size" is greater than 4GiB.
 
-We must not try to connect the socket while the transport is under
-construction, because the mechanisms to safely tear it down are not in
-place. As the code stands, we end up leaking the sockets on a connection
-error.
+The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
+arguments to unsigned int and selects the smaller one.  However, the
+cast truncates high bits in "size" and it results in misbehavior.
 
-Reported-by: wanghai (M) <wanghai38@huawei.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+For example:
+
+	suppose that size == 0x100000001, dest == 0x200000002
+	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
+	...
+	dest += 0x1;
+
+so we copy just one byte "and" dest remains unaligned.
+
+This patch fixes the bug by replacing unsigned with size_t.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtsock.c |    3 ---
- 1 file changed, 3 deletions(-)
+ arch/x86/lib/usercopy_64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -2826,9 +2826,6 @@ static struct rpc_xprt *xs_setup_local(s
- 		}
- 		xprt_set_bound(xprt);
- 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
--		ret = ERR_PTR(xs_local_setup_socket(transport));
--		if (ret)
--			goto out_err;
- 		break;
- 	default:
- 		ret = ERR_PTR(-EAFNOSUPPORT);
+diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
+index 40dbbd8f1fe4..8c6d0fb72b3a 100644
+--- a/arch/x86/lib/usercopy_64.c
++++ b/arch/x86/lib/usercopy_64.c
+@@ -161,7 +161,7 @@ void memcpy_flushcache(void *_dst, const void *_src, size_t size)
+ 
+ 	/* cache copy and flush to align dest */
+ 	if (!IS_ALIGNED(dest, 8)) {
+-		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
++		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+ 
+ 		memcpy((void *) dest, (void *) source, len);
+ 		clean_cache_range((void *) dest, len);
+-- 
+2.35.1
+
 
 

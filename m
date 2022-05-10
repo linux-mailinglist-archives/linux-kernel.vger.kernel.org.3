@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B522D521A8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2214521A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343500AbiEJN6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S245732AbiEJN6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245195AbiEJNii (ORCPT
+        with ESMTP id S245197AbiEJNii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 09:38:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47A25FCA;
-        Tue, 10 May 2022 06:28:39 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1BDDECC;
+        Tue, 10 May 2022 06:28:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 55A86CE1EED;
-        Tue, 10 May 2022 13:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24595C385C2;
-        Tue, 10 May 2022 13:28:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5595360B12;
+        Tue, 10 May 2022 13:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B9AC385C2;
+        Tue, 10 May 2022 13:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189316;
-        bh=tDDRTR4hAcafWMH1wych2cfeBCdy8kCp9bNyavD8AN0=;
+        s=korg; t=1652189319;
+        bh=QjF3jReUNDcYQveU7Tauj4YfmC8J+BQBTJfIbX5n0ME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zJOBfdt70myElGS/zWWRj9yeY0W4geUGGMmh4GdGkP+DHUkjlpPDgt9fP8IHd+j9q
-         BjnvxIKMBKsFIhXm1zRP73eFtZkhQapDIhpOSt0nk2xRTXEaJCxuuktfy+sjaPDHf5
-         9EW1SZljY99l9BriomaIMK+wIk0JUFbWvmou9ass=
+        b=DHWLK4VHiahUEYTMKMDtsGQkA6i0R4uQr1rL477vsqXf+HUkYi7CyCbnRxpN5iqUn
+         3hp9oMhvOvTWqtE13j9AWO2bgyBYHyL/e6qiPLqFsajKwIzxjXVIZ7UBPfB12HtG3y
+         Ondz4tQe8wMC7CNfGdSf45OM2oJzohPtlosg0OWY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 5.15 012/135] iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
-Date:   Tue, 10 May 2022 15:06:34 +0200
-Message-Id: <20220510130740.748771520@linuxfoundation.org>
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 013/135] drm/amd/display: Avoid reading audio pattern past AUDIO_CHANNELS_COUNT
+Date:   Tue, 10 May 2022 15:06:35 +0200
+Message-Id: <20220510130740.778835335@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -57,57 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+From: Harry Wentland <harry.wentland@amd.com>
 
-commit 95d4782c34a60800ccf91d9f0703137d4367a2fc upstream.
+commit 3dfe85fa87b2a26bdbd292b66653bba065cf9941 upstream.
 
-The arm_smmu_mm_invalidate_range function is designed to be called
-by mm core for Shared Virtual Addressing purpose between IOMMU and
-CPU MMU. However, the ways of two subsystems defining their "end"
-addresses are slightly different. IOMMU defines its "end" address
-using the last address of an address range, while mm core defines
-that using the following address of an address range:
+A faulty receiver might report an erroneous channel count. We
+should guard against reading beyond AUDIO_CHANNELS_COUNT as
+that would overflow the dpcd_pattern_period array.
 
-	include/linux/mm_types.h:
-		unsigned long vm_end;
-		/* The first byte after our end address ...
-
-This mismatch resulted in an incorrect calculation for size so it
-failed to be page-size aligned. Further, it caused a dead loop at
-"while (iova < end)" check in __arm_smmu_tlb_inv_range function.
-
-This patch fixes the issue by doing the calculation correctly.
-
-Fixes: 2f7e8c553e98 ("iommu/arm-smmu-v3: Hook up ATC invalidation to mm ops")
+Signed-off-by: Harry Wentland <harry.wentland@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Link: https://lore.kernel.org/r/20220419210158.21320-1-nicolinc@nvidia.com
-Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -183,7 +183,14 @@ static void arm_smmu_mm_invalidate_range
- {
- 	struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
- 	struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
--	size_t size = end - start + 1;
-+	size_t size;
-+
-+	/*
-+	 * The mm_types defines vm_end as the first byte after the end address,
-+	 * different from IOMMU subsystem using the last address of an address
-+	 * range. So do a simple translation here by calculating size correctly.
-+	 */
-+	size = end - start;
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -3118,7 +3118,7 @@ static void dp_test_get_audio_test_data(
+ 		&dpcd_pattern_type.value,
+ 		sizeof(dpcd_pattern_type));
  
- 	if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_BTM))
- 		arm_smmu_tlb_inv_range_asid(start, size, smmu_mn->cd->asid,
+-	channel_count = dpcd_test_mode.bits.channel_count + 1;
++	channel_count = min(dpcd_test_mode.bits.channel_count + 1, AUDIO_CHANNELS_COUNT);
+ 
+ 	// read pattern periods for requested channels when sawTooth pattern is requested
+ 	if (dpcd_pattern_type.value == AUDIO_TEST_PATTERN_SAWTOOTH ||
 
 

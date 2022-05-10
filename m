@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585725218BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F8B521852
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbiEJNjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S243468AbiEJNe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243235AbiEJN0i (ORCPT
+        with ESMTP id S242904AbiEJNZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:26:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97171AD59A;
-        Tue, 10 May 2022 06:19:10 -0700 (PDT)
+        Tue, 10 May 2022 09:25:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3D11F92A4;
+        Tue, 10 May 2022 06:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19A0361574;
-        Tue, 10 May 2022 13:19:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E940C385D9;
-        Tue, 10 May 2022 13:19:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5C119CE1E67;
+        Tue, 10 May 2022 13:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA5CC385C6;
+        Tue, 10 May 2022 13:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188749;
-        bh=s5f/t7GKIrC/DOo4GxniZ8U7AtBWL3nX1eULqNQQRlc=;
+        s=korg; t=1652188668;
+        bh=WmU0JrNCPKKDk0egiaa5q5KGJgNq4xSZSHdSFEerGvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WmCknKvhPwKXRrGeIN9vQIsexIa8ka9idH1Qd2M9in84R0teWYfHtmoeU9WmbVPQ5
-         /r7VPAm3UYnG6aoyNlX17dy75fKrjnaKQ7KQb7InAkHmRQzD+iUCI06u1dn94wgqmk
-         RjHyxPReum4bM1nYdVtNRVE5MFIcYGJ8xLLeVqXo=
+        b=PPlEnqSoMx94214zBzKEiGcNe1xIrXjL2sENyqiSpDTukNZKvzsll2yVoTDJtomDU
+         AIhmaM23wqczcV94c4SfDIvpktRa3yGhKqo6tLDtRoWxRRHgyBskUuytk2a3ETQ/Cq
+         wupYLsnsjVWMV862fSboPwwXLztSjUrFqJaJwk4k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Francesco Ruggeri <fruggeri@arista.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 32/88] tcp: md5: incorrect tcp_header_len for incoming connections
-Date:   Tue, 10 May 2022 15:07:17 +0200
-Message-Id: <20220510130734.679595336@linuxfoundation.org>
+Subject: [PATCH 4.14 32/78] mtd: rawnand: Fix return value check of wait_for_completion_timeout
+Date:   Tue, 10 May 2022 15:07:18 +0200
+Message-Id: <20220510130733.486432722@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Ruggeri <fruggeri@arista.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5b0b9e4c2c895227c8852488b3f09839233bba54 ]
+[ Upstream commit 084c16ab423a8890121b902b405823bfec5b4365 ]
 
-In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
-remote address in newsk. But that address is still 0 in newsk at this
-point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
-Use the address from the request socket instead.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220421005026.686A45EC01F2@us226.sjc.aristanetworks.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220412083435.29254-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_minisocks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/nand/sh_flctl.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index a20b393b4501..c79cb949da66 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -550,7 +550,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
- 	newtp->tsoffset = treq->ts_off;
- #ifdef CONFIG_TCP_MD5SIG
- 	newtp->md5sig_info = NULL;	/*XXX*/
--	if (newtp->af_specific->md5_lookup(sk, newsk))
-+	if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
- 		newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
- #endif
- 	if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
+diff --git a/drivers/mtd/nand/sh_flctl.c b/drivers/mtd/nand/sh_flctl.c
+index f2ed03ee3035..eac65aff5401 100644
+--- a/drivers/mtd/nand/sh_flctl.c
++++ b/drivers/mtd/nand/sh_flctl.c
+@@ -399,7 +399,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
+ 	dma_addr_t dma_addr;
+ 	dma_cookie_t cookie;
+ 	uint32_t reg;
+-	int ret;
++	int ret = 0;
++	unsigned long time_left;
+ 
+ 	if (dir == DMA_FROM_DEVICE) {
+ 		chan = flctl->chan_fifo0_rx;
+@@ -440,13 +441,14 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
+ 		goto out;
+ 	}
+ 
+-	ret =
++	time_left =
+ 	wait_for_completion_timeout(&flctl->dma_complete,
+ 				msecs_to_jiffies(3000));
+ 
+-	if (ret <= 0) {
++	if (time_left == 0) {
+ 		dmaengine_terminate_all(chan);
+ 		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
++		ret = -ETIMEDOUT;
+ 	}
+ 
+ out:
+@@ -456,7 +458,7 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *flctl, unsigned long *buf,
+ 
+ 	dma_unmap_single(chan->device->dev, dma_addr, len, dir);
+ 
+-	/* ret > 0 is success */
++	/* ret == 0 is success */
+ 	return ret;
+ }
+ 
+@@ -480,7 +482,7 @@ static void read_fiforeg(struct sh_flctl *flctl, int rlen, int offset)
+ 
+ 	/* initiate DMA transfer */
+ 	if (flctl->chan_fifo0_rx && rlen >= 32 &&
+-		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE) > 0)
++		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_FROM_DEVICE))
+ 			goto convert;	/* DMA success */
+ 
+ 	/* do polling transfer */
+@@ -539,7 +541,7 @@ static void write_ec_fiforeg(struct sh_flctl *flctl, int rlen,
+ 
+ 	/* initiate DMA transfer */
+ 	if (flctl->chan_fifo0_tx && rlen >= 32 &&
+-		flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE) > 0)
++		!flctl_dma_fifo0_transfer(flctl, buf, rlen, DMA_TO_DEVICE))
+ 			return;	/* DMA success */
+ 
+ 	/* do polling transfer */
 -- 
 2.35.1
 

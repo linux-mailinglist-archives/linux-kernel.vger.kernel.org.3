@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B11521782
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986765218E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243124AbiEJNZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S244396AbiEJNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243343AbiEJNVs (ORCPT
+        with ESMTP id S243081AbiEJNZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5E8369F7;
-        Tue, 10 May 2022 06:15:49 -0700 (PDT)
+        Tue, 10 May 2022 09:25:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205F023021D;
+        Tue, 10 May 2022 06:18:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8072CB81CE7;
-        Tue, 10 May 2022 13:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F96C385C6;
-        Tue, 10 May 2022 13:15:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B446B61663;
+        Tue, 10 May 2022 13:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEEAC385C2;
+        Tue, 10 May 2022 13:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188519;
-        bh=oc6DGHxk7tBm4fTtD+Nku+wgVy/bLOm9h6z8z3yKvNM=;
+        s=korg; t=1652188726;
+        bh=8lm3thwt99G1i9oKsvxb5K2n7Qp9sOJOBnjoL2NNz4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mD15IfMlaAXfSVfiVF0ONId0jwZEBAp+Fhdx68+ys1OTIG09dA804XaxaHbFAtuRW
-         rvlplY2h9JQJB/tsNOsUJ1Wr14X1So2QqA7FZ1RoQGijYIuoYxgADVodUVlCWFya6m
-         bu5FsT4JUXkZKIxTqfaPjFxm1rEwR8gVSipZrY/0=
+        b=CvFfCqqrxwZdJrkhOPxQymfFvRB++rF+6ZyoHgp5Y9dVVpJG4CEs2FOUIUeK3n3Na
+         aJ2jwotfz3egIycPv1TENrBnggCyjI+DgcmMhfC6KZeMtzPT8i6FnVoZd/K9NbiRJt
+         sJ8cZjo/47bIrYutq56hQOsZY+dPeUh4o4HSWAg8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 05/78] Revert "net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link"
-Date:   Tue, 10 May 2022 15:06:51 +0200
-Message-Id: <20220510130732.686866474@linuxfoundation.org>
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 07/88] USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
+Date:   Tue, 10 May 2022 15:06:52 +0200
+Message-Id: <20220510130733.954582778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 75e105d068cb98e43a6bb6b196fc006da52f9ee5 which is
-commit a6aaa00324240967272b451bfa772547bd576ee6 upstream.
+From: Daniele Palmas <dnlplm@gmail.com>
 
-Pavel reports that it causes boot issues, so revert it for now.
+commit f32c5a0423400e01f4d7c607949fa3a1f006e8fa upstream.
 
-Link: https://lore.kernel.org/r/20220429074341.GB1423@amd
-Reported-by: Pavel Machek <pavel@denx.de>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Sasha Levin <sashal@kernel.org>
+Add support for the following Telit FN980 and FN990 compositions:
+
+0x1057: tty, adb, rmnet, tty, tty, tty, tty, tty
+0x1058: tty, adb, tty, tty, tty, tty, tty
+0x1075: adb, tty
+
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://lore.kernel.org/r/20220406141408.580669-1-dnlplm@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |    8 ++++++++
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |    4 ----
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   13 ++++++++-----
- 3 files changed, 16 insertions(+), 9 deletions(-)
+ drivers/usb/serial/option.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-@@ -68,6 +68,10 @@
- #define TSE_PCS_USE_SGMII_ENA				BIT(0)
- #define TSE_PCS_IF_USE_SGMII				0x03
- 
-+#define SGMII_ADAPTER_CTRL_REG				0x00
-+#define SGMII_ADAPTER_DISABLE				0x0001
-+#define SGMII_ADAPTER_ENABLE				0x0000
-+
- #define AUTONEGO_LINK_TIMER				20
- 
- static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
-@@ -211,8 +215,12 @@ void tse_pcs_fix_mac_speed(struct tse_pc
- 			   unsigned int speed)
- {
- 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
-+	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
- 	u32 val;
- 
-+	writew(SGMII_ADAPTER_ENABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+
- 	pcs->autoneg = phy_dev->autoneg;
- 
- 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-@@ -21,10 +21,6 @@
- #include <linux/phy.h>
- #include <linux/timer.h>
- 
--#define SGMII_ADAPTER_CTRL_REG		0x00
--#define SGMII_ADAPTER_ENABLE		0x0000
--#define SGMII_ADAPTER_DISABLE		0x0001
--
- struct tse_pcs {
- 	struct device *dev;
- 	void __iomem *tse_pcs_base;
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -29,6 +29,9 @@
- 
- #include "altr_tse_pcs.h"
- 
-+#define SGMII_ADAPTER_CTRL_REG                          0x00
-+#define SGMII_ADAPTER_DISABLE                           0x0001
-+
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
-@@ -62,14 +65,16 @@ static void socfpga_dwmac_fix_mac_speed(
- {
- 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
- 	void __iomem *splitter_base = dwmac->splitter_base;
-+	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
- 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
- 	struct device *dev = dwmac->dev;
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct phy_device *phy_dev = ndev->phydev;
- 	u32 val;
- 
--	writew(SGMII_ADAPTER_DISABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	if ((tse_pcs_base) && (sgmii_adapter_base))
-+		writew(SGMII_ADAPTER_DISABLE,
-+		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 
- 	if (splitter_base) {
- 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
-@@ -91,9 +96,7 @@ static void socfpga_dwmac_fix_mac_speed(
- 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
- 	}
- 
--	writew(SGMII_ADAPTER_ENABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
--	if (phy_dev)
-+	if (tse_pcs_base && sgmii_adapter_base)
- 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
- }
- 
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1219,6 +1219,10 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1056, 0xff),	/* Telit FD980 */
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1057, 0xff),	/* Telit FN980 */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1058, 0xff),	/* Telit FN980 (PCIe) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1060, 0xff),	/* Telit LN920 (rmnet) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1061, 0xff),	/* Telit LN920 (MBIM) */
+@@ -1235,6 +1239,8 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990 (PCIe) */
++	  .driver_info = RSVD(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 
 

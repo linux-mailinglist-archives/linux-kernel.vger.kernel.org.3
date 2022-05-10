@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B195219C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5C15219C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244657AbiEJNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        id S244739AbiEJNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243336AbiEJNdM (ORCPT
+        with ESMTP id S243402AbiEJNde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:33:12 -0400
+        Tue, 10 May 2022 09:33:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F922380E2;
-        Tue, 10 May 2022 06:24:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223E023885F;
+        Tue, 10 May 2022 06:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD0CDB81DB1;
-        Tue, 10 May 2022 13:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499B3C385C9;
-        Tue, 10 May 2022 13:24:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C511B81DA9;
+        Tue, 10 May 2022 13:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BB4C385A6;
+        Tue, 10 May 2022 13:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189056;
-        bh=p66mXbbVKTuTCV9wvWvuCcAImiMsmy9tH8s+oB4xHXE=;
+        s=korg; t=1652189060;
+        bh=PxDPF3GeCBkDLBNd4DKQ3kujRzsOPDcr93P8GduNzsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Di9MqFst3LMVDOP/gg3pOd7KhKTklTRGFWavhGeE4QcpZZ7WLG6EYd7z9nMWMQkvJ
-         4eVVrsGHGlIw8VyOtDEEEfjIIRM6XkatoVxVmXeC/MmPJlEi9vYeNJiUtUyIAvsKg6
-         4UB5ouLoo6rsMyRPTOR7PA8LiiCf5HyDhr7zr5R8=
+        b=aiQAThZBMg+qweITzPxV2xTh/OKTAXWciHzzLiP13iGR2iLmo+C1iHJqoL3k4+ZDe
+         KlZSYFyELdFLx7oJi9zDaEXlyYHfuWW7YCjEcK+buC3cqKHDxWE5GlgWsLpBvCieI6
+         007TzCoY4LRp2SxfAi9YUDSd4ERpOeIm+yVWG2UI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.4 51/52] PCI: aardvark: Fix reading MSI interrupt number
-Date:   Tue, 10 May 2022 15:08:20 +0200
-Message-Id: <20220510130731.345785180@linuxfoundation.org>
+        stable@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Christian Loehle <cloehle@hyperstone.com>
+Subject: [PATCH 5.4 52/52] mmc: rtsx: add 74 Clocks in power on flow
+Date:   Tue, 10 May 2022 15:08:21 +0200
+Message-Id: <20220510130731.375039960@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
 References: <20220510130729.852544477@linuxfoundation.org>
@@ -56,59 +55,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Ricky WU <ricky_wu@realtek.com>
 
-commit 805dfc18dd3d4dd97a987d4406593b5a225b1253 upstream.
+commit 1f311c94aabdb419c28e3147bcc8ab89269f1a7e upstream.
 
-In advk_pcie_handle_msi() it is expected that when bit i in the W1C
-register PCIE_MSI_STATUS_REG is cleared, the PCIE_MSI_PAYLOAD_REG is
-updated to contain the MSI number corresponding to index i.
+SD spec definition:
+"Host provides at least 74 Clocks before issuing first command"
+After 1ms for the voltage stable then start issuing the Clock signals
 
-Experiments show that this is not so, and instead PCIE_MSI_PAYLOAD_REG
-always contains the number of the last received MSI, overall.
+if POWER STATE is
+MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
+MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
 
-Do not read PCIE_MSI_PAYLOAD_REG register for determining MSI interrupt
-number. Since Aardvark already forbids more than 32 interrupts and uses
-own allocated hwirq numbers, the msi_idx already corresponds to the
-received MSI number.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-3-kabel@kernel.org
-Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
+Link: https://lore.kernel.org/r/1badf10aba764191a1a752edcbf90389@realtek.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-aardvark.c |   10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/mmc/host/rtsx_pci_sdmmc.c |   31 +++++++++++++++++++++----------
+ 1 file changed, 21 insertions(+), 10 deletions(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1372,7 +1372,7 @@ static void advk_pcie_remove_irq_domain(
- static void advk_pcie_handle_msi(struct advk_pcie *pcie)
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -37,10 +37,7 @@ struct realtek_pci_sdmmc {
+ 	bool			double_clk;
+ 	bool			eject;
+ 	bool			initial_mode;
+-	int			power_state;
+-#define SDMMC_POWER_ON		1
+-#define SDMMC_POWER_OFF		0
+-
++	int			prev_power_state;
+ 	int			sg_count;
+ 	s32			cookie;
+ 	int			cookie_sg_count;
+@@ -902,14 +899,21 @@ static int sd_set_bus_width(struct realt
+ 	return err;
+ }
+ 
+-static int sd_power_on(struct realtek_pci_sdmmc *host)
++static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
  {
- 	u32 msi_val, msi_mask, msi_status, msi_idx;
--	u16 msi_data;
-+	int virq;
+ 	struct rtsx_pcr *pcr = host->pcr;
+ 	int err;
  
- 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
- 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
-@@ -1382,13 +1382,9 @@ static void advk_pcie_handle_msi(struct
- 		if (!(BIT(msi_idx) & msi_status))
- 			continue;
+-	if (host->power_state == SDMMC_POWER_ON)
++	if (host->prev_power_state == MMC_POWER_ON)
+ 		return 0;
  
--		/*
--		 * msi_idx contains bits [4:0] of the msi_data and msi_data
--		 * contains 16bit MSI interrupt number
--		 */
- 		advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG);
--		msi_data = advk_readl(pcie, PCIE_MSI_PAYLOAD_REG) & PCIE_MSI_DATA_MASK;
--		generic_handle_irq(msi_data);
-+		virq = irq_find_mapping(pcie->msi_inner_domain, msi_idx);
-+		generic_handle_irq(virq);
- 	}
++	if (host->prev_power_state == MMC_POWER_UP) {
++		rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
++		goto finish;
++	}
++
++	msleep(100);
++
+ 	rtsx_pci_init_cmd(pcr);
+ 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
+ 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SHARE_MODE,
+@@ -928,11 +932,17 @@ static int sd_power_on(struct realtek_pc
+ 	if (err < 0)
+ 		return err;
  
- 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING,
++	mdelay(1);
++
+ 	err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
+ 	if (err < 0)
+ 		return err;
+ 
+-	host->power_state = SDMMC_POWER_ON;
++	/* send at least 74 clocks */
++	rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
++
++finish:
++	host->prev_power_state = power_mode;
+ 	return 0;
+ }
+ 
+@@ -941,7 +951,7 @@ static int sd_power_off(struct realtek_p
+ 	struct rtsx_pcr *pcr = host->pcr;
+ 	int err;
+ 
+-	host->power_state = SDMMC_POWER_OFF;
++	host->prev_power_state = MMC_POWER_OFF;
+ 
+ 	rtsx_pci_init_cmd(pcr);
+ 
+@@ -967,7 +977,7 @@ static int sd_set_power_mode(struct real
+ 	if (power_mode == MMC_POWER_OFF)
+ 		err = sd_power_off(host);
+ 	else
+-		err = sd_power_on(host);
++		err = sd_power_on(host, power_mode);
+ 
+ 	return err;
+ }
+@@ -1402,10 +1412,11 @@ static int rtsx_pci_sdmmc_drv_probe(stru
+ 
+ 	host = mmc_priv(mmc);
+ 	host->pcr = pcr;
++	mmc->ios.power_delay_ms = 5;
+ 	host->mmc = mmc;
+ 	host->pdev = pdev;
+ 	host->cookie = -1;
+-	host->power_state = SDMMC_POWER_OFF;
++	host->prev_power_state = MMC_POWER_OFF;
+ 	INIT_WORK(&host->work, sd_request);
+ 	platform_set_drvdata(pdev, host);
+ 	pcr->slots[RTSX_SD_CARD].p_dev = pdev;
 
 

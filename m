@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48F2522531
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C0C522533
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiEJUJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
+        id S233112AbiEJUKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiEJUJU (ORCPT
+        with ESMTP id S229436AbiEJUKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:09:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931F1517CC;
-        Tue, 10 May 2022 13:09:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 241D0B81CCA;
-        Tue, 10 May 2022 20:09:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF09C385CA;
-        Tue, 10 May 2022 20:09:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eNIy6d7i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652213352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iVsjahm8BYGF5k4eUyIen00pH/noxcYbwc9i8vcgHoE=;
-        b=eNIy6d7iwonW+4amRxi1drIzCnIhDu3e/N6LWFCJlEu9GdZjwGDAIfp9Fmjip8qlfLhqwQ
-        doq0CD7Axjzrq/xGg6PJBWhixYTJQFo5JcMJkZfiWN6tUb8Fmwi6fh7mSqg1fNjOldzKoR
-        tzyBotb8FJqC5fvEMB56LM/WkQ0d0i4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id eceaa09b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 10 May 2022 20:09:11 +0000 (UTC)
-Date:   Tue, 10 May 2022 22:09:04 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     dodis@cs.nyu.edu, tytso@mit.edu, nadiah@cs.ucsd.edu,
-        noahsd@gmail.com, tessaro@cs.washington.edu,
-        torvalds@linux-foundation.org, jeanphilippe.aumasson@gmail.com,
-        jann@thejh.net, keescook@chromium.org, gregkh@linuxfoundation.org,
-        peter@cryptojedi.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "D. J. Bernstein" <djb@cr.yp.to>
-Subject: Re: is "premature next" a real world rng concern, or just an
- academic exercise?
-Message-ID: <YnrGYMyEL8qPMRGt@zx2c4.com>
-References: <YmlMGx6+uigkGiZ0@zx2c4.com>
- <Ym3ZM1P+uYYABtRm@mit.edu>
- <Ym5sICj5iBMn2w/E@zx2c4.com>
- <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
- <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
- <YnqDC25iR8mcL3XB@zx2c4.com>
- <20220510185123.80607.qmail@cr.yp.to>
+        Tue, 10 May 2022 16:10:51 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C237B286E8;
+        Tue, 10 May 2022 13:10:49 -0700 (PDT)
+Received: from [192.168.88.87] (unknown [180.242.99.67])
+        by gnuweeb.org (Postfix) with ESMTPSA id 85BFE7F610;
+        Tue, 10 May 2022 20:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1652213448;
+        bh=xGbGpRh0CXRIes2avgyarli9Rp73tR9kYCMcxSyKOGY=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=Y71uOwEP1OuzgfBJxJAcbh3DjOMp7w2q8B0ZlPEpb0WGBpLN/0UGzZU6oKjaT4vT+
+         NaE/pD4g8oxs1aCCjbG8mKILd0KY01Oo0rTCzXVzL50WWYyZlhYs+CQFqYcgMt6/UE
+         nkFhdPf6WH8g4x5XFZUkdmYEyAI1Hfp6JiEWVQ+OMA5UddcvK3TWlBI6OA0s57hEuJ
+         AyXljU0N5gCxu3KHObvJz+NhWrb/slPVsmRthyrfkzprlKG4IRuEukoArktZtYZHZ/
+         hGyVVp9ZPzqFgUD0pj45XCMJf8LJFk3WQ69vYnlJdiMuCOwha46/0ytHQs1qvQSTS9
+         DJJ4LQIjvuApA==
+Message-ID: <435b5f7a-fcbd-f7ae-b66f-670e5997aa1b@gnuweeb.org>
+Date:   Wed, 11 May 2022 03:10:31 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220510185123.80607.qmail@cr.yp.to>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
+        xu xin <xu.xin16@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Linux fsdevel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220507105926.d4423601230f698b0f5228d1@linux-foundation.org>
+ <20220508092710.930126-1-xu.xin16@zte.com.cn>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH v5] mm/ksm: introduce ksm_force for each process
+In-Reply-To: <20220508092710.930126-1-xu.xin16@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Dan,
+On 5/8/22 4:27 PM, cgel.zte@gmail.com wrote:
+> +static ssize_t ksm_force_write(struct file *file, const char __user *buf,
+> +				size_t count, loff_t *ppos)
+> +{
+> +	struct task_struct *task;
+> +	struct mm_struct *mm;
+> +	char buffer[PROC_NUMBUF];
+> +	int force;
+> +	int err = 0;
+> +
+> +	memset(buffer, 0, sizeof(buffer));
+> +	if (count > sizeof(buffer) - 1)
+> +		count = sizeof(buffer) - 1;
+> +	if (copy_from_user(buffer, buf, count)) {
+> +		err = -EFAULT;
+> +		goto out_return;
+> +	}
 
-On Tue, May 10, 2022 at 08:51:23PM +0200, D. J. Bernstein wrote:
-> Jason A. Donenfeld writes:
-> > Right, VMs are super problematic, but for that, there's now this
-> > "vmgenid" driver, where the hypervisor actually gives a 128-bit seed to
-> > guests when they're resumed, so that we can immediately reseed, which
-> > should pretty comprehensively handle that situation.
-> 
-> Hmmm. If an application initializes its own RNG state from /dev/urandom,
-> and is then cloned, and then generates an ECDSA nonce from the RNG
-> state, and then uses this nonce to sign a message that's different
-> across the clones, how is disaster averted?
+This one looks like over-zeroing to me. You don't need to zero
+all elements in the array. You're going to overwrite it with
+`copy_from_user()` anyway.
 
-Currently WireGuard will drop its ephemeral session key material from
-the tx path, to prevent nonce use. This is because of an in-kernel
-mechanism I added in 5.18, which is pretty minimal and non-invasive, and
-came basically for free. CTRL+F for "vmgenid" in here for details:
-https://www.zx2c4.com/projects/linux-rng-5.17-5.18/
+Just zero the last potentially useful element by using @count
+as the index. It can be like this:
 
-For 5.19 (or at this point, more likely 5.20), there's a userspace
-notifier in store, maybe, if I can figure out how to do it right.
-There's a pretty bikesheddy thread here on what shape that interface
-should take: https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
-But basically there are some details about how an async interface should
-work, and what the virtual hardware future, if any, looks like for a
-memory mapped race-free polling interface. Plus some considerations on
-how much we should care etc.
+```
+	char buffer[PROC_NUMBUF];
 
-> Given the goal of sending money to cryptographers, I'm pretty sure we
-> want the answer to be a security-audit nightmare, so let me suggest the
-> following idea. There's SIGWINCH to notify processes about window-size
-> changes, so there should also be a signal for RNG changes, which should
-> be called SIGRINCH, and there should be a different mechanism to address
-> RNG output cloning inside the kernel, and there should be endless papers
-> on Grinch Attacks, including papers that sort of prove security against
-> Grinch Attacks, and deployment of software that's sort of protected
-> against Grinch Attacks, and fear of the bad PR from abandoning anything
-> labeled as protection, because, hey, _maybe_ the protection accomplishes
-> something, and it's not as if anyone is going to be blamed for whatever
-> damage is caused by the systems-level effect of the added complexity.
+	if (count > sizeof(buffer) - 1)
+		count = sizeof(buffer) - 1;
+	if (copy_from_user(buffer, buf, count))
+		return -EFAULT;
+	buffer[count] = '\0';
+```
 
-I mean... you kid, but you're also kind of on point here. There are
-about a thousand ways of doing this kind of notification that lead to
-impossible-to-program-for paradigms that people will find necessary to
-implement, and it'll be a nightmare if not done in a sufficiently slick
-way. For the in-kernel thing WireGuard uses, it doesn't really matter
-because the kernel is one big codebase so ergonomics can change need be.
-But userspace is another challenge.
-
-Jason
+-- 
+Ammar Faizi

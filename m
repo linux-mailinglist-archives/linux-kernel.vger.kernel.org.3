@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A6752116A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7C652116B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239289AbiEJJxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S239297AbiEJJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239047AbiEJJxl (ORCPT
+        with ESMTP id S239300AbiEJJxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:53:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A512A18B9;
-        Tue, 10 May 2022 02:49:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7600B81BDA;
-        Tue, 10 May 2022 09:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8878C385C6;
-        Tue, 10 May 2022 09:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652176182;
-        bh=/gOPBTu3tvTGApNFzFvVy75YBVIr8MiZpBkvRlR3SAg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o2f5tiyUi4srx27bB6MrXZ2j9/2vfTHsYi2d/1SpF8A7Bklyn4VHHkZAr3LjwskgY
-         UvS/vZGyFrRig4kYhW6gMzWgPNCk5EiAHqXtgYDg+NCVP+5sVb03xssrYWlBE3oT8k
-         USZJGUKmavA4bhxS56T4ippuDkLqhurpwT50/Bo0=
-Date:   Tue, 10 May 2022 11:49:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH v1] serial: meson: acquire port->lock in startup()
-Message-ID: <Yno1MzqCzoITbCjk@kroah.com>
-References: <20220508103547.626355-1-john.ogness@linutronix.de>
- <cf593ff3-bf57-ccd3-9a25-b28cc604d6f4@baylibre.com>
- <YnoyU3fydh46e2Sc@alley>
+        Tue, 10 May 2022 05:53:55 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF9E2A18BD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:49:58 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id c11so22962138wrn.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qm5RREdXQYpD9UHeciW2nIxgirPQgGEeBKiqx8FamVc=;
+        b=efU5E2c+QJFiheymKzvrh090KLPPHIS0arcOJx/Bb75Oj2COjqe/Yqmuol7AQna1Yf
+         5zmuJ3pG0sehWYpBbumWjxmLp0mpfoYj1TrUb8AMsPFIhoZCljEU9T+7XdvE5K3InNDj
+         Nm00jEsKJu8JvvQ7ebG722Un6xcxu+nR6mOWh84UXxgkvlyVOtD3UrDiCYSUTNNpXi8R
+         0NJx/qAPlQDHthJI9/qYDjDES4vYVUXAoT9J2bcP20b+XvA3AGQYUQoMcuPiADGW2eFU
+         JkJok6xFmy5rGJAqiUyjiOsjVDtJzqjI3AeM7Ueu+So1M0OlzTsOXSr+AEEiZXKyjoUx
+         thyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qm5RREdXQYpD9UHeciW2nIxgirPQgGEeBKiqx8FamVc=;
+        b=07Khnr1iWbcwQ9S5dZg7+ID1tCMtBuB+XZOLsouZDWZAS0sjG4j+JhYHDeePw1SyIc
+         B6n4H3S0XNUViKst7DNPWau9rJwhQVjoQ/cjDwktCsmH98Nx6PpgfmkxpKotrPd2cLZB
+         7eA5Ddhf+kTy0zmbAqEpBiI2QnROUkzC8VN3EX4U6PmKwaz3lI/Uyo2m5v6yQScyOta1
+         tbqpBEsykg6eRgJKkX0TRaECIDx29XHo97BeB2CWizcd/YtWgKgACmBRLmnarLV1Ljgf
+         0rQwlikJO81N+y3c8oGhWkKP8aOvB70jePp/Ofaqa0c3lVadZLCyyvWc+zwjZ33E6p2Y
+         yaVg==
+X-Gm-Message-State: AOAM531UOyfAbcGpzacbO8MJG4VDhxgrZq+48IGh8rPjb/J/TeBNMGVG
+        4u8ydbX/xI6ZzuIEn8AIkaIbfA==
+X-Google-Smtp-Source: ABdhPJyjggIJx3KuEgtm3jMKrZaNgrv7vbn4kBIFKQ0Pvz4AFU7h8xKtBQP0OqIEzfO5SXHyR7+J+Q==
+X-Received: by 2002:adf:e104:0:b0:206:109a:c90f with SMTP id t4-20020adfe104000000b00206109ac90fmr17781979wrz.259.1652176197268;
+        Tue, 10 May 2022 02:49:57 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id m7-20020adffa07000000b0020cb42671aasm8877630wrr.105.2022.05.10.02.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 02:49:56 -0700 (PDT)
+Message-ID: <3cf688f6-63b3-3860-db25-c63733b33ef1@linaro.org>
+Date:   Tue, 10 May 2022 10:49:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnoyU3fydh46e2Sc@alley>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] slimbus: qcom: Remove unnecessary print function
+ dev_err()
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220429165051.6187-1-srinivas.kandagatla@linaro.org>
+ <20220429165051.6187-3-srinivas.kandagatla@linaro.org>
+ <YnkaTOk3SzcyFJyP@kroah.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <YnkaTOk3SzcyFJyP@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,99 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:37:23AM +0200, Petr Mladek wrote:
-> On Mon 2022-05-09 09:36:40, Neil Armstrong wrote:
-> > On 08/05/2022 12:35, John Ogness wrote:
-> > > The uart_ops startup() callback is called without interrupts
-> > > disabled and without port->lock locked, relatively late during the
-> > > boot process (from the call path of console_on_rootfs()). If the
-> > > device is a console, it was already previously registered and could
-> > > be actively printing messages.
-> > > 
-> > > Since the startup() callback is reading/writing registers used by
-> > > the console write() callback (AML_UART_CONTROL), its access must
-> > > be synchronized using the port->lock. Currently it is not.
-> > > 
-> > > The startup() callback is the only function that explicitly enables
-> > > interrupts. Without the synchronization, it is possible that
-> > > interrupts become accidentally permanently disabled.
-> > > 
-> > > CPU0                           CPU1
-> > > meson_serial_console_write     meson_uart_startup
-> > > --------------------------     ------------------
-> > > spin_lock(port->lock)
-> > > val = readl(AML_UART_CONTROL)
-> > > uart_console_write()
-> > >                                 writel(INT_EN, AML_UART_CONTROL)
-> > > writel(val, AML_UART_CONTROL)
-> > > spin_unlock(port->lock)
-> > > 
-> > > Add port->lock synchronization to meson_uart_startup() to avoid
-> > > racing with meson_serial_console_write().
-> > > 
-> > > Also add detailed comments to meson_uart_reset() explaining why it
-> > > is *not* using port->lock synchronization.
-> > > 
-> > > Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
-> > > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > > Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > > ---
-> > >   drivers/tty/serial/meson_uart.c | 13 +++++++++++++
-> > >   1 file changed, 13 insertions(+)
-> > > 
-> > > diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> > > index 2bf1c57e0981..39021dac09cc 100644
-> > > --- a/drivers/tty/serial/meson_uart.c
-> > > +++ b/drivers/tty/serial/meson_uart.c
-> > > @@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
-> > >   	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
-> > >   }
-> > > +/*
-> > > + * This function is called only from probe() using a temporary io mapping
-> > > + * in order to perform a reset before setting up the device. Since the
-> > > + * temporarily mapped region was successfully requested, there can be no
-> > > + * console on this port at this time. Hence it is not necessary for this
-> > > + * function to acquire the port->lock. (Since there is no console on this
-> > > + * port at this time, the port->lock is not initialized yet.)
-> > > + */
-> > >   static void meson_uart_reset(struct uart_port *port)
-> > >   {
-> > >   	u32 val;
-> > > @@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
-> > >   static int meson_uart_startup(struct uart_port *port)
-> > >   {
-> > > +	unsigned long flags;
-> > >   	u32 val;
-> > >   	int ret = 0;
-> > > +	spin_lock_irqsave(&port->lock, flags);
-> > > +
-> > >   	val = readl(port->membase + AML_UART_CONTROL);
-> > >   	val |= AML_UART_CLEAR_ERR;
-> > >   	writel(val, port->membase + AML_UART_CONTROL);
-> > > @@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
-> > >   	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
-> > >   	writel(val, port->membase + AML_UART_MISC);
-> > > +	spin_unlock_irqrestore(&port->lock, flags);
-> > > +
-> > >   	ret = request_irq(port->irq, meson_uart_interrupt, 0,
-> > >   			  port->name, port);
-> > > 
-> > > base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-> > 
-> > Thanks for fixing this, it may also fix an uart apparent lockup I encountered
-> > several time while developing on the platform, but the target was still alive
-> > so it matches.
-> > 
-> > So I'll add:
-> > Fixes: ff7693d079e5 ("ARM: meson: serial: add MesonX SoC on-chip uart driver")
-> > 
-> > and
-> > 
-> > Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+
+
+On 09/05/2022 14:42, Greg KH wrote:
+> On Fri, Apr 29, 2022 at 05:50:51PM +0100, Srinivas Kandagatla wrote:
+>> From: Yang Li <yang.lee@linux.alibaba.com>
+>>
+>> The print function dev_err() is redundant because
+>> platform_get_irq_byname() already prints an error.
+>>
+>> Eliminate the follow coccicheck warning:
+>> ./drivers/slimbus/qcom-ctrl.c:514:2-9: line 514 is redundant because
+>> platform_get_irq() already prints an error
+>>
+>> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> ---
+>>   drivers/slimbus/qcom-ctrl.c | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+>> index ec58091fc948..c0c4f895d76e 100644
+>> --- a/drivers/slimbus/qcom-ctrl.c
+>> +++ b/drivers/slimbus/qcom-ctrl.c
+>> @@ -510,10 +510,8 @@ static int qcom_slim_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	ctrl->irq = platform_get_irq(pdev, 0);
+>> -	if (ctrl->irq < 0) {
+>> -		dev_err(&pdev->dev, "no slimbus IRQ\n");
+>> +	if (ctrl->irq < 0)
+>>   		return ctrl->irq;
+>> -	}
+>>   
+>>   	sctrl = &ctrl->ctrl;
+>>   	sctrl->dev = &pdev->dev;
+>> -- 
+>> 2.21.0
+>>
 > 
-> Neil, may I assume that you are going to queue this fix for 5.19, please?
+> Does not apply to my tree :(
+Sorry my bad..
+I see there was a depended fix[1] that needs to go in first.
+I was hoping that that will be applied first..
+Let me resend them together in v2.
 
-I can take it, thanks.
 
-greg k-h
+[1] https://lkml.org/lkml/2022/4/29/1093
+
+Thanks,
+srini
+> 
+> 

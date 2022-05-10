@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F70E521611
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8AA5215D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbiEJM7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S241969AbiEJMxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242113AbiEJM7J (ORCPT
+        with ESMTP id S241714AbiEJMxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:59:09 -0400
-X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 May 2022 05:54:36 PDT
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16512B09C5;
-        Tue, 10 May 2022 05:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1652187274;
-        bh=3SEveaMj4jZCnJ5APQibQymks8/uOLuj8e/GbWas2KM=;
-        h=X-UI-Sender-Class:Date:To:Cc:From:Subject;
-        b=SBNtqWtVRzHMduAvz9KrxuD+zx4/QfELVFeQ0D5WxgqhwnG+VV0d8MCkRUcLy3nvW
-         x2X1O0O9HS6rskAWVt+yncCuDQmlSEFdfeYWwUZv+TOOv9jOx/103WS/OctHtefPWa
-         pFdQnMBbFCONGxLckExrhP6UTIZ7qz63iWlAmRXk=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.178.22] ([87.155.228.41]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MIc7N-1ncaui288r-00EJWJ; Tue, 10
- May 2022 14:48:57 +0200
-Message-ID: <b199d9f9-e3ae-df51-87b9-51202269d484@web.de>
-Date:   Tue, 10 May 2022 14:48:56 +0200
+        Tue, 10 May 2022 08:53:34 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C9C1A0750
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:36 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k27so19873607edk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OkJdI54e0iw+j0SubUNETqHu76mK4u9Bb+TpmNhQfJk=;
+        b=WcQESiMaelNFY4q4rRbkObJfFwbtVisQ/QjNSdC2B1kHTjKTB/HKEPrJ68Ar3s0cGC
+         vMvdLkCkffbKCDL0asmj+yMcyxwTdEBjOQ6OfPsp+CZwW7soGLWi/q8/VZfFV9jA1a0l
+         4elH/LTIugjEjVCP+herNH7fH9lrVsosG3NSRmTDk2wzhFvHNTuxQcXFfr/hc3Ah5JJS
+         atgRNfZzyUXdY58lBoVJF01UZbDk5nO+hyyiwRNf+JWS2jbQPM/hIFBC6vsrqA5xSPsZ
+         sybZDR21taCdULQ2yzm/rtqkNwCBxoDFYp4o2+jPPPFqvksBb6+QiIYKe5rWe/A7z44N
+         n5sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OkJdI54e0iw+j0SubUNETqHu76mK4u9Bb+TpmNhQfJk=;
+        b=Yw1mmI2gHg4Tah/t8s3MmcrvJzDJ2q3hRYrE7RxmrQLqmuQNFdPRVjrH8MwQwN/pK/
+         dF4F657wqg2anfOocU79zbDIUCko5noCZ3jliSHfIiK7r6rrTVwK8/+xd1phUH+Cn3NJ
+         e6/FFFVmPZJClbs183pXm5zivOlrEzYg/fwekD4x475uc/t4FtVcA6UJ9kNriWl8tCmr
+         5gVLjn1ZjoAYUtQK4JgnLfBopRAf0We4ziCfjX6VjO8SV8xVchdADR8nbsCfbf+pzwgv
+         wnamPnTfEITcaba8tBjR7+MtzkQC2kn/w4/JfSfk7T9BCxmSRPkoBl0uw3WkIrxBYgeK
+         waJw==
+X-Gm-Message-State: AOAM5316wX39xtdzoEGNbT+ggPnt/LzQoGKz0+H4oFbXG3hcuu4nBRH4
+        tZX1Gjc5e7HL1Isu1q1T6H+WIr0APpQhoFWK
+X-Google-Smtp-Source: ABdhPJxtXVk31Azba6nGHM86/peUdBPMSNyGDp3aDe/i4YnfTlGxc5OUae5y5syCyuUmkTmroh9LBA==
+X-Received: by 2002:a05:6402:1a26:b0:425:d3cf:d7f0 with SMTP id be6-20020a0564021a2600b00425d3cfd7f0mr23438469edb.251.1652186975008;
+        Tue, 10 May 2022 05:49:35 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpezg-94-253-144-75-cbl.xnet.hr. [94.253.144.75])
+        by smtp.googlemail.com with ESMTPSA id gz14-20020a170907a04e00b006f3ef214e62sm6094290ejc.200.2022.05.10.05.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 05:49:34 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, pali@kernel.org,
+        marek.behun@nic.cz
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 01/11] dt-bindings: vendor-prefixes: add Methode Electronics
+Date:   Tue, 10 May 2022 14:49:19 +0200
+Message-Id: <20220510124929.91000-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     linux-ia64@vger.kernel.org
-Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, debian-ia64 <debian-ia64@lists.debian.org>,
-        Pedro Miguel Justo <pmsjt@texair.net>,
-        Sergei Trofimovich <slyich@gmail.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Anton Borisov <anton.borisov@gmail.com>
-From:   Frank Scheiner <frank.scheiner@web.de>
-Subject: [ia64] Linux 5.17 (Debian) - Hardened Usercopy: kernel BUG at
- mm/usercopy.c:100
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:YMIOBBmOBAJ4PxtJ1uHxMIIQn8NjniDeiaH5CjgBAH5oeh/PZtr
- LV9mfPL/pvOUnAIZxE11BOJJR5CzHqOwEDIuKR/GS/x098OBhV9Sf+xoVgef8+d/Kh1rsyc
- onwaCEwOfBwc90RcSCrGqJ2n8zBaOHVfrq/EwVPEeA34Y8GKS6q9tqFgDx5x6I+eTv92Rq2
- 4at9QRjWTy0KflgLK1aqw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SlCnFZznTqw=:qOluRGBlFmFx+Ae6Zl/WKm
- ivVX4uhT90Fvu2FGBEkWbSEIKpaeiYfOvKAyFHs3Q7awVFB9KjUFfm0EEKZTTXJsB3dXsTFP5
- 0S4ISoibnaxq9buC3PhSA0wwewVmSwnXsxH7za46YSAPkgAwVRcoNxMi896MEtp6FuIRxxkVR
- cM0zSlDpgO7bvuODc7r6I6u69HHPbJs9hniUQv1IAeICMMZgiEnB2f3oUxeq9VcK96sF1xHXa
- utpLVDhYI6/1yQ0lzJ1Kd7ULTcHo/NaAPjepmHKr0vKDgNWnRx7kUpLFER0LFWM4epUJNo4hl
- 4GIKJRa4lcV8e7XpnPZ18n0Gp70VzrFDspKPl4g5DBSteUh+ckJKHlAe03JIgu82XZo5xmRG9
- ICk19NxLdxgDSaf7COcRp4mHoMDzbfB8HwJ6f6yPsyGn6kxJ4ZtviV5AVmjyoQGPFTQuwjqZC
- OeTNtPP90DtzG/FUh23lbKQ8uY3QtZp2OzFlwvyqRRp8JfXOmzgWDs+MW6rvUsLGGC/3uumj4
- POZJzYmCKmHN9ge3F7J5y2/Ar/D+unkM7C1fUwf15LarbxmnGUf5j6mDnh6koQWCmSq910hYp
- pmvHGsCdgPXgGJB91Jd099Gp9ZsqdXyAX8xPa3gsuZzxWOwhdQKORZaAvQcHxxuThz7kbZYHi
- s2FjTCm9Jm62Vdbou8Dzn/twdjiO0Slhh8DOMCvaBcJ9mBt3nJWqdtGJcuBYAYi6TNXqABCes
- hOlnFdCsWoe5aNpfbu0cL32DRqojLzF9Z+OsyYTJRNN/0faPdlgjMonkgznN1Dw2fcpGCGCw/
- A3ofJEHKWYkbZyyYM4ld9P0arURp0h4Couee1b3ZYPKKqsCuRQia7L6xOA69VnnjdNykyTF/P
- dxyCbBCvTW8Vxtw9K8FOUB8m/U7QDtqkYYb9+n/joB8oeryn7zWaNxVE+xru682dAv6x6quvR
- Kc26snyPiL8x+CplVr6Wt92/PfGURXiFCH4E+kT8Pg6/BBd8BIvlPm4/O76LR4N9Iu1i44vvq
- uoeexULBLq47WHNLcOFsR4U8dMRyhAUm4oRN09dGA7k92cAlq8d10aZ0cSZ71Aaz2uqyyL+I9
- EXpp04mCV0dgHVP/t1QIICYiTF64S5n/uNy76aefSu48JjmgYV5Fs3Tbw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear all,
+Add vendor prefix for Methode Electronics, Inc. (https://www.methode.com)
 
-"hardened usercopy" does not work correctly on ia64. And deactivating it
-with `hardened_usercopy=3Doff` in the kernel commandline seems to make no
-real difference for specific Itanium 2 CPUs, namely:
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-* Madison (in rx4640 with zx1)
-* Montvale (in rx2660, rx3600 and rx6600 with zx2)
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 01430973ecec..e5ec476f54cd 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -764,6 +764,8 @@ patternProperties:
+     description: Cisco Meraki, LLC
+   "^merrii,.*":
+     description: Merrii Technology Co., Ltd.
++  "^methode,.*":
++    description: Methode Electronics, Inc.
+   "^micrel,.*":
+     description: Micrel Inc.
+   "^microchip,.*":
+-- 
+2.36.1
 
-...which can't successfully complete kernel boot with and w/o
-`hardened_usercopy=3Doff`.
-
-If "hardened usercopy" is deactivated in the kernel configuration
-instead it seems to allow Montvales to complete kernel boot successfully.
-
-@Pedro: Please correct me if I understood you wrongly here.
-
-* Montecitos (in rx2620 with zx1 and rx2660 with zx2) instead seem to
-work much better (both kernel boot and userland operation) with
-`hardened_usercopy=3Doff`. They don't work w/o `hardened_usercopy=3Doff`,
-though (rx2620 needs to be checked, true for rx2660).
-
-* Tukwilas (in rx2800 i2) seem to be not affected by this bug at all.
-
-****
-
-I compiled the stack traces of the machines I tested on [1].
-
-[1]: https://pastebin.com/raw/AKfZrjWi
-
-Please also see the originating "Re: rx2660 + debian" thread on Debian's
-ia64 mailing list ([2]), and specifically [3] where Pedro and Sergei
-start to dissect this problem. [4] shows that usercopy problems already
-seem to exist in Linux 4.19 (for Montvales in rx2660 with zx2)!
-
-[2]: https://lists.debian.org/debian-ia64/2022/04/threads.html
-
-[3]: https://lists.debian.org/debian-ia64/2022/04/msg00021.html
-
-[4]: https://lists.debian.org/debian-ia64/2022/04/msg00022.html
-
-****
-
-If you need more information, please let me know.
-
-I haven't yet created a bug report on "bugzilla.kernel.org" for this.
-Does this need any more information than what I just wrote above?
-
-Cheers,
-Frank

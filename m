@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDB4520EF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19178520F03
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbiEJHtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S236842AbiEJHv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiEJHtH (ORCPT
+        with ESMTP id S234014AbiEJHvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D721606B;
-        Tue, 10 May 2022 00:45:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB9C060BBD;
-        Tue, 10 May 2022 07:45:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2A6C385C8;
-        Tue, 10 May 2022 07:45:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652168710;
-        bh=ugbpxd8hq/QSkUx3xtpNb3sp3DwgNUZqFp9044ceY2w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VFPunFaI5TndtsGBePg5J+Qh0sI89pJgb/IjxFbp9l/WFUsySvRK26ASAOeRV/5di
-         35T4xOZVCYkarCNdLXm0RLiFji9yYegEmn2sPAnv7mYkUp8kJO0VBytxnIgwdKwUZW
-         Ll7dCm991hduGH27fX+4j86Fx9YjWMRJOF56UqzqvAJ6qQN0sN2/m4ceUcy470kDmp
-         v14C3u/gLLRsWPLj++xAIbyXvmcxXq1UWdYGQB79GAnsohmVYQkbmZnO0obPj41E9Y
-         w5zKNgcDfBD7nY6LoM1Xqmf+U4OQZHN+fYZyshSCKCibIF9LxuZCxxWpR61i+z5PYt
-         UIMrW7VnGWgaA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1noKYN-00AAdL-7r; Tue, 10 May 2022 08:45:07 +0100
+        Tue, 10 May 2022 03:51:23 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D31189E6C;
+        Tue, 10 May 2022 00:47:26 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24A4C6ou025914;
+        Tue, 10 May 2022 09:47:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Ty8V9iwX1zolMe/EYzmSOenyETw9D+oy8Fkl2LeWaHc=;
+ b=nMFvM5BsDN5UkMt3bfHddX09ptZtFYHlTllgyAlYGez5BLA1uW0f8C1WPwBLaQ4SWLDu
+ wWE8fmvgbUAP7a8StH0kx/Z9dwjxt1OaYsgcjufhxYyQDg0ETqqmCaWsz3NrRskrAt7S
+ qaJTKIfOPHjMo4zbhEkqR4ize/u6Hpf9GQWxxmRedJCCyLnjai9KQ9kDwgP7utiMFloF
+ oiaeGHW52/0l+7+UmJKL3F1n5oQZpDiv4JuFpcFNJhAVKt5ZikDTQ3wBbKR9stJ7UL5o
+ tj09jgpruzSTyHZDc/en/GVWoc+6tD1/PND9bZHV1MjHwy7MlY12Tn226GcS/MPliq88 ig== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwe6kpm9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 09:47:10 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1F61D100034;
+        Tue, 10 May 2022 09:47:09 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0E4B920FA5A;
+        Tue, 10 May 2022 09:47:09 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 10 May
+ 2022 09:47:05 +0200
+Message-ID: <ddd5d5b2-32a5-6464-80a6-0054c376dd96@foss.st.com>
+Date:   Tue, 10 May 2022 09:47:05 +0200
 MIME-Version: 1.0
-Date:   Tue, 10 May 2022 08:45:07 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Haoran Jiang <jianghaoran@kylinos.cn>
-Cc:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different
- interrupt status registers
-In-Reply-To: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
-References: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4d047b6d65b3973b7cb58101a1c197a6@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: jianghaoran@kylinos.cn, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for
+ "st,stm32mp1-rcc-secure"
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
+ <1652123805.754133.27398.nullmailer@robh.at.kernel.org>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <1652123805.754133.27398.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_01,2022-05-09_02,2022-02-23_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-10 06:53, Haoran Jiang wrote:
-> According to the loongson cpu manual,different cpu cores
-> correspond to different interrupt status registers
-> 
-> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
-> ---
->  drivers/irqchip/irq-loongson-liointc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c
-> b/drivers/irqchip/irq-loongson-liointc.c
-> index 649c58391618..f4e015b50af0 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -195,7 +195,7 @@ static int __init liointc_of_init(struct 
-> device_node *node,
->  		}
-> 
->  		for (i = 0; i < LIOINTC_NUM_CORES; i++)
-> -			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
-> +			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
->  	}
-> 
->  	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+Hi Rob
 
-You need to provide some more detail:
+On 5/9/22 21:16, Rob Herring wrote:
+> On Mon, 09 May 2022 15:46:58 +0200, Alexandre Torgue wrote:
+>> For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
+>> required properties.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Error: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts:27.33-34 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1401: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
 
-- where is it documented (something more precise than ¨the loongson cpu 
-manual¨)?
-- if something doesn´t work today, what is the impact?
-- why does it work today without this change?
-- if this is a fix, what commit does it fix?
-- if this is a fix, does it need to be backported to stable kernels?
+I just updated dtschema and yamllint seems to be well installed. I don't 
+see the see above. I wrote this patch on top of my stm32-next tree. Do I 
+have to send it directly to arm-soc in order to be merged on top of my 
+latest pull-request ?
 
-Thanks,
+Alex
 
-         M.
--- 
-Jazz is not dead. It just smells funny...

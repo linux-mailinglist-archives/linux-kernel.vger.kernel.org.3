@@ -2,62 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6BA522490
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71DD522492
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347659AbiEJTQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 15:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S243855AbiEJTRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 15:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiEJTP7 (ORCPT
+        with ESMTP id S229490AbiEJTRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 15:15:59 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C025A5A8;
-        Tue, 10 May 2022 12:15:57 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id q23so3464wra.1;
-        Tue, 10 May 2022 12:15:57 -0700 (PDT)
+        Tue, 10 May 2022 15:17:01 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0E72608F3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:16:59 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id i5so33924ilv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ICALjRuls1YJWj64GMq9mPFxN7+vbqjUy39n5o5tGc=;
-        b=OrqzS6TNg8//lIUxE0r0DVe0hHdXi7HQFETI/GLvn1XA8S4MBD6qQq5VK/YwGv+rdp
-         ELOlnp1tPyrbmzORWNqTutolK50Je2TXQ4XcU4yeS5LozVzdjOWKfgDfevsTzF23lxno
-         TomNdGdifXQyFtVe38apK700eFtEDz32l4u54BR3QYSvzPI+pGdS4anjbdeY2GBVJio0
-         3jAT5AY2n/FWHXErnL0TXAKt4jhp0sCcFUIQMt5sHtoa8Us5aKlojwSWw+mvChxQuDVG
-         03tOmHVU+0cMSDSsUItVAWH5VOjGISPkRk+rIXZkwNJ7Ly9wemAeGH+d7nPIxK3y4v8M
-         okFQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KQbaG/uNayn0MvP5ZcG3kEKMtXIrQTLtyOWN/V1ZKEQ=;
+        b=SmHRlvDV4tZDjXY+KbUw8jmDD9jgLhF6z8RTkYgz9M84hje9NC+xkoLeeOEcuYLURC
+         uu0S7Ndi7zHqsHkchf/gkxav760GNAbm+XhMDbKlng6seeYjX7mE1kOvlOFKFb8FtThi
+         j+/5hLVyOAqSW3Q3P72aUouuYBbQ+N0y8OAQIb8ydv+zGMcAIyByBd/PaPn7wO3PlHCz
+         i1IF5t0uWlFclnXVGtbIQS1R/Qwwl+2U3XTcL6Raun81TKp3kw/PVxJ8Am7pVtQ/xQrB
+         HgaaT+qPKH4IUIOr1vTTbf3k9jxVbryi9yc4zAlEG9Z0jwcYV+UVKhuMkjvnEQUi3S2x
+         4+UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ICALjRuls1YJWj64GMq9mPFxN7+vbqjUy39n5o5tGc=;
-        b=IfYK5zDn2Cg9EhKRzUJug7DdjX4YO0OsyUMr3vuD1Z1tVGKXVn6w+ws/o8rhLWTMJT
-         2goJ/9M3KTuhKdP93B963C4tOqHasr99TlEFTwmmSzBLkq3/JtAiwjU8qLCNneikY0mN
-         gazZHDqumtDN/yuPbb35qJ/+zApYmZTGL1cIdA09o0yecWBOkzFJBARBjorBExE19Pik
-         ZVrvmEdPPnYEgJsXr48hpo33zKX55cCOV7xfzXT+XGPydyEFOJym7wBHeqbzl0AaIDY6
-         W7DexcVT7o3wWGjgCXIIXv6jJC/nZO6Ie9g6vECzRNd/XUrnHROdiJH1BgnR4/lJsRYn
-         eSCw==
-X-Gm-Message-State: AOAM530KjOvwJZY+WFpukdD5SsoY/Lv9vADRYbZ/Fd5aVbKK7w8Abzf1
-        LtpdFq73BsHl2qsi7wGItt8=
-X-Google-Smtp-Source: ABdhPJyo6pgt1kPLanz24n85hX79oTHKCx+Tykgx8nAdERBeN1v9VIBkW+RLqaKn1D8P2ea9Nnm4HQ==
-X-Received: by 2002:a5d:584a:0:b0:20c:5a8b:cee7 with SMTP id i10-20020a5d584a000000b0020c5a8bcee7mr19596063wrf.111.1652210156293;
-        Tue, 10 May 2022 12:15:56 -0700 (PDT)
-Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id l9-20020a7bc349000000b003942a244ee9sm7212wmj.46.2022.05.10.12.15.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KQbaG/uNayn0MvP5ZcG3kEKMtXIrQTLtyOWN/V1ZKEQ=;
+        b=oyWIQplCQVKppJWHMbQ99q5LnFnoIaMcjWyohouzKzEK1GatN/8ROLDYLsEe1jdi+J
+         ptFlWZP/NrMAMpTybCgmUhjLORhlpPL2QkpLn/901pK2dOt41aJnuMgQ7XhM8TMUqH36
+         pMxudAy2RbW3onV+hKMUA1mwP8CVZnOs+A6DwivSjMDk2V7iSgRNzOMFxEf3zIwNpgSx
+         e6w6LrMrYGhEbOfp1lOYwZUmmusjzHD88jugIXYLzowaPCIyWe0VhRHFlYMjNxrxn+Cl
+         90etSeVp1zHHqgHVjXdtWW6MYPbKDz1ImqUirPb2x7A2yA4fNqY6PGAqjfXriqXjCoA+
+         oWrA==
+X-Gm-Message-State: AOAM5302KgBjes7qPfuGmGkZIgqL1kQb5to2mCYOdTqdMq6EG+wIKDMQ
+        jsOAilW/eopMDetDt6ShGrg=
+X-Google-Smtp-Source: ABdhPJwZrM/ym9SWyM6BjPeFoAv9e5oGkyIsX52jni5N0NNIfDGtsbEzziEUuCbfnGfp4dWr4yxN8A==
+X-Received: by 2002:a05:6e02:1e08:b0:2cf:1c31:15ec with SMTP id g8-20020a056e021e0800b002cf1c3115ecmr10607722ila.133.1652210218459;
+        Tue, 10 May 2022 12:16:58 -0700 (PDT)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id o9-20020a92a809000000b002cdfeead6basm49951ilh.63.2022.05.10.12.16.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 12:15:55 -0700 (PDT)
-From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Subject: [PATCH] drivers: gpio: zevio: drop of_gpio.h header
-Date:   Tue, 10 May 2022 21:15:49 +0200
-Message-Id: <20220510191549.76105-1-mosescb.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 10 May 2022 12:16:57 -0700 (PDT)
+Date:   Tue, 10 May 2022 12:16:55 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Zankel <chris@zankel.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Subject: Re: [PATCH 08/22] bitops: introduce MANY_BITS() macro
+Message-ID: <Ynq6JxyfBKK4SMZj@yury-laptop>
+References: <20220510154750.212913-1-yury.norov@gmail.com>
+ <20220510154750.212913-9-yury.norov@gmail.com>
+ <CAMo8Bf+JiyKD=g00whNOYGynx_0KjC_wJtpEBCB2ynFZ3U+e_Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMo8Bf+JiyKD=g00whNOYGynx_0KjC_wJtpEBCB2ynFZ3U+e_Q@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,89 +91,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove of_gpio.h header file, replace of_* functions and structs
-with appropriate alternatives
+Hi Max,
 
-Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
----
- drivers/gpio/gpio-zevio.c | 28 +++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+On Tue, May 10, 2022 at 10:57:25AM -0700, Max Filippov wrote:
+> Hi Yury,
+> 
+> On Tue, May 10, 2022 at 8:48 AM Yury Norov <yury.norov@gmail.com> wrote:
+> > arch/xtensa/kernel/traps.c and include/linux/log2.h define very similar
+> > functions with different behaviour. XTENSA defines IS_POW2(), and
+> > log2.h defines is_power_of_2(). The difference is that IS_POW2()
+> > considers 0 as power of 2, while is_power_of_2() - does not.
+> 
+> IS_POW2 is constructed this way because we know that there is at least
+> one non-zero bit in the value that it tests.
+> 
+> > This discrepancy may confuse reader. From mathematical point of view,
+> > 0 is not a power of 2.
+> 
+> If it would reduce the confusion we can add a check that the value is
+> non-zero in the IS_POW2 macro.
+> 
+> I'd really like to not introduce the local macro and just use something
+> standard,
 
-diff --git a/drivers/gpio/gpio-zevio.c b/drivers/gpio/gpio-zevio.c
-index f6f8a541348f..ec774fefb0ff 100644
---- a/drivers/gpio/gpio-zevio.c
-+++ b/drivers/gpio/gpio-zevio.c
-@@ -11,7 +11,6 @@
- #include <linux/bitops.h>
- #include <linux/io.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/slab.h>
- #include <linux/gpio/driver.h>
- 
-@@ -54,21 +53,22 @@
- 
- struct zevio_gpio {
- 	spinlock_t		lock;
--	struct of_mm_gpio_chip	chip;
-+	struct gpio_chip	chip;
-+	void __iomem		*regs;
- };
- 
- static inline u32 zevio_gpio_port_get(struct zevio_gpio *c, unsigned pin,
- 					unsigned port_offset)
- {
- 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
--	return readl(IOMEM(c->chip.regs + section_offset + port_offset));
-+	return readl(IOMEM(c->regs + section_offset + port_offset));
- }
- 
- static inline void zevio_gpio_port_set(struct zevio_gpio *c, unsigned pin,
- 					unsigned port_offset, u32 val)
- {
- 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
--	writel(val, IOMEM(c->chip.regs + section_offset + port_offset));
-+	writel(val, IOMEM(c->regs + section_offset + port_offset));
- }
- 
- /* Functions for struct gpio_chip */
-@@ -178,12 +178,18 @@ static int zevio_gpio_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, controller);
- 
- 	/* Copy our reference */
--	controller->chip.gc = zevio_gpio_chip;
--	controller->chip.gc.parent = &pdev->dev;
-+	controller->chip = zevio_gpio_chip;
-+	controller->chip.parent = &pdev->dev;
- 
--	status = of_mm_gpiochip_add_data(pdev->dev.of_node,
--					 &(controller->chip),
--					 controller);
-+	controller->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(controller->regs)) {
-+		dev_err(&pdev->dev, "failed to ioremap memory resource\n");
-+		return PTR_ERR(controller->regs);
-+	}
-+
-+	status = devm_gpiochip_add_data(&pdev->dev,
-+					&(controller->chip),
-+					controller);
- 	if (status) {
- 		dev_err(&pdev->dev, "failed to add gpiochip: %d\n", status);
- 		return status;
-@@ -192,10 +198,10 @@ static int zevio_gpio_probe(struct platform_device *pdev)
- 	spin_lock_init(&controller->lock);
- 
- 	/* Disable interrupts, they only cause errors */
--	for (i = 0; i < controller->chip.gc.ngpio; i += 8)
-+	for (i = 0; i < controller->chip.ngpio; i += 8)
- 		zevio_gpio_port_set(controller, i, ZEVIO_GPIO_INT_MASK, 0xFF);
- 
--	dev_dbg(controller->chip.gc.parent, "ZEVIO GPIO controller set up!\n");
-+	dev_dbg(controller->chip.parent, "ZEVIO GPIO controller set up!\n");
- 
- 	return 0;
- }
--- 
-2.30.2
+This patch introduces a macro MANY_BITS() in include/linux/bitops.h, which
+is a full analogue of IS_POW2(). Would it work for you to switch to
+MANY_BITS()? 
 
+> but I can't use is_power_of_2 in a preprocessor condition, can I?
+
+I believe you can't.
+
+Thanks,
+Yury

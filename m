@@ -2,222 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6FF520F5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98038520F5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237725AbiEJIIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S237752AbiEJIIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiEJIH7 (ORCPT
+        with ESMTP id S237476AbiEJIIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:07:59 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F63C51E52
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:04:02 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id m12so2332416plb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 01:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FhWfsRbZ98Akrf0aSLVkGfN8ZyYE5vG2KIhUV1/GMow=;
-        b=LPxkR4M8ti1ISXPW/OtVTag/V3pT3pW5EjmEDcrAD7mUxvUu4DrQCUUVjSTbA983Vf
-         ORsCjPmpyTSaxRqBU3uLLaSehTeTuy36SFHoK3sQhd9B0WOXKGyYanyAf/ls0VNZMWqJ
-         TjhIffrZtG7POepa6wM+mCTV/rE0h4nvTaSobNNNZ3TKBUbdroxwPDhNF0NL/LHpBS6F
-         3WtGXdbKYQLPpvC/etMn7PiaecPqTA42+MJhbQiOH78OLE3SsXGBE5MUQDjJCuzqESB9
-         MBi3VCRCSSHrzFN8M6ChuHb0Fxo+bRiZdLcQJx2A/LRJfKGZ06gfqCdOLg6Usv2xzZeb
-         7Bdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FhWfsRbZ98Akrf0aSLVkGfN8ZyYE5vG2KIhUV1/GMow=;
-        b=wzV/W5SNSkeNkolPBeUrNFQr12zX4kHLtGwP8pO0NoB5iyZ5CeFrQptHvWubC9fAUA
-         TqCJWP7JlPouhClPXZttJppWRrQGaVSrGnLnRhTPdkcpaprV7d7HBxp+qc/SAWWlM7QC
-         DoijYwd9ird9Z3mTFBmSMf+e4ufGkflXXJ4kPs3KMg31eyWoURnPZvBwOH3K4N/ARPo8
-         DsbID+zg468svYtVfS21JDy3wd1MS7VssdK88eAvyaXiHXYuJy1SqXMWVwk4dCgARgd3
-         Xlwv/cAJIa+GJaRwnLGGUCK/UFWTc8TEP1VJW89gX48Q7tbK5347ugAbx0SJotZEwto8
-         3kjQ==
-X-Gm-Message-State: AOAM530zfWFSeKjn66Dx5rMts0QDcmzpHb/oFzfmFlusg5wV1KttV3Ez
-        Qgy+KeoyZuPvKIX2eWDT58s44Q==
-X-Google-Smtp-Source: ABdhPJw+MDRFI9Jwkuu3Bm3ZmJ34tYF0D8qZDpcogyNCuNu3qJW1m8ZRepUBkTX137Z1tJ6eQBqI1A==
-X-Received: by 2002:a17:90b:70a:b0:1d8:5662:6de0 with SMTP id s10-20020a17090b070a00b001d856626de0mr21702431pjz.212.1652169841372;
-        Tue, 10 May 2022 01:04:01 -0700 (PDT)
-Received: from [10.254.93.206] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id m2-20020a170902db0200b0015e8d4eb1d0sm1371765plx.26.2022.05.10.01.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 01:04:01 -0700 (PDT)
-Message-ID: <2db9ab21-e1ce-694a-f509-5600f1190d75@bytedance.com>
-Date:   Tue, 10 May 2022 16:03:56 +0800
+        Tue, 10 May 2022 04:08:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AE1205448;
+        Tue, 10 May 2022 01:04:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 377E221C34;
+        Tue, 10 May 2022 08:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652169873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DaQLdPptUk26qMkMuzbu1HRoCL7MeOl3shsW3JAMmI8=;
+        b=omWV6hdGLPgMStAGX94Vf9968qCTzQzuRKTcgTwr6HwAfFwNxOL7ku6USJPQAO3akb3fdR
+        /I70zGS27HAbrCBbgmW54qHHRcWPBleHl3BwoVDoCwT4yC7PyIA6YUeGxpph86sUctJwvx
+        YKo26ThqUXerqK0A3Vft+HBQb4Ue5wM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652169873;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DaQLdPptUk26qMkMuzbu1HRoCL7MeOl3shsW3JAMmI8=;
+        b=BTO4NYGUJPHtJWV2R0NAIEyQBnQAGPeOku4A8oKd5T0PeHVtdZn3tg1xWHgYwptt55EPyC
+        vwFDtG4WGIw21HDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07DFC13AC1;
+        Tue, 10 May 2022 08:04:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id toLEAJEcemIrCQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 10 May 2022 08:04:33 +0000
+Message-ID: <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+Date:   Tue, 10 May 2022 10:04:32 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v3] sched/fair: filter out overloaded cpus in SIS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
 Content-Language: en-US
-To:     Josh Don <joshdon@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Chen Yu <yu.c.chen@intel.com>
-References: <20220505122331.42696-1-wuyun.abel@bytedance.com>
- <CABk29Ns3KBwLXBSwiSe7Pv2YE9iMg+A1kPpPESWG=KNJu9dz0w@mail.gmail.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <CABk29Ns3KBwLXBSwiSe7Pv2YE9iMg+A1kPpPESWG=KNJu9dz0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+ <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+ <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
+ <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
+ <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
+ <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
+ <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
+ <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
+ <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------F05FZlZtegh5MeM9Wf0NHUAa"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------F05FZlZtegh5MeM9Wf0NHUAa
+Content-Type: multipart/mixed; boundary="------------CHyi4votx1xHWFO90ogx0cZu";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, linux-kernel@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+ Daniel Vetter <daniel.vetter@intel.com>
+Message-ID: <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+ <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+ <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
+ <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
+ <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
+ <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
+ <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
+ <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
+ <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+In-Reply-To: <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
 
-On 5/10/22 9:14 AM, Josh Don Wrote:
-> Hi Abel,
-> 
-> Overall this looks good, just a couple of comments.
-> 
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index d4bd299d67ab..79b4ff24faee 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -6323,7 +6323,9 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->>   static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
->>   {
->>          struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
->> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
->> +       struct sched_domain_shared *sds = sd->shared;
->> +       int nr, nro, weight = sd->span_weight;
->> +       int i, cpu, idle_cpu = -1;
->>          struct rq *this_rq = this_rq();
->>          int this = smp_processor_id();
->>          struct sched_domain *this_sd;
->> @@ -6333,7 +6335,23 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>          if (!this_sd)
->>                  return -1;
->>
->> +       nro = atomic_read(&sds->nr_overloaded_cpus);
->> +       if (nro == weight)
->> +               goto out;
-> 
-> This assumes that the sd we're operating on here is the LLC domain
-> (true for current use). Perhaps to catch future bugs from changing
-> this assumption, we could WARN_ON_ONCE(nro > weight).
+--------------CHyi4votx1xHWFO90ogx0cZu
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The @sds comes from sd->shared, so I don't think the condition will
-break once we operate at other level domains. But a quick check on
-sds != NULL may be needed then since domains can have no sds attached.
+SGkNCg0KQW0gMTAuMDUuMjIgdW0gMDA6NDIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IE9uIDUvMTAvMjIgMDA6MjIsIEFuZHJ6ZWogSGFqZGEgd3JvdGU6DQo+IA0K
+PiBbc25pcF0NCj4gDQo+Pj4gICAgc3RhdGljIHZvaWQgZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3ko
+c3RydWN0IGZiX2luZm8gKmluZm8pDQo+Pj4gICAgew0KPj4+ICsgICAgICAgaWYgKGluZm8t
+PmNtYXAubGVuKQ0KPj4+ICsgICAgICAgICAgICAgICBmYl9kZWFsbG9jX2NtYXAoJmluZm8t
+PmNtYXApOw0KPj4+ICsNCj4+PiAgICAgICAgICAgZHJtX2ZiZGV2X3JlbGVhc2UoaW5mby0+
+cGFyKTsNCj4+PiArICAgICAgIGZyYW1lYnVmZmVyX3JlbGVhc2UoaW5mbyk7DQo+Pg0KPj4g
+SSB3b3VsZCBwdXQgZHJtX2ZiZGV2X3JlbGVhc2UgYXQgdGhlIGJlZ2lubmluZyAtIGl0IGNh
+bmNlbHMgd29ya2Vycw0KPj4gd2hpY2ggY291bGQgZXhwZWN0IGNtYXAgdG8gYmUgc3RpbGwg
+dmFsaWQuDQo+Pg0KPiANCj4gSW5kZWVkLCB5b3UgYXJlIGNvcnJlY3QgYWdhaW4uIFswXSBp
+cyB0aGUgZmluYWwgdmVyc2lvbiBvZiB0aGUgcGF0Y2ggSSd2ZQ0KPiBidXQgZG9uJ3QgaGF2
+ZSBhbiBpOTE1IHRlc3QgbWFjaGluZSB0byBnaXZlIGl0IGEgdHJ5LiBJJ2xsIHRlc3QgdG9t
+b3Jyb3cNCj4gb24gbXkgdGVzdCBzeXN0ZW1zIHRvIHZlcmlmeSB0aGF0IGl0IGRvZXNuJ3Qg
+Y2F1c2UgYW55IHJlZ3Jlc3Npb25zIHNpbmNlDQo+IHdpdGggb3RoZXIgRFJNIGRyaXZlcnMu
+DQoNCllvdSBoYXZlIHRvIGdvIHRocm91Z2ggYWxsIERSTSBkcml2ZXJzIHRoYXQgY2FsbCBk
+cm1fZmJfaGVscGVyX2ZpbmkoKSANCmFuZCBtYWtlIHN1cmUgdGhhdCB0aGV5IGZyZWUgZmJf
+aW5mby4gRm9yIGV4YW1wbGUgYXJtYWRhIGFwcGVhcnMgdG8gYmUgDQpsZWFraW5nIG5vdy4g
+WzFdDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJv
+b3RsaW4uY29tL2xpbnV4L3Y1LjE3LjYvc291cmNlL2RyaXZlcnMvZ3B1L2RybS9hcm1hZGEv
+YXJtYWRhX2ZiZGV2LmMjTDE1Mg0KDQo+IA0KPiBJIHRoaW5rIHRoYXQgYmVzaWRlcyB0aGlz
+IHBhdGNoLCBkcml2ZXJzIHNob3VsZG4ndCBuZWVkIHRvIGNhbGwgdG8gdGhlDQo+IGRybV9m
+Yl9oZWxwZXJfZmluaSgpIGZ1bmN0aW9uIGRpcmVjdGx5LiBTaW5jZSB0aGF0IHdvdWxkIGJl
+IGNhbGxlZCBkdXJpbmcNCj4gZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3koKSBhbnl3YXlzLg0KPiAN
+Cj4gV2Ugc2hvdWxkIHByb2JhYmx5IHJlbW92ZSB0aGF0IGNhbGwgaW4gYWxsIGRyaXZlcnMg
+YW5kIG1ha2UgdGhpcyBoZWxwZXINCj4gZnVuY3Rpb24gc3RhdGljIGFuZCBqdXN0IHByaXZh
+dGUgdG8gZHJtX2ZiX2hlbHBlciBmdW5jdGlvbnMuDQo+IA0KPiBPciBhbSBJIG1pc3Npbmcg
+c29tZXRoaW5nIGhlcmUgPw0KPiANCj4gWzBdOg0KPiAgRnJvbSA1MTcwY2FmY2YyOTM2ZGE4
+ZjFjNTMyMzFlM2JhYTdkN2EyYjE2YzYxIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KPiBG
+cm9tOiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4g
+RGF0ZTogVHVlIE1heSAxMCAwMDozOTo1NSAyMDIyICswMjAwDQo+IFN1YmplY3Q6IFtSRlQg
+UEFUQ0hdIGRybS9mYi1oZWxwZXI6IERvbid0IGRlYWxsb2NhdGUgZmIgY29sb3JtYXAgYW5k
+IGZyZWUgZmIgaW5mbw0KPiAgIHRvbyBlYXJseQ0KPiANCj4gQ3VycmVudGx5IHRoZXNlIGFy
+ZSBkb25lIGluIGRybV9mYl9oZWxwZXJfZmluaSgpIGJ1dCB0aGlzIGhlbHBlciBpcyBjYWxs
+ZWQNCj4gYnkgZHJpdmVycyBpbiB0aGVpciAucmVtb3ZlIGNhbGxiYWNrLCB3aGljaCBjb3Vs
+ZCBsZWFkIHRvIGEgdXNlLWFmdGVyLWZyZWUNCj4gaWYgYSBwcm9jZXNzIGhhcyBvcGVuZWQg
+dGhlIGVtdWxhdGVkIGZiZGV2IG5vZGUgd2hpbGUgYSBkcml2ZXIgaXMgcmVtb3ZlZC4NCj4g
+DQo+IEZvciBleGFtcGxlLCBpbiBpOTE1IGRyaXZlciB0aGUgY2FsbCBjaGFpbiBkdXJpbmcg
+cmVtb3ZlIGlzIHRoZSBmb2xsb3dpbmc6DQo+IA0KPiBzdHJ1Y3QgcGNpX2RyaXZlciBpOTE1
+X3BjaV9kcml2ZXIgPSB7DQo+IC4uLg0KPiAgICAgICAgICAucmVtb3ZlID0gaTkxNV9wY2lf
+cmVtb3ZlLA0KPiAuLi4NCj4gfTsNCj4gDQo+IGk5MTVfcGNpX3JlbW92ZQ0KPiAgICBpOTE1
+X2RyaXZlcl9yZW1vdmUNCj4gICAgICBpbnRlbF9tb2Rlc2V0X2RyaXZlcl9yZW1vdmVfbm9p
+cnENCj4gICAgICAgIGludGVsX2ZiZGV2X2ZpbmkNCj4gICAgICAgICAgaW50ZWxfZmJkZXZf
+ZGVzdHJveQ0KPiAgICAgICAgICAgIGRybV9mYl9oZWxwZXJfZmluaQ0KPiAgICAgICAgICAg
+ICAgZnJhbWVidWZmZXJfcmVsZWFzZQ0KPiANCj4gTGF0ZXIgdGhlIHByb2Nlc3Mgd2lsbCBj
+bG9zZSB0aGUgZmJkZXYgbm9kZSBmaWxlIGRlc2NyaXB0b3IgbGVhZGluZyB0byB0aGUNCj4g
+bWVudGlvbmVkIHVzZS1hZnRlci1mcmVlIGJ1ZyBpbiBkcm1fZmJkZXZfZmJfZGVzdHJveSgp
+LCBkdWUgdGhlIGZvbGxvd2luZzoNCj4gDQo+IGRybV9mYmRldl9mYl9kZXN0cm95DQo+ICAg
+IGRybV9mYmRldl9yZWxlYXNlKGluZm8tPnBhcik7IDwtLSBpbmZvIHdhcyBhbHJlYWR5IGZy
+ZWVkIG9uIC5yZW1vdmUNCj4gDQo+IFRvIHByZXZlbnQgdGhhdCwgbGV0J3MgbW92ZSB0aGUg
+ZnJhbWVidWZmZXJfcmVsZWFzZSgpIGNhbGwgdG8gdGhlIGVuZCBvZg0KPiB0aGUgZHJtX2Zi
+ZGV2X2ZiX2Rlc3Ryb3koKSBmdW5jdGlvbi4NCj4gDQo+IEFsc28sIHRoZSBjYWxsIHRvIGZi
+X2RlYWxsb2NfY21hcCgpIGluIGRybV9mYl9oZWxwZXJfZmluaSgpIGlzIHRvbyBlYXJseQ0K
+PiBhbmQgaXMgbW9yZSBjb3JyZWN0IHRvIGRvIGl0IGluIGRybV9mYmRldl9mYl9kZXN0cm95
+KCkgYXMgd2VsbC4gQWZ0ZXIgYQ0KPiBjYWxsIHRvIGRybV9mYmRldl9yZWxlYXNlKCkgaGFz
+IGJlZW4gbWFkZS4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBBbmRyemVqIEhhamRhIDxhbmRyemVq
+LmhhamRhQGludGVsLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENh
+bmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS9kcm1fZmJfaGVscGVyLmMgfCA5ICsrKy0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAz
+IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJf
+aGVscGVyLmMNCj4gaW5kZXggZDI2NWE3MzMxM2M5Li43Mjg4ZmJkMjZiY2MgMTAwNjQ0DQo+
+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fZmJfaGVscGVyLmMNCj4gKysrIGIvZHJpdmVy
+cy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYw0KPiBAQCAtNjI3LDEyICs2MjcsNiBAQCB2b2lk
+IGRybV9mYl9oZWxwZXJfZmluaShzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqZmJfaGVscGVyKQ0K
+PiAgIAljYW5jZWxfd29ya19zeW5jKCZmYl9oZWxwZXItPnJlc3VtZV93b3JrKTsNCj4gICAJ
+Y2FuY2VsX3dvcmtfc3luYygmZmJfaGVscGVyLT5kYW1hZ2Vfd29yayk7DQo+ICAgDQo+IC0J
+aW5mbyA9IGZiX2hlbHBlci0+ZmJkZXY7DQo+IC0JaWYgKGluZm8pIHsNCj4gLQkJaWYgKGlu
+Zm8tPmNtYXAubGVuKQ0KPiAtCQkJZmJfZGVhbGxvY19jbWFwKCZpbmZvLT5jbWFwKTsNCj4g
+LQkJZnJhbWVidWZmZXJfcmVsZWFzZShpbmZvKTsNCj4gLQl9DQo+ICAgCWZiX2hlbHBlci0+
+ZmJkZXYgPSBOVUxMOw0KPiAgIA0KPiAgIAltdXRleF9sb2NrKCZrZXJuZWxfZmJfaGVscGVy
+X2xvY2spOw0KPiBAQCAtMjExMiw2ICsyMTA2LDkgQEAgc3RhdGljIHZvaWQgZHJtX2ZiZGV2
+X3JlbGVhc2Uoc3RydWN0IGRybV9mYl9oZWxwZXIgKmZiX2hlbHBlcikNCj4gICBzdGF0aWMg
+dm9pZCBkcm1fZmJkZXZfZmJfZGVzdHJveShzdHJ1Y3QgZmJfaW5mbyAqaW5mbykNCj4gICB7
+DQo+ICAgCWRybV9mYmRldl9yZWxlYXNlKGluZm8tPnBhcik7DQo+ICsJaWYgKGluZm8tPmNt
+YXAubGVuKQ0KPiArCQlmYl9kZWFsbG9jX2NtYXAoJmluZm8tPmNtYXApOw0KPiArCWZyYW1l
+YnVmZmVyX3JlbGVhc2UoaW5mbyk7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBpbnQgZHJt
+X2ZiZGV2X2ZiX21tYXAoc3RydWN0IGZiX2luZm8gKmluZm8sIHN0cnVjdCB2bV9hcmVhX3N0
+cnVjdCAqdm1hKQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIg
+RGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZl
+bGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8
+cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-> 
->> +
->> +       nr = min_t(int, weight, p->nr_cpus_allowed);
->> +
->> +       /*
->> +        * It's unlikely to find an idle cpu if the system is under
->> +        * heavy pressure, so skip searching to save a few cycles
->> +        * and relieve cache traffic.
->> +        */
->> +       if (weight - nro < (nr >> 4) && !has_idle_core)
->> +               return -1;
-> 
-> nit: nr / 16 is easier to read and the compiler will do the shifting for you.
+--------------CHyi4votx1xHWFO90ogx0cZu--
 
-Agreed.
+--------------F05FZlZtegh5MeM9Wf0NHUAa
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> 
-> Was < intentional vs <= ? With <= you'll be able to skip the search in
-> the case where both sides evaluate to 0 (can happen frequently if we
-> have no idle cpus, and a task with a small affinity mask).
+-----BEGIN PGP SIGNATURE-----
 
-It's intentional, the idea is to unconditionally pass when there are
-less than 16 cpus to search which seems scalability is not an issue.
-But I made a mistake that (weight - nro) couldn't be 0 here, so it's
-not appropriate to use "<".
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ6HJAFAwAAAAAACgkQlh/E3EQov+BA
+XxAAlKvMKE3F5e7yBblYycBRvs9vPCTY/3QHQyPYB9rG9PUu5aIKPOoOUbLfT/Jd6dvoVNU9/2UR
+4921JB/E+ez/kHOL8LhWRufvN7cNL7o6VPjtKj/VIdxzBMAQXF+TCdgA/R2DQ+K+/zcXSwJWITlv
+CmkgCgBrwQoP+poSHp7MMPFneZ7eJSnz9MTk1bjnXPteLd3qU6X0Kc2gMoSrmyHt/umygaa5H2Mz
+mLWEsZE7cWizaiskvmTBV30h7cwU5atErQAD5U888widRTSDOxOVi9KvRXrnXo3Rm2hY2jBaXrcN
+jgj0MhMEKnXtlF0btgfd7bOOna1T2Rd6oRRqR38IsSDL3K3+K/y9eX7Xle6LBIZgvcJxUwwMkRla
+Cz5veJ7BfCvwlnp+obJREY7hwz6/5L3n16ftEF7uvBjiIX5LnAatWOc/AbDF7J0ESPJcksVmTety
+KB/bldFM1Y4xbozFyDxLfGtYsunCv4nmwtfnFInOwT6SrDyTnRPoVG61LSEyG+qe/D1IUIyxMe0Y
+PagQlmD1HOLCB5at4pLQ2dMl+qTiH/9Kuazxf++WE6iPOFv8U3AUosQnMgJqbZ5fmqLDzvXR/B0n
+vdrXmxSEL4TPXBWiPTVePtW/m2HQmMhe+/C3fw/ZGHXeEzdt/B5noWtIB3A6DrvVHSrhHibIiU3J
+o4c=
+=IMRo
+-----END PGP SIGNATURE-----
 
-BTW, I think Chen Yu's proposal[1] on search depth limitation is a
-better idea and more reasonable. And he is doing some benchmark on
-the mixture of our work.
-
-[1] 
-https://lore.kernel.org/lkml/20220428182442.659294-1-yu.c.chen@intel.com/
-
-> 
-> This will also get a bit confused in the case where the task has many
-> cpus allowed, but almost all of them on a different LLC than the one
-> we're considering here. Apart from caching the per-LLC
-> nr_cpus_allowed, we could instead use cpumask_weight(cpus) below (and
-> only do this in the !has_idle_core case to reduce calls to
-> cpumask_weight()).
-
-Yes the task might have many cpus allowed on another LLC, the idea is
-to use @nr as a worst case boundary. And with Chen's work, I think we
-can get rid of nr_cpus_allowed.
-
-> 
->> +
->>          cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->> +       if (nro > 1)
->> +               cpumask_andnot(cpus, cpus, sdo_mask(sds));
-> 
-> Just
-> if (nro)
-> ?
-
-I think it's just not worthy to touch sdo_mask(sds) which causes heavy
-cache traffic, if it only contains one cpu.
-
-> 
->> @@ -6392,6 +6407,9 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>
->>                  update_avg(&this_sd->avg_scan_cost, time);
->>          }
->> +out:
->> +       if (has_idle_core)
->> +               WRITE_ONCE(sds->has_idle_cores, 0);
-> 
-> nit: use set_idle_cores() instead (or, if you really want to avoid the
-> extra sds dereference, add a __set_idle_cores(sds, val) helper you can
-> call directly.
-
-OK, will do.
-
-> 
->> @@ -7904,6 +7922,7 @@ static struct task_struct *detach_one_task(struct lb_env *env)
->>                          continue;
->>
->>                  detach_task(p, env);
->> +               update_overloaded_rq(env->src_rq);
->>
->>                  /*
->>                   * Right now, this is only the second place where
->> @@ -8047,6 +8066,9 @@ static int detach_tasks(struct lb_env *env)
->>                  list_move(&p->se.group_node, tasks);
->>          }
->>
->> +       if (detached)
->> +               update_overloaded_rq(env->src_rq);
->> +
-> 
-> Thinking about this more, I don't see an issue with moving the
-> update_overloaded_rq() calls to enqueue/dequeue_task, rather than here
-> in the attach/detach_task paths. Overloaded state only changes when we
-> pass the boundary of 2 runnable non-idle tasks, so thashing of the
-> overloaded mask is a lot less worrisome than if it were updated on the
-> boundary of 1 runnable task. The attach/detach_task paths run as part
-> of load balancing, which can be on a millisecond time scale.
-
-It's really hard to say which one is better, and I think it's more like
-workload-specific. It's common in our cloud servers that a long running
-workload co-exists with a short running workload which could flip the
-status frequently.
-
-Thanks & BR,
-Abel
+--------------F05FZlZtegh5MeM9Wf0NHUAa--

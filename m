@@ -2,198 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3CA522175
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62705522189
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347535AbiEJQqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S1347586AbiEJQrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343547AbiEJQqm (ORCPT
+        with ESMTP id S1347610AbiEJQrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:46:42 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8652124D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:42:44 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id e12so31722157ybc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CyIHSpV7urkNC/m60X3OuzStVpyeIryc1aK1Punw4D8=;
-        b=V92PI4bmOdix/67urkG91/TJAjUY3Ex/AdHQvLC+n6j+EjO3mVD7v3Mz4eGUlGoEJ7
-         zRNK7bexwodR/5e4GXaB5rQtzm4pkmocwRan7CNTEzgNkJXNdLAHUYpfx9bDBRNojZEj
-         1aHaCp25650Pvre4A5jQlG2Ku68l073Z6vB/qyS6TUMrMEakIwuxYunG9ihkOykkv5aD
-         n1Ui5FW3lbLiZagup2m7ABMIdbLVCmw7qTRG8mK3vm/NXR/wtXg2LAeBCA3FWtYN/fx6
-         1PHDacN8QP0kfjppDBfC0ZgdsgdLqP288ie4lkFHXo0SLOZWiBUol1lgo7C3v2kNkaIE
-         4Vcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CyIHSpV7urkNC/m60X3OuzStVpyeIryc1aK1Punw4D8=;
-        b=tBYsa2jMOGme683Dk+WmTLroAf/N5RdWr/i4CbNI1flKPwX993IF4yZ4TDdmYBFN/c
-         4SocCcfVquLhPorZl/Fl+K0eZrQYYbjwkK/Y8qtDFL7uGbjtVvGZDjNUBOcISdGiD+q6
-         jnVx4b+0ye1kFb3m2tig+KfqEk9SGV+MXkIZaB6EQfnbDELJwqCyzUKxh+u48c5wbJu0
-         6y3Ansu8d9R3WZpX0krYrxGBcaJvm2LavzLmxNjPgo7OoUw/D7+eBfcmEhhFyiRZHeX0
-         xfudS1UJPYlMTT5XXWmR+TeB3MXmjTOU/g4YzBnp+WktgqMbiequaR75bxaDevlP/mQg
-         111g==
-X-Gm-Message-State: AOAM533g33f+jcyAoLDNaxdGPWVgkDGAUW9usOQmX/RW6cyjlmrFCCnT
-        ui/tigws3CqK/j5RhDcvpVr3coysG7kUWfRhj8tYug==
-X-Google-Smtp-Source: ABdhPJxZ/+tgVgvg8fQm/jcM9aB8pFitGhgZM6GXVcw+NtkFAeAj8nhv59Uys3MXLYyvAYh+f32/Oi2k53WS8hYVTeY=
-X-Received: by 2002:a25:d55:0:b0:648:7008:61e0 with SMTP id
- 82-20020a250d55000000b00648700861e0mr18424242ybn.282.1652200963633; Tue, 10
- May 2022 09:42:43 -0700 (PDT)
+        Tue, 10 May 2022 12:47:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E45B62CC8;
+        Tue, 10 May 2022 09:43:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FDD26183D;
+        Tue, 10 May 2022 16:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C14C385A6;
+        Tue, 10 May 2022 16:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652200991;
+        bh=Osg1O0gfa6ZkJPjBpOrkM1rXaweWgHooysorOXbKftU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SG253suakgSw/EN+cXtrkyjj6aWCkxwrbCbP7C0HSUz/KfL9A6Vx4aeAY6gHLL/zK
+         Ig/jhuTc7srNJMuXg8I3xGqrmiHxoSwZQiu5XNG+vcxoeaNuD8SwYUmAwdpg2PvtsX
+         MpPy2zHkZCbErrHZecpOuX2nCTX41ds2hoJA0idx7X7ROHLRuS93+5p7XfBG9vBJBD
+         +vkSNa3ypaT5L6QmF6BfBVCSIK9q3bhncdsZ5Yu4H/cJ+Yulisq7PiKnwg/z/cBrCR
+         mVqqxmHRCgXEPo2OqbB+8jN15fPu9j2moaT3HEQDubZBxY0v4EEMpEQZCjIxPT4y4b
+         YYOf7ALzDkFLw==
+Date:   Tue, 10 May 2022 11:43:05 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mohamed Khalfella <mkhalfella@purestorage.com>
+Cc:     stable@vger.kernel.org, Meeta Saggi <msaggi@purestorage.com>,
+        Eric Badger <ebadger@purestorage.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Rajat Jain <rajatja@google.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI ENHANCED ERROR HANDLING (EEH) FOR POWERPC" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI/AER: Iterate over error counters instead of error
+ strings
+Message-ID: <20220510164305.GA678149@bhelgaas>
 MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
- <CAJuCfpEAqEEf-SCi87-VZrFYcoPff8Gkda5uF8fYRyKQo_vkjw@mail.gmail.com> <ebaad398-110d-6a6b-70a5-3abeacfcb14a@linuxfoundation.org>
-In-Reply-To: <ebaad398-110d-6a6b-70a5-3abeacfcb14a@linuxfoundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 May 2022 09:42:32 -0700
-Message-ID: <CAJuCfpG5dDv61NFmBLi+8oNuOMgS51Q4Cq6SNvM68n9z0XE5cA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] selftests: vm: add process_mrelease tests
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509181441.31884-1-mkhalfella@purestorage.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 9:36 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 5/10/22 10:29 AM, Suren Baghdasaryan wrote:
-> > On Tue, May 10, 2022 at 8:43 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 5/9/22 9:00 PM, Suren Baghdasaryan wrote:
-> >>> Introduce process_mrelease syscall sanity tests. They include tests of
-> >>> invalid pidfd and flags inputs, attempting to call process_mrelease
-> >>> with a live process and a valid usage of process_mrelease. Because
-> >>> process_mrelease has to be used against a process with a pending SIGKILL,
-> >>> it's possible that the process exits before process_mrelease gets called.
-> >>> In such cases we retry the test with a victim that allocates twice more
-> >>> memory up to 1GB. This would require the victim process to spend more
-> >>> time during exit and process_mrelease has a better chance of catching
-> >>> the process before it exits.
-> >>>
-> >>
-> >> +1 on Mike's comments on improving the change log. List what is getting
-> >> tested as opposed to describing the test code.
-> >
-> > I'll try to improve the description but IMHO it does describe what
-> > it's testing - the process_mrelease syscall with valid and invalid
-> > inputs. I could omit the implementation details if that helps.
-> >
-> >>
-> >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >>> ---
-> >>>    tools/testing/selftests/vm/Makefile        |   1 +
-> >>>    tools/testing/selftests/vm/mrelease_test.c | 176 +++++++++++++++++++++
-> >>>    tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
-> >>>    3 files changed, 193 insertions(+)
-> >>>    create mode 100644 tools/testing/selftests/vm/mrelease_test.c
-> >>
-> >> Please update .gitignore with the new executable.
-> >
-> > Ack.
-> >
-> >>
-> >>>
-> >>> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> >>> index 04a49e876a46..733fccbff0ef 100644
-> >>> --- a/tools/testing/selftests/vm/Makefile
-> >>> +++ b/tools/testing/selftests/vm/Makefile
-> >>> @@ -43,6 +43,7 @@ TEST_GEN_FILES += map_populate
-> >>>    TEST_GEN_FILES += memfd_secret
-> >>>    TEST_GEN_FILES += mlock-random-test
-> >>>    TEST_GEN_FILES += mlock2-tests
-> >>> +TEST_GEN_FILES += mrelease_test
-> >>>    TEST_GEN_FILES += mremap_dontunmap
-> >>>    TEST_GEN_FILES += mremap_test
-> >>>    TEST_GEN_FILES += on-fault-limit
-> >>> diff --git a/tools/testing/selftests/vm/mrelease_test.c b/tools/testing/selftests/vm/mrelease_test.c
-> >>> new file mode 100644
-> >>> index 000000000000..a61061bf8433
-> >>> --- /dev/null
-> >>> +++ b/tools/testing/selftests/vm/mrelease_test.c
-> >>> @@ -0,0 +1,176 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0
-> >>> +/*
-> >>> + * Copyright 2022 Google LLC
-> >>> + */
-> >>> +#define _GNU_SOURCE
-> >>> +#include <errno.h>
-> >>> +#include <stdio.h>
-> >>> +#include <stdlib.h>
-> >>> +#include <sys/wait.h>
-> >>> +#include <unistd.h>
-> >>> +
-> >>> +#include "util.h"
-> >>> +
-> >>> +static inline int pidfd_open(pid_t pid, unsigned int flags)
-> >>> +{
-> >>> +#ifdef __NR_pidfd_open
-> >>> +     return syscall(__NR_pidfd_open, pid, flags);
-> >>> +#else
-> >>> +     errno = ENOSYS;
-> >>
-> >> This isn't an error - this would be skip because this syscall
-> >> isn't supported.
-> >
-> > Ack.
-> >
-> >>
-> >>> +     return -1;
-> >>> +#endif
-> >>
-> >> Key off of syscall return instead of these ifdefs - same comment
-> >> on all of the ifdefs
-> >
-> > Ack. I was using some other test as an example but I guess that was
-> > not a good model.
-> >
-> >>
-> >>> +}
-> >>> +
-> >>
-> >> I am not seeing any reason for breaking this code up have a separate
-> >> routine for pidfd_open().
-> >
-> > I'm a bit unclear what you mean. Do you mean that userspace headers
-> > should already define pidfd_open() and I don't need to define it?
-> >
->
-> Do you need pidfd_open() or can this be part of main? Without the ifdefs,
-> it is really a one line code.
+[+cc Rajat]
 
-Ah, I see. I think it's cleaner that way but I'll make them one-line
-inline functions.
+On Mon, May 09, 2022 at 06:14:41PM +0000, Mohamed Khalfella wrote:
+> PCI AER stats counters sysfs attributes need to iterate over
+> stats counters instead of stats names. 
 
+Thanks for catching this; it definitely looks like a real issue!  I
+guess you're probably seeing junk in the sysfs files?
+
+It would be helpful to reviewers if this said *why* we need to iterate
+over the counters instead of the names.  I think the problem is that
+the current code reads past the end of the stats counters.
+
+There are parallel arrays here:
+
+  #define AER_MAX_TYPEOF_COR_ERRS         16
+  #define AER_MAX_TYPEOF_UNCOR_ERRS       27
+
+  aer_correctable_error_string[32]                               # 32
+  pdev->aer_stats->dev_cor_errs[AER_MAX_TYPEOF_COR_ERRS]         # 16
+  aer_uncorrectable_error_string[32]                             # 32
+  pdev->aer_stats->dev_fatal_errs[AER_MAX_TYPEOF_UNCOR_ERRS]     # 27
+  pdev->aer_stats->dev_nonfatal_errs[AER_MAX_TYPEOF_UNCOR_ERRS]  # 27
+
+And here's the current use of them:
+
+  #define aer_stats_dev_attr(..., stats_array, strings_array, ...)
+    for (i = 0; i < ARRAY_SIZE(strings_array); i++) {
+      if (strings_array[i])
+	sysfs_emit_at(..., strings_array[i], stats[i]);          (1)
+      else if (stats[i])
+	sysfs_emit_at(..., stats[i]);                            (2)
+
+  aer_stats_dev_attr(..., dev_cor_errs, aer_correctable_error_string,
+  aer_stats_dev_attr(..., dev_fatal_errs, aer_uncorrectable_error_string,
+  aer_stats_dev_attr(..., dev_nonfatal_errs, aer_uncorrectable_error_string,
+
+The current loop iterates over 0..31, which is safe at (1) because the
+non-NULL strings are at aer_correctable_error_string[0..15] and
+aer_uncorrectable_error_string[0..26].
+
+But it is unsafe at (2) because it references dev_cor_errs[16..31],
+dev_fatal_errs[27..31], and dev_nonfatal_errs[27..31], which are past
+the end of the arrays.
+
+> Also, added a build time check to make sure all counters have
+> entries in strings array.
 >
-> thanks,
-> -- Shuah
+> Fixes: 0678e3109a3c ("PCI/AER: Simplify __aer_print_error()")
+
+Yep, I blew it there.  Rajat did it correctly when he added this with
+81aa5206f9a7 ("PCI/AER: Add sysfs attributes to provide AER stats and
+breakdown"), and I broke it by extending the string arrays to 32
+entries.
+
+> Cc: stable@vger.kernel.org
+> Reported-by: Meeta Saggi <msaggi@purestorage.com>
+> Signed-off-by: Mohamed Khalfella <mkhalfella@purestorage.com>
+> Reviewed-by: Meeta Saggi <msaggi@purestorage.com>
+> Reviewed-by: Eric Badger <ebadger@purestorage.com>
+> ---
+>  drivers/pci/pcie/aer.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 9fa1f97e5b27..ce99a6d44786 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -533,7 +533,7 @@ static const char *aer_agent_string[] = {
+>  	u64 *stats = pdev->aer_stats->stats_array;			\
+>  	size_t len = 0;							\
+>  									\
+> -	for (i = 0; i < ARRAY_SIZE(strings_array); i++) {		\
+> +	for (i = 0; i < ARRAY_SIZE(pdev->aer_stats->stats_array); i++) {\
+>  		if (strings_array[i])					\
+>  			len += sysfs_emit_at(buf, len, "%s %llu\n",	\
+>  					     strings_array[i],		\
+
+I think maybe we should populate the currently NULL entries in the
+string[] arrays and simplify the code here, e.g.,
+
+  static const char *aer_correctable_error_string[] = {
+        "RxErr",                        /* Bit Position 0       */
+        "dev_cor_errs_bit[1]",
+	...
+
+  if (stats[i])
+    len += sysfs_emit_at(buf, len, "%s %llu\n", strings_array[i], stats[i]);
+
+It's a little more data space, but easier to verify.
+
+> @@ -1342,6 +1342,11 @@ static int aer_probe(struct pcie_device *dev)
+>  	struct device *device = &dev->device;
+>  	struct pci_dev *port = dev->port;
+>  
+> +	BUILD_BUG_ON(ARRAY_SIZE(aer_correctable_error_string) <
+> +		     AER_MAX_TYPEOF_COR_ERRS);
+> +	BUILD_BUG_ON(ARRAY_SIZE(aer_uncorrectable_error_string) <
+> +		     AER_MAX_TYPEOF_UNCOR_ERRS);
+
+And make these check for "!=" instead of "<".

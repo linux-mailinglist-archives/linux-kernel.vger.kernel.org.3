@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A56521ADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DEB5216B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242795AbiEJOED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
+        id S242507AbiEJNR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244614AbiEJNmC (ORCPT
+        with ESMTP id S242468AbiEJNQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:42:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341EA2CCD16;
-        Tue, 10 May 2022 06:30:18 -0700 (PDT)
+        Tue, 10 May 2022 09:16:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B564A916;
+        Tue, 10 May 2022 06:11:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C252B81DA0;
-        Tue, 10 May 2022 13:29:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3FAC385D8;
-        Tue, 10 May 2022 13:29:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79FB5615FC;
+        Tue, 10 May 2022 13:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC22C385C6;
+        Tue, 10 May 2022 13:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189396;
-        bh=sYcx22CNtW7hSY2tI7NBOUw3XnIwaKgfLUJasIi6tks=;
+        s=korg; t=1652188305;
+        bh=KrmrHxN/MRgGZte1TsTRlM3hbo4IwWi9CTaTAqB81dM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ykz2cUcu90pKcArr8GDvsCanf9Xq2jIQPXhUJ5uTtzotfxEbFhTbWr3wnf4KjJaw7
-         nknrHY1ElYdKR0VFJ2CbOIC9edjYgTYgxlD3aIIS7sEuN7eAd4x2Lo1Jf39ucW9U+0
-         v0Eqbm9IcpaPO7vMptHWzu0Rhb5WR5vIz2SmamHE=
+        b=MV6nTm+4OIdAeIH6fTVn3IcDlr7uNieJsX6RgRA2Nz89hqP/i8tfLCemMv6+MXJUl
+         A0fQtwAgzBc8VhnLUVxLiA6SlxUpEPWeommKjPMs7VUNarxesqpxUDsnDXxsu1MGiN
+         UvMKhTw1UliAzGVY67BWyYpK94EhaFUMDtrIBY/w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Larsson <andreas@gaisler.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.15 036/135] can: grcan: only use the NAPI poll budget for RX
-Date:   Tue, 10 May 2022 15:06:58 +0200
-Message-Id: <20220510130741.439388975@linuxfoundation.org>
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 09/66] USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
+Date:   Tue, 10 May 2022 15:06:59 +0200
+Message-Id: <20220510130730.042978438@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Larsson <andreas@gaisler.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-commit 2873d4d52f7c52d60b316ba6c47bd7122b5a9861 upstream.
+commit f32c5a0423400e01f4d7c607949fa3a1f006e8fa upstream.
 
-The previous split budget between TX and RX made it return not using
-the entire budget but at the same time not having calling called
-napi_complete. This sometimes led to the poll to not be called, and at
-the same time having TX and RX interrupts disabled resulting in the
-driver getting stuck.
+Add support for the following Telit FN980 and FN990 compositions:
 
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-4-andreas@gaisler.com
+0x1057: tty, adb, rmnet, tty, tty, tty, tty, tty
+0x1058: tty, adb, tty, tty, tty, tty, tty
+0x1075: adb, tty
+
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://lore.kernel.org/r/20220406141408.580669-1-dnlplm@gmail.com
 Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/grcan.c |   22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ drivers/usb/serial/option.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1137,7 +1137,7 @@ static int grcan_close(struct net_device
- 	return 0;
- }
- 
--static int grcan_transmit_catch_up(struct net_device *dev, int budget)
-+static void grcan_transmit_catch_up(struct net_device *dev)
- {
- 	struct grcan_priv *priv = netdev_priv(dev);
- 	unsigned long flags;
-@@ -1145,7 +1145,7 @@ static int grcan_transmit_catch_up(struc
- 
- 	spin_lock_irqsave(&priv->lock, flags);
- 
--	work_done = catch_up_echo_skb(dev, budget, true);
-+	work_done = catch_up_echo_skb(dev, -1, true);
- 	if (work_done) {
- 		if (!priv->resetting && !priv->closing &&
- 		    !(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
-@@ -1159,8 +1159,6 @@ static int grcan_transmit_catch_up(struc
- 	}
- 
- 	spin_unlock_irqrestore(&priv->lock, flags);
--
--	return work_done;
- }
- 
- static int grcan_receive(struct net_device *dev, int budget)
-@@ -1242,19 +1240,13 @@ static int grcan_poll(struct napi_struct
- 	struct net_device *dev = priv->dev;
- 	struct grcan_registers __iomem *regs = priv->regs;
- 	unsigned long flags;
--	int tx_work_done, rx_work_done;
--	int rx_budget = budget / 2;
--	int tx_budget = budget - rx_budget;
-+	int work_done;
- 
--	/* Half of the budget for receiving messages */
--	rx_work_done = grcan_receive(dev, rx_budget);
-+	work_done = grcan_receive(dev, budget);
- 
--	/* Half of the budget for transmitting messages as that can trigger echo
--	 * frames being received
--	 */
--	tx_work_done = grcan_transmit_catch_up(dev, tx_budget);
-+	grcan_transmit_catch_up(dev);
- 
--	if (rx_work_done < rx_budget && tx_work_done < tx_budget) {
-+	if (work_done < budget) {
- 		napi_complete(napi);
- 
- 		/* Guarantee no interference with a running reset that otherwise
-@@ -1271,7 +1263,7 @@ static int grcan_poll(struct napi_struct
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 	}
- 
--	return rx_work_done + tx_work_done;
-+	return work_done;
- }
- 
- /* Work tx bug by waiting while for the risky situation to clear. If that fails,
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1195,6 +1195,10 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1056, 0xff),	/* Telit FD980 */
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1057, 0xff),	/* Telit FN980 */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1058, 0xff),	/* Telit FN980 (PCIe) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1060, 0xff),	/* Telit LN920 (rmnet) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1061, 0xff),	/* Telit LN920 (MBIM) */
+@@ -1211,6 +1215,8 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
+ 	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990 (PCIe) */
++	  .driver_info = RSVD(0) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 
 

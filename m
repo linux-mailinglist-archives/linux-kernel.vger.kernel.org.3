@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFBD521BDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF0A521B8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344049AbiEJOXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S234072AbiEJORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245428AbiEJNwZ (ORCPT
+        with ESMTP id S244546AbiEJNqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1447829B01D;
-        Tue, 10 May 2022 06:38:06 -0700 (PDT)
+        Tue, 10 May 2022 09:46:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADB0158FAF;
+        Tue, 10 May 2022 06:31:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12FBE6193B;
-        Tue, 10 May 2022 13:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F255BC385C2;
-        Tue, 10 May 2022 13:37:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 665B8615C8;
+        Tue, 10 May 2022 13:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5731BC385A6;
+        Tue, 10 May 2022 13:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189877;
-        bh=hdGbXiZ7j3Xv43JBrJ2UKAMh9Rfoi9lnO0HEgJMe8o0=;
+        s=korg; t=1652189491;
+        bh=vtwB/M6DbWEB3HCR614K+ENnJNH/T7Xx8PGNzY39/xU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LPspCGvIDevj7d7qJxosROmirqI/+fe5SSgrXig8nC+f7dxGD0w73NmYG9A/vUAdm
-         Hf01dzQsg3hR3C7UIlzMq9hOm/Fy4vKZlZufnBKj4Qvea+szvAHM88XN8nidNZPFYz
-         iiD24liATfEGrcfWMp8se6LEUuT7G8Gpz9fihZgE=
+        b=K/UGEJSLq5XyKOvDCcAdCx6CySXAeOdo01K1N6j8h3o0w5ZWHEt16CP3rZVcWutK3
+         d898JoAU8wt+J+XJwqdOKL2Pv/Ho7TwvA37e8iWhfouryzIEJUn33ksTMWRdCfaerf
+         0jxOcynbNQQsjvHF6skQMquLK6dzr+LE+SYkBxeU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Shmidt <dimitrysh@google.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.17 058/140] ASoC: meson: axg-tdm-interface: Fix formatters in trigger"
-Date:   Tue, 10 May 2022 15:07:28 +0200
-Message-Id: <20220510130743.278161397@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Shravya Kumbham <shravya.kumbham@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.15 067/135] net: emaclite: Add error handling for of_address_to_resource()
+Date:   Tue, 10 May 2022 15:07:29 +0200
+Message-Id: <20220510130742.332592037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neil Armstrong <narmstrong@baylibre.com>
+From: Shravya Kumbham <shravya.kumbham@xilinx.com>
 
-commit c26830b6c5c534d273ce007eb33d5a2d2ad4e969 upstream.
+commit 7a6bc33ab54923d325d9a1747ec9652c4361ebd1 upstream.
 
-This reverts commit bf5e4887eeddb48480568466536aa08ec7f179a5 because
-the following and required commit e138233e56e9829e65b6293887063a1a3ccb2d68
-causes the following system crash when using audio:
- BUG: sleeping function called from invalid context at kernel/locking/mutex.c:282
+check the return value of of_address_to_resource() and also add
+missing of_node_put() for np and npp nodes.
 
-Fixes: bf5e4887eeddb4848056846 ("ASoC: meson: axg-tdm-interface: manage formatters in trigger")
-Reported-by: Dmitry Shmidt <dimitrysh@google.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Acked-by: Jerome Brunet <jbrunet@baylibre.com>
-Link: https://lore.kernel.org/r/20220421155725.2589089-1-narmstrong@baylibre.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e0a3bc65448c ("net: emaclite: Support multiple phys connected to one MDIO bus")
+Addresses-Coverity: Event check_return value.
+Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/meson/axg-tdm-interface.c | 26 +++++---------------------
- 1 file changed, 5 insertions(+), 21 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/meson/axg-tdm-interface.c b/sound/soc/meson/axg-tdm-interface.c
-index 0c31934a9630..e076ced30025 100644
---- a/sound/soc/meson/axg-tdm-interface.c
-+++ b/sound/soc/meson/axg-tdm-interface.c
-@@ -351,29 +351,13 @@ static int axg_tdm_iface_hw_free(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
--static int axg_tdm_iface_trigger(struct snd_pcm_substream *substream,
--				 int cmd,
-+static int axg_tdm_iface_prepare(struct snd_pcm_substream *substream,
- 				 struct snd_soc_dai *dai)
+--- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
++++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+@@ -822,10 +822,10 @@ static int xemaclite_mdio_write(struct m
+ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
  {
--	struct axg_tdm_stream *ts =
--		snd_soc_dai_get_dma_data(dai, substream);
+ 	struct mii_bus *bus;
+-	int rc;
+ 	struct resource res;
+ 	struct device_node *np = of_get_parent(lp->phy_node);
+ 	struct device_node *npp;
++	int rc, ret;
+ 
+ 	/* Don't register the MDIO bus if the phy_node or its parent node
+ 	 * can't be found.
+@@ -835,8 +835,14 @@ static int xemaclite_mdio_setup(struct n
+ 		return -ENODEV;
+ 	}
+ 	npp = of_get_parent(np);
 -
--	switch (cmd) {
--	case SNDRV_PCM_TRIGGER_START:
--	case SNDRV_PCM_TRIGGER_RESUME:
--	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
--		axg_tdm_stream_start(ts);
--		break;
--	case SNDRV_PCM_TRIGGER_SUSPEND:
--	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
--	case SNDRV_PCM_TRIGGER_STOP:
--		axg_tdm_stream_stop(ts);
--		break;
--	default:
--		return -EINVAL;
--	}
-+	struct axg_tdm_stream *ts = snd_soc_dai_get_dma_data(dai, substream);
+-	of_address_to_resource(npp, 0, &res);
++	ret = of_address_to_resource(npp, 0, &res);
++	of_node_put(npp);
++	if (ret) {
++		dev_err(dev, "%s resource error!\n",
++			dev->of_node->full_name);
++		of_node_put(np);
++		return ret;
++	}
+ 	if (lp->ndev->mem_start != res.start) {
+ 		struct phy_device *phydev;
+ 		phydev = of_phy_find_device(lp->phy_node);
+@@ -845,6 +851,7 @@ static int xemaclite_mdio_setup(struct n
+ 				 "MDIO of the phy is not registered yet\n");
+ 		else
+ 			put_device(&phydev->mdio.dev);
++		of_node_put(np);
+ 		return 0;
+ 	}
  
--	return 0;
-+	/* Force all attached formatters to update */
-+	return axg_tdm_stream_reset(ts);
- }
+@@ -857,6 +864,7 @@ static int xemaclite_mdio_setup(struct n
+ 	bus = mdiobus_alloc();
+ 	if (!bus) {
+ 		dev_err(dev, "Failed to allocate mdiobus\n");
++		of_node_put(np);
+ 		return -ENOMEM;
+ 	}
  
- static int axg_tdm_iface_remove_dai(struct snd_soc_dai *dai)
-@@ -413,8 +397,8 @@ static const struct snd_soc_dai_ops axg_tdm_iface_ops = {
- 	.set_fmt	= axg_tdm_iface_set_fmt,
- 	.startup	= axg_tdm_iface_startup,
- 	.hw_params	= axg_tdm_iface_hw_params,
-+	.prepare	= axg_tdm_iface_prepare,
- 	.hw_free	= axg_tdm_iface_hw_free,
--	.trigger	= axg_tdm_iface_trigger,
- };
+@@ -869,6 +877,7 @@ static int xemaclite_mdio_setup(struct n
+ 	bus->parent = dev;
  
- /* TDM Backend DAIs */
--- 
-2.36.1
-
+ 	rc = of_mdiobus_register(bus, np);
++	of_node_put(np);
+ 	if (rc) {
+ 		dev_err(dev, "Failed to register mdio bus.\n");
+ 		goto err_register;
 
 

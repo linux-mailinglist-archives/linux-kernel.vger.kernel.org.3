@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D5C521AD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2345D5218D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbiEJOEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S244781AbiEJNmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243516AbiEJNje (ORCPT
+        with ESMTP id S243079AbiEJNZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:39:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9D5291E7D;
-        Tue, 10 May 2022 06:29:30 -0700 (PDT)
+        Tue, 10 May 2022 09:25:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72A91683FC;
+        Tue, 10 May 2022 06:18:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D10B615C8;
-        Tue, 10 May 2022 13:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABCCC385A6;
-        Tue, 10 May 2022 13:29:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E090B81B32;
+        Tue, 10 May 2022 13:18:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B39EC385A6;
+        Tue, 10 May 2022 13:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189368;
-        bh=ISMfMhtXfu2Pk7+NSCCly6n7NsxSXlWEoWIa/Hw3yS4=;
+        s=korg; t=1652188723;
+        bh=Ug3fk8Vt8Pk8CQvWev9QH73Z1POTQgfDaPxABlOgu54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QcKI5b89IQvVynUKFwpcFWo+IwtPKsUWbEul+icsRmdqJ3jIHde5R1YnXsVXgQtw3
-         HLhNrKx3YL/EnBu5suMZ1/V9uwiy/nSl3Ur+wE3DXaX+ATd4ps6oIE7ltCpCm+0f6I
-         3pS868r9Z+u+0tqDEWIxNYsFkua0AIOpVS4MQbGM=
+        b=yN8eXI2dEIVa2jYzcxH8nia8mnwmpL+cyuNYbtiTlHTuvuBNOlSxb6AZilCWqdtj5
+         wEc9GPTDG0n8aMLhJNrVztUXJZPLUlqCrgTjHlIc3nyC0PcoA3Z9PASe59F26An++9
+         Fae1BvaJ5ceGvhxAGGI7e7VewPAId0piM8upaGDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 028/135] s390/dasd: fix data corruption for ESE devices
-Date:   Tue, 10 May 2022 15:06:50 +0200
-Message-Id: <20220510130741.207089029@linuxfoundation.org>
+        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 06/88] USB: serial: option: add support for Cinterion MV32-WA/MV32-WB
+Date:   Tue, 10 May 2022 15:06:51 +0200
+Message-Id: <20220510130733.926886756@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: Slark Xiao <slark_xiao@163.com>
 
-commit 5b53a405e4658580e1faf7c217db3f55a21ba849 upstream.
+commit b4a64ed6e7b857317070fcb9d87ff5d4a73be3e8 upstream.
 
-For ESE devices we get an error when accessing an unformatted track.
-The handling of this error will return zero data for read requests and
-format the track on demand before writing to it. To do this the code needs
-to distinguish between read and write requests. This is done with data from
-the blocklayer request. A pointer to the blocklayer request is stored in
-the CQR.
+Add support for Cinterion device MV32-WA/MV32-WB. MV32-WA PID is
+0x00F1, and MV32-WB PID is 0x00F2.
 
-If there is an error on the device an ERP request is built to do error
-recovery. While the ERP request is mostly a copy of the original CQR the
-pointer to the blocklayer request is not copied to not accidentally pass
-it back to the blocklayer without cleanup.
+Test evidence as below:
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f1 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F1 USB Mobile Broadband
+S:  SerialNumber=78ada8c4
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-This leads to the error that during ESE handling after an ERP request was
-built it is not possible to determine the IO direction. This leads to the
-formatting of a track for read requests which might in turn lead to data
-corruption.
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f2 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F2 USB Mobile Broadband
+S:  SerialNumber=cdd06a78
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
-Cc: stable@vger.kernel.org # 5.3+
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-2-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Interface 0&1: MBIM, 2:Modem, 3: GNSS, 4: NMEA, 5: Diag
+GNSS port don't use serial driver.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Link: https://lore.kernel.org/r/20220414074434.5699-1-slark_xiao@163.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd.c      |    8 +++++++-
- drivers/s390/block/dasd_eckd.c |    2 +-
- drivers/s390/block/dasd_int.h  |   12 ++++++++++++
- 3 files changed, 20 insertions(+), 2 deletions(-)
+ drivers/usb/serial/option.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/s390/block/dasd.c
-+++ b/drivers/s390/block/dasd.c
-@@ -1639,6 +1639,7 @@ void dasd_int_handler(struct ccw_device
- 	unsigned long now;
- 	int nrf_suppressed = 0;
- 	int fp_suppressed = 0;
-+	struct request *req;
- 	u8 *sense = NULL;
- 	int expires;
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -432,6 +432,8 @@ static void option_instat_callback(struc
+ #define CINTERION_PRODUCT_CLS8			0x00b0
+ #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
+ #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
++#define CINTERION_PRODUCT_MV32_WA		0x00f1
++#define CINTERION_PRODUCT_MV32_WB		0x00f2
  
-@@ -1739,7 +1740,12 @@ void dasd_int_handler(struct ccw_device
- 	}
- 
- 	if (dasd_ese_needs_format(cqr->block, irb)) {
--		if (rq_data_dir((struct request *)cqr->callback_data) == READ) {
-+		req = dasd_get_callback_data(cqr);
-+		if (!req) {
-+			cqr->status = DASD_CQR_ERROR;
-+			return;
-+		}
-+		if (rq_data_dir(req) == READ) {
- 			device->discipline->ese_read(cqr, irb);
- 			cqr->status = DASD_CQR_SUCCESS;
- 			cqr->stopclk = now;
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -3157,7 +3157,7 @@ dasd_eckd_ese_format(struct dasd_device
- 	sector_t curr_trk;
- 	int rc;
- 
--	req = cqr->callback_data;
-+	req = dasd_get_callback_data(cqr);
- 	block = cqr->block;
- 	base = block->base;
- 	private = base->private;
---- a/drivers/s390/block/dasd_int.h
-+++ b/drivers/s390/block/dasd_int.h
-@@ -757,6 +757,18 @@ dasd_check_blocksize(int bsize)
- 	return 0;
- }
- 
-+/*
-+ * return the callback data of the original request in case there are
-+ * ERP requests build on top of it
-+ */
-+static inline void *dasd_get_callback_data(struct dasd_ccw_req *cqr)
-+{
-+	while (cqr->refers)
-+		cqr = cqr->refers;
-+
-+	return cqr->callback_data;
-+}
-+
- /* externals in dasd.c */
- #define DASD_PROFILE_OFF	 0
- #define DASD_PROFILE_ON 	 1
+ /* Olivetti products */
+ #define OLIVETTI_VENDOR_ID			0x0b3c
+@@ -1969,6 +1971,10 @@ static const struct usb_device_id option
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
+ 	  .driver_info = RSVD(0)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
++	  .driver_info = RSVD(3)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
++	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
 
 

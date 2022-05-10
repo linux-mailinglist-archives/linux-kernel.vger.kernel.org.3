@@ -2,213 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE2A520C9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E6A520C9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236022AbiEJEPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S236336AbiEJEU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235901AbiEJEOe (ORCPT
+        with ESMTP id S236179AbiEJEUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:14:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675AB2380C9
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652155836; x=1683691836;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=icJDa2iLnHPRI9zTuKl758rXgrH0MpnOxbAYD3W4ZEY=;
-  b=YDIUdYsnN4gXOJCVVTr3tDB3Dn1xlsZ7J9BUw2WahAeaZf1pHn4SBd/e
-   xK7Mrf27DTZ3/Of8jxqNK6ysnMPBs69FrhaTW6T4XvkL2x7H3e1dBGvh4
-   LIXzmbbfb6qjq5AlFPWXcHZMbCOw0ZR/WXiHr861GwMhDXetyGC9uaNFD
-   vtuBdlZEf5Qcd1JwmDrohNANpunXoNJom4lY1qfRD9MHjHWz2eKvxqV+b
-   4OSUT3r/JY9alXBB4mA12GTU5UNubE6gNYnO5nuVcfmXlmZW6ya2tCos7
-   KK9+YfEiPRdEygHu8x83LROj0GZExkF4d7IiUo/0yOQ0ijhxV16s3h/A9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="332289492"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="332289492"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 21:10:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="738492077"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2022 21:10:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noHCj-000HHT-NX;
-        Tue, 10 May 2022 04:10:33 +0000
-Date:   Tue, 10 May 2022 12:09:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/6]
- fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types
- ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof ((1UL << 18))
- *' (aka 'unsigned long *'))
-Message-ID: <202205101239.HjP2nwNj-lkp@intel.com>
+        Tue, 10 May 2022 00:20:01 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23051D5033
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:14:34 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 574222C0781;
+        Tue, 10 May 2022 04:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652156072;
+        bh=beR9evBBDHwCGXTYqGuejgNhP+joqfGIzTwytCv6kNQ=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=famXQywzQqBz8alJ9cQNnaZlJTV2te65K6LfE63ekYrKNo2FvNVNCtWhupkraAsod
+         wNHxSbJK7jxwA0Ku7zXurqwg/xodK6y/WlJb8TnNLXY8i/cX1m1m5wbfSe6g9azJf9
+         ws39wHNXjDVlC9HSW9nLZZAaj6tC9qYoEYczHTIY41hoy7Hbn+Ay77qP6V6tDIk2pv
+         r1u6Nuh70SFQ1hHLvK6aYNIFJsDKSzUc5U3+0GfprmPOr9QmYx3YIwJMkpr/UoafHo
+         p465vw0dTEI8VE86bGLdF9GUVtEB2X3fyOZb+T0gyxv1oi2atwcIDupZW2tJEcJOSH
+         /DsNNY4qlOfGA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6279e6a80001>; Tue, 10 May 2022 16:14:32 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Tue, 10 May 2022 16:14:31 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Tue, 10 May 2022 16:14:31 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Topic: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Index: AQHYX3HqbCVddS0CWEWMkXLyqck2rq0POn2AgAeGWYA=
+Date:   Tue, 10 May 2022 04:14:31 +0000
+Message-ID: <6770d320-b998-0c9d-3824-0d429834b289@alliedtelesis.co.nz>
+References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
+ <20220504044624.951841-2-chris.packham@alliedtelesis.co.nz>
+ <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
+In-Reply-To: <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FF4C3F1620A2824CB79752A08CC827C1@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=KV0xaAgqlUJaG30mGBAA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
-head:   627ce4da99bb612945366770c5604019fb74b653
-commit: e4b60df6a12099568c671591d36a9fa16515f6eb [5/6] cifs: Change the I/O paths to use an iterator rather than a page list
-config: hexagon-randconfig-r005-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101239.HjP2nwNj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3abb68a626160e019c30a4860e569d7bc75e486a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e4b60df6a12099568c671591d36a9fa16515f6eb
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
-        git checkout e4b60df6a12099568c671591d36a9fa16515f6eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/ drivers/net/ethernet/stmicro/stmmac/ drivers/net/ethernet/xilinx/ drivers/net/netdevsim/ drivers/net/wan/ fs/cifs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/cifs/smb2ops.c:4752:11: warning: comparison of distinct pointer types ('typeof (size - copied) *' (aka 'unsigned int *') and 'typeof ((1UL << 18)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                                   seg = min(size - copied, PAGE_SIZE);
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4961:3: warning: variable 'length' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/cifs/smb2ops.c:4993:9: note: uninitialized use occurs here
-           return length;
-                  ^~~~~~
-   fs/cifs/smb2ops.c:4961:3: note: remove the 'if' if its condition is always true
-                   if (rdata->result != 0) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   fs/cifs/smb2ops.c:4860:12: note: initialize the variable 'length' to silence this warning
-           int length;
-                     ^
-                      = 0
-   2 warnings generated.
-
-
-vim +4752 fs/cifs/smb2ops.c
-
-  4702	
-  4703	/*
-  4704	 * This function will initialize new_rq and encrypt the content.
-  4705	 * The first entry, new_rq[0], only contains a single iov which contains
-  4706	 * a smb2_transform_hdr and is pre-allocated by the caller.
-  4707	 * This function then populates new_rq[1+] with the content from olq_rq[0+].
-  4708	 *
-  4709	 * The end result is an array of smb_rqst structures where the first structure
-  4710	 * only contains a single iov for the transform header which we then can pass
-  4711	 * to crypt_message().
-  4712	 *
-  4713	 * new_rq[0].rq_iov[0] :  smb2_transform_hdr pre-allocated by the caller
-  4714	 * new_rq[1+].rq_iov[*] == old_rq[0+].rq_iov[*] : SMB2/3 requests
-  4715	 */
-  4716	static int
-  4717	smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
-  4718			       struct smb_rqst *new_rq, struct smb_rqst *old_rq)
-  4719	{
-  4720		struct smb2_transform_hdr *tr_hdr = new_rq[0].rq_iov[0].iov_base;
-  4721		struct page *page;
-  4722		unsigned int orig_len = 0;
-  4723		int i, j;
-  4724		int rc = -ENOMEM;
-  4725	
-  4726		for (i = 1; i < num_rqst; i++) {
-  4727			struct smb_rqst *old = &old_rq[i - 1];
-  4728			struct smb_rqst *new = &new_rq[i];
-  4729			struct xarray *buffer = &new->rq_buffer;
-  4730			unsigned int npages;
-  4731			size_t size = iov_iter_count(&old->rq_iter), seg, copied = 0;
-  4732	
-  4733			xa_init(buffer);
-  4734	
-  4735			if (size > 0) {
-  4736				npages = DIV_ROUND_UP(size, PAGE_SIZE);
-  4737				for (j = 0; j < npages; j++) {
-  4738					void *o;
-  4739	
-  4740					rc = -ENOMEM;
-  4741					page = alloc_page(GFP_KERNEL|__GFP_HIGHMEM);
-  4742					if (!page)
-  4743						goto err_free;
-  4744					page->index = j;
-  4745					o = xa_store(buffer, j, page, GFP_KERNEL);
-  4746					if (xa_is_err(o)) {
-  4747						rc = xa_err(o);
-  4748						put_page(page);
-  4749						goto err_free;
-  4750					}
-  4751	
-> 4752					seg = min(size - copied, PAGE_SIZE);
-  4753					if (copy_page_from_iter(page, 0, seg, &old->rq_iter) != seg) {
-  4754						rc = -EFAULT;
-  4755						goto err_free;
-  4756					}
-  4757					copied += seg;
-  4758				}
-  4759				iov_iter_xarray(&new->rq_iter, iov_iter_rw(&old->rq_iter),
-  4760						buffer, 0, size);
-  4761			}
-  4762			new->rq_iov = old->rq_iov;
-  4763			new->rq_nvec = old->rq_nvec;
-  4764			orig_len += smb_rqst_len(server, new);
-  4765		}
-  4766	
-  4767		/* fill the 1st iov with a transform header */
-  4768		fill_transform_hdr(tr_hdr, orig_len, old_rq, server->cipher_type);
-  4769	
-  4770		rc = crypt_message(server, num_rqst, new_rq, 1);
-  4771		cifs_dbg(FYI, "Encrypt message returned %d\n", rc);
-  4772		if (rc)
-  4773			goto err_free;
-  4774	
-  4775		return rc;
-  4776	
-  4777	err_free:
-  4778		smb3_free_compound_rqst(num_rqst - 1, &new_rq[1]);
-  4779		return rc;
-  4780	}
-  4781	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+KHJlc2VuZCB3aXRob3V0IHRoZSBodG1sKQ0KDQoNCk9uIDUvMDUvMjIgMjE6MTksIEtyenlzenRv
+ZiBLb3psb3dza2kgd3JvdGU6DQo+PiArCWNvcmVfY2xvY2s6IGNvcmVfY2xvY2sgew0KPiBObyB1
+bmRlcnNjb3JlcyBpbiBub2RlIG5hbWVzLg0KPg0KPiBBbGwgdGhlc2UgY2xvY2tzIGRvIG5vdCBs
+b29rIGxpa2UgcmVhbCBjbG9ja3MuIFdoZXJlIGFyZSB0aGV5IGlmIG91dHNpZGUNCj4gb2YgU29D
+PyBUaGVzZSBzaG91bGQgYmUgZmVkIGZyb20gY2xvY2sgY29udHJvbGxlcnMsIHNob3VsZG4ndCB0
+aGV5PyBJZg0KPiB0aGV5IGFyZSBwcm92aWRlZCBieSBib2FyZHMsIGRvbid0IHB1dCB0aGVtIGlu
+dG8gU29DLi4uDQo+DQo+PiArCQljb21wYXRpYmxlID0gImZpeGVkLWNsb2NrIjsNCj4+ICsJCSNj
+bG9jay1jZWxscyA9IDwwPjsNCj4+ICsJCWNsb2NrLWZyZXF1ZW5jeSA9IDw0MDAwMDAwMDA+Ow0K
+Pj4gKwl9Ow0KPj4gKw0KPj4gKwlheGlfY2xvY2s6IGF4aV9jbG9jayB7DQo+PiArCQljb21wYXRp
+YmxlID0gImZpeGVkLWNsb2NrIjsNCj4+ICsJCSNjbG9jay1jZWxscyA9IDwwPjsNCj4+ICsJCWNs
+b2NrLWZyZXF1ZW5jeSA9IDwzMjUwMDAwMDA+Ow0KPj4gKwl9Ow0KPj4gKw0KPj4gKwlzcGlfY2xv
+Y2s6IHNwaV9jbG9jayB7DQo+PiArCQljb21wYXRpYmxlID0gImZpeGVkLWNsb2NrIjsNCj4+ICsJ
+CSNjbG9jay1jZWxscyA9IDwwPjsNCj4+ICsJCWNsb2NrLWZyZXF1ZW5jeSA9IDwyMDAwMDAwMDA+
+Ow0KPj4gKwl9Ow0KDQpCYXNlZCBvbiB0aGUgaW5mb3JtYXRpb24gSSBoYXZlICh3aGljaCBpc24n
+dCBtdWNoKSB0aGVyZSBpcyBhIHJlZl9jbGsgDQppbnB1dCB0aGF0IGlzIGNvbm5lY3RlZCB0byBh
+IDI1TUh6IG9zY2lsbGF0b3IgYW5kIHRoZW4gSSdtIGFzc3VtaW5nIA0KdGhlc2UgYXJlIGFsbCBn
+ZW5lcmF0ZWQgZnJvbSB0aGF0IHdpdGggdmFyaW91cyBkaXZpZGVycy4gMjVNSHogaXMgdGhlIA0K
+b25seSBkb2N1bWVudGVkIG9wdGlvbi4NCg0KVGhlcmUgZG9lc24ndCBhcHBlYXIgdG8gYmUgYW55
+IGRvY3VtZW50ZWQgcmVnaXN0ZXIgd2hlcmUgSSBjYW4gcmVhZCBvdXQgDQp0aGUgZGl2aWRlciBy
+YXRpb3MuIEl0IG1pZ2h0IGJlIG5pY2UgSSBjb3VsZCBoYXZlIHRoZSBmaXhlZCBvc2Mgbm9kZSBh
+bmQgDQpoYXZlIHRoZXNlIDMgY2xvY2tzIGRlcml2ZWQgd2l0aCBmaXhlZCBkaXZpc29ycyBidXQg
+SSBkb24ndCBzZWUgYW55IHdoYXQgDQpvZiBhY2hpZXZpbmcgdGhhdC4NCg0K

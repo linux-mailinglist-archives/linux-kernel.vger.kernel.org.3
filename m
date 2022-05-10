@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6C2520BF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98664520BED
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiEJD1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S235282AbiEJDZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiEJD1L (ORCPT
+        with ESMTP id S232678AbiEJDZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:27:11 -0400
-X-Greylist: delayed 166 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 20:23:13 PDT
-Received: from p3plwbeout23-04.prod.phx3.secureserver.net (p3plsmtp23-04-2.prod.phx3.secureserver.net [68.178.252.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537F3B54B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:23:13 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.141])
-        by :WBEOUT: with ESMTP
-        id oGQBnPPDPXwYxoGQCnr98K; Mon, 09 May 2022 20:20:24 -0700
-X-CMAE-Analysis: v=2.4 cv=N9vsq0xB c=1 sm=1 tr=0 ts=6279d9f8
- a=bheWAUFm1xGnSTQFbH9Kqg==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10
- a=m0AoEl9UtWfG1dJMmG4A:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  oGQBnPPDPXwYx
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp03.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1noGQB-0003JY-7R; Tue, 10 May 2022 04:20:23 +0100
-Message-ID: <1dff431e-f51d-edb0-5abc-353ceeef50ed@squashfs.org.uk>
-Date:   Tue, 10 May 2022 04:20:18 +0100
+        Mon, 9 May 2022 23:25:28 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440B252BC;
+        Mon,  9 May 2022 20:21:30 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id i19so30306418eja.11;
+        Mon, 09 May 2022 20:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W6hg8xZDlvVbV0yxBFJp6M3i2By/uzGhIKuyQsM88v4=;
+        b=P+wESGRbK7UrpgEo0WHOiYGsdzWzZ8+u3MZXUDBD4YdLv0BOKi/E+XbjkFcw6DoRaN
+         LenQnO42u8tz5dMfezSlUYh7mWdgCucKAr1fPOYcuPBvBQp4xQiCsNPZyCL+LxgPhrrf
+         veBicKCnUjsb4wSJjmvW+1gbMijZcgobY0wy5gqSBHsLiZJi6QFk1owyvBeCAcSL1S36
+         TVJ3B318oVs8ampqE+l+C6rWHg8nWxfmg8BhUGb6gqo2W498Bo+vfxGsE9pOMhyvAc8X
+         MwQJyuatuyH/Pe7rZDYhDlFYKFbSvx3LU4SUdCXn4Q7gK0ZFCplpHbfthTj3SECxSJFR
+         snqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W6hg8xZDlvVbV0yxBFJp6M3i2By/uzGhIKuyQsM88v4=;
+        b=t5X6kE/0bh7zr9jDchgv9KeXZ1S7hhqCsY2HH4/tb2AAgp1NWS1ck6U9bdiWsq/5Qi
+         uGw3+RGssfmSH+qRDTLucuSRceXcnuNzpntZKFwydKqdnb1veq9WKL0ge2XPy1AsYhYX
+         sPNFOkD8XZ6H/PVv9TywjAqfHJoG2MN14QCEAev0JBUV1JNiOTRi5Zz1PZgJvsUwiUUC
+         R+x37qFWxFVhi4kNmzWjzdILmhFyydGJDO4OR/2iv9NPPM5fB9wRJRfm770/4u0shKqQ
+         8TH4chTmnnhzKi+UnWkyfKvEwq5VOG18yrUy7jvCbiwR4rV+wuZTZjFGb6F5SxZUZueP
+         +cVA==
+X-Gm-Message-State: AOAM530a4vLvckO1awVyLE6lstKNE6cP1iSNzurLGQNBBOqyCC+DP9J/
+        10fDxR3Ml9hIllIoM8zSMHBeEbCHo8/LsElyHFeuJJrD1D6m1A==
+X-Google-Smtp-Source: ABdhPJwIr5oMdwzvHgt4e/5Aa9fSbNcXke+HDO7hTgH8FBfuwfgQdcUn+FngDnm8/mfyzKtDJRcj1i6vBDj5PVGLXSU=
+X-Received: by 2002:a17:906:3144:b0:6ce:de5d:5e3b with SMTP id
+ e4-20020a170906314400b006cede5d5e3bmr17816104eje.689.1652152889158; Mon, 09
+ May 2022 20:21:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: squashfs performance regression and readahea
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Xiongwei Song <sxwjean@gmail.com>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Song, Xiongwei" <Xiongwei.Song@windriver.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "squashfs-devel@lists.sourceforge.net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        open list <linux-kernel@vger.kernel.org>
-References: <PH0PR11MB519282C2834C7BB7B5431F34ECC79@PH0PR11MB5192.namprd11.prod.outlook.com>
- <Ynfzh2ifG85MZEoN@casper.infradead.org>
- <CAJMQK-jNYoJVqsri4REV=E3bG8AS7T82HrVSAUPzbUiWask01A@mail.gmail.com>
- <CAJMQK-i3OQxcG7=LzTG4k70BP0j6PstWw0C45xcEi6iVLn_2ag@mail.gmail.com>
- <CAEVVKH-m+3+xJMbM1vRM3d=AaPSv2xg4Qx8_WPw_29JByONS8A@mail.gmail.com>
- <YnkVaGB74xqWJqdG@casper.infradead.org>
- <13af40a9-6b60-6875-8326-0827e34182d5@squashfs.org.uk>
- <YnnPYD+VtQB6hlnL@casper.infradead.org>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <YnnPYD+VtQB6hlnL@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfE4OojHQqKeUWqDeUgXnELl39/Zvj8pNo3AAivap8TE3326ePWGy3LQRV90EjUwMMsjNDuG+CkILOJQ/UR0bt7sMNhOlHJXjZDU0pWgMBVncYEi5+59N
- 9QbT5u8ofvg+CB5HoKcp/kGfM1yMJBAWNbrCDpv6S4mwvNa/kAvVbe81l4n01i8NcvmDm4ra+K5TUslGG6NuDvFx5cWQYaVchNs=
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220509122213.19508-1-imagedong@tencent.com> <cb8eaad0-83c5-a150-d830-e078682ba18b@ssi.bg>
+In-Reply-To: <cb8eaad0-83c5-a150-d830-e078682ba18b@ssi.bg>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 10 May 2022 11:21:17 +0800
+Message-ID: <CADxym3bgR9xfHgoAwWeEQvLUnwrUxee3gK4SkRqcS+TmmfWUGw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: ipvs: random start for RR scheduler
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netdev <netdev@vger.kernel.org>, lvs-devel@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,83 +70,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 03:35, Matthew Wilcox wrote:
-> On Tue, May 10, 2022 at 02:11:41AM +0100, Phillip Lougher wrote:
->> On 09/05/2022 14:21, Matthew Wilcox wrote:
->>> On Mon, May 09, 2022 at 08:43:45PM +0800, Xiongwei Song wrote:
->>>> Hi Hsin-Yi and Matthew,
->>>>
->>>> With the patch from the attachment on linux 5.10, ran the command as I
->>>> mentioned earlier,
->>>> got the results below:
->>>> 1:40.65 (1m + 40.65s)
->>>> 1:10.12
->>>> 1:11.10
->>>> 1:11.47
->>>> 1:11.59
->>>> 1:11.94
->>>> 1:11.86
->>>> 1:12.04
->>>> 1:12.21
->>>> 1:12.06
->>>>
->>>> The performance has improved obviously, but compared to linux 4.18, the
->>>> performance is not so good.
->>>>
->>>> Moreover, I wanted to test on linux 5.18. But I think I should revert
->>>> 9eec1d897139 ("squashfs: provide backing_dev_info in order to disable
->>>> read-ahead"),
->>>> right?  Otherwise, the patch doesn't work?
->>>
->>> I've never seen patch 9eec1d897139 before.  If you're going to point
->>> out bugs in my code, at least have the decency to cc me on it.  It
->>> should never have gone in, and should be reverted so the problem can
->>> be fixed properly.
->>
->> You are not in charge of what patches goes into Squashfs, that is my
->> perogative as maintainer of Squashfs.
-> 
-> I think you mean 'prerogative'.  And, no, your filesystem is not your
-> little fiefdom, it's part of a collaborative effort.
-> 
+On Tue, May 10, 2022 at 2:17 AM Julian Anastasov <ja@ssi.bg> wrote:
+>
+>
+>         Hello,
+>
+> On Mon, 9 May 2022, menglong8.dong@gmail.com wrote:
+>
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the start of the RR scheduler is in the order of dest
+> > service added, it will result in imbalance if the load balance
+>
+>         ...order of added destinations,...
+>
+> > is done in client side and long connect is used.
+>
+>         ..."long connections are used". Is this a case where
+> small number of connections are used? And the two connections
+> relatively overload the real servers?
+>
+> > For example, we have client1, client2, ..., client5 and real service
+> > service1, service2, service3. All clients have the same ipvs config,
+> > and each of them will create 2 long TCP connect to the virtual
+> > service. Therefore, all the clients will connect to service1 and
+> > service2, leaving service3 free.
+>
+>         You mean, there are many IPVS directors with same
+> config and each director gets 2 connections? Third connection
+> will get real server #3, right ? Also, are the clients local
+> to the director?
+>
 
-This isn't a spelling contest, and if that's the best you can do you
-have already failed.
+Sorry to have missed your message here. Yeah, this is what I mean.
+And in my case, the directors are local the to client, and each client
+only have 2 connections. If the 3th connection happens, it will get #3
+real server. And all directors connected to #1 and #2 real servers,
+resulting in overload.
 
-Be carefull here also, I have been maintainer of Squashfs for 20 years,
-and was kernel maintainer for both Ubuntu and Redhat for 10 years, and
-so I am experienced member of the community.
-
-You reply is bordering on offensive and arrogant, especially considering
-it is unwarranted.  I did not set out to offend you, and I don't
-appreciate it.
-
-About 8 years ago I decided to refrain from active involvement in the
-kernel community, because I decided the level of discourse was
-disgusting, and I had enough of it.
-
-I poped up now to defend my approval of the Huawei patch.  I am *quite*
-happy not to have any more involvement until necessary.
-
-So having said what I want to say, I will leave it at that. You have
-just proved why I have minimised my involvement.
-
-No doubt you'll throw your toys out the pram, but, I'm no
-longer listening so don't bother.
-
-
->> That patch (by Huawei) fixes the performance regression in Squashfs
->> by disabling readahead, and it is good workaround until something
->> better.
-> 
-> You *didn't even report the problem to me*.  How can it be fixed if I'm
-> not aware of it?
-> 
-
-There was a email discussion last year, which I responded to, and got
-ignored.  I will find it out tomorrow, perhaps.  But I will probably
-not bother, because life is too short.
-
-Cheers
-
-Phillip
+> > Fix this by randomize the start of dest service to RR scheduler when
+>
+>         ..."randomizing the starting destination when"
+>
+> > IP_VS_SVC_F_SCHED_RR_RANDOM is set.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  include/uapi/linux/ip_vs.h    |  2 ++
+> >  net/netfilter/ipvs/ip_vs_rr.c | 25 ++++++++++++++++++++++++-
+> >  2 files changed, 26 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/ip_vs.h b/include/uapi/linux/ip_vs.h
+> > index 4102ddcb4e14..7f74bafd3211 100644
+> > --- a/include/uapi/linux/ip_vs.h
+> > +++ b/include/uapi/linux/ip_vs.h
+> > @@ -28,6 +28,8 @@
+> >  #define IP_VS_SVC_F_SCHED_SH_FALLBACK        IP_VS_SVC_F_SCHED1 /* SH fallback */
+> >  #define IP_VS_SVC_F_SCHED_SH_PORT    IP_VS_SVC_F_SCHED2 /* SH use port */
+> >
+> > +#define IP_VS_SVC_F_SCHED_RR_RANDOM  IP_VS_SVC_F_SCHED1 /* random start */
+> > +
+> >  /*
+> >   *      Destination Server Flags
+> >   */
+> > diff --git a/net/netfilter/ipvs/ip_vs_rr.c b/net/netfilter/ipvs/ip_vs_rr.c
+> > index 38495c6f6c7c..e309d97bdd08 100644
+> > --- a/net/netfilter/ipvs/ip_vs_rr.c
+> > +++ b/net/netfilter/ipvs/ip_vs_rr.c
+> > @@ -22,13 +22,36 @@
+> >
+> >  #include <net/ip_vs.h>
+> >
+> > +static void ip_vs_rr_random_start(struct ip_vs_service *svc)
+> > +{
+> > +     struct list_head *cur;
+> > +     u32 start;
+> > +
+> > +     if (!(svc->flags | IP_VS_SVC_F_SCHED_RR_RANDOM) ||
+>
+>         | -> &
+>
+> > +         svc->num_dests <= 1)
+> > +             return;
+> > +
+> > +     spin_lock_bh(&svc->sched_lock);
+> > +     start = get_random_u32() % svc->num_dests;
+>
+>         May be prandom is more appropriate for non-crypto purposes.
+> Also, not sure if it is a good idea to limit the number of steps,
+> eg. to 128...
+>
+>         start = prandom_u32_max(min(svc->num_dests, 128U));
+>
+>         or just use
+>
+>         start = prandom_u32_max(svc->num_dests);
+>
+>         Also, this line can be before the spin_lock_bh.
+>
+> > +     cur = &svc->destinations;
+>
+>         cur = svc->sched_data;
+>
+>         ... and to start from current svc->sched_data because
+> we are called for every added dest. Better to jump 0..127 steps
+> ahead, to avoid delay with long lists?
+>
+> > +     while (start--)
+> > +             cur = cur->next;
+> > +     svc->sched_data = cur;
+> > +     spin_unlock_bh(&svc->sched_lock);
+> > +}
+> >
+> >  static int ip_vs_rr_init_svc(struct ip_vs_service *svc)
+> >  {
+> >       svc->sched_data = &svc->destinations;
+> > +     ip_vs_rr_random_start(svc);
+> >       return 0;
+> >  }
+> >
+> > +static int ip_vs_rr_add_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
+> > +{
+> > +     ip_vs_rr_random_start(svc);
+> > +     return 0;
+> > +}
+> >
+> >  static int ip_vs_rr_del_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
+> >  {
+> > @@ -104,7 +127,7 @@ static struct ip_vs_scheduler ip_vs_rr_scheduler = {
+> >       .module =               THIS_MODULE,
+> >       .n_list =               LIST_HEAD_INIT(ip_vs_rr_scheduler.n_list),
+> >       .init_service =         ip_vs_rr_init_svc,
+> > -     .add_dest =             NULL,
+> > +     .add_dest =             ip_vs_rr_add_dest,
+> >       .del_dest =             ip_vs_rr_del_dest,
+> >       .schedule =             ip_vs_rr_schedule,
+> >  };
+> > --
+> > 2.36.0
+>
+> Regards
+>
+> --
+> Julian Anastasov <ja@ssi.bg>
+>

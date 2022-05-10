@@ -2,85 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3C9521504
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5BC521500
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiEJMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S241624AbiEJMS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241612AbiEJMSo (ORCPT
+        with ESMTP id S241592AbiEJMSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:18:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E655B2498BF;
-        Tue, 10 May 2022 05:14:46 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id g20so19749561edw.6;
-        Tue, 10 May 2022 05:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l/br5lVoJr5JONPYw1u2TkkXlTjPZRXlvdDqOy09iwI=;
-        b=FjagvNXwCbQMkr00LSuq5wEwkPbbZaJXOlTX3CESKiHhORbnsjJpqJdCQKfImkBgoW
-         THSuME8zouCe9kcMvi/fOKDuhiBzdtoIrfvQ9HdUo+iAXIc9J8Zbsqme+oqWRx/vxMom
-         aPp7kYBEkZ4kd6rVxaQ/xY+puVba/kL3CRalqh0YJ3xqS2PXw2Lxl38cdwMHwPREkAOf
-         BSYOYzS7BM+5YVgMxAysX479oT0kdnV+s34Tcsnsr2/O7m+PUH3ilTwd4nxP+Djl49HW
-         feTXM8W/yStz0TnUIZuzZJ5X0V/hK4FBTr2AFudpHSLmeoP3hD836jGPi9Uk/RE8Ywuj
-         oiyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l/br5lVoJr5JONPYw1u2TkkXlTjPZRXlvdDqOy09iwI=;
-        b=BR3PU5pJFlTwd9Wfj+BSaVC+hno1t6fS1h4NVU6hscM/QfHNPI1zm6FUcdkGFEfxNn
-         qEWkKu+r0lyCTGZowBXLwBO/ZN4P7cVSadlBVdkIuRBFmNvnVZ2sC4dCw069x4ixhoJB
-         uo/nJs+vYU5ovIH7Wrr6P5XlRlxMIh34Ox4gTrkXwYKySQ6oCbMzgd2nA4Qk3p99aJz0
-         2veoeZ/hYF1I1m9dto0oyeSoqWFm5Nj4PF/tmVGxfVREsyZJ2JSdtWfHHYr++apCfbuH
-         KHS1vIxW1g55Y+ARQnDSJ7GIijA2LKokEG7nuMAg/LgmjmtSphP7t4utHDn0Rz7PUwIb
-         gb3g==
-X-Gm-Message-State: AOAM533zt0ByogtdLFvYVG3F6qcKVWsObGKaOxttlA8A3uu4KYR4XMQ0
-        VKQjRqHz48Op84Yml7yJH+CuMZcvzC0nvcDfAD+A6izU82f71A==
-X-Google-Smtp-Source: ABdhPJzmmtgyTQaBfS7rRY2Ew1pDYRTrRHGjAEEWeZnbUpnkC4lag67F/yWbMmdN7dUiDkJ7FiLSj5qxLld/7cITLos=
-X-Received: by 2002:a05:6402:2999:b0:428:bb4d:6cea with SMTP id
- eq25-20020a056402299900b00428bb4d6ceamr958123edb.29.1652184885345; Tue, 10
- May 2022 05:14:45 -0700 (PDT)
+        Tue, 10 May 2022 08:18:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1B244F2E;
+        Tue, 10 May 2022 05:14:20 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6756A21B7F;
+        Tue, 10 May 2022 12:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652184859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z0qCXGbgchboCgbitrJZObbFnXC/YqP7fhEXmnIw2vY=;
+        b=OcxDFXmKKoVdDJUxSKREkD35h3cfh7L/UHzdGP/cbflejeipwrciY4AbOjnQu6DKNCs7aq
+        Tea2QFXBj209QcyaHp7BuefH2IIusivsxr3vlgfi6p9lZaMFpVOppWn8lIP/+rweBZrcrm
+        +Lwt8IUC7jK6VwI0ouYkElgPt01wPwE=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 552522C141;
+        Tue, 10 May 2022 12:14:16 +0000 (UTC)
+Date:   Tue, 10 May 2022 14:14:16 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YnpXGOXicwdy1E6n@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com>
 MIME-Version: 1.0
-References: <20220510105222.1352180-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220510105222.1352180-1-chi.minghao@zte.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 10 May 2022 14:14:08 +0200
-Message-ID: <CAHp75VfzbWAS6phV3eB7ehe50NrXitkuS54sYjdVK-OqqYVieA@mail.gmail.com>
-Subject: Re: [PATCH] toshiba_acpi: use kobj_to_dev()
-To:     cgel.zte@gmail.com
-Cc:     Azael Avalos <coproscefalo@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427224924.592546-6-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 1:58 PM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Use kobj_to_dev() instead of open-coding it.
+On Wed 2022-04-27 19:48:59, Guilherme G. Piccoli wrote:
+> The pvpanic driver relies on panic notifiers to execute a callback
+> on panic event. Such function is executed in atomic context - the
+> panic function disables local IRQs, preemption and all other CPUs
+> that aren't running the panic code.
+> 
+> With that said, it's dangerous to use regular spinlocks in such path,
+> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+> This patch fixes that by replacing regular spinlocks with the trylock
+> safer approach.
 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+It seems that the lock is used just to manipulating a list. A super
+safe solution would be to use the rcu API: rcu_add_rcu() and
+list_del_rcu() under rcu_read_lock(). The spin lock will not be
+needed and the list will always be valid.
 
-Same comment as per your other patch.
+The advantage would be that it will always call members that
+were successfully added earlier. That said, I am not familiar
+with pvpanic and am not sure if it is worth it.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> It also fixes an old comment (about a long gone framebuffer code) and
+> the notifier priority - we should execute hypervisor notifiers early,
+> deferring this way the panic action to the hypervisor, as expected by
+> the users that are setting up pvpanic.
+
+This should be done in a separate patch. It changes the behavior.
+Also there might be a discussion whether it really should be
+the maximal priority.
+
+Best Regards,
+Petr

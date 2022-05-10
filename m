@@ -2,167 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F237C5211F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7AE521202
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239671AbiEJKTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S239251AbiEJKWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiEJKTG (ORCPT
+        with ESMTP id S238778AbiEJKWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:19:06 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3AB2AC0D0;
-        Tue, 10 May 2022 03:15:09 -0700 (PDT)
+        Tue, 10 May 2022 06:22:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EC72550B0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652177710; x=1683713710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mm3Wzebclb3e6JX7+dRypp1DwInebPhxa0hyqQTCYhk=;
-  b=kDGssBIhxnWy2DXf8j0c2X8wVfKkSXxXqZ7yYTzBcqD2P0Tg9txmiNMz
-   VqNxgErH5B2HXSK0zFOgoq4539PYN6R8UM2OTLM2W3NjUHYlTVn1qm0Ud
-   jE9zG/DMPLpppZHy/oOiknyZFUUy956EyEQ4fKaeYkL+XlJ0fTpGuRNxG
-   oF1d2/2WNkkY5j7xuwzArZbWKV54G333bWTMD9ubt9B+5M1oywgvnAhd0
-   8VVPN3aSykZssT5DvLiOaB2W5MT1KWRjBSC78M7bo9pBN83K8QBnshfo8
-   qsxre1K6aUbtZ3QqC9QQ61kzxi07fze+IFYBvB9Hd2if5WsGLTnFV6c0f
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256865436"
+  t=1652177906; x=1683713906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4qztxUNqMycjP1rsDWfTqDBziA+dcRualG3jFrdIOxA=;
+  b=WsXvmYd7vS/IyOGV5ISPrdNFrvXOZZndc28v9fdRMyDXioJRxRsk7Wlz
+   WYvOEUp/m0RS7QO75BQKFC7MxjTCi5lt5J5sejRjUUFhkYSsfL6PLbq8G
+   I+Fo5ScUQQhzMoJahh95jNOkSWPJ5YorqEds0nXdVICUNx/p2igLU/zb4
+   X/odPTN2kOh0xD+07Iho9OoCAMT0/AnPa7kD17u0UwFFM5aUmlu5GBqLb
+   6lX9vs6ttpgyAQupLt1ONjWzOB/FhUhM2lHtnbF+qtBwmmMD1oNeuagPq
+   mCvYKSFOdXVTAxbtfQqSaBs4otjLtwEaA1vEt1oOn8KbsDsi+q3WIsr8u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="329923119"
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="256865436"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:15:09 -0700
+   d="scan'208";a="329923119"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:18:26 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="635878530"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:15:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1noMtO-00EIEX-Bb;
-        Tue, 10 May 2022 13:14:58 +0300
-Date:   Tue, 10 May 2022 13:14:57 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        wsa@kernel.org, jarkko.nikula@linux.intel.com,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
-        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
-        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] i2c: npcm: Handle spurious interrupts
-Message-ID: <Yno7IaBNnR5U2GuF@smile.fi.intel.com>
-References: <20220510091654.8498-1-warp5tw@gmail.com>
- <20220510091654.8498-8-warp5tw@gmail.com>
+   d="scan'208";a="697010384"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 May 2022 03:18:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noMwh-000Hgc-Nz;
+        Tue, 10 May 2022 10:18:23 +0000
+Date:   Tue, 10 May 2022 18:17:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but
+ not used
+Message-ID: <202205101815.8y6CWm3q-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510091654.8498-8-warp5tw@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:16:52PM +0800, Tyrone Ting wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
-> 
-> On some platforms in rare cases (1 to 100,000 transactions),
-> the i2c gets a spurious interrupt which means that we enter an interrupt
-> but in the interrupt handler we don't find any status bit that points to
-> the reason we got this interrupt.
-> 
-> This may be a case of a rare HW issue or signal integrity issue that is
-> still under investigation.
-> 
-> In order to overcome this we are doing the following:
-> 1. Disable incoming interrupts in master mode only when slave mode is not
->    enabled.
-> 2. Clear end of busy (EOB) after every interrupt.
-> 3. Clear other status bits (just in case since we found them cleared)
-> 4. Return correct status during the interrupt that will finish the
->    transaction.
-> 
-> On next xmit transaction if the bus is still busy the master will issue a
-> recovery process before issuing the new transaction.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9be9ed2612b5aedb52a2c240edb1630b6b743cb6
+commit: 0c2c7c069285374fc8feacddc0498f8ab7627117 KVM: SEV: Mark nested locking of vcpu->lock
+date:   4 days ago
+config: x86_64-buildonly-randconfig-r001-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101815.8y6CWm3q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0c2c7c069285374fc8feacddc0498f8ab7627117
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0c2c7c069285374fc8feacddc0498f8ab7627117
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +	/* clear status bits for spurious interrupts */
+All warnings (new ones prefixed by >>):
 
-Clear
+>> arch/x86/kvm/svm/sev.c:1605:30: warning: parameter 'role' set but not used [-Wunused-but-set-parameter]
+                                           enum sev_migration_role role)
+                                                                   ^
+   1 warning generated.
 
-...
 
-> +	/*
-> +	 * if irq is not one of the above, make sure EOB is disabled and all
+vim +/role +1605 arch/x86/kvm/svm/sev.c
 
-If
-
-> +	 * status bits are cleared.
-> +	 */
-
-...
-
-> +		/* verify no status bits are still set after bus is released */
-
-Verify
-
-...
-
-> +	/* check HW is OK: SDA and SCL should be high at this point. */
-
-Check
-
-...
-
-> +	if ((npcm_i2c_get_SDA(&bus->adap) == 0) ||
-> +	    (npcm_i2c_get_SCL(&bus->adap) == 0)) {
-
-This fits one line
-
-> +		dev_err(bus->dev, "I2C%d init fail: lines are low", bus->num);
-> +		dev_err(bus->dev, "SDA=%d SCL=%d", npcm_i2c_get_SDA(&bus->adap),
-> +			npcm_i2c_get_SCL(&bus->adap));
-
-No '\n' at the end of each?!
-
-> +		return -ENXIO;
-> +	}
-
-...
-
-> +	/* clear status bits for spurious interrupts */
-
-Clear
-
-...
-
-> +	/* after any xfer, successful or not, stall and EOB must be disabled */
-
-After
-
-...
-
-Maybe you chose the small letter for one-liner comments, but I see even in the
-original code the inconsistent style. Please, add an explanation to the cover
-letter and follow it, assuming you add the patch at the end of the series that
-makes comment style consistent (for the one-liners, for the multi-line comments
-we have a clear understanding about the style).
+  1603	
+  1604	static int sev_lock_vcpus_for_migration(struct kvm *kvm,
+> 1605						enum sev_migration_role role)
+  1606	{
+  1607		struct kvm_vcpu *vcpu;
+  1608		unsigned long i, j;
+  1609		bool first = true;
+  1610	
+  1611		kvm_for_each_vcpu(i, vcpu, kvm) {
+  1612			if (mutex_lock_killable_nested(&vcpu->mutex, role))
+  1613				goto out_unlock;
+  1614	
+  1615			if (first) {
+  1616				/*
+  1617				 * Reset the role to one that avoids colliding with
+  1618				 * the role used for the first vcpu mutex.
+  1619				 */
+  1620				role = SEV_NR_MIGRATION_ROLES;
+  1621				first = false;
+  1622			} else {
+  1623				mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+  1624			}
+  1625		}
+  1626	
+  1627		return 0;
+  1628	
+  1629	out_unlock:
+  1630	
+  1631		first = true;
+  1632		kvm_for_each_vcpu(j, vcpu, kvm) {
+  1633			if (i == j)
+  1634				break;
+  1635	
+  1636			if (first)
+  1637				first = false;
+  1638			else
+  1639				mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
+  1640	
+  1641	
+  1642			mutex_unlock(&vcpu->mutex);
+  1643		}
+  1644		return -EINTR;
+  1645	}
+  1646	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

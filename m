@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592F2521A94
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EA052197C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244580AbiEJNzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S245631AbiEJNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244855AbiEJNiI (ORCPT
+        with ESMTP id S243895AbiEJNcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA26D4CA;
-        Tue, 10 May 2022 06:26:33 -0700 (PDT)
+        Tue, 10 May 2022 09:32:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B4217DDE5;
+        Tue, 10 May 2022 06:23:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD8B1B81DA9;
-        Tue, 10 May 2022 13:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E0EC385C2;
-        Tue, 10 May 2022 13:26:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0116170D;
+        Tue, 10 May 2022 13:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F062C385A6;
+        Tue, 10 May 2022 13:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189190;
-        bh=/pxfULk7hU6DIw/b2kQ1JQq9ZuRhMqqC4/KdmYm/oPU=;
+        s=korg; t=1652189005;
+        bh=r5sYN3Ve8fxr1EeToSe7lqlaLLlbjVcQXAz6ebv863E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XTk1P73H93NTPxeMP9J+s/XTaBniYChls2kWi9pe3FiRSAet9PpvMmh2LSREjft7w
-         WYjKdAy6JRxjUXisEt+RalD59NmWVvmSCkoxzxlotFYb5fLooqdSdUafMEnFe90VVw
-         AsQkUcgMwA+rjwY6mQGuEvVjH/JgUDUNRyCvhqe0=
+        b=c0yqUvXk6Y7bcm97E9gjmwRKU8P8CEVNcSBTFwOR7JE+moiZmLppapEbm7WtsJ/3n
+         zcOKKnbyWo4AcYQuzo7Y+LgCG5aBFKKw0asS9P+fJvejQYNIn54gk6JZm9BkcDa6q5
+         jGCZn+b0Pu8knzjQJTOcpAmAqBzUnFBuVsaadNr8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.10 42/70] selftests/seccomp: Dont call read() on TTY from background pgrp
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 32/52] btrfs: always log symlinks in full mode
 Date:   Tue, 10 May 2022 15:08:01 +0200
-Message-Id: <20220510130734.091625379@linuxfoundation.org>
+Message-Id: <20220510130730.792504982@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,73 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7 upstream.
+commit d0e64a981fd841cb0f28fcd6afcac55e6f1e6994 upstream.
 
-Since commit 92d25637a3a4 ("kselftest: signal all child processes"), tests
-are executed in background process groups. This means that trying to read
-from stdin now throws SIGTTIN when stdin is a TTY, which breaks some
-seccomp selftests that try to use read(0, NULL, 0) as a dummy syscall.
+On Linux, empty symlinks are invalid, and attempting to create one with
+the system call symlink(2) results in an -ENOENT error and this is
+explicitly documented in the man page.
 
-The simplest way to fix that is probably to just use -1 instead of 0 as
-the dummy read()'s FD.
+If we rename a symlink that was created in the current transaction and its
+parent directory was logged before, we actually end up logging the symlink
+without logging its content, which is stored in an inline extent. That
+means that after a power failure we can end up with an empty symlink,
+having no content and an i_size of 0 bytes.
 
-Fixes: 92d25637a3a4 ("kselftest: signal all child processes")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220319010011.1374622-1-jannh@google.com
+It can be easily reproduced like this:
+
+  $ mkfs.btrfs -f /dev/sdc
+  $ mount /dev/sdc /mnt
+
+  $ mkdir /mnt/testdir
+  $ sync
+
+  # Create a file inside the directory and fsync the directory.
+  $ touch /mnt/testdir/foo
+  $ xfs_io -c "fsync" /mnt/testdir
+
+  # Create a symlink inside the directory and then rename the symlink.
+  $ ln -s /mnt/testdir/foo /mnt/testdir/bar
+  $ mv /mnt/testdir/bar /mnt/testdir/baz
+
+  # Now fsync again the directory, this persist the log tree.
+  $ xfs_io -c "fsync" /mnt/testdir
+
+  <power failure>
+
+  $ mount /dev/sdc /mnt
+  $ stat -c %s /mnt/testdir/baz
+  0
+  $ readlink /mnt/testdir/baz
+  $
+
+Fix this by always logging symlinks in full mode (LOG_INODE_ALL), so that
+their content is also logged.
+
+A test case for fstests will follow.
+
+CC: stable@vger.kernel.org # 4.9+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ fs/btrfs/tree-log.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -951,7 +951,7 @@ TEST(ERRNO_valid)
- 	ASSERT_EQ(0, ret);
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -5295,6 +5295,18 @@ static int btrfs_log_inode(struct btrfs_
+ 	}
  
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(E2BIG, errno);
- }
+ 	/*
++	 * For symlinks, we must always log their content, which is stored in an
++	 * inline extent, otherwise we could end up with an empty symlink after
++	 * log replay, which is invalid on linux (symlink(2) returns -ENOENT if
++	 * one attempts to create an empty symlink).
++	 * We don't need to worry about flushing delalloc, because when we create
++	 * the inline extent when the symlink is created (we never have delalloc
++	 * for symlinks).
++	 */
++	if (S_ISLNK(inode->vfs_inode.i_mode))
++		inode_only = LOG_INODE_ALL;
++
++	/*
+ 	 * a brute force approach to making sure we get the most uptodate
+ 	 * copies of everything.
+ 	 */
+@@ -5707,7 +5719,7 @@ process_leaf:
+ 			}
  
-@@ -970,7 +970,7 @@ TEST(ERRNO_zero)
- 
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
- 	/* "errno" of 0 is ok. */
--	EXPECT_EQ(0, read(0, NULL, 0));
-+	EXPECT_EQ(0, read(-1, NULL, 0));
- }
- 
- /*
-@@ -991,7 +991,7 @@ TEST(ERRNO_capped)
- 	ASSERT_EQ(0, ret);
- 
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(4095, errno);
- }
- 
-@@ -1022,7 +1022,7 @@ TEST(ERRNO_order)
- 	ASSERT_EQ(0, ret);
- 
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(12, errno);
- }
- 
-@@ -2575,7 +2575,7 @@ void *tsync_sibling(void *data)
- 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0);
- 	if (!ret)
- 		return (void *)SIBLING_EXIT_NEWPRIVS;
--	read(0, NULL, 0);
-+	read(-1, NULL, 0);
- 	return (void *)SIBLING_EXIT_UNKILLED;
- }
- 
+ 			ctx->log_new_dentries = false;
+-			if (type == BTRFS_FT_DIR || type == BTRFS_FT_SYMLINK)
++			if (type == BTRFS_FT_DIR)
+ 				log_mode = LOG_INODE_ALL;
+ 			ret = btrfs_log_inode(trans, root, BTRFS_I(di_inode),
+ 					      log_mode, 0, LLONG_MAX, ctx);
 
 

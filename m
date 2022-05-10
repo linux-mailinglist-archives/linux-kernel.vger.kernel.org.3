@@ -2,134 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E7B521243
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDD3521245
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239889AbiEJKhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S239914AbiEJKh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239787AbiEJKho (ORCPT
+        with ESMTP id S239896AbiEJKhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:37:44 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB1C207931
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:33:47 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id i27so32001701ejd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uqfSWWso3ePPIxs5kUlqIUVR6u0WQr5mUIPDHk0rKyY=;
-        b=lwF57YVYOdfouAUjyiC3oJLXQQRBz2XRn4Q4lItpEDKVFMCpUAA2IBvFZPlLuZJ88l
-         DyE/uUgu1ufs376VS1TqZmCLvtQIF5xuRh+9OKaghWaoMNHJTevL7VgD2wY43zECuHai
-         g493920Iq2idgbrhXzrShdhw36MJzW1BZ6RRcSeShIkTvIrTRPe7UYiMEs1x+khaFXRG
-         jEttGrTVk1VIjQlwaoi7Hzectd/GhsWmnwFuF4Q6lthywCmN/T251LuS5AEhEyJautKN
-         J2uakY75QPrmG4bAtZLxyeh4fPNAyGxK12OZb+UsikUwWy9Sj0i54zFWRcGnTNg1gI19
-         el/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uqfSWWso3ePPIxs5kUlqIUVR6u0WQr5mUIPDHk0rKyY=;
-        b=tcpVuBv5ZBf/nrxWJOHJncrZIyjKXU02swgxoeoDYewdwgyg3N0a7oWVKhwlm3hkAn
-         iH9ZksCPQFgGJUxRk2k09wJpitxVvlqsnTm7QnyAqvClOgefKben8CrmGEpBR226NCjm
-         koPjWEwm0LVsjLN3DjF9EVqxuXmgPSQBELkF/2FkrsUv0nPAMkEM+CPWo9RXgGggyDAo
-         iaVWl9qamYETEmnukEG29ZFE22ZW/YlQgdDzGov9JSo8zgH7xegry+mL6TEw2OwtCts6
-         v3yW1KU2cV4b2uKF9dhDdhCSQh96s7XqCDr4tWSflq09TumhfS9l/T3G01ZZdF69Oe0d
-         MeUQ==
-X-Gm-Message-State: AOAM531AYjVs/2boXwwgrCnY2cbROqQEGSE2c5vF2A/jysnGniGMB7ho
-        CXYiMoHXQjRT7IWDdQnj1zWlVw==
-X-Google-Smtp-Source: ABdhPJwASNrI52m0BHrPQWu6QJ2yOhCOdP9buMehfDsa+IIPExnannmqd2Mo77B1dcT0GDU/oKVxbQ==
-X-Received: by 2002:a17:906:dc8d:b0:6f4:75da:2fc8 with SMTP id cs13-20020a170906dc8d00b006f475da2fc8mr18488945ejc.7.1652178826051;
-        Tue, 10 May 2022 03:33:46 -0700 (PDT)
-Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id rn28-20020a170906d93c00b006fa9820b4a2sm765029ejb.165.2022.05.10.03.33.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 03:33:45 -0700 (PDT)
-Message-ID: <b0a12d60-819f-38a7-52ee-d8e96a606e94@linaro.org>
-Date:   Tue, 10 May 2022 12:33:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/4] dt-bindings: mfd: atmel,flexcom: Add lan966
- compatible string and mux properties
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        peda@axentia.se
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
-        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
-        UNGLinuxDriver@microchip.com
-References: <20220509084920.14529-1-kavyasree.kotagiri@microchip.com>
- <20220509084920.14529-3-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220509084920.14529-3-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 06:37:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936EF20823C;
+        Tue, 10 May 2022 03:33:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyDsq61dSz4ySZ;
+        Tue, 10 May 2022 20:33:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
+        s=201707; t=1652178835;
+        bh=LJAf2AB1VtWHbZhDAsR4IEpdZbINpfdn2dVKJ0sy5IQ=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=kYFx1nfb2EUvjtiID8tV81UOsPKrtZHfED1JwLdsbeC0LrMwPF0jz00ssWWVRghc8
+         rZOyzs8BkiSlRrBS3hKSv4nKaG9ps855Ae1DHTjIIh2EQxOGw739UOuielkWR+3cAj
+         tC5wyIDBVyxmX5s8kp06Im50OfWiHmnUn6MDWl0uWCBIwWdfjRY5L35FjDUpPRC6No
+         PKzb58lnw2/YcpQXLnDMM0YRa68+J8WjbZNLgIVOxEDngu6V/4WpT29CLL5xMycxiu
+         dayLr/eKoFsQHWFCa7+2iZLj2m4plAhGxtedmxGWY5RZLsMcA2b++H16vMXUWFYlpH
+         xhrRv4Jog1kIA==
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH] KVM: PPC: Book3S PR: Enable MSR_DR for
+ switch_mmu_context()
+From:   Matt Evans <matt@ozlabs.org>
+In-Reply-To: <20220509202355.13985-1-graf@amazon.com>
+Date:   Tue, 10 May 2022 11:33:45 +0100
+Cc:     kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>,
+        Ben Herrenschmitt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, stable@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5CBF19EB-F2DA-4DBA-9BD0-D38E3A3F959A@ozlabs.org>
+References: <20220509202355.13985-1-graf@amazon.com>
+To:     Alexander Graf <graf@amazon.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2022 10:49, Kavyasree Kotagiri wrote:
-> Add lan966 flexcom compatible string and flexcom mux
-> device tree properties.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
->  .../bindings/mfd/atmel,flexcom.yaml           | 52 ++++++++++++++++++-
->  1 file changed, 51 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> index 79ec7ebc7055..228c095c84ca 100644
-> --- a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> @@ -16,7 +16,9 @@ description:
->  
->  properties:
->    compatible:
-> -    const: atmel,sama5d2-flexcom
-> +    enum:
-> +      - atmel,sama5d2-flexcom
-> +      - microchip,lan966-flexcom
->  
->    reg:
->      maxItems: 1
-> @@ -57,6 +59,27 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: microchip,lan966-flexcom
+Hi Alex,
+
+> On 9 May 2022, at 21:23, Alexander Graf <graf@amazon.com> wrote:
+>=20
+> Commit 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+> moved the switch_mmu_context() to C. While in principle a good idea, =
+it
+> meant that the function now uses the stack. The stack is not =
+accessible
+> from real mode though.
+>=20
+> So to keep calling the function, let's turn on MSR_DR while we call =
+it.
+> That way, all pointer references to the stack are handled virtually.
+>=20
+> Reported-by: Matt Evans <matt@ozlabs.org>
+> Fixes: 863771a28e27 ("powerpc/32s: Convert switch_mmu_context() to C")
+> Signed-off-by: Alexander Graf <graf@amazon.com>
+> Cc: stable@vger.kernel.org
+
+Many thanks - this addresses the issue I saw, and has been...
+
+Tested-by: Matt Evans <matt@ozlabs.org>
+
+...on a G4 host.  One comment though:
+
+> =E2=80=94
+> arch/powerpc/kvm/book3s_32_sr.S | 20 +++++++++++++++-----
+> 1 file changed, 15 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/powerpc/kvm/book3s_32_sr.S =
+b/arch/powerpc/kvm/book3s_32_sr.S
+> index e3ab9df6cf19..bd4f798f7a46 100644
+> --- a/arch/powerpc/kvm/book3s_32_sr.S
+> +++ b/arch/powerpc/kvm/book3s_32_sr.S
+> @@ -122,11 +122,21 @@
+>=20
+> 	/* 0x0 - 0xb */
+>=20
+> -	/* 'current->mm' needs to be in r4 */
+> -	tophys(r4, r2)
+> -	lwz	r4, MM(r4)
+> -	tophys(r4, r4)
+> -	/* This only clobbers r0, r3, r4 and r5 */
+> +	/* switch_mmu_context() needs paging, let's enable it */
+> +	mfmsr   r9
+> +	ori     r11, r9, MSR_DR
+> +	mtmsr   r11
+> +	sync
 > +
-> +    then:
-> +      properties:
-> +        mux-controls:
-> +          minItems: 1
-> +          maxItems: 2
-> +          $ref: /schemas/types.yaml#/definitions/phandle-array
+> +	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
+> +	lwz	r4, MM(r2)
+> 	bl	switch_mmu_context
+
+Of the volatile registers, I believe r12 is still valuable here and =
+would need to be preserved.
+(I can=E2=80=99t spot any others but would defer to your judgement =
+here.)
+
+For example:
+
+diff --git a/arch/powerpc/kvm/book3s_32_sr.S =
+b/arch/powerpc/kvm/book3s_32_sr.S
+index e3ab9df6cf19..41fc9ca12d38 100644
+--- a/arch/powerpc/kvm/book3s_32_sr.S
++++ b/arch/powerpc/kvm/book3s_32_sr.S
+@@ -122,11 +122,23 @@
+=20
+ 	/* 0x0 - 0xb */
+=20
+-	/* 'current->mm' needs to be in r4 */
+-	tophys(r4, r2)
+-	lwz	r4, MM(r4)
+-	tophys(r4, r4)
+-	/* This only clobbers r0, r3, r4 and r5 */
++	/* switch_mmu_context() needs paging, let's enable it */
++	mfmsr   r9
++	ori     r11, r9, MSR_DR
++	mtmsr   r11
++	sync
++
++	SAVE_GPR(12, r1)
++	/* Calling switch_mmu_context(<inv>, current->mm, <inv>); */
++	lwz	r4, MM(r2)
+ 	bl	switch_mmu_context
++	REST_GPR(12, r1)
++
++	/* Disable paging again */
++	mfmsr   r9
++	li      r6, MSR_DR
++	andc    r9, r9, r6
++	mtmsr	r9
++	sync
+=20
+ .endm
+
+
+Matt
+
+>=20
+> +	/* Disable paging again */
+> +	mfmsr   r9
+> +	li      r6, MSR_DR
+> +	andc    r9, r9, r6
+> +	mtmsr	r9
+> +	sync
 > +
-> +        mux-control-names:
-> +          minItems: 1
-> +          $ref: ../mux/mux-consumer.yaml
+> .endm
+> --=20
+> 2.28.0.394.ge197136389
+>=20
+>=20
+>=20
+>=20
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+>=20
+>=20
+>=20
 
-absolute path, so:
-/schemas/mux/mux-consumer.yaml
-
-
-Best regards,
-Krzysztof

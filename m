@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4587C521B1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3467521C02
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244995AbiEJOIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S1344386AbiEJO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244693AbiEJNq4 (ORCPT
+        with ESMTP id S244367AbiEJNxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:46:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7FB173350;
-        Tue, 10 May 2022 06:31:54 -0700 (PDT)
+        Tue, 10 May 2022 09:53:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2655829B83F;
+        Tue, 10 May 2022 06:38:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5EF75CE1EF7;
-        Tue, 10 May 2022 13:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781F2C385A6;
-        Tue, 10 May 2022 13:31:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4B826188F;
+        Tue, 10 May 2022 13:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7917C385A6;
+        Tue, 10 May 2022 13:38:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189510;
-        bh=p3x2/3akNAtRt+p0xbegcWAmT13/WUYjwP+8L5oj3zY=;
+        s=korg; t=1652189902;
+        bh=C2v2vHSQbWR7p6v8H7wLTi3ABqS6AIycrKUhuDO3oM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uryts6qXQvzgZh87+F/ZncU6pi8069Dj62VnV9qf85UFDekmLLexqbRBOgR5+W1k3
-         uk7R4Qp2za7fowvg3OwtxkZMueW6tGKKzoXoLwLqZ+UkrVoxaFjZAIFkJzOc9CibwL
-         vRizHbtFUPPPMkYvFfqdj+bOOp/hf3xNrbzJgA98=
+        b=hMqd14sL1OkGpcjxxT0aquCaQAGpssjqKQ3WeXmp23FvfUJK01ZkKX7yIXW/ulE84
+         VTkggQn0VGbNKlOlrSBDITisT5IKRKSVjSm9XAw7FOUA0waa9pQewb6jqLL+xoKoW1
+         WXBfGOE6PidT2EWLoZjzQpVBXaSAsjdbhiRQ64RQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 073/135] mld: respect RCU rules in ip6_mc_source() and ip6_mc_msfilter()
+        stable@vger.kernel.org, Ariel Levkovich <lariel@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.17 065/140] net/mlx5e: Fix wrong source vport matching on tunnel rule
 Date:   Tue, 10 May 2022 15:07:35 +0200
-Message-Id: <20220510130742.506192143@linuxfoundation.org>
+Message-Id: <20220510130743.477938626@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Ariel Levkovich <lariel@nvidia.com>
 
-commit a9384a4c1d250cb40cebf50e41459426d160b08e upstream.
+commit cb0d54cbf94866b48a73e10a73a55655f808cc7c upstream.
 
-Whenever RCU protected list replaces an object,
-the pointer to the new object needs to be updated
-_before_ the call to kfree_rcu() or call_rcu()
+When OVS internal port is the vtep device, the first decap
+rule is matching on the internal port's vport metadata value
+and then changes the metadata to be the uplink's value.
 
-Also ip6_mc_msfilter() needs to update the pointer
-before releasing the mc_lock mutex.
+Therefore, following rules on the tunnel, in chain > 0, should
+avoid matching on internal port metadata and use the uplink
+vport metadata instead.
 
-Note that linux-5.13 was supporting kfree_rcu(NULL, rcu),
-so this fix does not need the conditional test I was
-forced to use in the equivalent patch for IPv4.
+Select the uplink's metadata value for the source vport match
+in case the rule is in chain greater than zero, even if the tunnel
+route device is internal port.
 
-Fixes: 882ba1f73c06 ("mld: convert ipv6_mc_socklist->sflist to RCU")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 166f431ec6be ("net/mlx5e: Add indirect tc offload of ovs internal port")
+Signed-off-by: Ariel Levkovich <lariel@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/mcast.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv6/mcast.c b/net/ipv6/mcast.c
-index 909f937befd7..7f695c39d9a8 100644
---- a/net/ipv6/mcast.c
-+++ b/net/ipv6/mcast.c
-@@ -460,10 +460,10 @@ int ip6_mc_source(int add, int omode, struct sock *sk,
- 				newpsl->sl_addr[i] = psl->sl_addr[i];
- 			atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
- 				   &sk->sk_omem_alloc);
--			kfree_rcu(psl, rcu);
- 		}
-+		rcu_assign_pointer(pmc->sflist, newpsl);
-+		kfree_rcu(psl, rcu);
- 		psl = newpsl;
--		rcu_assign_pointer(pmc->sflist, psl);
- 	}
- 	rv = 1;	/* > 0 for insert logic below if sl_count is 0 */
- 	for (i = 0; i < psl->sl_count; i++) {
-@@ -565,12 +565,12 @@ int ip6_mc_msfilter(struct sock *sk, struct group_filter *gsf,
- 			       psl->sl_count, psl->sl_addr, 0);
- 		atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
- 			   &sk->sk_omem_alloc);
--		kfree_rcu(psl, rcu);
- 	} else {
- 		ip6_mc_del_src(idev, group, pmc->sfmode, 0, NULL, 0);
- 	}
--	mutex_unlock(&idev->mc_lock);
- 	rcu_assign_pointer(pmc->sflist, newpsl);
-+	mutex_unlock(&idev->mc_lock);
-+	kfree_rcu(psl, rcu);
- 	pmc->sfmode = gsf->gf_fmode;
- 	err = 0;
- done:
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
+index 3f63df127091..3b151332e2f8 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
+@@ -139,7 +139,7 @@ mlx5_eswitch_set_rule_source_port(struct mlx5_eswitch *esw,
+ 		if (mlx5_esw_indir_table_decap_vport(attr))
+ 			vport = mlx5_esw_indir_table_decap_vport(attr);
+ 
+-		if (esw_attr->int_port)
++		if (attr && !attr->chain && esw_attr->int_port)
+ 			metadata =
+ 				mlx5e_tc_int_port_get_metadata_for_match(esw_attr->int_port);
+ 		else
 -- 
 2.36.1
 

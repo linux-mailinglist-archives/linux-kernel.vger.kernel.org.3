@@ -2,170 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656D9521407
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B7852140E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237245AbiEJLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S241139AbiEJLoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241124AbiEJLmm (ORCPT
+        with ESMTP id S235358AbiEJLoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:42:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC8124EA05;
-        Tue, 10 May 2022 04:38:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E799F21C06;
-        Tue, 10 May 2022 11:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652182721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QjxQbnD6WUcAB5XSGPbhgiXq5Z1nB8h07eo4ZkZ4QC8=;
-        b=ux1OKlKPpQAZrqb3VSx/+cdnKv+z0GMrb7Vrl4wT7av9mwtdsYHmGTFl15YLILBNoNipDu
-        zhzvyNUQ0tVf4I8bosAIddNvm3hk9CLYxTFt2W7RQIuTrmM1G9742/mw3JpxDF9W//N0xh
-        4YsR4kO61TX2TGUrgE/V7TAnZzSnJsg=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F0AB42C141;
-        Tue, 10 May 2022 11:38:39 +0000 (UTC)
-Date:   Tue, 10 May 2022 13:38:39 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Message-ID: <YnpOv4hAPV4b+6v4@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
- <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+        Tue, 10 May 2022 07:44:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D566624EA05
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:40:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB23A11FB;
+        Tue, 10 May 2022 04:40:22 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.1.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 37DCC3F66F;
+        Tue, 10 May 2022 04:40:21 -0700 (PDT)
+Date:   Tue, 10 May 2022 12:40:17 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Popov <alex.popov@linux.com>
+Cc:     linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, will@kernel.org
+Subject: Re: [PATCH v2 02/13] stackleak: move skip_erasing() check earlier
+Message-ID: <YnpPIZ/yotlPKwiA@FVFF77S0Q05N>
+References: <20220427173128.2603085-1-mark.rutland@arm.com>
+ <20220427173128.2603085-3-mark.rutland@arm.com>
+ <51cea283-3cc7-2361-413c-d1bd8ac845bb@linux.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <51cea283-3cc7-2361-413c-d1bd8ac845bb@linux.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-05-03 16:12:09, Guilherme G. Piccoli wrote:
-> On 03/05/2022 15:03, Evan Green wrote:
-> > [...]
-> > gsmi_shutdown_reason() is a common function called in other scenarios
-> > as well, like reboot and thermal trip, where it may still make sense
-> > to wait to acquire a spinlock. Maybe we should add a parameter to
-> > gsmi_shutdown_reason() so that you can get your change on panic, but
-> > we don't convert other callbacks into try-fail scenarios causing us to
-> > miss logs.
+On Sun, May 08, 2022 at 08:44:56PM +0300, Alexander Popov wrote:
+> On 27.04.2022 20:31, Mark Rutland wrote:
+> > In stackleak_erase() we check skip_erasing() after accessing some fields
+> > from current. As generating the address of current uses asm which
+> > hazards with the static branch asm, this work is always performed, even
+> > when the static branch is patched to jump to the return a the end of the
+> > function.
+> 
+> Nice find!
+> 
+> > This patch avoids this redundant work by moving the skip_erasing() check
+> > earlier.
 > > 
+> > To avoid complicating initialization within stackleak_erase(), the body
+> > of the function is split out into a __stackleak_erase() helper, with the
+> > check left in a wrapper function. The __stackleak_erase() helper is
+> > marked __always_inline to ensure that this is inlined into
+> > stackleak_erase() and not instrumented.
+
+[...]
+
+> > diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+> > index ddb5a7f48d69e..753eab797a04d 100644
+> > --- a/kernel/stackleak.c
+> > +++ b/kernel/stackleak.c
+> > @@ -70,7 +70,7 @@ late_initcall(stackleak_sysctls_init);
+> >   #define skip_erasing()	false
+> >   #endif /* CONFIG_STACKLEAK_RUNTIME_DISABLE */
+> > -asmlinkage void noinstr stackleak_erase(void)
+> > +static __always_inline void __stackleak_erase(void)
 > 
-> Hi Evan, thanks for your feedback, much appreciated!
-> What I've done in other cases like this was to have a helper checking
-> the spinlock in the panic notifier - if we can acquire that, go ahead
-> but if not, bail out. For a proper example of an implementation, check
-> patch 13 of the series:
-> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+> Are you sure that __stackleak_erase() doesn't need asmlinkage and noinstr as well?
+
+I am certain it needs neither.
+
+It's static and never called from asm, so it doesn't need `asmlinkage`.
+
+It's marked `__always_inline`, so it will always be inlined into its caller (or
+if the compiler cannot inline it, will result in a compiler error).
+
+That's important to get good codegen (especially with the on/off stack variants
+later in the series), and when inlined into its caller the compiler will treat
+it as part of its caller for code generation, so the caller's `noinstr` takes
+effect.
+
+Thanks,
+Mark.
+
 > 
-> Do you agree with that, or prefer really a parameter in
-> gsmi_shutdown_reason() ? I'll follow your choice =)
-
-I see two more alternative solutions:
-
-1st variant is a trick already used in console write() callbacks.
-They do trylock() when oops_in_progress is set. They remember
-the result to prevent double unlock when printing Oops messages and
-the system will try to continue working. For example:
-
-pl011_console_write(struct console *co, const char *s, unsigned int count)
-{
-[...]
-	int locked = 1;
-[...]
-	if (uap->port.sysrq)
-		locked = 0;
-	else if (oops_in_progress)
-		locked = spin_trylock(&uap->port.lock);
-	else
-		spin_lock(&uap->port.lock);
-
-[...]
-
-	if (locked)
-		spin_unlock(&uap->port.lock);
-}
-
-
-2nd variant is to check panic_cpu variable. It is used in printk.c.
-We might move the function to panic.h:
-
-static bool panic_in_progress(void)
-{
-	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
-}
-
-and then do:
-
-	if (panic_in_progress()) {
-		...
-
-
-> > Though thinking more about it, is this really a Good Change (TM)? The
-> > spinlock itself already disables interrupts, meaning the only case
-> > where this change makes a difference is if the panic happens from
-> > within the function that grabbed the spinlock (in which case the
-> > callback is also likely to panic), or in an NMI that panics within
-> > that window.
-
-As already mentioned in the other reply, panic() sometimes stops
-the other CPUs using NMI, for example, see kdump_nmi_shootdown_cpus().
-
-Another situation is when the CPU using the lock ends in some
-infinite loop because something went wrong. The system is in
-an unpredictable state during panic().
-
-I am not sure if this is possible with the code under gsmi_dev.lock
-but such things really happen during panic() in other subsystems.
-Using trylock in the panic() code path is a good practice.
-
-Best Regards,
-Petr
+> >   {
+> >   	/* It would be nice not to have 'kstack_ptr' and 'boundary' on stack */
+> >   	unsigned long kstack_ptr = current->lowest_stack;
+> > @@ -78,9 +78,6 @@ asmlinkage void noinstr stackleak_erase(void)
+> >   	unsigned int poison_count = 0;
+> >   	const unsigned int depth = STACKLEAK_SEARCH_DEPTH / sizeof(unsigned long);
+> > -	if (skip_erasing())
+> > -		return;
+> > -
+> >   	/* Check that 'lowest_stack' value is sane */
+> >   	if (unlikely(kstack_ptr - boundary >= THREAD_SIZE))
+> >   		kstack_ptr = boundary;
+> > @@ -125,6 +122,14 @@ asmlinkage void noinstr stackleak_erase(void)
+> >   	current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
+> >   }
+> > +asmlinkage void noinstr stackleak_erase(void)
+> > +{
+> > +	if (skip_erasing())
+> > +		return;
+> > +
+> > +	__stackleak_erase();
+> > +}
+> > +
+> >   void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
+> >   {
+> >   	unsigned long sp = current_stack_pointer;
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

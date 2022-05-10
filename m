@@ -2,145 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0C5520CD2
+	by mail.lfdr.de (Postfix) with ESMTP id 90FD5520CD1
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbiEJEcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S236357AbiEJEcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236467AbiEJE3U (ORCPT
+        with ESMTP id S236558AbiEJEbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:29:20 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBC9200F64
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:20:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 24CA25C01E5;
-        Tue, 10 May 2022 00:20:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 10 May 2022 00:20:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652156407; x=
-        1652242807; bh=as0nbBT5XoQXRrXJLN/v8UdLz8TC49sB1/eyhm8FVLw=; b=t
-        YS2ty10wMkPXkYiyfY2G+qolMiP1S3J8xOy92kP6dXeXhGRJOjExXfvw61mw1qso
-        XAg0Or3fW/Z/4/Xr9gzlhT+S/kWmA5eP6jUaJEMpm0fC5WzLVTEQXXTunEpYcxA9
-        QpmNciY1X+1UbmorloXqDEJWllSpUF/h2NVSMZIvBzl5UEXvi562t33gZaMFfObT
-        wIsQIY9TnHSHNqXDEUnRbbpNF761Z1/VehVN3XlIC7JM2QQnGukVGvHrD0EeThI7
-        nBy070didr9h1ZGW305wOQK9Zda6Js5F1Bvn/ggLAUD3RO09uNweZfAVxCP1u4Qv
-        rm4rQ63LfOWoDfgDnCebQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652156407; x=1652242807; bh=as0nbBT5XoQXR
-        rXJLN/v8UdLz8TC49sB1/eyhm8FVLw=; b=aTgRkgfe4qujxTtpecU47cRkfSuMq
-        2eMCscoDer/3OKxwOMOl/7QRki793H816X+3AuIhkLM+YEA8+6I2ZQJl5pb6yAhN
-        Tx3KzbY7Ns24LcvCb5Rk8Oj2yQEB+2U9aXdU4T76EK3yVy89qABAN2Q9MHFR1UML
-        S7FkQawHWX/uUi91VECTBhfmt1OwuVBiMdrSokUueWqODTf8BIILhdM23y6eFGa8
-        5r8mY/OHZ6S+jSyydLTSyRu1H5tv0JleixCvKQpEYdEBjnM2vPZ0bcOMEQZVZdMq
-        YNjG5WlN6JZ97cbTH1s5IUZfmoJbKoHAUU0oW52R/tB0+tpH4gQOxdGjg==
-X-ME-Sender: <xms:9ud5Yu78zKtL0VRMk98Sal9B9jDsDJcKNkIVueUs8x96WuuzTdzLCg>
-    <xme:9ud5Yn6h4yjeomDqmJDEdO-f3eFTBOVN1IdRpKTp7QhweeJdIDNcfIhNFuqXmR1gp
-    nXTZf0nR7a1PcCOLA>
-X-ME-Received: <xmr:9ud5YtdOiwemFqxVOKHTAcJGtIfb-6YC4QrM0cNys7Jt2qM7hFkN1l9M22Om2xbAt2lGuOgmo_Xq0wAZFpPzoFiKA7pSW-Vgk4GNtcbFFZA-cLQpKNk06VpGZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudeluedvhfdttedtvdethfdvhedvkedtvddtgeetueeuvdeufeff
-    teevleekgeetnecuffhomhgrihhnpehgihhtqdhstghmrdgtohhmpdhgihhthhhusgdrtg
-    homhdpkhgvrhhnvghlrdhorhhgpddtuddrohhrghdpghhithhhuhgsuhhsvghrtghonhht
-    vghnthdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:9ud5YrInPcS0r2F0CBpRSo2ks6J7cquZh8BiQktOddVaCAZPEl0UOg>
-    <xmx:9ud5YiKXD7CREvggdEGUU0B8Lpaf5CF1XbPtqEDMoz8XM2DXfqWDlw>
-    <xmx:9ud5YsyBqkgCX2jjmaNRuSvaVv4jTq14LG8e1rLVJ8fQ6Sw_hRn9Rg>
-    <xmx:9-d5YkA6OpxErHxIiBR9uSSqd-dWfH5_D4BKPRua290jOJpkffpaeQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 May 2022 00:20:06 -0400 (EDT)
-Subject: Re: [PATCH 3/5] genirq: Provide an IRQ affinity mask in non-SMP
- configs
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220509034333.60017-4-samuel@sholland.org>
- <202205091545.QhhCDxVm-lkp@intel.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <372caaac-0a76-965f-2678-79ea368e39ba@sholland.org>
-Date:   Mon, 9 May 2022 23:20:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 10 May 2022 00:31:19 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D661D8661
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:22:05 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id b32so11146275ljf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 21:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zoEuUNsSlASJkELQDVjOkHOErXZlwArgTvgzzDIC9n0=;
+        b=gmW6F2GnDKFqhfw4ydsqrHtImdNG0vq/A9SMKKxqTihVL6+9LHIjjj/Vxi50uf4lGN
+         5xVUs3QHYdEsWLGEBkSAE/HPkENUvkywBsUuE69A6thZJVD6JfEjo0IRCGl+bhVzTLnF
+         W3cUyJnsn90QYF65Np8+ojp1xyqETEP3nNNXcSLCPK3nG21knJOePFONJTDQRRC1XhWh
+         4rYfbw2TkPm4m4TEP2wYE2GVevLcTjDolRQJs4oMOfxm392QMSg7Z+p2lSSWhyRVY9BQ
+         UeC6g4gc+k0t/wZtqaesomF2i4O0sHfreOyxeMfaP+YgNYsTLyf5bI4JkqXRmIaT5/r7
+         J8tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zoEuUNsSlASJkELQDVjOkHOErXZlwArgTvgzzDIC9n0=;
+        b=wfzsbevO3LleWHUxh92bqni/4DotN92Etg3pWYjzS+K39XGCBNqhd5LJ82X4EXUlUj
+         Ol/Qt7+StdeviXNJcV/Q65lrCNXa+3ErDFSzfXvLTt4T3Afw/8ViLQU960mtlsZyTOv+
+         GEp7tnTVesZs0lKfg7j96KH96sn6bJENT1f6pDdgC3oHej1mqNePRiQ4HEX5q64PX16S
+         Vfl5Xs9+beRHFYLs/5sKopo+28/5WyxDUHKkNZbQ2usIG+BMIE3OsOng+KUeT9J4SyoZ
+         m7+23mxxUMTUIVSu3CPtEsZd8m7YOqe9P6tGyym5DDap2o78OhZNhtdVQxtzuBhQh07W
+         eVQw==
+X-Gm-Message-State: AOAM531+OLGXjAFplWuWdo6r656B3ed5lQy8bdm04YI0phWCxF1PBc+9
+        n3RW67c/k9nQubmq5Zhrycn7Cw==
+X-Google-Smtp-Source: ABdhPJzgZQwqVNv2i2+kGeKypm+wWSntUY2fJ5HKKPISPMIFnX7zxN8Vw/4Y93BZbLKxPXbWKEq4Cg==
+X-Received: by 2002:a2e:84c8:0:b0:24b:50bb:de7d with SMTP id q8-20020a2e84c8000000b0024b50bbde7dmr12512503ljh.40.1652156523717;
+        Mon, 09 May 2022 21:22:03 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id p14-20020a2e9ace000000b0024f3d1daed0sm1775545ljj.88.2022.05.09.21.22.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 21:22:03 -0700 (PDT)
+Message-ID: <6e68298c-7cdd-9984-215e-7e6fb3d03fe8@openvz.org>
+Date:   Tue, 10 May 2022 07:22:02 +0300
 MIME-Version: 1.0
-In-Reply-To: <202205091545.QhhCDxVm-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] percpu: improve percpu_alloc_percpu event trace
 Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@redhat.com>,
+        kbuild-all@lists.01.org, Shakeel Butt <shakeelb@google.com>,
+        kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux-foundation.org>
+References: <8d627f02-183f-c4e7-7c15-77b2b438536b@openvz.org>
+ <202205070420.aAhuqpYk-lkp@intel.com>
+ <e1c09bbb-2c58-a986-c704-1db538da905a@openvz.org>
+ <20220509170605.2eb7637e@gandalf.local.home>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220509170605.2eb7637e@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 2:52 AM, kernel test robot wrote:
-> Hi Samuel,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on tip/irq/core]
-> [also build test ERROR on soc/for-next linus/master v5.18-rc6 next-20220506]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
-> config: mips-randconfig-r024-20220509 (https://download.01.org/0day-ci/archive/20220509/202205091545.QhhCDxVm-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/4bca5b436c97eb2ee232dd23f262ebad05fa183c
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Samuel-Holland/genirq-irqchip-RISC-V-PLIC-cleanup-and-optimization/20220509-115510
->         git checkout 4bca5b436c97eb2ee232dd23f262ebad05fa183c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> kernel/irq/ipi.c:94:30: error: no member named 'affinity' in 'struct irq_common_data'
->                    cpumask_copy(data->common->affinity, dest);
->                                 ~~~~~~~~~~~~  ^
->    1 error generated.
+On 5/10/22 00:06, Steven Rostedt wrote:
+> I'm curious as to where the gfp_t to unsigned long is happening in the
+> macros?
 
-I think the fix here is to make GENERIC_IRQ_IPI also depend on SMP. I will add a
-patch doing this for v2.
+original ___GFP_* flags are usual defines
 
-Regards,
-Samuel
+/* Plain integer GFP bitmasks. Do not use this directly. */
+#define ___GFP_DMA              0x01u
+#define ___GFP_HIGHMEM          0x02u
+#define ___GFP_DMA32            0x04u
+
+... but __GFP_* flags used elsewhere are declared as 'forced to gfp_t'
+
+#define __GFP_DMA       ((__force gfp_t)___GFP_DMA)
+#define __GFP_HIGHMEM   ((__force gfp_t)___GFP_HIGHMEM)
+#define __GFP_DMA32     ((__force gfp_t)___GFP_DMA32)
+...
+#define GFP_DMA         __GFP_DMA
+#define GFP_DMA32       __GFP_DMA32
+
+... and when  __def_gfpflag_names() traslates them to unsigned long
+
+       {(unsigned long)GFP_DMA,                "GFP_DMA"},             \
+       {(unsigned long)__GFP_HIGHMEM,          "__GFP_HIGHMEM"},       \
+       {(unsigned long)GFP_DMA32,              "GFP_DMA32"},           \
+
+... it leads to sparse warnings bacuse type gfp_t was declared as 'bitwise'
+From mas sparse
+
+       -Wbitwise
+              Warn about unsupported operations or type mismatches with
+              restricted integer types.
+
+               Sparse supports an extended attribute,
+              __attribute__((bitwise)), which creates a new restricted
+              integer type from a base integer type, distinct from the
+              base integer type and from any other restricted integer
+              type not declared in the same declaration or typedef.
+
+             __bitwise is for *unique types* that cannot be mixed with
+              other types, and that you'd never want to just use as a
+              random integer (the integer 0 is special, though, and gets
+              silently accepted iirc - it's kind of like "NULL" for
+              pointers). So "gfp_t" or the "safe endianness" types would
+              be __bitwise: you can only operate on them by doing
+              specific operations that know about *that* particular
+              type.
+
+              Sparse issues these warnings by default.
+
+Thank you,
+	Vasily Averin

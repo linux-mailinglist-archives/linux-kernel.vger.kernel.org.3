@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7737952229E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E803C52229C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244939AbiEJRcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S1348191AbiEJRcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348164AbiEJRcD (ORCPT
+        with ESMTP id S1348253AbiEJRb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:32:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD0562F1;
-        Tue, 10 May 2022 10:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d0Hkb5yZv7o4mCTLzbNDo3V6J+B8rXkEK/qUdzCIUvU=; b=sSmG2Em/o9PHLyGs3CU8EHL1le
-        va/zjEt7uHgZDCI8Jcw4lpvtP1nouOoYImMG13FquRDBTriyrbZ0Jt4Khx2pxDgMYdldGF2m4cjUt
-        q87VA94xPPWTxCiRWkpqdcA0iki/Dz4zqUnckQQCwl9mJSbD13KXx5JO5+c4oAuD8NStmvr5NxvQ6
-        x3ax+vazK252pxNktD7OjuiLgct+FJCyF+bWOliC28CNaxgWs2fC6VRCb3e51MMvoTnlIMn77Ve6l
-        niXMPMVYD+Lf2YuCsISQ2c1oOPezW1oVAHF5W11W5YzB4Lw97jh87hzJTVZp2zZPU6lppDM/LparT
-        2U+a/MfQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noTe9-004fCw-9d; Tue, 10 May 2022 17:27:41 +0000
-Date:   Tue, 10 May 2022 18:27:41 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] niu: Add "overloaded" struct page union member
-Message-ID: <YnqgjVoMDu5v9PNG@casper.infradead.org>
-References: <20220509222334.3544344-1-keescook@chromium.org>
- <YnoT+cBTNnPzzg8H@infradead.org>
- <202205100849.58D2C81@keescook>
+        Tue, 10 May 2022 13:31:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B292D8CD92
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:27:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48C7DB81CC6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3D9C385A6;
+        Tue, 10 May 2022 17:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652203665;
+        bh=VL4kUUVILrJUOX+tH3h8eEBpzV7YwpyyhcS9uhyC7xE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=da3oknQNQoiangJsDXelQ3cLquPcJiRFSpbjHctcWb5YE1WrimB/OjNDJRAXNVqBj
+         bfFtY1kpnOFJgJGiW+u1IkhzhEXMLwzwMeEPuE6jFUOZ8D00tPbv8eCG/J0Lvd1pE2
+         YbKK0SQLjkFDduswkEqL/vbGSR5gP8WhW2VN6DrCAmGSNHhYQlm5+1FrC1Qub0bizN
+         t2igdQ2tZXscFh73u4Zd1j+fmxnwPPZkM20sQg4LI9UecEKn04wwqTDfrdzoiMIoTo
+         qqhQrSwdM5tlSlctpQ7L/gKxrH7veWAQLaMEqy5l5BMaVk2korn9MM2LIhoXb+4LOA
+         1l0CqJoTDEtwA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DE44B400B1; Tue, 10 May 2022 14:27:41 -0300 (-03)
+Date:   Tue, 10 May 2022 14:27:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 09/23] perf auxtrace: Record whether an auxtrace mmap
+ is needed
+Message-ID: <YnqgjdB+U3Oluv54@kernel.org>
+References: <20220506122601.367589-1-adrian.hunter@intel.com>
+ <20220506122601.367589-10-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205100849.58D2C81@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20220506122601.367589-10-adrian.hunter@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +61,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 08:50:47AM -0700, Kees Cook wrote:
-> On Tue, May 10, 2022 at 12:27:53AM -0700, Christoph Hellwig wrote:
-> > On Mon, May 09, 2022 at 03:23:33PM -0700, Kees Cook wrote:
-> > > The randstruct GCC plugin gets upset when it sees struct addresspace
-> > > (which is randomized) being assigned to a struct page (which is not
-> > > randomized):
-> > 
-> > Well, the right fix here is to remove this abuse from the driver, not
-> > to legitimize it as part of a "driver" patch touching a core mm header
+Em Fri, May 06, 2022 at 03:25:47PM +0300, Adrian Hunter escreveu:
+> Add a flag needs_auxtrace_mmap to record whether an auxtrace mmap is
+> needed, in preparation for correctly determining whether or not an
+> auxtrace mmap is needed.
+
+Thanks, applied.
+
+- Arnaldo
+
 > 
-> Right, I didn't expect anyone to like the new "overloaded" member.
-> Mainly I'd just like to understand how niu _should_ be fixed. Is using
-> the "private" member the correct thing here?
+> Acked-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/arch/arm/util/cs-etm.c    | 1 +
+>  tools/perf/arch/arm64/util/arm-spe.c | 1 +
+>  tools/perf/arch/s390/util/auxtrace.c | 1 +
+>  tools/perf/arch/x86/util/intel-bts.c | 1 +
+>  tools/perf/arch/x86/util/intel-pt.c  | 1 +
+>  tools/perf/util/evsel.h              | 1 +
+>  6 files changed, 6 insertions(+)
+> 
+> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+> index 11c71aa219f7..1b54638d53b0 100644
+> --- a/tools/perf/arch/arm/util/cs-etm.c
+> +++ b/tools/perf/arch/arm/util/cs-etm.c
+> @@ -319,6 +319,7 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+>  			}
+>  			evsel->core.attr.freq = 0;
+>  			evsel->core.attr.sample_period = 1;
+> +			evsel->needs_auxtrace_mmap = true;
+>  			cs_etm_evsel = evsel;
+>  			opts->full_auxtrace = true;
+>  		}
+> diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
+> index e8b577d33e53..6f4db2ac5420 100644
+> --- a/tools/perf/arch/arm64/util/arm-spe.c
+> +++ b/tools/perf/arch/arm64/util/arm-spe.c
+> @@ -160,6 +160,7 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
+>  			}
+>  			evsel->core.attr.freq = 0;
+>  			evsel->core.attr.sample_period = arm_spe_pmu->default_config->sample_period;
+> +			evsel->needs_auxtrace_mmap = true;
+>  			arm_spe_evsel = evsel;
+>  			opts->full_auxtrace = true;
+>  		}
+> diff --git a/tools/perf/arch/s390/util/auxtrace.c b/tools/perf/arch/s390/util/auxtrace.c
+> index 0db5c58c98e8..5068baa3e092 100644
+> --- a/tools/perf/arch/s390/util/auxtrace.c
+> +++ b/tools/perf/arch/s390/util/auxtrace.c
+> @@ -98,6 +98,7 @@ struct auxtrace_record *auxtrace_record__init(struct evlist *evlist,
+>  	evlist__for_each_entry(evlist, pos) {
+>  		if (pos->core.attr.config == PERF_EVENT_CPUM_SF_DIAG) {
+>  			diagnose = 1;
+> +			pos->needs_auxtrace_mmap = true;
+>  			break;
+>  		}
+>  	}
+> diff --git a/tools/perf/arch/x86/util/intel-bts.c b/tools/perf/arch/x86/util/intel-bts.c
+> index d68a0f48e41e..bcccfbade5c6 100644
+> --- a/tools/perf/arch/x86/util/intel-bts.c
+> +++ b/tools/perf/arch/x86/util/intel-bts.c
+> @@ -129,6 +129,7 @@ static int intel_bts_recording_options(struct auxtrace_record *itr,
+>  			}
+>  			evsel->core.attr.freq = 0;
+>  			evsel->core.attr.sample_period = 1;
+> +			evsel->needs_auxtrace_mmap = true;
+>  			intel_bts_evsel = evsel;
+>  			opts->full_auxtrace = true;
+>  		}
+> diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
+> index 38ec2666ec12..2eaac4638aab 100644
+> --- a/tools/perf/arch/x86/util/intel-pt.c
+> +++ b/tools/perf/arch/x86/util/intel-pt.c
+> @@ -649,6 +649,7 @@ static int intel_pt_recording_options(struct auxtrace_record *itr,
+>  			evsel->core.attr.freq = 0;
+>  			evsel->core.attr.sample_period = 1;
+>  			evsel->no_aux_samples = true;
+> +			evsel->needs_auxtrace_mmap = true;
+>  			intel_pt_evsel = evsel;
+>  			opts->full_auxtrace = true;
+>  		}
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 45d674812239..544fbed98df1 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -124,6 +124,7 @@ struct evsel {
+>  	bool			merged_stat;
+>  	bool			reset_group;
+>  	bool			errored;
+> +	bool			needs_auxtrace_mmap;
+>  	struct hashmap		*per_pkg_mask;
+>  	int			err;
+>  	struct {
+> -- 
+> 2.25.1
 
-Well ... no.  We're not entirely set up yet to go to the good answer
-that means we don't have to touch this driver again, and yet we're also
-in a situation where we'll need to touch this driver at some point in
-order to get rid of the way it abuses struct page before we can get to
-our good place.
+-- 
 
-The eventual good answer is that we declare a driver-private memdesc
-variant that has a ->link, ->base ->refcount and ->pfn (maybe it has more
-than that; I'd have to really understand this driver to be completely
-certain about what it needs).  Or perhaps there's a better way to handle
-driver-allocated memory for this kind of networking card that this driver
-should be converted to use.
-
-I haven't looked into this case deeply enough to have strong thoughts
-about how we should handle it, both now and in the glorious future.
+- Arnaldo

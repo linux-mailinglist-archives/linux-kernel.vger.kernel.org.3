@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AD1521387
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7C0521386
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240852AbiEJLXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S240861AbiEJLXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240836AbiEJLXY (ORCPT
+        with ESMTP id S240853AbiEJLX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:23:24 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264612A9764
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:19:27 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24ABJ7p6045467;
-        Tue, 10 May 2022 06:19:07 -0500
+        Tue, 10 May 2022 07:23:27 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AF32AACC8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:19:29 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24ABJBo1125790;
+        Tue, 10 May 2022 06:19:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652181547;
-        bh=egVFr2Lzju1msu86aPi0W2+t8awHwoi94vZ/ftvnOe0=;
+        s=ti-com-17Q1; t=1652181551;
+        bh=OeAyXVccjY3hm+MWAfdIaWBN7g5ZIOZUI4gJYrjNDbg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=cfe/J7N3ealCUTAmQ+kbBWcyJAlrDCZWQI8Xu+y8z34T4K7Brd8fSAT5IQbbP1xNz
-         QGpCJ5GkOW7cR88XZ+DclFO1+253F8JN+0R4gOr5+/ra2OSEnxJkfpHwTyQuCZSANv
-         0n8+EeY9NUyRdTknuNCLioB21Av3pvVleiGuLiEI=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24ABJ7aK067320
+        b=pyu8URTAdstc87XBeUdr6md9Ycr3d07FXPTmt2VvvnABQ2ek0qUXC5MRCzAiAdkyJ
+         3WKr8rJ9Xbb7RCBIXXLqbUCgJySLdjKFbjkZsDNd8xg8VmfJaLlBux4pZ0IhR63eu5
+         xoOoMYTNWou/XS9jhtX13/Yfrx12FI3CbXILemDc=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24ABJB0A094124
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 10 May 2022 06:19:07 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 10 May 2022 06:19:11 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 10
- May 2022 06:19:07 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ May 2022 06:19:11 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 10 May 2022 06:19:07 -0500
+ Frontend Transport; Tue, 10 May 2022 06:19:11 -0500
 Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24ABJ3fp127309;
-        Tue, 10 May 2022 06:19:05 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24ABJ3fq127309;
+        Tue, 10 May 2022 06:19:07 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v3 1/2] mtd: spi-nor: export spi_nor_hwcaps_pp2cmd()
-Date:   Tue, 10 May 2022 16:49:01 +0530
-Message-ID: <165218141900.322959.8359522970509700885.b4-ty@ti.com>
+To:     <richard@nod.at>, Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
+        <vigneshr@ti.com>, <miquel.raynal@bootlin.com>, <michael@walle.cc>,
+        <tudor.ambarus@microchip.com>
+CC:     <quic_asutoshd@quicinc.com>, <linux-mtd@lists.infradead.org>,
+        <quic_sartgarg@quicinc.com>, <quic_rampraka@quicinc.com>,
+        <quic_nitirawa@quicinc.com>, <quic_pragalla@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <quic_sayalil@quicinc.com>
+Subject: Re: [PATCH V9] mtd: spi-nor: winbond: add support for W25Q512NW-IM
+Date:   Tue, 10 May 2022 16:49:02 +0530
+Message-ID: <165218141900.322959.6753840624278997521.b4-ty@ti.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220429102018.2361038-1-michael@walle.cc>
-References: <20220429102018.2361038-1-michael@walle.cc>
+In-Reply-To: <1651234239-32217-1-git-send-email-quic_c_sbhanu@quicinc.com>
+References: <1651234239-32217-1-git-send-email-quic_c_sbhanu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,16 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 12:20:17 +0200, Michael Walle wrote:
-> The function will also be used by the debugfs module.
+On Fri, 29 Apr 2022 17:40:39 +0530, Shaik Sajida Bhanu wrote:
+> Add support for winbond W25Q512NW-IM chip.
 > 
+> Below are the tests done:
 > 
+> 1. Verified flashing binary image on spi card using flashrom tool.
+> 2. Verified OTP support, below are the test results:
+> 
+> [...]
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next, thanks!
-[1/2] mtd: spi-nor: export spi_nor_hwcaps_pp2cmd()
-      https://git.kernel.org/mtd/c/d92e0dbc6a
-[2/2] mtd: spi-nor: expose internal parameters via debugfs
-      https://git.kernel.org/mtd/c/0257be79fc
+[1/1] mtd: spi-nor: winbond: add support for W25Q512NW-IM
+      https://git.kernel.org/mtd/c/89051ff5dd
 
 --
 Regards,

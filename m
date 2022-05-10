@@ -2,267 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B60520B24
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E47520B23
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234633AbiEJC1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S234615AbiEJC1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234561AbiEJC1d (ORCPT
+        with ESMTP id S231676AbiEJC13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:27:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA5C2A7C08;
-        Mon,  9 May 2022 19:23:35 -0700 (PDT)
-X-UUID: 6c3449fd3a5643298e045fc5dac444db-20220510
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0edc4465-f77d-4529-85e9-4aca71546ff5,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:d5a1d116-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 6c3449fd3a5643298e045fc5dac444db-20220510
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1814271490; Tue, 10 May 2022 10:23:26 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 10 May 2022 10:23:25 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 10 May 2022 10:23:24 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 10 May 2022 10:23:24 +0800
-Subject: Re: [PATCH v2 1/3] dt-bindings: mediatek: add vdosys1 RDMA definition
- for mt8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-References: <20220509044302.27878-1-rex-bc.chen@mediatek.com>
- <20220509044302.27878-2-rex-bc.chen@mediatek.com>
- <a5c9e7ad-c4b5-e757-cd6d-f79de47d1ff3@linaro.org>
- <fbbbc7e6a951bdde648ddd896f1fa163dafa16f1.camel@mediatek.com>
-Message-ID: <8273e75d-2a8b-ad6c-2246-ad33e435c733@mediatek.com>
-Date:   Tue, 10 May 2022 10:23:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 9 May 2022 22:27:29 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBEA17EC33;
+        Mon,  9 May 2022 19:23:33 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id i17so15525523pla.10;
+        Mon, 09 May 2022 19:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6/agFKZVEdVDsrXQEEfaXW6kYgW1c8TH8P87O2R+AuI=;
+        b=mG9g2mMstF8Cm/8Ole2BQDDCAn/yBDrtFtfPrKm4u+9rkbufL9pK5fRbsf6eBYZzI3
+         +kbCSyTF7wPsoB4WwC1H8/dXvNdUoHMBisTI1lOXAn/cFp3WlaaC7pj+f4EswXey+rdi
+         8/MKrRaMLc5TmRnWvqT3Bm/nwaIUrY6FuL60MYSsLycLVXSRwBI9wWoz7pE3Z4o9UrXR
+         UylW7JhbxB7Bhko8uwYEfdhuejwrbAeKMtOOt0xSXWUmECbFcejZp+Q0+WRUQOFNElYf
+         CrL+pGY7FaE2ctaNDcqEWicnzByj1PpKlhN/YAjrStFDAOtywnDpD2x06mzAYO+MhWrH
+         n7/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6/agFKZVEdVDsrXQEEfaXW6kYgW1c8TH8P87O2R+AuI=;
+        b=R0gG3tR0CcQk9a7uCku7nE0YIckDO/UjpUCzZUB5cD4IIXVql3udL277kV4Pg8LXn2
+         pyIuxImM2vQvV0M9f2L4ODmsPyKMfBD50oMdufv6MQ+lXcazSlDbyHYI1RO7XBgEXeQc
+         F7Bh9siTClTKEMZIxkAo/+jN9V90TcyLGw37liTvIa12OPFQMes3cXigvTQO8NXiE/cM
+         oaMgCcPLBSvJCCocpBimOnHtmqCbtUHqIgHFWjUwuMa18A32eZmmS2ItV8fhLoD4FAki
+         1H5fe3Noz/CQZbEnK7vkszLtBZCMWPbpd9PcAHSXAeGm9HnCGM470b6qqHFjES5gWcMW
+         PcRA==
+X-Gm-Message-State: AOAM531UIPJ62BNZ9kDIvgrzvhTfPNbewv28N3oIqoIFt3bUnRHwZYNB
+        6xvnESl2h4LeexKva/GUmuY=
+X-Google-Smtp-Source: ABdhPJzYcvj9/KVB+ZVKxAPPK6e99ItRz2VlkXR1gDQExEfNPTMYalzk9Np8fZOiwVxmDZEAbNWoug==
+X-Received: by 2002:a17:90b:3d0:b0:1d9:52e1:de86 with SMTP id go16-20020a17090b03d000b001d952e1de86mr28829581pjb.73.1652149412660;
+        Mon, 09 May 2022 19:23:32 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p67-20020a622946000000b0050dc7628150sm9305952pfp.42.2022.05.09.19.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 19:23:31 -0700 (PDT)
+Message-ID: <6279cca3.1c69fb81.c4e50.581d@mx.google.com>
+X-Google-Original-Message-ID: <20220510022329.GA1278331@cgel.zte@gmail.com>
+Date:   Tue, 10 May 2022 02:23:29 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, wang.yong12@zte.com.cn,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn,
+        zhang.yunkai@zte.com.cn
+Subject: Re: [PATCH v5] mm/ksm: introduce ksm_force for each process
+References: <20220507105926.d4423601230f698b0f5228d1@linux-foundation.org>
+ <20220508092710.930126-1-xu.xin16@zte.com.cn>
+ <YngF+Lz01noCKRFc@casper.infradead.org>
+ <6278bb5f.1c69fb81.e623f.215f@mx.google.com>
+ <Ynk2AsCEl1fk/WaS@casper.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <fbbbc7e6a951bdde648ddd896f1fa163dafa16f1.camel@mediatek.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynk2AsCEl1fk/WaS@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 09, 2022 at 04:40:50PM +0100, Matthew Wilcox wrote:
+> On Mon, May 09, 2022 at 06:57:33AM +0000, CGEL wrote:
+> > On Sun, May 08, 2022 at 07:03:36PM +0100, Matthew Wilcox wrote:
+> > > On Sun, May 08, 2022 at 09:27:10AM +0000, cgel.zte@gmail.com wrote:
+> > > > If ksm_force is set to 0, cancel the feature of ksm_force of this
+> > > > process and unmerge those merged pages belonging to VMAs which is not
+> > > > madvised as MADV_MERGEABLE of this process, but leave MADV_MERGEABLE
+> > > > areas merged.
+> > > 
+> > > Is that actually a useful feature?  Otherwise, we could simply turn
+> > > on/off the existing MMF_VM_MERGEABLE flag instead of introducing this
+> > > new bool.
+> > > 
+> > I think this will be very useful for those apps which are very likely to
+> > cause Same Pages in memory and users and operators are not willing to
+> > modified the source codes for any reasons.
+> 
+> No, you misunderstand.  Is it useful to have the "force KSM off"
+> functionality?  ie code which has been modified to allow KSM, but
+> then overridden by an admin?
+> 
+Oh, I see what you mean. It should be mentioned that "force KSM off" is not
+implemented for the current patch. In this patch, setting ksm_force to 0 just
+restores the system to the default state (the state before patching)
 
-On 5/9/22 4:45 PM, Rex-BC Chen wrote:
-> On Mon, 2022-05-09 at 15:31 +0800, Krzysztof Kozlowski wrote:
->> On 09/05/2022 06:43, Rex-BC Chen wrote:
->>> From: "Nancy.Lin" <nancy.lin@mediatek.com>
->>>
->>> Add vdosys1 RDMA definition.
->>>
->>> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
->>> Reviewed-by: AngeloGioacchino Del Regno <
->>> angelogioacchino.delregno@collabora.com>
->>> ---
->>>   .../display/mediatek/mediatek,mdp-rdma.yaml   | 94
->>> +++++++++++++++++++
->>>   1 file changed, 94 insertions(+)
->>>   create mode 100644
->>> Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
->>> rdma.yaml
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
->>> rdma.yaml
->>> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
->>> rdma.yaml
->>> new file mode 100644
->>> index 000000000000..ca31accb0a95
->>> --- /dev/null
->>> +++
->>> b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
->>> rdma.yaml
->>> @@ -0,0 +1,94 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id:
->>> https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!x6pqRSLbN1fx6j57PKXCTTp8n7bulgpLzXS8uUh5vAIxkRKD8K6EqOopnFrXvT54LQXmIEDFFvPQzC4ldr1TddEeTw$
->>>   
->>> +$schema:
->>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!x6pqRSLbN1fx6j57PKXCTTp8n7bulgpLzXS8uUh5vAIxkRKD8K6EqOopnFrXvT54LQXmIEDFFvPQzC4ldr3y-9sW3w$
->>>   
->>> +
->>> +title: MediaTek MDP RDMA
->>> +
->>> +maintainers:
->>> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
->>> +  - Philipp Zabel <p.zabel@pengutronix.de>
->>> +
->>> +description:
->>> +  The MediaTek MDP RDMA stands for Read Direct Memory Access.
->>> +  It provides real time data to the back-end panel driver, such as
->>> DSI,
->>> +  DPI and DP_INTF.
->>> +  It contains one line buffer to store the sufficient pixel data.
->>> +  RDMA device node must be siblings to the central MMSYS_CONFIG
->>> node.
->>> +  For a description of the MMSYS_CONFIG binding, see
->>> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.ya
->>> ml for details.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->> oneOf is not needed
->>
->>> +      - items:
->> items not needed, you have only one item.
->>
-> Hello Krzysztof,
->
-> Thanks for your review.
-> ok, we will drop them.
->
->>> +          - const: mediatek,mt8195-vdo1-rdma
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  power-domains:
->>> +    description: A phandle and PM domain specifier as defined by
->>> bindings of
->>> +      the power controller specified by phandle. See
->>> +      Documentation/devicetree/bindings/power/power-domain.yaml
->>> for details.
->> Skip description, it's obvious. Instead maxItems.
->>
-> ok, we will fix it.
->
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: RDMA Clock
->>> +
->>> +  iommus:
->>> +    description:
->>> +      This property should point to the respective IOMMU block
->>> with master port as argument,
->>> +      see
->>> Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for
->>> details.
->> Skip description, it's obvious. Instead maxItems.
->>
-> ok, we will fix it.
->
->>> +
->>> +  mediatek,gce-client-reg:
->>> +    description:
->>> +      The register of display function block to be set by gce.
->>> There are 4 arguments,
->>> +      such as gce node, subsys id, offset and register size. The
->>> subsys id that is
->>> +      mapping to the register of display function blocks is
->>> defined in the gce header
->>> +      include/include/dt-bindings/gce/<chip>-gce.h of each chips.
->> Double "include" in the path.
-> ok, we will fix it.
->
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    items:
->>> +      items:
->>> +        - description: phandle of GCE
->>> +        - description: GCE subsys id
->>> +        - description: register offset
->>> +        - description: register size
->>> +    maxItems: 1
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - power-domains
->>> +  - clocks
->>> +  - iommus
->>> +  - mediatek,gce-client-reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +    #include <dt-bindings/clock/mt8195-clk.h>
->>> +    #include <dt-bindings/power/mt8195-power.h>
->>> +    #include <dt-bindings/gce/mt8195-gce.h>
->>> +    #include <dt-bindings/memory/mt8195-memory-port.h>
->>> +
->>> +    soc {
->>> +        #address-cells = <2>;
->>> +        #size-cells = <2>;
->>> +
->>> +        vdo1_rdma0: mdp-rdma@1c104000 {
->> Generic node name. dma-controller (if it does not conflict with
->> dma-common.yaml schema)?
-> We don't understand what dma-controller you are referring to? Can you
-> help explain more? Thanks!
->
-> BRs,
-> Rex
-Hello Krzysztof,
-
-
-Could you also help us to explain what do you mean here?
-
-Thanks!
-
-
-BRs,
-
-Rex
->>> +            compatible = "mediatek,mt8195-vdo1-rdma";
->>> +            reg = <0 0x1c104000 0 0x1000>;
->>> +            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
->>> +            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
->>> +            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
->>> +            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
->>> +            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX
->>> 0x4000 0x1000>;
->>> +        };
->>> +    };
->>
->> Best regards,
->> Krzysztof
+> > Besides, simply turning of/off the existing MMF_VM_MERGEABLE flag may be
+> > not feasible because madvise will also turn on the MMF_VM_MERGEABLE
+> > flag.
+> > 
+> > I think the following suggestions is good, and I will resend a patch.
+> > > > +Controlling KSM with procfs
+> > > > +===========================
+> > > > +
+> > > > +KSM can also operate on anonymous areas of address space of those processes's
+> > > > +knob ``/proc/<pid>/ksm_force`` is on, even if app codes doesn't call madvise()
+> > > > +explicitly to advise specific areas as MADV_MERGEABLE.
+> > > > +
+> > > > +You can set ksm_force to 1 to force all anonymous and qualified VMAs of
+> > > > +this process to be involved in KSM scanning. But It is effective only when the
+> > > > +klob of ``/sys/kernel/mm/ksm/run`` is set as 1.
+> > > 
+> > > I think that last sentence doesn't really add any value.
+> > > 
+> > > > +	memset(buffer, 0, sizeof(buffer));
+> > > > +	if (count > sizeof(buffer) - 1)
+> > > > +		count = sizeof(buffer) - 1;
+> > > > +	if (copy_from_user(buffer, buf, count)) {
+> > > > +		err = -EFAULT;
+> > > > +		goto out_return;
+> > > 
+> > > This feels a bit unnecessary.  Just 'return -EFAULT' here.
+> > > 
+> > > > +	}
+> > > > +
+> > > > +	err = kstrtoint(strstrip(buffer), 0, &force);
+> > > > +
+> > > > +	if (err)
+> > > > +		goto out_return;
+> > > 
+> > > 'return err'
+> > > 
+> > > > +	if (force != 0 && force != 1) {
+> > > > +		err = -EINVAL;
+> > > > +		goto out_return;
+> > > 
+> > > 'return -EINVAL'
+> > > 
+> > > > +	}
+> > > > +
+> > > > +	task = get_proc_task(file_inode(file));
+> > > > +	if (!task) {
+> > > > +		err = -ESRCH;
+> > > > +		goto out_return;
+> > > 
+> > > 'return -ESRCH'

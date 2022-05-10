@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D055521AA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBDE5217DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242721AbiEJOCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S243080AbiEJN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244674AbiEJNh4 (ORCPT
+        with ESMTP id S242953AbiEJNWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:37:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A19517DE;
-        Tue, 10 May 2022 06:26:06 -0700 (PDT)
+        Tue, 10 May 2022 09:22:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8A91ACFB2;
+        Tue, 10 May 2022 06:17:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40722B81DAB;
-        Tue, 10 May 2022 13:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D263C385A6;
-        Tue, 10 May 2022 13:26:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FFC26123F;
+        Tue, 10 May 2022 13:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C5CAC385C2;
+        Tue, 10 May 2022 13:17:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189163;
-        bh=BEL/QK5o7Uyv5QUi+azeEgIO671K4UQlx+HYxKtUE/8=;
+        s=korg; t=1652188620;
+        bh=NKHhRp6+HZv38THHVqfFc0ZPO0kyCzzKjN8CZ3PiGY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mtaBTK6F4lz8dyUMk4g4lT+gMSp6yXw7Je55w8bwMypGgo3XBGIvd4RdLcKIJT1Hj
-         ICaFFieewJiWYciNXFHJzPksbS0wr2s2SYojwCqdRbKon9mQmOl4ypajLn+U+IuSy7
-         y06yRxKwQgVPcT3qMH36d5ZRmDdxTI1lm+jwqrrw=
+        b=q+e4Ar9nVBJYQhDAmwWlfzX+EHJwZdRYMmajL+v1dRvnV3RrXOCMNKb08L2kZ9rj8
+         ogqPUZT9jT/joe1mr1y4+KpOrKQdVhpr5wuNporyIiKcfeUTSX35n7r0/97am/XFp7
+         KcSgasehkcL0QJhGsQo3vTVt/de6SStDyBDbLOks=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.10 33/70] NFC: netlink: fix sleep in atomic bug when firmware download timeout
+Subject: [PATCH 4.14 66/78] NFC: netlink: fix sleep in atomic bug when firmware download timeout
 Date:   Tue, 10 May 2022 15:07:52 +0200
-Message-Id: <20220510130733.836404045@linuxfoundation.org>
+Message-Id: <20220510130734.484860647@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,7 +97,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/net/nfc/netlink.c
 +++ b/net/nfc/netlink.c
-@@ -1244,7 +1244,7 @@ int nfc_genl_fw_download_done(struct nfc
+@@ -1251,7 +1251,7 @@ int nfc_genl_fw_download_done(struct nfc
  	struct sk_buff *msg;
  	void *hdr;
  
@@ -106,7 +106,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	if (!msg)
  		return -ENOMEM;
  
-@@ -1260,7 +1260,7 @@ int nfc_genl_fw_download_done(struct nfc
+@@ -1267,7 +1267,7 @@ int nfc_genl_fw_download_done(struct nfc
  
  	genlmsg_end(msg, hdr);
  

@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE4B521264
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DB4521266
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239866AbiEJKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S239871AbiEJKoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiEJKoK (ORCPT
+        with ESMTP id S239976AbiEJKoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:44:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE3F286FFA;
-        Tue, 10 May 2022 03:40:14 -0700 (PDT)
+        Tue, 10 May 2022 06:44:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F75D28ABA9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:40:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A49DD61790;
-        Tue, 10 May 2022 10:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AA0AC385A6;
-        Tue, 10 May 2022 10:40:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B225761784
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178B2C385C6;
+        Tue, 10 May 2022 10:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652179213;
-        bh=EHD5jt5sWyKaNSKhBgZoFlrvLc0kk1Tv6Qen37JCPzw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hVwFcw2Mn9OHACWfFp9eSmBtyeYQtpJ0rR9LecQt24MkPkgFl6b8jEbgzgsbaYBfV
-         C6Ln0QGViJeAHr70i99JR0AwhZrht1nlVgkvJVGej4Zaep6J0f5vhxBDKl/Px8l8be
-         tU0yd8rqBvdh1qqqPlKkmsqjTLTtIhgUPruIpodZ3lVdIOGgoZIGXjXUdTBGeYN83k
-         zXeaE73PD7UksPcuz4Wn2st5gRV0cGKB+gr3SqscI1ei3edNrNw//ae6UZLOZhZ3yz
-         HZkjDC30Xp/JAKxFR6cRkTu983NkEOE70lsGvWAQ/jubo0Dso93J/YdvZTDAfUeX4K
-         qEggR8iDnPIGg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB39EE8DCCE;
-        Tue, 10 May 2022 10:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1652179221;
+        bh=O7wGDdbvzyYaDqEfzW2f8qf2bbg8+hQwT/vCW4k2cPA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=phCPQqig6FC2alGkWQ8R32QnauSaXdQbGwPQJW7klNNmjGnnhdKTCmtdSyM0/+zQj
+         RvDY62lsTU5oFrYIWVHofXNSl1IUD98LbiMKorX54tgLvh85blX8AeKE9VglPa0G1K
+         17RNOz3wzdC/uNBgixKY9VAFegx6OpKFziZAay3Kj0RaT5EZZUSfpuk6rxG70TmULT
+         FZae+mdtNIGMDBNSFNW6dwfLhLPT5aL+y4WLCuN0tRhYt4YHrkI07vPcAsrR/a+n5a
+         JuLI7T2F6mCtW07dTsuanJuddo+gMMfHWT2dMdmar5DKKfSxU1fHGB0knXPEXpClfI
+         J2mm0ndPDVsyA==
+Date:   Tue, 10 May 2022 11:40:15 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     catalin.marinas@arm.com, broonie@kernel.org, pcc@google.com,
+        mark.rutland@arm.com, keescook@chromium.org, daniel.kiss@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wangweiyang2@huawei.com, gongruiqi1@huawei.com
+Subject: Re: [PATCH -next] arm64: add missing header dependencies
+Message-ID: <20220510104014.GA27557@willie-the-truck>
+References: <20220509061751.3434059-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] decnet: Use container_of() for struct dn_neigh casts
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165217921289.11394.178390152550838154.git-patchwork-notify@kernel.org>
-Date:   Tue, 10 May 2022 10:40:12 +0000
-References: <20220508102217.2647184-1-keescook@chromium.org>
-In-Reply-To: <20220508102217.2647184-1-keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     davem@davemloft.net, lkp@intel.com, kuba@kernel.org,
-        pabeni@redhat.com, yajun.deng@linux.dev, zhengyongjun3@huawei.com,
-        morbo@google.com, linux-decnet-user@lists.sourceforge.net,
-        netdev@vger.kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20220509061751.3434059-1-cuigaosheng1@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,28 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun,  8 May 2022 03:22:17 -0700 you wrote:
-> Clang's structure layout randomization feature gets upset when it sees
-> struct neighbor (which is randomized) cast to struct dn_neigh:
+On Mon, May 09, 2022 at 02:17:51PM +0800, Gaosheng Cui wrote:
+> We get one error when building module with processor.h:
 > 
-> net/decnet/dn_route.c:1123:15: error: casting from randomized structure pointer type 'struct neighbour *' to 'struct dn_neigh *'
-> 			gateway = ((struct dn_neigh *)neigh)->addr;
-> 				   ^
+> ./arch/arm64/include/asm/processor.h:263:36: error: implicit declaration of function ‘task_stack_page’;
+>   ((struct pt_regs *)(THREAD_SIZE + task_stack_page(p)) - 1)
+> ./arch/arm64/include/asm/processor.h:266:42: note: in expansion of macro ‘task_pt_regs’
+>  #define KSTK_ESP(tsk) user_stack_pointer(task_pt_regs(tsk))
 > 
-> [...]
+> task_stack_page is declared in linux/sched/task_stack.h, so this patch
+> add the missing header dependencies.
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  arch/arm64/include/asm/processor.h | 1 +
+>  1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - decnet: Use container_of() for struct dn_neigh casts
-    https://git.kernel.org/netdev/net/c/dc5306a8c0ea
+Do you know which commit is causing this error? I haven't seen any other
+reports, but it's hard to know which tree should take your patch as it
+stands.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
 
+Will
 
+> diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+> index 73e38d9a540c..1c239841c4d6 100644
+> --- a/arch/arm64/include/asm/processor.h
+> +++ b/arch/arm64/include/asm/processor.h
+> @@ -28,6 +28,7 @@
+>  #include <linux/build_bug.h>
+>  #include <linux/cache.h>
+>  #include <linux/init.h>
+> +#include <linux/sched/task_stack.h>
+>  #include <linux/stddef.h>
+>  #include <linux/string.h>
+>  #include <linux/thread_info.h>
+> -- 
+> 2.25.1
+> 

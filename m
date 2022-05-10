@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6984B521A8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36EB521A76
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245672AbiEJN6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S244807AbiEJOBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245202AbiEJNii (ORCPT
+        with ESMTP id S245210AbiEJNii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 09:38:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F092980A;
-        Tue, 10 May 2022 06:28:46 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433CA102773;
+        Tue, 10 May 2022 06:28:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 644EB60C1C;
-        Tue, 10 May 2022 13:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70378C385A6;
-        Tue, 10 May 2022 13:28:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0BA8B81D24;
+        Tue, 10 May 2022 13:28:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614B2C385D8;
+        Tue, 10 May 2022 13:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189325;
-        bh=iGVnxWxoOhBcJQqdzfpfv49ak3HYriGUEF0owT0UMQs=;
+        s=korg; t=1652189328;
+        bh=CnCF/oqRM09lHpWS48068MgvAhbnukFTnuqItqLeudU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h+mGm2KvLp20rrWfzZ0I0nYZ5E/bv0/uLRjYcuyyFAuKcfFQdpxImTAAShFHkkAHN
-         Ipik3pswvOdPvtZ2UIGjuxpMRSlgnKTTl8v/9xBwusTNK5Sa/d4nzK0B1vW+HY1Mx4
-         fuI/DgVrPXVJVY+a1rt/4e+EuYHBbrhkZKU3sr6k=
+        b=uFD3f0NMHfJi7AJ8gDIhxOeIU8ojm0LijO/gibaNV681cOYCuytkiEZwyMjSBc2Kh
+         WXG1aKed0s3kRNV/g+CpUZ3Uqb1eUpsLJfwcxFmBU3GPGhoMbQCUuoz2nuN58nc1OH
+         ioQmyzBY70yeBYnLhZqcWutnZU5SjdrhL4qdr6Uc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 015/135] RISC-V: relocate DTB if its outside memory region
-Date:   Tue, 10 May 2022 15:06:37 +0200
-Message-Id: <20220510130740.836495192@linuxfoundation.org>
+        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.15 016/135] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
+Date:   Tue, 10 May 2022 15:06:38 +0200
+Message-Id: <20220510130740.865346025@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -55,59 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Kossifidis <mick@ics.forth.gr>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit c6fe81191bd74f7e6ae9ce96a4837df9485f3ab8 upstream.
+commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
 
-In case the DTB provided by the bootloader/BootROM is before the kernel
-image or outside /memory, we won't be able to access it through the
-linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
-relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
-is not specified), and it's also not the most portable approach since
-the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
-at a specific offset that may not be available. To avoid this situation
-copy DTB so that it's visible through the linear mapping.
+This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
 
-Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
-Link: https://lore.kernel.org/r/20220322132839.3653682-1-mick@ics.forth.gr
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Fixes: f105aa940e78 ("riscv: add BUILTIN_DTB support for MMU-enabled targets")
+We must not try to connect the socket while the transport is under
+construction, because the mechanisms to safely tear it down are not in
+place. As the code stands, we end up leaking the sockets on a connection
+error.
+
+Reported-by: wanghai (M) <wanghai38@huawei.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/mm/init.c |   21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ net/sunrpc/xprtsock.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -218,8 +218,25 @@ static void __init setup_bootmem(void)
- 	 * early_init_fdt_reserve_self() since __pa() does
- 	 * not work for DTB pointers that are fixmap addresses
- 	 */
--	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
--		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-+		/*
-+		 * In case the DTB is not located in a memory region we won't
-+		 * be able to locate it later on via the linear mapping and
-+		 * get a segfault when accessing it via __va(dtb_early_pa).
-+		 * To avoid this situation copy DTB to a memory region.
-+		 * Note that memblock_phys_alloc will also reserve DTB region.
-+		 */
-+		if (!memblock_is_memory(dtb_early_pa)) {
-+			size_t fdt_size = fdt_totalsize(dtb_early_va);
-+			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
-+			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
-+
-+			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
-+			early_memunmap(new_dtb_early_va, fdt_size);
-+			_dtb_early_pa = new_dtb_early_pa;
-+		} else
-+			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+	}
- 
- 	early_init_fdt_scan_reserved_mem();
- 	dma_contiguous_reserve(dma32_phys_limit);
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2848,9 +2848,6 @@ static struct rpc_xprt *xs_setup_local(s
+ 		}
+ 		xprt_set_bound(xprt);
+ 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
+-		ret = ERR_PTR(xs_local_setup_socket(transport));
+-		if (ret)
+-			goto out_err;
+ 		break;
+ 	default:
+ 		ret = ERR_PTR(-EAFNOSUPPORT);
 
 

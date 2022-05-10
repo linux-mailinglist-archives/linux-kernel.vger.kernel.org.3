@@ -2,103 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838D9521583
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1023F52158A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238983AbiEJMiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S241558AbiEJMjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237901AbiEJMiF (ORCPT
+        with ESMTP id S241110AbiEJMjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:38:05 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4B02A7C3C;
-        Tue, 10 May 2022 05:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1652186042; x=1683722042;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AVZzSx7m2KvPuGPmt5Zx8G5rV5fa+SEexHw6KVQP/1c=;
-  b=F3pQHXs7oWqoTIjQbuzfUu7COfBi76dXc4CSktQm8nPf3JegokRekWSs
-   7j0kt+AKClr8PRrOAzz2fYpTCPLzae+Ki8lQo2vlLBcAf3Dy2RapfeSYm
-   oFsxVJAZN9rd0xyDVX/Z72j+BMxUfKU65fplgdDeeXigZ/NQDzdZD8Q94
-   8=;
-X-IronPort-AV: E=Sophos;i="5.91,214,1647302400"; 
-   d="scan'208";a="193936383"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 10 May 2022 12:33:46 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id 37BF941C44;
-        Tue, 10 May 2022 12:33:45 +0000 (UTC)
-Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Tue, 10 May 2022 12:33:45 +0000
-Received: from [0.0.0.0] (10.43.161.183) by EX13D20UWC001.ant.amazon.com
- (10.43.162.244) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 10 May
- 2022 12:33:42 +0000
-Message-ID: <5ad0f302-c1e1-b400-c3f3-a97c1cd443e8@amazon.com>
-Date:   Tue, 10 May 2022 14:33:40 +0200
+        Tue, 10 May 2022 08:39:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD12A2A9CE7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652186122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KAQGt/RronM2MwKu2wT61Gar8OOVM6I6Ip3NAsTYhRo=;
+        b=E0J6XMFQEObfdm7tbLVsEWV2bkGrhA+CRQcZ7k7QOQ8A75tsXvwu5PWp1LvWH4KnOvheMw
+        aTppLTLbA4nAX1DgYaOu/vrWC+SpZiNKRUW4mnv2FlkVKwrhQ61VHAe7ZgmjaZ6gw0e2Iw
+        gwMe7Cv/tBQa6coDuQJ7VVSL4+yvQCU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-g2GRWnOBOiO81XZFgG9qpA-1; Tue, 10 May 2022 08:35:17 -0400
+X-MC-Unique: g2GRWnOBOiO81XZFgG9qpA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2139E803D45;
+        Tue, 10 May 2022 12:35:17 +0000 (UTC)
+Received: from ws.net.home (unknown [10.36.112.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 89779400E115;
+        Tue, 10 May 2022 12:35:14 +0000 (UTC)
+Date:   Tue, 10 May 2022 14:35:12 +0200
+From:   Karel Zak <kzak@redhat.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220510123512.h6jjqgowex6gnjh5@ws.net.home>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v2] KVM: PPC: Book3S PR: Enable MSR_DR for
- switch_mmu_context()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Matt Evans <matt@ozlabs.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20220510111809.15987-1-graf@amazon.com>
- <f7416897-2ca5-6b2f-cfd3-30d9bcc557cd@csgroup.eu>
-From:   Alexander Graf <graf@amazon.com>
-In-Reply-To: <f7416897-2ca5-6b2f-cfd3-30d9bcc557cd@csgroup.eu>
-X-Originating-IP: [10.43.161.183]
-X-ClientProxiedBy: EX13D03UWA002.ant.amazon.com (10.43.160.144) To
- EX13D20UWC001.ant.amazon.com (10.43.162.244)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ck9uIDEwLjA1LjIyIDEzOjMxLCBDaHJpc3RvcGhlIExlcm95IHdyb3RlOgo+IExlIDEwLzA1LzIw
-MjIgw6AgMTM6MTgsIEFsZXhhbmRlciBHcmFmIGEgw6ljcml0IDoKPj4gQ29tbWl0IDg2Mzc3MWEy
-OGUyNyAoInBvd2VycGMvMzJzOiBDb252ZXJ0IHN3aXRjaF9tbXVfY29udGV4dCgpIHRvIEMiKQo+
-PiBtb3ZlZCB0aGUgc3dpdGNoX21tdV9jb250ZXh0KCkgdG8gQy4gV2hpbGUgaW4gcHJpbmNpcGxl
-IGEgZ29vZCBpZGVhLCBpdAo+PiBtZWFudCB0aGF0IHRoZSBmdW5jdGlvbiBub3cgdXNlcyB0aGUg
-c3RhY2suIFRoZSBzdGFjayBpcyBub3QgYWNjZXNzaWJsZQo+PiBmcm9tIHJlYWwgbW9kZSB0aG91
-Z2guCj4+Cj4+IFNvIHRvIGtlZXAgY2FsbGluZyB0aGUgZnVuY3Rpb24sIGxldCdzIHR1cm4gb24g
-TVNSX0RSIHdoaWxlIHdlIGNhbGwgaXQuCj4+IFRoYXQgd2F5LCBhbGwgcG9pbnRlciByZWZlcmVu
-Y2VzIHRvIHRoZSBzdGFjayBhcmUgaGFuZGxlZCB2aXJ0dWFsbHkuCj4gSXMgdGhlIHN5c3RlbSBy
-ZWFkeSB0byBoYW5kbGUgYSBEU0kgaW4gY2FzZSB0aGUgc3RhY2sgaXMgbm90IG1hcHBlZCA/CgoK
-QSBEU0kgaXRzZWxmIHdpbGwgYmUgYW4gaW50ZXJydXB0IGFnYWluIHdoaWNoIHdpbGwgaW4gdHVy
-biBkZXN0cm95IHRoZSAKU1BSRyB0aGF0IHdlJ3JlIHNhdmluZy4gR3Vlc3MgSSB3YXMgdHJ5aW5n
-IHRvIGJlIHRvbyBzbWFydCA6KS4gSSdsbCB1c2UgCk1hdHQncyBvcmlnaW5hbCBzdWdnZXN0aW9u
-IGFuZCBqdXN0IHB1dCBpdCBvbiB0aGUgc3RhY2suCgoKPj4gSW4gYWRkaXRpb24sIG1ha2Ugc3Vy
-ZSB0byBzYXZlL3Jlc3RvcmUgcjEyIGluIGFuIFNQUkcsIGFzIGl0IG1heSBnZXQKPj4gY2xvYmJl
-cmVkIGJ5IHRoZSBDIGZ1bmN0aW9uLgo+Pgo+PiBSZXBvcnRlZC1ieTogTWF0dCBFdmFucyA8bWF0
-dEBvemxhYnMub3JnPgo+PiBGaXhlczogODYzNzcxYTI4ZTI3ICgicG93ZXJwYy8zMnM6IENvbnZl
-cnQgc3dpdGNoX21tdV9jb250ZXh0KCkgdG8gQyIpCj4gT29wcywgc29ycnkgZm9yIHRoYXQuIEkg
-ZGlkbid0IHJlYWxpc2UgdGhhdCB0aGVyZSB3YXMgb3RoZXIgY2FsbGVycyB0bwo+IHN3aXRjaF9t
-bXVfY29udGV4dCgpIHRoYW4gc3dpdGNoX21tX2lycXNfb2ZmKCkuCgoKTm8gd29ycmllcywgdGhl
-IGNvbXBpbGVkIEMgdmVyc2lvbiBsb29rcyBhIGxvdCBuaWNlciB0aGFuIHRoZSBwcmV2aW91cyAK
-YXNtIG9uZSAtIGFuZCBpdCB3YXMgYSBnb29kIHdheSB0byBpZGVudGlmeSB3aGV0aGVyIHRoZXJl
-IHN0aWxsIGFyZSAKdXNlcnMgb2YgS1ZNIG9uIEJvb2szUyAzMmJpdCBvdXQgdGhlcmUgOikKCgpB
-bGV4CgoKCgoKQW1hem9uIERldmVsb3BtZW50IENlbnRlciBHZXJtYW55IEdtYkgKS3JhdXNlbnN0
-ci4gMzgKMTAxMTcgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzogQ2hyaXN0aWFuIFNjaGxhZWdl
-ciwgSm9uYXRoYW4gV2Vpc3MKRWluZ2V0cmFnZW4gYW0gQW10c2dlcmljaHQgQ2hhcmxvdHRlbmJ1
-cmcgdW50ZXIgSFJCIDE0OTE3MyBCClNpdHo6IEJlcmxpbgpVc3QtSUQ6IERFIDI4OSAyMzcgODc5
-CgoK
+On Mon, May 09, 2022 at 02:48:15PM +0200, Christian Brauner wrote:
+> One comment about this. We really need to have this interface support
+> giving us mount options like "relatime" back in numeric form (I assume
+> this will be possible.). It is royally annoying having to maintain a
+> mapping table in userspace just to do:
+> 
+> relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
+> ro	 -> MS_RDONLY/MOUNT_ATTR_RDONLY
+> 
+> A library shouldn't be required to use this interface. Conservative
+> low-level software that keeps its shared library dependencies minimal
+> will need to be able to use that interface without having to go to an
+> external library that transforms text-based output to binary form (Which
+> I'm very sure will need to happen if we go with a text-based
+> interface.).
+
+Sounds like David's fsinfo() :-)
+
+We need an interface where the kernel returns a consistent mount table    
+entry (more syscalls to get more key=value could be a way how to get
+inconsistent data).                                              
+
+IMHO all the attempts to make a trivial interface will be unsuccessful
+because the mount table is complex (tree) and mixes strings, paths,
+and flags. We will always end with a complex interface or complex
+strings (like the last xatts attempt). There is no 3rd path to go ...
+
+The best would be simplified fsinfo() where userspace defines
+a request (wanted "keys"), and the kernel fills a buffer with data
+separated by some header metadata struct. In this case, the kernel can
+return strings and structs with binary data.  
+
+
+I'd love something like:
+
+ssize_t sz;
+fsinfo_query query[] = {
+    { .request = FSINFO_MOUNT_PATH },
+    { .request = FSINFO_PROPAGATION },
+    { .request = FSINFO_CHILDREN_IDS },
+};
+
+sz = fsinfo(dfd, "", AT_EMPTY_PATH,
+                &query, ARRAY_SIZE(query),
+                buf, sizeof(buf));
+
+for (p = buf; p < buf + sz; ) {
+{
+    fsinfo_entry *e = (struct fsinfo_entry) p;
+    char *data = p + sizeof(struct fsinfo_entry);
+
+    switch(e->request) {
+    case FSINFO_MOUNT_PATH:
+        printf("mountpoint %s\n", data);
+        break;
+    case FSINFO_PROPAGATION:
+        printf("propagation %x\n", (uintptr_t) data);
+        break;
+    case FSINFO_CHILDREN_IDS:
+        fsinfo_child *x = (fsinfo_child *) data;
+        for (i = 0; i < e->count; i++) {
+            printf("child: %d\n", x[i].mnt_id);
+        }
+        break;
+    ...
+    }
+
+    p += sizeof(struct fsinfo_entry) + e->len;
+}
+
+
+
+... my two cents :-)
+
+    Karel
+
+-- 
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
 

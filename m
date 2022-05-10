@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53CD521B37
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCA4521BFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245222AbiEJOJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S1344776AbiEJO1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244914AbiEJNrG (ORCPT
+        with ESMTP id S245204AbiEJN5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:06 -0400
+        Tue, 10 May 2022 09:57:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA7A20132F;
-        Tue, 10 May 2022 06:32:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529412CC13F;
+        Tue, 10 May 2022 06:38:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAD55B81D24;
-        Tue, 10 May 2022 13:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B89C385A6;
-        Tue, 10 May 2022 13:32:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18639B81D7A;
+        Tue, 10 May 2022 13:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0BAC385A6;
+        Tue, 10 May 2022 13:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189557;
-        bh=nsYj24W1bTk5Ofb8/SeUcbT+QYBRqpKP3d3ebJkFHl8=;
+        s=korg; t=1652189932;
+        bh=FM+9f0lcvYb+RKVxJEYtJHTrKZyJPaTJRirnGzdUu8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y0lNAii9YAqqD9tbZdm/wKI4C2tn4z1g6cqblk/XV8O/NXjZ8SV0+AxBEKzVKstar
-         pP9qmKVbjDovqCnd8HFNiuGS/YCrT5T3VpKBx3qvEkgXTAMiaYwCPzfLp55tjVPIni
-         bdaw5JxEBkG0UahDdF1f0gUABPX/9ySYdoK3p+hI=
+        b=nBjm09h9hiUhO7JytnheFScUWhHM8YvT1ifKHeFsMkt2GDFBuhk043JNhflgXcaIn
+         Zsbl2AvOvvr5QhoJdNK75AUsx6IpnacZp3TNfsjBNxmFd5PWvJbA5SSRrrHyndAMyK
+         PLvdKxU90ER3/DoGARLkPsNhY2mT1XRmc+vSNTL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nirmoy Das <nirmoy.das@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 082/135] drm/amdgpu: unify BO evicting method in amdgpu_ttm
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.17 074/140] net/mlx5e: Lag, Dont skip fib events on current dst
 Date:   Tue, 10 May 2022 15:07:44 +0200
-Message-Id: <20220510130742.763825220@linuxfoundation.org>
+Message-Id: <20220510130743.732558194@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,199 +55,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nirmoy Das <nirmoy.das@amd.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-commit 58144d283712c9e80e528e001af6ac5aeee71af2 upstream.
+commit 4a2a664ed87962c4ddb806a84b5c9634820bcf55 upstream.
 
-Unify BO evicting functionality for possible memory
-types in amdgpu_ttm.c.
+Referenced change added check to skip updating fib when new fib instance
+has same or lower priority. However, new fib instance can be an update on
+same dst address as existing one even though the structure is another
+instance that has different address. Ignoring events on such instances
+causes multipath LAG state to not be correctly updated.
 
-Signed-off-by: Nirmoy Das <nirmoy.das@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Track 'dst' and 'dst_len' fields of fib event fib_entry_notifier_info
+structure and don't skip events that have the same value of that fields.
+
+Fixes: ad11c4f1d8fd ("net/mlx5e: Lag, Only handle events from highest priority multipath entry")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c |    8 ++-----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c  |   30 ++++++++++++++++++++++------
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c  |   23 ---------------------
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.h  |    1 
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c     |   30 ++++++++++++++++++++++++++++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h     |    1 
- 6 files changed, 58 insertions(+), 35 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c |   20 ++++++++++++--------
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.h |    2 ++
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -1176,7 +1176,7 @@ static int amdgpu_debugfs_evict_vram(voi
- 		return r;
- 	}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c
+@@ -100,10 +100,12 @@ static void mlx5_lag_fib_event_flush(str
+ 	flush_workqueue(mp->wq);
+ }
  
--	*val = amdgpu_bo_evict_vram(adev);
-+	*val = amdgpu_ttm_evict_resources(adev, TTM_PL_VRAM);
- 
- 	pm_runtime_mark_last_busy(dev->dev);
- 	pm_runtime_put_autosuspend(dev->dev);
-@@ -1189,17 +1189,15 @@ static int amdgpu_debugfs_evict_gtt(void
+-static void mlx5_lag_fib_set(struct lag_mp *mp, struct fib_info *fi)
++static void mlx5_lag_fib_set(struct lag_mp *mp, struct fib_info *fi, u32 dst, int dst_len)
  {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)data;
- 	struct drm_device *dev = adev_to_drm(adev);
--	struct ttm_resource_manager *man;
- 	int r;
+ 	mp->fib.mfi = fi;
+ 	mp->fib.priority = fi->fib_priority;
++	mp->fib.dst = dst;
++	mp->fib.dst_len = dst_len;
+ }
  
- 	r = pm_runtime_get_sync(dev->dev);
- 	if (r < 0) {
--		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
-+		pm_runtime_put_autosuspend(dev->dev);
- 		return r;
+ struct mlx5_fib_event_work {
+@@ -116,10 +118,10 @@ struct mlx5_fib_event_work {
+ 	};
+ };
+ 
+-static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+-				     unsigned long event,
+-				     struct fib_info *fi)
++static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev, unsigned long event,
++				     struct fib_entry_notifier_info *fen_info)
+ {
++	struct fib_info *fi = fen_info->fi;
+ 	struct lag_mp *mp = &ldev->lag_mp;
+ 	struct fib_nh *fib_nh0, *fib_nh1;
+ 	unsigned int nhs;
+@@ -133,7 +135,9 @@ static void mlx5_lag_fib_route_event(str
  	}
  
--	man = ttm_manager_type(&adev->mman.bdev, TTM_PL_TT);
--	*val = ttm_resource_manager_evict_all(&adev->mman.bdev, man);
-+	*val = amdgpu_ttm_evict_resources(adev, TTM_PL_TT);
+ 	/* Handle multipath entry with lower priority value */
+-	if (mp->fib.mfi && mp->fib.mfi != fi && fi->fib_priority >= mp->fib.priority)
++	if (mp->fib.mfi && mp->fib.mfi != fi &&
++	    (mp->fib.dst != fen_info->dst || mp->fib.dst_len != fen_info->dst_len) &&
++	    fi->fib_priority >= mp->fib.priority)
+ 		return;
  
- 	pm_runtime_mark_last_busy(dev->dev);
- 	pm_runtime_put_autosuspend(dev->dev);
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -3928,6 +3928,25 @@ void amdgpu_device_fini_sw(struct amdgpu
+ 	/* Handle add/replace event */
+@@ -149,7 +153,7 @@ static void mlx5_lag_fib_route_event(str
  
- }
+ 			i++;
+ 			mlx5_lag_set_port_affinity(ldev, i);
+-			mlx5_lag_fib_set(mp, fi);
++			mlx5_lag_fib_set(mp, fi, fen_info->dst, fen_info->dst_len);
+ 		}
  
-+/**
-+ * amdgpu_device_evict_resources - evict device resources
-+ * @adev: amdgpu device object
-+ *
-+ * Evicts all ttm device resources(vram BOs, gart table) from the lru list
-+ * of the vram memory type. Mainly used for evicting device resources
-+ * at suspend time.
-+ *
-+ */
-+static void amdgpu_device_evict_resources(struct amdgpu_device *adev)
-+{
-+	/* No need to evict vram on APUs for suspend to ram */
-+	if (adev->in_s3 && (adev->flags & AMD_IS_APU))
-+		return;
-+
-+	if (amdgpu_ttm_evict_resources(adev, TTM_PL_VRAM))
-+		DRM_WARN("evicting device resources failed\n");
-+
-+}
- 
- /*
-  * Suspend & resume.
-@@ -3968,17 +3987,16 @@ int amdgpu_device_suspend(struct drm_dev
- 	if (!adev->in_s0ix)
- 		amdgpu_amdkfd_suspend(adev, adev->in_runpm);
- 
--	/* evict vram memory */
--	amdgpu_bo_evict_vram(adev);
-+	/* First evict vram memory */
-+	amdgpu_device_evict_resources(adev);
- 
- 	amdgpu_fence_driver_hw_fini(adev);
- 
- 	amdgpu_device_ip_suspend_phase2(adev);
--	/* evict remaining vram memory
--	 * This second call to evict vram is to evict the gart page table
--	 * using the CPU.
-+	/* This second call to evict device resources is to evict
-+	 * the gart page table using the CPU.
- 	 */
--	amdgpu_bo_evict_vram(adev);
-+	amdgpu_device_evict_resources(adev);
- 
- 	return 0;
- }
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@ -1038,29 +1038,6 @@ void amdgpu_bo_unpin(struct amdgpu_bo *b
+ 		return;
+@@ -179,7 +183,7 @@ static void mlx5_lag_fib_route_event(str
  	}
+ 
+ 	mlx5_lag_set_port_affinity(ldev, MLX5_LAG_NORMAL_AFFINITY);
+-	mlx5_lag_fib_set(mp, fi);
++	mlx5_lag_fib_set(mp, fi, fen_info->dst, fen_info->dst_len);
  }
  
--/**
-- * amdgpu_bo_evict_vram - evict VRAM buffers
-- * @adev: amdgpu device object
-- *
-- * Evicts all VRAM buffers on the lru list of the memory type.
-- * Mainly used for evicting vram at suspend time.
-- *
-- * Returns:
-- * 0 for success or a negative error code on failure.
-- */
--int amdgpu_bo_evict_vram(struct amdgpu_device *adev)
--{
--	struct ttm_resource_manager *man;
--
--	if (adev->in_s3 && (adev->flags & AMD_IS_APU)) {
--		/* No need to evict vram on APUs for suspend to ram */
--		return 0;
--	}
--
--	man = ttm_manager_type(&adev->mman.bdev, TTM_PL_VRAM);
--	return ttm_resource_manager_evict_all(&adev->mman.bdev, man);
--}
--
- static const char *amdgpu_vram_names[] = {
- 	"UNKNOWN",
- 	"GDDR1",
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.h
-@@ -304,7 +304,6 @@ int amdgpu_bo_pin(struct amdgpu_bo *bo,
- int amdgpu_bo_pin_restricted(struct amdgpu_bo *bo, u32 domain,
- 			     u64 min_offset, u64 max_offset);
- void amdgpu_bo_unpin(struct amdgpu_bo *bo);
--int amdgpu_bo_evict_vram(struct amdgpu_device *adev);
- int amdgpu_bo_init(struct amdgpu_device *adev);
- void amdgpu_bo_fini(struct amdgpu_device *adev);
- int amdgpu_bo_set_tiling_flags(struct amdgpu_bo *bo, u64 tiling_flags);
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2036,6 +2036,36 @@ error_free:
- 	return r;
- }
- 
-+/**
-+ * amdgpu_ttm_evict_resources - evict memory buffers
-+ * @adev: amdgpu device object
-+ * @mem_type: evicted BO's memory type
-+ *
-+ * Evicts all @mem_type buffers on the lru list of the memory type.
-+ *
-+ * Returns:
-+ * 0 for success or a negative error code on failure.
-+ */
-+int amdgpu_ttm_evict_resources(struct amdgpu_device *adev, int mem_type)
-+{
-+	struct ttm_resource_manager *man;
-+
-+	switch (mem_type) {
-+	case TTM_PL_VRAM:
-+	case TTM_PL_TT:
-+	case AMDGPU_PL_GWS:
-+	case AMDGPU_PL_GDS:
-+	case AMDGPU_PL_OA:
-+		man = ttm_manager_type(&adev->mman.bdev, mem_type);
-+		break;
-+	default:
-+		DRM_ERROR("Trying to evict invalid memory type\n");
-+		return -EINVAL;
-+	}
-+
-+	return ttm_resource_manager_evict_all(&adev->mman.bdev, man);
-+}
-+
- #if defined(CONFIG_DEBUG_FS)
- 
- static int amdgpu_mm_vram_table_show(struct seq_file *m, void *unused)
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
-@@ -190,6 +190,7 @@ bool amdgpu_ttm_tt_is_readonly(struct tt
- uint64_t amdgpu_ttm_tt_pde_flags(struct ttm_tt *ttm, struct ttm_resource *mem);
- uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
- 				 struct ttm_resource *mem);
-+int amdgpu_ttm_evict_resources(struct amdgpu_device *adev, int mem_type);
- 
- void amdgpu_ttm_debugfs_init(struct amdgpu_device *adev);
- 
+ static void mlx5_lag_fib_nexthop_event(struct mlx5_lag *ldev,
+@@ -220,7 +224,7 @@ static void mlx5_lag_fib_update(struct w
+ 	case FIB_EVENT_ENTRY_REPLACE:
+ 	case FIB_EVENT_ENTRY_DEL:
+ 		mlx5_lag_fib_route_event(ldev, fib_work->event,
+-					 fib_work->fen_info.fi);
++					 &fib_work->fen_info);
+ 		fib_info_put(fib_work->fen_info.fi);
+ 		break;
+ 	case FIB_EVENT_NH_ADD:
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.h
+@@ -18,6 +18,8 @@ struct lag_mp {
+ 	struct {
+ 		const void        *mfi; /* used in tracking fib events */
+ 		u32               priority;
++		u32               dst;
++		int               dst_len;
+ 	} fib;
+ 	struct workqueue_struct   *wq;
+ };
 
 

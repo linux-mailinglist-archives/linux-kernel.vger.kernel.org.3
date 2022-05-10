@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E90521BF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4587C521B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344291AbiEJO0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S244995AbiEJOIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244341AbiEJNwy (ORCPT
+        with ESMTP id S244693AbiEJNq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F7E7A81D;
-        Tue, 10 May 2022 06:38:19 -0700 (PDT)
+        Tue, 10 May 2022 09:46:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7FB173350;
+        Tue, 10 May 2022 06:31:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B85A1618A6;
-        Tue, 10 May 2022 13:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AACDFC385A6;
-        Tue, 10 May 2022 13:38:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5EF75CE1EF7;
+        Tue, 10 May 2022 13:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781F2C385A6;
+        Tue, 10 May 2022 13:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189899;
-        bh=x9FNJaZ9Ldy9h7nrfhuU9gWW1aSmkPn7QTppmhyRPL4=;
+        s=korg; t=1652189510;
+        bh=p3x2/3akNAtRt+p0xbegcWAmT13/WUYjwP+8L5oj3zY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JbbQLtL+puFbR//Ar306y/JHVBoRJtQjcq94EnvGzyPsYKt8SHsmxkNbWGbYtme1h
-         XA8PU3RRCOInw0xHA1ZFH6JYNMGLTE2wyoOrMVBT7My2bHfWMearQlPxjmpfFp7oY0
-         YcGsCyXST1bIG4fpGTS82q66uj9vlqOjK5R/fK5Q=
+        b=Uryts6qXQvzgZh87+F/ZncU6pi8069Dj62VnV9qf85UFDekmLLexqbRBOgR5+W1k3
+         uk7R4Qp2za7fowvg3OwtxkZMueW6tGKKzoXoLwLqZ+UkrVoxaFjZAIFkJzOc9CibwL
+         vRizHbtFUPPPMkYvFfqdj+bOOp/hf3xNrbzJgA98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.17 064/140] net/mlx5: Fix slab-out-of-bounds while reading resource dump menu
-Date:   Tue, 10 May 2022 15:07:34 +0200
-Message-Id: <20220510130743.449998596@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Taehee Yoo <ap420073@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 073/135] mld: respect RCU rules in ip6_mc_source() and ip6_mc_msfilter()
+Date:   Tue, 10 May 2022 15:07:35 +0200
+Message-Id: <20220510130742.506192143@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,146 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aya Levin <ayal@nvidia.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 7ba2d9d8de96696c1451fee1b01da11f45bdc2b9 upstream.
+commit a9384a4c1d250cb40cebf50e41459426d160b08e upstream.
 
-Resource dump menu may span over more than a single page, support it.
-Otherwise, menu read may result in a memory access violation: reading
-outside of the allocated page.
-Note that page format of the first menu page contains menu headers while
-the proceeding menu pages contain only records.
+Whenever RCU protected list replaces an object,
+the pointer to the new object needs to be updated
+_before_ the call to kfree_rcu() or call_rcu()
 
-The KASAN logs are as follows:
-BUG: KASAN: slab-out-of-bounds in strcmp+0x9b/0xb0
-Read of size 1 at addr ffff88812b2e1fd0 by task systemd-udevd/496
+Also ip6_mc_msfilter() needs to update the pointer
+before releasing the mc_lock mutex.
 
-CPU: 5 PID: 496 Comm: systemd-udevd Tainted: G    B  5.16.0_for_upstream_debug_2022_01_10_23_12 #1
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x57/0x7d
- print_address_description.constprop.0+0x1f/0x140
- ? strcmp+0x9b/0xb0
- ? strcmp+0x9b/0xb0
- kasan_report.cold+0x83/0xdf
- ? strcmp+0x9b/0xb0
- strcmp+0x9b/0xb0
- mlx5_rsc_dump_init+0x4ab/0x780 [mlx5_core]
- ? mlx5_rsc_dump_destroy+0x80/0x80 [mlx5_core]
- ? lockdep_hardirqs_on_prepare+0x286/0x400
- ? raw_spin_unlock_irqrestore+0x47/0x50
- ? aomic_notifier_chain_register+0x32/0x40
- mlx5_load+0x104/0x2e0 [mlx5_core]
- mlx5_init_one+0x41b/0x610 [mlx5_core]
- ....
-The buggy address belongs to the object at ffff88812b2e0000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 4048 bytes to the right of
- 4096-byte region [ffff88812b2e0000, ffff88812b2e1000)
-The buggy address belongs to the page:
-page:000000009d69807a refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88812b2e6000 pfn:0x12b2e0
-head:000000009d69807a order:3 compound_mapcount:0 compound_pincount:0
-flags: 0x8000000000010200(slab|head|zone=2)
-raw: 8000000000010200 0000000000000000 dead000000000001 ffff888100043040
-raw: ffff88812b2e6000 0000000080040000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+Note that linux-5.13 was supporting kfree_rcu(NULL, rcu),
+so this fix does not need the conditional test I was
+forced to use in the equivalent patch for IPv4.
 
-Memory state around the buggy address:
- ffff88812b2e1e80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88812b2e1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88812b2e1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                                 ^
- ffff88812b2e2000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88812b2e2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Fixes: 12206b17235a ("net/mlx5: Add support for resource dump")
-Signed-off-by: Aya Levin <ayal@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 882ba1f73c06 ("mld: convert ipv6_mc_socklist->sflist to RCU")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c |   31 ++++++++++++----
- 1 file changed, 25 insertions(+), 6 deletions(-)
+ net/ipv6/mcast.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c
-@@ -31,6 +31,7 @@ static const char *const mlx5_rsc_sgmt_n
- struct mlx5_rsc_dump {
- 	u32 pdn;
- 	u32 mkey;
-+	u32 number_of_menu_items;
- 	u16 fw_segment_type[MLX5_SGMT_TYPE_NUM];
- };
- 
-@@ -50,21 +51,37 @@ static int mlx5_rsc_dump_sgmt_get_by_nam
- 	return -EINVAL;
- }
- 
--static void mlx5_rsc_dump_read_menu_sgmt(struct mlx5_rsc_dump *rsc_dump, struct page *page)
-+#define MLX5_RSC_DUMP_MENU_HEADER_SIZE (MLX5_ST_SZ_BYTES(resource_dump_info_segment) + \
-+					MLX5_ST_SZ_BYTES(resource_dump_command_segment) + \
-+					MLX5_ST_SZ_BYTES(resource_dump_menu_segment))
-+
-+static int mlx5_rsc_dump_read_menu_sgmt(struct mlx5_rsc_dump *rsc_dump, struct page *page,
-+					int read_size, int start_idx)
- {
- 	void *data = page_address(page);
- 	enum mlx5_sgmt_type sgmt_idx;
- 	int num_of_items;
- 	char *sgmt_name;
- 	void *member;
-+	int size = 0;
- 	void *menu;
- 	int i;
- 
--	menu = MLX5_ADDR_OF(menu_resource_dump_response, data, menu);
--	num_of_items = MLX5_GET(resource_dump_menu_segment, menu, num_of_records);
-+	if (!start_idx) {
-+		menu = MLX5_ADDR_OF(menu_resource_dump_response, data, menu);
-+		rsc_dump->number_of_menu_items = MLX5_GET(resource_dump_menu_segment, menu,
-+							  num_of_records);
-+		size = MLX5_RSC_DUMP_MENU_HEADER_SIZE;
-+		data += size;
-+	}
-+	num_of_items = rsc_dump->number_of_menu_items;
-+
-+	for (i = 0; start_idx + i < num_of_items; i++) {
-+		size += MLX5_ST_SZ_BYTES(resource_dump_menu_record);
-+		if (size >= read_size)
-+			return start_idx + i;
- 
--	for (i = 0; i < num_of_items; i++) {
--		member = MLX5_ADDR_OF(resource_dump_menu_segment, menu, record[i]);
-+		member = data + MLX5_ST_SZ_BYTES(resource_dump_menu_record) * i;
- 		sgmt_name =  MLX5_ADDR_OF(resource_dump_menu_record, member, segment_name);
- 		sgmt_idx = mlx5_rsc_dump_sgmt_get_by_name(sgmt_name);
- 		if (sgmt_idx == -EINVAL)
-@@ -72,6 +89,7 @@ static void mlx5_rsc_dump_read_menu_sgmt
- 		rsc_dump->fw_segment_type[sgmt_idx] = MLX5_GET(resource_dump_menu_record,
- 							       member, segment_type);
+diff --git a/net/ipv6/mcast.c b/net/ipv6/mcast.c
+index 909f937befd7..7f695c39d9a8 100644
+--- a/net/ipv6/mcast.c
++++ b/net/ipv6/mcast.c
+@@ -460,10 +460,10 @@ int ip6_mc_source(int add, int omode, struct sock *sk,
+ 				newpsl->sl_addr[i] = psl->sl_addr[i];
+ 			atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
+ 				   &sk->sk_omem_alloc);
+-			kfree_rcu(psl, rcu);
+ 		}
++		rcu_assign_pointer(pmc->sflist, newpsl);
++		kfree_rcu(psl, rcu);
+ 		psl = newpsl;
+-		rcu_assign_pointer(pmc->sflist, psl);
  	}
-+	return 0;
- }
- 
- static int mlx5_rsc_dump_trigger(struct mlx5_core_dev *dev, struct mlx5_rsc_dump_cmd *cmd,
-@@ -168,6 +186,7 @@ static int mlx5_rsc_dump_menu(struct mlx
- 	struct mlx5_rsc_dump_cmd *cmd = NULL;
- 	struct mlx5_rsc_key key = {};
- 	struct page *page;
-+	int start_idx = 0;
- 	int size;
- 	int err;
- 
-@@ -189,7 +208,7 @@ static int mlx5_rsc_dump_menu(struct mlx
- 		if (err < 0)
- 			goto destroy_cmd;
- 
--		mlx5_rsc_dump_read_menu_sgmt(dev->rsc_dump, page);
-+		start_idx = mlx5_rsc_dump_read_menu_sgmt(dev->rsc_dump, page, size, start_idx);
- 
- 	} while (err > 0);
- 
+ 	rv = 1;	/* > 0 for insert logic below if sl_count is 0 */
+ 	for (i = 0; i < psl->sl_count; i++) {
+@@ -565,12 +565,12 @@ int ip6_mc_msfilter(struct sock *sk, struct group_filter *gsf,
+ 			       psl->sl_count, psl->sl_addr, 0);
+ 		atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
+ 			   &sk->sk_omem_alloc);
+-		kfree_rcu(psl, rcu);
+ 	} else {
+ 		ip6_mc_del_src(idev, group, pmc->sfmode, 0, NULL, 0);
+ 	}
+-	mutex_unlock(&idev->mc_lock);
+ 	rcu_assign_pointer(pmc->sflist, newpsl);
++	mutex_unlock(&idev->mc_lock);
++	kfree_rcu(psl, rcu);
+ 	pmc->sfmode = gsf->gf_fmode;
+ 	err = 0;
+ done:
+-- 
+2.36.1
+
 
 

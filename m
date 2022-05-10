@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DB75218AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD93521958
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243563AbiEJNjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S244417AbiEJNqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242769AbiEJNYq (ORCPT
+        with ESMTP id S243896AbiEJNcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:24:46 -0400
+        Tue, 10 May 2022 09:32:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB601D5268;
-        Tue, 10 May 2022 06:17:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5D17DDDA;
+        Tue, 10 May 2022 06:23:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AC9CB81CE7;
-        Tue, 10 May 2022 13:17:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EBBC385C9;
-        Tue, 10 May 2022 13:17:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CD03B81DA5;
+        Tue, 10 May 2022 13:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F5EC385C2;
+        Tue, 10 May 2022 13:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188647;
-        bh=nkxvK/LmljPa2TgaOh3D/laoycyV7JXVdk9NozXoCvo=;
+        s=korg; t=1652189003;
+        bh=Z2pZtBar+OQYj0jU1RiRltmhY7KwuBZhswUXMFNU2Ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YpbozLKwRFQXJu3YQF0Hx6YRGzGzVC9WuOPwtTjIF9SQtIpSjqF3nx0T0gfw6pk+b
-         RG2/n3uCAz8crCiJrfnrym584xiVtcfow0FjIJ6gQpx02hxBR85KXOXBzbxNE20ux9
-         T4SKBitKCWkajpOSlSbsbE6xJs2e3C9fQ622hVHs=
+        b=vizXUPIY92p2np+RFS9bFrdWOAmkWBqG0C3AQTgM7OEHHqBAlggEvb4AzI66GyoNg
+         6e4YtwZssCDmSEYJ/gsis2cDPT5Z6vDERqU60bgAzuq8bm/Z+t3JFD5fZtIrIIAMe0
+         llh9OqwoAaFi18VD1qpc7Jop/snEGeBZTNtB+5nE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 74/78] net: ipv6: ensure we call ipv6_mc_down() at most once
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 31/52] smsc911x: allow using IRQ0
 Date:   Tue, 10 May 2022 15:08:00 +0200
-Message-Id: <20220510130734.719777234@linuxfoundation.org>
+Message-Id: <20220510130730.763739609@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,95 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: j.nixdorf@avm.de <j.nixdorf@avm.de>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
+commit 5ef9b803a4af0f5e42012176889b40bb2a978b18 upstream.
 
-There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
-either the network device is actually going down, or IPv6 was disabled
-on the interface.
+The AlphaProject AP-SH4A-3A/AP-SH4AD-0A SH boards use IRQ0 for their SMSC
+LAN911x Ethernet chip, so the networking on them must have been broken by
+commit 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
+which filtered out 0 as well as the negative error codes -- it was kinda
+correct at the time, as platform_get_irq() could return 0 on of_irq_get()
+failure and on the actual 0 in an IRQ resource.  This issue was fixed by
+me (back in 2016!), so we should be able to fix this driver to allow IRQ0
+usage again...
 
-If either of them stays down while the other is toggled, we repeatedly
-call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
-calling the corresponding ipv6_mc_up() in between. This will cause a
-new entry in idev->mc_tomb to be allocated for each multicast group
-the interface is subscribed to, which in turn leaks one struct ifmcaddr6
-per nontrivial multicast group the interface is subscribed to.
+When merging this to the stable kernels, make sure you also merge commit
+e330b9a6bb35 ("platform: don't return 0 from platform_get_irq[_byname]()
+on error") -- that's my fix to platform_get_irq() for the DT platforms...
 
-The following reproducer will leak at least $n objects:
-
-ip addr add ff2e::4242/32 dev eth0 autojoin
-sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
-for i in $(seq 1 $n); do
-	ip link set up eth0; ip link set down eth0
-done
-
-Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
-sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
-can also be used to create a nontrivial idev->mc_list, which will the
-leak objects with the right up-down-sequence.
-
-Based on both sources for NETDEV_DOWN events the interface IPv6 state
-should be considered:
-
- - not ready if the network interface is not ready OR IPv6 is disabled
-   for it
- - ready if the network interface is ready AND IPv6 is enabled for it
-
-The functions ipv6_mc_up() and ipv6_down() should only be run when this
-state changes.
-
-Implement this by remembering when the IPv6 state is ready, and only
-run ipv6_mc_down() if it actually changed from ready to not ready.
-
-The other direction (not ready -> ready) already works correctly, as:
-
- - the interface notification triggered codepath for NETDEV_UP /
-   NETDEV_CHANGE returns early if ipv6 is disabled, and
- - the disable_ipv6=0 triggered codepath skips fully initializing the
-   interface as long as addrconf_link_ready(dev) returns false
- - calling ipv6_mc_up() repeatedly does not leak anything
-
-Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[jnixdorf: context updated for bpo to v4.9/v4.14]
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
+Fixes: 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Link: https://lore.kernel.org/r/656036e4-6387-38df-b8a7-6ba683b16e63@omp.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/addrconf.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/smsc/smsc911x.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3580,6 +3580,7 @@ static int addrconf_ifdown(struct net_de
- 	struct list_head del_list;
- 	int _keep_addr;
- 	bool keep_addr;
-+	bool was_ready;
- 	int state, i;
- 
- 	ASSERT_RTNL();
-@@ -3643,7 +3644,10 @@ restart:
- 
- 	addrconf_del_rs_timer(idev);
- 
--	/* Step 2: clear flags for stateless addrconf */
-+	/* Step 2: clear flags for stateless addrconf, repeated down
-+	 *         detection
-+	 */
-+	was_ready = idev->if_flags & IF_READY;
- 	if (!how)
- 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
- 
-@@ -3730,7 +3734,7 @@ restart:
- 	if (how) {
- 		ipv6_ac_destroy_dev(idev);
- 		ipv6_mc_destroy_dev(idev);
--	} else {
-+	} else if (was_ready) {
- 		ipv6_mc_down(idev);
- 	}
- 
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -2433,7 +2433,7 @@ static int smsc911x_drv_probe(struct pla
+ 	if (irq == -EPROBE_DEFER) {
+ 		retval = -EPROBE_DEFER;
+ 		goto out_0;
+-	} else if (irq <= 0) {
++	} else if (irq < 0) {
+ 		pr_warn("Could not allocate irq resource\n");
+ 		retval = -ENODEV;
+ 		goto out_0;
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DEB521745
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56739521908
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242677AbiEJNYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S243873AbiEJNlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243058AbiEJNVW (ORCPT
+        with ESMTP id S243899AbiEJN1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:22 -0400
+        Tue, 10 May 2022 09:27:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FD32C13C2;
-        Tue, 10 May 2022 06:14:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6665C2C255E;
+        Tue, 10 May 2022 06:20:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C4E61668;
-        Tue, 10 May 2022 13:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0256FC385C2;
-        Tue, 10 May 2022 13:14:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA3F616D0;
+        Tue, 10 May 2022 13:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11E4C385A6;
+        Tue, 10 May 2022 13:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188482;
-        bh=/4tIIjSnRVWb5mqxn4GkUSAWWT+Y1OQB5JP/Vz1OeYo=;
+        s=korg; t=1652188845;
+        bh=/A+a3bk4xx74A+u/WRwLO3Lza7C3KHpa+IWrB4azzCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jENOjyM4Po7rqwxvL/8pyilayNTUKbBNnQ2V8oioxxxP3hR+aX7m6Co+BUIJQyL/N
-         l5rgfPAVyEt2/iCwqXf37INh3GbCxSN1X6S2Q8lYeBORnhIsdKFHIWzkHPr1pQi9AA
-         RzPMOy57vkgu9RQgByhzfuLWFUyuHB+IsVxXMJNw=
+        b=OZHvBT5q1gNF9/e32nL+auABysYIyCY0/gJ1d9DUmkrVit2YZrUsFA85rz/ebJ0Me
+         td48BdLq36Diff6cLt2UY9k1EYG2XPc3/PKBvOw32U39s1HrneFuXhq0U+7bbIu8cz
+         nhn5BxeruIFGkXOS3CClEBkq0jmXJJswIMp+1lKM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        stable <stable@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH 4.14 22/78] serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
-Date:   Tue, 10 May 2022 15:07:08 +0200
-Message-Id: <20220510130733.189588990@linuxfoundation.org>
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 24/88] ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
+Date:   Tue, 10 May 2022 15:07:09 +0200
+Message-Id: <20220510130734.447917545@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,70 +50,78 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Fabio Estevam <festevam@gmail.com>
 
-commit 637674fa40059cddcc3ad2212728965072f62ea3 upstream.
+[ Upstream commit fa51e1dc4b91375bc18349663a52395ad585bd3c ]
 
-The EndRun PTP/1588 dual serial port device is based on the Oxford
-Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set
-for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock
-input derived from the 100MHz PCI Express clock.  The clock rate is
-divided by the oversampling rate of 16 as it is supplied to the baud
-rate generator, yielding the baud base of 3906250.
+On a custom carrier board with a i.MX6Q Apalis SoM, the sgtl5000 codec
+on the SoM is often not detected and the following error message is
+seen when the sgtl5000 driver tries to read the ID register:
 
-Replace the incorrect baud base of 4000000 with the right value of
-3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct
-the clock for OxSemi PCIe devices").
+sgtl5000 1-000a: Error reading chip id -6
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: stable <stable@kernel.org>
-Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204181515270.9383@angie.orcam.me.uk
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The reason for the error is that the MCLK clock is not provided
+early enough.
+
+Fix the problem by describing the MCLK pinctrl inside the codec
+node instead of placing it inside the audmux pinctrl group.
+
+With this change applied the sgtl5000 is always detected on every boot.
+
+Fixes: 693e3ffaae5a ("ARM: dts: imx6: Add support for Toradex Apalis iMX6Q/D SoM")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Tim Harvey <tharvey@gateworks.com>
+Acked-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_pci.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -2668,7 +2668,7 @@ enum pci_board_num_t {
- 	pbn_panacom2,
- 	pbn_panacom4,
- 	pbn_plx_romulus,
--	pbn_endrun_2_4000000,
-+	pbn_endrun_2_3906250,
- 	pbn_oxsemi,
- 	pbn_oxsemi_1_4000000,
- 	pbn_oxsemi_2_4000000,
-@@ -3184,10 +3184,10 @@ static struct pciserial_board pci_boards
- 	* signal now many ports are available
- 	* 2 port 952 Uart support
- 	*/
--	[pbn_endrun_2_4000000] = {
-+	[pbn_endrun_2_3906250] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 2,
--		.base_baud	= 4000000,
-+		.base_baud	= 3906250,
- 		.uart_offset	= 0x200,
- 		.first_offset	= 0x1000,
- 	},
-@@ -4039,7 +4039,7 @@ static const struct pci_device_id serial
- 	*/
- 	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_endrun_2_4000000 },
-+		pbn_endrun_2_3906250 },
- 	/*
- 	 * Quatech cards. These actually have configurable clocks but for
- 	 * now we just use the default.
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 05f07ea3e8c8..ed783c91b002 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -313,6 +313,8 @@ vgen6_reg: vgen6 {
+ 	codec: sgtl5000@a {
+ 		compatible = "fsl,sgtl5000";
+ 		reg = <0x0a>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sgtl5000>;
+ 		clocks = <&clks IMX6QDL_CLK_CKO>;
+ 		VDDA-supply = <&reg_module_3v3_audio>;
+ 		VDDIO-supply = <&reg_module_3v3>;
+@@ -540,8 +542,6 @@ MX6QDL_PAD_DISP0_DAT20__AUD4_TXC	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT21__AUD4_TXD	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT22__AUD4_TXFS	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT23__AUD4_RXD	0x130b0
+-			/* SGTL5000 sys_mclk */
+-			MX6QDL_PAD_GPIO_5__CCM_CLKO1		0x130b0
+ 		>;
+ 	};
+ 
+@@ -807,6 +807,12 @@ MX6QDL_PAD_NANDF_CS1__GPIO6_IO14 0x000b0
+ 		>;
+ 	};
+ 
++	pinctrl_sgtl5000: sgtl5000grp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_5__CCM_CLKO1	0x130b0
++		>;
++	};
++
+ 	pinctrl_spdif: spdifgrp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_GPIO_16__SPDIF_IN  0x1b0b0
+-- 
+2.35.1
+
 
 

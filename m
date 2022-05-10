@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D737521BA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0734D521B87
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343537AbiEJOTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S245097AbiEJOQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343560AbiEJNsO (ORCPT
+        with ESMTP id S245712AbiEJNsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:48:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB582B1652;
-        Tue, 10 May 2022 06:36:34 -0700 (PDT)
+        Tue, 10 May 2022 09:48:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925492A974A;
+        Tue, 10 May 2022 06:36:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7FC8B81DB0;
-        Tue, 10 May 2022 13:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE0EC385A6;
-        Tue, 10 May 2022 13:36:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AEBE61889;
+        Tue, 10 May 2022 13:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2211BC385C2;
+        Tue, 10 May 2022 13:36:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189765;
-        bh=bZJsAhefE7TmQsxHE4HZUSdcOMaxLZwLBWLG/XeVUpY=;
+        s=korg; t=1652189768;
+        bh=HrFwwV1kd23kgR1btV299Q1ZWpwAu8d6zvEXiDUPtLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BF1kO9crXbGvl9Nk3ZPRuL+AxAAbWTjLbrQhDqD7mUHDEXRMxZ4LM1lZC9SSIdUY/
-         qXIe1RMC32h6g7jQxHyOPuHcLPa4s+HGu6J+cMCwT3AvJCzV6u9nC8GNX5WwnjaY/K
-         X8cot39tk23BCEY3+JVUOM1vQaXi8FXr4AwMXjJc=
+        b=10V1+YGigaycM63fErFHf+53jfm3reesyh/tysTjcTQMb9QCrCU7rkSlG+0gi2Oyq
+         tb7/nSd2+RcVG9VIrkBOCGhKTqZBoUpUiw5mym6OHNTYwEfbXsEnaqEqEtwymDzTEC
+         J3iPSRPxxHDUjDi7ooXeuNvN0Uz0/RxhYL1pd/Xk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.17 021/140] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware quirk
-Date:   Tue, 10 May 2022 15:06:51 +0200
-Message-Id: <20220510130742.216781277@linuxfoundation.org>
+        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.17 022/140] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
+Date:   Tue, 10 May 2022 15:06:52 +0200
+Message-Id: <20220510130742.246070677@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -54,55 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zev Weiss <zev@bewilderbeest.net>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 08da09f028043fed9653331ae75bc310411f72e6 upstream.
+commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
 
-CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
-power output glitches on the ahe-50dc, so block them from being sent
-at all.
+This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+We must not try to connect the socket while the transport is under
+construction, because the mechanisms to safely tear it down are not in
+place. As the code stands, we end up leaking the sockets on a connection
+error.
+
+Reported-by: wanghai (M) <wanghai38@huawei.com>
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220427035109.3819-1-zev@bewilderbeest.net
-Fixes: d387d88ed045 ("hwmon: (pmbus) Add Delta AHE-50DC fan control module driver")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/pmbus/delta-ahe50dc-fan.c |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ net/sunrpc/xprtsock.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-+++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-@@ -14,6 +14,21 @@
- 
- #define AHE50DC_PMBUS_READ_TEMP4 0xd0
- 
-+static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
-+{
-+	/*
-+	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
-+	 * 5% of the time or so) trigger a problematic phenomenon in which the
-+	 * fan speeds surge momentarily and at least some (perhaps all?) of the
-+	 * system's power outputs experience a glitch.
-+	 *
-+	 * However, according to Delta it should be OK to simply not send any
-+	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
-+	 * reporting any faults anyway), so just blackhole them unconditionally.
-+	 */
-+	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
-+}
-+
- static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
- {
- 	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
-@@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_
- 		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
- 		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
- 	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
-+	.write_byte = ahe50dc_fan_write_byte,
- 	.read_word_data = ahe50dc_fan_read_word_data,
- };
- 
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2867,9 +2867,6 @@ static struct rpc_xprt *xs_setup_local(s
+ 		}
+ 		xprt_set_bound(xprt);
+ 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
+-		ret = ERR_PTR(xs_local_setup_socket(transport));
+-		if (ret)
+-			goto out_err;
+ 		break;
+ 	default:
+ 		ret = ERR_PTR(-EAFNOSUPPORT);
 
 

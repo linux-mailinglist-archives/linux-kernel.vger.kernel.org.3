@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55871521BCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A024521C50
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344299AbiEJOVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S243509AbiEJOec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244978AbiEJNrK (ORCPT
+        with ESMTP id S1344168AbiEJOHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F94E2380E5;
-        Tue, 10 May 2022 06:33:07 -0700 (PDT)
+        Tue, 10 May 2022 10:07:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2124D201317;
+        Tue, 10 May 2022 06:41:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFCCC6182F;
-        Tue, 10 May 2022 13:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE998C385A6;
-        Tue, 10 May 2022 13:33:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E64D6615E9;
+        Tue, 10 May 2022 13:41:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018F4C385A6;
+        Tue, 10 May 2022 13:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189586;
-        bh=nt4Jl+T/r56aML4HwP1tjND6t2tSipFlS5Q/81Noaz0=;
+        s=korg; t=1652190110;
+        bh=yoCwmthqTWLrTpChDssSy8r1GU2Q8VGPcgaoXwsiVu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1nTZlDdt0vVD9IjdDTL4EtmR99YopGjh8XCw4z/FW1VlVVw0qxZ354p2YQ4f+rNrx
-         74YqwV4EFmUsS6lwv/7yk9rbVBBdqmSgOBQzbHXK5eyf4TWAHGuOoAbPqUyjLmOenk
-         s+f9SVReLfsGJEmn7GJ6fky65UYgtLYexxqxdQbo=
+        b=bslENd1HuyKKtn/XNUOE40mKJmYQLNKDGJSsOcgeBR4RKTg0t7u0EXqJqDbIGfocn
+         5PpJvlXO8ugN6HMbdndDg9hfWW9PqUgAtVTEKRCeLljeti2sfbjqD811GyyrbsUAso
+         2jVna7+/AWMVPvBGZRrCfikTFehlv1vnDbAXq3J4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aili Yao <yaoaili@kingsoft.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/135] KVM: LAPIC: Enable timer posted-interrupt only when mwait/hlt is advertised
+        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.17 091/140] selftests/net: so_txtime: fix parsing of start time stamp on 32 bit systems
 Date:   Tue, 10 May 2022 15:08:01 +0200
-Message-Id: <20220510130743.249028835@linuxfoundation.org>
+Message-Id: <20220510130744.211645827@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 1714a4eb6fb0cb79f182873cd011a8ed60ac65e8 ]
+commit 97926d5a847ca1758ad8702ce591e3b05a701e0d upstream.
 
-As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted
-interrupt") mentioned that the host admin should well tune the guest
-setup, so that vCPUs are placed on isolated pCPUs, and with several pCPUs
-surplus for *busy* housekeeping.  In this setup, it is preferrable to
-disable mwait/hlt/pause vmexits to keep the vCPUs in non-root mode.
+This patch fixes the parsing of the cmd line supplied start time on 32
+bit systems. A "long" on 32 bit systems is only 32 bit wide and cannot
+hold a timestamp in nano second resolution.
 
-However, if only some guests isolated and others not, they would not
-have any benefit from posted timer interrupts, and at the same time lose
-VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
-returns true and therefore forces kvm_can_use_hv_timer() to false.
-
-By guaranteeing that posted-interrupt timer is only used if MWAIT or
-HLT are done without vmexit, KVM can make a better choice and use the
-VMX preemption timer and the corresponding fast paths.
-
-Reported-by: Aili Yao <yaoaili@kingsoft.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Cc: Aili Yao <yaoaili@kingsoft.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-Message-Id: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 040806343bb4 ("selftests/net: so_txtime multi-host support")
+Cc: Carlos Llamas <cmllamas@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Carlos Llamas <cmllamas@google.com>
+Link: https://lore.kernel.org/r/20220502094638.1921702-2-mkl@pengutronix.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/lapic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/so_txtime.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 83d1743a1dd0..493d636e6231 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -113,7 +113,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
- 
- static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
- {
--	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-+	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-+		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
- }
- 
- bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
--- 
-2.35.1
-
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/net/so_txtime.c
+@@ -475,7 +475,7 @@ static void parse_opts(int argc, char **
+ 			cfg_rx = true;
+ 			break;
+ 		case 't':
+-			cfg_start_time_ns = strtol(optarg, NULL, 0);
++			cfg_start_time_ns = strtoll(optarg, NULL, 0);
+ 			break;
+ 		case 'm':
+ 			cfg_mark = strtol(optarg, NULL, 0);
 
 

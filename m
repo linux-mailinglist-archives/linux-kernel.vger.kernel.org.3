@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69752173A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289B1521ACA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242712AbiEJNYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S242589AbiEJOEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243144AbiEJNVg (ORCPT
+        with ESMTP id S244773AbiEJNmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7992C1807;
-        Tue, 10 May 2022 06:14:54 -0700 (PDT)
+        Tue, 10 May 2022 09:42:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301AE6C0F6;
+        Tue, 10 May 2022 06:30:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F06DFB81DA0;
-        Tue, 10 May 2022 13:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E3DC385C2;
-        Tue, 10 May 2022 13:14:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E406181B;
+        Tue, 10 May 2022 13:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6436CC385A6;
+        Tue, 10 May 2022 13:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188491;
-        bh=bbuB3klp7gBXlXc0HvRVG1HXiaFEo6yFGRcr8AS1H2s=;
+        s=korg; t=1652189429;
+        bh=g61op7ZwhDPVP/2KksLP31NrhdNotYN2BThA5StsoMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jpu7+xTzQxq6gSwltFljRhsNBkbJuZl9rGLCAOtnBCDdPe7pVm90KOQgKtRnEOEDm
-         thtgJdRkj2UmHjmgToqN6W7jzHg+p4qsMeD9mI4MNLGx1d3J0BPV3rhntpM8QBFhbz
-         h75baZ+WHE79Apo8a23UvczNjx08pLizJe84JGtQ=
+        b=Xx74pf/g8WlazmaPNJIKWHGatsAOoqs89VyCIwHYMbaBv+eYLDgLNJxCzUXKqTbCI
+         E3W6o263vw6+kVoJIJEzmTxeqbM+jYqokr6zqmgoZaCaOfkGsD4+I4xDLdQ8c+nA1t
+         EdFfdCZEyKVHs+HH7b5M/r+MDk/qtcBN97JKYW2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 25/78] USB: Fix xhci event ring dequeue pointer ERDP update issue
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.15 049/135] net/mlx5e: Dont match double-vlan packets if cvlan is not set
 Date:   Tue, 10 May 2022 15:07:11 +0200
-Message-Id: <20220510130733.276202420@linuxfoundation.org>
+Message-Id: <20220510130741.805647965@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-[ Upstream commit e91ac20889d1a26d077cc511365cd7ff4346a6f3 ]
+commit ada09af92e621ab500dd80a16d1d0299a18a1180 upstream.
 
-In some situations software handles TRB events slower than adding TRBs.
-If the number of TRB events to be processed in a given interrupt is exactly
-the same as the event ring size 256, then the local variable
-"event_ring_deq" that holds the initial dequeue position is equal to
-software_dequeue after handling all 256 interrupts.
+Currently, match VLAN rule also matches packets that have multiple VLAN
+headers. This behavior is similar to buggy flower classifier behavior that
+has recently been fixed. Fix the issue by matching on
+outer_second_cvlan_tag with value 0 which will cause the HW to verify the
+packet doesn't contain second vlan header.
 
-It will cause driver to not update ERDP to hardware,
-
-Software dequeue pointer is out of sync with ERDP on interrupt exit.
-On the next interrupt, the event ring may full but driver will not
-update ERDP as software_dequeue is equal to ERDP.
-
-[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
-[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
-[  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
-[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
-[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
-[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
-[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
-
-Hardware ERDP is updated mid event handling if there are more than 128
-events in an interrupt (half of ring size).
-Fix this by updating the software local variable at the same time as
-hardware ERDP.
-
-[commit message rewording -Mathias]
-
-Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220408134823.2527272-2-mathias.nyman@linux.intel.com
+Fixes: 699e96ddf47f ("net/mlx5e: Support offloading tc double vlan headers match")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-ring.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 681d5bb99d99..9f49649f1df5 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2921,6 +2921,8 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		if (event_loop++ < TRBS_PER_SEGMENT / 2)
- 			continue;
- 		xhci_update_erst_dequeue(xhci, event_ring_deq);
-+		event_ring_deq = xhci->event_ring->dequeue;
-+
- 		event_loop = 0;
- 	}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -2291,6 +2291,17 @@ static int __parse_cls_flower(struct mlx
+ 				 match.key->vlan_priority);
  
--- 
-2.35.1
-
+ 			*match_level = MLX5_MATCH_L2;
++
++			if (!flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CVLAN) &&
++			    match.mask->vlan_eth_type &&
++			    MLX5_CAP_FLOWTABLE_TYPE(priv->mdev,
++						    ft_field_support.outer_second_vid,
++						    fs_type)) {
++				MLX5_SET(fte_match_set_misc, misc_c,
++					 outer_second_cvlan_tag, 1);
++				spec->match_criteria_enable |=
++					MLX5_MATCH_MISC_PARAMETERS;
++			}
+ 		}
+ 	} else if (*match_level != MLX5_MATCH_NONE) {
+ 		/* cvlan_tag enabled in match criteria and
 
 

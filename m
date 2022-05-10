@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7857852167C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D6A52178E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242256AbiEJNOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S244018AbiEJN1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241947AbiEJNOr (ORCPT
+        with ESMTP id S242950AbiEJNVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:14:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557A711A05;
-        Tue, 10 May 2022 06:10:49 -0700 (PDT)
+        Tue, 10 May 2022 09:21:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DA82C07FD;
+        Tue, 10 May 2022 06:14:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A1ADFCE1EE2;
-        Tue, 10 May 2022 13:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936DCC385A6;
-        Tue, 10 May 2022 13:10:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC191B81DA2;
+        Tue, 10 May 2022 13:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D7AC385A6;
+        Tue, 10 May 2022 13:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188245;
-        bh=cJmHsdcBC+rr0n3Or8etT+0FElCdwbVFWr4uzPO5Tp8=;
+        s=korg; t=1652188455;
+        bh=rv5YClglW/BeeR7VokaDgRvc3nal0GlKMs5Rdx/I3YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xOTWjlRqzpvOJAuMzhc+yr4yjhXcP7krJVRJQ+3GLSJan6+KKdhfec03SQlDig5pV
-         2de7KhIbgne9aApGO1OTtsIjnpVVP97yxpOJ6OWb5/1uRP1F4oijSu6Bf2VSqlr9lZ
-         nKwgM4J7Gp3qBao/UeReKeEetR/zguwPuLZReTpo=
+        b=eeUYb86foMmTbeXxkUytl3ZppB7ApYITngdUmJh1arYHVecWAJqVH4oByA0hivrnP
+         KhnMmoB1bqJrVOaYVOOcN7EC0OtorKr1+6dSutAinvd2rtyzcq9Sx23TG6R6OxkKRd
+         qvRGVQtGZunjbqSEBKaESpsRIo6BkwwSAjHPEToc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Henry Lin <henryl@nvidia.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4.9 10/66] xhci: stop polling roothubs after shutdown
+Subject: [PATCH 4.14 14/78] xhci: stop polling roothubs after shutdown
 Date:   Tue, 10 May 2022 15:07:00 +0200
-Message-Id: <20220510130730.071761272@linuxfoundation.org>
+Message-Id: <20220510130732.955604657@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -80,9 +80,9 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -746,6 +746,17 @@ void xhci_shutdown(struct usb_hcd *hcd)
+@@ -724,6 +724,17 @@ void xhci_shutdown(struct usb_hcd *hcd)
  	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.controller));
+ 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
  
 +	/* Don't poll the roothubs after shutdown. */
 +	xhci_dbg(xhci, "%s: stopping usb%d port polling.\n",

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A062521BD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A344E521B08
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343869AbiEJOXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S1344048AbiEJOHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244557AbiEJNu4 (ORCPT
+        with ESMTP id S244117AbiEJNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:50:56 -0400
+        Tue, 10 May 2022 09:45:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BD9296BC5;
-        Tue, 10 May 2022 06:37:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C612EAD1E;
+        Tue, 10 May 2022 06:31:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAC50618A6;
-        Tue, 10 May 2022 13:37:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C78C9C385C6;
-        Tue, 10 May 2022 13:37:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B0A61763;
+        Tue, 10 May 2022 13:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3E5C385C6;
+        Tue, 10 May 2022 13:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189874;
-        bh=WXSNMrp0qzPhfuD6Y3qb5bOnrpSU5f7R2X8o0aXPoxw=;
+        s=korg; t=1652189482;
+        bh=AAu3wZQM5TXMCSefAdcqdNYX8X6nheEiGnbu9e2bf/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tc66fhK74t5rbgHR4BVGN3n8LG0yIPeqt2xkTnsJM14/RLAi+9L7ZpdIe6EgElstf
-         3WgSFly38O74KuwZJ79sM2Y1DiZo6xaQCw+IlS7/vCv3/FipWP8S6qbLF3KlO/wMws
-         +S7yyhdSFeOMcfE9JOcebRp389VfJQKjyV3waXPA=
+        b=BSpOHlyOrnwHeg9fwkCnuvVjrOQFBnn9tCPC7KH4W/WavP/rd193REOF2GBpyixMY
+         jadqMKacwk5L0DOSD+3NUBWzD848qBAhQSVsNT3NULD33f4Mj6lSDJ36PfPBsEiPfI
+         w3qkbjMzAIUaaabv64lNA6dk0v6ri6voggK3ZmIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.17 057/140] ASoC: dmaengine: Restore NULL prepare_slave_config() callback
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 065/135] net: cpsw: add missing of_node_put() in cpsw_probe_dt()
 Date:   Tue, 10 May 2022 15:07:27 +0200
-Message-Id: <20220510130743.249571831@linuxfoundation.org>
+Message-Id: <20220510130742.276322740@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 660564fc9a92a893a14f255be434f7ea0b967901 upstream.
+commit 95098d5ac2551769807031444e55a0da5d4f0952 upstream.
 
-As pointed out by Sascha Hauer, this patch changes:
-if (pmc->config && !pcm->config->prepare_slave_config)
-        <do nothing>
-to:
-if (pmc->config && !pcm->config->prepare_slave_config)
-        snd_dmaengine_pcm_prepare_slave_config()
+'tmp_node' need be put before returning from cpsw_probe_dt(),
+so add missing of_node_put() in error path.
 
-This breaks the drivers that do not need a call to
-dmaengine_slave_config(). Drivers that still need to call
-snd_dmaengine_pcm_prepare_slave_config(), but have a NULL
-pcm->config->prepare_slave_config should use
-snd_dmaengine_pcm_prepare_slave_config() as their prepare_slave_config
-callback.
-
-Fixes: 9a1e13440a4f ("ASoC: dmaengine: do not use a NULL prepare_slave_config() callback")
-Reported-by: Sascha Hauer <sha@pengutronix.de>
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220421125403.2180824-1-codrin.ciubotariu@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: ed3525eda4c4 ("net: ethernet: ti: introduce cpsw switchdev based driver part 1 - dual-emac")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-generic-dmaengine-pcm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/ti/cpsw_new.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/sound/soc/soc-generic-dmaengine-pcm.c
-+++ b/sound/soc/soc-generic-dmaengine-pcm.c
-@@ -86,10 +86,10 @@ static int dmaengine_pcm_hw_params(struc
+--- a/drivers/net/ethernet/ti/cpsw_new.c
++++ b/drivers/net/ethernet/ti/cpsw_new.c
+@@ -1246,8 +1246,10 @@ static int cpsw_probe_dt(struct cpsw_com
+ 	data->slave_data = devm_kcalloc(dev, CPSW_SLAVE_PORTS_NUM,
+ 					sizeof(struct cpsw_slave_data),
+ 					GFP_KERNEL);
+-	if (!data->slave_data)
++	if (!data->slave_data) {
++		of_node_put(tmp_node);
+ 		return -ENOMEM;
++	}
  
- 	memset(&slave_config, 0, sizeof(slave_config));
+ 	/* Populate all the child nodes here...
+ 	 */
+@@ -1341,6 +1343,7 @@ static int cpsw_probe_dt(struct cpsw_com
  
--	if (pcm->config && pcm->config->prepare_slave_config)
--		prepare_slave_config = pcm->config->prepare_slave_config;
--	else
-+	if (!pcm->config)
- 		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
-+	else
-+		prepare_slave_config = pcm->config->prepare_slave_config;
+ err_node_put:
+ 	of_node_put(port_np);
++	of_node_put(tmp_node);
+ 	return ret;
+ }
  
- 	if (prepare_slave_config) {
- 		int ret = prepare_slave_config(substream, params, &slave_config);
 
 

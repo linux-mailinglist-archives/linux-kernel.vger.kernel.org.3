@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EA9521BBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A2F521C34
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344322AbiEJOVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S1344356AbiEJObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245009AbiEJNrL (ORCPT
+        with ESMTP id S244765AbiEJOBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF7D2380F7;
-        Tue, 10 May 2022 06:33:31 -0700 (PDT)
+        Tue, 10 May 2022 10:01:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFDB27FD5;
+        Tue, 10 May 2022 06:40:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 467756188A;
-        Tue, 10 May 2022 13:33:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFC2C385C2;
-        Tue, 10 May 2022 13:33:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBBE4B81DB8;
+        Tue, 10 May 2022 13:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3809FC385D0;
+        Tue, 10 May 2022 13:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189610;
-        bh=n1KCDh4LONfKCtHsaCx9VaPa6rdpnvpNzEZKw6ZLikY=;
+        s=korg; t=1652190002;
+        bh=FxIhdZqIw91pbHMbO5gwTOdjHrJnWK2rh0Rb9gXuISc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zXyMIHKf/IF0HSnOhrCSp3oVJ9mIlDXXizhL7RIvEiN+bsgBzpz2pZlI7h8gyQhCj
-         KjV2WgcGYuVAj7FtlL1RhvtDpCBBPyyZ3VSo+rRCIEUN+bZ1sEZjZZrrqpSxxRZblN
-         D3Z/yp0+uZ5Xa+DOduQvKXccQaJz9ax3yRovM9ek=
+        b=BvsSH/ZQBr8D38vSFheYdza+MzqnRq3QPkgE31y1kLlQOATXB5qXTKLNDJWqRZPgq
+         Tph77JwcKzu1KumiFPG5LWzSXZAwfzamW+z8gEyvHFN78QJL7V5yxUHeM8JevP1GVn
+         tz+CoWcKrGFYRqHiP5AeyqEp/jzmWGKiC9BwDKVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 106/135] PCI: pci-bridge-emul: Add description for class_revision field
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.17 098/140] selftests: mirror_gre_bridge_1q: Avoid changing PVID while interface is operational
 Date:   Tue, 10 May 2022 15:08:08 +0200
-Message-Id: <20220510130743.448324699@linuxfoundation.org>
+Message-Id: <20220510130744.408551358@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Ido Schimmel <idosch@nvidia.com>
 
-commit 9319230ac147067652b58fe849ffe0ceec098665 upstream.
+commit 3122257c02afd9f199a8fc84ae981e1fc4958532 upstream.
 
-The current assignment to the class_revision member
+In emulated environments, the bridge ports enslaved to br1 get a carrier
+before changing br1's PVID. This means that by the time the PVID is
+changed, br1 is already operational and configured with an IPv6
+link-local address.
 
-  class_revision |= cpu_to_le32(PCI_CLASS_BRIDGE_PCI << 16);
+When the test is run with netdevs registered by mlxsw, changing the PVID
+is vetoed, as changing the VID associated with an existing L3 interface
+is forbidden. This restriction is similar to the 8021q driver's
+restriction of changing the VID of an existing interface.
 
-can make the reader think that class is at high 16 bits of the member and
-revision at low 16 bits.
+Fix this by taking br1 down and bringing it back up when it is fully
+configured.
 
-In reality, class is at high 24 bits, but the class for PCI Bridge Normal
-Decode is PCI_CLASS_BRIDGE_PCI << 8.
+With this fix, the test reliably passes on top of both the SW and HW
+data paths (emulated or not).
 
-Change the assignment and add a comment to make this clearer.
-
-Link: https://lore.kernel.org/r/20211130172913.9727-2-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: 239e754af854 ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1q")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Link: https://lore.kernel.org/r/20220502084507.364774-1-idosch@nvidia.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pci-bridge-emul.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -284,7 +284,11 @@ int pci_bridge_emul_init(struct pci_brid
- {
- 	BUILD_BUG_ON(sizeof(bridge->conf) != PCI_BRIDGE_CONF_END);
+--- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
++++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
+@@ -61,9 +61,12 @@ setup_prepare()
  
--	bridge->conf.class_revision |= cpu_to_le32(PCI_CLASS_BRIDGE_PCI << 16);
-+	/*
-+	 * class_revision: Class is high 24 bits and revision is low 8 bit of this member,
-+	 * while class for PCI Bridge Normal Decode has the 24-bit value: PCI_CLASS_BRIDGE_PCI << 8
-+	 */
-+	bridge->conf.class_revision |= cpu_to_le32((PCI_CLASS_BRIDGE_PCI << 8) << 8);
- 	bridge->conf.header_type = PCI_HEADER_TYPE_BRIDGE;
- 	bridge->conf.cache_line_size = 0x10;
- 	bridge->conf.status = cpu_to_le16(PCI_STATUS_CAP_LIST);
+ 	vrf_prepare
+ 	mirror_gre_topo_create
++	# Avoid changing br1's PVID while it is operational as a L3 interface.
++	ip link set dev br1 down
+ 
+ 	ip link set dev $swp3 master br1
+ 	bridge vlan add dev br1 vid 555 pvid untagged self
++	ip link set dev br1 up
+ 	ip address add dev br1 192.0.2.129/28
+ 	ip address add dev br1 2001:db8:2::1/64
+ 
 
 

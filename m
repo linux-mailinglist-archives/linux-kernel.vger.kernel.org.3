@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2866521BB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D57521C47
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343559AbiEJOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S1343939AbiEJOdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245077AbiEJNrV (ORCPT
+        with ESMTP id S244676AbiEJOIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F53198755;
-        Tue, 10 May 2022 06:34:59 -0700 (PDT)
+        Tue, 10 May 2022 10:08:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D88623E360;
+        Tue, 10 May 2022 06:42:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 258A4B81DAF;
-        Tue, 10 May 2022 13:34:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD97C385A6;
-        Tue, 10 May 2022 13:34:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5406192C;
+        Tue, 10 May 2022 13:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BADCBC385A6;
+        Tue, 10 May 2022 13:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189696;
-        bh=rrzejhvcQXnEC6A7XoE7Mjs1pkvzmQkXpRkj3K43Yow=;
+        s=korg; t=1652190139;
+        bh=z8hq8fLZpFA7icnRzDjRC1UziW/f67KhSR5BDDrhu5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=he/8xOkZh8jKHIlRNtWvleG8fd7vg2oZFJMVggDYPsrrRAYXNrhK/QoZ4pfNDAeSP
-         ZWyXuuoKBZxCT+VBaiN0LaCHWQ/ZW8ipsBOSwanNABMumuMg/gaAGqrjR/pwVPHkDn
-         zo7XoAmdAqh+2+9REVqJiQxZpWiFaK4OC+9GGOHg=
+        b=yZG8Ubm1yrG4PH0f+NNuJ/LthgII5nQr92Tht5M5HlhEIMIJLWHcd7rBdiMti4hvy
+         YqBIe+E3PkiCvJktNBG+DE0WW5UDr3S0q0m5//9IX6DqK8XR7+5vhsr7w/iOry4foB
+         s5fe6UE7I1r7R+ydCP+z95XiEzNTfamZJhxsKN+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, pali@kernel.org,
         =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 135/135] PCI: aardvark: Update comment about link going down after link-up
-Date:   Tue, 10 May 2022 15:08:37 +0200
-Message-Id: <20220510130744.266819133@linuxfoundation.org>
+Subject: [PATCH 5.17 128/140] PCI: aardvark: Refactor unmasking summary MSI interrupt
+Date:   Tue, 10 May 2022 15:08:38 +0200
+Message-Id: <20220510130745.253980569@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Marek Behún" <kabel@kernel.org>
+From: Pali Rohár <pali@kernel.org>
 
-commit 92f4ffecc4170ce29e67a1f8d51c168c3de95fb2 upstream.
+commit 4689c0916320f112a8a33f2689d3addc3262f02c upstream.
 
-Update the comment about what happens when link goes down after we have
-checked for link-up. If a PIO request is done while link-down, we have
-a serious problem.
+Refactor the masking of ISR0/1 Sources and unmasking of summary MSI interrupt
+so that it corresponds to the comments:
+- first mask all ISR0/1
+- then unmask all MSIs
+- then unmask summary MSI interrupt
 
-Link: https://lore.kernel.org/r/20220110015018.26359-23-kabel@kernel.org
+Link: https://lore.kernel.org/r/20220110015018.26359-10-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 --- a/drivers/pci/controller/pci-aardvark.c
 +++ b/drivers/pci/controller/pci-aardvark.c
-@@ -998,8 +998,12 @@ static bool advk_pcie_valid_device(struc
- 		return false;
+@@ -571,15 +571,17 @@ static void advk_pcie_setup_hw(struct ad
+ 	advk_writel(pcie, PCIE_IRQ_ALL_MASK, HOST_CTRL_INT_STATUS_REG);
  
- 	/*
--	 * If the link goes down after we check for link-up, nothing bad
--	 * happens but the config access times out.
-+	 * If the link goes down after we check for link-up, we have a problem:
-+	 * if a PIO request is executed while link-down, the whole controller
-+	 * gets stuck in a non-functional state, and even after link comes up
-+	 * again, PIO requests won't work anymore, and a reset of the whole PCIe
-+	 * controller is needed. Therefore we need to prevent sending PIO
-+	 * requests while the link is down.
- 	 */
- 	if (!pci_is_root_bus(bus) && !advk_pcie_link_up(pcie))
- 		return false;
+ 	/* Disable All ISR0/1 Sources */
+-	reg = PCIE_ISR0_ALL_MASK;
+-	reg &= ~PCIE_ISR0_MSI_INT_PENDING;
+-	advk_writel(pcie, reg, PCIE_ISR0_MASK_REG);
+-
++	advk_writel(pcie, PCIE_ISR0_ALL_MASK, PCIE_ISR0_MASK_REG);
+ 	advk_writel(pcie, PCIE_ISR1_ALL_MASK, PCIE_ISR1_MASK_REG);
+ 
+ 	/* Unmask all MSIs */
+ 	advk_writel(pcie, ~(u32)PCIE_MSI_ALL_MASK, PCIE_MSI_MASK_REG);
+ 
++	/* Unmask summary MSI interrupt */
++	reg = advk_readl(pcie, PCIE_ISR0_MASK_REG);
++	reg &= ~PCIE_ISR0_MSI_INT_PENDING;
++	advk_writel(pcie, reg, PCIE_ISR0_MASK_REG);
++
+ 	/* Enable summary interrupt for GIC SPI source */
+ 	reg = PCIE_IRQ_ALL_MASK & (~PCIE_IRQ_ENABLE_INTS_MASK);
+ 	advk_writel(pcie, reg, HOST_CTRL_INT_MASK_REG);
 
 

@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EE1521318
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600EE52131F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbiEJLIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S240630AbiEJLJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiEJLIc (ORCPT
+        with ESMTP id S234466AbiEJLJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:08:32 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B846627E3DB;
-        Tue, 10 May 2022 04:04:33 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1noNen-00BzQQ-RI; Tue, 10 May 2022 21:03:59 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 10 May 2022 19:03:58 +0800
-Date:   Tue, 10 May 2022 19:03:58 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [RFC PATCH 0/7] crypto: Add helpers for allocating with DMA alignment
-Message-ID: <YnpGnsr4k7yVUR54@gondor.apana.org.au>
-References: <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
- <YllM24eca/uxf9y7@gondor.apana.org.au>
- <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
- <YlvK9iefUECy361O@gondor.apana.org.au>
- <YlvQTci7RP5evtTy@arm.com>
- <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
- <YlvU6ou14okbAbgW@arm.com>
- <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
- <YlxAo5BAy+ARlvqj@arm.com>
- <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
+        Tue, 10 May 2022 07:09:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E50C92B09C4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652180732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L879vTuOytFC1BBKCpJazjTgxv9uvQMbOkHnTde3iP0=;
+        b=i07ENLqtRaDhxffSwKtXLKGjpaF0zgacDIAz9ZFjAFDKT7dYIhveO9bV/M/sr/hMaMhmeT
+        oD+gWrOC/pjwjZf9Z3ojq/mbIHc4GZaLdtDyYCIDdutumwD2eC/IPRTvmn5BB3RFitwt6K
+        gwrXJPdPA1Ufje5CNmSRCcZHMjTyX80=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-2ZUVdvP-NqGlHet2ZKjnOA-1; Tue, 10 May 2022 07:05:30 -0400
+X-MC-Unique: 2ZUVdvP-NqGlHet2ZKjnOA-1
+Received: by mail-qv1-f71.google.com with SMTP id d13-20020a05621421cd00b0045a99874ae5so13973735qvh.14
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:05:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=L879vTuOytFC1BBKCpJazjTgxv9uvQMbOkHnTde3iP0=;
+        b=jKTNVO0+QQJtnORwSmucmX+aJjstaZKtsT+LPSw9MWrG67DKEQLdQd50oYW8uR4ibr
+         rAndbWY3IVoCfWB68PX02HXskErHaWWoTDox6X5u3mkEeAp+vzlc39NeTRZ5DzFknNaF
+         PTvCvFOsec4NdZuGVcKzBOwbL0OnCvrGAvrRgPgT6qKVIXbTsW24pjju2GmX9e45etzZ
+         ZHUJ17zF+uhuHDDJ1DhuQiTHjJG5RXiT0waKmodyYEZvazj0I7Q+Ebvjt3FuJnLf+hSD
+         vNt7SBKGzIlhTUIxSPo9Bh1ezyiRCMPpRLMfb6iR2tR8u6ph54C3Hwt2QRxpZd0ZIoV5
+         m+xQ==
+X-Gm-Message-State: AOAM530TmK/v65tUwhPaNTknVJN+2jMo9Zl+Th/RbisfldvSCzCJ6Io0
+        oa3jvo7ymlAsesfhbUR3RRy97thRZUc9aOrtob30mzf/bvhuxqjfSV5m3RVZoVLMv+pWlSAups6
+        Hg7eU+5Mp/VtqF66zu6SRqjsr
+X-Received: by 2002:ac8:7f04:0:b0:2f3:d6d6:8406 with SMTP id f4-20020ac87f04000000b002f3d6d68406mr10162347qtk.509.1652180729598;
+        Tue, 10 May 2022 04:05:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzoeC9I1S6EUIH6D3Ol16trgj7nqKgi4NXn76Y6uUPXMSnfTiJrPdzyZM7KNtUGJxzuqRQjUQ==
+X-Received: by 2002:ac8:7f04:0:b0:2f3:d6d6:8406 with SMTP id f4-20020ac87f04000000b002f3d6d68406mr10162321qtk.509.1652180729321;
+        Tue, 10 May 2022 04:05:29 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-113-89.dyn.eolo.it. [146.241.113.89])
+        by smtp.gmail.com with ESMTPSA id g12-20020ac842cc000000b002f39b99f678sm9342697qtm.18.2022.05.10.04.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 04:05:27 -0700 (PDT)
+Message-ID: <b826a78efa5e015b93038f5f8564ca7e98e1240a.camel@redhat.com>
+Subject: Re: [PATCH net 2/2] net/smc: align the connect behaviour with TCP
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>,
+        kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 10 May 2022 13:05:24 +0200
+In-Reply-To: <20220509115837.94911-3-guangguan.wang@linux.alibaba.com>
+References: <20220509115837.94911-1-guangguan.wang@linux.alibaba.com>
+         <20220509115837.94911-3-guangguan.wang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,16 +80,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds helpers to allow drivers to explicitly
-request ARCH_DMA_MINALIGN when allocating memory through the
-Crypto API.
+On Mon, 2022-05-09 at 19:58 +0800, Guangguan Wang wrote:
+> Connect with O_NONBLOCK will not be completed immediately
+> and returns -EINPROGRESS. It is possible to use selector/poll
+> for completion by selecting the socket for writing. After select
+> indicates writability, a second connect function call will return
+> 0 to indicate connected successfully as TCP does, but smc returns
+> -EISCONN. Use socket state for smc to indicate connect state, which
+> can help smc aligning the connect behaviour with TCP.
+> 
+> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> ---
+>  net/smc/af_smc.c | 53 ++++++++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 49 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+> index fce16b9d6e1a..45f9f7c6e776 100644
+> --- a/net/smc/af_smc.c
+> +++ b/net/smc/af_smc.c
+> @@ -1544,9 +1544,32 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>  		goto out_err;
+>  
+>  	lock_sock(sk);
+> +	switch (sock->state) {
+> +	default:
+> +		rc = -EINVAL;
+> +		goto out;
+> +	case SS_CONNECTED:
+> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
+> +		goto out;
+> +	case SS_CONNECTING:
+> +		if (sk->sk_state == SMC_ACTIVE) {
+> +			sock->state = SS_CONNECTED;
+> +			rc = 0;
+> +			goto out;
+> +		}
+> +		break;
+> +	case SS_UNCONNECTED:
+> +		sock->state = SS_CONNECTING;
+> +		break;
+> +	}
+> +
+>  	switch (sk->sk_state) {
+>  	default:
+>  		goto out;
+> +	case SMC_CLOSED:
+> +		rc = sock_error(sk) ? : -ECONNABORTED;
+> +		sock->state = SS_UNCONNECTED;
+> +		goto out;
+>  	case SMC_ACTIVE:
+>  		rc = -EISCONN;
+>  		goto out;
+> @@ -1565,18 +1588,22 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>  		goto out;
+>  
+>  	sock_hold(&smc->sk); /* sock put in passive closing */
+> -	if (smc->use_fallback)
+> +	if (smc->use_fallback) {
+> +		sock->state = SS_CONNECTED;
+>  		goto out;
+> +	}
+>  	if (flags & O_NONBLOCK) {
+>  		if (queue_work(smc_hs_wq, &smc->connect_work))
+>  			smc->connect_nonblock = 1;
+>  		rc = -EINPROGRESS;
+>  	} else {
+>  		rc = __smc_connect(smc);
+> -		if (rc < 0)
+> +		if (rc < 0) {
+>  			goto out;
+> -		else
+> +		} else {
+>  			rc = 0; /* success cases including fallback */
+> +			sock->state = SS_CONNECTED;
 
-Note that I've only converted one file in one driver as this
-is only meant to show how it's done and find out what else we
-may need.
+'else' is not needed here, you can keep the above 2 statements dropping
+an indentation level.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> +		}
+>  	}
+>  
+
+You can avoid a little code duplication adding here the following:
+
+connected:
+   sock->state = SS_CONNECTED;
+
+and using the new label where appropriate.
+
+>  out:
+> @@ -1693,6 +1720,7 @@ struct sock *smc_accept_dequeue(struct sock *parent,
+>  		}
+>  		if (new_sock) {
+>  			sock_graft(new_sk, new_sock);
+> +			new_sock->state = SS_CONNECTED;
+>  			if (isk->use_fallback) {
+>  				smc_sk(new_sk)->clcsock->file = new_sock->file;
+>  				isk->clcsock->file->private_data = isk->clcsock;
+> @@ -2424,7 +2452,7 @@ static int smc_listen(struct socket *sock, int backlog)
+>  
+>  	rc = -EINVAL;
+>  	if ((sk->sk_state != SMC_INIT && sk->sk_state != SMC_LISTEN) ||
+> -	    smc->connect_nonblock)
+> +	    smc->connect_nonblock || sock->state != SS_UNCONNECTED)
+>  		goto out;
+>  
+>  	rc = 0;
+> @@ -2716,6 +2744,17 @@ static int smc_shutdown(struct socket *sock, int how)
+>  
+>  	lock_sock(sk);
+>  
+> +	if (sock->state == SS_CONNECTING) {
+> +		if (sk->sk_state == SMC_ACTIVE)
+> +			sock->state = SS_CONNECTED;
+> +		else if (sk->sk_state == SMC_PEERCLOSEWAIT1 ||
+> +			 sk->sk_state == SMC_PEERCLOSEWAIT2 ||
+> +			 sk->sk_state == SMC_APPCLOSEWAIT1 ||
+> +			 sk->sk_state == SMC_APPCLOSEWAIT2 ||
+> +			 sk->sk_state == SMC_APPFINCLOSEWAIT)
+> +			sock->state = SS_DISCONNECTING;
+> +	}
+> +
+>  	rc = -ENOTCONN;
+>  	if ((sk->sk_state != SMC_ACTIVE) &&
+>  	    (sk->sk_state != SMC_PEERCLOSEWAIT1) &&
+> @@ -2729,6 +2768,7 @@ static int smc_shutdown(struct socket *sock, int how)
+>  		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
+>  		if (sk->sk_shutdown == SHUTDOWN_MASK) {
+>  			sk->sk_state = SMC_CLOSED;
+> +			sk->sk_socket->state = SS_UNCONNECTED;
+>  			sock_put(sk);
+>  		}
+>  		goto out;
+> @@ -2754,6 +2794,10 @@ static int smc_shutdown(struct socket *sock, int how)
+>  	/* map sock_shutdown_cmd constants to sk_shutdown value range */
+>  	sk->sk_shutdown |= how + 1;
+>  
+> +	if (sk->sk_state == SMC_CLOSED)
+> +		sock->state = SS_UNCONNECTED;
+> +	else
+> +		sock->state = SS_DISCONNECTING;
+>  out:
+>  	release_sock(sk);
+>  	return rc ? rc : rc1;
+> @@ -3139,6 +3183,7 @@ static int __smc_create(struct net *net, struct socket *sock, int protocol,
+>  
+>  	rc = -ENOBUFS;
+>  	sock->ops = &smc_sock_ops;
+> +	sock->state = SS_UNCONNECTED;
+>  	sk = smc_sock_alloc(net, sock, protocol);
+>  	if (!sk)
+>  		goto out;
+

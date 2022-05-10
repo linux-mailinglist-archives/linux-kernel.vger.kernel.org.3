@@ -2,460 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCA352213B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EE7522140
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347416AbiEJQeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S1347421AbiEJQee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347390AbiEJQdz (ORCPT
+        with ESMTP id S1347422AbiEJQe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:33:55 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27912201E9B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:29:57 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7c424c66cso186332347b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:29:57 -0700 (PDT)
+        Tue, 10 May 2022 12:34:26 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ACD2A28F7;
+        Tue, 10 May 2022 09:30:22 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so2261380pjb.0;
+        Tue, 10 May 2022 09:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aJloidsDMSjNdKsdQ92Ek2s3Nok5OpSiV08K1fKvW/c=;
-        b=dU8YCmE+vqGPx/am1Kbhb9tc3zBmcw0d6Vl3xCJQ6q+au/WHtm2SixK2VdNAhZDCEH
-         /3EaF/lU92QNqIrwbdEOI6NG50SdQzrrY6kY4aSqX+I9/Ndw5WSQSwB2xa2bOSQQbVDC
-         y0R48jDMPXhfouEBqvaAntHHhRrjdm7QBgU4Cu6bhDfJkDcB5yM5OlrDvK4xYA+6Ym6F
-         m/jvJf6l0ThPiDaUQxeHTovxDgTN9RUsYZl51ogcZCtbKDMEQv76UxfSiJw+tSyZEcXg
-         CfnLQXxhv091UsiouGWzA1JQol1NdpmLtNM9cRAI4JZug617Pn7TIlZVdJp0H1DcgLvu
-         mJfQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nmTwo0VlGN7HZAEkbWFLYNGP+DbFScpw15RdeNhAOsM=;
+        b=qMCb6EA6TVj1ZK4i4rl/lUDMseHdpoxbJATbR6ben/NEwzK95Ap98M+yg9DJpq4d7M
+         5BUqzE4bgssTbTyEID5eYtcQ8m3H2eBYuyEE7IlCgmr02G/Zb95HQy3TAZXue71yDlrV
+         M9sC7hSQQO7Sp3yz+9+2N9h+L51HPoafgeMVnx9kL8q6tvHcay5Vwa4U+ERUmeWWZ8v8
+         /aIiRgaZ4N09/kZETp9vIS1yhv0b4xcaqSUjgFbnmnhLD8Q6Les4ZUMPQ380fX8dmkRX
+         gVtg3+LQLp1GFPNB8t1YBRaQbXWrNSPMQio8AAeTYRudwa33AA0M6pN3Ljwh6aj24XCs
+         1/lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aJloidsDMSjNdKsdQ92Ek2s3Nok5OpSiV08K1fKvW/c=;
-        b=V2Nb08egdmhk5Jc+8YMWzXW3TdOYICNkGsXbSbpA5WJKQeaLfj4c4p82Y5AmoiH9Vg
-         U/GC2sKkErAyW8XYzaCyRX90QRSoOX34f/NY5O5Nr3FaB2tSJNDECqp2Qzu6GpAqbyuC
-         ZliJlNNMh1fN/zr/6+SyJk2rbHpIMHsu1M0y17+HC0RDAU+GDDVGcxxRvnFhpr1658Jz
-         uOI24AS31xMV2M+80exurQE7VMnMvZ/t66SPUWvogGvUGuVbYWSuV0BfwuLT9Sll0rDU
-         LiV7dKxcde2tAz10VnXBzTePLShxiyZFc85cWc1sxQMY6pjjvtbJmPQqR3+t/6COd3Qa
-         +ccA==
-X-Gm-Message-State: AOAM533J+dO6iQgyweNlRDpZI5PCL1+CD4S+AMxwc/Pd6cVqD2QXMxVM
-        uynG6fMC8ro2pmy7ErF2k7T48Bk+OdS2WL0Ziskc1g==
-X-Google-Smtp-Source: ABdhPJx5rcdrZIFfWZmVEv8aWH6L4r9FXVQPuw/X4O4oc/sxy7PZ3H8d/XVNdGArXpAoEgYI+ADW7h6XzKubzLkfI7s=
-X-Received: by 2002:a0d:d543:0:b0:2f7:e554:68c with SMTP id
- x64-20020a0dd543000000b002f7e554068cmr21157189ywd.380.1652200195972; Tue, 10
- May 2022 09:29:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nmTwo0VlGN7HZAEkbWFLYNGP+DbFScpw15RdeNhAOsM=;
+        b=dBIyVwqvG4cX8xYUINsj9kovoKx/dOt7nsHybIu6IbA0jYGfd+JgY8cF5hVTQwSE8S
+         S2UT+at6VUDduLqkqzCN1xUjQLk0mVE89J9m4u3rrMkH9EwYHo7NmaaXhKIepVOruLZH
+         5DqKpYIyYwvSviAeKbv4rYvl2EjUfbg7b1Ga0Io/4+6LIyygVPu9Pi3EiRmO6Md565FQ
+         MCk8otZOyCihPYSe9P38xTReWMA+ysdqKfIPyo6aNV5jp2VXIECCL3eMXfLZU8Pvj/E/
+         Fa/0WXja3sQ35t1dqSYrZnYf0AAM1/cZQed/br1mJVGeAC9L1XmJ6gSADjFNjKuavjhV
+         mdCA==
+X-Gm-Message-State: AOAM532APkKiIDQadlDFbJ5OV1q9PVjFv3i8IBl0ZwrqzzXNDTAFpM8S
+        yWaA2vLsR2oxpCU3hqR/u20=
+X-Google-Smtp-Source: ABdhPJzthHrKIyJiyo3f4D4rf/UY0bGjefzB0w9VP88JxxNfui2ZBhjOs9clpHhgT62RFv260NQxQQ==
+X-Received: by 2002:a17:90b:610:b0:1d9:4008:cfee with SMTP id gb16-20020a17090b061000b001d94008cfeemr752504pjb.71.1652200221607;
+        Tue, 10 May 2022 09:30:21 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id cr11-20020a056a000f0b00b00510c135da63sm1680324pfb.9.2022.05.10.09.30.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 09:30:21 -0700 (PDT)
+Message-ID: <1b097089-d6e6-5622-15aa-7038b66b1367@gmail.com>
+Date:   Tue, 10 May 2022 09:30:17 -0700
 MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
-In-Reply-To: <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 May 2022 09:29:44 -0700
-Message-ID: <CAJuCfpEAqEEf-SCi87-VZrFYcoPff8Gkda5uF8fYRyKQo_vkjw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] selftests: vm: add process_mrelease tests
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next v4 00/12] add support for Renesas RZ/N1 ethernet
+ subsystem devices
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220509131900.7840-1-clement.leger@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 8:43 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 5/9/22 9:00 PM, Suren Baghdasaryan wrote:
-> > Introduce process_mrelease syscall sanity tests. They include tests of
-> > invalid pidfd and flags inputs, attempting to call process_mrelease
-> > with a live process and a valid usage of process_mrelease. Because
-> > process_mrelease has to be used against a process with a pending SIGKILL,
-> > it's possible that the process exits before process_mrelease gets called.
-> > In such cases we retry the test with a victim that allocates twice more
-> > memory up to 1GB. This would require the victim process to spend more
-> > time during exit and process_mrelease has a better chance of catching
-> > the process before it exits.
-> >
->
-> +1 on Mike's comments on improving the change log. List what is getting
-> tested as opposed to describing the test code.
+On 5/9/22 06:18, Clément Léger wrote:
+> The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+> (most notably) a switch, two GMACs, and a MII converter [1]. This
+> series adds support for the switch and the MII converter.
+> 
+> The MII converter present on this SoC has been represented as a PCS
+> which sit between the MACs and the PHY. This PCS driver is probed from
+> the device-tree since it requires to be configured. Indeed the MII
+> converter also contains the registers that are handling the muxing of
+> ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
+> 
+> The switch driver is based on DSA and exposes 4 ports + 1 CPU
+> management port. It include basic bridging support as well as FDB and
+> statistics support.
+> 
+> This series needs commits 14f11da778ff6421 ("soc: renesas: rzn1: Select
+> PM and PM_GENERIC_DOMAINS configs") and ed66b37f916ee23b ("ARM: dts:
+> r9a06g032: Add missing '#power-domain-cells'") which are available on
+> the renesas-devel tree in order to enable generic power domain on
+> RZ/N1.
+> 
+> Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
+Build testing this patch set gave me the following Kconfig warnings:
 
-I'll try to improve the description but IMHO it does describe what
-it's testing - the process_mrelease syscall with valid and invalid
-inputs. I could omit the implementation details if that helps.
+WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
+   Selected by [m]:
+   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
 
->
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >   tools/testing/selftests/vm/Makefile        |   1 +
-> >   tools/testing/selftests/vm/mrelease_test.c | 176 +++++++++++++++++++++
-> >   tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
-> >   3 files changed, 193 insertions(+)
-> >   create mode 100644 tools/testing/selftests/vm/mrelease_test.c
->
-> Please update .gitignore with the new executable.
+WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
+   Selected by [m]:
+   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
 
-Ack.
+WARNING: unmet direct dependencies detected for PCS_RZN1_MIIC
+   Depends on [n]: NETDEVICES [=y] && (ARCH_RZN1 [=n] || COMPILE_TEST [=n])
+   Selected by [m]:
+   - NET_DSA_RZN1_A5PSW [=m] && NETDEVICES [=y] && NET_DSA [=m]
 
->
-> >
-> > diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> > index 04a49e876a46..733fccbff0ef 100644
-> > --- a/tools/testing/selftests/vm/Makefile
-> > +++ b/tools/testing/selftests/vm/Makefile
-> > @@ -43,6 +43,7 @@ TEST_GEN_FILES += map_populate
-> >   TEST_GEN_FILES += memfd_secret
-> >   TEST_GEN_FILES += mlock-random-test
-> >   TEST_GEN_FILES += mlock2-tests
-> > +TEST_GEN_FILES += mrelease_test
-> >   TEST_GEN_FILES += mremap_dontunmap
-> >   TEST_GEN_FILES += mremap_test
-> >   TEST_GEN_FILES += on-fault-limit
-> > diff --git a/tools/testing/selftests/vm/mrelease_test.c b/tools/testing/selftests/vm/mrelease_test.c
-> > new file mode 100644
-> > index 000000000000..a61061bf8433
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/vm/mrelease_test.c
-> > @@ -0,0 +1,176 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2022 Google LLC
-> > + */
-> > +#define _GNU_SOURCE
-> > +#include <errno.h>
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <sys/wait.h>
-> > +#include <unistd.h>
-> > +
-> > +#include "util.h"
-> > +
-> > +static inline int pidfd_open(pid_t pid, unsigned int flags)
-> > +{
-> > +#ifdef __NR_pidfd_open
-> > +     return syscall(__NR_pidfd_open, pid, flags);
-> > +#else
-> > +     errno = ENOSYS;
->
-> This isn't an error - this would be skip because this syscall
-> isn't supported.
-
-Ack.
-
->
-> > +     return -1;
-> > +#endif
->
-> Key off of syscall return instead of these ifdefs - same comment
-> on all of the ifdefs
-
-Ack. I was using some other test as an example but I guess that was
-not a good model.
-
->
-> > +}
-> > +
->
-> I am not seeing any reason for breaking this code up have a separate
-> routine for pidfd_open().
-
-I'm a bit unclear what you mean. Do you mean that userspace headers
-should already define pidfd_open() and I don't need to define it?
-
->
-> > +static inline int process_mrelease(int pidfd, unsigned int flags)
-> > +{
-> > +#ifdef __NR_process_mrelease
-> > +     return syscall(__NR_process_mrelease, pidfd, flags);
-> > +#else
-> > +     errno = ENOSYS;
-> > +     return -1;
-> > +#endif> +}
-> > +
->
-> Same comments on ifdefs and skips here as well.
-
-Ack.
-
->
-> > +static void write_fault_pages(char *addr, unsigned long nr_pages)
-> > +{
-> > +     unsigned long i;
-> > +
-> > +     for (i = 0; i < nr_pages; i++)
-> > +             *((unsigned long *)(addr + (i * PAGE_SIZE))) = i;
-> > +}
-> > +
-> > +static int alloc_noexit(unsigned long nr_pages, int pipefd)
-> > +{
-> > +     int ppid = getppid();
-> > +     void *buf;
-> > +
-> > +     buf = mmap(NULL, nr_pages * PAGE_SIZE, PROT_READ | PROT_WRITE,
-> > +                MAP_PRIVATE | MAP_ANON, 0, 0);
-> > +     if (buf == MAP_FAILED) {
-> > +             perror("mmap");
->
-> A bit more descriptive message what the test would do will be helpful.
-> Also consider if this should be a skip or fail for the test.
-
-I guess the question is whether an OOM condition should be considered
-a test failure? I guess we could skip since the test is specifically
-for process_mrelease.
-
->
-> > +             return 1;
-> > +     }
-> > +
-> > +     write_fault_pages((char *)buf, nr_pages);
-> > +
-> > +     /* Signal the parent that the child is ready */
-> > +     if (write(pipefd, "", 1) < 0) {
-> > +             perror("write");
-> > +             return 1;
-> > +     }
-> > +
-> > +     /* Wait to be killed (when reparenting happens) */
-> > +     while (getppid() == ppid)
-> > +             sleep(1);
-> > +
->
-> What happens if reparenting doesn't happen? Will this loop for ever?
-> This test could hang?
-
-Technically that should not happen because we kill the child and after
-that it has to reparent but to be safe I'll add a timeout to prevent
-an infinite loop.
-
->
-> > +     munmap(buf, nr_pages * PAGE_SIZE);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +
-> > +#define MB(x) (x << 20)
-> > +#define MAX_SIZE_MB 1024
-> > +
-> > +int main(void)
-> > +{
-> > +     int res;
-> > +     int pipefd[2], pidfd;
-> > +     pid_t pid;
-> > +     char byte;
-> > +     size_t size;
-> > +     int negative_tests_done = 0;
-> > +
-> > +     /* Test a wrong pidfd */
-> > +     if (!process_mrelease(-1, 0) || errno != EBADF) {
-> > +             perror("process_mrelease with wring pidfd");
->
-> Incorrect spelling "wring/wrong"
-
-Ack.
-
->
-> > +             exit(1);
-> > +     }
-> > +
-> > +     /*
-> > +      * Start the test with 1MB allocation and double every time
-> > +      * process_mrelease fails
-> > +      */
-> > +     for (size = 1; size <= MAX_SIZE_MB; size *= 2) {
-> > +             /*
-> > +              * Pipe for the child to signal when it's done allocating
-> > +              * memory
-> > +              */
-> > +             if (pipe(pipefd)) {
-> > +                     perror("pipe");
-> > +                     exit(1);
-> > +             }
-> > +             pid = fork();
-> > +             if (pid < 0) {
-> > +                     perror("fork");
->
-> Close the pipe?
-
-Ack.
-Although I though all FDs are closed implicitly when the process exits
-(which is the case in here).
-
->
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (pid == 0) {
-> > +                     close(pipefd[0]);
-> > +                     res = alloc_noexit(MB(size) / PAGE_SIZE, pipefd[1]);
-> > +                     close(pipefd[1]);
-> > +                     exit(res);
-> > +             }
-> > +
-> > +             close(pipefd[1]);
-> > +             /* Block until the child is ready */
-> > +             res = read(pipefd[0], &byte, 1);
-> > +             close(pipefd[0]);
-> > +             if (res < 0) {
-> > +                     perror("read");
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             pidfd = pidfd_open(pid, 0);
-> > +             if (pidfd < 0) {
-> > +                     perror("pidfd_open");
-> > +                     exit(1);
-> > +             }
-> > +
->
-> The code is very hard to read. Add comments to indicate parent and child
-> paths clearly so reviewers can follow the logic and be able to do effective
-> review.
-
-Ack.
-
->
-> > +             /* Run negative tests which require a valid child only once */
-> > +             if (!negative_tests_done) {
-> > +                     /* Test invalid flags */
-> > +                     if (!process_mrelease(pidfd, (unsigned int)-1) ||
-> > +                         errno != EINVAL) {
-> > +                             perror("process_mrelease with wrong flags");
-> > +                             exit(1);
->
-> So is this an expected fail or a test fail?
-
-We expect it to fail with EINVAL. We fail the test if the call
-succeeds or fails for any other reason.
-
->
-> > +                     }
-> > +                     /* Test reapling while process is still alive */
-> > +                     if (!process_mrelease(pidfd, 0) ||
-> > +                         errno != EINVAL) {
-> > +                             perror("process_mrelease on a live process");
->
-> So is this an expected fail or a test fail?
-
-Expected to fail with EINVAL.
-
->
-> > +                             exit(1);
-> > +                     }
-> > +                     negative_tests_done = 1;
-> > +             }
->
-> Now the above negative_tests_done block could be in a separate function ---
-> All the others aren't really needed. It will be good for abstraction and
-> readability.
-
-I'll separate them into a stand-alone function.
-
->
-> > +
-> > +             if (kill(pid, SIGKILL)) {
-> > +                     perror("kill");
->
-> Include test results in the change log - so we can see the test report.
-
-Ack. Although the test does not print any results on success, it just
-succeeds or fails with an error description. I'll add outputs for both
-cases.
-
->
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (!process_mrelease(pidfd, 0)) {
-> > +                     /* Terminate the test once process_mrelease succeeds */
-> > +                     return 0;
-> > +             }
-> > +
-> > +             /*
-> > +              * Ignore the failure if the child exited before mrelease got
-> > +              * called, increase allocation size and retry the test
-> > +              */
->
-> Add more info. on why allocating more memory helps.
-
-Ack.
-
->
-> > +             if (errno != ESRCH) {
-> > +                     perror("process_mrelease");
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (waitpid(pid, NULL, 0) < 0) {
-> > +                     perror("waitpid");
-> > +                     exit(1);
-> > +             }
-> > +             close(pidfd);
-> > +     }
-> > +
-> > +     printf("All process_mrelease attempts failed!\n");
-> > +     exit(1);
-> > +}
-> > diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> > index 352ba00cf26b..1986162fea39 100755
-> > --- a/tools/testing/selftests/vm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> > @@ -287,6 +287,22 @@ else
-> >       echo "[PASS]"
-> >   fi
-> >
-> > +echo "---------------------"
-> > +echo "running mrelease_test"
-> > +echo "---------------------"
-> > +./mrelease_test
-> > +ret_val=$?
-> > +
-> > +if [ $ret_val -eq 0 ]; then
-> > +     echo "[PASS]"
-> > +elif [ $ret_val -eq $ksft_skip ]; then
-> > +      echo "[SKIP]"
-> > +      exitcode=$ksft_skip
-> > +else
-> > +     echo "[FAIL]"
-> > +     exitcode=1
-> > +fi
-> > +
-> >   echo "-------------------"
-> >   echo "running mremap_test"
-> >   echo "-------------------"
-> >
->
-> In general, the code flow is hard to read to make sure resources
-> are released e.g: pipefd in all the error paths. The code is broken
-> up into smaller chunks where it isn't needed in some cases and left
-> as a large block when it could benefit from abstraction e.g: negative
-> test block.
->
-> Please make changes and send v2.
-
-Will try to refactor it for a better readability. Thanks for the review!
-
->
-> thanks,
-> -- Shuah
+I started off with arm64's defconfig and then enabled all of the DSA 
+drivers.
+-- 
+Florian

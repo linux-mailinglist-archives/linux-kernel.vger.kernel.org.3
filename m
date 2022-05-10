@@ -2,127 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1694F521E71
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DC9521E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiEJP2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S242525AbiEJP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346248AbiEJP0v (ORCPT
+        with ESMTP id S1346065AbiEJP07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:26:51 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB81C200F62;
-        Tue, 10 May 2022 08:14:12 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:55498)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noRYx-00Cznd-JJ; Tue, 10 May 2022 09:14:11 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37640 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noRYv-00Dzkh-Bm; Tue, 10 May 2022 09:14:11 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arch@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?utf-8?B?0JzQsNC60YHQuNC8INCa0YPRgtGP0LLQuNC9?= 
-        <maximkabox13@gmail.com>
-References: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
-        <20220506141512.516114-1-ebiederm@xmission.com> <87fslhpi58.ffs@tglx>
-Date:   Tue, 10 May 2022 10:14:01 -0500
-In-Reply-To: <87fslhpi58.ffs@tglx> (Thomas Gleixner's message of "Tue, 10 May
-        2022 16:38:27 +0200")
-Message-ID: <87v8udwhc6.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 10 May 2022 11:26:59 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648802016C6;
+        Tue, 10 May 2022 08:14:32 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id x9so13749681qts.6;
+        Tue, 10 May 2022 08:14:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vz1eJzNwX0qqlgjKghzI8UdnpqFW4v/yeEdgJ7aBooc=;
+        b=d9g9CtWKsOGR7z5n/x33vnbuP8nImZ5VYEHaN+wmNX+xmzA0AG2Lj17Hhzmp9v/r4e
+         kxWsxCd5aYsDBrvrtYcbR+h177R5jZ5eutBwK5x9W069WlEDrT41+UMymuBWmDRrHZ4n
+         jufFg8l+Mi0QydGUJQev5YUn+CPnXkUBuQXCPh6qklp4s4NAndRDzRRRHQuxgP8j0If4
+         2hlVlyocbw+OjjnQPLEbGR2Sc13/kRheMBasfRZykqLljY6WTyM1vFcBS6DaY4sEypcT
+         wL1PV79eAiJY8va8OUlarZXKbY4H5R6nbtrEdHDhua/aO4g9KczjbFnGbLxjmVAZVDS8
+         ISTA==
+X-Gm-Message-State: AOAM533anAxpbCuPpkPilS7mwGw/khHj0B8sPG6fxG9xGXJcAXt0fG1r
+        CEC6zp6Iu3Xx4ImJB4k234xIzpIuU75Z6w==
+X-Google-Smtp-Source: ABdhPJzVNRRGRMkmw0kwAOgsedCsn5kkgcEeQ+MUFnOmBdpkRZfK+cpnisqt1Z+Az080srveVc8RTQ==
+X-Received: by 2002:ac8:5bd5:0:b0:2f3:b654:694d with SMTP id b21-20020ac85bd5000000b002f3b654694dmr19934873qtb.435.1652195671013;
+        Tue, 10 May 2022 08:14:31 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id h191-20020a379ec8000000b0069fc347ef5dsm8536086qke.74.2022.05.10.08.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 08:14:30 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id v59so31246334ybi.12;
+        Tue, 10 May 2022 08:14:30 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr19243837ybu.604.1652195669937; Tue, 10
+ May 2022 08:14:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1noRYv-00Dzkh-Bm;;;mid=<87v8udwhc6.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18r1alnvHdXXOMJb1iQYhRdbubmdw+zTt0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220505193143.31826-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220505193143.31826-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 May 2022 17:14:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVajeFy++etApUrZC4_sgFCPH76xOOb93rQWsz42i3EVg@mail.gmail.com>
+Message-ID: <CAMuHMdVajeFy++etApUrZC4_sgFCPH76xOOb93rQWsz42i3EVg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/4] clk: renesas: r9a07g043: Add support for RZ/Five SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;Thomas Gleixner <tglx@linutronix.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1633 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.80
-        (0.1%), extract_message_metadata: 19 (1.2%), get_uri_detail_list: 2.6
-        (0.2%), tests_pri_-1000: 17 (1.0%), tests_pri_-950: 1.75 (0.1%),
-        tests_pri_-900: 1.39 (0.1%), tests_pri_-90: 272 (16.7%), check_bayes:
-        270 (16.5%), b_tokenize: 7 (0.5%), b_tok_get_all: 9 (0.5%),
-        b_comp_prob: 2.4 (0.1%), b_tok_touch_all: 247 (15.1%), b_finish: 1.05
-        (0.1%), tests_pri_0: 1291 (79.0%), check_dkim_signature: 0.74 (0.0%),
-        check_dkim_adsp: 3.1 (0.2%), poll_dns_idle: 0.64 (0.0%), tests_pri_10:
-        2.6 (0.2%), tests_pri_500: 11 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/7] kthread: Don't allocate kthread_struct for init and
- umh
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+Hi Prabhakar,
 
-> On Fri, May 06 2022 at 09:15, Eric W. Biederman wrote:
->>  	 * the init task will end up wanting to create kthreads, which, if
->>  	 * we schedule it before we create kthreadd, will OOPS.
->>  	 */
->> -	pid = kernel_thread(kernel_init, NULL, CLONE_FS);
->> +	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
+On Thu, May 5, 2022 at 9:32 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add minimal clock and resets entries required to boot RZ/Five SoC.
 >
-> So init does not have PF_KTHREAD set anymore, which causes this to go
-> sideways with a NULL pointer dereference in get_mm_counter() on next:
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Well not after the change above, but in a later patch yes.
+Thanks for your patch!
 
-Patch 1/7 really gets us back to the previous status quo, where
-I introduced the breakage.
+I'm only commenting on the actual clock/reset definitions, as I expect
+the structure of this file to change...
 
->  get_mm_counter include/linux/mm.h:1996 [inline]
->  get_mm_rss include/linux/mm.h:2049 [inline]
->  task_nr_scan_windows.isra.0+0x23/0x120 kernel/sched/fair.c:1123
->  task_scan_min kernel/sched/fair.c:1144 [inline]
->  task_scan_start+0x6c/0x400 kernel/sched/fair.c:1150
->  task_tick_numa kernel/sched/fair.c:2944 [inline]
->  task_tick_fair+0xaeb/0xef0 kernel/sched/fair.c:11186
->  scheduler_tick+0x20a/0x5e0 kernel/sched/core.c:5380
+> --- a/drivers/clk/renesas/r9a07g043-cpg.c
+> +++ b/drivers/clk/renesas/r9a07g043-cpg.c
+> @@ -151,7 +151,7 @@ static const struct {
+>  static const struct {
+>         struct rzg2l_mod_clk common[54];
+>  #ifdef CONFIG_RISCV
+> -       struct rzg2l_mod_clk rzfive[0];
+> +       struct rzg2l_mod_clk rzfive[2];
+>  #else
+>         struct rzg2l_mod_clk rzg2ul[3];
+>  #endif
+> @@ -268,6 +268,10 @@ static const struct {
+>         },
+>  #ifdef CONFIG_RISCV
+>         .rzfive = {
+> +               DEF_MOD("iax45_pclk",   R9A07G043_IAX45_PCLK, R9A07G043_CLK_P2,
+> +                                       0x518, 0),
+> +               DEF_MOD("iax45_clk",    R9A07G043_IAX45_CLK, R9A07G043_CLK_P1,
+> +                                       0x518, 1),
+
+OK.
+
+Note that the register offset and bits for the IAX45 block on riscv
+are exactly the same as for the IA55 block on arm64.  Hence it
+would be an option to use the exact same values in the DT binding
+definitions for R9A07G043_IAX45_(P)CLK and R9A07G043_IA55_(P)CLK,
+and avoid the #ifdefs and duplicated DEF_MOD() entries here.
+
+I'm undecided what's the best option...
+
+>         },
+>  #else
+>         .rzg2ul = {
+> @@ -284,7 +288,7 @@ static const struct {
+>  static const struct {
+>         struct rzg2l_reset common[42];
+>  #ifdef CONFIG_RISCV
+> -       struct rzg2l_reset rzfive[0];
+> +       struct rzg2l_reset rzfive[1];
+>  #else
+>         struct rzg2l_reset rzg2ul[3];
+>  #endif
+> @@ -335,6 +339,7 @@ static const struct {
+>         },
+>  #ifdef CONFIG_RISCV
+>         .rzfive = {
+> +               DEF_RST(R9A07G043_IAX45_RESETN, 0x818, 0),
+
+Same for R9A07G043_IAX45_RESETN and R9A07G043_IAA55_RESETN.
+
+>         },
+>  #else
+>         .rzg2ul = {
+> @@ -345,16 +350,27 @@ static const struct {
+>  #endif
+>  };
 >
->  https://lore.kernel.org/lkml/0000000000008a9fbb05dea76400@google.com
->
-> because the fence in task_tick_numa():
->
->  	if ((curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
-> 		return;
->
-> is not longer sufficient. It needs also to bail if !curr->mm.
+> +#ifdef CONFIG_RISCV
+> +static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
+> +       MOD_CLK_BASE + R9A07G043_IAX45_CLK,
+> +       MOD_CLK_BASE + R9A07G043_DMAC_ACLK,
+> +};
+> +#else
+>  static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
+>         MOD_CLK_BASE + R9A07G043_GIC600_GICCLK,
+>         MOD_CLK_BASE + R9A07G043_IA55_CLK,
+>         MOD_CLK_BASE + R9A07G043_DMAC_ACLK,
+>  };
+> +#endif
 
-Agreed.  I proposed a patch to do just that a little while ago.
+Please keep a single r9a07g043_crit_mod_clks[] array, and protect the
+entries inside by #ifdef CONFIG_ARM64 or CONFIG_RISCV.
 
-> I'm worried that there are more of these issues lurking. Haven't looked
-> yet.
+Gr{oetje,eeting}s,
 
-I looked earlier and I missed this one.  I am going to look again today,
-along with applying the obvious fix to task_tick_numa.
+                        Geert
 
-I don't think there are many but when the code has evolved into a shape
-that is not easy to understand things occasionally slip through when the
-abstractions are made clear to understand.  The reason to rework the
-code and make it clear is that once the code has evolved to a point of
-many subtle issues making any change is brittle.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Eric
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

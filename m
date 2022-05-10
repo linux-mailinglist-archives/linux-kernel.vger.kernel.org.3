@@ -2,288 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A91D5227D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2235F5227DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238573AbiEJXyw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 10 May 2022 19:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
+        id S238124AbiEJX4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiEJXyt (ORCPT
+        with ESMTP id S230150AbiEJX4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:54:49 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C361C1F68EF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:54:47 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f7ca2ce255so3233967b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:54:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LkB9VCPYUQ49GiWWHtqF1JmJ6O5/FOWFNNGNAFI6V7c=;
-        b=VO+NiwnuMsGRMS6OgbYASiIb5bIrcDqpTODMYDcYEInLY04l580sn+qwnSsCvvV1Cr
-         iTHfCxov8NACvD54IkHtv3aSNvLe4DWTQ1kJ5B4tFk1OnQ3bGA9ItcUb6OkVa9E+BQ6L
-         kN7CtecfiphCFC8ViP+Q8Tp4fCLF8IkVe+3BwPMIFV8F3QCcIuF3RVpyAdUA7Ch7vDHK
-         koSeewPd/JTcCrDlufD3fHws3qauhv7Hj075Oq7SiQqO+JjOn7gPCejHBpLCKGhdnrm5
-         t9/nNsOT760DcXxmFjycLNwVdTwAbN7cL2Oz9cfNPAGbeo1DMRGN5za9ONWid7N6Ps8B
-         Gjug==
-X-Gm-Message-State: AOAM532jGfPOsEUUiwPrbPPhOhDAVL81lx2Q/qqU29YpqzDTqEiC7Z6e
-        JVQdtaGcM3TeGg2swr/EJGO+CVrJOu60qZHgY7M=
-X-Google-Smtp-Source: ABdhPJwmLEBrNtBIymZv1ulZmq0Azwymw08e46QNccwsL2pRkKx/sT7xjezagG+nae9yPT7xmDh0BenPUREkMdC/Zgk=
-X-Received: by 2002:a81:8cf:0:b0:2f4:da59:9eef with SMTP id
- 198-20020a8108cf000000b002f4da599eefmr22674416ywi.78.1652226886870; Tue, 10
- May 2022 16:54:46 -0700 (PDT)
+        Tue, 10 May 2022 19:56:41 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE1200F6C;
+        Tue, 10 May 2022 16:56:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kcupC5+gRQP0O9zXniO7KZiIoMhXhrPvGs6nO59Efzj7ow2xdtE9/8ZhBfdTKdnlgkOEzZtrTdqDqrCgYV330r6cBksFWGM6Llfga+SN9w++eap7vYTGRlw3l0locdJDB5IP5grFKbUeBtMySPQxgJVDYa4snbOzcujLMsFcgy9/5gi4/RPTnplRqmAtZ8p4rxe/Mk8ojfrrC9/cWEc4bXKfJ6WwOEKdu+t4ataMB7YZezytgCEhxz0Q5L0IrN5iI90RqVpRbMFVVPoHtZ2NrjScxH8lADyqrO1DSaLqbMacy2L1Cgd6mASnHMMDpidYwnA7L0n+zCJ/4tXGGtd4lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ccimTFkNg6kA0VRZlKJ7sbO/R7PJjhF4ZCQtXIJcn8w=;
+ b=NCJjRJ3zKUqQWVSoS9ztH5AdE3Shz+WKW4KyHUiaEAbaOb3CUtFSz2ILD/wpgNHaNjMcqCUFIIuO8hOnsaMSyHNdKaCZO080k++oGOYSI21i3qZuAye03iOqjA9nFBVYD8iwXuPiaXK1vnvO7aGiAg7ElvuzUuhrZsLNsKbmJK9C38+X8Ch7H6a+eS/QFWO1yCt/1ZZQEV9PxQbYT+bAiBrxd7qeO3+lSqZlwWpEPjzWeSJ8KkxEJ0qDXpFyhNBAhpMAsQb+ybrYRviltrxOOWL3PVnnwABeuH9XiJtEqLo4mi3jEtrYXcIoAxpzk7nQkGJz5+2x135j8ImdgLTIMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ccimTFkNg6kA0VRZlKJ7sbO/R7PJjhF4ZCQtXIJcn8w=;
+ b=Dk5cGdwv+F7SfKZgCZieQCIkY8vmhMvSFELq2Sem7kmbOq4O55DnQcsLoBAwuTe3r9lk11kJd2Y+Ojij1SgJeSuI+dTWqpsF2aNy86DprvYVwy/sbElcrppC6KMbQ72kUAolFhGVw1bkMdmPeYrTMtUimllienl80vQ/rHxQB8ByQOVI3b2HF3Cmq9HSIaAq2rOgMTJ/squ3dWy2S1kSW+y9IK9O5dyAkViaVlTLTwvrNyArnA6MqkQO6yVVJ0C0OCSWZyLrttvvK6dN5EyoreppxRhQBRLgbUq/Vlh+F42Hg5ZwSglErltYTS0LvdyX7aAyoKnaxnXdci6pXPvrXw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SN6PR12MB2639.namprd12.prod.outlook.com (2603:10b6:805:75::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Tue, 10 May
+ 2022 23:56:39 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 23:56:38 +0000
+Date:   Tue, 10 May 2022 20:56:37 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Patrisious Haddad <phaddad@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Mark Zhang <markzhang@nvidia.com>
+Subject: Re: [PATCH rdma-next 1/2] RDMA/core: Add an rb_tree that stores
+ cm_ids sorted by ifindex and remote IP
+Message-ID: <20220510235637.GA1163656@nvidia.com>
+References: <cover.1649075034.git.leonro@nvidia.com>
+ <9594928bfa8c8996bfdb31bc575c289573fa5bfb.1649075034.git.leonro@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9594928bfa8c8996bfdb31bc575c289573fa5bfb.1649075034.git.leonro@nvidia.com>
+X-ClientProxiedBy: MN2PR06CA0014.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::19) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220510142550.1686866-1-mailhol.vincent@wanadoo.fr>
- <20220510142550.1686866-2-mailhol.vincent@wanadoo.fr> <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdnorHJWesiardEnhYACM4NY_PHBHaoJZB1miJjgKukg2Q@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 11 May 2022 08:54:35 +0900
-Message-ID: <CAMZ6RqLTNQnFantEoUToNPKitHr6A-9y88McDdwv83xwpFoekw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate
- constant expressions
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b4e080df-5622-4748-70b1-08da32e0b927
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2639:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB263985B25792D863C125CA00C2C99@SN6PR12MB2639.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FWZoBT7BYnLr+nslEACL9fpplgMsnvV9RYvhbveHUjMrdqTSErhLIXHQaBpUY+6mmPbTnYFN8t5KR9x843wexRoIKlWQtHX+sFgTyNPv8zsX9HYPhQpH00XKu+g22UPQw3nx8tP708u7B6BnUHpDjBUeGhN80EYuBIBlWRG/WbFn7i4fiD3MbP20WLatJnL96nu3vWmzPrCAzPI8YQLg9GvvY7KzN4ahe17VDTxDnLdSnzuOG21gEKn4WhhzJfQ59c2AqUa3O61ujjkurIB9MJxctPddOzFwwQ1zjrY8fAQGS7IKzaF6cC4UYEoCCWYd+DD4MLIMFUSVP2Pn8r7NfMJeF7awK5U8z9XpbOiz/UGGQAY95XdPJqcTcXEAXlAvwKIeXpT3hl3meuz4sNEk7O31HjqlLz/W+CSiMPRX+csY7RI8rmpaJ36LrEGvdF9dtmr22BSAvq40/1AW3xlXZaqoLAk4Szj7bcaG2nVbw6qPnEgn2AmrjNmq+g9hUv2lonwJ7utDfh/M0uIBS8q2F/ENsPboE9O+vBFp/hb4WaGBOM6VZCtt/+ps1BhbaXZQmO1fVNqnQlQBFajS82zCYp6kDVbr2lBSpitf1B6VG4FhkFd608gpWH/DYfLGHieSFwqF8w+8wz6cprnY/5jYGA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(36756003)(8936002)(38100700002)(186003)(5660300002)(107886003)(1076003)(508600001)(4326008)(83380400001)(33656002)(66946007)(66556008)(2616005)(8676002)(66476007)(54906003)(316002)(6506007)(6916009)(86362001)(26005)(6512007)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kSgPsP+sSnzOlX9LNKVcRasP17Zzd7IwScvPF8Mx/PSk3BkL475NtXq0tgVt?=
+ =?us-ascii?Q?B67qMhkLRSGVMhQmtPPerbFtdoLVBcR28gH+Xdr81Jj1wTLx6nETCCkpXLm8?=
+ =?us-ascii?Q?psH7BiqbORtMmVuMu6ECZQExyzEBDGjjsD8O7TfIOej7m70Vbb0t4JLjD2JV?=
+ =?us-ascii?Q?OH1BNG4xF/cmD9qA7zhNcs2galANld6Vtb8qyG9xgcwFcdv9RPtnbgeG/3bH?=
+ =?us-ascii?Q?UWaintdQYVRb8QxasE1XmmJ/yvotVeidpBe3ONYyupB04bjXE69BSEPG3ful?=
+ =?us-ascii?Q?SKwIXQAUACUlkc7zvCqKibJRB5Yw+o1UsMEbgtDLxDZuQw4h5nd1Pc1M+oF5?=
+ =?us-ascii?Q?IdUjJRUebUjOKfxgqfhLDnp+kIdUq4qfuy8sESVZQUZOljwsgT/0tdiPAJVa?=
+ =?us-ascii?Q?nYJcA9iM9VT7coZDqjybjFmufMqLN2wtMN9hDZCLUvTE91jZrR+zFwM/EJpl?=
+ =?us-ascii?Q?2OlJJDPLr7Yd8+EjjfDNj/bcY4wVQvw2TgD1ny+XFREaCwDzTvAM2xIHRpqE?=
+ =?us-ascii?Q?I7m9OZijdgBGFxl7oj1JtQQSdjhmre26L7WNNYpDBp2uVIvEjXwI6Tma32vb?=
+ =?us-ascii?Q?W8Lwe/QVChIk/WaEGxA9byOjW5HRalli5uDzVU6YMEMsSb0oMWPXXPve8aRu?=
+ =?us-ascii?Q?AlWLKwGyEjH6VcFVsLkic+8fnjIhCH1zvnJyhqdTLhumC2C9t2/1YJjsMEbj?=
+ =?us-ascii?Q?euILlzHnybLq19zoSnDIIY6FsxP0iaPtAfL8BxlQdFmsYHoI1Em+197j4QBE?=
+ =?us-ascii?Q?LL9D/LK5f4RmeH0jsld+Nt828CmmZNmQS09G2mpaMoZuVaGVfwzFUDqbwBoy?=
+ =?us-ascii?Q?f6UXMDEiBEOxVhiLMjg/0eEd+kR9zwIhs1lCyRrZnijktnrOqIPoqI7nw+SG?=
+ =?us-ascii?Q?79fpsQxAUZxrQUxMe7Cugav5eSKRMGuOkxn9dY8pHDwc6NyRl77W6cLBfB6s?=
+ =?us-ascii?Q?tDupUuPNlbFBsDQxC6qxj0RfHZbMDs5pZQf/NfgDSvwPbrwIJ+CLAU7R4LMT?=
+ =?us-ascii?Q?nzyjq0wZBHNpo7sb6dR53/+ItMhFpNDww0mAHfPr/3rIm3QwaekmMdNMtp1F?=
+ =?us-ascii?Q?moYnlVKMnrEAF7YrX3eBesETPlordWvGndm+Rbp3b4x+9sBJQjFfh1NAZ/BJ?=
+ =?us-ascii?Q?SOFRWZBGiqPzC2mQGqGUhIyyhdot9YX4xsRSBjmIBwd17zby4pYvf00o45+J?=
+ =?us-ascii?Q?cFkH8IZnuKR8hpI5DkM8NPAXerrSk8R7s4Qa0ImVP5uphW5Z2RTEJrFL+RLk?=
+ =?us-ascii?Q?dxEZYgjcPNDk7du+a/wuEelQLVo78V/A/GHpwAt52SZLUN5uEV+CByUwEST9?=
+ =?us-ascii?Q?t7K05++QmIMSNd5Pwd9/r03ahsXV4vBI92N8/tvJ32yLZ5mRuKL6aXeMoA8N?=
+ =?us-ascii?Q?zvY/K6nTF2hNnoK+usM329lBdrorZcMXWAzHSOFeyQkKxALXN++pGJ+vxDIe?=
+ =?us-ascii?Q?x4Ti49XPZ2seahk1Wp+Rgjbrk87kEIoAmuRl6SVVA1WKZb4Uc2C3WR3RLSu5?=
+ =?us-ascii?Q?gs2ZVcrL8XgsJEJOUXgeqSUFmgxoVmXNeNB7P4jwjfDnlCFxrDiEOPydWdyL?=
+ =?us-ascii?Q?EstoMCOFo3i2CblSAqKJrYm9f7X+XrNR3Zzzp3LPk292cw8AxV3IECZEGumB?=
+ =?us-ascii?Q?GNZuXGMdc/hjggUGcr9sa70djVyUW1+zHAICpICD7T9YC8sz4roi8UaAWbes?=
+ =?us-ascii?Q?OxSFgdLP/fERB46AePOSec9WamXN6iyqLXBFWo0IBZJk+W/YG5+Jat3/Jx2V?=
+ =?us-ascii?Q?ZXOgnfO3Xg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4e080df-5622-4748-70b1-08da32e0b927
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 23:56:38.9435
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8U/sMxopDoprdD733X3vFJTOdP+DAbFVOPl3Sat8ZzQfICwUs5Dfzu9InhKG4ES6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2639
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 11 May 2022 at 07:29, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Tue, May 10, 2022 at 7:26 AM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > For x86_64, the current ffs() implementation does not produce
-> > optimized code when called with a constant expression. On the
-> > contrary, the __builtin_ffs() function of both GCC and clang is able
-> > to simplify the expression into a single instruction.
-> >
-> > * Example *
-> >
-> > Let's consider two dummy functions foo() and bar() as below:
-> >
-> > | #include <linux/bitops.h>
-> > | #define CONST 0x01000000
-> > |
-> > | unsigned int foo(void)
-> > | {
-> > |       return ffs(CONST);
-> > | }
-> > |
-> > | unsigned int bar(void)
-> > | {
-> > |       return __builtin_ffs(CONST);
-> > | }
-> >
-> > GCC would produce below assembly code:
-> >
-> > | 0000000000000000 <foo>:
-> > |    0: b8 ff ff ff ff          mov    $0xffffffff,%eax
-> > |    5: 0f bc c7                bsf    %edi,%eax
-> > |    8: 83 c0 01                add    $0x1,%eax
-> > |    b: c3                      ret
-> > |    c: 0f 1f 40 00             nopl   0x0(%rax)
-> > |
-> > | 0000000000000010 <bar>:
-> > |   10: b8 19 00 00 00          mov    $0x19,%eax
-> > |   15: c3                      ret
-> >
-> > And clang would produce:
-> >
-> > | 0000000000000000 <foo>:
-> > |    0: 55                      push   %rbp
-> > |    1: 48 89 e5                mov    %rsp,%rbp
-> > |    4: b8 ff ff ff ff          mov    $0xffffffff,%eax
-> > |    9: 0f bc 05 00 00 00 00    bsf    0x0(%rip),%eax        # 10 <foo+0x10>
-> > |   10: ff c0                   inc    %eax
-> > |   12: 5d                      pop    %rbp
-> > |   13: c3                      ret
-> > |   14: 66 2e 0f 1f 84 00 00    cs nopw 0x0(%rax,%rax,1)
-> > |   1b: 00 00 00
-> > |   1e: 66 90                   xchg   %ax,%ax
-> > |
-> > | 0000000000000020 <bar>:
-> > |   20: 55                      push   %rbp
-> > |   21: 48 89 e5                mov    %rsp,%rbp
-> > |   24: b8 19 00 00 00          mov    $0x19,%eax
-> > |   29: 5d                      pop    %rbp
-> > |   2a: c3                      ret
->
-> Right, we need to allocate registers to move the inputs into the asm
-> block, and the results back out. Inline asm is analogous to a call
-> with a custom calling convention, where we don't look into the body of
-> the inline asm.
->
-> Does -fomit-frame-pointer clean make these snippets clearer, or did
-> you not build with -O2?  Consider using those flags if so, since we
-> generally prefer the ORC unwinder on x86, not the frame pointer
-> unwinder.  If the compilers are forcing a frame pointer when using the
-> builtins once optimizations are enabled, that's a problem (that we've
-> seen in the past with the builtins for reading eflags with clang; now
-> fixed).
+On Mon, Apr 04, 2022 at 03:27:26PM +0300, Leon Romanovsky wrote:
+> +static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
+> +				 int ifindex_b, struct sockaddr *sb)
+> +{
+> +	if (ifindex_a != ifindex_b)
+> +		return ifindex_a - ifindex_b;
 
-I have not played with those parameters yet, so short answer, I
-am using the kernel default (above assembly was compiled with
-Kbuild).  You are touching a few topics I am not familiar with, I
-need some research on this before answering you in more detail.
+These subtraction tricks don't work if the value can overflow
+INT_MAX - INT_MIN == undefined
 
-> >
-> > For both examples, we clearly see the benefit of using __builtin_ffs()
-> > instead of the kernel's asm implementation for constant expressions.
-> >
-> > However, for non constant expressions, the ffs() asm version of the
-> > kernel remains better for x86_64 because, contrary to GCC, it doesn't
-> > emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-> > able optimize out the CMOV call).
-> >
-> > This patch uses the __builtin_constant_p() to select between the
-> > kernel's ffs() and the __builtin_ffs() depending on whether the
-> > argument is constant or not.
-> >
-> >
-> > As a side benefit, this patch also removes below -Wshadow warning:
-> >
-> > | ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-> > |   283 | static __always_inline int ffs(int x)
->
-> Nice! :)
 
-Thanks.
+> +static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
+> +{
+> +	struct rb_node **new = &id_table.rb_node, *parent = NULL;
 
-For the record, fixing the -Wshadow is my real motivation. I am
-pissed when the header files through some W=12 warnings.  Once
-this patch is applied, there will be one last annoying W=2
-warning to clear in order to only see local warnings and not
-random spam from headers when doing a W=12 (at least on x86_64).
+This read of rb_node has to be under the spinlock
 
-But because those kinds of W=2 fixes aren't so popular, I figured
-it would be better to offer something else. I first checked if
-GCC produces less optimized code than the kernel assembly: that
-was still the case. I then looked at the GCC mailing list to see
-if discussion on this topic existed. Didn't find it but found
-instead that GCC could optimize constant expressions. And voilà
-how I came to the creation of this patch.
+> +	struct id_table_entry *this, *node;
+> +	struct rdma_id_private *id_priv;
+> +	unsigned long flags;
+> +	int result;
+> +
+> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +	if (!node)
+> +		return -ENOMEM;
+> +
+> +	spin_lock_irqsave(&id_table_lock, flags);
+> +	while (*new) {
+> +		this = container_of(*new, struct id_table_entry, rb_node);
 
-> >
-> > [1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
-> > http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
->
-> + David, author of ca3d30cc02f7.  I was wondering if this applied to
-> more than just x86, but I see now that some architectures just include
-> include/asm-generic/bitops/builtin-ffs.h into their
-> arch/*/include/asm/bitops.h. It's only when we want to beat the
-> compiler for non-ICE expressions.
+Because rebalacing can alter the head
 
-Yes, I did a quick research, the majority of the architectures already
-rely on the builtin function.
-Would need to give a deeper look to track if anyone else other than
-x86 also uses assembly.
+> +		id_priv = list_first_entry(
+> +			&this->id_list, struct rdma_id_private, id_list_entry);
+> +		result = compare_netdev_and_ip(
+> +			node_id_priv->id.route.addr.dev_addr.bound_dev_if,
+> +			cma_dst_addr(node_id_priv),
+> +			id_priv->id.route.addr.dev_addr.bound_dev_if,
+> +			cma_dst_addr(id_priv));
 
-Also, this potentially may apply to builtin functions other than
-the ffs family. Just did not find any other cases so far.
+This pattern keeps repeating, one of the arguments to compare should
+just be the id_table_entry * and do the list_first/etc inside the
+compare.
 
-> Patch LGTM; just minor comments on commit message, naming, and formatting.
->
-> >
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  arch/x86/include/asm/bitops.h | 29 +++++++++++++++++------------
-> >  1 file changed, 17 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-> > index a288ecd230ab..535a7a358c14 100644
-> > --- a/arch/x86/include/asm/bitops.h
-> > +++ b/arch/x86/include/asm/bitops.h
-> > @@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigned long word)
-> >  #undef ADDR
-> >
-> >  #ifdef __KERNEL__
-> > -/**
-> > - * ffs - find first set bit in word
-> > - * @x: the word to search
-> > - *
-> > - * This is defined the same way as the libc and compiler builtin ffs
-> > - * routines, therefore differs in spirit from the other bitops.
-> > - *
-> > - * ffs(value) returns 0 if value is 0 or the position of the first
-> > - * set bit if value is nonzero. The first (least significant) bit
-> > - * is at position 1.
-> > - */
-> > -static __always_inline int ffs(int x)
-> > +static __always_inline int __ffs_asm(int x)
->
-> How about variable_ffs rather than __ffs_asm? Let's try to stick with
-> the convention used by test_bit?
-
-ACK. I will also follow this comment for path 2/2 and use
-__variable_ffs instead of __ffs_asm_not_zero there.
-
-> >  {
-> >         int r;
-> >
-> > @@ -310,6 +299,22 @@ static __always_inline int ffs(int x)
-> >         return r + 1;
-> >  }
-> >
-> > +/**
-> > + * ffs - find first set bit in word
-> > + * @x: the word to search
-> > + *
-> > + * This is defined the same way as the libc and compiler builtin ffs
-> > + * routines, therefore differs in spirit from the other bitops.
-> > + *
-> > + * ffs(value) returns 0 if value is 0 or the position of the first
-> > + * set bit if value is nonzero. The first (least significant) bit
-> > + * is at position 1.
-> > + */
-> > +#define ffs(x)                                 \
-> > +        (__builtin_constant_p(x) ?             \
-> > +         __builtin_ffs(x) :                    \
-> > +         __ffs_asm(x))
-> > +
->
-> I think this whole #define can fit on one line?
-
-I split it into multiple lines to be consistent with other macros
-in the file. I have no objections to doing it on a single line (I
-will just check if this is within the 80 characters limit and if
-so, will do a single line in v2).
-
-> If not, perhaps the
-> BCP can start on the initial line?  Otherwise it looks like the
-> then/else clauses are indented by 1 tab followed by 1 space. Consider
-> just using tabs.
-
-Right, I inadvertently added a space after the tab of the first
-line and the editor auto indentation repeated the patterns on the
-other lines.
-
-With that said, I will prepare the v2. I will send it within two
-days I think (can not do it right now).
-
-> >  /**
-> >   * fls - find last set bit in word
-> >   * @x: the word to search
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+Jason

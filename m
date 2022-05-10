@@ -2,357 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10F4522256
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E64B522257
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348001AbiEJR0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S1347980AbiEJR0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347957AbiEJRZx (ORCPT
+        with ESMTP id S1348049AbiEJR0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:25:53 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E2B4CD4E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:21:54 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652203312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9BnUX9L7fFC6FZQH+Z8kfV4MrXVz/gU8TaLzj3GzwfE=;
-        b=Sc9ixXYnpaYRJS0XNgIOFN+kDRa83HYNYyLK60/fLRQzpIedidG/vukGolYNhUHKMkN5nk
-        gZkqDEWv5VN7Rr6lSei5RVgdYHkitMCktiADJ3cvyR7487MBNS6HG7JUmv0Ue0La+ZZGha
-        kPeY1qOs9b7q16dtMeTDxzB/rfUNjuc=
-From:   andrey.konovalov@linux.dev
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2 3/3] kasan: clean-up kconfig options descriptions
-Date:   Tue, 10 May 2022 19:21:48 +0200
-Message-Id: <c160840dd9e4b1ad5529ecfdb0bba35d9a14d826.1652203271.git.andreyknvl@google.com>
-In-Reply-To: <896b2d914d6b50d677fd7b38f76967cc705c01ba.1652203271.git.andreyknvl@google.com>
-References: <896b2d914d6b50d677fd7b38f76967cc705c01ba.1652203271.git.andreyknvl@google.com>
-MIME-Version: 1.0
+        Tue, 10 May 2022 13:26:20 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2040.outbound.protection.outlook.com [40.107.102.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A001D0FF;
+        Tue, 10 May 2022 10:22:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IyYqLUxLZXDx2EiJHPK8B+a7Yz3jzcyzSXilrTm7TA2Mai+blku5i6Ozsu4Ju3c21xS+lm/60VOV7MWytfWYnymXEh/AfwrqcjbaaZ9qTFjy6TcG88SxceugVJaZc1Ngd1/7tYCMvqU11tpUE2vGGb1pfTYS9vzspvkemsg+lBo+eeVsMswUNhYJoaZSP3BrWA9kWlw+gg+AT8FuO0te0vokJuJxj3ar2F1+0KbIgF9bAb2tTs9seI6lstg7qGOweS3XE+UsQYG7XlbNAMfQSHv8vxOf0tAj3I25rG2tQI0b3HuRZ59hzf0hxQUxDPwgm2wmoXmxTkOhMPWLzy80iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AGYjx71YOIPqYQO2UTzNzsJ/4sCmtM2mGQxpEUNuNZI=;
+ b=Mv4QPW7HUHmuRY/FtNGD7j6u5shN2BQhEmvl9bmehflE2AjPExZ3Gj7tRdJ8GwI0CiiHCNw4nADrGASY9W3OhYMv4QcJZoGTaSD2T/9EhCUyQ0EuwdeBi38SM07Mb/sCJhkPDY4Bzg0v0VKj9Jhrg3+SGhny0qkH3LMR1jDodWvTOZaIRBjndeuRiavn0kQisqWYf1AZSrJ8E7H9p4H5krWZ2oegbduXR2R+fmJbmNzQ4EGNR8VEkMSb7+JrS9FiyZ9InObDzbgXWMqWCnP4xTko4nt6QB1V52XsewvR5Wb6aUCVXw7ouqcVzkQ2fm1JOYCuiDsWQL5wvsNxVUi7Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AGYjx71YOIPqYQO2UTzNzsJ/4sCmtM2mGQxpEUNuNZI=;
+ b=Q/t/atXxmpD+FS5N+gFV1q4atrIXnBgevMHAEFdHZ22NrpDqDU7Vlbm6gGw/rK6hszsSwbM/BbEiVuJ8+M0AkZg+A1qvS1FHtfedUrwVhX+PYT4wXMBqLQ2X5hGkrK/Lg/4HcNR1PCTkOmTUS+IAe50Ryb7h4uUxBbku3vT8I8w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BN9PR12MB5100.namprd12.prod.outlook.com (2603:10b6:408:119::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
+ 2022 17:22:20 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::fdba:2c6c:b9ab:38f]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::fdba:2c6c:b9ab:38f%4]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 17:22:20 +0000
+Message-ID: <2a0312d3-d576-b5be-c823-938b38096523@amd.com>
+Date:   Tue, 10 May 2022 19:22:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V2] dmabuf: ensure unique directory name for dmabuf stats
+Content-Language: en-US
+To:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        gregkh@linuxfoundation.org, sumit.semwal@linaro.org,
+        hridya@google.com, daniel.vetter@ffwll.ch, tjmercier@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <1652191562-18700-1-git-send-email-quic_charante@quicinc.com>
+ <4ac55be2-7d55-2c3b-0d5e-f61c02c62792@amd.com>
+ <6dc59fa7-5885-9ed1-54c3-f2d112786312@quicinc.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <6dc59fa7-5885-9ed1-54c3-f2d112786312@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: AM5PR0601CA0054.eurprd06.prod.outlook.com
+ (2603:10a6:206::19) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2b544507-32e0-4132-35de-08da32a9a3a8
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5100:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB510064851B425C67DE6CC96883C99@BN9PR12MB5100.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XbgnFydIg+XeTV79otyBBEqF1APqBqAYCYdHqubmUWl9Imw22t8c92yNcOJHtMFeNl6D3b/qZa1iz5Ng+7xBiFCY0Kt5guNoF3HDREQcww5YHt6vemBuVfMjXlEEVtdiZTLhej2VwvG2ncDOe3f334Q6TjkGZlHF9r75QIv78Edpf8/RTMFL1waDAUeDbchnVZ++DC+1EP8P4qMLtdZk3gOuEw5jOEnFvLIQBPrGv3EzWPirK7Z+zBZ88dzWkSpf6T6ZMcALeyj5Xa40ZeM0LC/MMmYHYkL03LcxtFgaoNIUY5KSramhiSUzpvlc/0plbMDBnPDFU1+wMj4W5nCrJU5RKQHSJ+ySErZ5A1ShEVwPx3rxKaK8G/ZFFXpCKcagBxsjNQAf2jIFcGtLDBZmz0bRSf80/pwUazsiT9r0/xGA6m4qqyANCLp8ImTPd+1t8CE6CtNTh30j2K8COEqk0NCK8nCjwha+Lkt0PJ1xGb1pQVxwg/u8C69z7Ub/+VThuGn4PBNfkHCqlRyhFyq0HPhRg7MshPUFie65Vft3VHCWg6KVqlgk1K5DCJj2FPcNHjHRevtCe6CakXFgy29Sp+pNE1Kip+aprl73Apj55dcGOglt6CdL1Gw3w3JgATluDIbo2VpGaX71b49hcssq88EV1i03du1yxXhVul9JSQ3OUmNAkw0DpVPpUoYiOew11tlXKEY8nLi7SlVU0tMCNjfC6l6kTQVdEU1Ar93Z+uA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(31696002)(66556008)(2906002)(508600001)(38100700002)(5660300002)(36756003)(186003)(31686004)(7416002)(83380400001)(8936002)(4326008)(66476007)(66946007)(316002)(86362001)(2616005)(8676002)(6506007)(6666004)(53546011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWpzNy9lOW1vRTJpRWEzZTFGSnJOSVVqNm5SSmcyTTUvSFNUNCtDSk9tWDRn?=
+ =?utf-8?B?NWZ0NnErQlpSeHRQcklldGRPaEF0bWdYWE9RS21LSmNQd1NEeHhrZDB4RnAw?=
+ =?utf-8?B?VXRLZ1ozRnVNam94NWszblY1djR0WEZxcHplTzdXWUcxZ0FEd2o5aHNQT2JV?=
+ =?utf-8?B?ck5TK2hMTWdUcXlKSkFkQThGTkFhUU1nYi9kait3Wi9ySFdVZmlQc2RjdWh1?=
+ =?utf-8?B?QkNwRFFkNDVSaitFcHorV2w0UHdGQTVDdnc4NE14cE15aFErTm9kcXByM0JG?=
+ =?utf-8?B?bUZqMXhXTzJTMjBxL3M2UjRnRWpSU3FMRWUxRWwxd28wNXRUOEVFRUd4ZlBh?=
+ =?utf-8?B?bVhXdi9vRzNQQzhWM0FrNWpjeU8wMmRCSS9uc0l5VE1aVTZMby9EcVZocFlQ?=
+ =?utf-8?B?V3RBajJTVTZ5Yk9CRXFlK0Q3bGcvMG1JTzh0bHJ1MkxaZHdPTmNtaFZUZGt5?=
+ =?utf-8?B?bG9ITTBUQkVHSnZlQlJYbjNFL0Rrdk51WUhMbU4rNnpENmRYVnIwaG56R3pr?=
+ =?utf-8?B?Wkludk9aNkpIMElwZkpyRGdzS21scFVDN29jZ053TWF1ZkJFUEVPTkxvS2VV?=
+ =?utf-8?B?M2FDQzNFa2NnWS9HNzFzZXJPdXBoNlVRZXJBZ3pzZnB5ZFR6U1BsMlFNc3NO?=
+ =?utf-8?B?YmkwVUxiVDdZVFY2ckZNWTJtTEUzMW5zdWcybm15clRCWTBuKzlRU0lYN1Vp?=
+ =?utf-8?B?dldESTZCTUYxQVU5TlNJNEs1VC9QQjBEbmlHMUVRWGZxQ3JmOVo5OEl1UitZ?=
+ =?utf-8?B?cjNMRjJMYW0zTXBWWTVpcGlwRHBGVjZQREdoak51QlFIcW5xdTRMTko5dkpC?=
+ =?utf-8?B?NGE3MGdEQ3IxWTA3YmtpN2lWSTFzRmZCUTJOL0RXbFYrbktqOGczRXZCZDRp?=
+ =?utf-8?B?NzVNSmJDcDVNUXhZTXBHS0svR01FREhySkFzb25jZWN6UGtVNDQ1dW5qKzlw?=
+ =?utf-8?B?TmNEMEFNUFNYTHdoOEF6ZGFkai8zMWhrVWZocGNiV0J5dTN6eUpTa1gySTVI?=
+ =?utf-8?B?ZUpsa0VjakJsQ25IbktLVFNOTjFMTkRIT1U4T0s2M0M1emI3UTBRUHdpQUpL?=
+ =?utf-8?B?cFgxdkFTdnhhUnpqUmtIZlFmdXVpNW55bEw2MktUUUN6Vmk2c29Pcm9MRno4?=
+ =?utf-8?B?bUlMYUQzQ1Y2Nnl2VDBXZzFsckNPVlQ5ZjJEZ1R2bjJhOHF2V254ZnhGeCtU?=
+ =?utf-8?B?TFp1dk9SY0orT21uSlUvanJlOGxOSU9ieVZSNVR1UXkwbmhtKzJpQWtPRlQ3?=
+ =?utf-8?B?amlybGhZV01sMTBvZEdtVkd5blN3ZGpVb1c0MFNLaUYvcmtOekVBSCtkYVlE?=
+ =?utf-8?B?NWgzM1dMbEtZVTBqNzZYRXVhU0J0Z29OaVpmazJkNUp2RE9xa3Exb3BieVB5?=
+ =?utf-8?B?VHlSZDVsbjZQWWdOSXl4ckhXNlIxT1NqYS8xTXhTUm9OWHdKQWdObzNIOEwv?=
+ =?utf-8?B?Sm1wUDA5UjBQV2l3ZmkvSnZIbGs5T3pPNGdpajlRdXpGeFZJcjE2SVJ6S0Vn?=
+ =?utf-8?B?ejlTaGFCcWFUN25Jd1hwak5teGtpOGhqVmR3Q1pRWWpEWUdRcU1PU0RzM25P?=
+ =?utf-8?B?cCtkZ0VIVC9hVjExL1hBWFFWMlFjRUJ3azg3OURxZkRvVmpTeG9uQzFicnov?=
+ =?utf-8?B?bE0zZkxybHgydmlDUWYwSXdUZjVWVk51L2VLR25zOHNVNmd6UzdCNnh5VXNj?=
+ =?utf-8?B?VXBDaUtXWERCU0NDYXg3TjdZbC9tVWw4WjEwZVFJSDQ2Vkhid3RkU2NQc3ZV?=
+ =?utf-8?B?T3Byc0dCaUVyeWx0eVM1NW9Dc29QR3RYRWpPL25QSTB0MGh3cXY3STlIS092?=
+ =?utf-8?B?QVg5SFRhMHVKTkNqYnJWWGZMb2Z1b1JzU2xqRjR6dmNCcnMwUjdpaStKTHlW?=
+ =?utf-8?B?Y2NHdG00TU9GZU00Nmx6bExaREQ4WkdJMEZiYSsxeFJyY1VaZTRqR1lBaUN0?=
+ =?utf-8?B?VkRrdFArMHFqemgyd2JsOEc2Zm00U29JbkVSM3M5dWJpeWN4Q2tlTmdTMktV?=
+ =?utf-8?B?WHlwQ1BTUHFnZU9sZXQvczRWdnV2OVNYQ2FEeUhmbUs2aEs5Q1M0QzhTZjB4?=
+ =?utf-8?B?WXd6Zk9peTNGd0NsWWRqS3VxUHVodDNIVVVRRktIUGV5Nm9iNSs0R083V05M?=
+ =?utf-8?B?ZVcrWEgySlpYQVpPOEJGZ2lJOVN6MWpXamNPQzhVT1dJWFRMdDBhWjVIajZJ?=
+ =?utf-8?B?KzBjNUk0c0NybWtQKzJHOTZxbTUwb2Nkang4eDFGaVg3Zm9FakcrbEdtRlBr?=
+ =?utf-8?B?bHk2SE80bG5nRlU1UEtsUmR4VjRsMEoxamdPYXFTbnZsUUY4NksrQlRyaE5a?=
+ =?utf-8?B?bjVMNDRsUjVGWlhlV0hyQ3hhVENlanFRcnYzb2pMemNsRHpyeDcrNFhhNU5w?=
+ =?utf-8?Q?CsPy7/M+ZY0/iUVQS6zV+Gpvyld2prsW/bJ5HQyoENMO8?=
+X-MS-Exchange-AntiSpam-MessageData-1: A/zJbmyMIvfhSg==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b544507-32e0-4132-35de-08da32a9a3a8
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 17:22:20.5105
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qt2xu/He98DdoyQ74L7xKEjK/WLtkIUEKlBt2N+SYrpYpsgAOvev9wKFHnFesL2E
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5100
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+Am 10.05.22 um 19:14 schrieb Charan Teja Kalla:
+> On 5/10/2022 8:42 PM, Christian König wrote:
+>>>     * The information in the interface can also be used to derive
+>>> per-exporter
+>>>     * statistics. The data from the interface can be gathered on error
+>>> conditions
+>>> @@ -172,6 +172,7 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
+>>>    {
+>>>        struct dma_buf_sysfs_entry *sysfs_entry;
+>>>        int ret;
+>>> +    static atomic64_t unique_id = ATOMIC_INIT(0);
+>> Please move that to the beginning of the declarations.
+>>
+> Done. Any scripts I can run at my end to catch these type of trivial
+> changes? checkpatch.pl didn't report this coding style.
 
-Various readability clean-ups of KASAN Kconfig options.
+Not that I know of. It's also not a hard requirement, I let it mostly 
+slip in the drivers I maintain. But upstream people sometimes insist on 
+that, so I want to be clean at least in driver independent frameworks.
 
-No functional changes.
+>>>          if (!dmabuf || !dmabuf->file)
+>>>            return -EINVAL;
+>>> @@ -192,7 +193,8 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
+>>>          /* create the directory for buffer stats */
+>>>        ret = kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype,
+>>> NULL,
+>>> -                   "%lu", file_inode(dmabuf->file)->i_ino);
+>>> +                   "%lu-%lu", file_inode(dmabuf->file)->i_ino,
+>> Why not just use the unique value here? Or is the inode number necessary
+>> for something?
+> This will ease the debugging a lot. Given the dump, I can easily map
+> which dmabuf buffer to the process. On the crashutilty I just have to
+> search for this inode in the files output, just one example.
 
-Reviewed-by: Marco Elver <elver@google.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- lib/Kconfig.kasan | 168 ++++++++++++++++++++++------------------------
- 1 file changed, 82 insertions(+), 86 deletions(-)
+T.J. Mercier just confirmed my suspicion that this would break the UAPI. 
+So that won't work.
 
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index 1f3e620188a2..f0973da583e0 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
- # This config refers to the generic KASAN mode.
- config HAVE_ARCH_KASAN
- 	bool
-@@ -15,9 +16,8 @@ config HAVE_ARCH_KASAN_VMALLOC
- config ARCH_DISABLE_KASAN_INLINE
- 	bool
- 	help
--	  An architecture might not support inline instrumentation.
--	  When this option is selected, inline and stack instrumentation are
--	  disabled.
-+	  Disables both inline and stack instrumentation. Selected by
-+	  architectures that do not support these instrumentation types.
- 
- config CC_HAS_KASAN_GENERIC
- 	def_bool $(cc-option, -fsanitize=kernel-address)
-@@ -26,13 +26,13 @@ config CC_HAS_KASAN_SW_TAGS
- 	def_bool $(cc-option, -fsanitize=kernel-hwaddress)
- 
- # This option is only required for software KASAN modes.
--# Old GCC versions don't have proper support for no_sanitize_address.
-+# Old GCC versions do not have proper support for no_sanitize_address.
- # See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89124 for details.
- config CC_HAS_WORKING_NOSANITIZE_ADDRESS
- 	def_bool !CC_IS_GCC || GCC_VERSION >= 80300
- 
- menuconfig KASAN
--	bool "KASAN: runtime memory debugger"
-+	bool "KASAN: dynamic memory safety error detector"
- 	depends on (((HAVE_ARCH_KASAN && CC_HAS_KASAN_GENERIC) || \
- 		     (HAVE_ARCH_KASAN_SW_TAGS && CC_HAS_KASAN_SW_TAGS)) && \
- 		    CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
-@@ -40,10 +40,13 @@ menuconfig KASAN
- 	depends on (SLUB && SYSFS) || (SLAB && !DEBUG_SLAB)
- 	select STACKDEPOT_ALWAYS_INIT
- 	help
--	  Enables KASAN (KernelAddressSANitizer) - runtime memory debugger,
--	  designed to find out-of-bounds accesses and use-after-free bugs.
-+	  Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
-+	  error detector designed to find out-of-bounds and use-after-free bugs.
-+
- 	  See Documentation/dev-tools/kasan.rst for details.
- 
-+	  For better error reports, also enable CONFIG_STACKTRACE.
-+
- if KASAN
- 
- choice
-@@ -51,75 +54,71 @@ choice
- 	default KASAN_GENERIC
- 	help
- 	  KASAN has three modes:
--	  1. generic KASAN (similar to userspace ASan,
--	     x86_64/arm64/xtensa, enabled with CONFIG_KASAN_GENERIC),
--	  2. software tag-based KASAN (arm64 only, based on software
--	     memory tagging (similar to userspace HWASan), enabled with
--	     CONFIG_KASAN_SW_TAGS), and
--	  3. hardware tag-based KASAN (arm64 only, based on hardware
--	     memory tagging, enabled with CONFIG_KASAN_HW_TAGS).
- 
--	  All KASAN modes are strictly debugging features.
-+	  1. Generic KASAN (supported by many architectures, enabled with
-+	     CONFIG_KASAN_GENERIC, similar to userspace ASan),
-+	  2. Software Tag-Based KASAN (arm64 only, based on software memory
-+	     tagging, enabled with CONFIG_KASAN_SW_TAGS, similar to userspace
-+	     HWASan), and
-+	  3. Hardware Tag-Based KASAN (arm64 only, based on hardware memory
-+	     tagging, enabled with CONFIG_KASAN_HW_TAGS).
- 
--	  For better error reports enable CONFIG_STACKTRACE.
-+	  See Documentation/dev-tools/kasan.rst for details about each mode.
- 
- config KASAN_GENERIC
--	bool "Generic mode"
-+	bool "Generic KASAN"
- 	depends on HAVE_ARCH_KASAN && CC_HAS_KASAN_GENERIC
- 	depends on CC_HAS_WORKING_NOSANITIZE_ADDRESS
- 	select SLUB_DEBUG if SLUB
- 	select CONSTRUCTORS
- 	help
--	  Enables generic KASAN mode.
-+	  Enables Generic KASAN.
- 
--	  This mode is supported in both GCC and Clang. With GCC it requires
--	  version 8.3.0 or later. Any supported Clang version is compatible,
--	  but detection of out-of-bounds accesses for global variables is
--	  supported only since Clang 11.
-+	  Requires GCC 8.3.0+ or Clang.
- 
--	  This mode consumes about 1/8th of available memory at kernel start
--	  and introduces an overhead of ~x1.5 for the rest of the allocations.
-+	  Consumes about 1/8th of available memory at kernel start and adds an
-+	  overhead of ~50% for dynamic allocations.
- 	  The performance slowdown is ~x3.
- 
--	  Currently CONFIG_KASAN_GENERIC doesn't work with CONFIG_DEBUG_SLAB
--	  (the resulting kernel does not boot).
-+	  (Incompatible with CONFIG_DEBUG_SLAB: the kernel does not boot.)
- 
- config KASAN_SW_TAGS
--	bool "Software tag-based mode"
-+	bool "Software Tag-Based KASAN"
- 	depends on HAVE_ARCH_KASAN_SW_TAGS && CC_HAS_KASAN_SW_TAGS
- 	depends on CC_HAS_WORKING_NOSANITIZE_ADDRESS
- 	select SLUB_DEBUG if SLUB
- 	select CONSTRUCTORS
- 	help
--	  Enables software tag-based KASAN mode.
-+	  Enables Software Tag-Based KASAN.
- 
--	  This mode require software memory tagging support in the form of
--	  HWASan-like compiler instrumentation.
-+	  Requires GCC 11+ or Clang.
- 
--	  Currently this mode is only implemented for arm64 CPUs and relies on
--	  Top Byte Ignore. This mode requires Clang.
-+	  Supported only on arm64 CPUs and relies on Top Byte Ignore.
- 
--	  This mode consumes about 1/16th of available memory at kernel start
--	  and introduces an overhead of ~20% for the rest of the allocations.
--	  This mode may potentially introduce problems relating to pointer
--	  casting and comparison, as it embeds tags into the top byte of each
--	  pointer.
-+	  Consumes about 1/16th of available memory at kernel start and
-+	  add an overhead of ~20% for dynamic allocations.
- 
--	  Currently CONFIG_KASAN_SW_TAGS doesn't work with CONFIG_DEBUG_SLAB
--	  (the resulting kernel does not boot).
-+	  May potentially introduce problems related to pointer casting and
-+	  comparison, as it embeds a tag into the top byte of each pointer.
-+
-+	  (Incompatible with CONFIG_DEBUG_SLAB: the kernel does not boot.)
- 
- config KASAN_HW_TAGS
--	bool "Hardware tag-based mode"
-+	bool "Hardware Tag-Based KASAN"
- 	depends on HAVE_ARCH_KASAN_HW_TAGS
- 	depends on SLUB
- 	help
--	  Enables hardware tag-based KASAN mode.
-+	  Enables Hardware Tag-Based KASAN.
-+
-+	  Requires GCC 10+ or Clang 12+.
- 
--	  This mode requires hardware memory tagging support, and can be used
--	  by any architecture that provides it.
-+	  Supported only on arm64 CPUs starting from ARMv8.5 and relies on
-+	  Memory Tagging Extension and Top Byte Ignore.
- 
--	  Currently this mode is only implemented for arm64 CPUs starting from
--	  ARMv8.5 and relies on Memory Tagging Extension and Top Byte Ignore.
-+	  Consumes about 1/32nd of available memory.
-+
-+	  May potentially introduce problems related to pointer casting and
-+	  comparison, as it embeds a tag into the top byte of each pointer.
- 
- endchoice
- 
-@@ -131,83 +130,80 @@ choice
- config KASAN_OUTLINE
- 	bool "Outline instrumentation"
- 	help
--	  Before every memory access compiler insert function call
--	  __asan_load*/__asan_store*. These functions performs check
--	  of shadow memory. This is slower than inline instrumentation,
--	  however it doesn't bloat size of kernel's .text section so
--	  much as inline does.
-+	  Makes the compiler insert function calls that check whether the memory
-+	  is accessible before each memory access. Slower than KASAN_INLINE, but
-+	  does not bloat the size of the kernel's .text section so much.
- 
- config KASAN_INLINE
- 	bool "Inline instrumentation"
- 	depends on !ARCH_DISABLE_KASAN_INLINE
- 	help
--	  Compiler directly inserts code checking shadow memory before
--	  memory accesses. This is faster than outline (in some workloads
--	  it gives about x2 boost over outline instrumentation), but
--	  make kernel's .text size much bigger.
-+	  Makes the compiler directly insert memory accessibility checks before
-+	  each memory access. Faster than KASAN_OUTLINE (gives ~x2 boost for
-+	  some workloads), but makes the kernel's .text size much bigger.
- 
- endchoice
- 
- config KASAN_STACK
--	bool "Enable stack instrumentation (unsafe)" if CC_IS_CLANG && !COMPILE_TEST
-+	bool "Stack instrumentation (unsafe)" if CC_IS_CLANG && !COMPILE_TEST
- 	depends on KASAN_GENERIC || KASAN_SW_TAGS
- 	depends on !ARCH_DISABLE_KASAN_INLINE
- 	default y if CC_IS_GCC
- 	help
--	  The LLVM stack address sanitizer has a know problem that
--	  causes excessive stack usage in a lot of functions, see
--	  https://bugs.llvm.org/show_bug.cgi?id=38809
--	  Disabling asan-stack makes it safe to run kernels build
--	  with clang-8 with KASAN enabled, though it loses some of
--	  the functionality.
--	  This feature is always disabled when compile-testing with clang
--	  to avoid cluttering the output in stack overflow warnings,
--	  but clang users can still enable it for builds without
--	  CONFIG_COMPILE_TEST.	On gcc it is assumed to always be safe
--	  to use and enabled by default.
--	  If the architecture disables inline instrumentation, stack
--	  instrumentation is also disabled as it adds inline-style
--	  instrumentation that is run unconditionally.
-+	  Disables stack instrumentation and thus KASAN's ability to detect
-+	  out-of-bounds bugs in stack variables.
-+
-+	  With Clang, stack instrumentation has a problem that causes excessive
-+	  stack usage, see https://bugs.llvm.org/show_bug.cgi?id=38809. Thus,
-+	  with Clang, this option is deemed unsafe.
-+
-+	  This option is always disabled when compile-testing with Clang to
-+	  avoid cluttering the log with stack overflow warnings.
-+
-+	  With GCC, enabling stack instrumentation is assumed to be safe.
-+
-+	  If the architecture disables inline instrumentation via
-+	  ARCH_DISABLE_KASAN_INLINE, stack instrumentation gets disabled
-+	  as well, as it adds inline-style instrumentation that is run
-+	  unconditionally.
- 
- config KASAN_TAGS_IDENTIFY
--	bool "Enable memory corruption identification"
-+	bool "Memory corruption type identification"
- 	depends on KASAN_SW_TAGS || KASAN_HW_TAGS
- 	help
--	  This option enables best-effort identification of bug type
--	  (use-after-free or out-of-bounds) at the cost of increased
--	  memory consumption.
-+	  Enables best-effort identification of the bug types (use-after-free
-+	  or out-of-bounds) at the cost of increased memory consumption.
-+	  Only applicable for the tag-based KASAN modes.
- 
- config KASAN_VMALLOC
- 	bool "Check accesses to vmalloc allocations"
- 	depends on HAVE_ARCH_KASAN_VMALLOC
- 	help
--	  This mode makes KASAN check accesses to vmalloc allocations for
--	  validity.
-+	  Makes KASAN check the validity of accesses to vmalloc allocations.
- 
--	  With software KASAN modes, checking is done for all types of vmalloc
--	  allocations. Enabling this option leads to higher memory usage.
-+	  With software KASAN modes, all types vmalloc allocations are
-+	  checked. Enabling this option leads to higher memory usage.
- 
--	  With hardware tag-based KASAN, only VM_ALLOC mappings are checked.
--	  There is no additional memory usage.
-+	  With Hardware Tag-Based KASAN, only non-executable VM_ALLOC mappings
-+	  are checked. There is no additional memory usage.
- 
- config KASAN_KUNIT_TEST
- 	tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
- 	depends on KASAN && KUNIT
- 	default KUNIT_ALL_TESTS
- 	help
--	  This is a KUnit test suite doing various nasty things like
--	  out of bounds and use after free accesses. It is useful for testing
--	  kernel debugging features like KASAN.
-+	  A KUnit-based KASAN test suite. Triggers different kinds of
-+	  out-of-bounds and use-after-free accesses. Useful for testing whether
-+	  KASAN can detect certain bug types.
- 
- 	  For more information on KUnit and unit tests in general, please refer
--	  to the KUnit documentation in Documentation/dev-tools/kunit.
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
- 
- config KASAN_MODULE_TEST
- 	tristate "KUnit-incompatible tests of KASAN bug detection capabilities"
- 	depends on m && KASAN && !KASAN_HW_TAGS
- 	help
--	  This is a part of the KASAN test suite that is incompatible with
--	  KUnit. Currently includes tests that do bad copy_from/to_user
--	  accesses.
-+	  A part of the KASAN test suite that is not integrated with KUnit.
-+	  Incompatible with Hardware Tag-Based KASAN.
- 
- endif # KASAN
--- 
-2.25.1
+This needs to be a single number, preferable documented as such.
+
+Regards,
+Christian.
 

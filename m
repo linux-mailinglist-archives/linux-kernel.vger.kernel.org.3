@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69B7521A87
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BFA521A8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242248AbiEJNzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S1343816AbiEJOCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiEJNiD (ORCPT
+        with ESMTP id S244842AbiEJNiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20B15BD09;
-        Tue, 10 May 2022 06:26:22 -0700 (PDT)
+        Tue, 10 May 2022 09:38:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C863861624;
+        Tue, 10 May 2022 06:26:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6CFA615C8;
-        Tue, 10 May 2022 13:26:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89D4C385A6;
-        Tue, 10 May 2022 13:26:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C039DB81D24;
+        Tue, 10 May 2022 13:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70D8C385A6;
+        Tue, 10 May 2022 13:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189181;
-        bh=abmYuJArJqRPZKjjiUnONxxuXLGmX/tmZAbp6sJlbwo=;
+        s=korg; t=1652189184;
+        bh=DHz9FBVHZk9j/KZCg+ljNfPo6VkSfiVP4tnwrZI+KG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CNJVO6bc8pyCy5lfiWIZ/HFhEg945nsOH012FTd0va2z9rbrqUVCj36IvDNEri7cU
-         0BJpnuunxgvOhR4BXQALtXTaPMFFK7O1s30qzZ+fDC1SWVPjmjwR63bXk8JQZP/KIl
-         CnUCr7PYWytcb7/FbaHgTUD4zbeoTG3wExGjPdhs=
+        b=kRkfB3VlDeUJZtf83UBqYZU/2qCgmDuINn2F65h44b8aAB1b6Rdx8FgsRK2CuU5vj
+         4wdkcDJRpdVg9UEohwzqwFTGcUri24DR8IEtURZttp2ic1nQwmrb353q0LI+sFUKVp
+         /ZhCnQHI1haMq607u2MIxa6ESmUpPKmdkPk22OTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oz Shlomo <ozsh@nvidia.com>,
-        Paul Blakey <paulb@nvidia.com>,
+        stable@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.10 39/70] net/mlx5e: CT: Fix queued up restore put() executing after relevant ft release
-Date:   Tue, 10 May 2022 15:07:58 +0200
-Message-Id: <20220510130734.007929518@linuxfoundation.org>
+Subject: [PATCH 5.10 40/70] net/mlx5e: Fix the calling of update_buffer_lossy() API
+Date:   Tue, 10 May 2022 15:07:59 +0200
+Message-Id: <20220510130734.036026407@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
 References: <20220510130732.861729621@linuxfoundation.org>
@@ -55,44 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Mark Zhang <markzhang@nvidia.com>
 
-commit b069e14fff46c8da9fcc79957f8acaa3e2dfdb6b upstream.
+commit c4d963a588a6e7c4ef31160e80697ae8e5a47746 upstream.
 
-__mlx5_tc_ct_entry_put() queues release of tuple related to some ct FT,
-if that is the last reference to that tuple, the actual deletion of
-the tuple can happen after the FT is already destroyed and freed.
+The arguments of update_buffer_lossy() is in a wrong order. Fix it.
 
-Flush the used workqueue before destroying the ct FT.
-
-Fixes: a2173131526d ("net/mlx5e: CT: manage the lifetime of the ct entry object")
-Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Fixes: 88b3d5c90e96 ("net/mlx5e: Fix port buffers cell size value")
+Signed-off-by: Mark Zhang <markzhang@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-@@ -1629,6 +1629,8 @@ mlx5_tc_ct_flush_ft_entry(void *ptr, voi
- static void
- mlx5_tc_ct_del_ft_cb(struct mlx5_tc_ct_priv *ct_priv, struct mlx5_ct_ft *ft)
- {
-+	struct mlx5e_priv *priv;
-+
- 	if (!refcount_dec_and_test(&ft->refcount))
- 		return;
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
+@@ -309,8 +309,8 @@ int mlx5e_port_manual_buffer_config(stru
+ 		if (err)
+ 			return err;
  
-@@ -1638,6 +1640,8 @@ mlx5_tc_ct_del_ft_cb(struct mlx5_tc_ct_p
- 	rhashtable_free_and_destroy(&ft->ct_entries_ht,
- 				    mlx5_tc_ct_flush_ft_entry,
- 				    ct_priv);
-+	priv = netdev_priv(ct_priv->netdev);
-+	flush_workqueue(priv->wq);
- 	mlx5_tc_ct_free_pre_ct_tables(ft);
- 	mapping_remove(ct_priv->zone_mapping, ft->zone_restore_id);
- 	kfree(ft);
+-		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, port_buff_cell_sz,
+-					  xoff, &port_buffer, &update_buffer);
++		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, xoff,
++					  port_buff_cell_sz, &port_buffer, &update_buffer);
+ 		if (err)
+ 			return err;
+ 	}
 
 

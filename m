@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D477152114F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFAC521153
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbiEJJto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S239213AbiEJJuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239132AbiEJJti (ORCPT
+        with ESMTP id S239209AbiEJJuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:49:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C057613D7D;
-        Tue, 10 May 2022 02:45:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BEB3615F6;
-        Tue, 10 May 2022 09:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27EE5C385A6;
-        Tue, 10 May 2022 09:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652175940;
-        bh=DA2sXq3+sFtWkZvanBaOfDxgyFD71ZwLr0nhsoVt/Vs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WSYdStevd34miebV06Iq8S7LogMNsnybjdRk8kFhtYWJCiG+xDCZXddPnvEy3wgAS
-         lqkXSJqbX+/FScknnQvdxd5+w6U0N/CW29rEvI9i58awd1417yhTvFe1j/JtJbHFQC
-         ZP6JkiIWR4Qmxx0mHGApe1W2j7RcxXZKiNlbdFu/eyYRB5oPGlNpBB8VVLlwySI+kJ
-         2lz6OUIuQwgXuBGjcVZ+KsDDVhPKaKm/ScZX49IgnPpjvZqZrWcPXuXoqJG7XgZM0/
-         AvEH/IdFwyCVkrTu0Ol6i9rJeSAiSqYnfmPQ9lzTtMnPeaZi50GrozyBprOatGJXOy
-         qkN3l0+AOZlHw==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Clark Williams <williams@redhat.com>
-Subject: [PATCH 3/3] tracing/timerlat: Do not wakeup the thread if the trace stops at the IRQ
-Date:   Tue, 10 May 2022 11:45:25 +0200
-Message-Id: <b392356c91b56aedd2b289513cc56a84cf87e60d.1652175637.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <2c2d9a56c0886c8402ba320de32856cbbb10c2bb.1652175637.git.bristot@kernel.org>
-References: <2c2d9a56c0886c8402ba320de32856cbbb10c2bb.1652175637.git.bristot@kernel.org>
+        Tue, 10 May 2022 05:50:05 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC471CEEC7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:46:07 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id y63so17922566oia.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o39NrF3LSVHYlVpwQr3bgKqf/zDQFHhHc4PtC81jizY=;
+        b=SfCXjLw/VznGk6AzMLnh7lqE+0bjdTxIsbqedkWfVZqnAVpZe04Rtg0cAPR5Lm0vOw
+         a1kDK6R6UBoc+F5Yl3KfbXmwnV6Cs4sXZNlaUnx1/SMPTpAyZQkLkF/c9D8aBrv01Iah
+         tvG1ziIqkAHUJiTdG/zyHnWJUmkIImU8U2SPnPtDhy2YyWpsswc1M9nnhnmZ18vN+sZE
+         jt7q/yvmNghXEQD0vNgIaZ2okgFiFQ1cF/kdeFLmaU8QY94W+1SMIvm9Jlxq+fbwdn2v
+         P2tJNjrzzSCEvw3d1vtCJUmt5N51xAAbG3jSDRoljFkTgx8V7lFNvSPxaRxk90AGZSLH
+         ZhNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o39NrF3LSVHYlVpwQr3bgKqf/zDQFHhHc4PtC81jizY=;
+        b=vnlgjjDVVWywfXQsWaaa+9HQweONF4pzh5nyedkl1uq0BA1Z20AT18yMEmNHRibeS6
+         +2bPwEiBzsgNqH9BjkWyt/wZnM5zg4wOVCR4lf3rWwJzdiGh0YWsxx+S2Bvn75n5nqd+
+         s4WuRZErm2eDy/7U7hOM/C4fOqYlvu5xhLlt0HZQVVY48jZKjRBBpf1F8PKgDYtvkce7
+         A9lm+nRj0EkzRBnt7BHiqNCMehnzdyR3OnfO5J1+EB0Xr+9cYMlCccBW0Jxhvzk5h7Nr
+         f69A/sWOSH6WmdZmJj0OyqLG368oIqcMws9CFL1wevTdpYSdPmwA7ze3PjRCxMk3dxQh
+         qgag==
+X-Gm-Message-State: AOAM533fllQRbV7TYUsZ9yfmNma9vzFs1p9Dqzv02NHR+ZkX2WGSQT7a
+        HiJNv0I24naaRRogkqtG0pylPJs80yMuultx8ejldA==
+X-Google-Smtp-Source: ABdhPJwLwLi6HfB/M1LmfOIjn+TH5lqS8GI3HaBOG4okjrcTmcuCVhyHfe6tbTsbpvj2w6SW3d8BLPBFZfrHl3Rc9Qo=
+X-Received: by 2002:aca:180b:0:b0:2f7:23ae:8cd1 with SMTP id
+ h11-20020aca180b000000b002f723ae8cd1mr13435377oih.146.1652175966977; Tue, 10
+ May 2022 02:46:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220509162559.2387784-1-oupton@google.com> <20220509162559.2387784-3-oupton@google.com>
+In-Reply-To: <20220509162559.2387784-3-oupton@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 10 May 2022 10:45:30 +0100
+Message-ID: <CA+EHjTztV9ZN4sQyS8BGxuROw4NY873LXve8LPjo417Ao6y4aQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, qperret@google.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to wakeup the timerlat/ thread if stop tracing is hit
-at the timerlat's IRQ handler.
+Hi Oliver,
 
-Return before waking up timerlat's thread.
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- kernel/trace/trace_osnoise.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, May 9, 2022 at 5:26 PM Oliver Upton <oupton@google.com> wrote:
+>
+> FEAT_SVE is already masked by the fixed configuration for
+> ID_AA64PFR0_EL1; don't try and mask it at runtime.
+>
+> No functional change intended.
+>
+> Signed-off-by: Oliver Upton <oupton@google.com>
+> ---
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 9b204ee3c6f5..035ec8b84e12 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1595,6 +1595,8 @@ static enum hrtimer_restart timerlat_irq(struct hrtimer *timer)
- 
- 			osnoise_stop_tracing();
- 			notify_new_max_latency(diff);
-+
-+			return HRTIMER_NORESTART;
- 		}
- 	}
- 
--- 
-2.32.0
+Reviewed-by: Fuad Tabba <tabba@google.com>
 
+Cheers,
+/fuad
+
+
+>  arch/arm64/kvm/hyp/nvhe/sys_regs.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> index 33f5181af330..3f5d7bd171c5 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> @@ -90,9 +90,6 @@ static u64 get_pvm_id_aa64pfr0(const struct kvm_vcpu *vcpu)
+>         u64 set_mask = 0;
+>         u64 allow_mask = PVM_ID_AA64PFR0_ALLOW;
+>
+> -       if (!vcpu_has_sve(vcpu))
+> -               allow_mask &= ~ARM64_FEATURE_MASK(ID_AA64PFR0_SVE);
+> -
+>         set_mask |= get_restricted_features_unsigned(id_aa64pfr0_el1_sys_val,
+>                 PVM_ID_AA64PFR0_RESTRICT_UNSIGNED);
+>
+> --
+> 2.36.0.512.ge40c2bad7a-goog
+>

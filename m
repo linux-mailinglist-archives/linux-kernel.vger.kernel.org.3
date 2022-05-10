@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1035521A96
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DB75218AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244994AbiEJN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S243563AbiEJNjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244843AbiEJNiI (ORCPT
+        with ESMTP id S242769AbiEJNYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1562CFC;
-        Tue, 10 May 2022 06:26:29 -0700 (PDT)
+        Tue, 10 May 2022 09:24:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB601D5268;
+        Tue, 10 May 2022 06:17:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3D9CB81DA8;
-        Tue, 10 May 2022 13:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A668C385A6;
-        Tue, 10 May 2022 13:26:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AC9CB81CE7;
+        Tue, 10 May 2022 13:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EBBC385C9;
+        Tue, 10 May 2022 13:17:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189187;
-        bh=O6BESBseo/1PxSG1YQz7m3Aoqpw3BtYVHDjNoochBjA=;
+        s=korg; t=1652188647;
+        bh=nkxvK/LmljPa2TgaOh3D/laoycyV7JXVdk9NozXoCvo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R98m76OkHffd8PUUgK1hl/zIdF5AqRBrf8y/N5sqPnLr1DIOC22DHfktewRNXnHte
-         kW9IdWriPIhkWoF3/f+skxZlYtRJfiiD8vH9xKr6UKSeAEo3Hia0civfb5W0T+wE61
-         oi47NPfoSOB6J89GS0mbUaUofoAnJq15I7QGA89M=
+        b=YpbozLKwRFQXJu3YQF0Hx6YRGzGzVC9WuOPwtTjIF9SQtIpSjqF3nx0T0gfw6pk+b
+         RG2/n3uCAz8crCiJrfnrym584xiVtcfow0FjIJ6gQpx02hxBR85KXOXBzbxNE20ux9
+         T4SKBitKCWkajpOSlSbsbE6xJs2e3C9fQ622hVHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
-        Maher Sanalla <msanalla@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.10 41/70] net/mlx5: Avoid double clear or set of sync reset requested
+        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 74/78] net: ipv6: ensure we call ipv6_mc_down() at most once
 Date:   Tue, 10 May 2022 15:08:00 +0200
-Message-Id: <20220510130734.064449793@linuxfoundation.org>
+Message-Id: <20220510130734.719777234@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Shemesh <moshe@nvidia.com>
+From: j.nixdorf@avm.de <j.nixdorf@avm.de>
 
-commit fc3d3db07b35885f238e1fa06b9f04a8fa7a62d0 upstream.
+commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
 
-Double clear of reset requested state can lead to NULL pointer as it
-will try to delete the timer twice. This can happen for example on a
-race between abort from FW and pci error or reset. Avoid such case using
-test_and_clear_bit() to verify only one time reset requested state clear
-flow. Similarly use test_and_set_bit() to verify only one time reset
-requested state set flow.
+There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
+either the network device is actually going down, or IPv6 was disabled
+on the interface.
 
-Fixes: 7dd6df329d4c ("net/mlx5: Handle sync reset abort event")
-Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
-Reviewed-by: Shay Drory <shayd@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+If either of them stays down while the other is toggled, we repeatedly
+call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
+calling the corresponding ipv6_mc_up() in between. This will cause a
+new entry in idev->mc_tomb to be allocated for each multicast group
+the interface is subscribed to, which in turn leaks one struct ifmcaddr6
+per nontrivial multicast group the interface is subscribed to.
+
+The following reproducer will leak at least $n objects:
+
+ip addr add ff2e::4242/32 dev eth0 autojoin
+sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
+for i in $(seq 1 $n); do
+	ip link set up eth0; ip link set down eth0
+done
+
+Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
+sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
+can also be used to create a nontrivial idev->mc_list, which will the
+leak objects with the right up-down-sequence.
+
+Based on both sources for NETDEV_DOWN events the interface IPv6 state
+should be considered:
+
+ - not ready if the network interface is not ready OR IPv6 is disabled
+   for it
+ - ready if the network interface is ready AND IPv6 is enabled for it
+
+The functions ipv6_mc_up() and ipv6_down() should only be run when this
+state changes.
+
+Implement this by remembering when the IPv6 state is ready, and only
+run ipv6_mc_down() if it actually changed from ready to not ready.
+
+The other direction (not ready -> ready) already works correctly, as:
+
+ - the interface notification triggered codepath for NETDEV_UP /
+   NETDEV_CHANGE returns early if ipv6 is disabled, and
+ - the disable_ipv6=0 triggered codepath skips fully initializing the
+   interface as long as addrconf_link_ready(dev) returns false
+ - calling ipv6_mc_up() repeatedly does not leak anything
+
+Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
+Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[jnixdorf: context updated for bpo to v4.9/v4.14]
+Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |   28 ++++++++++++++-------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ net/ipv6/addrconf.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-@@ -134,14 +134,19 @@ static void mlx5_stop_sync_reset_poll(st
- 	del_timer_sync(&fw_reset->timer);
- }
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -3580,6 +3580,7 @@ static int addrconf_ifdown(struct net_de
+ 	struct list_head del_list;
+ 	int _keep_addr;
+ 	bool keep_addr;
++	bool was_ready;
+ 	int state, i;
  
--static void mlx5_sync_reset_clear_reset_requested(struct mlx5_core_dev *dev, bool poll_health)
-+static int mlx5_sync_reset_clear_reset_requested(struct mlx5_core_dev *dev, bool poll_health)
- {
- 	struct mlx5_fw_reset *fw_reset = dev->priv.fw_reset;
+ 	ASSERT_RTNL();
+@@ -3643,7 +3644,10 @@ restart:
  
-+	if (!test_and_clear_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags)) {
-+		mlx5_core_warn(dev, "Reset request was already cleared\n");
-+		return -EALREADY;
-+	}
-+
- 	mlx5_stop_sync_reset_poll(dev);
--	clear_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags);
- 	if (poll_health)
- 		mlx5_start_health_poll(dev);
-+	return 0;
- }
+ 	addrconf_del_rs_timer(idev);
  
- #define MLX5_RESET_POLL_INTERVAL	(HZ / 10)
-@@ -185,13 +190,17 @@ static int mlx5_fw_reset_set_reset_sync_
- 	return mlx5_reg_mfrl_set(dev, MLX5_MFRL_REG_RESET_LEVEL3, 0, 2, false);
- }
+-	/* Step 2: clear flags for stateless addrconf */
++	/* Step 2: clear flags for stateless addrconf, repeated down
++	 *         detection
++	 */
++	was_ready = idev->if_flags & IF_READY;
+ 	if (!how)
+ 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
  
--static void mlx5_sync_reset_set_reset_requested(struct mlx5_core_dev *dev)
-+static int mlx5_sync_reset_set_reset_requested(struct mlx5_core_dev *dev)
- {
- 	struct mlx5_fw_reset *fw_reset = dev->priv.fw_reset;
- 
-+	if (test_and_set_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags)) {
-+		mlx5_core_warn(dev, "Reset request was already set\n");
-+		return -EALREADY;
-+	}
- 	mlx5_stop_health_poll(dev, true);
--	set_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags);
- 	mlx5_start_sync_reset_poll(dev);
-+	return 0;
- }
- 
- static void mlx5_fw_live_patch_event(struct work_struct *work)
-@@ -225,7 +234,9 @@ static void mlx5_sync_reset_request_even
- 			       err ? "Failed" : "Sent");
- 		return;
+@@ -3730,7 +3734,7 @@ restart:
+ 	if (how) {
+ 		ipv6_ac_destroy_dev(idev);
+ 		ipv6_mc_destroy_dev(idev);
+-	} else {
++	} else if (was_ready) {
+ 		ipv6_mc_down(idev);
  	}
--	mlx5_sync_reset_set_reset_requested(dev);
-+	if (mlx5_sync_reset_set_reset_requested(dev))
-+		return;
-+
- 	err = mlx5_fw_reset_set_reset_sync_ack(dev);
- 	if (err)
- 		mlx5_core_warn(dev, "PCI Sync FW Update Reset Ack Failed. Error code: %d\n", err);
-@@ -325,7 +336,8 @@ static void mlx5_sync_reset_now_event(st
- 	struct mlx5_core_dev *dev = fw_reset->dev;
- 	int err;
- 
--	mlx5_sync_reset_clear_reset_requested(dev, false);
-+	if (mlx5_sync_reset_clear_reset_requested(dev, false))
-+		return;
- 
- 	mlx5_core_warn(dev, "Sync Reset now. Device is going to reset.\n");
- 
-@@ -354,10 +366,8 @@ static void mlx5_sync_reset_abort_event(
- 						      reset_abort_work);
- 	struct mlx5_core_dev *dev = fw_reset->dev;
- 
--	if (!test_bit(MLX5_FW_RESET_FLAGS_RESET_REQUESTED, &fw_reset->reset_flags))
-+	if (mlx5_sync_reset_clear_reset_requested(dev, true))
- 		return;
--
--	mlx5_sync_reset_clear_reset_requested(dev, true);
- 	mlx5_core_warn(dev, "PCI Sync FW Update Reset Aborted.\n");
- }
  
 
 

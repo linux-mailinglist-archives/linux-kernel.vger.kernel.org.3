@@ -2,106 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD52F521003
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADBA521006
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238205AbiEJIyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S238214AbiEJIya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235005AbiEJIyO (ORCPT
+        with ESMTP id S238219AbiEJIy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:54:14 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47EED1B5495;
-        Tue, 10 May 2022 01:50:18 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 805DD1C80FD8;
-        Tue, 10 May 2022 16:50:17 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 10
- May 2022 16:50:17 +0800
-Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 10 May 2022 16:50:17 +0800
-Message-ID: <47b7ec9f-1ed5-642e-5acc-b1398ca31774@nuvoton.com>
-Date:   Tue, 10 May 2022 16:50:17 +0800
+        Tue, 10 May 2022 04:54:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9C21BE11C;
+        Tue, 10 May 2022 01:50:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1C95621C48;
+        Tue, 10 May 2022 08:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652172627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g0IURHOoAl2M6zCSLpyMPT18KFdqoUyeDPjl0hJ99tg=;
+        b=nLVA7wXSOSmDcJjrIZeUUMxWxxpiP0nwODbF4958MwRUSWet8guWCinq5YDZjQad6yjaFm
+        j3aERjfh/aBvj60qmsCodmh/zjytI4jwSfKiCXNu5yLrQbgOUcWmb4xT7/+5ygozUP6cuc
+        syzRP7zhCBSu0k0+grf4xqUTpi4gx1Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652172627;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g0IURHOoAl2M6zCSLpyMPT18KFdqoUyeDPjl0hJ99tg=;
+        b=z9DI44p53W1bZCp1BY3XPA9xEmfmRmtEKhOc3Itu7hqfRNTDv+NP7jv/aOrF619jtWwP9L
+        StJ1YBtzv96wskCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E255C13AC1;
+        Tue, 10 May 2022 08:50:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8XU3NlInemKCHgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 10 May 2022 08:50:26 +0000
+Message-ID: <71ebd5f7-64d0-510a-6f1b-29921fca19fa@suse.de>
+Date:   Tue, 10 May 2022 10:50:26 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for
- MA35D1
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        <ychuang570808@gmail.com>, "Rob Herring" <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
-        <cfli0@nuvoton.com>
-References: <20220510032558.10304-1-ychuang3@nuvoton.com>
- <20220510032558.10304-4-ychuang3@nuvoton.com>
- <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-From:   Jacky Huang <ychuang3@nuvoton.com>
-In-Reply-To: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@intel.com>
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+ <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+ <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
+ <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
+ <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
+ <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
+ <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
+ <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
+ <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+ <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+ <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
+ <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
+In-Reply-To: <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MHXgXaeQmCiuyyM80xVQxmIp"
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MHXgXaeQmCiuyyM80xVQxmIp
+Content-Type: multipart/mixed; boundary="------------5nhp0O6fvenQ2qVUPU9Pw2Og";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, linux-kernel@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+ Daniel Vetter <daniel.vetter@intel.com>
+Message-ID: <71ebd5f7-64d0-510a-6f1b-29921fca19fa@suse.de>
+Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
+ fb_release()
+References: <20220505215947.364694-1-javierm@redhat.com>
+ <20220505220413.365977-1-javierm@redhat.com>
+ <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
+ <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
+ <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
+ <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
+ <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
+ <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
+ <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
+ <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
+ <79aaea41-5dab-f896-ab3d-d6bc9a5de615@suse.de>
+ <2d8d8583-3a39-b826-dd83-ba5bc4c5b082@redhat.com>
+ <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
+In-Reply-To: <7ffd92d7-9c07-fa9c-dc95-9e82719fd237@suse.de>
 
+--------------5nhp0O6fvenQ2qVUPU9Pw2Og
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 2022/5/10 下午 03:01, Arnd Bergmann wrote:
-> On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
->> Add the initial device tree files for Nuvoton MA35D1 Soc.
->>
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->> ---
->> +
->> +/ {
->> +       model = "Nuvoton MA35D1-EVB";
->> +       compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
->> +
->> +       chosen {
->> +               stdout-path = "serial0:115200n8";
->> +       };
-> Something seems to be missing here: you set the console to the serial0
-> alias, but that is not defined anywhere, and the ma35d1.dtsi file does not
-> appear to define any UART at all. Are you still missing the driver for this?
->
-> Please add a more detailed description in the changelog text above that
-> explains what kind of SoC this is (maybe a link to the product web page,
-> if there is one), and a status of how complete the support is: which drivers
-> are already merged, and which ones are still being worked on?
->
->          Arnd
+SGkNCg0KQW0gMTAuMDUuMjIgdW0gMTA6Mzcgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
+Ci4uLg0KPj4+DQo+Pj4gWW91IGhhdmUgdG8gZ28gdGhyb3VnaCBhbGwgRFJNIGRyaXZlcnMg
+dGhhdCBjYWxsIGRybV9mYl9oZWxwZXJfZmluaSgpDQo+Pj4gYW5kIG1ha2Ugc3VyZSB0aGF0
+IHRoZXkgZnJlZSBmYl9pbmZvLiBGb3IgZXhhbXBsZSBhcm1hZGEgYXBwZWFycyB0byBiZQ0K
+Pj4+IGxlYWtpbmcgbm93LiBbMV0NCj4+Pg0KPj4NCj4+IEJ1dCBzaG91bGRuJ3QgZmJfaW5m
+byBiZSBmcmVlZCB3aGVuIHVucmVnaXN0ZXJfZnJhbWVidWZmZXIoKSBpcyBjYWxsZWQNCj4+
+IHRocm91Z2ggZHJtX2Rldl91bnJlZ2lzdGVyKCkgPyBBRkFJQ1QgdGhlIGNhbGwgY2hhaW4g
+aXMgdGhlIGZvbGxvd2luZzoNCj4+DQo+PiBkcm1fcHV0X2RldigpDQo+PiDCoMKgIGRybV9k
+ZXZfdW5yZWdpc3RlcigpDQo+PiDCoMKgwqDCoCBkcm1fY2xpZW50X2Rldl91bnJlZ2lzdGVy
+KCkNCj4+IMKgwqDCoMKgwqDCoCBkcm1fZmJkZXZfY2xpZW50X3VucmVnaXN0ZXIoKQ0KPj4g
+wqDCoMKgwqDCoMKgwqDCoCBkcm1fZmJfaGVscGVyX3VucmVnaXN0ZXJfZmJpKCkNCj4+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHVucmVnaXN0ZXJfZnJhbWVidWZmZXIoKQ0KPj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIGRvX3VucmVnaXN0ZXJfZnJhbWVidWZmZXIoKQ0KPj4gwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwdXRfZmJfaW5mbygpDQo+PiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkcm1fZmJkZXZfZmJfZGVzdHJveSgpDQo+PiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZnJhbWVidWZmZXJfcmVsZWFzZSgp
+DQo+Pg0KPj4gd2hpY2ggaXMgdGhlIHJlYXNvbiB3aHkgSSBiZWxpZXZlIHRoYXQgZHJtX2Zi
+X2hlbHBlcl9maW5pKCkgc2hvdWxkIGJlDQo+PiBhbiBpbnRlcm5hbCBzdGF0aWMgZnVuY3Rp
+b24gYW5kIG9ubHkgY2FsbGVkIGZyb20gZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3koKS4NCj4+DQo+
+PiBEcml2ZXJzIHNob3VsZG4ndCByZWFsbHkgZXhwbGljaXRseSBjYWxsIHRoaXMgaGVscGVy
+IGluIG15IG9waW5pb24uDQoNCk9uZSBtb3JlIHN0dXBpZCBxdWVzdGlvbjogZG9lcyBhcm1h
+ZGEgYWN0dWFsbHkgdXNlIA0KZHJtX2ZiZGV2X2ZiX2Rlc3Ryb3koKT8gSXQncyBzdXBwb3Nl
+ZCB0byBiZSBhIGNhbGxiYWNrIGZvciBzdHJ1Y3QgDQpmYl9vcHMuIEFybWFkYSB1c2VzIGl0
+J3Mgb3duIGluc3RhbmNlIG9mIGZiX29wcywgd2hpY2ggYXBwYXJlbnRseSANCmRvZXNuJ3Qg
+Y29udGFpbiBmYl9kZXN0cm95LiBbMV0NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KWzFd
+IA0KaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTcuNi9zb3VyY2UvZHJp
+dmVycy9ncHUvZHJtL2FybWFkYS9hcm1hZGFfZmJkZXYuYyNMMTkNCg0KDQo+IA0KPiBUaGFu
+a3MuwqAgVGhhdCBtYWtlcyBzZW5zZS4NCj4gDQo+IEJlc3QgcmVnYXJkcw0KPiBUaG9tYXMN
+Cj4gDQo+IA0KPj4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
+aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
+RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Hi Arnd,
+--------------5nhp0O6fvenQ2qVUPU9Pw2Og--
 
-The serial driver is ready 
-(https://github.com/OpenNuvoton/MA35D1_linux-5.4.y/blob/master/drivers/tty/serial/ma35d1_serial.c),
-but we have to review the coding style and porting it from Linux 5.4.y 
-to 5.18.
+--------------MHXgXaeQmCiuyyM80xVQxmIp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-In the next patch version, I will added a brief introduction about 
-MA35D1 in the cover-letter [PATCH 0/5].
+-----BEGIN PGP SIGNATURE-----
 
-Thanks for your review.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ6J1IFAwAAAAAACgkQlh/E3EQov+Dn
+5g//cMbWLTZEQV4oKwTt8ao+7B/mNzQcuFG5Uof78v/C9yNDIxy/pHsS/Th/crWYY4UzkICgUlpx
+tijFv0Muidxtweo+BYCJvvMQKOVQOtDzyhEqdRF2vtXKWgqEg60kR2FXeEwJDh4g3Js2aId1Fypv
+Ad2dHTAQwNZaZnp2CMBeSdVPL6Kk54gzLYGYls8UsUppohfNAg1/1su+vsmdu4pLLS9Ub5nhN29q
+x8IbnGajaMkV5vq3UuqrQFKQDp5pHrX78J6TFsbw9tIRPVaN3oFSqlsL9+L44KwxE8pcOEO+w9km
+9CqmA2C1AAxMpB6joXJ2MB6adV5cUXK1mvEdjEQn17PCzG0EaU8LIMjNKCtzQ88pzFybuRAx9Vpo
+HOWfmIgIsK8sJhgp3PzSVToZ9xGc5Vc7YWajbQ3Elj3SCWmiyxr7azCvRRC6qvRk5gAf8Y3p7oBm
+dRdg20teD16JMPxFhU1ArOfJhtfRBWoWiAMBMmNaRQMIo2I2QVRsANuwpr5HDaCmjfbmGTU+co7+
+WWUMZI8kTWdfJaq+4VafFN90IDTTdALS+Hn73GMU+y6lZlgI4lVuZSj79vlkWCKSHzzAKP3LDX/M
+aVVwwOUi9JgFaX/vdUzYYZTy/JOY56VCN4alnPLVh4JZ49sZt4RIcmmJwE6DI+VmZ4RuUCzvU2kq
+EbE=
+=7eHO
+-----END PGP SIGNATURE-----
 
-Sincerely,
-Jacky Huang
-
-
-
+--------------MHXgXaeQmCiuyyM80xVQxmIp--

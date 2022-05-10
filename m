@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B055212F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEE05212FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiEJLD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
+        id S240509AbiEJLEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbiEJLDz (ORCPT
+        with ESMTP id S240100AbiEJLEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:03:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE5623AE44;
-        Tue, 10 May 2022 03:59:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC9E6B81C64;
-        Tue, 10 May 2022 10:59:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697D8C385C6;
-        Tue, 10 May 2022 10:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652180394;
-        bh=mP4OuZOhZwV/dmB0cFoVtzXacKFaCfNyN7n0iv1nrYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=faKPlVCxpkkG+QMDYcrORj/z3MB5YVFqVu+wQbcaXs0+6tfnQX0e8v5XuzT70UFh/
-         CFLz978/VZkKdqD2rpT3tdddkPoibz/Vv0lgkzMx1B4I4d4p/58knNF8Y/vOwesRqQ
-         RDH3snK1vaizTlvvk38vPSmYEaPI2W7gRXyQ/sL7XwoEFGzoEZdmrqvZfTcfUyH9GE
-         Pt2LsQGvvSnAW73WmE789tP9DT0fT+eotIpxrELWuth2dYipmMFRfDzsfHeanyIpUi
-         3A7s6ky9+vlTiTXBBTljVMB9W3myNjG5ys1s0RwUQWzDhXrQCMuhvcBEYOzvqyW68c
-         CeT3cBJ4Mcbgg==
-Date:   Tue, 10 May 2022 11:59:48 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Francis Laniel <flaniel@linux.microsoft.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-trace-devel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Kiss <daniel.kiss@arm.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/1] arm64: Forget syscall if different from
- execve*()
-Message-ID: <20220510105948.GB27557@willie-the-truck>
-References: <20220509151958.441240-1-flaniel@linux.microsoft.com>
- <20220509151958.441240-2-flaniel@linux.microsoft.com>
+        Tue, 10 May 2022 07:04:05 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011C823AE4C;
+        Tue, 10 May 2022 04:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652180409; x=1683716409;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=cWiFpy1BulEe8GzbIrFAcOtXKxm6yh3lnWMPeKAd5LA=;
+  b=nEylUt3h3JH5fVzleoJQMxcr0vs9+PRev0w5jVZ6afIlwVDZk7X+Mkcc
+   yIuY0hIzgRxrco3ZNFH4NB0vnwhCmIcrJrF1HRjT3BCiUIUPPb70jKzkX
+   gkaD8opgDZo9OsYsb5UeGPllhqd8z2eXDHLMOMo0AUZKy3WF2HnXsL44v
+   I=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 04:00:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 04:00:07 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 04:00:07 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 04:00:02 -0700
+Subject: Re: [PATCH 0/3] Add support for proxy interconnect bandwidth votes
+To:     Stephen Boyd <swboyd@chromium.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <ohad@wizery.com>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <evgreen@chromium.org>,
+        <dianders@chromium.org>, <mka@chromium.org>,
+        <krzysztof.kozlowski@canonical.com>
+References: <1644813252-12897-1-git-send-email-quic_sibis@quicinc.com>
+ <CAE-0n51qygskCKAv7MwJmM8BVV2D0wT46YCBwxtGKybP4QA+jQ@mail.gmail.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <8a4ee54e-f648-97a9-e9a6-ccae6ca8ce10@quicinc.com>
+Date:   Tue, 10 May 2022 16:29:50 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509151958.441240-2-flaniel@linux.microsoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n51qygskCKAv7MwJmM8BVV2D0wT46YCBwxtGKybP4QA+jQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 04:19:57PM +0100, Francis Laniel wrote:
-> This patch enables exeve*() to be traced by syscalls:sys_exit_execve
-> tracepoint.
-> Previously, calling forget_syscall() would set syscall to -1, which impedes
-> this tracepoint to prints its information.
-> So, this patch makes call to forget_syscall() conditional by only calling
-> it when syscall number is not execve() or execveat().
+On 4/5/22 4:47 AM, Stephen Boyd wrote:
+> Quoting Sibi Sankar (2022-02-13 20:34:09)
+>> Add support for proxy interconnect bandwidth votes during modem bootup on
+>> SC7280 SoCs.
+>>
+>> Sibi Sankar (3):
+>>    dt-bindings: remoteproc: qcom: Add interconnects property
+>>    remoteproc: qcom_q6v5_mss: Add support for interconnect bandwidth
+>>      voting
+>>    arm64: dts: qcom: sc7280: Add proxy interconnect requirements for
+>>      modem
 > 
-> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> ---
->  arch/arm64/include/asm/processor.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> Is this patch series going to be resent? Does it need to be applied to
+> sc7180 as well?
+
+Stephen,
+The proxy votes are needed on SC7180.
+
+-Sibi
 > 
-> diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-> index 73e38d9a540c..e12ceb363d6a 100644
-> --- a/arch/arm64/include/asm/processor.h
-> +++ b/arch/arm64/include/asm/processor.h
-> @@ -34,6 +34,8 @@
->  
->  #include <vdso/processor.h>
->  
-> +#include <asm-generic/unistd.h>
-> +
->  #include <asm/alternative.h>
->  #include <asm/cpufeature.h>
->  #include <asm/hw_breakpoint.h>
-> @@ -250,8 +252,12 @@ void tls_preserve_current_state(void);
->  
->  static inline void start_thread_common(struct pt_regs *regs, unsigned long pc)
->  {
-> +	s32 previous_syscall = regs->syscallno;
->  	memset(regs, 0, sizeof(*regs));
-> -	forget_syscall(regs);
-> +	if (previous_syscall == __NR_execve || previous_syscall == __NR_execveat)
-> +		regs->syscallno = previous_syscall;
-> +	else
-> +		forget_syscall(regs);
-
-Hmm, this really looks like a bodge and it doesn't handle the compat case
-either.
-
-How do other architectures handle this?
-
-Will

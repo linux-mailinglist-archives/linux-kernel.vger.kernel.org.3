@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B9A5216DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0100521A27
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242674AbiEJNUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S244183AbiEJNyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242467AbiEJNRC (ORCPT
+        with ESMTP id S244259AbiEJNhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:17:02 -0400
+        Tue, 10 May 2022 09:37:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936BE3C4B6;
-        Tue, 10 May 2022 06:12:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3468762223;
+        Tue, 10 May 2022 06:25:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D58615FA;
-        Tue, 10 May 2022 13:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21C2C385C2;
-        Tue, 10 May 2022 13:12:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 717DA6170D;
+        Tue, 10 May 2022 13:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F668C385C2;
+        Tue, 10 May 2022 13:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188367;
-        bh=7ni6v9EcwTeRnymZXJCe2F2vv9mVcGy9VAalwjR/0ls=;
+        s=korg; t=1652189128;
+        bh=XvdFnLpnH8rg/tJlNoJuTp1Us8A3o+r1OR7Q0sYWAhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zgbzU+IW+/pslt9oQDQ2xBgoYP/GOlmWnSuaRZlqsT3xBj7/T0b7ulR9HTzub9lD9
-         YuEI4pKdulbXRTgWSSHvJacMaPZKpY2lLJq80SYnc0Jeqcq/mPD4ChmkvUZXHZSomI
-         BqyqjGpsooJUIpnCymmj5viA4ewAhIkWumcenpRk=
+        b=vwCt3G+vTBGH1GYJANLF9op9d05WOYRa/zW/mq3/SXJcYT/n3WEf9aotiWy7dgw6I
+         GSHqTDsc0gZ+MtxmB3g0QUEi/57VYCJ+tRJbm9SzxyTkIHkUK9AFa5sPdjQYUP5dya
+         yNYMDeqyTTr5yktof1Ohf9cXKF/aOB87u9PWGI/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH 4.9 50/66] ASoC: wm8958: Fix change notifications for DSP controls
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.10 21/70] ASoC: meson: Fix event generation for AUI CODEC mux
 Date:   Tue, 10 May 2022 15:07:40 +0200
-Message-Id: <20220510130731.232069294@linuxfoundation.org>
+Message-Id: <20220510130733.487953451@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +56,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mark Brown <broonie@kernel.org>
 
-commit b4f5c6b2e52b27462c0599e64e96e53b58438de1 upstream.
+commit fce49921a22262736cdc3cc74fa67915b75e9363 upstream.
 
-The WM8958 DSP controls all return 0 on successful write, not a boolean
-value indicating if the write changed the value of the control. Fix this
-by returning 1 after a change, there is already a check at the start of
-each put() that skips the function in the case that there is no change.
+The AIU CODEC has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220416125408.197440-1-broonie@kernel.org
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-3-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wm8958-dsp2.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/meson/aiu-codec-ctrl.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/codecs/wm8958-dsp2.c
-+++ b/sound/soc/codecs/wm8958-dsp2.c
-@@ -533,7 +533,7 @@ static int wm8958_mbc_put(struct snd_kco
+--- a/sound/soc/meson/aiu-codec-ctrl.c
++++ b/sound/soc/meson/aiu-codec-ctrl.c
+@@ -57,7 +57,7 @@ static int aiu_codec_ctrl_mux_put_enum(s
  
- 	wm8958_dsp_apply(codec, mbc, wm8994->mbc_ena[mbc]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_MBC_SWITCH(xname, xval) {\
-@@ -659,7 +659,7 @@ static int wm8958_vss_put(struct snd_kco
- 
- 	wm8958_dsp_apply(codec, vss, wm8994->vss_ena[vss]);
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
  
 -	return 0;
 +	return 1;
  }
  
- 
-@@ -733,7 +733,7 @@ static int wm8958_hpf_put(struct snd_kco
- 
- 	wm8958_dsp_apply(codec, hpf % 3, ucontrol->value.integer.value[0]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_HPF_SWITCH(xname, xval) {\
-@@ -827,7 +827,7 @@ static int wm8958_enh_eq_put(struct snd_
- 
- 	wm8958_dsp_apply(codec, eq, ucontrol->value.integer.value[0]);
- 
--	return 0;
-+	return 1;
- }
- 
- #define WM8958_ENH_EQ_SWITCH(xname, xval) {\
+ static SOC_ENUM_SINGLE_DECL(aiu_hdmi_ctrl_mux_enum, AIU_HDMI_CLK_DATA_CTRL,
 
 

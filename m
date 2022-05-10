@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06AB5213BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821555213CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbiEJLcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S235701AbiEJLfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbiEJLck (ORCPT
+        with ESMTP id S238147AbiEJLfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:32:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606F524DC00;
-        Tue, 10 May 2022 04:28:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F13281F8B5;
-        Tue, 10 May 2022 11:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652182121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3MNMfYAzBmcTCGWbN4PU5xoySsicFXm7oS2gQCk3PM=;
-        b=1dFLSVWLYnS0PIpslKIMUpWl8LjaxLlNBHKDubjTk6onQXqgZH5a0/Z5GeUA3bHMl8xojF
-        d9I2UmLnaMPoeviFv4q5kPwkzmfxbbIfOpRLTioqMuHT+8nuHt6Jhrv8iNqwa5qzA89XAj
-        Lg9iWgj57Z6kYOgecr0iyuShQgkv9lc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652182121;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3MNMfYAzBmcTCGWbN4PU5xoySsicFXm7oS2gQCk3PM=;
-        b=kkU6z+n9RITqF8SMik6rIWdkljq8WB0PgIdPVNvAnPTw2Fs3gxyM+0MeKmAS3lsuTGxcti
-        p/8yZNfoWEFHk2AA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
+        Tue, 10 May 2022 07:35:04 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4762FFEC;
+        Tue, 10 May 2022 04:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1652182267; x=1683718267;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2SNelXJdTh3xGopHG8ofy7R9HS6iWQB+gEljljkwN88=;
+  b=lgkF0Z5EDZK523ENyRA0OfwRx2/qnh8j6PSVHrrkT60uWZEKM5KhnOyt
+   jkgxxZ5+3DW5t7CWDztkDfNp2ZG9HRd1D0wHRkC82A1A0E2UO/hbTIipb
+   MNCXu1vERuhCwzhCfec09VxaLE1lJyBA8u3Fy4zsl+uBg7gP44FoKYLsD
+   Y=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="119943251"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647298800"; 
+   d="scan'208";a="119943251"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 13:31:04 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DFDB72C141;
-        Tue, 10 May 2022 11:28:41 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8BAB1A062A; Tue, 10 May 2022 13:28:38 +0200 (CEST)
-Date:   Tue, 10 May 2022 13:28:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Cc:     jack@suse.com, LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: A slab-out-of-bounds Write when invoke udf_write_fi via ioctl
-Message-ID: <20220510112838.zfx2sxyoh4ewmjxr@quack3.lan>
-References: <CAFcO6XNpj6e+OGba30usr_miODhbhmqk7vh3ymU+NLoe2HBqFA@mail.gmail.com>
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Tue, 10 May 2022 13:31:03 +0200 (CEST)
+Received: from ISCN5CG1067W80.muc.infineon.com (172.23.8.247) by
+ MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 13:30:59 +0200
+From:   Johannes Holland <johannes.holland@infineon.com>
+To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        Johannes Holland <johannes.holland@infineon.com>
+Subject: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+Date:   Tue, 10 May 2022 13:29:03 +0200
+Message-ID: <20220510112902.23213-1-johannes.holland@infineon.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFcO6XNpj6e+OGba30usr_miODhbhmqk7vh3ymU+NLoe2HBqFA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE801.infineon.com (172.23.29.27) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,92 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 10-05-22 15:14:42, butt3rflyh4ck wrote:
-> Hi, if mounts a malicious udf image,  there is a slab out of bounds
-> write  bug when a user invokes udf_write_fi via ioctl.
-> I have reproduced it in the latest kernel.
-> 
-> ##smaple analyse
-> the function call chains:
-> do_sys_open
->     --->do_sys_openat2
->        --->do_filp_open
->           --->path_openat
->               --->open_last_lookups
->                  --->lookup_open
->                      --->udf_add_nondir
->                         --->udf_add_entry
-> 
-> There would traverse to get a `fi` in the function udf_add_entry.
-> ```
-> if (dinfo->i_alloc_type == ICBTAG_FLAG_AD_IN_ICB) {   [1]
->          block = dinfo->i_location.logicalBlockNum;
->          fi = (struct fileIdentDesc *)
->            (dinfo->i_data + fibh->soffset -
->              udf_ext0_offset(dir) +
->               dinfo->i_lenEAttr);
->              [2]
-> } else {
->           block = eloc.logicalBlockNum +
->               ((elen - 1) >>
->             dir->i_sb->s_blocksize_bits);
->             fi = (struct fileIdentDesc *)
->                  (fibh->sbh->b_data + fibh->soffset);
-> }
-> ```
-> [1] if dinfo->i_alloc_type is ICBTAG_FLAG_AD_IN_ICB, [2] it  would
-> calculate an offset as `fi`,
-> through the debugger, the `fi` is as below:
-> ```
->  p/x *(struct fileIdentDesc*)fi
-> $24 = {
->   descTag = {
->     tagIdent = 0x2f70,
->     descVersion = 0xea55,
->     tagChecksum = 0xcd,
->     reserved = 0x66,
->     tagSerialNum = 0x511f,
->     descCRC = 0x5a9c,
->     descCRCLength = 0x5142,
->     tagLocation = 0x373ce06a
->   },
->   fileVersionNum = 0x3139,
->   fileCharacteristics = 0xf6,
->   lengthFileIdent = 0x7e,
->   icb = {
->     extLength = 0x6059792,
->     extLocation = {
->       logicalBlockNum = 0x73886466,
->       partitionReferenceNum = 0x7cc6
->     },
->     impUse = {0x3c, 0xcc, 0x4a, 0xed, 0xdc, 0xfb}
->   },
->   lengthOfImpUse = 0x1a6a,
->   impUse = 0xffff888019ca716a
-> }
-> ```
-> These data are wrong and all data are part of  udf image mounted.
-> Then next it would invoke function udf_write_fi to write fileident into `fi`.
-> ```
-> if (fileident) {
->       if (adinicb || (offset + lfi < 0)) {
->           memcpy(udf_get_fi_ident(sfi), fileident, lfi);   [3]
-> } else if (offset >= 0) {
->           memcpy(fibh->ebh->b_data + offset, fileident, lfi);
-> } else {
->           memcpy(udf_get_fi_ident(sfi), fileident, -offset);
->           memcpy(fibh->ebh->b_data, fileident - offset,
->                   lfi + offset);
->        }
-> }
-> ```
-> The fileident was controlled by user. `sfi` is `fi`, the memcpy
-> function is called to copy the data, so an out-of-bounds write occurs
+To comply with protocol requirements, minimum polling times must often
+be adhered to. Therefore, a macro like tpm_msleep() should sleep at
+least the given amount of time (not up to the given period). Have
+tpm_msleep() sleep at least the given number of milliseconds.
 
-Thanks for report and the analysis. This is indeed a serious bug. I'll send
-a fix shortly.
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+---
+ drivers/char/tpm/tpm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-								Honza
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 2163c6ee0d36..0971b55fffe3 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+ 
+ static inline void tpm_msleep(unsigned int delay_msec)
+ {
+-	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+-		     delay_msec * 1000);
++	usleep_range(delay_msec * 1000, (delay_msec * 1000)
++		     + TPM_TIMEOUT_RANGE_US);
+ };
+ 
+ int tpm_chip_start(struct tpm_chip *chip);
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+

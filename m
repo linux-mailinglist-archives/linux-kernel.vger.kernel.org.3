@@ -2,172 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E454520A84
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F335520A88
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiEJBO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S234112AbiEJBSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbiEJBOx (ORCPT
+        with ESMTP id S231551AbiEJBSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:14:53 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD41E16
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:10:54 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id v59so28000982ybi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:10:54 -0700 (PDT)
+        Mon, 9 May 2022 21:18:30 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3D91847C3
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:14:34 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2f7c57ee6feso163765327b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N2NYOBnGr3oC2HbawPc8n2japmW7gZ/2gS/4kyYGuoc=;
+        b=JbcRYkCc3dNkJImVIJeRCKnH0a6NvUueYeaeMCxC/VbHQDIFXeiIjr+Vka/KYytySi
+         4VGrbeecRB92r3uSg9lmdmodmKIHyDk/f/EHKWY+1aqymATjfKiHLI4auVq+twjRiS3t
+         0Fp3NS8Rg1Dc1R+PWLnyvqNKEfb+Jt14flg0AsKqlbnNJkVx6+FXojBYOSSQcr7r6V1y
+         uRFJC/Jhv0SVw/J2YibBjYzaF4TOX66NsSSlr0EA2BBbvk+eUl//PDfHZNIFk4zjrQql
+         k9Ux2q3vSVs963ZF65F/AJj5dyN1xAO1OSMREGpo7ug+WpXSr5dRyMmlc43WV1chQvHl
+         XnBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Pu2anZ+R3B06nqhjgv9ISwTVomKwIVTtmDdQYWCLtaU=;
-        b=SBzbIGwpogQjc7IMGMxjUwPJcIQHt3GZd3N3nyAvbiVGChqLplRFXUoE1yQym1UPXB
-         ASGMAXbvkzLxER8KdGaoH/ygXeJn5ZoS4BBzbtAGJbH/jh9aagcP52uoALMAp5f4KeQ3
-         U4282yK7pydR8J8bLtDiwg39BWZ1yAgyQvpXq9Xr4oR2FRJZCj9ja4aOagMQHIqr3tvI
-         Js91IopKS6+Cy49fqkNsNpLqY7dcj0oXxGlPHSTOvtj0QE9JXVeXkoRNBxZUrRVNKvhO
-         Xt+h+lTicrLalVat1V4xkdwJVBJApxkRng6TBN1dTO6PiJXVsmFtD+uGdefGWoSgb2Vz
-         qOfw==
-X-Gm-Message-State: AOAM5307xGmM73jHMnywd633NZw7CRWOA4PONckI+G4ti3UAhW+nw9T4
-        4JRMXm+5Zi62gOinS3tksSAP1lkl0F1SgQmItwk=
-X-Google-Smtp-Source: ABdhPJxt8ljHX+a7Cku4rMKwAxeR+LFa7WwyvBewPPYp9BYbLUHVF00V/WCIrRFQ9WDFNtfesjm+bdIYzcxLt6dyA0s=
-X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
- n17-20020a5b0491000000b0064af42f6973mr3469601ybp.20.1652145054084; Mon, 09
- May 2022 18:10:54 -0700 (PDT)
+        bh=N2NYOBnGr3oC2HbawPc8n2japmW7gZ/2gS/4kyYGuoc=;
+        b=Xt86yi0H2moyEltYnIAw+615dafwGUNa69o8eNlrD8z8H8mFJ/IWLj3Z/Fzyxrl565
+         lxY0uNF3oBDf4AQVvn5H0I/LTlUU8SkkKwBy8dyV781Wc0L1NMnxS2vOw1Sdx7Tyjt37
+         682Wgut6ZYl0M567RfqIGwBFn3wZzs9raatw0ACdb4allyUO5nO3gNqyvxkAmamBgiL/
+         QlghGKEKuPDeNEETYbmTxuazz1Gi4AOvnMfTmQ6qSrvPCFGjciBCYUU3L8Sj562PtPpQ
+         7m7L99arMuQEht0qNWWVEgKvtdWl9MSB06im7hmghZ99f4pixHUcxIx1AZWYM1TtPJHM
+         9D3A==
+X-Gm-Message-State: AOAM533yl8nGA4fJ4Z2FjU4GOwzzmB92K9vOr7J8ZPpFbzTFVRqfRHDc
+        Qe5ZVbXt+Di20ILy8utxZ6fny8zvFQM4wp+vPC+FmA==
+X-Google-Smtp-Source: ABdhPJz7iKHIfKSmPqUxBSS1zpgdNd/jPtkOnn1arMXMwo1S/LhMZERgYbKqPV4gUn9Z2MyH46ri3/R5PmPGFP3UUhU=
+X-Received: by 2002:a0d:d80e:0:b0:2f8:39d8:1e8c with SMTP id
+ a14-20020a0dd80e000000b002f839d81e8cmr17144278ywe.97.1652145273523; Mon, 09
+ May 2022 18:14:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
- <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
- <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
- <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
- <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
- <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com> <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
-In-Reply-To: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 10 May 2022 10:10:43 +0900
-Message-ID: <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
+References: <20220505122331.42696-1-wuyun.abel@bytedance.com>
+In-Reply-To: <20220505122331.42696-1-wuyun.abel@bytedance.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 9 May 2022 18:14:22 -0700
+Message-ID: <CABk29Ns3KBwLXBSwiSe7Pv2YE9iMg+A1kPpPESWG=KNJu9dz0w@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/fair: filter out overloaded cpus in SIS
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 10 May 2022 at 08:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > Hi Nick,
-> >
-> > On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > >
-> > > > Instead, I am thinking of just using -fno-builtin-ffs to remove
-> > > > the annoying -Wshadow warning. Would that make more sense?
-> > >
-> > > Perhaps a pragma would be the best tool to silence this instance of
-> > > -Wshadow?  I understand what GCC is trying to express, but the kernel
-> > > does straddle a weird place between -ffreestanding and a "hosted" env.
-> >
-> > I was a bit reluctant to propose the use of pragma because I received
-> > negative feedback in another patch for using the __diag_ignore()
-> > c.f.:
-> > https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
-> >
-> > But the context here is a bit different, I guess. If I receive your support, I
-> > am fully OK to silence this with some #pragma.
-> >
-> > The patch would look as below (I just need to test with clang
-> > before submitting).
+Hi Abel,
+
+Overall this looks good, just a couple of comments.
+
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index d4bd299d67ab..79b4ff24faee 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6323,7 +6323,9 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
+>  static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
+>  {
+>         struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
+> +       struct sched_domain_shared *sds = sd->shared;
+> +       int nr, nro, weight = sd->span_weight;
+> +       int i, cpu, idle_cpu = -1;
+>         struct rq *this_rq = this_rq();
+>         int this = smp_processor_id();
+>         struct sched_domain *this_sd;
+> @@ -6333,7 +6335,23 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>         if (!this_sd)
+>                 return -1;
 >
-> Do you have a sense for how many other functions trigger -Wshadow?
+> +       nro = atomic_read(&sds->nr_overloaded_cpus);
+> +       if (nro == weight)
+> +               goto out;
 
-I only witnessed such -Wshadow warnings for ffs().
+This assumes that the sd we're operating on here is the LLC domain
+(true for current use). Perhaps to catch future bugs from changing
+this assumption, we could WARN_ON_ONCE(nro > weight).
 
-> For
-> example, one question I have is:
-> Why does ffs() trigger this, but not any of the functions defined in
-> lib/string.c (or declared in include/linux/string.h) which surely also
-> shadow existing builtins?  I can't see your example being sprinkled
-> all over include/linux/string.h as being ok.
+> +
+> +       nr = min_t(int, weight, p->nr_cpus_allowed);
+> +
+> +       /*
+> +        * It's unlikely to find an idle cpu if the system is under
+> +        * heavy pressure, so skip searching to save a few cycles
+> +        * and relieve cache traffic.
+> +        */
+> +       if (weight - nro < (nr >> 4) && !has_idle_core)
+> +               return -1;
 
-Thanks, you are touching on a really interesting point.
+nit: nr / 16 is easier to read and the compiler will do the shifting for you.
 
-After checking, the other builtin functions declare the function with
-two leading underscores (e.g. __foo(...)) and then do:
+Was < intentional vs <= ? With <= you'll be able to skip the search in
+the case where both sides evaluate to 0 (can happen frequently if we
+have no idle cpus, and a task with a small affinity mask).
 
-#define foo(...) __foo(...)
+This will also get a bit confused in the case where the task has many
+cpus allowed, but almost all of them on a different LLC than the one
+we're considering here. Apart from caching the per-LLC
+nr_cpus_allowed, we could instead use cpumask_weight(cpus) below (and
+only do this in the !has_idle_core case to reduce calls to
+cpumask_weight()).
 
-Or alternatively, if using the builtin function:
+> +
+>         cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+> +       if (nro > 1)
+> +               cpumask_andnot(cpus, cpus, sdo_mask(sds));
 
-#define foo(...) __builtin_foo(...)
+Just
+if (nro)
+?
 
-Compilers do not trigger the -Wshadow for such patterns.
-
-Example with memcpy():
-https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/string_64.h#L75
-
-So, in light of your comment doing this would be more consistent:
-
-#define ffs(x) _ffs(x)
-
-> If it's more than just ffs(), perhaps the GCC developers can split the
-> shadowing of builtins into a sub flag under -Wshadow that can then be
-> disabled; we do want to shadow these functions, but -Wno-shadow would
-> miss warnings on variables being shadowed due to scope.
+> @@ -6392,6 +6407,9 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
 >
-> We've done this in the past with various flags in clang. Rather than
-> having semantic analysis trigger the same warning flag for different
-> concerns, we split the flag into distinct concerns, and reuse the
-> original flag as a group that enables the new flags. This gives
-> developers fine grain control over enabling/disabling distinct
-> concerns.
+>                 update_avg(&this_sd->avg_scan_cost, time);
+>         }
+> +out:
+> +       if (has_idle_core)
+> +               WRITE_ONCE(sds->has_idle_cores, 0);
+
+nit: use set_idle_cores() instead (or, if you really want to avoid the
+extra sds dereference, add a __set_idle_cores(sds, val) helper you can
+call directly.
+
+> @@ -7904,6 +7922,7 @@ static struct task_struct *detach_one_task(struct lb_env *env)
+>                         continue;
 >
-> >
-> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-> > index a288ecd230ab..e44911253bdf 100644
-> > --- a/arch/x86/include/asm/bitops.h
-> > +++ b/arch/x86/include/asm/bitops.h
-> > @@ -269,6 +269,9 @@ static __always_inline unsigned long
-> > __fls(unsigned long word)
-> >  #undef ADDR
-> >
-> >  #ifdef __KERNEL__
-> > +__diag_push();
-> > +__diag_ignore_all("-Wshadow",
-> > +                  "-fno-builtin-foo would remove optimization, just
-> > silence it instead");
-> >  /**
-> >   * ffs - find first set bit in word
-> >   * @x: the word to search
-> > @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
-> >  #endif
-> >         return r + 1;
-> >  }
-> > +__diag_pop(); /* ignore -Wshadow */
-> >
-> >  /**
-> >   * fls - find last set bit in word
+>                 detach_task(p, env);
+> +               update_overloaded_rq(env->src_rq);
 >
+>                 /*
+>                  * Right now, this is only the second place where
+> @@ -8047,6 +8066,9 @@ static int detach_tasks(struct lb_env *env)
+>                 list_move(&p->se.group_node, tasks);
+>         }
 >
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+> +       if (detached)
+> +               update_overloaded_rq(env->src_rq);
+> +
+
+Thinking about this more, I don't see an issue with moving the
+update_overloaded_rq() calls to enqueue/dequeue_task, rather than here
+in the attach/detach_task paths. Overloaded state only changes when we
+pass the boundary of 2 runnable non-idle tasks, so thashing of the
+overloaded mask is a lot less worrisome than if it were updated on the
+boundary of 1 runnable task. The attach/detach_task paths run as part
+of load balancing, which can be on a millisecond time scale.
+
+Best,
+Josh

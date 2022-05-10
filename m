@@ -2,290 +2,955 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE46521CF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43A1521CF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345186AbiEJOxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S1344074AbiEJOxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344720AbiEJOx1 (ORCPT
+        with ESMTP id S1345111AbiEJOxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:53:27 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80051.outbound.protection.outlook.com [40.107.8.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E8126CC47;
+        Tue, 10 May 2022 10:53:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4903273F61;
+        Tue, 10 May 2022 07:13:42 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id p4so20215791edx.0;
+        Tue, 10 May 2022 07:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KcqoIPk0ygEnf3kwvjB1/+RCVDH+kifyONLKWU/UKZs=;
+        b=DXSivDM2yXQBgS8L49mzuRhmA/P3oK846thzY2HOYl0By9RRUnIpvP2iiGp1NRvbuU
+         OdxA2EUiQH+9nxg+B3Zs59DgY5E5PZ6jedbwJruxkqMbkalNp5NQus/f3Rakqd/NhsT3
+         c0pP7p7B2q8k0/Piu+ExGz06eEJlekwYhnFJhaxQfMlxybVN1w63C7qjbTWvi4PNeMQK
+         Z1Wri8/Iz0i/THFfNQbY5jtmGBgmjIh+OzT5as77WRaV84JMGaY326aPWHS49b+MQXYZ
+         C6Hc24XCOD2NL0v6Au2JGgTEM2u65z6nY5P2wxO89xQL3p/7m2CNvlPvvF3C7PEijeVY
+         Qfmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=KcqoIPk0ygEnf3kwvjB1/+RCVDH+kifyONLKWU/UKZs=;
+        b=pr469GmQ58p4HLzc7YGUy3o0bNQv0qyx/i4yZuMVVe9l76AfIkBZ9saGiVau61O7WI
+         VT5rkyHHj140LXHIsWZHRXaLGgLZocDrOyhzoLp4PkMTlyaNYoW2Yz3quUcmbT2moJQC
+         JzbQJBB0fPwqA56cLlwjKPEDELdIbtn+2yaqzSrtHcU4Ajt8JTp6hVNd5+l8ptjEkUIN
+         25oTB9RZ5OSdNCzMl+k0OpBPINk4psgfXAAPuI3cLyJonR5bPdK2/9IrrOQZBxMbUQqb
+         sfXNoxDBDM+EpgL6g4pjEzIQQpWFO0pyhb1k5QywauUGcmi9s9bN9AHRPdcb0lRykWba
+         QkCg==
+X-Gm-Message-State: AOAM532TNQPdKhSdzcK8Wh9w1ls5HTFkX9awnt22MM+Fi6D1dfCoYL9S
+        /Kv3L3qSjOVLNN7hmI2epq0=
+X-Google-Smtp-Source: ABdhPJwvga78W+rrq9YeL+lOKx95TyawluNV/9On4TzYU01HHQYbirllgGLlYyeDDyPQYG5IlODp8g==
+X-Received: by 2002:a05:6402:1cc1:b0:428:a06e:a30f with SMTP id ds1-20020a0564021cc100b00428a06ea30fmr10368823edb.377.1652192020374;
+        Tue, 10 May 2022 07:13:40 -0700 (PDT)
+Received: from cizrna.home (cst-prg-46-129.cust.vodafone.cz. [46.135.46.129])
+        by smtp.gmail.com with ESMTPSA id qp24-20020a170907a21800b006f3ef214e4bsm6224903ejc.177.2022.05.10.07.13.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 10 May 2022 07:13:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TOC7E1Z8kHpazh3bVwWDnROO66Jpjx/AtjhArG85UY7DzIrerLILaMAgoXXleSo2vG8GvA5vsspL7tL2M8WIJ2Zg0XVbUDarfSmGdj2zXXKv6+RKM+62UhxAH8lRwCv/7RI88orjZjz2sndRvH/SZwEiODfi89w8rqhm2CeMVHUxUGGxRokC7exaOba1+K+Gbu/RH96hik18VAGE2vlkfjZmsZxmG71vygn23gCO1V9KgNISHiyPy6YIcRnY4N5g2TpxWb93B9W/bg02tnOhF/Yd0e392YlXdhJ0BLdtbrciyUbK6NgTonuz/4FaMMVY5uStlq62gkYIztOPamdO8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9OmKLPaOVzojWH4HxZllQ+IWyMrJsy0mBifTwmgZkMQ=;
- b=WygVJIhPb2BlY0kk6MI8tRBWN1QmYYfAUrG9mAK8hM9dk7nv/JklwTr8BJGqy1hjRnibA268m95bajxNNke01Y+NKbk8E8IdNQDFKH7j1vzAuSWixxR5Xyc/aAK1Zz4jEGtPPAFF80ezx0W/W7ry4jqrK5kWC9V7tVhwq4QMDfgjSX28z6T7AXWuBQ0MYHfyhToemFYPm0Br/V8F+RTPU8rR+13ooGFBkD0Y+RKDcB3qX7xr4BFDBEAl2a4TIeRO8p+ZaqEr3qI9w8AfvuUr+dyCE3j67OT8AzrH0726DuVaJbZJrX9RkmhYDm3PKC/Poh58HAqpF2pYDq5nwDZb3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 139.15.153.200) smtp.rcpttodomain=linaro.org smtp.mailfrom=in.bosch.com;
- dmarc=pass (p=reject sp=none pct=100) action=none header.from=in.bosch.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.bosch.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9OmKLPaOVzojWH4HxZllQ+IWyMrJsy0mBifTwmgZkMQ=;
- b=PSEkzmIvofbaoDI7UCrT4LvhM+WAV5n8jPWV6r7V44tBLnfy3xARNai5edZje8NQIhcbCXy3RLJmsmaTTBtSd3JBw9MQ7w5bhBWH1zSPM09+4v8tLUF7kD26FvF9FazN00kKDVpWYXM2YHwh85ZQ+/QFLYDhvo8q/Di0H0pRK7k=
-Received: from AM5PR04CA0018.eurprd04.prod.outlook.com (2603:10a6:206:1::31)
- by AM5PR1001MB1076.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:203:12::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Tue, 10 May
- 2022 14:13:33 +0000
-Received: from AM5EUR03FT059.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:206:1:cafe::d7) by AM5PR04CA0018.outlook.office365.com
- (2603:10a6:206:1::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23 via Frontend
- Transport; Tue, 10 May 2022 14:13:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.200)
- smtp.mailfrom=in.bosch.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=in.bosch.com;
-Received-SPF: Pass (protection.outlook.com: domain of in.bosch.com designates
- 139.15.153.200 as permitted sender) receiver=protection.outlook.com;
- client-ip=139.15.153.200; helo=eop.bosch-org.com;
-Received: from eop.bosch-org.com (139.15.153.200) by
- AM5EUR03FT059.mail.protection.outlook.com (10.152.17.193) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.15 via Frontend Transport; Tue, 10 May 2022 14:13:33 +0000
-Received: from FE-EXCAS2001.de.bosch.com (10.139.217.200) by eop.bosch-org.com
- (139.15.153.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.24; Tue, 10 May
- 2022 16:13:31 +0200
-Received: from FE-HUB2000.de.bosch.com (10.4.103.109) by
- FE-EXCAS2001.de.bosch.com (10.139.217.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.24; Tue, 10 May 2022 16:13:31 +0200
-Received: from localhost.localdomain (10.167.1.123) by FE-HUB2000.de.bosch.com
- (10.4.103.109) with Microsoft SMTP Server id 15.1.2375.24; Tue, 10 May 2022
- 16:13:27 +0200
-From:   <Gireesh.Hiremath@in.bosch.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>
-CC:     <m.felsch@pengutronix.de>, <linux-omap@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <bcousson@baylibre.com>,
-        <tony@atomide.com>, <robh+dt@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <mkorpershoek@baylibre.com>,
-        <davidgow@google.com>, <swboyd@chromium.org>,
-        <fengping.yu@mediatek.com>, <y.oudjana@protonmail.com>,
-        <rdunlap@infradead.org>, <colin.king@intel.com>,
-        <Gireesh.Hiremath@in.bosch.com>, <sjoerd.simons@collabora.co.uk>,
-        <VinayKumar.Shettar@in.bosch.com>,
-        <Govindaraji.Sivanantham@in.bosch.com>,
-        <anaclaudia.dias@de.bosch.com>
-Subject: Re: [PATCH v2 2/4] Input: mt-matrix-keypad: Add Bosch mt matrix keypad driver
-Date:   Tue, 10 May 2022 14:13:06 +0000
-Message-ID: <20220510141306.2431-1-Gireesh.Hiremath@in.bosch.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220506072737.1590-2-Gireesh.Hiremath@in.bosch.com>
-References: <20220506072737.1590-2-Gireesh.Hiremath@in.bosch.com>
+Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org
+Subject: [RFC v2] drm/msm: Add initial ci/ subdirectory
+Date:   Tue, 10 May 2022 16:13:28 +0200
+Message-Id: <20220510141329.54414-1-tomeu.vizoso@collabora.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
+References: <20220510070140.45407-1-tomeu.vizoso@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.167.1.123]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9c010ec4-f57f-4252-abff-08da328f4467
-X-MS-TrafficTypeDiagnostic: AM5PR1001MB1076:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR1001MB1076A7E25A7FFCB53466BEBCA6C99@AM5PR1001MB1076.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nlwVCUplLxWuKFsTFgAdtgJf59gVP5EF9W4vkEkTpKsCvGjF6ycSYclXFW547f3SGqSs3mHUWdvPLSI6EyCG8Htx1PhIcKcOCbjTVICCXnBkgqA9C6daGHiT73LlmWqNRAHReFDRuPEya9q0E0rWh7WKeYp4EsCHujexVV3stL7rXUCt1lmryErMhvQ+nm4YOdkmh6YwMwM+9BVgSiG6uM48gOasBClxUBtuddGH7tRPc1AywcvJdPycgcKBj+vYGQgDhSkXRspY3Dqsae+zjF/4JddmhizHB9YuRMEK9bkHSQpQtHLfUw7sdAdUtEQze2/jKu9qNd5ABtE5w6VJ/dP5DuNDIh214UellQLF+p4eNWtfj6Xdvp9wNwW8hCMGTsBLtCADxZuzHt7Qo3ghewv44RWCkO2xuY0wosZgZDdATwGXPCy5f6eovJCj1XArTXv587EnITxossOU3L6pzM5ohcBzQQtjJVkrALrV2gvnq4JDVX50xUeLqxtK+Zl81wUyTtTpAhOS28+M4j+cHFoeDWWMA8rrMAnlfQ1bHac7vJlV+4vYlabh6x5unonv5KiNAPtXNbQ/sbbqgKjpTwQSWrXCH5o+S9dPYP2TXxml797uJnLOPTiZINgHO8D2zEOjsfGrv0c6uFtDHqcZlJqB6SwNgkMmxNtgAThWjaovWKiVoTyMWdo5Y3x953Qa8u17Y+oYzkb6umI3bOYraw==
-X-Forefront-Antispam-Report: CIP:139.15.153.200;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(356005)(54906003)(81166007)(82960400001)(4326008)(316002)(508600001)(6666004)(2906002)(40460700003)(82310400005)(7416002)(16526019)(186003)(8936002)(26005)(86362001)(1076003)(70206006)(5660300002)(107886003)(70586007)(2616005)(36860700001)(8676002)(2876002)(83380400001)(336012)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: in.bosch.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 14:13:33.4835
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c010ec4-f57f-4252-abff-08da328f4467
-X-MS-Exchange-CrossTenant-Id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.200];Helo=[eop.bosch-org.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM5EUR03FT059.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR1001MB1076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+And use it to store expectations about what the drm/msm driver is
+supposed to pass in the IGT test suite.
 
-Hi Krzysztof,
+Also include a configuration file that points to the out-of-tree CI
+scripts.
 
->>>> both matric_keypad.c and mt_matrix_kepad.c logically operate differently,
->>>> my openion is not to merge both.
->>>
->>> IMHO from the user/system-integrator pov it is looking the same and so
->>> one driver should be fine. To distinguish between both modes we could
->>> add dt-property or add a new dt-compatible like "gpio-matrix-keypad-v2".
->>>
->> 
->> as mentioned above our keypad is not complete matrix keypad  and it will
->> not be compatible with matrix_keypad diver. that is the reason we derived
->> mt matrix keypad driver.
->> 
->> to avoid confusion, we will rename the driver as bosch_mt_keypad.c
->> if you suggest.
->
->Sending a new version while discussions are ongoing is not how we reach
->consensus.
+By storing the test expectations along the code we can make sure both
+stay in sync with each other, and so we can know when a code change
+breaks those expectations.
 
-I apologize for sending new version.
+This will allow all contributors to drm/msm to reuse the infrastructure
+already in gitlab.freedesktop.org to test the driver on several
+generations of the hardware.
 
->
->Make the driver as part of matrix-keypad driver or bring real arguments
->why it cannot be merged.
+v2:
+  - Fix names of result expectation files to match SoC
+  - Don't execute tests that are going to skip on all boards
 
-I tryied to put real hardware scenario which used in 
-Bosch Power tool measuring devices.
-Keypad schematic as below, it is reduced matrix keypad compared
-to standard matrix keypad 
+Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+---
+ Documentation/gpu/msm_automated_testing.rst   |  70 +++++++++
+ drivers/gpu/drm/msm/ci/gitlab-ci.yml          |  11 ++
+ drivers/gpu/drm/msm/ci/msm.testlist           | 148 ++++++++++++++++++
+ .../gpu/drm/msm/ci/msm_apq8016_results.txt    | 140 +++++++++++++++++
+ .../gpu/drm/msm/ci/msm_apq8096_results.txt    | 140 +++++++++++++++++
+ drivers/gpu/drm/msm/ci/msm_sc7180_results.txt | 141 +++++++++++++++++
+ drivers/gpu/drm/msm/ci/msm_sdm845_results.txt | 141 +++++++++++++++++
+ 7 files changed, 791 insertions(+)
+ create mode 100644 Documentation/gpu/msm_automated_testing.rst
+ create mode 100644 drivers/gpu/drm/msm/ci/gitlab-ci.yml
+ create mode 100644 drivers/gpu/drm/msm/ci/msm.testlist
+ create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+ create mode 100644 drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+ create mode 100644 drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+ create mode 100644 drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
 
-                     Pin8 (gpio1 16)-----------------------
-                     Pin7 (gpio1 20)--------------------- |
-                     Pin6 (gpio1 22)------------------- | |
-                     Pin5 (gpio2 21)----------------- | | |
-                     Pin4 (ground  )--------------- | | | |
-                     Pin3 (gpio1 31)------------- | | | | |
-                     Pin2 (gpio1 23)----------- | | | | | |
-                     Pin1 (gpio1 24)--------- | | | | | | |
-                                            | | | | | | | |
-                                            | | | | | | | |
-                                            | | | | | | | |
-    |------------|---------|----------------- | | | | | | |-----------|
-    |  Button1   |         |  Button2         | | | | | |    Button3  | 
-    |      _|_   |         |   _|_            | | | | | |       _|_   | 
-    |  |--o   o--|         |--o   o-----------| | | | | |------o   o--|       
-    |  |                                      | | | | | |             |
-    |  |         |----------------------------| | | | | |             |
-    |  | Button4 |            Button5           | | | | |  Button6    |
-    |  |   _|_   |              _|_             | | | | |    _|_      |
-    |  |--o   o--|         |---o   o------------| | | | |---o   o-----|
-    |  |                   |                      | | |               |
-    |  |                   |------------------|---| | |-----------|   |
-    |  |                                      |     |             |   |
-    |  |------------------------------|       |     |---------|   |   |
-    |                                 |       |               |   |   |
-    |   Button7              Button8  |	      |    Button9    |   |   |
-    |      _|_                _|_     |	      |       _|_     |   |   |
-    |-----o   o-----|--------o   o----|       |------o   o----|   |   |
-                    |                 |                           |   |
-                    |                 |---------------------------|   |
-                    |                                                 |
-                    |-------------------------------------------------|
+diff --git a/Documentation/gpu/msm_automated_testing.rst b/Documentation/gpu/msm_automated_testing.rst
+new file mode 100644
+index 000000000000..fe59474569c2
+--- /dev/null
++++ b/Documentation/gpu/msm_automated_testing.rst
+@@ -0,0 +1,70 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++=========================================
++Automated testing of MSM DRM driver
++=========================================
++
++
++Introduction
++============
++
++Making sure that changes to a driver don't introduce regressions can be very time consuming when lots of different hardware configurations need to be tested. Moreover, it isn't practical for each person interested in this testing to have to acquire and maintain what can be a considerable amount of hardware.
++
++Also, it is desirable for developers to check for regressions in their code by themselves, instead of relying on the maintainer finding them and then reporting back.
++
++There are facilities in gitlab.freedesktop.org to automatically test Mesa that can be used as well for testing DRM drivers such as drm/msm. This document explains how people interested in testing the drm/msm driver can use this shared infrastructure to save quite some time and effort.
++
++
++Relevant files
++==============
++
++drivers/gpu/drm/msm/ci/gitlab-ci.yml
++------------------------------------
++
++Specifies the specific version of the scripts to be used. GitLab CI will use the values defined in this file to fetch the right scripts.
++
++
++drivers/gpu/drm/msm/ci/msm.testlist
++-----------------------------------
++
++Specifies the tests that the current code is expected to be able to reliably run. These tests are expected to not hang the DUT (device under testing) when running on the revision they belong to, and to give consistent results.
++
++
++drivers/gpu/drm/msm/ci/msm_*_results.txt
++----------------------------------------
++
++Specifies the expected results of running this specific kernel revision on a given hardware configuration.
++
++
++How to enable automated testing on your tree
++============================================
++
++1. Create a Linux tree in https://gitlab.freedesktop.org/ if you don't have one yet
++
++2. In your kernel repo's configuration (eg. https://gitlab.freedesktop.org/tomeu/linux/-/settings/ci_cd), change the CI/CD configuration file from .gitlab-ci.yml to drivers/gpu/drm/msm/ci/gitlab-ci.yml.
++
++3. Next time you push to this repository, you will see a CI pipeline being created (eg. https://gitlab.freedesktop.org/tomeu/linux/-/pipelines)
++
++4. The various jobs will be run and when the pipeline is finished, all jobs should be green unless a regression has been found.
++
++
++How to update test expectations
++===============================
++
++If your changes to the code fix any tests, you will have to update one or more of the files in drivers/gpu/drm/msm/ci/msm_*_results.txt, for each of the test platforms affected by the change.
++
++If you have run a pipeline and it failed because of a mismatched test result, you will have been offered a patch at the end of the run that you can apply after reviewing it.
++
++
++How to expand coverage
++======================
++
++If your code changes makes it possible to run more tests (by solving reliability issues, for example), more tests can be added to this list, and then the expected results updated with the patch file that will be printed at the end of each job.
++
++If there is a need for updating the version of IGT being used (maybe you have added more tests to it), follow the instructions at https://gitlab.freedesktop.org/gfx-ci/drm-ci/-/tree/msm#upreving-igt.
++
++
++How to test your changes to the scripts
++==========================================
++
++For testing changes to the scripts in the drm-ci repo, change the DRM_CI_PROJECT_PATH variable in drivers/gpu/drm/msm/ci/gitlab-ci.yml to match your fork of the project (eg. tomeu/drm-ci). This fork needs to be in https://gitlab.freedesktop.org/.
+\ No newline at end of file
+diff --git a/drivers/gpu/drm/msm/ci/gitlab-ci.yml b/drivers/gpu/drm/msm/ci/gitlab-ci.yml
+new file mode 100644
+index 000000000000..9b7caa7fcab2
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/gitlab-ci.yml
+@@ -0,0 +1,11 @@
++variables:
++  # Change this to use your fork of drm-ci
++  DRM_CI_PROJECT_PATH: &drm-ci-project-path gfx-ci/drm-ci
++  DRM_CI_COMMIT_SHA: &drm-ci-commit-sha msm
++
++include:
++  - project: *drm-ci-project-path
++    ref: *drm-ci-commit-sha
++    file:
++      - '.msm-gitlab-ci.yml'
++      - '.gitlab-ci.yml'
+diff --git a/drivers/gpu/drm/msm/ci/msm.testlist b/drivers/gpu/drm/msm/ci/msm.testlist
+new file mode 100644
+index 000000000000..8805a3bc7316
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/msm.testlist
+@@ -0,0 +1,148 @@
++# Keep alphabetically sorted by default
++
++igt@core_auth@getclient-simple
++igt@core_auth@getclient-master-drop
++igt@core_auth@basic-auth
++igt@core_auth@many-magics
++igt@core_getclient
++igt@core_getstats
++igt@core_getversion
++igt@core_setmaster_vs_auth
++igt@drm_read@invalid-buffer
++igt@drm_read@fault-buffer
++igt@drm_read@empty-block
++igt@drm_read@empty-nonblock
++igt@drm_read@short-buffer-block
++igt@drm_read@short-buffer-nonblock
++igt@drm_read@short-buffer-wakeup
++igt@kms_addfb_basic@unused-handle
++igt@kms_addfb_basic@unused-pitches
++igt@kms_addfb_basic@unused-offsets
++igt@kms_addfb_basic@unused-modifier
++igt@kms_addfb_basic@legacy-format
++igt@kms_addfb_basic@no-handle
++igt@kms_addfb_basic@basic
++igt@kms_addfb_basic@bad-pitch-0
++igt@kms_addfb_basic@bad-pitch-32
++igt@kms_addfb_basic@bad-pitch-63
++igt@kms_addfb_basic@bad-pitch-128
++igt@kms_addfb_basic@bad-pitch-256
++igt@kms_addfb_basic@bad-pitch-1024
++igt@kms_addfb_basic@bad-pitch-999
++igt@kms_addfb_basic@bad-pitch-65536
++igt@kms_addfb_basic@size-max
++igt@kms_addfb_basic@too-wide
++igt@kms_addfb_basic@too-high
++igt@kms_addfb_basic@bo-too-small
++igt@kms_addfb_basic@small-bo
++igt@kms_addfb_basic@addfb25-modifier-no-flag
++igt@kms_addfb_basic@addfb25-bad-modifier
++igt@kms_addfb_basic@invalid-get-prop-any
++igt@kms_addfb_basic@invalid-get-prop
++igt@kms_addfb_basic@invalid-set-prop-any
++igt@kms_addfb_basic@invalid-set-prop
++igt@kms_addfb_basic@master-rmfb
++igt@kms_atomic@plane-overlay-legacy
++igt@kms_atomic@plane-primary-legacy
++igt@kms_atomic@plane-primary-overlay-mutable-zpos
++igt@kms_atomic@plane-immutable-zpos
++igt@kms_atomic@test-only
++igt@kms_atomic@plane-cursor-legacy
++igt@kms_atomic@plane-invalid-params
++igt@kms_atomic@crtc-invalid-params
++igt@kms_atomic@atomic-invalid-params
++igt@kms_atomic@atomic_plane_damage
++igt@kms_atomic_interruptible@legacy-setmode@pipe-a-edp-1
++igt@kms_atomic_interruptible@atomic-setmode@pipe-a-edp-1
++igt@kms_atomic_interruptible@legacy-dpms@pipe-a-edp-1
++igt@kms_atomic_interruptible@legacy-pageflip@pipe-a-edp-1
++igt@kms_atomic_interruptible@legacy-cursor@pipe-a-edp-1
++igt@kms_atomic_interruptible@universal-setplane-primary@pipe-a-edp-1
++igt@kms_atomic_interruptible@universal-setplane-cursor@pipe-a-edp-1
++igt@kms_content_protection@LIC
++igt@kms_flip_event_leak
++igt@kms_getfb@getfb-handle-zero
++igt@kms_getfb@getfb-handle-valid
++igt@kms_getfb@getfb-handle-closed
++igt@kms_getfb@getfb-handle-not-fb
++igt@kms_getfb@getfb-addfb-different-handles
++igt@kms_getfb@getfb-repeated-different-handles
++igt@kms_getfb@getfb2-handle-zero
++igt@kms_getfb@getfb2-handle-closed
++igt@kms_getfb@getfb2-handle-not-fb
++igt@kms_getfb@getfb2-into-addfb2
++igt@kms_getfb@getfb-handle-protection
++igt@kms_getfb@getfb2-handle-protection
++igt@kms_hdmi_inject@inject-4k
++igt@kms_multipipe_modeset@basic-max-pipe-crc-check
++igt@kms_pipe_crc_basic@bad-source
++igt@kms_pipe_crc_basic@read-crc-pipe-a
++igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a
++igt@kms_pipe_crc_basic@read-crc-pipe-b
++igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b
++igt@kms_prop_blob@basic
++igt@kms_prop_blob@blob-prop-core
++igt@kms_prop_blob@blob-prop-validate
++igt@kms_prop_blob@blob-prop-lifetime
++igt@kms_prop_blob@blob-multiple
++igt@kms_prop_blob@invalid-get-prop-any
++igt@kms_prop_blob@invalid-get-prop
++igt@kms_prop_blob@invalid-set-prop-any
++igt@kms_prop_blob@invalid-set-prop
++igt@kms_rmfb@rmfb-ioctl
++igt@kms_rmfb@close-fd
++igt@kms_setmode@basic@pipe-a-edp-1
++igt@kms_setmode@basic@pipe-b-edp-1
++
++# Flakes on a530 with:
++# arm-smmu b40000.iommu: Unhandled context fault: fsr=0x408, iova=0x01003000, fsynr=0x13, cbfrsynra=0x0, cb=0
++# igt@msm_mapping@ring
++
++igt@msm_mapping@sqefw
++igt@msm_mapping@shadow
++igt@msm_recovery@hangcheck
++igt@msm_recovery@gpu-fault
++igt@msm_recovery@iova-fault
++igt@msm_submit@empty-submit
++igt@msm_submit@invalid-queue-submit
++igt@msm_submit@invalid-flags-submit
++igt@msm_submit@invalid-in-fence-submit
++igt@msm_submit@invalid-duplicate-bo-submit
++igt@msm_submit@invalid-cmd-idx-submit
++igt@msm_submit@invalid-cmd-type-submit
++igt@msm_submit@valid-submit
++igt@kms_sysfs_edid_timing
++igt@kms_universal_plane@universal-plane-pipe-a-functional
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-a
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-b
++igt@kms_vblank@invalid
++igt@kms_vblank@crtc-id
++igt@kms_vblank@pipe-a-query-idle
++igt@kms_vblank@pipe-a-query-forked
++igt@kms_vblank@pipe-a-query-busy
++igt@kms_vblank@pipe-a-query-forked-busy
++igt@kms_vblank@pipe-a-wait-idle
++igt@kms_vblank@pipe-a-wait-forked
++igt@kms_vblank@pipe-a-wait-busy
++igt@kms_vblank@pipe-a-wait-forked-busy
++igt@kms_vblank@pipe-a-ts-continuation-idle
++igt@kms_vblank@pipe-a-ts-continuation-modeset
++igt@kms_vblank@pipe-b-accuracy-idle
++igt@kms_vblank@pipe-b-query-idle
++igt@kms_vblank@pipe-b-query-forked
++igt@kms_vblank@pipe-b-query-busy
++igt@kms_vblank@pipe-b-query-forked-busy
++igt@kms_vblank@pipe-b-wait-idle
++igt@kms_vblank@pipe-b-wait-forked
++igt@kms_vblank@pipe-b-wait-busy
++igt@kms_vblank@pipe-b-wait-forked-busy
++igt@kms_vblank@pipe-b-ts-continuation-idle
++igt@kms_vblank@pipe-b-ts-continuation-modeset
+diff --git a/drivers/gpu/drm/msm/ci/msm_apq8016_results.txt b/drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+new file mode 100644
+index 000000000000..2cad61d89faf
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/msm_apq8016_results.txt
+@@ -0,0 +1,140 @@
++igt@core_auth@getclient-simple,pass
++igt@core_auth@getclient-master-drop,pass
++igt@core_auth@basic-auth,pass
++igt@core_auth@many-magics,pass
++igt@core_getclient,pass
++igt@core_getstats,pass
++igt@core_getversion,pass
++igt@core_setmaster_vs_auth,pass
++igt@drm_read@invalid-buffer,skip
++igt@drm_read@fault-buffer,skip
++igt@drm_read@empty-block,skip
++igt@drm_read@empty-nonblock,skip
++igt@drm_read@short-buffer-block,skip
++igt@drm_read@short-buffer-nonblock,skip
++igt@drm_read@short-buffer-wakeup,skip
++igt@kms_addfb_basic@unused-handle,pass
++igt@kms_addfb_basic@unused-pitches,pass
++igt@kms_addfb_basic@unused-offsets,pass
++igt@kms_addfb_basic@unused-modifier,pass
++igt@kms_addfb_basic@legacy-format,dmesg-warn
++igt@kms_addfb_basic@no-handle,pass
++igt@kms_addfb_basic@basic,pass
++igt@kms_addfb_basic@bad-pitch-0,pass
++igt@kms_addfb_basic@bad-pitch-32,pass
++igt@kms_addfb_basic@bad-pitch-63,pass
++igt@kms_addfb_basic@bad-pitch-128,pass
++igt@kms_addfb_basic@bad-pitch-256,pass
++igt@kms_addfb_basic@bad-pitch-1024,pass
++igt@kms_addfb_basic@bad-pitch-999,pass
++igt@kms_addfb_basic@bad-pitch-65536,pass
++igt@kms_addfb_basic@size-max,pass
++igt@kms_addfb_basic@too-wide,pass
++igt@kms_addfb_basic@too-high,dmesg-warn
++igt@kms_addfb_basic@bo-too-small,pass
++igt@kms_addfb_basic@small-bo,pass
++igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
++igt@kms_addfb_basic@addfb25-bad-modifier,fail
++igt@kms_addfb_basic@invalid-get-prop-any,pass
++igt@kms_addfb_basic@invalid-get-prop,pass
++igt@kms_addfb_basic@invalid-set-prop-any,pass
++igt@kms_addfb_basic@invalid-set-prop,pass
++igt@kms_addfb_basic@master-rmfb,pass
++igt@kms_atomic@plane-overlay-legacy,skip
++igt@kms_atomic@plane-primary-legacy,skip
++igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
++igt@kms_atomic@plane-immutable-zpos,skip
++igt@kms_atomic@test-only,skip
++igt@kms_atomic@plane-cursor-legacy,skip
++igt@kms_atomic@plane-invalid-params,skip
++igt@kms_atomic@crtc-invalid-params,skip
++igt@kms_atomic@atomic-invalid-params,skip
++igt@kms_atomic@atomic_plane_damage,skip
++igt@kms_atomic_interruptible@legacy-setmode,skip
++igt@kms_atomic_interruptible@atomic-setmode,skip
++igt@kms_atomic_interruptible@legacy-dpms,skip
++igt@kms_atomic_interruptible@legacy-pageflip,skip
++igt@kms_atomic_interruptible@legacy-cursor,skip
++igt@kms_atomic_interruptible@universal-setplane-primary,skip
++igt@kms_atomic_interruptible@universal-setplane-cursor,skip
++igt@kms_content_protection@lic,skip
++igt@kms_flip_event_leak,skip
++igt@kms_getfb@getfb-handle-zero,pass
++igt@kms_getfb@getfb-handle-valid,pass
++igt@kms_getfb@getfb-handle-closed,pass
++igt@kms_getfb@getfb-handle-not-fb,pass
++igt@kms_getfb@getfb-addfb-different-handles,pass
++igt@kms_getfb@getfb-repeated-different-handles,pass
++igt@kms_getfb@getfb2-handle-zero,pass
++igt@kms_getfb@getfb2-handle-closed,pass
++igt@kms_getfb@getfb2-handle-not-fb,pass
++igt@kms_getfb@getfb2-into-addfb2,pass
++igt@kms_getfb@getfb-handle-protection,pass
++igt@kms_getfb@getfb2-handle-protection,pass
++igt@kms_hdmi_inject@inject-4k,fail
++igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
++igt@kms_pipe_crc_basic@bad-source,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-a,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,skip
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,skip
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
++igt@kms_prop_blob@basic,pass
++igt@kms_prop_blob@blob-prop-core,pass
++igt@kms_prop_blob@blob-prop-validate,pass
++igt@kms_prop_blob@blob-prop-lifetime,pass
++igt@kms_prop_blob@blob-multiple,pass
++igt@kms_prop_blob@invalid-get-prop-any,pass
++igt@kms_prop_blob@invalid-get-prop,pass
++igt@kms_prop_blob@invalid-set-prop-any,pass
++igt@kms_prop_blob@invalid-set-prop,pass
++igt@kms_rmfb@rmfb-ioctl,skip
++igt@kms_rmfb@close-fd,skip
++igt@kms_setmode@basic,skip
++igt@msm_mapping@sqefw,skip
++igt@msm_mapping@shadow,skip
++igt@msm_recovery@hangcheck,skip
++igt@msm_recovery@gpu-fault,skip
++igt@msm_recovery@iova-fault,skip
++igt@msm_submit@empty-submit,pass
++igt@msm_submit@invalid-queue-submit,pass
++igt@msm_submit@invalid-flags-submit,pass
++igt@msm_submit@invalid-in-fence-submit,pass
++igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
++igt@msm_submit@valid-submit,pass
++igt@kms_sysfs_edid_timing,pass
++igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,skip
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
++igt@kms_vblank@invalid,skip
++igt@kms_vblank@crtc-id,skip
++igt@kms_vblank@pipe-a-query-idle,skip
++igt@kms_vblank@pipe-a-query-forked,skip
++igt@kms_vblank@pipe-a-query-busy,skip
++igt@kms_vblank@pipe-a-query-forked-busy,skip
++igt@kms_vblank@pipe-a-wait-idle,skip
++igt@kms_vblank@pipe-a-wait-forked,skip
++igt@kms_vblank@pipe-a-wait-busy,skip
++igt@kms_vblank@pipe-a-wait-forked-busy,skip
++igt@kms_vblank@pipe-a-ts-continuation-idle,skip
++igt@kms_vblank@pipe-a-ts-continuation-modeset,skip
++igt@kms_vblank@pipe-b-accuracy-idle,skip
++igt@kms_vblank@pipe-b-query-idle,skip
++igt@kms_vblank@pipe-b-query-forked,skip
++igt@kms_vblank@pipe-b-query-busy,skip
++igt@kms_vblank@pipe-b-query-forked-busy,skip
++igt@kms_vblank@pipe-b-wait-idle,skip
++igt@kms_vblank@pipe-b-wait-forked,skip
++igt@kms_vblank@pipe-b-wait-busy,skip
++igt@kms_vblank@pipe-b-wait-forked-busy,skip
++igt@kms_vblank@pipe-b-ts-continuation-idle,skip
++igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+diff --git a/drivers/gpu/drm/msm/ci/msm_apq8096_results.txt b/drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+new file mode 100644
+index 000000000000..6f10941e5626
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/msm_apq8096_results.txt
+@@ -0,0 +1,140 @@
++igt@core_auth@getclient-simple,pass
++igt@core_auth@getclient-master-drop,pass
++igt@core_auth@basic-auth,pass
++igt@core_auth@many-magics,pass
++igt@core_getclient,pass
++igt@core_getstats,pass
++igt@core_getversion,pass
++igt@core_setmaster_vs_auth,pass
++igt@drm_read@invalid-buffer,skip
++igt@drm_read@fault-buffer,skip
++igt@drm_read@empty-block,skip
++igt@drm_read@empty-nonblock,skip
++igt@drm_read@short-buffer-block,skip
++igt@drm_read@short-buffer-nonblock,skip
++igt@drm_read@short-buffer-wakeup,skip
++igt@kms_addfb_basic@unused-handle,pass
++igt@kms_addfb_basic@unused-pitches,pass
++igt@kms_addfb_basic@unused-offsets,pass
++igt@kms_addfb_basic@unused-modifier,pass
++igt@kms_addfb_basic@legacy-format,dmesg-warn
++igt@kms_addfb_basic@no-handle,pass
++igt@kms_addfb_basic@basic,pass
++igt@kms_addfb_basic@bad-pitch-0,pass
++igt@kms_addfb_basic@bad-pitch-32,pass
++igt@kms_addfb_basic@bad-pitch-63,pass
++igt@kms_addfb_basic@bad-pitch-128,pass
++igt@kms_addfb_basic@bad-pitch-256,pass
++igt@kms_addfb_basic@bad-pitch-1024,pass
++igt@kms_addfb_basic@bad-pitch-999,pass
++igt@kms_addfb_basic@bad-pitch-65536,pass
++igt@kms_addfb_basic@size-max,pass
++igt@kms_addfb_basic@too-wide,pass
++igt@kms_addfb_basic@too-high,dmesg-warn
++igt@kms_addfb_basic@bo-too-small,pass
++igt@kms_addfb_basic@small-bo,pass
++igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
++igt@kms_addfb_basic@addfb25-bad-modifier,fail
++igt@kms_addfb_basic@invalid-get-prop-any,pass
++igt@kms_addfb_basic@invalid-get-prop,pass
++igt@kms_addfb_basic@invalid-set-prop-any,pass
++igt@kms_addfb_basic@invalid-set-prop,pass
++igt@kms_addfb_basic@master-rmfb,pass
++igt@kms_atomic@plane-overlay-legacy,skip
++igt@kms_atomic@plane-primary-legacy,skip
++igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
++igt@kms_atomic@plane-immutable-zpos,skip
++igt@kms_atomic@test-only,skip
++igt@kms_atomic@plane-cursor-legacy,skip
++igt@kms_atomic@plane-invalid-params,skip
++igt@kms_atomic@crtc-invalid-params,skip
++igt@kms_atomic@atomic-invalid-params,skip
++igt@kms_atomic@atomic_plane_damage,skip
++igt@kms_atomic_interruptible@legacy-setmode,skip
++igt@kms_atomic_interruptible@atomic-setmode,skip
++igt@kms_atomic_interruptible@legacy-dpms,skip
++igt@kms_atomic_interruptible@legacy-pageflip,skip
++igt@kms_atomic_interruptible@legacy-cursor,skip
++igt@kms_atomic_interruptible@universal-setplane-primary,skip
++igt@kms_atomic_interruptible@universal-setplane-cursor,skip
++igt@kms_content_protection@lic,skip
++igt@kms_flip_event_leak,skip
++igt@kms_getfb@getfb-handle-zero,pass
++igt@kms_getfb@getfb-handle-valid,pass
++igt@kms_getfb@getfb-handle-closed,pass
++igt@kms_getfb@getfb-handle-not-fb,pass
++igt@kms_getfb@getfb-addfb-different-handles,pass
++igt@kms_getfb@getfb-repeated-different-handles,pass
++igt@kms_getfb@getfb2-handle-zero,pass
++igt@kms_getfb@getfb2-handle-closed,pass
++igt@kms_getfb@getfb2-handle-not-fb,pass
++igt@kms_getfb@getfb2-into-addfb2,pass
++igt@kms_getfb@getfb-handle-protection,pass
++igt@kms_getfb@getfb2-handle-protection,pass
++igt@kms_hdmi_inject@inject-4k,dmesg-warn
++igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
++igt@kms_pipe_crc_basic@bad-source,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-a,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,skip
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,skip
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
++igt@kms_prop_blob@basic,pass
++igt@kms_prop_blob@blob-prop-core,pass
++igt@kms_prop_blob@blob-prop-validate,pass
++igt@kms_prop_blob@blob-prop-lifetime,pass
++igt@kms_prop_blob@blob-multiple,pass
++igt@kms_prop_blob@invalid-get-prop-any,pass
++igt@kms_prop_blob@invalid-get-prop,pass
++igt@kms_prop_blob@invalid-set-prop-any,pass
++igt@kms_prop_blob@invalid-set-prop,pass
++igt@kms_rmfb@rmfb-ioctl,skip
++igt@kms_rmfb@close-fd,skip
++igt@kms_setmode@basic,skip
++igt@msm_mapping@sqefw,skip
++igt@msm_mapping@shadow,skip
++igt@msm_recovery@hangcheck,skip
++igt@msm_recovery@gpu-fault,skip
++igt@msm_recovery@iova-fault,skip
++igt@msm_submit@empty-submit,pass
++igt@msm_submit@invalid-queue-submit,pass
++igt@msm_submit@invalid-flags-submit,pass
++igt@msm_submit@invalid-in-fence-submit,pass
++igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
++igt@msm_submit@valid-submit,pass
++igt@kms_sysfs_edid_timing,pass
++igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,skip
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
++igt@kms_vblank@invalid,skip
++igt@kms_vblank@crtc-id,skip
++igt@kms_vblank@pipe-a-query-idle,skip
++igt@kms_vblank@pipe-a-query-forked,skip
++igt@kms_vblank@pipe-a-query-busy,skip
++igt@kms_vblank@pipe-a-query-forked-busy,skip
++igt@kms_vblank@pipe-a-wait-idle,skip
++igt@kms_vblank@pipe-a-wait-forked,skip
++igt@kms_vblank@pipe-a-wait-busy,skip
++igt@kms_vblank@pipe-a-wait-forked-busy,skip
++igt@kms_vblank@pipe-a-ts-continuation-idle,skip
++igt@kms_vblank@pipe-a-ts-continuation-modeset,skip
++igt@kms_vblank@pipe-b-accuracy-idle,skip
++igt@kms_vblank@pipe-b-query-idle,skip
++igt@kms_vblank@pipe-b-query-forked,skip
++igt@kms_vblank@pipe-b-query-busy,skip
++igt@kms_vblank@pipe-b-query-forked-busy,skip
++igt@kms_vblank@pipe-b-wait-idle,skip
++igt@kms_vblank@pipe-b-wait-forked,skip
++igt@kms_vblank@pipe-b-wait-busy,skip
++igt@kms_vblank@pipe-b-wait-forked-busy,skip
++igt@kms_vblank@pipe-b-ts-continuation-idle,skip
++igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+diff --git a/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+new file mode 100644
+index 000000000000..01f7b4b399b5
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/msm_sc7180_results.txt
+@@ -0,0 +1,141 @@
++igt@core_auth@getclient-simple,dmesg-warn
++igt@core_auth@getclient-master-drop,pass
++igt@core_auth@basic-auth,pass
++igt@core_auth@many-magics,pass
++igt@core_getclient,pass
++igt@core_getstats,pass
++igt@core_getversion,pass
++igt@core_setmaster_vs_auth,pass
++igt@drm_read@invalid-buffer,pass
++igt@drm_read@fault-buffer,pass
++igt@drm_read@empty-block,pass
++igt@drm_read@empty-nonblock,pass
++igt@drm_read@short-buffer-block,pass
++igt@drm_read@short-buffer-nonblock,pass
++igt@drm_read@short-buffer-wakeup,pass
++igt@kms_addfb_basic@unused-handle,pass
++igt@kms_addfb_basic@unused-pitches,pass
++igt@kms_addfb_basic@unused-offsets,pass
++igt@kms_addfb_basic@unused-modifier,pass
++igt@kms_addfb_basic@legacy-format,dmesg-warn
++igt@kms_addfb_basic@no-handle,pass
++igt@kms_addfb_basic@basic,pass
++igt@kms_addfb_basic@bad-pitch-0,pass
++igt@kms_addfb_basic@bad-pitch-32,pass
++igt@kms_addfb_basic@bad-pitch-63,pass
++igt@kms_addfb_basic@bad-pitch-128,pass
++igt@kms_addfb_basic@bad-pitch-256,pass
++igt@kms_addfb_basic@bad-pitch-1024,pass
++igt@kms_addfb_basic@bad-pitch-999,pass
++igt@kms_addfb_basic@bad-pitch-65536,pass
++igt@kms_addfb_basic@size-max,pass
++igt@kms_addfb_basic@too-wide,pass
++igt@kms_addfb_basic@too-high,dmesg-warn
++igt@kms_addfb_basic@bo-too-small,pass
++igt@kms_addfb_basic@small-bo,pass
++igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
++igt@kms_addfb_basic@addfb25-bad-modifier,dmesg-warn
++igt@kms_addfb_basic@invalid-get-prop-any,pass
++igt@kms_addfb_basic@invalid-get-prop,pass
++igt@kms_addfb_basic@invalid-set-prop-any,pass
++igt@kms_addfb_basic@invalid-set-prop,pass
++igt@kms_addfb_basic@master-rmfb,pass
++igt@kms_atomic@plane-overlay-legacy,skip
++igt@kms_atomic@plane-primary-legacy,pass
++igt@kms_atomic@plane-primary-overlay-mutable-zpos,skip
++igt@kms_atomic@plane-immutable-zpos,pass
++igt@kms_atomic@test-only,pass
++igt@kms_atomic@plane-cursor-legacy,pass
++igt@kms_atomic@plane-invalid-params,pass
++igt@kms_atomic@crtc-invalid-params,pass
++igt@kms_atomic@atomic-invalid-params,pass
++igt@kms_atomic@atomic_plane_damage,pass
++igt@kms_atomic_interruptible@legacy-setmode,skip
++igt@kms_atomic_interruptible@atomic-setmode,skip
++igt@kms_atomic_interruptible@legacy-dpms,skip
++igt@kms_atomic_interruptible@legacy-pageflip,skip
++igt@kms_atomic_interruptible@legacy-cursor,skip
++igt@kms_atomic_interruptible@universal-setplane-primary,skip
++igt@kms_atomic_interruptible@universal-setplane-cursor,skip
++igt@kms_content_protection@lic,skip
++igt@kms_flip_event_leak,pass
++igt@kms_getfb@getfb-handle-zero,pass
++igt@kms_getfb@getfb-handle-valid,pass
++igt@kms_getfb@getfb-handle-closed,pass
++igt@kms_getfb@getfb-handle-not-fb,pass
++igt@kms_getfb@getfb-addfb-different-handles,pass
++igt@kms_getfb@getfb-repeated-different-handles,pass
++igt@kms_getfb@getfb2-handle-zero,pass
++igt@kms_getfb@getfb2-handle-closed,pass
++igt@kms_getfb@getfb2-handle-not-fb,pass
++igt@kms_getfb@getfb2-into-addfb2,pass
++igt@kms_getfb@getfb-handle-protection,pass
++igt@kms_getfb@getfb2-handle-protection,pass
++igt@kms_hdmi_inject@inject-4k,skip
++igt@kms_multipipe_modeset@basic-max-pipe-crc-check,skip
++igt@kms_pipe_crc_basic@bad-source,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-a,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,pass
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,pass
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-b,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,pass
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,pass
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,pass
++igt@kms_prop_blob@basic,pass
++igt@kms_prop_blob@blob-prop-core,pass
++igt@kms_prop_blob@blob-prop-validate,pass
++igt@kms_prop_blob@blob-prop-lifetime,pass
++igt@kms_prop_blob@blob-multiple,pass
++igt@kms_prop_blob@invalid-get-prop-any,pass
++igt@kms_prop_blob@invalid-get-prop,pass
++igt@kms_prop_blob@invalid-set-prop-any,pass
++igt@kms_prop_blob@invalid-set-prop,pass
++igt@kms_rmfb@rmfb-ioctl,pass
++igt@kms_rmfb@close-fd,fail
++igt@kms_setmode@basic@pipe-a-edp-1,pass
++igt@kms_setmode@basic@pipe-b-edp-1,pass
++igt@msm_mapping@sqefw,dmesg-fail
++igt@msm_mapping@shadow,dmesg-fail
++igt@msm_recovery@hangcheck,dmesg-warn
++igt@msm_recovery@gpu-fault,dmesg-warn
++igt@msm_recovery@iova-fault,dmesg-warn
++igt@msm_submit@empty-submit,pass
++igt@msm_submit@invalid-queue-submit,pass
++igt@msm_submit@invalid-flags-submit,pass
++igt@msm_submit@invalid-in-fence-submit,pass
++igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
++igt@msm_submit@valid-submit,pass
++igt@kms_sysfs_edid_timing,pass
++igt@kms_universal_plane@universal-plane-pipe-a-functional,skip
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,pass
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,fail
++igt@kms_vblank@invalid,pass
++igt@kms_vblank@crtc-id,pass
++igt@kms_vblank@pipe-a-query-idle,pass
++igt@kms_vblank@pipe-a-query-forked,pass
++igt@kms_vblank@pipe-a-query-busy,pass
++igt@kms_vblank@pipe-a-query-forked-busy,pass
++igt@kms_vblank@pipe-a-wait-idle,pass
++igt@kms_vblank@pipe-a-wait-forked,pass
++igt@kms_vblank@pipe-a-wait-busy,pass
++igt@kms_vblank@pipe-a-wait-forked-busy,pass
++igt@kms_vblank@pipe-a-ts-continuation-idle,pass
++igt@kms_vblank@pipe-a-ts-continuation-modeset,pass
++igt@kms_vblank@pipe-b-accuracy-idle,pass
++igt@kms_vblank@pipe-b-query-idle,pass
++igt@kms_vblank@pipe-b-query-forked,pass
++igt@kms_vblank@pipe-b-query-busy,pass
++igt@kms_vblank@pipe-b-query-forked-busy,pass
++igt@kms_vblank@pipe-b-wait-idle,pass
++igt@kms_vblank@pipe-b-wait-forked,pass
++igt@kms_vblank@pipe-b-wait-busy,pass
++igt@kms_vblank@pipe-b-wait-forked-busy,pass
++igt@kms_vblank@pipe-b-ts-continuation-idle,pass
++igt@kms_vblank@pipe-b-ts-continuation-modeset,pass
+diff --git a/drivers/gpu/drm/msm/ci/msm_sdm845_results.txt b/drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
+new file mode 100644
+index 000000000000..3df1e5ef6d80
+--- /dev/null
++++ b/drivers/gpu/drm/msm/ci/msm_sdm845_results.txt
+@@ -0,0 +1,141 @@
++igt@core_auth@getclient-simple,dmesg-warn
++igt@core_auth@getclient-master-drop,pass
++igt@core_auth@basic-auth,pass
++igt@core_auth@many-magics,pass
++igt@core_getclient,pass
++igt@core_getstats,pass
++igt@core_getversion,pass
++igt@core_setmaster_vs_auth,pass
++igt@drm_read@invalid-buffer,pass
++igt@drm_read@fault-buffer,pass
++igt@drm_read@empty-block,pass
++igt@drm_read@empty-nonblock,pass
++igt@drm_read@short-buffer-block,pass
++igt@drm_read@short-buffer-nonblock,pass
++igt@drm_read@short-buffer-wakeup,pass
++igt@kms_addfb_basic@unused-handle,pass
++igt@kms_addfb_basic@unused-pitches,pass
++igt@kms_addfb_basic@unused-offsets,pass
++igt@kms_addfb_basic@unused-modifier,pass
++igt@kms_addfb_basic@legacy-format,dmesg-warn
++igt@kms_addfb_basic@no-handle,pass
++igt@kms_addfb_basic@basic,pass
++igt@kms_addfb_basic@bad-pitch-0,pass
++igt@kms_addfb_basic@bad-pitch-32,pass
++igt@kms_addfb_basic@bad-pitch-63,pass
++igt@kms_addfb_basic@bad-pitch-128,pass
++igt@kms_addfb_basic@bad-pitch-256,pass
++igt@kms_addfb_basic@bad-pitch-1024,pass
++igt@kms_addfb_basic@bad-pitch-999,pass
++igt@kms_addfb_basic@bad-pitch-65536,pass
++igt@kms_addfb_basic@size-max,pass
++igt@kms_addfb_basic@too-wide,pass
++igt@kms_addfb_basic@too-high,dmesg-warn
++igt@kms_addfb_basic@bo-too-small,pass
++igt@kms_addfb_basic@small-bo,pass
++igt@kms_addfb_basic@addfb25-modifier-no-flag,pass
++igt@kms_addfb_basic@addfb25-bad-modifier,dmesg-warn
++igt@kms_addfb_basic@invalid-get-prop-any,pass
++igt@kms_addfb_basic@invalid-get-prop,pass
++igt@kms_addfb_basic@invalid-set-prop-any,pass
++igt@kms_addfb_basic@invalid-set-prop,pass
++igt@kms_addfb_basic@master-rmfb,pass
++igt@kms_atomic@plane-overlay-legacy,dmesg-warn
++igt@kms_atomic@plane-primary-legacy,dmesg-warn
++igt@kms_atomic@plane-primary-overlay-mutable-zpos,dmesg-warn
++igt@kms_atomic@plane-immutable-zpos,dmesg-warn
++igt@kms_atomic@test-only,dmesg-warn
++igt@kms_atomic@plane-cursor-legacy,dmesg-warn
++igt@kms_atomic@plane-invalid-params,dmesg-warn
++igt@kms_atomic@crtc-invalid-params,dmesg-warn
++igt@kms_atomic@atomic-invalid-params,dmesg-warn
++igt@kms_atomic@atomic_plane_damage,dmesg-warn
++igt@kms_atomic_interruptible@legacy-setmode,skip
++igt@kms_atomic_interruptible@atomic-setmode,skip
++igt@kms_atomic_interruptible@legacy-dpms,skip
++igt@kms_atomic_interruptible@legacy-pageflip,skip
++igt@kms_atomic_interruptible@legacy-cursor,skip
++igt@kms_atomic_interruptible@universal-setplane-primary,skip
++igt@kms_atomic_interruptible@universal-setplane-cursor,skip
++igt@kms_content_protection@lic,skip
++igt@kms_flip_event_leak,dmesg-warn
++igt@kms_getfb@getfb-handle-zero,pass
++igt@kms_getfb@getfb-handle-valid,pass
++igt@kms_getfb@getfb-handle-closed,pass
++igt@kms_getfb@getfb-handle-not-fb,pass
++igt@kms_getfb@getfb-addfb-different-handles,pass
++igt@kms_getfb@getfb-repeated-different-handles,pass
++igt@kms_getfb@getfb2-handle-zero,pass
++igt@kms_getfb@getfb2-handle-closed,pass
++igt@kms_getfb@getfb2-handle-not-fb,pass
++igt@kms_getfb@getfb2-into-addfb2,pass
++igt@kms_getfb@getfb-handle-protection,pass
++igt@kms_getfb@getfb2-handle-protection,pass
++igt@kms_hdmi_inject@inject-4k,skip
++igt@kms_multipipe_modeset@basic-max-pipe-crc-check,pass
++igt@kms_pipe_crc_basic@bad-source,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-a,pass
++igt@kms_pipe_crc_basic@read-crc-pipe-a-frame-sequence,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a,pass
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-a-frame-sequence,pass
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-a,dmesg-warn
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-a,dmesg-warn
++igt@kms_pipe_crc_basic@read-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@read-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b,skip
++igt@kms_pipe_crc_basic@nonblocking-crc-pipe-b-frame-sequence,skip
++igt@kms_pipe_crc_basic@disable-crc-after-crtc-pipe-b,skip
++igt@kms_pipe_crc_basic@compare-crc-sanitycheck-pipe-b,skip
++igt@kms_prop_blob@basic,pass
++igt@kms_prop_blob@blob-prop-core,pass
++igt@kms_prop_blob@blob-prop-validate,pass
++igt@kms_prop_blob@blob-prop-lifetime,pass
++igt@kms_prop_blob@blob-multiple,pass
++igt@kms_prop_blob@invalid-get-prop-any,pass
++igt@kms_prop_blob@invalid-get-prop,pass
++igt@kms_prop_blob@invalid-set-prop-any,pass
++igt@kms_prop_blob@invalid-set-prop,pass
++igt@kms_rmfb@rmfb-ioctl,pass
++igt@kms_rmfb@close-fd,fail
++igt@kms_setmode@basic@pipe-a-edp-1,dmesg-warn
++igt@kms_setmode@basic,skip
++igt@msm_mapping@sqefw,dmesg-fail
++igt@msm_mapping@shadow,dmesg-fail
++igt@msm_recovery@hangcheck,dmesg-warn
++igt@msm_recovery@gpu-fault,dmesg-warn
++igt@msm_recovery@iova-fault,dmesg-warn
++igt@msm_submit@empty-submit,pass
++igt@msm_submit@invalid-queue-submit,pass
++igt@msm_submit@invalid-flags-submit,pass
++igt@msm_submit@invalid-in-fence-submit,pass
++igt@msm_submit@invalid-duplicate-bo-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-idx-submit,dmesg-warn
++igt@msm_submit@invalid-cmd-type-submit,dmesg-warn
++igt@msm_submit@valid-submit,pass
++igt@kms_sysfs_edid_timing,pass
++igt@kms_universal_plane@universal-plane-pipe-a-functional,dmesg-fail
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-a,dmesg-warn
++igt@kms_universal_plane@disable-primary-vs-flip-pipe-b,skip
++igt@kms_vblank@invalid,dmesg-warn
++igt@kms_vblank@crtc-id,dmesg-warn
++igt@kms_vblank@pipe-a-query-idle,dmesg-warn
++igt@kms_vblank@pipe-a-query-forked,dmesg-warn
++igt@kms_vblank@pipe-a-query-busy,dmesg-warn
++igt@kms_vblank@pipe-a-query-forked-busy,dmesg-warn
++igt@kms_vblank@pipe-a-wait-idle,dmesg-warn
++igt@kms_vblank@pipe-a-wait-forked,dmesg-warn
++igt@kms_vblank@pipe-a-wait-busy,dmesg-warn
++igt@kms_vblank@pipe-a-wait-forked-busy,dmesg-warn
++igt@kms_vblank@pipe-a-ts-continuation-idle,dmesg-warn
++igt@kms_vblank@pipe-a-ts-continuation-modeset,dmesg-warn
++igt@kms_vblank@pipe-b-accuracy-idle,skip
++igt@kms_vblank@pipe-b-query-idle,skip
++igt@kms_vblank@pipe-b-query-forked,skip
++igt@kms_vblank@pipe-b-query-busy,skip
++igt@kms_vblank@pipe-b-query-forked-busy,skip
++igt@kms_vblank@pipe-b-wait-idle,skip
++igt@kms_vblank@pipe-b-wait-forked,skip
++igt@kms_vblank@pipe-b-wait-busy,skip
++igt@kms_vblank@pipe-b-wait-forked-busy,skip
++igt@kms_vblank@pipe-b-ts-continuation-idle,skip
++igt@kms_vblank@pipe-b-ts-continuation-modeset,skip
+-- 
+2.31.1
 
-
-    ____________________________________
-    | Button  | Pin activation| Keymap |
-    |----------------------------------|
-    |Button1  |	    1,6       | KEY_7  |
-    |----------------------------------|
-    |Button2  |	    1,2       | KEY_8  |
-    |----------------------------------|
-    |Button3  |	    7,8       | KEY_9  |
-    |----------------------------------|
-    |Button4  |	    2,6       | KEY_4  |
-    |----------------------------------|
-    |Button5  |	    3,4       | KEY_5  |
-    |----------------------------------|
-    |Button6  |	    6,7       | KEY_6  |
-    |----------------------------------|
-    |Button7  |	    1,8       | KEY_1  |
-    |----------------------------------|
-    |Button8  |	    6,8       | KEY_2  |
-    |----------------------------------|
-    |Button9  |	    4,5       | KEY_3  |
-    |----------------------------------|
-				
-for Button5 and Button9 we used standard gpio_keys.c driver.
-
-Button1,2,3,4,6,7,8 are not in standard row and column format,
-found difficulty to apply matrix keypad drive to these button.
-
-to solve this we came with vendor specific driver like
-mt_matrix_keypad.c by taking matrix_keypad as reference.
-
-after your review comment I felt it should named as
-bosch_keypad.c to show as vendor specific.
-
-in this driver all gpio lines act as row as well as column,
-a key can be placed at each intersection of a unique row
-number not equal to a unique column and they are diagonally
-symmetric.
-we can skip keymap for the valid intersection of gpio and
-invalid keymap for row equal to column.
-
-the matrix table as below for above schematic
-
-    ------------------------------------------------------
-    |Row\Col |GPIO 0 | GPIO 1 | GPIO 2 | GPIO 3 | GPIO 4 |
-    ------------------------------------------------------
-    | GPIO 0 |  X    | KEY_9  | KEY_2  |   X    | KEY_1  |
-    ------------------------------------------------------
-    | GPIO 1 | KEY_9 |  X     | KEY_6  |   X    |  X     |
-    ------------------------------------------------------
-    | GPIO 2 | KEY_2 | KEY_6  |  X     | KEY_4  | KEY_7  |
-    ------------------------------------------------------
-    | GPIO 3 |  X    |  X     | KEY_4  |  X     | KEY_8  |
-    ------------------------------------------------------
-    | GPIO 4 | KEY_1 |  X     | KEY_7  | KEY_8  |  X     |
-    ------------------------------------------------------
-    X - invalid key
-    KEY_x - preferred key code
-
-
-in Device tree we avoided row and column 
-and passed gpio info as line-gpios
-
-line-gpios = <
-          &gpio1 24 1     /*gpio_56*/
-          &gpio1 23 1     /*gpio_55*/
-          &gpio1 22 1     /*gpio_54*/
-          &gpio1 20 1     /*gpio_52*/
-          &gpio1 16 1     /*gpio_48*/
-        >;
-        linux,keymap = <
-                0x00000000 /* row 0, col 0, KEY_RESERVED */
-                0x0001000a /* row 0, col 1, KEY_9 */
-                0x00020003 /* row 0, col 2, KEY_2 */
-                0x00030000 /* row 0, col 3, KEY_RESERVED */
-                0x00040002 /* row 0, col 4, KEY_1 */
-                0x0100000a /* row 1, col 0, KEY_9 */
-                0x01010000 /* row 1, col 1, KEY_RESERVED */
-                0x01020007 /* row 1, col 2, KEY_6 */
-                0x01030000 /* row 1, col 3, KEY_RESERVED */
-                0x01040000 /* row 1, col 4, KEY_RESERVED */
-                0x02000003 /* row 2, col 0, KEY_2 */
-                0x02010007 /* row 2, col 1, KEY_6 */
-                0x02020000 /* row 2, col 2, KEY_RESERVED */
-                0x02030005 /* row 2, col 3, KEY_4 */
-                0x02040008 /* row 2, col 4, KEY_7 */
-                0x03000000 /* row 3, col 0, KEY_RESERVED */
-                0x03010000 /* row 3, col 1, KEY_RESERVED */
-                0x03020005 /* row 3, col 2, KEY_4 */
-                0x03030000 /* row 3, col 3, KEY_RESERVED */
-                0x03040009 /* row 3, col 4, KEY_8 */
-                0x04000002 /* row 4, col 0, KEY_1 */
-                0x04010000 /* row 4, col 1, KEY_RESERVED */
-                0x04020008 /* row 4, col 2, KEY_7 */
-                0x04030009 /* row 4, col 3, KEY_8 */
-                0x04040000 /* row 4, col 4, KEY_RESERVED */
-        >;
-
-this driver approch may be usefull for the embadded device
-which are using reduced matrix keypad
-		
->
->Best regards,
->Krzysztof
-
-Best regards,
-Gireesh Hiremath

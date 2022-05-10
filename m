@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E77521210
+	by mail.lfdr.de (Postfix) with ESMTP id 3794852120E
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbiEJKYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S238561AbiEJKYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239776AbiEJKYO (ORCPT
+        with ESMTP id S239760AbiEJKYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:24:14 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1AD2AC6C4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:20:16 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id y21so19420939edo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=JAZE3H1GU49hxfnZj4dz1ADpHTYQaP7poHbZZaWlb9w=;
-        b=oFt8LN2qwiQkvu709/jiLgEfOL/3nzC2iBaYdt8tOvH9kklDtTP27FTQHV1j1S3rjv
-         qD3Fs2qCNq6/oAuSU2uPmPGEMfNlOIAyCUNvnVVUf+BcF6+/cMTOEb78zPx11iQUAmjG
-         AyovrymATAnM7csnf3914u9kFxc4/gJGK0lUPATCMspFYwyr42bQiLTCZWnE49jmnVgC
-         4nzzPDDBRh1CKW76njeVzbnpbgyn4ltb04FJ/Y0pb4wpvN01ly5AAOVVQQ5AnvIEFKJE
-         /+Jlv0d6fNft5WiDK82GYzetMg5EGbd7CmSttsx0EPxz+dGnj6su6blz+AVtoclmJZ8K
-         uioA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JAZE3H1GU49hxfnZj4dz1ADpHTYQaP7poHbZZaWlb9w=;
-        b=L0nPYK2H/abp27o1pzqZ220irzjCZ4vZuQDfqydS5ujgPyk185g/PWlVP2Xh5PRGyi
-         PVt1U5qlfj9B4HZD2gPAdZvXLfC+KlE3fUqkHGO4NW7FrxYAWreXp4iy3OTPdNIEOmkJ
-         L728AAJ9di0xehFDIabrfGrt8jCAgN+Tbdc2NQjE09erH3hD00/0WqenbPRFeZRvMyYX
-         sgM7t1mnArsJVuG+Xfhjqbljywe++cy108YkiaAK7E6Gu15a1bOINPmx909rDoJvCG9i
-         e8DBegWIC8diZSXRsG+ofjhHwIv3iS8DHwPPwOqhkvWIuonVczk2u6O4ZWxDiSUSuhyU
-         cN9g==
-X-Gm-Message-State: AOAM530Gra0kWCmS4d7YzPGo56MSavJBWcdYsKNQH050pMAMs17sjwh5
-        FyQu6y3+TpcZcWLEW79G/U1IdA==
-X-Google-Smtp-Source: ABdhPJyvoiZDTo7gRyxxJWEXPyfVnVOhX62o9dqmOeexsQlrnzElSpHIuaxfkyFT8WV64l8lsEXooA==
-X-Received: by 2002:a05:6402:2692:b0:427:ddba:d811 with SMTP id w18-20020a056402269200b00427ddbad811mr21982456edd.343.1652178014773;
-        Tue, 10 May 2022 03:20:14 -0700 (PDT)
-Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d29-20020a50cd5d000000b0042617ba6391sm7403282edj.27.2022.05.10.03.20.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 03:20:14 -0700 (PDT)
-Message-ID: <ea77c9a5-107d-dd4b-a87f-5b62d01c51d0@linaro.org>
-Date:   Tue, 10 May 2022 12:20:13 +0200
+        Tue, 10 May 2022 06:24:23 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68162AACD1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:20:22 -0700 (PDT)
+Date:   Tue, 10 May 2022 12:20:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1652178020;
+        bh=Nhv0FTzQESz5asnBYvRpiUwYoTOaiKJNzvOlOIwp9CI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uNDX6+Ke8cHl8qxZ9lEtzivYVgiByYEc7+hF9Q5qW/pHk711/TZWdkZUm4QM6uQAq
+         axQTU6ILlAYIIipm91NqGmZO2SgDVku9KUIC3Z4dM74ITktNKN5/fdStKzCF6TO4TF
+         furw6zCyypPko4a5BpyWHNNZOS8znYwoZxnLdneA=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Christoph Hellwig <hch@lst.de>, g@troy.t-8ch.de
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH] nvme-pci: fix host memory buffer allocation size
+Message-ID: <6123b484-bf2c-49f0-a657-6085c7333b2e@t-8ch.de>
+References: <20220428101922.14216-1-linux@weissschuh.net>
+ <20220428143603.GA20460@lst.de>
+ <5060d75e-46c0-4d29-a334-62c7e9714fa7@t-8ch.de>
+ <20220428150644.GA22685@lst.de>
+ <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
+ <20220510070356.GA11660@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: vendor-prefixes: add Methode Electronics
-Content-Language: en-US
-To:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        shawnguo@kernel.org, linus.walleij@linaro.org, kostap@marvell.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, pali@kernel.org,
-        marek.behun@nic.cz
-References: <20220509110028.144226-1-robert.marko@sartura.hr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220509110028.144226-1-robert.marko@sartura.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220510070356.GA11660@lst.de>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2022 13:00, Robert Marko wrote:
-> Add vendor prefix for Methode Electronics, Inc. (https://www.methode.com)
+On 2022-05-10 09:03+0200, Christoph Hellwig wrote:
+> On Thu, Apr 28, 2022 at 06:09:11PM +0200, Thomas Weißschuh wrote:
+> > > > On my hardware we start with a chunk_size of 4MiB and just allocate
+> > > > 8 (hmmaxd) * 4 = 32 MiB which is worse than 1 * 200MiB.
+> > > 
+> > > And that is because the hardware only has a limited set of descriptors.
+> > 
+> > Wouldn't it make more sense then to allocate as much memory as possible for
+> > each descriptor that is available?
+> > 
+> > The comment in nvme_alloc_host_mem() tries to "start big".
+> > But it actually starts with at most 4MiB.
 > 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> Compared to what other operating systems offer, that is quite large.
 
+Ok. I only looked at FreeBSD, which uses up to 5% of total memory per
+device. [0]
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > And on devices that have hmminds > 4MiB the loop condition will never succeed
+> > at all and HMB will not be used.
+> > My fairly boring hardware already is at a hmminds of 3.3MiB.
+> > 
+> > > Is there any real problem you are fixing with this?  Do you actually
+> > > see a performance difference on a relevant workload?
+> > 
+> > I don't have a concrete problem or performance issue.
+> > During some debugging I stumbled in my kernel logs upon
+> > "nvme nvme0: allocated 32 MiB host memory buffer"
+> > and investigated why it was so low.
+> 
+> Until recently we could not even support these large sizes at all on
+> typical x86 configs.  With my fairly recent change to allow vmap
+> remapped iommu allocations on x86 we can do that now.  But if we
+> unconditionally enabled it I'd be a little worried about using too
+> much memory very easily.
 
+This should still be limited to max_host_mem_size_mb which defaults to 128MiB,
+or?
 
-Best regards,
-Krzysztof
+> We could look into removing the min with
+> PAGE_SIZE * MAX_ORDER_NR_PAGES to try to do larger segments for
+> "segment challenged" controllers now that it could work on a lot
+> of iommu enabled setups.  But I'd rather have a very good reason for
+> that.
+
+On my current setup (WD SN770 on ThinkPad X1 Carbon Gen9) frequently the NVME
+controller stops responding. Switching from no scheduler to mq-deadline reduced
+this but did not eliminate it.
+Since switching to HMB of 1 * 200MiB and no scheduler this did not happen anymore.
+(But I'll need some more time to gain real confidence in this)
+
+Initially I assumed that the PAGE_SIZE * MAX_ORDER_NR_PAGES was indeed
+meant as a minimum for DMA allocation.
+As that is not the case, removing the min() completely instead of the max() I
+proposed would obviously be the correct thing to do.
+
+[0] https://manpages.debian.org/testing/freebsd-manpages/nvme.4freebsd.en.html

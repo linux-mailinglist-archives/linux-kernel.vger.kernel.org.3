@@ -2,167 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C993520EC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701F1520ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbiEJHov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S233425AbiEJHpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbiEJHoU (ORCPT
+        with ESMTP id S235046AbiEJHoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:44:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8672B3F7D;
-        Tue, 10 May 2022 00:35:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1A7A91FA40;
-        Tue, 10 May 2022 07:35:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652168112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1XmhHsmMxly2ssjXZq07GT+YLgJJKJCm1DDtateBDTk=;
-        b=IJuN4UGrs9rc2dJVVBhsa1bjZ3T3IclRPChNG+pU/f0P5j2jhqhJdBv6iHyS8YLVKXrX9O
-        IgR+SAlvxejrlifKj7vvU9VRi+tTDzUTwOLC8ZzoO9LJStWIqpcJbGIH0Mg8qtBSPfOOXE
-        DtIELQ9PZ5agpNUPUxAzWBC7OuPsRuE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652168112;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1XmhHsmMxly2ssjXZq07GT+YLgJJKJCm1DDtateBDTk=;
-        b=Hky868WPFR6DQGfmlvXKlSdXSBp6m/eni1+ZiF8ZqPIJzJCqTRAyxT9iOGNx5/1MoEmPNW
-        oW/SwcsdgAngRzDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFBA313AA5;
-        Tue, 10 May 2022 07:35:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xutPNa8VemJXeQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 10 May 2022 07:35:11 +0000
-Message-ID: <0da1c63b-5cc3-7fc9-1fb4-fdc385539bbc@suse.cz>
-Date:   Tue, 10 May 2022 09:35:11 +0200
+        Tue, 10 May 2022 03:44:44 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDA917AA4;
+        Tue, 10 May 2022 00:35:42 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so1336604pjb.3;
+        Tue, 10 May 2022 00:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jggdeZwx0ELWqoEo5YRQ8TKCNejGggZ8TRXkejgLZs4=;
+        b=BF0+B4tvl9Sj3z4Ej45SIy9UpoJQ/cl8xGhd4tNlE7v7kOKipjjpgpwNt5IC3sFIBa
+         OauOq/TYSy/uz+xU1rpBwhQdClqM9r7gqtQQ66kGsWL1PrkVqGUvnENwvcnGNIqZO/fg
+         l+5rDftZQCL8alLFxoxEAdtPKdCmHgLSB9nbstxOwn+szjt+VQQpBw+6JqVuFHeLD6cO
+         N6iBQO2301vP1sHGie0fxKI1Q1YHX8O0Yo3e0P8MPsccTk1Ie33lfLGPPxAZ7mlTvNcR
+         6VQlvn+rHZ7saZQtQVAE4F+yNvxIPJT5UqPtCueUH5OYytXvwWkdWXJ0oBqecGDOmVWt
+         E4YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jggdeZwx0ELWqoEo5YRQ8TKCNejGggZ8TRXkejgLZs4=;
+        b=2w1WPb2YxvNt2hz9GHs7SQJCFua12YuPaJxWl7rHxkfuv1NRBxjblELoqbhEJbEb7l
+         bwv91rfgRpMKE+aKQmODfyXPB/M3EmBe4yE7toGOlE8HfEmskdvEmxFeKvEcK8iwhn8e
+         JXjBYEIFw2K3SnVRq7n4DxqnA2avE7btdt/+5RE+vdai13de9jUKHGQEvu8SexHz1BzZ
+         LmrjJS2YnWxhv5qt6w0WzcGhMAeacpsRhiiKKbhT1KJjUBfP9AB+Mky2VStSCCzFBLNd
+         r5rP8dzlnh1ZlYyVY5Usfcus/fhsVjyEBi04n78OiiuksRZIT5wQAg0ezPu/0HU9p2NM
+         3AGA==
+X-Gm-Message-State: AOAM531YJUAaG4tG1TDoQN6sQS8WjMpvI7P4faQzcCQ8G95mAAcBrQNR
+        16zKtTAfCaGWr9ZDGre/z/6EAYNUTUWvcGtRzII=
+X-Google-Smtp-Source: ABdhPJzxrfCR7GjoMK2EJz7JCGaTcxPmCs3fGYZi7OwF+OwyYUNG+9KiCS/+lZThDa4KLVKu4ILylCCQh7274Nb+Z7c=
+X-Received: by 2002:a17:902:eb8d:b0:15e:bf22:2791 with SMTP id
+ q13-20020a170902eb8d00b0015ebf222791mr19834834plg.88.1652168142424; Tue, 10
+ May 2022 00:35:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>,
-        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220404200250.321455-1-shy828301@gmail.com>
- <627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz>
- <CAHbLzkrZb6r1r6xFaEFvvJzwvVgDgeZWfjhq-SFu_mQZ0j5tTQ@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more
- consistent
-In-Reply-To: <CAHbLzkrZb6r1r6xFaEFvvJzwvVgDgeZWfjhq-SFu_mQZ0j5tTQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220509134629.440965-1-Qing-wu.Li@leica-geosystems.com.cn> <20220509134629.440965-6-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220509134629.440965-6-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Tue, 10 May 2022 10:35:31 +0300
+Message-ID: <CA+U=DsoTgX5kjVshqKYa0rcL7MMWER9Q5njnVd7WRpkq+YCAHQ@mail.gmail.com>
+Subject: Re: [PATCH V1 5/5] iio: accel: bmi088: modifed the device name.
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 22:34, Yang Shi wrote:
-> On Mon, May 9, 2022 at 9:05 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> On 4/4/22 22:02, Yang Shi wrote:
->> >  include/linux/huge_mm.h        | 14 ++++++++++++
->> >  include/linux/khugepaged.h     | 59 ++++++++++++---------------------------------------
->> >  include/linux/sched/coredump.h |  3 ++-
->> >  kernel/fork.c                  |  4 +---
->> >  mm/huge_memory.c               | 15 ++++---------
->> >  mm/khugepaged.c                | 76 +++++++++++++++++++++++++++++++++++++-----------------------------
->> >  mm/mmap.c                      | 14 ++++++++----
->> >  mm/shmem.c                     | 12 -----------
->> >  8 files changed, 88 insertions(+), 109 deletions(-)
->>
->> Resending my general feedback from mm-commits thread to include the
->> public ML's:
->>
->> There's modestly less lines in the end, some duplicate code removed,
->> special casing in shmem.c removed, that's all good as it is. Also patch 8/8
->> become quite boring in v3, no need to change individual filesystems and also
->> no hook in fault path, just the common mmap path. So I would just handle
->> patch 6 differently as I just replied to it, and acked the rest.
->>
->> That said it's still unfortunately rather a mess of functions that have
->> similar names. transhuge_vma_enabled(vma). hugepage_vma_check(vma),
->> transparent_hugepage_active(vma), transhuge_vma_suitable(vma, addr)?
->> So maybe still some space for further cleanups. But the series is fine as it
->> is so we don't have to wait for it now.
-> 
-> Yeah, I agree that we do have a lot thp checks. Will find some time to
-> look into it deeper later.
+On Mon, May 9, 2022 at 4:46 PM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> It is possible to have multiple sensors connected on the same platform,
+> The commit makes it possible to obtain the device name for
+> the different chips according to the connected chip ID.
+>
+> To be compatible with previous versions, renambmi088a to bmi088-accel.
+>
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> ---
+>  drivers/iio/accel/bmi088-accel-core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
+> index 7c78cfb321ee..8f6920dc2ad9 100644
+> --- a/drivers/iio/accel/bmi088-accel-core.c
+> +++ b/drivers/iio/accel/bmi088-accel-core.c
+> @@ -461,7 +461,7 @@ static const struct iio_chan_spec bmi088_accel_channels[] = {
+>
+>  static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
+>         [0] = {
+> -               .name = "bmi088a",
+> +               .name = "bmi088-accel",
+>                 .chip_id = 0x1E,
+>                 .channels = bmi088_accel_channels,
+>                 .num_channels = ARRAY_SIZE(bmi088_accel_channels),
+> @@ -561,7 +561,7 @@ int bmi088_accel_core_probe(struct device *dev, struct regmap *regmap,
+>
+>         indio_dev->channels = data->chip_info->channels;
+>         indio_dev->num_channels = data->chip_info->num_channels;
+> -       indio_dev->name = name ? name : data->chip_info->name;
 
-Thanks.
+This makes the 'name' parameter unused now.
+Which begs the question if it should be removed.
 
->>
->> We could also consider that the tracking of which mm is to be scanned is
->> modelled after ksm which has its own madvise flag, but also no "always"
->> mode. What if for THP we only tracked actual THP madvised mm's, and in
->> "always" mode just scanned all vm's, would that allow ripping out some code
->> perhaps, while not adding too many unnecessary scans? If some processes are
-> 
-> Do you mean add all mm(s) to the scan list unconditionally? I don't
-> think it will scale.
+One other detail is that the device-tree will need to set a compatible
+string to 'bmi088-accel' and this will work (for SPI devices) for all
+chip-types (including the new ones).
 
-It might be interesting to find out how many mm's (percentage of all mm's)
-are typically in the list with "always" enabled. I wouldn't be surprised if
-it was nearly all of them. Having at least one large enough anonymous area
-sounds like something all processes would have these days?
+This raises the question of whether we should update the new chips in
+the DT yaml doc here?
 
->> being scanned without any effect, maybe track success separately, and scan
->> them less frequently etc. That could be ultimately more efficinet than
->> painfully tracking just *eligibility* for scanning in "always" mode?
-> 
-> Sounds like we need a couple of different lists, for example, inactive
-> and active? And promote or demote mm(s) between the two lists? TBH I
-> don't see too many benefits at the moment. Or I misunderstood you?
+Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
 
-Yeah, something like that. It would of course require finding out whether
-khugepaged is consuming too much cpu uselessly these days while not
-processing fast enough mm's where it succeeds more.
+properties:
+  compatible:
+    enum:
+      - bosch,bmi088-accel
 
->>
->> Even more radical thing to consider (maybe that's a LSF/MM level topic, too
->> bad :) is that we scan pagetables in ksm, khugepaged, numa balancing, soon
->> in MGLRU, and I probably forgot something else. Maybe time to think about
->> unifying those scanners?
-> 
-> We do have pagewalk (walk_page_range()) which is used by a couple of
-> mm stuff, for example, mlock, mempolicy, mprotect, etc. I'm not sure
-> whether it is feasible for khugepaged, ksm, etc, or not since I didn't
-> look that hard. But I agree it should be worth looking at.
+If yes, then the 'drivers/iio/accel/bmi088-accel-spi.c' file also
+requires an update with the new device-names.
 
-pagewalk is a framework to simplify writing code that processes page tables
-for a given one-off task, yeah. But this would be something a bit different,
-e.g. a kernel thread that does the sum of what khugepaged/ksm/etc do. Numa
-balancing uses task_work instead of kthread so that would require
-consideration on which mechanism the unified daemon would use.
-
->>
->>
-
+> +       indio_dev->name = data->chip_info->name;
+>         indio_dev->available_scan_masks = bmi088_accel_scan_masks;
+>         indio_dev->modes = INDIO_DIRECT_MODE;
+>         indio_dev->info = &bmi088_accel_info;
+> --
+> 2.25.1
+>

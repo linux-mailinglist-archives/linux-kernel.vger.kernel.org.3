@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29419521630
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EB852163D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242151AbiEJNFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S242174AbiEJNG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiEJNFj (ORCPT
+        with ESMTP id S242150AbiEJNFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:05:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C75C82618FE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652187701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fgWfYJ7Qd7GhRnx6OEouaMYEm/K1sNUenuJjpHxXdMk=;
-        b=OGAhHQI18kt0b6i/jCqoG7nV0wFNeeIl06NOvAuPCqzxl4UXZbCbdYej+5UWVkLLdvQJdj
-        00E7De4JD7hAFXsLPDs7oKyK48+hp8X1vgfEvWdJk79Rk39nNwxnfIO2dpZ5TaJEyzlvV/
-        Dw5zir7kQuKz3JlCKxcN+08QD/tkkOI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-x0Y6pDSVODiGFMRNWJlebQ-1; Tue, 10 May 2022 09:01:37 -0400
-X-MC-Unique: x0Y6pDSVODiGFMRNWJlebQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2D52C848536;
-        Tue, 10 May 2022 13:01:09 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1825840D2822;
-        Tue, 10 May 2022 13:01:05 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220509074028.74954-9-jefflexu@linux.alibaba.com>
-References: <20220509074028.74954-9-jefflexu@linux.alibaba.com> <20220509074028.74954-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        yinxin.x@bytedance.com, zhangjiachen.jaycee@bytedance.com,
-        zhujia.zj@bytedance.com
-Subject: Re: [PATCH v11 08/22] cachefiles: document on-demand read mode
+        Tue, 10 May 2022 09:05:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA7F261946
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:01:47 -0700 (PDT)
+Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MOz8O-1nRH0A0Mrk-00PMXu for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022
+ 15:01:46 +0200
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7d621d1caso178417867b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:01:45 -0700 (PDT)
+X-Gm-Message-State: AOAM533/s5bUbhxByOwVMVRU9oxsNKIqVajYNG250KG11gkvcWc6nwbN
+        ++d/FibFnYSYbud9jgTlS4aUyfZDnHN8y4WdpPM=
+X-Google-Smtp-Source: ABdhPJy+T0eXkI/JKNqS9DdVEoRi+XhkQCs5zGGEulEfFAt349X2IljWvx8XEX4MN75HMZqLUtoIyBN++cWMnOCy59A=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr20121759ywf.347.1652187704917; Tue, 10
+ May 2022 06:01:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3509712.1652187665.1@warthog.procyon.org.uk>
-Date:   Tue, 10 May 2022 14:01:05 +0100
-Message-ID: <3509713.1652187665@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220506192957.24889-1-nick.hawkins@hpe.com> <CAK8P3a045Di_zRomezeah0ZoSGPw0Z6YoYkZtoxx1qOXAtKbbw@mail.gmail.com>
+ <7C103AEB-3111-4AE6-9645-CF590388A879@hpe.com>
+In-Reply-To: <7C103AEB-3111-4AE6-9645-CF590388A879@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 10 May 2022 15:01:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0OS+4XTG9VmfPwbuQoT+_G5-fSatbJ0g8Y7Y+O6-3YLQ@mail.gmail.com>
+Message-ID: <CAK8P3a0OS+4XTG9VmfPwbuQoT+_G5-fSatbJ0g8Y7Y+O6-3YLQ@mail.gmail.com>
+Subject: Re: [PATCH v1] ARM: A9: Add ARM ERRATA 764319 workaround
+To:     "Verdun, Jean-Marie" <verdun@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dTbG73dSwWLOwXtvAE1dp5LMmobOUCwxP93UPBXVLk1MvHzcEcw
+ SZx3ZA5UATuejDLVmjC8t+Lww2beqi6pOQCBDxUsl9LUoXJZfdaqGmpMP1JPc03h/7RY8TN
+ vbqSUdfcK+AYkG/Nm22UM034TZvJPNXYzWAXt7Ecfk8TYo7jK9hAMvdBaBXAkWxLmk2p2Q/
+ SCeaU0UEPOHvQpF9Se53g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Kr9kRAQVEgI=:B0MZvF8zM1oiRUHkYw+T9f
+ 9hlW/E4WjXp/tS7yzRKRaauW77N81xW6PeeKZoDa9jeRRQ2vgdTZ1hntbjpoY0jOYI5nkVzcd
+ N8UdRQClhxmopIcod0TsM/meM9UUtpNBSVEQLrV3+oeGaeeNOU6bV2ORHB4jU6Tl5LZHh7y7X
+ AC4v7H7S64jF/x4KZ/UfIIBH9GxBOr5xjgc4m8aw1IOGKZ5cbSCt1Fn/O1fSK1b+RKE7yY+ev
+ Nk+ZLIelmVPTGmR7lGhQmvKiIJo1vWgbPPniZzHR/tUlFpd1KyZHXZAj3oDfDBU7sXzV8iisu
+ K/03fYdRxew8WGyqXL7z8p9yCkdMiXZ9HSzEAH3uk+LpsNwXSY0B6dtqr4eYN0ZbgcoKbrWfi
+ I5WLVPcvPD0SFGKcBBCBru0XFGVlr5bx3e0NW2CFPp+D4T60mTv6cHR+ndSnszDxrfB8PN6Sv
+ 7KiHORfYc/5GLa6UbfIhe0U+fui8Y9e7UBSrMCldbze9tmai3HqU7Og+hyJv96blD6J9BWdHj
+ fU1KqkBmDa+BIifzDBU/PIE3xT4VxtLRODdhc5+dM1FDbzCCJVuFz0BbmkjXaLNqzApe2yPNz
+ VtRTDVODE1PhFrqCArJEYEwRYI86zNDF/CxnqnNMH+eB7jtbZtc32i2g6BlU0/t8vss3Z1kKz
+ sacGggSJjxUYv227BX6Ml892ks5RXfmIiOuQnchjuc90oLacg4Q9wrULpo86hZ6kWlpJ2iVt1
+ jl0LcOBij1Vxf9kEoJX4+cRW5uLOZN+Ya9s3w+OYxKB4vCsqGEr7WT3f4eUGjhMiqivVjueq5
+ HLrqeB2kq0wjD3gN9BngaE8PVNd32Iu+U1lWbF/RKgeUrFYP1g=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,11 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+On Tue, May 10, 2022 at 1:53 PM Verdun, Jean-Marie <verdun@hpe.com> wrote:
+>
+> Hi Arnd,
+>
+> >    Hi Nick,
+>
+> >    This seems a bit more complex than necessary. Can't you just use a custom
+> >    inline asm with an ex_table entry to catch the fault? Have a look at
+> >    __get_user_asm() for an example.
+> >
+> >           Arnd
+>
+> We got inspired from debug_reg_hook within the same source file
+>( ./arch/arm/kernel/hw_breakpoint.c ). We chose that path to keep coherency
+> within the source code. We can implement the same fix by using an ex_table
+> entry, but this will create two different ways at catching unknown instruction
+> within the same source file. Will that be ok ?
 
-> Document new user interface introduced by on-demand read mode.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+I got a little lost trying to find where the breakpoint instruction comes
+from that gets trapped here, but I would guess that they had to do this
+using an undef_hook because the ex_table approach does not work
+there for some reason.
 
-Acked-by: David Howells <dhowells@redhat.com>
+I would still pick the ex_table method here if that works.
 
+       Arnd

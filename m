@@ -2,109 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFAC521153
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D2C521156
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239213AbiEJJuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S239226AbiEJJuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbiEJJuF (ORCPT
+        with ESMTP id S239212AbiEJJuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:50:05 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC471CEEC7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:46:07 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id y63so17922566oia.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:46:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o39NrF3LSVHYlVpwQr3bgKqf/zDQFHhHc4PtC81jizY=;
-        b=SfCXjLw/VznGk6AzMLnh7lqE+0bjdTxIsbqedkWfVZqnAVpZe04Rtg0cAPR5Lm0vOw
-         a1kDK6R6UBoc+F5Yl3KfbXmwnV6Cs4sXZNlaUnx1/SMPTpAyZQkLkF/c9D8aBrv01Iah
-         tvG1ziIqkAHUJiTdG/zyHnWJUmkIImU8U2SPnPtDhy2YyWpsswc1M9nnhnmZ18vN+sZE
-         jt7q/yvmNghXEQD0vNgIaZ2okgFiFQ1cF/kdeFLmaU8QY94W+1SMIvm9Jlxq+fbwdn2v
-         P2tJNjrzzSCEvw3d1vtCJUmt5N51xAAbG3jSDRoljFkTgx8V7lFNvSPxaRxk90AGZSLH
-         ZhNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o39NrF3LSVHYlVpwQr3bgKqf/zDQFHhHc4PtC81jizY=;
-        b=vnlgjjDVVWywfXQsWaaa+9HQweONF4pzh5nyedkl1uq0BA1Z20AT18yMEmNHRibeS6
-         +2bPwEiBzsgNqH9BjkWyt/wZnM5zg4wOVCR4lf3rWwJzdiGh0YWsxx+S2Bvn75n5nqd+
-         s4WuRZErm2eDy/7U7hOM/C4fOqYlvu5xhLlt0HZQVVY48jZKjRBBpf1F8PKgDYtvkce7
-         A9lm+nRj0EkzRBnt7BHiqNCMehnzdyR3OnfO5J1+EB0Xr+9cYMlCccBW0Jxhvzk5h7Nr
-         f69A/sWOSH6WmdZmJj0OyqLG368oIqcMws9CFL1wevTdpYSdPmwA7ze3PjRCxMk3dxQh
-         qgag==
-X-Gm-Message-State: AOAM533fllQRbV7TYUsZ9yfmNma9vzFs1p9Dqzv02NHR+ZkX2WGSQT7a
-        HiJNv0I24naaRRogkqtG0pylPJs80yMuultx8ejldA==
-X-Google-Smtp-Source: ABdhPJwLwLi6HfB/M1LmfOIjn+TH5lqS8GI3HaBOG4okjrcTmcuCVhyHfe6tbTsbpvj2w6SW3d8BLPBFZfrHl3Rc9Qo=
-X-Received: by 2002:aca:180b:0:b0:2f7:23ae:8cd1 with SMTP id
- h11-20020aca180b000000b002f723ae8cd1mr13435377oih.146.1652175966977; Tue, 10
- May 2022 02:46:06 -0700 (PDT)
+        Tue, 10 May 2022 05:50:14 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3393C486;
+        Tue, 10 May 2022 02:46:12 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 17B76FF811;
+        Tue, 10 May 2022 09:46:08 +0000 (UTC)
+Date:   Tue, 10 May 2022 11:46:07 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: Re: [PATCH v3 2/4] media: ov5675: add device-tree support and
+ support runtime PM
+Message-ID: <20220510094607.2ijaw6we6jml2bv7@uno.localdomain>
+References: <20220509143226.531117-1-foss+kernel@0leil.net>
+ <20220509143226.531117-2-foss+kernel@0leil.net>
 MIME-Version: 1.0
-References: <20220509162559.2387784-1-oupton@google.com> <20220509162559.2387784-3-oupton@google.com>
-In-Reply-To: <20220509162559.2387784-3-oupton@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 10 May 2022 10:45:30 +0100
-Message-ID: <CA+EHjTztV9ZN4sQyS8BGxuROw4NY873LXve8LPjo417Ao6y4aQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, qperret@google.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220509143226.531117-2-foss+kernel@0leil.net>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+Hi Quentin,
 
+On Mon, May 09, 2022 at 04:32:24PM +0200, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>
+> Until now, this driver only supported ACPI. This adds support for
+> Device Tree too while enabling clock and regulators in runtime PM.
+>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-On Mon, May 9, 2022 at 5:26 PM Oliver Upton <oupton@google.com> wrote:
->
-> FEAT_SVE is already masked by the fixed configuration for
-> ID_AA64PFR0_EL1; don't try and mask it at runtime.
->
-> No functional change intended.
->
-> Signed-off-by: Oliver Upton <oupton@google.com>
+Thanks for addressing all comments on the previous version.
+
+Looks good to me!
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+
+Thanks
+  j
+
 > ---
-
-Reviewed-by: Fuad Tabba <tabba@google.com>
-
-Cheers,
-/fuad
-
-
->  arch/arm64/kvm/hyp/nvhe/sys_regs.c | 3 ---
->  1 file changed, 3 deletions(-)
 >
-> diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
-> index 33f5181af330..3f5d7bd171c5 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
-> @@ -90,9 +90,6 @@ static u64 get_pvm_id_aa64pfr0(const struct kvm_vcpu *vcpu)
->         u64 set_mask = 0;
->         u64 allow_mask = PVM_ID_AA64PFR0_ALLOW;
+> v3:
+>  - added linux/mod_devicetable.h include,
+>  - moved delay for reset pulse right after the regulators are enabled,
+>  - removed check on is_acpi_node in favor of checks on presence of OF
+>  properties (e.g. devm_clk_get_optional returns NULL),
+>  - moved power management out of system suspend/resume into runtime PM
+>  callbacks,
+>  - removed ACPI specific comment since it's not specific to this driver,
+>  - changed devm_clk_get to devm_clk_get_optional,
+>  - remove OF use of clock-frequency (handled by devm_clk_get_optional
+>  directly),
+>  - removed name of clock (only one, so no need for anything explicit)
+>  when requesting a clock from OF,
+>  - wrapped lines to 80 chars,
 >
-> -       if (!vcpu_has_sve(vcpu))
-> -               allow_mask &= ~ARM64_FEATURE_MASK(ID_AA64PFR0_SVE);
+> v2:
+>  - fixed unused-const-variable warning by removing of_match_ptr in
+>  of_match_table, reported by kernel test robot,
+>
+>  drivers/media/i2c/ov5675.c | 143 +++++++++++++++++++++++++++++++------
+>  1 file changed, 122 insertions(+), 21 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+> index 82ba9f56baec..cee380196774 100644
+> --- a/drivers/media/i2c/ov5675.c
+> +++ b/drivers/media/i2c/ov5675.c
+> @@ -3,10 +3,14 @@
+>
+>  #include <asm/unaligned.h>
+>  #include <linux/acpi.h>
+> +#include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <media/v4l2-ctrls.h>
+>  #include <media/v4l2-device.h>
+>  #include <media/v4l2-fwnode.h>
+> @@ -17,7 +21,7 @@
+>
+>  #define OV5675_LINK_FREQ_450MHZ		450000000ULL
+>  #define OV5675_SCLK			90000000LL
+> -#define OV5675_MCLK			19200000
+> +#define OV5675_XVCLK_19_2		19200000
+>  #define OV5675_DATA_LANES		2
+>  #define OV5675_RGB_DEPTH		10
+>
+> @@ -76,6 +80,14 @@
+>
+>  #define to_ov5675(_sd)			container_of(_sd, struct ov5675, sd)
+>
+> +static const char * const ov5675_supply_names[] = {
+> +	"avdd",		/* Analog power */
+> +	"dovdd",	/* Digital I/O power */
+> +	"dvdd",		/* Digital core power */
+> +};
+> +
+> +#define OV5675_NUM_SUPPLIES	ARRAY_SIZE(ov5675_supply_names)
+> +
+>  enum {
+>  	OV5675_LINK_FREQ_900MBPS,
+>  };
+> @@ -484,6 +496,9 @@ struct ov5675 {
+>  	struct v4l2_subdev sd;
+>  	struct media_pad pad;
+>  	struct v4l2_ctrl_handler ctrl_handler;
+> +	struct clk		*xvclk;
+> +	struct gpio_desc	*reset_gpio;
+> +	struct regulator_bulk_data supplies[OV5675_NUM_SUPPLIES];
+>
+>  	/* V4L2 Controls */
+>  	struct v4l2_ctrl *link_freq;
+> @@ -944,6 +959,50 @@ static int ov5675_set_stream(struct v4l2_subdev *sd, int enable)
+>  	return ret;
+>  }
+>
+> +static int ov5675_power_off(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5675 *ov5675 = to_ov5675(sd);
+> +
+> +	gpiod_set_value_cansleep(ov5675->reset_gpio, 1);
+> +	usleep_range(1000, 1200);
+> +
+> +	regulator_bulk_disable(OV5675_NUM_SUPPLIES, ov5675->supplies);
+> +	clk_disable_unprepare(ov5675->xvclk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ov5675_power_on(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5675 *ov5675 = to_ov5675(sd);
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(ov5675->xvclk);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to enable xvclk: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	gpiod_set_value_cansleep(ov5675->reset_gpio, 1);
+> +
+> +	ret = regulator_bulk_enable(OV5675_NUM_SUPPLIES, ov5675->supplies);
+> +	if (ret) {
+> +		clk_disable_unprepare(ov5675->xvclk);
+> +		return ret;
+> +	}
+> +
+> +	/* Reset pulse should be at least 2ms */
+> +	usleep_range(2000, 2200);
+> +
+> +	gpiod_set_value_cansleep(ov5675->reset_gpio, 0);
+> +
+> +	usleep_range(1000, 1200);
+> +
+> +	return 0;
+> +}
+> +
+>  static int __maybe_unused ov5675_suspend(struct device *dev)
+>  {
+>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> @@ -1106,32 +1165,60 @@ static const struct v4l2_subdev_internal_ops ov5675_internal_ops = {
+>  	.open = ov5675_open,
+>  };
+>
+> -static int ov5675_check_hwcfg(struct device *dev)
+> +static int ov5675_get_hwcfg(struct ov5675 *ov5675, struct device *dev)
+>  {
+>  	struct fwnode_handle *ep;
+>  	struct fwnode_handle *fwnode = dev_fwnode(dev);
+>  	struct v4l2_fwnode_endpoint bus_cfg = {
+>  		.bus_type = V4L2_MBUS_CSI2_DPHY
+>  	};
+> -	u32 mclk;
+> +	u32 xvclk_rate;
+>  	int ret;
+>  	unsigned int i, j;
+>
+>  	if (!fwnode)
+>  		return -ENXIO;
+>
+> -	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+> +	ov5675->xvclk = devm_clk_get_optional(dev, NULL);
+> +	if (IS_ERR(ov5675->xvclk))
+> +		return dev_err_probe(dev, PTR_ERR(ov5675->xvclk),
+> +				     "failed to get xvclk: %ld\n",
+> +				     PTR_ERR(ov5675->xvclk));
+>
+> -	if (ret) {
+> -		dev_err(dev, "can't get clock frequency");
+> -		return ret;
+> +	if (ov5675->xvclk) {
+> +		xvclk_rate = clk_get_rate(ov5675->xvclk);
+> +	} else {
+> +		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
+> +					       &xvclk_rate);
+> +
+> +		if (ret) {
+> +			dev_err(dev, "can't get clock frequency");
+> +			return ret;
+> +		}
+>  	}
+>
+> -	if (mclk != OV5675_MCLK) {
+> -		dev_err(dev, "external clock %d is not supported", mclk);
+> +	if (xvclk_rate != OV5675_XVCLK_19_2) {
+> +		dev_err(dev, "external clock rate %u is unsupported",
+> +			xvclk_rate);
+>  		return -EINVAL;
+>  	}
+>
+> +	ov5675->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> +						     GPIOD_OUT_HIGH);
+> +	if (IS_ERR(ov5675->reset_gpio)) {
+> +		ret = PTR_ERR(ov5675->reset_gpio);
+> +		dev_err(dev, "failed to get reset-gpios: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < OV5675_NUM_SUPPLIES; i++)
+> +		ov5675->supplies[i].supply = ov5675_supply_names[i];
+> +
+> +	ret = devm_regulator_bulk_get(dev, OV5675_NUM_SUPPLIES,
+> +				      ov5675->supplies);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+>  	if (!ep)
+>  		return -ENXIO;
+> @@ -1186,6 +1273,9 @@ static int ov5675_remove(struct i2c_client *client)
+>  	pm_runtime_disable(&client->dev);
+>  	mutex_destroy(&ov5675->mutex);
+>
+> +	if (!pm_runtime_status_suspended(&client->dev))
+> +		ov5675_power_off(&client->dev);
+> +
+>  	return 0;
+>  }
+>
+> @@ -1195,25 +1285,31 @@ static int ov5675_probe(struct i2c_client *client)
+>  	bool full_power;
+>  	int ret;
+>
+> -	ret = ov5675_check_hwcfg(&client->dev);
+> +	ov5675 = devm_kzalloc(&client->dev, sizeof(*ov5675), GFP_KERNEL);
+> +	if (!ov5675)
+> +		return -ENOMEM;
+> +
+> +	ret = ov5675_get_hwcfg(ov5675, &client->dev);
+>  	if (ret) {
+> -		dev_err(&client->dev, "failed to check HW configuration: %d",
+> +		dev_err(&client->dev, "failed to get HW configuration: %d",
+>  			ret);
+>  		return ret;
+>  	}
+>
+> -	ov5675 = devm_kzalloc(&client->dev, sizeof(*ov5675), GFP_KERNEL);
+> -	if (!ov5675)
+> -		return -ENOMEM;
 > -
->         set_mask |= get_restricted_features_unsigned(id_aa64pfr0_el1_sys_val,
->                 PVM_ID_AA64PFR0_RESTRICT_UNSIGNED);
+>  	v4l2_i2c_subdev_init(&ov5675->sd, client, &ov5675_subdev_ops);
 >
+> +	ret = ov5675_power_on(&client->dev);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to power on: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	full_power = acpi_dev_state_d0(&client->dev);
+>  	if (full_power) {
+>  		ret = ov5675_identify_module(ov5675);
+>  		if (ret) {
+>  			dev_err(&client->dev, "failed to find sensor: %d", ret);
+> -			return ret;
+> +			goto probe_power_off;
+>  		}
+>  	}
+>
+> @@ -1243,11 +1339,6 @@ static int ov5675_probe(struct i2c_client *client)
+>  		goto probe_error_media_entity_cleanup;
+>  	}
+>
+> -	/*
+> -	 * Device is already turned on by i2c-core with ACPI domain PM.
+> -	 * Enable runtime PM and turn off the device.
+> -	 */
+> -
+>  	/* Set the device's state to active if it's in D0 state. */
+>  	if (full_power)
+>  		pm_runtime_set_active(&client->dev);
+> @@ -1262,12 +1353,15 @@ static int ov5675_probe(struct i2c_client *client)
+>  probe_error_v4l2_ctrl_handler_free:
+>  	v4l2_ctrl_handler_free(ov5675->sd.ctrl_handler);
+>  	mutex_destroy(&ov5675->mutex);
+> +probe_power_off:
+> +	ov5675_power_off(&client->dev);
+>
+>  	return ret;
+>  }
+>
+>  static const struct dev_pm_ops ov5675_pm_ops = {
+>  	SET_SYSTEM_SLEEP_PM_OPS(ov5675_suspend, ov5675_resume)
+> +	SET_RUNTIME_PM_OPS(ov5675_power_off, ov5675_power_on, NULL)
+>  };
+>
+>  #ifdef CONFIG_ACPI
+> @@ -1279,11 +1373,18 @@ static const struct acpi_device_id ov5675_acpi_ids[] = {
+>  MODULE_DEVICE_TABLE(acpi, ov5675_acpi_ids);
+>  #endif
+>
+> +static const struct of_device_id ov5675_of_match[] = {
+> +	{ .compatible = "ovti,ov5675", },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ov5675_of_match);
+> +
+>  static struct i2c_driver ov5675_i2c_driver = {
+>  	.driver = {
+>  		.name = "ov5675",
+>  		.pm = &ov5675_pm_ops,
+>  		.acpi_match_table = ACPI_PTR(ov5675_acpi_ids),
+> +		.of_match_table = ov5675_of_match,
+>  	},
+>  	.probe_new = ov5675_probe,
+>  	.remove = ov5675_remove,
 > --
-> 2.36.0.512.ge40c2bad7a-goog
+> 2.35.3
 >

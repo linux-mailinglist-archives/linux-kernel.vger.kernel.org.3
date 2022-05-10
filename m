@@ -2,180 +2,492 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1D45212F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFC95212F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbiEJLCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S240525AbiEJLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240455AbiEJLCC (ORCPT
+        with ESMTP id S240470AbiEJLC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:02:02 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2EA201E8D;
-        Tue, 10 May 2022 03:57:55 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24A9E9YJ027802;
-        Tue, 10 May 2022 10:57:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : from : to : cc : subject : content-type :
- content-transfer-encoding; s=pp1;
- bh=LFGPf8mFA0aevhB01jzcjQEGy7N5k1JKzArekpB+7wo=;
- b=scCNGxELalf+pJEneZXWDybfUaVGo+FT2/30yt1ZEY/cvIIB6+8GxgAFPcrYJcv7vJwu
- gSAZZLkFxc6fUnTmLbi561zmGZ63uCobRbamif8zpYL23eDV5MChFM00J9wTcE9/FNqr
- FdidhIM3UkOkMc8AW9TFF9I7fT4xWqVAT5Q1wELNwseACJCm/pGAkA7erAsr1bF9rqoP
- hsLVjO2SoxplMkAqy3wpaXJfnoylbwAKNqfbbyH5RaN7jmd9Nhz3ap8yAL0tZfw35gY2
- 6eq/4vgO7TTpe6fKPTubLteLU6i8pK69NEGlPlECdtgITSnu/HKbs5m+40VyulGN3U3A 4w== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyn811y4t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 10:57:22 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AAvGXX026819;
-        Tue, 10 May 2022 10:57:21 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma05wdc.us.ibm.com with ESMTP id 3fwgd9vf9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 10:57:21 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AAvLQG7799336
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 May 2022 10:57:21 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F33F8AE062;
-        Tue, 10 May 2022 10:57:20 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D95CAE063;
-        Tue, 10 May 2022 10:57:17 +0000 (GMT)
-Received: from [9.43.16.192] (unknown [9.43.16.192])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 10 May 2022 10:57:17 +0000 (GMT)
-Message-ID: <b6e58d90-a0e4-00bb-7d61-487f163c8b8b@linux.vnet.ibm.com>
-Date:   Tue, 10 May 2022 16:27:15 +0530
+        Tue, 10 May 2022 07:02:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9FF2311C4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652180310; x=1683716310;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hXtxTLWjRw77FTEFJybiBu2bHX2PKC9r5af4RVYhk7E=;
+  b=RFS6JbPBpZqFiqXEdcSexVb9lLopuZjUCaAtbwnxjpV34JKQQSm3nrb8
+   D+lXtOxZLl62KByDriNcEMYyxmVV5jN9Jvn20jet6bdT2YJylbSgdckoD
+   IJTVarB/4596Pft3DJqyjZHJobf4i/3/Zy33T6hCgyR0PUL2mEECBI/v8
+   kCO0Csw3w6CYRDN6JDaEMCQRJqfliTGVY5IC58zqTcPx22fSGcnbPRcOg
+   dds2k/Vv7X7jIB+6D3jy54S6/Q5KxiZ/a5xb/8AagswbBl9M2fm0jtDxF
+   MLB2v3keMeFWlE57o8zW66X/SqWjCYegj3gWCVoRwP0a2h1IXfgOJeNNi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249867510"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="249867510"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:58:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="541722567"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 10 May 2022 03:58:26 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noNZR-000Hjm-MR;
+        Tue, 10 May 2022 10:58:25 +0000
+Date:   Tue, 10 May 2022 18:58:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Robin Chen <po-tchen@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Anthony Koo <Anthony.Koo@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22:
+ warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used
+Message-ID: <202205101837.hI7VSSFg-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-To:     linux-block@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        martin.petersen@oracle.com, kch@nvidia.com, axboe@kernel.dk,
-        hch@lst.de, abdhaleem@linux.vnet.ibm.com, sachinp@linux.vnet.com,
-        mputtash@linux.vnet.com
-Subject: [linux-next] [FC/EXT4] [PPC] WARNING: CPU: 33 PID: 47869 at
- block/blk-lib.c:50 __blkdev_issue_discard+0x250/0x280
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oAfMhK2fwKJwPzZz_B5j6OLOgxkbOJgS
-X-Proofpoint-ORIG-GUID: oAfMhK2fwKJwPzZz_B5j6OLOgxkbOJgS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-10_01,2022-05-10_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205100046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9be9ed2612b5aedb52a2c240edb1630b6b743cb6
+commit: 548f212514151b0d6ec911c87e61f189f530255b drm/amd/display: To support sending TPS3 pattern when restoring link
+date:   6 months ago
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220510/202205101837.hI7VSSFg-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=548f212514151b0d6ec911c87e61f189f530255b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 548f212514151b0d6ec911c87e61f189f530255b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-linux-next kernel 5.18.0-rc5-next-20220506 WARN_ON is triggered while 
-running stress test on FC disk created with the EXT4 filesystem.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Console Logs :
+All warnings (new ones prefixed by >>):
 
-  md127: detected capacity change from 0 to 62879744
-  EXT4-fs (dm-11): mounted filesystem with ordered data mode. Quota 
-mode: none.
-  md127: detected capacity change from 62879744 to 0
-  md: md127 stopped.
-  EXT4-fs (dm-11): mounted filesystem with ordered data mode. Quota 
-mode: none.
-  md127: detected capacity change from 0 to 62879744
-  WARNING: CPU: 33 PID: 47869 at block/blk-lib.c:50 
-__blkdev_issue_discard+0x250/0x280
-  Modules linked in: raid0 rpadlpar_io rpaphp nfnetlink tcp_diag 
-udp_diag inet_diag unix_diag af_packet_diag netlink_diag bonding rfkill 
-sunrpc pseries_rng xts vmx_crypto gf128mul sch_fq_codel binfmt_misc 
-ip_tables ext4 mbcache jbd2 dm_round_robin sd_mod t10_pi crc64_rocksoft 
-crc64 sg ibmvfc scsi_transport_fc ibmveth dm_multipath dm_mirror 
-dm_region_hash dm_log dm_mod fuse
-  CPU: 33 PID: 47869 Comm: mkfs.ext4 Kdump: loaded Not tainted 
-5.18.0-rc5-next-20220506-autotest #1
-  NIP:  c00000000064beb0 LR: c00000000064bf40 CTR: 0000000000000000
-  REGS: c0000000a7a2f870 TRAP: 0700   Not tainted 
-(5.18.0-rc5-next-20220506-autotest)
-  MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28002282  XER: 00000000
-  CFAR: c00000000064bd24 IRQMASK: 0
-  GPR00: c00000000064bf40 c0000000a7a2fb10 c0000000028cbd00 
-c0000000ed960000
-  GPR04: 0000000000000000 0000000000008000 0000000000000cc0 
-c0000000a7a2fc28
-  GPR08: 0000000000000000 c0000000c70a0000 00000000ffffffff 
-0000000000000000
-  GPR12: 0000000000002000 c0000018ff95ee80 0000000000000000 
-0000000000000000
-  GPR16: 0000000000000000 0000000000000000 000000000077ef00 
-000000014e1e56a0
-  GPR20: 0000000000008000 00007fff988b0588 00007ffff213dfe8 
-0000000000000000
-  GPR24: 0000000000000003 0000000000000000 0000000001000000 
-c0000000ed960000
-  GPR28: 0000000001000000 0000000000000000 c0000000ed960000 
-c0000000ed960000
-  NIP [c00000000064beb0] __blkdev_issue_discard+0x250/0x280
-  LR [c00000000064bf40] blkdev_issue_discard+0x60/0xe0
-  Call Trace:
-  [c0000000a7a2fb10] [c0000000a7a2fb60] 0xc0000000a7a2fb60 (unreliable)
-  [c0000000a7a2fbe0] [c00000000064bf40] blkdev_issue_discard+0x60/0xe0
-  [c0000000a7a2fc70] [c00000000065e840] blkdev_common_ioctl+0x1b0/0xbf0
-  [c0000000a7a2fd00] [c00000000065f6a8] blkdev_ioctl+0x428/0x6e0
-  [c0000000a7a2fd60] [c0000000004857c8] sys_ioctl+0xf8/0x150
-  [c0000000a7a2fdb0] [c00000000002f468] system_call_exception+0x178/0x380
-  [c0000000a7a2fe10] [c00000000000c64c] system_call_common+0xec/0x250
-  --- interrupt: c00 at 0x7fff98524480
-  NIP:  00007fff98524480 LR: 00007fff98867828 CTR: 0000000000000000
-  REGS: c0000000a7a2fe80 TRAP: 0c00   Not tainted 
-(5.18.0-rc5-next-20220506-autotest)
-  MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 
-24002288  XER: 00000000
-  IRQMASK: 0
-  GPR00: 0000000000000036 00007ffff213dec0 00007fff98617100 
-0000000000000003
-  GPR04: 0000000020001277 00007ffff213df48 0000000001000000 
-0000000000001000
-  GPR08: 0000000000000003 0000000000000000 0000000000000000 
-0000000000000000
-  GPR12: 0000000000000000 00007fff9895ce40 0000000000000000 
-0000000000000000
-  GPR16: 0000000000000000 0000000000000000 000000000077ef00 
-000000014e1e56a0
-  GPR20: 0000000000008000 00007fff988b0588 00007ffff213dfe8 
-0000000000000000
-  GPR24: 000000011b2a0890 000000011b2a08a0 000000011b2a0880 
-000000011b2a00d8
-  GPR28: 0000000000000000 00007fff988b0590 000000011b2a00e0 
-00007ffff213e0a0
-  NIP [00007fff98524480] 0x7fff98524480
-  LR [00007fff98867828] 0x7fff98867828
-  --- interrupt: c00
-  Instruction dump:
-  60000000 2fa30000 419e0018 3c62fe6e 38810068 38630da0 4bb95b21 60000000
-  3b20ffa1 4bffff60 60000000 60000000 <0fe00000> 7c0802a6 fb010090 fb4100a0
-  ---[ end trace 0000000000000000 ]---
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:244:19: note: in expansion of macro 'BASE_INNER'
+     244 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:247:29: note: in expansion of macro 'BASE'
+     247 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:386:9: note: in expansion of macro 'SR'
+     386 |         SR(MPC_CRC_RESULT_GB), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:753:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     753 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: warning: initialized field overwritten [-Woverride-init]
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:242:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     242 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:244:19: note: in expansion of macro 'BASE_INNER'
+     244 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:247:29: note: in expansion of macro 'BASE'
+     247 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:387:9: note: in expansion of macro 'SR'
+     387 |         SR(MPC_CRC_RESULT_C), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:753:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     753 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: note: (near initialization for 'hwseq_reg.MPC_CRC_RESULT_C')
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:242:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     242 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:244:19: note: in expansion of macro 'BASE_INNER'
+     244 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:247:29: note: in expansion of macro 'BASE'
+     247 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:387:9: note: in expansion of macro 'SR'
+     387 |         SR(MPC_CRC_RESULT_C), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:753:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     753 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: warning: initialized field overwritten [-Woverride-init]
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:242:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     242 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:244:19: note: in expansion of macro 'BASE_INNER'
+     244 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:247:29: note: in expansion of macro 'BASE'
+     247 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:388:9: note: in expansion of macro 'SR'
+     388 |         SR(MPC_CRC_RESULT_AR), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:753:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     753 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/sienna_cichlid_ip_offset.h:373:52: note: (near initialization for 'hwseq_reg.MPC_CRC_RESULT_AR')
+     373 | #define DCN_BASE__INST0_SEG3                       0x00009000
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:242:25: note: in expansion of macro 'DCN_BASE__INST0_SEG3'
+     242 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:244:19: note: in expansion of macro 'BASE_INNER'
+     244 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:247:29: note: in expansion of macro 'BASE'
+     247 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:388:9: note: in expansion of macro 'SR'
+     388 |         SR(MPC_CRC_RESULT_AR), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:753:17: note: in expansion of macro 'HWSEQ_DCN30_REG_LIST'
+     753 |                 HWSEQ_DCN30_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:878:6: warning: no previous prototype for 'dcn30_dpp_destroy' [-Wmissing-prototypes]
+     878 | void dcn30_dpp_destroy(struct dpp **dpp)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:995:16: warning: no previous prototype for 'dcn30_hubbub_create' [-Wmissing-prototypes]
+     995 | struct hubbub *dcn30_hubbub_create(struct dc_context *ctx)
+         |                ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1146:24: warning: no previous prototype for 'dcn30_stream_encoder_create' [-Wmissing-prototypes]
+    1146 | struct stream_encoder *dcn30_stream_encoder_create(
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:1182:19: warning: no previous prototype for 'dcn30_hwseq_create' [-Wmissing-prototypes]
+    1182 | struct dce_hwseq *dcn30_hwseq_create(
+         |                   ^~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.c:32:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_init.c:143:6: warning: no previous prototype for 'dcn301_hw_sequencer_construct' [-Wmissing-prototypes]
+     143 | void dcn301_hw_sequencer_construct(struct dc *dc)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dce110/dce110_hw_sequencer.h:29,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_init.c:26:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:110:25: note: in expansion of macro 'DCN_BASE__INST0_SEG2'
+     110 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:112:19: note: in expansion of macro 'BASE_INNER'
+     112 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:115:29: note: in expansion of macro 'BASE'
+     115 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn21/dcn21_hubbub.h:42:9: note: in expansion of macro 'SR'
+      42 |         SR(DCHUBBUB_ARB_REFCYC_PER_TRIP_TO_MEMORY_D),\
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_hubbub.h:33:9: note: in expansion of macro 'HUBBUB_HVM_REG_LIST'
+      33 |         HUBBUB_HVM_REG_LIST()
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:569:17: note: in expansion of macro 'HUBBUB_REG_LIST_DCN301'
+     569 |                 HUBBUB_REG_LIST_DCN301(0)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/vangogh_ip_offset.h:454:52: warning: initialized field overwritten [-Woverride-init]
+     454 | #define DCN_BASE__INST0_SEG2                       0x000034C0
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:110:25: note: in expansion of macro 'DCN_BASE__INST0_SEG2'
+     110 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:112:19: note: in expansion of macro 'BASE_INNER'
+     112 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:115:29: note: in expansion of macro 'BASE'
+     115 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:399:9: note: in expansion of macro 'SR'
+     399 |         SR(DCFCLK_CNTL), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:593:17: note: in expansion of macro 'HWSEQ_DCN301_REG_LIST'
+     593 |                 HWSEQ_DCN301_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/vangogh_ip_offset.h:454:52: note: (near initialization for 'hwseq_reg.DCFCLK_CNTL')
+     454 | #define DCN_BASE__INST0_SEG2                       0x000034C0
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:110:25: note: in expansion of macro 'DCN_BASE__INST0_SEG2'
+     110 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:112:19: note: in expansion of macro 'BASE_INNER'
+     112 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:115:29: note: in expansion of macro 'BASE'
+     115 |                 .reg_name = BASE(mm ## reg_name ## _BASE_IDX) +  \
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:399:9: note: in expansion of macro 'SR'
+     399 |         SR(DCFCLK_CNTL), \
+         |         ^~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:593:17: note: in expansion of macro 'HWSEQ_DCN301_REG_LIST'
+     593 |                 HWSEQ_DCN301_REG_LIST()
+         |                 ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:720:6: warning: no previous prototype for 'dcn301_dpp_destroy' [-Wmissing-prototypes]
+     720 | void dcn301_dpp_destroy(struct dpp **dpp)
+         |      ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:726:13: warning: no previous prototype for 'dcn301_dpp_create' [-Wmissing-prototypes]
+     726 | struct dpp *dcn301_dpp_create(
+         |             ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:744:32: warning: no previous prototype for 'dcn301_opp_create' [-Wmissing-prototypes]
+     744 | struct output_pixel_processor *dcn301_opp_create(
+         |                                ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:760:17: warning: no previous prototype for 'dcn301_aux_engine_create' [-Wmissing-prototypes]
+     760 | struct dce_aux *dcn301_aux_engine_create(
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:796:20: warning: no previous prototype for 'dcn301_i2c_hw_create' [-Wmissing-prototypes]
+     796 | struct dce_i2c_hw *dcn301_i2c_hw_create(
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:832:16: warning: no previous prototype for 'dcn301_hubbub_create' [-Wmissing-prototypes]
+     832 | struct hubbub *dcn301_hubbub_create(struct dc_context *ctx)
+         |                ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:863:26: warning: no previous prototype for 'dcn301_timing_generator_create' [-Wmissing-prototypes]
+     863 | struct timing_generator *dcn301_timing_generator_create(
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:897:22: warning: no previous prototype for 'dcn301_link_encoder_create' [-Wmissing-prototypes]
+     897 | struct link_encoder *dcn301_link_encoder_create(
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:918:20: warning: no previous prototype for 'dcn301_panel_cntl_create' [-Wmissing-prototypes]
+     918 | struct panel_cntl *dcn301_panel_cntl_create(const struct panel_cntl_init_data *init_data)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:1000:24: warning: no previous prototype for 'dcn301_stream_encoder_create' [-Wmissing-prototypes]
+    1000 | struct stream_encoder *dcn301_stream_encoder_create(
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:1036:19: warning: no previous prototype for 'dcn301_hwseq_create' [-Wmissing-prototypes]
+    1036 | struct dce_hwseq *dcn301_hwseq_create(
+         |                   ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:1185:14: warning: no previous prototype for 'dcn301_hubp_create' [-Wmissing-prototypes]
+    1185 | struct hubp *dcn301_hubp_create(
+         |              ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:1204:6: warning: no previous prototype for 'dcn301_dwbc_create' [-Wmissing-prototypes]
+    1204 | bool dcn301_dwbc_create(struct dc_context *ctx, struct resource_pool *pool)
+         |      ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:1229:6: warning: no previous prototype for 'dcn301_mmhubbub_create' [-Wmissing-prototypes]
+    1229 | bool dcn301_mmhubbub_create(struct dc_context *ctx, struct resource_pool *pool)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_resource.c:32:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dce110/irq_service_dce110.c:40:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dmub/dmub_srv.h:67,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.h:30,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_hwseq.c:48:
+   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h: In function 'dmub_rb_flush_pending':
+   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2892:26: warning: variable 'temp' set but not used [-Wunused-but-set-variable]
+    2892 |                 uint64_t temp;
+         |                          ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_hwseq.c: In function 'dcn30_enable_writeback':
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_hwseq.c:324:34: warning: variable 'optc' set but not used [-Wunused-but-set-variable]
+     324 |         struct timing_generator *optc;
+         |                                  ^~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_hwseq.c:29:
+   At top level:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dmub/dmub_srv.h:67,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.h:30,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:28:
+   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h: In function 'dmub_rb_flush_pending':
+   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2892:26: warning: variable 'temp' set but not used [-Wunused-but-set-variable]
+    2892 |                 uint64_t temp;
+         |                          ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c: At top level:
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:96:10: warning: no previous prototype for 'dcn301_panel_cntl_hw_init' [-Wmissing-prototypes]
+      96 | uint32_t dcn301_panel_cntl_hw_init(struct panel_cntl *panel_cntl)
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:150:6: warning: no previous prototype for 'dcn301_panel_cntl_destroy' [-Wmissing-prototypes]
+     150 | void dcn301_panel_cntl_destroy(struct panel_cntl **panel_cntl)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:158:6: warning: no previous prototype for 'dcn301_is_panel_backlight_on' [-Wmissing-prototypes]
+     158 | bool dcn301_is_panel_backlight_on(struct panel_cntl *panel_cntl)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:168:6: warning: no previous prototype for 'dcn301_is_panel_powered_on' [-Wmissing-prototypes]
+     168 | bool dcn301_is_panel_powered_on(struct panel_cntl *panel_cntl)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:180:6: warning: no previous prototype for 'dcn301_store_backlight_level' [-Wmissing-prototypes]
+     180 | void dcn301_store_backlight_level(struct panel_cntl *panel_cntl)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn301/dcn301_panel_cntl.c:27:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+--
+     207 |         SRI(TMDS_CTL_BITS, DIG, id), \
+         |         ^~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:238:9: note: in expansion of macro 'DPCS_DCN2_CMN_REG_LIST'
+     238 |         DPCS_DCN2_CMN_REG_LIST(id), \
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:980:33: note: in expansion of macro 'DPCS_DCN2_REG_LIST'
+     980 |                                 DPCS_DCN2_REG_LIST(id), \
+         |                                 ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:989:17: note: in expansion of macro 'link_regs'
+     989 |                 link_regs(4, E)
+         |                 ^~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/dimgrey_cavefish_ip_offset.h:365:52: note: (near initialization for 'link_enc_regs[4].TMDS_CTL_BITS')
+     365 | #define DCN_BASE__INST0_SEG2                       0x000034C0
+         |                                                    ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:310:25: note: in expansion of macro 'DCN_BASE__INST0_SEG2'
+     310 | #define BASE_INNER(seg) DCN_BASE__INST0_SEG ## seg
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:312:19: note: in expansion of macro 'BASE_INNER'
+     312 | #define BASE(seg) BASE_INNER(seg)
+         |                   ^~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:321:29: note: in expansion of macro 'BASE'
+     321 |                 .reg_name = BASE(mm ## block ## id ## _ ## reg_name ## _BASE_IDX) + mm ## block ## id ## _ ## reg_name
+         |                             ^~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:207:9: note: in expansion of macro 'SRI'
+     207 |         SRI(TMDS_CTL_BITS, DIG, id), \
+         |         ^~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:238:9: note: in expansion of macro 'DPCS_DCN2_CMN_REG_LIST'
+     238 |         DPCS_DCN2_CMN_REG_LIST(id), \
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:980:33: note: in expansion of macro 'DPCS_DCN2_REG_LIST'
+     980 |                                 DPCS_DCN2_REG_LIST(id), \
+         |                                 ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:989:17: note: in expansion of macro 'link_regs'
+     989 |                 link_regs(4, E)
+         |                 ^~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:66:
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34336:111: warning: initialized field overwritten [-Woverride-init]
+   34336 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0__SHIFT                                                                  0x0
+         |                                                                                                               ^~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_link_encoder.h:173:23: note: in expansion of macro 'DIG0_TMDS_CTL_BITS__TMDS_CTL0__SHIFT'
+     173 |         .field_name = reg_name ## __ ## field_name ## post_fix
+         |                       ^~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:184:9: note: in expansion of macro 'LE_SF'
+     184 |         LE_SF(DIG0_TMDS_CTL_BITS, TMDS_CTL0, mask_sh), \
+         |         ^~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dio_link_encoder.h:58:9: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN20'
+      58 |         LINK_ENCODER_MASK_SH_LIST_DCN20(mask_sh)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:993:17: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN30'
+     993 |                 LINK_ENCODER_MASK_SH_LIST_DCN30(__SHIFT),
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34336:111: note: (near initialization for 'le_shift.TMDS_CTL0')
+   34336 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0__SHIFT                                                                  0x0
+         |                                                                                                               ^~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_link_encoder.h:173:23: note: in expansion of macro 'DIG0_TMDS_CTL_BITS__TMDS_CTL0__SHIFT'
+     173 |         .field_name = reg_name ## __ ## field_name ## post_fix
+         |                       ^~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:184:9: note: in expansion of macro 'LE_SF'
+     184 |         LE_SF(DIG0_TMDS_CTL_BITS, TMDS_CTL0, mask_sh), \
+         |         ^~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dio_link_encoder.h:58:9: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN20'
+      58 |         LINK_ENCODER_MASK_SH_LIST_DCN20(mask_sh)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:993:17: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN30'
+     993 |                 LINK_ENCODER_MASK_SH_LIST_DCN30(__SHIFT),
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:66:
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34340:111: warning: initialized field overwritten [-Woverride-init]
+   34340 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK                                                                    0x00000001L
+         |                                                                                                               ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34340:111: note: in definition of macro 'DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK'
+   34340 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK                                                                    0x00000001L
+         |                                                                                                               ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:184:9: note: in expansion of macro 'LE_SF'
+     184 |         LE_SF(DIG0_TMDS_CTL_BITS, TMDS_CTL0, mask_sh), \
+         |         ^~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dio_link_encoder.h:58:9: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN20'
+      58 |         LINK_ENCODER_MASK_SH_LIST_DCN20(mask_sh)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:998:17: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN30'
+     998 |                 LINK_ENCODER_MASK_SH_LIST_DCN30(_MASK),
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34340:111: note: (near initialization for 'le_mask.TMDS_CTL0')
+   34340 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK                                                                    0x00000001L
+         |                                                                                                               ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_0_2_sh_mask.h:34340:111: note: in definition of macro 'DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK'
+   34340 | #define DIG0_TMDS_CTL_BITS__TMDS_CTL0_MASK                                                                    0x00000001L
+         |                                                                                                               ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_link_encoder.h:184:9: note: in expansion of macro 'LE_SF'
+     184 |         LE_SF(DIG0_TMDS_CTL_BITS, TMDS_CTL0, mask_sh), \
+         |         ^~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dio_link_encoder.h:58:9: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN20'
+      58 |         LINK_ENCODER_MASK_SH_LIST_DCN20(mask_sh)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:998:17: note: in expansion of macro 'LINK_ENCODER_MASK_SH_LIST_DCN30'
+     998 |                 LINK_ENCODER_MASK_SH_LIST_DCN30(_MASK),
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.h:29,
+                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn302/dcn302_resource.c:27:
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:121:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
+     121 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:120:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
+     120 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+..
 
+
+vim +/DP_SINK_DEVICE_STR_ID_2 +121 drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h
+
+   119	
+ > 120	static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
+ > 121	static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
+   122	
 
 -- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+0-DAY CI Kernel Test Service
+https://01.org/lkp

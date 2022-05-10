@@ -2,79 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E73520E71
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F61D520E68
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiEJHfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S239817AbiEJHet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238509AbiEJHH5 (ORCPT
+        with ESMTP id S239012AbiEJHK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:07:57 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951211D8135
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:04:00 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B31E468AFE; Tue, 10 May 2022 09:03:56 +0200 (CEST)
-Date:   Tue, 10 May 2022 09:03:56 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH] nvme-pci: fix host memory buffer allocation size
-Message-ID: <20220510070356.GA11660@lst.de>
-References: <20220428101922.14216-1-linux@weissschuh.net> <20220428143603.GA20460@lst.de> <5060d75e-46c0-4d29-a334-62c7e9714fa7@t-8ch.de> <20220428150644.GA22685@lst.de> <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
+        Tue, 10 May 2022 03:10:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6400189974
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:06:59 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ky8GZ3wPgzhYx0;
+        Tue, 10 May 2022 15:06:30 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 15:06:57 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 15:06:57 +0800
+Message-ID: <1331b212-59d8-5e9d-974c-e0f3a47d9879@huawei.com>
+Date:   Tue, 10 May 2022 15:06:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 0/5] arm64: Cleanup ioremap() and support
+ ioremap_prot()
+Content-Language: en-US
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>
+References: <20220429103225.75121-1-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20220429103225.75121-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 06:09:11PM +0200, Thomas Weißschuh wrote:
-> > > On my hardware we start with a chunk_size of 4MiB and just allocate
-> > > 8 (hmmaxd) * 4 = 32 MiB which is worse than 1 * 200MiB.
-> > 
-> > And that is because the hardware only has a limited set of descriptors.
-> 
-> Wouldn't it make more sense then to allocate as much memory as possible for
-> each descriptor that is available?
-> 
-> The comment in nvme_alloc_host_mem() tries to "start big".
-> But it actually starts with at most 4MiB.
+Hello maintainers，kindly ping.
 
-Compared to what other operating systems offer, that is quite large.
-
-> And on devices that have hmminds > 4MiB the loop condition will never succeed
-> at all and HMB will not be used.
-> My fairly boring hardware already is at a hmminds of 3.3MiB.
-> 
-> > Is there any real problem you are fixing with this?  Do you actually
-> > see a performance difference on a relevant workload?
-> 
-> I don't have a concrete problem or performance issue.
-> During some debugging I stumbled in my kernel logs upon
-> "nvme nvme0: allocated 32 MiB host memory buffer"
-> and investigated why it was so low.
-
-Until recently we could not even support these large sizes at all on
-typical x86 configs.  With my fairly recent change to allow vmap
-remapped iommu allocations on x86 we can do that now.  But if we
-unconditionally enabled it I'd be a little worried about using too
-much memory very easily.
-
-We could look into removing the min with
-PAGE_SIZE * MAX_ORDER_NR_PAGES to try to do larger segments for
-"segment challenged" controllers now that it could work on a lot
-of iommu enabled setups.  But I'd rather have a very good reason for
-that.
+On 2022/4/29 18:32, Kefeng Wang wrote:
+> 1. Enhance generic ioremap to make it more useful.
+> 2. Let's arm64 use GENERIC_IOREMAP to cleanup code.
+> 3. Support HAVE_IOREMAP_PROT on arm64, which enable generic_access_phys(),
+>     it is useful when debug(eg, gdb) via access_process_vm device memory
+>     infrastructure.
+>
+> v2:
+> - s/addr/phys_addr in ioremap_prot, suggested by Andrew Morton
+> - rename arch_ioremap/iounmap_check to arch_ioremap/iounmad
+>    and change return value, per Christoph Hellwig and Andrew Morton
+> - and use 'ifndef arch_ioremap' instead of weak function, per Arnd Bergmann
+> - collect ack/review
+>
+> Kefeng Wang (5):
+>    mm: ioremap: Use more sensibly name in ioremap_prot()
+>    mm: ioremap: Setup phys_addr of struct vm_struct
+>    mm: ioremap: Add arch_ioremap/iounmap()
+>    arm64: mm: Convert to GENERIC_IOREMAP
+>    arm64: Add HAVE_IOREMAP_PROT support
+>
+>   .../features/vm/ioremap_prot/arch-support.txt |  2 +-
+>   arch/arm64/Kconfig                            |  2 +
+>   arch/arm64/include/asm/io.h                   | 20 +++--
+>   arch/arm64/include/asm/pgtable.h              | 10 +++
+>   arch/arm64/kernel/acpi.c                      |  2 +-
+>   arch/arm64/mm/hugetlbpage.c                   | 10 ---
+>   arch/arm64/mm/ioremap.c                       | 85 +++----------------
+>   include/asm-generic/io.h                      | 16 +++-
+>   mm/ioremap.c                                  | 27 ++++--
+>   9 files changed, 74 insertions(+), 100 deletions(-)
+>

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4184F521B93
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600DF521B83
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241075AbiEJORg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S1343546AbiEJOQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244908AbiEJNrF (ORCPT
+        with ESMTP id S1343517AbiEJNsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB571E8E23;
-        Tue, 10 May 2022 06:32:35 -0700 (PDT)
+        Tue, 10 May 2022 09:48:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BF32AED8D;
+        Tue, 10 May 2022 06:36:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E7C615C8;
-        Tue, 10 May 2022 13:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25ACBC385C2;
-        Tue, 10 May 2022 13:32:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB70E618C1;
+        Tue, 10 May 2022 13:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0806C385C2;
+        Tue, 10 May 2022 13:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189554;
-        bh=r/8WhCII/QSwBbGHS0M4iDqpyet3/YT26qUmf2G5itc=;
+        s=korg; t=1652189790;
+        bh=ICoUCWveMjVxL0JXl/i8DtIZOEvJ3uy+U5E1ZTjNeo4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nrMy6dI/LE//5W+6fRJNBXlXOOa4KzqYuEzfxxHoV+hbL46LydOdYmm9vWIAkhznj
-         v4zhlZafVYytOIDSUbk9i2y7zijoc7+hA7dLVzo0T9GmcU1Jgzs+5KKS9wqqGlH6eC
-         3yP5IOeda9DYopmR5FLAvcfWI5fGEtjS4im9PRUA=
+        b=cTTVYKZ8lHuGqO2EBTh/OgDTbPLjDY/7r/JVwNZt1X4Qm818us/odsweZ2EngjAzZ
+         z3LmWHXJIj0l/OalpiMFmF6uKRYz7KW5WwVkLFp4/I73yVHdVKJCieJXtqSZWWICmT
+         EdGj4aGodP2FMLsKtJvjrzCdDQw1Soc5LdLKkg1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 037/135] nfc: replace improper check device_is_registered() in netlink related functions
+        stable@vger.kernel.org, Matt Corallo <blnxfsl@bluematt.me>,
+        Josef Bacik <josef@toxicpanda.com>, Qu Wenruo <wqu@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.17 029/140] btrfs: force v2 space cache usage for subpage mount
 Date:   Tue, 10 May 2022 15:06:59 +0200
-Message-Id: <20220510130741.467352394@linuxfoundation.org>
+Message-Id: <20220510130742.446962329@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,172 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Qu Wenruo <wqu@suse.com>
 
-commit da5c0f119203ad9728920456a0f52a6d850c01cd upstream.
+commit 9f73f1aef98b2fa7252c0a89be64840271ce8ea0 upstream.
 
-The device_is_registered() in nfc core is used to check whether
-nfc device is registered in netlink related functions such as
-nfc_fw_download(), nfc_dev_up() and so on. Although device_is_registered()
-is protected by device_lock, there is still a race condition between
-device_del() and device_is_registered(). The root cause is that
-kobject_del() in device_del() is not protected by device_lock.
+[BUG]
+For a 4K sector sized btrfs with v1 cache enabled and only mounted on
+systems with 4K page size, if it's mounted on subpage (64K page size)
+systems, it can cause the following warning on v1 space cache:
 
-   (cleanup task)         |     (netlink task)
-                          |
-nfc_unregister_device     | nfc_fw_download
- device_del               |  device_lock
-  ...                     |   if (!device_is_registered)//(1)
-  kobject_del//(2)        |   ...
- ...                      |  device_unlock
+ BTRFS error (device dm-1): csum mismatch on free space cache
+ BTRFS warning (device dm-1): failed to load free space cache for block group 84082688, rebuilding it now
 
-The device_is_registered() returns the value of state_in_sysfs and
-the state_in_sysfs is set to zero in kobject_del(). If we pass check in
-position (1), then set zero in position (2). As a result, the check
-in position (1) is useless.
+Although not a big deal, as kernel can rebuild it without problem, such
+warning will bother end users, especially if they want to switch the
+same btrfs seamlessly between different page sized systems.
 
-This patch uses bool variable instead of device_is_registered() to judge
-whether the nfc device is registered, which is well synchronized.
+[CAUSE]
+V1 free space cache is still using fixed PAGE_SIZE for various bitmap,
+like BITS_PER_BITMAP.
 
-Fixes: 3e256b8f8dfa ("NFC: add nfc subsystem core")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Such hard-coded PAGE_SIZE usage will cause various mismatch, from v1
+cache size to checksum.
+
+Thus kernel will always reject v1 cache with a different PAGE_SIZE with
+csum mismatch.
+
+[FIX]
+Although we should fix v1 cache, it's already going to be marked
+deprecated soon.
+
+And we have v2 cache based on metadata (which is already fully subpage
+compatible), and it has almost everything superior than v1 cache.
+
+So just force subpage mount to use v2 cache on mount.
+
+Reported-by: Matt Corallo <blnxfsl@bluematt.me>
+CC: stable@vger.kernel.org # 5.15+
+Link: https://lore.kernel.org/linux-btrfs/61aa27d1-30fc-c1a9-f0f4-9df544395ec3@bluematt.me/
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/core.c |   29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ fs/btrfs/disk-io.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -38,7 +38,7 @@ int nfc_fw_download(struct nfc_dev *dev,
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -3569,6 +3569,17 @@ int __cold open_ctree(struct super_block
+ 	if (sectorsize < PAGE_SIZE) {
+ 		struct btrfs_subpage_info *subpage_info;
  
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -94,7 +94,7 @@ int nfc_dev_up(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -142,7 +142,7 @@ int nfc_dev_down(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -207,7 +207,7 @@ int nfc_start_poll(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -246,7 +246,7 @@ int nfc_stop_poll(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -291,7 +291,7 @@ int nfc_dep_link_up(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -335,7 +335,7 @@ int nfc_dep_link_down(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -401,7 +401,7 @@ int nfc_activate_target(struct nfc_dev *
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -448,7 +448,7 @@ int nfc_deactivate_target(struct nfc_dev
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -495,7 +495,7 @@ int nfc_data_exchange(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		kfree_skb(skb);
- 		goto error;
-@@ -552,7 +552,7 @@ int nfc_enable_se(struct nfc_dev *dev, u
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -601,7 +601,7 @@ int nfc_disable_se(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -1134,6 +1134,7 @@ int nfc_register_device(struct nfc_dev *
- 			dev->rfkill = NULL;
- 		}
- 	}
-+	dev->shutting_down = false;
- 	device_unlock(&dev->dev);
- 
- 	rc = nfc_genl_device_added(dev);
-@@ -1166,12 +1167,10 @@ void nfc_unregister_device(struct nfc_de
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
- 	}
-+	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
- 
- 	if (dev->ops->check_presence) {
--		device_lock(&dev->dev);
--		dev->shutting_down = true;
--		device_unlock(&dev->dev);
- 		del_timer_sync(&dev->check_pres_timer);
- 		cancel_work_sync(&dev->check_pres_work);
- 	}
++		/*
++		 * V1 space cache has some hardcoded PAGE_SIZE usage, and is
++		 * going to be deprecated.
++		 *
++		 * Force to use v2 cache for subpage case.
++		 */
++		btrfs_clear_opt(fs_info->mount_opt, SPACE_CACHE);
++		btrfs_set_and_info(fs_info, FREE_SPACE_TREE,
++			"forcing free space tree for sector size %u with page size %lu",
++			sectorsize, PAGE_SIZE);
++
+ 		btrfs_warn(fs_info,
+ 		"read-write for sector size %u with page size %lu is experimental",
+ 			   sectorsize, PAGE_SIZE);
 
 

@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5781E52185D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CAA5217ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241616AbiEJNfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S243528AbiEJNbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242922AbiEJNZQ (ORCPT
+        with ESMTP id S242998AbiEJNVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7458E5EBF6;
-        Tue, 10 May 2022 06:18:24 -0700 (PDT)
+        Tue, 10 May 2022 09:21:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45704A3F5;
+        Tue, 10 May 2022 06:14:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F6EBB81CE7;
-        Tue, 10 May 2022 13:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78BF8C385C2;
-        Tue, 10 May 2022 13:18:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13176B81DA4;
+        Tue, 10 May 2022 13:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A85FC385A6;
+        Tue, 10 May 2022 13:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188701;
-        bh=5DaDxR42mwGSr1uVDRE0OYynjZnYKWwQ0Cz0LyU4kj8=;
+        s=korg; t=1652188461;
+        bh=LlaNvZNC6zMQ2YYn7Jimy2RhtIUwN/GT9NAOZ5adIg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ajEPrs5R6QczeNACTMc+XWS+AyXsU1gWmlDZJ+v9Jplwk9f20IpUN4XZkgKWpn+Sw
-         LbDU+8K/Apt8GXm4hxvOiNLu//iNYXZeOHHnjo6iMmavF791pQlWsu6XJuhEo8W7fQ
-         Z/26byzUYdDD3HgCDKXf8TYGvhpVFIoShQLvUOJo=
+        b=fLBXaf098KUuKqUdlAg3sj4m1Q5Oe2nWSHanxnVSOPc98UxW1ELg86PSj0eLW2HR3
+         R0sK18Dsc/A3k3HheaQOsavBPxjsjPQYCtHN+UNiGUpWGcNgZzhG/JSSTrfbzXR0ys
+         GSIIR30i+1fF8phHjkf7xzGHZi3zY9JluqUqjW8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 4.19 16/88] usb: dwc3: gadget: Return proper request status
-Date:   Tue, 10 May 2022 15:07:01 +0200
-Message-Id: <20220510130734.217598344@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.14 16/78] iio: dac: ad5446: Fix read_raw not returning set value
+Date:   Tue, 10 May 2022 15:07:02 +0200
+Message-Id: <20220510130733.013232254@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,81 +50,40 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Michael Hennerich <michael.hennerich@analog.com>
 
-commit c7428dbddcf4ea1919e1c8e15f715b94ca359268 upstream.
+commit 89a01cd688d3c0ac983ef0b0e5f40018ab768317 upstream.
 
-If the user sets the usb_request's no_interrupt, then there will be no
-completion event for the request. Currently the driver incorrectly uses
-the event status of a different request to report the status for a
-request with no_interrupt. The dwc3 driver needs to check the TRB status
-associated with the request when reporting its status.
+read_raw should return the un-scaled value.
 
-Note: this is only applicable to missed_isoc TRB completion status, but
-the other status are also listed for completeness/documentation.
-
-Fixes: 6d8a019614f3 ("usb: dwc3: gadget: check for Missed Isoc from event status")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/db2c80108286cfd108adb05bad52138b78d7c3a7.1650673655.git.Thinh.Nguyen@synopsys.com
+Fixes: 5e06bdfb46e8b ("staging:iio:dac:ad5446: Return cached value for 'raw' attribute")
+Signed-off-by: Michael Hennerich <michael.hennerich@analog.com>
+Reviewed-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20220406105620.1171340-1-michael.hennerich@analog.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/gadget.c |   31 ++++++++++++++++++++++++++++++-
- 1 file changed, 30 insertions(+), 1 deletion(-)
+ drivers/iio/dac/ad5446.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2415,6 +2415,7 @@ static int dwc3_gadget_ep_cleanup_comple
- 		const struct dwc3_event_depevt *event,
- 		struct dwc3_request *req, int status)
- {
-+	int request_status;
- 	int ret;
+--- a/drivers/iio/dac/ad5446.c
++++ b/drivers/iio/dac/ad5446.c
+@@ -171,7 +171,7 @@ static int ad5446_read_raw(struct iio_de
  
- 	if (req->request.num_mapped_sgs)
-@@ -2444,7 +2445,35 @@ static int dwc3_gadget_ep_cleanup_comple
- 		req->needs_extra_trb = false;
- 	}
- 
--	dwc3_gadget_giveback(dep, req, status);
-+	/*
-+	 * The event status only reflects the status of the TRB with IOC set.
-+	 * For the requests that don't set interrupt on completion, the driver
-+	 * needs to check and return the status of the completed TRBs associated
-+	 * with the request. Use the status of the last TRB of the request.
-+	 */
-+	if (req->request.no_interrupt) {
-+		struct dwc3_trb *trb;
-+
-+		trb = dwc3_ep_prev_trb(dep, dep->trb_dequeue);
-+		switch (DWC3_TRB_SIZE_TRBSTS(trb->size)) {
-+		case DWC3_TRBSTS_MISSED_ISOC:
-+			/* Isoc endpoint only */
-+			request_status = -EXDEV;
-+			break;
-+		case DWC3_TRB_STS_XFER_IN_PROG:
-+			/* Applicable when End Transfer with ForceRM=0 */
-+		case DWC3_TRBSTS_SETUP_PENDING:
-+			/* Control endpoint only */
-+		case DWC3_TRBSTS_OK:
-+		default:
-+			request_status = 0;
-+			break;
-+		}
-+	} else {
-+		request_status = status;
-+	}
-+
-+	dwc3_gadget_giveback(dep, req, request_status);
- 
- out:
- 	return ret;
+ 	switch (m) {
+ 	case IIO_CHAN_INFO_RAW:
+-		*val = st->cached_val;
++		*val = st->cached_val >> chan->scan_type.shift;
+ 		return IIO_VAL_INT;
+ 	case IIO_CHAN_INFO_SCALE:
+ 		*val = st->vref_mv;
 
 

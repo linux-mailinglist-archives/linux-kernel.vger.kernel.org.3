@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F2752181D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80A2521ACE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243368AbiEJNdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S242903AbiEJOC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243026AbiEJNZ1 (ORCPT
+        with ESMTP id S245494AbiEJNjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AD022EA4F;
-        Tue, 10 May 2022 06:18:36 -0700 (PDT)
+        Tue, 10 May 2022 09:39:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0191728F1F2;
+        Tue, 10 May 2022 06:29:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41F52B81DA2;
-        Tue, 10 May 2022 13:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D112C385A6;
-        Tue, 10 May 2022 13:18:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F56F60C1C;
+        Tue, 10 May 2022 13:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53029C385A6;
+        Tue, 10 May 2022 13:29:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188713;
-        bh=iw5r7VXYhZZ7jk1+tRISB95kKILUAHqZqpWpvMsK8Bo=;
+        s=korg; t=1652189362;
+        bh=YpKJBiYbIBRLNkiHda5QMm3L+zXhaJseWyql1maFGDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgBy18GBOS6dTW6LXCQeuWOZ9ebQ99ssSfWk0y3JXtDUkC30Nv2dK7O7eTCTVwEn6
-         4SE+5yjAKOYeeIb+CYqm+T/2CjLo9ppAo+2d/FydBgyZ+GZUIjal2SSkymkgn9xrti
-         nPTz3lRL66npkK4GiaBw3tq0lZ4+yAW/OROa6hK0=
+        b=UefwNQ2HGYritiBrJQ7Dd3/q/4vtNms8bfnqmTSi4O3LSCrIVtiuMm/64CjkSCaQe
+         H5EqrWitu+lxoAfCh1pYBvHaF2mHtW9XmUfjr/X7UIR181XLjtl2ywMP5BpgtYxxHT
+         SKWfRSgDM02QkMoim0dKTO35MdALYbNgvrzqyx4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 4.19 03/88] USB: quirks: add STRING quirk for VCOM device
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.15 026/135] ASoC: meson: Fix event generation for G12A tohdmi mux
 Date:   Tue, 10 May 2022 15:06:48 +0200
-Message-Id: <20220510130733.838144982@linuxfoundation.org>
+Message-Id: <20220510130741.150894960@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
+commit 12131008fc13ff7f7690d170b7a8f72d24fd7d1e upstream.
 
-This has been reported to stall if queried
+The G12A tohdmi has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ sound/soc/meson/g12a-tohdmitx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -511,6 +511,9 @@ static const struct usb_device_id usb_qu
- 	/* DJI CineSSD */
- 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
+--- a/sound/soc/meson/g12a-tohdmitx.c
++++ b/sound/soc/meson/g12a-tohdmitx.c
+@@ -67,7 +67,7 @@ static int g12a_tohdmitx_i2s_mux_put_enu
  
-+	/* VCOM device */
-+	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
-+
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
  
+-	return 0;
++	return 1;
+ }
+ 
+ static SOC_ENUM_SINGLE_DECL(g12a_tohdmitx_i2s_mux_enum, TOHDMITX_CTRL0,
 
 

@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61875216BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A399521A4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242448AbiEJNSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S244391AbiEJNyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242346AbiEJNQT (ORCPT
+        with ESMTP id S244534AbiEJNhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:16:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA0433B5;
-        Tue, 10 May 2022 06:12:15 -0700 (PDT)
+        Tue, 10 May 2022 09:37:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A391129;
+        Tue, 10 May 2022 06:25:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93B7D612E4;
-        Tue, 10 May 2022 13:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC53C385C2;
-        Tue, 10 May 2022 13:12:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEEB7B81DA9;
+        Tue, 10 May 2022 13:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCB5C385A6;
+        Tue, 10 May 2022 13:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188323;
-        bh=ZFKz7D5VMBgdP5HYgXbth0GjUNlu9Z2TL8vZsHJON3Q=;
+        s=korg; t=1652189147;
+        bh=oXK+xeO7TyS/609kqkxla+MZL2jQ1JRBvy7n7RIohAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uieG78kWd0BTfu4oKUBXz+K82UTaPMjXLMo6Eia8Hfn5qNfW0eAHDqSu2Gl6VTFIB
-         MkVXz9iUNy40N/+qhCmygD0Tgot5vrinTWfK8aP5zbkSum4BwV4XDgElcrb6RTbR44
-         LxtuBhx7D9vB+BLH3D49pNoxc3WezfT1edOqyrI4=
+        b=AC+orTsLxEnGuGHyA8ONJWgMRzmeD3nnJhj0x3eq1l5mqzc3Q5bJGkrbGc/CNQsxJ
+         qG7dTk28yg2ZIBnpAD7Abb14L0pVLkjcGggBOH0H+WfmZ5aDYY8xpHPywaQLEC9G63
+         mCafKJV7ZJeibQFcJ0/3CSwpyiGbHic7gkXdaNwE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.9 36/66] tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
+        stable@vger.kernel.org, Andrei Lalaev <andrei.lalaev@emlid.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.10 07/70] gpiolib: of: fix bounds check for gpio-reserved-ranges
 Date:   Tue, 10 May 2022 15:07:26 +0200
-Message-Id: <20220510130730.828522012@linuxfoundation.org>
+Message-Id: <20220510130733.079273199@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Andrei Lalaev <andrei.lalaev@emlid.com>
 
-commit 06d5afd4d640eea67f5623e76cd5fc03359b7f3c upstream.
+commit e75f88efac05bf4e107e4171d8db6d8c3937252d upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.5.2 describes that the signal octet in
-convergence layer type 2 can be either one or two bytes. The length is
-encoded in the EA bit. This is set 1 for the last byte in the sequence.
-gsmtty_modem_update() handles this correctly but gsm_dlci_data_output()
-fails to set EA to 1. There is no case in which we encode two signal octets
-as there is no case in which we send out a break signal.
-Therefore, always set the EA bit to 1 for the signal octet to fix this.
+Gpiolib interprets the elements of "gpio-reserved-ranges" as "start,size"
+because it clears "size" bits starting from the "start" bit in the according
+bitmap. So it has to use "greater" instead of "greater or equal" when performs
+bounds check to make sure that GPIOs are in the available range.
+Previous implementation skipped ranges that include the last GPIO in
+the range.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+I wrote the mail to the maintainers
+(https://lore.kernel.org/linux-gpio/20220412115554.159435-1-andrei.lalaev@emlid.com/T/#u)
+of the questioned DTSes (because I couldn't understand how the maintainers
+interpreted this property), but I haven't received a response.
+Since the questioned DTSes use "gpio-reserved-ranges = <0 4>"
+(i.e., the beginning of the range), this patch doesn't affect these DTSes at all.
+TBH this patch doesn't break any existing DTSes because none of them
+reserve gpios at the end of range.
+
+Fixes: 726cb3ba4969 ("gpiolib: Support 'gpio-reserved-ranges' property")
+Signed-off-by: Andrei Lalaev <andrei.lalaev@emlid.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-5-daniel.starke@siemens.com
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    2 +-
+ drivers/gpio/gpiolib-of.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -839,7 +839,7 @@ static int gsm_dlci_data_output(struct g
- 			break;
- 		case 2:	/* Unstructed with modem bits.
- 		Always one byte as we never send inline break data */
--			*dp++ = gsm_encode_modem(dlci);
-+			*dp++ = (gsm_encode_modem(dlci) << 1) | EA;
- 			break;
- 		}
- 		WARN_ON(kfifo_out_locked(dlci->fifo, dp , len, &dlci->lock) != len);
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -912,7 +912,7 @@ static void of_gpiochip_init_valid_mask(
+ 					   i, &start);
+ 		of_property_read_u32_index(np, "gpio-reserved-ranges",
+ 					   i + 1, &count);
+-		if (start >= chip->ngpio || start + count >= chip->ngpio)
++		if (start >= chip->ngpio || start + count > chip->ngpio)
+ 			continue;
+ 
+ 		bitmap_clear(chip->valid_mask, start, count);
 
 

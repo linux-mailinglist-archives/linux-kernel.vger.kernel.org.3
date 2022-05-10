@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1223F520B42
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7282520B3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234673AbiEJCdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S234743AbiEJCeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbiEJCdf (ORCPT
+        with ESMTP id S234713AbiEJCd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:33:35 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2DB1C345C;
-        Mon,  9 May 2022 19:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652149778; x=1683685778;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VB+S7FbsbedyfQegYcDT9rEqTeQpA5DhiVtlZtTEzpM=;
-  b=couAxsUKykYDw9d7hoseJH8jnF0OA7Bi/ohZ20paXcWf/4dGwwwaCHdB
-   oq/9YtJlsTXm0faO6dbveKlFEhH0gtJK0fQw48mIgPAnH8zWmEIfpvQFT
-   On8Fti8ZzDkO1Yyfq9bXbeklQ6NB+8C8lebuw1U0RECjuA1exwjRKh4+w
-   k=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 09 May 2022 19:29:37 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 19:29:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 9 May 2022 19:29:21 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 9 May 2022
- 19:29:20 -0700
-Message-ID: <8372be1c-5f7d-3a0e-38fb-787b9d38fcd9@quicinc.com>
-Date:   Mon, 9 May 2022 20:29:19 -0600
+        Mon, 9 May 2022 22:33:58 -0400
+Received: from out28-193.mail.aliyun.com (out28-193.mail.aliyun.com [115.124.28.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38651B774A;
+        Mon,  9 May 2022 19:30:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08325132|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0186495-0.000315131-0.981035;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.Nh22IJP_1652149798;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Nh22IJP_1652149798)
+          by smtp.aliyun-inc.com(33.18.97.150);
+          Tue, 10 May 2022 10:29:58 +0800
+Subject: Re: Question about SC16IS752 device tree.
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>, jringle@gridpoint.com,
+        shc_work@mail.ru, Rob Herring <robh@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-serial@vger.kernel.org,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <7c89db86-4055-90b5-6a67-611410f5759f@wanyeetech.com>
+ <ZYNMBR.VDVV3VHFQBMO1@crapouillou.net>
+ <04bd0853-7e34-5210-f1b5-f3ea8c35e484@wanyeetech.com>
+ <501852E6-6934-4BB2-850C-B53A07580568@goldelico.com>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <8533f999-f584-ea31-0c44-1ce29c066d88@wanyeetech.com>
+Date:   Tue, 10 May 2022 10:29:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/2] PCI: hv: Reuse existing ITRE allocation in
- compose_msi_msg()
+In-Reply-To: <501852E6-6934-4BB2-850C-B53A07580568@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>
-CC:     Jake Oshins <jakeo@microsoft.com>,
-        David Zhang <dazhan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
- <1652132902-27109-2-git-send-email-quic_jhugo@quicinc.com>
- <BYAPR21MB1270A579B909B31FA271FC08BFC69@BYAPR21MB1270.namprd21.prod.outlook.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <BYAPR21MB1270A579B909B31FA271FC08BFC69@BYAPR21MB1270.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/2022 5:13 PM, Dexuan Cui wrote:
->> From: Jeffrey Hugo <quic_jhugo@quicinc.com>
->> Sent: Monday, May 9, 2022 2:48 PM
->> Subject: [PATCH 1/2] PCI: hv: Reuse existing ITRE allocation in
-> 
-> s/ITRE/IRTE. I suppose Wei can help fix this without a v2 :-)
+Hi Nikolaus,
 
-Thanks for the review.
-
-I have no problem sending out a V2.  Especially since you pointed out my 
-mistakes on both patches.  I'll wait a little bit for any additional 
-feedback, and then send out a V2.
-
-> 
->> compose_msi_msg()
->> ...
->> Currently if compose_msi_msg() is called multiple times, it will free any
->> previous ITRE allocation, and generate a new allocation.  While nothing
->> prevents this from occurring, it is extranious when Linux could just reuse
-> 
-> s/extranious/extraneous
-> 
->> the existing allocation and avoid a bunch of overhead.
+On 2022/5/10 上午4:19, H. Nikolaus Schaller wrote:
+> Hi,
+>
+>> Am 09.05.2022 um 20:41 schrieb Zhou Yanjie <zhouyanjie@wanyeetech.com>:
 >>
->> However, when future ITRE allocations operate on blocks of MSIs instead of
-> 
-> s/ITRE/IRTE
-> 
->> a single line, freeing the allocation will impact all of the lines.  This
->> could cause an issue where an allocation of N MSIs occurs, then some of
->> the lines are retargeted, and finally the allocation is freed/reallocated.
->> The freeing of the allocation removes all of the configuration for the
->> entire block, which requires all the lines to be retargeted, which might
->> not happen since some lines might already be unmasked/active.
+>> Hi Paul,
 >>
->> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> 
-> Reviewed-by: Dexuan Cui <decui@microsoft.com>
-> Tested-by: Dexuan Cui <decui@microsoft.com>
+>> On 2022/5/10 上午2:13, Paul Cercueil wrote:
+>>> I can't say for sure that it's your problem, but your bluetooth nodes are missing "reg" properties.
+>>
+>> Unfortunately it doesn't seem to be the problem here, I added "reg" and
+>> the problem persists, and I've looked at other device trees that contain
+>> "brcm,bcm43438-bt", none of them use "reg", and "reg" is not mentioned in
+>> neither "Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt" nor
+>> "Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml".
+> what happens if you remove the serdev children from DTS? Does the driver create two separate /dev/tty ports? And do they work?
 
+
+Yes, there will be two separate /dev/tty ports (ttySC0 and ttySC1), and
+both ports can work normally, but at this time the two bluetooth modules
+are not working.
+
+I guess it is because the driver does not detect bluetooth module nodes,
+so the inability to operate "reset-gpios" and "device-wakeup-gpios" causes
+the bluetooth module to work incorrectly.
+
+
+>
+> Maybe the sc16is752 driver does not separate them for child nodes, i.e. while "reg" should be added it may not be handled?
+
+
+I'm not too sure, I'm not very familiar with serial port systems.
+If the truth is what you think, how should I improve it?
+
+
+Best regards!
+
+
+>
+> BR,
+> Nikolaus

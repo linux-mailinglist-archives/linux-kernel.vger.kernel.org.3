@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD15521B01
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E26521B85
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343772AbiEJOHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S241390AbiEJORD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244124AbiEJNgv (ORCPT
+        with ESMTP id S244692AbiEJNq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:36:51 -0400
+        Tue, 10 May 2022 09:46:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725452D9ED5;
-        Tue, 10 May 2022 06:25:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5906514CB68;
+        Tue, 10 May 2022 06:31:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AF4C61767;
-        Tue, 10 May 2022 13:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46789C385A6;
-        Tue, 10 May 2022 13:25:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F1E760B12;
+        Tue, 10 May 2022 13:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D041C385A6;
+        Tue, 10 May 2022 13:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189113;
-        bh=2HnKUKKeygCNULEDLTGebDWd/Upf5P086EXE4P6TmGo=;
+        s=korg; t=1652189513;
+        bh=X0ixFeNEvURfQKTkFaXnL+ELjrFBVzXxY/dWtVPiXhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UMefxCXfdDoy5SVdDHbjuAoiuhMmrzbtXUM9YtSn05LjfItGsXbcr0Ylrq9GsG1D4
-         nmK8PNqAIxcNsjuY+R0YNKKN9IxnqjwwuOQFnRoPa+bDJq4nOkEtYllTxcrvj0k3rQ
-         JjVdmguSrFo280CPgZ8iUEy8+R7VYC2CvyuIYBzw=
+        b=Tty34OpsNym02u0C2pmSh8lis5l/8IZ4R8gk+c98QtOJBgAuP4OUHoDdbmbjFBBWj
+         ML+KdAHwDhh1OHD0vFZ+aUJlOGGfXxfMHJB51mrl30oEcmq9s2A4aa2OIEECMnxncz
+         fJ/MXlNZOFBQKHbQEz9OGTnniwLnq0fxuRfyvT3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Subject: [PATCH 5.10 17/70] ASoC: da7219: Fix change notifications for tone generator frequency
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-afs@lists.infradead.org
+Subject: [PATCH 5.15 074/135] rxrpc: Enable IPv6 checksums on transport socket
 Date:   Tue, 10 May 2022 15:07:36 +0200
-Message-Id: <20220510130733.370742040@linuxfoundation.org>
+Message-Id: <20220510130742.534618150@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: David Howells <dhowells@redhat.com>
 
-commit 08ef48404965cfef99343d6bbbcf75b88c74aa0e upstream.
+commit 39cb9faa5d46d0d0694f4b594ef905f517600c8e upstream.
 
-The tone generator frequency control just returns 0 on successful write,
-not a boolean value indicating if there was a change or not.  Compare
-what was written with the value that was there previously so that
-notifications are generated appropriately when the value changes.
+AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
+socket it opens and the checksums in the packets it generates end up 0.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220420133437.569229-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
+checksums.  The latter only seem to be applied if the socket family is
+AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
+IPv6 socket seem to have checksums anyway.
+
+What seems to have happened is that the inet_inv_convert_csum() call didn't
+get converted to the appropriate udp_port_cfg parameters - and
+udp_sock_create() disables checksums unless explicitly told not too.
+
+Fix this by enabling the three udp_port_cfg checksum options.
+
+Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+cc: Vadim Fedorenko <vfedorenko@novek.ru>
+cc: David S. Miller <davem@davemloft.net>
+cc: linux-afs@lists.infradead.org
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/da7219.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ net/rxrpc/local_object.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/soc/codecs/da7219.c
-+++ b/sound/soc/codecs/da7219.c
-@@ -446,7 +446,7 @@ static int da7219_tonegen_freq_put(struc
- 	struct soc_mixer_control *mixer_ctrl =
- 		(struct soc_mixer_control *) kcontrol->private_value;
- 	unsigned int reg = mixer_ctrl->reg;
--	__le16 val;
-+	__le16 val_new, val_old;
- 	int ret;
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrp
+ 	       local, srx->transport_type, srx->transport.family);
  
- 	/*
-@@ -454,13 +454,19 @@ static int da7219_tonegen_freq_put(struc
- 	 * Therefore we need to convert to little endian here to align with
- 	 * HW registers.
- 	 */
--	val = cpu_to_le16(ucontrol->value.integer.value[0]);
-+	val_new = cpu_to_le16(ucontrol->value.integer.value[0]);
- 
- 	mutex_lock(&da7219->ctrl_lock);
--	ret = regmap_raw_write(da7219->regmap, reg, &val, sizeof(val));
-+	ret = regmap_raw_read(da7219->regmap, reg, &val_old, sizeof(val_old));
-+	if (ret == 0 && (val_old != val_new))
-+		ret = regmap_raw_write(da7219->regmap, reg,
-+				&val_new, sizeof(val_new));
- 	mutex_unlock(&da7219->ctrl_lock);
- 
--	return ret;
-+	if (ret < 0)
-+		return ret;
-+
-+	return val_old != val_new;
- }
- 
- 
+ 	udp_conf.family = srx->transport.family;
++	udp_conf.use_udp_checksums = true;
+ 	if (udp_conf.family == AF_INET) {
+ 		udp_conf.local_ip = srx->transport.sin.sin_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin.sin_port;
+@@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrp
+ 	} else {
+ 		udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
++		udp_conf.use_udp6_tx_checksums = true;
++		udp_conf.use_udp6_rx_checksums = true;
+ #endif
+ 	}
+ 	ret = udp_sock_create(net, &udp_conf, &local->socket);
 
 

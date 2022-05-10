@@ -2,104 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A4C520CF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E61D520CE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbiEJEde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S236588AbiEJEdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbiEJEbg (ORCPT
+        with ESMTP id S236656AbiEJEbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:31:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9054CD5F
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:26:31 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noHRr-00070V-Nc; Tue, 10 May 2022 06:26:11 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1noHRp-0007KV-SV; Tue, 10 May 2022 06:26:09 +0200
-Date:   Tue, 10 May 2022 06:26:09 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-Message-ID: <20220510042609.GA10669@pengutronix.de>
-References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
- <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
+        Tue, 10 May 2022 00:31:35 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FF43526D;
+        Mon,  9 May 2022 21:26:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCp29EM_1652156751;
+Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCp29EM_1652156751)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 12:25:53 +0800
+Message-ID: <0db300f4-8a91-b330-5c6f-bbc63cf2f151@linux.alibaba.com>
+Date:   Tue, 10 May 2022 12:26:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 06:19:23 up 40 days, 16:49, 62 users,  load average: 0.01, 0.09,
- 0.08
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 0/3] Fix CONT-PTE/PMD size hugetlb issue when unmapping
+ or migrating
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     mike.kravetz@oracle.com, catalin.marinas@arm.com, will@kernel.org,
+        songmuchun@bytedance.com, tsbogend@alpha.franken.de,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
+ <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote:
-> On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote:
-> > This is not explicitly stated in SAE J1939-21 and some tools used for
-> > ISO-11783 certification do not expect this wait.
 
-It will be interesting to know which certification tool do not expect it and
-what explanation is used if it fails?
+On 5/10/2022 12:04 PM, Andrew Morton wrote:
+> On Tue, 10 May 2022 11:45:57 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> 
+>> Hi,
+>>
+>> Now migrating a hugetlb page or unmapping a poisoned hugetlb page, we'll
+>> use ptep_clear_flush() and set_pte_at() to nuke the page table entry
+>> and remap it, and this is incorrect for CONT-PTE or CONT-PMD size hugetlb
+>> page,
+> 
+> It would be helpful to describe why it's wrong.  Something like "should
+> use huge_ptep_clear_flush() and huge_ptep_clear_flush() for this
+> purpose"?
 
-> IMHO, the current behaviour is not explicitely stated, but nor is the opposite.
-> And if I'm not mistaken, this introduces a 250msec delay.
-> 
-> 1. If you want to avoid the 250msec gap, you should avoid to contest the same address.
-> 
-> 2. It's a balance between predictability and flexibility, but if you try to accomplish both,
-> as your patch suggests, there is slight time-window until the current owner responds,
-> in which it may be confusing which node has the address. It depends on how much history
-> you have collected on the bus.
-> 
-> I'm sure that this problem decreases with increasing processing power on the nodes,
-> but bigger internal queues also increase this window.
-> 
-> It would certainly help if you describe how the current implementation fails.
-> 
-> Would decreasing the dead time to 50msec help in such case.
-> 
-> Kind regards,
-> Kurt
-> 
+Sorry for the confusing description. I described the problem explicitly 
+in each patch's commit message.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+https://lore.kernel.org/all/ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com/
+https://lore.kernel.org/all/730ea4b6d292f32fb10b7a4e87dad49b0eb30474.1652147571.git.baolin.wang@linux.alibaba.com/
+
+> 
+>> which will cause potential data consistent issue. This patch set
+>> will change to use hugetlb related APIs to fix this issue, please find
+>> details in each patch. Thanks.
+> 
+> Is a cc:stable needed here?  And are we able to identify a target for a
+> Fixes: tag?
+
+I think need a cc:stable tag, however I am not sure the target fixes 
+tag, since we should trace back to the introduction of CONT-PTE/PMD 
+hugetlb? 66b3923a1a0f ("arm64: hugetlb: add support for PTE contiguous bit")

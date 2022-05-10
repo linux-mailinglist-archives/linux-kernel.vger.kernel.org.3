@@ -2,168 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B5A521DA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AD8521DA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345404AbiEJPM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S243264AbiEJPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346080AbiEJPLt (ORCPT
+        with ESMTP id S1346125AbiEJPLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:11:49 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A8125BA46
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:44:59 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x88so4521105pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=J+j65+g15fCsV+Woqx6SguatojsTFMU+fypv/4RCtgE=;
-        b=UTKi9sbH4ZRyjDc/7lHYfVs9p+QExxFt9/+sbFXNine0VCZsiYBonNCzQr9PVXDNu9
-         QWx7xX/dW3O0HVOK8KbAOsU0vj7r1WZj64aBaM42JQrWhvHplMFMlet/XWgeCe+fBX1M
-         5/obDfisv/+8zQrzGAaXXgJovXZmvJPru63YyrKVxAY/He8u9DhzcDaIfLqwezGoPfCs
-         Mt1bVCF6ZEdokq17J2DgC5oXLJTxjhB6jqeQ4DlifycFKhjIQ/WvF6CK0l2BQKFhniHg
-         KnklIDO0Qq3yf1Y46nZtjYBZ9wcmnYlIZO62+aWAcG+vWvJbv9+tNUccgFmHuE7mM/hB
-         pWow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=J+j65+g15fCsV+Woqx6SguatojsTFMU+fypv/4RCtgE=;
-        b=W3KBHT54SsNKPQTL5762lgULicn9vaZftaHddHi/eY/uKj1AKMdhUMvOzPMzb1LFUe
-         O5w/ZIXDAXzXz9msBVSj1a+7UGAIMQ5SqeMs76RRGdjprIKrFTGpVvCsxVX3Hqozgia2
-         PrP4qu2fwqmmgRcQEffQTkQbP69HUuRhedq2tYURzd1kCxdmo6oLNmZ0UmMMH0hmwaDc
-         WogNEi6f6Zq3rqr60MYONDQlk1lSi+ZiR9d0aCaQU15p+bKZhNaRVkGKFiB/AmHyoHeq
-         As2oGejjwU4EpEuXJU9m3DV/3NFEJQZ/z1HoS4lFtI4U8foHQHqg5Y73r1Os346F4JqC
-         Hmzg==
-X-Gm-Message-State: AOAM533ZSSxcd/fpia4mDR2ojlBmOYR1jHMoZv0C7WeniuN6U4UdeO7A
-        c5BZ2dy5faxCx8PrkgkewixgNg==
-X-Google-Smtp-Source: ABdhPJzNdRCklFLDmwhjIZK4nIKrvpEW7TlAilVB41p7zRwaLd6gMiqaPsg66tubxXerZRc5n5Z5XA==
-X-Received: by 2002:a17:903:2312:b0:15e:a6c8:a313 with SMTP id d18-20020a170903231200b0015ea6c8a313mr20952499plh.122.1652193898495;
-        Tue, 10 May 2022 07:44:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k22-20020a170902761600b0015e8d4eb1d4sm2181590pll.30.2022.05.10.07.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 07:44:57 -0700 (PDT)
-Date:   Tue, 10 May 2022 14:44:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <Ynp6ZoQUwtlWPI0Z@google.com>
-References: <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
- <YmxKqpWFvdUv+GwJ@google.com>
- <YmxRnwSUBIkOIjLA@zn.tnic>
- <Ymxf2Jnmz5y4CHFN@google.com>
- <YmxlHBsxcIy8uYaB@zn.tnic>
- <YmxzdAbzJkvjXSAU@google.com>
- <Ym0GcKhPZxkcMCYp@zn.tnic>
- <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
- <Ym1fGZIs6K7T6h3n@zn.tnic>
+        Tue, 10 May 2022 11:11:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678342AC0F1;
+        Tue, 10 May 2022 07:45:19 -0700 (PDT)
+Date:   Tue, 10 May 2022 16:45:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652193917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5blkjIedYuMCiqErNt15Eq65xE+zoCnwsx/3F3fRUQ8=;
+        b=jXszJivvNglB8FP/v3gF3KwlzVs0dDzDmH1/cWD/Zy3cdPLh9I8DjDJZwprPIV+P5jvzEy
+        xm+NGj8oUdQNAZGcrqWTv4+neGmzcCMwyZpJhgDdsnp3X47Bxugq4OqnvDph5Ou9eoljOV
+        F5QRTSDBnFjkgu+fzG9vgfqcLk12/M5XMTw4w1QxaO+zx7VQrXVM60oYxGyY6ITBPiT7ac
+        X24VJanYpx8dmh0ZkIwdpqKtmklxkZcMhQI5I/wl1fPsXGuJ53yqFGI+NNUIdzm3labKWi
+        i3ZmLr8IwHR0bm+cqlY+0APMFY4+8Y7wrVxqNJZzyIWu0C03zqnS4fGAvBt77Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652193917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5blkjIedYuMCiqErNt15Eq65xE+zoCnwsx/3F3fRUQ8=;
+        b=WEzshOP+DtQxpnpyZIVwNRSJAbEcKHWL7ofcB9TlTU5e8NmlPVtxeVq23+5gqbxWlEHFC3
+        1TYWJVUuC1RJKMCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
+Message-ID: <Ynp6fP8QkIGvUT1T@linutronix.de>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+ <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <20220510141119.GA23277@redhat.com>
+ <87lev9xy3n.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ym1fGZIs6K7T6h3n@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <87lev9xy3n.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022, Borislav Petkov wrote:
-> On Sat, Apr 30, 2022 at 02:50:35PM +0000, Jon Kohler wrote:
-> > This is 100% a fair ask, I appreciate the diligence, as we’ve all been there
-> > on the ‘other side’ of changes to complex areas and spend hours digging on
-> > git history, LKML threads, SDM/APM, and other sources trying to derive
-> > why the heck something is the way it is.
+On 2022-05-10 09:26:36 [-0500], Eric W. Biederman wrote:
+> Does anyone else have any comments on this patchset?
 > 
-> Yap, that's basically proving my point and why I want stuff to be
-> properly documented so that the question "why was it done this way" can
-> always be answered satisfactorily.
-> 
-> > AFAIK, the KVM IBPB is avoided when switching in between vCPUs
-> > belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
-> > have one VM highly oversubscribed to the host and you wouldn’t see
-> > either the KVM IBPB or the switch_mm IBPB. All good. 
-> > 
-> > Reference vmx_vcpu_load_vmcs() and svm_vcpu_load() and the 
-> > conditionals prior to the barrier.
-> 
-> So this is where something's still missing.
-> 
-> > However, the pain ramps up when you have a bunch of separate guests,
-> > especially with a small amount of vCPUs per guest, so the switching is more
-> > likely to be in between completely separate guests.
-> 
-> If the guests are completely separate, then it should fall into the
-> switch_mm() case.
-> 
-> Unless it has something to do with, as I looked at the SVM side of
-> things, the VMCBs:
-> 
-> 	if (sd->current_vmcb != svm->vmcb) {
-> 
-> So it is not only different guests but also within the same guest and
-> when the VMCB of the vCPU is not the current one.
+> If not I am going to apply this to a branch and get it into linux-next.
 
-Yep.
+Looks good I guess.
+Be aware that there will be clash due to
+   https://lore.kernel.org/all/1649240981-11024-3-git-send-email-yangtiezhu@loongson.cn/
 
-> But then if VMCB of the vCPU is not the current, per-CPU VMCB, then that
-> CPU ran another guest so in order for that other guest to attack the
-> current guest, then its branch pred should be flushed.
+which sits currently in -akpm.
 
-That CPU ran a different _vCPU_, whether or not it ran a different guest, i.e. a
-different security domain, is unknown.
+> Eric
 
-> But I'm likely missing a virt aspect here so I'd let Sean explain what
-> the rules are...
-
-I don't think you're missing anything.  I think the original 15d45071523d ("KVM/x86:
-Add IBPB support") was simply wrong.
-
-As I see it:
-
-  1. If the vCPUs belong to the same VM, they are in the same security domain and
-     do not need an IPBP.
-
-  2. If the vCPUs belong to different VMs, and each VM is in its own mm_struct,
-     defer to switch_mm_irqs_off() to handle IBPB as an mm switch is guaranteed to
-     occur prior to loading a vCPU belonging to a different VMs.
- 
-  3. If the vCPUs belong to different VMs, but multiple VMs share an mm_struct,
-     then the security benefits of an IBPB when switching vCPUs are dubious, at best.
-
-If we only consider #1 and #2, then KVM doesn't need an IBPB, period.
-
-#3 is the only one that's a grey area.  I have no objection to omitting IBPB entirely
-even in that case, because none of us can identify any tangible value in doing so.
+Sebastian

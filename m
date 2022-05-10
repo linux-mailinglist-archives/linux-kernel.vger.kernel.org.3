@@ -2,174 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F2A520EA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1AE520E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237660AbiEJHiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S236391AbiEJHiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239476AbiEJHOH (ORCPT
+        with ESMTP id S239892AbiEJHQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:14:07 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7552AC6FB;
-        Tue, 10 May 2022 00:10:10 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q76so13901752pgq.10;
-        Tue, 10 May 2022 00:10:10 -0700 (PDT)
+        Tue, 10 May 2022 03:16:46 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2077.outbound.protection.outlook.com [40.107.223.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F92992C1;
+        Tue, 10 May 2022 00:12:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MhdpyCfjyqKhYfosZuHv3zjOBoPmFYoeG8MD9sGA2YM8Xw5WtoU7Kjaf11+4QGiHgpu9aoEystl2z2AUCW/VSbpQ3LytnlDXRnjmejj7F+cIau/2wJHjgmvlYQ/yJ2ojb/0bxw6kPOpXkKJhRXR/IcJAbhXVsIEVjDQN9ykQN5LHUvqdqdCFTRYUqy24Zksle3qvAghpVzDZfilC8z98LjAzVXBssQm4lvY8Qgxal7J//fTVWUc9YCWkkvVqayl9kkRMmKU3pfcuOzDoef0/TCgMFn+4rrmK7rf4q4vA3qQOB0euS6hD2Se7DhQ6SxOy8auOOdAyxqYQTzdMuJKZmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q6UhZ9Ju+sKS2B4lmecY5o11lTjBi9rrYVWUyX5lQnY=;
+ b=lih4A3FuaPRlp8ouAEtfcZPgejvXErLvr3A9X5k/JMvclyarO9rmZ/JD8X1Fw2DceAaIQV+jjvFs0oR74RvwoKkVJJ43Q+d9AKs6GJAw/JtWjvvzG0BJcN203FDuu19lZw07j+DtYlcIgCA2rJ3ypLMSLp0ben35rzl0CtEx7v++n3rOZUVBIpsyGCBD7Uo7zHAjb0X1jz99pXzvEdTGVYGMcE6bsDu4Zd9vRT85JW+4MPkPt0MUJaLZmaCIYIpI5qLFM5VYwy7BM0q+aQrJym214JNoWZMrhkZPpMCAfpK3S9cUviPHAQNF3UwuRBY7A098gYaAeQ+UQgeJhFizVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nvBw6OQsd3gRusg0t9ALo2OMlbylQpVciIeUsEY5H/4=;
-        b=T+qFWTxO629LWZdJnJq3bp3CM+liSSrAY3WpNo7uZbfNlwaOh63g7Z/odA38bzDoFM
-         /mAt6v//a/cX1ea2lWReLCxd5d/34TeqOh9HqUa/YqEhdj1Booh/dap+NfTO9w40rqeO
-         mTRnITr8cjT/8u36hwtU4CT31maq1xLM/35YvFUPCLXp/BUaovTPITiaMl23+CFQPRrb
-         j/vJlhg4RakjtzcdAtBxJNvIW6KzG4oV/qCnVUJMfoZU3IO39O1xK2mJ5KRuxD5ZwW5c
-         X7bjIEeup9pJjVH682ylswV6vilws/ZGLMYfAXFhfmLll1/lZUdW/SWZDcOyjxe474aJ
-         zrPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nvBw6OQsd3gRusg0t9ALo2OMlbylQpVciIeUsEY5H/4=;
-        b=WDxYrzAsWbF46rXekEKxaRdAXEF1YDxbftaW6kPdUhZ56qPwB26Tg+AXRc+FTiUjwy
-         rVvwGcFoY4x/p3j00f3ikpTTmOm6jdYyF+iDbrnb0+Ta8FSY6YxC6lYlWEzi0p0Roq2p
-         Cu/iK2fauI0BWmDFpJs3jUz2zJRgxtjc9HNU9OAV3IlRwfNRCFvIaZmioNquIHfuV8G1
-         0yfOuWOkEywBwpetjfDXmczF3gWEP5MvB/hukULVbir5aJtnZovSgfYdd0WTjHwDkapL
-         bmRpr+O6j3SaRBfne4ecjgIeWgruYxMjLQSc09Op4NYPLBu76C+YAfGEceefYD7ADli2
-         wigA==
-X-Gm-Message-State: AOAM532TZMcm5e9961QaBLoefthVdYfgDa6OIsmy+50YQeCEz2auLYyf
-        Is5sng+BqSfD6/eVvfTl3ln118ZY5R0Tv3zvZUs=
-X-Google-Smtp-Source: ABdhPJy3De2SOHraFvRmY+AxMAyt6ksdN+tsXD6BFVR4apRpDurzUoFx16dt1LXeTwflcMvHCKvNeA==
-X-Received: by 2002:a63:cc4f:0:b0:3c5:fc22:f6a with SMTP id q15-20020a63cc4f000000b003c5fc220f6amr15904329pgi.67.1652166610010;
-        Tue, 10 May 2022 00:10:10 -0700 (PDT)
-Received: from localhost.localdomain ([125.131.156.123])
-        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e2sm1105666plh.300.2022.05.10.00.10.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 00:10:09 -0700 (PDT)
-From:   Wonhyuk Yang <vvghjk1234@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Baik Song An <bsahn@etri.re.kr>,
-        Hong Yeon Kim <kimhy@etri.re.kr>,
-        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: Add extra information in kvm_page_fault trace point
-Date:   Tue, 10 May 2022 16:10:00 +0900
-Message-Id: <20220510071001.87169-1-vvghjk1234@gmail.com>
-X-Mailer: git-send-email 2.30.2
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q6UhZ9Ju+sKS2B4lmecY5o11lTjBi9rrYVWUyX5lQnY=;
+ b=cKNIvU5WWhKLodWhET1jA0P2rs6n2ma0NcoDuDdxcYenWUhwWfcKOtnUFFLowVfeYpvAuzZ50e5tbmqFoPhluP1dIz84iEKY4g0JfDnjMmPA6PFCDgWtMXh/Z9NYbIQpxnbQErZAhCPPyAH9o49B3W2gGxpRldyK4DN3MMKePg0=
+Received: from DM6PR13CA0070.namprd13.prod.outlook.com (2603:10b6:5:134::47)
+ by CY4PR02MB2600.namprd02.prod.outlook.com (2603:10b6:903:72::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Tue, 10 May
+ 2022 07:12:47 +0000
+Received: from DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:134:cafe::f3) by DM6PR13CA0070.outlook.office365.com
+ (2603:10b6:5:134::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
+ Transport; Tue, 10 May 2022 07:12:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT033.mail.protection.outlook.com (10.13.4.101) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Tue, 10 May 2022 07:12:47 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 10 May 2022 00:12:45 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 10 May 2022 00:12:45 -0700
+Envelope-to: git@xilinx.com,
+ vkoul@kernel.org,
+ dmaengine@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.23.64.6] (port=41364 helo=xhdvnc106.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <radhey.shyam.pandey@xilinx.com>)
+        id 1noK33-000CbH-Bj; Tue, 10 May 2022 00:12:45 -0700
+Received: by xhdvnc106.xilinx.com (Postfix, from userid 13245)
+        id 8DA5961070; Tue, 10 May 2022 12:42:44 +0530 (IST)
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+To:     <vkoul@kernel.org>
+CC:     <michal.simek@xilinx.com>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH 0/3] dmaengine: zynqmp_dma: coverity fixes
+Date:   Tue, 10 May 2022 12:42:39 +0530
+Message-ID: <1652166762-18317-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 028fab54-099a-40d2-ceaf-08da32547cbb
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2600:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR02MB26002020F508148085014BD1C7C99@CY4PR02MB2600.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 93JcVE7Nv2svm0crjGGEqM3QvWeKQjwYxa/z7cxUMahnOPYY3RVXfgZ5XwzcqIMdOyIDasH12kIlqKf8wwkznGfhiEyKCe1dkjrWtkoOpwo/fwQltUup0dGI6ySWNuPNDDI4nOFRIiM/lcYY4ykL6uhlbuP5AsWhEHl/QW7s1kEGAHfefKFYPbhFJv/BaDgO5XPd8s+VAjorTlGNR/fw5kJjGmHV5SdTpOavF6inboga8NAOIr/dnEvFS00vEiENzTk3JTSzKRZdFX0mSuIOw9jnuyYYZgjO6o7s1pVJa6YRpV7yCCUeejOMBVydlvmtemfQjs0UEEp1tF601NdXVxppUph9wJlC1L5Jm9WSsiKNab+gJFr1Tbtzhn61ZRObxrpL/TjKIOnXijb9eBe/P3SdeZRErf09H7kPvM2reID4PuMEUN992AkV5I/jYfdnc89bzb2pRHwXcCVsN3TySjkWl45DqPcaDTBmKlHR3rkf/N3rmNCFrFzAbLk13i2o7L7ARWLAWFv9YYeWthVSd5RImPAuElvGZGg+ICZ9NXf87dw+ALuhzz0s85WRB3rJXDhIdXCFGnuBkk7Ujr54RCJ9BoKxRcJuzAezztor4XK+BNcougANbw9YAPsWVo4I2h+2eQPFWJEMgs18iCpRpzVDXG2vkvHvIgSN8K3XxJ2YbOBDm/mVSntpB1Wv+JVAXBpu6oTDULJqnpRu7ZaBKA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(42186006)(83380400001)(40460700003)(2616005)(186003)(6916009)(54906003)(107886003)(26005)(356005)(508600001)(6266002)(336012)(6666004)(426003)(7636003)(316002)(47076005)(8936002)(2906002)(36860700001)(36756003)(82310400005)(8676002)(70206006)(70586007)(4326008)(4744005)(5660300002)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 07:12:47.6733
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 028fab54-099a-40d2-ceaf-08da32547cbb
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT033.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2600
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, kvm_page_fault trace point provide fault_address and error
-code. However it is not enough to find which cpu and instruction
-cause kvm_page_faults. So add vcpu id and instruction pointer in
-kvm_page_fault trace point.
+This patchset addresses coverity issues reported on zynqmp dma driver.
 
-Cc: Baik Song An <bsahn@etri.re.kr>
-Cc: Hong Yeon Kim <kimhy@etri.re.kr>
-Cc: Taeung Song <taeung@reallinux.co.kr>
-Cc: linuxgeek@linuxgeek.io
-Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
----
- arch/x86/kvm/mmu/mmu.c |  2 +-
- arch/x86/kvm/svm/svm.c |  2 +-
- arch/x86/kvm/trace.h   | 12 +++++++++---
- arch/x86/kvm/vmx/vmx.c |  2 +-
- 4 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 311e4e1d7870..b9421060efa8 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4080,7 +4080,7 @@ int kvm_handle_page_fault(struct kvm_vcpu *vcpu, u64 error_code,
- 
- 	vcpu->arch.l1tf_flush_l1d = true;
- 	if (!flags) {
--		trace_kvm_page_fault(fault_address, error_code);
-+		trace_kvm_page_fault(vcpu, fault_address, error_code);
- 
- 		if (kvm_event_needs_reinjection(vcpu))
- 			kvm_mmu_unprotect_page_virt(vcpu, fault_address);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7e45d03cd018..9741cfbf47a4 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1784,7 +1784,7 @@ static int npf_interception(struct kvm_vcpu *vcpu)
- 	u64 fault_address = svm->vmcb->control.exit_info_2;
- 	u64 error_code = svm->vmcb->control.exit_info_1;
- 
--	trace_kvm_page_fault(fault_address, error_code);
-+	trace_kvm_page_fault(vcpu, fault_address, error_code);
- 	return kvm_mmu_page_fault(vcpu, fault_address, error_code,
- 			static_cpu_has(X86_FEATURE_DECODEASSISTS) ?
- 			svm->vmcb->control.insn_bytes : NULL,
-diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-index e3a24b8f04be..78d20d392904 100644
---- a/arch/x86/kvm/trace.h
-+++ b/arch/x86/kvm/trace.h
-@@ -383,20 +383,26 @@ TRACE_EVENT(kvm_inj_exception,
-  * Tracepoint for page fault.
-  */
- TRACE_EVENT(kvm_page_fault,
--	TP_PROTO(unsigned long fault_address, unsigned int error_code),
--	TP_ARGS(fault_address, error_code),
-+	TP_PROTO(struct kvm_vcpu *vcpu, unsigned long fault_address,
-+		 unsigned int error_code),
-+	TP_ARGS(vcpu, fault_address, error_code),
- 
- 	TP_STRUCT__entry(
-+		__field(	unsigned int,	vcpu_id		)
-+		__field(	unsigned long,	guest_rip	)
- 		__field(	unsigned long,	fault_address	)
- 		__field(	unsigned int,	error_code	)
- 	),
- 
- 	TP_fast_assign(
-+		__entry->vcpu_id	= vcpu->vcpu_id;
-+		__entry->guest_rip	= kvm_rip_read(vcpu);
- 		__entry->fault_address	= fault_address;
- 		__entry->error_code	= error_code;
- 	),
- 
--	TP_printk("address %lx error_code %x",
-+	TP_printk("vcpu %u rip 0x%lx address 0x%lx error_code %x",
-+		  __entry->vcpu_id, __entry->guest_rip,
- 		  __entry->fault_address, __entry->error_code)
- );
- 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 610355b9ccce..0f1edd02b68b 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5398,7 +5398,7 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
- 		vmcs_set_bits(GUEST_INTERRUPTIBILITY_INFO, GUEST_INTR_STATE_NMI);
- 
- 	gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
--	trace_kvm_page_fault(gpa, exit_qualification);
-+	trace_kvm_page_fault(vcpu, gpa, exit_qualification);
- 
- 	/* Is it a read fault? */
- 	error_code = (exit_qualification & EPT_VIOLATION_ACC_READ)
+Radhey Shyam Pandey (2):
+  dmaengine: zynqmp_dma: In struct zynqmp_dma_chan fix desc_size data
+    type
+  dmaengine: zynqmp_dma: use pm_runtime_resume_and_get() instead of
+    pm_runtime_get_sync()
+
+Shravya Kumbham (1):
+  dmaengine: zynqmp_dma: check dma_async_device_register return value
+
+ drivers/dma/xilinx/zynqmp_dma.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
 -- 
-2.30.2
+2.25.1
 

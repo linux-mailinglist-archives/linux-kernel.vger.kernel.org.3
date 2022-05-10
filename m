@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA2A521604
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69675215FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242040AbiEJM6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S242157AbiEJM44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242264AbiEJM4i (ORCPT
+        with ESMTP id S242099AbiEJM4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:56:38 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE8F2AD8
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652187160; x=1683723160;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bm2lo75Y8U82TesofbKiy9P6Lga824nihfJpemUvpXg=;
-  b=aHIs8dwOY6EpJbA5A0SyRTfpbarrzivwuMDyJqFpV5eonAqlaVCikTjh
-   uw0S2rSpwHbvI+tYqW0HyssYlEOzpZbq0iK20dj4rUSc8EqGP0y3pl5TA
-   lYAz5WRv3M8eAqfi4hVESa0/mLg8Lzoji1VVv6eQQ8xGjkKgCEeASk1e6
-   MZ3X3LJ6qniW6416Rpno6uIGiv6Vp7N6E7lSRAaJjnU361hK+1SX0iE9u
-   8DD7TH3AFSPAdVnEQxlSUCvI6SuviXm5JD7tCweQ9PZleJUEugyncEStm
-   lMvqTbg+mz00OYDGpbNmSVz9Io6FOO05va1b5N+ZAYSDvWJNt9n1aigTa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268203012"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="268203012"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 05:52:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="711005142"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 May 2022 05:52:38 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noPLy-000Hu2-3E;
-        Tue, 10 May 2022 12:52:38 +0000
-Date:   Tue, 10 May 2022 20:52:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 338/431] mm/nommu.c:579:2: error: call to
- undeclared function 'vma_mas_store'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202205102024.jnJMagOr-lkp@intel.com>
+        Tue, 10 May 2022 08:56:55 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B813C369;
+        Tue, 10 May 2022 05:52:57 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id be20so19852959edb.12;
+        Tue, 10 May 2022 05:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WI1zTOfSIg5efVZfyvBSsp8//tfBd0cdczBSSxTFZbM=;
+        b=M0XRCTZL5/OCjpLOp6VQQC7z0Re+F/RgmF1UukIrioiMykPB0R7Aj13djyzrg2StTD
+         VJDOyuKku0W+egHu+VrN33KttIt3d5+iHhTH3n/5IAmZek52mv17Dg1VcM7yXoyQttmc
+         /ZZ+3qIfmL178zYSJkv8X3S0uvoLXDPUu45142K201/sJhbuvvpMuTRzgyPc3YuIXza6
+         wIiYACOsi0KOPM/2POCEvOByBujP9Syuh5km2bLbH4e9CB0SYHbUVAnBIqvgA0oOQTmr
+         7gOt+5bvgMYuCV5wk35z/SUzp8lENBLwnQYKgIQPJW4nLEsiPn9P1pvj2F4NPM8pdkaE
+         AsOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WI1zTOfSIg5efVZfyvBSsp8//tfBd0cdczBSSxTFZbM=;
+        b=FKhywKOKz1HqzsTMQZM9rD9uW/qR8sBICi+Xb6Wu1sj2YCW8ef4SfcUuK/T7+/4TV2
+         bqw0w/4sKdHjfY5772fhSWUOHkGNoO6flJDNX6TYT76e3FGkT0g6mpT78Dx6dpHp9Iu1
+         4ep6XZzJ7lV32Sq1bvXNY/tpMkUD+sYUI62ei/OgfJYD2u1Hd+er45d5s5TbrEKGG6Xa
+         RfhtPmxyuRGVGx9WSFG0mDAqbnTX62XXnhHaJMukL5sFMdqWJ75oPWIzveeoAplC4eov
+         6+60CGG9Wzhka10HtW0qsoqUI9VxBOnYhGS5+7aitXSiwy6nuoMnBD5J3ZBWVbF0ysPe
+         /e5Q==
+X-Gm-Message-State: AOAM530egDNV37vRdiKKEBbsOPDJ07Mn8yW7uUGQUq5lzZOfAjA/R2HQ
+        smgkw5yXBp9ctMr61nEXp9Q=
+X-Google-Smtp-Source: ABdhPJyN5CN/JhTtUeKUlijPnHsp542eYOzriocQW2nzKpv+Am+UGABpfo9csh4/XMFj0hFFENFGfA==
+X-Received: by 2002:a50:ce14:0:b0:425:cb75:5322 with SMTP id y20-20020a50ce14000000b00425cb755322mr23429940edi.386.1652187176341;
+        Tue, 10 May 2022 05:52:56 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:616c:3555:9eac:59cc? ([2a02:908:1256:79a0:616c:3555:9eac:59cc])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170906284300b006f3ef214df2sm6096680ejc.88.2022.05.10.05.52.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 05:52:55 -0700 (PDT)
+Message-ID: <ae249cf7-7367-d3c2-60e5-7bfab6e3ef73@gmail.com>
+Date:   Tue, 10 May 2022 14:52:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dmabuf: ensure unique directory name
+ for dmabuf stats
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        sumit.semwal@linaro.org, tjmercier@google.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <1652178212-22383-1-git-send-email-quic_charante@quicinc.com>
+ <YnpF1XP1tH83uBlM@kroah.com> <039e1acc-8688-2e06-1b2a-1acbe813b91e@amd.com>
+ <YnpWNSdAQzG80keQ@kroah.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YnpWNSdAQzG80keQ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,117 +80,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   584a50635cc1deee2eeab5a17dfdcf9db7add21b
-commit: a245f2ec995564195c1956813ff4fee7a894f099 [338/431] mm: remove rb tree.
-config: arm-randconfig-r012-20220509 (https://download.01.org/0day-ci/archive/20220510/202205102024.jnJMagOr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=a245f2ec995564195c1956813ff4fee7a894f099
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout a245f2ec995564195c1956813ff4fee7a894f099
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Am 10.05.22 um 14:10 schrieb Greg KH:
+> On Tue, May 10, 2022 at 01:35:41PM +0200, Christian König wrote:
+>> Am 10.05.22 um 13:00 schrieb Greg KH:
+>>> On Tue, May 10, 2022 at 03:53:32PM +0530, Charan Teja Kalla wrote:
+>>>> The dmabuf file uses get_next_ino()(through dma_buf_getfile() ->
+>>>> alloc_anon_inode()) to get an inode number and uses the same as a
+>>>> directory name under /sys/kernel/dmabuf/buffers/<ino>. This directory is
+>>>> used to collect the dmabuf stats and it is created through
+>>>> dma_buf_stats_setup(). At current, failure to create this directory
+>>>> entry can make the dma_buf_export() to fail.
+>>>>
+>>>> Now, as the get_next_ino() can definitely give a repetitive inode no
+>>>> causing the directory entry creation to fail with -EEXIST. This is a
+>>>> problem on the systems where dmabuf stats functionality is enabled on
+>>>> the production builds can make the dma_buf_export(), though the dmabuf
+>>>> memory is allocated successfully, to fail just because it couldn't
+>>>> create stats entry.
+>>> Then maybe we should not fail the creation path of the kobject fails to
+>>> be created?  It's just for debugging, it should be fine if the creation
+>>> of it isn't there.
+>> Well if it's just for debugging then it should be under debugfs and not
+>> sysfs.
+> I'll note that the original patch series for this described why this was
+> moved from debugfs to sysfs.
+>
+>>>> This issue we are able to see on the snapdragon system within 13 days
+>>>> where there already exists a directory with inode no "122602" so
+>>>> dma_buf_stats_setup() failed with -EEXIST as it is trying to create
+>>>> the same directory entry.
+>>>>
+>>>> To make the directory entry as unique, append the inode creation time to
+>>>> the inode. With this change the stats directory entries will be in the
+>>>> format of: /sys/kernel/dmabuf/buffers/<inode no>-<inode creation time in
+>>>> secs>.
+>>> As you are changing the format here, shouldn't the Documentation/ABI/
+>>> entry for this also be changed?
+>> As far as I can see that is even an UAPI break, not sure if we can allow
+>> that.
+> Why?  Device names change all the time and should never be static.  A
+> buffer name should just be a unique identifier in that directory, that's
+> all.  No rules on the formatting of it unless for some reason the name
+> being the inode number was somehow being used in userspace for that
+> number?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My impression was that we documented that should have been a number, but 
+I might be wrong on this. And if it's not documented to be a number, I 
+think it should be.
 
-All errors (new ones prefixed by >>):
+The background is that you probably need to associate the DMA-buf with 
+some userspace structure for accounting and that becomes easier when you 
+can just put them into a radix.
 
->> mm/nommu.c:579:2: error: call to undeclared function 'vma_mas_store'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vma_mas_store(vma, &mas);
-           ^
-   mm/nommu.c:579:2: note: did you mean 'mas_store'?
-   include/linux/maple_tree.h:454:7: note: 'mas_store' declared here
-   void *mas_store(struct ma_state *mas, void *entry);
-         ^
->> mm/nommu.c:615:2: error: call to undeclared function 'vma_mas_remove'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vma_mas_remove(vma, &mas);
-           ^
-   2 errors generated.
+Regards,
+Christian.
 
+>
+> thanks,
+>
+> greg k-h
+> _______________________________________________
+> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
 
-vim +/vma_mas_store +579 mm/nommu.c
-
-   547	
-   548	/*
-   549	 * add a VMA into a process's mm_struct in the appropriate place in the list
-   550	 * and tree and add to the address space's page tree also if not an anonymous
-   551	 * page
-   552	 * - should be called with mm->mmap_lock held writelocked
-   553	 */
-   554	static void add_vma_to_mm(struct mm_struct *mm, struct vm_area_struct *vma)
-   555	{
-   556		struct address_space *mapping;
-   557		struct vm_area_struct *prev;
-   558		MA_STATE(mas, &mm->mm_mt, vma->vm_start, vma->vm_end);
-   559	
-   560		BUG_ON(!vma->vm_region);
-   561	
-   562		mm->map_count++;
-   563		vma->vm_mm = mm;
-   564	
-   565		/* add the VMA to the mapping */
-   566		if (vma->vm_file) {
-   567			mapping = vma->vm_file->f_mapping;
-   568	
-   569			i_mmap_lock_write(mapping);
-   570			flush_dcache_mmap_lock(mapping);
-   571			vma_interval_tree_insert(vma, &mapping->i_mmap);
-   572			flush_dcache_mmap_unlock(mapping);
-   573			i_mmap_unlock_write(mapping);
-   574		}
-   575	
-   576		prev = mas_prev(&mas, 0);
-   577		mas_reset(&mas);
-   578		/* add the VMA to the tree */
- > 579		vma_mas_store(vma, &mas);
-   580		__vma_link_list(mm, vma, prev);
-   581	}
-   582	
-   583	/*
-   584	 * delete a VMA from its owning mm_struct and address space
-   585	 */
-   586	static void delete_vma_from_mm(struct vm_area_struct *vma)
-   587	{
-   588		int i;
-   589		struct address_space *mapping;
-   590		struct mm_struct *mm = vma->vm_mm;
-   591		struct task_struct *curr = current;
-   592		MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
-   593	
-   594		mm->map_count--;
-   595		for (i = 0; i < VMACACHE_SIZE; i++) {
-   596			/* if the vma is cached, invalidate the entire cache */
-   597			if (curr->vmacache.vmas[i] == vma) {
-   598				vmacache_invalidate(mm);
-   599				break;
-   600			}
-   601		}
-   602	
-   603		/* remove the VMA from the mapping */
-   604		if (vma->vm_file) {
-   605			mapping = vma->vm_file->f_mapping;
-   606	
-   607			i_mmap_lock_write(mapping);
-   608			flush_dcache_mmap_lock(mapping);
-   609			vma_interval_tree_remove(vma, &mapping->i_mmap);
-   610			flush_dcache_mmap_unlock(mapping);
-   611			i_mmap_unlock_write(mapping);
-   612		}
-   613	
-   614		/* remove from the MM's tree and list */
- > 615		vma_mas_remove(vma, &mas);
-   616		__vma_unlink_list(mm, vma);
-   617	}
-   618	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

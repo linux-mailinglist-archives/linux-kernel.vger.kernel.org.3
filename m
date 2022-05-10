@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8325211AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD005211AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbiEJKIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S239497AbiEJKJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237339AbiEJKIm (ORCPT
+        with ESMTP id S239476AbiEJKJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:08:42 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FAC1DB585
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:04:45 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id a10so517698ioe.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=vjJ/DPgH5OA8A+lItdmXvfVjesRSStJY4gQ0upgp36A=;
-        b=Dvb3+l2dOcBJa7de2OMoWNS/oOovHKNWDiART07JN04YL1eI9u3r/Vn2Yk0/0Dhuo4
-         ejZOuHy46axmH8Xy23UNfudpJpdoRRCNGDhBkjHBvZvDcZl/5tJsAXqeRihg4Mzyasmz
-         WIiUQVJB8BsLV8Hgs9+SjX1/UqIvm3jM0Gi8vQbBUvMHdTG05LS3CaNvcj3Dq9FSe9xy
-         pw7rG08WF92cvRg17MuCSxpntL/eYgPOUVbhOEcV4gfHnhaX0niPItbb7X5I4xokas01
-         UuRc2l4C530nvs1+rXIjU6iIvFmxhkfpFsBYbE9o2vmpzQ21OcAfGqVP1erRtG4ZtZed
-         RNYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=vjJ/DPgH5OA8A+lItdmXvfVjesRSStJY4gQ0upgp36A=;
-        b=prNEyCgSoOLjDu8AyzOa2oY6M6sVxzg4YoPF7wpw4f6UzKyOiu3HGLJdA/0QNFkLcY
-         LasqLzVZ34aeBISO1yHWlmOvCWmZdNq9Mmn0KvyXHeoeT0xrhYOdEhB44diKg7h/UTQJ
-         962EdKnHzDRux9rffDhgu1yWjk5kRAH9LZE2gfXr20nftLGzC40UHON4vZD8/N/pMPqR
-         M1SnmUENMyvweHnbOnjVootA2RI6qc2LYgOzXjhlCg/kRld6D563E/25+yHGrnAMJmxr
-         xj245Lg4hrtImCo5i4uxr+zLLfauWWIwXGBkM1YOypj0SFzLgm4ygoazQinmEB+SCqad
-         zK1A==
-X-Gm-Message-State: AOAM5326t/XOWyPN3vq5ScfRg5DQKIRf0nC4kKHBDbT7BhZj5njq09CI
-        SZgKEosqJV81Z4lCGoLczaK1q27ntRmrYRLc15I=
-X-Google-Smtp-Source: ABdhPJzN4dorZFX4EYBFEEtTxl/ghge+4imOU6I4uS5NPI+ADFzwzb3+p0YHRGy+qM0BYyWa2gVnLC7PcvkrCQUkbrI=
-X-Received: by 2002:a02:a06:0:b0:32d:c5ea:58bd with SMTP id
- 6-20020a020a06000000b0032dc5ea58bdmr545613jaw.163.1652177084442; Tue, 10 May
- 2022 03:04:44 -0700 (PDT)
+        Tue, 10 May 2022 06:09:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718611DB585;
+        Tue, 10 May 2022 03:05:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2033AB81C25;
+        Tue, 10 May 2022 10:05:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A90C385C6;
+        Tue, 10 May 2022 10:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652177104;
+        bh=MOo8nsiLJfqxrIWRjZulpDT7AErX6Kq8hkthnCTA5uU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jy9sOx5IhAIDejPVKVF2+Bd/T0Py/5wx8+Po+Ecv0CR8BCrEvcq4NXAPEFAm802Ty
+         8cRLHqys6IkXu4/djRBMoMkQByyOaFyW7LcnB56PnnqYCrewDk0t6vAPt0ilmAqrP9
+         bNMqa/zDBvxt0x7TuFwji5mwsLRZamsLaTtuQqGt1cN7zj1bUdASCaiZelDL/z3VNI
+         p6Pj8oL0tYCYRKw+uLngJYl8jq0JkOQqTFSh+zQdDgfqqYgwiiEl9uEIIUab3OLN22
+         s6YnDdfn2O6lVXVwCwlbEjUqg8hcgBeNsxeTbQ0nkjXTKMo0wGcRneJRpqWIfMrr3l
+         ymPB75JvnFwsw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1noMjm-00ACgV-4r; Tue, 10 May 2022 11:05:02 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     kvmarm@lists.cs.columbia.edu, Oliver Upton <oupton@google.com>
+Cc:     will@kernel.org, tabba@google.com, qperret@google.com,
+        james.morse@arm.com, alexandru.elisei@arm.com, kvm@vger.kernel.org,
+        suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] KVM: arm64: Minor pKVM cleanups
+Date:   Tue, 10 May 2022 11:04:59 +0100
+Message-Id: <165217709150.1535314.2127016424159834600.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220509162559.2387784-1-oupton@google.com>
+References: <20220509162559.2387784-1-oupton@google.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1ca7:0:0:0:0 with HTTP; Tue, 10 May 2022 03:04:44
- -0700 (PDT)
-Reply-To: qatarfoundationendowment1@gmail.com
-From:   Qatar Foundation Endowment <philiplawrence58@gmail.com>
-Date:   Tue, 10 May 2022 11:04:44 +0100
-Message-ID: <CAKhidwUUqnuOwkbPSXwO29qsNpuGJGRSdFhtBC8U0gN=Qr2ybA@mail.gmail.com>
-Subject: Dear Beneficiary
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DEAR_BENEFICIARY,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d2a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5006]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [qatarfoundationendowment1[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [philiplawrence58[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [philiplawrence58[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 DEAR_BENEFICIARY BODY: Dear Beneficiary:
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kvmarm@lists.cs.columbia.edu, oupton@google.com, will@kernel.org, tabba@google.com, qperret@google.com, james.morse@arm.com, alexandru.elisei@arm.com, kvm@vger.kernel.org, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Beneficiary,
+On Mon, 9 May 2022 16:25:57 +0000, Oliver Upton wrote:
+> I was reading through some of the pKVM stuff to get an idea of how it
+> handles feature registers and spotted a few minor nits.
+> 
+> Applies cleanly to 5.18-rc5.
+> 
+> Oliver Upton (2):
+>   KVM: arm64: pkvm: Drop unnecessary FP/SIMD trap handler
+>   KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
+> 
+> [...]
 
-You have been selected to receive (=E2=82=AC1,000,000.00) from the Qatar
-Foundation, kindly reply back with your full name and address for more
-information;
+Applied to next, thanks!
 
-Regards,
+[1/2] KVM: arm64: pkvm: Drop unnecessary FP/SIMD trap handler
+      commit: 4d2e469e163ec79340b2f42c2a07838b5ff30686
+[2/2] KVM: arm64: pkvm: Don't mask already zeroed FEAT_SVE
+      commit: 249838b7660ac04a67bfb017364a7f01029370a0
 
-Mr. Rashid Al-Naimi.
+Cheers,
 
-Chief Executive Officer of Qatar Foundation Endowment.
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
+

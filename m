@@ -2,97 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EDD521557
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DCD5214EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241684AbiEJM3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S241580AbiEJMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237699AbiEJM3U (ORCPT
+        with ESMTP id S241582AbiEJMPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:29:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A232224685;
-        Tue, 10 May 2022 05:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=0SOHdnZm/qIXaafuGPsWb+8y+0cZMBYOdPMCj5bdxFs=; b=ssUW9aQmsIjXI3QzluEQbxRQ+M
-        cC6kGQGCJDuXvSHWxXW8y1iNfTI+j8Pr2dCPhNVjmV4BapCvHOFAt32KVk6l1fFnJGmLp22dM2BFj
-        8xqPnxzRt9SBMspCfijipgoFeOVo7+KZNQoQVXdxHYgyfhW0FWgkssAKHOFIPiBlpPGQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1noOvO-0028E6-3y; Tue, 10 May 2022 14:25:10 +0200
-Date:   Tue, 10 May 2022 14:25:10 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kael_w@yeah.net
-Subject: Re: [PATCH net] net: phy: mscc: Add error check when __phy_read()
- failed
-Message-ID: <YnpZphRYEZJm/9D6@lunn.ch>
-References: <20220510035458.9804-1-wanjiabing@vivo.com>
+        Tue, 10 May 2022 08:15:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D95933A3A;
+        Tue, 10 May 2022 05:11:57 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyGzl38wHzGpcX;
+        Tue, 10 May 2022 20:09:07 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 20:11:54 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next v2] ext4: fix warning in ext4_handle_inode_extension
+Date:   Tue, 10 May 2022 20:25:45 +0800
+Message-ID: <20220510122545.1770410-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510035458.9804-1-wanjiabing@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:54:56AM +0800, Wan Jiabing wrote:
-> Calling __phy_read() might return a negative error code. Use 'int'
-> to declare variables which call __phy_read() and also add error check
-> for them.
+We got issue as follows:
+EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
+EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
+EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
+EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
+Modules linked in:
+CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
+RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
+RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
+RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
+RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
+RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
+R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
+R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
+FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ do_iter_readv_writev+0x2e5/0x360
+ do_iter_write+0x112/0x4c0
+ do_pwritev+0x1e5/0x390
+ __x64_sys_pwritev2+0x7e/0xa0
+ do_syscall_64+0x37/0x50
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-It would be good to add a comment here:
+Above issue may happen as follows:
+Assume
+inode.i_size=4096
+EXT4_I(inode)->i_disksize=4096
 
-The numerous callers of vsc8584_macsec_phy_read() don't expect it to
-fail. So don't return the error code from __phy_read(), but also don't
-return random values if it does fail.
+step 1: set inode->i_isize = 8192
+ext4_setattr
+  if (attr->ia_size != inode->i_size)
+    EXT4_I(inode)->i_disksize = attr->ia_size;
+    rc = ext4_mark_inode_dirty
+       ext4_reserve_inode_write
+          ext4_get_inode_loc
+            __ext4_get_inode_loc
+              sb_getblk --> return -ENOMEM
+   ...
+   if (!error)  ->will not update i_size
+     i_size_write(inode, attr->ia_size);
+Now:
+inode.i_size=4096
+EXT4_I(inode)->i_disksize=8192
 
-The commit message should try to answer any questions to reviewer
-has. And when i first looked at the change, i thought this is wrong,
-the error code is thrown away. But then i remembers our discussion. So
-it is good to mention that in the commit message.
+step 2: Direct write 4096 bytes
+ext4_file_write_iter
+ ext4_dio_write_iter
+   iomap_dio_rw ->return error
+ if (extend)
+   ext4_handle_inode_extension
+     WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
+->Then trigger warning.
 
-> Fixes: fa164e40c53b ("net: phy: mscc: split the driver into separate files")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/net/phy/mscc/mscc_macsec.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/phy/mscc/mscc_macsec.c b/drivers/net/phy/mscc/mscc_macsec.c
-> index b7b2521c73fb..8a63e32fafa0 100644
-> --- a/drivers/net/phy/mscc/mscc_macsec.c
-> +++ b/drivers/net/phy/mscc/mscc_macsec.c
-> @@ -22,9 +22,9 @@
->  static u32 vsc8584_macsec_phy_read(struct phy_device *phydev,
->  				   enum macsec_bank bank, u32 reg)
->  {
-> -	u32 val, val_l = 0, val_h = 0;
->  	unsigned long deadline;
-> -	int rc;
-> +	int rc, val, val_l, val_h;
-> +	u32 ret = 0;
+To solve above issue, when ext4_reserve_inode_write failed we abort jbd2
+instead of only record error information.
+This modification scheme is based on Jan Kara's suggestion:
+"Well, firstly, errors=continue was always the best effort. There are no
+guarantees which failures we are able to withstand and which not.
+Generally, I think we try to withstand on-disk filesystem inconsistency but
+not inconsistency coming from programming errors or other external factors
+like out-of-memory conditions. Secondly, we already do abort the journal
+when e.g. jbd2_journal_get_write_access() fails (although that generally
+means some internal inconsistency) or when say revoke handling fails to
+allocate memory for a revoke record. So it won't be a new thing. Thirdly,
+and perhaps most importantly, you have found and fixed just one fairly
+innocent problem happening due to in memory inode state getting
+inconsistent after we fail to record the inode in the journal. There are
+almost 80 callsites of ext4_mark_inode_dirty() and honestly I suspect that
+e.g. inconsistent states resulting from extent tree manipulations being
+aborted in the middle due to ext4_ext_dirty() failing due to ENOMEM will
+also trigger all sorts of "interesting" behavior. So that's why I'd rather
+abort the journal than try to continue when we almost certainly now we
+cannot."
 
-Networking code uses "reverse christmas tree", meaning these lines
-should be sorted, longest first, shortest last. So deadline needs to
-come after val_h.
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/inode.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-     Andrew
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 987ea77e672d..0a30661953ef 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -5735,10 +5735,10 @@ int
+ ext4_reserve_inode_write(handle_t *handle, struct inode *inode,
+ 			 struct ext4_iloc *iloc)
+ {
+-	int err;
++	int err = -EIO;;
+ 
+ 	if (unlikely(ext4_forced_shutdown(EXT4_SB(inode->i_sb))))
+-		return -EIO;
++		goto out;
+ 
+ 	err = ext4_get_inode_loc(inode, iloc);
+ 	if (!err) {
+@@ -5750,7 +5750,9 @@ ext4_reserve_inode_write(handle_t *handle, struct inode *inode,
+ 			iloc->bh = NULL;
+ 		}
+ 	}
+-	ext4_std_error(inode->i_sb, err);
++out:
++	if (err)
++		ext4_abort(inode->i_sb, -err, "Detect reserve inode write failed");
+ 	return err;
+ }
+ 
+-- 
+2.31.1
+

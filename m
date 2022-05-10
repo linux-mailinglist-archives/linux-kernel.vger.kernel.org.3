@@ -2,152 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB4652207D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3337B52207F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346849AbiEJQDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S1346959AbiEJQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347876AbiEJP6K (ORCPT
+        with ESMTP id S1346723AbiEJP6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:58:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BC462CF2;
-        Tue, 10 May 2022 08:51:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EA0161373;
-        Tue, 10 May 2022 15:51:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88345C385A6;
-        Tue, 10 May 2022 15:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652197876;
-        bh=6JxcE5t9KXVE8fMNIQQ+vlROON2kYoaeG2ur0y4wic8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=akwaLFkg0R/3GizbON24I88jiLQHcxNG8NGP6pKgKS5C20Khy1Y7xZNOmJ1vAelWH
-         rklD2/xr0jvYdgTPQ+bgI54Yis5lQ6qpm8zKgAAGNREmUk4dP47T37AtmFAVt+9ZLn
-         7ybau9gnxTutbjks0xu5bdYaLWBF0fhuuYhnHQ/NGnWoLHD6xpBik/lQlltS3OxC8m
-         5DPiB0+mHyrLbixkwNyrsKK7V/DIGaYhx8ekCyDDC39Oq0NGXSFIMw4oGVoLfqe1Ad
-         SQJXjYjCBSBCP0Tfxpj4Wnb/XvmucYWbOg/cO1t+HaI8YoTDuVXsRzdCbUGDmZqWDy
-         MHmI9I4lAIjAA==
-Date:   Tue, 10 May 2022 17:51:07 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Micah Morton <mortonm@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Message-ID: <20220510155107.srxifzuqfstvet2f@wittgenstein>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-2-stefanb@linux.ibm.com>
- <20220509195414.GA30894@mail.hallyn.com>
- <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
- <20220510141025.GA7290@mail.hallyn.com>
+        Tue, 10 May 2022 11:58:42 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425113F1D7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:36 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso2399441pjw.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PqrBku7yWCns4CXdaKkexOpRPKx78T35A2SXeO5Nj2E=;
+        b=H+qXQc4zr8F6UfoAgbi5D//b4XzaqZVmA+b7sInWlNzEN6NONMtGhp4uLT3EhXky0B
+         F2ykJK18cz68RmJacrLVeTIKJsx2twiKIDeaoobGkT13lMMLzxjonor+gFOXjuv2eiFf
+         alcejIWCmMvJy5lI8HJ2nUM36sWK7biyf10tQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PqrBku7yWCns4CXdaKkexOpRPKx78T35A2SXeO5Nj2E=;
+        b=2iYsZGiPm9ndk+mhRzzX8puv8dWGOw5N1+iJWL6l3vF1WPrSXJsi9TqKlk9yj6MoRQ
+         MYVP2nIL1r37q3ggAZfWGT5l8AKeiQL3m4JdpeE8oZW2eQhrALbZ4eYjeWVjTntXCfal
+         L4rAm0elUL/RebvcML2p4B/7mF/WALAKjMrPZld43siCeDb0yP1sZhRpv7iQKcNo3TM1
+         djBwS1BfM8W5L8FIimgGLXiNEMupF2h6gbudeFHVmvwqdm4YGd2ygHShtI3EDhk2yLX6
+         nGjuhg1JSu+7SCFLh70Q5mUNo1M8Fa/FmkYOLSskHDUyPMLaqYOqhhPmxDlCmFab4NAV
+         rq6Q==
+X-Gm-Message-State: AOAM531wNmMjE4qWgf0IB9O1GTfjlHDOkjBW6mGvb3j+nRQbfmFBo+1p
+        PpsDAEMVgjqFjQ9j6UF202p78w==
+X-Google-Smtp-Source: ABdhPJybt3dgYr6zy6CHWp80A2YhHDeIy7tSmCq53SNr13/QWthE/HGjzW3UCKvVi/6K+DIgnBx5KQ==
+X-Received: by 2002:a17:902:b412:b0:15e:dc07:4c14 with SMTP id x18-20020a170902b41200b0015edc074c14mr21368892plr.99.1652197895085;
+        Tue, 10 May 2022 08:51:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 67-20020a621946000000b0050dc7628190sm10963364pfz.106.2022.05.10.08.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 08:51:34 -0700 (PDT)
+Date:   Tue, 10 May 2022 08:51:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Bob Peterson <rpeterso@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        Bill Wendling <morbo@google.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Steven Whitehouse <swhiteho@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gfs2: Use container_of() for gfs2_glock(aspace)
+Message-ID: <202205100851.663310B@keescook>
+References: <20220508100630.2642320-1-keescook@chromium.org>
+ <YnoQmuPgK9c5V8ZC@infradead.org>
+ <CAHc6FU5VfS9yNe0yH_sfOt04rvii6T_NMq7kp+32HZa5XQDtEA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510141025.GA7290@mail.hallyn.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHc6FU5VfS9yNe0yH_sfOt04rvii6T_NMq7kp+32HZa5XQDtEA@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:10:25AM -0500, Serge Hallyn wrote:
-> On Tue, May 10, 2022 at 12:25:25PM +0200, Christian Brauner wrote:
-> > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
-> > > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
-> > > > From: Christian Brauner <brauner@kernel.org>
-> > > > 
-> > > > When securityfs creates a new file or directory via
-> > > > securityfs_create_dentry() it will take an additional reference on the
-> > > > newly created dentry after it has attached the new inode to the new
-> > > > dentry and added it to the hashqueues.
-> > > > If we contrast this with debugfs which has the same underlying logic as
-> > > > securityfs. It uses a similar pairing as securityfs. Where securityfs
-> > > > has the securityfs_create_dentry() and securityfs_remove() pairing,
-> > > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> > > > 
-> > > > In contrast to securityfs, debugfs doesn't take an additional reference
-> > > > on the newly created dentry in __debugfs_create_file() which would need
-> > > > to be put in debugfs_remove().
-> > > > 
-> > > > The additional dget() isn't a problem per se. In the current
-> > > > implementation of securityfs each created dentry pins the filesystem via
-> > > 
-> > > Is 'via' an extra word here or is there a missing word?
-> > > 
-> > > I'll delay the rest of my response as the missing word may answer my
-> > > remaining question :)
-> > 
-> > It can be both. It should either be removed or it should be followed by
-> > "securityfs_create_dentry()". securityfs_create_dentry() takes two
-> > references one in lookup_one_len() and another one explicitly via
-> > dget(). The latter one isn't needed. Some of that has been covered in an
-> > earlier thread:
-> > https://lore.kernel.org/lkml/20220105101815.ldsm4s5yx7pmuiil@wittgenstein
+On Tue, May 10, 2022 at 01:13:31PM +0200, Andreas Gruenbacher wrote:
+> Kees and Christoph,
 > 
-> Yes, I saw that two references were being taken.  And near as I can tell,
-> the second one was never being dropped.  So if you tell me that before this
-> patch the dentries are never freed, then I'm happy.  Otherwise, I'm
-> bothered the fact that no matching dput is being deleted in the code (to
-> match the extra dget being removed).  So where is the code where the final
-> dput was happening, and is it the d_delete() you're adding which is making
-> it so that that dput won't be called now?
+> thanks for the patch and review.
+> 
+> On Tue, May 10, 2022 at 9:29 AM Christoph Hellwig <hch@infradead.org> wrote:
+> > > +/* gfs2_glock_get(), "glock" must be first. */
+> > > +struct glock_aspace {
+> > > +     struct gfs2_glock       glock;
+> > > +     struct address_space    mapping;
+> > > +};
+> >
+> > Why does glock need to be first?  The whole point of using container_of
+> > is that we don't have to make that assumption.
+> 
+> Just needs to be cleaned up in gfs2_glock_get() and
+> gfs2_glock_dealloc() as well. I'll do that when applying the patch.
+> 
+> > >  static inline struct address_space *gfs2_glock2aspace(struct gfs2_glock *gl)
+> > >  {
+> > >       if (gl->gl_ops->go_flags & GLOF_ASPACE)
+> > > -             return (struct address_space *)(gl + 1);
+> > > +             return &(container_of(gl, struct glock_aspace, glock)->mapping);
+> >
+> > Do we even need the braces here?
+> 
+> Will use a local variable here, as suggested below.
+> 
+> > >       struct inode *inode = mapping->host;
+> > >       if (mapping->a_ops == &gfs2_meta_aops)
+> > > -             return (((struct gfs2_glock *)mapping) - 1)->gl_name.ln_sbd;
+> > > +             return container_of(mapping, struct glock_aspace, mapping)->glock.gl_name.ln_sbd;
+> >
+> > A local variable would be really nice for the reader here to decompose
+> > this a bit:
+> >
+> >                 struct glock_aspace *a =
+> >                         container_of(mapping, struct glock_aspace, mapping);
+> >
+> >                 return a->glock.gl_name.ln_sbd;
+> 
+> Yes.
 
-* So consider mounting securityfs _without this patch applied_:
+Thanks! So I should leave this with you to arrange, or should I send an
+updated patch?
 
-  mount -t securityfs /sfs
-  
-  and assume we only have a single user that creates a file "foo" via
-  
-  securityfs_create_file()
-  {
-  	lookup_one_len();	// first dget()
-  	dget();			// second dget()
-  }
-  
-  now assume that user at some point calls
-  
-  void securityfs_remove()
-  {
-  	if (d_is_dir(dentry))
-  		simple_rmdir(dir, dentry);	// first dput()
-  	else
-  		simple_unlink(dir, dentry);	// first dput()
-  	dput(dentry);				// second dput()
-  }
-
-* Now consider mounting securityfs _with this patch applied_:
-
-  securityfs_create_file()
-  {
-  	lookup_one_len();	// first dget()
-  }
-  
-  void securityfs_remove()
-  {
-  	dget();					// second dget() 
-  	if (d_is_dir(dentry))
-  		simple_rmdir(dir, dentry);	// first dput()
-  	else
-  		simple_unlink(dir, dentry);	// first dput()
-  	dput(dentry);				// second dput()
-  }
+-- 
+Kees Cook

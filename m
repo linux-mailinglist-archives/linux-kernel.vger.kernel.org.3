@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED78E521B4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B59F521C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245493AbiEJOK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S1343998AbiEJOeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244977AbiEJNrK (ORCPT
+        with ESMTP id S1344174AbiEJOHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ACD2380E9;
-        Tue, 10 May 2022 06:33:10 -0700 (PDT)
+        Tue, 10 May 2022 10:07:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2020B1FE1C6;
+        Tue, 10 May 2022 06:41:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA9226188A;
-        Tue, 10 May 2022 13:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0610C385C2;
-        Tue, 10 May 2022 13:33:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE81D615C8;
+        Tue, 10 May 2022 13:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E11A9C385C2;
+        Tue, 10 May 2022 13:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189589;
-        bh=RrY/267cCvZ+Zw6/oIJgYru9TUR3Qifk5FHKotJx9AQ=;
+        s=korg; t=1652190113;
+        bh=9CSoLroFbSTvPx0vay7I1wRnNOPAKHtc8NonX8gn7hQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xQP7gr2VxCVOLZdYNXvinIbdhuL7E5XUAekHoUtc1PPBZKMqT5NhFF5fhQinCgBDB
-         PVijrBIO4NZbk9f8P3EhM+AdrZepMK/ynbP8JMDdFgkqYDSlc2bzfpt6y+ZFq0elzG
-         MxHgG3y2IQaAiOs5eD4q8pT55sPoau2Ce21HOIow=
+        b=pGOWAS1RvGwMy7rYvCztDhV+4zkQCgjPyXkdrVUE/m96C0E2Vod9sNrk7l+HE6Thi
+         G/lCamInBdgmrlNW2T69UOab/G1ZzblDLiVS5D0cKot6pHehriwe8P3gxMWzT103Em
+         PYi3zic45Opp1M6b7GQlMOv5l9RcD+tTPoushoa8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/135] selftest/vm: verify mmap addr in mremap_test
+        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.17 092/140] selftests/net: so_txtime: usage(): fix documentation of default clock
 Date:   Tue, 10 May 2022 15:08:02 +0200
-Message-Id: <20220510130743.277550432@linuxfoundation.org>
+Message-Id: <20220510130744.239554837@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,73 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 9c85a9bae267f6b5e5e374d0d023bbbe9db096d3 ]
+commit f5c2174a3775491e890ce285df52f5715fbef875 upstream.
 
-Avoid calling mmap with requested addresses that are less than the
-system's mmap_min_addr.  When run as root, mmap returns EACCES when
-trying to map addresses < mmap_min_addr.  This is not one of the error
-codes for the condition to retry the mmap in the test.
+The program uses CLOCK_TAI as default clock since it was added to the
+Linux repo. In commit:
+| 040806343bb4 ("selftests/net: so_txtime multi-host support")
+a help text stating the wrong default clock was added.
 
-Rather than arbitrarily retrying on EACCES, don't attempt an mmap until
-addr > vm.mmap_min_addr.
+This patch fixes the help text.
 
-Add a munmap call after an alignment check as the mappings are retained
-after the retry and can reach the vm.max_map_count sysctl.
-
-Link: https://lkml.kernel.org/r/20220420215721.4868-1-sidhartha.kumar@oracle.com
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 040806343bb4 ("selftests/net: so_txtime multi-host support")
+Cc: Carlos Llamas <cmllamas@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Carlos Llamas <cmllamas@google.com>
+Link: https://lore.kernel.org/r/20220502094638.1921702-3-mkl@pengutronix.de
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/vm/mremap_test.c | 29 ++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ tools/testing/selftests/net/so_txtime.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index e3ce33a9954e..efcbf537b3d5 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -66,6 +66,35 @@ enum {
- 	.expect_failure = should_fail				\
- }
- 
-+/* Returns mmap_min_addr sysctl tunable from procfs */
-+static unsigned long long get_mmap_min_addr(void)
-+{
-+	FILE *fp;
-+	int n_matched;
-+	static unsigned long long addr;
-+
-+	if (addr)
-+		return addr;
-+
-+	fp = fopen("/proc/sys/vm/mmap_min_addr", "r");
-+	if (fp == NULL) {
-+		ksft_print_msg("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
-+			strerror(errno));
-+		exit(KSFT_SKIP);
-+	}
-+
-+	n_matched = fscanf(fp, "%llu", &addr);
-+	if (n_matched != 1) {
-+		ksft_print_msg("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
-+			strerror(errno));
-+		fclose(fp);
-+		exit(KSFT_SKIP);
-+	}
-+
-+	fclose(fp);
-+	return addr;
-+}
-+
- /*
-  * Returns false if the requested remap region overlaps with an
-  * existing mapping (e.g text, stack) else returns true.
--- 
-2.35.1
-
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/net/so_txtime.c
+@@ -421,7 +421,7 @@ static void usage(const char *progname)
+ 			"Options:\n"
+ 			"  -4            only IPv4\n"
+ 			"  -6            only IPv6\n"
+-			"  -c <clock>    monotonic (default) or tai\n"
++			"  -c <clock>    monotonic or tai (default)\n"
+ 			"  -D <addr>     destination IP address (server)\n"
+ 			"  -S <addr>     source IP address (client)\n"
+ 			"  -r            run rx mode\n"
 
 

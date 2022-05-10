@@ -2,224 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C797C520EF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDB4520EF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiEJHtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S236513AbiEJHtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236871AbiEJHtG (ORCPT
+        with ESMTP id S236375AbiEJHtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:49:06 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B29223874;
-        Tue, 10 May 2022 00:44:45 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id i24so14252863pfa.7;
-        Tue, 10 May 2022 00:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/PQpWDOLtgetCHx/Dm+r4oknUTM2WK+PRWdFcr5XoII=;
-        b=aURwVS5zElR52e8zV0QIOuj1FVJJkiACBIsmRaO9iIegJRMF+wu+p5WlRSh1hWGk62
-         McGGASA7KaNIZCxvdGxk/20xGF0WScmDWfsXY2EJsXyKcsMnajuhXQ7tbk+u5BVqYo0L
-         2KR3rLTua6et8Nl640WAKPJLsivZWemlxof5yRLbzmywoH2yGuJGRKZj9htqY3SobXlZ
-         ZzNLSgOERY2lRrxnEFlO1YHW2QwMkEh5QYhylJeXl4+c1g8OuDGbty+jJXFmhqix7tAg
-         aS1XMz0H3NkadthMDz/wChWkiA7mksnMYx+xava+g1uEAXc7oOUeHu30WMLxS5erI/yu
-         L0NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/PQpWDOLtgetCHx/Dm+r4oknUTM2WK+PRWdFcr5XoII=;
-        b=wYaYCf44/x41sGhw3hoX7cCRyi05GfCiLy4BWDU9ttIYKDw1nKcqwLxEaWEhsPvg7m
-         8zQuP7/JFG0Aoi01K8g/+UwEFDGkPaexm4QiNhkACKo34YZ1CJzZCbp7LgLCFndNldJU
-         WBK/D5Lf9xIrYFGzDF/cLi2vM7syG4pHrsvDYOoF5lb+hu09QYAUYdoj1tvRu0EkRFMA
-         fzG9BnDbCZ23sTI4TVRCU/iclKnz77Th6CzK+BNA2BS5Lm1nEkyUfjvyB2j5CUc47tli
-         XxBf02EJyzmfUwSnyF7Ip6w0zRLijlKLvkT52jw5sS/rOY7yRkFjvdwELtKVBqHpVMPR
-         IvWA==
-X-Gm-Message-State: AOAM533l70o0wls+l5yFaf9fDjlfxt8ynOIlOQMWjLZ6ULOYZaianflP
-        Ru0e8sCHhPAw4ZrWgs86IbHPN5G2fljZCQ==
-X-Google-Smtp-Source: ABdhPJzzaedDYADezJGpjwZ8bNAtrKZ8OqKV3KQDacZ7iMk0B8M1dLDQghGOrnn1GLj0gJrRODK91g==
-X-Received: by 2002:a05:6a00:1908:b0:4f7:8813:b2cb with SMTP id y8-20020a056a00190800b004f78813b2cbmr19572766pfi.54.1652168685273;
-        Tue, 10 May 2022 00:44:45 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.88])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170903100200b0015ef27092aasm1212146plb.190.2022.05.10.00.44.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 00:44:44 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     ja@ssi.bg
-Cc:     horms@verge.net.au, pablo@netfilter.org, kadlec@netfilter.org,
-        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: [PATCH net-next v2] net: ipvs: randomize starting destination of RR/WRR scheduler
-Date:   Tue, 10 May 2022 15:43:01 +0800
-Message-Id: <20220510074301.480941-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 10 May 2022 03:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D721606B;
+        Tue, 10 May 2022 00:45:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB9C060BBD;
+        Tue, 10 May 2022 07:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2A6C385C8;
+        Tue, 10 May 2022 07:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652168710;
+        bh=ugbpxd8hq/QSkUx3xtpNb3sp3DwgNUZqFp9044ceY2w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VFPunFaI5TndtsGBePg5J+Qh0sI89pJgb/IjxFbp9l/WFUsySvRK26ASAOeRV/5di
+         35T4xOZVCYkarCNdLXm0RLiFji9yYegEmn2sPAnv7mYkUp8kJO0VBytxnIgwdKwUZW
+         Ll7dCm991hduGH27fX+4j86Fx9YjWMRJOF56UqzqvAJ6qQN0sN2/m4ceUcy470kDmp
+         v14C3u/gLLRsWPLj++xAIbyXvmcxXq1UWdYGQB79GAnsohmVYQkbmZnO0obPj41E9Y
+         w5zKNgcDfBD7nY6LoM1Xqmf+U4OQZHN+fYZyshSCKCibIF9LxuZCxxWpR61i+z5PYt
+         UIMrW7VnGWgaA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1noKYN-00AAdL-7r; Tue, 10 May 2022 08:45:07 +0100
 MIME-Version: 1.0
+Date:   Tue, 10 May 2022 08:45:07 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Haoran Jiang <jianghaoran@kylinos.cn>
+Cc:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different
+ interrupt status registers
+In-Reply-To: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+References: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <4d047b6d65b3973b7cb58101a1c197a6@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: jianghaoran@kylinos.cn, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On 2022-05-10 06:53, Haoran Jiang wrote:
+> According to the loongson cpu manual,different cpu cores
+> correspond to different interrupt status registers
+> 
+> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+> ---
+>  drivers/irqchip/irq-loongson-liointc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c
+> b/drivers/irqchip/irq-loongson-liointc.c
+> index 649c58391618..f4e015b50af0 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -195,7 +195,7 @@ static int __init liointc_of_init(struct 
+> device_node *node,
+>  		}
+> 
+>  		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+> -			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+> +			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
+>  	}
+> 
+>  	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
 
-For now, the start of the RR/WRR scheduler is in order of added
-destinations, it will result in imbalance if the director is local
-to the clients and the number of connection is small.
+You need to provide some more detail:
 
-For example, we have client1, client2, ..., client100 and real service
-service1, service2, ..., service10. All clients have local director with
-the same ipvs config, and each of them will create 2 long TCP connect to
-the virtual service. Therefore, all the clients will connect to service1
-and service2, leaving others free, which will make service1 and service2
-overloaded.
+- where is it documented (something more precise than ¨the loongson cpu 
+manual¨)?
+- if something doesn´t work today, what is the impact?
+- why does it work today without this change?
+- if this is a fix, what commit does it fix?
+- if this is a fix, does it need to be backported to stable kernels?
 
-Fix this by randomizing the starting destination when
-IP_VS_SVC_F_SCHED_RR_RANDOM/IP_VS_SVC_F_SCHED_WRR_RANDOM is set.
+Thanks,
 
-I start the randomizing from svc->destinations, as we choose the starting
-destination from all of the destinations, so it makes no different to
-start from svc->sched_data or svc->destinations. If we start from
-svc->sched_data, we have to avoid the 'head' node of the list being the
-next node of svc->sched_data, to make the choose totally random.
-
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v2:
-- randomizing the starting of WRR scheduler too
-- Replace '|' with '&' in ip_vs_rr_random_start(Julian Anastasov)
-- Replace get_random_u32() with prandom_u32_max() (Julian Anastasov)
----
- include/uapi/linux/ip_vs.h     |  3 +++
- net/netfilter/ipvs/ip_vs_rr.c  | 25 ++++++++++++++++++++++++-
- net/netfilter/ipvs/ip_vs_wrr.c | 20 ++++++++++++++++++++
- 3 files changed, 47 insertions(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/ip_vs.h b/include/uapi/linux/ip_vs.h
-index 4102ddcb4e14..9543906dae7d 100644
---- a/include/uapi/linux/ip_vs.h
-+++ b/include/uapi/linux/ip_vs.h
-@@ -28,6 +28,9 @@
- #define IP_VS_SVC_F_SCHED_SH_FALLBACK	IP_VS_SVC_F_SCHED1 /* SH fallback */
- #define IP_VS_SVC_F_SCHED_SH_PORT	IP_VS_SVC_F_SCHED2 /* SH use port */
- 
-+#define IP_VS_SVC_F_SCHED_WRR_RANDOM	IP_VS_SVC_F_SCHED1 /* random start */
-+#define IP_VS_SVC_F_SCHED_RR_RANDOM	IP_VS_SVC_F_SCHED1 /* random start */
-+
- /*
-  *      Destination Server Flags
-  */
-diff --git a/net/netfilter/ipvs/ip_vs_rr.c b/net/netfilter/ipvs/ip_vs_rr.c
-index 38495c6f6c7c..d53bfaf7aadf 100644
---- a/net/netfilter/ipvs/ip_vs_rr.c
-+++ b/net/netfilter/ipvs/ip_vs_rr.c
-@@ -22,13 +22,36 @@
- 
- #include <net/ip_vs.h>
- 
-+static void ip_vs_rr_random_start(struct ip_vs_service *svc)
-+{
-+	struct list_head *cur;
-+	u32 start;
-+
-+	if (!(svc->flags & IP_VS_SVC_F_SCHED_RR_RANDOM) ||
-+	    svc->num_dests <= 1)
-+		return;
-+
-+	start = prandom_u32_max(svc->num_dests);
-+	spin_lock_bh(&svc->sched_lock);
-+	cur = &svc->destinations;
-+	while (start--)
-+		cur = cur->next;
-+	svc->sched_data = cur;
-+	spin_unlock_bh(&svc->sched_lock);
-+}
- 
- static int ip_vs_rr_init_svc(struct ip_vs_service *svc)
- {
- 	svc->sched_data = &svc->destinations;
-+	ip_vs_rr_random_start(svc);
- 	return 0;
- }
- 
-+static int ip_vs_rr_add_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
-+{
-+	ip_vs_rr_random_start(svc);
-+	return 0;
-+}
- 
- static int ip_vs_rr_del_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
- {
-@@ -104,7 +127,7 @@ static struct ip_vs_scheduler ip_vs_rr_scheduler = {
- 	.module =		THIS_MODULE,
- 	.n_list =		LIST_HEAD_INIT(ip_vs_rr_scheduler.n_list),
- 	.init_service =		ip_vs_rr_init_svc,
--	.add_dest =		NULL,
-+	.add_dest =		ip_vs_rr_add_dest,
- 	.del_dest =		ip_vs_rr_del_dest,
- 	.schedule =		ip_vs_rr_schedule,
- };
-diff --git a/net/netfilter/ipvs/ip_vs_wrr.c b/net/netfilter/ipvs/ip_vs_wrr.c
-index 1bc7a0789d85..ed6230976379 100644
---- a/net/netfilter/ipvs/ip_vs_wrr.c
-+++ b/net/netfilter/ipvs/ip_vs_wrr.c
-@@ -102,6 +102,24 @@ static int ip_vs_wrr_max_weight(struct ip_vs_service *svc)
- 	return weight;
- }
- 
-+static void ip_vs_wrr_random_start(struct ip_vs_service *svc)
-+{
-+	struct ip_vs_wrr_mark *mark = svc->sched_data;
-+	struct list_head *cur;
-+	u32 start;
-+
-+	if (!(svc->flags & IP_VS_SVC_F_SCHED_WRR_RANDOM) ||
-+	    svc->num_dests <= 1)
-+		return;
-+
-+	start = prandom_u32_max(svc->num_dests);
-+	spin_lock_bh(&svc->sched_lock);
-+	cur = &svc->destinations;
-+	while (start--)
-+		cur = cur->next;
-+	mark->cl = list_entry(cur, struct ip_vs_dest, n_list);
-+	spin_unlock_bh(&svc->sched_lock);
-+}
- 
- static int ip_vs_wrr_init_svc(struct ip_vs_service *svc)
- {
-@@ -119,6 +137,7 @@ static int ip_vs_wrr_init_svc(struct ip_vs_service *svc)
- 	mark->mw = ip_vs_wrr_max_weight(svc) - (mark->di - 1);
- 	mark->cw = mark->mw;
- 	svc->sched_data = mark;
-+	ip_vs_wrr_random_start(svc);
- 
- 	return 0;
- }
-@@ -149,6 +168,7 @@ static int ip_vs_wrr_dest_changed(struct ip_vs_service *svc,
- 	else if (mark->di > 1)
- 		mark->cw = (mark->cw / mark->di) * mark->di + 1;
- 	spin_unlock_bh(&svc->sched_lock);
-+	ip_vs_wrr_random_start(svc);
- 	return 0;
- }
- 
+         M.
 -- 
-2.36.0
-
+Jazz is not dead. It just smells funny...

@@ -2,107 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0A2520D0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734E1520D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiEJEsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
+        id S236550AbiEJEtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiEJEsJ (ORCPT
+        with ESMTP id S236526AbiEJEtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:48:09 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F44293B61;
-        Mon,  9 May 2022 21:44:13 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d22so15711172plr.9;
-        Mon, 09 May 2022 21:44:13 -0700 (PDT)
+        Tue, 10 May 2022 00:49:08 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9809A293B69
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:45:10 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id v12so22010259wrv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 21:45:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6+sQlTltbJMISkmfPebzAVn4VW2b92jPEnbl/JJQPtA=;
-        b=krLLYW13kDlgS57yxnDgLiF6KhAhX7/BxaD11cYnloCT5JEA6ksWD9bth6XpqoW0EE
-         inWZVdt2YIlSoSBy9cco9yCipuaSECVSHoQ9J2WYVWA34EMxud//wZT1PZiDjsz53WEd
-         x4g5n75USwpB8+Yitqk6aSNFkg70IIuDdOY5hLtO4RshUhtecoHTcXZep7/6oyexLRRZ
-         hg6YPJWrAq0aIoGil6HPEfMkgmBNGeqTzQfSIFOIg1AaL9dTXd/px99e0pb9tZ7MOeaI
-         oO3iLsT/jMiDIY8Si4LLk+q5P3+8+99mawyLloBTd9dNSOzr5zTz4RWG0yZbQ0DEdaht
-         adJg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9s1dagxJlyBeoN8vXdOpsPpdS8AD1RWVJWE0n8ehmas=;
+        b=OrctmfTVDCxyYdwcxCtO+PuFgHBDMDC7Bjk3TGUWyuOKGBhKLCCiUkxtYUOPWSujka
+         /OoqstAYhrGXcYieyOQKBFbwQ9tdHrrlfAgfjS6rNqvPEA5JdQz3D4E5NS7VzL5WOf+E
+         ppcl6vbGTOThxdSbDLD0FF3VNmQjZYs0YaRKW2LrfcKbI7iiYsOvdodP6Nf3qoZXPgQF
+         Um1ef/9fJDTkVoHV63EAahHnEkdwxgxf/Hc8y1wACrWcQPfhb2xVBIshPVinpye5CGSN
+         DoHok7Lf+NgFTiQMqtYLLj/aSoKi0RaOM3+EWbBDgDeG8Kjhw/dRvI6d3AEZbIIqfLAr
+         UHxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6+sQlTltbJMISkmfPebzAVn4VW2b92jPEnbl/JJQPtA=;
-        b=pufp454T175thDYxQEMCv0bWNzrRBkdMkFxMkgxfogmyftGzUxcJd3O5qbgl9J7L8N
-         fH1ENc3ZU6WDl0PqeJotpZqstJxzeIyP7gPcmZNKGO2zxUd6qgoI5UELDP5kxkn0ipra
-         vnQn+VatOh6dhqZMEFqDFCe7dF6FGEbLNxoI5yAiuQNHR8fRc2JcWeBTBmNTZFaYA5m0
-         1oNOuE8n/RhQjoUFUtHzVXp7dEHrAtZS1om7DlwNQMGmGY546FVpnsBJZuMJOC4feCGO
-         uiJlWIXInQrYdHLjKLZc2g1U0xsu5SqQRPAyNduxnE0ofs08fvc826vE7tzXjsNazsXq
-         sI6Q==
-X-Gm-Message-State: AOAM532Yb6dsSYWOUrCpER9cVdcx0m4Aa9OLZxH8ZEqWoBo97+/XJyIW
-        gJKopFgUrZ1jJCfJNAtPZbQ=
-X-Google-Smtp-Source: ABdhPJwBKpiNFXJ3fxQfjWX14unnnowuPRW8gh0tOZR+V8vw/F7/AjerayoZ7uHOzdu/yEcgd9lHRg==
-X-Received: by 2002:a17:90b:4b12:b0:1dc:dfdb:446 with SMTP id lx18-20020a17090b4b1200b001dcdfdb0446mr19476441pjb.150.1652157852878;
-        Mon, 09 May 2022 21:44:12 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.85])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170903300a00b0015e9d4a5d27sm828012pla.23.2022.05.09.21.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 21:44:12 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     pbonzini@redhat.com
-Cc:     jmattson@google.com, like.xu.linux@gmail.com, joro@8bytes.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com
-Subject: [PATCH v2] KVM: x86/pmu: Don't pre-set the pmu->global_ctrl when refreshing
-Date:   Tue, 10 May 2022 12:44:07 +0800
-Message-Id: <20220510044407.26445-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220509102204.62389-2-likexu@tencent.com>
-References: <20220509102204.62389-2-likexu@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9s1dagxJlyBeoN8vXdOpsPpdS8AD1RWVJWE0n8ehmas=;
+        b=f3C6rX6KlEsokrI8jZmr7ztNcmjc/yRrrzWr1GTl7CJPH683zgeoXwEQdizoqMnqWD
+         kFZQWiJ2nRkqFBJX6BcDWoEqnGXFFS85ZUE5O9ZbV9ILIYos3GPdEtdfzA4ezOq7653F
+         I8ahZEzVngmtnsZqICt7o7335MsLmCO10oKeOwAkxQ8hvjFHFU0ABtAcTysl2/HPaEJN
+         TuTFFIn8V+C+F25YzKHFq7CH0vEPhFWX7G1hGHnukRLRC2VMvVkouJRgY7iwWTGek+j/
+         9zNWBuKjnZBq99YM8b9jAWfRMVpkjm6ESYzGevoj+5R8+u+54wfp4wn7Ieq6LDgxQQtP
+         yckQ==
+X-Gm-Message-State: AOAM533ODA2hBVu+DgHCIpxe1vOHU0zoK0f9Yuy+PW978V5JtemcSb8Q
+        QHdIYBr1zFt65xLRTae8uhhdxbgd0JrWYDq7yXi5+w==
+X-Google-Smtp-Source: ABdhPJzfNwaPy5xjCTvC86K51nEH3yemeJZ1erUUa4xvtvCZqXN7MOjD5hnH0ntxxTlSOXapkot4g5ZMqXe6px9AH2Q=
+X-Received: by 2002:a5d:4806:0:b0:20a:da03:711b with SMTP id
+ l6-20020a5d4806000000b0020ada03711bmr16582569wrq.395.1652157908998; Mon, 09
+ May 2022 21:45:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220507052451.12890-1-ojeda@kernel.org> <CABVgOSm5S2=QYnHJ+B0JbYtFYKBDRZiOhE5YMKKUKZU56d17HQ@mail.gmail.com>
+ <CANiq72=0ft6+QLbdwWD6cLm4FhWfv53GSg6HKEwxQ-q2N-UkOw@mail.gmail.com>
+In-Reply-To: <CANiq72=0ft6+QLbdwWD6cLm4FhWfv53GSg6HKEwxQ-q2N-UkOw@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 10 May 2022 12:44:57 +0800
+Message-ID: <CABVgOSkrvfvA7Ay4GC5wg64S1gibvm5_U5VGBog3sw4_UFo8Cg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/23] Rust support
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Sat, May 7, 2022 at 11:03 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> Hi David,
+>
+> On Sat, May 7, 2022 at 11:29 AM David Gow <davidgow@google.com> wrote:
+> >
+> > It's great to see some KUnit support here!
+>
+> Thanks!
+>
+> > It's also possible to run these tests using the KUnit wrapper tool with:
+> > $ ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_RUST=y
+> > --make_options LLVM=1 --arch x86_64 'rust_kernel_doctests'
+> >
+> > That also nicely formats the results.
+>
+> Indeed!
+>
+>     [16:55:52] ============ rust_kernel_doctests (70 subtests) ============
+>     [16:55:52] [PASSED] rust_kernel_doctest_build_assert_rs_12_0
+>     [16:55:52] [PASSED] rust_kernel_doctest_build_assert_rs_55_0
+>     ...
+>     [16:55:52] [PASSED] rust_kernel_doctest_types_rs_445_0
+>     [16:55:52] [PASSED] rust_kernel_doctest_types_rs_509_0
+>     [16:55:52] ============== [PASSED] rust_kernel_doctests ===============
+>     [16:55:52] ============================================================
+>     [16:55:52] Testing complete. Passed: 70, Failed: 0, Crashed: 0,
+>     Skipped: 0, Errors: 0
+>
 
-Assigning a value to pmu->global_ctrl just to set the value of
-pmu->global_ctrl_mask in a more readable way leaves a side effect of
-not conforming to the specification. The value is reset to zero on
-Power up and Reset but keeps unchanged on INIT, like an ordinary MSR.
+I've just sent out a pull request to get this working under UML as
+well, which would simplify running these further:
+https://github.com/Rust-for-Linux/linux/pull/766
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-v1 -> v2 Changelog:
-- Explicitly add parentheses around;
+> > That all being said, I can't say I'm thrilled with the test names
+> > here: none of them are particularly descriptive, and they'll probably
+> > not be static (which would make it difficult to track results /
+> > regressions / etc between kernel versions). Neither of those are
+>
+> Yeah, the names are not great and would change from time to time
+> across kernel versions.
+>
+> We could ask example writers to give each example a name, but that
+> would make them fairly less convenient. For instance, sometimes they
+> may be very small snippets interleaved with docs' prose (where giving
+> a name may feel a bit of a burden, and people may end writing
+> `foo_example1`, `foo_example2` etc. for each small "step" of an
+> explanation). In other cases they may be very long, testing a wide API
+> surface (e.g. when describing a module or type), where it is also hard
+> to give non-generic names like `rbtree_doctest`. In those kind of
+> cases, I think we would end up with not much better names than
+> automatically generated ones.
+>
+> The other aspect is that, given they are part of the documentation,
+> the prose or how things are explained/split may change, thus the
+> doctests as well. For instance, one may need to split a very long
+> `rbtree_doctest` in pieces, and then the name would need to change
+> anyway.
+>
+> So I think we should avoid asking documentation writers to add a
+> manual name, even if that means a bit ugly test names. Also this way
+> they are consistently named. What do you think?
 
- arch/x86/kvm/vmx/pmu_intel.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Yeah, these are all fair points: particularly for small doctests.
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index b82b6709d7a8..7829ec457b28 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -522,9 +522,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 		setup_fixed_pmc_eventsel(pmu);
- 	}
- 
--	pmu->global_ctrl = ((1ull << pmu->nr_arch_gp_counters) - 1) |
--		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED);
--	pmu->global_ctrl_mask = ~pmu->global_ctrl;
-+	pmu->global_ctrl_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
-+		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
- 	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
- 			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
- 			    MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
--- 
-2.36.1
+Maybe having an optional name, which more significant tests could use
+to override the file:line names? That could be useful for a few of the
+larger, more often referenced tests.
 
+> One idea could be giving them a name based on the hash of the content
+> and avoiding the line number, so that there is a higher chance for the
+> name to stay the same even when the file gets modified for other
+> reasons.
+
+Ugh: it's a bit ugly either way. I suspect that file:line is still
+probably better, if only because we need some way of looking up the
+test in the code if it fails. I'd hate for people to be randomly
+hashing bits of just to find out what test is failing.
+
+> > necessarily deal breakers, though it might make sense to hide them
+> > behind a kernel option (like all other KUnit tests) so that they can
+> > easily be excluded where they would otherwise clutter up results. (And
+>
+> Currently they are under `CONFIG_RUST_KERNEL_KUNIT_TEST` -- or do you
+> mean something else?
+>
+
+Oops: I missed that (one of the issues with testing this on a
+different machine which had a rust toolchain). Looks good to me.
+
+> > if there's a way to properly name them, or maybe even split them into
+> > per-file or per-module suites, that would make them a bit easier to
+> > deal.) Additionally, there are some plans to taint the kernel[1] when
+>
+> Yeah, splitting them further is definitely possible. We are also
+> likely splitting the `kernel` crate into several, which would also
+> make the suites smaller etc. so perhaps further splits may not be
+> needed.
+
+Ah: I didn't realise the plan was always to have crate-specific
+suites, and possibly to split things up.
+
+The KTAP output specification does actually support arbitrary nesting
+(though KUnit itself doesn't at the moment), which would potentially
+be an option if (e.g.) providing the complete module nesting made
+sense. I'm not convinced that'd make things easier to read, though.
+
+> > Regardless, this is very neat, and I'm looking forward to taking a
+> > closer look at it.
+>
+> Thanks again for taking a look and playing with it, I am glad you
+> liked it! (even if it is just a first approximation, and only supports
+> the `kernel` crate, etc.).
+>
+> Cheers,
+> Miguel
+
+Thanks,
+-- David

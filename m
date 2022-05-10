@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11201521BA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F50A521BA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343628AbiEJOSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        id S245653AbiEJOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344022AbiEJNss (ORCPT
+        with ESMTP id S244227AbiEJNtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:48:48 -0400
+        Tue, 10 May 2022 09:49:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693986FD2A;
-        Tue, 10 May 2022 06:37:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409D073562;
+        Tue, 10 May 2022 06:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A70A618B4;
-        Tue, 10 May 2022 13:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB09C385A6;
-        Tue, 10 May 2022 13:37:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53991618A6;
+        Tue, 10 May 2022 13:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7CDC385C2;
+        Tue, 10 May 2022 13:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189830;
-        bh=SXyEZMAQcqYISW4MVCLhRpD3aV940h5MdKUH9HHsXWY=;
+        s=korg; t=1652189833;
+        bh=qeRM6FQzBbEvCNb4O/cYvgcYLA+zC9ijzGkyG9hloSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=loteEV+xKbTA1wwmtna2Cb/Sk9isJi97sZTl143tzLDVFJpPH+pGoGPmJdIZq/ndh
-         HN+afcPOGOFFRJ2LsF9JAHu/DwxO61WxjarHVbN3jhM7lAXvC3bJKT0drKxUXp9qPu
-         yMzDLzQwC3MgWOSBQ1VgavPTBfFG3WEdX9dz/MXw=
+        b=WM6l59SqV6Aess7Y/5XN8UiokLKWCAEE9QHxrlEpf7KdBcLR9WNfj2aZbVmaiTDoT
+         alI7gl+dhXcNR9YYSLt9zb+ZoIYH4FRbURMl9GjpmnKdqfbTIYs6IfEBMnOrvW78lG
+         DV2bvFmsy5xUikE1S59x/yyHgvsxNrsRNI9Uu42M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
         John David Anglin <dave.anglin@bell.net>
-Subject: [PATCH 5.17 005/140] Revert "parisc: Mark cr16 CPU clocksource unstable on all SMP machines"
-Date:   Tue, 10 May 2022 15:06:35 +0200
-Message-Id: <20220510130741.760254485@linuxfoundation.org>
+Subject: [PATCH 5.17 006/140] Revert "parisc: Mark sched_clock unstable only if clocks are not syncronized"
+Date:   Tue, 10 May 2022 15:06:36 +0200
+Message-Id: <20220510130741.788784661@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -56,59 +56,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Helge Deller <deller@gmx.de>
 
-commit 9dc4241bb14afecd16518a0760bceb3d7359b12a upstream.
+commit 7962c0896429af2a0e00ec6bc15d992536453b2d upstream.
 
-This reverts commit afdb4a5b1d340e4afffc65daa21cc71890d7d589.
+This reverts commit d97180ad68bdb7ee10f327205a649bc2f558741d.
 
 It triggers RCU stalls at boot with a 32-bit kernel.
 
 Signed-off-by: Helge Deller <deller@gmx.de>
 Noticed-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # v5.16+
+Cc: stable@vger.kernel.org # v5.15+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/time.c |   28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ arch/parisc/kernel/setup.c |    2 ++
+ arch/parisc/kernel/time.c  |    7 ++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
+--- a/arch/parisc/kernel/setup.c
++++ b/arch/parisc/kernel/setup.c
+@@ -161,6 +161,8 @@ void __init setup_arch(char **cmdline_p)
+ #ifdef CONFIG_PA11
+ 	dma_ops_init();
+ #endif
++
++	clear_sched_clock_stable();
+ }
+ 
+ /*
 --- a/arch/parisc/kernel/time.c
 +++ b/arch/parisc/kernel/time.c
-@@ -249,16 +249,30 @@ void __init time_init(void)
- static int __init init_cr16_clocksource(void)
- {
- 	/*
--	 * The cr16 interval timers are not syncronized across CPUs, even if
--	 * they share the same socket.
-+	 * The cr16 interval timers are not syncronized across CPUs on
-+	 * different sockets, so mark them unstable and lower rating on
-+	 * multi-socket SMP systems.
- 	 */
- 	if (num_online_cpus() > 1 && !running_on_qemu) {
--		/* mark sched_clock unstable */
--		clear_sched_clock_stable();
-+		int cpu;
-+		unsigned long cpu0_loc;
-+		cpu0_loc = per_cpu(cpu_data, 0).cpu_loc;
+@@ -265,9 +265,6 @@ static int __init init_cr16_clocksource(
+ 			    (cpu0_loc == per_cpu(cpu_data, cpu).cpu_loc))
+ 				continue;
  
--		clocksource_cr16.name = "cr16_unstable";
--		clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
--		clocksource_cr16.rating = 0;
-+		for_each_online_cpu(cpu) {
-+			if (cpu == 0)
-+				continue;
-+			if ((cpu0_loc != 0) &&
-+			    (cpu0_loc == per_cpu(cpu_data, cpu).cpu_loc))
-+				continue;
-+
-+			/* mark sched_clock unstable */
-+			clear_sched_clock_stable();
-+
-+			clocksource_cr16.name = "cr16_unstable";
-+			clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
-+			clocksource_cr16.rating = 0;
-+			break;
-+		}
+-			/* mark sched_clock unstable */
+-			clear_sched_clock_stable();
+-
+ 			clocksource_cr16.name = "cr16_unstable";
+ 			clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
+ 			clocksource_cr16.rating = 0;
+@@ -275,6 +272,10 @@ static int __init init_cr16_clocksource(
+ 		}
  	}
  
++	/* XXX: We may want to mark sched_clock stable here if cr16 clocks are
++	 *	in sync:
++	 *	(clocksource_cr16.flags == CLOCK_SOURCE_IS_CONTINUOUS) */
++
  	/* register at clocksource framework */
+ 	clocksource_register_hz(&clocksource_cr16,
+ 		100 * PAGE0->mem_10msec);
 
 

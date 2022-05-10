@@ -2,96 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C96521C84
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1C3521C8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344287AbiEJOiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        id S244092AbiEJOi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245074AbiEJOhe (ORCPT
+        with ESMTP id S1343553AbiEJOiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:37:34 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F024B2F30B6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:56:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id n10so33127419ejk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:56:44 -0700 (PDT)
+        Tue, 10 May 2022 10:38:12 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2BE2F3C9F
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:57:00 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j6so15002076pfe.13
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=pjmJ7M+KMckwEPKWOfiYlDmA1Pppkrstffdbv55ePIA=;
-        b=IaCvboNyy9XXm/WOVingix5kNVr2ZVr9B56ITuA78kNWY5vjtaG4aGi4nxNAbQCKLf
-         Q2qF9RGNRQW4KkfBoUYGqu0KYxt5eJkmD0C+GkuyII0reCCOzipRy4etvpV3qrNxIqoR
-         VJrzA4JgMuUqNz29D9k1ax94UQkpP1YKDNos+ca13xP0GfEVLQBGdAG6UoQ1A1To8Q+9
-         LZuVOMhBDbIm1ZZbhlBwAlv7xHAFlfaVQ7kEZnNH3EzYxS+BScNZd6ih0Bl/EjR3/LwH
-         ZTENTY6nQMiIlcN1uo6esDCkVS81+TXUYClr7e8oAM4j4N8BXaRZadJeiTBH2AWrtBJg
-         iSJA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kiQACap0HlYOlp8ZH4NG5Zh8+trxbQX+sb2tMEraWN4=;
+        b=RCu2Xnv5xvPD3uE8m1QZj6iZlSYzlrTeqEM0k+enZcI7WKY/nNAnbfekUXtY0/2s6K
+         Dx6zuMSJpB5N6X0x2Y77xtbcXc7SkTZsfyWROM40guwJHSH3/ZlB1AwrGgjUaJvTGyCL
+         LQfRvdC/O/Fk+J0PEBcTaVsC2e0A21GuCYnlBZcxgx5acGuqQ2Ojq/J3oevzjYx2NY+O
+         QgujmBAwtcsd0/g22Ji7gm1v+VkfG7T8qxmsMVwS+c/e+q0A79JAckEmd7KP0OZufZwO
+         PNgC+7Vut8BhaWFYn2KkGoIXtLrxrFs5mfr2PK0uP3hO43FbBuJjPnQ+Y4OgiME1OPxy
+         XN8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pjmJ7M+KMckwEPKWOfiYlDmA1Pppkrstffdbv55ePIA=;
-        b=rRIyk/jH9nYk8n6MKupzsF5vAfqjO5G5PlFDMPll8HVXszQlhM87A8Dyh8MdbHbwc2
-         KxIKBu7ywBpRThvpf+QO7EYlYqiypTnsIzaWTE3kpKuYDOn4UoezzG6YOrDFqKXKRHEj
-         eNj4EnzdDX+fcvB6IgX6xdpFfWOGES2+y+5FZXhh6S0HulQZ47uI56Qs6e9FcFzC47UD
-         G4BdUwt3HrlxCQK7V3TKve4RD2rzanGHPXtwt8UvC2NNvdEK/dGn12esZ6D13eCItt5n
-         bu/ZkoDq5Sek//QWQLL4aWtdewLOWAYA00i9CU8+7zCisSY+RF5KHlFuhzc39wztWp2w
-         T6gw==
-X-Gm-Message-State: AOAM533gEkZ4kXlXj2z5/S5ExxDOiOjY5GDmFbQEw3VxLmusJZynUp1+
-        sI4+Ft3LqMwHhdQAA2YN6mmQFg==
-X-Google-Smtp-Source: ABdhPJzX8NehLFbd2eHiwAz5mIFRYvEUSDEbzbZGkzzZ0F3c8SW4arwk9U2t99jcgn0VYiWyWa6n5A==
-X-Received: by 2002:a17:906:5fc3:b0:6f3:9901:bc3a with SMTP id k3-20020a1709065fc300b006f39901bc3amr19929018ejv.711.1652190998024;
-        Tue, 10 May 2022 06:56:38 -0700 (PDT)
-Received: from [192.168.0.253] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b006f3ef214e4asm6150973ejc.176.2022.05.10.06.56.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 06:56:37 -0700 (PDT)
-Message-ID: <b183f838-359c-752a-dd23-9bd1a160eee5@linaro.org>
-Date:   Tue, 10 May 2022 15:56:36 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kiQACap0HlYOlp8ZH4NG5Zh8+trxbQX+sb2tMEraWN4=;
+        b=xkwulbAS6Mv3k3n8IC2j3pf4CVnpxLU/Bwuhbh/6FlzRqJO2wDPtcS87C8xdgvxwpZ
+         4A64uSqHuwrV14H7DPUP7V+bV+wLwqxy3XvLmqCV7sXhQvezPEH8p0x5Y+Io9IAM28Ls
+         9Vl9Ju91iuJ6ilnzx7bIdH+RDH7MDxsQnWbVhLtwpNkBXnJbufu21DeqsvarsAFh7P2t
+         OkFSJJcQnqFhMu/HrAbtkDLX10qOm5gZwm/lR3gEeAxNy3JJ9o9QU1fKwx/xCu3zMgjo
+         Jl3ZYaEoAJmRfUWM+gZDUmxmufF4O657uZ3s5zMUjKNTHeOWusWddyMLW9F+sJ/1+guQ
+         LQ9w==
+X-Gm-Message-State: AOAM532aGNMxUhEb1OPfBaYfjgOakEZm2MuBBDgW5ZHmCjXiSj6+WpS3
+        3huW6inypiqBE22yfp7L58pTlQ==
+X-Google-Smtp-Source: ABdhPJz3PdtYrEyYVXbIkRhiFVppqHSDAtQoc9m5MtKlcGR6pLshSbBiS5E93aq0j5zsOaa3eIWG6g==
+X-Received: by 2002:a63:1c5:0:b0:39c:c779:b480 with SMTP id 188-20020a6301c5000000b0039cc779b480mr16810679pgb.311.1652191015329;
+        Tue, 10 May 2022 06:56:55 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c6-20020aa79526000000b0050dc7628155sm10836976pfp.47.2022.05.10.06.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 06:56:54 -0700 (PDT)
+Date:   Tue, 10 May 2022 13:56:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     syzbot <syzbot+0c6da80218456f1edc36@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, davem@davemloft.net, jhs@mojatatu.com,
+        jiri@resnulli.us, kvm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@elte.hu, mlevitsk@redhat.com, netdev@vger.kernel.org,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vinicius.gomes@intel.com,
+        viro@zeniv.linux.org.uk, xiyou.wangcong@gmail.com
+Subject: Re: [syzbot] INFO: task hung in synchronize_rcu (3)
+Message-ID: <YnpvI4tgbrEtHBG2@google.com>
+References: <000000000000402c5305ab0bd2a2@google.com>
+ <0000000000004f3c0d05dea46dac@google.com>
+ <Ynpsc7dRs8tZugpl@google.com>
+ <8f24d358-1fbd-4598-1f2d-959b4f8d75fd@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] arm64: dts: uDPU: update partition table
-Content-Language: en-US
-To:     Robert Marko <robert.marko@sartura.hr>, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pali@kernel.org, marek.behun@nic.cz
-References: <20220322105857.1107016-1-robert.marko@sartura.hr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220322105857.1107016-1-robert.marko@sartura.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f24d358-1fbd-4598-1f2d-959b4f8d75fd@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2022 11:58, Robert Marko wrote:
-> Partition currently called "uboot" does not only contain U-boot, but
-> rather it contains TF-A, U-boot and U-boot environment.
+On Tue, May 10, 2022, Paolo Bonzini wrote:
+> On 5/10/22 15:45, Sean Christopherson wrote:
+> > > 
+> > >      KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
+> > > 
+> > > bisection log:https://syzkaller.appspot.com/x/bisect.txt?x=16dc2e49f00000
+> > > start commit:   ea4424be1688 Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
+> > > git tree:       upstream
+> > > kernel config:https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+> > > dashboard link:https://syzkaller.appspot.com/bug?extid=0c6da80218456f1edc36
+> > > syz repro:https://syzkaller.appspot.com/x/repro.syz?x=1685af9e700000
+> > > C reproducer:https://syzkaller.appspot.com/x/repro.c?x=11b09df1700000
+> > > 
+> > > If the result looks correct, please mark the issue as fixed by replying with:
+> > > 
+> > > #syz fix: KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
+> > > 
+> > > For information about bisection process see:https://goo.gl/tpsmEJ#bisection
+> > #syz fix: KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
+> > 
 > 
-> So, to avoid accidentally deleting the U-boot environment which is
-> located at 0x180000 split the partition.
-> 
-> "uboot" is not the correct name as you can't boot these boards with U-boot
-> only, TF-A must be present as well, so rename the "uboot" partition to
-> "firmware".
-> 
-> While we are here, describe the NOR node as "spi-flash@0" instead of
-> "m25p80@0" which is the old SPI-NOR driver name.
+> Are you sure? The hang is in synchronize_*rcu* and the testcase is unrelated
+> to KVM.  It seems like the testcase is not 100% reproducible.
 
-This patch was applied, but it was never tested with dtbs_check (nor
-rebased on my cleanups). spi-flash is still wrong.
+Ugh, syzbot seems to have bundled multiple unrelated errors together.  The splat
+that comes up first on the dashboard is definitely the KVM bug:
 
-Best regards,
-Krzysztof
+  INFO: task syz-executor500:19706 blocked for more than 143 seconds.
+        Not tainted 5.17.0-rc7-syzkaller-00020-gea4424be1688 #0
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:syz-executor500 state:D stack:27048 pid:19706 ppid:  3644 flags:0x00000004
+  Call Trace:
+   <TASK>
+   context_switch kernel/sched/core.c:4995 [inline]
+   __schedule+0xa94/0x4910 kernel/sched/core.c:6304
+   schedule+0xd2/0x260 kernel/sched/core.c:6377
+   schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
+   do_wait_for_common kernel/sched/completion.c:85 [inline]
+   __wait_for_common+0x2af/0x360 kernel/sched/completion.c:106
+   __synchronize_srcu+0x1f2/0x290 kernel/rcu/srcutree.c:930
+   kvm_swap_active_memslots+0x410/0x800 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1473
+   kvm_activate_memslot arch/x86/kvm/../../../virt/kvm/kvm_main.c:1595 [inline]
+   kvm_create_memslot arch/x86/kvm/../../../virt/kvm/kvm_main.c:1660 [inline]
+   kvm_set_memslot+0xa67/0x1010 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1772
+   __kvm_set_memory_region+0xf02/0x11f0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1914
+   kvm_set_memory_region arch/x86/kvm/../../../virt/kvm/kvm_main.c:1927 [inline]
+   kvm_vm_ioctl_set_memory_region arch/x86/kvm/../../../virt/kvm/kvm_main.c:1939 [inline]
+   kvm_vm_ioctl+0x51a/0x22c0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4492
+   vfs_ioctl fs/ioctl.c:51 [inline]
+   __do_sys_ioctl fs/ioctl.c:874 [inline]
+   __se_sys_ioctl fs/ioctl.c:860 [inline]
+   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+But there are multiple other errors that are indeed not the KVM bug.

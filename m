@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26A4521870
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F35C521750
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243269AbiEJNf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S242812AbiEJNYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243035AbiEJNZ1 (ORCPT
+        with ESMTP id S243232AbiEJNVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:27 -0400
+        Tue, 10 May 2022 09:21:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D09B22EA77;
-        Tue, 10 May 2022 06:18:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F3C2C2572;
+        Tue, 10 May 2022 06:15:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F58A61665;
-        Tue, 10 May 2022 13:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90118C385C2;
-        Tue, 10 May 2022 13:18:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3245615DD;
+        Tue, 10 May 2022 13:15:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10232C385C2;
+        Tue, 10 May 2022 13:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188717;
-        bh=ICZctLIchoodJ3+Rypdhc4DMeoSUKHvRYT1hN6mKWPc=;
+        s=korg; t=1652188516;
+        bh=m2ASRB4GczbfdDdQ1RmKGS9fhnmfR0jNT5aBSJnnqzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lKnkS9yX1GJdxJ3HeW2S4RWkttNcy+nrM/P06vUdu17iJuHhI5Z7d+iAAMdI3HPHz
-         5FkPbAXVFol+l+sOQJraJvTkEApfzCVJDKiPW0esp9fXYhOmZoTThXezjX6JoWd7VX
-         uj/l5oLxdrNkt52ioZif3LyalsyXbbnL3lYaQ3rg=
+        b=kSUEhTUxqzyRmCVubK72GxjxJ0d1kMnAKn3iK3Vy1Y0sbauYVUAiGruEKPlNRYHFp
+         Siaq079YI6kGdcHPpHZt6d3eYF/wWnr2ZPsbG9oo39OtyUpKqNqddbAEJtf6EDVuxu
+         Lm/TK531XfSlXR0z475UvJ2Gaz+rNLRZglfXmL60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 04/88] USB: serial: whiteheat: fix heap overflow in WHITEHEAT_GET_DTR_RTS
-Date:   Tue, 10 May 2022 15:06:49 +0200
-Message-Id: <20220510130733.867169924@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Robert Kolchmeyer <rkolchmeyer@google.com>
+Subject: [PATCH 4.14 04/78] net/sched: cls_u32: fix netns refcount changes in u32_change()
+Date:   Tue, 10 May 2022 15:06:50 +0200
+Message-Id: <20220510130732.657790863@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +59,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Eric Dumazet <edumazet@google.com>
 
-commit e23e50e7acc8d8f16498e9c129db33e6a00e80eb upstream.
+commit 3db09e762dc79584a69c10d74a6b98f89a9979f8 upstream.
 
-The sizeof(struct whitehat_dr_info) can be 4 bytes under CONFIG_AEABI=n
-due to "-mabi=apcs-gnu", even though it has a single u8:
+We are now able to detect extra put_net() at the moment
+they happen, instead of much later in correct code paths.
 
-whiteheat_private {
-        __u8                       mcr;                  /*     0     1 */
+u32_init_knode() / tcf_exts_init() populates the ->exts.net
+pointer, but as mentioned in tcf_exts_init(),
+the refcount on netns has not been elevated yet.
 
-        /* size: 4, cachelines: 1, members: 1 */
-        /* padding: 3 */
-        /* last cacheline: 4 bytes */
-};
+The refcount is taken only once tcf_exts_get_net()
+is called.
 
-The result is technically harmless, as both the source and the
-destinations are currently the same allocation size (4 bytes) and don't
-use their padding, but if anything were to ever be added after the
-"mcr" member in "struct whiteheat_private", it would be overwritten. The
-structs both have a single u8 "mcr" member, but are 4 bytes in padded
-size. The memcpy() destination was explicitly targeting the u8 member
-(size 1) with the length of the whole structure (size 4), triggering
-the memcpy buffer overflow warning:
+So the two u32_destroy_key() calls from u32_change()
+are attempting to release an invalid reference on the netns.
 
-In file included from include/linux/string.h:253,
-                 from include/linux/bitmap.h:11,
-                 from include/linux/cpumask.h:12,
-                 from include/linux/smp.h:13,
-                 from include/linux/lockdep.h:14,
-                 from include/linux/spinlock.h:62,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:6,
-                 from include/linux/slab.h:15,
-                 from drivers/usb/serial/whiteheat.c:17:
-In function 'fortify_memcpy_chk',
-    inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
-include/linux/fortify-string.h:328:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
-  328 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+syzbot report:
 
-Instead, just assign the one byte directly.
+refcount_t: decrement hit 0; leaking memory.
+WARNING: CPU: 0 PID: 21708 at lib/refcount.c:31 refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
+Modules linked in:
+CPU: 0 PID: 21708 Comm: syz-executor.5 Not tainted 5.18.0-rc2-next-20220412-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:refcount_warn_saturate+0xbf/0x1e0 lib/refcount.c:31
+Code: 1d 14 b6 b2 09 31 ff 89 de e8 6d e9 89 fd 84 db 75 e0 e8 84 e5 89 fd 48 c7 c7 40 aa 26 8a c6 05 f4 b5 b2 09 01 e8 e5 81 2e 05 <0f> 0b eb c4 e8 68 e5 89 fd 0f b6 1d e3 b5 b2 09 31 ff 89 de e8 38
+RSP: 0018:ffffc900051af1b0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff8160a0c8 RDI: fffff52000a35e28
+RBP: 0000000000000004 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81604a9e R11: 0000000000000000 R12: 1ffff92000a35e3b
+R13: 00000000ffffffef R14: ffff8880211a0194 R15: ffff8880577d0a00
+FS:  00007f25d183e700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f19c859c028 CR3: 0000000051009000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_dec include/linux/refcount.h:344 [inline]
+ refcount_dec include/linux/refcount.h:359 [inline]
+ ref_tracker_free+0x535/0x6b0 lib/ref_tracker.c:118
+ netns_tracker_free include/net/net_namespace.h:327 [inline]
+ put_net_track include/net/net_namespace.h:341 [inline]
+ tcf_exts_put_net include/net/pkt_cls.h:255 [inline]
+ u32_destroy_key.isra.0+0xa7/0x2b0 net/sched/cls_u32.c:394
+ u32_change+0xe01/0x3140 net/sched/cls_u32.c:909
+ tc_new_tfilter+0x98d/0x2200 net/sched/cls_api.c:2148
+ rtnetlink_rcv_msg+0x80d/0xb80 net/core/rtnetlink.c:6016
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2495
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ ____sys_sendmsg+0x6e2/0x800 net/socket.c:2413
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f25d0689049
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f25d183e168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f25d079c030 RCX: 00007f25d0689049
+RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000005
+RBP: 00007f25d06e308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd0b752e3f R14: 00007f25d183e300 R15: 0000000000022000
+ </TASK>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202204142318.vDqjjSFn-lkp@intel.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220421001234.2421107-1-keescook@chromium.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: 35c55fc156d8 ("cls_u32: use tcf_exts_get_net() before call_rcu()")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[rkolchmeyer: Backported to 4.14: adjusted u32_destroy_key() signature]
+Signed-off-by: Robert Kolchmeyer <rkolchmeyer@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/whiteheat.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ net/sched/cls_u32.c |   18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -611,9 +611,8 @@ static int firm_send_command(struct usb_
- 		switch (command) {
- 		case WHITEHEAT_GET_DTR_RTS:
- 			info = usb_get_serial_port_data(port);
--			memcpy(&info->mcr, command_info->result_buffer,
--					sizeof(struct whiteheat_dr_info));
--				break;
-+			info->mcr = command_info->result_buffer[0];
-+			break;
+--- a/net/sched/cls_u32.c
++++ b/net/sched/cls_u32.c
+@@ -395,15 +395,20 @@ static int u32_init(struct tcf_proto *tp
+ 	return 0;
+ }
+ 
+-static int u32_destroy_key(struct tcf_proto *tp, struct tc_u_knode *n,
+-			   bool free_pf)
++static void __u32_destroy_key(struct tc_u_knode *n)
+ {
+ 	struct tc_u_hnode *ht = rtnl_dereference(n->ht_down);
+ 
+ 	tcf_exts_destroy(&n->exts);
+-	tcf_exts_put_net(&n->exts);
+ 	if (ht && --ht->refcnt == 0)
+ 		kfree(ht);
++	kfree(n);
++}
++
++static void u32_destroy_key(struct tcf_proto *tp, struct tc_u_knode *n,
++			   bool free_pf)
++{
++	tcf_exts_put_net(&n->exts);
+ #ifdef CONFIG_CLS_U32_PERF
+ 	if (free_pf)
+ 		free_percpu(n->pf);
+@@ -412,8 +417,7 @@ static int u32_destroy_key(struct tcf_pr
+ 	if (free_pf)
+ 		free_percpu(n->pcpu_success);
+ #endif
+-	kfree(n);
+-	return 0;
++	__u32_destroy_key(n);
+ }
+ 
+ /* u32_delete_key_rcu should be called when free'ing a copied
+@@ -942,13 +946,13 @@ static int u32_change(struct net *net, s
+ 				    tca[TCA_RATE], ovr);
+ 
+ 		if (err) {
+-			u32_destroy_key(tp, new, false);
++			__u32_destroy_key(new);
+ 			return err;
  		}
- 	}
- exit:
+ 
+ 		err = u32_replace_hw_knode(tp, new, flags);
+ 		if (err) {
+-			u32_destroy_key(tp, new, false);
++			__u32_destroy_key(new);
+ 			return err;
+ 		}
+ 
 
 

@@ -2,139 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834FE5213EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9556D5213F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241102AbiEJLkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S241109AbiEJLlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241105AbiEJLkY (ORCPT
+        with ESMTP id S241097AbiEJLlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:40:24 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63B18995A;
-        Tue, 10 May 2022 04:36:23 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id m6so18178837iob.4;
-        Tue, 10 May 2022 04:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4EZpR3qbj2OiB8Rs7HNB/ykkYoIogT5opUzlrLNV8YI=;
-        b=VoJKpqMfxxTPHvVta4VrHB92nXtrqsdoFMCKO72GGQiiTNlssKn+AXRFv2R0zA/qJl
-         ctxf5yvCTzchX0hBX89nV/pbn8AMQXcZyobufzGfOBQSZx6nhMaYwA+R8ZttLsdM8Xl+
-         rpydufKYD/6bVeUkxjjhLcjOQR0qGg0c2UaMnbMITS+RV4LBbE8poluGb/ji6ozV4ggX
-         2ZOwstsWV1YYyBdttQncwLva3BWyKTcGbQP+6PrGtjhkepSKztq/WSV1uGa3OR1zPmHp
-         fWEbAq+8c6Bu4dtUV2ivF9jPrKCiNZQT0HzmRt0DR1EBUHs6Rmtmvgahn+B8mMcFvjaB
-         CbRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4EZpR3qbj2OiB8Rs7HNB/ykkYoIogT5opUzlrLNV8YI=;
-        b=xAaRcOLEjXYF8ZIctQZuKRNbZn8skkklilc3NYRN/mlxAeVWmKan3DI33EaAwHnzLp
-         xfdWt8V1rO9cWRd6926JmVlmwkA/rm7H8oT+dYF0v/L5xyB+ucbFBsLFTcQhphWKmNqF
-         fCLm8vDKWmAw7bqIcqXlM9WhJ1NKtDz7Tc3PB8i2t2t1+pAmjSpKoXLPoDVXaSwRKvDe
-         0Y0EUSy47rpAzk+Oyup8Q8yE4oJp2xAdwbM9xeFPyY+01Kw/qQwy7uj/kK8SxOSnXvEz
-         6nfcYkgdOoo5YfSvi0qaYOFfjfcSqANtJcjaGRsk0lUf5YQ6wrXwoAuGquN1/r0MO921
-         GysQ==
-X-Gm-Message-State: AOAM531tgx6cHsW8QamPo789rckrvnVJ/9lCJkC8JO4wGImhriSqwyGR
-        S3WeMC5/YmkPtQ+9hgFu2+kR5Vn+TGHi29FKI+s=
-X-Google-Smtp-Source: ABdhPJxse48OZESZFthVDv8nUynrMkvM0JCiuRjG7/tN4zNaiseDCEGjt9o4QzkyV4Z20WHbORCpQublLG3V37jZ2Dg=
-X-Received: by 2002:a02:8624:0:b0:32b:397d:eeb1 with SMTP id
- e33-20020a028624000000b0032b397deeb1mr9940559jai.264.1652182582955; Tue, 10
- May 2022 04:36:22 -0700 (PDT)
+        Tue, 10 May 2022 07:41:50 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42F81E02A1;
+        Tue, 10 May 2022 04:37:53 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652182672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZSfFmrkwvSS3eqPLQm0swvWT7J06O/4HwkliRm/F5SM=;
+        b=OEiCbePtGN9R41EOW696ItL6C4v7YwKobu5uOVsB+L+o+iwswSqbzIdwvnOziDbZ/VvoZU
+        dOyb+BpTrmbpa+nlf0l1p/98oqfVvrbO3G/ssGco8YHzPLy7B/m6yG2xzm0mRVZmE2kvP6
+        QrZ2A52cNzvhHgwKZbTkVNmLd+t1Zm49zIzaMGYqztZKGIINFKV0q0rk7oB7k683RF+EGU
+        W/kkIrC5nysY83FAUW84NjiJH5hHfFJmEAsMrC/zzG94wkuarbvtg6t1iW+wvre9xztaoZ
+        rndYiVERG2rjQrRQnY7Ip35MrVVS6xwC+gYN6tmICzc2qH7cJ0BHwFs4LYrI7Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652182672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZSfFmrkwvSS3eqPLQm0swvWT7J06O/4HwkliRm/F5SM=;
+        b=NScDfioIUhsbAhEVbrY6xPt32+yRjKpYvluxU1W6Kd7vfWHLaAGWWlIY/pD9y/R6fNiPcp
+        etPv5GBX4lUEqlBw==
+To:     Thomas Pfaff <tpfaff@pcs.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v3] irq/core: synchronize irq_thread startup
+In-Reply-To: <87pmklpqod.ffs@tglx>
+References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+ <87mtg0m2jb.ffs@tglx> <e64aa9cb-a1ae-7534-8bf1-446d9d8c512@pcs.com>
+ <87pmklpqod.ffs@tglx>
+Date:   Tue, 10 May 2022 13:37:51 +0200
+Message-ID: <87mtfppqi8.ffs@tglx>
 MIME-Version: 1.0
-References: <20220507052451.12890-1-ojeda@kernel.org> <CABVgOSm5S2=QYnHJ+B0JbYtFYKBDRZiOhE5YMKKUKZU56d17HQ@mail.gmail.com>
- <CANiq72=0ft6+QLbdwWD6cLm4FhWfv53GSg6HKEwxQ-q2N-UkOw@mail.gmail.com> <CABVgOSkrvfvA7Ay4GC5wg64S1gibvm5_U5VGBog3sw4_UFo8Cg@mail.gmail.com>
-In-Reply-To: <CABVgOSkrvfvA7Ay4GC5wg64S1gibvm5_U5VGBog3sw4_UFo8Cg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 10 May 2022 13:36:11 +0200
-Message-ID: <CANiq72mcvKDW6qO=1PzYR_U0tAwVLyCWFZjFVLL81znWDSYq7A@mail.gmail.com>
-Subject: Re: [PATCH v6 00/23] Rust support
-To:     David Gow <davidgow@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On Tue, May 10, 2022 at 6:45 AM David Gow <davidgow@google.com> wrote:
+On Tue, May 10 2022 at 13:34, Thomas Gleixner wrote:
+> On Tue, May 10 2022 at 10:43, Thomas Pfaff wrote:
+>> It can be done only before the interrupt thread is stopped, and free_irq() 
+>> itself is already taking care about synchronizing, no matter if its done by 
+>> __synchronize_hardirq() or by synchronize_irq(), like it was before commit 
+>> 519cc8652b3a.
 >
-> I've just sent out a pull request to get this working under UML as
-> well, which would simplify running these further:
-> https://github.com/Rust-for-Linux/linux/pull/766
+> No, it does not really take care about it. It can return with
+> irq_desc::threads_active > 0 due to the interrupt thread being stopped
+> before reaching the thread function. Think about shared interrupts.
 
-Thanks a lot!
+Duh. Hit send too fast.
 
-> Yeah, these are all fair points: particularly for small doctests.
->
-> Maybe having an optional name, which more significant tests could use
-> to override the file:line names? That could be useful for a few of the
-> larger, more often referenced tests.
+It does matter whether the synchronization is done via
+__synchronize_hardirq() or via synchronize_irq(). The latter ensured
+that the thread reached the thread function and handled the pending
+wakeup _before_ kthread_stop() become true.
 
-Sounds reasonable. I can add support for that.
+So the fix is required to undo the damage created by 519cc8652b3a.
 
-> Ugh: it's a bit ugly either way. I suspect that file:line is still
-> probably better, if only because we need some way of looking up the
-> test in the code if it fails. I'd hate for people to be randomly
-> hashing bits of just to find out what test is failing.
+The synchronize_irq() after free_irq() is a completely different
+problem.
 
-One redeeming quality is that the assertion prints the line/file
-number in the generated file, so it would still be possible to check
-where it came from:
+Thanks,
 
-    [13:13:43] # rust_kernel_doctest_str_rs_somehash: ASSERTION FAILED
-at rust/doctests_kernel_generated.rs:2209
-    [13:13:43] Expected 2 > 3 to be true, but is false
-    [13:13:43] not ok 43 - rust_kernel_doctest_str_rs_somehash
-    [13:13:43] [FAILED] rust_kernel_doctest_str_rs_somehash
-
-Another alternative is to keep the file:line information around
-without embedding it into the test name, e.g. in a TAP comment or a
-mapping file (which `kunit.py` could read).
-
-But, yeah, before doing hashes or things like that, I would just go
-for simplicity and keep things as they are unless some use case really
-needs doctests to be stable.
-
-> Oops: I missed that (one of the issues with testing this on a
-> different machine which had a rust toolchain). Looks good to me.
->
-> Ah: I didn't realise the plan was always to have crate-specific
-> suites, and possibly to split things up.
->
-> The KTAP output specification does actually support arbitrary nesting
-> (though KUnit itself doesn't at the moment), which would potentially
-> be an option if (e.g.) providing the complete module nesting made
-> sense. I'm not convinced that'd make things easier to read, though.
-
-That is useful to know in case we need it, thanks!
-
-Cheers,
-Miguel
+        tglx

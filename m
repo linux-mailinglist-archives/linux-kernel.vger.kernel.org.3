@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE250520A58
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222D1520A59
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233851AbiEJAsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 20:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S233876AbiEJAtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 20:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiEJAsV (ORCPT
+        with ESMTP id S233011AbiEJAtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 20:48:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C391D8129;
-        Mon,  9 May 2022 17:44:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5F336155D;
-        Tue, 10 May 2022 00:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B28C385C5;
-        Tue, 10 May 2022 00:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652143465;
-        bh=K0UKY0ySeiFuDmMGhu1CLNh5evnfc+t09/RQFlXE1vQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r2fDG/los3M43jggaD960JLHPjml0wyQki6J5AgpUG5+3V7pGIF2guVWMjqM9WMGM
-         rby7uK5PK+FbhWL9YT2LyKZeKJbPyfOYDGhIL8Nel5V7s9/Iz+sTuzDkyD8wZvLufl
-         pr0HgM3+XMRD6oT3RVYI9q7E9pjzf57vpAKMman8=
-Date:   Mon, 9 May 2022 17:44:24 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     David Vernet <void@manifault.com>,
-        Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        tj@kernel.org, roman.gushchin@linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, mhocko@kernel.org, shakeelb@google.com,
-        kernel-team@fb.com, Richard Palethorpe <rpalethorpe@suse.com>
-Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
- test_memcg_low()
-Message-Id: <20220509174424.e43e695ffe0f7333c187fba8@linux-foundation.org>
-In-Reply-To: <Ynkum8DeJIAtGi9y@cmpxchg.org>
-References: <20220423155619.3669555-1-void@manifault.com>
-        <20220423155619.3669555-3-void@manifault.com>
-        <20220427140928.GD9823@blackbody.suse.cz>
-        <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
-        <20220429092620.GA23621@blackbody.suse.cz>
-        <20220506164015.fsdsuv226nhllos5@dev0025.ash9.facebook.com>
-        <Ynkum8DeJIAtGi9y@cmpxchg.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Mon, 9 May 2022 20:49:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110C2201388
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652143507; x=1683679507;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GeIgOnwBjoETAQHmucQ7R/kDKLxgAt3Z9vGZ1wlwYj8=;
+  b=c/xi6+ETSAtGAN2uKSkTE3DSij7YnCZB7wCpRpDRUVwxB5wErMgVSmCr
+   Yrwvso6nUPmqk45HuejkLHdbtwcF6XMGHlJpg7zpvKDcjYIxpN4ck2/g5
+   z5p62kG1G2WJTIfErKG6Cb7JhrtkQJSlL+DdY3YC3EntslOZjRuuPswPs
+   uEVthPALwkpwlLDN7OtTwuAM8BQwJzu//chEiQtkS8MgnAS0hUa8V05wr
+   KE6cbhSmZUZIb+CiXKaazlNl1+OASYjJjWBl8snkpo2jGA8qMMt7SS2Td
+   xTT4C0lq2PUf9sbq+S6fzjvW3Rvmbe4xN+mdfPI4KViarQ4OjGgD6fQXq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="269146724"
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="269146724"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 17:45:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,212,1647327600"; 
+   d="scan'208";a="657382336"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 May 2022 17:45:04 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noDzs-000H44-38;
+        Tue, 10 May 2022 00:45:04 +0000
+Date:   Tue, 10 May 2022 08:44:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 34/35] arch/riscv/kvm/aia_aplic.c:264:6:
+ warning: variable 'inject' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202205100811.BAMM4bPO-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +63,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 11:09:15 -0400 Johannes Weiner <hannes@cmpxchg.org> wrot=
-e:
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   2622f5aa2f4ccb93fdd771e7503ca364c6a290d4
+commit: cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436 [34/35] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+config: riscv-randconfig-r004-20220509 (https://download.01.org/0day-ci/archive/20220510/202205100811.BAMM4bPO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout cd81051cd1fc8eeb4629c0f3b71cf570e4a7d436
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> On Fri, May 06, 2022 at 09:40:15AM -0700, David Vernet wrote:
-> > Sorry for the delayed reply, Michal. I've been at LSFMM this week.
-> >=20
-> > On Fri, Apr 29, 2022 at 11:26:20AM +0200, Michal Koutn=FD wrote:
-> > > I still think that the behavior when there's no protection left for t=
-he
-> > > memory.low =3D=3D 0 child, there should be no memory.low events (not =
-just
-> > > uncounted but not happening) and test should not accept this (even
-> > > though it's the current behavior).
-> >
-> > That's fair. I think part of the problem here is that in general, the
-> > memcontroller itself is quite heuristic, so it's tough to write tests t=
-hat
-> > provide useful coverage while also being sufficiently flexible to avoid
-> > flakiness and over-prescribing expected behavior. In this case I think =
-it's
-> > probably correct that the memory.low =3D=3D 0 child shouldn't inherit
-> > protection from its parent under any circumstances due to its siblings
-> > overcommitting the parent's protection, but I also wonder if it's really
-> > necessary to enforce that. If you look at how much memory A/B/E gets at=
- the
-> > end of the reclaim, it's still far less than 1MB (though should it be 0=
-?).
-> > I'd be curious to hear what Johannes thinks.
->=20
-> We need to distinguish between what the siblings declare and what they
-> consume.
->=20
-> My understanding of the issue you're raising, Michal, is that
-> protected siblings start with current > low, then get reclaimed
-> slightly too much and end up with current < low. This results in a
-> tiny bit of float that then gets assigned to the low=3D0 sibling; when
-> that sibling gets reclaimed regardless, it sees a low event. Correct
-> me if I missed a detail or nuance here.
->=20
-> But unused float going to siblings is intentional. This is documented
-> in point 3 in the comment above effective_protection(): if you use
-> less than you're legitimately claiming, the float goes to your
-> siblings. So the problem doesn't seem to be with low accounting and
-> event generation, but rather it's simply overreclaim.
->=20
-> It's conceivable to make reclaim more precise and then tighten up the
-> test. But right now, David's patch looks correct to me.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I think we're OK with [2/5] now.  Unless there be objections, I'll
-be looking to get this series into mm-stable later this week.
+All warnings (new ones prefixed by >>):
 
+>> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
+           if (inject)
+               ^~~~~~
+   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
+           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
+           bool inject, ie;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +264 arch/riscv/kvm/aia_aplic.c
+
+   248	
+   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
+   250	{
+   251		u32 target;
+   252		bool inject, ie;
+   253		unsigned long flags;
+   254		struct aplic_irq *irqd;
+   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
+   256	
+   257		if (!aplic || !source || (aplic->nr_irqs <= source))
+   258			return -ENODEV;
+   259		irqd = &aplic->irqs[source];
+   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
+   261	
+   262		raw_spin_lock_irqsave(&irqd->lock, flags);
+   263	
+ > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
+   265			goto skip_unlock;
+   266	
+   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
+   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
+   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   272			break;
+   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
+   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
+   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   277			break;
+   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
+   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   281			break;
+   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
+   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
+   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
+   285			break;
+   286		}
+   287	
+   288		if (level)
+   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
+   290		else
+   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
+   292	
+   293		inject = false;
+   294		target = irqd->target;
+   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
+   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
+   297			inject = true;
+   298		}
+   299	
+   300	skip_unlock:
+   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
+   302	
+   303		if (inject)
+   304			aplic_inject_msi(kvm, source, target);
+   305	
+   306		return 0;
+   307	}
+   308	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

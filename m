@@ -2,163 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3BA52124F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E9B521256
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239814AbiEJKlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S235793AbiEJKmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239932AbiEJKlG (ORCPT
+        with ESMTP id S240019AbiEJKly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:41:06 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB92618E4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:37:08 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bv19so32051233ejb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=75/C7h5CNsbW/VVYm2sKiusOMpu9/WpRRE2yjuNNA7Y=;
-        b=mx5dQxDx0ZCxnBFMxuie5AkL72AsDS45domPNjZ/menpLr7TtONaLqhcO3BBJZCAiw
-         fbzrTyl/BaFfLnoney01gyPd88c/7JTL5ibgAtas2kuAcHlN+yq0bEKRHV4V3MW3E+iL
-         4NqM88T61dV8HudyVqQuq6uv3CYTaXkk/GdxvJQS56S0drI07ug3dwN3yKI1lQWnQ3gz
-         LFJ5FMAcThL38AsM+TY1vwNF6TlKe6SUQXoukCGRbmgW4hrChBkqea6DZ3XxkkkCWI61
-         nFlysVi1tfYVVUdnl5DTJkq17vWDQ4Eno0yi3TRLAk4w7lgAdVJkuzrUtKe3u/7W8tT6
-         tasw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=75/C7h5CNsbW/VVYm2sKiusOMpu9/WpRRE2yjuNNA7Y=;
-        b=4X/zrHF1JjMZ0OqCFaZsQoTaPsHCT0X7muSjKgwLMj6MXxHXAqPWiPqhQL2AEo4NM9
-         IoeKB/r0FjCetUUuK1Ybi4JAmSvQpWizUXEC/pfvXvbD+8BlRXBF377px44AmbBjpG87
-         U5dZK/QBBbWdk1hm+/OfSHBi7RPHnX3E5zuNR0md/aMld+xonDwvoQYOD9uqQZq9JBX/
-         6/4HFlrqkOyrTOgFzXMm8ffH5wAxVo5qzDUTrKlfN65mqsJqs6LNA0vGKxUyJbaPBIkq
-         mI0aI4NfzBnVn66US9Fqw2uHUxGZeqW8aOAN52EvE4V2nzht6n5bmiHXgDjs/+ezRbfl
-         3+Rw==
-X-Gm-Message-State: AOAM531zabl3aCYG/nKCc/yNnxx/5VrQUDXmJFpCbiPnor6T/g7AxFPU
-        DctPJ2Fe9CCp1Vy0Mj87A/4Teg==
-X-Google-Smtp-Source: ABdhPJwTRNAmvlaJMRk0SNOUSPmD2ohyEdjxYr4vHijwfhtSm7X6ktPpLVAZZ/7kBhdWdOvLAz0QQw==
-X-Received: by 2002:a17:907:6092:b0:6fa:7951:e26 with SMTP id ht18-20020a170907609200b006fa79510e26mr8537235ejc.734.1652179026740;
-        Tue, 10 May 2022 03:37:06 -0700 (PDT)
-Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id hv7-20020a17090760c700b006f3ef214e15sm5983621ejc.123.2022.05.10.03.37.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 03:37:06 -0700 (PDT)
-Message-ID: <88a0543f-e717-4228-4842-aa69cd7faaf8@linaro.org>
-Date:   Tue, 10 May 2022 12:37:04 +0200
+        Tue, 10 May 2022 06:41:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F69126CC61
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:37:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F293261785
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD9DC385A6;
+        Tue, 10 May 2022 10:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652179070;
+        bh=gEUdySVb9quKEsnAJIwkLpqXP8oiSnANbxwM2hILG4o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GEBEEkNCmOrR73vQ5zxfIGz8bK0GKyIAMRVX3VqpYmF/bqlKyJkH1NAXc2tHQJtqv
+         ZjcU8nuUgpN7sauTQ9GJtN2vWlQtGvW/Pr0RiSjn3F107H+aWGgljdlsAyCuzl12U7
+         sjkNcD8qzklauXhca4u3qGQXVycvd5fGRBzRzf4lH2AA8lsZ6138w+R9X5okfsR0Do
+         mJtdCAnvjDi9QrRfAFZSxU4GliIOR1QimftN8ZKBLYLmVNY2kIRT8hO+/8KaZdPqWn
+         lzLizagW6lzZ3cTNnB1dAIeUHNkfz7gVrWT8VSMzAjZOvrsDo6YsP4cEszhpxKxqUa
+         waENBEy7uH7Gg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
+Date:   Tue, 10 May 2022 10:37:47 +0000
+Message-Id: <20220510103747.151886-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220504010716.661115-10-Liam.Howlett@oracle.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 3/4] dt-bindings: mux: Add lan966 flexcom mux
- controller
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        peda@axentia.se
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
-        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
-        UNGLinuxDriver@microchip.com
-References: <20220509084920.14529-1-kavyasree.kotagiri@microchip.com>
- <20220509084920.14529-4-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220509084920.14529-4-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2022 10:49, Kavyasree Kotagiri wrote:
-> This adds DT bindings documentation for lan966 flexcom
-> mux controller.
+Hi Liam,
+
+On Wed, 4 May 2022 01:07:52 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> Start tracking the VMAs with the new maple tree structure in parallel with
+> the rb_tree.  Add debug and trace events for maple tree operations and
+> duplicate the rb_tree that is created on forks into the maple tree.
+> 
+> The maple tree is added to the mm_struct including the mm_init struct,
+> added support in required mm/mmap functions, added tracking in kernel/fork
+> for process forking, and used to find the unmapped_area and checked
+> against what the rbtree finds.
+> 
+> This also moves the mmap_lock() in exit_mmap() since the oom reaper call
+> does walk the VMAs.  Otherwise lockdep will be unhappy if oom happens.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->  .../mux/microchip,lan966-flx-mux.yaml         | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
+>  arch/x86/kernel/tboot.c     |   1 +
+>  drivers/firmware/efi/efi.c  |   1 +
+>  include/linux/mm.h          |   2 +
+>  include/linux/mm_types.h    |   3 +
+>  include/trace/events/mmap.h |  73 ++++++++
+>  kernel/fork.c               |  20 ++-
+>  mm/init-mm.c                |   2 +
+>  mm/mmap.c                   | 323 +++++++++++++++++++++++++++++++++---
+>  8 files changed, 396 insertions(+), 29 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml b/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
-> new file mode 100644
-> index 000000000000..63147a2e8f3a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mux/microchip,lan966-flx-mux.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mux/microchip,lan966-flx-mux.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+[...]
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index d7e120ad5825..e777da0132f6 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+[...]
+> @@ -680,6 +744,56 @@ static void __vma_link_file(struct vm_area_struct *vma)
+>  	}
+>  }
+>  
+> +/*
+> + * vma_mas_store() - Store a VMA in the maple tree.
+> + * @vma: The vm_area_struct
+> + * @mas: The maple state
+> + *
+> + * Efficient way to store a VMA in the maple tree when the @mas has already
+> + * walked to the correct location.
+> + *
+> + * Note: the end address is inclusive in the maple tree.
+> + */
+> +inline void vma_mas_store(struct vm_area_struct *vma, struct ma_state *mas)
+> +{
+> +	trace_vma_store(mas->tree, vma);
+> +	mas_set_range(mas, vma->vm_start, vma->vm_end - 1);
+> +	mas_store_prealloc(mas, vma);
+> +}
 > +
-> +title: Microchip Lan966 Flexcom multiplexer bindings
+> +/*
+> + * vma_mas_remove() - Remove a VMA from the maple tree.
+> + * @vma: The vm_area_struct
+> + * @mas: The maple state
+> + *
+> + * Efficient way to remove a VMA from the maple tree when the @mas has already
+> + * been established and points to the correct location.
+> + * Note: the end address is inclusive in the maple tree.
+> + */
+> +static inline void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
+> +{
+> +	trace_vma_mas_szero(mas->tree, vma->vm_start, vma->vm_end - 1);
+> +	mas->index = vma->vm_start;
+> +	mas->last = vma->vm_end - 1;
+> +	mas_store_prealloc(mas, NULL);
+> +}
 
-s/bindings//
+Above two functions were defined in internal.h in v8[1], but moved to mmap.c in
+this version.  As mmap.c is compiled when CONFIG_MMU, build fails when the
+config is not set as below:
 
-> +
-> +maintainers:
-> +  - Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> +
-> +description: |+
+    .../mm/nommu.c: In function 'add_vma_to_mm':
+    .../mm/nommu.c:575:2: error: implicit declaration of function 'vma_mas_store'; did you mean 'mas_store'? [-Werror=implicit-function-declaration]
+      575 |  vma_mas_store(vma, &mas);
+          |  ^~~~~~~~~~~~~
+          |  mas_store
+    .../mm/nommu.c: In function 'delete_vma_from_mm':
+    .../mm/nommu.c:599:2: error: implicit declaration of function 'vma_mas_remove' [-Werror=implicit-function-declaration]
+      599 |  vma_mas_remove(vma, &mas);
+          |  ^~~~~~~~~~~~~~
 
-No need for |+
+Was there a reason to move these definitions?  I confirmed moving the
+definition back to internal.h fixes this issue, but I'm unsure if that's the
+right solution.
 
-> +  The Microchip Lan966 have 5 Flexcoms. Each flexcom has 2 chip-selects
-> +  when operating in USART and SPI modes.
-> +  Each chip select of each flexcom can be mapped to 21 flexcom shared pins.
-> +  Define register offset and pin number to map a flexcom chip-select
-> +  to flexcom shared pin.
-> +
-> +allOf:
-> +  - $ref: /schemas/mux/mux-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,lan966-flx-mux
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#mux-control-cells':
-> +    const: 1
-> +
-> +  mux-offset-pin:
-> +    description: an array of register offset and flexcom shared pin(0-20).
-
-This does not look like generic property, so you need vendor prefix and
-type/ref.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#mux-control-cells'
-> +  - mux-offset-pin
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    mux: mux-controller@e2004168 {
-> +        compatible = "microchip,lan966-flx-mux";
-> +        reg = <0xe2004168 0x8>;
-> +        #mux-control-cells = <1>;
-> +        mux-offset-pin = <0x18 9>; /* 0: flx3 cs0 offset, pin-9 */
-> +    };
-> +...
+[1] https://lore.kernel.org/linux-mm/20220426150616.3937571-10-Liam.Howlett@oracle.com/
 
 
-Best regards,
-Krzysztof
+Thanks,
+SJ
+
+[...]

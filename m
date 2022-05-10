@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E316522148
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125FC52214F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347449AbiEJQge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S1347457AbiEJQhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347450AbiEJQgD (ORCPT
+        with ESMTP id S244652AbiEJQhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:36:03 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CD4F455
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso185921697b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
+        Tue, 10 May 2022 12:37:03 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFD52A3770;
+        Tue, 10 May 2022 09:33:03 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 204so12581838pfx.3;
+        Tue, 10 May 2022 09:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
-        b=S93KyGQn2wdSML11sOCTMuFkKrJFU5aOaCEo6hMoFsAJapfw/z68o2XJdecid4v+1w
-         5imt+0Tx2VA5Vu0BuP+ng9175P6tfMna5xwMriqyMcXBC32q4QI/s621h3BBgi6KDzQ/
-         /mQP6iTHWSiLU05VebTJQUvcyuU6PXOilhDXPEdxHnmozF0thna7eLKi30v72QlorLwf
-         yPSDt66K84FKyGuXD21ARYWgDIwrbqtGdsAPXhF+f5BYkS98SXfMzv6eHtmi8Ufq/HLP
-         TE++Ad09hh94UwED/ms3PenfmiGwBKBz78O+UiOdC1lROufFPAfZ3ZnlrVlCIlyg5IUl
-         uIXw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=GjChMeNIzLiRvrSn8OnMS9zcuWEpvcpYPPQEksMqNGI=;
+        b=bcyxtS0zXZzZrIZG8OlMxLI+eozWOBw8yBXTHalpQHG0E5TazrSpDnh7D3rNFWzkzN
+         wfjfnD/iVbRHWwRrA+RtTtdtZVlKxykzNIoqt6DFiUslxUzqHXK6SpoWv10lFpTQwIUY
+         A//+noQiZq9IKZ6BJrQyP/cL5rtMBCjjJt7omr9HJcawrQX9xg2H8/cLr4nDxGI5Gz0F
+         HpO4xC4X2pittWAFwTVNSaTgE+75pJoT8kuo5DqOnrRlJEOzQO1aajNlKTwfMz7O2Ism
+         xYyZQqf2mth185epzKs2yRr6oDhJHY/KRdNWTnqO5KCDuIOM7FRPPTd77vGp8ejP1Yvc
+         5lgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
-        b=TDn1HY9qLyG/0jkuEkyp7m0LY0OiyLrTqd2pBJPqKbbuC27Qsgi2BkIeo7iChXWE5c
-         Sc2bmPQ3lCT94EFS8hy3DD/h9rpU7rOEycJl7o8JStMjsDiHkJgGx1tIBR8ZrbNBJDFT
-         xQ4iz+XlJg4/MN+KXTiq4fnLlfK4hTbhQVgSa70dJUHr/aKFYOW8KvvBXsKqR4sKdvrV
-         /AIHlWfAVfX+WHFeMC0lFyOhA1TgilkG/80IzWTt0xrbcTg/tQJrrFdCOTbkiPYXmhiS
-         v6S6hR5zT0ALo7C6xuSJ23LYfN4DvNu/jjQgN6j9A0kbZ5oIUEf5cN1ll1iEWTrSBL0T
-         FX0g==
-X-Gm-Message-State: AOAM533VsI3k0XBjTpLeE1hdJTbdB0rSDai7WRx6j2Cu7NA1G8sEVEhq
-        P/Hf0KvmwL4sJE2lpdty1jn6Y6c5rc6/y+rEIRHkPg==
-X-Google-Smtp-Source: ABdhPJyXHvPFrLpD9JHZCeHuyGvGIXtbfBGwcobE9WuG1B4tDoKEOWroGcOYYXCzJn0wqwei/jnuhTj3Vn3KvonB3oQ=
-X-Received: by 2002:a81:6cc3:0:b0:2f7:cc1f:b52d with SMTP id
- h186-20020a816cc3000000b002f7cc1fb52dmr20616990ywc.293.1652200321217; Tue, 10
- May 2022 09:32:01 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=GjChMeNIzLiRvrSn8OnMS9zcuWEpvcpYPPQEksMqNGI=;
+        b=tkNECMNrjo4HutJqP3jCIOdX6fO3FYUPYMJYvR8o3PVOId0flp+GOewevA8XX+JALz
+         Afe6M6V99DVZg27cs8zhOn2xhwHhxqt7S8oMsPZriY8ldKWH4lHOvS4zobdURkrAaUfa
+         3nk+0H9MAe+g2SoTXYGPmiEB0dHNgDQTdfNc/xUo3lSWVNyF1+d9b0Vtk4Dk88F7MH1q
+         CtT8Ws90Z5hj4t76MznbPV6+gaZGv3c2uLXjr7h5GhqM444z8jZHYuIE6H+G3OldiRMC
+         kYFWB1Oji6mFRAf4cARGIMapnZSmK52Qdhs48Ad6hjAMIQGPSKuEp4BMoMonFnTlgZYM
+         ZVDQ==
+X-Gm-Message-State: AOAM531K7TQ6EdO3dQie/Z4IBqHs45KqPH2S48weUc6dZJlxVkf8fUed
+        YqB61vDRkWn72584+Qr4IQU=
+X-Google-Smtp-Source: ABdhPJz9k4askbfK9UmXvCcoQt2SxJ5gdVOhVd8QLLwCmfXZIYhwsJq/C690+7p+klwQYuQVaetEMQ==
+X-Received: by 2002:a63:86c6:0:b0:3ab:2c2c:42e9 with SMTP id x189-20020a6386c6000000b003ab2c2c42e9mr17280836pgd.230.1652200383080;
+        Tue, 10 May 2022 09:33:03 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o2-20020a63e342000000b003c14af5063esm10630940pgj.86.2022.05.10.09.32.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 09:33:02 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------9QHY3eIOD3o2Kvoq1xEXNc8i"
+Message-ID: <e31809b6-6f57-111b-3e01-76bfa69f9796@gmail.com>
+Date:   Tue, 10 May 2022 09:32:53 -0700
 MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-2-surenb@google.com>
- <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
-In-Reply-To: <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 May 2022 09:31:50 -0700
-Message-ID: <CAJuCfpEt9SSrELZzfmcqJ7JL_nEzWGz-YE9GRUZTjU5unqQjQg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next v4 07/12] net: dsa: rzn1-a5psw: add statistics
+ support
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+ <20220509131900.7840-8-clement.leger@bootlin.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220509131900.7840-8-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,90 +93,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 6:06 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
-> > With the oom-killer being able to operate on locked pages, exit_mmap
-> > does not need to ensure that oom_reap_task_mm is done before it can
-> > proceed. Instead it can rely on mmap_lock write lock to prevent
-> > oom-killer from operating on the vma tree while it's freeing page
-> > tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
-> > and then take mmap_lock write lock before freeing page tables.
->
-> The changelog is rather light on nasty details which might be good but
-> for the sake of our future us let's be more verbose so that we do not
-> have to reinvent the prior history each time we are looking into this
-> code. I would go with something like this instead:
-> "
-> The primary reason to invoke the oom reaper from the exit_mmap path used
-> to be a prevention of an excessive oom killing if the oom victim exit
-> races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
-> and exit_mmap run concurrently") for more details. The invocation has
-> moved around since then because of the interaction with the munlock
-> logic but the underlying reason has remained the same (see 27ae357fa82b
-> ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
->
-> Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
-> delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
-> any blocking operation before the memory is unmapped by exit_mmap so
-> the oom reaper invocation can be dropped. The unmapping part can be done
-> with the non-exclusive mmap_sem and the exclusive one is only required
-> when page tables are freed.
->
-> Remove the oom_reaper from exit_mmap which will make the code easier to
-> read. This is really unlikely to make any observable difference although
-> some microbenchmarks could benefit from one less branch that needs to be
-> evaluated even though it almost never is true.
-> "
+This is a multi-part message in MIME format.
+--------------9QHY3eIOD3o2Kvoq1xEXNc8i
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Looks great! Thanks for collecting all the history. Will update the description.
+On 5/9/22 06:18, Clément Léger wrote:
+> Add statistics support to the rzn1-a5psw driver by implementing the
+> following dsa_switch_ops callbacks:
+> - get_sset_count()
+> - get_strings()
+> - get_ethtool_stats()
+> - get_eth_mac_stats()
+> - get_eth_ctrl_stats()
+> - get_rmon_stats()
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>   drivers/net/dsa/rzn1_a5psw.c | 178 +++++++++++++++++++++++++++++++++++
+>   drivers/net/dsa/rzn1_a5psw.h |  46 ++++++++-
+>   2 files changed, 223 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
+> index 1e2fac80f3e0..46ba25672593 100644
+> --- a/drivers/net/dsa/rzn1_a5psw.c
+> +++ b/drivers/net/dsa/rzn1_a5psw.c
+> @@ -17,6 +17,61 @@
+>   
+>   #include "rzn1_a5psw.h"
+>   
+> +struct a5psw_stats {
+> +	u16 offset;
+> +	const char name[ETH_GSTRING_LEN];
+> +};
+> +
+> +#define STAT_DESC(_offset, _name) {.offset = _offset, .name = _name}
 
->
-> One minor comment below. Other than that \o/ this is finally going away.
-> I strongly suspect that the history of this code is a nice example about how
-> over optimizing code can cause more harm than good.
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
+You can build a more compact representation as long as you keep the 
+offset constant and the name in sync, the attached patch and leverage 
+the __stringify() macro to construct the name field:
 
-Thanks.
+-#define STAT_DESC(_offset, _name) {.offset = _offset, .name = _name}
++#define STAT_DESC(_offset) {   \
++       .offset = A5PSW_##_offset,      \
++       .name = __stringify(_offset),   \
++}
 
->
-> Thanks!
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  include/linux/oom.h |  2 --
-> >  mm/mmap.c           | 25 ++++++-------------------
-> >  mm/oom_kill.c       |  2 +-
-> >  3 files changed, 7 insertions(+), 22 deletions(-)
-> >
-> [...]
-> > @@ -3138,6 +3121,10 @@ void exit_mmap(struct mm_struct *mm)
-> >       /* update_hiwater_rss(mm) here? but nobody should be looking */
-> >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
-> >       unmap_vmas(&tlb, vma, 0, -1);
-> > +     mmap_read_unlock(mm);
-> > +     /* Set MMF_OOM_SKIP to disregard this mm from further consideration.*/
-> > +     set_bit(MMF_OOM_SKIP, &mm->flags);
->
-> I think that it would be slightly more readable to add an empty line
-> above and below of this. Also the comment would be more helpful if it
-> explaind what the further consideration actually means. I would go with
->
->         /*
->          * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
->          * because the memory has been already freed. Do not bother
->          * checking mm_is_oom_victim because setting a bit
->          * unconditionally is just cheaper.
->          */
->
+The attached patch does the conversion if you want to fixup into your 
+commit.
+-- 
+Florian
+--------------9QHY3eIOD3o2Kvoq1xEXNc8i
+Content-Type: text/x-patch; charset=UTF-8; name="rzn1_a5psw.c.diff"
+Content-Disposition: attachment; filename="rzn1_a5psw.c.diff"
+Content-Transfer-Encoding: base64
 
-Ack.
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2RzYS9yem4xX2E1cHN3LmMgYi9kcml2ZXJzL25l
+dC9kc2EvcnpuMV9hNXBzdy5jCmluZGV4IGVmOWQ4ZWY5NjFiNS4uNGU1Mjg5ODE4N2E1IDEw
+MDY0NAotLS0gYS9kcml2ZXJzL25ldC9kc2EvcnpuMV9hNXBzdy5jCisrKyBiL2RyaXZlcnMv
+bmV0L2RzYS9yem4xX2E1cHN3LmMKQEAgLTIyLDU0ICsyMiw1MCBAQCBzdHJ1Y3QgYTVwc3df
+c3RhdHMgewogCWNvbnN0IGNoYXIgbmFtZVtFVEhfR1NUUklOR19MRU5dOwogfTsKIAotI2Rl
+ZmluZSBTVEFUX0RFU0MoX29mZnNldCwgX25hbWUpIHsub2Zmc2V0ID0gX29mZnNldCwgLm5h
+bWUgPSBfbmFtZX0KKyNkZWZpbmUgU1RBVF9ERVNDKF9vZmZzZXQpIHsJXAorCS5vZmZzZXQg
+PSBBNVBTV18jI19vZmZzZXQsIAlcCisJLm5hbWUgPSBfX3N0cmluZ2lmeShfb2Zmc2V0KSwJ
+XAorfQogCiBzdGF0aWMgY29uc3Qgc3RydWN0IGE1cHN3X3N0YXRzIGE1cHN3X3N0YXRzW10g
+PSB7Ci0JU1RBVF9ERVNDKEE1UFNXX2FGcmFtZXNUcmFuc21pdHRlZE9LLCAiYUZyYW1lVHJh
+bnNtaXR0ZWRPSyIpLAotCVNUQVRfREVTQyhBNVBTV19hRnJhbWVzUmVjZWl2ZWRPSywgImFG
+cmFtZVJlY2VpdmVkT0siKSwKLQlTVEFUX0RFU0MoQTVQU1dfYUZyYW1lQ2hlY2tTZXF1ZW5j
+ZUVycm9ycywgImFGcmFtZUNoZWNrU2VxdWVuY2VFcnJvcnMiKSwKLQlTVEFUX0RFU0MoQTVQ
+U1dfYUFsaWdubWVudEVycm9ycywgImFBbGlnbm1lbnRFcnJvcnMiKSwKLQlTVEFUX0RFU0Mo
+QTVQU1dfYU9jdGV0c1RyYW5zbWl0dGVkT0ssICJhT2N0ZXRzVHJhbnNtaXR0ZWRPSyIpLAot
+CVNUQVRfREVTQyhBNVBTV19hT2N0ZXRzUmVjZWl2ZWRPSywgImFPY3RldHNSZWNlaXZlZE9L
+IiksCi0JU1RBVF9ERVNDKEE1UFNXX2FUeFBBVVNFTUFDQ3RybEZyYW1lcywgImFUeFBBVVNF
+TUFDQ3RybEZyYW1lcyIpLAotCVNUQVRfREVTQyhBNVBTV19hUnhQQVVTRU1BQ0N0cmxGcmFt
+ZXMsICJhUnhQQVVTRU1BQ0N0cmxGcmFtZXMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfaWZJbkVy
+cm9ycywgImlmSW5FcnJvcnMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfaWZPdXRFcnJvcnMsICJp
+Zk91dEVycm9ycyIpLAotCVNUQVRfREVTQyhBNVBTV19pZkluVWNhc3RQa3RzLCAiaWZJblVj
+YXN0UGt0cyIpLAotCVNUQVRfREVTQyhBNVBTV19pZkluTXVsdGljYXN0UGt0cywgImlmSW5N
+dWx0aWNhc3RQa3RzIiksCi0JU1RBVF9ERVNDKEE1UFNXX2lmSW5Ccm9hZGNhc3RQa3RzLCAi
+aWZJbkJyb2FkY2FzdFBrdHMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfaWZPdXREaXNjYXJkcywg
+ImlmT3V0RGlzY2FyZHMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfaWZPdXRVY2FzdFBrdHMsICJp
+Zk91dFVjYXN0UGt0cyIpLAotCVNUQVRfREVTQyhBNVBTV19pZk91dE11bHRpY2FzdFBrdHMs
+ICJpZk91dE11bHRpY2FzdFBrdHMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfaWZPdXRCcm9hZGNh
+c3RQa3RzLCAiaWZPdXRCcm9hZGNhc3RQa3RzIiksCi0JU1RBVF9ERVNDKEE1UFNXX2V0aGVy
+U3RhdHNEcm9wRXZlbnRzLCAiZXRoZXJTdGF0c0Ryb3BFdmVudHMiKSwKLQlTVEFUX0RFU0Mo
+QTVQU1dfZXRoZXJTdGF0c09jdGV0cywgImV0aGVyU3RhdHNPY3RldHMiKSwKLQlTVEFUX0RF
+U0MoQTVQU1dfZXRoZXJTdGF0c1BrdHMsICJldGhlclN0YXRzUGt0cyIpLAotCVNUQVRfREVT
+QyhBNVBTV19ldGhlclN0YXRzVW5kZXJzaXplUGt0cywgImV0aGVyU3RhdHNVbmRlcnNpemVQ
+a3RzIiksCi0JU1RBVF9ERVNDKEE1UFNXX2V0aGVyU3RhdHNPdmVyc2l6ZVBrdHMsICJldGhl
+clN0YXRzT3ZlcnNpemVQa3RzIiksCi0JU1RBVF9ERVNDKEE1UFNXX2V0aGVyU3RhdHNQa3Rz
+NjRPY3RldHMsICJldGhlclN0YXRzUGt0czY0T2N0ZXRzIiksCi0JU1RBVF9ERVNDKEE1UFNX
+X2V0aGVyU3RhdHNQa3RzNjV0bzEyN09jdGV0cywKLQkJICAiZXRoZXJTdGF0c1BrdHM2NXRv
+MTI3T2N0ZXRzIiksCi0JU1RBVF9ERVNDKEE1UFNXX2V0aGVyU3RhdHNQa3RzMTI4dG8yNTVP
+Y3RldHMsCi0JCSAgImV0aGVyU3RhdHNQa3RzMTI4dG8yNTVPY3RldHMiKSwKLQlTVEFUX0RF
+U0MoQTVQU1dfZXRoZXJTdGF0c1BrdHMyNTZ0bzUxMU9jdGV0cywKLQkJICAiZXRoZXJTdGF0
+c1BrdHMyNTZ0bzUxMU9jdGV0cyIpLAotCVNUQVRfREVTQyhBNVBTV19ldGhlclN0YXRzUGt0
+czUxMnRvMTAyM09jdGV0cywKLQkJICAiZXRoZXJTdGF0c1BrdHM1MTJ0bzEwMjNPY3RldHMi
+KSwKLQlTVEFUX0RFU0MoQTVQU1dfZXRoZXJTdGF0c1BrdHMxMDI0dG8xNTE4T2N0ZXRzLAot
+CQkgICJldGhlclN0YXRzUGt0czEwMjR0bzE1MThPY3RldHMiKSwKLQlTVEFUX0RFU0MoQTVQ
+U1dfZXRoZXJTdGF0c1BrdHMxNTE5dG9YT2N0ZXRzLAotCQkgICJldGhlclN0YXRzUGt0czE1
+MTl0b1hPY3RldHMiKSwKLQlTVEFUX0RFU0MoQTVQU1dfZXRoZXJTdGF0c0phYmJlcnMsICJl
+dGhlclN0YXRzSmFiYmVycyIpLAotCVNUQVRfREVTQyhBNVBTV19ldGhlclN0YXRzRnJhZ21l
+bnRzLCAiZXRoZXJTdGF0c0ZyYWdtZW50cyIpLAotCVNUQVRfREVTQyhBNVBTV19WTEFOUmVj
+ZWl2ZWQsICJWTEFOUmVjZWl2ZWQiKSwKLQlTVEFUX0RFU0MoQTVQU1dfVkxBTlRyYW5zbWl0
+dGVkLCAiVkxBTlRyYW5zbWl0dGVkIiksCi0JU1RBVF9ERVNDKEE1UFNXX2FEZWZlcnJlZCwg
+ImFEZWZlcnJlZCIpLAotCVNUQVRfREVTQyhBNVBTV19hTXVsdGlwbGVDb2xsaXNpb25zLCAi
+YU11bHRpcGxlQ29sbGlzaW9ucyIpLAotCVNUQVRfREVTQyhBNVBTV19hU2luZ2xlQ29sbGlz
+aW9ucywgImFTaW5nbGVDb2xsaXNpb25zIiksCi0JU1RBVF9ERVNDKEE1UFNXX2FMYXRlQ29s
+bGlzaW9ucywgImFMYXRlQ29sbGlzaW9ucyIpLAotCVNUQVRfREVTQyhBNVBTV19hRXhjZXNz
+aXZlQ29sbGlzaW9ucywgImFFeGNlc3NpdmVDb2xsaXNpb25zIiksCi0JU1RBVF9ERVNDKEE1
+UFNXX2FDYXJyaWVyU2Vuc2VFcnJvcnMsICJhQ2FycmllclNlbnNlRXJyb3JzIiksCisJU1RB
+VF9ERVNDKGFGcmFtZXNUcmFuc21pdHRlZE9LKSwKKwlTVEFUX0RFU0MoYUZyYW1lc1JlY2Vp
+dmVkT0spLAorCVNUQVRfREVTQyhhRnJhbWVDaGVja1NlcXVlbmNlRXJyb3JzKSwKKwlTVEFU
+X0RFU0MoYUFsaWdubWVudEVycm9ycyksCisJU1RBVF9ERVNDKGFPY3RldHNUcmFuc21pdHRl
+ZE9LKSwKKwlTVEFUX0RFU0MoYU9jdGV0c1JlY2VpdmVkT0spLAorCVNUQVRfREVTQyhhVHhQ
+QVVTRU1BQ0N0cmxGcmFtZXMpLAorCVNUQVRfREVTQyhhUnhQQVVTRU1BQ0N0cmxGcmFtZXMp
+LAorCVNUQVRfREVTQyhpZkluRXJyb3JzKSwKKwlTVEFUX0RFU0MoaWZPdXRFcnJvcnMpLAor
+CVNUQVRfREVTQyhpZkluVWNhc3RQa3RzKSwKKwlTVEFUX0RFU0MoaWZJbk11bHRpY2FzdFBr
+dHMpLAorCVNUQVRfREVTQyhpZkluQnJvYWRjYXN0UGt0cyksCisJU1RBVF9ERVNDKGlmT3V0
+RGlzY2FyZHMpLAorCVNUQVRfREVTQyhpZk91dFVjYXN0UGt0cyksCisJU1RBVF9ERVNDKGlm
+T3V0TXVsdGljYXN0UGt0cyksCisJU1RBVF9ERVNDKGlmT3V0QnJvYWRjYXN0UGt0cyksCisJ
+U1RBVF9ERVNDKGV0aGVyU3RhdHNEcm9wRXZlbnRzKSwKKwlTVEFUX0RFU0MoZXRoZXJTdGF0
+c09jdGV0cyksCisJU1RBVF9ERVNDKGV0aGVyU3RhdHNQa3RzKSwKKwlTVEFUX0RFU0MoZXRo
+ZXJTdGF0c1VuZGVyc2l6ZVBrdHMpLAorCVNUQVRfREVTQyhldGhlclN0YXRzT3ZlcnNpemVQ
+a3RzKSwKKwlTVEFUX0RFU0MoZXRoZXJTdGF0c1BrdHM2NE9jdGV0cyksCisJU1RBVF9ERVND
+KGV0aGVyU3RhdHNQa3RzNjV0bzEyN09jdGV0cyksCisJU1RBVF9ERVNDKGV0aGVyU3RhdHNQ
+a3RzMTI4dG8yNTVPY3RldHMpLAorCVNUQVRfREVTQyhldGhlclN0YXRzUGt0czI1NnRvNTEx
+T2N0ZXRzKSwKKwlTVEFUX0RFU0MoZXRoZXJTdGF0c1BrdHMxMDI0dG8xNTE4T2N0ZXRzKSwK
+KwlTVEFUX0RFU0MoZXRoZXJTdGF0c1BrdHMxNTE5dG9YT2N0ZXRzKSwKKwlTVEFUX0RFU0Mo
+ZXRoZXJTdGF0c0phYmJlcnMpLAorCVNUQVRfREVTQyhldGhlclN0YXRzRnJhZ21lbnRzKSwK
+KwlTVEFUX0RFU0MoVkxBTlJlY2VpdmVkKSwKKwlTVEFUX0RFU0MoVkxBTlRyYW5zbWl0dGVk
+KSwKKwlTVEFUX0RFU0MoYURlZmVycmVkKSwKKwlTVEFUX0RFU0MoYU11bHRpcGxlQ29sbGlz
+aW9ucyksCisJU1RBVF9ERVNDKGFTaW5nbGVDb2xsaXNpb25zKSwKKwlTVEFUX0RFU0MoYUxh
+dGVDb2xsaXNpb25zKSwKKwlTVEFUX0RFU0MoYUV4Y2Vzc2l2ZUNvbGxpc2lvbnMpLAorCVNU
+QVRfREVTQyhhQ2FycmllclNlbnNlRXJyb3JzKSwKIH07CiAKIHN0YXRpYyB2b2lkIGE1cHN3
+X3JlZ193cml0ZWwoc3RydWN0IGE1cHN3ICphNXBzdywgaW50IG9mZnNldCwgdTMyIHZhbHVl
+KQo=
 
-> > +     mmap_write_lock(mm);
-> >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
-> >       tlb_finish_mmu(&tlb);
->
-> --
-> Michal Hocko
-> SUSE Labs
+--------------9QHY3eIOD3o2Kvoq1xEXNc8i--

@@ -2,45 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBF8521BAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6BC521BA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245665AbiEJOT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S243951AbiEJOTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245666AbiEJNsE (ORCPT
+        with ESMTP id S1343557AbiEJNsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:48:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C715456200;
-        Tue, 10 May 2022 06:36:24 -0700 (PDT)
+        Tue, 10 May 2022 09:48:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6CF2B09C2;
+        Tue, 10 May 2022 06:36:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C3D5618B4;
-        Tue, 10 May 2022 13:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F32C385A6;
-        Tue, 10 May 2022 13:36:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EC52B81DAF;
+        Tue, 10 May 2022 13:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E9CC385C2;
+        Tue, 10 May 2022 13:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189784;
-        bh=US8X43Rh5j+4y6FKP6v9+3eLwbnOi3Z71ZpJneSh7n4=;
+        s=korg; t=1652189787;
+        bh=ztsU5dmS7toICJwPpwBvhqBZNz9WAcj48WoOreS6KZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qcaJK3sGpqepjTuZOMkAIVz02W+spYFzQqPJPQ9cSXwB/2pV92ePZE4F+dKXnZfXE
-         2Ls0mLeOjPQ1kuoK7uysQZHErO6QmtS1G159fSKsBP9YUpweL+kwPekfBwU9dzNsJB
-         2BRV2Gmg05Th3OYbRym/HM47rA79TKu+NPrxzECU=
+        b=QUUL8Uf6ttUy6gaySFWo1qgWnHU0FEJ/5yXsGk6MiFIdstvGuzA3tLBhaOqZU76zC
+         8qp31xNCgOnhAMDo1SUN5O3WlPCkkXymnHL2VgQt0OHls4lyiALFBD1jjoS7vOLbdH
+         0CirNWZAqw2p3h0kxPOpUztiyH3vfHyimWdvOndk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Ong, Boon Leong" <boon.leong.ong@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>, Ong@vger.kernel.org
-Subject: [PATCH 5.17 027/140] net: stmmac: disable Split Header (SPH) for Intel platforms
-Date:   Tue, 10 May 2022 15:06:57 +0200
-Message-Id: <20220510130742.389045834@linuxfoundation.org>
+        stable@vger.kernel.org, David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.17 028/140] btrfs: sysfs: export the balance paused state of exclusive operation
+Date:   Tue, 10 May 2022 15:06:58 +0200
+Message-Id: <20220510130742.417556860@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -58,65 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tan Tee Min <tee.min.tan@linux.intel.com>
+From: David Sterba <dsterba@suse.com>
 
-commit 47f753c1108e287edb3e27fad8a7511a9d55578e upstream.
+commit 3e1ad196385c65c1454aceab1226d9a4baca27d5 upstream.
 
-Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
-of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
-This SPH limitation will cause ping failure when the packets size exceed
-the MTU size. For example, the issue happens once the basic ping packet
-size is larger than the configured MTU size and the data is lost inside
-the fragmented packet, replaced by zeros/corrupted values, and leads to
-ping fail.
+The new state allowing device addition with paused balance is not
+exported to user space so it can't recognize it and actually start the
+operation.
 
-So, disable the Split Header for Intel platforms.
-
-v2: Add fixes tag in commit message.
-
-Fixes: 67afd6d1cfdf("net: stmmac: Add Split Header support and enable it in XGMAC cores")
-Cc: <stable@vger.kernel.org> # 5.10.x
-Suggested-by: Ong, Boon Leong <boon.leong.ong@intel.com>
-Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: efc0e69c2fea ("btrfs: introduce exclusive operation BALANCE_PAUSED state")
+CC: stable@vger.kernel.org # 5.17
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c |    1 +
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    2 +-
- include/linux/stmmac.h                            |    1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+ fs/btrfs/sysfs.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -454,6 +454,7 @@ static int intel_mgbe_common_data(struct
- 	plat->has_gmac4 = 1;
- 	plat->force_sf_dma_mode = 0;
- 	plat->tso_en = 1;
-+	plat->sph_disable = 1;
- 
- 	/* Multiplying factor to the clk_eee_i clock time
- 	 * period to make it closer to 100 ns. This value
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7077,7 +7077,7 @@ int stmmac_dvr_probe(struct device *devi
- 		dev_info(priv->device, "TSO feature enabled\n");
- 	}
- 
--	if (priv->dma_cap.sphen) {
-+	if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
- 		ndev->hw_features |= NETIF_F_GRO;
- 		priv->sph_cap = true;
- 		priv->sph = priv->sph_cap;
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -270,5 +270,6 @@ struct plat_stmmacenet_data {
- 	int msi_rx_base_vec;
- 	int msi_tx_base_vec;
- 	bool use_phy_wol;
-+	bool sph_disable;
- };
- #endif
+--- a/fs/btrfs/sysfs.c
++++ b/fs/btrfs/sysfs.c
+@@ -919,6 +919,9 @@ static ssize_t btrfs_exclusive_operation
+ 		case BTRFS_EXCLOP_BALANCE:
+ 			str = "balance\n";
+ 			break;
++		case BTRFS_EXCLOP_BALANCE_PAUSED:
++			str = "balance paused\n";
++			break;
+ 		case BTRFS_EXCLOP_DEV_ADD:
+ 			str = "device add\n";
+ 			break;
 
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBFF521C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF9521B6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344962AbiEJOgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S242558AbiEJOOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343678AbiEJOHK (ORCPT
+        with ESMTP id S245076AbiEJNrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:07:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A71FD1C4;
-        Tue, 10 May 2022 06:41:14 -0700 (PDT)
+        Tue, 10 May 2022 09:47:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC1D22EA74;
+        Tue, 10 May 2022 06:35:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D556B81DC3;
-        Tue, 10 May 2022 13:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB91C385C2;
-        Tue, 10 May 2022 13:41:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B9BECE1EDE;
+        Tue, 10 May 2022 13:35:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34985C385C2;
+        Tue, 10 May 2022 13:34:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190071;
-        bh=SMMW/xa9C8D5vurAKOeqVtrr7C7izTSMHjwXwWpZJXA=;
+        s=korg; t=1652189699;
+        bh=GMk/FTiZNuJINrvD/5eVq2bJ3KaCN5rDMfVzshQ+yrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/pgOuM2qenkiJ7dOkGNFmgqklTnTBPzTAr7p4Hgg1Je+rRw91IAWe1qhwnsjccow
-         aoXvBqfQlFrOHix1drMq/vloCX1S0X4zQVaOCQEIeTbwdCYgqvj7e7Z7eeazscbXqF
-         LKPo+kxAPQBItmIODU0Ym0AHQFTIgsBtGjF3Mozw=
+        b=g5ew5w6sE+zD4d0Ipvn3F/UNEXYTwInb9evrpkynDyXvO5xYAhmlv6lg3e8ZUOfIf
+         DYwbibg2WXcEUUpBH2cga6XdVKJHljxMoV3wPQBlYfGPBkqwtKkWmPndtgPpzYPr/G
+         6ugbOgIiC4L1d3XrIc94id+JlCzWd0SyCX2HYo8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aili Yao <yaoaili@kingsoft.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 118/140] KVM: LAPIC: Enable timer posted-interrupt only when mwait/hlt is advertised
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 126/135] PCI: aardvark: Enable MSI-X support
 Date:   Tue, 10 May 2022 15:08:28 +0200
-Message-Id: <20220510130744.978253870@linuxfoundation.org>
+Message-Id: <20220510130744.010873265@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 1714a4eb6fb0cb79f182873cd011a8ed60ac65e8 ]
+commit 754e449889b22fc3c34235e8836f08f51121d307 upstream.
 
-As commit 0c5f81dad46 ("KVM: LAPIC: Inject timer interrupt via posted
-interrupt") mentioned that the host admin should well tune the guest
-setup, so that vCPUs are placed on isolated pCPUs, and with several pCPUs
-surplus for *busy* housekeeping.  In this setup, it is preferrable to
-disable mwait/hlt/pause vmexits to keep the vCPUs in non-root mode.
+According to PCI 3.0 specification, sending both MSI and MSI-X interrupts
+is done by DWORD memory write operation to doorbell message address. The
+write operation for MSI has zero upper 16 bits and the MSI interrupt number
+in the lower 16 bits, while the write operation for MSI-X contains a 32-bit
+value from MSI-X table.
 
-However, if only some guests isolated and others not, they would not
-have any benefit from posted timer interrupts, and at the same time lose
-VMX preemption timer fast paths because kvm_can_post_timer_interrupt()
-returns true and therefore forces kvm_can_use_hv_timer() to false.
+Since the driver only uses interrupt numbers from range 0..31, the upper
+16 bits of the DWORD memory write operation to doorbell message address
+are zero even for MSI-X interrupts. Thus we can enable MSI-X interrupts.
 
-By guaranteeing that posted-interrupt timer is only used if MWAIT or
-HLT are done without vmexit, KVM can make a better choice and use the
-VMX preemption timer and the corresponding fast paths.
+Testing proves that kernel can correctly receive MSI-X interrupts from PCIe
+cards which supports both MSI and MSI-X interrupts.
 
-Reported-by: Aili Yao <yaoaili@kingsoft.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Cc: Aili Yao <yaoaili@kingsoft.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-Message-Id: <1643112538-36743-1-git-send-email-wanpengli@tencent.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110015018.26359-13-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/lapic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 6b6f9359d29e..970d5c740b00 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -113,7 +113,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1339,7 +1339,7 @@ static struct irq_chip advk_msi_irq_chip
  
- static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
- {
--	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-+	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-+		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
- }
+ static struct msi_domain_info advk_msi_domain_info = {
+ 	.flags	= MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+-		  MSI_FLAG_MULTI_PCI_MSI,
++		  MSI_FLAG_MULTI_PCI_MSI | MSI_FLAG_PCI_MSIX,
+ 	.chip	= &advk_msi_irq_chip,
+ };
  
- bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
--- 
-2.35.1
-
 
 

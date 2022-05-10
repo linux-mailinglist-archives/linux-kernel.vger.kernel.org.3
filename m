@@ -2,139 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C271F521A79
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881A3521AC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbiEJN66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S243096AbiEJODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245174AbiEJNig (ORCPT
+        with ESMTP id S244615AbiEJNmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:36 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7E266CA4;
-        Tue, 10 May 2022 06:28:01 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4626C5C010F;
-        Tue, 10 May 2022 09:27:59 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 10 May 2022 09:27:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1652189279; x=1652275679; bh=V6n23Qh6v/
-        2jyzSVv1tn7FsIF7VHsBZB/caUq+pIMMg=; b=nYnGnjTuTItTYE14cgml9pWfyF
-        BSZTajAxncG0KbjQcTvr2rQTOdPLen7jZ40XG6+e2af0TMsDqzG+5xQ7GRTh2uzj
-        JFMSUEieXdFynepr4KUdUn6p2KRfMaVUap7a/MNzycoqYyZs9zHgdngdPJl8yE6x
-        RhyzsnCxy3ys3ANvQ3Q733+V1zKgVsei7xcM+XRzYvfB/XiShYFunKlXAo1tPneO
-        ofy0OX4kkB9w0s7wGYXAM0vTC+ot5kwd/lF+dRmRp2ZA11RArdO+i1w6CAXVjjNM
-        mbDi9PHQq0FCaRzGiLIlL+rNHCXhYkrFJnQIX/6HWTTGOj8QJNf5VgVpErpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652189279; x=
-        1652275679; bh=V6n23Qh6v/2jyzSVv1tn7FsIF7VHsBZB/caUq+pIMMg=; b=u
-        /51tmdFk5+4+4ukJvcpU7nAQP1AEn1m7Gg0Mws2lO3DsABt8RaoXLjSrkdTHrEXb
-        dut+J996Mn7gOqGUm9utPZ3LdVGhn0ZZs8PUnShhf77l+ETsqZBxjpAIZNlhC6tE
-        m6GxBiyGcK0RE09Ld/8rxtXwPlk3sYDWfYk1Au//ylFMTs1lid7aGz/3qK1g79MN
-        8e881/VH04RJcRnc5ucLPh1qXzOsf/9GuJvwYXxa0fHWV4U3/DK7JSRwBic4gLlJ
-        24MTTNGxzw1s/PwOueY3LUpB9REi1pPPt1HSoLxmOyfOJsFNUzypMjfkwQ004xPD
-        VvhQDPeX974SGUjJ686XQ==
-X-ME-Sender: <xms:Xmh6Yqr_BMNg0-l-chG3sXXrMIfgqy_4iXzBtz9KGJivQSPYUCijKw>
-    <xme:Xmh6YoqzgesNwJN_GFqrQbywJhrno4rIMjwvdeS2mO7UIUpEA8bxps5pxnDS9cCTa
-    -TVE2Fi_cdpjkiBMp4>
-X-ME-Received: <xmr:Xmh6YvPFH_S64W__4GZUMoDXFt2ERekiBzVG29-KRF2zbMYv7yRwDOJNzh4dETm9F7FL0GzPLqeLgN3dJRldF-eLvglGxElPKNykQss>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedugdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Xmh6Yp4GR_jxquWbiZnqiYycMDnCL7XR4R8tHrC-jyTvQqI-A_LGrw>
-    <xmx:Xmh6Yp6JG-C-QUHGCywYJ3iZuAWEqsi2Sr9pLNIxFNzoUFZ_7VuaNA>
-    <xmx:Xmh6Ypgo7IscSJYi-xK6fi138IjgYH2CGQ6TJc8vIfQCE_Ld9tMmmw>
-    <xmx:X2h6YuEKw_S7tOfqzAZawgqvAkrGR5R4pGegipRmF-jwbzZToaSXZA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 May 2022 09:27:58 -0400 (EDT)
-Date:   Tue, 10 May 2022 15:27:56 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: bcm2835: fix bcm2835_clock_choose_div
-Message-ID: <20220510132756.qmyjca53xu44iwn7@houat>
-References: <20220428183010.1635248-1-stefan.wahren@i2se.com>
- <20220503145804.b2xz4etzc6kpr3fk@houat>
- <ee39ddd1-bfce-012d-5e04-448d779ed995@i2se.com>
+        Tue, 10 May 2022 09:42:02 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6962CE21B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:30:20 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id dk23so32976957ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EYtYwlz2KPXmVu+njbcewGhC8fMqY+Dy5OCbzouBYQo=;
+        b=XFUvOxgiQR78YUbV8REgK2ViRkKX7EkAyva7X50Xa6UHoA2pLqEhgl+Ynmz6Tfs4qb
+         HWg8aiTvL4kJ4qTzR+sNRQ81J8qANDBoncI0vy+viOXojJzRNFVPYlk6CiOPpq4ytdQF
+         RqYsJjgbUbry87AasVKZ56V00bYF+Ng47N1ra0iu68fcQPAJM4pTzzP3Kz0JYX3T0Mu6
+         eE/JQ+h4kvRxp8u94q77tQlzKsEebcYIm2oidjYM29Bb0N9vuf0s2oPGa6RuCv2+iiq0
+         EMwAb8f5af1DHTWsghLWc75BF8J6luPYlrO1PMkfmHGvIUqRsjSrwYX0qjkQmAI4H5NX
+         qN3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EYtYwlz2KPXmVu+njbcewGhC8fMqY+Dy5OCbzouBYQo=;
+        b=Nwm7MEPNAs8UiV75PJQqU4cKAALza4T5p/0n0bWltYvKTBsKyYizVbG22Ovwk1Enfa
+         5+iDAiXt9o1V/ww4uglVWWPe5/K7XdXjnLfGZKw/ehJMvq7OiVlKAss0WvChPUFcHuJV
+         UW3BmKAkLr9pwRAr1S0tbidCnk+ynv2EIZE3SYCGxXi2mru+TeDHZcE2nCJKx8QrEklN
+         m7KALlyWcyWNrMO0iv1DcI/CfHObhY5QdOxZ2yd6UXesRI50WjqCp0zSEZ3zi8uwjn1V
+         DK9XNVK3+pMUljWBberAMjsFFCOkByDFfgIMPY12ouoYSBUXdNDEDl9ePiz6QK48hVGT
+         qwdw==
+X-Gm-Message-State: AOAM533YWe0Yvv+nTQU6DzBs0pqoMPF9TxxjmW6eHBaBA7GIlOPHUooO
+        mvPCpvCIbG3nXAvFBsDNWQOHQQ==
+X-Google-Smtp-Source: ABdhPJz51i+DK9WKBMW2jvke8/AQ9bcDkq6DkUeG6a37vidtAoW3AWZAjecAM/UEy4O6QPtfASKGIQ==
+X-Received: by 2002:a17:907:80c8:b0:6f4:3177:a0c9 with SMTP id io8-20020a17090780c800b006f43177a0c9mr20879712ejc.188.1652189416932;
+        Tue, 10 May 2022 06:30:16 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id yl26-20020a17090693fa00b006f3ef214de2sm6121263ejb.72.2022.05.10.06.30.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 06:30:16 -0700 (PDT)
+Message-ID: <8f814e9f-2060-7361-8d36-4a34f2aece1a@linaro.org>
+Date:   Tue, 10 May 2022 15:30:15 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iiuqzltjsvoixdta"
-Content-Disposition: inline
-In-Reply-To: <ee39ddd1-bfce-012d-5e04-448d779ed995@i2se.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/4] media: dt-bindings: ov5675: document YAML binding
+Content-Language: en-US
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+References: <20220509143226.531117-1-foss+kernel@0leil.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220509143226.531117-1-foss+kernel@0leil.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/05/2022 16:32, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> 
+> This patch adds documentation of device tree in YAML schema for the
+> OV5675 CMOS image sensor from Omnivision.
+> 
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
---iiuqzltjsvoixdta
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 07, 2022 at 11:26:28AM +0200, Stefan Wahren wrote:
-> Am 03.05.22 um 16:58 schrieb Maxime Ripard:
-> > Hi,
-> >=20
-> > On Thu, Apr 28, 2022 at 08:30:10PM +0200, Stefan Wahren wrote:
-> > > The commit 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
-> > > accidentially breaks the behavior of bcm2835_clock_choose_div() and
-> > > booting of Raspberry Pi. The removed do_div macro call had side effec=
-ts,
-> > > so we need to restore it.
-> > >=20
-> > > Fixes: 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
-> > > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > I only found this patch after debugging why the HDMI driver was
-> > returning -EINVAL at probe on -rc5.
-> >=20
-> > Acked-by: Maxime Ripard <maxime@cerno.tech>
-> > Tested-by: Maxime Ripard <maxime@cerno.tech>
->=20
-> Thanks,
->=20
-> does this go via clk-fixes?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yep, it should.
 
-Stephen, could we merge this?
-
-Maxime
-
---iiuqzltjsvoixdta
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnpoRgAKCRDj7w1vZxhR
-xXXWAP4unHPnJJ+pfUOyHlW0LlgxC5dGW9PKPQF5+/AGot2oNAEAgBckc8lfPpYH
-RQ67UzgFYAKV6AlepFjtnRlbxpQRJg8=
-=yS+i
------END PGP SIGNATURE-----
-
---iiuqzltjsvoixdta--
+Best regards,
+Krzysztof

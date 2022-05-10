@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E747D522754
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA1452275C
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbiEJXEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S237094AbiEJXE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237711AbiEJXEN (ORCPT
+        with ESMTP id S230470AbiEJXEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:04:13 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EF3F29F9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:04:12 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d17so219850plg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rpOOu3yloX9+o7QmB4b1fha0WPYoksvLJ9prqiOWMZA=;
-        b=k00JKarFFBjlfYD+r85hwLg0trPXVpQEixLbgrBOuMBzDyi5b/kKU+CffB5c5ibqTD
-         zxjGv7Zvu0lj5MfTWUoTgBkOspD19gvDGY+tGud+fgVwBXnUHjjkvby3B8BN9MveLS+P
-         S6eZZopSzUB+t2aSvRryNcQnFK9X6XbfLNlJQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rpOOu3yloX9+o7QmB4b1fha0WPYoksvLJ9prqiOWMZA=;
-        b=VwnRW64UodvoxhQYnHRkqfd7ae/QbhOlBj+K3genGryl8kGC+iKlEa2LNKhH1R+tta
-         5T/q/zjPquTnzp+JY0WzSLiKx89C+DZSArhwsCjcF+p68G7++flmwiiouucCAl2DbaHR
-         Arf1OweLAaY5K7cC2PMATM/qpxLaqC1XveuA3xXXqgXgXfmVKZ1eg5LENfRrgijkkzgE
-         9QcolnkvO/8aMeBM8EJGt9Yv83+9r1HZdiaBtzOqixMxb2eG1FcWlg6DrQs2QDuS0HgN
-         9dnryStAP4Tf0pWTAHWZTxMwaKfXCfAsaq0aaXuqDjKp2oF5q1nFM/detE5V953dWl8V
-         /ZhQ==
-X-Gm-Message-State: AOAM533c6NaqRDfocCqPwM67KxkpRMF+hIA2q0xdzd3MqG14a/67IFDZ
-        y2Ul2N7xJExmtnwzawu6LJggNnGtFQ3jPQ==
-X-Google-Smtp-Source: ABdhPJxEnJFubfWfGEANXo2HCxGCKtq5R1uXvOZ5g1XB3spi/HvrHYO1LvgE8enCGq/BukKn6rfDMw==
-X-Received: by 2002:a17:902:e881:b0:15e:93ac:41ba with SMTP id w1-20020a170902e88100b0015e93ac41bamr22642097plg.160.1652223851502;
-        Tue, 10 May 2022 16:04:11 -0700 (PDT)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 137-20020a62178f000000b0050d4d156362sm97625pfx.1.2022.05.10.16.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 16:04:11 -0700 (PDT)
-Date:   Tue, 10 May 2022 23:04:09 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Subject: Re: [PATCH v4 0/2] Input: cros-ec-keyb: Better matrixless support
-Message-ID: <Ynrvadrl/P/6CrMQ@chromium.org>
-References: <20220503204212.3907925-1-swboyd@chromium.org>
+        Tue, 10 May 2022 19:04:54 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 072442734DA;
+        Tue, 10 May 2022 16:04:53 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 44A9110E68F9;
+        Wed, 11 May 2022 09:04:49 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1noYuN-00AT9W-Ck; Wed, 11 May 2022 09:04:47 +1000
+Date:   Wed, 11 May 2022 09:04:47 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220510230447.GC2306852@dread.disaster.area>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <20220510005533.GA2306852@dread.disaster.area>
+ <87bkw5d098.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503204212.3907925-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <87bkw5d098.fsf@oldenburg.str.redhat.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=627aef94
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8
+        a=DeMPlFUAyss6Xeq_UakA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Tue, May 10, 2022 at 02:45:39PM +0200, Florian Weimer wrote:
+> * Dave Chinner:
+> 
+> > IOWs, what Linux really needs is a listxattr2() syscall that works
+> > the same way that getdents/XFS_IOC_ATTRLIST_BY_HANDLE work. With the
+> > list function returning value sizes and being able to iterate
+> > effectively, every problem that listxattr() causes goes away.
+> 
+> getdents has issues of its own because it's unspecified what happens if
+> the list of entries is modified during iteration.  Few file systems add
+> another tree just to guarantee stable iteration.
 
-On May 03 13:42, Stephen Boyd wrote:
-> This is a followup to my previous patch[1] that skips keyboard registration
-> when the matrix properties aren't present. This adds a compatible string
-> for this scenario so we can ease existing DTBs over to the new design.
-> 
-> Changes from v3 (https://lore.kernel.org/r/20220503042242.3597561-1-swboyd@chromium.org):
->  * s/register_keyboard/has_keyboard/
->  * Pick up review tags
->  * Indicate properties are required in example #2 in yaml file
-> 
-> Changes from v2 (https://lore.kernel.org/r/20220429233112.2851665-1-swboyd@chromium.org):
->  * Drop rows/cols check now that compatible schema handles it
->  * Make binding require rows,cols,keymap for cros-ec-keyb compatible
-> 
-> Changes from v1 (https://lore.kernel.org/r/20220427203026.828183-1-swboyd@chromium.org):
->  * Better enforcement of properties in DT binding
->  * Skip registration by means of adding compatible to device id list
-> 
-> Stephen Boyd (2):
->   dt-bindings: google,cros-ec-keyb: Introduce switches only compatible
->   Input: cros-ec-keyb - skip keyboard registration w/o cros-ec-keyb
->     compatible
+The filesystem I care about (XFS) guarantees stable iteration and
+stable seekdir/telldir cookies. It's not that hard to do, but it
+requires the filesystem designer to understand that this is a
+necessary feature before they start designing the on-disk directory
+format and lookup algorithms....
 
-Do these need input maintainers Acked-by? Also, should these go through
-the chrome-platform branch?
+> Maybe that's different for xattrs because they are supposed to be small
+> and can just be snapshotted with a full copy?
 
-Thanks,
+It's different for xattrs because we directly control the API
+specification for XFS_IOC_ATTRLIST_BY_HANDLE, not POSIX. We can
+define the behaviour however we want. Stable iteration is what
+listing keys needs.
 
--Prashant 
-> 
->  .../bindings/input/google,cros-ec-keyb.yaml   | 87 +++++++++++++++++--
->  drivers/input/keyboard/cros_ec_keyb.c         | 19 ++--
->  2 files changed, 91 insertions(+), 15 deletions(-)
-> 
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: <devicetree@vger.kernel.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-> 
-> [1] https://lore.kernel.org/all/20220425210726.3813477-1-swboyd@chromium.org/
-> 
-> base-commit: 4352e23a7ff2f8a4ff229dd1283ed2f2b708ec51
-> -- 
-> https://chromeos.dev
-> 
-> 
+The cursor is defined as 16 bytes of opaque data, enabling us to
+encoded exactly where in the hashed name btree index we have
+traversed to:
+
+/*
+ * Kernel-internal version of the attrlist cursor.
+ */
+struct xfs_attrlist_cursor_kern {
+        __u32   hashval;        /* hash value of next entry to add */
+        __u32   blkno;          /* block containing entry (suggestion) */
+        __u32   offset;         /* offset in list of equal-hashvals */
+        __u16   pad1;           /* padding to match user-level */
+        __u8    pad2;           /* padding to match user-level */
+        __u8    initted;        /* T/F: cursor has been initialized */
+};
+
+Hence we have all the information in the cursor we need to reset the
+btree traversal index to the exact entry we finished at (even in the
+presence of hash collisions in the index). Hence removal of the
+entry the cursor points to isn't a problem for us, we just move to
+the next highest sequential hash index in the btree and start again
+from there.
+
+Of course, if this is how we define listxattr2() behaviour (or maybe
+we should call it "list_keys()" to make it clear we are treating
+this as a key/value store instead of xattrs) then each filesystem
+can put what it needs in that cursor to guarantee it can restart key
+iteration correctly if the entry the cursor points to has been
+removed.  We can also make the cursor larger if necessary for other
+filesystems to store the information they need.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

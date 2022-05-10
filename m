@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7607B522059
+	by mail.lfdr.de (Postfix) with ESMTP id 274E9522058
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347514AbiEJQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S1347575AbiEJQBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347263AbiEJPwL (ORCPT
+        with ESMTP id S1347267AbiEJPwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:52:11 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5527CF4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:48:14 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id h3so13813820qtn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:48:14 -0700 (PDT)
+        Tue, 10 May 2022 11:52:13 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D8B27FE4;
+        Tue, 10 May 2022 08:48:15 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id fu47so13827619qtb.5;
+        Tue, 10 May 2022 08:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=T2IJO+Pa5M9voLAKUXr0ktIZBj7JUQbqvUsJEPx3GJM=;
-        b=c3IN7lMAFbv4sEP6laSQRowTvSX+G5HVSYHppf0FixY2y1TOg935HHtOG7mdR4VDoe
-         LQ69xKtAOxfnp4jdc3DXQEgPRlFnpm00mdslKhj6m28OSLFLu9jG5au941IQtcxYX9TQ
-         LhiZpqUmNAvT00BdJohSd3u1bbdaE5Qh+pz80eMMUhg7p6IuxcdGsDdMY3jG2dRCpBRt
-         up0C87zFbVNdmfiE5nx6LZJOpflQEsJdkh86x0JFWLqfBZTWAa3OYqW+AanRLvD2B0BC
-         5N6Hb4J4B1CLqpldSIQVLKJNnVaehyw4jy1VsGrSBIyXrUm1jSbs+db1MZSetK+1f9zS
-         A30w==
+        bh=Yb/F6YFHx8jMmT8NzFo+iYOEgGU08YViXeElbI3tjgc=;
+        b=MMnXS3xA1tmydR2qCDMamehnHI5FTZPQnT0YdSBT4isID4m9dejiQqAVaASciKXh2t
+         uNvjLP9M1SpNR4L9suFWs2GB3zj0kW6tIw+HGOGD0qgwx94I6AWsORwzqjwEJ0Yw8Lon
+         SHAjLcmqVRiNW8qsl5AfmJNSQJxIMdeX/5OhcZCWobvLe1G4TOlSiS1f4gQUkC3AyewE
+         s/5zKTm6e85HXpPxzZGWWHF7kuC8kNjOOFMOLzuI6valozkPvbjyLJR/echRLonbSXes
+         Vef44tpvYg2wXOOhFuE8RU0X4TxNWG/udFq3Emz7Cl/FRJe4tXgux0zhuZj3kBgh3jZD
+         9N3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=T2IJO+Pa5M9voLAKUXr0ktIZBj7JUQbqvUsJEPx3GJM=;
-        b=0QH68RvxuyjdFimXMyhWDT+efAXL1dTJRpXorKAWfNq8lIg1F4AosERw6qQv8kquqW
-         NQVNn+7GVLvWoCYmJBSTLoGX1xHzlLT7vakSGxn62A6ATcDni6lIq7ffwMubwDFaMnRQ
-         zsWn0XhCgqn58GcJhE6XIUOqCTh4S2qxOzbTCvSVHLSOU/Lh2tTQukKSUxdPLEj1K2TS
-         T1lDiP+yKC0xs7FS7A6Iq+7ljVWviRfJzAT4B4juAHu8A8D4jFo2kCK4GNLyuCwNzTyB
-         pIQnDm9v6v2t8d+LdTHquNaR4EMaYEScD2EEn21q57FyiTASBSY0NrpDC37FUgXha9rT
-         pr0Q==
-X-Gm-Message-State: AOAM5338ixKM7DFcV7KSnICGae5eQnOnFHE/z7mdvPghksV5UvtkTky1
-        R/gG/43CpaXInadEpxgIcIaD05Oc09/K4g==
-X-Google-Smtp-Source: ABdhPJz52r13mAcgDBQf1ACM0hZ/J0vco7XnwEomdirN9ZWSxVJnzg675wnJR4aV7S74ZqzB7KnbjA==
-X-Received: by 2002:ac8:7fd1:0:b0:2f3:dddb:4206 with SMTP id b17-20020ac87fd1000000b002f3dddb4206mr7333570qtk.11.1652197693544;
-        Tue, 10 May 2022 08:48:13 -0700 (PDT)
+        bh=Yb/F6YFHx8jMmT8NzFo+iYOEgGU08YViXeElbI3tjgc=;
+        b=76KRrIAfArRUp4oHOH+q8Q1eCGeF4C0taImlIGbukwMIGyjKwxuWpkklPgrT/kuhc5
+         yJPlwBiUUp3BfXD23HIutJPzok2gMTbXuAj4TuMCfatte54JKnaTs071rCvslAIwfiXs
+         GjRWKXwZFo9LmnbeHU8EjetkITZw7XCvp42ZLbB3JLqyzZzL1+DB9cnrgumfFfx3XEFu
+         81YqUvKwGGgrNZyCzo6JE1EVaALx3h+bAiMXJl4CHM1eEt9COp5aKE8QD4F5RSCIpWXf
+         x+OskF7rVUhA5bp/XIPd8YDkylrloaraa3kfMW70URozjbjLZN88Y0WDdn4hP1GoV2s2
+         ZjHQ==
+X-Gm-Message-State: AOAM530b7Dwz3XLIq9adoT9BAqCT1884OEYOjet/Y45Lk+w3lWs23hnH
+        poNcC8IgoVBlCZE81XbzsAg=
+X-Google-Smtp-Source: ABdhPJwV70hoAcYnRzaFrPNRGD//htdKIyrvhMG9B5O5rgnhDgAUf7COuLmQzmUbet3XQOUvrJCg2A==
+X-Received: by 2002:a05:622a:93:b0:2f3:c4ef:6c71 with SMTP id o19-20020a05622a009300b002f3c4ef6c71mr19568082qtw.505.1652197694757;
+        Tue, 10 May 2022 08:48:14 -0700 (PDT)
 Received: from localhost ([98.242.65.84])
-        by smtp.gmail.com with ESMTPSA id z7-20020ac875c7000000b002f39b99f6b5sm9242338qtq.79.2022.05.10.08.48.13
+        by smtp.gmail.com with ESMTPSA id c2-20020ac80542000000b002f39b99f67bsm9312717qth.21.2022.05.10.08.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:48:13 -0700 (PDT)
+        Tue, 10 May 2022 08:48:14 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         David Laight <David.Laight@ACULAB.COM>,
@@ -62,20 +62,16 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         linux-kernel@vger.kernel.org
 Cc:     Yury Norov <yury.norov@gmail.com>,
-        Balbir Singh <sblbir@amazon.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org
-Subject: [PATCH 14/22] x86: smp: use cpumask_weight_eq() in remove_siblinginfo
-Date:   Tue, 10 May 2022 08:47:42 -0700
-Message-Id: <20220510154750.212913-15-yury.norov@gmail.com>
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH 15/22] net/mlx5: use cpumask_weight_gt() in irq_pool_request_irq()
+Date:   Tue, 10 May 2022 08:47:43 -0700
+Message-Id: <20220510154750.212913-16-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220510154750.212913-1-yury.norov@gmail.com>
 References: <20220510154750.212913-1-yury.norov@gmail.com>
@@ -91,42 +87,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpumask_weight_eq() is more efficient because it may stop traversing
+cpumask_weight_gt() is more efficient because it may stop traversing
 cpumask depending on condition.
 
-CC: Balbir Singh <sblbir@amazon.com>
-CC: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: H. Peter Anvin <hpa@zytor.com>
-CC: Huang Rui <ray.huang@amd.com>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Paul E. McKenney <paulmck@kernel.org>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CC: Sean Christopherson <seanjc@google.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Tim Chen <tim.c.chen@linux.intel.com>
-CC: x86@kernel.org
+CC: David S. Miller <davem@davemloft.net>
+CC: Eric Dumazet <edumazet@google.com>
+CC: Jakub Kicinski <kuba@kernel.org>
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>
+CC: Saeed Mahameed <saeedm@nvidia.com>
+CC: netdev@vger.kernel.org
+CC: linux-rdma@vger.kernel.org
 CC: linux-kernel@vger.kernel.org
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- arch/x86/kernel/smpboot.c | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/irq_affinity.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 7d948f79ef31..74ca98b3ab2a 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1621,7 +1621,7 @@ static void remove_siblinginfo(int cpu)
- 
- 	for_each_cpu(sibling, topology_sibling_cpumask(cpu)) {
- 		cpumask_clear_cpu(cpu, topology_sibling_cpumask(sibling));
--		if (cpumask_weight(topology_sibling_cpumask(sibling)) == 1)
-+		if (cpumask_weight_eq(topology_sibling_cpumask(sibling), 1))
- 			cpu_data(sibling).smt_active = false;
- 	}
- 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/irq_affinity.c b/drivers/net/ethernet/mellanox/mlx5/core/irq_affinity.c
+index 380a208ab137..d57f804ee934 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/irq_affinity.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/irq_affinity.c
+@@ -58,7 +58,7 @@ irq_pool_request_irq(struct mlx5_irq_pool *pool, const struct cpumask *req_mask)
+ 	if (err)
+ 		return ERR_PTR(err);
+ 	if (pool->irqs_per_cpu) {
+-		if (cpumask_weight(req_mask) > 1)
++		if (cpumask_weight_gt(req_mask, 1))
+ 			/* if req_mask contain more then one CPU, set the least loadad CPU
+ 			 * of req_mask
+ 			 */
 -- 
 2.32.0
 

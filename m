@@ -2,228 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E76520C10
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187B0520C26
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiEJDeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S235546AbiEJDkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235478AbiEJDdx (ORCPT
+        with ESMTP id S235451AbiEJDkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:33:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CAD6948B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:29:49 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id i1so15617639plg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:29:49 -0700 (PDT)
+        Mon, 9 May 2022 23:40:22 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9634E2016C1
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:34:30 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id q4so12747664plr.11
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fxdtTp3M8aUfDAUSZiH+3vfMAMB7VhyCU2mEh+hK6Ew=;
-        b=4sHLng4o/86uE+nfqNXIXDE5L+7p2bPFktoPF881vrndtItm5dFj+t2Gz8/SgvvKLe
-         G2TZRt64QCDdts+BM5JOfQ8f8vffhbevbejdIrjh44I2tvoR/YKynPJi06vlBgrp4n1r
-         /5LxwwBq+U9Nk46R34kbzREGjxz708XH4DawA/1voll+RpxbotzdfGj1w5TzGaaG0qPR
-         KUQjYUZjfoJ3j4Q8/lfgcWLAO7QklBVO2c/ZmQDmduvgvgQUBdxgFJvnpqnoXMCZnUVZ
-         xN62e9k5vuHu9gwbzE2/ETiRosRWXrfa6ZjvomGW8LXXVONocBKtNmY3lGj5GatkR1ee
-         FAKw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CZ1QdS/D3rgCmw+Zycki6j1IWtRyZB2FiDM7FD6ZGy4=;
+        b=lMmmY4nLRQd8BsH/lO2MBfdzCuU6S7jC3MHaOmd6hr7SwHTC8Rfu4Waack75xECioc
+         1x49pTXz65EykrxjojpOYVDP9ZMpzMyeMpMW6LVEWwkonJ0F9Hrucxz3L6ASZX+h6BEH
+         tsvs1YWPvK/FmEK7WUT6g0j4J8v5LP3OAtWs1RJv64+1RHhWDEj31Ood/o6kV1xsTMo4
+         2z7hra6JfFy+OCvRUavVFd8Y4kqLWSka8wUK1BFh1mQpJyairE+KriSEhlYKn5BbmBz+
+         7HT/c2a9wwaLr3j175eLkn1SYrYiYCsjFLaxWtxtm4s2BugCD1JTYW3ShtAGfpnIk+/W
+         B59Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fxdtTp3M8aUfDAUSZiH+3vfMAMB7VhyCU2mEh+hK6Ew=;
-        b=QSp9NeP8aGYRXSsV4PhJcDbfyluynXzFFhu2Iff1CcQcQuCgOpPk40kg3k/hoeom0y
-         XrA7TDApTX8Czm0XW4wB4JU8CTVqk0r5Lt7P78oyZN/ZqvU3xTU3BPg6uef5ijM9rKQy
-         cDpVUWI+RyVAeyNXSCHiHPGJresuCVhrnydB+pOiMxAS2LhHN93G+YPM7oQBGrRhZQq1
-         SA7n31PRxo2TfdCW7COy3/2kcpjxAvyhbWr3gmgMhh4+dPr5bgoL7EAA75lbIUFby76x
-         4k+qM19qPzoJbau1PHvFex11cgPWLu7baWRyF/B5kk15AfSol18Y91rCgAA51KFQihyd
-         MhFA==
-X-Gm-Message-State: AOAM531ulSgZslllHDzI3+b7xkcu8MFtaSKezcjaIYRWJQ8ePvqKhAGF
-        Xi8te13cNo4fLymbLthGOas0gA==
-X-Google-Smtp-Source: ABdhPJwV4PmwcQY4MScIOkWZ3RK8xFz4p9aXLt1+NZARu9n25aZZ1Nik595PT53Cm1fFtUitXi/xOg==
-X-Received: by 2002:a17:902:74c5:b0:15f:1388:53eb with SMTP id f5-20020a17090274c500b0015f138853ebmr7521990plt.39.1652153388271;
-        Mon, 09 May 2022 20:29:48 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g7-20020a17090a578700b001d25dfb9d39sm535687pji.14.2022.05.09.20.29.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 20:29:47 -0700 (PDT)
-Message-ID: <5ac7c54a-e82b-9d28-9761-446a644e181c@kernel.dk>
-Date:   Mon, 9 May 2022 21:29:46 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CZ1QdS/D3rgCmw+Zycki6j1IWtRyZB2FiDM7FD6ZGy4=;
+        b=XqOVht9Iui07hNu/rzub1mtHROBSNoZ1ZGPFvxBgFY7TuSZ4zFIqdE2niCMdn7OUeJ
+         6wKrWUkaDwiUmXVVd5vFUtpAyZIftB/Vz6tvjXdLmrkxY4jwZ/0MGtjKCoiPxnjAwp9r
+         N8HWhhl+Prb8Dfj6+CTR+/bUbKxp7zh6SkeMr2laLGRUEUO/0K9lEakc/inzCdNgbysC
+         jT9uY5FHQDmCR74OJJy+c7Koi0BHvpXJCqeM5S6WZhBJYI2XG2sw6ecej+lJTY4v8gqv
+         tPTTGtsCgtugOYoJ9e2LeaHHnugTd0PGQF6wO9sPknZQXnms6lsRxK9lLS3KGGFfP4YG
+         uEmQ==
+X-Gm-Message-State: AOAM532QLmMIqdJSIOk39Z1qvUxldj0sAdBz1UCofJOiqwg2Rm2bkOfX
+        vjGEBmBSzsBw1rNEOj9M1+4=
+X-Google-Smtp-Source: ABdhPJzBCOnWl+Fsjf8SC5B2ZH/hGKxtSSQwNDu2PN16mLJrvUj16WliQAJPgU/0i3PAKBpFzCvzRg==
+X-Received: by 2002:a17:90a:f310:b0:1db:effb:a614 with SMTP id ca16-20020a17090af31000b001dbeffba614mr29401587pjb.233.1652153670101;
+        Mon, 09 May 2022 20:34:30 -0700 (PDT)
+Received: from localhost ([152.70.90.187])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0015e8d4eb283sm664755plh.205.2022.05.09.20.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 20:34:29 -0700 (PDT)
+Date:   Tue, 10 May 2022 11:34:25 +0800
+From:   Wang Cheng <wanngchenng@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     dan.carpenter@oracle.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] staging: rtl8712: fix uninit-value in usb_read8()
+ and friends
+Message-ID: <20220510033425.6uzanqtejdlmtwl2@ppc.localdomain>
+References: <cover.1651833575.git.wanngchenng@gmail.com>
+ <b9b7a6ee02c02aa28054f5cf16129977775f3cd9.1651833575.git.wanngchenng@gmail.com>
+ <dba1acfa-1e82-7b6b-928a-beff18c51f5b@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
- <9c833e12-fd09-fe7d-d4f2-e916c6ce4524@kernel.dk> <YnnUuZve2b2LmInc@T590>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YnnUuZve2b2LmInc@T590>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dba1acfa-1e82-7b6b-928a-beff18c51f5b@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/22 8:58 PM, Ming Lei wrote:
-> On Mon, May 09, 2022 at 10:09:10AM -0600, Jens Axboe wrote:
->> On 5/9/22 3:23 AM, Ming Lei wrote:
->>> This is the driver part of userspace block driver(ubd driver), the other
->>> part is userspace daemon part(ubdsrv)[1].
->>>
->>> The two parts communicate by io_uring's IORING_OP_URING_CMD with one
->>> shared cmd buffer for storing io command, and the buffer is read only for
->>> ubdsrv, each io command is indexed by io request tag directly, and
->>> is written by ubd driver.
->>>
->>> For example, when one READ io request is submitted to ubd block driver, ubd
->>> driver stores the io command into cmd buffer first, then completes one
->>> IORING_OP_URING_CMD for notifying ubdsrv, and the URING_CMD is issued to
->>> ubd driver beforehand by ubdsrv for getting notification of any new io request,
->>> and each URING_CMD is associated with one io request by tag.
->>>
->>> After ubdsrv gets the io command, it translates and handles the ubd io
->>> request, such as, for the ubd-loop target, ubdsrv translates the request
->>> into same request on another file or disk, like the kernel loop block
->>> driver. In ubdsrv's implementation, the io is still handled by io_uring,
->>> and share same ring with IORING_OP_URING_CMD command. When the target io
->>> request is done, the same IORING_OP_URING_CMD is issued to ubd driver for
->>> both committing io request result and getting future notification of new
->>> io request.
->>>
->>> Another thing done by ubd driver is to copy data between kernel io
->>> request and ubdsrv's io buffer:
->>>
->>> 1) before ubsrv handles WRITE request, copy the request's data into
->>> ubdsrv's userspace io buffer, so that ubdsrv can handle the write
->>> request
->>>
->>> 2) after ubsrv handles READ request, copy ubdsrv's userspace io buffer
->>> into this READ request, then ubd driver can complete the READ request
->>>
->>> Zero copy may be switched if mm is ready to support it.
->>>
->>> ubd driver doesn't handle any logic of the specific user space driver,
->>> so it should be small/simple enough.
->>
->> This is pretty interesting! Just one small thing I noticed, since you
->> want to make sure batching is Good Enough:
->>
->>> +static blk_status_t ubd_queue_rq(struct blk_mq_hw_ctx *hctx,
->>> +		const struct blk_mq_queue_data *bd)
->>> +{
->>> +	struct ubd_queue *ubq = hctx->driver_data;
->>> +	struct request *rq = bd->rq;
->>> +	struct ubd_io *io = &ubq->ios[rq->tag];
->>> +	struct ubd_rq_data *data = blk_mq_rq_to_pdu(rq);
->>> +	blk_status_t res;
->>> +
->>> +	if (ubq->aborted)
->>> +		return BLK_STS_IOERR;
->>> +
->>> +	/* this io cmd slot isn't active, so have to fail this io */
->>> +	if (WARN_ON_ONCE(!(io->flags & UBD_IO_FLAG_ACTIVE)))
->>> +		return BLK_STS_IOERR;
->>> +
->>> +	/* fill iod to slot in io cmd buffer */
->>> +	res = ubd_setup_iod(ubq, rq);
->>> +	if (res != BLK_STS_OK)
->>> +		return BLK_STS_IOERR;
->>> +
->>> +	blk_mq_start_request(bd->rq);
->>> +
->>> +	/* mark this cmd owned by ubdsrv */
->>> +	io->flags |= UBD_IO_FLAG_OWNED_BY_SRV;
->>> +
->>> +	/*
->>> +	 * clear ACTIVE since we are done with this sqe/cmd slot
->>> +	 *
->>> +	 * We can only accept io cmd in case of being not active.
->>> +	 */
->>> +	io->flags &= ~UBD_IO_FLAG_ACTIVE;
->>> +
->>> +	/*
->>> +	 * run data copy in task work context for WRITE, and complete io_uring
->>> +	 * cmd there too.
->>> +	 *
->>> +	 * This way should improve batching, meantime pinning pages in current
->>> +	 * context is pretty fast.
->>> +	 */
->>> +	task_work_add(ubq->ubq_daemon, &data->work, TWA_SIGNAL);
->>> +
->>> +	return BLK_STS_OK;
->>> +}
->>
->> It'd be better to use bd->last to indicate what kind of signaling you
->> need here. TWA_SIGNAL will force an immediate transition if the app is
->> running in userspace, which may not be what you want. Also see:
->>
->> https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.19/io_uring&id=e788be95a57a9bebe446878ce9bf2750f6fe4974
->>
->> But regardless of signaling needed, you don't need it except if bd->last
->> is true. Would need a commit_rqs() as well, but that's trivial.
+On 22/05/06 03:12PM, Pavel Skripkin wrote:
+> Hi Wang,
 > 
-> Good point, I think we may add non-last request via task_work_add(TWA_NONE),
-> and only notify via TWA_SIGNAL_NO_IPI for bd->last.
-
-Yep, I think that'd be the way to go.
-
->> More importantly, what prevents ubq->ubq_daemon from going away after
->> it's been assigned? I didn't look at the details, but is this relying on
->> io_uring being closed to cancel pending requests? That should work, but
+> On 5/6/22 14:59, Wang Cheng wrote:
+> > Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
+> > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+> > ---
+> >   drivers/staging/rtl8712/usb_ops.c | 27 ++++++++++++++++++---------
+> >   1 file changed, 18 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/staging/rtl8712/usb_ops.c b/drivers/staging/rtl8712/usb_ops.c
+> > index e64845e6adf3..af9966d03979 100644
+> > --- a/drivers/staging/rtl8712/usb_ops.c
+> > +++ b/drivers/staging/rtl8712/usb_ops.c
+> > @@ -29,7 +29,8 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
+> >   	u16 wvalue;
+> >   	u16 index;
+> >   	u16 len;
+> > -	__le32 data;
+> > +	int status;
+> > +	__le32 data = 0;
+> >   	struct intf_priv *intfpriv = intfhdl->pintfpriv;
+> >   	request = 0x05;
+> > @@ -37,8 +38,10 @@ static u8 usb_read8(struct intf_hdl *intfhdl, u32 addr)
+> >   	index = 0;
+> >   	wvalue = (u16)(addr & 0x0000ffff);
+> >   	len = 1;
+> > -	r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index, &data, len,
+> > -				requesttype);
+> > +	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
+> > +					 &data, len, requesttype);
+> > +	if (status < 0)
+> > +		return 0;
 > 
-> I think no way can prevent ubq->ubq_daemon from being killed by 'kill -9',
-> even though ubdsrv has handled SIGTERM. That is why I suggest to add
-> one service for removing all ubd devices before shutdown:
+> Wait, but what about partial reads? I see that r8712_usbctrl_vendorreq()
+> uses `usb_control_msg()` which can read less data than was requested.
 > 
-> https://github.com/ming1/ubdsrv/blob/devel/README
-
-Right, you can't prevent a task from getting killed. But what you do
-know is that file descriptors get closed when the task goes away, and if
-you're integrated into io_uring in terms of how request are handled,
-then the closing of the io_ring ring descriptor should wait-for/cancel
-pending requests. If done right, that could perhaps exclude the issue of
-having the stored task become invalid.
-
-I haven't looked too closely at it all yet, so the above may not be a
-viable approach. Or maybe it will... It's how io_uring itself does it.
-
-> All the commands of UBD_IO_FETCH_REQ or UBD_IO_COMMIT_AND_FETCH_REQ have
-> been submitted to driver, I understand io_uring can't cancel them,
-> please correct me if it is wrong.
-
-Right, any storage IO can't get canceled if it's already hit the block
-layer or further down. So you end up waiting for them, which is fine
-too.
-
-> One solution I thought of is to use one watchdog to check if ubq->ubq_daemon
-> is dead, then abort whole device if yes. Or any suggestion?
-
-You'd still need to ensure that it remains valid.
-
->> we need some way to ensure that ->ubq_daemon is always valid here.
+> So here you are just hiding these error by zeroing data
 > 
-> Good catch.
+> >   	return (u8)(le32_to_cpu(data) & 0x0ff);
+> >   }
 > 
-> get_task_struct() should be used for assigning ubq->ubq_daemon.
+> And as i said in previous email: caller can't see an error.
+> 
+> Imagine caller waits for some register to become 0. Caller sees that
+> usb_read8() returned 0. Is it an error? Is register really become 0?
+> 
+> 
+> Generic read API prototype looks like following:
+> 
+> int read_something(struct my_cool_dev *dev, void *data, size_t size);
+> 
+> and it returns 0 on success and -errno on failure and data returned via
+> passed pointer. So, if API returned an error caller should not touch @data,
+> since likely it's uninitialized
 
-Yep, that could work too as long as it doesn't introduce a weird loopy
-dependency. Since it's just the task_struct itself, I think it'd be fine
-and the simplest solution. This is a setup thing, and not per-io?
+Thank you for your remind, sorry I didnt understand your previous reply
+about "register and 0" that you explain very clearly above. I am thinking
+about it standing on that the return type of usb_read8() is u8.
 
--- 
-Jens Axboe
-
+thanks,
+- w

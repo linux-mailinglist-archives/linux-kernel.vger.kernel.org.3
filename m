@@ -2,164 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC515221B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAEF5221BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347682AbiEJQy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S1347695AbiEJQzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347693AbiEJQyu (ORCPT
+        with ESMTP id S1347685AbiEJQzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:54:50 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B76F21240
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:50:52 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so2032711pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+OrGejelLd0/r3wyZ5B1hnRpKSyjyIABgvgW47LLooY=;
-        b=Gt3pUi+fMXEx3yt2N7YDLecB+fh8bnsLUAhNGUelGqYArf8brh67ItBKmaEnAgRcJZ
-         Xn0T4bUlGe+xa2Q61dbd1UN2FxULHx3pyMndliDEIMP27wn1EQOW7+KCOIZCsvJeBMyq
-         2XF7RfKJS4EUpzD9NKR3C7JBY30zzrejdnYVVu5ztvIJBW4OvjIlkwg5vVRtViCmSuaW
-         E3KMSYj3+0wXUIm7Mi6iNv083gU+nI64HjxkquUcTG3XfwIqFihSO/nHoKEXIMo8wOKt
-         Z7Ufq5YVcpRQc7kOVM/cW5bAA2pX+FHJK9wkUK3GsyEHYrWOVxot2YGDtoXUT8P4+QC4
-         PiKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+OrGejelLd0/r3wyZ5B1hnRpKSyjyIABgvgW47LLooY=;
-        b=69m9ew3UAcnk2c8nDRQfoJa1xWSmXrrPyF7U6hcZsVihMFwPpH1J/Gan7Nnvy93KZO
-         h9KkieDbTLIOaJXcIOl6j8J+W/Qtcg76CYUqEobzWx/q01usSov4cmgpBTZgTsR1vkDM
-         X9eGgT8isMfLX/pTkorFodER/6JDRtqrFAg8RifnoWNLVvA110EKbaSW9qUSyQytv8YA
-         TNcABhIddoAwM0b0GAam9BZ87UNhaZQUWsyaPl8Ml698Zy5x4E4ug6PRaxoWhoRVTX/9
-         w5e1CGhXSJjIuJG9JQs42LRdLc1K1SJOp1y99D9kQuj3haITB0+m+kyyGohfj2z8ojfy
-         4vaQ==
-X-Gm-Message-State: AOAM533kQRAeMckLuUmjGEEgnH0G3z0GedLYcM6Dpv5mKL0U9zdNbVfr
-        QU02M5nQDQMe0fc+q8df0L4GxS6icUsQQh/r60c=
-X-Google-Smtp-Source: ABdhPJwffULAkMAIgasr7aNCVYP16kgnCweiJCKt6lygDrJlUDTcxhAsvV/eEsmYgsYZy1m3uAjEKYK6SpK8RmgIbKQ=
-X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id
- m17-20020a17090a859100b001b9da102127mr818585pjn.13.1652201451374; Tue, 10 May
- 2022 09:50:51 -0700 (PDT)
+        Tue, 10 May 2022 12:55:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E484162118;
+        Tue, 10 May 2022 09:51:20 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AFJjbp026754;
+        Tue, 10 May 2022 16:50:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MtEUdrFg5vVjbNQCS/BU2XYQmsKHTDxuTJJMpHB118M=;
+ b=eT/g0iwRdTnHQeQijJOg2K/U6rbI2tmCnru3jZ1b2HoQR077MWSjm296OHocij0et23e
+ w7HT+xEliTu60ZSC95uUdfT2n85pQunzIzI2SkmIFNzwJSPf076wXcG0MKsl5HKPAg86
+ GbaVpX7+143ggcNMLo/j2RX2JLLf4gMUzxUN7yLBN5a3MZzRg+JkMvfhUMPKILXnLpBW
+ V7egPydqAQwrq6RkmyLgqQrRyqBgQxVz8RJJB8YjhZlVno9CCmBfaAj9VgUCeKhq5ZBY
+ 6yxW1bDrBBWmthmIqnm+8Cx5l8DWjzcK1qDAlC8blLG9PLcUahToPsNnbgng4ZMptObt 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fytkkt5sv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:50:44 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AGTFMC001381;
+        Tue, 10 May 2022 16:50:43 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fytkkt5sc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:50:43 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AGT47v027915;
+        Tue, 10 May 2022 16:50:42 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01wdc.us.ibm.com with ESMTP id 3fwgd96b1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:50:42 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AGof3f61342026
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 16:50:41 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 67F9E124055;
+        Tue, 10 May 2022 16:50:41 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 033AD124058;
+        Tue, 10 May 2022 16:50:41 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 10 May 2022 16:50:40 +0000 (GMT)
+Message-ID: <c76f52d9-07eb-39dd-dad4-43b108696539@linux.ibm.com>
+Date:   Tue, 10 May 2022 12:50:40 -0400
 MIME-Version: 1.0
-References: <20220510154750.212913-1-yury.norov@gmail.com> <20220510154750.212913-9-yury.norov@gmail.com>
-In-Reply-To: <20220510154750.212913-9-yury.norov@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 10 May 2022 09:50:40 -0700
-Message-ID: <CAADnVQKcX2xEWCHu-DX0Cy_mvCL6E0aE_BF1Wo+U-vy_Bi2-3w@mail.gmail.com>
-Subject: Re: [PATCH 08/22] bitops: introduce MANY_BITS() macro
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Micah Morton <mortonm@chromium.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+References: <20220420140633.753772-1-stefanb@linux.ibm.com>
+ <20220420140633.753772-2-stefanb@linux.ibm.com>
+ <20220509195414.GA30894@mail.hallyn.com>
+ <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rm2ZvGlia5ghHqQtREAD3mTlCv2558Ga
+X-Proofpoint-GUID: FwZzpy1yN5E-3p3du-KT6wkIbBSpD0C3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_04,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 adultscore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=803 bulkscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205100072
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 8:48 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> arch/xtensa/kernel/traps.c and include/linux/log2.h define very similar
-> functions with different behaviour. XTENSA defines IS_POW2(), and
-> log2.h defines is_power_of_2(). The difference is that IS_POW2()
-> considers 0 as power of 2, while is_power_of_2() - does not.
->
-> This discrepancy may confuse reader. From mathematical point of view,
-> 0 is not a power of 2. So let's introduce macro MANY_BITS(), which
-> returns true if 2 or more bits are set in a number (which is what
-> XTENSA actually needs), and use it in is_power_of_2().
->
-> CC: Alexei Starovoitov <ast@kernel.org>
-> CC: Andrew Morton <akpm@linux-foundation.org>
-> CC: Chris Zankel <chris@zankel.net>
-> CC: Christophe Leroy <christophe.leroy@csgroup.eu>
-> CC: Eric W. Biederman <ebiederm@xmission.com>
-> CC: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> CC: Max Filippov <jcmvbkbc@gmail.com>
-> CC: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> CC: linux-xtensa@linux-xtensa.org
-> CC: linux-kernel@vger.kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/xtensa/kernel/traps.c | 5 +----
->  include/linux/bitops.h     | 3 +++
->  include/linux/log2.h       | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-> index 138a86fbe9d7..040ec38bfce2 100644
-> --- a/arch/xtensa/kernel/traps.c
-> +++ b/arch/xtensa/kernel/traps.c
-> @@ -203,10 +203,7 @@ static void do_multihit(struct pt_regs *regs)
->
->  #if XTENSA_FAKE_NMI
->
-> -#define IS_POW2(v) (((v) & ((v) - 1)) =3D=3D 0)
-> -
-> -#if !(PROFILING_INTLEVEL =3D=3D XCHAL_EXCM_LEVEL && \
-> -      IS_POW2(XTENSA_INTLEVEL_MASK(PROFILING_INTLEVEL)))
-> +#if (MANY_BITS(XTENSA_INTLEVEL_MASK(PROFILING_INTLEVEL)) || PROFILING_IN=
-TLEVEL !=3D XCHAL_EXCM_LEVEL)
->  #warning "Fake NMI is requested for PMM, but there are other IRQs at or =
-above its level."
->  #warning "Fake NMI will be used, but there will be a bugcheck if one of =
-those IRQs fire."
->
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 7aaed501f768..96bc6a2552d6 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -21,6 +21,9 @@
->  #define BITS_TO_U32(nr)                __KERNEL_DIV_ROUND_UP(nr, BITS_PE=
-R_TYPE(u32))
->  #define BITS_TO_BYTES(nr)      __KERNEL_DIV_ROUND_UP(nr, BITS_PER_TYPE(c=
-har))
->
-> +/* Return: nonzero if 2 or more bits are set */
-> +#define MANY_BITS(n)           ((n) & ((n) - 1))
-> +
->  extern unsigned int __sw_hweight8(unsigned int w);
->  extern unsigned int __sw_hweight16(unsigned int w);
->  extern unsigned int __sw_hweight32(unsigned int w);
-> diff --git a/include/linux/log2.h b/include/linux/log2.h
-> index 9f30d087a128..335b9dbd302d 100644
-> --- a/include/linux/log2.h
-> +++ b/include/linux/log2.h
-> @@ -44,7 +44,7 @@ int __ilog2_u64(u64 n)
->  static inline __attribute__((const))
->  bool is_power_of_2(unsigned long n)
->  {
-> -       return (n !=3D 0 && ((n & (n - 1)) =3D=3D 0));
-> +       return n !=3D 0 && !MANY_BITS(n);
->  }
 
-Please don't. Open coded version is much easier to read.
+
+On 5/10/22 06:25, Christian Brauner wrote:
+> On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
+>> On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
+>>> From: Christian Brauner <brauner@kernel.org>
+>>>
+>>> When securityfs creates a new file or directory via
+>>> securityfs_create_dentry() it will take an additional reference on the
+>>> newly created dentry after it has attached the new inode to the new
+>>> dentry and added it to the hashqueues.
+>>> If we contrast this with debugfs which has the same underlying logic as
+>>> securityfs. It uses a similar pairing as securityfs. Where securityfs
+>>> has the securityfs_create_dentry() and securityfs_remove() pairing,
+>>> debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
+>>>
+>>> In contrast to securityfs, debugfs doesn't take an additional reference
+>>> on the newly created dentry in __debugfs_create_file() which would need
+>>> to be put in debugfs_remove().
+>>>
+>>> The additional dget() isn't a problem per se. In the current
+>>> implementation of securityfs each created dentry pins the filesystem via
+>>
+>> Is 'via' an extra word here or is there a missing word?
+>>
+>> I'll delay the rest of my response as the missing word may answer my
+>> remaining question :)
+> 
+> It can be both. It should either be removed or it should be followed by
+> "securityfs_create_dentry()". securityfs_create_dentry() takes two
+
+I am adding "securityfs_create_dentry()" to the text.

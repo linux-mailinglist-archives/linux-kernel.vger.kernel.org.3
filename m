@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA2A522736
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043A252273A
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiEJWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S237532AbiEJWub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbiEJWuN (ORCPT
+        with ESMTP id S233317AbiEJWuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:50:13 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF724DC54
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:11 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id kk28so621472qvb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5pgf2LC4mfZtxmKKitMud+Oy12RPGcU3F46iHWGsadA=;
-        b=ekAQBJLQ0g2H+FUmFV5f70dwdMJlmpMe43UT4QIXA58jzQ7eDTurlQUHhbMjmFXgUn
-         iSvHyXVOpjYMsk92HbvRZQl8ByOek4TmP4dutBYmWmysLSp+0lz8VY73TGj93QW0TK/I
-         wFDu3nWggMxUUhT25DqnrpkQRHcZyfZQlsTbTl94c/g9RyI7z/yYTSrr78bkYPz4zPE6
-         iY4Bp9up41gXopOTZgVvz0svbTi1cJwop5wCmJ5rigsS40iOXz4jYN10Zh1qCwptI9S1
-         NrCYR94Zlax6XmK+bd61BAf+16YQeV+dhN2Bpph/aIHzuhFyMVqWf35ODyxRjEeOQHST
-         hZVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5pgf2LC4mfZtxmKKitMud+Oy12RPGcU3F46iHWGsadA=;
-        b=QhtwVxJUJQ0ctE5z8Ln3Gs0AY7ySSi29RZnqrSvliWAyrsBP71JbCmwcQJLIamu+/3
-         J0gjnBev+WP9kRF0T7el+M+WgBnSARCmPTgPg5wjCpYNp9/vpZ608xS8O4u3AbsIV+zJ
-         15dFK/bC/1FBh0yiyzwILOkqAY5P46FGR1X5u6wock4xF/rYUnTc8xqrXcxHnYQyJpp2
-         k3rZhdqEb2h8X+FoFhWU0Y39dDaYlnOr9jevWLWFHxoju9xBSMguwLCzJgFuhS9Yg9ss
-         7WokX4nqG1rPoqH7z28YYmKof+aM9GQFVnM3Vo8lT3J+ILJn+N1jmKzhTM0x87b59c7i
-         1WAg==
-X-Gm-Message-State: AOAM533sefsjSe8QbCcBRznPIQ6b6zvKM/mZ68uyQGR0WEkQyOA+Z5K1
-        apenes4CDa4y+i0+gf6tBMfgzA+c4adMnjwS7K79dg==
-X-Google-Smtp-Source: ABdhPJzAFn9/jIPprW6IL+T0z4v5PPLX/63yNDyYNQ0qdZ3QxvFVYV7PhbjIoCNQF1WFZkNWMTKoVzPSeNUYybVJQSc=
-X-Received: by 2002:ad4:4753:0:b0:456:34db:614b with SMTP id
- c19-20020ad44753000000b0045634db614bmr19945189qvx.17.1652223010267; Tue, 10
- May 2022 15:50:10 -0700 (PDT)
+        Tue, 10 May 2022 18:50:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C1B24E023;
+        Tue, 10 May 2022 15:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FCEBB82004;
+        Tue, 10 May 2022 22:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9148BC385D0;
+        Tue, 10 May 2022 22:50:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="m2qHVslI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652223014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9+CqMPmHp+6ac0+Sm4AN/wwxvPotPYL1MZ4jUenJ3jE=;
+        b=m2qHVslIkinT8gFrhEc7CNtoppYkDVjiQ3rO6iYQ6YJew5wu6LSGAGEaXRrd5QgJkHVOBF
+        anEbwNAgvrudnrfVYIVe3wP5vg2QbT0O1n7SBZESlRh8ozDaOcB3+yLvA6YYCuuRtRRwtf
+        xrlfj/bNgWVvcYsI99nBRYDpJBV4CWs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e7faad4f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 10 May 2022 22:50:14 +0000 (UTC)
+Date:   Wed, 11 May 2022 00:50:11 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Simo Sorce <simo@redhat.com>
+Cc:     dodis@cs.nyu.edu, tytso@mit.edu, nadiah@cs.ucsd.edu,
+        noahsd@gmail.com, tessaro@cs.washington.edu,
+        torvalds@linux-foundation.org, jeanphilippe.aumasson@gmail.com,
+        jann@thejh.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peter@cryptojedi.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "D. J. Bernstein" <djb@cr.yp.to>
+Subject: Re: is "premature next" a real world rng concern, or just an
+ academic exercise?
+Message-ID: <YnrsI3wdrbnW7gjS@zx2c4.com>
+References: <YmlMGx6+uigkGiZ0@zx2c4.com>
+ <Ym3ZM1P+uYYABtRm@mit.edu>
+ <Ym5sICj5iBMn2w/E@zx2c4.com>
+ <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
+ <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
+ <YnqDC25iR8mcL3XB@zx2c4.com>
+ <20220510185123.80607.qmail@cr.yp.to>
+ <YnrGYMyEL8qPMRGt@zx2c4.com>
+ <5b63a8a37b415db66ffe6b660859e3900c054909.camel@redhat.com>
 MIME-Version: 1.0
-References: <20220510001807.4132027-1-yosryahmed@google.com>
- <20220510001807.4132027-9-yosryahmed@google.com> <Ynq04gC1l7C2tx6o@slm.duckdns.org>
- <CA+khW7girnNwap1ABN1a4XuvkEEnmkztTV+fsuC3MsxNeB08Yg@mail.gmail.com> <YnriMPYyOP9ibskc@slm.duckdns.org>
-In-Reply-To: <YnriMPYyOP9ibskc@slm.duckdns.org>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 10 May 2022 15:49:59 -0700
-Message-ID: <CA+khW7gUdZQq77jO2_A6rvE6f+HV=sGfBVGvAmazGPvwudE0RQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5b63a8a37b415db66ffe6b660859e3900c054909.camel@redhat.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 3:07 PM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Tue, May 10, 2022 at 02:12:16PM -0700, Hao Luo wrote:
-> > > Is there a reason why this can't be a proper iterator which supports
-> > > lseek64() to locate a specific cgroup?
-> > >
-> >
-> > There are two reasons:
-> >
-> > - Bpf_iter assumes no_llseek. I haven't looked closely on why this is
-> > so and whether we can add its support.
-> >
-> > - Second, the name 'iter' in this patch is misleading. What this patch
-> > really does is reusing the functionality of dumping in bpf_iter.
-> > 'Dumper' is a better name. We want to create one file in bpffs for
-> > each cgroup. We are essentially just iterating a set of one single
-> > element.
->
-> I see. I'm just shooting in the dark without context but at least in
-> principle there's no reason why cgroups wouldn't be iterable, so it might be
-> something worth at least thinking about before baking in the interface.
->
+Hi Simo,
 
-Yep. Conceptually there should be no problem to iterate cgroups in the
-system. It may be better to have two independent bpf objects: bpf_iter
-and bpf_dumper. In our use case, we want bpf_dumper, which just
-exports data out through fs interface.
+On Tue, May 10, 2022 at 05:33:34PM -0400, Simo Sorce wrote:
+> On Tue, 2022-05-10 at 22:09 +0200, Jason A. Donenfeld wrote:
+> > For 5.19 (or at this point, more likely 5.20), there's a userspace
+> > notifier in store, maybe, if I can figure out how to do it right.
+> > There's a pretty bikesheddy thread here on what shape that interface
+> > should take: https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
+> > But basically there are some details about how an async interface should
+> > work, and what the virtual hardware future, if any, looks like for a
+> > memory mapped race-free polling interface. Plus some considerations on
+> > how much we should care etc.
+> 
+> Perhaps it might be simpler to add an "epoch" number or similar exposed
+> [...]
 
-Hao
+Could you send these ideas to the bikeshed thread that I linked rather
+than this premature next one. I think it'd be a good idea to keep Alex
+and Lennart looped in to that discussion, since they represent userspace
+projects that probably care about it, and not bog this one down with
+systems programming things pretty far from premature next threat model
+stuff. It's a bikeshed thing, after all...
+
+Thanks,
+Jason

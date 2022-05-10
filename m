@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67831521761
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D055521AA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242844AbiEJNWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S242721AbiEJOCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242610AbiEJNTV (ORCPT
+        with ESMTP id S244674AbiEJNh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:19:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2C16D5C4;
-        Tue, 10 May 2022 06:13:26 -0700 (PDT)
+        Tue, 10 May 2022 09:37:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A19517DE;
+        Tue, 10 May 2022 06:26:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20709615DD;
-        Tue, 10 May 2022 13:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF19C385A6;
-        Tue, 10 May 2022 13:13:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40722B81DAB;
+        Tue, 10 May 2022 13:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D263C385A6;
+        Tue, 10 May 2022 13:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188405;
-        bh=Fq+uiXNrrJncXpaGY9VAdua8hHlsJPbzUlEDpb2IISQ=;
+        s=korg; t=1652189163;
+        bh=BEL/QK5o7Uyv5QUi+azeEgIO671K4UQlx+HYxKtUE/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KERhoIAg0Y49RkSq4jp/n/UjbhM+2L77xvWtkI8UYSLVjFaUgGpfx5z3M267qdlX8
-         h9LTOGff9gR8tm2SH81Lfv6TzRZtFnxqOg/ZH/nDIQDpNLuZWSPAQ7NiAW9mJAqnnH
-         Ekd+MFRhGsUihE2RhpG6Ga9gGGiiePyVi0dOMLqI=
+        b=mtaBTK6F4lz8dyUMk4g4lT+gMSp6yXw7Je55w8bwMypGgo3XBGIvd4RdLcKIJT1Hj
+         ICaFFieewJiWYciNXFHJzPksbS0wr2s2SYojwCqdRbKon9mQmOl4ypajLn+U+IuSy7
+         y06yRxKwQgVPcT3qMH36d5ZRmDdxTI1lm+jwqrrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 62/66] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.10 33/70] NFC: netlink: fix sleep in atomic bug when firmware download timeout
 Date:   Tue, 10 May 2022 15:07:52 +0200
-Message-Id: <20220510130731.583338857@linuxfoundation.org>
+Message-Id: <20220510130733.836404045@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,60 +48,72 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sandipan Das <sandipan.das@amd.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 5a1bde46f98b893cda6122b00e94c0c40a6ead3c ]
+commit 4071bf121d59944d5cd2238de0642f3d7995a997 upstream.
 
-On some x86 processors, CPUID leaf 0xA provides information
-on Architectural Performance Monitoring features. It
-advertises a PMU version which Qemu uses to determine the
-availability of additional MSRs to manage the PMCs.
+There are sleep in atomic bug that could cause kernel panic during
+firmware download process. The root cause is that nlmsg_new with
+GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
+handler. The call trace is shown below:
 
-Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
-the same, the kernel constructs return values based on the
-x86_pmu_capability irrespective of the vendor.
+BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
+Call Trace:
+kmem_cache_alloc_node
+__alloc_skb
+nfc_genl_fw_download_done
+call_timer_fn
+__run_timers.part.0
+run_timer_softirq
+__do_softirq
+...
 
-This leaf and the additional MSRs are not supported on AMD
-and Hygon processors. If AMD PerfMonV2 is detected, the PMU
-version is set to 2 and guest startup breaks because of an
-attempt to access a non-existent MSR. Return zeros to avoid
-this.
+The nlmsg_new with GFP_KERNEL parameter may sleep during memory
+allocation process, and the timer handler is run as the result of
+a "software interrupt" that should not call any other function
+that could sleep.
 
-Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
-Reported-by: Vasant Hegde <vasant.hegde@amd.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-Message-Id: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch changes allocation mode of netlink message from GFP_KERNEL
+to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
+flag makes memory allocation operation could be used in atomic context.
+
+Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
+Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220504055847.38026-1-duoming@zju.edu.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/cpuid.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/nfc/netlink.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index a6f8600672d7..c068027ac55f 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -502,6 +502,11 @@ static inline int __do_cpuid_ent(struct kvm_cpuid_entry2 *entry, u32 function,
- 		union cpuid10_eax eax;
- 		union cpuid10_edx edx;
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -1244,7 +1244,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 	struct sk_buff *msg;
+ 	void *hdr;
  
-+		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
-+		}
-+
- 		perf_get_x86_pmu_capability(&cap);
+-	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
+ 	if (!msg)
+ 		return -ENOMEM;
  
- 		/*
--- 
-2.35.1
-
+@@ -1260,7 +1260,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 
+ 	genlmsg_end(msg, hdr);
+ 
+-	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
++	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
+ 
+ 	return 0;
+ 
 
 

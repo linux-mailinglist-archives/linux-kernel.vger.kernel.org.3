@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93886522043
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A467A522027
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239749AbiEJP7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S1346799AbiEJPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347036AbiEJPvy (ORCPT
+        with ESMTP id S1347184AbiEJPwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:51:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08621246429;
-        Tue, 10 May 2022 08:46:46 -0700 (PDT)
+        Tue, 10 May 2022 11:52:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D552289BFF;
+        Tue, 10 May 2022 08:47:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B49ACB81DF7;
-        Tue, 10 May 2022 15:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28478C385CA;
-        Tue, 10 May 2022 15:46:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C879B81DF7;
+        Tue, 10 May 2022 15:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338AFC385A6;
+        Tue, 10 May 2022 15:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652197603;
-        bh=iM9Ex4unx0/YzERfc9oAu4GcZ0NigJ1gWR2pmH2XcN4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ugH3wpnRjsF//gSIuN9fHMI/WKoVizf/Amq9iWzK4O8ou91ZKo0frRWgc9hjM+/r6
-         62fZGhJQZ+Joc0BhraKFFwBgEJC4FKphLYsHtA8NDwYwtUzcxpzFLgpu+zQnReKPZN
-         80UlWWAJouLOe4h59E+gj0DexBH6ge8FIm+FN92F+dnnkXFWuDoM/KufOvb3wGU4K4
-         z7myCNbDvZePjtBC8LBjlFIIWRuEmSiue3+7k5hsH4laWsiwSCz4IW8+mGRuP7DyOP
-         +i1D4vh/hRB79srG4EyQq8td6r6rAh+108nDUGVeILP6qFiyezKfkRW4bbmZifDvjF
-         6k55GIN2dApAw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Abhishek Kumar <kuabhs@chromium.org>
-Cc:     netdev@vger.kernel.org, dianders@chromium.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ath10k@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v3] ath10k: improve BDF search fallback strategy
-References: <20220509022618.v3.1.Ibfd52b9f0890fffe87f276fa84deaf6f1fb0055c@changeid>
-        <87a6bp8kfn.fsf@kernel.org>
-Date:   Tue, 10 May 2022 18:46:39 +0300
-In-Reply-To: <87a6bp8kfn.fsf@kernel.org> (Kalle Valo's message of "Tue, 10 May
-        2022 18:41:00 +0300")
-Message-ID: <875ymd8k68.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        s=k20201202; t=1652197628;
+        bh=Xb2iH1RD9rLYp/HcvNZ8NPrqSJ1SAA5g+w9cI06BPY0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ukOl6X+c/SsN0hsstWhZKeDN8MHZ6nYlKiZzAvAsr1uNJO/cNJNX7o/zo5xSZVmcS
+         C6M64OO4Zgdjd2FC+YQ0p3Dg+n5YzqBrgd4kStmOcpquWF1Y51co4mP0asvQ272HeI
+         rOMUFzp13Jyrssyk96W5aLHX6kWaSVztN/V3Mni0TkOi+Y3nF+ywia9SVFrFu7BGPZ
+         dqrOav3XRQirXc4TYbfjDB7N55hAv+8rIDESv5CpVGmm435t6UeGJIhIvuqnJXMhzU
+         bDfim4ym4MSc9zCcf5dxxgCvG/VA3TSLP/pzSJ5NVU/W64aBBR7oua2OjvNMYj3Phe
+         Y9NZu+/qSi+xQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>,
+        Ji-Ze Hong <hpeter+linux_kernel@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 1/4] hwmon: (f71882fg) Fix negative temperature
+Date:   Tue, 10 May 2022 11:47:00 -0400
+Message-Id: <20220510154704.154362-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,32 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+From: "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
 
->>  static int ath10k_core_fetch_board_data_api_n(struct ath10k *ar,
->>  					      const char *boardname,
->> -					      const char *fallback_boardname1,
->> -					      const char *fallback_boardname2,
->>  					      const char *filename)
->>  {
->> -	size_t len, magic_len;
->> +	size_t len, magic_len, board_len;
->>  	const u8 *data;
->>  	int ret;
->> +	char temp_boardname[100];
->> +
->> +	board_len = 100 * sizeof(temp_boardname[0]);
->
-> Why not:
->
-> board_len = sizeof(temp_board-name);
->
-> That way number 100 is used only once.
+[ Upstream commit 4aaaaf0f279836f06d3b9d0ffeec7a1e1a04ceef ]
 
-BTW I'm not sure if it makes sense to CC David, Eric, Jakub and Paolo.
-I'm sure they get a lot of email already. And I would also drop netdev.
+All temperature of Fintek superio hwmonitor that using 1-byte reg will use
+2's complement.
 
+In show_temp()
+	temp = data->temp[nr] * 1000;
+
+When data->temp[nr] read as 255, it indicate -1C, but this code will report
+255C to userspace. It'll be ok when change to:
+	temp = ((s8)data->temp[nr]) * 1000;
+
+Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+Link: https://lore.kernel.org/r/20220418090706.6339-1-hpeter+linux_kernel@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/f71882fg.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
+index cb28e4b4fb10..b87ca56fb774 100644
+--- a/drivers/hwmon/f71882fg.c
++++ b/drivers/hwmon/f71882fg.c
+@@ -1590,8 +1590,9 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *devattr,
+ 		temp *= 125;
+ 		if (sign)
+ 			temp -= 128000;
+-	} else
+-		temp = data->temp[nr] * 1000;
++	} else {
++		temp = ((s8)data->temp[nr]) * 1000;
++	}
+ 
+ 	return sprintf(buf, "%d\n", temp);
+ }
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.35.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

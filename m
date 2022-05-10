@@ -2,190 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A9D5227B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178CB5227B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbiEJXfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S232803AbiEJXgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiEJXfG (ORCPT
+        with ESMTP id S233707AbiEJXgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:35:06 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79232802F5;
-        Tue, 10 May 2022 16:35:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x18so229806plg.6;
-        Tue, 10 May 2022 16:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R13jHsl0NRq2P7uupdPrQEK0knUWVCVlecfA2FHAsIY=;
-        b=i6LMAZCFD+2w5H807GfcaKA0KFBunhQMkZ4oNhifqGqedLQWS0l4oYs5yiLhDNtB9E
-         kzC8SpUjZBK3RsBeGeRG/ZfUTYH2GXeTBP8S7gqRFHFzqGvgymqfELVeW7qoPIFW4VGh
-         GceRYpMBG1+oFZRy3IFPBPuecFyUGBQvv4sHVak/ehU4VhkBIM89rJIWPUb3+TNeq55j
-         XB50sdW1SncopJC0TPQz6UVUHprqYUCSzdwZn2ahW9oaxJb6msfEQhQJt9V0wtvsAbWI
-         GhSFn8GLq4d3d5Wcy8EmmGa/z32Mhn/mstI1BryUQjsIJWyf+sIz7HU1OqpwPLtHYu5H
-         z45w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R13jHsl0NRq2P7uupdPrQEK0knUWVCVlecfA2FHAsIY=;
-        b=x6r/SqwdMyu8QYk4nwwIUcwXLLmCEydGPE5gcpB4q+Pm+l3/9VfRlikOQePTBeicdz
-         TDkBolaYV8lNOFR8Is24MdTyon5Qid+V/oAI2XSib29YWOhb1vm7Ttfz2Ah/KThMU8Ig
-         jobk4GqW5+jI9LuMmHMypmunvkaIN88YM8bc3fCMX7UvH+6CHVg3NIiPRFJ+eRg78nAp
-         /NjIXHpKONJ7mrvSw2LPchsciVJp/tqm+jyZ2yzuDP78xzJgpVyQe3g1ZRmufkCAouf3
-         Hg1mVLJkayY6ohIspWB7GtZ7VoFxTFB5Js62JFVylz4De/EUT4vi3pMEdqCoKp8CxKql
-         imjw==
-X-Gm-Message-State: AOAM5334kZJFhqX6SgNF0w6JIiD+q3yL8Ve0Ka1VvdOqnDMEn3QLLRiK
-        YeWjB0pP1Mu+QsGj9nRlL8k=
-X-Google-Smtp-Source: ABdhPJxus5TmFdysSKYsoNhz5hOfAwQQ0cxSm5zp6mx6kXcl62wvePrQ8fNn1TW4Mea2M4xbAF0dKg==
-X-Received: by 2002:a17:90b:38c3:b0:1dc:b8c1:d428 with SMTP id nn3-20020a17090b38c300b001dcb8c1d428mr2216367pjb.55.1652225704431;
-        Tue, 10 May 2022 16:35:04 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090341cb00b0015ee60ef65bsm160273ple.260.2022.05.10.16.35.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 16:35:03 -0700 (PDT)
-Message-ID: <268372a9-2f6a-74f3-29ea-c51536a73dba@gmail.com>
-Date:   Wed, 11 May 2022 08:34:58 +0900
+        Tue, 10 May 2022 19:36:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934E526121;
+        Tue, 10 May 2022 16:36:17 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652225775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/EYKbD+5m5rYtUrz9cU8ph/+xjuJsYLEKLmP4yizks=;
+        b=Td0jh6UQTEdUYRd5xnaHNw8KSgjFmg4k8FSTVAaMadw81+zaBWQ1honj/GMlAoXcWJtq6o
+        8WtVlmhVnMJUcJ+3ZFJZT/HuvbaGkgXgXpkOqYvWJn6bJEpAHPL8cFA/mXzRAqc15QkQ+V
+        MpINp1sRCn8JHKegPRxjlhmce5H94xLcR1BsZ0TI3Z27hDK4Q9hAPyBAc3yST38VLP/m+W
+        KmybeJK3EBvlbJe2V3CT+xFea/dh0T84L7k/J+sNwtAGwcNbg1UsdbVuh17vUmUvMSKZgP
+        jwzPX5ryEapaebK7rRAXz8kD7xFpnnMSZP3hts7BT+yNwLRwagTkCi433Envrg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652225775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/EYKbD+5m5rYtUrz9cU8ph/+xjuJsYLEKLmP4yizks=;
+        b=/YfHHXkuqYRdWRMkvYVqBbEJaYYHN2qJOO5lbQ5LiAh5X/kNvBy4PxtPsKnSvZPQFqAflL
+        qZ7ojYQ76UfcH0Aw==
+To:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org,
+        Octavian Purdila <octavian.purdila@nxp.com>,
+        linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu,
+        catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com,
+        guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        nickhu@andestech.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        shorne@gmail.com, stefan.kristiansson@saunalahti.fi,
+        tsbogend@alpha.franken.de, vgupta@kernel.org,
+        vladimir.murzin@arm.com, will@kernel.org
+Subject: Re: [PATCH v2 17/17] irq: remove handle_domain_{irq,nmi}()
+In-Reply-To: <87h75z6pix.wl-maz@kernel.org>
+References: <20211026092504.27071-1-mark.rutland@arm.com>
+ <20211026092504.27071-18-mark.rutland@arm.com>
+ <20220506203242.GA1855@wunner.de> <YnjWvbzn8ox+f2Y2@FVFF77S0Q05N>
+ <87h75z6pix.wl-maz@kernel.org>
+Date:   Wed, 11 May 2022 01:36:15 +0200
+Message-ID: <877d6tot8w.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net-next] docs: ctucanfd: Use 'kernel-figure' directive
- instead of 'figure'
-Content-Language: en-US
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <05d491d4-c498-9bab-7085-9c892b636d68@gmail.com>
- <202205101825.15126.pisa@cmp.felk.cvut.cz>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <202205101825.15126.pisa@cmp.felk.cvut.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 18:25:15 +0200,
-Pavel Pisa wrote:
-> Hello Akira,
->=20
-> On Tuesday 10 of May 2022 11:34:37 Akira Yokosawa wrote:
->> Two issues were observed in the ReST doc added by commit c3a0addefbde
->> ("docs: ctucanfd: CTU CAN FD open-source IP core documentation.").
->=20
-> Thanks for the fix
->=20
->> The plain "figure" directive broke "make pdfdocs" due to a missing=20
->> PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"=
+On Mon, May 09 2022 at 10:09, Marc Zyngier wrote:
+> On Mon, 09 May 2022 09:54:21 +0100,
+> Mark Rutland <mark.rutland@arm.com> wrote:
+>> > Why isn't the WARN_ON_ONCE() conditional on handle_enforce_irqctx()?
+>> > (See handle_irq_desc() and c16816acd086.)
+>> 
+>> I did this for consistency with the in_nmi() check in
+>> generic_handle_domain_nmi(); I was unaware of commit c16816acd086 and
+>> IRQD_HANDLE_ENFORCE_IRQCTX.
+>> 
+>> I'll have ot leave it to Marc and Thomas as to what we should do there.
+>
+> My preference would be to not introduce things that result in
+> different behaviours for drivers, specially for things that are
+> evidently cross-architecture such as USB drivers (which seems to be
+> the case here).
 
->> directive, which is an extension for kernel documentations, should
->> be used instead.
->=20
-> I have not noticed that there is kernel-figure
-> option. We have setup own Sphinx 1.4.9 based build for driver
-> documentation out of the tree compilation, I am not sure if that
-> would work with this option but if not we keep this version
-> modified. There are required modification for sources location anyway..=
-=2E
->=20
-> https://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/linux_driver/buil=
-d/ctucanfd-driver.html
+No. USB drivers which synthesize their interrupts from a received packet
+work perfectly fine on all architectures because the interrupt domain
+and interrupt chip they are using are a software construct designed for
+the purpose and have no hard interrupt context requirements.
 
-You might want to see kernel's doc-guide at
+The reason why this is done is to leverage the interrupt driven PHY
+status changes instead of enforcing timer based polling. The charm is
+that the phy code does not have to grow another wart and just uses the
+offered synthetic interrupt. There are other places which do similar
+things for the same reason. This also provides the beloved statistics in
+/proc/interrupt, tracepoints etc. out of the box without having to add
+extra muck into yet another subsystem.
 
-    https://www.kernel.org/doc/html/latest/doc-guide/sphinx.html
+> I'd rather do something that allows these to be handled in the right
+> context such as a self-IPI. This would certainly work for the GIC. No
+> idea whether this is valid for x86, which is the other user.
 
-, or its source
+This interrupt is neither directly nor indirectly connected to GIC
+or APIC. It's synthesized. So what would the self-IPI help?
 
-    Documentation/doc-guide/sphinx.rst
+And no, I don't want to create infrastructure to allocate a pseudo
+device vector on x86 just to be able to self-IPI this USB synthesized
+interrupt. That'd be yet another horrorshow and worse a horrorshow for
+no reason and zero value.
 
->=20
->> The directive of "code:: raw" causes a warning from both
->> "make htmldocs" and "make pdfdocs", which reads:
->>
->>     [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name=
+IRQD_HANDLE_ENFORCE_IRQCTX was introduced to be able to differentiate
+between interrupt chips which require a particular context and chips
+which can handle it perfectly fine to have e.g. their software retrigger
+handled by directly invoking the handler from an arbitrary context.
 
->>     'raw' is not known
->=20
-> Strange I have not seen any warning when building htmldocs
-> in my actual linux kernel tree. I have cleaned docs to be warnings
-> free, but it is possible that I have another tools versions.
-Well, I don't think "make htmldocs" runs with Sphinx 1.4.9.
+I wish this would be the case on x86. That would eliminate a boatload of
+horrible code.
 
-You mean 1.7.9?
+Thanks,
 
-Then the above mentioned warning is not shown.
-I see the warning with Sphinx versions 2.4.4. and 4.5.0.
+        tglx
 
-I'll amend the changelog to mention the Sphinx versions and
-post as v2.
 
-        Thanks, Akira
 
->=20
-> Anyway thanks for cleanup.
->=20
->> A plain literal-block marker should suffice where no syntax
->> highlighting is intended.
->>
->> Fix the issues by using suitable directive and marker.
->>
->> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
->> Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core
->> documentation.") Cc: Pavel Pisa <pisa@cmp.felk.cvut.cz>
->> Cc: Martin Jerabek <martin.jerabek01@gmail.com>
->> Cc: Ondrej Ille <ondrej.ille@gmail.com>
->> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
->=20
-> Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
->=20
->> ---
->>  .../networking/device_drivers/can/ctu/ctucanfd-driver.rst     | 4 ++-=
--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git
->> a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
->> b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst =
-index
->> 2fde5551e756..40c92ea272af 100644
->> --- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.=
-rst
->> +++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.=
-rst
->> @@ -72,7 +72,7 @@ it is reachable (on which bus it resides) and its
->> configuration =E2=80=93 registers address, interrupts and so on. An ex=
-ample of such
->> a device tree is given in .
->>
->> -.. code:: raw
->> +::
->>
->>             / {
->>                 /* ... */
->> @@ -451,7 +451,7 @@ the FIFO is maintained, together with priority
->> rotation, is depicted in
->>
->>
->>
->> -.. figure:: fsm_txt_buffer_user.svg
->> +.. kernel-figure:: fsm_txt_buffer_user.svg
->>
->>     TX Buffer states with possible transitions
->=20
->=20
+

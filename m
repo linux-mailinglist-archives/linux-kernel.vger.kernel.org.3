@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955B55212CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131FF521292
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiEJK44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S240051AbiEJKwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240334AbiEJKxa (ORCPT
+        with ESMTP id S232518AbiEJKwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:53:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC0732B030D;
-        Tue, 10 May 2022 03:49:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8447E15DB;
-        Tue, 10 May 2022 03:49:25 -0700 (PDT)
-Received: from hype-n1-sdp.warwick.arm.com (hype-n1-sdp.warwick.arm.com [10.32.33.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 19B213F66F;
-        Tue, 10 May 2022 03:49:22 -0700 (PDT)
-From:   Nick Forrington <nick.forrington@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     Nick Forrington <nick.forrington@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>
-Subject: [PATCH 14/20] perf vendors events arm64: Arm Cortex-A75
-Date:   Tue, 10 May 2022 11:47:52 +0100
-Message-Id: <20220510104758.64677-15-nick.forrington@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220510104758.64677-1-nick.forrington@arm.com>
-References: <20220510104758.64677-1-nick.forrington@arm.com>
+        Tue, 10 May 2022 06:52:09 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9571BDD82
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:48:12 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id e5so14319317pgc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vpDFlOZXpJjXLC7ktedthI7zQougAm9+755lwKBDRYQ=;
+        b=L2p74zzSnxmX+oAWUzKHb5m9IZgc62QdY3HohYzBVPVhe0dhmg9ADu4Yqu6AqCF4B0
+         v4jkWStbaOkwaXbT8yqdvBCGNLccvBfLYoTlQo87rzR3e3bhqPB22CbyCS5yh1wEp9Ew
+         gzxoCQ/DWr/9rVFWN/LM/IS9Cq3uEDN8srenc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vpDFlOZXpJjXLC7ktedthI7zQougAm9+755lwKBDRYQ=;
+        b=IDvHe7II1fgI/W0ByxORuwBj0RY5ibgSw/aipw75bz4p/cDBdy176ZetBNCzzXNvgE
+         1zCQ2yub2epcI70t9VF2eC/PqYRBB+/J6xiyd75VnbMmfCArj5B5ylcUaH+fDxRvIG/W
+         yvq9Mzl8FEsm1P64vWLEwrB6etESqoLr/CdhMDpvKSNGjtWtAmqolIpejCscZAKkJZu4
+         v9vmlCn7pJyef9Oe3t/+e7It0hLjsWMDHquXSdAHsQY0w/2K/ADKD4OV/PSIp4YztEtE
+         kHamEvcQvE7A/W2257bBxaVJJU6Mk2S8fPGNJuq6HitURkoPDDmKXwxeyCI76dR//nr8
+         UD8A==
+X-Gm-Message-State: AOAM533DIFTiaGZCWO5+qSyXPdjJk3m03d3c2ekuii5ZifyBHyWb0+G0
+        BsUd2tOl9cC338r043XcSt66Ng==
+X-Google-Smtp-Source: ABdhPJyhlmUFh9/ps5D57B2uVw0NOeQ/MOs6dPy31mbKwB0SdcdcVA74igmhool6iWIHCQau2SEetQ==
+X-Received: by 2002:a62:31c1:0:b0:50a:4909:2691 with SMTP id x184-20020a6231c1000000b0050a49092691mr20316266pfx.64.1652179692002;
+        Tue, 10 May 2022 03:48:12 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:6dcd:8578:55cf:2b12])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902e30900b0015e8d4eb21esm1659691plc.104.2022.05.10.03.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 03:48:11 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/11] clk: mediatek: Move to struct clk_hw provider APIs
+Date:   Tue, 10 May 2022 18:47:53 +0800
+Message-Id: <20220510104804.544597-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,538 +73,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PMU events for Arm Cortex-A75
-Add corresponding common events
-Update mapfile.csv
+Hi everyone,
 
-Event data based on:
-https://github.com/ARM-software/data/tree/master/pmu/cortex-a75.json
+This is v2 of part 2 of my proposed MediaTek clk driver cleanup work [1].
 
-which is based on PMU event descriptions from the Arm Cortex-A75 Technical
-Reference Manual.
+Changes since v1:
+- Rebased and added coverage of new MT8186 clk drivers
+- Split patch "clk: mediatek: Replace 'struct clk' with 'struct clk_hw'"
+  into arbitrary pieces so that they don't bounce from the mailing lists
 
-Common event data based on:
-https://github.com/ARM-software/data/blob/master/pmu/common_armv9.json
+This was tested on MT8183 Juniper. Apppreciate any help testing on non-
+ChromeOS devices.
 
-which is based on PMU event descriptions found in the Arm Architecture
-Reference Manual:
-https://developer.arm.com/documentation/ddi0487/
+I'm not sure how this is supposed to be merged. Patches 3~8 need to be
+squashed together for bisectability, and the same goes for patches 9+10.
+Maybe after review, I could squash them and send a pull request? Or the
+patches could be put on a separate topic branch? That would be bad if
+we needed to revert the branch and other stuff was based on it though.
 
-Mapping data (for mapfile.csv) based on:
-https://github.com/ARM-software/data/blob/master/cpus.json
+Original cover letter from v1, with patch numbers fixed:
 
-which is based on Main ID Register (MIDR) information found in the Arm
-Technical Reference Manuals for individual CPUs.
+Part 2 involves moving the whole MediaTek clk driver library from the
+old `struct clk` provider API to the new `struct clk_hw` provider API.
 
-Signed-off-by: Nick Forrington <nick.forrington@arm.com>
----
- .../arch/arm64/arm/cortex-a75/branch.json     |  11 ++
- .../arch/arm64/arm/cortex-a75/bus.json        |  17 ++
- .../arch/arm64/arm/cortex-a75/cache.json      | 164 ++++++++++++++++++
- .../arch/arm64/arm/cortex-a75/etm.json        |  14 ++
- .../arch/arm64/arm/cortex-a75/exception.json  |  17 ++
- .../arm64/arm/cortex-a75/instruction.json     |  74 ++++++++
- .../arch/arm64/arm/cortex-a75/memory.json     |  17 ++
- .../arch/arm64/arm/cortex-a75/mmu.json        |  44 +++++
- .../arch/arm64/arm/cortex-a75/pipeline.json   |  44 +++++
- .../arch/arm64/common-and-microarch.json      |   6 +
- tools/perf/pmu-events/arch/arm64/mapfile.csv  |   1 +
- 11 files changed, 409 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/branch.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/bus.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/cache.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/etm.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/exception.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/instruction.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/memory.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/mmu.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a75/pipeline.json
+Parts of this series were done with coccinelle scripts, while others
+were done by hand. To facilitate review, these parts are currently split
+into different patches. As a result however, this series is not fully
+bisectable. Later on, the related parts should be squashed together.
 
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/branch.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/branch.json
-new file mode 100644
-index 000000000000..ece201718284
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/branch.json
-@@ -0,0 +1,11 @@
-+[
-+    {
-+        "ArchStdEvent": "BR_MIS_PRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_PRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_INDIRECT_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/bus.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/bus.json
-new file mode 100644
-index 000000000000..75d850b781ac
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/bus.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "CPU_CYCLES"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_CYCLES"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "BUS_ACCESS_WR"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/cache.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/cache.json
-new file mode 100644
-index 000000000000..7efa09800a51
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/cache.json
-@@ -0,0 +1,164 @@
-+[
-+    {
-+        "ArchStdEvent": "L1I_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WB"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WB"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "L1I_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_ALLOCATE"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_TLB_REFILL"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "L2I_TLB"
-+    },
-+    {
-+        "ArchStdEvent": "DTLB_WALK"
-+    },
-+    {
-+        "ArchStdEvent": "ITLB_WALK"
-+    },
-+    {
-+        "ArchStdEvent": "LL_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "LL_CACHE_MISS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WB_VICTIM"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_WB_CLEAN"
-+    },
-+    {
-+        "ArchStdEvent": "L1D_CACHE_INVAL"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WR"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WB_VICTIM"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_WB_CLEAN"
-+    },
-+    {
-+        "ArchStdEvent": "L2D_CACHE_INVAL"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_RD"
-+    },
-+    {
-+        "ArchStdEvent": "L3D_CACHE_REFILL_RD"
-+    },
-+    {
-+        "PublicDescription": "Number of ways read in the instruction cache - Tag RAM",
-+        "EventCode": "0xC2",
-+        "EventName": "I_TAG_RAM_RD",
-+        "BriefDescription": "Number of ways read in the instruction cache - Tag RAM"
-+    },
-+    {
-+        "PublicDescription": "Number of ways read in the instruction cache - Data RAM",
-+        "EventCode": "0xC3",
-+        "EventName": "I_DATA_RAM_RD",
-+        "BriefDescription": "Number of ways read in the instruction cache - Data RAM"
-+    },
-+    {
-+        "PublicDescription": "Number of ways read in the instruction BTAC RAM",
-+        "EventCode": "0xC4",
-+        "EventName": "I_BTAC_RAM_RD",
-+        "BriefDescription": "Number of ways read in the instruction BTAC RAM"
-+    },
-+    {
-+        "PublicDescription": "Level 1 PLD TLB refill",
-+        "EventCode": "0xE7",
-+        "EventName": "L1PLD_TLB_REFILL",
-+        "BriefDescription": "Level 1 PLD TLB refill"
-+    },
-+    {
-+        "PublicDescription": "Level 2 preload and MMU prefetcher TLB access. This event only counts software and hardware prefetches at Level 2",
-+        "EventCode": "0xE8",
-+        "EventName": "L2PLD_TLB",
-+        "BriefDescription": "Level 2 preload and MMU prefetcher TLB access. This event only counts software and hardware prefetches at Level 2"
-+    },
-+    {
-+        "PublicDescription": "Level 1 TLB flush",
-+        "EventCode": "0xE9",
-+        "EventName": "UTLB_FLUSH",
-+        "BriefDescription": "Level 1 TLB flush"
-+    },
-+    {
-+        "PublicDescription": "Level 2 TLB access",
-+        "EventCode": "0xEA",
-+        "EventName": "TLB_ACCESS",
-+        "BriefDescription": "Level 2 TLB access"
-+    },
-+    {
-+        "PublicDescription": "Level 1 preload TLB access. This event only counts software and hardware prefetches at Level 1. This event counts all accesses to the preload data micro TLB, that is L1 prefetcher and preload instructions. This event does not take into account whether the MMU is enabled or not",
-+        "EventCode": "0xEB",
-+        "EventName": "L1PLD_TLB",
-+        "BriefDescription": "Level 1 preload TLB access. This event only counts software and hardware prefetches at Level 1. This event counts all accesses to the preload data micro TLB, that is L1 prefetcher and preload instructions. This event does not take into account whether the MMU is enabled or not"
-+    },
-+    {
-+        "PublicDescription": "Prefetch access to unified TLB that caused a page table walk. This event counts software and hardware prefetches",
-+        "EventCode": "0xEC",
-+        "EventName": "PLDTLB_WALK",
-+        "BriefDescription": "Prefetch access to unified TLB that caused a page table walk. This event counts software and hardware prefetches"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/etm.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/etm.json
-new file mode 100644
-index 000000000000..fce852e82369
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/etm.json
-@@ -0,0 +1,14 @@
-+[
-+    {
-+        "PublicDescription": "ETM trace unit output 0",
-+        "EventCode": "0xDE",
-+        "EventName": "ETM_EXT_OUT0",
-+        "BriefDescription": "ETM trace unit output 0"
-+    },
-+    {
-+        "PublicDescription": "ETM trace unit output 1",
-+        "EventCode": "0xDF",
-+        "EventName": "ETM_EXT_OUT1",
-+        "BriefDescription": "ETM trace unit output 1"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/exception.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/exception.json
-new file mode 100644
-index 000000000000..5b04d01de703
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/exception.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "EXC_TAKEN"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_UNDEF"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_HVC"
-+    },
-+    {
-+        "PublicDescription": "Number of traps to hypervisor. This event counts the number of exception traps taken to EL2, excluding HVC instructions. This event is set every time that an exception is executed because of a decoded trap to the hypervisor. CCFAIL exceptions and traps caused by HVC instructions are excluded. This event is not counted when it is accessible from Non-secure EL0 or EL1",
-+        "EventCode": "0xDC",
-+        "EventName": "EXC_TRAP_HYP",
-+        "BriefDescription": "Number of traps to hypervisor. This event counts the number of exception traps taken to EL2, excluding HVC instructions. This event is set every time that an exception is executed because of a decoded trap to the hypervisor. CCFAIL exceptions and traps caused by HVC instructions are excluded. This event is not counted when it is accessible from Non-secure EL0 or EL1"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/instruction.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/instruction.json
-new file mode 100644
-index 000000000000..930ce8a259f3
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/instruction.json
-@@ -0,0 +1,74 @@
-+[
-+    {
-+        "ArchStdEvent": "SW_INCR"
-+    },
-+    {
-+        "ArchStdEvent": "INST_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "EXC_RETURN"
-+    },
-+    {
-+        "ArchStdEvent": "CID_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "PC_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_IMMED_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_RETURN_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "INST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "TTBR_WRITE_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "BR_RETIRED"
-+    },
-+    {
-+        "ArchStdEvent": "LDREX_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "STREX_PASS_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "STREX_FAIL_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "STREX_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "LD_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "LDST_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "DP_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ASE_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "VFP_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "CRYPTO_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "ISB_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "DSB_SPEC"
-+    },
-+    {
-+        "ArchStdEvent": "DMB_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/memory.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/memory.json
-new file mode 100644
-index 000000000000..929fc545470f
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/memory.json
-@@ -0,0 +1,17 @@
-+[
-+    {
-+        "ArchStdEvent": "MEM_ACCESS"
-+    },
-+    {
-+        "ArchStdEvent": "REMOTE_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "MEM_ACCESS_RD"
-+    },
-+    {
-+        "ArchStdEvent": "MEM_ACCESS_WR"
-+    },
-+    {
-+        "ArchStdEvent": "UNALIGNED_LDST_SPEC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/mmu.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/mmu.json
-new file mode 100644
-index 000000000000..0e63e68bc8cb
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/mmu.json
-@@ -0,0 +1,44 @@
-+[
-+    {
-+        "PublicDescription": "Duration of a translation table walk handled by the MMU",
-+        "EventCode": "0xE0",
-+        "EventName": "MMU_PTW",
-+        "BriefDescription": "Duration of a translation table walk handled by the MMU"
-+    },
-+    {
-+        "PublicDescription": "Duration of a Stage 1 translation table walk handled by the MMU. This event is not counted when it is accessible from Non-secure EL0 or EL1",
-+        "EventCode": "0xE1",
-+        "EventName": "MMU_PTW_ST1",
-+        "BriefDescription": "Duration of a Stage 1 translation table walk handled by the MMU. This event is not counted when it is accessible from Non-secure EL0 or EL1"
-+    },
-+    {
-+        "PublicDescription": "Duration of a Stage 2 translation table walk handled by the MMU. This event is not counted when it is accessible from Non-secure EL0 or EL1",
-+        "EventCode": "0xE2",
-+        "EventName": "MMU_PTW_ST2",
-+        "BriefDescription": "Duration of a Stage 2 translation table walk handled by the MMU. This event is not counted when it is accessible from Non-secure EL0 or EL1"
-+    },
-+    {
-+        "PublicDescription": "Duration of a translation table walk requested by the LSU",
-+        "EventCode": "0xE3",
-+        "EventName": "MMU_PTW_LSU",
-+        "BriefDescription": "Duration of a translation table walk requested by the LSU"
-+    },
-+    {
-+        "PublicDescription": "Duration of a translation table walk requested by the instruction side",
-+        "EventCode": "0xE4",
-+        "EventName": "MMU_PTW_ISIDE",
-+        "BriefDescription": "Duration of a translation table walk requested by the instruction side"
-+    },
-+    {
-+        "PublicDescription": "Duration of a translation table walk requested by a Preload instruction or Prefetch request",
-+        "EventCode": "0xE5",
-+        "EventName": "MMU_PTW_PLD",
-+        "BriefDescription": "Duration of a translation table walk requested by a Preload instruction or Prefetch request"
-+    },
-+    {
-+        "PublicDescription": "Duration of a translation table walk requested by an address translation operation",
-+        "EventCode": "0xE6",
-+        "EventName": "MMU_PTW_CP15",
-+        "BriefDescription": "Duration of a translation table walk requested by an address translation operation"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/pipeline.json
-new file mode 100644
-index 000000000000..0f8f50823cf1
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/arm/cortex-a75/pipeline.json
-@@ -0,0 +1,44 @@
-+[
-+    {
-+        "ArchStdEvent": "STALL_FRONTEND"
-+    },
-+    {
-+        "ArchStdEvent": "STALL_BACKEND"
-+    },
-+    {
-+        "PublicDescription": "A linefill caused an instruction side stall",
-+        "EventCode": "0xC0",
-+        "EventName": "LF_STALL",
-+        "BriefDescription": "A linefill caused an instruction side stall"
-+    },
-+    {
-+        "PublicDescription": "A translation table walk caused an instruction side stall",
-+        "EventCode": "0xC1",
-+        "EventName": "PTW_STALL",
-+        "BriefDescription": "A translation table walk caused an instruction side stall"
-+    },
-+    {
-+        "PublicDescription": "Duration for which all slots in the Load-Store Unit (LSU) are busy",
-+        "EventCode": "0xD3",
-+        "EventName": "D_LSU_SLOT_FULL",
-+        "BriefDescription": "Duration for which all slots in the Load-Store Unit (LSU) are busy"
-+    },
-+    {
-+        "PublicDescription": "Duration for which all slots in the load-store issue queue are busy. This event counts the cycles where all slots in the LS IQs are full with micro-operations waiting for issuing, and the dispatch stage is not empty",
-+        "EventCode": "0xD8",
-+        "EventName": "LS_IQ_FULL",
-+        "BriefDescription": "Duration for which all slots in the load-store issue queue are busy. This event counts the cycles where all slots in the LS IQs are full with micro-operations waiting for issuing, and the dispatch stage is not empty"
-+    },
-+    {
-+        "PublicDescription": "Duration for which all slots in the data processing issue queue are busy. This event counts the cycles where all slots in the DP0 and DP1 IQs are full with micro-operations waiting for issuing, and the despatch stage is not empty",
-+        "EventCode": "0xD9",
-+        "EventName": "DP_IQ_FULL",
-+        "BriefDescription": "Duration for which all slots in the data processing issue queue are busy. This event counts the cycles where all slots in the DP0 and DP1 IQs are full with micro-operations waiting for issuing, and the despatch stage is not empty"
-+    },
-+    {
-+        "PublicDescription": "Duration for which all slots in the data engine issue queue are busy. This event is set every time that the data engine rename has at least one valid instruction, excluding No Operations (NOPs), that cannot move to the issue stage because accpt_instr is LOW",
-+        "EventCode": "0xDA",
-+        "EventName": "DE_IQ_FULL",
-+        "BriefDescription": "Duration for which all slots in the data engine issue queue are busy. This event is set every time that the data engine rename has at least one valid instruction, excluding No Operations (NOPs), that cannot move to the issue stage because accpt_instr is LOW"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/arm64/common-and-microarch.json b/tools/perf/pmu-events/arch/arm64/common-and-microarch.json
-index 876b51dae92e..492083b99256 100644
---- a/tools/perf/pmu-events/arch/arm64/common-and-microarch.json
-+++ b/tools/perf/pmu-events/arch/arm64/common-and-microarch.json
-@@ -179,6 +179,12 @@
-         "EventName": "BUS_CYCLES",
-         "BriefDescription": "Bus cycle"
-     },
-+    {
-+        "PublicDescription": "Level 1 data cache allocation without refill",
-+        "EventCode": "0x1F",
-+        "EventName": "L1D_CACHE_ALLOCATE",
-+        "BriefDescription": "Level 1 data cache allocation without refill"
-+    },
-     {
-         "PublicDescription": "Attributable Level 2 data cache allocation without refill",
-         "EventCode": "0x20",
-diff --git a/tools/perf/pmu-events/arch/arm64/mapfile.csv b/tools/perf/pmu-events/arch/arm64/mapfile.csv
-index f413d8b629de..43cdeae3f1b6 100644
---- a/tools/perf/pmu-events/arch/arm64/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/arm64/mapfile.csv
-@@ -28,6 +28,7 @@
- 0x00000000410fd070,v1,arm/cortex-a57-a72,core
- 0x00000000410fd080,v1,arm/cortex-a57-a72,core
- 0x00000000410fd090,v1,arm/cortex-a73,core
-+0x00000000410fd0a0,v1,arm/cortex-a75,core
- 0x00000000410fd0b0,v1,arm/cortex-a76-n1,core
- 0x00000000410fd0c0,v1,arm/cortex-a76-n1,core
- 0x00000000410fd400,v1,arm/neoverse-v1,core
+Patch 1 and 2 are minor cleanups around code that is touched by later
+patches.
+
+Patch 3 starts the switch of the underlying data structure used to hold
+clocks from `struct clk_onecell_data` to `struct clk_hw_onecell_data`.
+This part is done by hand. The helpers used to allocate the data
+structures are changed, but none of the actual call sites, nor the
+clk provider API usage.
+
+Patch 4~8 finish the switch from `struct clk_onecell_data` to `struct
+clk_hw_onecell_data`. All the holding variables and call sites that
+involve `struct clk_onecell_data` are changed using coccinelle scripts.
+
+Patch 9 moves most of the MediaTek clk driver library from clk_register*()
+to clk_hw_register*, including all intermediate helpers, using
+coccinelle scripts.
+
+Patch 10 fixes, by hand, a build error from a call site that was not covered
+by the previous patch.
+
+Patch 11 converts the last usage of clk_register*() in the MediaTek clk
+drivers.
+
+As mentioned above, this series includes parts that don't build, but are
+split out for clarity. These are patches 3~8 and 9+10. Once the patches
+are reviewed, they can be squashed together.
+
+This series will likely conflict with Rex's "Cleanup MediaTek clk reset
+drivers" that was posted earlier today. We'll see how these work out.
+
+The next phase of the cleanup/improvement shall be to introduce some
+variant of `struct clk_parent_data` to describe clk relationships
+efficiently.
+
+Please have a look.
+
+
+Thanks
+ChenYu
+
+[1] https://lore.kernel.org/linux-clk/20220122091731.283592-1-wenst@chromium.org/
+
+Chen-Yu Tsai (11):
+  clk: mediatek: Make mtk_clk_register_composite() static
+  clk: mediatek: apmixed: Drop error message from clk_register() failure
+  clk: mediatek: Convert mtk_{alloc,free}_clk_data to struct clk_hw
+  clk: mediatek: Replace 'struct clk' with 'struct clk_hw'
+  clk: mediatek: mt27xx: Replace 'struct clk' with 'struct clk_hw'
+  clk: mediatek: mt67xx: Replace 'struct clk' with 'struct clk_hw'
+  clk: mediatek: mt7xxx: Replace 'struct clk' with 'struct clk_hw'
+  clk: mediatek: mt8xxx: Replace 'struct clk' with 'struct clk_hw'
+  clk: mediatek: Switch to clk_hw provider APIs
+  clk: mediatek: mt8173: Fix usage of mtk_clk_register_ref2usb_tx()
+  clk: mediatek: mt8173: Switch to clk_hw provider APIs
+
+ drivers/clk/mediatek/clk-apmixed.c           |  12 +-
+ drivers/clk/mediatek/clk-cpumux.c            |  50 +++---
+ drivers/clk/mediatek/clk-cpumux.h            |   6 +-
+ drivers/clk/mediatek/clk-gate.c              |  52 +++---
+ drivers/clk/mediatek/clk-gate.h              |   8 +-
+ drivers/clk/mediatek/clk-mt2701-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-bdp.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2701-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt2701-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt2701.c            |  26 +--
+ drivers/clk/mediatek/clk-mt2712-bdp.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2712-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2712-jpgdec.c     |   4 +-
+ drivers/clk/mediatek/clk-mt2712-mfg.c        |   4 +-
+ drivers/clk/mediatek/clk-mt2712-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt2712-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt2712-venc.c       |   4 +-
+ drivers/clk/mediatek/clk-mt2712.c            |  28 +--
+ drivers/clk/mediatek/clk-mt6765-audio.c      |   4 +-
+ drivers/clk/mediatek/clk-mt6765-cam.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6765-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6765-mipi0a.c     |   4 +-
+ drivers/clk/mediatek/clk-mt6765-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt6765-vcodec.c     |   4 +-
+ drivers/clk/mediatek/clk-mt6765.c            |  12 +-
+ drivers/clk/mediatek/clk-mt6779-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6779-cam.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6779-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6779-ipe.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6779-mfg.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6779-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt6779-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt6779-venc.c       |   4 +-
+ drivers/clk/mediatek/clk-mt6779.c            |  12 +-
+ drivers/clk/mediatek/clk-mt6797-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt6797-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt6797-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt6797-venc.c       |   4 +-
+ drivers/clk/mediatek/clk-mt6797.c            |  22 +--
+ drivers/clk/mediatek/clk-mt7622-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c        |   8 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c        |   8 +-
+ drivers/clk/mediatek/clk-mt7622.c            |  30 ++--
+ drivers/clk/mediatek/clk-mt7629-eth.c        |   8 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c        |   8 +-
+ drivers/clk/mediatek/clk-mt7629.c            |  30 ++--
+ drivers/clk/mediatek/clk-mt7986-apmixed.c    |   6 +-
+ drivers/clk/mediatek/clk-mt7986-eth.c        |  12 +-
+ drivers/clk/mediatek/clk-mt7986-infracfg.c   |   4 +-
+ drivers/clk/mediatek/clk-mt7986-topckgen.c   |  16 +-
+ drivers/clk/mediatek/clk-mt8135.c            |  18 +-
+ drivers/clk/mediatek/clk-mt8167-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8167-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8167-mfgcfg.c     |   4 +-
+ drivers/clk/mediatek/clk-mt8167-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt8167-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt8167.c            |  12 +-
+ drivers/clk/mediatek/clk-mt8173-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt8173.c            |  69 ++++----
+ drivers/clk/mediatek/clk-mt8183-audio.c      |   4 +-
+ drivers/clk/mediatek/clk-mt8183-cam.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8183-img.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8183-ipu0.c       |   4 +-
+ drivers/clk/mediatek/clk-mt8183-ipu1.c       |   4 +-
+ drivers/clk/mediatek/clk-mt8183-ipu_adl.c    |   4 +-
+ drivers/clk/mediatek/clk-mt8183-ipu_conn.c   |   4 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c     |   4 +-
+ drivers/clk/mediatek/clk-mt8183-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt8183-vdec.c       |   4 +-
+ drivers/clk/mediatek/clk-mt8183-venc.c       |   4 +-
+ drivers/clk/mediatek/clk-mt8183.c            |  25 +--
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c |   6 +-
+ drivers/clk/mediatek/clk-mt8186-mcu.c        |   6 +-
+ drivers/clk/mediatek/clk-mt8186-mm.c         |   6 +-
+ drivers/clk/mediatek/clk-mt8186-topckgen.c   |   6 +-
+ drivers/clk/mediatek/clk-mt8192-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8192-mm.c         |   4 +-
+ drivers/clk/mediatek/clk-mt8192.c            |  21 +--
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c |   6 +-
+ drivers/clk/mediatek/clk-mt8195-apusys_pll.c |   6 +-
+ drivers/clk/mediatek/clk-mt8195-topckgen.c   |   6 +-
+ drivers/clk/mediatek/clk-mt8195-vdo0.c       |   6 +-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c       |   6 +-
+ drivers/clk/mediatek/clk-mt8516-aud.c        |   4 +-
+ drivers/clk/mediatek/clk-mt8516.c            |  12 +-
+ drivers/clk/mediatek/clk-mtk.c               | 173 +++++++++----------
+ drivers/clk/mediatek/clk-mtk.h               |  25 ++-
+ drivers/clk/mediatek/clk-mux.c               |  50 +++---
+ drivers/clk/mediatek/clk-mux.h               |   6 +-
+ drivers/clk/mediatek/clk-pll.c               |  52 +++---
+ drivers/clk/mediatek/clk-pll.h               |   6 +-
+ 95 files changed, 543 insertions(+), 554 deletions(-)
+
 -- 
-2.25.1
+2.36.0.512.ge40c2bad7a-goog
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE996521BCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D73521C25
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344346AbiEJOVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S1344224AbiEJOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244998AbiEJNrK (ORCPT
+        with ESMTP id S242297AbiEJOAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5E039833;
-        Tue, 10 May 2022 06:33:23 -0700 (PDT)
+        Tue, 10 May 2022 10:00:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E52716B;
+        Tue, 10 May 2022 06:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7268EB81D24;
-        Tue, 10 May 2022 13:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF72C385A6;
-        Tue, 10 May 2022 13:33:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 233CC6195A;
+        Tue, 10 May 2022 13:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C159C385A6;
+        Tue, 10 May 2022 13:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189601;
-        bh=ZPX7+Rri4XQY1fUgTPvv/Qn+qiJcSUxHBUSmocYYkfo=;
+        s=korg; t=1652189993;
+        bh=ClrH9r6REJMY4gRv6YNSD6cNrPGYsFLSvLtpnlQJ+58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FUSLljfkT954RTbOkZ+y3+BLCFVT9EGUDKoGJEoH4VZ0B88QygQaQOCPwKinYHF5i
-         fMHIC71T9IWNDkYsVlLB1nPyslOH9irwa3zW/NiIx4BREcqf/3lMvfSPG9fhKmIC5Y
-         qmPIdbxVM5xW/IV/KLEQbxrLveBzvQtjE0Kh1EVA=
+        b=GfUh+ogYROCs+P9YUO+g8D0w3vZXlZNLZLNgE26qrQjneWVz6wlnhykABp+cYCmDX
+         dV+9MWruxmhSenhdqPML2e1KB9Afz9O5KbDGMK+y/whQYPG/MnWd3K0LDopNxQN/Ax
+         PWBNAmFtYYCgUzrxvNWQIS8hSU+te7uX1BrwmwP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [PATCH 5.15 103/135] Revert "parisc: Mark sched_clock unstable only if clocks are not syncronized"
+        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.17 095/140] SUNRPC: Dont leak sockets in xs_local_connect()
 Date:   Tue, 10 May 2022 15:08:05 +0200
-Message-Id: <20220510130743.362197225@linuxfoundation.org>
+Message-Id: <20220510130744.324350750@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 7962c0896429af2a0e00ec6bc15d992536453b2d upstream.
+commit aad41a7d7cf6c6fa804c872a2480f8e541da37cf upstream.
 
-This reverts commit d97180ad68bdb7ee10f327205a649bc2f558741d.
+If there is still a closed socket associated with the transport, then we
+need to trigger an autoclose before we can set up a new connection.
 
-It triggers RCU stalls at boot with a 32-bit kernel.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Noticed-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # v5.15+
+Reported-by: wanghai (M) <wanghai38@huawei.com>
+Fixes: f00432063db1 ("SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/setup.c |    2 ++
- arch/parisc/kernel/time.c  |    6 +-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ net/sunrpc/xprtsock.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/arch/parisc/kernel/setup.c
-+++ b/arch/parisc/kernel/setup.c
-@@ -150,6 +150,8 @@ void __init setup_arch(char **cmdline_p)
- #ifdef CONFIG_PA11
- 	dma_ops_init();
- #endif
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -1967,6 +1967,9 @@ static void xs_local_connect(struct rpc_
+ 	struct sock_xprt *transport = container_of(xprt, struct sock_xprt, xprt);
+ 	int ret;
+ 
++	if (transport->file)
++		goto force_disconnect;
 +
-+	clear_sched_clock_stable();
+ 	if (RPC_IS_ASYNC(task)) {
+ 		/*
+ 		 * We want the AF_LOCAL connect to be resolved in the
+@@ -1979,11 +1982,17 @@ static void xs_local_connect(struct rpc_
+ 		 */
+ 		task->tk_rpc_status = -ENOTCONN;
+ 		rpc_exit(task, -ENOTCONN);
+-		return;
++		goto out_wake;
+ 	}
+ 	ret = xs_local_setup_socket(transport);
+ 	if (ret && !RPC_IS_SOFTCONN(task))
+ 		msleep_interruptible(15000);
++	return;
++force_disconnect:
++	xprt_force_disconnect(xprt);
++out_wake:
++	xprt_clear_connecting(xprt);
++	xprt_wake_pending_tasks(xprt, -ENOTCONN);
  }
  
- /*
---- a/arch/parisc/kernel/time.c
-+++ b/arch/parisc/kernel/time.c
-@@ -249,13 +249,9 @@ void __init time_init(void)
- static int __init init_cr16_clocksource(void)
- {
- 	/*
--	 * The cr16 interval timers are not syncronized across CPUs, even if
--	 * they share the same socket.
-+	 * The cr16 interval timers are not synchronized across CPUs.
- 	 */
- 	if (num_online_cpus() > 1 && !running_on_qemu) {
--		/* mark sched_clock unstable */
--		clear_sched_clock_stable();
--
- 		clocksource_cr16.name = "cr16_unstable";
- 		clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
- 		clocksource_cr16.rating = 0;
+ #if IS_ENABLED(CONFIG_SUNRPC_SWAP)
 
 

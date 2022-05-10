@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B1F520AD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB506520AD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiEJBtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S234330AbiEJBuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiEJBs5 (ORCPT
+        with ESMTP id S232990AbiEJBud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:48:57 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEB6289BDC;
-        Mon,  9 May 2022 18:45:02 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id e5so13454236pgc.5;
-        Mon, 09 May 2022 18:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
-        b=DCH/WQHYliiBOM5qtU28mWlxYWa0xEhfYgyUf43q9BDAmCFxHJfCZi/pZarlHfGJoY
-         UqhtZdkilfcKTzRuNdpO6n1i3LHWiGKt6FNX6KLh6Ec4/grUGWdpmjoYWt9+OrJrcK3o
-         rAIYDZlGzNFBsbpO5VdnE8SIjw484E7uyIEp92r/rXF2UolFc3Tx3Ua0lpEeJyGBV4dP
-         /E+RJI0tEyvx/20IPKLFFEvwzGtU+wr/E1lxfdIXjc81WiXHEhpLjv4CE4lJvMgDtANJ
-         sFSjwA9ttKUKEn96X8v4eQgkvHx2NiZvnt8OLaPF2SC14/6kfZxcPWPHUXmFzDod0zYt
-         E0YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=nP61nKy/ZPvS3vrbOJaB+tc2rmY8ROtm0Xppu8VLlno=;
-        b=2VUjVz3m9zB2L901MpNcYDFqHJD/fW8DWi4fRFY/ZXHZQDitW+a1H6VDNEkGcdLlqy
-         eeIAwFTqT4x19u4N9w9PnY37tzNoYxy1aBi5JJu8CVTN242cvBtCRvarlErq/JQaw2cG
-         Zg1JWtvOnWjITwQP/v16tBplVMt6zP1CUiszvSefnvsUXB4iY0ytlKvoh4TLT7NM/ryj
-         N/RYAH7duI9d2QALXtB2yQcdZPQZ92GETp0iklGPFvqY80XCPJdzR69A+m7IctIEBPlh
-         UwDeeGKxKerUL0sX+8VbRKOiE4QamNSqUKWAcaBjjjOjAAswFx9b5F2hl0/VCjJhB0UN
-         xj6w==
-X-Gm-Message-State: AOAM532R/1qGAumTfTRirZG887tlIz0FwnuwJPSaza21pxIGHZrLABV8
-        I8bircdI0zi7geNuBxDUem91gRvpFKo=
-X-Google-Smtp-Source: ABdhPJwzT/+uJ2WTtLY2nkbyUT0PnbYSh7AqMNOP0QKEmBYONx6/3TFc58YIa9s0ov22A+8PSn8wnw==
-X-Received: by 2002:a63:68c4:0:b0:3c6:c9a6:e316 with SMTP id d187-20020a6368c4000000b003c6c9a6e316mr5139838pgc.399.1652147101507;
-        Mon, 09 May 2022 18:45:01 -0700 (PDT)
-Received: from localhost.localdomain ([49.216.43.238])
-        by smtp.gmail.com with ESMTPSA id x186-20020a627cc3000000b0050dc7628134sm9590075pfc.14.2022.05.09.18.44.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 May 2022 18:45:00 -0700 (PDT)
-From:   cy_huang <u0084500@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, matthias.bgg@gmail.com
-Cc:     cy_huang@richtek.com, bryan_huang@richtek.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: tcpci_mt6360: Update for BMC PHY setting
-Date:   Tue, 10 May 2022 09:44:52 +0800
-Message-Id: <1652147092-19255-1-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 9 May 2022 21:50:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC06F1BB9B3;
+        Mon,  9 May 2022 18:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652147197; x=1683683197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Jm5HcOG6ePgg0xlvCVUpmfa8KgOU7ubHWo2csDDoiZs=;
+  b=WsF9LHujRIZj4AVp/EHci+gYmiMyfntDBuWY5WpTiap3YwM+79iw/BFe
+   Bvp16elpueIy3L91Tq4r+nbKlHGpmjZyiF2QUKB2nt9FAZWYF6YH+IMOr
+   CwdN/tpRAjqO24UpENepA3uX/iN0rKuQRzUPxKqD567g5MiT/awghCBu7
+   OeLNnka6/KUeT9f4x4WVb3G2I8Fy1q8ry3p71Xuo/3jzLGzJZRE3kP+T1
+   99xqq17IJiuVCX1PCROsorGROrBmLHrIHUf8JFAj205GDo9Vl7C4V6R2b
+   Di/BK+6HMP0NYuuTwhTDo2EiaJVpwy4tS8m8A066kS3yzPo04cxaa4duI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="251272773"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="251272773"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 18:46:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="669638245"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 09 May 2022 18:46:21 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1noExA-000H8k-DG;
+        Tue, 10 May 2022 01:46:20 +0000
+Date:   Tue, 10 May 2022 09:46:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        peda@axentia.se
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        lee.jones@linaro.org, linux@armlinux.org.uk,
+        Manohar.Puri@microchip.com, Kavyasree.Kotagiri@microchip.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v2 4/4] mux: lan966: Add support for flexcom mux
+ controller
+Message-ID: <202205100948.56scrQeg-lkp@intel.com>
+References: <20220509084920.14529-5-kavyasree.kotagiri@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509084920.14529-5-kavyasree.kotagiri@microchip.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi Kavyasree,
 
-Update MT6360 BMC PHY Tx/Rx setting for the compatibility.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Hi,
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on robh/for-next]
+[cannot apply to soc/for-next linus/master v5.18-rc6 next-20220509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Recently, there's some USBPD MT6360 IOP issue from the user.
-From our RD's comment, BMC PHY Tx/Rx setting need to be updated for
-the compatibility issue.
----
- drivers/usb/typec/tcpm/tcpci_mt6360.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kavyasree-Kotagiri/Add-support-for-lan966-flexcom-multiplexer/20220509-171104
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: arm-at91_dt_defconfig (https://download.01.org/0day-ci/archive/20220510/202205100948.56scrQeg-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6b77ec16441906d1aa067b60cf97807111abdd72
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kavyasree-Kotagiri/Add-support-for-lan966-flexcom-multiplexer/20220509-171104
+        git checkout 6b77ec16441906d1aa067b60cf97807111abdd72
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-index f1bd9e0..8a952ea 100644
---- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-+++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-@@ -15,6 +15,9 @@
- 
- #include "tcpci.h"
- 
-+#define MT6360_REG_PHYCTRL1	0x80
-+#define MT6360_REG_PHYCTRL3	0x82
-+#define MT6360_REG_PHYCTRL7	0x86
- #define MT6360_REG_VCONNCTRL1	0x8C
- #define MT6360_REG_MODECTRL2	0x8F
- #define MT6360_REG_SWRESET	0xA0
-@@ -22,6 +25,8 @@
- #define MT6360_REG_DRPCTRL1	0xA2
- #define MT6360_REG_DRPCTRL2	0xA3
- #define MT6360_REG_I2CTORST	0xBF
-+#define MT6360_REG_PHYCTRL11	0xCA
-+#define MT6360_REG_RXCTRL1	0xCE
- #define MT6360_REG_RXCTRL2	0xCF
- #define MT6360_REG_CTDCTRL2	0xEC
- 
-@@ -106,6 +111,27 @@ static int mt6360_tcpc_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 	if (ret)
- 		return ret;
- 
-+	/* BMC PHY */
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL1, 0x3A70);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL3,  0x82);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_PHYCTRL7, 0x36);
-+	if (ret)
-+		return ret;
-+
-+	ret = mt6360_tcpc_write16(regmap, MT6360_REG_PHYCTRL11, 0x3C60);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(regmap, MT6360_REG_RXCTRL1, 0xE8);
-+	if (ret)
-+		return ret;
-+
- 	/* Set shipping mode off, AUTOIDLE on */
- 	return regmap_write(regmap, MT6360_REG_MODECTRL2, 0x7A);
- }
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: drivers/mfd/atmel-flexcom.o: in function `atmel_flexcom_probe':
+   atmel-flexcom.c:(.text+0x160): undefined reference to `devm_mux_control_get'
+>> arm-linux-gnueabi-ld: atmel-flexcom.c:(.text+0x1ec): undefined reference to `mux_control_select_delay'
+>> arm-linux-gnueabi-ld: atmel-flexcom.c:(.text+0x1fc): undefined reference to `mux_control_deselect'
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

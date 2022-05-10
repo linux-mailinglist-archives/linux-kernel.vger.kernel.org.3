@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAF5522752
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE03522755
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237643AbiEJXDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S237728AbiEJXEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiEJXDw (ORCPT
+        with ESMTP id S237704AbiEJXEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:03:52 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11168994E4;
-        Tue, 10 May 2022 16:03:52 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id h13so699172qvh.0;
-        Tue, 10 May 2022 16:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4CWgQ7c6/so/TrZFvbwKiAbSDiJmPs4rDdHHcrJQtFY=;
-        b=YRQ5V62GTRb10bX8N3+J8kh/1ZwJZL1FpEBKWVJYhMlGjneANpvKqhPlQ1a7EiO3vX
-         gF72VMSHkCNicG9RpMtX1FOk2F2cw/0ekzKKzpASenfOHL2GeOEK0LCFHKNz39OgnMnZ
-         FRr4lv2lEZGeq4WO2FUNps1VgdiPL23cQpJzwwoeCRY6b8Xad5FV2PkKNkY2tuVF2fW1
-         uSNS3K7J4eJopwOuo6emOXzAjesxUPQ3DiHtpP+TlnAT1dlsBoR8Bopg3GCkHxUVw9aC
-         vtY+hMTjmu3CKmh+pAFVu1V4NpHkPIIpkIdDsGWmI6hokKOB1txXxuvAI5XLDoYnJhbj
-         vI3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4CWgQ7c6/so/TrZFvbwKiAbSDiJmPs4rDdHHcrJQtFY=;
-        b=dD43bhrMcDeuquG8qXnSHK0CpKNRL6DEPERms/IrDoLPOgUZMfP1D4Rs5F/030u2U2
-         uUtcSxMmUco/uRR7CED4aC2RG3Y+IEVlURk6R24wXYEjXXUAUPOTl8u4y+igDmEabf6G
-         nFAzdggrAAeJIAzMES6CNH2YnqKUjGbd3MMjhjEv8tewJ57mkKfd9fILnDdrjOMop3Tw
-         GRvBGAGLCbv2/ITUtItNaCTGKXLYktGl+nclBnz3PwNj2IZs+pIFOXC5zq7DLLFls1R8
-         MA3uJBpcw46FAG2J8kAuIOM6VwJOb+bU2DstDmVXscFHF+BDEnOL7gfNnQu3SwSLvWHl
-         bO8Q==
-X-Gm-Message-State: AOAM530DZLpzHWsdedGTVhfHEAVoO1XDsbRHmbGeJ1od0Gdna+yvSgos
-        eqAsOe4lhhB+5e5FaEhIUw==
-X-Google-Smtp-Source: ABdhPJxv0CW8oYBzduzbC6FQyXdJZdYmqQx7/b3pW9+LHlMx6EM5cQPG9vCAGt1DxHb0IdgcU+4QwA==
-X-Received: by 2002:ad4:594f:0:b0:45a:8f92:7a2e with SMTP id eo15-20020ad4594f000000b0045a8f927a2emr20340711qvb.28.1652223831205;
-        Tue, 10 May 2022 16:03:51 -0700 (PDT)
-Received: from bytedance (ec2-52-72-174-210.compute-1.amazonaws.com. [52.72.174.210])
-        by smtp.gmail.com with ESMTPSA id s11-20020ac8528b000000b002f39b99f684sm173738qtn.30.2022.05.10.16.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 16:03:50 -0700 (PDT)
-Date:   Tue, 10 May 2022 16:03:47 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC v1 net-next 0/4] net: Qdisc backpressure
- infrastructure
-Message-ID: <20220510230347.GA11152@bytedance>
-References: <cover.1651800598.git.peilin.ye@bytedance.com>
- <2dbd5e38-b748-0c16-5b8b-b32bc0cc43b0@gmail.com>
+        Tue, 10 May 2022 19:04:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322C1C5E7F;
+        Tue, 10 May 2022 16:04:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79EB5B81FA8;
+        Tue, 10 May 2022 23:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8E5C385CE;
+        Tue, 10 May 2022 23:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652223844;
+        bh=iCYV15DfR+BEr5RvtEavvwo6ovTlC0z54Wr3xrFZk40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c2ExLq+Hps5wHasqSR4RCet/Pw28c6/rgvxFwmGH7SGyvXFE6sWGN+LiH6JOeUISK
+         5wqMxB4cAll3gOCVsmo+qzZVDCa4GptpfzUjTlXd8RYWe+wBwCowb9raXpRG0YPZBD
+         YQdcmXsdQU2hiBDf4hBWwA0yjkH0irq16my8vvGL0q5UytEpn8bWkU61ec20cXvNlz
+         eWNULDVAmcI689lCzsAViNNs69XHhXyxKPOJrjz7rVz9PokIQ3jMQxEnsYKzdlDFt/
+         G/7WUcMFptDJ/ItBXaleqO+q+725tzHo2g/UAHxT9ihlYHAlk2XIUjFnkb9dCP2pXY
+         6C1Yq22tr8oaw==
+Date:   Tue, 10 May 2022 16:04:02 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Rik van Riel <riel@fb.com>, "song@kernel.org" <song@kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <20220510230402.e5ymkwt45sg7bd35@treble>
+References: <YnkuFrm1YR46OFx/@alley>
+ <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
+ <YnoawYtoCSvrK7lb@alley>
+ <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
+ <YnqIcw+dYsWz/w7g@alley>
+ <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
+ <20220510165244.ikfh64ertnvodxb4@treble>
+ <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+ <20220510184213.l3gjweeleyg7obca@treble>
+ <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2dbd5e38-b748-0c16-5b8b-b32bc0cc43b0@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <47440502-930F-4CBD-B859-3AC9BBFF8FC6@fb.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-On Mon, May 09, 2022 at 08:26:27PM -0700, Eric Dumazet wrote:
-> On 5/6/22 12:43, Peilin Ye wrote:
-> > From: Peilin Ye <peilin.ye@bytedance.com>
+On Tue, May 10, 2022 at 07:45:49PM +0000, Song Liu wrote:
+> >> A KLP transition preempt notifier would help those
+> >> kernel threads transition to the new KLP version at
+> >> any time they reschedule.
 > > 
-> > Hi all,
+> > ... unless cond_resched() is a no-op due to CONFIG_PREEMPT?
+> 
+> Based on my understanding (and a few other folks we chatted with),
+> a kernel thread can legally run for extended time, as long as it 
+> calls cond_resched() at a reasonable frequency. Therefore, I 
+> think we should be able to patch such thread easily, unless it 
+> calls cond_resched() with being-patched function in the stack, 
+> of course.
+
+But again, with CONFIG_PREEMPT, that doesn't work.
+
+> OTOH, Petr's mindset of allowing many minutes for the patch 
+> transition is new to me. I need to think more about it. 
+> Josh, what’s you opinion on this? IIUC, kpatch is designed to 
+> only wait up to 60 seconds (no option to overwrite the time). 
+
+I wouldn't be necessarily opposed to changing the kpatch timeout to
+something bigger, or eliminating it altogether in favor of a WARN()
+after x minutes.
+
+> >> How much it will help is hard to predict, but I should
+> >> be able to get results from a fairly large sample size
+> >> of systems within a few weeks :)
 > > 
-> > Currently sockets (especially UDP ones) can drop a lot of skbs at TC
-> > egress when rate limited by shaper Qdiscs like HTB.  This experimental
-> > patchset tries to improve this by introducing a backpressure mechanism, so
-> > that sockets are temporarily throttled when they "send too much".
-> > 
-> > For now it takes care of TBF, HTB and CBQ, for UDP and TCP sockets.  Any
-> > comments, suggestions would be much appreciated.  Thanks!
+> > As Peter said, keep in mind that we will need to fix other cases beyond
+> > Facebook, i.e., CONFIG_PREEMPT combined with non-x86 arches which don't
+> > have ORC so they can't reliably unwind from an IRQ.
 > 
-> This very much looks like trying to solve an old problem to me.
+> I think livepatch transition may fail in different cases, and we
+> don't need to address all of them in one shoot. Fixing some cases
+> is an improvement as long as we don't slow down other cases. I 
+> understand that adding tiny overhead to __cond_resched() may end 
+> up as a visible regression. But maybe adding it to 
+> preempt_schedule_common() is light enough?
 > 
-> If you were using EDT model, a simple eBPF program could get rid of the
-> HTB/TBF qdisc
-> 
-> and you could use MQ+FQ as the packet schedulers, with the true multiqueue
-> sharding.
-> 
-> FQ provides fairness, so a flow can not anymore consume all the qdisc limit.
+> Did I miss/misunderstand something?
 
-This RFC tries to solve the "when UDP starts to drop (whether because of
-per-flow or per-Qdisc limit), it drops a lot" issue described in [I] of
-the cover letter; its main goal is not to improve fairness.
+If it's a real bug, we should fix it everywhere, not just for Facebook.
+Otherwise CONFIG_PREEMPT and/or non-x86 arches become second-class
+citizens.
 
-> (If your UDP sockets send packets all over the place (not connected
-> sockets),
-> 
-> then the eBPF can also be used to rate limit them)
-
-I was able to reproduce the same issue using EDT: default sch_fq
-flow_limit (100 packets), with a 1 Gbit/sec rate limit.  Now if I run
-this:
-
-  $ iperf -u -c 1.2.3.4 -p 5678 -l 3K -i 0.5 -t 30 -b 3g
-
-  [ ID] Interval       Transfer     Bandwidth
-  [  3]  0.0- 0.5 sec   137 MBytes  2.29 Gbits/sec
-  [  3]  0.5- 1.0 sec   142 MBytes  2.38 Gbits/sec
-  [  3]  1.0- 1.5 sec   117 MBytes  1.96 Gbits/sec
-  [  3]  1.5- 2.0 sec   105 MBytes  1.77 Gbits/sec
-  [  3]  2.0- 2.5 sec   132 MBytes  2.22 Gbits/sec
-  <...>                             ^^^^^^^^^^^^^^
-
-On average it tries to send 2.31 Gbits per second, dropping 56.71% of
-the traffic:
-
-  $ tc -s qdisc show dev eth0
-  <...>
-  qdisc fq 5: parent 1:4 limit 10000p flow_limit 100p buckets 1024 orphan_mask 1023 quantum 18030 initial_quantum 90150 low_rate_threshold 550Kbit refill_delay 40.0ms
-   Sent 16356556 bytes 14159 pkt (dropped 2814461, overlimits 0 requeues 0)
-                                  ^^^^^^^^^^^^^^^
-
-This RFC does not cover EDT though, since it does not use Qdisc watchdog
-or friends.
-
-Thanks,
-Peilin Ye
-
+-- 
+Josh

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3467521C02
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373EF521BF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344386AbiEJO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S1344425AbiEJO0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244367AbiEJNxy (ORCPT
+        with ESMTP id S244470AbiEJNx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:53:54 -0400
+        Tue, 10 May 2022 09:53:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2655829B83F;
-        Tue, 10 May 2022 06:38:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611E42A0A41;
+        Tue, 10 May 2022 06:38:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4B826188F;
-        Tue, 10 May 2022 13:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7917C385A6;
-        Tue, 10 May 2022 13:38:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03003615C8;
+        Tue, 10 May 2022 13:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD3C385C2;
+        Tue, 10 May 2022 13:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189902;
-        bh=C2v2vHSQbWR7p6v8H7wLTi3ABqS6AIycrKUhuDO3oM0=;
+        s=korg; t=1652189905;
+        bh=CZCbhfw3omaRJXhOwD3hj63Q4L75/COhbyLBzDbWWxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMqd14sL1OkGpcjxxT0aquCaQAGpssjqKQ3WeXmp23FvfUJK01ZkKX7yIXW/ulE84
-         VTkggQn0VGbNKlOlrSBDITisT5IKRKSVjSm9XAw7FOUA0waa9pQewb6jqLL+xoKoW1
-         WXBfGOE6PidT2EWLoZjzQpVBXaSAsjdbhiRQ64RQ=
+        b=vhNqLmQfBiWaFOb9RqbcWklPP3VhLdgl5Azskqu0HLK/FMVk7Y5dIcW+k4eohsQUg
+         bEgBn6RxbhT+AdSUV2hhHRDKa3tMdRljiJwQiw4+o9jKu11XLVwaMhnF3lW0re85dI
+         req+GoI5Rr0vIverNEey2YUNY6e2vLBu5OUrhUMQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariel Levkovich <lariel@nvidia.com>,
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
         Maor Dickman <maord@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.17 065/140] net/mlx5e: Fix wrong source vport matching on tunnel rule
-Date:   Tue, 10 May 2022 15:07:35 +0200
-Message-Id: <20220510130743.477938626@linuxfoundation.org>
+Subject: [PATCH 5.17 066/140] net/mlx5e: Dont match double-vlan packets if cvlan is not set
+Date:   Tue, 10 May 2022 15:07:36 +0200
+Message-Id: <20220510130743.507125417@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -55,46 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ariel Levkovich <lariel@nvidia.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-commit cb0d54cbf94866b48a73e10a73a55655f808cc7c upstream.
+commit ada09af92e621ab500dd80a16d1d0299a18a1180 upstream.
 
-When OVS internal port is the vtep device, the first decap
-rule is matching on the internal port's vport metadata value
-and then changes the metadata to be the uplink's value.
+Currently, match VLAN rule also matches packets that have multiple VLAN
+headers. This behavior is similar to buggy flower classifier behavior that
+has recently been fixed. Fix the issue by matching on
+outer_second_cvlan_tag with value 0 which will cause the HW to verify the
+packet doesn't contain second vlan header.
 
-Therefore, following rules on the tunnel, in chain > 0, should
-avoid matching on internal port metadata and use the uplink
-vport metadata instead.
-
-Select the uplink's metadata value for the source vport match
-in case the rule is in chain greater than zero, even if the tunnel
-route device is internal port.
-
-Fixes: 166f431ec6be ("net/mlx5e: Add indirect tc offload of ovs internal port")
-Signed-off-by: Ariel Levkovich <lariel@nvidia.com>
+Fixes: 699e96ddf47f ("net/mlx5e: Support offloading tc double vlan headers match")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
 Reviewed-by: Maor Dickman <maord@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-index 3f63df127091..3b151332e2f8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
-@@ -139,7 +139,7 @@ mlx5_eswitch_set_rule_source_port(struct mlx5_eswitch *esw,
- 		if (mlx5_esw_indir_table_decap_vport(attr))
- 			vport = mlx5_esw_indir_table_decap_vport(attr);
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -2355,6 +2355,17 @@ static int __parse_cls_flower(struct mlx
+ 				 match.key->vlan_priority);
  
--		if (esw_attr->int_port)
-+		if (attr && !attr->chain && esw_attr->int_port)
- 			metadata =
- 				mlx5e_tc_int_port_get_metadata_for_match(esw_attr->int_port);
- 		else
--- 
-2.36.1
-
+ 			*match_level = MLX5_MATCH_L2;
++
++			if (!flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CVLAN) &&
++			    match.mask->vlan_eth_type &&
++			    MLX5_CAP_FLOWTABLE_TYPE(priv->mdev,
++						    ft_field_support.outer_second_vid,
++						    fs_type)) {
++				MLX5_SET(fte_match_set_misc, misc_c,
++					 outer_second_cvlan_tag, 1);
++				spec->match_criteria_enable |=
++					MLX5_MATCH_MISC_PARAMETERS;
++			}
+ 		}
+ 	} else if (*match_level != MLX5_MATCH_NONE) {
+ 		/* cvlan_tag enabled in match criteria and
 
 

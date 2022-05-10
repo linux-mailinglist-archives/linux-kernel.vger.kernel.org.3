@@ -2,125 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6E0520A80
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E454520A84
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiEJBLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S234097AbiEJBO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbiEJBLT (ORCPT
+        with ESMTP id S233975AbiEJBOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:11:19 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2079.outbound.protection.outlook.com [40.107.95.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82C17DAA2
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:07:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aN00QmFi9TabjWJxgOa20kxSOgc8WSjQq7EZ9EDP1lCEZsZu8R1uW0jfCvn5mywHb+TZ8ShtQWfBXAZDldoAZp8457MAHW5m6Muf6xBT87AoZcqoEYTBGzBRT9czEk+h6K0I3ngzaaOu86Imet/F3cNXwfTRIIrD/jYCmNii/SAQTVugXEpwO4exXIFHl5WEgxNXX4JMXMJ8BuZdqAvFCEEaiZxCOxtcG9x9IZJd3LapUOVOlWI+/Ly/hFGOB3besTN2i7RDSNR20lMSBMZQTnQ0jvbXgPnHFiZP1DwdHaEv+voKMZR37m2ZulZcPkoI5kN0yRAyx+w07FKtzfmnPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ACpxfg1n2PpxiRRKl8ut436I/zkvSArArqixZH0z9Y4=;
- b=CzM0GAvmNwWyvZow7ehOez447MXV43rFN4G5rFQSjJKjgglPbI/anQSNcUH0Q9WlMpnib/j503M0eMUa3EVCxc4rF5xZA7lWWkBJmJa/QVQnrtPH/kOpEKPNw9gOTbcW5hL0zaLBcS8bsDAJPhe7OQQsubXuqzCRocyfBb4vb0qW+MUEs5wjSOE8kALkbWyiJ5G4C0EMTnrsojG+RBeXZOUVarRRRFLzjdGDrb76U2zhLVjAOPolLUbHZZIUqdOEvvxGmNPZmO5pYroBWx9bQyVr5XZiQ/outGkWAOQFi/jY51Uw1HFAQ15UQBo27ogXp6o3uQrm6bmpLO4JpKr+HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ACpxfg1n2PpxiRRKl8ut436I/zkvSArArqixZH0z9Y4=;
- b=k8+nfwbycbKMFeRDc/j1mFuJDUQtjnyZ8dUygjgxi5tEV/FRyDOQC58kg2YGgRp4nFsjqMUHwqM9JV+gihUkcMgPPLwXhiWash3M3wAQRsHw/MV6bfK1Tj9v+jaG/gk7b/MzsuOpBp30HwOLUGMKCW8pY54uwyFog/NsDjKUvoatRZWUgIbF0WP+zbU4lAy0qn9Ajmhl+WsynCHFf6XnbjHDlFHIPsdtjedBEO20HD//MRc43sC66SVzZud3QDLsjbUUZ1R1E2nxLx/U1ShnDzTCa+adV0uWBU7c+ZGKKtTh4gNmNKPw4yPCz+OIV2VBNkh8WFX1iS/7UggMnIUmAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by BL1PR12MB5205.namprd12.prod.outlook.com (2603:10b6:208:308::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
- 2022 01:07:22 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::920:970d:6f94:1f10]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::920:970d:6f94:1f10%4]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 01:07:22 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Date:   Mon, 09 May 2022 21:07:20 -0400
-X-Mailer: MailMate (1.14r5883)
-Message-ID: <7F381222-1C5C-4CBD-B29F-BBE0305231AD@nvidia.com>
-In-Reply-To: <20220509180356.24ff0403cf3ffc3fd01ffe98@linux-foundation.org>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
- <20220509180356.24ff0403cf3ffc3fd01ffe98@linux-foundation.org>
-Content-Type: multipart/signed;
- boundary="=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR07CA0023.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::33) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        Mon, 9 May 2022 21:14:53 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD41E16
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:10:54 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id v59so28000982ybi.12
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:10:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pu2anZ+R3B06nqhjgv9ISwTVomKwIVTtmDdQYWCLtaU=;
+        b=SBzbIGwpogQjc7IMGMxjUwPJcIQHt3GZd3N3nyAvbiVGChqLplRFXUoE1yQym1UPXB
+         ASGMAXbvkzLxER8KdGaoH/ygXeJn5ZoS4BBzbtAGJbH/jh9aagcP52uoALMAp5f4KeQ3
+         U4282yK7pydR8J8bLtDiwg39BWZ1yAgyQvpXq9Xr4oR2FRJZCj9ja4aOagMQHIqr3tvI
+         Js91IopKS6+Cy49fqkNsNpLqY7dcj0oXxGlPHSTOvtj0QE9JXVeXkoRNBxZUrRVNKvhO
+         Xt+h+lTicrLalVat1V4xkdwJVBJApxkRng6TBN1dTO6PiJXVsmFtD+uGdefGWoSgb2Vz
+         qOfw==
+X-Gm-Message-State: AOAM5307xGmM73jHMnywd633NZw7CRWOA4PONckI+G4ti3UAhW+nw9T4
+        4JRMXm+5Zi62gOinS3tksSAP1lkl0F1SgQmItwk=
+X-Google-Smtp-Source: ABdhPJxt8ljHX+a7Cku4rMKwAxeR+LFa7WwyvBewPPYp9BYbLUHVF00V/WCIrRFQ9WDFNtfesjm+bdIYzcxLt6dyA0s=
+X-Received: by 2002:a5b:491:0:b0:64a:f42f:6973 with SMTP id
+ n17-20020a5b0491000000b0064af42f6973mr3469601ybp.20.1652145054084; Mon, 09
+ May 2022 18:10:54 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0cb7472d-2ef0-448f-d331-08da3221700f
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5205:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB520550FC6E08CD26BF3199A3C2C99@BL1PR12MB5205.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VXA8v1KFjfedHavBup3GZc56GsUrFw+k1kdmuZW4hOrotwtDiDVF8RJUN21RxaAU11yxjzN+ocPBfC1LXfC+IOyCPXB/2q9+qdbhjjTi90S/CQ63TUnuCyngm7F7qXlRt/gjpoQ9cfMF7J9/FKl7vINKnjRaIWWlTIYfvxTTMmBokNXDlDWDl2fPmtZD0PMEzivH5oHvcErAos7kkSrhKB/DGvbOlxXTT2iRmOFUDmPopbfwlG4xHsdrEw8TzkCHKku7//qUgrw8+aLvKOSyYfp0m6X9vG1dTEofaN+Bh810F4n5jNY+CZ0kdJxLAeotq5YwXB/NeAekk6fR3qleiklPvdmR+V3Ka7D2aj8A1QEdyUY8pSOWRWfmU9K6cho6BHtwnj8ACpZ0+h5Ecp50RlMIzMVAUuuJDWVDUtuJ9SwuMoctDh9BiKthf5lc9EaP9aarWmXCSSSQifn1E8+lZ4uw63tpGIWrfSgdwT0vhJpLIGWAKf8l6xWGWqQ/5CGCGHReBg7yJo9351UE2oShE0uN5PiuhamO9KW/0TcNV2GrxgoLJt0C7bCdEmaTXyUs+Bvwve39oKkFCaDUbH2ZeetA6NTNKQtNe/XJx2zI8yAfUc14BhT1Br2k9BjcIudh4t4stJoTRyAyt7+KvZPIDLRx699uI2oPjp6zXBmIW7nf6ywuaXzKf1zO8bNG7Mo6BZuy2rQ4aGRuFcmdyI+1cYQdq8e8k+WrOOpqoLkfzpP+s/SUCGxnBCs2HTBWXi4RL6zPU/1IDr1Ba+vOJYOzA0T3NcVjCN29Vo+qVqS3W3QynCoF1rKInnYpSygcnp5GotZ9g7W21mbmi2T8UXNVt8JafJNbuPMu3103JPUUss4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6512007)(8676002)(4326008)(2616005)(6506007)(2906002)(53546011)(8936002)(508600001)(6486002)(966005)(38100700002)(7416002)(66476007)(86362001)(235185007)(5660300002)(36756003)(54906003)(83380400001)(186003)(21480400003)(33656002)(66556008)(316002)(6916009)(66946007)(72826004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0MDctm95XYdyTvHgFKAIfcvUkJ9SSKUk+bxOEsx+iO/DT1TEUESyqTW2vX3O?=
- =?us-ascii?Q?aMJTZ7SIBRf+LtDujsxcfHI9vjez7scB2JUUL8HbIq88J6jAyaY7nhGxvPd+?=
- =?us-ascii?Q?M2Fe8vKhAxea62Qm3aY5UqZPX5Sih6BdfEYW1ndszmnkryNpBC3qeuzHqlOl?=
- =?us-ascii?Q?3UBtA9cipy//Z+z+jMvcyY5JW7HBDPG0+WrHGjsvd5REaJ95i/dYbP0xUaYf?=
- =?us-ascii?Q?eTthZTWEYTCeMDY6AXVNnx7foyoRYhndt15k1nH6HMZdBjZlrg8Sy9Ne/jtt?=
- =?us-ascii?Q?rZ/UPBGuy5D4CtFVjcVt1GTzrM2A77w+g/4WZu6B1F9OvTgVppZeJu7kT0GO?=
- =?us-ascii?Q?//vmf9rCSK24VAZOAvvTuEI/zrmuxcuP0GIulIMVoO7C9EzEGZTyhb0CB3fr?=
- =?us-ascii?Q?74f+93/Gsnfw3kzKr1FJnsXSj2TQ5jCLyaKy6BuO3HU6IbuBEcinjAKn1iDP?=
- =?us-ascii?Q?KwqijyGbsRqDXz6dTGOwuVBihS+YA/iWpc3oBTkuDRXrXNaBqP+Y/aeIL7tl?=
- =?us-ascii?Q?C34nkL9fuO5sQcUUwQBCO4PL/DOcf30JxPS/OsfmIGrTNOmFTfy3kkCLRsR7?=
- =?us-ascii?Q?wkhuaNcrV/2o0tO+PjLN/8OPTi3ASEXJdNz+EEnP0HAU1GvkbEErnom9UgpF?=
- =?us-ascii?Q?K+0pOD7NReLcYBy30Gc6tedMoWC86DVwHWDgH0L5s6ef4PjUBZffyF7jvCX0?=
- =?us-ascii?Q?UFAhrCV5X5J8Wfhr6zDUjUHIF2tLwp20HEfoloRBd0df8tQl+1BhoDkAUTvf?=
- =?us-ascii?Q?o8sUSEYYD/F9MMmu0/vZQvK/RF13rcl2+z/6XwQXkFYI//tUPCeN09wMXZ+t?=
- =?us-ascii?Q?NNvh93qYwm/vScAHIWgFLeX4osm+PiAlAJVDt6lttHdsNxsHqvHsYRXF5Jnc?=
- =?us-ascii?Q?6RELnA5HKdWq1oqRcOQzcEictJXx+5/CQSwBQliNkiuPoVcBWJdVDO2yIVHq?=
- =?us-ascii?Q?FefICL8vs0c3SEjARdYEB8CA7seqNjqF5iKCQf1YTYCWYsL5Lmnry8hQs08N?=
- =?us-ascii?Q?rdPc2eiKRtfwWE7sObDW9OGTBj4LbddTPvdiOftvhI+ACtTFA0d/ccUmnyFJ?=
- =?us-ascii?Q?it1TjQFfa5LYGOoXoVOFyP3282MtS0zeYepJNhU2GcLgccyiCtzFWj8fkEuX?=
- =?us-ascii?Q?UX/ekDu17gpikm51fL0DqmNc+1D5P42Wry0GaAsm9ZXUksSqkpg4wUjL0awM?=
- =?us-ascii?Q?1Y5Cmy7KalDsjZta6cD/Nu2IYsQYGioXk5GuOHectdEf08Q/dipayFp8b7l4?=
- =?us-ascii?Q?Nwbun8JRPckdsvMAkQcREGrK2Qgb7MnTp9Gk/zr2uSwNS6APboQLeZMFwTOW?=
- =?us-ascii?Q?cjOt/ZaiVryBFZ2KWWu2eCUnXnOpAm/7s5uq3nN8xrw6ndvccJyyjOhkGCP6?=
- =?us-ascii?Q?DezHfTPMjlOesWx/HJDB2CXcg50H2/VtOQRiPTAr5eTgIpA1Rq/F52WuW3Lc?=
- =?us-ascii?Q?Q+mKQNNVGffe6xL9sS6b17eB0poDHnLlLhGo9Tecjsi4dt0cpC/ZJ1+kcPMt?=
- =?us-ascii?Q?ClQ1I+x3atBLPNc33uQ1LU5nnVrAqvKIestmruE8sRdxs9xKAjlH53SsayNH?=
- =?us-ascii?Q?aZbbzhoVmz6pegmezaG0z0rSu/iYkdNhJpDdEbYoesOU40fcJzJ64tLCCdyd?=
- =?us-ascii?Q?+1bialtEE3tYIGBRJjxIufCMCZDvDhAYEzZAHce7J9C25eAOS6nDfc1sLRIJ?=
- =?us-ascii?Q?UTXyB+AKi/78iCRHQ+6544GjN0e7JNfw0Mfc/84gbkaqUvFH4xYOH3CEXMPN?=
- =?us-ascii?Q?bn85PzTd4Q=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0cb7472d-2ef0-448f-d331-08da3221700f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 01:07:22.5334
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iZyjche5Sm1PPVnCNUtprgZq7Km2l1FsRcDgope4E/ZLS9J7OGmDCt0Lw3bfsEpe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5205
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+References: <20220306171009.1973074-1-mailhol.vincent@wanadoo.fr>
+ <20220508100907.61231-1-mailhol.vincent@wanadoo.fr> <CAK8P3a3Fw2T0WSkxv4DiTG2wGkKcs24StPx-BG_vi=ffa9OLVA@mail.gmail.com>
+ <CAMZ6RqK9d0hFwYebaArKjod4LJVGQgfDygpbGdBu-4BCDUR_SA@mail.gmail.com>
+ <YnhXgzhghfi17vMX@dev-arch.thelio-3990X> <CAMZ6RqL7543LFU7ywbr-FV9A3n+m7zNy-J00j=ZrNMkDonq2aw@mail.gmail.com>
+ <CAKwvOdniSVMOwkBke2EcgONn_Vmv88M+B2FTYL_BKtWawCSLAw@mail.gmail.com>
+ <CAMZ6Rq+q44vAeqa7HN8mfoNXzv9GndnQDm1e4_kyMXf_+oADdQ@mail.gmail.com> <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
+In-Reply-To: <CAKwvOdnf5f_eNz0FTiYfUf=TtEqWTZTFNN7UpmH3qCcKQGkkHg@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 10 May 2022 10:10:43 +0900
+Message-ID: <CAMZ6RqLp86ca6s-dO-Zre=PzOLr6JK9qu-8uAxfMym+X0a19yQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] x86/build: add -fno-builtin flag to prevent shadowing
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -129,63 +69,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-On 9 May 2022, at 21:03, Andrew Morton wrote:
-
-> On Mon, 25 Apr 2022 10:31:12 -0400 Zi Yan <zi.yan@sent.com> wrote:
+On Tue. 10 May 2022 at 08:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Mon, May 9, 2022 at 4:12 PM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> >
+> > Hi Nick,
+> >
+> > On Tue. 10 May 2022 at 04:50, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > On Mon, May 9, 2022 at 8:01 AM Vincent MAILHOL
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > >
+> > > > Instead, I am thinking of just using -fno-builtin-ffs to remove
+> > > > the annoying -Wshadow warning. Would that make more sense?
+> > >
+> > > Perhaps a pragma would be the best tool to silence this instance of
+> > > -Wshadow?  I understand what GCC is trying to express, but the kernel
+> > > does straddle a weird place between -ffreestanding and a "hosted" env.
+> >
+> > I was a bit reluctant to propose the use of pragma because I received
+> > negative feedback in another patch for using the __diag_ignore()
+> > c.f.:
+> > https://lore.kernel.org/all/YmhZSZWg9YZZLRHA@yury-laptop/
+> >
+> > But the context here is a bit different, I guess. If I receive your support, I
+> > am fully OK to silence this with some #pragma.
+> >
+> > The patch would look as below (I just need to test with clang
+> > before submitting).
 >
->> This patchset tries to remove the MAX_ORDER-1 alignment requirement fo=
-r CMA
->> and alloc_contig_range(). It prepares for my upcoming changes to make
->> MAX_ORDER adjustable at boot time[1].
+> Do you have a sense for how many other functions trigger -Wshadow?
+
+I only witnessed such -Wshadow warnings for ffs().
+
+> For
+> example, one question I have is:
+> Why does ffs() trigger this, but not any of the functions defined in
+> lib/string.c (or declared in include/linux/string.h) which surely also
+> shadow existing builtins?  I can't see your example being sprinkled
+> all over include/linux/string.h as being ok.
+
+Thanks, you are touching on a really interesting point.
+
+After checking, the other builtin functions declare the function with
+two leading underscores (e.g. __foo(...)) and then do:
+
+#define foo(...) __foo(...)
+
+Or alternatively, if using the builtin function:
+
+#define foo(...) __builtin_foo(...)
+
+Compilers do not trigger the -Wshadow for such patterns.
+
+Example with memcpy():
+https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/string_64.h#L75
+
+So, in light of your comment doing this would be more consistent:
+
+#define ffs(x) _ffs(x)
+
+> If it's more than just ffs(), perhaps the GCC developers can split the
+> shadowing of builtins into a sub flag under -Wshadow that can then be
+> disabled; we do want to shadow these functions, but -Wno-shadow would
+> miss warnings on variables being shadowed due to scope.
 >
-> I'm thinking this looks ready to be merged into mm-stable later this we=
-ek, for
-> the 5.19-rc1 merge window.
+> We've done this in the past with various flags in clang. Rather than
+> having semantic analysis trigger the same warning flag for different
+> concerns, we split the flag into distinct concerns, and reuse the
+> original flag as a group that enables the new flags. This gives
+> developers fine grain control over enabling/disabling distinct
+> concerns.
 >
-> I believe the build error at
-> https://lkml.kernel.org/r/CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9=
-mNScJg@mail.gmail.com
-> was addressed in ARM?
-
-Right. The warning is caused by CONFIG_ARM64_SME=3Dy not this patchset,
-see https://lore.kernel.org/all/YnGrbEt3oBBTly7u@qian/.
-
+> >
+> > diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> > index a288ecd230ab..e44911253bdf 100644
+> > --- a/arch/x86/include/asm/bitops.h
+> > +++ b/arch/x86/include/asm/bitops.h
+> > @@ -269,6 +269,9 @@ static __always_inline unsigned long
+> > __fls(unsigned long word)
+> >  #undef ADDR
+> >
+> >  #ifdef __KERNEL__
+> > +__diag_push();
+> > +__diag_ignore_all("-Wshadow",
+> > +                  "-fno-builtin-foo would remove optimization, just
+> > silence it instead");
+> >  /**
+> >   * ffs - find first set bit in word
+> >   * @x: the word to search
+> > @@ -309,6 +312,7 @@ static __always_inline int ffs(int x)
+> >  #endif
+> >         return r + 1;
+> >  }
+> > +__diag_pop(); /* ignore -Wshadow */
+> >
+> >  /**
+> >   * fls - find last set bit in word
 >
-> I have one -fix to be squashed,
-> https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/pa=
-tches/mm-make-alloc_contig_range-work-at-pageblock-granularity-fix.patch
-
-Yes. Thanks.
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmJ5usgPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKOU8P/jsC0OKEhFGlRCZhfcj9u2Tmst2xv7hd8/VY
-sFXiBqb55eadDrVOqbRw+KlUqOQrGOnS3px06LWljhaCrGlfxiMyIIY49D7mEehP
-dsS2k2fwdY8f0+1KzWrDf0iGYgka+usrVFjadirVi0wZ6zHHblFmvzegDSonTFkr
-nYMLZlILgRe89Ow8xnioPHt5Ha5qCY4Io1VcLgoJhNZnFo47U5Lo+wSEbP/KIHFA
-NoI0bmw0fQN79xUkAtF2f12CKhwxv9FBPV9bxYtPzrMRXTBnfWQUSv3ZKbYzlmSA
-CJK78slQu9dzO+7kxy+GANBAbg1whLYIERtbcmtVt+DrWfg75VZjeAsbV8gisWhG
-RQ9+FnHkkL+odpmPto90wHczD5TypmKwynC1k1NoHdhnKNQ5YPZeIuGoj8TIFhob
-d7y/f754iL7IXtiPj1dNW8DNKPeg7wJnpfNnaO0DcOFMZnuoQdBo28nw0AbVJ6Ew
-9bwFwSOLfj4IcU+d909gRtPs34KmIey9c0EcTQrcEAdBItNwKcvPDEW/OdsCzwqh
-3UzEw2de96kJJFGlT8jl8yclrSnxHvajEpozyEIkNVo8LKwUF6ymsNuRrdX2y5rV
-aXagbRRuFHfGxRZHaBc7V2yXr9oGFtQ2pC0EkVX0nSKItQaF6lJHR3Jbp5iaTufx
-FCVh6a5E
-=t+xN
------END PGP SIGNATURE-----
-
---=_MailMate_0746441A-D90C-40BC-8CC5-DA2826820A8E_=--
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers

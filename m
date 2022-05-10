@@ -2,215 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D8B521DE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DF7521DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345538AbiEJPRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S1345512AbiEJPMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345982AbiEJPQf (ORCPT
+        with ESMTP id S1346097AbiEJPLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:16:35 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E70021AA9D;
-        Tue, 10 May 2022 07:53:56 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id DD06C755; Tue, 10 May 2022 09:53:54 -0500 (CDT)
-Date:   Tue, 10 May 2022 09:53:54 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        containers@lists.linux.dev,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>, jpenumak@redhat.com,
-        Christian Brauner <brauner@kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Micah Morton <mortonm@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Message-ID: <20220510145354.GB7974@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-2-stefanb@linux.ibm.com>
- <20220509195414.GA30894@mail.hallyn.com>
- <20220509203618.GA31408@mail.hallyn.com>
- <CAOQ4uxjJJVRHrsiOqFokR=zFCV46U+tZJJ74cn9vriucbCHRkA@mail.gmail.com>
+        Tue, 10 May 2022 11:11:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99072A18A4;
+        Tue, 10 May 2022 07:45:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A781B81DB5;
+        Tue, 10 May 2022 14:45:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDB6C385C9;
+        Tue, 10 May 2022 14:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652193901;
+        bh=FigDUgbnzGZnaUshxGGnPmztjq2HwG7NbActxSZrPfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VLCIXi7fuXLQhi/lZX7peub4KDAYbkC5t3ITAGtli7uY52BeAkRiBNNCMludeKthz
+         /P1GSVNtfZd93JBoFbCNXSN3UOTTvCNPzgprUH5eVZHhWJwjno8fncPaEbvEYdaBH2
+         7h60GofoYkK/cmXi2N3oJN9pIZQeLw1a6NTqoHDVo2JWZYPId0bFq7lh3IsYgw1UrX
+         psJpeY2EWwBvpzMPZbL6+bI8a3+6jyspqx3jRaBjR+dn9f2ZtwmYtIlC0ND6NcdUyf
+         q8CRnG17lUuJKvdkZjs3i8z2A4bNh5vwHEmF1ScqL/M25Go4n/scNPWpq5xHMfKgcT
+         dVI99c2Fpj7AQ==
+Date:   Tue, 10 May 2022 09:54:15 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] x86/mm/pgtable: Fix -Wstringop-overflow warnings
+Message-ID: <20220510145415.GA8111@embeddedor>
+References: <20220509194541.GA91598@embeddedor>
+ <202205091251.5703DE2@keescook>
+ <20220509205056.GA109715@embeddedor>
+ <202205091351.6E0BA523@keescook>
+ <20220510141202.GA6878@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjJJVRHrsiOqFokR=zFCV46U+tZJJ74cn9vriucbCHRkA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220510141202.GA6878@embeddedor>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:43:13AM +0300, Amir Goldstein wrote:
-> On Mon, May 9, 2022 at 11:36 PM Serge E. Hallyn <serge@hallyn.com> wrote:
-> >
-> > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge E. Hallyn wrote:
-> > > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
-> > > > From: Christian Brauner <brauner@kernel.org>
-> > > >
-> > > > When securityfs creates a new file or directory via
-> > > > securityfs_create_dentry() it will take an additional reference on the
-> > > > newly created dentry after it has attached the new inode to the new
-> > > > dentry and added it to the hashqueues.
-> > > > If we contrast this with debugfs which has the same underlying logic as
-> > > > securityfs. It uses a similar pairing as securityfs. Where securityfs
-> > > > has the securityfs_create_dentry() and securityfs_remove() pairing,
-> > > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> > > >
-> > > > In contrast to securityfs, debugfs doesn't take an additional reference
-> > > > on the newly created dentry in __debugfs_create_file() which would need
-> > > > to be put in debugfs_remove().
-> > > >
-> > > > The additional dget() isn't a problem per se. In the current
-> > > > implementation of securityfs each created dentry pins the filesystem via
-> > >
-> > > Is 'via' an extra word here or is there a missing word?
-> > >
-> > > I'll delay the rest of my response as the missing word may answer my
-> > > remaining question :)
-> > >
-> > > > until it is removed. Since it is virtually guaranteed that there is at
-> > > > least one user of securityfs that has created dentries the initial
-> > > > securityfs mount cannot go away until all dentries have been removed.
-> > > >
-> > > > Since most of the users of the initial securityfs mount don't go away
-> > > > until the system is shutdown the initial securityfs won't go away when
-> > > > unmounted. Instead a mount will usually surface the same superblock as
-> > > > before. The additional dget() doesn't matter in this scenario since it
-> > > > is required that all dentries have been cleaned up by the respective
-> > > > users before the superblock can be destroyed, i.e. superblock shutdown
-> > > > is tied to the lifetime of the associated dentries.
-> > > >
-> > > > However, in order to support ima namespaces we need to extend securityfs
-> > > > to support being mounted outside of the initial user namespace. For
-> > > > namespaced users the pinning logic doesn't make sense. Whereas in the
-> > > > initial namespace the securityfs instance and the associated data
-> > > > structures of its users can't go away for reason explained earlier users
-> > > > of non-initial securityfs instances do go away when the last users of
-> > > > the namespace are gone.
-> > > >
-> > > > So for those users we neither want to duplicate the pinning logic nor
-> > > > make the global securityfs instance display different information based
-> > > > on the namespace. Both options would be really messy and hacky.
-> > > >
-> > > > Instead we will simply give each namespace its own securityfs instance
-> > > > similar to how each ipc namespace has its own mqueue instance and all
-> > > > entries in there are cleaned up on umount or when the last user of the
-> > > > associated namespace is gone.
-> > > >
-> > > > This means that the superblock's lifetime isn't tied to the dentries.
-> > > > Instead the last umount, without any fds kept open, will trigger a clean
-> > > > shutdown. But now the additional dget() gets in the way. Instead of
-> > > > being able to rely on the generic superblock shutdown logic we would
-> > > > need to drop the additional dentry reference during superblock shutdown
-> > > > for all associated users. That would force the use of a generic
-> > > > coordination mechanism for current and future users of securityfs which
-> > > > is unnecessary. Simply remove the additional dget() in
-> > > > securityfs_dentry_create().
-> > > >
-> > > > In securityfs_remove() we will call dget() to take an additional
-> > > > reference on the dentry about to be removed. After simple_unlink() or
-> > > > simple_rmdir() have dropped the dentry refcount we can call d_delete()
-> > > > which will either turn the dentry into negative dentry if our earlier
-> > > > dget() is the only reference to the dentry, i.e. it has no other users,
-> > > > or remove it from the hashqueues in case there are additional users.
-> > > >
+On Tue, May 10, 2022 at 09:12:02AM -0500, Gustavo A. R. Silva wrote:
+> > > > > --- a/arch/x86/mm/pgtable.c
+> > > > > +++ b/arch/x86/mm/pgtable.c
+> > > > > @@ -434,14 +434,18 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+> > > > >  
+> > > > >  	mm->pgd = pgd;
+> > > > >  
+> > > > > -	if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+> > > > > -		goto out_free_pgd;
+> > > > > +	if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0) {
+> > > > > +		if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+> > > > > +			goto out_free_pgd;
+> > > > >  
+> > > > > -	if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+> > > > > -		goto out_free_pmds;
+> > > > > +		if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+> > > > > +			goto out_free_pmds;
+> > > > >  
+> > > > > -	if (paravirt_pgd_alloc(mm) != 0)
+> > > > > -		goto out_free_user_pmds;
+> > > > > +		if (paravirt_pgd_alloc(mm) != 0)
+> > > > > +			goto out_free_user_pmds;
+> > > > > +	} else {
+> > > > > +		goto out_free_pgd;
+> > > > 
+> > > > The "all 0" case shouldn't be a failure mode; it should just skip the
+> > > > preallocate_pmds() calls.
+> > > 
+> > > Do you mean something like this:
+> > > 
+> > > diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+> > > index f16059e9a85e..4dae168408f1 100644
+> > > --- a/arch/x86/mm/pgtable.c
+> > > +++ b/arch/x86/mm/pgtable.c
+> > > @@ -434,11 +434,13 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+> > > 
+> > >         mm->pgd = pgd;
+> > > 
+> > > -       if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+> > > -               goto out_free_pgd;
+> > > +       if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0) {
+> > > +               if (preallocate_pmds(mm, pmds, PREALLOCATED_PMDS) != 0)
+> > > +                       goto out_free_pgd;
+> > > 
+> > > -       if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+> > > -               goto out_free_pmds;
+> > > +               if (preallocate_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS) != 0)
+> > > +                       goto out_free_pmds;
+> > > +       }
+> > > 
+> > >         if (paravirt_pgd_alloc(mm) != 0)
+> > >                 goto out_free_user_pmds;
+> > > 
+> > > It seems that the above is not enough, because we have the same issue
+> > > when calling pgd_prepopulate_pmd(), pgd_prepopulate_user_pmd() and
+> > > free_pmds():
+> > > 
+> > >   CC      arch/x86/mm/pgtable.o
+> > > arch/x86/mm/pgtable.c: In function 'pgd_alloc':
+> > > arch/x86/mm/pgtable.c:464:9: warning: 'free_pmds' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
+> > >   464 |         free_pmds(mm, u_pmds, PREALLOCATED_USER_PMDS);
+> > >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Ugh. Perhaps just marking both preallocate_pmds() and free_pmds() as
+> > inline is enough to let the compiler "see" everything correctly?
 > 
-> The first case (turn negative) cannot happen because the function is
-> entered with at least 1 refcount and increments it by 1.
-> So you can follow commit 46c46f8df9aa ("devpts_pty_kill(): don't bother
-> with d_delete()") and use d_drop() instead.
-> 
-> > > > All of these changes should not have any effect on the userspace
-> > > > semantics of the initial securityfs mount.
-> > > >
-> > > > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > > > Cc: John Johansen <john.johansen@canonical.com>
-> > > > Cc: Matthew Garrett <mjg59@srcf.ucam.org>
-> > > > Cc: Micah Morton <mortonm@chromium.org>
-> > > > Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-> > > > Cc: James Morris <jmorris@namei.org>
-> > > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > ---
-> > > >  security/inode.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/security/inode.c b/security/inode.c
-> > > > index 6c326939750d..13e6780c4444 100644
-> > > > --- a/security/inode.c
-> > > > +++ b/security/inode.c
-> > > > @@ -159,7 +159,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
-> > > >             inode->i_fop = fops;
-> > > >     }
-> > > >     d_instantiate(dentry, inode);
-> > > > -   dget(dentry);
-> > > >     inode_unlock(dir);
-> > > >     return dentry;
-> > > >
-> > > > @@ -302,10 +301,12 @@ void securityfs_remove(struct dentry *dentry)
-> > > >     dir = d_inode(dentry->d_parent);
-> > > >     inode_lock(dir);
-> > > >     if (simple_positive(dentry)) {
-> > > > +           dget(dentry);
-> > > >             if (d_is_dir(dentry))
-> > > >                     simple_rmdir(dir, dentry);
-> >
-> > Hm, so I realize your patch isn't introducing this, but is the
-> > fact that we ignore the possible -ENOTEMPTY return value of
-> > simple_rmdir() not a problem?
-> 
-> As long as we are using debugfs as a reference code, wouldn't
-> securityfs need to use simple_recursive_removal()?
-> Can we guaranty that modules always cleanup all entries in
-> correct order?
-> 
-> >
-> > > >             else
-> > > >                     simple_unlink(dir, dentry);
-> > > > +           d_delete(dentry);
-> >
-> 
-> d_drop() (see comment above)
-> 
-> > I'm mostly trying to convince myself that the fact that there is not
-> > a matching dput being removed (to match the dget being removed above)
-> > is ok.  I do think it is, but that belief seems to dictate that right
-> > now dentries must never be being released.
-> >
-> > Otherwise, it seems like there must be cases where the next dput could
-> > be called on a dentry that has been freed.
-> >
-> > > >             dput(dentry);
-> 
-> Huh? There must be a ref to dentry when entering this function
-> and there is dget() added above so balance is not lost.
+> It doesn't seem to work... however, the following piece of code implies
+> that pmds and u_pmds should be first preallocated through preallocate_pmds(),
+> which cannot happen if (MAX_PREALLOCATED_PMDS != 0 && MAX_PREALLOCATED_USER_PMDS != 0)
 
-Like, I said, i think the answer is that before this patch there the
-dentry counts never reach 0.  But we are removing a dget and not
-removing any matching dput, so if they reached 0 before, then my
-question is where was that happening and is that code still safe after
-this patch.
+I wanted to say: which cannot happen if MAX_PREALLOCATED_PMDS == 0 && MAX_PREALLOCATED_USER_PMDS == 0
+
+> 
+> 448         /*
+> 449          * Make sure that pre-populating the pmds is atomic with
+> 450          * respect to anything walking the pgd_list, so that they
+> 451          * never see a partially populated pgd.
+> 452          */
+> 453         spin_lock(&pgd_lock);
+> 454
+> 455         pgd_ctor(mm, pgd);
+> 456         pgd_prepopulate_pmd(mm, pgd, pmds);
+> 457         pgd_prepopulate_user_pmd(mm, pgd, u_pmds);
+> 458
+> 459         spin_unlock(&pgd_lock);
+> 460
+> 461         return pgd;
+> 
+> So, my question here is why do you think the "all 0" case should only skip the
+> preallocate_pmds() calls and not the pgd_prepopulate_pmd() calls too?
+> 
+> > 
+> > Otherwise, they'll likely each need the same check that was added to
+> > pgd_prepopulate_pmd() ages ago for a similar situation...
+> 
+> uhm... that doesn't seem to have an impact nowadays, or at least now
+> Wstringop-overflow sees the problem first, because now the issue is
+> detected at the moment of passing the arguments to the the function
+> and not when actually executing the function?
+> 
+> otherwise, I think we wouldn't see this error:
+> 
+> arch/x86/mm/pgtable.c:454:9: warning: 'pgd_prepopulate_pmd' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
+>   454 |         pgd_prepopulate_pmd(mm, pgd, pmds);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> arch/x86/mm/pgtable.c:454:9: note: referencing argument 3 of type 'pmd_t *[0]'
+> arch/x86/mm/pgtable.c:296:13: note: in a call to function 'pgd_prepopulate_pmd'
+>   296 | static void pgd_prepopulate_pmd(struct mm_struct *mm, pgd_t *pgd, pmd_t *pmds[])
+>       |             ^~~~~~~~~~~~~~~~~~~
+> 
+
+Thanks
+--
+Gustavo

@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FDF5212DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD36E5212E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbiEJK6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S240520AbiEJK7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240034AbiEJK62 (ORCPT
+        with ESMTP id S240360AbiEJK6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:58:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210124FC6D;
-        Tue, 10 May 2022 03:51:50 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id n10so4458946pjh.5;
-        Tue, 10 May 2022 03:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
-        b=CtJrbRkdYLd2m75y3KnT1llgVR0TrXUGgcfjKnerzLytO3KhE+tKJrXpMCdL73JkrV
-         wAE/cO12OX9q8ZV1cNOS2d1PVJ3Qq6lwn2BevdYI7dWmfYZ2/oqbSVU++K8smSj58FPP
-         qH2VzrXI9m/8h87/7bLOVM9SJ/Z9Qi1/Vg02c9t+/YE5MskdJQkY7Yv27xiblP6N0kXP
-         TG6LEgZiozrbLNKeR8paleRjAh4a35//96uGyg2aupHR9sl3JIWgl3G7DgaAYcn7yoVu
-         aMcsAfjp+U4rmcJo3ncmyakDkU9nWPvBVkGpPNnXlLE+sUg0xrn3ZP5fFh2UEWYFW7Qe
-         yjHw==
+        Tue, 10 May 2022 06:58:40 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B327532CC;
+        Tue, 10 May 2022 03:52:09 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id bg25so9918733wmb.4;
+        Tue, 10 May 2022 03:52:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
-        b=nyw9qC0QGpBG1qp7yi6s9pHz7lMpeigzY639MYZL6hnxK5nNm6Fzwjmzg714w9vRC1
-         UYO0mMVq4O7jKQqajkd5JF+qIR77+CnoulgDRhnsgGRBTgStoZRvxac7OLOkRLLWtYNd
-         zrePeTLzB3OJcxU5qqbvlRoQN7EMUJmhW3Huc48R4qZYyVe/20dfnKRIq6/rrG+65hut
-         2WB0Bn8RtVgWectZ05Nlw9+fDrirGBml9eCIfO8PFouqGZrm1CfYZnUElisuSuUwus2l
-         8M3mVxMmgWylWmhnp+DOtvuPa8bDDKEx5UOyzMPF6cGKHXJH5TXKWV98wLv7qnMCQY2t
-         VvQA==
-X-Gm-Message-State: AOAM530eylbINopiecyeAtkmZZRHgbRRBGt+oNG/+9MpPNnCkl65Y7gY
-        +zFiTcIEzz4dMgJNp16xgdU=
-X-Google-Smtp-Source: ABdhPJwkdiCGUU+XM88WpYZnDkq5K9ncI89i87n9dQBbbP43hghm580ctBP9FYiQdGdVRcOiq1UP3w==
-X-Received: by 2002:a17:903:1d1:b0:15e:9607:d4c9 with SMTP id e17-20020a17090301d100b0015e9607d4c9mr20156470plh.41.1652179909689;
-        Tue, 10 May 2022 03:51:49 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r9-20020a056a00216900b0050dc7628195sm10288927pff.111.2022.05.10.03.51.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p6VCNHyiYuDbxgsrbiSQPkXEisIh4ErIQF+ClwhqALo=;
+        b=FSYwuDVlKH9wW4QkdUVsZ0vCRN5OqJ05OKq6qiTlw5fEITVE7vaWAQ5Zd7xSQ7ib6t
+         6ZsM/u1M8QUd5t6KIv7ENt6euKB6LNn3W1XU0H8uOPUNr2W65O/YZwVhoUrKlFU4jfN7
+         2Ve2hLh7SSemKUl1OZj6ltgysDlLSsjz6HXp863arbyznGxD4jNthM9+B5cGruzQ7met
+         00I2PvXeymbOPe497l+uO+8jQDlzBjbcJK7gyg+/qNLyBgHv4AcJ3o6P3vqc49yly/aR
+         bHQ6Ij+ZjNb9phSRWOW9fhPN84XS2mi4yYQSpuPriiuIaNtJmac+hbvisnXAISCWtzW4
+         SAiw==
+X-Gm-Message-State: AOAM533vH6VAlcHz6lEmoNXwmQro8TZM7XPAkJmv0QxxGDhmpQO/q4Vl
+        bzvk1RvocT1BGhIfj2vlu5c=
+X-Google-Smtp-Source: ABdhPJwuWwvFLwODMaM2OHf1KBzQlzSMCPivJS8OGOT5GoBODuzez3+oLb5dA2oywcHIXj7AVTOICQ==
+X-Received: by 2002:a05:600c:a08:b0:392:a561:9542 with SMTP id z8-20020a05600c0a0800b00392a5619542mr20338302wmp.62.1652179927424;
+        Tue, 10 May 2022 03:52:07 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id r17-20020a05600c425100b003942a244ee2sm2304037wmm.39.2022.05.10.03.52.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:51:49 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     james.smart@broadcom.com
-Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] lpfc: use kobj_to_dev()
-Date:   Tue, 10 May 2022 10:51:45 +0000
-Message-Id: <20220510105145.1352030-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 May 2022 03:52:06 -0700 (PDT)
+Date:   Tue, 10 May 2022 10:52:04 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Jake Oshins <jakeo@microsoft.com>,
+        David Zhang <dazhan@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] PCI: hv: Reuse existing ITRE allocation in
+ compose_msi_msg()
+Message-ID: <20220510105204.t57u35y5kicniefs@liuwe-devbox-debian-v2>
+References: <1652132902-27109-1-git-send-email-quic_jhugo@quicinc.com>
+ <1652132902-27109-2-git-send-email-quic_jhugo@quicinc.com>
+ <BYAPR21MB1270A579B909B31FA271FC08BFC69@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <8372be1c-5f7d-3a0e-38fb-787b9d38fcd9@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8372be1c-5f7d-3a0e-38fb-787b9d38fcd9@quicinc.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Mon, May 09, 2022 at 08:29:19PM -0600, Jeffrey Hugo wrote:
+> On 5/9/2022 5:13 PM, Dexuan Cui wrote:
+> > > From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > > Sent: Monday, May 9, 2022 2:48 PM
+> > > Subject: [PATCH 1/2] PCI: hv: Reuse existing ITRE allocation in
+> > 
+> > s/ITRE/IRTE. I suppose Wei can help fix this without a v2 :-)
+> 
+> Thanks for the review.
+> 
+> I have no problem sending out a V2.  Especially since you pointed out my
+> mistakes on both patches.  I'll wait a little bit for any additional
+> feedback, and then send out a V2.
 
-Use kobj_to_dev() instead of open-coding it.
+Yes please send out v2.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/scsi/lpfc/lpfc_attr.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 3caaa7c4af48..97f87155c1bd 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -4376,8 +4376,7 @@ sysfs_drvr_stat_data_read(struct file *filp, struct kobject *kobj,
- 		struct bin_attribute *bin_attr,
- 		char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device,
--		kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
-@@ -6396,7 +6395,7 @@ sysfs_ctlreg_write(struct file *filp, struct kobject *kobj,
- 		   char *buf, loff_t off, size_t count)
- {
- 	size_t buf_off;
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
-@@ -6456,7 +6455,7 @@ sysfs_ctlreg_read(struct file *filp, struct kobject *kobj,
- {
- 	size_t buf_off;
- 	uint32_t * tmp_ptr;
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
--- 
-2.25.1
-
-
+Thanks,
+Wei.

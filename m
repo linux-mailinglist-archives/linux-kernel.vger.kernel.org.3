@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA13052177F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3C25216D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242873AbiEJNZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S242622AbiEJNTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243450AbiEJNVz (ORCPT
+        with ESMTP id S242522AbiEJNQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CB84EF58;
-        Tue, 10 May 2022 06:16:08 -0700 (PDT)
+        Tue, 10 May 2022 09:16:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1348B4EF4D;
+        Tue, 10 May 2022 06:12:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EBCD61663;
-        Tue, 10 May 2022 13:16:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF8AC385A6;
-        Tue, 10 May 2022 13:16:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA394B81D7C;
+        Tue, 10 May 2022 13:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569DCC385C2;
+        Tue, 10 May 2022 13:12:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188566;
-        bh=rrHsYt9Qs4PHF/mVTk+Pvgt2CBMycA8rpv2zIgNl2mE=;
+        s=korg; t=1652188355;
+        bh=zumcUBKdVw+tCDMrhfgUFNeo9e5sfQFbqe3N33yZVjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0IdvtVW/PJG73rDMFMm6yzY2BFe5mpsJr4cKeY5I2IAleDCaO/S+M7iOHG3U7obe
-         bNHDKpA4/nlKfxWjiyg5M+rzIVVdhrZ4H2KhbTnXF7FT1sYsS9fuFo0MsFiPlBgn3f
-         UbS9l5ZQrkptZqt/Zv9RTTwCz1/sdUopSi2/Vkm0=
+        b=LMWP43telmrl5CdtgZ40mwxa5bE6Lp5qk7aEfalHr7WmlgAAwMSs4Y0cdE5GRxScN
+         GuKGTmImMmgL6KNhn7YL0mXdVyjZO5ykQVr69MFylTUJGtGgDeirGMz8jY3vAeBnm/
+         xD8sxMaaP3Jowq41lKK4yxHpboLplMJjlHksPPcs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.14 50/78] tty: n_gsm: fix wrong command retry handling
+        stable@vger.kernel.org, "wanghai (M)" <wanghai38@huawei.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.9 46/66] Revert "SUNRPC: attempt AF_LOCAL connect on setup"
 Date:   Tue, 10 May 2022 15:07:36 +0200
-Message-Id: <20220510130734.019028524@linuxfoundation.org>
+Message-Id: <20220510130731.117354034@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,66 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit d0bcdffcad5a22f202e3bf37190c0dd8c080ea92 upstream.
+commit a3d0562d4dc039bca39445e1cddde7951662e17d upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
-maximum number of retransmissions (N2) is from 0 to 255 (both including).
-gsm_config() fails to limit this range correctly. Furthermore,
-gsm_control_retransmit() handles this number incorrectly by performing
-N2 - 1 retransmission attempts. Setting N2 to zero results in more than 255
-retransmission attempts.
-Fix the range check in gsm_config() and the value handling in
-gsm_control_send() and gsm_control_retransmit() to comply with 3GPP 27.010.
+This reverts commit 7073ea8799a8cf73db60270986f14e4aae20fa80.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+We must not try to connect the socket while the transport is under
+construction, because the mechanisms to safely tear it down are not in
+place. As the code stands, we end up leaking the sockets on a connection
+error.
+
+Reported-by: wanghai (M) <wanghai38@huawei.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-11-daniel.starke@siemens.com
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/sunrpc/xprtsock.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1341,7 +1341,6 @@ static void gsm_control_retransmit(unsig
- 	spin_lock_irqsave(&gsm->control_lock, flags);
- 	ctrl = gsm->pending_cmd;
- 	if (ctrl) {
--		gsm->cretries--;
- 		if (gsm->cretries == 0) {
- 			gsm->pending_cmd = NULL;
- 			ctrl->error = -ETIMEDOUT;
-@@ -1350,6 +1349,7 @@ static void gsm_control_retransmit(unsig
- 			wake_up(&gsm->event);
- 			return;
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2882,9 +2882,6 @@ static struct rpc_xprt *xs_setup_local(s
  		}
-+		gsm->cretries--;
- 		gsm_control_transmit(gsm, ctrl);
- 		mod_timer(&gsm->t2_timer, jiffies + gsm->t2 * HZ / 100);
- 	}
-@@ -1390,7 +1390,7 @@ retry:
- 
- 	/* If DLCI0 is in ADM mode skip retries, it won't respond */
- 	if (gsm->dlci[0]->mode == DLCI_MODE_ADM)
--		gsm->cretries = 1;
-+		gsm->cretries = 0;
- 	else
- 		gsm->cretries = gsm->n2;
- 
-@@ -2531,7 +2531,7 @@ static int gsmld_config(struct tty_struc
- 	/* Check the MRU/MTU range looks sane */
- 	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
- 		return -EINVAL;
--	if (c->n2 < 3)
-+	if (c->n2 > 255)
- 		return -EINVAL;
- 	if (c->encapsulation > 1)	/* Basic, advanced, no I */
- 		return -EINVAL;
+ 		xprt_set_bound(xprt);
+ 		xs_format_peer_addresses(xprt, "local", RPCBIND_NETID_LOCAL);
+-		ret = ERR_PTR(xs_local_setup_socket(transport));
+-		if (ret)
+-			goto out_err;
+ 		break;
+ 	default:
+ 		ret = ERR_PTR(-EAFNOSUPPORT);
 
 

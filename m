@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B3521A70
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4085216BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343779AbiEJN7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S242381AbiEJNSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244483AbiEJNhp (ORCPT
+        with ESMTP id S242328AbiEJNQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:37:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2D23F33C;
-        Tue, 10 May 2022 06:25:49 -0700 (PDT)
+        Tue, 10 May 2022 09:16:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56C24132B;
+        Tue, 10 May 2022 06:12:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC2F60B12;
-        Tue, 10 May 2022 13:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B226FC385D8;
-        Tue, 10 May 2022 13:25:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4435615F4;
+        Tue, 10 May 2022 13:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF6DC385C2;
+        Tue, 10 May 2022 13:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189141;
-        bh=g+CxDpsJrUR4Wrwj2lmQW1ntkowQuLzhfCR3upGflZo=;
+        s=korg; t=1652188317;
+        bh=zlgTwDPqMHGwCom7yT3bg2E8DypAoRsb8SCA47wPt4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oxSKRxCsu7ZA7cVsctQhexzxTULMcVIUwCflsEOPY9P/+5oLNQzea7Ui2ghKwh7HC
-         8pg8qL9Si8fEu/lKE3ZExNv1DdrSczRTxvOXzW2dQhQZqC14FrlkqzfoYU2uV12XSg
-         q4GYHVzVXtxE5HCbtmJ9Q6adKzq1W1+HLA0qpltk=
+        b=WwRFkwKtdKfveyy1CuXRQsp2AYgv4POCkOydJpCF8SJVEhTpU+USTdw7X9rkvXxaS
+         Yco7JA0dBKWPXwfjdQ/HbFZrNwHx38KyR5PZDykrEtm42rqHV0bXZafsXeTbMVAS4x
+         1qe5eLotuCuE1y5C9tofGTla9g9pn7bF5G/DZXjI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 05/70] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 34/66] drivers: net: hippi: Fix deadlock in rr_close()
 Date:   Tue, 10 May 2022 15:07:24 +0200
-Message-Id: <20220510130733.021043995@linuxfoundation.org>
+Message-Id: <20220510130730.764886380@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,112 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 3e5a8e8494a8122fe4eb3f167662f406cab753b9 upstream.
+[ Upstream commit bc6de2878429e85c1f1afaa566f7b5abb2243eef ]
 
-Reset GCC_SDCC_BCR register before every fresh initilazation. This will
-reset whole SDHC-msm controller, clears the previous power control
-states and avoids, software reset timeout issues as below.
+There is a deadlock in rr_close(), which is shown below:
 
-[ 5.458061][ T262] mmc1: Reset 0x1 never completed.
-[ 5.462454][ T262] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
-[ 5.469065][ T262] mmc1: sdhci: Sys addr: 0x00000000 | Version: 0x00007202
-[ 5.475688][ T262] mmc1: sdhci: Blk size: 0x00000000 | Blk cnt: 0x00000000
-[ 5.482315][ T262] mmc1: sdhci: Argument: 0x00000000 | Trn mode: 0x00000000
-[ 5.488927][ T262] mmc1: sdhci: Present: 0x01f800f0 | Host ctl: 0x00000000
-[ 5.495539][ T262] mmc1: sdhci: Power: 0x00000000 | Blk gap: 0x00000000
-[ 5.502162][ T262] mmc1: sdhci: Wake-up: 0x00000000 | Clock: 0x00000003
-[ 5.508768][ T262] mmc1: sdhci: Timeout: 0x00000000 | Int stat: 0x00000000
-[ 5.515381][ T262] mmc1: sdhci: Int enab: 0x00000000 | Sig enab: 0x00000000
-[ 5.521996][ T262] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
-[ 5.528607][ T262] mmc1: sdhci: Caps: 0x362dc8b2 | Caps_1: 0x0000808f
-[ 5.535227][ T262] mmc1: sdhci: Cmd: 0x00000000 | Max curr: 0x00000000
-[ 5.541841][ T262] mmc1: sdhci: Resp[0]: 0x00000000 | Resp[1]: 0x00000000
-[ 5.548454][ T262] mmc1: sdhci: Resp[2]: 0x00000000 | Resp[3]: 0x00000000
-[ 5.555079][ T262] mmc1: sdhci: Host ctl2: 0x00000000
-[ 5.559651][ T262] mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP-----------
-[ 5.566621][ T262] mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg: 0x6000642c | DLL cfg2: 0x0020a000
-[ 5.575465][ T262] mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl: 0x00010800 | DDR cfg: 0x80040873
-[ 5.584658][ T262] mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88218a8 Vndr func3: 0x02626040
+   (Thread 1)                |      (Thread 2)
+                             | rr_open()
+rr_close()                   |  add_timer()
+ spin_lock_irqsave() //(1)   |  (wait a time)
+ ...                         | rr_timer()
+ del_timer_sync()            |  spin_lock_irqsave() //(2)
+ (wait timer to stop)        |  ...
 
-Fixes: 0eb0d9f4de34 ("mmc: sdhci-msm: Initial support for Qualcomm chipsets")
-Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Tested-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/1650816153-23797-1-git-send-email-quic_c_sbhanu@quicinc.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+We hold rrpriv->lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need rrpriv->lock in position (2) of thread 2.
+As a result, rr_close() will block forever.
+
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417125519.82618-1-duoming@zju.edu.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-msm.c |   42 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ drivers/net/hippi/rrunner.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -16,6 +16,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/interconnect.h>
- #include <linux/pinctrl/consumer.h>
-+#include <linux/reset.h>
+diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
+index 6f3519123eb6..0e1a422d9567 100644
+--- a/drivers/net/hippi/rrunner.c
++++ b/drivers/net/hippi/rrunner.c
+@@ -1354,7 +1354,9 @@ static int rr_close(struct net_device *dev)
  
- #include "sdhci-pltfm.h"
- #include "cqhci.h"
-@@ -2228,6 +2229,43 @@ static inline void sdhci_msm_get_of_prop
- 	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
- }
+ 	rrpriv->fw_running = 0;
  
-+static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
-+{
-+	struct reset_control *reset;
-+	int ret = 0;
-+
-+	reset = reset_control_get_optional_exclusive(dev, NULL);
-+	if (IS_ERR(reset))
-+		return dev_err_probe(dev, PTR_ERR(reset),
-+				"unable to acquire core_reset\n");
-+
-+	if (!reset)
-+		return ret;
-+
-+	ret = reset_control_assert(reset);
-+	if (ret) {
-+		reset_control_put(reset);
-+		return dev_err_probe(dev, ret, "core_reset assert failed\n");
-+	}
-+
-+	/*
-+	 * The hardware requirement for delay between assert/deassert
-+	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
-+	 * ~125us (4/32768). To be on the safe side add 200us delay.
-+	 */
-+	usleep_range(200, 210);
-+
-+	ret = reset_control_deassert(reset);
-+	if (ret) {
-+		reset_control_put(reset);
-+		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
-+	}
-+
-+	usleep_range(200, 210);
-+	reset_control_put(reset);
-+
-+	return ret;
-+}
++	spin_unlock_irqrestore(&rrpriv->lock, flags);
+ 	del_timer_sync(&rrpriv->timer);
++	spin_lock_irqsave(&rrpriv->lock, flags);
  
- static int sdhci_msm_probe(struct platform_device *pdev)
- {
-@@ -2276,6 +2314,10 @@ static int sdhci_msm_probe(struct platfo
- 
- 	msm_host->saved_tuning_phase = INVALID_TUNING_PHASE;
- 
-+	ret = sdhci_msm_gcc_reset(&pdev->dev, host);
-+	if (ret)
-+		goto pltfm_free;
-+
- 	/* Setup SDCC bus voter clock. */
- 	msm_host->bus_clk = devm_clk_get(&pdev->dev, "bus");
- 	if (!IS_ERR(msm_host->bus_clk)) {
+ 	writel(0, &regs->TxPi);
+ 	writel(0, &regs->IpRxPi);
+-- 
+2.35.1
+
 
 

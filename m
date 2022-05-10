@@ -2,57 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E2E52160A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73BC521608
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbiEJM62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S242030AbiEJM6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242012AbiEJM6I (ORCPT
+        with ESMTP id S241816AbiEJM6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:58:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 695742A8075;
-        Tue, 10 May 2022 05:54:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C65CE12FC;
-        Tue, 10 May 2022 05:54:09 -0700 (PDT)
-Received: from [10.57.2.65] (unknown [10.57.2.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53FEA3F73D;
-        Tue, 10 May 2022 05:54:05 -0700 (PDT)
-Message-ID: <30ad6a53-1f4a-a88e-c239-fdd6d80ca4e1@arm.com>
-Date:   Tue, 10 May 2022 13:54:03 +0100
+        Tue, 10 May 2022 08:58:05 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E01B2550AD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:54:08 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w24so12129573edx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8ZXDhVwfP9b/t3UBf3NPpQNR6CAeGAVJW+qQkAZj5Ko=;
+        b=euXwwMN+44LSnVe58GHN3cQNvSZzRsRMZMrWbY83XR04MkNKGe9KxfYl2XjOBQ2rAm
+         NeGgFovJ7w80bRYLSul/3kupJl1LsM2BjyUFhOUi/HDx2QP1R8Esh4WUOAGEzKNXVWpk
+         DBx3xHnvXB8eYG8dFU00iNwnDbRiATCA8TzNhFRf1kg5vdvS6SxKXjwaUX4a7T2WF6hL
+         h0DTKR2ZqV94fbVJaUTzlNJ7QxFjSv7JdHmd6jCwGXm3rXKiXcy84vB7UDhT65N7O3B9
+         ZzbQHCBhOmCF4blxyvHUJtcyi7t+VCUQAtpcTNDQUhPlZrIoLc2f2+0rW9TOZZ2pk8Sy
+         G8MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8ZXDhVwfP9b/t3UBf3NPpQNR6CAeGAVJW+qQkAZj5Ko=;
+        b=u82Bnda0MirPwBrLg4lSm+0u2p5t5DSoJ/kH9Z5gSmIW1ijCfn3MwWBBCKB2kzqx7P
+         JOevb2wcN50ptTmmmFTFjNIVZBnkSucrm27jzCnl+AXEClaVn792v+7QSe7ykU7adxfP
+         mU9Yt0TZO6wpAOxnlrFAqwi8F9BwHkS5FBh1E07RDYJ9ir1xAHk/rqkx3Oh6icmQLiqB
+         PKXMOKdw6PHyCGZty01veH+fSplN/TlX22Ku20GtxrDGIsJ8e/x9yTJO0FJ5SGm3NMfk
+         rOAVLvXK75r/V+9Va/ApuheQB5PGmFzf0oc55Rt62FZkbNwGcvb5Mn9GWrY9h3MBcjIj
+         T3GA==
+X-Gm-Message-State: AOAM531c91+TU9BpTsKPp/GcSJ0ZJXwTuN/lQB599fAKQa7ne847x0et
+        QNaw/8uxI2ng9CHk9WBpBnCfSg==
+X-Google-Smtp-Source: ABdhPJwih/KHvqR7RfCUpPJRC7LqDV0GHHqs6+c7WhjgmhAopq8u7vTMOgYFocRdLALC7G7Iz1hMpA==
+X-Received: by 2002:a05:6402:50a:b0:426:16c3:4283 with SMTP id m10-20020a056402050a00b0042616c34283mr23282269edv.371.1652187247138;
+        Tue, 10 May 2022 05:54:07 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u17-20020a170906781100b006f3ef214dacsm6228554ejm.18.2022.05.10.05.54.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 05:54:06 -0700 (PDT)
+Message-ID: <9365247a-8aa0-bad5-c619-9d5a984b17de@linaro.org>
+Date:   Tue, 10 May 2022 14:54:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 2/7] hwtracing: Add trace function support for
- HiSilicon PCIe Tune and Trace device
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
 Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>, Leo Yan <leo.yan@linaro.org>
-Cc:     prime.zeng@huawei.com, liuqi115@huawei.com,
-        zhangshaokun@hisilicon.com, linuxarm@huawei.com,
-        gregkh@linuxfoundation.org, helgaas@kernel.org,
-        alexander.shishkin@linux.intel.com, lorenzo.pieralisi@arm.com,
-        will@kernel.org, mark.rutland@arm.com, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, daniel.thompson@linaro.org,
-        joro@8bytes.org, john.garry@huawei.com,
-        shameerali.kolothum.thodi@huawei.com, robin.murphy@arm.com,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        coresight@lists.linaro.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org
-References: <20220407125841.3678-1-yangyicong@hisilicon.com>
- <20220407125841.3678-3-yangyicong@hisilicon.com>
- <e56c02c5-3696-c8d5-89e0-050bfe9edaa8@arm.com>
- <ad518edf-425b-f2ab-08e9-5a00b712508c@huawei.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <ad518edf-425b-f2ab-08e9-5a00b712508c@huawei.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
+ <20220504044624.951841-2-chris.packham@alliedtelesis.co.nz>
+ <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
+ <6770d320-b998-0c9d-3824-0d429834b289@alliedtelesis.co.nz>
+ <3498643b-cb2e-5685-65e0-7efe1113783f@linaro.org> <Ynpclx4z5z1Emx+b@lunn.ch>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Ynpclx4z5z1Emx+b@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,343 +91,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/05/2022 14:37, Andrew Lunn wrote:
+> On Tue, May 10, 2022 at 09:08:08AM +0200, Krzysztof Kozlowski wrote:
+>> On 10/05/2022 06:14, Chris Packham wrote:
+>>>
+>>> Based on the information I have (which isn't much) there is a ref_clk 
+>>> input that is connected to a 25MHz oscillator and then I'm assuming 
+>>> these are all generated from that with various dividers. 25MHz is the 
+>>> only documented option.
+>>>
+>>> There doesn't appear to be any documented register where I can read out 
+>>> the divider ratios. It might be nice I could have the fixed osc node and 
+>>> have these 3 clocks derived with fixed divisors but I don't see any what 
+>>> of achieving that.
+>>
+>>
+>> OK, but where are the dividers? The ref_clk is outside of SoC, so should
+>> be defined in board DTS (at least its rate). If the rest is in the SoC,
+>> they are usually part of clock controller, because usually they belong
+>> to some power domain or have some clock gating.
+> 
+> 25MHz is a 'magic value' in Ethernet, nearly everything is based
+> around it. And remember this SoC is basically an Ethernet switch with
+> a small CPU glued on one side. If you gated clocks derived from the
+> 25MHz reference clock, probably part of your Ethernet switch stops
+> working, which is the whole point of this SoC. So i doubt there are
+> gates on the derived clocks. If there is any gating and power domains,
+> it is generally at a different level. You can power down individual
+> ports of the Ethernet switch. But generally, there is one bit in a
+> register somewhere to do that, and you don't have direct control over
+> clocks and regulators etc.
+
+The 25 MHz input clock I understand, it was about other clocks, like
+spi, axi and core. These clearly look like part of SoC, so defining them
+with a "stubs" (uncontrollable fixed-clock) is not the best way of
+modelling an SoC. Although maybe this SoC does not have a proper clock
+controller and even SPI and AXI clocks are always on?
 
 
-On 10/05/2022 12:18, Yicong Yang wrote:
-> On 2022/5/10 17:46, James Clark wrote:
->>
->>
->> On 07/04/2022 13:58, Yicong Yang wrote:
->>> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex integrated
->>> Endpoint(RCiEP) device, providing the capability to dynamically monitor and
->>> tune the PCIe traffic, and trace the TLP headers.
->>>
->>> Add the driver for the device to enable the trace function. Register PMU
->>> device of PTT trace, then users can use trace through perf command. The
->>> driver makes use of perf AUX trace and support following events to
->>> configure the trace:
->>>
->>> - filter: select Root port or Endpoint to trace
->>> - type: select the type of traced TLP headers
->>> - direction: select the direction of traced TLP headers
->>> - format: select the data format of the traced TLP headers
->>>
->>> This patch adds the driver part of PTT trace. The perf command support of
->>> PTT trace is added in the following patch.
->>>
->>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>> ---
->>>  drivers/Makefile                 |   1 +
->>>  drivers/hwtracing/Kconfig        |   2 +
->>>  drivers/hwtracing/ptt/Kconfig    |  12 +
->>>  drivers/hwtracing/ptt/Makefile   |   2 +
->>>  drivers/hwtracing/ptt/hisi_ptt.c | 874 +++++++++++++++++++++++++++++++
->>>  drivers/hwtracing/ptt/hisi_ptt.h | 166 ++++++
->>>  6 files changed, 1057 insertions(+)
->>>  create mode 100644 drivers/hwtracing/ptt/Kconfig
->>>  create mode 100644 drivers/hwtracing/ptt/Makefile
->>>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
->>>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
->>>
->>> diff --git a/drivers/Makefile b/drivers/Makefile
->>> index 020780b6b4d2..662d50599467 100644
->>> --- a/drivers/Makefile
->>> +++ b/drivers/Makefile
->>> @@ -175,6 +175,7 @@ obj-$(CONFIG_USB4)		+= thunderbolt/
->>>  obj-$(CONFIG_CORESIGHT)		+= hwtracing/coresight/
->>>  obj-y				+= hwtracing/intel_th/
->>>  obj-$(CONFIG_STM)		+= hwtracing/stm/
->>> +obj-$(CONFIG_HISI_PTT)		+= hwtracing/ptt/
->>>  obj-$(CONFIG_ANDROID)		+= android/
->>>  obj-$(CONFIG_NVMEM)		+= nvmem/
->>>  obj-$(CONFIG_FPGA)		+= fpga/
->>> diff --git a/drivers/hwtracing/Kconfig b/drivers/hwtracing/Kconfig
->>> index 13085835a636..911ee977103c 100644
->>> --- a/drivers/hwtracing/Kconfig
->>> +++ b/drivers/hwtracing/Kconfig
->>> @@ -5,4 +5,6 @@ source "drivers/hwtracing/stm/Kconfig"
->>>  
->>>  source "drivers/hwtracing/intel_th/Kconfig"
->>>  
->>> +source "drivers/hwtracing/ptt/Kconfig"
->>> +
->>>  endmenu
->>> diff --git a/drivers/hwtracing/ptt/Kconfig b/drivers/hwtracing/ptt/Kconfig
->>> new file mode 100644
->>> index 000000000000..8902a6f27563
->>> --- /dev/null
->>> +++ b/drivers/hwtracing/ptt/Kconfig
->>> @@ -0,0 +1,12 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only
->>> +config HISI_PTT
->>> +	tristate "HiSilicon PCIe Tune and Trace Device"
->>> +	depends on ARM64 || (COMPILE_TEST && 64BIT)
->>> +	depends on PCI && HAS_DMA && HAS_IOMEM && PERF_EVENTS
->>> +	help
->>> +	  HiSilicon PCIe Tune and Trace Device exists as a PCIe RCiEP
->>> +	  device, and it provides support for PCIe traffic tuning and
->>> +	  tracing TLP headers to the memory.
->>> +
->>> +	  This driver can also be built as a module. If so, the module
->>> +	  will be called hisi_ptt.
->>> diff --git a/drivers/hwtracing/ptt/Makefile b/drivers/hwtracing/ptt/Makefile
->>> new file mode 100644
->>> index 000000000000..908c09a98161
->>> --- /dev/null
->>> +++ b/drivers/hwtracing/ptt/Makefile
->>> @@ -0,0 +1,2 @@
->>> +# SPDX-License-Identifier: GPL-2.0
->>> +obj-$(CONFIG_HISI_PTT) += hisi_ptt.o
->>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
->>> new file mode 100644
->>> index 000000000000..242b41870380
->>> --- /dev/null
->>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
->>> @@ -0,0 +1,874 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Driver for HiSilicon PCIe tune and trace device
->>> + *
->>> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
->>> + * Author: Yicong Yang <yangyicong@hisilicon.com>
->>> + */
->>> +
->>> +#include <linux/bitfield.h>
->>> +#include <linux/bitops.h>
->>> +#include <linux/delay.h>
->>> +#include <linux/dma-iommu.h>
->>> +#include <linux/dma-mapping.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/io.h>
->>> +#include <linux/iommu.h>
->>> +#include <linux/iopoll.h>
->>> +#include <linux/module.h>
->>> +#include <linux/sysfs.h>
->>> +#include <linux/vmalloc.h>
->>> +
->>> +#include "hisi_ptt.h"
->>> +
->>> +static u16 hisi_ptt_get_filter_val(struct pci_dev *pdev)
->>> +{
->>> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT)
->>> +		return BIT(HISI_PCIE_CORE_PORT_ID(PCI_SLOT(pdev->devfn)));
->>> +
->>> +	return PCI_DEVID(pdev->bus->number, pdev->devfn);
->>> +}
->>> +
->>> +static bool hisi_ptt_wait_trace_hw_idle(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	u32 val;
->>> +
->>> +	return !readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_STS,
->>> +					  val, val & HISI_PTT_TRACE_IDLE,
->>> +					  HISI_PTT_WAIT_POLL_INTERVAL_US,
->>> +					  HISI_PTT_WAIT_TRACE_TIMEOUT_US);
->>> +}
->>> +
->>> +static bool hisi_ptt_wait_dma_reset_done(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	u32 val;
->>> +
->>> +	return !readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_WR_STS,
->>> +					  val, !val, HISI_PTT_RESET_POLL_INTERVAL_US,
->>> +					  HISI_PTT_RESET_TIMEOUT_US);
->>> +}
->>> +
->>> +static void hisi_ptt_free_trace_buf(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
->>> +	struct device *dev = &hisi_ptt->pdev->dev;
->>> +	int i;
->>> +
->>> +	if (!ctrl->trace_buf)
->>> +		return;
->>> +
->>> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++) {
->>> +		if (ctrl->trace_buf[i].addr)
->>> +			dmam_free_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
->>> +					   ctrl->trace_buf[i].addr,
->>> +					   ctrl->trace_buf[i].dma);
->>> +	}
->>> +
->>> +	devm_kfree(dev, ctrl->trace_buf);
->>> +	ctrl->trace_buf = NULL;
->>> +}
->>> +
->>> +static int hisi_ptt_alloc_trace_buf(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
->>> +	struct device *dev = &hisi_ptt->pdev->dev;
->>> +	int i;
->>> +
->>> +	hisi_ptt->trace_ctrl.buf_index = 0;
->>> +
->>> +	/* If the trace buffer has already been allocated, zero it. */
->>> +	if (ctrl->trace_buf) {
->>> +		for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++)
->>> +			memset(ctrl->trace_buf[i].addr, 0, HISI_PTT_TRACE_BUF_SIZE);
->>> +		return 0;
->>> +	}
->>> +
->>> +	ctrl->trace_buf = devm_kcalloc(dev, HISI_PTT_TRACE_BUF_CNT,
->>> +				       sizeof(struct hisi_ptt_dma_buffer), GFP_KERNEL);
->>> +	if (!ctrl->trace_buf)
->>> +		return -ENOMEM;
->>> +
->>> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; ++i) {
->>> +		ctrl->trace_buf[i].addr = dmam_alloc_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
->>> +							     &ctrl->trace_buf[i].dma,
->>> +							     GFP_KERNEL);
->>> +		if (!ctrl->trace_buf[i].addr) {
->>> +			hisi_ptt_free_trace_buf(hisi_ptt);
->>> +			return -ENOMEM;
->>> +		}
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static void hisi_ptt_trace_end(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +	hisi_ptt->trace_ctrl.started = false;
->>> +}
->>> +
->>> +static int hisi_ptt_trace_start(struct hisi_ptt *hisi_ptt)
->>> +{
->>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
->>> +	u32 val;
->>> +	int i;
->>> +
->>> +	/* Check device idle before start trace */
->>> +	if (!hisi_ptt_wait_trace_hw_idle(hisi_ptt)) {
->>> +		pci_err(hisi_ptt->pdev, "Failed to start trace, the device is still busy\n");
->>> +		return -EBUSY;
->>> +	}
->>> +
->>> +	ctrl->started = true;
->>> +
->>> +	/* Reset the DMA before start tracing */
->>> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +	val |= HISI_PTT_TRACE_CTRL_RST;
->>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +
->>> +	hisi_ptt_wait_dma_reset_done(hisi_ptt);
->>> +
->>> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +	val &= ~HISI_PTT_TRACE_CTRL_RST;
->>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +
->>> +	/* Clear the interrupt status */
->>> +	writel(HISI_PTT_TRACE_INT_STAT_MASK, hisi_ptt->iobase + HISI_PTT_TRACE_INT_STAT);
->>> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_INT_MASK);
->>> +
->>> +	/* Configure the trace DMA buffer */
->>> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++) {
->>> +		writel(lower_32_bits(ctrl->trace_buf[i].dma),
->>> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_LO_0 +
->>> +		       i * HISI_PTT_TRACE_ADDR_STRIDE);
->>> +		writel(upper_32_bits(ctrl->trace_buf[i].dma),
->>> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_HI_0 +
->>> +		       i * HISI_PTT_TRACE_ADDR_STRIDE);
->>> +	}
->>> +	writel(HISI_PTT_TRACE_BUF_SIZE, hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_SIZE);
->>> +
->>> +	/* Set the trace control register */
->>> +	val = FIELD_PREP(HISI_PTT_TRACE_CTRL_TYPE_SEL, ctrl->type);
->>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_RXTX_SEL, ctrl->direction);
->>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_DATA_FORMAT, ctrl->format);
->>> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_TARGET_SEL, hisi_ptt->trace_ctrl.filter);
->>> +	if (!hisi_ptt->trace_ctrl.is_port)
->>> +		val |= HISI_PTT_TRACE_CTRL_FILTER_MODE;
->>> +
->>> +	/* Start the Trace */
->>> +	val |= HISI_PTT_TRACE_CTRL_EN;
->>> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int hisi_ptt_update_aux(struct hisi_ptt *hisi_ptt, int index, bool stop)
->>> +{
->>> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
->>> +	struct perf_output_handle *handle = &ctrl->handle;
->>> +	struct perf_event *event = handle->event;
->>> +	struct hisi_ptt_pmu_buf *buf;
->>> +	void *addr;
->>> +
->>> +	buf = perf_get_aux(handle);
->>> +	if (!buf || !handle->size)
->>> +		return -EINVAL;
->>> +
->>> +	addr = ctrl->trace_buf[ctrl->buf_index].addr;
->>> +
->>> +	memcpy(buf->base + buf->pos, addr, HISI_PTT_TRACE_BUF_SIZE);
->>> +	memset(addr, 0, HISI_PTT_TRACE_BUF_SIZE);
->>
->> Hi Kicong,
->>
->> I also have the same comment as Leo here, I don't think the memset is
->> required.
->>
-> 
-> It's necessary in the current approach as we always commit HISI_PTT_TRACE_BUF_SIZE
-> data but the buffer maybe partly filled (called when perf going to stopp, not by the
-> interrupt). The buffer is cleared so the unfilled part of the buffer will have
-> empty data (normal traced TLP headers won't be all 0), then the user can distinguish
-> the valid part of the data.
-> 
-> I'm trying to only copy the traced data rather than the whole buffer then the
-> clear operation here will be unnecessary. The hardware provide a register indicating
-> which offset of which buffer it's currently writing to and it canbe used here.
-
-If only the traced data is copied rather than the full buffer, isn't that what
-perf_aux_output_end() is for? Perf will only read up to the point where you
-say the buffer is filled to, it won't go and read the zeros if you didn't tell
-it to by emitting perf_aux_output_end() for more data than was written.
-
-If you are having to write zeros to detect which bits of the buffer is filled
-or not it sounds like those zero parts are making it into the perf file and are
-wasting disk space and CPU cycles to copy them.
-
-> 
->>> +	buf->pos += HISI_PTT_TRACE_BUF_SIZE;
->>> +
->>> +	if (stop) {
->>> +		perf_aux_output_end(handle, buf->pos);
->>> +	} else if (buf->length - buf->pos < HISI_PTT_TRACE_BUF_SIZE) {
->>> +		perf_aux_output_skip(handle, buf->length - buf->pos);
->>
->> perf_aux_output_skip() can also return an error so should probably also
->> be checked like perf_aux_output_begin()
->>
-> 
-> ok it should be checked.
-> 
->> I'm also wondering why there is a skip for every output_end()? Is that
->> to avoid having two memcpy calls to handle the wrap around if the data
->> to be copied goes past the end of the aux buffer?
->>
->> For example if your buffers are 4MB each and the aux buffer that the
->> user picked isn't a multiple of 4 I can see you needing to write the
->> first part of the 4MB to the end of the aux buffer and then the last
->> part to the beginning which would be two memcpy() calls. And then a
->> skip wouldn't be required.
->>
-> 
-> I intended to handle the case that AUX buffer is not a multiple of 4 MiB.
-> When the resident AUX buffer size is less than 4MiB, we're not going to
-> commit data to it and will apply a new AUX buffer instead. I think you're
-> right that the perf_aux_output_skip() is unnecessary here. Thanks for
-> catching this.
-> 
->> I looked at all the other uses of perf_output_end() and perf_output_skip()
->> in the kernel and didn't see a pattern like yours so it seems suspicous to
->> me. Maybe at least some comments around this section are needed.
->>
-> 
-> Will add some comments of the handling here.
-> 
-> Regards,
-> Yicong
+Best regards,
+Krzysztof

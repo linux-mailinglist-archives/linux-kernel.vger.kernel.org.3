@@ -2,184 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8105B521E46
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201C9521E78
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240888AbiEJP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S238022AbiEJP2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345813AbiEJP1a (ORCPT
+        with ESMTP id S1345654AbiEJP1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:27:30 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB1DAC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1652195909;
-  x=1683731909;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=L72R/3pl0k6gCMx5L3/WImeqw8/7Ha/qfVw/S09dPtQ=;
-  b=gViiMAO+5bLXAeI5jvxXT4YWPU+thGY38nyY16QABfVOaLMg5cTpYIze
-   ZVWNl8n/rwc/YyGQ0ZClTvR8n4Vli95YRCWmiejFPYS1P+8LFDLWe5IsL
-   +eEmJ1kmsZ70nVi08JHGjHdjRNO236mDtb9PuNhkW8bu2UEI3NLEbNJtJ
-   qKZeoYh2hsLAxfCHcWCDVk39f771ZMRZjsGW3EgV4tWhcmbaJ36bf0YsC
-   mJJ62QAg1Ph2TTKcq4ZP3e2Jwz5aMR7a9Xeq7qjwKEiqq/ZD/4kZ+A4K7
-   V8QPkY3bwvVxjH7LjgrW1P0Mq8U+SZh0l0CcTBchKf8mibTiu3Retja0Z
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Tue, 10 May 2022 11:27:31 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455B925EF;
+        Tue, 10 May 2022 08:18:46 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:55028)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRdJ-003qNX-VX; Tue, 10 May 2022 09:18:42 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37648 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRdI-00D1O9-QE; Tue, 10 May 2022 09:18:41 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] mtd: phram: Allow cached mappings
-Date:   Tue, 10 May 2022 17:18:22 +0200
-Message-ID: <20220510151822.1809278-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220510141119.GA23277@redhat.com>
+        <87lev9xy3n.fsf@email.froward.int.ebiederm.org>
+        <Ynp6fP8QkIGvUT1T@linutronix.de>
+Date:   Tue, 10 May 2022 10:18:32 -0500
+In-Reply-To: <Ynp6fP8QkIGvUT1T@linutronix.de> (Sebastian Andrzej Siewior's
+        message of "Tue, 10 May 2022 16:45:16 +0200")
+Message-ID: <877d6twh4n.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1noRdI-00D1O9-QE;;;mid=<877d6twh4n.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+K53bzJQj82BQIbEeFyvHE/PiTfNglD3U=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 534 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 9 (1.7%), b_tie_ro: 8 (1.4%), parse: 1.01 (0.2%),
+        extract_message_metadata: 12 (2.3%), get_uri_detail_list: 0.95 (0.2%),
+        tests_pri_-1000: 12 (2.3%), tests_pri_-950: 1.36 (0.3%),
+        tests_pri_-900: 1.11 (0.2%), tests_pri_-90: 270 (50.6%), check_bayes:
+        268 (50.2%), b_tokenize: 7 (1.3%), b_tok_get_all: 7 (1.3%),
+        b_comp_prob: 2.2 (0.4%), b_tok_touch_all: 248 (46.5%), b_finish: 0.97
+        (0.2%), tests_pri_0: 212 (39.7%), check_dkim_signature: 0.87 (0.2%),
+        check_dkim_adsp: 3.4 (0.6%), poll_dns_idle: 0.78 (0.1%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently phram always uses ioremap(), but this is unnecessary when
-normal memory is used.  If the reserved-memory node does not specify the
-no-map property, indicating it should be mapped as system RAM and
-ioremap() cannot be used on it, use a cached mapping using
-memremap(MEMREMAP_WB) instead.
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 
-On one of my systems this improves read performance by ~70%.
+> On 2022-05-10 09:26:36 [-0500], Eric W. Biederman wrote:
+>> Does anyone else have any comments on this patchset?
+>> 
+>> If not I am going to apply this to a branch and get it into linux-next.
+>
+> Looks good I guess.
+> Be aware that there will be clash due to
+>    https://lore.kernel.org/all/1649240981-11024-3-git-send-email-yangtiezhu@loongson.cn/
+>
+> which sits currently in -akpm.
 
-(Note that this driver has always used normal memcpy/memset functions on
-memory obtained from ioremap(), which sparse doesn't like.  There is no
-memremap() variant which maps exactly to ioremap() on all architectures,
-so that behaviour of the driver is not changed to avoid affecting
-existing users, but the sparse warnings are suppressed in the moved code
-with __force.)
+Thanks for the heads up.  That looks like the best kind of conflict.
+One where code just disappears.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
-
-Notes:
-    v4:
-    - Split out from "[PATCH v3] mtd: phram: Allow cached mappings"[0] since the
-      rest of the patches have been merged to mtd-next.
-    - Rebased on mtd-next.
-    - Refactored to avoid code duplication, fix sparse warnings in the existing
-      code which is moved, and also to avoid SH build problems[1]
-    
-    [0] https://lore.kernel.org/lkml/20220412135302.1682890-1-vincent.whitchurch@axis.com/"
-    [1] https://lore.kernel.org/lkml/CAMuHMdW-8HaQip+DT5W2Owq8M8kbYwHsf8_Zd-5rRfSjSjK0=g@mail.gmail.com/
-
- drivers/mtd/devices/phram.c | 43 +++++++++++++++++++++++++++++++------
- 1 file changed, 37 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/mtd/devices/phram.c b/drivers/mtd/devices/phram.c
-index 506e9edf5c85..208bd4d871f4 100644
---- a/drivers/mtd/devices/phram.c
-+++ b/drivers/mtd/devices/phram.c
-@@ -34,6 +34,7 @@
- struct phram_mtd_list {
- 	struct mtd_info mtd;
- 	struct list_head list;
-+	bool cached;
- };
- 
- static LIST_HEAD(phram_list);
-@@ -80,13 +81,41 @@ static int phram_write(struct mtd_info *mtd, loff_t to, size_t len,
- 	return 0;
- }
- 
-+static int phram_map(struct phram_mtd_list *phram, phys_addr_t start, size_t len)
-+{
-+	void *addr = NULL;
-+
-+	if (phram->cached)
-+		addr = memremap(start, len, MEMREMAP_WB);
-+	else
-+		addr = (void __force *)ioremap(start, len);
-+	if (!addr)
-+		return -EIO;
-+
-+	phram->mtd.priv = addr;
-+
-+	return 0;
-+}
-+
-+static void phram_unmap(struct phram_mtd_list *phram)
-+{
-+	void *addr = phram->mtd.priv;
-+
-+	if (phram->cached) {
-+		memunmap(addr);
-+		return;
-+	}
-+
-+	iounmap((void __iomem *)addr);
-+}
-+
- static void unregister_devices(void)
- {
- 	struct phram_mtd_list *this, *safe;
- 
- 	list_for_each_entry_safe(this, safe, &phram_list, list) {
- 		mtd_device_unregister(&this->mtd);
--		iounmap(this->mtd.priv);
-+		phram_unmap(this);
- 		kfree(this->mtd.name);
- 		kfree(this);
- 	}
-@@ -96,6 +125,7 @@ static int register_device(struct platform_device *pdev, const char *name,
- 			   phys_addr_t start, size_t len, uint32_t erasesize)
- {
- 	struct device_node *np = pdev ? pdev->dev.of_node : NULL;
-+	bool cached = np ? !of_property_read_bool(np, "no-map") : false;
- 	struct phram_mtd_list *new;
- 	int ret = -ENOMEM;
- 
-@@ -103,9 +133,10 @@ static int register_device(struct platform_device *pdev, const char *name,
- 	if (!new)
- 		goto out0;
- 
--	ret = -EIO;
--	new->mtd.priv = ioremap(start, len);
--	if (!new->mtd.priv) {
-+	new->cached = cached;
-+
-+	ret = phram_map(new, start, len);
-+	if (ret) {
- 		pr_err("ioremap failed\n");
- 		goto out1;
- 	}
-@@ -140,7 +171,7 @@ static int register_device(struct platform_device *pdev, const char *name,
- 	return 0;
- 
- out2:
--	iounmap(new->mtd.priv);
-+	phram_unmap(new);
- out1:
- 	kfree(new);
- out0:
-@@ -362,7 +393,7 @@ static int phram_remove(struct platform_device *pdev)
- 	struct phram_mtd_list *phram = platform_get_drvdata(pdev);
- 
- 	mtd_device_unregister(&phram->mtd);
--	iounmap(phram->mtd.priv);
-+	phram_unmap(phram);
- 	kfree(phram);
- 
- 	return 0;
--- 
-2.34.1
-
+Eric

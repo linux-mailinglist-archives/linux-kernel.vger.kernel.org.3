@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882D8521B91
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CBA521B81
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245579AbiEJORW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S1344044AbiEJOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244902AbiEJNrF (ORCPT
+        with ESMTP id S1343912AbiEJNsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E4F1D8640;
-        Tue, 10 May 2022 06:32:32 -0700 (PDT)
+        Tue, 10 May 2022 09:48:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC9A6CF5D;
+        Tue, 10 May 2022 06:37:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB23617F5;
-        Tue, 10 May 2022 13:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C60C385C2;
-        Tue, 10 May 2022 13:32:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C995A618B4;
+        Tue, 10 May 2022 13:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF45EC385C6;
+        Tue, 10 May 2022 13:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189551;
-        bh=AXVlMqWVh31M/5HakdprczmpNhoKSmd7rznleQMc9Hc=;
+        s=korg; t=1652189821;
+        bh=/G7G98mOkb3wMCY7W2ZwgXvwNVhR/tDRGLVkEvO0kr0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gCUPV+UNvT36wM0FfcxHtw5qrIXR4p+VNSOogc2JtvczbUgjcU8RIF9wlaxw9Cgp7
-         MpyxJUlZHSR5CtAxCIAr0A3QgoUhyGwrJh1w2vmkjKgD7JjhA5C6RCj6IqG6otgnlO
-         a5ZhXXZ0V6k/wEo8GTmsZ25MERRX3tPhGe0Dnugk=
+        b=H/M33Zk0X6O8m/QRSHNvOQSD6ua6Trt9pL4i4wKcqnDRKLnaqNPyoqFDCp0Ouzbbt
+         aC20h5wOJzzZ5ROrjvlzVYFc4Ndoq9M9BAD8kXhn8LGeteGCBo5XscTKO+DBGTlvON
+         Puub+0UA85kCvbK/V1qPuWpb978kU2gMpB97pde8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.15 046/135] iommu/vt-d: Drop stop marker messages
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.17 038/140] ASoC: meson: Fix event generation for AUI ACODEC mux
 Date:   Tue, 10 May 2022 15:07:08 +0200
-Message-Id: <20220510130741.719786279@linuxfoundation.org>
+Message-Id: <20220510130742.708181307@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit da8669ff41fa31573375c9a4180f5c080677204b upstream.
+commit 2e3a0d1bfa95b54333f7add3e50e288769373873 upstream.
 
-The page fault handling framework in the IOMMU core explicitly states
-that it doesn't handle PCI PASID Stop Marker and the IOMMU drivers must
-discard them before reporting faults. This handles Stop Marker messages
-in prq_event_thread() before reporting events to the core.
+The AIU ACODEC has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
-The VT-d driver explicitly drains the pending page requests when a CPU
-page table (represented by a mm struct) is unbound from a PASID according
-to the procedures defined in the VT-d spec. The Stop Marker messages do
-not need a response. Hence, it is safe to drop the Stop Marker messages
-silently if any of them is found in the page request queue.
-
-Fixes: d5b9e4bfe0d88 ("iommu/vt-d: Report prq to io-pgfault framework")
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Link: https://lore.kernel.org/r/20220421113558.3504874-1-baolu.lu@linux.intel.com
-Link: https://lore.kernel.org/r/20220423082330.3897867-2-baolu.lu@linux.intel.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel/svm.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ sound/soc/meson/aiu-acodec-ctrl.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -978,6 +978,10 @@ bad_req:
- 			goto bad_req;
- 		}
+--- a/sound/soc/meson/aiu-acodec-ctrl.c
++++ b/sound/soc/meson/aiu-acodec-ctrl.c
+@@ -58,7 +58,7 @@ static int aiu_acodec_ctrl_mux_put_enum(
  
-+		/* Drop Stop Marker message. No need for a response. */
-+		if (unlikely(req->lpig && !req->rd_req && !req->wr_req))
-+			goto prq_advance;
-+
- 		if (!svm || svm->pasid != req->pasid) {
- 			/*
- 			 * It can't go away, because the driver is not permitted
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static SOC_ENUM_SINGLE_DECL(aiu_acodec_ctrl_mux_enum, AIU_ACODEC_CTRL,
 
 

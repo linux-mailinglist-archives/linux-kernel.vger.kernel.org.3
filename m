@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135195215E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9E15215E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242033AbiEJMyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S242068AbiEJMyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242029AbiEJMxy (ORCPT
+        with ESMTP id S242037AbiEJMxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 08:53:54 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA5A25473B
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:49 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z19so19871017edx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:49 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CDE2A7C3C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:50 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l18so32689740ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:49:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vfLuO2bBXhL8oa/UMAFdd0jhsQRQifT6C/f2wEkgFLI=;
-        b=1TrQqVwddCRr+SHafXfwtHdncvM/vTDdTYmI52vBIE/RNWLBLTyaAX1C0wLx323vjN
-         jzEwbuJ5OieYsjCZQKkGT4Kv6OXqu2SZYQmUIV0ku1FuQ9AAzHboVIZS5P2IbitydFeO
-         Z/7nPHz86++ho7fq2DqXKqZzxaybMPub1ouG0knPG+9b7aLD7TQh2mcn2SydLLGwjDhO
-         BOZLKZbZkKAqmyoXz4L2q10huMD2BztNm0iQ3u3sDU49sDJ2uAru2YmVvVlph8XcBe5q
-         UaS00to/lWHI17whP5bh31CLTvznES+3kfzbuLApxUf0dW2ySkiZ5qtfv/xbIbKtw6Sh
-         g7Zg==
+        bh=uE+uPH7XJQcG7yH10ofbLOu1qNt5to4brlA9JYvKtQs=;
+        b=iKtgXy4JrJUvAJppO3GZ+XMVhpICzTvH/99xfRe6Y8da08LQY7JbAeJrvSTD4Uf5xI
+         JNwkwZnIOBzex3M3JQMbmAw7+NmQImhbQLEAgVu6p7XKyyic8Pa/CP0pkz8gQ42vWO0/
+         omfe9nuDyyCahTNR0yvxsIbsNpH0ifhCtRg7Pdu1XxXQnumU1koJUz7KGy2yJ5zHC4tw
+         Ct5V1Pllw0sS56DQc5gZd+yTfZlHQQ3pwnCJUjepxUIDNpznS0Ho+CC5bfw6MFTzAZPz
+         Tnu2SM/YFtL09StrIQMY1VBk7KZ9Mr1G2+aOjoZzUe8iL7KeQ0XUf/7yAX0oqYfkQNfi
+         HCdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vfLuO2bBXhL8oa/UMAFdd0jhsQRQifT6C/f2wEkgFLI=;
-        b=igxMa1/JXHm06jsmg1fybcR1wLlJpuPWk+yQwaUM9zPU6eoQLjm+d71YrWFixX4oOm
-         2BJ32YnAf/7WAepT3TLTOlxBb7Et4GILOvbhtAUenF7alOJ4DPNAnP+U2sBc+qTdl5r7
-         EKy4gJXByJxs7AQK/6fvzIOXpKi+diILFxK7ueJh+/2ASZbbaslh1go+HL7zTIJz/0xJ
-         CuX1rCjL/pJeyFUQ2wAg8BIgcGsUd6Z7HgH3eaQ32KLLc0Qo3jiGfXkDgzBZJfXbz7Fg
-         tMTujo/IRUTGTszUb7TdnpcfiH/DN90/LD41vBaswmXW5eCHTvlCYCKpnVqojv0wx/RB
-         AH1Q==
-X-Gm-Message-State: AOAM530rtyjtKC9lG1KNoSN3tWDAvwbcbP88jJ1WvQCr4Ym+6X4Dznr2
-        Kx4Im2ql7MrnMU3MDK0qWuen+A==
-X-Google-Smtp-Source: ABdhPJzwyrYize71rVhYnx5pouWR0PPJUe95eUtmSTWj/S44UobOFzmAhlGOS5t5pb0nzpyIMMlz5w==
-X-Received: by 2002:a05:6402:43c4:b0:41d:9403:8dca with SMTP id p4-20020a05640243c400b0041d94038dcamr22822731edc.184.1652186988762;
-        Tue, 10 May 2022 05:49:48 -0700 (PDT)
+        bh=uE+uPH7XJQcG7yH10ofbLOu1qNt5to4brlA9JYvKtQs=;
+        b=7/KuxwgpuMREzRg/tIhU0QeJaG8ueQZPMxb3i5cgvSV4EXG3dGvy0+0LYi+ZMvX+tQ
+         lXuZ/3H0PmdUFsnXJ6BKcjjiN+T02V8RJxSYeAoIIQBnBSBz/3tlGiOZfgqtrJdwaU2a
+         yeQPlqlRypa86DpOIMSIicKgqt1x+04kNdPlQkB9yg55TMKA0QrCWKnnjpXTVVW9KYY+
+         q7196EwJgACjpAa5EJOsUJ+e2g6rkq1Sk5OGMqIF/YBZwBvavPrjVg92QA3FCWl2X63X
+         SKVccx77y4QF0MCusgY6QjoheS8PuE8V5eDbx66LOhWDj7Z3yiEAnSVDkeVXhqH9sS7w
+         NdIQ==
+X-Gm-Message-State: AOAM530EtQAB7mypwjNvBx+zTehBaFKbD9bOk3B5WzpyVqqk8m8Uc4AD
+        cZchNuCcfBUAC2WsS3ltzRtnFw==
+X-Google-Smtp-Source: ABdhPJzO/bHcf5IDfxgIy5UOpIHVpNzywPuo8Id6tHFxW+Va42WdjEgXjv8p05Dl/div2ikIUmncHg==
+X-Received: by 2002:a17:907:7baa:b0:6f4:794d:d3ae with SMTP id ne42-20020a1709077baa00b006f4794dd3aemr19189820ejc.611.1652186990350;
+        Tue, 10 May 2022 05:49:50 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpezg-94-253-144-75-cbl.xnet.hr. [94.253.144.75])
-        by smtp.googlemail.com with ESMTPSA id gz14-20020a170907a04e00b006f3ef214e62sm6094290ejc.200.2022.05.10.05.49.47
+        by smtp.googlemail.com with ESMTPSA id gz14-20020a170907a04e00b006f3ef214e62sm6094290ejc.200.2022.05.10.05.49.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 05:49:48 -0700 (PDT)
+        Tue, 10 May 2022 05:49:50 -0700 (PDT)
 From:   Robert Marko <robert.marko@sartura.hr>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         andrew@lunn.ch, gregory.clement@bootlin.com,
@@ -56,9 +56,9 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, pali@kernel.org,
         marek.behun@nic.cz
 Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v2 09/11] arm64: dts: marvell: split Methode uDPU DTS
-Date:   Tue, 10 May 2022 14:49:27 +0200
-Message-Id: <20220510124929.91000-9-robert.marko@sartura.hr>
+Subject: [PATCH v2 10/11] dt-bindings: marvell: armada-37xx: add Methode eDPU compatible
+Date:   Tue, 10 May 2022 14:49:28 +0200
+Message-Id: <20220510124929.91000-10-robert.marko@sartura.hr>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510124929.91000-1-robert.marko@sartura.hr>
 References: <20220510124929.91000-1-robert.marko@sartura.hr>
@@ -73,371 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Split the Methode uDPU DTS into a common DTSI as preparation for adding
-support for Methode eDPU which is based on the uDPU to avoid duplication.
+Document compatible for the Methode eDPU Armada 3720 based board.
 
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 ---
- .../boot/dts/marvell/armada-3720-uDPU.dts     | 150 +---------------
- .../boot/dts/marvell/armada-3720-uDPU.dtsi    | 160 ++++++++++++++++++
- 2 files changed, 161 insertions(+), 149 deletions(-)
- create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi
+ Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-index f21a855fc608..a75734d88a4f 100644
---- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-@@ -1,66 +1,13 @@
- // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
--/*
-- * Device tree for the uDPU board.
-- * Based on Marvell Armada 3720 development board (DB-88F3720-DDR3)
-- * Copyright (C) 2016 Marvell
-- * Copyright (C) 2019 Methode Electronics
-- * Copyright (C) 2019 Telus
-- *
-- * Vladimir Vid <vladimir.vid@sartura.hr>
-- */
+diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml
+index 3f41ef2c6f3e..db0307241e39 100644
+--- a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml
++++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.yaml
+@@ -25,6 +25,7 @@ properties:
+               - globalscale,espressobin
+               - cznic,turris-mox
+               - methode,udpu
++              - methode,edpu
+           - const: marvell,armada3720
+           - const: marvell,armada3710
  
- /dts-v1/;
- 
--#include <dt-bindings/gpio/gpio.h>
--#include "armada-372x.dtsi"
-+#include "armada-3720-uDPU.dtsi"
- 
- / {
- 	model = "Methode uDPU Board";
- 	compatible = "methode,udpu", "marvell,armada3720", "marvell,armada3710";
- 
--	chosen {
--		stdout-path = "serial0:115200n8";
--	};
--
--	memory@0 {
--		device_type = "memory";
--		reg = <0x00000000 0x00000000 0x00000000 0x20000000>;
--	};
--
--	leds {
--		compatible = "gpio-leds";
--
--		led-power1 {
--			label = "udpu:green:power";
--			gpios = <&gpionb 11 GPIO_ACTIVE_LOW>;
--		};
--
--		led-power2 {
--			label = "udpu:red:power";
--			gpios = <&gpionb 12 GPIO_ACTIVE_LOW>;
--		};
--
--		led-network1 {
--			label = "udpu:green:network";
--			gpios = <&gpionb 13 GPIO_ACTIVE_LOW>;
--		};
--
--		led-network2 {
--			label = "udpu:red:network";
--			gpios = <&gpionb 14 GPIO_ACTIVE_LOW>;
--		};
--
--		led-alarm1 {
--			label = "udpu:green:alarm";
--			gpios = <&gpionb 15 GPIO_ACTIVE_LOW>;
--		};
--
--		led-alarm2 {
--			label = "udpu:red:alarm";
--			gpios = <&gpionb 16 GPIO_ACTIVE_LOW>;
--		};
--	};
--
- 	sfp_eth0: sfp-eth0 {
- 		compatible = "sff,sfp";
- 		i2c-bus = <&i2c0>;
-@@ -70,55 +17,6 @@ sfp_eth0: sfp-eth0 {
- 		tx-fault-gpio = <&gpiosb 5 GPIO_ACTIVE_HIGH>;
- 		maximum-power-milliwatt = <3000>;
- 	};
--
--	sfp_eth1: sfp-eth1 {
--		compatible = "sff,sfp";
--		i2c-bus = <&i2c1>;
--		los-gpio = <&gpiosb 7 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpio = <&gpiosb 8 GPIO_ACTIVE_LOW>;
--		tx-disable-gpio = <&gpiosb 9 GPIO_ACTIVE_HIGH>;
--		tx-fault-gpio = <&gpiosb 10 GPIO_ACTIVE_HIGH>;
--		maximum-power-milliwatt = <3000>;
--	};
--};
--
--&sdhci0 {
--	status = "okay";
--	bus-width = <8>;
--	mmc-ddr-1_8v;
--	mmc-hs400-1_8v;
--	marvell,pad-type = "fixed-1-8v";
--	non-removable;
--	no-sd;
--	no-sdio;
--};
--
--&spi0 {
--	status = "okay";
--	pinctrl-names = "default";
--	pinctrl-0 = <&spi_quad_pins>;
--
--	flash@0 {
--		compatible = "jedec,spi-nor";
--		reg = <0>;
--		spi-max-frequency = <54000000>;
--
--		partitions {
--			compatible = "fixed-partitions";
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			partition@0 {
--				label = "firmware";
--				reg = <0x0 0x180000>;
--			};
--
--			partition@180000 {
--				label = "u-boot-env";
--				reg = <0x180000 0x10000>;
--			};
--		};
--	};
- };
- 
- &pinctrl_nb {
-@@ -126,11 +24,6 @@ i2c1_recovery_pins: i2c1-recovery-pins {
- 		groups = "i2c1";
- 		function = "gpio";
- 	};
--
--	i2c2_recovery_pins: i2c2-recovery-pins {
--		groups = "i2c2";
--		function = "gpio";
--	};
- };
- 
- &i2c0 {
-@@ -143,48 +36,7 @@ &i2c0 {
- 	sda-gpios = <&gpionb 1 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- };
- 
--&i2c1 {
--	status = "okay";
--	pinctrl-names = "default", "recovery";
--	pinctrl-0 = <&i2c2_pins>;
--	pinctrl-1 = <&i2c2_recovery_pins>;
--	/delete-property/mrvl,i2c-fast-mode;
--	scl-gpios = <&gpionb 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
--	sda-gpios = <&gpionb 3 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
--
--	temp-sensor@48 {
--		compatible = "ti,tmp75c";
--		reg = <0x48>;
--	};
--
--	temp-sensor@49 {
--		compatible = "ti,tmp75c";
--		reg = <0x49>;
--	};
--};
--
- &eth0 {
- 	phy-mode = "sgmii";
--	status = "okay";
--	managed = "in-band-status";
--	phys = <&comphy1 0>;
- 	sfp = <&sfp_eth0>;
- };
--
--&eth1 {
--	phy-mode = "sgmii";
--	status = "okay";
--	managed = "in-band-status";
--	phys = <&comphy0 1>;
--	sfp = <&sfp_eth1>;
--};
--
--&usb3 {
--	status = "okay";
--	phys = <&usb2_utmi_otg_phy>;
--	phy-names = "usb2-utmi-otg-phy";
--};
--
--&uart0 {
--	status = "okay";
--};
-diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi
-new file mode 100644
-index 000000000000..3f79923376fb
---- /dev/null
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device tree for the uDPU board.
-+ * Based on Marvell Armada 3720 development board (DB-88F3720-DDR3)
-+ * Copyright (C) 2016 Marvell
-+ * Copyright (C) 2019 Methode Electronics
-+ * Copyright (C) 2019 Telus
-+ *
-+ * Vladimir Vid <vladimir.vid@sartura.hr>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include "armada-372x.dtsi"
-+
-+/ {
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x00000000 0x00000000 0x20000000>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-power1 {
-+			label = "udpu:green:power";
-+			gpios = <&gpionb 11 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-power2 {
-+			label = "udpu:red:power";
-+			gpios = <&gpionb 12 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-network1 {
-+			label = "udpu:green:network";
-+			gpios = <&gpionb 13 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-network2 {
-+			label = "udpu:red:network";
-+			gpios = <&gpionb 14 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-alarm1 {
-+			label = "udpu:green:alarm";
-+			gpios = <&gpionb 15 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-alarm2 {
-+			label = "udpu:red:alarm";
-+			gpios = <&gpionb 16 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	sfp_eth1: sfp-eth1 {
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c1>;
-+		los-gpio = <&gpiosb 7 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpio = <&gpiosb 8 GPIO_ACTIVE_LOW>;
-+		tx-disable-gpio = <&gpiosb 9 GPIO_ACTIVE_HIGH>;
-+		tx-fault-gpio = <&gpiosb 10 GPIO_ACTIVE_HIGH>;
-+		maximum-power-milliwatt = <3000>;
-+	};
-+};
-+
-+&sdhci0 {
-+	status = "okay";
-+	bus-width = <8>;
-+	mmc-ddr-1_8v;
-+	mmc-hs400-1_8v;
-+	marvell,pad-type = "fixed-1-8v";
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+};
-+
-+&spi0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_quad_pins>;
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <54000000>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "firmware";
-+				reg = <0x0 0x180000>;
-+			};
-+
-+			partition@180000 {
-+				label = "u-boot-env";
-+				reg = <0x180000 0x10000>;
-+			};
-+		};
-+	};
-+};
-+
-+&pinctrl_nb {
-+	i2c2_recovery_pins: i2c2-recovery-pins {
-+		groups = "i2c2";
-+		function = "gpio";
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+	pinctrl-names = "default", "recovery";
-+	pinctrl-0 = <&i2c2_pins>;
-+	pinctrl-1 = <&i2c2_recovery_pins>;
-+	/delete-property/mrvl,i2c-fast-mode;
-+	scl-gpios = <&gpionb 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+	sda-gpios = <&gpionb 3 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+
-+	temp-sensor@48 {
-+		compatible = "ti,tmp75c";
-+		reg = <0x48>;
-+	};
-+
-+	temp-sensor@49 {
-+		compatible = "ti,tmp75c";
-+		reg = <0x49>;
-+	};
-+};
-+
-+&eth0 {
-+	status = "okay";
-+	managed = "in-band-status";
-+	phys = <&comphy1 0>;
-+};
-+
-+&eth1 {
-+	phy-mode = "sgmii";
-+	status = "okay";
-+	managed = "in-band-status";
-+	phys = <&comphy0 1>;
-+	sfp = <&sfp_eth1>;
-+};
-+
-+&usb3 {
-+	status = "okay";
-+	phys = <&usb2_utmi_otg_phy>;
-+	phy-names = "usb2-utmi-otg-phy";
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
 -- 
 2.36.1
 

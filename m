@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF71C5226F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26507522701
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbiEJWko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S237014AbiEJWmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiEJWkm (ORCPT
+        with ESMTP id S236975AbiEJWmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:40:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518181FA70;
-        Tue, 10 May 2022 15:40:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C908461811;
-        Tue, 10 May 2022 22:40:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7375C385D1;
-        Tue, 10 May 2022 22:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652222439;
-        bh=Uep9omWAHUgcNmftnhT+OxXsLVstbaEvQlnJP1mh//w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aU3hfLPZDr+uUiq73DIBtXvAfY5S2GiWrylBB7qJs04cVSM3a032pbem+F+SzA3nD
-         NmTFsl/iikJ9L8A13NTBsku9/0KwxWXCPXKeZ6/c0JvI6ckcVLMmTGJmlWcWt3QzJh
-         PiasBPNTr9le1p4IUa0r4IApkoasZ/VAVs0RChD0=
-Date:   Tue, 10 May 2022 15:40:37 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 3/6] mm: Kconfig: group swap, slab, hotplug and thp
- options into submenus
-Message-Id: <20220510154037.c7916ee9d7de90eedd12f92c@linux-foundation.org>
-In-Reply-To: <20220510152847.230957-4-hannes@cmpxchg.org>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
-        <20220510152847.230957-4-hannes@cmpxchg.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 10 May 2022 18:42:44 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09D815BAD6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:42:42 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id m25so716466oih.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7+KltJ7F34G8/AC3DOb6MTBB54rI+MST/Cj23S11o1s=;
+        b=VLkccRon0Voxtemyy/FjFAx3KJOGoO7ZbHUYWXLISlf/SQJ0qKeJn7oEt0R4MwbM3P
+         IUYO4hhLTjfodZMeR1J+xhUDoP2dqEz7wU/lnZrDSOjAMqGI+E5IVtQ8BFETiHrZQgA7
+         lkrr88h66LQoyI0bgtpMusBqHx08GHzPIt/RI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7+KltJ7F34G8/AC3DOb6MTBB54rI+MST/Cj23S11o1s=;
+        b=BnqNyyT/6SCqPkPRsH5ANH742iRXxi5BPOL0b0bSLCyztrX9eiKv6IaQKOgsF+SkcT
+         Vr5m8/mViJTpaSEqUHYbH62cUU9dJPjW/kG5bxpW8CSilq72zaxC6HkTGu/GFvwDqvie
+         EIX8eQqVl+ohWb84k//qB/IqGM5hvs686CaoddSQVxpiPijmG14nKMhCNYB+z4fUOxBY
+         6FvBKD9P0OKYGY173cPdFvHNqzRf5FfisHghQ6kIoNfikSZmgGb0W6Vs4/YMLzjKfyuJ
+         sqVYGJ/zCUOlMe6f5HC3sSSWj7xMnbE8jvfQhdvwhx9n4DpD/pTqE/wxRU2SQ8dkrsoI
+         Gh0Q==
+X-Gm-Message-State: AOAM531ldfBZmUq/fkbyL/zB+W+z4AjBew004BZJgphA817xSIjvmu+U
+        2Ew5wukgZzThYRNnLRlzFTwN7g==
+X-Google-Smtp-Source: ABdhPJxb47ZCpyuPF1hbvN0++QLW6/mvOLD6412jYUK9qcSIHRUtxj9eOIrb3wzeSz3wb5XKRcKHlA==
+X-Received: by 2002:a05:6808:ecc:b0:322:319c:cd3 with SMTP id q12-20020a0568080ecc00b00322319c0cd3mr1166653oiv.148.1652222561778;
+        Tue, 10 May 2022 15:42:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u4-20020a4a9704000000b0035eb4e5a6b5sm308288ooi.11.2022.05.10.15.42.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 15:42:41 -0700 (PDT)
+Subject: Re: [PATCH 5.15 000/135] 5.15.39-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0e6f63a4-6070-805b-40e3-3198f960e7cd@linuxfoundation.org>
+Date:   Tue, 10 May 2022 16:42:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 11:28:44 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
+On 5/10/22 7:06 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.39 release.
+> There are 135 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.39-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> There are several clusters of related config options spread throughout
-> the mostly flat MM submenu. Group them together and put specialization
-> options into further subdirectories to make the MM submenu a bit more
-> organized and easier to navigate.
+Compiled and booted on my test system. No dmesg regressions.
 
-Causes
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-hp2:/usr/src/25> make allnoconfig
+thanks,
+-- Shuah
 
-WARNING: unmet direct dependencies detected for ARCH_WANT_GENERAL_HUGETLB
-  Depends on [n]: TRANSPARENT_HUGEPAGE [=n]
-  Selected by [y]:
-  - X86 [=y]
-
-WARNING: unmet direct dependencies detected for ARCH_WANTS_THP_SWAP
-  Depends on [n]: TRANSPARENT_HUGEPAGE [=n]
-  Selected by [y]:
-  - X86 [=y] && X86_64 [=y]
-#
-# configuration written to .config
-#
-
-
-I'll disable this and [4/6] for now.

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2214521A6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A05C521A97
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245732AbiEJN6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S245715AbiEJN6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245197AbiEJNii (ORCPT
+        with ESMTP id S245201AbiEJNii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 09:38:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1BDDECC;
-        Tue, 10 May 2022 06:28:40 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2E7DF5F;
+        Tue, 10 May 2022 06:28:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5595360B12;
-        Tue, 10 May 2022 13:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B9AC385C2;
-        Tue, 10 May 2022 13:28:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 249F0B81DA2;
+        Tue, 10 May 2022 13:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D23C385C6;
+        Tue, 10 May 2022 13:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189319;
-        bh=QjF3jReUNDcYQveU7Tauj4YfmC8J+BQBTJfIbX5n0ME=;
+        s=korg; t=1652189322;
+        bh=ighqq+8BTA6i60Rh16ci84mBTU+PHJGizR7t8a8h21o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHWLK4VHiahUEYTMKMDtsGQkA6i0R4uQr1rL477vsqXf+HUkYi7CyCbnRxpN5iqUn
-         3hp9oMhvOvTWqtE13j9AWO2bgyBYHyL/e6qiPLqFsajKwIzxjXVIZ7UBPfB12HtG3y
-         Ondz4tQe8wMC7CNfGdSf45OM2oJzohPtlosg0OWY=
+        b=gv0ANQXoEqGTUJeppdWf7GMxaG3t5FpHUZaCDnQdD3n50aZdGXFeuzWnaxTrecRtP
+         U10fLuFI5hVmjuMJQKoKtxjgnbkdcBZ8hj9c5jtv/lKmSIB4kUO0LrOylzCRbF2wBs
+         2WjDa13bnGEdlcSI8qF7UeYy2AySUD74ciGJsG04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
         Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 013/135] drm/amd/display: Avoid reading audio pattern past AUDIO_CHANNELS_COUNT
-Date:   Tue, 10 May 2022 15:06:35 +0200
-Message-Id: <20220510130740.778835335@linuxfoundation.org>
+Subject: [PATCH 5.15 014/135] drm/amdgpu: do not use passthrough mode in Xen dom0
+Date:   Tue, 10 May 2022 15:06:36 +0200
+Message-Id: <20220510130740.808126555@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -54,33 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harry Wentland <harry.wentland@amd.com>
+From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 
-commit 3dfe85fa87b2a26bdbd292b66653bba065cf9941 upstream.
+commit 19965d8259fdabc6806da92adda49684f5bcbec5 upstream.
 
-A faulty receiver might report an erroneous channel count. We
-should guard against reading beyond AUDIO_CHANNELS_COUNT as
-that would overflow the dpcd_pattern_period array.
+While technically Xen dom0 is a virtual machine too, it does have
+access to most of the hardware so it doesn't need to be considered a
+"passthrough". Commit b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for
+APUs in passthrough") changed how FB is accessed based on passthrough
+mode. This breaks amdgpu in Xen dom0 with message like this:
 
-Signed-off-by: Harry Wentland <harry.wentland@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+    [drm:dc_dmub_srv_wait_idle [amdgpu]] *ERROR* Error waiting for DMUB idle: status=3
+
+While the reason for this failure is unclear, the passthrough mode is
+not really necessary in Xen dom0 anyway. So, to unbreak booting affected
+kernels, disable passthrough mode in this case.
+
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1985
+Fixes: b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for APUs in passthrough")
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -3118,7 +3118,7 @@ static void dp_test_get_audio_test_data(
- 		&dpcd_pattern_type.value,
- 		sizeof(dpcd_pattern_type));
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+@@ -24,6 +24,7 @@
+ #include <linux/module.h>
  
--	channel_count = dpcd_test_mode.bits.channel_count + 1;
-+	channel_count = min(dpcd_test_mode.bits.channel_count + 1, AUDIO_CHANNELS_COUNT);
+ #include <drm/drm_drv.h>
++#include <xen/xen.h>
  
- 	// read pattern periods for requested channels when sawTooth pattern is requested
- 	if (dpcd_pattern_type.value == AUDIO_TEST_PATTERN_SAWTOOTH ||
+ #include "amdgpu.h"
+ #include "amdgpu_ras.h"
+@@ -694,7 +695,8 @@ void amdgpu_detect_virtualization(struct
+ 		adev->virt.caps |= AMDGPU_SRIOV_CAPS_ENABLE_IOV;
+ 
+ 	if (!reg) {
+-		if (is_virtual_machine())	/* passthrough mode exclus sriov mod */
++		/* passthrough mode exclus sriov mod */
++		if (is_virtual_machine() && !xen_initial_domain())
+ 			adev->virt.caps |= AMDGPU_PASSTHROUGH_MODE;
+ 	}
+ 
 
 

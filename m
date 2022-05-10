@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E304521B82
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D406521B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343813AbiEJOQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S1343874AbiEJOQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343711AbiEJNsW (ORCPT
+        with ESMTP id S1343757AbiEJNsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:48:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56772D9EFA;
-        Tue, 10 May 2022 06:36:47 -0700 (PDT)
+        Tue, 10 May 2022 09:48:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4836B641;
+        Tue, 10 May 2022 06:36:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E966618CF;
-        Tue, 10 May 2022 13:36:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33039C385C2;
-        Tue, 10 May 2022 13:36:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6CE9B81D24;
+        Tue, 10 May 2022 13:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAE8C385C9;
+        Tue, 10 May 2022 13:36:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189805;
-        bh=7EOlkagCuaSCpsJRB/bfcScFi2TgH0RRwlzbd6ObCfE=;
+        s=korg; t=1652189808;
+        bh=9xEVtLV5Lt1Wu95ByQYAXxRUTJvXj47o6TKf+HyKhmU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SH/4e6y/z52RDM+H9Q5YNYT4b+dDWDILmQ1dIdlGcX4oIqS8wxJUcmwUnAyHDEsPg
-         HJX4lzPkHHkoqwg9zwexfZUIpOz/y29GI55kaOCHylxEBAPbz/7F2Ow5F83/cBHkld
-         6vyxM3C1CALFM21/hCtqXXzoUAf0wNdWwlTOQMpo=
+        b=q15uhl5jkzQnXEu+WNNVzaLqigeCRMs7tABGM/cZGgVQSelE2HGD2Tw22QgGRLWwx
+         zQf/B714BwTKnqmtBBD6QpTNq8w35KJrNTcKBQ5w7q+lRdhuR0/ExxUa03zdzxlWO9
+         D71OkIRaO/p2hxQxdtYv8yDcKxgG1JvWPSlSvfm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.17 033/140] btrfs: skip compression property for anything other than files and dirs
-Date:   Tue, 10 May 2022 15:07:03 +0200
-Message-Id: <20220510130742.563550943@linuxfoundation.org>
+        stable@vger.kernel.org, Thomas Pfaff <tpfaff@pcs.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.17 034/140] genirq: Synchronize interrupt thread startup
+Date:   Tue, 10 May 2022 15:07:04 +0200
+Message-Id: <20220510130742.592721474@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -54,149 +55,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Thomas Pfaff <tpfaff@pcs.com>
 
-commit 4b73c55fdebd8939f0f6000921075f7f6fa41397 upstream.
+commit 8707898e22fd665bc1d7b18b809be4b56ce25bdd upstream.
 
-The compression property only has effect on regular files and directories
-(so that it's propagated to files and subdirectories created inside a
-directory). For any other inode type (symlink, fifo, device, socket),
-it's pointless to set the compression property because it does nothing
-and ends up unnecessarily wasting leaf space due to the pointless xattr
-(75 or 76 bytes, depending on the compression value). Symlinks in
-particular are very common (for example, I have almost 10k symlinks under
-/etc, /usr and /var alone) and therefore it's worth to avoid wasting
-leaf space with the compression xattr.
+A kernel hang can be observed when running setserial in a loop on a kernel
+with force threaded interrupts. The sequence of events is:
 
-For example, the compression property can end up on a symlink or character
-device implicitly, through inheritance from a parent directory
+   setserial
+     open("/dev/ttyXXX")
+       request_irq()
+     do_stuff()
+      -> serial interrupt
+         -> wake(irq_thread)
+	      desc->threads_active++;
+     close()
+       free_irq()
+         kthread_stop(irq_thread)
+     synchronize_irq() <- hangs because desc->threads_active != 0
 
-  $ mkdir /mnt/testdir
-  $ btrfs property set /mnt/testdir compression lzo
+The thread is created in request_irq() and woken up, but does not get on a
+CPU to reach the actual thread function, which would handle the pending
+wake-up. kthread_stop() sets the should stop condition which makes the
+thread immediately exit, which in turn leaves the stale threads_active
+count around.
 
-  $ ln -s yadayada /mnt/testdir/lnk
-  $ mknod /mnt/testdir/dev c 0 0
+This problem was introduced with commit 519cc8652b3a, which addressed a
+interrupt sharing issue in the PCIe code.
 
-Or explicitly like this:
+Before that commit free_irq() invoked synchronize_irq(), which waits for
+the hard interrupt handler and also for associated threads to complete.
 
-  $ ln -s yadayda /mnt/lnk
-  $ setfattr -h -n btrfs.compression -v lzo /mnt/lnk
+To address the PCIe issue synchronize_irq() was replaced with
+__synchronize_hardirq(), which only waits for the hard interrupt handler to
+complete, but not for threaded handlers.
 
-So skip the compression property on inodes that are neither a regular
-file nor a directory.
+This was done under the assumption, that the interrupt thread already
+reached the thread function and waits for a wake-up, which is guaranteed to
+be handled before acting on the stop condition. The problematic case, that
+the thread would not reach the thread function, was obviously overlooked.
 
-CC: stable@vger.kernel.org # 5.4+
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Make sure that the interrupt thread is really started and reaches
+thread_fn() before returning from __setup_irq().
+
+This utilizes the existing wait queue in the interrupt descriptor. The
+wait queue is unused for non-shared interrupts. For shared interrupts the
+usage might cause a spurious wake-up of a waiter in synchronize_irq() or the
+completion of a threaded handler might cause a spurious wake-up of the
+waiter for the ready flag. Both are harmless and have no functional impact.
+
+[ tglx: Amended changelog ]
+
+Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
+Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/props.c |   43 +++++++++++++++++++++++++++++++++++++++++++
- fs/btrfs/props.h |    1 +
- fs/btrfs/xattr.c |    3 +++
- 3 files changed, 47 insertions(+)
+ kernel/irq/internals.h |    2 ++
+ kernel/irq/irqdesc.c   |    2 ++
+ kernel/irq/manage.c    |   39 +++++++++++++++++++++++++++++----------
+ 3 files changed, 33 insertions(+), 10 deletions(-)
 
---- a/fs/btrfs/props.c
-+++ b/fs/btrfs/props.c
-@@ -21,6 +21,7 @@ struct prop_handler {
- 			size_t len);
- 	int (*apply)(struct inode *inode, const char *value, size_t len);
- 	const char *(*extract)(struct inode *inode);
-+	bool (*ignore)(const struct btrfs_inode *inode);
- 	int inheritable;
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
+  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
+  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
+  * IRQTF_FORCED_THREAD  - irq action is force threaded
++ * IRQTF_READY     - signals that irq thread is ready
+  */
+ enum {
+ 	IRQTF_RUNTHREAD,
+ 	IRQTF_WARNED,
+ 	IRQTF_AFFINITY,
+ 	IRQTF_FORCED_THREAD,
++	IRQTF_READY,
  };
  
-@@ -74,6 +75,28 @@ int btrfs_validate_prop(const struct btr
- 	return handler->validate(inode, value, value_len);
+ /*
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -407,6 +407,7 @@ static struct irq_desc *alloc_desc(int i
+ 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+ 	mutex_init(&desc->request_mutex);
+ 	init_rcu_head(&desc->rcu);
++	init_waitqueue_head(&desc->wait_for_threads);
+ 
+ 	desc_set_defaults(irq, desc, node, affinity, owner);
+ 	irqd_set(&desc->irq_data, flags);
+@@ -575,6 +576,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
++		init_waitqueue_head(&desc[i].wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+ 	}
+ 	return arch_early_irq_init();
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1249,6 +1249,31 @@ static void irq_wake_secondary(struct ir
  }
  
-+/*
-+ * Check if a property should be ignored (not set) for an inode.
-+ *
-+ * @inode:     The target inode.
-+ * @name:      The property's name.
-+ *
-+ * The caller must be sure the given property name is valid, for example by
-+ * having previously called btrfs_validate_prop().
-+ *
-+ * Returns:    true if the property should be ignored for the given inode
-+ *             false if the property must not be ignored for the given inode
+ /*
++ * Internal function to notify that a interrupt thread is ready.
 + */
-+bool btrfs_ignore_prop(const struct btrfs_inode *inode, const char *name)
++static void irq_thread_set_ready(struct irq_desc *desc,
++				 struct irqaction *action)
 +{
-+	const struct prop_handler *handler;
-+
-+	handler = find_prop_handler(name, NULL);
-+	ASSERT(handler != NULL);
-+
-+	return handler->ignore(inode);
++	set_bit(IRQTF_READY, &action->thread_flags);
++	wake_up(&desc->wait_for_threads);
 +}
 +
- int btrfs_set_prop(struct btrfs_trans_handle *trans, struct inode *inode,
- 		   const char *name, const char *value, size_t value_len,
- 		   int flags)
-@@ -316,6 +339,22 @@ static int prop_compression_apply(struct
- 	return 0;
- }
- 
-+static bool prop_compression_ignore(const struct btrfs_inode *inode)
++/*
++ * Internal function to wake up a interrupt thread and wait until it is
++ * ready.
++ */
++static void wake_up_and_wait_for_irq_thread_ready(struct irq_desc *desc,
++						  struct irqaction *action)
 +{
-+	/*
-+	 * Compression only has effect for regular files, and for directories
-+	 * we set it just to propagate it to new files created inside them.
-+	 * Everything else (symlinks, devices, sockets, fifos) is pointless as
-+	 * it will do nothing, so don't waste metadata space on a compression
-+	 * xattr for anything that is neither a file nor a directory.
-+	 */
-+	if (!S_ISREG(inode->vfs_inode.i_mode) &&
-+	    !S_ISDIR(inode->vfs_inode.i_mode))
-+		return true;
++	if (!action || !action->thread)
++		return;
 +
-+	return false;
++	wake_up_process(action->thread);
++	wait_event(desc->wait_for_threads,
++		   test_bit(IRQTF_READY, &action->thread_flags));
 +}
 +
- static const char *prop_compression_extract(struct inode *inode)
- {
- 	switch (BTRFS_I(inode)->prop_compress) {
-@@ -336,6 +375,7 @@ static struct prop_handler prop_handlers
- 		.validate = prop_compression_validate,
- 		.apply = prop_compression_apply,
- 		.extract = prop_compression_extract,
-+		.ignore = prop_compression_ignore,
- 		.inheritable = 1
- 	},
- };
-@@ -362,6 +402,9 @@ static int inherit_props(struct btrfs_tr
- 		if (!h->inheritable)
- 			continue;
++/*
+  * Interrupt handler thread
+  */
+ static int irq_thread(void *data)
+@@ -1259,6 +1284,8 @@ static int irq_thread(void *data)
+ 	irqreturn_t (*handler_fn)(struct irq_desc *desc,
+ 			struct irqaction *action);
  
-+		if (h->ignore(BTRFS_I(inode)))
-+			continue;
++	irq_thread_set_ready(desc, action);
 +
- 		value = h->extract(parent);
- 		if (!value)
- 			continue;
---- a/fs/btrfs/props.h
-+++ b/fs/btrfs/props.h
-@@ -15,6 +15,7 @@ int btrfs_set_prop(struct btrfs_trans_ha
- 		   int flags);
- int btrfs_validate_prop(const struct btrfs_inode *inode, const char *name,
- 			const char *value, size_t value_len);
-+bool btrfs_ignore_prop(const struct btrfs_inode *inode, const char *name);
+ 	sched_set_fifo(current);
  
- int btrfs_load_inode_props(struct inode *inode, struct btrfs_path *path);
+ 	if (force_irqthreads() && test_bit(IRQTF_FORCED_THREAD,
+@@ -1683,8 +1710,6 @@ __setup_irq(unsigned int irq, struct irq
+ 	}
  
---- a/fs/btrfs/xattr.c
-+++ b/fs/btrfs/xattr.c
-@@ -408,6 +408,9 @@ static int btrfs_xattr_handler_set_prop(
- 	if (ret)
- 		return ret;
+ 	if (!shared) {
+-		init_waitqueue_head(&desc->wait_for_threads);
+-
+ 		/* Setup the type (level, edge polarity) if configured: */
+ 		if (new->flags & IRQF_TRIGGER_MASK) {
+ 			ret = __irq_set_trigger(desc,
+@@ -1780,14 +1805,8 @@ __setup_irq(unsigned int irq, struct irq
  
-+	if (btrfs_ignore_prop(BTRFS_I(inode), name))
-+		return 0;
-+
- 	trans = btrfs_start_transaction(root, 2);
- 	if (IS_ERR(trans))
- 		return PTR_ERR(trans);
+ 	irq_setup_timings(desc, new);
+ 
+-	/*
+-	 * Strictly no need to wake it up, but hung_task complains
+-	 * when no hard interrupt wakes the thread up.
+-	 */
+-	if (new->thread)
+-		wake_up_process(new->thread);
+-	if (new->secondary)
+-		wake_up_process(new->secondary->thread);
++	wake_up_and_wait_for_irq_thread_ready(desc, new);
++	wake_up_and_wait_for_irq_thread_ready(desc, new->secondary);
+ 
+ 	register_irq_proc(irq, desc);
+ 	new->dir = NULL;
 
 

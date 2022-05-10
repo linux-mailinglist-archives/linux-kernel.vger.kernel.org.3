@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E61521B02
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFB6521BF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343873AbiEJOHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
+        id S1344369AbiEJO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243531AbiEJNoB (ORCPT
+        with ESMTP id S243919AbiEJNwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:44:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6D050B19;
-        Tue, 10 May 2022 06:31:11 -0700 (PDT)
+        Tue, 10 May 2022 09:52:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29706C0D0;
+        Tue, 10 May 2022 06:38:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B2B5CE1EED;
-        Tue, 10 May 2022 13:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A771C385C6;
-        Tue, 10 May 2022 13:31:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CB38615E9;
+        Tue, 10 May 2022 13:37:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C61C385A6;
+        Tue, 10 May 2022 13:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189467;
-        bh=sxLapHNWEjM9BKEqFmfX+dQbnR8JAXuElA7Mx+lx8Jg=;
+        s=korg; t=1652189858;
+        bh=BEL/QK5o7Uyv5QUi+azeEgIO671K4UQlx+HYxKtUE/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DNGDx7EPUP9Zr6Lo8xndNRqYG6z7FjIFnaA4wDPtCHSCOtaWyq/f6Q2BJRZTC4qO3
-         aJchJRYiKT3VhDqw/FCNLwx3mpDZWFCX4j1QdGgLxUBCnXkdFQSqy7Wv1HwCMRQteH
-         UJIzYlbcqOL5tZsQXwYxhpi+vMuJizIKbBBzWZeQ=
+        b=nzIP0O5utaP2SNA0m63pxgLNYwLNiCfA3Q5Sjd60BHwOOUrGnODU8eLWYhta+l3zX
+         RZBLSqJusZV2aHqvts/ozhSHHf2OBkIXJ+6+jesabWZvej1Hh/Go0YQDzVRt5RIje6
+         RiWLr4GyKI/BqVWNPMONdyYrk5sjbFvvfye7y3Sw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.15 060/135] NFSv4: Dont invalidate inode attributes on delegation return
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.17 052/140] NFC: netlink: fix sleep in atomic bug when firmware download timeout
 Date:   Tue, 10 May 2022 15:07:22 +0200
-Message-Id: <20220510130742.129662082@linuxfoundation.org>
+Message-Id: <20220510130743.109408814@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 00c94ebec5925593c0377b941289224469e72ac7 upstream.
+commit 4071bf121d59944d5cd2238de0642f3d7995a997 upstream.
 
-There is no need to declare attributes such as the ctime, mtime and
-block size invalid when we're just returning a delegation, so it is
-inappropriate to call nfs_post_op_update_inode_force_wcc().
-Instead, just call nfs_refresh_inode() after faking up the change
-attribute. We know that the GETATTR op occurs before the DELEGRETURN, so
-we are safe when doing this.
+There are sleep in atomic bug that could cause kernel panic during
+firmware download process. The root cause is that nlmsg_new with
+GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
+handler. The call trace is shown below:
 
-Fixes: 0bc2c9b4dca9 ("NFSv4: Don't discard the attributes returned by asynchronous DELEGRETURN")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
+Call Trace:
+kmem_cache_alloc_node
+__alloc_skb
+nfc_genl_fw_download_done
+call_timer_fn
+__run_timers.part.0
+run_timer_softirq
+__do_softirq
+...
+
+The nlmsg_new with GFP_KERNEL parameter may sleep during memory
+allocation process, and the timer handler is run as the result of
+a "software interrupt" that should not call any other function
+that could sleep.
+
+This patch changes allocation mode of netlink message from GFP_KERNEL
+to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
+flag makes memory allocation operation could be used in atomic context.
+
+Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
+Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220504055847.38026-1-duoming@zju.edu.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ net/nfc/netlink.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -366,6 +366,14 @@ static void nfs4_setup_readdir(u64 cooki
- 	kunmap_atomic(start);
- }
+--- a/net/nfc/netlink.c
++++ b/net/nfc/netlink.c
+@@ -1244,7 +1244,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 	struct sk_buff *msg;
+ 	void *hdr;
  
-+static void nfs4_fattr_set_prechange(struct nfs_fattr *fattr, u64 version)
-+{
-+	if (!(fattr->valid & NFS_ATTR_FATTR_PRECHANGE)) {
-+		fattr->pre_change_attr = version;
-+		fattr->valid |= NFS_ATTR_FATTR_PRECHANGE;
-+	}
-+}
-+
- static void nfs4_test_and_free_stateid(struct nfs_server *server,
- 		nfs4_stateid *stateid,
- 		const struct cred *cred)
-@@ -6558,7 +6566,9 @@ static void nfs4_delegreturn_release(voi
- 		pnfs_roc_release(&data->lr.arg, &data->lr.res,
- 				 data->res.lr_ret);
- 	if (inode) {
--		nfs_post_op_update_inode_force_wcc(inode, &data->fattr);
-+		nfs4_fattr_set_prechange(&data->fattr,
-+					 inode_peek_iversion_raw(inode));
-+		nfs_refresh_inode(inode, &data->fattr);
- 		nfs_iput_and_deactive(inode);
- 	}
- 	kfree(calldata);
+-	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
+ 	if (!msg)
+ 		return -ENOMEM;
+ 
+@@ -1260,7 +1260,7 @@ int nfc_genl_fw_download_done(struct nfc
+ 
+ 	genlmsg_end(msg, hdr);
+ 
+-	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
++	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
+ 
+ 	return 0;
+ 
 
 

@@ -2,89 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A67522487
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22A7522489
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiEJTLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 15:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S1345923AbiEJTNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 15:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbiEJTLc (ORCPT
+        with ESMTP id S237140AbiEJTNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 15:11:32 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AB32532C0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:11:30 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id f5so11986906ilj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yhVqDTExWoz6ItXB09D+IajghtNf4zxV3xnD5/jJ9ho=;
-        b=YtU3JpNg0d4+TwtvZUMQoB8QGjkNFayCqDkhoy5HhfzjqkvZZlaHweYW4LZr2tevSq
-         oCP8b4Eu6Rhjr4a9IsQ6QbKdW4YPgjDXS9PEBJ0wuOgnusmSUohF2R5oEnWBfjA/dOTI
-         b9vz3uqPUeogLKXkrjlqdzTmz3x95hKu4QjZoyuBnSfMBwN3f0G5F4ezPCB19pUXACmi
-         tKzg+22dP+rnB7n+MLTiuats9FGitXRL2rll2xmvQi9dDkXUjOIVsC9AYs83X661WEah
-         Bz8AfZo1A9pbr3pIEhwqi/MhLrQxH/PYAIolC6+sbgz11qo94NcLkQzfTbdN+rJW0iyp
-         +AKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yhVqDTExWoz6ItXB09D+IajghtNf4zxV3xnD5/jJ9ho=;
-        b=Zgjoq8lUPdELH9BM03qZmcLi2whpVXt8UlR1K2WBM43+XKoN7XSIP/eRj+YlO/ayr0
-         Ts7Z5Z6FfkT81yX+GQPDjpWuN+vRzeQUmrfgZdcHx2ur45VvdKQ3WdPS1lxaBn3l6jBL
-         SF9T2Zccc6RJ+h/EZ4sxP1Mls+B04/7rSmSVaG3dLDvtZTATp8ZKyLJyKs988AlbRHgo
-         4y2BkJ5kLdSMAWXK5wyA5Fmm7SO7alWSIhhtpylxvE+tzAXzKGjAISjXBsRWMmolQ7ci
-         /m10M9BccVTnsUW75ImEfZDpUNWYEuAUua0LYfSuM2QY5W+gGhp+UOwSx1GJJGYR9j3M
-         6uZg==
-X-Gm-Message-State: AOAM532pmBrB/R1sL5JxXk83AtBA8tKLQUb4tULoc8ZbjsaMUL6jJzC6
-        /bcvP7eEwA/0uumLUNexEzc=
-X-Google-Smtp-Source: ABdhPJyEe7vsMfxtz+RpPpQUxfNa88KUwRB9L4IzhYDNUJAxw8k/QcypoXOVNbbisU9OXdmbPRGz2Q==
-X-Received: by 2002:a92:7309:0:b0:2ca:8c9c:752d with SMTP id o9-20020a927309000000b002ca8c9c752dmr10040741ilc.151.1652209890213;
-        Tue, 10 May 2022 12:11:30 -0700 (PDT)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id g100-20020a02856d000000b0032dba44218asm994547jai.166.2022.05.10.12.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 12:11:29 -0700 (PDT)
-Date:   Tue, 10 May 2022 12:11:27 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Alexei Starovoitov' <alexei.starovoitov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
-Subject: Re: [PATCH 08/22] bitops: introduce MANY_BITS() macro
-Message-ID: <Ynq43wlPezrRzur8@yury-laptop>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
- <20220510154750.212913-9-yury.norov@gmail.com>
- <CAADnVQKcX2xEWCHu-DX0Cy_mvCL6E0aE_BF1Wo+U-vy_Bi2-3w@mail.gmail.com>
- <3be064fe804845e4aeaca8b1d45ddf0a@AcuMS.aculab.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3be064fe804845e4aeaca8b1d45ddf0a@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 10 May 2022 15:13:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08611D811E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:13:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FBF2B81ECF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 19:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A64C385C2;
+        Tue, 10 May 2022 19:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652210023;
+        bh=u0t/vwSsLdadPi1EI1J7kbn0NOaLNLclvmuuTIEZPgI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kuJzEOM2WWLGZZO+F65HpaNa6Sd0Zd8F8CPiVCm3wP8ZGqJ4c9ZMdgB1yaBNroIl+
+         6LWc8Sezq8nnZNTW4+QqSX0OqLepkdT3IF0GqRcZ+X8SaV8XKWHwR2wl5Y1qUWKWec
+         DAmHNObFUYjwKZo9pQ906gogwXZhuyTgWd6XW8TY=
+Date:   Tue, 10 May 2022 12:13:42 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "damon@lists.linux.dev" <damon@lists.linux.dev>
+Subject: Re: [PATCH v9 15/69] damon: Convert __damon_va_three_regions to use
+ the VMA iterator
+Message-Id: <20220510121342.704d3b415bf4cadb92814ce8@linux-foundation.org>
+In-Reply-To: <20220510104428.152064-1-sj@kernel.org>
+References: <20220504011215.661968-1-Liam.Howlett@oracle.com>
+        <20220510104428.152064-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,54 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:54:13PM +0000, David Laight wrote:
-> From: Alexei Starovoitov
-> > Sent: 10 May 2022 17:51
-> ...
-> > +/* Return: nonzero if 2 or more bits are set */
-> > +#define MANY_BITS(n)           ((n) & ((n) - 1))
-> 
-> You can't have a macro that expands its argument twice.
+On Tue, 10 May 2022 10:44:28 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-Yes, I'll fix it.
- 
-> ...
-> > >  static inline __attribute__((const))
-> > >  bool is_power_of_2(unsigned long n)
-> > >  {
-> > > -       return (n != 0 && ((n & (n - 1)) == 0));
-> > > +       return n != 0 && !MANY_BITS(n);
-> > >  }
+> On Wed, 4 May 2022 01:12:26 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+> 
+> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > > 
-> > Please don't. Open coded version is much easier to read.
-
-To me the human-readable version is easier to read. Still, if you thing
-that n & (n - 1) is simpler, what for this function is needed at all?
-
-> Especially if you remove all the spare parenthesis.
-> 	return n && !(n & (n - 1));
+> > This rather specialised walk can use the VMA iterator.  If this proves to
+> > be too slow, we can write a custom routine to find the two largest gaps,
+> > but it will be somewhat complicated, so let's see if we need it first.
+> > 
+> > Update the kunit test case to use the maple tree.  This also fixes an
+> > issue with the kunit testcase not adding the last VMA to the list.
+> > 
+> > Fixes: 17ccae8bb5c9 (mm/damon: add kunit tests)
+> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
+> > ---
+> >  mm/damon/vaddr-test.h | 37 +++++++++++-------------------
+> >  mm/damon/vaddr.c      | 53 ++++++++++++++++++++++---------------------
+> >  2 files changed, 40 insertions(+), 50 deletions(-)
+> > 
+> > diff --git a/mm/damon/vaddr-test.h b/mm/damon/vaddr-test.h
+> > index 5431da4fe9d4..dbf2b8759607 100644
+> > --- a/mm/damon/vaddr-test.h
+> > +++ b/mm/damon/vaddr-test.h
+> > @@ -13,34 +13,21 @@
+> >  #define _DAMON_VADDR_TEST_H
+> >  
+> >  #include <kunit/test.h>
+> > +#include "../../mm/internal.h"
 > 
-> I bet a lot of callers know the value is non-zero.
+> V9 maple tree patchset has moved the definition of vma_mas_store() from
+> internal.h to mmap.c, so inclusion of internal.h wouldn't needed here, right?
 > 
-> I suspect you'll find at least one caller that uses
-> is_power_of_2() assuming it is !(n & (n - 1)) and
-> so is wrong for zero.
+> If we end up moving the definitions back to internal.h, because this file is
+> under mm/damon/, we can also use shorter include path, "../internal.h".
+
+I put the vma_mas_store() and vma_mas_remove() declarations into
+include/linux/mm.h so yes, internal.h is no longer required.  I queued
+a fixlet against
+damon-convert-__damon_va_three_regions-to-use-the-vma-iterator.patch
+
+
+--- a/mm/damon/vaddr-test.h~damon-convert-__damon_va_three_regions-to-use-the-vma-iterator-fix
++++ a/mm/damon/vaddr-test.h
+@@ -13,7 +13,6 @@
+ #define _DAMON_VADDR_TEST_H
  
-Another thing is that despite __attribute__(const), gcc sometimes doesn't
-recognize it as constant expression, and people have to workaround it.
-XTENSA is the example for 1st case, and for the 2nd:
+ #include <kunit/test.h>
+-#include "../../mm/internal.h"
+ 
+ static void __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
+ 			ssize_t nr_vmas)
+_
 
-arch/powerpc/mm/init-common.c:
-        unsigned long minalign = max(MAX_PGTABLE_INDEX_SIZE + 1,
-                                                     HUGEPD_SHIFT_MASK + 1);
-
-        /* It would be nice if this was a BUILD_BUG_ON(), but at the
-         * moment, gcc doesn't seem to recognize is_power_of_2
-         * as a constant expression, so so much for that. */
-        BUG_ON(!is_power_of_2(minalign));
-
-This convinced me that we need a simple macro that is decoupled with
-pow_2 semantics and can be used in another macros like BUILD_BUG_ON().
-
-Thanks,
-Yury

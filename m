@@ -2,132 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67795209DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954895209E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiEJASR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 20:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S232244AbiEJAU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 20:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiEJASP (ORCPT
+        with ESMTP id S229536AbiEJAUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 20:18:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF30A262714
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652141659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m/Cpn4znmGtPMU6JmBbESD0qm5X4CWqOjWVCzDX837U=;
-        b=P97i/8HX+9KZhcMn/E2CzV/ck8pW49p8vy/8HMul4Js+Rb/UYx0XvdgPZrc/Xur0Q7CSre
-        YmPxweqRBKa461E8szLLwzCezG9Abda0rQoPboeFH/npL5uLe4Elb6iIW0R8JJ1j4wHHtt
-        XTsbcxEXhO85maasg/XZlK3LlJDH2tE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-VeKmZPTnMrGw1e9T0pqueA-1; Mon, 09 May 2022 20:14:13 -0400
-X-MC-Unique: VeKmZPTnMrGw1e9T0pqueA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8FE9811E80;
-        Tue, 10 May 2022 00:14:12 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD07840D1B9A;
-        Tue, 10 May 2022 00:14:03 +0000 (UTC)
-Date:   Tue, 10 May 2022 08:13:58 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
-Message-ID: <YnmuRuO4yplt8p/p@T590>
-References: <00000000000029572505de968021@google.com>
- <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk>
+        Mon, 9 May 2022 20:20:23 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220D29C82
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 17:16:25 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso770382pjg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 17:16:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pAjE/FGNfgdcYo2dCSU6dkt2Z0irtgo2y1079975rZQ=;
+        b=A1KmbS0lGGlGxKT5sRTYEr//k90phAJXGi4XKVsjlftHnem42HFOpjp6OgCmyH2upk
+         G1BtJT+d+2RTyy2jSw1qDE5oCVEFwwohOP6mSkbMYY+X7P0KauU1kz3gvbBYfkQZQyRf
+         NZBInmNnxAJxBl/a7c4YxvujXWjHPQMX7KQSv03mPoPfGTBRjUt56p181IEtm7IYTanW
+         DdrVDPorXLazHLF30JyK22w9O9cSMJYRi5r48kycl/DpdP4yuUtOLGo1qf1cKIpHirdm
+         RnFBYxmVTxVZ2EYb9l/+OpatWiYY1YqU+9o582glhy0Uk3L1HbWsatk2XSw3rJzqrsd/
+         uItw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pAjE/FGNfgdcYo2dCSU6dkt2Z0irtgo2y1079975rZQ=;
+        b=TRWmSvX/DZx3bPY29Qe2GsjBL4NnKSXabfPZqmTjzHpsrgUm6UYb0/cF9JzH7KCuEl
+         M0UMOlpN+gYbqmsTajWbcQTD2GNtXAHGNcGFwb9r2SavvwOc4MlrW21LHY9zxRC8GtZx
+         stgeCmCMEfb1FHZflyH89t8ot8etexiPySsnFrfXcsMgKdd/iQ0PA5h8OQ35pbe536/d
+         0Y+0Xuu4uSvjdVriBjnb8S2f3W1d5CZskvPRX7agkbS6x72rglqs8r19jHwm4+YZgjzh
+         H+O6gW+h9UmEI6OxvmbbEqrlgk2+H4EBaNCqlQUNb5PeOKZcWbOqPkWp7p1CHTBaC4Xl
+         fM6A==
+X-Gm-Message-State: AOAM532LlxCsz4PQy0U0qKHKQ/5dS2yI7j/NT3RjtZV3/4Ulzg85MOYC
+        glqA2AXjeW7AMGnhQ3Qusz9RcSozHsY6ZEQNWwY=
+X-Google-Smtp-Source: ABdhPJwnORiA/LCdOWDLeRmTlrj3rKUFPlQNpHnR9B8rbxM58w2vhHJv3HLIlr1dNIMOSju9lDA+q8lH54yMOTGRO7E=
+X-Received: by 2002:a17:902:e851:b0:15e:93ac:41db with SMTP id
+ t17-20020a170902e85100b0015e93ac41dbmr18298641plg.26.1652141784795; Mon, 09
+ May 2022 17:16:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220427053220.719866-1-naoya.horiguchi@linux.dev>
+ <CAHbLzko3=bHrsWNGdb0QZijN9oPg3pchbC2F9=_6Td+2xDczhA@mail.gmail.com> <20220509071447.GA123646@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20220509071447.GA123646@hori.linux.bs1.fc.nec.co.jp>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 9 May 2022 17:16:12 -0700
+Message-ID: <CAHbLzkppuTdA4d6EA=cng9PA9zXEM+dXjEbMxkxn=szF4b-Z5g@mail.gmail.com>
+Subject: Re: ##freemail## Re: [PATCH v2] mm/hwpoison: use pr_err() instead of
+ dump_page() in get_any_page()
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 11:02:41AM -0600, Jens Axboe wrote:
-> On 5/9/22 10:14 AM, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    c5eb0a61238d Linux 5.18-rc6
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=112bf03ef00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=99938118dfd9e1b0741a
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12311571f00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177a2e86f00000
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com
-> > 
-> > ==================================================================
-> > BUG: KASAN: use-after-free in bio_poll+0x275/0x3c0 block/blk-core.c:942
-> > Read of size 4 at addr ffff8880751d92b4 by task syz-executor486/3607
-> > 
-> > CPU: 0 PID: 3607 Comm: syz-executor486 Not tainted 5.18.0-rc6-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
-> >  print_report mm/kasan/report.c:429 [inline]
-> >  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
-> >  bio_poll+0x275/0x3c0 block/blk-core.c:942
-> >  __iomap_dio_rw+0x10ee/0x1ae0 fs/iomap/direct-io.c:658
-> >  iomap_dio_rw+0x38/0x90 fs/iomap/direct-io.c:681
-> >  ext4_dio_write_iter fs/ext4/file.c:566 [inline]
-> >  ext4_file_write_iter+0xe4d/0x1510 fs/ext4/file.c:677
-> >  call_write_iter include/linux/fs.h:2050 [inline]
-> >  do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:726
-> >  do_iter_write+0x182/0x700 fs/read_write.c:852
-> >  vfs_writev+0x1aa/0x630 fs/read_write.c:925
-> >  do_pwritev+0x1b6/0x270 fs/read_write.c:1022
-> >  __do_sys_pwritev2 fs/read_write.c:1081 [inline]
-> >  __se_sys_pwritev2 fs/read_write.c:1072 [inline]
-> >  __x64_sys_pwritev2+0xeb/0x150 fs/read_write.c:1072
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f6846af7e69
-> 
-> Guys, should we just queue:
-> 
-> ommit 9650b453a3d4b1b8ed4ea8bcb9b40109608d1faf
-> Author: Ming Lei <ming.lei@redhat.com>
-> Date:   Wed Apr 20 22:31:10 2022 +0800
-> 
->     block: ignore RWF_HIPRI hint for sync dio
-> 
-> up for 5.18 and stable?
+On Mon, May 9, 2022 at 12:14 AM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3=E3=80=80=
+=E7=9B=B4=E4=B9=9F)
+<naoya.horiguchi@nec.com> wrote:
+>
+> On Thu, Apr 28, 2022 at 10:25:33AM -0700, Yang Shi wrote:
+> > On Tue, Apr 26, 2022 at 10:32 PM Naoya Horiguchi
+> > <naoya.horiguchi@linux.dev> wrote:
+> > >
+> > > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > >
+> > > The following VM_BUG_ON_FOLIO() is triggered when memory error event
+> > > happens on the (thp/folio) pages which are about to be freed:
+> > >
+> > >   [ 1160.232771] page:00000000b36a8a0f refcount:1 mapcount:0 mapping:=
+0000000000000000 index:0x1 pfn:0x16a000
+> > >   [ 1160.236916] page:00000000b36a8a0f refcount:0 mapcount:0 mapping:=
+0000000000000000 index:0x1 pfn:0x16a000
+> > >   [ 1160.240684] flags: 0x57ffffc0800000(hwpoison|node=3D1|zone=3D2|l=
+astcpupid=3D0x1fffff)
+> > >   [ 1160.243458] raw: 0057ffffc0800000 dead000000000100 dead000000000=
+122 0000000000000000
+> > >   [ 1160.246268] raw: 0000000000000001 0000000000000000 00000000fffff=
+fff 0000000000000000
+> > >   [ 1160.249197] page dumped because: VM_BUG_ON_FOLIO(!folio_test_lar=
+ge(folio))
+> > >   [ 1160.251815] ------------[ cut here ]------------
+> > >   [ 1160.253438] kernel BUG at include/linux/mm.h:788!
+> > >   [ 1160.256162] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> > >   [ 1160.258172] CPU: 2 PID: 115368 Comm: mceinj.sh Tainted: G       =
+     E     5.18.0-rc1-v5.18-rc1-220404-2353-005-g83111+ #3
+> > >   [ 1160.262049] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996=
+), BIOS 1.15.0-1.fc35 04/01/2014
+> > >   [ 1160.265103] RIP: 0010:dump_page.cold+0x27e/0x2bd
+> > >   [ 1160.266757] Code: fe ff ff 48 c7 c6 81 f1 5a 98 e9 4c fe ff ff 4=
+8 c7 c6 a1 95 59 98 e9 40 fe ff ff 48 c7 c6 50 bf 5a 98 48 89 ef e8 9d 04 6=
+d ff <0f> 0b 41 f7 c4 ff 0f 00 00 0f 85 9f fd ff ff 49 8b 04 24 a9 00 00
+> > >   [ 1160.273180] RSP: 0018:ffffaa2c4d59fd18 EFLAGS: 00010292
+> > >   [ 1160.274969] RAX: 000000000000003e RBX: 0000000000000001 RCX: 000=
+0000000000000
+> > >   [ 1160.277263] RDX: 0000000000000001 RSI: ffffffff985995a1 RDI: 000=
+00000ffffffff
+> > >   [ 1160.279571] RBP: ffffdc9c45a80000 R08: 0000000000000000 R09: 000=
+00000ffffdfff
+> > >   [ 1160.281794] R10: ffffaa2c4d59fb08 R11: ffffffff98940d08 R12: fff=
+fdc9c45a80000
+> > >   [ 1160.283920] R13: ffffffff985b6f94 R14: 0000000000000000 R15: fff=
+fdc9c45a80000
+> > >   [ 1160.286641] FS:  00007eff54ce1740(0000) GS:ffff99c67bd00000(0000=
+) knlGS:0000000000000000
+> > >   [ 1160.289498] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > >   [ 1160.291106] CR2: 00005628381a5f68 CR3: 0000000104712003 CR4: 000=
+0000000170ee0
+> > >   [ 1160.293031] Call Trace:
+> > >   [ 1160.293724]  <TASK>
+> > >   [ 1160.294334]  get_hwpoison_page+0x47d/0x570
+> > >   [ 1160.295474]  memory_failure+0x106/0xaa0
+> > >   [ 1160.296474]  ? security_capable+0x36/0x50
+> > >   [ 1160.297524]  hard_offline_page_store+0x43/0x80
+> > >   [ 1160.298684]  kernfs_fop_write_iter+0x11c/0x1b0
+> > >   [ 1160.299829]  new_sync_write+0xf9/0x160
+> > >   [ 1160.300810]  vfs_write+0x209/0x290
+> > >   [ 1160.301835]  ksys_write+0x4f/0xc0
+> > >   [ 1160.302718]  do_syscall_64+0x3b/0x90
+> > >   [ 1160.303664]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > >   [ 1160.304981] RIP: 0033:0x7eff54b018b7
+> > >
+> > > As shown in the RIP address, this VM_BUG_ON in folio_entire_mapcount(=
+) is
+> > > called from dump_page("hwpoison: unhandlable page") in get_any_page()=
+.
+> > > The below explains the mechanism of the race:
+> > >
+> > >   CPU 0                                       CPU 1
+> > >
+> > >     memory_failure
+> > >       get_hwpoison_page
+> > >         get_any_page
+> > >           dump_page
+> > >             compound =3D PageCompound
+> > >                                                 free_pages_prepare
+> > >                                                   page->flags &=3D ~P=
+AGE_FLAGS_CHECK_AT_PREP
+> > >             folio_entire_mapcount
+> > >               VM_BUG_ON_FOLIO(!folio_test_large(folio))
+> > >
+> > > So replace dump_page() with safer one, pr_err().
+> > >
+> > > Fixes: 74e8ee4708a8 ("mm: Turn head_compound_mapcount() into folio_en=
+tire_mapcount()")
+> > > Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > > ---
+> > > ChangeLog v1 -> v2:
+> > > - v1: https://lore.kernel.org/linux-mm/20220414235950.840409-1-naoya.=
+horiguchi@linux.dev/T/#u
+> > > - update caller side instead of changing dump_page().
+> > > ---
+> > >  mm/memory-failure.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > > index 35e11d6bea4a..0e1453514a2b 100644
+> > > --- a/mm/memory-failure.c
+> > > +++ b/mm/memory-failure.c
+> > > @@ -1270,7 +1270,7 @@ static int get_any_page(struct page *p, unsigne=
+d long flags)
+> > >         }
+> > >  out:
+> > >         if (ret =3D=3D -EIO)
+> > > -               dump_page(p, "hwpoison: unhandlable page");
+> > > +               pr_err("Memory failure: %#lx: unhandlable page.\n", p=
+age_to_pfn(p));
+> >
+> > I think dump_page() is helpful to tell the users more information
+> > about the unhandlable page, I'm ok with this fix for now, but should
+> > we consider having a memory failure safe dump_page() in the future?
+>
+> Yes, maybe that would be helpful not only in this unhandlable case, so so=
+unds
+> good to me.  But how do we handle folio's case?  And I'm not sure that th=
+e full
+> info in dump_page() is needed in a memory_failure-specific variant.
 
-I am fine with merging to 5.18 & stable.
+Off the top of my head, we just dump the raw information of the page
+and the head page if it belongs to a large folio at the moment? This
+may be just slightly different from dump_page().
 
-
-Thanks,
-Ming
-
+>
+> Thanks,
+> Naoya Horiguchi

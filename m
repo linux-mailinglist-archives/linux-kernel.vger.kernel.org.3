@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CA7521C01
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5E0521BE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344255AbiEJO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S1344210AbiEJOZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244286AbiEJNwy (ORCPT
+        with ESMTP id S244325AbiEJNqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:54 -0400
+        Tue, 10 May 2022 09:46:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A246C0F4;
-        Tue, 10 May 2022 06:38:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FED134E0E;
+        Tue, 10 May 2022 06:31:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91098B81DB2;
-        Tue, 10 May 2022 13:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1261C385C2;
-        Tue, 10 May 2022 13:37:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD25FB81DA0;
+        Tue, 10 May 2022 13:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 221E9C385C6;
+        Tue, 10 May 2022 13:31:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189861;
-        bh=jFjwf+37Eb9UmLxCksgbMDhGLmrjgVyM4X2iBi+3J54=;
+        s=korg; t=1652189473;
+        bh=u5m/vwoLt/OJvU6P75/Au/EcoodccxVtvbU6tqGmf6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hth/wUcKhjtpZu0NGSzFQkQOO0I3ca6nbpalDEMbHYXIA7ZDXLIg0t3QGEalsDC6w
-         YuVo6h6tMP8pxdFD/Tq8jNfcC8vxqBgkiWbt4raPsVQAk0kJ4TxasE2AZAyqkpupA2
-         fwc0dFBZSoMFJ+vck3WIOyLOsy2hl13Ki3l5C3k4=
+        b=FP1GLFAlOcO3Og2rZyIWvFl1gG7iUlIDvc3ZnLCDBGS94tF9pzXputbZxgis7b8TS
+         0+Ofl8lFfbtvf/Y+oNqcpIuOxUMHxyPHH+YTep6lk/iXnV7lgl6/yzYjOZaeuaO4lF
+         7ud3h7AVTdoL/Yau/TrCEC4SPHZm9MNp6LYnAcuI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH 5.17 053/140] gpio: visconti: Fix fwnode of GPIO IRQ
-Date:   Tue, 10 May 2022 15:07:23 +0200
-Message-Id: <20220510130743.137492573@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 062/135] net: dsa: mt7530: add missing of_node_put() in mt7530_setup()
+Date:   Tue, 10 May 2022 15:07:24 +0200
+Message-Id: <20220510130742.187030660@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 171865dab096da1ab980a32eeea5d1b88cd7bc50 upstream.
+commit a9e9b091a1c14ecd8bd9d3214a62142a1786fe30 upstream.
 
-The fwnode of GPIO IRQ must be set to its own fwnode, not the fwnode of the
-parent IRQ. Therefore, this sets own fwnode instead of the parent IRQ fwnode to
-GPIO IRQ's.
+Add of_node_put() if of_get_phy_mode() fails in mt7530_setup()
 
-Fixes: 2ad74f40dacc ("gpio: visconti: Add Toshiba Visconti GPIO support")
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Fixes: 0c65b2b90d13 ("net: of_get_phy_mode: Change API to solve int/unit warnings")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220428095317.538829-1-yangyingliang@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-visconti.c |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/net/dsa/mt7530.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpio/gpio-visconti.c
-+++ b/drivers/gpio/gpio-visconti.c
-@@ -130,7 +130,6 @@ static int visconti_gpio_probe(struct pl
- 	struct gpio_irq_chip *girq;
- 	struct irq_domain *parent;
- 	struct device_node *irq_parent;
--	struct fwnode_handle *fwnode;
- 	int ret;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-@@ -150,14 +149,12 @@ static int visconti_gpio_probe(struct pl
- 	}
- 
- 	parent = irq_find_host(irq_parent);
-+	of_node_put(irq_parent);
- 	if (!parent) {
- 		dev_err(dev, "No IRQ parent domain\n");
- 		return -ENODEV;
- 	}
- 
--	fwnode = of_node_to_fwnode(irq_parent);
--	of_node_put(irq_parent);
--
- 	ret = bgpio_init(&priv->gpio_chip, dev, 4,
- 			 priv->base + GPIO_IDATA,
- 			 priv->base + GPIO_OSET,
-@@ -180,7 +177,7 @@ static int visconti_gpio_probe(struct pl
- 
- 	girq = &priv->gpio_chip.irq;
- 	girq->chip = irq_chip;
--	girq->fwnode = fwnode;
-+	girq->fwnode = of_node_to_fwnode(dev->of_node);
- 	girq->parent_domain = parent;
- 	girq->child_to_parent_hwirq = visconti_gpio_child_to_parent_hwirq;
- 	girq->populate_parent_alloc_arg = visconti_gpio_populate_parent_fwspec;
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2216,6 +2216,7 @@ mt7530_setup(struct dsa_switch *ds)
+ 				ret = of_get_phy_mode(mac_np, &interface);
+ 				if (ret && ret != -ENODEV) {
+ 					of_node_put(mac_np);
++					of_node_put(phy_node);
+ 					return ret;
+ 				}
+ 				id = of_mdio_parse_addr(ds->dev, phy_node);
 
 

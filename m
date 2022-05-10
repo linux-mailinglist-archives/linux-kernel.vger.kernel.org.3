@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE90521B25
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BEE521BFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244380AbiEJOIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S1344586AbiEJO1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244783AbiEJNrA (ORCPT
+        with ESMTP id S244608AbiEJNz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:00 -0400
+        Tue, 10 May 2022 09:55:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA93718E1DF;
-        Tue, 10 May 2022 06:32:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7EB663FE;
+        Tue, 10 May 2022 06:38:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46B7AB81DAB;
-        Tue, 10 May 2022 13:32:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFDD6C385A6;
-        Tue, 10 May 2022 13:31:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC85FB81DC7;
+        Tue, 10 May 2022 13:38:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BFEC385A6;
+        Tue, 10 May 2022 13:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189520;
-        bh=eep/UWxZ1ZaW7xY+fv2HrHD4JEKoYXq7ZZ+B4VdYUIk=;
+        s=korg; t=1652189914;
+        bh=1g6coX2ecD6ja2I4HHiOaPhcem39u5y+T3mHAMQOf/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xMYP7D1X7Tj5y3rr6extBbmecKPdrdGnlFMu4fWiz0Fwhx4KsH2CMrFRuTKs9VpCg
-         sm3k0Gg5QamTBXTEFfyTxAJSrxAgfO3mukdPvWm6PPaRIx2BF0zQuTyrKUAOx/yhBQ
-         1BrVtJUanMa1TYmJET8A9cpfQTYzvaXgFaMxvUNw=
+        b=Q1iCz5Y0FgZKd/yj+yMb5uwjO2s1QEklzlmEz6MuJvCI/ydCF6feULgq8sq8eh5uS
+         tjPHZNve/z4N2sADs2kTFBCYfsSuzTW9IvJ7+ZAOUA6KeCTHS/wbre49Ir/Lr/mJhX
+         3OqAqM74aZMCm4si/SAQ1cZ3Bdr9Scjvx3IIvaZo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 076/135] bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
-Date:   Tue, 10 May 2022 15:07:38 +0200
-Message-Id: <20220510130742.591947350@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.17 069/140] net/mlx5: Fix matching on inner TTC
+Date:   Tue, 10 May 2022 15:07:39 +0200
+Message-Id: <20220510130743.592071899@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Somnath Kotur <somnath.kotur@broadcom.com>
+From: Mark Bloch <mbloch@nvidia.com>
 
-commit 13ba794397e45e52893cfc21d7a69cb5f341b407 upstream.
+commit a042d7f5bb68c47f6e0e546ca367d14e1e4b25ba upstream.
 
-bnxt_open() can fail in this code path, especially on a VF when
-it fails to reserve default rings:
+The cited commits didn't use proper matching on inner TTC
+as a result distribution of encapsulated packets wasn't symmetric
+between the physical ports.
 
-bnxt_open()
-  __bnxt_open_nic()
-    bnxt_clear_int_mode()
-    bnxt_init_dflt_ring_mode()
-
-RX rings would be set to 0 when we hit this error path.
-
-It is possible for a subsequent bnxt_open() call to potentially succeed
-with a code path like this:
-
-bnxt_open()
-  bnxt_hwrm_if_change()
-    bnxt_fw_init_one()
-      bnxt_fw_init_one_p3()
-        bnxt_set_dflt_rfs()
-          bnxt_rfs_capable()
-            bnxt_hwrm_reserve_rings()
-
-On older chips, RFS is capable if we can reserve the number of vnics that
-is equal to RX rings + 1.  But since RX rings is still set to 0 in this
-code path, we may mistakenly think that RFS is supported for 0 RX rings.
-
-Later, when the default RX rings are reserved and we try to enable
-RFS, it would fail and cause bnxt_open() to fail unnecessarily.
-
-We fix this in 2 places.  bnxt_rfs_capable() will always return false if
-RX rings is not yet set.  bnxt_init_dflt_ring_mode() will call
-bnxt_set_dflt_rfs() which will always clear the RFS flags if RFS is not
-supported.
-
-Fixes: 20d7d1c5c9b1 ("bnxt_en: reliably allocate IRQ table on reset to avoid crash")
-Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 4c71ce50d2fe ("net/mlx5: Support partial TTC rules")
+Fixes: 8e25a2bc6687 ("net/mlx5: Lag, add support to create TTC tables for LAG port selection")
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/lag/port_sel.c | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c   | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -10881,7 +10881,7 @@ static bool bnxt_rfs_capable(struct bnxt
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag/port_sel.c b/drivers/net/ethernet/mellanox/mlx5/core/lag/port_sel.c
+index a6592f9c3c05..5be322528279 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag/port_sel.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/port_sel.c
+@@ -505,7 +505,7 @@ static int mlx5_lag_create_inner_ttc_table(struct mlx5_lag *ldev)
+ 	struct ttc_params ttc_params = {};
  
- 	if (bp->flags & BNXT_FLAG_CHIP_P5)
- 		return bnxt_rfs_supported(bp);
--	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp))
-+	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp) || !bp->rx_nr_rings)
- 		return false;
+ 	mlx5_lag_set_inner_ttc_params(ldev, &ttc_params);
+-	port_sel->inner.ttc = mlx5_create_ttc_table(dev, &ttc_params);
++	port_sel->inner.ttc = mlx5_create_inner_ttc_table(dev, &ttc_params);
+ 	if (IS_ERR(port_sel->inner.ttc))
+ 		return PTR_ERR(port_sel->inner.ttc);
  
- 	vnics = 1 + bp->rx_nr_rings;
-@@ -13087,10 +13087,9 @@ static int bnxt_init_dflt_ring_mode(stru
- 		goto init_dflt_ring_err;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c
+index b63dec24747a..b78f2ba25c19 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c
+@@ -408,6 +408,8 @@ static int mlx5_generate_inner_ttc_table_rules(struct mlx5_core_dev *dev,
+ 	for (tt = 0; tt < MLX5_NUM_TT; tt++) {
+ 		struct mlx5_ttc_rule *rule = &rules[tt];
  
- 	bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
--	if (bnxt_rfs_supported(bp) && bnxt_rfs_capable(bp)) {
--		bp->flags |= BNXT_FLAG_RFS;
--		bp->dev->features |= NETIF_F_NTUPLE;
--	}
-+
-+	bnxt_set_dflt_rfs(bp);
-+
- init_dflt_ring_err:
- 	bnxt_ulp_irq_restart(bp, rc);
- 	return rc;
++		if (test_bit(tt, params->ignore_dests))
++			continue;
+ 		rule->rule = mlx5_generate_inner_ttc_rule(dev, ft,
+ 							  &params->dests[tt],
+ 							  ttc_rules[tt].etype,
+-- 
+2.36.1
+
 
 

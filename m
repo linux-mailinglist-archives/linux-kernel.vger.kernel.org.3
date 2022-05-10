@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9A6521B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FF1521C07
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245556AbiEJOKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S244244AbiEJO1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244981AbiEJNrK (ORCPT
+        with ESMTP id S245224AbiEJN5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:10 -0400
+        Tue, 10 May 2022 09:57:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2345C2380EF;
-        Tue, 10 May 2022 06:33:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625FF2CDEEE;
+        Tue, 10 May 2022 06:39:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B42DF6188A;
-        Tue, 10 May 2022 13:33:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4477C385A6;
-        Tue, 10 May 2022 13:33:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE792618A6;
+        Tue, 10 May 2022 13:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DF6C385A6;
+        Tue, 10 May 2022 13:38:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189592;
-        bh=Z0xWQbgeZcOMALo5oszoheDr4ixi8SXV4KCqIovGVEI=;
+        s=korg; t=1652189939;
+        bh=k0EV5QDhIv6NUYclbw0DwTvNWUIi+LTqKXOQFZpnxhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sjMDT3eLcDYhvvNoP83By5GqKE2dfrFxBLTgvr0qpYGLetqBcBGb5ngWFcGgKTEDJ
-         5afq7QnE541HCUAjbh6vZYpgzlHglDwNdNv4TJhI7iV3AjDlCZA6DE0QcS+PQPH9PO
-         5HGECirpnRsL9Oy2ukxVNOh9a9stkT8z0+jKQWgg=
+        b=uD6uBTJgdBtYIQPx1LPAOQaYzIOoljk5tvjIla71HMSJMEJq9DMCI9K84syN42h1l
+         UQoQdA/kxwmaviMWLZ6U/WA3src5IpYTRWuwSr7pRcOzTTV+395hrHVmgY/CLEAv18
+         NkvGlw1SAihk2d3rtUf7hMK5xydz2kGwahplRb70=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 083/135] drm/amdgpu: explicitly check for s0ix when evicting resources
-Date:   Tue, 10 May 2022 15:07:45 +0200
-Message-Id: <20220510130742.793338598@linuxfoundation.org>
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.17 076/140] selftests/seccomp: Dont call read() on TTY from background pgrp
+Date:   Tue, 10 May 2022 15:07:46 +0200
+Message-Id: <20220510130743.788485575@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Jann Horn <jannh@google.com>
 
-commit e53d9665ab003df0ece8f869fcd3c2bbbecf7190 upstream.
+commit 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7 upstream.
 
-This codepath should be running in both s0ix and s3, but only does
-currently because s3 and s0ix are both set in the s0ix case.
+Since commit 92d25637a3a4 ("kselftest: signal all child processes"), tests
+are executed in background process groups. This means that trying to read
+from stdin now throws SIGTTIN when stdin is a TTY, which breaks some
+seccomp selftests that try to use read(0, NULL, 0) as a dummy syscall.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Limonciello, Mario" <Mario.Limonciello@amd.com>
+The simplest way to fix that is probably to just use -1 instead of 0 as
+the dummy read()'s FD.
+
+Fixes: 92d25637a3a4 ("kselftest: signal all child processes")
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220319010011.1374622-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -3939,8 +3939,8 @@ void amdgpu_device_fini_sw(struct amdgpu
-  */
- static void amdgpu_device_evict_resources(struct amdgpu_device *adev)
- {
--	/* No need to evict vram on APUs for suspend to ram */
--	if (adev->in_s3 && (adev->flags & AMD_IS_APU))
-+	/* No need to evict vram on APUs for suspend to ram or s2idle */
-+	if ((adev->in_s3 || adev->in_s0ix) && (adev->flags & AMD_IS_APU))
- 		return;
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -955,7 +955,7 @@ TEST(ERRNO_valid)
+ 	ASSERT_EQ(0, ret);
  
- 	if (amdgpu_ttm_evict_resources(adev, TTM_PL_VRAM))
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(E2BIG, errno);
+ }
+ 
+@@ -974,7 +974,7 @@ TEST(ERRNO_zero)
+ 
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+ 	/* "errno" of 0 is ok. */
+-	EXPECT_EQ(0, read(0, NULL, 0));
++	EXPECT_EQ(0, read(-1, NULL, 0));
+ }
+ 
+ /*
+@@ -995,7 +995,7 @@ TEST(ERRNO_capped)
+ 	ASSERT_EQ(0, ret);
+ 
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(4095, errno);
+ }
+ 
+@@ -1026,7 +1026,7 @@ TEST(ERRNO_order)
+ 	ASSERT_EQ(0, ret);
+ 
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+-	EXPECT_EQ(-1, read(0, NULL, 0));
++	EXPECT_EQ(-1, read(-1, NULL, 0));
+ 	EXPECT_EQ(12, errno);
+ }
+ 
+@@ -2623,7 +2623,7 @@ void *tsync_sibling(void *data)
+ 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0);
+ 	if (!ret)
+ 		return (void *)SIBLING_EXIT_NEWPRIVS;
+-	read(0, NULL, 0);
++	read(-1, NULL, 0);
+ 	return (void *)SIBLING_EXIT_UNKILLED;
+ }
+ 
 
 

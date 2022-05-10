@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C03521935
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0C2521731
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243596AbiEJNok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S242754AbiEJNWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243562AbiEJNbY (ORCPT
+        with ESMTP id S242496AbiEJNTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:31:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E9F2CC13C;
-        Tue, 10 May 2022 06:21:53 -0700 (PDT)
+        Tue, 10 May 2022 09:19:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CED1632BB;
+        Tue, 10 May 2022 06:13:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F4661764;
-        Tue, 10 May 2022 13:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB79C385C6;
-        Tue, 10 May 2022 13:21:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEB79B81D0D;
+        Tue, 10 May 2022 13:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BEAC385C2;
+        Tue, 10 May 2022 13:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188911;
-        bh=r0qu1SHTTBix2UxhC42n8aLxidZuhHFHggYUCqVygQo=;
+        s=korg; t=1652188402;
+        bh=6e5cb8PZEn39YQelbfgGkF0/G87zXk7lkw+ex3L/OaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WSaTGmyVoLlIzgD20DKvp80dv7LTUJlThF7LIeZ3zranhcwn6EyMfLFa4zmI32M0C
-         6lSCIsI8odzOoxjPD1kBszdQ4HM3Eyo484V1mXGhXww2RDq9xOtjEevwN0xu0Z+XIQ
-         94BiPPAKZTZvdadR52S97apq98cluUKikluae014=
+        b=SfjKX7ousydiV5Jhvbg3JzxXIWOddY4+TBjzR2+6abMs/m+OCtYSGD6R3AOrm2+tu
+         4O/NmyhhV8+D6N4J8gMNR+sht5JUFwlEiPwziPY8K9Qje72eN2fvv8cR+P5BUByVOT
+         CYn1k4NojbyrGGWKFv/e60tw9SHHACKrHkNYys2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Pfaff <tpfaff@pcs.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.19 66/88] genirq: Synchronize interrupt thread startup
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Flavio Leitner <fbl@sysclose.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 61/66] net: igmp: respect RCU rules in ip_mc_source() and ip_mc_msfilter()
 Date:   Tue, 10 May 2022 15:07:51 +0200
-Message-Id: <20220510130735.655568199@linuxfoundation.org>
+Message-Id: <20220510130731.554960140@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,173 +56,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Pfaff <tpfaff@pcs.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 8707898e22fd665bc1d7b18b809be4b56ce25bdd upstream.
+commit dba5bdd57bea587ea4f0b79b03c71135f84a7e8b upstream.
 
-A kernel hang can be observed when running setserial in a loop on a kernel
-with force threaded interrupts. The sequence of events is:
+syzbot reported an UAF in ip_mc_sf_allow() [1]
 
-   setserial
-     open("/dev/ttyXXX")
-       request_irq()
-     do_stuff()
-      -> serial interrupt
-         -> wake(irq_thread)
-	      desc->threads_active++;
-     close()
-       free_irq()
-         kthread_stop(irq_thread)
-     synchronize_irq() <- hangs because desc->threads_active != 0
+Whenever RCU protected list replaces an object,
+the pointer to the new object needs to be updated
+_before_ the call to kfree_rcu() or call_rcu()
 
-The thread is created in request_irq() and woken up, but does not get on a
-CPU to reach the actual thread function, which would handle the pending
-wake-up. kthread_stop() sets the should stop condition which makes the
-thread immediately exit, which in turn leaves the stale threads_active
-count around.
+Because kfree_rcu(ptr, rcu) got support for NULL ptr
+only recently in commit 12edff045bc6 ("rcu: Make kfree_rcu()
+ignore NULL pointers"), I chose to use the conditional
+to make sure stable backports won't miss this detail.
 
-This problem was introduced with commit 519cc8652b3a, which addressed a
-interrupt sharing issue in the PCIe code.
+if (psl)
+    kfree_rcu(psl, rcu);
 
-Before that commit free_irq() invoked synchronize_irq(), which waits for
-the hard interrupt handler and also for associated threads to complete.
+net/ipv6/mcast.c has similar issues, addressed in a separate patch.
 
-To address the PCIe issue synchronize_irq() was replaced with
-__synchronize_hardirq(), which only waits for the hard interrupt handler to
-complete, but not for threaded handlers.
+[1]
+BUG: KASAN: use-after-free in ip_mc_sf_allow+0x6bb/0x6d0 net/ipv4/igmp.c:2655
+Read of size 4 at addr ffff88807d37b904 by task syz-executor.5/908
 
-This was done under the assumption, that the interrupt thread already
-reached the thread function and waits for a wake-up, which is guaranteed to
-be handled before acting on the stop condition. The problematic case, that
-the thread would not reach the thread function, was obviously overlooked.
+CPU: 0 PID: 908 Comm: syz-executor.5 Not tainted 5.18.0-rc4-syzkaller-00064-g8f4dd16603ce #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ ip_mc_sf_allow+0x6bb/0x6d0 net/ipv4/igmp.c:2655
+ raw_v4_input net/ipv4/raw.c:190 [inline]
+ raw_local_deliver+0x4d1/0xbe0 net/ipv4/raw.c:218
+ ip_protocol_deliver_rcu+0xcf/0xb30 net/ipv4/ip_input.c:193
+ ip_local_deliver_finish+0x2ee/0x4c0 net/ipv4/ip_input.c:233
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ ip_local_deliver+0x1b3/0x200 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:461 [inline]
+ ip_rcv_finish+0x1cb/0x2f0 net/ipv4/ip_input.c:437
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ ip_rcv+0xaa/0xd0 net/ipv4/ip_input.c:556
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
+ netif_receive_skb_internal net/core/dev.c:5605 [inline]
+ netif_receive_skb+0x13e/0x8e0 net/core/dev.c:5664
+ tun_rx_batched.isra.0+0x460/0x720 drivers/net/tun.c:1534
+ tun_get_user+0x28b7/0x3e30 drivers/net/tun.c:1985
+ tun_chr_write_iter+0xdb/0x200 drivers/net/tun.c:2015
+ call_write_iter include/linux/fs.h:2050 [inline]
+ new_sync_write+0x38a/0x560 fs/read_write.c:504
+ vfs_write+0x7c0/0xac0 fs/read_write.c:591
+ ksys_write+0x127/0x250 fs/read_write.c:644
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3f12c3bbff
+Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
+RSP: 002b:00007f3f13ea9130 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f3f12d9bf60 RCX: 00007f3f12c3bbff
+RDX: 0000000000000036 RSI: 0000000020002ac0 RDI: 00000000000000c8
+RBP: 00007f3f12ce308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000036 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007fffb68dd79f R14: 00007f3f13ea9300 R15: 0000000000022000
+ </TASK>
 
-Make sure that the interrupt thread is really started and reaches
-thread_fn() before returning from __setup_irq().
+Allocated by task 908:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:234 [inline]
+ __do_kmalloc mm/slab.c:3710 [inline]
+ __kmalloc+0x209/0x4d0 mm/slab.c:3719
+ kmalloc include/linux/slab.h:586 [inline]
+ sock_kmalloc net/core/sock.c:2501 [inline]
+ sock_kmalloc+0xb5/0x100 net/core/sock.c:2492
+ ip_mc_source+0xba2/0x1100 net/ipv4/igmp.c:2392
+ do_ip_setsockopt net/ipv4/ip_sockglue.c:1296 [inline]
+ ip_setsockopt+0x2312/0x3ab0 net/ipv4/ip_sockglue.c:1432
+ raw_setsockopt+0x274/0x2c0 net/ipv4/raw.c:861
+ __sys_setsockopt+0x2db/0x6a0 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-This utilizes the existing wait queue in the interrupt descriptor. The
-wait queue is unused for non-shared interrupts. For shared interrupts the
-usage might cause a spurious wake-up of a waiter in synchronize_irq() or the
-completion of a threaded handler might cause a spurious wake-up of the
-waiter for the ready flag. Both are harmless and have no functional impact.
+Freed by task 753:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x13d/0x180 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ __cache_free mm/slab.c:3439 [inline]
+ kmem_cache_free_bulk+0x69/0x460 mm/slab.c:3774
+ kfree_bulk include/linux/slab.h:437 [inline]
+ kfree_rcu_work+0x51c/0xa10 kernel/rcu/tree.c:3318
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
 
-[ tglx: Amended changelog ]
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
+ kvfree_call_rcu+0x74/0x990 kernel/rcu/tree.c:3595
+ ip_mc_msfilter+0x712/0xb60 net/ipv4/igmp.c:2510
+ do_ip_setsockopt net/ipv4/ip_sockglue.c:1257 [inline]
+ ip_setsockopt+0x32e1/0x3ab0 net/ipv4/ip_sockglue.c:1432
+ raw_setsockopt+0x274/0x2c0 net/ipv4/raw.c:861
+ __sys_setsockopt+0x2db/0x6a0 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
-Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com
+Second to last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
+ call_rcu+0x99/0x790 kernel/rcu/tree.c:3074
+ mpls_dev_notify+0x552/0x8a0 net/mpls/af_mpls.c:1656
+ notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
+ call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1938
+ call_netdevice_notifiers_extack net/core/dev.c:1976 [inline]
+ call_netdevice_notifiers net/core/dev.c:1990 [inline]
+ unregister_netdevice_many+0x92e/0x1890 net/core/dev.c:10751
+ default_device_exit_batch+0x449/0x590 net/core/dev.c:11245
+ ops_exit_list+0x125/0x170 net/core/net_namespace.c:167
+ cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+
+The buggy address belongs to the object at ffff88807d37b900
+ which belongs to the cache kmalloc-64 of size 64
+The buggy address is located 4 bytes inside of
+ 64-byte region [ffff88807d37b900, ffff88807d37b940)
+
+The buggy address belongs to the physical page:
+page:ffffea0001f4dec0 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88807d37b180 pfn:0x7d37b
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff888010c41340 ffffea0001c795c8 ffff888010c40200
+raw: ffff88807d37b180 ffff88807d37b000 000000010000001f 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x342040(__GFP_IO|__GFP_NOWARN|__GFP_COMP|__GFP_HARDWALL|__GFP_THISNODE), pid 2963, tgid 2963 (udevd), ts 139732238007, free_ts 139730893262
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+ __alloc_pages_node include/linux/gfp.h:587 [inline]
+ kmem_getpages mm/slab.c:1378 [inline]
+ cache_grow_begin+0x75/0x350 mm/slab.c:2584
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+ ____cache_alloc mm/slab.c:3040 [inline]
+ ____cache_alloc mm/slab.c:3023 [inline]
+ __do_cache_alloc mm/slab.c:3267 [inline]
+ slab_alloc mm/slab.c:3309 [inline]
+ __do_kmalloc mm/slab.c:3708 [inline]
+ __kmalloc+0x3b3/0x4d0 mm/slab.c:3719
+ kmalloc include/linux/slab.h:586 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
+ tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
+ tomoyo_encode+0x28/0x50 security/tomoyo/realpath.c:80
+ tomoyo_realpath_from_path+0x186/0x620 security/tomoyo/realpath.c:288
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
+ security_inode_getattr+0xcf/0x140 security/security.c:1350
+ vfs_getattr fs/stat.c:157 [inline]
+ vfs_statx+0x16a/0x390 fs/stat.c:232
+ vfs_fstatat+0x8c/0xb0 fs/stat.c:255
+ __do_sys_newfstatat+0x91/0x110 fs/stat.c:425
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
+ __vunmap+0x85d/0xd30 mm/vmalloc.c:2667
+ __vfree+0x3c/0xd0 mm/vmalloc.c:2715
+ vfree+0x5a/0x90 mm/vmalloc.c:2746
+ __do_replace+0x16b/0x890 net/ipv6/netfilter/ip6_tables.c:1117
+ do_replace net/ipv6/netfilter/ip6_tables.c:1157 [inline]
+ do_ip6t_set_ctl+0x90d/0xb90 net/ipv6/netfilter/ip6_tables.c:1639
+ nf_setsockopt+0x83/0xe0 net/netfilter/nf_sockopt.c:101
+ ipv6_setsockopt+0x122/0x180 net/ipv6/ipv6_sockglue.c:1026
+ tcp_setsockopt+0x136/0x2520 net/ipv4/tcp.c:3696
+ __sys_setsockopt+0x2db/0x6a0 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff88807d37b800: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+ ffff88807d37b880: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+>ffff88807d37b900: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+                   ^
+ ffff88807d37b980: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff88807d37ba00: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+
+Fixes: c85bb41e9318 ("igmp: fix ip_mc_sf_allow race [v5]")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Cc: Flavio Leitner <fbl@sysclose.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/irq/internals.h |    2 ++
- kernel/irq/irqdesc.c   |    2 ++
- kernel/irq/manage.c    |   39 +++++++++++++++++++++++++++++----------
- 3 files changed, 33 insertions(+), 10 deletions(-)
+ net/ipv4/igmp.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
-  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
-  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
-  * IRQTF_FORCED_THREAD  - irq action is force threaded
-+ * IRQTF_READY     - signals that irq thread is ready
-  */
- enum {
- 	IRQTF_RUNTHREAD,
- 	IRQTF_WARNED,
- 	IRQTF_AFFINITY,
- 	IRQTF_FORCED_THREAD,
-+	IRQTF_READY,
- };
- 
- /*
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -404,6 +404,7 @@ static struct irq_desc *alloc_desc(int i
- 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
- 	mutex_init(&desc->request_mutex);
- 	init_rcu_head(&desc->rcu);
-+	init_waitqueue_head(&desc->wait_for_threads);
- 
- 	desc_set_defaults(irq, desc, node, affinity, owner);
- 	irqd_set(&desc->irq_data, flags);
-@@ -568,6 +569,7 @@ int __init early_irq_init(void)
- 		raw_spin_lock_init(&desc[i].lock);
- 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
- 		mutex_init(&desc[i].request_mutex);
-+		init_waitqueue_head(&desc[i].wait_for_threads);
- 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+--- a/net/ipv4/igmp.c
++++ b/net/ipv4/igmp.c
+@@ -2360,9 +2360,10 @@ int ip_mc_source(int add, int omode, str
+ 				newpsl->sl_addr[i] = psl->sl_addr[i];
+ 			/* decrease mem now to avoid the memleak warning */
+ 			atomic_sub(IP_SFLSIZE(psl->sl_max), &sk->sk_omem_alloc);
+-			kfree_rcu(psl, rcu);
+ 		}
+ 		rcu_assign_pointer(pmc->sflist, newpsl);
++		if (psl)
++			kfree_rcu(psl, rcu);
+ 		psl = newpsl;
  	}
- 	return arch_early_irq_init();
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -1064,6 +1064,31 @@ static void irq_wake_secondary(struct ir
- }
- 
- /*
-+ * Internal function to notify that a interrupt thread is ready.
-+ */
-+static void irq_thread_set_ready(struct irq_desc *desc,
-+				 struct irqaction *action)
-+{
-+	set_bit(IRQTF_READY, &action->thread_flags);
-+	wake_up(&desc->wait_for_threads);
-+}
-+
-+/*
-+ * Internal function to wake up a interrupt thread and wait until it is
-+ * ready.
-+ */
-+static void wake_up_and_wait_for_irq_thread_ready(struct irq_desc *desc,
-+						  struct irqaction *action)
-+{
-+	if (!action || !action->thread)
-+		return;
-+
-+	wake_up_process(action->thread);
-+	wait_event(desc->wait_for_threads,
-+		   test_bit(IRQTF_READY, &action->thread_flags));
-+}
-+
-+/*
-  * Interrupt handler thread
-  */
- static int irq_thread(void *data)
-@@ -1074,6 +1099,8 @@ static int irq_thread(void *data)
- 	irqreturn_t (*handler_fn)(struct irq_desc *desc,
- 			struct irqaction *action);
- 
-+	irq_thread_set_ready(desc, action);
-+
- 	if (force_irqthreads && test_bit(IRQTF_FORCED_THREAD,
- 					&action->thread_flags))
- 		handler_fn = irq_forced_thread_fn;
-@@ -1462,8 +1489,6 @@ __setup_irq(unsigned int irq, struct irq
- 	}
- 
- 	if (!shared) {
--		init_waitqueue_head(&desc->wait_for_threads);
--
- 		/* Setup the type (level, edge polarity) if configured: */
- 		if (new->flags & IRQF_TRIGGER_MASK) {
- 			ret = __irq_set_trigger(desc,
-@@ -1553,14 +1578,8 @@ __setup_irq(unsigned int irq, struct irq
- 
- 	irq_setup_timings(desc, new);
- 
--	/*
--	 * Strictly no need to wake it up, but hung_task complains
--	 * when no hard interrupt wakes the thread up.
--	 */
--	if (new->thread)
--		wake_up_process(new->thread);
--	if (new->secondary)
--		wake_up_process(new->secondary->thread);
-+	wake_up_and_wait_for_irq_thread_ready(desc, new);
-+	wake_up_and_wait_for_irq_thread_ready(desc, new->secondary);
- 
- 	register_irq_proc(irq, desc);
- 	new->dir = NULL;
+ 	rv = 1;	/* > 0 for insert logic below if sl_count is 0 */
+@@ -2460,11 +2461,13 @@ int ip_mc_msfilter(struct sock *sk, stru
+ 			psl->sl_count, psl->sl_addr, 0);
+ 		/* decrease mem now to avoid the memleak warning */
+ 		atomic_sub(IP_SFLSIZE(psl->sl_max), &sk->sk_omem_alloc);
+-		kfree_rcu(psl, rcu);
+-	} else
++	} else {
+ 		(void) ip_mc_del_src(in_dev, &msf->imsf_multiaddr, pmc->sfmode,
+ 			0, NULL, 0);
++	}
+ 	rcu_assign_pointer(pmc->sflist, newpsl);
++	if (psl)
++		kfree_rcu(psl, rcu);
+ 	pmc->sfmode = msf->imsf_fmode;
+ 	err = 0;
+ done:
 
 

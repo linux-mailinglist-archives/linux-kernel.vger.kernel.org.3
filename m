@@ -2,124 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37377522299
+	by mail.lfdr.de (Postfix) with ESMTP id 82AFF52229A
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348110AbiEJRbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S1348189AbiEJRbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348358AbiEJRbA (ORCPT
+        with ESMTP id S1348125AbiEJRb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:31:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738C14A3CA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:26:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9FF16192A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 17:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F361C385C2;
-        Tue, 10 May 2022 17:26:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652203617;
-        bh=MH7Zsi8yFAeRcDHjpDleZQKFS4ZPgItbU4fbMKDx9y8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvZtUsRa1l6vIkNhFWA9kpvEG0xAQoWl5Ltu9uZSSR4TwOVjk9sGK54Mqo1Ni5G0T
-         HyyZXrAawFoE8oXBV52TJWyPc9C7CXe06eR+9aUkhFcRNTOfPOzSsOxpm0CKkwWrhr
-         pliQIVYxKdozyT+Imir5m9C4bczmQQnZskOuKcv/so4zhta0NS9GAyHxbKNXzgr9uX
-         symQC3si9rNKNsb10D77sOVu/KXzssoA07oJkErmBEz4Nc7I4psw3Elg6z42lEDQB6
-         idhrSkMn2vthrFWfk2R7ze0MN6KGuYDpxyKxX9YApG+qA8C6T3oG5YzsZfqtRCeLpG
-         peEKcoU7/aSdA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 96D00400B1; Tue, 10 May 2022 14:26:54 -0300 (-03)
-Date:   Tue, 10 May 2022 14:26:54 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 08/23] libperf evlist: Add evsel as a parameter to
- ->idx()
-Message-ID: <YnqgXgcTRw4CpghV@kernel.org>
-References: <20220506122601.367589-1-adrian.hunter@intel.com>
- <20220506122601.367589-9-adrian.hunter@intel.com>
+        Tue, 10 May 2022 13:31:26 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09951ADA7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id p18so20827062edr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
+        b=l4OjCZhdF+uEbp7Nc5W8GzH4w1orFwvhDBIJnO+/nYkVEJkhGx11/s5f9/qz/B84+o
+         lxowYN95PdzNUl8RQvisra6uT+XW3IZdhiN+iey4DZgCK7BU+USuwe72eEtbCdIihVkk
+         AvwQWyV/bgFjypdruN3oD4Xi9q8Quwc+3ucw6xXxnXoHt93MdHSZlQWnm0f577YpU50J
+         9GwBTnVC/kPmnSxOTaInURBfI9PRLKPQZrpt7eUQgBZNEXil3ZXaecz2VpIkSR6KrtWE
+         j7szHqt8jianLsWTCWEQKRbfi0RDljYgkqIKVnq9JbBCrskrLJcAJz95KWQkIgpQ53fO
+         9lXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
+        b=otWm2PROLJEzE+XwGrlX51Mo01w9phuW905RCSfZYlgYG/bg3lLeFW64eu/lWOzq18
+         iu3uM2KEUD99kVgmoEfK9WGx+skQWDOuDL/HkaQRhA4yHxtMy3goM6UERhAddqHi5SzX
+         tNh78yZJ8/aDe8lHIAzLNwo4tnh+fIzJYPFYMzXyKFaCVlcJgCJPHbwZwXVe5vx9hUyF
+         JoxwqOR3pjRxFSefqEmHrC3xXOkUkRkYbIC2bHY+WGacNXaw8Ro/z30YCpzSxOUuOPR+
+         /9Yy93PnqSuLJkh8qwGQNjhoIQO/3QCBZVH7H/SmA7IXKLlBW6Csp+Qz/0xhRTsoRC4p
+         aMbw==
+X-Gm-Message-State: AOAM531EQyZP137RaYcwdEPSyVH4b/ttPLAtdBGNq9Hfl24vimQ7y9c7
+        VeIg2t/ZzD6LqzYTKwfncg3dRva8sBz99HSObeVIMA==
+X-Google-Smtp-Source: ABdhPJx2kSgAU2XY/27rj6V2tZzvTpxBTH9s2dEI4WHLt7Xvikp7+Mq8td5ekP+J6cRnKA+sx1pJ5K2Mc8vf9imokWg=
+X-Received: by 2002:a05:6402:3590:b0:427:ba05:6f19 with SMTP id
+ y16-20020a056402359000b00427ba056f19mr24886754edc.334.1652203643134; Tue, 10
+ May 2022 10:27:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506122601.367589-9-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220509204909.2464496-1-dlatypov@google.com> <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
+In-Reply-To: <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 10 May 2022 10:27:12 -0700
+Message-ID: <CAGS_qxr+MOnWgz3B7+J12-Tj3VGERVRqrYg4uF0_FkBxa2hRdQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: misc cleanups
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 06, 2022 at 03:25:46PM +0300, Adrian Hunter escreveu:
-> Add evsel as a parameter to ->idx() in preparation for correctly
-> determining whether an auxtrace mmap is needed.
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Mon, May 9, 2022 at 11:22 PM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, May 10, 2022 at 4:49 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > This primarily comes from running pylint over kunit tool code and
+> > ignoring some warnings we don't care about.
+> > If we ever got a fully clean setup, we could add this to run_checks.py,
+> > but we're not there yet.
+> >
+> > Fix things like
+> > * Drop unused imports
+> > * check `is None`, not `== None` (see PEP 8)
+> > * remove redundant parens around returns
+> > * remove redundant `else` / convert `elif` to `if` where appropriate
+>
+> Personally, I find the explicit 'elif' much more readable in most of
+> these cases, but if we're annoying a linter, I guess we should change
+> them...
 
-Thanks, applied.
+Same, some of them felt a tad more readable, but using `if` is a bit
+more explicit about the actual control flow.
+For short branches, like most of the ones here, they don't make too
+much of a difference, but for longer blocks of code, this can help.
 
-- Arnaldo
+E.g. if one sees
+  elif check2():
+     do_thing2()
+one might think they can tack on a
+  do_cleanup()
+and have it run for all branches, if they're not careful.
 
-> ---
->  tools/lib/perf/evlist.c                  | 2 +-
->  tools/lib/perf/include/internal/evlist.h | 3 ++-
->  tools/perf/util/evlist.c                 | 1 +
->  3 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 4fce417432aa..ed66f2e38464 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -479,7 +479,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->  			refcount_set(&map->refcnt, 2);
->  
->  			if (ops->idx)
-> -				ops->idx(evlist, mp, idx);
-> +				ops->idx(evlist, evsel, mp, idx);
->  
->  			if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
->  				return -1;
-> diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
-> index 0d5c830431a7..6f89aec3e608 100644
-> --- a/tools/lib/perf/include/internal/evlist.h
-> +++ b/tools/lib/perf/include/internal/evlist.h
-> @@ -38,7 +38,8 @@ struct perf_evlist {
->  };
->  
->  typedef void
-> -(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_mmap_param*, int);
-> +(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_evsel*,
-> +			      struct perf_mmap_param*, int);
->  typedef struct perf_mmap*
->  (*perf_evlist_mmap__cb_get_t)(struct perf_evlist*, bool, int);
->  typedef int
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 09a1d3400fd9..7ae56b062f44 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -747,6 +747,7 @@ static struct mmap *evlist__alloc_mmap(struct evlist *evlist,
->  
->  static void
->  perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
-> +			 struct perf_evsel *_evsel __maybe_unused,
->  			 struct perf_mmap_param *_mp,
->  			 int idx)
->  {
-> -- 
-> 2.25.1
+>
+> > * rename make_arch_qemuconfig() param to base_kunitconfig (this is the
+> >   name used in the subclass, and it's a better one)
+> > * kunit_tool_test: check the exit code for SystemExit (could be 0)
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> All of these changes seem correct to me, even if I'm not sure I'd
+> bother with most of them if they weren't causing pylint to show
+> errors.
+>
+> Given that apparently it does, though, I'm okay with it going through.
+> (I'll just grumble quietly in my corner. :-))
 
--- 
+To be fair, we could ignore more of these warnings.
+If we ever try to get the code clean wrt linter warnings, we'd already
+need to tweak the settings.
 
-- Arnaldo
+But I think I've taken care of most of the reasonable warnings in this patch.

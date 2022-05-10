@@ -2,133 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F7452147D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00BB521479
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241419AbiEJMBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S241397AbiEJMBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241386AbiEJMB1 (ORCPT
+        with ESMTP id S241379AbiEJMB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 08:01:27 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B571BD712
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:57:25 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id x88so4129741pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:57:25 -0700 (PDT)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449775418B;
+        Tue, 10 May 2022 04:57:24 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d17so16564763plg.0;
+        Tue, 10 May 2022 04:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7BPZlTHByJ08KrdS7jJrTlTcZYxY/HRw1sFuvcsMJtw=;
-        b=UWWC5Jv7k0umTf2srlPlhKqOfgbSx2z3RAvdCLw1KpRk70G1E1NwqiERUB5vm6Nub0
-         IvGhBPQr6FLjS9oai5za6N6rr3X7UHR1/ad2Z/wzGonTf0Bw7Q+xjBs4oNd3Z35HpVFW
-         QKJHRxUaJl8Gj6S4WXsHHZIRRcSRLbbjZtcyXNbOcg2dyL2vI90PXu0hWLEItjoZt0hd
-         FJv+uFSCA7ontfeayjE1CXX6tu+/p1LvcPIM+w3A/Clnz7dd6JoWiRKTWrTAJMH4YNhZ
-         oGkB/Rqs9Vy1hsd6tQFnk9jdxgYoKfte3Sd1xt9Z1OVudrKzT7+2iedhF6aWyW6NkrTU
-         RuhQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=shkBQ6u+7n2fObSlWwQHgCMPATV4g6HS36NExz20L0w=;
+        b=PQRwBWTzYkvG65psGWy3kZMKe/EyYclggxnRLqkt/6n/QbLN+5e7Ft2ksdjrq+WPw/
+         yMV4PtGil3G3L4rqfPj32Gj5C/A1G/NauIGQgxgWADiA+ZrrZYb1iSOycyhu+5SgPDXg
+         Wi8d9/STee5ANfbUieBNxr5wEOVWtLTUC39cPxevmgTxp0Ncn/tBYNDkQd06pWEsdabn
+         EK8colE11fIR8HNmwQ99ruhtUq/6mdXNOIcjL0zbaT7kQ6LP3Uuptw8b4vIRG8N9psV+
+         VctK7OmycZVvHnuoOuWTHP7L2UY6bC0+M7BEQpfuVfOXHlVvgLbPebmKiD9L3x2iLk+q
+         9zmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7BPZlTHByJ08KrdS7jJrTlTcZYxY/HRw1sFuvcsMJtw=;
-        b=fo4Wt33F4oXFdweRoQB7STJii2H8r+zXirUg8YFcB2e5kCNXCvpiG5NdlKX3oXPMqN
-         tNvJt8WrzXACAtmWzOrSlwNL687OHXYu3dIGUA1DYsFXpmB/oVcbaLZGIMA4d6qSZ/1S
-         MKt1y2G4It+09w+5R8nfdSL0iHlgHoc6/zIyZ/jyM8CEtaj9sfW6LGwjfDMh/Zfm+J//
-         9l1RlD0e45cbmca6S+Xb6P4yPFJ18YiLcAgDyFwUiiv5YSIiNdY8plYMgrtZF6OsthtY
-         sN1jfey69JbKEW2fo1lrVivqBL0WLsX0AGpP5V12kTC8lo87fgkC6Cy7FvbIFkZLc2QT
-         pqtA==
-X-Gm-Message-State: AOAM531wkS//Sc7tmCz+HqzYcskWfgPyZcJWh3BkismaBpyHWO1ys+n6
-        CO8WbYkzzulhST0h963p/A8=
-X-Google-Smtp-Source: ABdhPJzK1VkiphXc+HoTD+GpWQ0/A8btsdOK09KMv+Sxa9B1hdkP6x/ieyK4QCaW4Hm5lBorBuKrXQ==
-X-Received: by 2002:a17:90b:4b83:b0:1dc:5073:b704 with SMTP id lr3-20020a17090b4b8300b001dc5073b704mr23201301pjb.94.1652183844892;
-        Tue, 10 May 2022 04:57:24 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id bd36-20020a056a0027a400b0050dc76281b1sm10261215pfb.139.2022.05.10.04.57.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=shkBQ6u+7n2fObSlWwQHgCMPATV4g6HS36NExz20L0w=;
+        b=32JrbQHOLKC6LABoAFOq99jH3T6zeXIg3g5MSJEZPrQ1sQyxk2bIVyVBZtKyUcQz6/
+         kJraKWwoL9jZwklMytcPQWlWlIiH+rfIZXNIyii81dqAYDS1p6XLTCaDY/PNa+AcwCc2
+         KT/7wqy38MEI7/rQZUaXaYLCGrllU/F5N6Yxs6pnYN8TUpSruQCwAtm4d2rjgnbaQ7OO
+         1fhW/CwCrYze0q9posQf1b4WUeypqnew57/WOr01HBfH3APnWXki5u5feXvjg2nzBuJ0
+         C7V8RVXgQw0noFm2VXqCFGYA13iyEnl+2+lieNxACx/XMRcksPTKSbGI92Bs7i0aZv1b
+         wLjA==
+X-Gm-Message-State: AOAM530s4cq0+ehGKThTYMWGrNwYwv94ZHVK4xZuydB+SRqumDNZ9pbt
+        gvTVFNIxGueDnNO5g5LFU70=
+X-Google-Smtp-Source: ABdhPJxE0E0NpdKRSDOPYn/tNURiZIemQGnJ9NLdwCebVEomK7N4OcuWGxqwJ8+az3vdtwf4KQEEww==
+X-Received: by 2002:a17:90b:3a83:b0:1dc:b7d4:8395 with SMTP id om3-20020a17090b3a8300b001dcb7d48395mr22931698pjb.173.1652183843744;
+        Tue, 10 May 2022 04:57:23 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.81])
+        by smtp.gmail.com with ESMTPSA id m21-20020a62a215000000b0050dc7628194sm10460463pff.110.2022.05.10.04.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:57:24 -0700 (PDT)
-Date:   Tue, 10 May 2022 20:57:16 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Tue, 10 May 2022 04:57:23 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>, sandipan.das@amd.com,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mm/cpa: set PAGE_KERNEL in __set_pages_p()
-Message-ID: <YnpTHMvOO/pLJQ+l@hyeyoo>
-References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
- <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
+Subject: [PATCH 1/3] KVM: x86/pmu: Add fast-path check for per-vm vPMU disablility
+Date:   Tue, 10 May 2022 19:57:16 +0800
+Message-Id: <20220510115718.93335-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 11:06:22AM -0500, Tom Lendacky wrote:
-> On 5/6/22 00:19, Hyeonggon Yoo wrote:
-> > __set_pages_np() not only clears _PAGE_PRESENT and _PAGE_RW, but also
-> > clears _PAGE_GLOBAL to avoid confusing _PAGE_GLOBAL as _PAGE_PROTNONE
-> > when the PTE is not present.
-> > 
-> > Common usage for __set_pages_p() is to call it after __set_pages_np().
-> > Therefore calling __set_pages_p() after __set_pages_np() clears
-> > _PAGE_GLOBAL, making it unable to globally shared in TLB.
-> > 
-> > As they are called by set_direct_map_{invalid,default}_noflush(),
-> > pages in direct map cannot be globally shared in TLB after being used by
-> > vmalloc, secretmem, and hibernation.
-> > 
-> > So set PAGE_KERNEL isntead of __pgprot(_PAGE_PRESENT | _PAGE_RW) in
-> > __set_pages_p().
-> > 
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > ---
-> >   arch/x86/mm/pat/set_memory.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> > index abf5ed76e4b7..fcb6147c4cd4 100644
-> > --- a/arch/x86/mm/pat/set_memory.c
-> > +++ b/arch/x86/mm/pat/set_memory.c
-> > @@ -2177,7 +2177,7 @@ static int __set_pages_p(struct page *page, int numpages)
-> >   	struct cpa_data cpa = { .vaddr = &tempaddr,
-> >   				.pgd = NULL,
-> >   				.numpages = numpages,
-> > -				.mask_set = __pgprot(_PAGE_PRESENT | _PAGE_RW),
-> > +				.mask_set = PAGE_KERNEL,
-> 
-> With SME/SEV, this will also (unintentionally) set the encryption bit, so I
-> don't think this is correct.
->
+From: Like Xu <likexu@tencent.com>
 
-Thank you for catching this.
-It seems PAGE_KERNEL was too much for  __set_pages_p().
+Since vcpu->kvm->arch.enable_pmu is introduced in a generic way,
+it makes more sense to move the relevant checks to generic code rather
+than scattering usages around, thus saving cpu cycles from static_call()
+when vPMU is disabled.
 
-I think __pgprot_mask(_PAGE_KERNEL | _PAGE_RW | _PAGE_GLOBAL) would be correct.
-Thoughts?
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/pmu.c           | 6 ++++++
+ arch/x86/kvm/svm/pmu.c       | 3 ---
+ arch/x86/kvm/vmx/pmu_intel.c | 2 +-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-> Thanks,
-> Tom
-> 
-> >   				.mask_clr = __pgprot(0),
-> >   				.flags = 0};
-
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 618f529f1c4d..522498945a4a 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -415,6 +415,9 @@ void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
+ 
+ bool kvm_pmu_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+ {
++	if (!vcpu->kvm->arch.enable_pmu)
++		return false;
++
+ 	return static_call(kvm_x86_pmu_msr_idx_to_pmc)(vcpu, msr) ||
+ 		static_call(kvm_x86_pmu_is_valid_msr)(vcpu, msr);
+ }
+@@ -445,6 +448,9 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+  */
+ void kvm_pmu_refresh(struct kvm_vcpu *vcpu)
+ {
++	if (!vcpu->kvm->arch.enable_pmu)
++		return;
++
+ 	static_call(kvm_x86_pmu_refresh)(vcpu);
+ }
+ 
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 57ab4739eb19..68b9e22c84d2 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -101,9 +101,6 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+ {
+ 	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+ 
+-	if (!vcpu->kvm->arch.enable_pmu)
+-		return NULL;
+-
+ 	switch (msr) {
+ 	case MSR_F15H_PERF_CTL0:
+ 	case MSR_F15H_PERF_CTL1:
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 9db662399487..3f15ec2dd4b3 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -493,7 +493,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	pmu->raw_event_mask = X86_RAW_EVENT_MASK;
+ 
+ 	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
+-	if (!entry || !vcpu->kvm->arch.enable_pmu)
++	if (!entry)
+ 		return;
+ 	eax.full = entry->eax;
+ 	edx.full = entry->edx;
 -- 
-Thanks,
-Hyeonggon
+2.36.1
+

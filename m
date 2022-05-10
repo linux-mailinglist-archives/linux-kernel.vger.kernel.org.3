@@ -2,143 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7DE52252D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48F2522531
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiEJUHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S233179AbiEJUJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiEJUHu (ORCPT
+        with ESMTP id S229436AbiEJUJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:07:50 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C050E22;
-        Tue, 10 May 2022 13:07:48 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so63177wmn.1;
-        Tue, 10 May 2022 13:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7t/dYXLOrWyPR6e0gTNdWYUxgAYSle4zMbdfPRexeZ4=;
-        b=HH/0nVElAF1y1rfGeHMRJkzArUwXxGETMXm7YSwP6adEtbBrqQeCIhTK1zmfD7cxv/
-         si0xd5hAK4tTB9uTqtErFdShC6u/yyHfDgw/tjkcbWerpuQ5Usk3Xm9KGLuQVC4P8oOL
-         F/zxSZkEI0z9D0uaZWYkXuQc7DJCuhwH6JlSG7nIO42IB5wCXZSYzeFcZH+OkuBmZezp
-         Hq6hPw3ekzzNr45+LltY3RYlJSsP90dLJ7MWbMW/zVA5v1Yv6I7cjfu5Z/jDWZRtRvCv
-         JX+WluFOWXgRCeVsSovdv+e5DgAIqMBcAWsrHPNaH9anvMVX4TCVPXMtPfbbmzJ9vRDy
-         R10g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7t/dYXLOrWyPR6e0gTNdWYUxgAYSle4zMbdfPRexeZ4=;
-        b=VVTgGLKvK3Gv3qCne+a8egOWmLEH0OncRXrPxlrhU0Z4GcuDjtwtbx3lKAXRga9IxT
-         0P0U++WgWnbkTmq8G+qvS/aAEDzf2j4aZoF9PyMrlhNdJ1GGNN9VWyyzgEvGz5eGEv4+
-         wREMeaUCD3gKDJJhCZfstcWFvAXsFVVRS7zvw/8f2Lh2OLyYDFOA81X3XVzLrE681iqP
-         8RS6cIjlRUpnx62P0lDF7J3SyjfrytgKjqBUrhD0XmB1rzvXsWKuw51btIsyLNWLadMi
-         Zf5S6ucgpp1H6dosn5MmCEedvKpaY8ul8pG3ZYNz+zjJcGfFOTrihjixssM2Fo5GJPwN
-         ok3w==
-X-Gm-Message-State: AOAM530Xx7Qy2LMyrVFOT2ARkdwe/tz6vU4y2ziyDWdfaWyK7nla6yMt
-        Fxm5gQ7yn8BGV833L3Ehl8A=
-X-Google-Smtp-Source: ABdhPJw8eBlTdeQItDiSVzgwx/oTcwDXSW+F/WbdYeS8IuSJSeObVG3fASZ44OIF6Fa5hCrhTAlAlA==
-X-Received: by 2002:a05:600c:34c8:b0:394:92b4:f63c with SMTP id d8-20020a05600c34c800b0039492b4f63cmr1603994wmq.58.1652213266681;
-        Tue, 10 May 2022 13:07:46 -0700 (PDT)
-Received: from [172.22.204.227] ([104.28.230.247])
-        by smtp.gmail.com with ESMTPSA id c14-20020adffb0e000000b0020c6fa5a797sm15013148wrr.91.2022.05.10.13.07.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 13:07:46 -0700 (PDT)
-Message-ID: <ede9e050-3b60-ba0e-c626-044f7825adb7@gmail.com>
-Date:   Tue, 10 May 2022 23:07:23 +0300
+        Tue, 10 May 2022 16:09:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931F1517CC;
+        Tue, 10 May 2022 13:09:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 241D0B81CCA;
+        Tue, 10 May 2022 20:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF09C385CA;
+        Tue, 10 May 2022 20:09:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eNIy6d7i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652213352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iVsjahm8BYGF5k4eUyIen00pH/noxcYbwc9i8vcgHoE=;
+        b=eNIy6d7iwonW+4amRxi1drIzCnIhDu3e/N6LWFCJlEu9GdZjwGDAIfp9Fmjip8qlfLhqwQ
+        doq0CD7Axjzrq/xGg6PJBWhixYTJQFo5JcMJkZfiWN6tUb8Fmwi6fh7mSqg1fNjOldzKoR
+        tzyBotb8FJqC5fvEMB56LM/WkQ0d0i4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id eceaa09b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 10 May 2022 20:09:11 +0000 (UTC)
+Date:   Tue, 10 May 2022 22:09:04 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     dodis@cs.nyu.edu, tytso@mit.edu, nadiah@cs.ucsd.edu,
+        noahsd@gmail.com, tessaro@cs.washington.edu,
+        torvalds@linux-foundation.org, jeanphilippe.aumasson@gmail.com,
+        jann@thejh.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peter@cryptojedi.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "D. J. Bernstein" <djb@cr.yp.to>
+Subject: Re: is "premature next" a real world rng concern, or just an
+ academic exercise?
+Message-ID: <YnrGYMyEL8qPMRGt@zx2c4.com>
+References: <YmlMGx6+uigkGiZ0@zx2c4.com>
+ <Ym3ZM1P+uYYABtRm@mit.edu>
+ <Ym5sICj5iBMn2w/E@zx2c4.com>
+ <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
+ <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
+ <YnqDC25iR8mcL3XB@zx2c4.com>
+ <20220510185123.80607.qmail@cr.yp.to>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mtd: parsers: add support for Sercomm partitions
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        NOGUCHI Hiroshi <drvlabo@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220329122016.4122899-1-csharper2005@gmail.com>
- <20220330100958.57dc4d61@xps13>
-From:   Mikhail Zhilkin <csharper2005@gmail.com>
-In-Reply-To: <20220330100958.57dc4d61@xps13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220510185123.80607.qmail@cr.yp.to>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
+Hey Dan,
 
-On 3/30/2022 11:09 AM, Miquel Raynal wrote:
-> Hi Mikhail,
->
-> csharper2005@gmail.com wrote on Tue, 29 Mar 2022 12:20:16 +0000:
->
->> This adds an MTD partition parser for the Sercomm partition table that
->> is used in some Beeline, Netgear and Sercomm routers.
->>
->> The Sercomm partition map table contains real partition offsets, which
->> may differ from device to device depending on the number and location of
->> bad blocks on NAND.
->>
->> Device tree example:
->> partitions {
->> 	compatible = "sercomm,sc-partitions", "fixed-partitions";
->> 	#address-cells = <1>;
->> 	#size-cells = <1>;
->>
->> 	partition@0 {
->> 		label = "u-boot";
->> 		reg = <0x0 0x100000>;
->> 		scpart-id = <0>;
->> 		read-only;
->> 	};
->> };
-> You'll need a DT binding patch and Rob's ack!
+On Tue, May 10, 2022 at 08:51:23PM +0200, D. J. Bernstein wrote:
+> Jason A. Donenfeld writes:
+> > Right, VMs are super problematic, but for that, there's now this
+> > "vmgenid" driver, where the hypervisor actually gives a 128-bit seed to
+> > guests when they're resumed, so that we can immediately reseed, which
+> > should pretty comprehensively handle that situation.
+> 
+> Hmmm. If an application initializes its own RNG state from /dev/urandom,
+> and is then cloned, and then generates an ECDSA nonce from the RNG
+> state, and then uses this nonce to sign a message that's different
+> across the clones, how is disaster averted?
 
-I hope that I near to finish with DT binding...
+Currently WireGuard will drop its ephemeral session key material from
+the tx path, to prevent nonce use. This is because of an in-kernel
+mechanism I added in 5.18, which is pretty minimal and non-invasive, and
+came basically for free. CTRL+F for "vmgenid" in here for details:
+https://www.zx2c4.com/projects/linux-rng-5.17-5.18/
 
-Link:
-https://lore.kernel.org/all/20220510162314.20810-1-csharper2005@gmail.com/
+For 5.19 (or at this point, more likely 5.20), there's a userspace
+notifier in store, maybe, if I can figure out how to do it right.
+There's a pretty bikesheddy thread here on what shape that interface
+should take: https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
+But basically there are some details about how an async interface should
+work, and what the virtual hardware future, if any, looks like for a
+memory mapped race-free polling interface. Plus some considerations on
+how much we should care etc.
 
-Link:
-https://lore.kernel.org/all/20220510162403.20861-1-csharper2005@gmail.com/
+> Given the goal of sending money to cryptographers, I'm pretty sure we
+> want the answer to be a security-audit nightmare, so let me suggest the
+> following idea. There's SIGWINCH to notify processes about window-size
+> changes, so there should also be a signal for RNG changes, which should
+> be called SIGRINCH, and there should be a different mechanism to address
+> RNG output cloning inside the kernel, and there should be endless papers
+> on Grinch Attacks, including papers that sort of prove security against
+> Grinch Attacks, and deployment of software that's sort of protected
+> against Grinch Attacks, and fear of the bad PR from abandoning anything
+> labeled as protection, because, hey, _maybe_ the protection accomplishes
+> something, and it's not as if anyone is going to be blamed for whatever
+> damage is caused by the systems-level effect of the added complexity.
 
->> This is essentially the same code as proposed by NOGUCHI Hiroshi
->> <drvlabo@gmail.com> here:
-> I would credit Hiroshi with a Suggested-by at least
+I mean... you kid, but you're also kind of on point here. There are
+about a thousand ways of doing this kind of notification that lead to
+impossible-to-program-for paradigms that people will find necessary to
+implement, and it'll be a nightmare if not done in a sufficiently slick
+way. For the in-kernel thing WireGuard uses, it doesn't really matter
+because the kernel is one big codebase so ergonomics can change need be.
+But userspace is another challenge.
 
-I read submitting patches rules again and thought that Signed-off-by is
-suitable for this case. Is this ok?
-
-Link:
-https://lore.kernel.org/all/20220510162655.21011-1-csharper2005@gmail.com/
-
->> https://github.com/openwrt/openwrt/pull/1318#issuecomment-420607394
-> And use a Link: tag for this.
->
-Fixed, thanks!
-
-Link:
-https://lore.kernel.org/all/20220510162655.21011-1-csharper2005@gmail.com/
-
-> Thanks,
-> Miquèl
--- 
-Best regards,
-Mikhail
-
+Jason

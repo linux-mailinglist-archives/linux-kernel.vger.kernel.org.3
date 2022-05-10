@@ -2,277 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB56521E11
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF78521DF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242889AbiEJPW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S242883AbiEJPUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345427AbiEJPTz (ORCPT
+        with ESMTP id S1345526AbiEJPUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:19:55 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AF1B7B5
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:59:44 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b19so24196489wrh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zy0q38hbFw40Sq+7rWYl2W9NS/43Or3wh3FVtf7AHik=;
-        b=S7+1zDRFW9/cYqjSR86okpMRKuCC9XcU9HyEOVI2BNsXl7oefcfTrVKEbAWFqr+Mxf
-         uptJofTLpL7TCXt2VTkiLvhC59q8UuYlZ/SQmybkiebb25kRPy3K42CfmG6Dn2xP/XVp
-         zsIHlsh2XX4D8GAuzGm5ewiMIjo/jbwBQZee+jMVNFMguCTD5YB4LjOmvfkFQCPueuur
-         v7QbxpiaShFDgfuJ04VrJLN+X3oIb8FWX3x6vp8YsA+W0IyrLkQ53iEVUx3zdArjlrCN
-         ym004kK0GwDJ5ijF4+rbYGtoQoCAq9b49sXBvyAk6/tVVqa9yglkYfhec6+XixvAM4dp
-         bXsg==
+        Tue, 10 May 2022 11:20:09 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA4D4666C;
+        Tue, 10 May 2022 07:59:54 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id c1so13363822qkf.13;
+        Tue, 10 May 2022 07:59:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Zy0q38hbFw40Sq+7rWYl2W9NS/43Or3wh3FVtf7AHik=;
-        b=fvQoDX3EqH8YpoyvhlxWmNZpfX9VNWHUbDglSCtTyNm3imWsh2NmGE8rhY79ipMYTY
-         UvPYwN/Wr0Ce/fkQBcJViU1GCjQaCStGX3ZUJCRQ5JnwS91f4RWIBy6klInUR/VrZgqq
-         ae/4Qc/GbNBAgj8NFchaAZxJB0LTaacQTc34wKIXz/4488rCv4ZnkSSL+Y5WaokPqzmi
-         5VDPmVVJajDt/7cp+eHti0PnmmsFSOtBdsL17tuMhMf1zY/9MLJraNbOgAMW9mb89+LB
-         qCD1OGxg1PKe73O+DgzgWxoOuH3UrPlEYuhU5wpmY2mH2LObaLuwa9pvWzeE7Yjfn6Ms
-         SGCg==
-X-Gm-Message-State: AOAM533Q334mNyzBI/+Wl/wQPTYk6qs/yGWVx0oM6uNhghsI9YJ/Ov1A
-        nQinJnYr/zRYX7osQaVXxGNVx7kn3Ds25fW7G9W3YWyGFvUtEQ==
-X-Google-Smtp-Source: ABdhPJxHPqfxlchHk0nGnhVo680p7h7XyQI3klCSyMtzbYEBsnoUT4wc0KaakcWziqG3NNDNjTaL7+t8y7Y52+3TGhI=
-X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
- r11-20020a5d6c6b000000b001ea77eadde8mr19048585wrz.690.1652194782989; Tue, 10
- May 2022 07:59:42 -0700 (PDT)
+        bh=3e3Lz+jYEnYk5BFbUe1qTpBNu9HtQF+sDOwNpDINJlI=;
+        b=qPwtF5pAEIBm7FNj4YVI5vpIwC9REJqgqyX05AT3M8kXNlW6lFIlou/VV57aX5gVe8
+         gRip8XH754i/dY0U/VRe+g/y18Nj5ooaQtv6AZJiC7kLYd+Hpgsyu46TJz16I8pu+S9q
+         Xi9GWE1rqdlYQqOSAk8z18Z+K+Uteya5uOuTE53vTua2Js1tx8WBgi7CjdzKZ5DJImYf
+         xwasRtUnkEby+L8OwNScv/v3BZOEoYeAjN0TBlH/N5l0VDvjNEwS5F+WUVgsuBxTGz4J
+         d8G1e1VCHO5ZkWwxxs5+TVcj+lkCi31gQeU9wJxlqwp/aoGAkMtIgmli7tZxTvzMXf1Z
+         auJA==
+X-Gm-Message-State: AOAM530sr+O0j0i6GKkHliN5dpspHvtvH3Tbemd9C2X/H7+oTI6Z0fGF
+        eL8iE1IaVk1qYgRcs6S/4oaTazIynti3Fw==
+X-Google-Smtp-Source: ABdhPJyeyQXHzd4g8uD9vWGJdqpkL4wUi/W742W14oohqRg3G4kCoXlpMJkiGiYEk2xNiTh2g4T/lA==
+X-Received: by 2002:a05:620a:4091:b0:6a0:54cf:c0ed with SMTP id f17-20020a05620a409100b006a054cfc0edmr11845380qko.578.1652194792734;
+        Tue, 10 May 2022 07:59:52 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id s11-20020ac85ecb000000b002f39b99f69dsm9058368qtx.55.2022.05.10.07.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 07:59:52 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id r11so31170660ybg.6;
+        Tue, 10 May 2022 07:59:52 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr19168862ybu.604.1652194791974; Tue, 10
+ May 2022 07:59:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220509182937.1881849-1-atishp@rivosinc.com>
-In-Reply-To: <20220509182937.1881849-1-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 10 May 2022 20:29:31 +0530
-Message-ID: <CAAhSdy2V20HEftXz04mOv40HV3pcyn+mAgwM7HRuDfQ+a7FGHA@mail.gmail.com>
-Subject: Re: [PATCH v3] RISC-V: KVM: Introduce ISA extension register
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     KVM General <kvm@vger.kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
+References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220505193143.31826-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220505193143.31826-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 May 2022 16:59:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX7A32skBCmXDbyP9Y+kY0S3nv+8iFHwqFnzJU1nYn1WQ@mail.gmail.com>
+Message-ID: <CAMuHMdX7A32skBCmXDbyP9Y+kY0S3nv+8iFHwqFnzJU1nYn1WQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] clk: renesas: r9a07g043: Split up core, module
+ and resets array
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 11:59 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> Currently, there is no provision for vmm (qemu-kvm or kvmtool) to
-> query about multiple-letter ISA extensions. The config register
-> is only used for base single letter ISA extensions.
->
-> A new ISA extension register is added that will allow the vmm
-> to query about any ISA extension one at a time. It is enabled for
-> both single letter or multi-letter ISA extensions. The ISA extension
-> register is useful to if the vmm requires to retrieve/set single
-> extension while the config register should be used if all the base
-> ISA extension required to retrieve or set.
->
-> For any multi-letter ISA extensions, the new register interface
-> must be used.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+Hi Prabhakar,
 
-Looks good to me.
-
-Queued this patch for 5.19
-
-Thanks,
-Anup
-
-> ---
-> Changes from v2->v3:
-> 1. Fixed the comment style.
-> 2. Fixed the kvm_riscv_vcpu_get_reg_isa_ext function.
-> ---
->  arch/riscv/include/uapi/asm/kvm.h | 20 +++++++
->  arch/riscv/kvm/vcpu.c             | 99 +++++++++++++++++++++++++++++++
->  2 files changed, 119 insertions(+)
+On Thu, May 5, 2022 at 9:32 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> In preparation for adding support for Renesas RZ/Five SoC as part of
+> r9a07g043-cpg.c file, split up the core clock, module clock and resets
+> array into common and SoC specific.
 >
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> index f808ad1ce500..92bd469e2ba6 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -82,6 +82,23 @@ struct kvm_riscv_timer {
->         __u64 state;
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Thanks for your patch!
+
+> --- a/drivers/clk/renesas/r9a07g043-cpg.c
+> +++ b/drivers/clk/renesas/r9a07g043-cpg.c
+> @@ -36,9 +36,11 @@ enum clk_ids {
+>         CLK_PLL3_DIV2_4_2,
+>         CLK_SEL_PLL3_3,
+>         CLK_DIV_PLL3_C,
+> +#ifndef CONFIG_RISCV
+
+Perhaps make this a positive check, i.e. check for CONFIG_ARM64?
+Just in case Renesas spins out another variant with a
+non-arm64/non-riscv core ;-)
+
+>         CLK_PLL5,
+>         CLK_PLL5_500,
+>         CLK_PLL5_250,
+> +#endif
+
+Technically, this #ifdef protection is not needed, but it helps to
+catch errors below.
+
+>         CLK_PLL6,
+>         CLK_PLL6_250,
+>         CLK_P1_DIV2,
+> @@ -76,227 +78,271 @@ static const char * const sel_pll3_3[] = { ".pll3_533", ".pll3_400" };
+>  static const char * const sel_pll6_2[] = { ".pll6_250", ".pll5_250" };
+>  static const char * const sel_shdi[] = { ".clk_533", ".clk_400", ".clk_266" };
+>
+> -static const struct cpg_core_clk r9a07g043_core_clks[] __initconst = {
+> -       /* External Clock Inputs */
+> -       DEF_INPUT("extal", CLK_EXTAL),
+> +static const struct {
+> +       struct cpg_core_clk common[38];
+> +#ifndef CONFIG_RISCV
+> +       struct cpg_core_clk rzg2ul[3];
+> +#endif
+
+Unlike in the r9a07g044 vs. r9a07g054 case, there is no need to have
+access to the individual arrays at runtime.  So you can just keep the
+single r9a07g043_core_clks[] array, and add #ifdef/#endif around the
+clock definitions for clocks that are present on one variant only.
+
+> +} core_clks __initconst = {
+> +       .common = {
+> +               /* External Clock Inputs */
+> +               DEF_INPUT("extal", CLK_EXTAL),
+>
+> -       /* Internal Core Clocks */
+> -       DEF_FIXED(".osc", R9A07G043_OSCCLK, CLK_EXTAL, 1, 1),
+> -       DEF_FIXED(".osc_div1000", CLK_OSC_DIV1000, CLK_EXTAL, 1, 1000),
+> -       DEF_SAMPLL(".pll1", CLK_PLL1, CLK_EXTAL, PLL146_CONF(0)),
+> -       DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 200, 3),
+> -       DEF_FIXED(".pll2_div2", CLK_PLL2_DIV2, CLK_PLL2, 1, 2),
+> -       DEF_FIXED(".clk_800", CLK_PLL2_800, CLK_PLL2, 1, 2),
+> -       DEF_FIXED(".clk_533", CLK_PLL2_SDHI_533, CLK_PLL2, 1, 3),
+> -       DEF_FIXED(".clk_400", CLK_PLL2_SDHI_400, CLK_PLL2_800, 1, 2),
+> -       DEF_FIXED(".clk_266", CLK_PLL2_SDHI_266, CLK_PLL2_SDHI_533, 1, 2),
+> -       DEF_FIXED(".pll2_div2_8", CLK_PLL2_DIV2_8, CLK_PLL2_DIV2, 1, 8),
+> -       DEF_FIXED(".pll2_div2_10", CLK_PLL2_DIV2_10, CLK_PLL2_DIV2, 1, 10),
+> -       DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 200, 3),
+> -       DEF_FIXED(".pll3_div2", CLK_PLL3_DIV2, CLK_PLL3, 1, 2),
+> -       DEF_FIXED(".pll3_div2_4", CLK_PLL3_DIV2_4, CLK_PLL3_DIV2, 1, 4),
+> -       DEF_FIXED(".pll3_div2_4_2", CLK_PLL3_DIV2_4_2, CLK_PLL3_DIV2_4, 1, 2),
+> -       DEF_FIXED(".pll3_400", CLK_PLL3_400, CLK_PLL3, 1, 4),
+> -       DEF_FIXED(".pll3_533", CLK_PLL3_533, CLK_PLL3, 1, 3),
+> -       DEF_MUX(".sel_pll3_3", CLK_SEL_PLL3_3, SEL_PLL3_3,
+> -               sel_pll3_3, ARRAY_SIZE(sel_pll3_3), 0, CLK_MUX_READ_ONLY),
+> -       DEF_DIV("divpl3c", CLK_DIV_PLL3_C, CLK_SEL_PLL3_3,
+> -               DIVPL3C, dtable_1_32, CLK_DIVIDER_HIWORD_MASK),
+
+I.e. add
+#ifdef CONFIG_ARM64
+
+> -       DEF_FIXED(".pll5", CLK_PLL5, CLK_EXTAL, 125, 1),
+> -       DEF_FIXED(".pll5_500", CLK_PLL5_500, CLK_PLL5, 1, 6),
+> -       DEF_FIXED(".pll5_250", CLK_PLL5_250, CLK_PLL5_500, 1, 2),
+
+#endif
+
+> -       DEF_FIXED(".pll6", CLK_PLL6, CLK_EXTAL, 125, 6),
+> -       DEF_FIXED(".pll6_250", CLK_PLL6_250, CLK_PLL6, 1, 2),
+> +               /* Internal Core Clocks */
+> +               DEF_FIXED(".osc", R9A07G043_OSCCLK, CLK_EXTAL, 1, 1),
+
+[...]
+
+> +               DEF_FIXED("SD1_DIV4", CLK_SD1_DIV4, R9A07G043_CLK_SD1, 1, 4),
+> +       },
+> +#ifndef CONFIG_RISCV
+> +       .rzg2ul = {
+> +               DEF_FIXED(".pll5", CLK_PLL5, CLK_EXTAL, 125, 1),
+> +               DEF_FIXED(".pll5_500", CLK_PLL5_500, CLK_PLL5, 1, 6),
+> +               DEF_FIXED(".pll5_250", CLK_PLL5_250, CLK_PLL5_500, 1, 2),
+> +       },
+> +#endif
+>
+> -       /* Core output clk */
+> -       DEF_DIV("I", R9A07G043_CLK_I, CLK_PLL1, DIVPL1A, dtable_1_8,
+> -               CLK_DIVIDER_HIWORD_MASK),
+> -       DEF_DIV("P0", R9A07G043_CLK_P0, CLK_PLL2_DIV2_8, DIVPL2A,
+> -               dtable_1_32, CLK_DIVIDER_HIWORD_MASK),
+> -       DEF_FIXED("P0_DIV2", R9A07G043_CLK_P0_DIV2, R9A07G043_CLK_P0, 1, 2),
+> -       DEF_FIXED("TSU", R9A07G043_CLK_TSU, CLK_PLL2_DIV2_10, 1, 1),
+> -       DEF_DIV("P1", R9A07G043_CLK_P1, CLK_PLL3_DIV2_4,
+> -               DIVPL3B, dtable_1_32, CLK_DIVIDER_HIWORD_MASK),
+> -       DEF_FIXED("P1_DIV2", CLK_P1_DIV2, R9A07G043_CLK_P1, 1, 2),
+> -       DEF_DIV("P2", R9A07G043_CLK_P2, CLK_PLL3_DIV2_4_2,
+> -               DIVPL3A, dtable_1_32, CLK_DIVIDER_HIWORD_MASK),
+> -       DEF_FIXED("M0", R9A07G043_CLK_M0, CLK_PLL3_DIV2_4, 1, 1),
+> -       DEF_FIXED("ZT", R9A07G043_CLK_ZT, CLK_PLL3_DIV2_4_2, 1, 1),
+> -       DEF_MUX("HP", R9A07G043_CLK_HP, SEL_PLL6_2,
+> -               sel_pll6_2, ARRAY_SIZE(sel_pll6_2), 0, CLK_MUX_HIWORD_MASK),
+> -       DEF_FIXED("SPI0", R9A07G043_CLK_SPI0, CLK_DIV_PLL3_C, 1, 2),
+> -       DEF_FIXED("SPI1", R9A07G043_CLK_SPI1, CLK_DIV_PLL3_C, 1, 4),
+> -       DEF_SD_MUX("SD0", R9A07G043_CLK_SD0, SEL_SDHI0,
+> -                  sel_shdi, ARRAY_SIZE(sel_shdi)),
+> -       DEF_SD_MUX("SD1", R9A07G043_CLK_SD1, SEL_SDHI1,
+> -                  sel_shdi, ARRAY_SIZE(sel_shdi)),
+> -       DEF_FIXED("SD0_DIV4", CLK_SD0_DIV4, R9A07G043_CLK_SD0, 1, 4),
+> -       DEF_FIXED("SD1_DIV4", CLK_SD1_DIV4, R9A07G043_CLK_SD1, 1, 4),
 >  };
 >
-> +/**
-> + * ISA extension IDs specific to KVM. This is not the same as the host ISA
-> + * extension IDs as that is internal to the host and should not be exposed
-> + * to the guest. This should always be contiguous to keep the mapping simple
-> + * in KVM implementation.
-> + */
-> +enum KVM_RISCV_ISA_EXT_ID {
-> +       KVM_RISCV_ISA_EXT_A = 0,
-> +       KVM_RISCV_ISA_EXT_C,
-> +       KVM_RISCV_ISA_EXT_D,
-> +       KVM_RISCV_ISA_EXT_F,
-> +       KVM_RISCV_ISA_EXT_H,
-> +       KVM_RISCV_ISA_EXT_I,
-> +       KVM_RISCV_ISA_EXT_M,
-> +       KVM_RISCV_ISA_EXT_MAX,
-> +};
-> +
->  /* Possible states for kvm_riscv_timer */
->  #define KVM_RISCV_TIMER_STATE_OFF      0
->  #define KVM_RISCV_TIMER_STATE_ON       1
-> @@ -123,6 +140,9 @@ struct kvm_riscv_timer {
->  #define KVM_REG_RISCV_FP_D_REG(name)   \
->                 (offsetof(struct __riscv_d_ext_state, name) / sizeof(__u64))
+> -static struct rzg2l_mod_clk r9a07g043_mod_clks[] = {
+
+Likewise, you can keep r9a07g043_mod_clks[].
+
+#ifdef CONFIG_ARM64
+
+> -       DEF_MOD("gic",          R9A07G043_GIC600_GICCLK, R9A07G043_CLK_P1,
+> -                               0x514, 0),
+> -       DEF_MOD("ia55_pclk",    R9A07G043_IA55_PCLK, R9A07G043_CLK_P2,
+> -                               0x518, 0),
+> -       DEF_MOD("ia55_clk",     R9A07G043_IA55_CLK, R9A07G043_CLK_P1,
+> -                               0x518, 1),
+
+#endif
+
+and add the RZ/Five-only module clocks later protected by
+#ifdef CONFIG_RISCV.
+
+> -       DEF_MOD("dmac_aclk",    R9A07G043_DMAC_ACLK, R9A07G043_CLK_P1,
+> -                               0x52c, 0),
+
+[...]
+
+> +static const struct {
+> +       struct rzg2l_mod_clk common[54];
+> +#ifdef CONFIG_RISCV
+> +       struct rzg2l_mod_clk rzfive[0];
+> +#else
+> +       struct rzg2l_mod_clk rzg2ul[3];
+> +#endif
+> +} mod_clks = {
+> +       .common = {
+> +               DEF_MOD("dmac_aclk",    R9A07G043_DMAC_ACLK, R9A07G043_CLK_P1,
+> +                                       0x52c, 0),
+
+[...]
+
+> +               DEF_MOD("tsu_pclk",     R9A07G043_TSU_PCLK, R9A07G043_CLK_TSU,
+> +                                       0x5ac, 0),
+> +       },
+> +#ifdef CONFIG_RISCV
+> +       .rzfive = {
+> +       },
+> +#else
+> +       .rzg2ul = {
+> +               DEF_MOD("gic",          R9A07G043_GIC600_GICCLK, R9A07G043_CLK_P1,
+> +                                       0x514, 0),
+> +               DEF_MOD("ia55_pclk",    R9A07G043_IA55_PCLK, R9A07G043_CLK_P2,
+> +                                       0x518, 0),
+> +               DEF_MOD("ia55_clk",     R9A07G043_IA55_CLK, R9A07G043_CLK_P1,
+> +                                       0x518, 1),
+> +       },
+> +#endif
+>  };
 >
-> +/* ISA Extension registers are mapped as type 7 */
-> +#define KVM_REG_RISCV_ISA_EXT          (0x07 << KVM_REG_RISCV_TYPE_SHIFT)
-> +
->  #endif
+> -static struct rzg2l_reset r9a07g043_resets[] = {
+
+If you do the same for the resets, you can drop "[RFC PATCH 2/4]
+clk: renesas: rzg2l-cpg: Add support to stack the resets instead
+of indexing".
+
+> @@ -307,8 +353,8 @@ static const unsigned int r9a07g043_crit_mod_clks[] __initconst = {
 >
->  #endif /* __LINUX_KVM_RISCV_H */
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 7461f964d20a..0875beaa1973 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -365,6 +365,101 @@ static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
->         return 0;
->  }
+>  const struct rzg2l_cpg_info r9a07g043_cpg_info = {
+>         /* Core Clocks */
+> -       .core_clks = r9a07g043_core_clks,
+> -       .num_core_clks = ARRAY_SIZE(r9a07g043_core_clks),
+> +       .core_clks = core_clks.common,
+> +       .num_core_clks = ARRAY_SIZE(core_clks.common) + ARRAY_SIZE(core_clks.rzg2ul),
+
+Then this change is not needed...
+
+>         .last_dt_core_clk = LAST_DT_CORE_CLK,
+>         .num_total_core_clks = MOD_CLK_BASE,
 >
-> +/* Mapping between KVM ISA Extension ID & Host ISA extension ID */
-> +static unsigned long kvm_isa_ext_arr[] = {
-> +       RISCV_ISA_EXT_a,
-> +       RISCV_ISA_EXT_c,
-> +       RISCV_ISA_EXT_d,
-> +       RISCV_ISA_EXT_f,
-> +       RISCV_ISA_EXT_h,
-> +       RISCV_ISA_EXT_i,
-> +       RISCV_ISA_EXT_m,
-> +};
-> +
-> +static int kvm_riscv_vcpu_get_reg_isa_ext(struct kvm_vcpu *vcpu,
-> +                                         const struct kvm_one_reg *reg)
-> +{
-> +       unsigned long __user *uaddr =
-> +                       (unsigned long __user *)(unsigned long)reg->addr;
-> +       unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-> +                                           KVM_REG_SIZE_MASK |
-> +                                           KVM_REG_RISCV_ISA_EXT);
-> +       unsigned long reg_val = 0;
-> +       unsigned long host_isa_ext;
-> +
-> +       if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-> +               return -EINVAL;
-> +
-> +       if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
-> +               return -EINVAL;
-> +
-> +       host_isa_ext = kvm_isa_ext_arr[reg_num];
-> +       if (__riscv_isa_extension_available(&vcpu->arch.isa, host_isa_ext))
-> +               reg_val = 1; /* Mark the given extension as available */
-> +
-> +       if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-> +               return -EFAULT;
-> +
-> +       return 0;
-> +}
-> +
-> +static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
-> +                                         const struct kvm_one_reg *reg)
-> +{
-> +       unsigned long __user *uaddr =
-> +                       (unsigned long __user *)(unsigned long)reg->addr;
-> +       unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
-> +                                           KVM_REG_SIZE_MASK |
-> +                                           KVM_REG_RISCV_ISA_EXT);
-> +       unsigned long reg_val;
-> +       unsigned long host_isa_ext;
-> +       unsigned long host_isa_ext_mask;
-> +
-> +       if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
-> +               return -EINVAL;
-> +
-> +       if (reg_num >= KVM_RISCV_ISA_EXT_MAX || reg_num >= ARRAY_SIZE(kvm_isa_ext_arr))
-> +               return -EINVAL;
-> +
-> +       if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
-> +               return -EFAULT;
-> +
-> +       host_isa_ext = kvm_isa_ext_arr[reg_num];
-> +       if (!__riscv_isa_extension_available(NULL, host_isa_ext))
-> +               return  -EOPNOTSUPP;
-> +
-> +       if (host_isa_ext >= RISCV_ISA_EXT_BASE &&
-> +           host_isa_ext < RISCV_ISA_EXT_MAX) {
-> +               /*
-> +                * Multi-letter ISA extension. Currently there is no provision
-> +                * to enable/disable the multi-letter ISA extensions for guests.
-> +                * Return success if the request is to enable any ISA extension
-> +                * that is available in the hardware.
-> +                * Return -EOPNOTSUPP otherwise.
-> +                */
-> +               if (!reg_val)
-> +                       return -EOPNOTSUPP;
-> +               else
-> +                       return 0;
-> +       }
-> +
-> +       /* Single letter base ISA extension */
-> +       if (!vcpu->arch.ran_atleast_once) {
-> +               host_isa_ext_mask = BIT_MASK(host_isa_ext);
-> +               if (!reg_val && (host_isa_ext_mask & KVM_RISCV_ISA_DISABLE_ALLOWED))
-> +                       vcpu->arch.isa &= ~host_isa_ext_mask;
-> +               else
-> +                       vcpu->arch.isa |= host_isa_ext_mask;
-> +               vcpu->arch.isa &= riscv_isa_extension_base(NULL);
-> +               vcpu->arch.isa &= KVM_RISCV_ISA_ALLOWED;
-> +               kvm_riscv_vcpu_fp_reset(vcpu);
-> +       } else {
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
->                                   const struct kvm_one_reg *reg)
->  {
-> @@ -382,6 +477,8 @@ static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
->         else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
->                 return kvm_riscv_vcpu_set_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_D);
-> +       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
-> +               return kvm_riscv_vcpu_set_reg_isa_ext(vcpu, reg);
+> @@ -317,11 +363,11 @@ const struct rzg2l_cpg_info r9a07g043_cpg_info = {
+>         .num_crit_mod_clks = ARRAY_SIZE(r9a07g043_crit_mod_clks),
 >
->         return -EINVAL;
->  }
-> @@ -403,6 +500,8 @@ static int kvm_riscv_vcpu_get_reg(struct kvm_vcpu *vcpu,
->         else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_FP_D)
->                 return kvm_riscv_vcpu_get_reg_fp(vcpu, reg,
->                                                  KVM_REG_RISCV_FP_D);
-> +       else if ((reg->id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_ISA_EXT)
-> +               return kvm_riscv_vcpu_get_reg_isa_ext(vcpu, reg);
+>         /* Module Clocks */
+> -       .mod_clks = r9a07g043_mod_clks,
+> -       .num_mod_clks = ARRAY_SIZE(r9a07g043_mod_clks),
+> +       .mod_clks = mod_clks.common,
+> +       .num_mod_clks = ARRAY_SIZE(mod_clks.common) + ARRAY_SIZE(mod_clks.rzg2ul),
+
+Same here.
+
+#ifdef CONFIG_ARM64
+
+>         .num_hw_mod_clks = R9A07G043_TSU_PCLK + 1,
+
+#endif
+
+Note that compile-testing on non-arm64/non-riscv still works fine,
+as .num_hw_mod_clks = 0 is not an issue at build-time.
+
 >
->         return -EINVAL;
->  }
-> --
-> 2.36.0
->
+>         /* Resets */
+> -       .resets = r9a07g043_resets,
+
+#ifdef CONFIG_ARM64
+
+> -       .num_resets = R9A07G043_TSU_PRESETN + 1, /* Last reset ID + 1 */
+
+#endif
+
+> +       .resets = resets.common,
+> +       ARRAY_SIZE(resets.common) + ARRAY_SIZE(resets.rzg2ul),
+
+(BTW, ".num_resets = " was lost here)
+
+>  };
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

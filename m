@@ -2,74 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92B9521104
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2664521102
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbiEJJj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S238941AbiEJJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238978AbiEJJjZ (ORCPT
+        with ESMTP id S238928AbiEJJjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:39:25 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B9B28FEAE;
-        Tue, 10 May 2022 02:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=kI3usnv3cvSu4CK/ziEmj9I3Q9wcT4zQJngj+G2T8jc=; b=O9nROi0WT4KAsJcqjNTCmI5mNa
-        SrMqjABCnuLu9GkShkbEoD2JqLJCcIKwNJ1yRqFQjFpTeKA5GAg93l9k1E7RFM2id432ABdGThpc+
-        ZhWI6utuGdVTRxLJvvXGU/nI6EUdaVGSttg/tAawdiaO3XWZxXBcsKpuAyncfs6GElHSZHqTsFvlP
-        tku4WPChkK8OWTYEnU9qKUhdn1x49U3EW60E6lX00RcVET8a6o9d+V9CyB7+4NCCPuuZMXyF6NOzu
-        pGkA4e6oUpaTiaWO58lteasuiJA5TB5/Ux4f250U9EJgEPsmmdgDlmekkIo5YTUGXykim9kvnryA8
-        bsjD5Y1g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noMGs-00Co3Q-WF; Tue, 10 May 2022 09:35:11 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B7596981011; Tue, 10 May 2022 11:35:08 +0200 (CEST)
-Date:   Tue, 10 May 2022 11:35:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Rik van Riel <riel@surriel.com>, Song Liu <song@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [RFC] sched,livepatch: call stop_one_cpu in
- klp_check_and_switch_task
-Message-ID: <20220510093508.GL76023@worktop.programming.kicks-ass.net>
-References: <20220507174628.2086373-1-song@kernel.org>
- <20220509115227.6075105e@imladris.surriel.com>
- <20220509180004.zmvhz65xlncwqrrc@treble>
- <68f91fb233d5bf82e29cc5c6960a62863b297db3.camel@surriel.com>
- <20220509191745.yk2txsa4cv3ypf6k@treble>
- <1f94c48b4e0e7d73a689a076f78f0892095b4d89.camel@surriel.com>
- <20220509200949.vzx4g5xpebomkok4@treble>
- <AD44A5E5-24BA-481A-AF32-4704A3207245@fb.com>
+        Tue, 10 May 2022 05:39:12 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A186628F7F2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:35:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VCqPVT1_1652175311;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VCqPVT1_1652175311)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 17:35:12 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] erofs: scan devices from device table
+Date:   Tue, 10 May 2022 17:35:11 +0800
+Message-Id: <20220510093511.77473-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <AD44A5E5-24BA-481A-AF32-4704A3207245@fb.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:32:02AM +0000, Song Liu wrote:
-> cond_sched() feels like a natural “transition point” to me, and it 
+When "-o device" mount option is not specified, scan the device table
+and instantiate the devices if there's any in the device table. In this
+case, the tag field of each device slot uniquely specifies a device.
 
-You have to think of cond_resched() as a NOP.
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+---
+ fs/erofs/erofs_fs.h |   9 ++--
+ fs/erofs/super.c    | 102 ++++++++++++++++++++++++++++++--------------
+ 2 files changed, 72 insertions(+), 39 deletions(-)
+
+diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+index 1238ca104f09..1adde3a813b4 100644
+--- a/fs/erofs/erofs_fs.h
++++ b/fs/erofs/erofs_fs.h
+@@ -37,12 +37,9 @@
+ #define EROFS_SB_EXTSLOT_SIZE	16
+ 
+ struct erofs_deviceslot {
+-	union {
+-		u8 uuid[16];		/* used for device manager later */
+-		u8 userdata[64];	/* digest(sha256), etc. */
+-	} u;
+-	__le32 blocks;			/* total fs blocks of this device */
+-	__le32 mapped_blkaddr;		/* map starting at mapped_blkaddr */
++	u8 tag[64];		/* digest(sha256), etc. */
++	__le32 blocks;		/* total fs blocks of this device */
++	__le32 mapped_blkaddr;	/* map starting at mapped_blkaddr */
+ 	u8 reserved[56];
+ };
+ #define EROFS_DEVT_SLOT_SIZE	sizeof(struct erofs_deviceslot)
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 4a623630e1c4..3f19c2031e69 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -219,7 +219,52 @@ static int erofs_load_compr_cfgs(struct super_block *sb,
+ }
+ #endif
+ 
+-static int erofs_init_devices(struct super_block *sb,
++static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
++			     struct erofs_device_info *dif, erofs_off_t *pos)
++{
++	struct erofs_sb_info *sbi = EROFS_SB(sb);
++	struct erofs_deviceslot *dis;
++	struct block_device *bdev;
++	void *ptr;
++	int ret;
++
++	ptr = erofs_read_metabuf(buf, sb, erofs_blknr(*pos), EROFS_KMAP);
++	if (IS_ERR(ptr))
++		return PTR_ERR(ptr);
++	dis = ptr + erofs_blkoff(*pos);
++
++	if (!dif->path) {
++		if (!dis->tag[0]) {
++			erofs_err(sb, "Empty digest data (pos %llu)", *pos);
++			return -EINVAL;
++		}
++		dif->path = kmemdup_nul(dis->tag, sizeof(dis->tag), GFP_KERNEL);
++		if (!dif->path)
++			return -ENOMEM;
++	}
++
++	if (erofs_is_fscache_mode(sb)) {
++		ret = erofs_fscache_register_cookie(sb, &dif->fscache,
++				dif->path, false);
++		if (ret)
++			return ret;
++	} else {
++		bdev = blkdev_get_by_path(dif->path, FMODE_READ | FMODE_EXCL,
++					  sb->s_type);
++		if (IS_ERR(bdev))
++			return PTR_ERR(bdev);
++		dif->bdev = bdev;
++		dif->dax_dev = fs_dax_get_by_bdev(bdev, &dif->dax_part_off);
++	}
++
++	dif->blocks = le32_to_cpu(dis->blocks);
++	dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
++	sbi->total_blocks += dif->blocks;
++	*pos += EROFS_DEVT_SLOT_SIZE;
++	return 0;
++}
++
++static int erofs_scan_devices(struct super_block *sb,
+ 			      struct erofs_super_block *dsb)
+ {
+ 	struct erofs_sb_info *sbi = EROFS_SB(sb);
+@@ -227,8 +272,6 @@ static int erofs_init_devices(struct super_block *sb,
+ 	erofs_off_t pos;
+ 	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+ 	struct erofs_device_info *dif;
+-	struct erofs_deviceslot *dis;
+-	void *ptr;
+ 	int id, err = 0;
+ 
+ 	sbi->total_blocks = sbi->primarydevice_blocks;
+@@ -237,7 +280,8 @@ static int erofs_init_devices(struct super_block *sb,
+ 	else
+ 		ondisk_extradevs = le16_to_cpu(dsb->extra_devices);
+ 
+-	if (ondisk_extradevs != sbi->devs->extra_devices) {
++	if (sbi->devs->extra_devices &&
++	    ondisk_extradevs != sbi->devs->extra_devices) {
+ 		erofs_err(sb, "extra devices don't match (ondisk %u, given %u)",
+ 			  ondisk_extradevs, sbi->devs->extra_devices);
+ 		return -EINVAL;
+@@ -248,39 +292,31 @@ static int erofs_init_devices(struct super_block *sb,
+ 	sbi->device_id_mask = roundup_pow_of_two(ondisk_extradevs + 1) - 1;
+ 	pos = le16_to_cpu(dsb->devt_slotoff) * EROFS_DEVT_SLOT_SIZE;
+ 	down_read(&sbi->devs->rwsem);
+-	idr_for_each_entry(&sbi->devs->tree, dif, id) {
+-		struct block_device *bdev;
+-
+-		ptr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
+-					 EROFS_KMAP);
+-		if (IS_ERR(ptr)) {
+-			err = PTR_ERR(ptr);
+-			break;
+-		}
+-		dis = ptr + erofs_blkoff(pos);
+-
+-		if (erofs_is_fscache_mode(sb)) {
+-			err = erofs_fscache_register_cookie(sb, &dif->fscache,
+-							    dif->path, false);
++	if (sbi->devs->extra_devices) {
++		idr_for_each_entry(&sbi->devs->tree, dif, id) {
++			err = erofs_init_device(&buf, sb, dif, &pos);
+ 			if (err)
+ 				break;
+-		} else {
+-			bdev = blkdev_get_by_path(dif->path,
+-						  FMODE_READ | FMODE_EXCL,
+-						  sb->s_type);
+-			if (IS_ERR(bdev)) {
+-				err = PTR_ERR(bdev);
++		}
++	} else {
++		for (id = 0; id < ondisk_extradevs; id++) {
++			dif = kzalloc(sizeof(*dif), GFP_KERNEL);
++			if (!dif) {
++				err = -ENOMEM;
+ 				break;
+ 			}
+-			dif->bdev = bdev;
+-			dif->dax_dev = fs_dax_get_by_bdev(bdev,
+-							  &dif->dax_part_off);
+-		}
+ 
+-		dif->blocks = le32_to_cpu(dis->blocks);
+-		dif->mapped_blkaddr = le32_to_cpu(dis->mapped_blkaddr);
+-		sbi->total_blocks += dif->blocks;
+-		pos += EROFS_DEVT_SLOT_SIZE;
++			err = idr_alloc(&sbi->devs->tree, dif, 0, 0, GFP_KERNEL);
++			if (err < 0) {
++				kfree(dif);
++				break;
++			}
++			++sbi->devs->extra_devices;
++
++			err = erofs_init_device(&buf, sb, dif, &pos);
++			if (err)
++				break;
++		}
+ 	}
+ 	up_read(&sbi->devs->rwsem);
+ 	erofs_put_metabuf(&buf);
+@@ -367,7 +403,7 @@ static int erofs_read_superblock(struct super_block *sb)
+ 		goto out;
+ 
+ 	/* handle multiple devices */
+-	ret = erofs_init_devices(sb, dsb);
++	ret = erofs_scan_devices(sb, dsb);
+ 
+ 	if (erofs_sb_has_ztailpacking(sbi))
+ 		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+-- 
+2.27.0
 

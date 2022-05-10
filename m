@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2345D5218D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1CA521AAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244781AbiEJNmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S245251AbiEJODQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243079AbiEJNZa (ORCPT
+        with ESMTP id S234163AbiEJNkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72A91683FC;
-        Tue, 10 May 2022 06:18:45 -0700 (PDT)
+        Tue, 10 May 2022 09:40:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154C42370E7;
+        Tue, 10 May 2022 06:29:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E090B81B32;
-        Tue, 10 May 2022 13:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B39EC385A6;
-        Tue, 10 May 2022 13:18:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2989B81DA0;
+        Tue, 10 May 2022 13:29:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE63C385A6;
+        Tue, 10 May 2022 13:29:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188723;
-        bh=Ug3fk8Vt8Pk8CQvWev9QH73Z1POTQgfDaPxABlOgu54=;
+        s=korg; t=1652189371;
+        bh=WAC2T/PFvI26Rh781lfEXaly7tnF4TXThSPFMyXmm1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yN8eXI2dEIVa2jYzcxH8nia8mnwmpL+cyuNYbtiTlHTuvuBNOlSxb6AZilCWqdtj5
-         wEc9GPTDG0n8aMLhJNrVztUXJZPLUlqCrgTjHlIc3nyC0PcoA3Z9PASe59F26An++9
-         Fae1BvaJ5ceGvhxAGGI7e7VewPAId0piM8upaGDg=
+        b=jurWyp+ogJ8cuc9V/DrMT2PrqtMMe65VzQ3zvv7YF+bywUJ6FZIa1v7n1xhSjx6Cu
+         Qd94YUpPb2WMIEUUsH6UeCwWpZFmo8MxEFyOVou7OqNOxY2C2wcSQY+pADEzcVqQvo
+         mMbndVx8cQ1FSFYx3O5tzQgT1pegpP/x1rvzuI8s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 06/88] USB: serial: option: add support for Cinterion MV32-WA/MV32-WB
+        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 029/135] s390/dasd: prevent double format of tracks for ESE devices
 Date:   Tue, 10 May 2022 15:06:51 +0200
-Message-Id: <20220510130733.926886756@linuxfoundation.org>
+Message-Id: <20220510130741.237133863@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,75 +55,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Stefan Haberland <sth@linux.ibm.com>
 
-commit b4a64ed6e7b857317070fcb9d87ff5d4a73be3e8 upstream.
+commit 71f3871657370dbbaf942a1c758f64e49a36c70f upstream.
 
-Add support for Cinterion device MV32-WA/MV32-WB. MV32-WA PID is
-0x00F1, and MV32-WB PID is 0x00F2.
+For ESE devices we get an error for write operations on an unformatted
+track. Afterwards the track will be formatted and the IO operation
+restarted.
+When using alias devices a track might be accessed by multiple requests
+simultaneously and there is a race window that a track gets formatted
+twice resulting in data loss.
 
-Test evidence as below:
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f1 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F1 USB Mobile Broadband
-S:  SerialNumber=78ada8c4
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+Prevent this by remembering the amount of formatted tracks when starting
+a request and comparing this number before actually formatting a track
+on the fly. If the number has changed there is a chance that the current
+track was finally formatted in between. As a result do not format the
+track and restart the current IO to check.
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
-D:  Ver= 3.20 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=1e2d ProdID=00f2 Rev=05.04
-S:  Manufacturer=Cinterion
-S:  Product=Cinterion PID 0x00F2 USB Mobile Broadband
-S:  SerialNumber=cdd06a78
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+The number of formatted tracks does not match the overall number of
+formatted tracks on the device and it might wrap around but this is no
+problem. It is only needed to recognize that a track has been formatted at
+all in between.
 
-Interface 0&1: MBIM, 2:Modem, 3: GNSS, 4: NMEA, 5: Diag
-GNSS port don't use serial driver.
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Link: https://lore.kernel.org/r/20220414074434.5699-1-slark_xiao@163.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
+Cc: stable@vger.kernel.org # 5.3+
+Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
+Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220505141733.1989450-3-sth@linux.ibm.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/s390/block/dasd.c      |    7 +++++++
+ drivers/s390/block/dasd_eckd.c |   19 +++++++++++++++++--
+ drivers/s390/block/dasd_int.h  |    2 ++
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -432,6 +432,8 @@ static void option_instat_callback(struc
- #define CINTERION_PRODUCT_CLS8			0x00b0
- #define CINTERION_PRODUCT_MV31_MBIM		0x00b3
- #define CINTERION_PRODUCT_MV31_RMNET		0x00b7
-+#define CINTERION_PRODUCT_MV32_WA		0x00f1
-+#define CINTERION_PRODUCT_MV32_WB		0x00f2
+--- a/drivers/s390/block/dasd.c
++++ b/drivers/s390/block/dasd.c
+@@ -1422,6 +1422,13 @@ int dasd_start_IO(struct dasd_ccw_req *c
+ 		if (!cqr->lpm)
+ 			cqr->lpm = dasd_path_get_opm(device);
+ 	}
++	/*
++	 * remember the amount of formatted tracks to prevent double format on
++	 * ESE devices
++	 */
++	if (cqr->block)
++		cqr->trkcount = atomic_read(&cqr->block->trkcount);
++
+ 	if (cqr->cpmode == 1) {
+ 		rc = ccw_device_tm_start(device->cdev, cqr->cpaddr,
+ 					 (long) cqr, cqr->lpm);
+--- a/drivers/s390/block/dasd_eckd.c
++++ b/drivers/s390/block/dasd_eckd.c
+@@ -3095,13 +3095,24 @@ static int dasd_eckd_format_device(struc
+ }
  
- /* Olivetti products */
- #define OLIVETTI_VENDOR_ID			0x0b3c
-@@ -1969,6 +1971,10 @@ static const struct usb_device_id option
- 	  .driver_info = RSVD(3)},
- 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV31_RMNET, 0xff),
- 	  .driver_info = RSVD(0)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA, 0xff),
-+	  .driver_info = RSVD(3)},
-+	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
-+	  .driver_info = RSVD(3)},
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+ static bool test_and_set_format_track(struct dasd_format_entry *to_format,
+-				      struct dasd_block *block)
++				      struct dasd_ccw_req *cqr)
+ {
++	struct dasd_block *block = cqr->block;
+ 	struct dasd_format_entry *format;
+ 	unsigned long flags;
+ 	bool rc = false;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	if (cqr->trkcount != atomic_read(&block->trkcount)) {
++		/*
++		 * The number of formatted tracks has changed after request
++		 * start and we can not tell if the current track was involved.
++		 * To avoid data corruption treat it as if the current track is
++		 * involved
++		 */
++		rc = true;
++		goto out;
++	}
+ 	list_for_each_entry(format, &block->format_list, list) {
+ 		if (format->track == to_format->track) {
+ 			rc = true;
+@@ -3121,6 +3132,7 @@ static void clear_format_track(struct da
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&block->format_lock, flags);
++	atomic_inc(&block->trkcount);
+ 	list_del_init(&format->list);
+ 	spin_unlock_irqrestore(&block->format_lock, flags);
+ }
+@@ -3182,8 +3194,11 @@ dasd_eckd_ese_format(struct dasd_device
+ 	}
+ 	format->track = curr_trk;
+ 	/* test if track is already in formatting by another thread */
+-	if (test_and_set_format_track(format, block))
++	if (test_and_set_format_track(format, cqr)) {
++		/* this is no real error so do not count down retries */
++		cqr->retries++;
+ 		return ERR_PTR(-EEXIST);
++	}
+ 
+ 	fdata.start_unit = curr_trk;
+ 	fdata.stop_unit = curr_trk;
+--- a/drivers/s390/block/dasd_int.h
++++ b/drivers/s390/block/dasd_int.h
+@@ -188,6 +188,7 @@ struct dasd_ccw_req {
+ 	void (*callback)(struct dasd_ccw_req *, void *data);
+ 	void *callback_data;
+ 	unsigned int proc_bytes;	/* bytes for partial completion */
++	unsigned int trkcount;		/* count formatted tracks */
+ };
+ 
+ /*
+@@ -611,6 +612,7 @@ struct dasd_block {
+ 
+ 	struct list_head format_list;
+ 	spinlock_t format_lock;
++	atomic_t trkcount;
+ };
+ 
+ struct dasd_attention_data {
 
 

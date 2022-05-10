@@ -2,127 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693F4520FD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0FB520FD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbiEJImg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S238099AbiEJInO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbiEJIme (ORCPT
+        with ESMTP id S236464AbiEJInL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:42:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC391238861;
-        Tue, 10 May 2022 01:38:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5309A21B9E;
-        Tue, 10 May 2022 08:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652171916; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VBHPkY7leVke4Ab1YZuG3Eh0I871w0YjHYv2ZTtbS6c=;
-        b=DsYTFv2022XRh8F2WnKcoEl+nKZY/3KpwlPjMI4FKvwyHh0rrcFNMQQmRsq0I711GwI0Ep
-        SAZ+vVa2BPCJhwhrtLBU/mVDb5Oqi01suAxUtLsAchCovotcblyR2nPoXWwTsaoxMyNr58
-        PJcrw4n3sS7HX+mJ6hcxDLzaFUSpjaA=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 10 May 2022 04:43:11 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8772631E0;
+        Tue, 10 May 2022 01:39:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9AC522C141;
-        Tue, 10 May 2022 08:38:35 +0000 (UTC)
-Date:   Tue, 10 May 2022 10:38:35 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Gary Guo <gary@garyguo.net>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v6 14/23] vsprintf: add new `%pA` format specifier
-Message-ID: <Ynoki5rA2ivmFwkS@alley>
-References: <20220507052451.12890-1-ojeda@kernel.org>
- <20220507052451.12890-15-ojeda@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyBKV0njmz4ySc;
+        Tue, 10 May 2022 18:39:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652171951;
+        bh=7LR72tovo0ogawpq2JyC0EYhYgvgWno6oZIg1I1iyxk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cIfSs0ETusNLIbTX2lseoXuYKePdr2kpAFCvTg24RNuZDIE1jbpfzGqBGjwM7aF9m
+         5NhYsMHOz7+6/lkjoo8A4ZraH7yfuvex2PC32mVQWdMmRmreIsBa+R0eQM6YqHxPwY
+         Xnk8INFaz68jB7i1A8phoDWqAM42RVSdQefWE3uaGGQb4lUPqoElOm4YWs8L/Z0UV6
+         nlbwfoD5/kJz0WaphxI7uct1iQXgBCTmHJiioIGyIrfknBwQqU7vsWWwOWlSAcYrCL
+         kW22jNdbATh49ivj4P9kFkeFAcq/9E6HoZZIYGbUBsER1Qg7oRq1F5upA5zKdlcJmc
+         XguB5sCxEE2jg==
+Date:   Tue, 10 May 2022 18:39:08 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the folio tree with the btrfs tree
+Message-ID: <20220510183908.7571cb73@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507052451.12890-15-ojeda@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=7FizyL.aR57VoR.BZIAaDh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-05-07 07:24:12, Miguel Ojeda wrote:
-> From: Gary Guo <gary@garyguo.net>
-> 
-> This patch adds a format specifier `%pA` to `vsprintf` which formats
-> a pointer as `core::fmt::Arguments`. Doing so allows us to directly
-> format to the internal buffer of `printf`, so we do not have to use
-> a temporary buffer on the stack to pre-assemble the message on
-> the Rust side.
-> 
-> This specifier is intended only to be used from Rust and not for C, so
-> `checkpatch.pl` is intentionally unchanged to catch any misuse.
-> 
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+--Sig_/=7FizyL.aR57VoR.BZIAaDh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Feel free to use:
+Hi all,
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+Today's linux-next merge of the folio tree got a conflict in:
 
-See a comment below.
+  fs/btrfs/send.c
 
-> ---
->  lib/vsprintf.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 40d26a07a133..00f71f91d991 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -2270,6 +2270,9 @@ int __init no_hash_pointers_enable(char *str)
->  }
->  early_param("no_hash_pointers", no_hash_pointers_enable);
->  
-> +/* Used for Rust formatting ('%pA'). */
-> +char *rust_fmt_argument(char *buf, char *end, void *ptr);
-> +
->  /*
->   * Show a '%p' thing.  A kernel extension is that the '%p' is followed
->   * by an extra set of alphanumeric characters that are extended format
-> @@ -2396,6 +2399,10 @@ early_param("no_hash_pointers", no_hash_pointers_enable);
->   *
->   * Note: The default behaviour (unadorned %p) is to hash the address,
->   * rendering it useful as a unique identifier.
-> + *
-> + * There is also a '%pA' format specifier, but it is only intended to be used
-> + * from Rust code to format core::fmt::Arguments. Do *not* use it from C.
-> + * See rust/kernel/print.rs for details.
->   */
+between commit:
 
-It would be great to document it also in
-Documentation/core-api/printk-formats.rst
-I am sorry that I did not mentioned it earlier.
+  d1a1a97304b4 ("btrfs: send: keep the current inode open while processing =
+it")
 
-Also the check in checkpatch.pl, mentioned in another reply, sounds
-like a good idea.
+from the btrfs tree and commit:
 
-Best Regards,
-Petr
+  2ebdd1df3166 ("mm/readahead: Convert page_cache_async_readahead to take a=
+ folio")
+
+from the folio tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/btrfs/send.c
+index 8e8e4ab59930,8985d115559d..000000000000
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@@ -4905,13 -4984,14 +4905,14 @@@ static int put_file_data(struct send_ct
+  			}
+  		}
+ =20
+ -		if (PageReadahead(page)) {
+ -			page_cache_async_readahead(inode->i_mapping, &sctx->ra,
+ -						NULL, page_folio(page), index,
+ -						last_index + 1 - index);
+ -		}
+ +		if (PageReadahead(page))
+ +			page_cache_async_readahead(sctx->cur_inode->i_mapping,
+- 						   &sctx->ra, NULL, page, index,
+++						   &sctx->ra, NULL,
+++						   page_folio(page), index,
+ +						   last_index + 1 - index);
+ =20
+  		if (!PageUptodate(page)) {
+- 			btrfs_readpage(NULL, page);
++ 			btrfs_read_folio(NULL, page_folio(page));
+  			lock_page(page);
+  			if (!PageUptodate(page)) {
+  				unlock_page(page);
+
+--Sig_/=7FizyL.aR57VoR.BZIAaDh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ6JKwACgkQAVBC80lX
+0GykKAf/XrJEgp/mrvADJxmkpWwQUY0gmFEdMhuXUk/wniZgdPBSBxFG49Zzfpo5
+JIrhc/pfGSuVG7OAzJzb2CRf3Ctf2Wp/6YS9F78l95D3s1OrBS3RagdF+Z8zANce
+C3lO62+PQAcqCRaLPOgomdIJ5LsfMRBXL45KhSMm9lvf/g+WVJK/RclLpJjJy/Qq
+flpYwqgEA/zubFbrOR4b+qdJpwWSsKOAqwFLmOxoLpANm6NEl7xfQgoS4Jj2ARBp
+DUsdZeAio5EzpXQi6EzYVcIaL5AES1Pc/TbHzE739WG1uKIZ5QfcKDpgQUS8gAky
+DQqUxElr57BQOLI9K00z8ZaUluXKSw==
+=FjUp
+-----END PGP SIGNATURE-----
+
+--Sig_/=7FizyL.aR57VoR.BZIAaDh--

@@ -2,54 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EB352245B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A660522469
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237754AbiEJSvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S1343831AbiEJSyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiEJSvm (ORCPT
+        with ESMTP id S233830AbiEJSy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:51:42 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACE439693;
-        Tue, 10 May 2022 11:51:39 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id ECD64FDF; Tue, 10 May 2022 13:51:37 -0500 (CDT)
-Date:   Tue, 10 May 2022 13:51:37 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com, John Johansen <john.johansen@canonical.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Micah Morton <mortonm@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: Re: [PATCH v12 01/26] securityfs: rework dentry creation
-Message-ID: <20220510185137.GA10706@mail.hallyn.com>
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-2-stefanb@linux.ibm.com>
- <20220509195414.GA30894@mail.hallyn.com>
- <20220510102525.hlt2rm3k3hg5r6gg@wittgenstein>
- <20220510141025.GA7290@mail.hallyn.com>
- <20220510155107.srxifzuqfstvet2f@wittgenstein>
+        Tue, 10 May 2022 14:54:29 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE312EA0B;
+        Tue, 10 May 2022 11:54:29 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id l11so9793524pgt.13;
+        Tue, 10 May 2022 11:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Se915aO2vPjgqlRAWsxAyLIac4mNleYAwasmX9ThcTs=;
+        b=qtKjfeAFfdWJmrcdiDBx3H9tdAengHKNuMfJ+52+dCHfb2fEN26tHa4yctHK9itWCi
+         /S7QNeU9Mg40uShLcIXkEmMQBAcSgSG8JD7arS1Sehk7BvdL17T/fc4ATxuX9eqVVo3M
+         5O0f9kenrSlerNMDKS+0efpEqXLaaxeNoAK3sb+ffui7C7i2Sh8tJUX66ZhJOL6H1JWb
+         cVEKHijbwtuXVvjBKUXvamEFrR0+KFcejFT4sK0xPlHJRPzLSrEI7qex90z2uxymQT3f
+         qY6M3x9dVrSQwXQJ89W7tNLpS467f62pp4xJkrmjfsjuLND+Utd1muiCbeJuVeU4BgDw
+         wiug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Se915aO2vPjgqlRAWsxAyLIac4mNleYAwasmX9ThcTs=;
+        b=Yjyw7v5N+iUZjL44wJ1lVodEQTyTU7xxIvqq+EZMsZ80kuO6Th9NReVIyQGmbrQfv5
+         Q21+VM7mZ51ZjMNGxwFUu45Z25qLE2F22pPTuFeqOGz8PwPvjOh/H0CMY4nUfvbIVe1M
+         ESOUrnWBVArz+vZFEIp0TC412qmFLO6zKlDaC88Hi+HtcnGCyE/eftym5GXcaqR61rPR
+         bJv6VP00o5hDsdjZl7qHYitQ7WqD4qgJh1GVp695mpT19tB/RXmVA4Nl++79Jy71OUO4
+         1bFXL53oBaMzO1760gW039lt3Oj7QRc+zxMHLlONIkkXUB8rk+ssIvAUqx51jJVyneyd
+         H+hg==
+X-Gm-Message-State: AOAM533SR8R+R28qjmBghAvsYalOD77rEKh1wKqcPBF9bHebZbLHUuGy
+        WfWY7P4zWYmRCfrRztB4fio=
+X-Google-Smtp-Source: ABdhPJweJ4qdfrx2+kzhEognD0PEYcgHg++Dtst9d97jC8SFSQp0MTMLH8RZ38mnOn0Ip+guLs6JoQ==
+X-Received: by 2002:aa7:83c2:0:b0:505:723f:6ace with SMTP id j2-20020aa783c2000000b00505723f6acemr21710594pfn.86.1652208868419;
+        Tue, 10 May 2022 11:54:28 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id r22-20020a170903021600b0015e8d4eb22csm2431432plh.118.2022.05.10.11.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 11:54:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 10 May 2022 08:54:26 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
+Message-ID: <Ynq04gC1l7C2tx6o@slm.duckdns.org>
+References: <20220510001807.4132027-1-yosryahmed@google.com>
+ <20220510001807.4132027-9-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510155107.srxifzuqfstvet2f@wittgenstein>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220510001807.4132027-9-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,90 +89,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:51:07PM +0200, Christian Brauner wrote:
-> On Tue, May 10, 2022 at 09:10:25AM -0500, Serge Hallyn wrote:
-> > On Tue, May 10, 2022 at 12:25:25PM +0200, Christian Brauner wrote:
-> > > On Mon, May 09, 2022 at 02:54:14PM -0500, Serge Hallyn wrote:
-> > > > On Wed, Apr 20, 2022 at 10:06:08AM -0400, Stefan Berger wrote:
-> > > > > From: Christian Brauner <brauner@kernel.org>
-> > > > > 
-> > > > > When securityfs creates a new file or directory via
-> > > > > securityfs_create_dentry() it will take an additional reference on the
-> > > > > newly created dentry after it has attached the new inode to the new
-> > > > > dentry and added it to the hashqueues.
-> > > > > If we contrast this with debugfs which has the same underlying logic as
-> > > > > securityfs. It uses a similar pairing as securityfs. Where securityfs
-> > > > > has the securityfs_create_dentry() and securityfs_remove() pairing,
-> > > > > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> > > > > 
-> > > > > In contrast to securityfs, debugfs doesn't take an additional reference
-> > > > > on the newly created dentry in __debugfs_create_file() which would need
-> > > > > to be put in debugfs_remove().
-> > > > > 
-> > > > > The additional dget() isn't a problem per se. In the current
-> > > > > implementation of securityfs each created dentry pins the filesystem via
-> > > > 
-> > > > Is 'via' an extra word here or is there a missing word?
-> > > > 
-> > > > I'll delay the rest of my response as the missing word may answer my
-> > > > remaining question :)
-> > > 
-> > > It can be both. It should either be removed or it should be followed by
-> > > "securityfs_create_dentry()". securityfs_create_dentry() takes two
-> > > references one in lookup_one_len() and another one explicitly via
-> > > dget(). The latter one isn't needed. Some of that has been covered in an
-> > > earlier thread:
-> > > https://lore.kernel.org/lkml/20220105101815.ldsm4s5yx7pmuiil@wittgenstein
-> > 
-> > Yes, I saw that two references were being taken.  And near as I can tell,
-> > the second one was never being dropped.  So if you tell me that before this
-> > patch the dentries are never freed, then I'm happy.  Otherwise, I'm
-> > bothered the fact that no matching dput is being deleted in the code (to
-> > match the extra dget being removed).  So where is the code where the final
-> > dput was happening, and is it the d_delete() you're adding which is making
-> > it so that that dput won't be called now?
-> 
-> * So consider mounting securityfs _without this patch applied_:
-> 
->   mount -t securityfs /sfs
->   
->   and assume we only have a single user that creates a file "foo" via
->   
->   securityfs_create_file()
->   {
->   	lookup_one_len();	// first dget()
->   	dget();			// second dget()
->   }
->   
->   now assume that user at some point calls
->   
->   void securityfs_remove()
->   {
->   	if (d_is_dir(dentry))
->   		simple_rmdir(dir, dentry);	// first dput()
->   	else
->   		simple_unlink(dir, dentry);	// first dput()
->   	dput(dentry);				// second dput()
->   }
-> 
-> * Now consider mounting securityfs _with this patch applied_:
-> 
->   securityfs_create_file()
->   {
->   	lookup_one_len();	// first dget()
->   }
->   
->   void securityfs_remove()
->   {
->   	dget();					// second dget() 
->   	if (d_is_dir(dentry))
->   		simple_rmdir(dir, dentry);	// first dput()
->   	else
->   		simple_unlink(dir, dentry);	// first dput()
->   	dput(dentry);				// second dput()
->   }
+Hello,
 
-Oh - I was thinking about the new d_delete, but I guess that doesn't matter.
+On Tue, May 10, 2022 at 12:18:06AM +0000, Yosry Ahmed wrote:
+> From: Hao Luo <haoluo@google.com>
+> 
+> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> be parameterized by a cgroup id and prints only that cgroup. So one
+> needs to specify a target cgroup id when attaching this iter. The target
+> cgroup's state can be read out via a link of this iter.
 
-thanks,
--serge
+Is there a reason why this can't be a proper iterator which supports
+lseek64() to locate a specific cgroup?
+
+Thanks.
+
+-- 
+tejun

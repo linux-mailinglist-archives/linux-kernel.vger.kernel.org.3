@@ -2,128 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298EC520B66
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A46520B69
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbiEJCo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S232802AbiEJCpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiEJCoz (ORCPT
+        with ESMTP id S232596AbiEJCpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:44:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 999679154C
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652150458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=btuSt+eTiboN9EpYdhYjr//P8XlvonQ50rzV3e6NBaU=;
-        b=TO1hx16UrxNuTF9+7/yp8CLSgdweQ7od1U6ld1WcSQifyBN6pkzb+0CzjKXQDnyLQIHkQV
-        GLWW/+hdzOXs1Vs+M0MvYWh1LQsG6h7/8cy/4a8npCwLqINVvqcVr13NttE7fOCJp3Tpd+
-        XZqqhXMnTvpKKv41fZw9xXyVohUVz9g=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-jXuMnlcDMfSuyUWjFhGkdw-1; Mon, 09 May 2022 22:40:57 -0400
-X-MC-Unique: jXuMnlcDMfSuyUWjFhGkdw-1
-Received: by mail-lj1-f198.google.com with SMTP id x4-20020a05651c104400b0024f253d777fso4684099ljm.16
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 19:40:57 -0700 (PDT)
+        Mon, 9 May 2022 22:45:51 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D853227F11C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:41:54 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r192so9351155pgr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 19:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=3CHnTRVSx7EiMqE3gXZruy28LmKpNUBw2gGOVHAk0qc=;
+        b=vbrYyQzxhp0kzXpHDjd4wnZjFNvSziTNaM92BL227G6XaufuQvxBCpQBYZWCqhtupK
+         7iBzTlFhTJ5mlWdCJDkdKiuiTGpwFEsc0og6zLqo7bugE6bqIkxKxaaWdr4UZn+cJjHk
+         yT3fz3YSmbH4rYVKVAfzMw4TU/KFYVi7q76uXJa5RZ3W3ntqdmm4q6S77p8G7z0R31cI
+         3BLscLUWVKecV5dqMBP/S1xGPvjKZjR+t48UyeJkKaIu4YmKRUYhbWJO407hL6vH8cF6
+         dt5ey17+oeBMwfXeULIiYBiqKp3UWUKFgcvT6MuKQ38mBL7iHqtsm4MtS0GMAEbUIfg0
+         6y+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=btuSt+eTiboN9EpYdhYjr//P8XlvonQ50rzV3e6NBaU=;
-        b=uw7dDhx8KmzPv2+IgCtDJMha9nvAM76aEGJimrLX8+Ltqpz7ntj1/D+BLc4E8gjFdU
-         GlEe+bvfK6Hr81tr1GdyZWVPmfPK13X+NoJrGNekoQ4F9VrtN6R4lUWcfjq1826x5Eff
-         q84yAACKDcD3P1/t+F84Y+pdm2uePnQdc1do2+kAaGIGifFyQK2VUkRJjnXspLhqMyqf
-         jR+2W6sJLFvsWY3U8r20bdlWEkRvcKpGGwiTQwvgd9lrzQQhAPkzgtELATcw7CRU875a
-         1xFFQXipORMoyaf2FsTyKwIANUKpW2ZzWVXNpbVfmk1KCrsqBhZBACRWQBwB8uaHi29Z
-         7HwA==
-X-Gm-Message-State: AOAM53006bARnKEaIsR9Nr1eqoqF75BQXi7hA3ULp7aXH4+BGuOTT4g4
-        BZveukXzJ3YSOD83iagpBhZpQpywRFjVl+gCxskPrHdaqnqXJopPCHlELKjJbT+324U70+xd+Ht
-        AKB2DcReWFGgeXENM3NYRl20dGKFBroyKmYHoICkw
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr14762567lfj.587.1652150455983;
-        Mon, 09 May 2022 19:40:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx466G++VqLk0Dv1De6DAfZjSjfHh3BKVNXytAvyofCCuDsxodfSwD1fVt/PLRyuQ58RkwsIcxETi0sYcfjero=
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
- h16-20020a19ca50000000b00471f556092bmr14762559lfj.587.1652150455802; Mon, 09
- May 2022 19:40:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3CHnTRVSx7EiMqE3gXZruy28LmKpNUBw2gGOVHAk0qc=;
+        b=ySuNwanQ/p8PcjX7ccdFnmhhgSRvbHMvZ1QC6wkvz7Wzi+ioTB8QI6Aw5pqT5Xv2rB
+         7QZBgEy0GxUBDqQDaGmcs9ox1TQ2AOBThK+Ao/xgx51W4WQRWEt0Lv+Jem5LMlU4tVF2
+         q7gn1h4R9Ba6shSTB9u6JAEZpS52EkEnLrpnufdPwafDFB8b2q5AA/xlUQ/bbbo+bOxj
+         BCA1c5CZ7xAT+TwROxx91miAcICMQZGFshDMybyEvJ6iU2pdJslcXB4P6xM4FzrzZe0y
+         sgBECWG0yIC6oMKEaY7ywT5Drp1hhlODiSByPuFZH3ae8Nt9SB4soHQ2mowVGT7pDVF+
+         xW0Q==
+X-Gm-Message-State: AOAM530YHab0i1xwGFWfeigxv3oW+YBCUjeC/ouP88Ie1ifmAI3x+AeU
+        VPtzSPzg9QUTA6X1/gY272JB7Q==
+X-Google-Smtp-Source: ABdhPJx1xry35nft2YoS3KHdxR6l5KuGykU/aL3okpA2DFlPwq9E3ctRStt5hElJmWDNarMTMl9LnA==
+X-Received: by 2002:a62:d10b:0:b0:50d:a238:75d4 with SMTP id z11-20020a62d10b000000b0050da23875d4mr18377014pfg.78.1652150514074;
+        Mon, 09 May 2022 19:41:54 -0700 (PDT)
+Received: from [10.86.119.184] ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e2sm566338plh.300.2022.05.09.19.41.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 19:41:53 -0700 (PDT)
+Message-ID: <d20aef2a-273a-3183-0923-bde9657d4418@bytedance.com>
+Date:   Tue, 10 May 2022 10:41:44 +0800
 MIME-Version: 1.0
-References: <20220508163317.204673-1-elic@nvidia.com> <20220508163317.204673-2-elic@nvidia.com>
-In-Reply-To: <20220508163317.204673-2-elic@nvidia.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 10 May 2022 10:40:44 +0800
-Message-ID: <CACGkMEs35nLewkMzP0p4mBHtiYb0DQaMmnG_EEpUad18ygnqxg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [External] Re: [PATCH bpf-next] bpf: add
+ bpf_map_lookup_percpu_elem for percpu map
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com
+References: <20220507024840.42662-1-zhoufeng.zf@bytedance.com>
+ <CAEf4BzZD5q2j229_gL_nDFse2v=k2Ea0nfguH+sOA2O1Nm5sQw@mail.gmail.com>
+ <CAJD7tkbd8qA-4goUCVW6Tf0xGpj2OSBXncpWhrWFn5y010oBMw@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAJD7tkbd8qA-4goUCVW6Tf0xGpj2OSBXncpWhrWFn5y010oBMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 12:33 AM Eli Cohen <elic@nvidia.com> wrote:
+在 2022/5/10 上午9:04, Yosry Ahmed 写道:
+> On Mon, May 9, 2022 at 5:34 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+>> On Fri, May 6, 2022 at 7:49 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>
+>>> Trace some functions, such as enqueue_task_fair, need to access the
+>>> corresponding cpu, not the current cpu, and bpf_map_lookup_elem percpu map
+>>> cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
+>>> percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
+>>>
+>>> The implementation method is relatively simple, refer to the implementation
+>>> method of map_lookup_elem of percpu map, increase the parameters of cpu, and
+>>> obtain it according to the specified cpu.
+>>>
+>> I don't think it's safe in general to access per-cpu data from another
+>> CPU. I'd suggest just having either a ARRAY_OF_MAPS or adding CPU ID
+>> as part of the key, if you need such a custom access pattern.
+> I actually just sent an RFC patch series containing a similar patch
+> for the exact same purpose. There are instances in the kernel where
+> per-cpu data is accessed from other cpus (e.g.
+> mem_cgroup_css_rstat_flush()). I believe, like any other variable,
+> percpu data can be safe or not safe to access, based on the access
+> pattern. It is up to the user to coordinate accesses to the variable.
 >
-> In vdpa_nl_cmd_dev_get_doit(), ff the call to genlmsg_reply() fails we
+> For example, in my use case, one of the accessors only reads percpu
+> values of different cpus, so it should be safe. If a user accesses
+> percpu data of another cpu without guaranteeing safety, they corrupt
+> their own data. I understand that the main purpose of percpu data is
+> lockless (and therefore fast) access, but in some use cases the user
+> may be able to safely (and locklessly) access the data concurrently.
+>
 
-I guess you mean "if" here?
+Regarding data security, I think users need to consider before using it, 
+such
+as hook enqueue_task_fair, the function itself takes the rq lock of the
+corresponding cpu, there is no problem, and the kernel only provides a 
+method,
+like bpf_per_cpu_ptr and bpf_this_cpu_ptr, data security needs to be 
+guaranteed
+by users in different scenarios, such as using bpf_spin_lock.
 
-> must not call nlmsg_free() since this is done inside genlmsg_reply().
->
-> Fix it.
->
-> Fixes: bc0d90ee021f ("vdpa: Enable user to query vdpa device info")
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
 
-Other than the above typo.
+>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>> ---
+>>>   include/linux/bpf.h            |  2 ++
+>>>   include/uapi/linux/bpf.h       |  9 +++++++++
+>>>   kernel/bpf/arraymap.c          | 15 +++++++++++++++
+>>>   kernel/bpf/core.c              |  1 +
+>>>   kernel/bpf/hashtab.c           | 32 ++++++++++++++++++++++++++++++++
+>>>   kernel/bpf/helpers.c           | 18 ++++++++++++++++++
+>>>   kernel/bpf/verifier.c          | 17 +++++++++++++++--
+>>>   kernel/trace/bpf_trace.c       |  2 ++
+>>>   tools/include/uapi/linux/bpf.h |  9 +++++++++
+>>>   9 files changed, 103 insertions(+), 2 deletions(-)
+>>>
+>> [...]
 
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-> ---
->  drivers/vdpa/vdpa.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 2b75c00b1005..fac89a0d8178 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -756,14 +756,19 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
->                 goto mdev_err;
->         }
->         err = vdpa_dev_fill(vdev, msg, info->snd_portid, info->snd_seq, 0, info->extack);
-> -       if (!err)
-> -               err = genlmsg_reply(msg, info);
-> +       if (err)
-> +               goto mdev_err;
-> +
-> +       err = genlmsg_reply(msg, info);
-> +       put_device(dev);
-> +       mutex_unlock(&vdpa_dev_mutex);
-> +       return err;
-> +
->  mdev_err:
->         put_device(dev);
->  err:
->         mutex_unlock(&vdpa_dev_mutex);
-> -       if (err)
-> -               nlmsg_free(msg);
-> +       nlmsg_free(msg);
->         return err;
->  }
->
-> --
-> 2.35.1
->
 

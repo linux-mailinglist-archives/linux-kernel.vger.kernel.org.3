@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AC0522444
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08BA522445
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349038AbiEJSmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S1349040AbiEJSm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243004AbiEJSmS (ORCPT
+        with ESMTP id S243811AbiEJSmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:42:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2DF268669;
-        Tue, 10 May 2022 11:42:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81C74B81F8E;
-        Tue, 10 May 2022 18:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C043CC385C2;
-        Tue, 10 May 2022 18:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652208135;
-        bh=v9assGn8KJvRcYSGGwT4yY/3QErO+MifFnTskNJEOJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DOiuH0NVr/M/+D5cGKtA0J1jPwNc7Q8iGoTIHw/Md93ZJ9xbOK2Ywccrswpf+c1dl
-         eKMzThtVr/hgf5FfUOj7+nCl8EARsp8oJ+Q6SwDhDrxMyEP+r0RPy+WlaoX9t7VNOC
-         llRIBpGK6tQ1GrdjtW081wS+TpLpCLyYg/qvj4C0JAnTlwr0/QtIbSprwj7+MO4S7d
-         h6byhmIWcZdfbOZzTEESvxHVQcl9rXmuxi5hq3HkhG5oMY0/tVZWe/Uw3lcG3Tc/QG
-         TtFuJKiVDAwisMzTPzG0YlDePMN/CkoBZ8qh2L+ljj0ClNXh1RMpumcWP2GgOGWQSr
-         jpyz2ShXwNNFg==
-Date:   Tue, 10 May 2022 11:42:13 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Rik van Riel <riel@fb.com>
-Cc:     "song@kernel.org" <song@kernel.org>,
-        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
-        Song Liu <songliubraving@fb.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
-Message-ID: <20220510184213.l3gjweeleyg7obca@treble>
-References: <20220507174628.2086373-1-song@kernel.org>
- <YnkuFrm1YR46OFx/@alley>
- <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
- <YnoawYtoCSvrK7lb@alley>
- <3a9bfb4a52b715bd8739d8834409c9549ec7f22f.camel@fb.com>
- <YnqIcw+dYsWz/w7g@alley>
- <6bf85ff908377508a5f5bcc7c4e75d598b96f388.camel@fb.com>
- <20220510165244.ikfh64ertnvodxb4@treble>
- <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
+        Tue, 10 May 2022 14:42:50 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9C82A1523
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:42:49 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-edeb6c3642so65772fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=fRGYlsYtKjeR7SLxK1Q/hlnVkvMCL7nW7++KYx2qsUr3ufQPpRKNDcItNb3XFZKlmj
+         LH7gI8/D/i3Afzj5hiM/wmaKdgdZFQQsfE4GK+XNsMXLU2UlbKLo9OgXOeLOgwt6V9Wj
+         cD56tNDF7rIpRVKCjOVD12frZ0cjULQSjgU5qPNiZ+n7ZlLyvOK2s+gsTHoN1xtArW+a
+         YUxLIJG2dcBR8tmQqsXVV6RlKQb5QMDQilX3/I9aSkDwc30fnb8UZXv1SiXdoHHv10fO
+         zM9EAuZ2Co+cHP9Y+lFIkzix6CMIWbRJSbNatyaod0I28DraoOS+bFRVuTdJEB0YTvyd
+         SkBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=2povo/0hjHbtypL6IIS/pUvlq7B88qiKgD0ZSLx0nuAZHYcolMjjsYOCQ6PXJo8R5p
+         pmly/75OMf+4hOUD5Pl04oZqmqe84FSMcsXrCoM1kNQNFYGlsH2tXSRYmEFszKjB8W/C
+         KS50J8kLFiAw96ZVU84XtS6Dxe3lesx2fAw9Y0EmDu3JbPjY1y/MMVygtclP2OMwDqMr
+         b/4fIf4Yq+fyt5P/d2m+1V/nWw00FjIJafJflLwTxAVPJBe0anxL7TF08k3LNtZHdD/M
+         tU5MDZhRukYnUdUXWEYDgLYrNGpM0SB6YZplZmQw5t2MDuGP0zcJIkdaSLORxSxvAkyB
+         Ob8Q==
+X-Gm-Message-State: AOAM530ihQGTONOCn0zqQON+nDpOP544jkSqZcfQ83IAveK2aP644xhl
+        /cP9CkSASjcEymCWMVwnSk+NkQwBnbzEbtFrOuE=
+X-Google-Smtp-Source: ABdhPJxaTBiMWx7mUrvSuhCxru3ZMoNKmOc1CKeeHpMWZTa13yrxLkNqcJnqbAU8R2tIoA5usw9ktgSqolq95aaKoj4=
+X-Received: by 2002:a05:6870:d59a:b0:de:9ec0:8f07 with SMTP id
+ u26-20020a056870d59a00b000de9ec08f07mr846671oao.15.1652208168441; Tue, 10 May
+ 2022 11:42:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1bd15361edfd4db9fc9271d35e7bbe5edad1b87a.camel@fb.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a4a:52c3:0:0:0:0:0 with HTTP; Tue, 10 May 2022 11:42:47
+ -0700 (PDT)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <tracymedicinemed1@gmail.com>
+Date:   Tue, 10 May 2022 11:42:47 -0700
+Message-ID: <CAOHAJ295wV4_9vczhLvNpTKDnQNf9McO5=pWBYtzjqzaosod8w@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4998]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [avamedicinemed3[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tracymedicinemed1[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tracymedicinemed1[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 06:07:00PM +0000, Rik van Riel wrote:
-> On Tue, 2022-05-10 at 09:52 -0700, Josh Poimboeuf wrote:
-> > On Tue, May 10, 2022 at 04:07:42PM +0000, Rik van Riel wrote:
-> > > > 
-> > > Now I wonder if we could just hook up a preempt notifier
-> > > for kernel live patches. All the distro kernels already
-> > > need the preempt notifier for KVM, anyway...
-> > > 
-> > 
-> > I wouldn't be opposed to that, but how does it solve this problem? 
-> > If
-> > as Peter said cond_resched() can be a NOP, then preemption would have
-> > to
-> > be from an interrupt, in which case frame pointers aren't reliable.
-> > 
-> The systems where we are seeing problems do not, as far
-> as I know, throw softlockup errors, so the kworker
-> threads that fail to transition to the new KLP version
-> are sleeping and getting scheduled out at times.
-
-Are they sleeping due to an explicit call to cond_resched()?
-
-> A KLP transition preempt notifier would help those
-> kernel threads transition to the new KLP version at
-> any time they reschedule.
-
-... unless cond_resched() is a no-op due to CONFIG_PREEMPT?
-
-> How much it will help is hard to predict, but I should
-> be able to get results from a fairly large sample size
-> of systems within a few weeks :)
-
-As Peter said, keep in mind that we will need to fix other cases beyond
-Facebook, i.e., CONFIG_PREEMPT combined with non-x86 arches which don't
-have ORC so they can't reliably unwind from an IRQ.
-
 -- 
-Josh
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

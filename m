@@ -2,117 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F0F520ACB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E4A520ACE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiEJBoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S234317AbiEJBru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiEJBoH (ORCPT
+        with ESMTP id S234304AbiEJBrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:44:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42DD2BB1B
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652146811; x=1683682811;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DR3wN2x6Pr5dYK0lRzAW/+NtoVTIzkGo2sj/9c7Y7Ek=;
-  b=Mq6yP3K7I5ZWSgzLH2Z0By77/thfOZqdfsb4Y2of4k86MuwGmHRZrR/i
-   gm/nwKAEYovMvUZA/hlcgG2dgmORiIAsUczHO6b29pRFeazTPu4Q5Wp5j
-   e16ui/0Tb+lbx4HQcjT7F0FobHd6kXqK17HrVlyrZwX0ILfepwef6lGq+
-   3O8KtAtar+6ioirOtbnzjiUdkMPMXD0LSPjdOOOSoKDqk+4wSObdFegJl
-   GR4zDUwY09pLtK/pVjqqxv667D15KSvd+Xw6jR9fAHLvoNBSCGJWL+SEc
-   JEUriaOnLr+qv2Dio5ZPVo08LRTNWJWAypIiLPCQJfNlNrV7MW4lQ7KYE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266814670"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="266814670"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 18:40:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="813744001"
-Received: from abehrenx-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.1.104])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 18:40:07 -0700
-Message-ID: <7cadc7777238a50dec4c18119e1c68fd3c5cfe96.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 10 May 2022 13:40:05 +1200
-In-Reply-To: <20220510013038.ggubvsrwf7pyoamk@box.shutemov.name>
-References: <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
-         <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
-         <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
-         <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
-         <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
-         <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
-         <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
-         <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
-         <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
-         <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
-         <20220510013038.ggubvsrwf7pyoamk@box.shutemov.name>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 9 May 2022 21:47:47 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B93E286FE7;
+        Mon,  9 May 2022 18:43:51 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q76so13426927pgq.10;
+        Mon, 09 May 2022 18:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HgGTA2L0WTR4KLBkAGFUu4sFQBHJ/DJdCql0JMw+UdA=;
+        b=PQtM78l2Szcsfpy4oz0zTJGNYjLHXrbEDGhoEKp+SP/Pa1siwRO+rDz3t0BFl3resm
+         dd8tcXGT5i6a82bz80DTxIKuLb3u8lAwq8yUsRIx0GhudcTqTvxtzIEeBaOjbjpCitNq
+         q+VyfCneFhYGz4mP2xJ3gYDnKji0GVSkfrT2Oee3fXek4xuIo880FhrxH+lMXsrr5xwx
+         Nq1pIdHfa41nMi5miCZmzs4D/xeLesHo5FfIvycHlMyBPbIUJeXhmdjr3j9zvs+wYUH5
+         o6+K3hpdHvKaBvRM4E/gsKQoEwDwy4zBLdaqaK3c6sqnny9rfkbdfe6hT5+LSAR8EzcN
+         /8NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HgGTA2L0WTR4KLBkAGFUu4sFQBHJ/DJdCql0JMw+UdA=;
+        b=j/14owxfGtVHrryeVuZ/DjVSDtKKlajnXYzVrsq+v+BX55QkhlH+SAk/PBoSBmzyb6
+         GTu3Q66fHohy4NXxWNnFUTV+4ZSsZDqs2Y+kjcgzn3wx7PfpH+jF/g56aYRuibvbxdZr
+         oEJPfOoLBnixg+Z4EQ25WTkjb5339cvaM7iy9FoTz6/T+BgiJws+LKnfPwxpjw9uTtse
+         vFqg2hNg3m7MO5ltB24JaTTFmqhul9YuMUf9OweGnkqO/FVCVbLwLI+h5CGDTE90e1IP
+         QadT/L4EvBiGu40o/VXY4L7BEbBBNNLvFgyTEqdadmkh5eXPSH4hro5DT93BFuBrLNKx
+         iJ7A==
+X-Gm-Message-State: AOAM533SWdIf5kPGzWeI51TiwF/9aDxagQKmE+bgiC6dxdiuVmsiMXpH
+        vrs9J+h3GMJvHGKFEm6bEM4=
+X-Google-Smtp-Source: ABdhPJy2FOePOQ00ab2y0snBDHiAx1OOUXyfOevwooeooZCPtaDvJEiNPq0H1xGkxOIzZYF9ARPTVw==
+X-Received: by 2002:a65:6e41:0:b0:39c:c97b:2aef with SMTP id be1-20020a656e41000000b0039cc97b2aefmr15690480pgb.473.1652147030614;
+        Mon, 09 May 2022 18:43:50 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g1-20020a17090a7d0100b001d93118827asm380903pjl.57.2022.05.09.18.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 18:43:48 -0700 (PDT)
+Message-ID: <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
+X-Google-Original-Message-ID: <20220510014338.GA1267733@cgel.zte@gmail.com>
+Date:   Tue, 10 May 2022 01:43:38 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
+        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, william.kucharski@oracle.com,
+        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
+        songmuchun@bytedance.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+ <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
+ <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
+ <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
+ <6278fa75.1c69fb81.9c598.f794@mx.google.com>
+ <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 04:30 +0300, Kirill A. Shutemov wrote:
-> On Tue, May 10, 2022 at 11:54:12AM +1200, Kai Huang wrote:
-> > On Mon, 2022-05-09 at 15:09 +0300, Kirill A. Shutemov wrote:
-> > > On Mon, May 09, 2022 at 03:37:22PM +1200, Kai Huang wrote:
-> > > > On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
-> > > > > On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
-> > > > > > Kirill, what's your opinion?
-> > > > > 
-> > > > > I said before that I think DMA API is the right tool here.
-> > > > > 
-> > > > > Speculation about future of DMA in TDX is irrelevant here. If semantics
-> > > > > change we will need to re-evaluate all users. VirtIO uses DMA API and it
-> > > > > is conceptually the same use-case: communicate with the host.
-> > > > 
-> > > > Virtio is designed for device driver to use, so it's fine to use DMA API. And
-> > > > real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
-> > > > assumption.
+On Mon, May 09, 2022 at 01:48:39PM +0200, Michal Hocko wrote:
+> On Mon 09-05-22 11:26:43, CGEL wrote:
+> > On Mon, May 09, 2022 at 12:00:28PM +0200, Michal Hocko wrote:
+> > > On Sat 07-05-22 02:05:25, CGEL wrote:
+> > > [...]
+> > > > If there are many containers to run on one host, and some of them have high
+> > > > performance requirements, administrator could turn on thp for them:
+> > > > # docker run -it --thp-enabled=always
+> > > > Then all the processes in those containers will always use thp.
+> > > > While other containers turn off thp by:
+> > > > # docker run -it --thp-enabled=never
 > > > 
-> > > Whether attestation driver uses struct device is implementation detail.
-> > > I don't see what is you point.
+> > > I do not know. The THP config space is already too confusing and complex
+> > > and this just adds on top. E.g. is the behavior of the knob
+> > > hierarchical? What is the policy if parent memcg says madivise while
+> > > child says always? How does the per-application configuration aligns
+> > > with all that (e.g. memcg policy madivise but application says never via
+> > > prctl while still uses some madvised - e.g. via library).
+> > >
 > > 
-> > No real DMA is involved in attestation.
+> > The cgroup THP behavior is align to host and totally independent just likes
+> > /sys/fs/cgroup/memory.swappiness. That means if one cgroup config 'always'
+> > for thp, it has no matter with host or other cgroup. This make it simple for
+> > user to understand or control.
 > 
-> As with VirtIO. So what?
+> All controls in cgroup v2 should be hierarchical. This is really
+> required for a proper delegation semantic.
+>
+
+Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
+Some distributions like Ubuntu is still using cgroup v1.
+
+> > If memcg policy madivise but application says never, just like host, the result
+> > is no THP for that application.
+> > 
+> > > > By doing this we could promote important containers's performance with less
+> > > > footprint of thp.
+> > > 
+> > > Do we really want to provide something like THP based QoS? To me it
+> > > sounds like a bad idea and if the justification is "it might be useful"
+> > > then I would say no. So you really need to come with a very good usecase
+> > > to promote this further.
+> > 
+> > At least on some 5G(communication technology) machine, it's useful to provide
+> > THP based QoS. Those 5G machine use micro-service software architecture, in
+> > other words one service application runs in one container.
 > 
+> I am not really sure I understand. If this is one application per
+> container (cgroup) then why do you really need per-group setting?
+> Does the application is a set of different processes which are only very
+> loosely tight?
+> 
+For micro-service architecture, the application in one container is not a
+set of loosely tight processes, it's aim at provide one certain service,
+so different containers means different service, and different service
+has different QoS demand. 
 
-No real DMA can happen to virtio buffer.  Consider DPDK which uses virtio +
-vhost-user.  But I don't want to argue anymore about this topic. :)
+The reason why we need per-group(per-container) setting is because most
+container are managed by compose software, the compose software provide
+UI to decide how to run a container(likes setting swappiness value). For
+example the docker compose:
+https://docs.docker.com/compose/#compose-v2-and-the-new-docker-compose-command
 
--- 
-Thanks,
--Kai
+To make it clearer, I try to make a summary for why container needs this patch:
+    1.one machine can run different containers;
+    2.for some scenario, container runs only one service inside(can be only one
+application);
+    3.different containers provide different services, different services have
+different QoS demands;
+    4.THP has big influence on QoS. It's fast for memory access, but eat more
+memory;
+    5.containers usually managed by compose software, which treats container as
+base management unit;
+    6.this patch provide cgroup THP controller, which can be a method to adjust
+container memory QoS.
 
-
+> > Container becomes
+> > the suitable management unit but not the whole host. And some performance
+> > sensitive containers desiderate THP to provide low latency communication.
+> > But if we use THP with 'always', it will consume more memory(on our machine
+> > that is about 10% of total memory). And unnecessary huge pages will increase
+> > memory pressure, add latency for minor pages faults, and add overhead when
+> > splitting huge pages or coalescing normal sized pages into huge pages.
+> 
+> It is still not really clear to me how do you achieve that the whole
+> workload in the said container has the same THP requirements.
+> -- 
+> Michal Hocko
+> SUSE Labs

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445615217F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532E952195C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243543AbiEJNbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S245490AbiEJNrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243564AbiEJNWE (ORCPT
+        with ESMTP id S243993AbiEJNcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D37532D1;
-        Tue, 10 May 2022 06:16:22 -0700 (PDT)
+        Tue, 10 May 2022 09:32:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122BB1B5FAE;
+        Tue, 10 May 2022 06:23:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28FAE615FA;
-        Tue, 10 May 2022 13:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EC1C385A6;
-        Tue, 10 May 2022 13:16:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88AC76175F;
+        Tue, 10 May 2022 13:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EA2C385C2;
+        Tue, 10 May 2022 13:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188563;
-        bh=rcPMcmx+O2Rg0m2AEX3UqeiP68IktvyIl4QmJckVrk4=;
+        s=korg; t=1652189038;
+        bh=uZMOLfy6eiL9LYCuuMPoUD+KDOWsUnsgqeVOwCZTtgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pxD+QVcx+Q4CcaTPCrkLRokkfQpJFuBOdAGR4F1FV5bvD2l6qfXd5+Sr7ad/k50w5
-         FiZFtYpVAhyI/KYCSNKrrdaIJ0Ah3SgDcGOyzRTC5d8u8UZ+Y7fZ/kFo0sQgnAhwzj
-         UJF4uiI2pDx1MDbp7d/eAZD9aMySQ64Kn0H1vOjk=
+        b=eYo1TvmkiyMz5fvI5VzX2fgq2XuW5lUQT3G7gQmtj3/1iXTIWkZM+5dSpXvQDAdR8
+         XcEXgCYzwKRaY4PB07TjT0xOotc6yeh46ja0CGB+OunxY/F+y0P/3looqCuUd6sAXv
+         xFSQ66/8tEVh5xdDhsg/CBjUa8mUzahxge1db4kE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 4.14 49/78] tty: n_gsm: fix missing explicit ldisc flush
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.4 06/52] firewire: fix potential uaf in outbound_phy_packet_callback()
 Date:   Tue, 10 May 2022 15:07:35 +0200
-Message-Id: <20220510130733.989336187@linuxfoundation.org>
+Message-Id: <20220510130730.044041189@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,35 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-commit 17eac652028501df7ea296b1d9b9c134db262b7d upstream.
+commit b7c81f80246fac44077166f3e07103affe6db8ff upstream.
 
-In gsm_cleanup_mux() the muxer is closed down and all queues are removed.
-However, removing the queues is done without explicit control of the
-underlying buffers. Flush those before freeing up our queues to ensure
-that all outgoing queues are cleared consistently. Otherwise, a new mux
-connection establishment attempt may time out while the underlying tty is
-still busy sending out the remaining data from the previous connection.
+&e->event and e point to the same address, and &e->event could
+be freed in queue_event. So there is a potential uaf issue if
+we dereference e after calling queue_event(). Fix this by adding
+a temporary variable to maintain e->client in advance, this can
+avoid the potential uaf issue.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-10-daniel.starke@siemens.com
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-2-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/firewire/core-cdev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2113,6 +2113,7 @@ static void gsm_cleanup_mux(struct gsm_m
- 			gsm_dlci_release(gsm->dlci[i]);
- 	mutex_unlock(&gsm->mutex);
- 	/* Now wipe the queues */
-+	tty_ldisc_flush(gsm->tty);
- 	list_for_each_entry_safe(txq, ntxq, &gsm->tx_list, list)
- 		kfree(txq);
- 	INIT_LIST_HEAD(&gsm->tx_list);
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -1482,6 +1482,7 @@ static void outbound_phy_packet_callback
+ {
+ 	struct outbound_phy_packet_event *e =
+ 		container_of(packet, struct outbound_phy_packet_event, p);
++	struct client *e_client;
+ 
+ 	switch (status) {
+ 	/* expected: */
+@@ -1498,9 +1499,10 @@ static void outbound_phy_packet_callback
+ 	}
+ 	e->phy_packet.data[0] = packet->timestamp;
+ 
++	e_client = e->client;
+ 	queue_event(e->client, &e->event, &e->phy_packet,
+ 		    sizeof(e->phy_packet) + e->phy_packet.length, NULL, 0);
+-	client_put(e->client);
++	client_put(e_client);
+ }
+ 
+ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
 
 

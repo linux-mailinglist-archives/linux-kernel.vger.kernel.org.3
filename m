@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C7F5225BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84975225BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbiEJUoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S234843AbiEJUpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237005AbiEJUo3 (ORCPT
+        with ESMTP id S229484AbiEJUpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:44:29 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83EA2A375A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:44:24 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso1670644wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:44:24 -0700 (PDT)
+        Tue, 10 May 2022 16:45:04 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2B22A28F6;
+        Tue, 10 May 2022 13:45:02 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f7bb893309so193180737b3.12;
+        Tue, 10 May 2022 13:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=H+z42sapPI1YBphYIrh6dW0GFMAVRokw99cL8ZqGxg8=;
-        b=CTpiNl02mk2asLHcnBsuNAVd8tR5UxljFjwGWN7EPCdyw8jw1qTJN8Kj958PoCw+f9
-         C32LJd3iJyAPIc7JnhsDf3F+CLv0mIznaGhwzjGKAYcrkMmcqX0unecnaIRY4eg2RdS/
-         0wpRZMze08BUkQN9Kfpmmxj4PSmOnYIqgNxsMT/R3rkcd0HxVerVL26sQmKyCcoM0a/m
-         s7JJXvfYmJef+dh/gZmajmQP15BB/zKpZ1gNodzL0OvqccJTjiHJ10N8+lrMEhpadzdu
-         fFFf+dHjfdsLLT+W0V8q1dm0F4FO7Oj3L3kgVi1f9Ro2JBTKBHwIl+3Ypo+uOj1B/r4q
-         F3zQ==
+        bh=BrRJYBjS3oQOjizWwUlaoTbPU5hZi97x1mqlvUymfoo=;
+        b=XQfxFjb6eCfUJ/OGp0e5FtspQty+u+fX95U2bLklHVuQI+I4OnEZmBWN2Yd5UXoN03
+         tWUwhDAumcnvaSVWzgHH9SZF8rWlu+IKYeX9TmLl3qsE0RSTuy+jBY0Oxiz1nMGarjQc
+         NhnNps6uBvtGsjaIsPclMz9+pRXyGY9pXJgB+tretpXCX3VtbNDAH5K1Dnt4NqeXkGjq
+         vOe78g3VIdGSPYSHTLT8AQpdzZFm4ENroeD3cPI/3MI42X4DpKlRou8AdsYBP1GN/QIs
+         Nvm5t/iY6T2SRLJrVTahz7Vf0bTktj6dnQZY8ezx7umP526yIkIjzv9Lc9cbF+dafQNe
+         UL1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H+z42sapPI1YBphYIrh6dW0GFMAVRokw99cL8ZqGxg8=;
-        b=05ZpI6KVPE8xPBGfhA8HUqMSAXvYpHql5vZQLn1SBEABK8WM/8TD0h6J/gZIrQ1/3c
-         htMZ2iONqwVg4DUAXD5UjzZLNBjQR0iS5iqkUaQBcrTs5k/uwZ8lUjfBZlLKG4M2d7jd
-         W4TQ/Ii6McMyQIaWKP/0zjS3AmFSJIoBnIxIxw2XRHPhZIbg2Tx4pr4cVkpiV8cdLXSS
-         aVsFpN5JWKnA7bwjRsFfBRsnLEZ7kKZRLAuQf0NdU14EnigUUx1IgIlZ0PfM6YzbjD3E
-         +DE7uh/AfSr61Hv+GG5t5kuJiXiNPtOKOBmB9OoU+Mkez8PC24RJtdOJmvHtZwQqBprr
-         Nuyw==
-X-Gm-Message-State: AOAM5307k/BWVednErWfl8JkeOmudSHjOeeoP+1SNPrEbhJoTIuJAUHU
-        G9KLcP3+DR9EBbZF4nX2PgzE8G9AMnBB2lGaojrGmQ==
-X-Google-Smtp-Source: ABdhPJwliUlItsrpLn1+I5hrd9rEc+YvxNDiJSj3yNhjvh/mpLFiO4d78N2zmuNH2esxan4r8P2KPApz87peJAW0mPs=
-X-Received: by 2002:a05:600c:4ecc:b0:394:790d:5f69 with SMTP id
- g12-20020a05600c4ecc00b00394790d5f69mr1691105wmq.196.1652215462895; Tue, 10
- May 2022 13:44:22 -0700 (PDT)
+        bh=BrRJYBjS3oQOjizWwUlaoTbPU5hZi97x1mqlvUymfoo=;
+        b=CFJftJcZkXtg/ym0i5ChwmhUPEIZQL6AXbF++/e2SwmUddhqlX3FY7timCgjf6k0Yv
+         xxY+pludES16EdvpCYjOfs9RrlWs2oP47+8Z98A0kBIX2UbS78802EZo3ahiVzwrI6kL
+         Ekne0/aa2PFC3dA1tNyRe8D9q2igYD2bikd+FKPQoId1vxomeW1HhsMk2TLnALLSQrSl
+         vvMilO/XM05tUrWSIjUZvo6ZuGeOT1QCRcHoKbuTt52j9JCdAHbi0n9iCP1VKy3fkkBf
+         Txxgp8trrPMrGYZ/Zc7xg6xhJ8btQeiXQ2Q3b4HtIqT9cWo2kOU8qOuHz+mANdnyMvxA
+         5b6Q==
+X-Gm-Message-State: AOAM53243hi1GMHICWLQ2UBbkL1G2GOn6MpBxnmaPVKJ2pIGWf+A+wA2
+        TvHpKJPlOJF7L22k/FvyaZJhOj1NgXuiIlSGnZk=
+X-Google-Smtp-Source: ABdhPJwnewgoQKLhIkzPf7D369Q+CSf7gvEBJNCOhwvaZqVd7IKm197Kq3ivHnsUA6DUpfxqeryq5cfLDxtupFAHVX4=
+X-Received: by 2002:a81:50c5:0:b0:2f7:b5e4:218e with SMTP id
+ e188-20020a8150c5000000b002f7b5e4218emr21854329ywb.361.1652215501936; Tue, 10
+ May 2022 13:45:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510001807.4132027-1-yosryahmed@google.com>
- <20220510001807.4132027-2-yosryahmed@google.com> <Ynqyh+K1tMyNCTUW@slm.duckdns.org>
- <CAJD7tkZVXJY3s2k8M4pcq+eJVD+aX=iMDiDKtdE=j0_q+UWQzA@mail.gmail.com> <YnrEDfZs1kuB1gu5@slm.duckdns.org>
-In-Reply-To: <YnrEDfZs1kuB1gu5@slm.duckdns.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 10 May 2022 13:43:46 -0700
-Message-ID: <CAJD7tkahC1e-_K0xJMu-xXwd8WNVzYDRgJFua9=JhNRq7b+G8A@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/9] bpf: introduce CGROUP_SUBSYS_RSTAT
- program type
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        cgroups@vger.kernel.org
+References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 10 May 2022 21:44:26 +0100
+Message-ID: <CADVatmNyky-XXaeAiQ5ypZ7+7F7fzLshB4bNWt5v3RdnXStsOg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/70] 5.10.115-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:59 PM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Tue, May 10, 2022 at 12:34:42PM -0700, Yosry Ahmed wrote:
-> > The rationale behind associating this work with cgroup_subsys is that
-> > usually the stats are associated with a resource (e.g. memory, cpu,
-> > etc). For example, if the memory controller is only enabled for a
-> > subtree in a big hierarchy, it would be more efficient to only run BPF
-> > rstat programs for those cgroups, not the entire hierarchy. It
-> > provides a way to control what part of the hierarchy you want to
-> > collect stats for. This is also semantically similar to the
-> > css_rstat_flush() callback.
->
-> Hmm... one major point of rstat is not having to worry about these things
-> because we iterate what's been active rather than what exists. Now, this
-> isn't entirely true because we share the same updated list for all sources.
-> This is a trade-off which makes sense because 1. the number of cgroups to
-> iterate each cycle is generally really low anyway 2. different controllers
-> often get enabled together. If the balance tilts towards "we're walking too
-> many due to the sharing of updated list across different sources", the
-> solution would be splitting the updated list so that we make the walk finer
-> grained.
->
-> Note that the above doesn't really affect the conceptual model. It's purely
-> an optimization decision. Tying these things to a cgroup_subsys does affect
-> the conceptual model and, in this case, the userland API for a performance
-> consideration which can be solved otherwise.
->
-> So, let's please keep this simple and in the (unlikely) case that the
-> overhead becomes an issue, solve it from rstat operation side.
->
-> Thanks.
+Hi Greg,
 
-I assume if we do this optimization, and have separate updated lists
-for controllers, we will still have a "core" updated list that is not
-tied to any controller. Is this correct?
+On Tue, May 10, 2022 at 2:25 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.115 release.
+> There are 70 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
 
-If yes, then we can make the interface controller-agnostic (a global
-list of BPF flushers). If we do the optimization later, we tie BPF
-stats to the "core" updated list. We can even extend the userland
-interface then to allow for controller-specific BPF stats if found
-useful.
+Just some initial report for you.
+As mentioned in the mail for 4.19-stable, it will also need
+d422c6c0644b ("MIPS: Use address-of operator on section symbols").
 
-If not, and there will only be controller-specific updated lists then,
-then we might need to maintain a "core" updated list just for the sake
-of BPF programs, which I don't think would be favorable.
+But apart from that, there is also another failure.
+drivers/usb/phy/phy-generic.c: In function 'usb_phy_gen_create_phy':
+drivers/usb/phy/phy-generic.c:271:26: error: implicit declaration of
+function 'devm_regulator_get_exclusive'; did you mean
+'regulator_get_exclusive'? [-Werror=implicit-function-declaration]
+  271 |         nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
 
-What do you think? Either-way, I will try to document our discussion
-outcome in the commit message (and maybe the code), so that
-if-and-when this optimization is made, we can come back to it.
+This was introduced in v5.10.114 by d22d92230ffb ("usb: phy: generic:
+Get the vbus supply") but I missed testing that release. :(
 
 
->
-> --
-> tejun
+--
+Regards
+Sudip

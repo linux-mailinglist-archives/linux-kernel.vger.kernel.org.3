@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B19521BF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3A5521AF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344324AbiEJO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S242915AbiEJOFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244350AbiEJNwy (ORCPT
+        with ESMTP id S244810AbiEJNmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCCD7A80C;
-        Tue, 10 May 2022 06:38:19 -0700 (PDT)
+        Tue, 10 May 2022 09:42:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB4A81991;
+        Tue, 10 May 2022 06:30:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C44615C8;
-        Tue, 10 May 2022 13:38:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BA8C385C6;
-        Tue, 10 May 2022 13:38:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BB461763;
+        Tue, 10 May 2022 13:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A94B8C385C2;
+        Tue, 10 May 2022 13:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189883;
-        bh=1Cs4CGR/T9aWauJL6iNFtwdxt8Jg/kB7NldSroRV47k=;
+        s=korg; t=1652189433;
+        bh=bZpbnHDawu3VCWMLYiGy43zxTarsma7M7G7naDOwl/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCYo8yz5KE09ntmr3Jef+1UKr/IPN4WNM7RXt7IH0F2xdSmQuUauN8b23fdsPkMJl
-         dAZtaEYCjVcfTXHrYQ2WyhKNjM7w1yxodhMzc3JlS/tEIPHHoUd3oC95iX0xYUcD4M
-         OtPjAaSJYrcmKl2BusKr6mmJrIhBkPV1TmoRHtZE=
+        b=SHHDj38GX4WBsxMtFT119xfrPyB2F5UwLG5fd+k+R+x/ZTrUIWNz48NPb2c84GnQr
+         3ONmIYq/UZzAWFbIJRVe73GG4jO8R/rTsARW7jsQdaJV6wfhQn4qkjq/+NF47Ik+D7
+         KsECsk1SIoypHZbRR7hCODnxBEE0iZMXH9++m1rw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 042/140] s390/dasd: prevent double format of tracks for ESE devices
+        stable@vger.kernel.org, Oz Shlomo <ozsh@nvidia.com>,
+        Paul Blakey <paulb@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.15 050/135] net/mlx5e: CT: Fix queued up restore put() executing after relevant ft release
 Date:   Tue, 10 May 2022 15:07:12 +0200
-Message-Id: <20220510130742.823129293@linuxfoundation.org>
+Message-Id: <20220510130741.835869717@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,123 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Haberland <sth@linux.ibm.com>
+From: Paul Blakey <paulb@nvidia.com>
 
-commit 71f3871657370dbbaf942a1c758f64e49a36c70f upstream.
+commit b069e14fff46c8da9fcc79957f8acaa3e2dfdb6b upstream.
 
-For ESE devices we get an error for write operations on an unformatted
-track. Afterwards the track will be formatted and the IO operation
-restarted.
-When using alias devices a track might be accessed by multiple requests
-simultaneously and there is a race window that a track gets formatted
-twice resulting in data loss.
+__mlx5_tc_ct_entry_put() queues release of tuple related to some ct FT,
+if that is the last reference to that tuple, the actual deletion of
+the tuple can happen after the FT is already destroyed and freed.
 
-Prevent this by remembering the amount of formatted tracks when starting
-a request and comparing this number before actually formatting a track
-on the fly. If the number has changed there is a chance that the current
-track was finally formatted in between. As a result do not format the
-track and restart the current IO to check.
+Flush the used workqueue before destroying the ct FT.
 
-The number of formatted tracks does not match the overall number of
-formatted tracks on the device and it might wrap around but this is no
-problem. It is only needed to recognize that a track has been formatted at
-all in between.
-
-Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
-Cc: stable@vger.kernel.org # 5.3+
-Signed-off-by: Stefan Haberland <sth@linux.ibm.com>
-Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-3-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: a2173131526d ("net/mlx5e: CT: manage the lifetime of the ct entry object")
+Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd.c      |    7 +++++++
- drivers/s390/block/dasd_eckd.c |   19 +++++++++++++++++--
- drivers/s390/block/dasd_int.h  |    2 ++
- 3 files changed, 26 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/s390/block/dasd.c
-+++ b/drivers/s390/block/dasd.c
-@@ -1422,6 +1422,13 @@ int dasd_start_IO(struct dasd_ccw_req *c
- 		if (!cqr->lpm)
- 			cqr->lpm = dasd_path_get_opm(device);
- 	}
-+	/*
-+	 * remember the amount of formatted tracks to prevent double format on
-+	 * ESE devices
-+	 */
-+	if (cqr->block)
-+		cqr->trkcount = atomic_read(&cqr->block->trkcount);
-+
- 	if (cqr->cpmode == 1) {
- 		rc = ccw_device_tm_start(device->cdev, cqr->cpaddr,
- 					 (long) cqr, cqr->lpm);
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -3083,13 +3083,24 @@ static int dasd_eckd_format_device(struc
- }
- 
- static bool test_and_set_format_track(struct dasd_format_entry *to_format,
--				      struct dasd_block *block)
-+				      struct dasd_ccw_req *cqr)
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
+@@ -1699,6 +1699,8 @@ mlx5_tc_ct_flush_ft_entry(void *ptr, voi
+ static void
+ mlx5_tc_ct_del_ft_cb(struct mlx5_tc_ct_priv *ct_priv, struct mlx5_ct_ft *ft)
  {
-+	struct dasd_block *block = cqr->block;
- 	struct dasd_format_entry *format;
- 	unsigned long flags;
- 	bool rc = false;
++	struct mlx5e_priv *priv;
++
+ 	if (!refcount_dec_and_test(&ft->refcount))
+ 		return;
  
- 	spin_lock_irqsave(&block->format_lock, flags);
-+	if (cqr->trkcount != atomic_read(&block->trkcount)) {
-+		/*
-+		 * The number of formatted tracks has changed after request
-+		 * start and we can not tell if the current track was involved.
-+		 * To avoid data corruption treat it as if the current track is
-+		 * involved
-+		 */
-+		rc = true;
-+		goto out;
-+	}
- 	list_for_each_entry(format, &block->format_list, list) {
- 		if (format->track == to_format->track) {
- 			rc = true;
-@@ -3109,6 +3120,7 @@ static void clear_format_track(struct da
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&block->format_lock, flags);
-+	atomic_inc(&block->trkcount);
- 	list_del_init(&format->list);
- 	spin_unlock_irqrestore(&block->format_lock, flags);
- }
-@@ -3170,8 +3182,11 @@ dasd_eckd_ese_format(struct dasd_device
- 	}
- 	format->track = curr_trk;
- 	/* test if track is already in formatting by another thread */
--	if (test_and_set_format_track(format, block))
-+	if (test_and_set_format_track(format, cqr)) {
-+		/* this is no real error so do not count down retries */
-+		cqr->retries++;
- 		return ERR_PTR(-EEXIST);
-+	}
- 
- 	fdata.start_unit = curr_trk;
- 	fdata.stop_unit = curr_trk;
---- a/drivers/s390/block/dasd_int.h
-+++ b/drivers/s390/block/dasd_int.h
-@@ -188,6 +188,7 @@ struct dasd_ccw_req {
- 	void (*callback)(struct dasd_ccw_req *, void *data);
- 	void *callback_data;
- 	unsigned int proc_bytes;	/* bytes for partial completion */
-+	unsigned int trkcount;		/* count formatted tracks */
- };
- 
- /*
-@@ -611,6 +612,7 @@ struct dasd_block {
- 
- 	struct list_head format_list;
- 	spinlock_t format_lock;
-+	atomic_t trkcount;
- };
- 
- struct dasd_attention_data {
+@@ -1708,6 +1710,8 @@ mlx5_tc_ct_del_ft_cb(struct mlx5_tc_ct_p
+ 	rhashtable_free_and_destroy(&ft->ct_entries_ht,
+ 				    mlx5_tc_ct_flush_ft_entry,
+ 				    ct_priv);
++	priv = netdev_priv(ct_priv->netdev);
++	flush_workqueue(priv->wq);
+ 	mlx5_tc_ct_free_pre_ct_tables(ft);
+ 	mapping_remove(ct_priv->zone_mapping, ft->zone_restore_id);
+ 	kfree(ft);
 
 

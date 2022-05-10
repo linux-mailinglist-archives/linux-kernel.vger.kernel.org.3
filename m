@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D302520A42
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57956520A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 02:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiEJAi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 20:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S233917AbiEJA46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 20:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbiEJAi0 (ORCPT
+        with ESMTP id S232541AbiEJA4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 20:38:26 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114F42AC6FD;
-        Mon,  9 May 2022 17:34:31 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id b5so10413034ile.0;
-        Mon, 09 May 2022 17:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4karCgB0MC1BnR8W1B+6xeveKW1nLUhu/KIW4e11r7E=;
-        b=gPV/WNtmjhKATU3NOJJ2pJw0iSift/HVTYr5YFJsS1JUov3T3P2sugNCw4ICoi2aNI
-         DN+uDBJG7kkKevRYgmg0JQ/nZIy3pnAhVVdsTOD9BWnVU1xH5Ixx4fwIM61GxmRKmKjL
-         nBTx2psO/Mytl/Lx70vvQozaObWeysSydsSWlDGnlF6X4mw4JLrZvYcIRrBk0PvzQ5Lz
-         pp7oNz4kWk1X6Lvyl9yPJBIE6Pzussr/T8e/CgwZFGRVcrEgBbK01QRaAN336Wkhr3Vv
-         gRSZV3tAx8vrptWz++Iwlyv1KsvlnpmCtj31YZ3N+YYP0dAvAlZ+IXRbWWKBGW7WnHNF
-         +jQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4karCgB0MC1BnR8W1B+6xeveKW1nLUhu/KIW4e11r7E=;
-        b=NPbxDXGMJEO7lrhPJGmy/qU4XF5IPwxMKXb3Fwk3zZPtjaEPcnnxm7hBGRVWAM5wwZ
-         fe4lhQDBf/ID7gWuAdOKxbby8jqKynS4xj8yBPtYTIqDTtTgP3FqmUuOTaIXPCLw56Po
-         2KMlA/lQRuX/9GYrSo1uP7fzz5z6NTdtpNpYYKIfoKcHiLkNDm40cdnbAU2pnrUGyCFv
-         TmXAo6g/tmdKEqwyU9ZzTJb/RPQJoZGPGM0keD7GBax+6Ks0QBDSRX+scXV7UwJwK6DT
-         36VUADX7DW7DNzGYuQHWIoAB3bMQIG38aeamW8xhMWJw4997ue604Eut+mZ2aPWLTZ/u
-         x80Q==
-X-Gm-Message-State: AOAM533SLKYZznHDdQKyS7sFWtgQc8I+E49sbDgxLr9eIwkMn5Dh7roo
-        L+hIKwutuhAgG12CGNgq0trfBdveah+voK94wD0=
-X-Google-Smtp-Source: ABdhPJyXKMB/dcO/qmS2dmo6ODOVuO8sotAH8x77Z6eURlzacTOTt1pw+DNbYYdrMF9bz0dTDEjhqn+xEl0aV8YssTk=
-X-Received: by 2002:a05:6e02:1d8d:b0:2cf:2112:2267 with SMTP id
- h13-20020a056e021d8d00b002cf21122267mr7869217ila.239.1652142870407; Mon, 09
- May 2022 17:34:30 -0700 (PDT)
+        Mon, 9 May 2022 20:56:55 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9D9127B328;
+        Mon,  9 May 2022 17:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=WqmJd
+        515m1PJTK0nq4GDI1QjAybjj0z9nr72C7+YdFk=; b=qEMnIt5En+Lp2rUDeRV1N
+        uD+cCktAsYhJe+phFhsY3IRQCT/nKbr8daGR05VDy4Cl8CLAWNZF8DXZ4M9cGLIT
+        q76QsILybAawv1BQ/CquxKzzbjeB8ZopTtrRWC+jBNj/9pnbusas0sG7WCXKZ8IX
+        dcATHn+rPjzauh/lqdoU9Q=
+Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.19])
+        by smtp11 (Coremail) with SMTP id D8CowABntf58s3liulW+Bg--.40118S2;
+        Tue, 10 May 2022 08:36:13 +0800 (CST)
+From:   qianfanguijin@163.com
+To:     linux-sunxi@lists.linux.dev
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        qianfan Zhao <qianfanguijin@163.com>
+Subject: [PATCH v2] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Date:   Tue, 10 May 2022 08:36:11 +0800
+Message-Id: <20220510003611.1812-1-qianfanguijin@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220507024840.42662-1-zhoufeng.zf@bytedance.com>
-In-Reply-To: <20220507024840.42662-1-zhoufeng.zf@bytedance.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 9 May 2022 17:34:19 -0700
-Message-ID: <CAEf4BzZD5q2j229_gL_nDFse2v=k2Ea0nfguH+sOA2O1Nm5sQw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add bpf_map_lookup_percpu_elem for percpu map
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joanne Koong <joannekoong@fb.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        zhouchengming@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowABntf58s3liulW+Bg--.40118S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWrWxWF47WF4UWrWfuF43GFg_yoWrtry5pr
+        17CFWkGrs3Wr1Yqw12qrW8tF18Caykuay5tF1UC34fJr1kXFyDXryftr9akrZ8Xr13X3yS
+        vrnYqr92vw4DXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zN9aPUUUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXB387VXl2wCLHQAAst
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,36 +58,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 7:49 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->
-> Trace some functions, such as enqueue_task_fair, need to access the
-> corresponding cpu, not the current cpu, and bpf_map_lookup_elem percpu map
-> cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
-> percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
->
-> The implementation method is relatively simple, refer to the implementation
-> method of map_lookup_elem of percpu map, increase the parameters of cpu, and
-> obtain it according to the specified cpu.
->
+From: qianfan Zhao <qianfanguijin@163.com>
 
-I don't think it's safe in general to access per-cpu data from another
-CPU. I'd suggest just having either a ARRAY_OF_MAPS or adding CPU ID
-as part of the key, if you need such a custom access pattern.
+OPP table value is get from allwinner lichee 3.10 kernel.
+And completed 'cpu-supply' on sun8i based board.
 
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> ---
->  include/linux/bpf.h            |  2 ++
->  include/uapi/linux/bpf.h       |  9 +++++++++
->  kernel/bpf/arraymap.c          | 15 +++++++++++++++
->  kernel/bpf/core.c              |  1 +
->  kernel/bpf/hashtab.c           | 32 ++++++++++++++++++++++++++++++++
->  kernel/bpf/helpers.c           | 18 ++++++++++++++++++
->  kernel/bpf/verifier.c          | 17 +++++++++++++++--
->  kernel/trace/bpf_trace.c       |  2 ++
->  tools/include/uapi/linux/bpf.h |  9 +++++++++
->  9 files changed, 103 insertions(+), 2 deletions(-)
->
+Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+---
+ .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  4 ++
+ arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  4 ++
+ arch/arm/boot/dts/sun8i-r40.dtsi              | 47 +++++++++++++++++++
+ arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  4 ++
+ .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  4 ++
+ drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+ 6 files changed, 64 insertions(+)
 
-[...]
+diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+index a6a1087a0c9b..4f30018ec4a2 100644
+--- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
++++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+@@ -113,6 +113,10 @@ &ahci {
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &de {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+index 265e0fa57a32..b872b51a346d 100644
+--- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+@@ -6,6 +6,10 @@
+ 
+ #include "sun8i-r40.dtsi"
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &i2c0 {
+ 	status = "okay";
+ 
+diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
+index 291f4784e86c..90de119095fa 100644
+--- a/arch/arm/boot/dts/sun8i-r40.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+@@ -54,6 +54,41 @@ / {
+ 	#size-cells = <1>;
+ 	interrupt-parent = <&gic>;
+ 
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-720000000 {
++			opp-hz = /bits/ 64 <720000000>;
++			opp-microvolt = <1000000 1000000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-912000000 {
++			opp-hz = /bits/ 64 <912000000>;
++			opp-microvolt = <1100000 1100000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1008000000 {
++			opp-hz = /bits/ 64 <1008000000>;
++			opp-microvolt = <1160000 1160000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1104000000 {
++			opp-hz = /bits/ 64 <1104000000>;
++			opp-microvolt = <1240000 1240000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <1300000 1300000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++	};
++
+ 	clocks {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -84,24 +119,36 @@ cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <0>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu1: cpu@1 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <1>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu2: cpu@2 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <2>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu3: cpu@3 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <3>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+index 6931aaab2382..0eb1990742ff 100644
+--- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
++++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+@@ -88,6 +88,10 @@ &ahci {
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &de {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+index 47954551f573..fdf8bd12faaa 100644
+--- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
++++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+@@ -107,6 +107,10 @@ &ahci {
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &de {
+ 	status = "okay";
+ };
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index ca1d103ec449..971a99219d4d 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -26,6 +26,7 @@ static const struct of_device_id allowlist[] __initconst = {
+ 	{ .compatible = "allwinner,sun8i-a23", },
+ 	{ .compatible = "allwinner,sun8i-a83t", },
+ 	{ .compatible = "allwinner,sun8i-h3", },
++	{ .compatible = "allwinner,sun8i-r40", },
+ 
+ 	{ .compatible = "apm,xgene-shadowcat", },
+ 
+-- 
+2.25.1
+

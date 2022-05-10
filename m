@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13185224BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9577D5224C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 21:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiEJT2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 15:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S231993AbiEJTaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 15:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbiEJT2M (ORCPT
+        with ESMTP id S229550AbiEJT37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 15:28:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAE356416
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lsBeHLglJOApYF654Jir26FeEjZ4KihltVOnJfCQAmM=; b=GKSgMglUZZSziABl1xao9QbCdV
-        aqxXhDHJ+8IRYN+Xq5ApUGjIzskCJY0HPTaukl7TVbQk1Ii9nAS5I0ZLjfLIZVuCa9+0HnruKfQS8
-        ThDgkOAf/CWorsNa+06o6GjrDWpxVNkIEPajpdj7ouBz8aKetOHoHN99PdZKBBMEXdaDoNf9NLimP
-        i/oXHlbjNdcy9tM5MQELU5fxUMZKVpjkUHsN+pYzMFlifx6g1rFqQxR+cr0XHOhG+5t+Ucd+TGYU1
-        TKFfCItNd7OfSdnhCQBWe8wJB6IMX9N2/N6t3CpZ9vUShr7TuTO7va2ELvPVEnI3WsBdVzdys7Jev
-        n5vgRQQw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noVVm-004jum-DB; Tue, 10 May 2022 19:27:10 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3AE5A98100A; Tue, 10 May 2022 21:27:08 +0200 (CEST)
-Date:   Tue, 10 May 2022 21:27:08 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Aaron Lu <aaron.lu@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        kernel test robot <oliver.sang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        fengwei.yin@intel.com
-Subject: Re: [mm/page_alloc] f26b3fa046: netperf.Throughput_Mbps -18.0%
- regression
-Message-ID: <20220510192708.GQ76023@worktop.programming.kicks-ass.net>
-References: <bd3db4de223a010d1e06013e93b09879fc9b36a8.camel@intel.com>
- <YnURx04+hE0sQ3v3@ziqianlu-desk1>
- <7d20a9543f69523cfda280e3f5ab17d68db037ab.camel@intel.com>
- <YnXnLuYjmEWdVyBP@ziqianlu-desk1>
- <ae763d63e50d14650c5762103d113934412bef57.camel@intel.com>
- <ba83270a-4f37-7d5a-b37a-0b7a6df5f5b4@intel.com>
- <d13688d1483e9d87ec477292893f2916832b3bdc.camel@intel.com>
- <c11ae803-cea7-8b7f-9992-2f640c90f104@intel.com>
- <37dac785a08e3a341bf05d9ee35f19718ce83d26.camel@intel.com>
- <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
+        Tue, 10 May 2022 15:29:59 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B00429449C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:29:58 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id c14so41977pfn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 12:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m2wbH10hLIaixT4gU4VcnqZ+N4u1LZ2SXLM2sDFPj5I=;
+        b=csjpvF+tDG4L1MZ5teqJ4rm6FqoRpwUnKDW7N4J2SR1Z/jE7y5d+SavGXDDtg8GPDS
+         bFhHSqTMXZVAjrp7ppBr+fGEa44adJ9NnoQFiex8tZS+oayc1/K6oNNDYroHeUpDAUeC
+         SGRHtWQaQJ7JK4t0y/WGBIxvJYqV0v8K3f1tI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m2wbH10hLIaixT4gU4VcnqZ+N4u1LZ2SXLM2sDFPj5I=;
+        b=YllnYr+cbtoXaOsLABkrSDTGXzVwy2QZQHJWNKc4LgSCnnUxUmYdnCepa/BluZ+Ahl
+         g04N1y5lke0uBms7ub4PFBYSz2OuY3xV3zSKcJM2nOI7pKqfXCpXc7vQPjiiT/Ebq/Wt
+         nEdWeZJ3MCKEaKTCHkStTdBCn8rMx31rinJpwWrOeCXpSX1qUcn+XNO71lK7ReMKBbZJ
+         /CZJaFIxcXG8kwftL3kAHb0HXSxkAJTn9KXBRn5pCYeVxsW2lB4wrrC5q/ucqrDP9xQe
+         YshuZXQe4e5JZ6UHHo9XS2nrprFxExrRzAzC08XtahTT1zU295G0teZ91z4cfKRs3xlN
+         Mi1w==
+X-Gm-Message-State: AOAM530UdQXmgWMevceD9Sc4CNQOJCObmAhRLoalI/iJjf1L/WsTM6S8
+        2Fphm05GrbGmgvQ9peXXlrInww==
+X-Google-Smtp-Source: ABdhPJx1kjvHHwuQUwQAxV/SPI0cp2pBJRjMlaOwFgnpxf2uBmn2EuQKScO7rtAiarLlv5alh3XA1A==
+X-Received: by 2002:a65:6c10:0:b0:380:437a:c154 with SMTP id y16-20020a656c10000000b00380437ac154mr17822001pgu.549.1652210997923;
+        Tue, 10 May 2022 12:29:57 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:6f08:624c:c762:d238])
+        by smtp.gmail.com with ESMTPSA id s43-20020a056a001c6b00b0050dc762819dsm10786989pfw.119.2022.05.10.12.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 12:29:57 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] drm/dp: Make DP AUX bus usage easier; use it on ps8640
+Date:   Tue, 10 May 2022 12:29:40 -0700
+Message-Id: <20220510192944.2408515-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjguW5nxjagV99GHvc_-E_7mSg+LMvGtFjJ9LUSx4Skig@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:05:01AM -0700, Linus Torvalds wrote:
+This patch is v3 of the first 2 patches from my RFC series ("drm/dp: Improvements
+for DP AUX channel") [1]. I've broken the series in two so we can make
+progress on the two halves separately.
 
-> I think from a pure lock standpoint, it's the right thing to do (no
-> unnecessary bouncing, with the lock releaser doing just one write, and
-> the head waiter spinning on it is doing the right thing).
-> 
-> But I think this is an example of where you end up having that
-> spinning on the lock possibly then being a disturbance on the other
-> fields around the lock.
-> 
-> I wonder if Waiman / PeterZ / Will have any comments on that. Maybe
-> that "spin on the lock itself" is just fundamentally the only correct
-> thing, but since my initial reaction was "no, we're spinning on the
-> mcs node", maybe that would be _possible_?
-> 
-> We do have a lot of those spinlocks embedded in other data structures
-> cases. And if "somebody else is waiting for the lock" contends badly
-> with "the lock holder is doing a lot of writes close to the lock",
-> then that's not great.
+v2 of this series tries to incorporate all the feedback from v1. Hopefully
+things are less confusing and simpler this time around. The one thing that got
+slightly more confusing is that the done_probing() callback can't return
+-EPROBE_DEFER in most cases so we have to adjust drivers a little more.
 
-The immediate problem is that we don't always have a node. Notably we
-only do the whole MCS queueing thing when there's more than 1 contender.
+v3 takes Dmitry's advice on v2. This now introduces
+devm_drm_bridge_add() (in an extra patch), splits some fixups into
+their own patch, uses a new name for functions, and requires an
+explicit call to done_probing if you have no children.
 
-Always doing the MCS thing had a hefty performance penalty vs the
-simpler spinlock implementations for the uncontended and light contended
-lock cases (by far the most common scenario) due to the extra cache-miss
-of getting an MCS node.
+The idea for this series came up during the review process of
+Sankeerth's series trying to add eDP for Qualcomm SoCs [2].
+
+This _doesn't_ attempt to fix the Analogix driver. If this works out,
+ideally someone can post a patch up to do that.
+
+NOTE: I don't have any ps8640 devices that _don't_ use the aux panel
+underneath them, so I'm relying on code inspection to make sure I
+didn't break those. If someone sees that I did something wrong for
+that case then please yell!
+
+[1] https://lore.kernel.org/r/20220409023628.2104952-1-dianders@chromium.org/
+[2] https://lore.kernel.org/r/1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com/
+
+Changes in v3:
+- Adapt to v3 changes in aux bus.
+- Don't call done_probing() if there are no children; return -ENODEV.
+- Patch ("drm/bridge: Add devm_drm_bridge_add()") new for v3.
+- Patch ("drm/dp: Export symbol / kerneldoc fixes...") split for v3.
+- Split out EXPORT_SYMBOL and kerneldoc fixes to its own patch.
+- Use devm_drm_bridge_add() to simplify.
+- Used Dmitry's proposed name: of_dp_aux_populate_bus()
+
+Changes in v2:
+- Change to assume exactly one device.
+- Have a probe callback instead of an extra sub device.
+- Rewrote atop new method introduced by patch #1.
+
+Douglas Anderson (4):
+  drm/dp: Export symbol / kerneldoc fixes for DP AUX bus
+  drm/dp: Add callbacks to make using DP AUX bus properly easier
+  drm/bridge: Add devm_drm_bridge_add()
+  drm/bridge: parade-ps8640: Handle DP AUX more properly
+
+ drivers/gpu/drm/bridge/parade-ps8640.c   |  74 +++++---
+ drivers/gpu/drm/display/drm_dp_aux_bus.c | 211 +++++++++++++++--------
+ drivers/gpu/drm/drm_bridge.c             |  23 +++
+ include/drm/display/drm_dp_aux_bus.h     |  34 +++-
+ include/drm/drm_bridge.h                 |   1 +
+ 5 files changed, 238 insertions(+), 105 deletions(-)
+
+-- 
+2.36.0.550.gb090851708-goog
 

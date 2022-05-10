@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71567521C1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE769521B61
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344215AbiEJOaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S1343769AbiEJOLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244605AbiEJOC1 (ORCPT
+        with ESMTP id S245026AbiEJNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:02:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3656E2DE5AC;
-        Tue, 10 May 2022 06:40:17 -0700 (PDT)
+        Tue, 10 May 2022 09:47:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060D462204;
+        Tue, 10 May 2022 06:33:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD8F5B81DCD;
-        Tue, 10 May 2022 13:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC9EC385A6;
-        Tue, 10 May 2022 13:40:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADFCBB81DA2;
+        Tue, 10 May 2022 13:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25086C385C2;
+        Tue, 10 May 2022 13:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190014;
-        bh=sv2hjGyjBcuJdU2vhkrhCU7EMqqYtp/aYPxVnvsQjCE=;
+        s=korg; t=1652189622;
+        bh=DMggDDOU+eaxJXc5upw4OUuvsOsb/HcMaUf15fpdsdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eGNL870TQwHTle/l0b1c3AYZL1v8DMmOToKxCXiqQ+HZMcTZD49V2fqocwaXQxx2E
-         /SccFWWmuARrCIykD5a3OkY91YA4KjT9E8KhIItdyVXMP8frZA/BUARKHXHTMJvEda
-         jPMxS7nTFBPUJUBKIxDE9pwGgnadvhwmd9Kl6HoQ=
+        b=jUSfYKACQsJihtwQvQKZzNCieFChRhsv0rikk3pg57SM1g64MqIlyt53KgbKLYko+
+         D4L+7jbzEHVbw/1FqPUwnNgudPPB/17yVSIOa5H2VbdRbGIvdUDIgcW6rj9nZ3U7ip
+         o4QjP0DwBAzMiQDzdveJ2W22Sze47cU+rxdT/s68=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 102/140] selftests: ocelot: tc_flower_chains: specify conform-exceed action for policer
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 110/135] PCI: aardvark: Comment actions in driver remove method
 Date:   Tue, 10 May 2022 15:08:12 +0200
-Message-Id: <20220510130744.521684188@linuxfoundation.org>
+Message-Id: <20220510130743.561084013@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 5a7c5f70c743c6cf32b44b05bd6b19d4ad82f49d upstream.
+commit a4ca7948e1d47275f8f3e5023243440c40561916 upstream.
 
-As discussed here with Ido Schimmel:
-https://patchwork.kernel.org/project/netdevbpf/patch/20220224102908.5255-2-jianbol@nvidia.com/
+Add two more comments into the advk_pcie_remove() method.
 
-the default conform-exceed action is "reclassify", for a reason we don't
-really understand.
-
-The point is that hardware can't offload that police action, so not
-specifying "conform-exceed" was always wrong, even though the command
-used to work in hardware (but not in software) until the kernel started
-adding validation for it.
-
-Fix the command used by the selftest by making the policer drop on
-exceed, and pass the packet to the next action (goto) on conform.
-
-Fixes: 8cd6b020b644 ("selftests: ocelot: add some example VCAP IS1, IS2 and ES0 tc offloads")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/20220503121428.842906-1-vladimir.oltean@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20211130172913.9727-6-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
-+++ b/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
-@@ -190,7 +190,7 @@ setup_prepare()
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1681,11 +1681,13 @@ static int advk_pcie_remove(struct platf
+ 	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+ 	int i;
  
- 	tc filter add dev $eth0 ingress chain $(IS2 0 0) pref 1 \
- 		protocol ipv4 flower skip_sw ip_proto udp dst_port 5201 \
--		action police rate 50mbit burst 64k \
-+		action police rate 50mbit burst 64k conform-exceed drop/pipe \
- 		action goto chain $(IS2 1 0)
- }
++	/* Remove PCI bus with all devices */
+ 	pci_lock_rescan_remove();
+ 	pci_stop_root_bus(bridge->bus);
+ 	pci_remove_root_bus(bridge->bus);
+ 	pci_unlock_rescan_remove();
+ 
++	/* Remove IRQ domains */
+ 	advk_pcie_remove_msi_irq_domain(pcie);
+ 	advk_pcie_remove_irq_domain(pcie);
  
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E251952180E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89552521983
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241495AbiEJNdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S245713AbiEJNsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242610AbiEJNYR (ORCPT
+        with ESMTP id S243894AbiEJNcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:24:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3869C54682;
-        Tue, 10 May 2022 06:17:27 -0700 (PDT)
+        Tue, 10 May 2022 09:32:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C95178562;
+        Tue, 10 May 2022 06:23:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9665B81D0D;
-        Tue, 10 May 2022 13:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480B8C385C2;
-        Tue, 10 May 2022 13:17:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7A0E61768;
+        Tue, 10 May 2022 13:23:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6614C385A6;
+        Tue, 10 May 2022 13:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188644;
-        bh=hwo8XwOH5FAgJgZVLngvecjaImRzHhr+s7d0muU2US0=;
+        s=korg; t=1652189000;
+        bh=tm/Y3N1xRtkC0eTpSWQ2qqM2l+6CezNMfRdf2u3uhmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CSo6ah9Z8Gy7ErJvooKELAVbAUxLxHBP6mkiawZSdhXOemdOFlF5Hm7twqYGRJ/9U
-         BSHxs3aJvnAQJPh09ewvQ6W0LVSF0RcHYxXLddIjTGmEpzcOYB8cuY0jSE4dWl2NhS
-         TozF/WwX74ayDd8Oc4ezFlpm34INgmSKAshHxG98=
+        b=NB9O4CyfeK3PlALCvmuxjZPLP+rJABn/PGfZwIJ/PqoyOBPusDfUAMVgv3djEjS9P
+         NW7FSlG495zv5Ixw7Vv3r3MqFigeYfYXKHzjQ4Znr+BE/UCjivzCVVp7Epn/CviTme
+         lPvXJKw7LTiHfivu5C3joGWquz1AVsysm2oafyhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 73/78] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
+        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 30/52] bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
 Date:   Tue, 10 May 2022 15:07:59 +0200
-Message-Id: <20220510130734.690549554@linuxfoundation.org>
+Message-Id: <20220510130730.735895357@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sandipan Das <sandipan.das@amd.com>
+From: Somnath Kotur <somnath.kotur@broadcom.com>
 
-[ Upstream commit 5a1bde46f98b893cda6122b00e94c0c40a6ead3c ]
+commit 13ba794397e45e52893cfc21d7a69cb5f341b407 upstream.
 
-On some x86 processors, CPUID leaf 0xA provides information
-on Architectural Performance Monitoring features. It
-advertises a PMU version which Qemu uses to determine the
-availability of additional MSRs to manage the PMCs.
+bnxt_open() can fail in this code path, especially on a VF when
+it fails to reserve default rings:
 
-Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
-the same, the kernel constructs return values based on the
-x86_pmu_capability irrespective of the vendor.
+bnxt_open()
+  __bnxt_open_nic()
+    bnxt_clear_int_mode()
+    bnxt_init_dflt_ring_mode()
 
-This leaf and the additional MSRs are not supported on AMD
-and Hygon processors. If AMD PerfMonV2 is detected, the PMU
-version is set to 2 and guest startup breaks because of an
-attempt to access a non-existent MSR. Return zeros to avoid
-this.
+RX rings would be set to 0 when we hit this error path.
 
-Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
-Reported-by: Vasant Hegde <vasant.hegde@amd.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-Message-Id: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+It is possible for a subsequent bnxt_open() call to potentially succeed
+with a code path like this:
+
+bnxt_open()
+  bnxt_hwrm_if_change()
+    bnxt_fw_init_one()
+      bnxt_fw_init_one_p3()
+        bnxt_set_dflt_rfs()
+          bnxt_rfs_capable()
+            bnxt_hwrm_reserve_rings()
+
+On older chips, RFS is capable if we can reserve the number of vnics that
+is equal to RX rings + 1.  But since RX rings is still set to 0 in this
+code path, we may mistakenly think that RFS is supported for 0 RX rings.
+
+Later, when the default RX rings are reserved and we try to enable
+RFS, it would fail and cause bnxt_open() to fail unnecessarily.
+
+We fix this in 2 places.  bnxt_rfs_capable() will always return false if
+RX rings is not yet set.  bnxt_init_dflt_ring_mode() will call
+bnxt_set_dflt_rfs() which will always clear the RFS flags if RFS is not
+supported.
+
+Fixes: 20d7d1c5c9b1 ("bnxt_en: reliably allocate IRQ table on reset to avoid crash")
+Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/cpuid.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 7e1ab0e0f3f2..fd1eb8600ccf 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -517,6 +517,11 @@ static inline int __do_cpuid_ent(struct kvm_cpuid_entry2 *entry, u32 function,
- 		union cpuid10_eax eax;
- 		union cpuid10_edx edx;
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -9791,7 +9791,7 @@ static bool bnxt_rfs_capable(struct bnxt
  
-+		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
-+		}
+ 	if (bp->flags & BNXT_FLAG_CHIP_P5)
+ 		return bnxt_rfs_supported(bp);
+-	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp))
++	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp) || !bp->rx_nr_rings)
+ 		return false;
+ 
+ 	vnics = 1 + bp->rx_nr_rings;
+@@ -11725,10 +11725,9 @@ static int bnxt_init_dflt_ring_mode(stru
+ 		goto init_dflt_ring_err;
+ 
+ 	bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
+-	if (bnxt_rfs_supported(bp) && bnxt_rfs_capable(bp)) {
+-		bp->flags |= BNXT_FLAG_RFS;
+-		bp->dev->features |= NETIF_F_NTUPLE;
+-	}
 +
- 		perf_get_x86_pmu_capability(&cap);
- 
- 		/*
--- 
-2.35.1
-
++	bnxt_set_dflt_rfs(bp);
++
+ init_dflt_ring_err:
+ 	bnxt_ulp_irq_restart(bp, rc);
+ 	return rc;
 
 

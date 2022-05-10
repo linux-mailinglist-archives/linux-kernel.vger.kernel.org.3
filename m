@@ -2,81 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F6E521EAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397CE521EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbiEJPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
+        id S1345824AbiEJPei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345692AbiEJPdV (ORCPT
+        with ESMTP id S1345705AbiEJPeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:33:21 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32334662;
-        Tue, 10 May 2022 08:26:37 -0700 (PDT)
+        Tue, 10 May 2022 11:34:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E713C4A0;
+        Tue, 10 May 2022 08:28:46 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ch13so5270373ejb.12;
+        Tue, 10 May 2022 08:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1652196397;
-  x=1683732397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yUD3uwtewYu9aG509jJFvj6tNpbiQKxIslmOylkUtdk=;
-  b=k+juFkF1CHzm5dkkd8MSQMyMKFQWyGZoeW6s9zbpzw8A1R80zWQ9GGDU
-   eY0AlEv8itrWT3KNMTlfAKBnwO5a87BlRRZVRYMG9x2xuJsVosn2GB9EP
-   1b122qrfO4QZjx3WDAJkC8ej5a8nDx7Hqio6aZ3ljCdktUUidFaNF2rKF
-   TfADQlpUmf2KLLYuman+MlY3cRtONDOzDRWpF73AoPeVBNCdfYDXDoxeS
-   OmR4Hq0ESgfi6fOu21IPuoUH+efJhGIRRxXesDm5D37TRB1L++nHqrr3J
-   N5vMJrqQgSN1U9JT80urq2hPpGNQcwK5ZumudZonNOBHyXancaOHsl90H
-   A==;
-Date:   Tue, 10 May 2022 17:26:35 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     kernel test robot <lkp@intel.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "joern@lazybastard.org" <joern@lazybastard.org>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        kernel <kernel@axis.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/4] mtd: phram: Allow cached mappings
-Message-ID: <20220510152635.GA17605@axis.com>
-References: <20220412135302.1682890-5-vincent.whitchurch@axis.com>
- <202204131446.omJ5mC54-lkp@intel.com>
- <20220414090402.GA11067@axis.com>
- <20220425102816.54619c66@xps13>
- <20220425103015.1cc05f77@xps13>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9zv1s67X9++8u97ESUQcgdq1IJV6kWayIC8vZbznek8=;
+        b=kGqF4R8QIb+Tb8QtT2f7AXe6DA8WGWw7EItVn9hGxoOBIj/WSUwlDw2bU8IakvPWgj
+         g8ICmZ6J7rZdkKVjWH1IDi+TM6Zu+Gs05/aCcN2VV7LXPnrKkOckvbSZ6F7UVkOf0Tut
+         RVNKDL40zMPKEA8XE0W23M/CA7QiSjtFaUCTUPxEte8BnMqS0wuxOFaKyk28u+XIMO7/
+         1e02z97WblFf5HnsTMh+ZI0kyr34WCGzunchTq0HvhQRQaoeJurXhMFC4h4/OTo73MRo
+         3BNQ6W8P98mwu8vzj4XEss0Ag8y8vNMSRPLmvLxspm0kiTidJd6PyLYzVYn8kjVANMxS
+         JTQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9zv1s67X9++8u97ESUQcgdq1IJV6kWayIC8vZbznek8=;
+        b=Caf4wkRsevw79wbdKrUlKKZIWprhmH64l5eGgF+tKrM2QQ23+JCyV/dNoWa2wPz6rS
+         Xd1gvLxJtCx3caXbV0WBM/kPEgSEgscV/oi6LVWh4YAWx4Q25/qLpuxa1urSfEcPyUmR
+         jTtpzVp5yTU+L1HZRaXvF5Cf4dKRc9lxv6l2OZixprVGCMS1YRppOSEF8Dc2nRCk8ddK
+         tSae3RWa76FvG9kce8s1qDxka+V7WFE8Rpr/k5AmnHPRYT2D+JeHoyvrX0KBqOPCmttX
+         upPPWF5aiycN74MbodCDO/rCs4dryJQ/wFU3oenCUc292d73QGsW2MHTh78fbvXpPkZd
+         vWgg==
+X-Gm-Message-State: AOAM531htgXrScKBFv0pZjui2BqpkRfnnoZy2eiLaTbcBKTBPbfG4Clo
+        m1QWZt811Jr4ma6GxJF3zjc=
+X-Google-Smtp-Source: ABdhPJxmNDJe474WdhkT9WP72Kr9bcEIaAR/BSjdBWmPGyKOYX4UXD6a53d2l4dd0EvpnlL9vM2HCQ==
+X-Received: by 2002:a17:907:7810:b0:6e7:ef73:8326 with SMTP id la16-20020a170907781000b006e7ef738326mr19706751ejc.429.1652196524386;
+        Tue, 10 May 2022 08:28:44 -0700 (PDT)
+Received: from archbook.localnet (ict-networks-195-176-112-189.fwd-v4.ethz.ch. [195.176.112.189])
+        by smtp.gmail.com with ESMTPSA id w26-20020a50fa9a000000b0041d893ed437sm7746703edr.2.2022.05.10.08.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 08:28:43 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: rockchip: Add Hantro encoder node to rk356x
+Date:   Tue, 10 May 2022 17:27:08 +0200
+Message-ID: <1959188.DQhRDO7MrQ@archbook>
+In-Reply-To: <CAAEAJfC5aoFmk7hKZ-CSv1=RhzO8YU38Abz8PhD26MvV+X0r-Q@mail.gmail.com>
+References: <20220508202544.501981-1-frattaroli.nicolas@gmail.com> <20220508202544.501981-4-frattaroli.nicolas@gmail.com> <CAAEAJfC5aoFmk7hKZ-CSv1=RhzO8YU38Abz8PhD26MvV+X0r-Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220425103015.1cc05f77@xps13>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:30:15AM +0200, Miquel Raynal wrote:
-> miquel.raynal@bootlin.com wrote on Mon, 25 Apr 2022 10:28:16 +0200:
-> > Looks good to me but I don't want to be the one "carrying" new compile
-> > errors so I'll drop the series for now, until you get this patch
-> > applied. Please then just resend the series with this thread mentioned
-> > and I'll take it back.
+Hi Ezequiel,
+
+On Montag, 9. Mai 2022 16:17:03 CEST Ezequiel Garcia wrote:
+> Hi Nicolas,
 > 
-> BTW, I'm only talking about this improvement, patches 1-3 will remain.
+> On Sun, May 8, 2022 at 5:26 PM Nicolas Frattaroli
+> <frattaroli.nicolas@gmail.com> wrote:
+> >
+> > The RK3566 and RK3568 come with a dedicated Hantro instance solely for
+> > encoding. This patch adds a node for this to the device tree, along with
+> > a node for its MMU.
+> >
+> > Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > index 7cdef800cb3c..2e3c9e1887e3 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > @@ -508,6 +508,27 @@ gpu: gpu@fde60000 {
+> >                 status = "disabled";
+> >         };
+> >
+> > +       vepu: video-codec@fdee0000 {
+> > +               compatible = "rockchip,rk3568-vepu";
+> > +               reg = <0x0 0xfdee0000 0x0 0x800>;
+> > +               interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> > +               interrupt-names = "vepu";
+> 
+> It this block "encoder only" and if so, maybe we should remove the
+> "interrupt-names" [1]?
+> 
+> The driver is able to handle it. See:
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/staging/media/hantro/hantro_drv.c#L962
+> 
+> You might have to adjust the dt-bindings for this.
+> 
+> [1] https://lore.kernel.org/linux-media/20210324151715.GA3070006@robh.at.kernel.org/
 
-Thank you.  I've now refactored this patch and send it out separately as
-a v4, primarily to avoid the SH build problems (which look like they're
-going to take a while[0] to get fixed) but also to remove some code
-duplication.
+What the Linux driver can handle should not matter to the device tree;
+device trees are independent of drivers and kernels.
 
-[0] https://lore.kernel.org/lkml/CAMuHMdW-8HaQip+DT5W2Owq8M8kbYwHsf8_Zd-5rRfSjSjK0=g@mail.gmail.com/
+What does matter though is to be consistent in the bindings.
+interrupt-names is a required property even if there's only a vdpu
+interrupt. I modelled my vepu-only binding after this case.
+
+If robh thinks there is no value to having the interrupt show up
+as anything other than "default" in /proc/interrupts, then I respectfully
+disagree with that opinion and point out that this should have been brought
+up when the vdpu-only case in the bindings was made to require
+interrupt-names also.
+
+Changing the binding now that there theoretically could be drivers out
+in the wild (though I doubt it) that do require interrupt-names, because
+the binding told them that this is okay to do, seems unwise to me.
+
+Regards,
+Nicolas Frattaroli
+
+> 
+> Thanks,
+> Ezequiel
+> 
+> > +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> > +               clock-names = "aclk", "hclk";
+> > +               iommus = <&vepu_mmu>;
+> > +               power-domains = <&power RK3568_PD_RGA>;
+> > +       };
+> > +
+> > +       vepu_mmu: iommu@fdee0800 {
+> > +               compatible = "rockchip,rk3568-iommu";
+> > +               reg = <0x0 0xfdee0800 0x0 0x40>;
+> > +               interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
+> > +               clocks = <&cru ACLK_JENC>, <&cru HCLK_JENC>;
+> > +               clock-names = "aclk", "iface";
+> > +               power-domains = <&power RK3568_PD_RGA>;
+> > +               #iommu-cells = <0>;
+> > +       };
+> > +
+> >         sdmmc2: mmc@fe000000 {
+> >                 compatible = "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc";
+> >                 reg = <0x0 0xfe000000 0x0 0x4000>;
+> > --
+> > 2.36.0
+> >
+> >
+> > _______________________________________________
+> > Linux-rockchip mailing list
+> > Linux-rockchip@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+> 
+
+
+
+

@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF0C521577
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CEE52150E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241457AbiEJMda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S241299AbiEJMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238445AbiEJMd2 (ORCPT
+        with ESMTP id S238990AbiEJMVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:33:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFBA2A3760;
-        Tue, 10 May 2022 05:29:30 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5E9151C0B95; Tue, 10 May 2022 14:29:28 +0200 (CEST)
-Date:   Tue, 10 May 2022 14:29:27 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        rjw@rjwysocki.net, Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 08/10] PM: hibernate: Mix user key in encrypted hibernate
-Message-ID: <20220510122927.GA19328@amd>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220504161439.8.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
- <20220506160820.GB1060@bug>
- <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
+        Tue, 10 May 2022 08:21:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883AAF68BC
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:17:37 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyH6J0BxJzGpfZ;
+        Tue, 10 May 2022 20:14:48 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 20:17:35 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 20:17:34 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <mcoquelin.stm32@gmail.com>, <kirill.shutemov@linux.intel.com>,
+        <s.hauer@pengutronix.de>, <gregkh@linuxfoundation.org>,
+        <arne.edholm@axis.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH v3 0/3] Fix high cpu usage of ubi_bgt thread and an uaf problem
+Date:   Tue, 10 May 2022 20:31:23 +0800
+Message-ID: <20220510123126.1820335-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="sdtB3X0nJg68CQEu"
-Content-Disposition: inline
-In-Reply-To: <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v1->v2:
+  Update fm pool filling strategy, consider reserve enough free count
+  for fastmap non anchor pebs while filling fm_wl_pool.
+  Remove 'fm_next_anchor' and check 'fm_anchor' during wear leveling.
+  Check wl_pool for free peb before wear leveling.
+v2->v3:
+  1. Don't reserve beb_revd_pebs while filling fm pool.
+  2. Fix an uaf in ubi_create_volume()'s error handling path.
 
---sdtB3X0nJg68CQEu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Zhihao Cheng (3):
+  ubi: fastmap: Fix high cpu usage of ubi_bgt by making sure wl_pool not
+    empty
+  ubi: fastmap: Check wl_pool for free peb before wear leveling
+  ubi: ubi_create_volume: Fix use-after-free when volume creation failed
 
-Hi!
+ drivers/mtd/ubi/fastmap-wl.c | 121 ++++++++++++++++++++++++++++-------
+ drivers/mtd/ubi/fastmap.c    |  11 ----
+ drivers/mtd/ubi/ubi.h        |   4 +-
+ drivers/mtd/ubi/vmt.c        |   1 -
+ drivers/mtd/ubi/wl.c         |  33 ++++++----
+ drivers/mtd/ubi/wl.h         |   2 +
+ 6 files changed, 123 insertions(+), 49 deletions(-)
 
-> > > One annoyance of the "preloading" scheme is that hibernate image memo=
-ry
-> > > is effectively double-allocated: first by the usermode process pulling
-> > > encrypted contents off of disk and holding it, and second by the kern=
-el
-> > > in its giant allocation in prepare_image(). An interesting future
-> > > optimization would be to allow the kernel to accept and store encrypt=
-ed
-> > > page data before the user key is available. This would remove the
-> > > double allocation problem, as usermode could push the encrypted pages
-> > > loaded from disk immediately without storing them. The kernel could d=
-efer
-> > > decryption of the data until the user key is available, while still
-> > > knowing the correct page locations to store the encrypted data in.
-> >
-> > Um. Dunno. Won't you run out of memory? Hibernation images can be quite=
- big...
-> >
->=20
-> As you know, with the way the snapshot mechanism works, a hibernation
-> image can be at most 50% of RAM. If the system was using more than
+-- 
+2.31.1
 
-There used to be 50% of RAM limit, but it was removed.
-
-Best regards,
-								Pavel
-							=09
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---sdtB3X0nJg68CQEu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmJ6WqcACgkQMOfwapXb+vKwggCfU6LTG5MoZ6aeMEdfwivj1685
-yUIAnR0jzeK1d2wmq0UYRYOrpRjaWwNn
-=UpfY
------END PGP SIGNATURE-----
-
---sdtB3X0nJg68CQEu--

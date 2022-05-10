@@ -2,151 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98ED5520F44
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5592520F4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiEJICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S237681AbiEJIDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiEJIBl (ORCPT
+        with ESMTP id S235830AbiEJIDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:01:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FB601E251D
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652169445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+GogPWfkvrNoObtQPGw+NoKWIrWBSSJnqUGbnCQ7gy8=;
-        b=Y7rJYOxTYwIL44kNmTc9RnCV6C84Kyd2xFlt7B3/Elaae2t0Nz3hlhMsKQQU2gEOlFgURq
-        DrxDmOvIbdIVkhgQiQnZjYsygw7A2MyUPBOxFF8512CiBoV7UD5Vcm+1/UOM+sWj3zvWLV
-        QCDj0FThK8k76HiiV8wdUoR1DYj91nQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-mc1In2aYMyq6jeONhZ2QMw-1; Tue, 10 May 2022 03:57:22 -0400
-X-MC-Unique: mc1In2aYMyq6jeONhZ2QMw-1
-Received: by mail-ed1-f72.google.com with SMTP id a19-20020aa7d913000000b004284eecb34aso7046698edr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 00:57:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=+GogPWfkvrNoObtQPGw+NoKWIrWBSSJnqUGbnCQ7gy8=;
-        b=AbiGLNYk9Uva1Q6wYOK9PJ0B9AVx8V6wA394dJ64EMGjmypvEvZNW9gx7jLNoHuNrH
-         wMHgpoWmReijiba+Jd6aHKxtYP+D2QhGgmQscs5alnQzxspvBFp2TAN3pvVqrs3jmi8v
-         oJD4JmUGNnqecdAnLqPCX65OmTC+J0bc2HD2pKuRDp32auAHdco8JHxExpK17X3hGQGZ
-         c1AdP/8fHegKHHKM4aRj2CgGuxxJYds951io+jNK7WtI/k+5HXieYuwJZ6BlJylz8xyr
-         UDcFrJOv4SsFTuLJ7jycJp/ZT9BqwWm2fjNMaK0M0MuA4f8iaAdNoqYEQbJx+KWcn7Yy
-         QUww==
-X-Gm-Message-State: AOAM532CGLAXlitLmh7WrBiezYgMdohSyR45EGiRPGyDPug177pXIuJH
-        8RHPKjpKh96DrKOqKZvhWJ/x7l00TdhQU2FOvoGeU8U5lmtDWbsEnyc5nHRhISAAKxguIqp4JVs
-        g2W/b01UIoe4rAeGZdXQVY8MZ
-X-Received: by 2002:a17:907:2cc7:b0:6fa:7356:f411 with SMTP id hg7-20020a1709072cc700b006fa7356f411mr8350478ejc.369.1652169441767;
-        Tue, 10 May 2022 00:57:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw0z9Bybx4Np2JFUQ4kYBlYYkYDzd5vyFPqkU2JXcuwv3AnrvJ4kxcu0CAARzbIYsdPk1ng6g==
-X-Received: by 2002:a17:907:2cc7:b0:6fa:7356:f411 with SMTP id hg7-20020a1709072cc700b006fa7356f411mr8350462ejc.369.1652169441548;
-        Tue, 10 May 2022 00:57:21 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id a5-20020a170906244500b006f3ef214dd2sm5853119ejb.56.2022.05.10.00.57.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 00:57:21 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] KVM: X86: correct trace_kvm_pv_tlb_flush stats
-In-Reply-To: <C8885C42-26FE-4BD3-80B1-2B8C7C413A21@nutanix.com>
-References: <20220504182707.680-1-jon@nutanix.com>
- <YnL0gUcUq5MbWvdH@google.com>
- <8E192C0D-512C-4030-9EBE-C0D6029111FE@nutanix.com>
- <87h7641ju3.fsf@redhat.com>
- <C8885C42-26FE-4BD3-80B1-2B8C7C413A21@nutanix.com>
-Date:   Tue, 10 May 2022 09:57:20 +0200
-Message-ID: <874k1xzuov.fsf@redhat.com>
+        Tue, 10 May 2022 04:03:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEAE24F0E8;
+        Tue, 10 May 2022 00:59:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id A101C1F43DAF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652169565;
+        bh=0/8USldqeWAsxzFJkTMe/8nTLoFf3bblkE2WDOxfPaA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QsSJbWxROhDdXBTTpKGk8WfomsV9vGvfl5NVqtQMOcuI4iJMx4XMSIXTGNnpEzlLp
+         LWdFgEckcYsR0PXF27dkvzglxnwhf3XmzbaARO41Bd1v7NLCYZG9vkSkbTqPRsr3l8
+         7aNGkc2g6uhsfHplnw12egiZBdv8eSYeXYzKWHvgyKXJNC58znt2w92Leeli4C1+GV
+         HisD8QyimlyMsqzky7MFckxo7NhS1/LPbtz1gLNL0pkmj9MeZWap9Su26u99S1ExPZ
+         +76bFGfHVMTL/okru8zzb9WqInBShKFX8TpFnde4UfnAh/oj277gTFn5RedoDfAdW+
+         UycI7AxSIvj4w==
+Message-ID: <5f61f655-e5bc-9e70-ce11-431b630a5331@collabora.com>
+Date:   Tue, 10 May 2022 09:59:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] PCI: mediatek-gen3: Assert resets to ensure expected init
+ state
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     ryder.lee@mediatek.com, jianjun.wang@mediatek.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        nfraprado@collabora.com
+References: <20220509171631.GA605998@bhelgaas>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220509171631.GA605998@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jon Kohler <jon@nutanix.com> writes:
+Il 09/05/22 19:16, Bjorn Helgaas ha scritto:
+> On Mon, May 09, 2022 at 02:18:34PM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 04/04/22 16:48, AngeloGioacchino Del Regno ha scritto:
+>>> The controller may have been left out of reset by the bootloader,
+>>> in which case, before the powerup sequence, the controller will be
+>>> found preconfigured with values that were set before booting the
+>>> kernel: this produces a controller failure, with the result of
+>>> a failure during the mtk_pcie_startup_port() sequence as the PCIe
+>>> link never gets up.
+>>>
+>>> To ensure that we get a clean start in an expected state, assert
+>>> both the PHY and MAC resets before executing the controller
+>>> power-up sequence.
+>>>
+>>> Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
+>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> Friendly ping for an important fix :-)
+> 
+> d3bf75b579b9 appeared in v5.13-rc1 (May 2021, a year ago), so I assume
+> this is important for v5.19, but not urgent enough to require being in
+> v5.18.  Right?
+> 
 
->> On May 5, 2022, at 4:09 AM, Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->>=20
->> Jon Kohler <jon@nutanix.com> writes:
->>=20
->>>> On May 4, 2022, at 5:47 PM, Sean Christopherson <seanjc@google.com> wr=
-ote:
->>>>=20
->>=20
->> ...
->>=20
->>>=20
->>> The net problem here is really that the stat is likely incorrect; howev=
-er,
->>> one other oddity I didn=E2=80=99t quite understand after looking into t=
-his is that
->>> the call site for all of this is in record_steal_time(), which is only =
-called
->>> from vcpu_enter_guest(), and that is called *after*
->>> kvm_service_local_tlb_flush_requests(), which also calls
->>> kvm_vcpu_flush_tlb_guest() if request =3D=3D KVM_REQ_TLB_FLUSH_GUEST
->>>=20
->>> That request may be there set from a few different places.=20
->>>=20
->>> I don=E2=80=99t have any proof of this, but it seems to me like we migh=
-t have a
->>> situation where we double flush?
->>>=20
->>> Put another way, I wonder if there is any sense behind maybe hoisting
->>> if (kvm_check_request(KVM_REQ_STEAL_UPDATE, vcpu)) up before
->>> Other tlb flushes, and have it clear the FLUSH_GUEST if it was set?
->>=20
->> Indeed, if we move KVM_REQ_STEAL_UPDATE check/record_steal_time() call
->> in vcpu_enter_guest() before kvm_service_local_tlb_flush_requests(), we
->> can probably get aways with kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST,
->> vcpu) in record_steal_time() which would help to avoid double flushing.
->
-> Thanks, Vitaly, I=E2=80=99ll rework this one and incorporate that. In the=
- mean time, do you
-> have any suggestions on Sean's concern about losing the trace in situatio=
-ns
-> where pv tlb flushing isn=E2=80=99t happening?
->
+Hello Bjorn,
+no it's not *very* urgent, as MediaTek devices that do require this will be
+in v5.19 anyway...
 
-No strong preference from my side but there are multiple places which
-conditionally cause TLB flush but we don't have tracepoints saying
-"flush could've been done but wasn't" there, right? Also,
-kvm_vcpu_flush_tlb_all()/kvm_vcpu_flush_tlb_guest()/kvm_vcpu_flush_tlb_curr=
-ent()
-don't seem to have tracepoints so we don't actually record when we
-flush. Hyper-V TLB flush has its own tracepoints
-(trace_kvm_hv_flush_tlb()/trace_kvm_hv_flush_tlb_ex()) though.
-This probably deserves a cleanup if we want TLB flush to be debuggable
-without code instrumentation.
-
---=20
-Vitaly
-
+Thanks,
+Angelo

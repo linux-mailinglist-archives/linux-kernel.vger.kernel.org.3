@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10EF521C75
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6AC521C81
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344014AbiEJOhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S243121AbiEJOhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344251AbiEJOdu (ORCPT
+        with ESMTP id S239470AbiEJOeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:33:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B76222F1F0C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652190672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZAGHGrcoAkfJTCYhh0+KXJWKuk5hs3gPSub8G/kTM/Y=;
-        b=IH+aUakekotAcKpeQOsJUPnOvHDMTpsGCN9srw7t2FI7l3a+RjlK46n4Ry0ACh2lByZDWa
-        YH/a5JiTcpMz45JAR1l3HS5RxiBY3MsETQWHhY1Zi/AabHK3OB2TCRLp6W9WG0rIN10PbY
-        UKdtgSgqzF4cwLh8BuotmsmWuTQzwi4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-RDi7atB5Mt2bknTqYPGSXg-1; Tue, 10 May 2022 09:51:11 -0400
-X-MC-Unique: RDi7atB5Mt2bknTqYPGSXg-1
-Received: by mail-wm1-f71.google.com with SMTP id m124-20020a1c2682000000b00393fcd2722dso834711wmm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:51:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZAGHGrcoAkfJTCYhh0+KXJWKuk5hs3gPSub8G/kTM/Y=;
-        b=uMWloU2sqFOP0eCig8KcqZ2kaWZNO4dJD1rnE3O61DzkaR+6aWsBNCMfPdwdUVAH8E
-         ZfLcZ8g3tNuO6+DRmaAzQzFUfqR619lwC+GWGhj1pm6U0wWZrAzEcKsr/ZtrNtkFHJN6
-         OFWq+xuBPg4shs2CINzrhcSya+MsLkLKiB5bDndAyIQU8tpJZQx8rqyKxmccB834/Vc2
-         ktrkg7gCIaoxSIH5n8CHNi+7bW0MB/JXyfzq8iphwcmvZjQRG7rtshaqyezyEGGuJruo
-         JdXyGX0100VMv7YXeUnkArqDG6+sNixV30l0jgHNUy7JVhl+BFAtGNRev/G1cHRalSSw
-         622w==
-X-Gm-Message-State: AOAM5333L1iAWsaATFTOu95f1utoMZI/0aMRiyBm/IVaXsMComir5FE2
-        e1bOhhRfhXj/Fhkpgo8X+Lx4FnrF9ef5kh8BU8yMMx/pAJZKM75+19Bf5luRJ/0lOK+LyT7KxdQ
-        DfrzUBYAHr41QpszaDMXvnLTI
-X-Received: by 2002:a05:6000:1a89:b0:20c:613f:da94 with SMTP id f9-20020a0560001a8900b0020c613fda94mr18362133wry.356.1652190667155;
-        Tue, 10 May 2022 06:51:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3IgxLwZziy91sXD3yrkheTJ3uGwJ3zLdE2j03c0MRWxjGcQGeDy06Ef/vxojp3Um9k3+OMg==
-X-Received: by 2002:a05:6000:1a89:b0:20c:613f:da94 with SMTP id f9-20020a0560001a8900b0020c613fda94mr18362122wry.356.1652190666957;
-        Tue, 10 May 2022 06:51:06 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id l7-20020a5d5607000000b0020c5253d904sm13941681wrv.80.2022.05.10.06.50.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 06:51:06 -0700 (PDT)
-Message-ID: <8f24d358-1fbd-4598-1f2d-959b4f8d75fd@redhat.com>
-Date:   Tue, 10 May 2022 15:50:57 +0200
+        Tue, 10 May 2022 10:34:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16792F29D2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:53:16 -0700 (PDT)
+Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyKDf49VnzGpdw;
+        Tue, 10 May 2022 21:50:26 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 21:53:14 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.30) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 21:53:13 +0800
+From:   Hui Tang <tanghui20@huawei.com>
+To:     <emma@anholt.net>
+CC:     <mripard@kernel.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <p.zabel@pengutronix.de>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] drm/vc4: hdmi: Fix build error for implicit function declaration
+Date:   Tue, 10 May 2022 21:51:48 +0800
+Message-ID: <20220510135148.247719-1-tanghui20@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [syzbot] INFO: task hung in synchronize_rcu (3)
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        syzbot <syzbot+0c6da80218456f1edc36@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, davem@davemloft.net, jhs@mojatatu.com,
-        jiri@resnulli.us, kvm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@elte.hu, mlevitsk@redhat.com, netdev@vger.kernel.org,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vinicius.gomes@intel.com,
-        viro@zeniv.linux.org.uk, xiyou.wangcong@gmail.com
-References: <000000000000402c5305ab0bd2a2@google.com>
- <0000000000004f3c0d05dea46dac@google.com> <Ynpsc7dRs8tZugpl@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ynpsc7dRs8tZugpl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.30]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 15:45, Sean Christopherson wrote:
->>
->>      KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
->>
->> bisection log:https://syzkaller.appspot.com/x/bisect.txt?x=16dc2e49f00000
->> start commit:   ea4424be1688 Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
->> git tree:       upstream
->> kernel config:https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
->> dashboard link:https://syzkaller.appspot.com/bug?extid=0c6da80218456f1edc36
->> syz repro:https://syzkaller.appspot.com/x/repro.syz?x=1685af9e700000
->> C reproducer:https://syzkaller.appspot.com/x/repro.c?x=11b09df1700000
->>
->> If the result looks correct, please mark the issue as fixed by replying with:
->>
->> #syz fix: KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
->>
->> For information about bisection process see:https://goo.gl/tpsmEJ#bisection
-> #syz fix: KVM: x86: Don't re-acquire SRCU lock in complete_emulated_io()
-> 
+drivers/gpu/drm/vc4/vc4_hdmi.c: In function ‘vc4_hdmi_connector_detect’:
+drivers/gpu/drm/vc4/vc4_hdmi.c:228:7: error: implicit declaration of function ‘gpiod_get_value_cansleep’; did you mean ‘gpio_get_value_cansleep’? [-Werror=implicit-function-declaration]
+   if (gpiod_get_value_cansleep(vc4_hdmi->hpd_gpio))
+       ^~~~~~~~~~~~~~~~~~~~~~~~
+       gpio_get_value_cansleep
+  CC [M]  drivers/gpu/drm/vc4/vc4_validate.o
+  CC [M]  drivers/gpu/drm/vc4/vc4_v3d.o
+  CC [M]  drivers/gpu/drm/vc4/vc4_validate_shaders.o
+  CC [M]  drivers/gpu/drm/vc4/vc4_debugfs.o
+drivers/gpu/drm/vc4/vc4_hdmi.c: In function ‘vc4_hdmi_bind’:
+drivers/gpu/drm/vc4/vc4_hdmi.c:2883:23: error: implicit declaration of function ‘devm_gpiod_get_optional’; did you mean ‘devm_clk_get_optional’? [-Werror=implicit-function-declaration]
+  vc4_hdmi->hpd_gpio = devm_gpiod_get_optional(dev, "hpd", GPIOD_IN);
+                       ^~~~~~~~~~~~~~~~~~~~~~~
+                       devm_clk_get_optional
+drivers/gpu/drm/vc4/vc4_hdmi.c:2883:59: error: ‘GPIOD_IN’ undeclared (first use in this function); did you mean ‘GPIOF_IN’?
+  vc4_hdmi->hpd_gpio = devm_gpiod_get_optional(dev, "hpd", GPIOD_IN);
+                                                           ^~~~~~~~
+                                                           GPIOF_IN
+drivers/gpu/drm/vc4/vc4_hdmi.c:2883:59: note: each undeclared identifier is reported only once for each function it appears in
+cc1: all warnings being treated as errors
 
-Are you sure? The hang is in synchronize_*rcu* and the testcase is 
-unrelated to KVM.  It seems like the testcase is not 100% reproducible.
+Fixes: 6800234ceee0 ("drm/vc4: hdmi: Convert to gpiod")
+Signed-off-by: Hui Tang <tanghui20@huawei.com>
+---
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Paolo
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 6aadb65eb640..823d812f4982 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -38,6 +38,7 @@
+ #include <drm/drm_simple_kms_helper.h>
+ #include <linux/clk.h>
+ #include <linux/component.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/of_address.h>
+ #include <linux/of_gpio.h>
+-- 
+2.17.1
 

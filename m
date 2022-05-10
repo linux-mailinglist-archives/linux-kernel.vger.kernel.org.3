@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C96B521C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DED521BC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344875AbiEJO11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S1344537AbiEJOWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245134AbiEJN5P (ORCPT
+        with ESMTP id S244860AbiEJNrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:57:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79402C96E8;
-        Tue, 10 May 2022 06:38:46 -0700 (PDT)
+        Tue, 10 May 2022 09:47:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39BC1A90C0;
+        Tue, 10 May 2022 06:32:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 939CAB81DC3;
-        Tue, 10 May 2022 13:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4B6C385A6;
-        Tue, 10 May 2022 13:38:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94652B81DAF;
+        Tue, 10 May 2022 13:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F10C385C2;
+        Tue, 10 May 2022 13:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189923;
-        bh=eCnaFYbbuU0OxvBtFtBv0weJme631iBH3c8BwEoEMdw=;
+        s=korg; t=1652189533;
+        bh=FqY/euhtDsvTvFayr++q1gSSEZGc/7jzgkGThKaqcKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KmNW++6fZ12lwzVZ15u0dX5deoBDUc/qtKBHR7mIrdJ6+3N0LjJTPaf9fD6Muvt66
-         3fiZvTD52ePvhzgh4S9iR+y2Q/BoDjsfAQw8VvOU4h/9ZJACwGh1/VSr5uPIIAlAc3
-         PFpnca2nRom0S+qfBzE32rNdoX7vkxxTastqVsm0=
+        b=Om2/Mn66vgc2gYTp9WmsDgP5ncHy/kWfX+4FaYwAlaGwndCE7NAY0MCf5ozp2MUHQ
+         9d/qtD4j5vf8o09vPB/tKDGwY7/XGTqfepYQi7q2TvljHAAwa0oT3tKtXz8nbrg/Y/
+         Z8Vz8MvXnMUO+AXq3VUPYr8giX8lqdOy2YDzk7CU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
-        Maher Sanalla <msanalla@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.17 071/140] net/mlx5: Fix deadlock in sync reset flow
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 079/135] smsc911x: allow using IRQ0
 Date:   Tue, 10 May 2022 15:07:41 +0200
-Message-Id: <20220510130743.648068609@linuxfoundation.org>
+Message-Id: <20220510130742.677070410@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Shemesh <moshe@nvidia.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit cb7786a76ea39f394f0a059787fe24fa8e340fb6 upstream.
+commit 5ef9b803a4af0f5e42012176889b40bb2a978b18 upstream.
 
-The sync reset flow can lead to the following deadlock when
-poll_sync_reset() is called by timer softirq and waiting on
-del_timer_sync() for the same timer. Fix that by moving the part of the
-flow that waits for the timer to reset_reload_work.
+The AlphaProject AP-SH4A-3A/AP-SH4AD-0A SH boards use IRQ0 for their SMSC
+LAN911x Ethernet chip, so the networking on them must have been broken by
+commit 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
+which filtered out 0 as well as the negative error codes -- it was kinda
+correct at the time, as platform_get_irq() could return 0 on of_irq_get()
+failure and on the actual 0 in an IRQ resource.  This issue was fixed by
+me (back in 2016!), so we should be able to fix this driver to allow IRQ0
+usage again...
 
-It fixes the following kernel Trace:
-RIP: 0010:del_timer_sync+0x32/0x40
-...
-Call Trace:
- <IRQ>
- mlx5_sync_reset_clear_reset_requested+0x26/0x50 [mlx5_core]
- poll_sync_reset.cold+0x36/0x52 [mlx5_core]
- call_timer_fn+0x32/0x130
- __run_timers.part.0+0x180/0x280
- ? tick_sched_handle+0x33/0x60
- ? tick_sched_timer+0x3d/0x80
- ? ktime_get+0x3e/0xa0
- run_timer_softirq+0x2a/0x50
- __do_softirq+0xe1/0x2d6
- ? hrtimer_interrupt+0x136/0x220
- irq_exit+0xae/0xb0
- smp_apic_timer_interrupt+0x7b/0x140
- apic_timer_interrupt+0xf/0x20
- </IRQ>
+When merging this to the stable kernels, make sure you also merge commit
+e330b9a6bb35 ("platform: don't return 0 from platform_get_irq[_byname]()
+on error") -- that's my fix to platform_get_irq() for the DT platforms...
 
-Fixes: 3c5193a87b0f ("net/mlx5: Use del_timer_sync in fw reset flow of halting poll")
-Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Link: https://lore.kernel.org/r/656036e4-6387-38df-b8a7-6ba683b16e63@omp.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |   34 ++++++++++-----------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ drivers/net/ethernet/smsc/smsc911x.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c
-@@ -112,22 +112,6 @@ static void mlx5_fw_reset_complete_reloa
- 	}
- }
- 
--static void mlx5_sync_reset_reload_work(struct work_struct *work)
--{
--	struct mlx5_fw_reset *fw_reset = container_of(work, struct mlx5_fw_reset,
--						      reset_reload_work);
--	struct mlx5_core_dev *dev = fw_reset->dev;
--	int err;
--
--	mlx5_enter_error_state(dev, true);
--	mlx5_unload_one(dev);
--	err = mlx5_health_wait_pci_up(dev);
--	if (err)
--		mlx5_core_err(dev, "reset reload flow aborted, PCI reads still not working\n");
--	fw_reset->ret = err;
--	mlx5_fw_reset_complete_reload(dev);
--}
--
- static void mlx5_stop_sync_reset_poll(struct mlx5_core_dev *dev)
- {
- 	struct mlx5_fw_reset *fw_reset = dev->priv.fw_reset;
-@@ -150,6 +134,23 @@ static int mlx5_sync_reset_clear_reset_r
- 	return 0;
- }
- 
-+static void mlx5_sync_reset_reload_work(struct work_struct *work)
-+{
-+	struct mlx5_fw_reset *fw_reset = container_of(work, struct mlx5_fw_reset,
-+						      reset_reload_work);
-+	struct mlx5_core_dev *dev = fw_reset->dev;
-+	int err;
-+
-+	mlx5_sync_reset_clear_reset_requested(dev, false);
-+	mlx5_enter_error_state(dev, true);
-+	mlx5_unload_one(dev);
-+	err = mlx5_health_wait_pci_up(dev);
-+	if (err)
-+		mlx5_core_err(dev, "reset reload flow aborted, PCI reads still not working\n");
-+	fw_reset->ret = err;
-+	mlx5_fw_reset_complete_reload(dev);
-+}
-+
- #define MLX5_RESET_POLL_INTERVAL	(HZ / 10)
- static void poll_sync_reset(struct timer_list *t)
- {
-@@ -164,7 +165,6 @@ static void poll_sync_reset(struct timer
- 
- 	if (fatal_error) {
- 		mlx5_core_warn(dev, "Got Device Reset\n");
--		mlx5_sync_reset_clear_reset_requested(dev, false);
- 		queue_work(fw_reset->wq, &fw_reset->reset_reload_work);
- 		return;
- 	}
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -2429,7 +2429,7 @@ static int smsc911x_drv_probe(struct pla
+ 	if (irq == -EPROBE_DEFER) {
+ 		retval = -EPROBE_DEFER;
+ 		goto out_0;
+-	} else if (irq <= 0) {
++	} else if (irq < 0) {
+ 		pr_warn("Could not allocate irq resource\n");
+ 		retval = -ENODEV;
+ 		goto out_0;
 
 

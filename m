@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF2520BD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91874520BDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbiEJDTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S235256AbiEJDVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiEJDT1 (ORCPT
+        with ESMTP id S235269AbiEJDVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:19:27 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424C22A7C36;
-        Mon,  9 May 2022 20:15:28 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id j6so13826534pfe.13;
-        Mon, 09 May 2022 20:15:28 -0700 (PDT)
+        Mon, 9 May 2022 23:21:24 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD33E15814
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:17:26 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id i10so26987609lfg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:17:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=OzBRtyA4Byv4LHvvdlavJZPXa2xwqQ3WqNSL+ipftlE=;
-        b=GRyifsnxSAzQclB46AIqh//+4UVGhBderEtEsgh88zGcsLB6KJfD4JqQotuLmYQk8C
-         qlWplL77Gza4lP3BSveSdF+ZsPItB7vHxW3p1K06qWPGHVB0HKJm9rQYB/F3VYHbi6Po
-         bYhc+MYISHqIWN8palL2/40KWuIy5SK+VMCp2078167w96Q7/bQccaovelMHkFE1N41v
-         zJ6kHyBj+H0YTYOLH0Wk2d0vJx7PcFM3RHlx/IxKenDEjGnx/lGzd8vIipji3mkpornL
-         6nCxSOiGZPNmWOkDYhXbD89Cx9QTcpl/N7g4pgZdfSRAQ1os9u74kz+sOrYQUs52DGiX
-         RMwA==
+        bh=Ls/SMjFj6heZoySKcqmoqFtaszIPQaljVTG5Re0rH9M=;
+        b=EB1ROIutBjcQZmj6LJr9SUFDRILRUz/dzhbYK+KW34P/HGB5VYjQOYia914IABPKHm
+         ZB2rJYgCDwhzeTK1YSlNZCVpAtHmbUntOvkPoj0MeZhIc5THiAljwEScvUbZU5unm1E0
+         78ioKS9u3eFHR3yEy1e3LjpgEBGiS3yUMMS3M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OzBRtyA4Byv4LHvvdlavJZPXa2xwqQ3WqNSL+ipftlE=;
-        b=Ujl+paofVJPJ8B+ecRBAasmWgoX7nNpuaVMu/LDUN3fhRMNEmA6FkYx4b4kXT6e0bb
-         z+R6BzahBKMgTnvj715wwVdmNwhcVPm8td3HMKZVJD1ap61+9zdvYfac7VI1gZicO+S5
-         ixDBrfDeKPe2a7nVmPFNQT6y5r9HeJEjJoroeRAWldLpWeSG2skBspnIf01NacsYepHN
-         TWW9MVd2SH1CdvRCEQOqSr7YviTtbtLHk/88aZtnlyuAEv9lxmhwxv9pyB0VNAs8nLKo
-         AgwhfO/UM5KZpBe9xN9ido6NG0mnJVyf4yvVUsYLNT6fTm5dMCiBz1HfLo68tTnCKkDl
-         i0Sw==
-X-Gm-Message-State: AOAM532bGGyAHcr6JZRlaDMgjz6ww3qxDX8N6ftJFnvylyiDV6R0OMeI
-        Huwr6YlkxITG3bLY+qyLjbKwWe8AOcyH1GhcnYg=
-X-Google-Smtp-Source: ABdhPJx5NoYTMAQANTkydC4IpcP+swG4dX1n9zoWhruqsIgQDTRC5XKQkT1vr5YaiY0DmWqZsC4y49eBzgbkatMRFIE=
-X-Received: by 2002:a05:6a00:8ce:b0:510:9298:ea26 with SMTP id
- s14-20020a056a0008ce00b005109298ea26mr12990895pfu.55.1652152527696; Mon, 09
- May 2022 20:15:27 -0700 (PDT)
+        bh=Ls/SMjFj6heZoySKcqmoqFtaszIPQaljVTG5Re0rH9M=;
+        b=4P/l9yzc+rHePnA+SXfcpD9UCvyPM9HLeDNLKHWakFaSe+GWbLlmC0NxY6poaaLLn/
+         yzoxxh8yxy2MbzgeO1jCKC+yOy96ADDbNNonm/a8LsssRYcRBG1oiNteTntRcPIK8iYf
+         ypIlWJsXMdB6djj9huGJx7J7qT8ZFQx4gXiIoXsU7OlU0erUVC07SjJc2bQVc36nkIk+
+         mC+ckSpwqy2dIWFt7i+549vKSrFYOxZASjyzLJuMR4lyMutKU2JuKIMFmZm9kczGGDfC
+         62U/Kuo/C4p9clcycpcW4PGoRVeojJIT4/H47AuUsbJ8aDR77/n3xmCc2tnpco77j/oE
+         AISw==
+X-Gm-Message-State: AOAM533bbrqRAdymgMDgPZ9WldT6++KO34J/SWwpbFK68svVp6XFcndn
+        Io+QDfGPxMN+iikdxaxFaEVHv35ULiF66Bkm1w8fFQ==
+X-Google-Smtp-Source: ABdhPJw1K7QAlE5QAiZCLMLRs+tK1ZtQMIflSjgCESXPl/YsTyscWXUV+ShFFygPmv2BiT+hQUxJJ2+IPMYpxQps+Qk=
+X-Received: by 2002:a05:6512:3f86:b0:44a:f5bf:ec9a with SMTP id
+ x6-20020a0565123f8600b0044af5bfec9amr15376918lfa.490.1652152645011; Mon, 09
+ May 2022 20:17:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220507024840.42662-1-zhoufeng.zf@bytedance.com>
- <CAEf4BzZD5q2j229_gL_nDFse2v=k2Ea0nfguH+sOA2O1Nm5sQw@mail.gmail.com>
- <CAJD7tkbd8qA-4goUCVW6Tf0xGpj2OSBXncpWhrWFn5y010oBMw@mail.gmail.com> <d20aef2a-273a-3183-0923-bde9657d4418@bytedance.com>
-In-Reply-To: <d20aef2a-273a-3183-0923-bde9657d4418@bytedance.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 9 May 2022 20:15:16 -0700
-Message-ID: <CAADnVQL+Vq5y47J++VCppti1728w3U0maxg9d4SqAtArY+h1yg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next] bpf: add bpf_map_lookup_percpu_elem
- for percpu map
-To:     Feng Zhou <zhoufeng.zf@bytedance.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joanne Koong <joannekoong@fb.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
+References: <1651228073-1999-1-git-send-email-quic_bgodavar@quicinc.com>
+ <1651228073-1999-4-git-send-email-quic_bgodavar@quicinc.com>
+ <0D3D8346-0F64-4CAF-8BED-940F189A3E97@holtmann.org> <SJ0PR02MB713538E5BBB40CDEF2E050A0F8FF9@SJ0PR02MB7135.namprd02.prod.outlook.com>
+In-Reply-To: <SJ0PR02MB713538E5BBB40CDEF2E050A0F8FF9@SJ0PR02MB7135.namprd02.prod.outlook.com>
+From:   Miao-chen Chou <mcchou@chromium.org>
+Date:   Mon, 9 May 2022 20:17:13 -0700
+Message-ID: <CABmPvSFiAC474WthmMX0nE20UEOxUD5dEYBVbiKh7HOovCnCkA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] Bluetooth: hci_qca: WAR to handle WCN6750 HW issue
+To:     "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Andy Gross <agross@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
+        "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>,
+        quic_rjliao <quic_rjliao@quicinc.com>,
+        Alain Michaud <alainmichaud@google.com>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,54 +79,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 7:41 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->
-> =E5=9C=A8 2022/5/10 =E4=B8=8A=E5=8D=889:04, Yosry Ahmed =E5=86=99=E9=81=
-=93:
-> > On Mon, May 9, 2022 at 5:34 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >> On Fri, May 6, 2022 at 7:49 PM Feng zhou <zhoufeng.zf@bytedance.com> w=
-rote:
-> >>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> >>>
-> >>> Trace some functions, such as enqueue_task_fair, need to access the
-> >>> corresponding cpu, not the current cpu, and bpf_map_lookup_elem percp=
-u map
-> >>> cannot do it. So add bpf_map_lookup_percpu_elem to accomplish it for
-> >>> percpu_array_map, percpu_hash_map, lru_percpu_hash_map.
-> >>>
-> >>> The implementation method is relatively simple, refer to the implemen=
-tation
-> >>> method of map_lookup_elem of percpu map, increase the parameters of c=
-pu, and
-> >>> obtain it according to the specified cpu.
-> >>>
-> >> I don't think it's safe in general to access per-cpu data from another
-> >> CPU. I'd suggest just having either a ARRAY_OF_MAPS or adding CPU ID
-> >> as part of the key, if you need such a custom access pattern.
-> > I actually just sent an RFC patch series containing a similar patch
-> > for the exact same purpose. There are instances in the kernel where
-> > per-cpu data is accessed from other cpus (e.g.
-> > mem_cgroup_css_rstat_flush()). I believe, like any other variable,
-> > percpu data can be safe or not safe to access, based on the access
-> > pattern. It is up to the user to coordinate accesses to the variable.
-> >
-> > For example, in my use case, one of the accessors only reads percpu
-> > values of different cpus, so it should be safe. If a user accesses
-> > percpu data of another cpu without guaranteeing safety, they corrupt
-> > their own data. I understand that the main purpose of percpu data is
-> > lockless (and therefore fast) access, but in some use cases the user
-> > may be able to safely (and locklessly) access the data concurrently.
-> >
->
-> Regarding data security, I think users need to consider before using it,
-> such
-> as hook enqueue_task_fair, the function itself takes the rq lock of the
-> corresponding cpu, there is no problem, and the kernel only provides a
-> method,
-> like bpf_per_cpu_ptr and bpf_this_cpu_ptr, data security needs to be
-> guaranteed
-> by users in different scenarios, such as using bpf_spin_lock.
+Hi Bala,
 
-Right. The new helper looks useful and is safe.
-Please add a selftest and respin.
+When is the estimated start date and timeline of the driver development?
+
+Thanks,
+Miao
+
+On Fri, Apr 29, 2022 at 8:09 PM Balakrishna Godavarthi (QUIC)
+<quic_bgodavar@quicinc.com> wrote:
+>
+> Hi Marcel,
+>
+> -----Original Message-----
+> From: Marcel Holtmann <marcel@holtmann.org>
+> Sent: Friday, April 29, 2022 8:24 PM
+> To: Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>
+> Cc: Andy Gross <agross@kernel.org>; robh+dt@kernel.org; bjorn.andersson@l=
+inaro.org; linux-arm-msm@vger.kernel.org; devicetree@vger.kernel.org; linux=
+-kernel@vger.kernel.org; Johan Hedberg <johan.hedberg@gmail.com>; mka@chrom=
+ium.org; linux-bluetooth@vger.kernel.org; Hemant Gupta (QUIC) <quic_hemantg=
+@quicinc.com>; Sai Teja Aluvala (Temp) (QUIC) <quic_saluvala@quicinc.com>; =
+quic_rjliao <quic_rjliao@quicinc.com>; mcchou@chromium.org
+> Subject: Re: [PATCH v1 3/3] Bluetooth: hci_qca: WAR to handle WCN6750 HW =
+issue
+>
+> Hi Balakrishna,
+>
+> > The patch is workaround for hardware issue on WCN6750.
+> > On WCN6750 sometimes observed AON power source takes 100ms time to
+> > fully discharge voltage during OFF. As WCN6750 is combo chip for WLAN
+> > and BT. If any of the tech area ON is triggered during discharge
+> > phase, it fails to turn ON.
+> > To overcome this hardware issue, During BT ON, driver check for
+> > WLAN_EN pin status. If it high, it will pull BT_EN to high immediately
+> > else it will wait for 100ms assuming WLAN was just powered OFF and
+> > then BT_EN will be pulled to high.
+> >
+> > Fixes: d8f97da1b92d2 ("Bluetooth: hci_qca: Add support for QTI
+> > Bluetooth chip wcn6750")
+> > Reviewed-by: Miao-chen Chou <mcchou@chromium.org>
+> > Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+> > Signed-off-by: Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
+> > ---
+> > drivers/bluetooth/hci_qca.c | 30 ++++++++++++++++++++++++------
+> > 1 file changed, 24 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> > index eab34e2..c3862d1 100644
+> > --- a/drivers/bluetooth/hci_qca.c
+> > +++ b/drivers/bluetooth/hci_qca.c
+> > @@ -219,6 +219,7 @@ struct qca_serdev {
+> >       struct hci_uart  serdev_hu;
+> >       struct gpio_desc *bt_en;
+> >       struct gpio_desc *sw_ctrl;
+> > +     struct gpio_desc *wlan_en;
+> >       struct clk       *susclk;
+> >       enum qca_btsoc_type btsoc_type;
+> >       struct qca_power *bt_power;
+>
+> I am really against these intermixing of Bluetooth and WiFi details. Ther=
+e is work ongoing to do some sequence power procedure. Maybe that is someth=
+ing you should look into. This is a mess.
+>
+> And again, we are still hacking around hci_qca.c instead of writing a cle=
+an serdev only driver for this hardware. I have the feeling that nobody lis=
+tens to review comments these days. It is just hacking patches together to =
+get hardware enabled somehow and then disappear.
+>
+> [Bala]: We are working on serdev like driver for our QCA platform.  We ar=
+e in initial stages of discussion, and soon we will start the driver develo=
+pment work.
+> In mean to stop stability or functional issues we are trying to add these=
+ HACKs in QCA driver.
+>
+> Regards
+>
+> Marcel
+>

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4718A521AF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D2C521B98
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245359AbiEJOG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S1343698AbiEJOQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244559AbiEJNl7 (ORCPT
+        with ESMTP id S1343680AbiEJNsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:41:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832FD2C96EB;
-        Tue, 10 May 2022 06:30:14 -0700 (PDT)
+        Tue, 10 May 2022 09:48:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1952B8D09;
+        Tue, 10 May 2022 06:36:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C66AFB81DAF;
-        Tue, 10 May 2022 13:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B672C385C2;
-        Tue, 10 May 2022 13:29:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EF7618BB;
+        Tue, 10 May 2022 13:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E88C385C2;
+        Tue, 10 May 2022 13:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189387;
-        bh=ZS4YX0gYWuUArXMDi1K/gNPON1wBSM2zlX0d9VfYLWk=;
+        s=korg; t=1652189777;
+        bh=3H1BjRzDHUjxEnk9QTEfAYQL8EISB2HXM59jjO3NEzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E51FigRLhPDCUxKgVAZ2UWifyoiDptxOMCt5CG/5ngIZfoUSDK6ftZPCQp1JsDqiM
-         pIHzEK4PCvAdMgrRPUrkyzoXL/+ZIQ4T2vpYReBQ8hxfbZp4awzjJxShgtbJKMx25O
-         c/zxZ0SoFNNUboaUon/9Qitf5fcwseKIa/Nc2JAE=
+        b=1kaV42gVcuJyHYM6xgnADrFElpwxplWrRBMFbZw+a/7K/yyljYuMRcSapA3Zh3UUc
+         6T/fjBv/17FN/PrAGGP25XeZGtx7MfASvVyktp8agVhLe6M++HLoVRhZqwS3kc+m0X
+         I1ldVy7QmaOM7+M/wJAmdycVp9RlMy8LHgijg8L0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.15 033/135] can: isotp: remove re-binding of bound socket
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 025/140] firewire: remove check of list iterator against head past the loop body
 Date:   Tue, 10 May 2022 15:06:55 +0200
-Message-Id: <20220510130741.351866672@linuxfoundation.org>
+Message-Id: <20220510130742.331173258@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-commit 72ed3ee9fa0b461ad086403a8b5336154bd82234 upstream.
+commit 9423973869bd4632ffe669f950510c49296656e0 upstream.
 
-As a carry over from the CAN_RAW socket (which allows to change the CAN
-interface while mantaining the filter setup) the re-binding of the
-CAN_ISOTP socket needs to take care about CAN ID address information and
-subscriptions. It turned out that this feature is so limited (e.g. the
-sockopts remain fix) that it finally has never been needed/used.
+When list_for_each_entry() completes the iteration over the whole list
+without breaking the loop, the iterator value will be a bogus pointer
+computed based on the head element.
 
-In opposite to the stateless CAN_RAW socket the switching of the CAN ID
-subscriptions might additionally lead to an interrupted ongoing PDU
-reception. So better remove this unneeded complexity.
+While it is safe to use the pointer to determine if it was computed
+based on the head element, either with list_entry_is_head() or
+&pos->member == head, using the iterator variable after the loop should
+be avoided.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/all/20220422082337.1676-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to point to the found element [1].
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220409041243.603210-3-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c |   22 +++++-----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
+ drivers/firewire/core-transaction.c |   30 ++++++++++++++++--------------
+ drivers/firewire/sbp2.c             |   13 +++++++------
+ 2 files changed, 23 insertions(+), 20 deletions(-)
 
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1146,6 +1146,11 @@ static int isotp_bind(struct socket *soc
+--- a/drivers/firewire/core-transaction.c
++++ b/drivers/firewire/core-transaction.c
+@@ -73,24 +73,25 @@ static int try_cancel_split_timeout(stru
+ static int close_transaction(struct fw_transaction *transaction,
+ 			     struct fw_card *card, int rcode)
+ {
+-	struct fw_transaction *t;
++	struct fw_transaction *t = NULL, *iter;
+ 	unsigned long flags;
  
- 	lock_sock(sk);
- 
-+	if (so->bound) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
- 	/* do not register frame reception for functional addressing */
- 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
- 		do_rx_reg = 0;
-@@ -1156,10 +1161,6 @@ static int isotp_bind(struct socket *soc
- 		goto out;
+ 	spin_lock_irqsave(&card->lock, flags);
+-	list_for_each_entry(t, &card->transaction_list, link) {
+-		if (t == transaction) {
+-			if (!try_cancel_split_timeout(t)) {
++	list_for_each_entry(iter, &card->transaction_list, link) {
++		if (iter == transaction) {
++			if (!try_cancel_split_timeout(iter)) {
+ 				spin_unlock_irqrestore(&card->lock, flags);
+ 				goto timed_out;
+ 			}
+-			list_del_init(&t->link);
+-			card->tlabel_mask &= ~(1ULL << t->tlabel);
++			list_del_init(&iter->link);
++			card->tlabel_mask &= ~(1ULL << iter->tlabel);
++			t = iter;
+ 			break;
+ 		}
  	}
+ 	spin_unlock_irqrestore(&card->lock, flags);
  
--	if (so->bound && addr->can_ifindex == so->ifindex &&
--	    rx_id == so->rxid && tx_id == so->txid)
--		goto out;
--
- 	dev = dev_get_by_index(net, addr->can_ifindex);
- 	if (!dev) {
- 		err = -ENODEV;
-@@ -1186,19 +1187,6 @@ static int isotp_bind(struct socket *soc
+-	if (&t->link != &card->transaction_list) {
++	if (t) {
+ 		t->callback(card, rcode, NULL, 0, t->callback_data);
+ 		return 0;
+ 	}
+@@ -935,7 +936,7 @@ EXPORT_SYMBOL(fw_core_handle_request);
  
- 	dev_put(dev);
+ void fw_core_handle_response(struct fw_card *card, struct fw_packet *p)
+ {
+-	struct fw_transaction *t;
++	struct fw_transaction *t = NULL, *iter;
+ 	unsigned long flags;
+ 	u32 *data;
+ 	size_t data_length;
+@@ -947,20 +948,21 @@ void fw_core_handle_response(struct fw_c
+ 	rcode	= HEADER_GET_RCODE(p->header[1]);
  
--	if (so->bound && do_rx_reg) {
--		/* unregister old filter */
--		if (so->ifindex) {
--			dev = dev_get_by_index(net, so->ifindex);
--			if (dev) {
--				can_rx_unregister(net, dev, so->rxid,
--						  SINGLE_MASK(so->rxid),
--						  isotp_rcv, sk);
--				dev_put(dev);
--			}
--		}
--	}
--
- 	/* switch to new settings */
- 	so->ifindex = ifindex;
- 	so->rxid = rx_id;
+ 	spin_lock_irqsave(&card->lock, flags);
+-	list_for_each_entry(t, &card->transaction_list, link) {
+-		if (t->node_id == source && t->tlabel == tlabel) {
+-			if (!try_cancel_split_timeout(t)) {
++	list_for_each_entry(iter, &card->transaction_list, link) {
++		if (iter->node_id == source && iter->tlabel == tlabel) {
++			if (!try_cancel_split_timeout(iter)) {
+ 				spin_unlock_irqrestore(&card->lock, flags);
+ 				goto timed_out;
+ 			}
+-			list_del_init(&t->link);
+-			card->tlabel_mask &= ~(1ULL << t->tlabel);
++			list_del_init(&iter->link);
++			card->tlabel_mask &= ~(1ULL << iter->tlabel);
++			t = iter;
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&card->lock, flags);
+ 
+-	if (&t->link == &card->transaction_list) {
++	if (!t) {
+  timed_out:
+ 		fw_notice(card, "unsolicited response (source %x, tlabel %x)\n",
+ 			  source, tlabel);
+--- a/drivers/firewire/sbp2.c
++++ b/drivers/firewire/sbp2.c
+@@ -408,7 +408,7 @@ static void sbp2_status_write(struct fw_
+ 			      void *payload, size_t length, void *callback_data)
+ {
+ 	struct sbp2_logical_unit *lu = callback_data;
+-	struct sbp2_orb *orb;
++	struct sbp2_orb *orb = NULL, *iter;
+ 	struct sbp2_status status;
+ 	unsigned long flags;
+ 
+@@ -433,17 +433,18 @@ static void sbp2_status_write(struct fw_
+ 
+ 	/* Lookup the orb corresponding to this status write. */
+ 	spin_lock_irqsave(&lu->tgt->lock, flags);
+-	list_for_each_entry(orb, &lu->orb_list, link) {
++	list_for_each_entry(iter, &lu->orb_list, link) {
+ 		if (STATUS_GET_ORB_HIGH(status) == 0 &&
+-		    STATUS_GET_ORB_LOW(status) == orb->request_bus) {
+-			orb->rcode = RCODE_COMPLETE;
+-			list_del(&orb->link);
++		    STATUS_GET_ORB_LOW(status) == iter->request_bus) {
++			iter->rcode = RCODE_COMPLETE;
++			list_del(&iter->link);
++			orb = iter;
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&lu->tgt->lock, flags);
+ 
+-	if (&orb->link != &lu->orb_list) {
++	if (orb) {
+ 		orb->callback(orb, &status);
+ 		kref_put(&orb->kref, free_orb); /* orb callback reference */
+ 	} else {
 
 

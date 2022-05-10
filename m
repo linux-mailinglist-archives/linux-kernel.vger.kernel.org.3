@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CD452194B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE331521A7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243953AbiEJNot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S244550AbiEJOBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243668AbiEJNbz (ORCPT
+        with ESMTP id S245125AbiEJNid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:31:55 -0400
+        Tue, 10 May 2022 09:38:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDE52CC131;
-        Tue, 10 May 2022 06:21:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4094E244F24;
+        Tue, 10 May 2022 06:27:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1E0860C1C;
-        Tue, 10 May 2022 13:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7500C385C2;
-        Tue, 10 May 2022 13:21:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A81615C8;
+        Tue, 10 May 2022 13:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0D3C385A6;
+        Tue, 10 May 2022 13:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188909;
-        bh=09iYEBo61QGv2MPZ1PJgYqKZ2Yf52Nz+eYKGn4iEPOY=;
+        s=korg; t=1652189233;
+        bh=YmCIwfczu1mXcczkqwoETbSEQm5ZZgmkMLoLZWVLehw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xgtVKjR9WTsvRyjQoCG3Q/JXbr5ProvjQd//jHT5C0mhl6wrJVrSxzBFS20rPNg64
-         ocDtunPz+WxTe07QGETL3pTVe/I2/LXdA4WkowTwOdBiTF++sHwa3nWkqDk27AWWNk
-         /5akQDVb1YyNPhUBl5Wv+oDH06S2CgpzzLsz6hqA=
+        b=KvgYP1V9xCLzqVv6Kc8UAvyDWIOV5JJjKnHsnljLp/yS/SYLPHwNz9lIXUI8gz+ok
+         /wylx/0/4nAPfQVdvl34A2GHgIUCXYwD/qjxDGgLxnAFbtKK6ZbvGY0IbkO0DCFR+o
+         IDZfridahsvocdSR/IbG75s1UwQ8j2Sv97VbPtSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricky Wu <ricky_wu@realtek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Christian Loehle <cloehle@hyperstone.com>
-Subject: [PATCH 4.19 88/88] mmc: rtsx: add 74 Clocks in power on flow
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 54/70] selftests: ocelot: tc_flower_chains: specify conform-exceed action for policer
 Date:   Tue, 10 May 2022 15:08:13 +0200
-Message-Id: <20220510130736.285970056@linuxfoundation.org>
+Message-Id: <20220510130734.447328140@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,114 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricky WU <ricky_wu@realtek.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit 1f311c94aabdb419c28e3147bcc8ab89269f1a7e upstream.
+commit 5a7c5f70c743c6cf32b44b05bd6b19d4ad82f49d upstream.
 
-SD spec definition:
-"Host provides at least 74 Clocks before issuing first command"
-After 1ms for the voltage stable then start issuing the Clock signals
+As discussed here with Ido Schimmel:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220224102908.5255-2-jianbol@nvidia.com/
 
-if POWER STATE is
-MMC_POWER_OFF to MMC_POWER_UP to issue Clock signal to card
-MMC_POWER_UP to MMC_POWER_ON to stop issuing signal to card
+the default conform-exceed action is "reclassify", for a reason we don't
+really understand.
 
-Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-Link: https://lore.kernel.org/r/1badf10aba764191a1a752edcbf90389@realtek.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+The point is that hardware can't offload that police action, so not
+specifying "conform-exceed" was always wrong, even though the command
+used to work in hardware (but not in software) until the kernel started
+adding validation for it.
+
+Fix the command used by the selftest by making the policer drop on
+exceed, and pass the packet to the next action (goto) on conform.
+
+Fixes: 8cd6b020b644 ("selftests: ocelot: add some example VCAP IS1, IS2 and ES0 tc offloads")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/20220503121428.842906-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/rtsx_pci_sdmmc.c |   31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+ tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -49,10 +49,7 @@ struct realtek_pci_sdmmc {
- 	bool			double_clk;
- 	bool			eject;
- 	bool			initial_mode;
--	int			power_state;
--#define SDMMC_POWER_ON		1
--#define SDMMC_POWER_OFF		0
--
-+	int			prev_power_state;
- 	int			sg_count;
- 	s32			cookie;
- 	int			cookie_sg_count;
-@@ -914,14 +911,21 @@ static int sd_set_bus_width(struct realt
- 	return err;
+--- a/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
++++ b/tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh
+@@ -185,7 +185,7 @@ setup_prepare()
+ 
+ 	tc filter add dev $eth0 ingress chain $(IS2 0 0) pref 1 \
+ 		protocol ipv4 flower skip_sw ip_proto udp dst_port 5201 \
+-		action police rate 50mbit burst 64k \
++		action police rate 50mbit burst 64k conform-exceed drop/pipe \
+ 		action goto chain $(IS2 1 0)
  }
  
--static int sd_power_on(struct realtek_pci_sdmmc *host)
-+static int sd_power_on(struct realtek_pci_sdmmc *host, unsigned char power_mode)
- {
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	if (host->power_state == SDMMC_POWER_ON)
-+	if (host->prev_power_state == MMC_POWER_ON)
- 		return 0;
- 
-+	if (host->prev_power_state == MMC_POWER_UP) {
-+		rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0);
-+		goto finish;
-+	}
-+
-+	msleep(100);
-+
- 	rtsx_pci_init_cmd(pcr);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SELECT, 0x07, SD_MOD_SEL);
- 	rtsx_pci_add_cmd(pcr, WRITE_REG_CMD, CARD_SHARE_MODE,
-@@ -940,11 +944,17 @@ static int sd_power_on(struct realtek_pc
- 	if (err < 0)
- 		return err;
- 
-+	mdelay(1);
-+
- 	err = rtsx_pci_write_register(pcr, CARD_OE, SD_OUTPUT_EN, SD_OUTPUT_EN);
- 	if (err < 0)
- 		return err;
- 
--	host->power_state = SDMMC_POWER_ON;
-+	/* send at least 74 clocks */
-+	rtsx_pci_write_register(pcr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
-+
-+finish:
-+	host->prev_power_state = power_mode;
- 	return 0;
- }
- 
-@@ -953,7 +963,7 @@ static int sd_power_off(struct realtek_p
- 	struct rtsx_pcr *pcr = host->pcr;
- 	int err;
- 
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 
- 	rtsx_pci_init_cmd(pcr);
- 
-@@ -979,7 +989,7 @@ static int sd_set_power_mode(struct real
- 	if (power_mode == MMC_POWER_OFF)
- 		err = sd_power_off(host);
- 	else
--		err = sd_power_on(host);
-+		err = sd_power_on(host, power_mode);
- 
- 	return err;
- }
-@@ -1414,10 +1424,11 @@ static int rtsx_pci_sdmmc_drv_probe(stru
- 
- 	host = mmc_priv(mmc);
- 	host->pcr = pcr;
-+	mmc->ios.power_delay_ms = 5;
- 	host->mmc = mmc;
- 	host->pdev = pdev;
- 	host->cookie = -1;
--	host->power_state = SDMMC_POWER_OFF;
-+	host->prev_power_state = MMC_POWER_OFF;
- 	INIT_WORK(&host->work, sd_request);
- 	platform_set_drvdata(pdev, host);
- 	pcr->slots[RTSX_SD_CARD].p_dev = pdev;
 
 

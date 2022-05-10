@@ -2,109 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0CC521E07
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FF7521E1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345562AbiEJPWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S1345635AbiEJPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346304AbiEJPW0 (ORCPT
+        with ESMTP id S1345583AbiEJPWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:22:26 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9412615801;
-        Tue, 10 May 2022 08:05:57 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id a22so13410405qkl.5;
-        Tue, 10 May 2022 08:05:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3buBIN+IyWy8jl5QP9VpwtQkm+plR/re5/e7qWc+5iU=;
-        b=AWJKXpxp+wGGwAMKWY6y+evKTJCoZVs3h+VIwVPJfwKLd4pLNbtfdr0xx7+z1uTTEk
-         JKBUHNgF+WQ+0+qjrENwv76LG5+6VLptTWDBSxbkjwi8gWec0JrpVqyXbNqsnmS5KPhN
-         +CDihUjQZvmoqO57kS16Sj8KmMt9oqqlYsh+hhFN/7NI+BiEo1HvQ+3NoGdkXm2s4he3
-         vRqIIZKbU1OKdZ9pjirov8x6dgae33VGIjeKCRdxmJJm0tKaNuFWTIcarOe0+6rsASx+
-         QZ6AF5lXmtXkuStqKjxfmxPbeXSzoUSB9maW68zztRVQ973dfjNu8V7Wgct4rrpJ7B1p
-         gRIw==
-X-Gm-Message-State: AOAM532uuyksx/gjRDZWZ1Yy7KL9FBNUgkOZ7SfhvmG3OFN7z7kauVYl
-        LpSZ8fOBbpewL9kPJbmC33mOrPFtseit0A==
-X-Google-Smtp-Source: ABdhPJx1fX/9AbUOi27gMb3WUjt+0JWFPd2nJ3l+tMGlLObEzedH1sNGWZGzTsSoTN47UzFiPYbomg==
-X-Received: by 2002:a37:a351:0:b0:69f:cebf:5a7c with SMTP id m78-20020a37a351000000b0069fcebf5a7cmr15047972qke.740.1652195155971;
-        Tue, 10 May 2022 08:05:55 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id az35-20020a05620a172300b0069fc13ce20bsm9138500qkb.60.2022.05.10.08.05.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 08:05:55 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id x17so10700173ybj.3;
-        Tue, 10 May 2022 08:05:55 -0700 (PDT)
-X-Received: by 2002:a25:6157:0:b0:645:8d0e:f782 with SMTP id
- v84-20020a256157000000b006458d0ef782mr20010518ybb.36.1652195155051; Tue, 10
- May 2022 08:05:55 -0700 (PDT)
+        Tue, 10 May 2022 11:22:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC46A87A37
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652195239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fI2ZawHCdRIhMJCwYHvAzY/bTTBNnIpXKClvdmq4TdY=;
+        b=gZXCG5neXk185hfHF6RuHNsb5nIATlH9fd1PF7gtEVJLeEScZweq5iBvxwW+QDca4KXTG4
+        UC3QHYV1pLP2/vexs9ntbsKgLZvSNu+yU7LHsrcD7Si+X/wJpVs+nylUdT7NsMlvxrfBML
+        QOT9DIn4tXwl+nlvLKCC+jRKDd3mjMg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-caOQUNsuOAqj1TuHv_ir7A-1; Tue, 10 May 2022 11:07:16 -0400
+X-MC-Unique: caOQUNsuOAqj1TuHv_ir7A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF6F43C021AB;
+        Tue, 10 May 2022 15:07:15 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 72BB89E72;
+        Tue, 10 May 2022 15:07:15 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     pbonzini@redhat.com, likexu@tencent.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: x86: Skip unsupported test when Arch LBR is available
+Date:   Tue, 10 May 2022 11:06:38 -0400
+Message-Id: <20220510150637.1774645-1-pbonzini@redhat.com>
+In-Reply-To: <20220510035028.21042-1-weijiang.yang@intel.com>
+References: 
 MIME-Version: 1.0
-References: <20220505193143.31826-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220505193143.31826-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220505193143.31826-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 10 May 2022 17:05:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVtPRgWJXDAGRh8rm4TiH4XMNmp_+V2Vu0rShjzBdaykw@mail.gmail.com>
-Message-ID: <CAMuHMdVtPRgWJXDAGRh8rm4TiH4XMNmp_+V2Vu0rShjzBdaykw@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] clk: renesas: rzg2l-cpg: Add support to stack the
- resets instead of indexing
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi,
 
-On Thu, May 5, 2022 at 9:32 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Instead of indexing the resets, stack them and instead create an id member
-> in struct rzg2l_reset to store the index. With this approach for every id
-> we will have to loop through the resets array to match the id.
->
-> This in preparation to add support for Renesas RZ/Five CPG in
-> r9a07g043-cpg.c file where the resets array will be split up into three
-> i.e. common and two SoC specific.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> -	ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
+> -	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
+> +	/* Note, on Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
+> +	 * so skip below test if running on these platforms. */
+> +	if (host_cap.lbr_format != PMU_CAP_LBR_FMT) {
+> +		ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
+> +		TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
+> +	}
 
-Thanks for your patch!
+Why not try a different value?
 
-An obvious alternative would be to allocate an array with pointers to
-the individual resets, like is done for clocks.
+Paolo
 
-Please see the suggestion in my reply to "[RFC PATCH 3/4] clk: renesas:
-r9a07g043: Split up core, module and resets array", which would make
-this patch unnecessary.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

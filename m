@@ -2,167 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C55E520DAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836E7520DB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237047AbiEJGVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
+        id S237051AbiEJGYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbiEJGVL (ORCPT
+        with ESMTP id S236552AbiEJGYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:21:11 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2045.outbound.protection.outlook.com [40.107.114.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCB126087E
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:17:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j7MqWO4nz9YfVdzMslpevmaWnNeXXZlUQkXC5uU4P8A6X2OhgElSLUKQb0dS9lp9pRF61EnV0ZSyoxzvWivzrnR0WNVuoElhuY8GiznpJBbGHKraFLP/hEHmmKuUI4XQm9d9IwEpJEAZd/9I4J1LsJqPbzoOQx9dloLkbHAISMSioz7ACLuMXrwiiUJurHpfceVJoAz8WETxGzOYa2NbcHO1RjUaNrbzkfButM/5U8S+SGdY8wVljxO0ApZTCHjNfiBz2IuN+qlxhvu5FLoLt6sH75pWTpiYC7HSTIGFSeVjF3YoZfk83JAYy6bwIjQGWwQ17p4Z9vyXhYvUX1Uq6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f5t+JYH1I0zdsz57WyAn8dq5rAYcBRtjdAs/4MGYCeM=;
- b=ZWbWEZxe6aapggIs2pKdNGkJOJ4DAs9W6VyOaiXMnkYIj/koJOQN2rGGxj+L6pCTHxdSEEhXonywlGxxkuNSrWQWQnWqghva4il4sLyLk0KuRh64apzWT+AoIaZkkrRT2RZsrnlIfZGOjV2Lax4M8MiUmvK713tfRUXfk/hxQSwlTeD0Z7zzlKVW8m6heJwXl6+3fnZgWr+PbgEFh6lSu4IdmNG2TV+ZhYmDnUDYblWyLgTQwDB+rBjMe51y/aL67avxjZ9ZmiJ4CY7z+E6FJgWfw5JFpEIEG4oA4uIh9SADGVMCC8KVkW1u2fUAz3YD9YR3Wl8hvT1oiXqNMZ6enA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f5t+JYH1I0zdsz57WyAn8dq5rAYcBRtjdAs/4MGYCeM=;
- b=kbSgRwJimhb9egA5/nzpfNqIx7LklmNiZTmGCz7XCarzKnmk+dt8E8G1SQ+9wB1TAyXuf/d1ZF7kcb1l9RD+ZQAA2Y5GZMj8WN7pSkEsEU14VA76921WoN+BU8EMk0OpX7d2HMdNgKbLQzWBswzLc8mfVtIaobiePPTI/1cpZ00=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by OSAPR01MB2369.jpnprd01.prod.outlook.com (2603:1096:603:3a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
- 2022 06:17:13 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d51:985:b999:96b8]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::5d51:985:b999:96b8%6]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 06:17:12 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "neilb@suse.de" <neilb@suse.de>,
-        "david@redhat.com" <david@redhat.com>,
-        "apopple@nvidia.com" <apopple@nvidia.com>,
-        "surenb@google.com" <surenb@google.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if swap
- read fails
-Thread-Topic: [PATCH v3 1/3] mm/swapfile: unuse_pte can map random data if
- swap read fails
-Thread-Index: AQHYV7s04sjKvB31sE2FEmou2La8+60Xu7UA
-Date:   Tue, 10 May 2022 06:17:12 +0000
-Message-ID: <20220510061712.GA162496@hori.linux.bs1.fc.nec.co.jp>
-References: <20220424091105.48374-1-linmiaohe@huawei.com>
- <20220424091105.48374-2-linmiaohe@huawei.com>
-In-Reply-To: <20220424091105.48374-2-linmiaohe@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0641684a-0486-4a65-7210-08da324cb909
-x-ms-traffictypediagnostic: OSAPR01MB2369:EE_
-x-microsoft-antispam-prvs: <OSAPR01MB236955DB895E4D5F4FDEC501E7C99@OSAPR01MB2369.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YUs9NseDq2he5RkFO5r1L+UCrpCTM9mhjDsEKPjAxB5fA1wlJj0waakMwmM1YgcE7eq8eDVKFT3/VGrCm8latp+lXsp7TA7CCl/k2jeGsi30Y8Hv7VfonBvY1trSwNgv36dR7eJQmPX2qzpTFVNOc+nH77EbymkWEDE1CZYO8oaMUfNDix8sMVk6F2zKEzRsJ2fopssEVmz7AaqPi/YF+0dBrhp9KbiEw0svZUQ0/cjK9B6Ou1hUfjfcGU5UAjvVTn4alFPSGv7t7uyObBCLepeN/hIHHBi1/BAQ+vq2CuGWcT34SzFJUk51k4nHZ8R/MYk1Yf1BOKmns1loou039AB7FY8mrs9lSefrYIZU4PrMckaLvqlj2hSUrtFp0nQ0sN2ZvaeRVEBq8sJcxC3I0sdrzAr/2vkiucTxuh8NybOHeyl8SG8TGjYaLkdMPHn3I+mP+Hj4PYl840ofw5kN5wSv7XTJ+RJmBSZHfDQeccJ9ljzk7UpFiatHBXPPJH1/4L/zqRUx1Bkf3FXKE3SeVydfGuooIP5y4etVGwOVR/MBcEW730AUMcyE1nGWzvqmk0FvHi00i6cJvjY0bJ0mHGrXtavtvryu6J28Vt85s/Hf4Au8Y+vwXm3gt2G4OLgT1hxme8Pk/Uvl/+Q2FEdzD4i4NyrASg02OkGbZWluSBYuoA/Ef7d4sdAUYyYpf92l7MFZZCatwaf36yXRgHCp2A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6512007)(71200400001)(66446008)(8676002)(4326008)(9686003)(64756008)(38070700005)(55236004)(2906002)(6506007)(8936002)(508600001)(6486002)(86362001)(66476007)(1076003)(33656002)(83380400001)(5660300002)(54906003)(186003)(316002)(66556008)(6916009)(122000001)(85182001)(76116006)(66946007)(82960400001)(38100700002)(7416002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VEpwU3VGK0taWUZVZ2s5SGw3VWl4V1Mrd2xRUUgrcVVqOFVibWJVYnFSdWRL?=
- =?utf-8?B?dUp3VGt4amVoalNqdytHV3RlOC9ydi9Mc3VsNVpuOEFzZVZpMHAvcXdoRVly?=
- =?utf-8?B?eUFRaGVERkppRFdwK3NYU1hQYkIvd2IvNFVzSUtTSUFQRm5RMi9IRG9qbHRN?=
- =?utf-8?B?anlyN0dtekNWblQ4VWRySzNlTHdDbGJiRUZSTWF5OGFtczhlWVBrM2lJdE95?=
- =?utf-8?B?TjJIcUxEY2I0bVdzSnR5cjBZZ1cvcEVZWmxIQUNjWTlWOFBtMUg2cVdXdzZs?=
- =?utf-8?B?ZFdwTlJlRUd3d01IWGpETmUrdDdXbC9CNUF0dXBsUmlqeEwxR3hSY0wxbHM3?=
- =?utf-8?B?ZGRSUkFFMFd0UGRyWlhzNU5ua3VhZnprczNBYkExOHYwRVYwZnlPYmpJbVZl?=
- =?utf-8?B?cFZ1aXNUK2k3SVQ1clRvQzhKRG5EZldKRGl2RjFOWjVFT1FsWHN4U3AzR2F0?=
- =?utf-8?B?QTVmblNadysxUC9PNG1hcXA2bVA1U1AvY04rNVI0dStPOFVnQjBNMUxVMlZ1?=
- =?utf-8?B?SjcyVTNVK00vbmNBNXRjYTU4dFlUa1VpdUlMa21oRDRsWnFWRXJMZGFFNTBV?=
- =?utf-8?B?d1hKMHRxZ0hyZnZxdFZMYm1JMU5qM1B5RFM3TVNXR0FEMFpxclB5YUwwenRT?=
- =?utf-8?B?R0pzc3VMZzdyZVhKbXF1UUJTanAyWnZOSmJKcVRWZ2FaeXdmV3JTandOMlRF?=
- =?utf-8?B?ZEJZWmZ2MVJIcWxFU1FTMGNRR3hyaEpqZ2RRcmFFWlh6K0EvaVRwM0V4a3lM?=
- =?utf-8?B?UWJsVFJUSitYUlBnZDFYVUMzblNXVmdVQUMxbEx1ekV0U05jd0FDTkJkY2t3?=
- =?utf-8?B?YTJ0N0dhRE5jRjdRRnAyek5wZFhmQ1NRSk1BU3RRYzVYSmJIaWJTdjcza2xn?=
- =?utf-8?B?Z3MwVFV4YW5TS0NFaXdud3liNXVveEFENStnRU94VFk5cGNEaDAxN3RubndT?=
- =?utf-8?B?NzFNS0lSanhGZEV2cnpnSDEyWVFWbGlQRTIvQzQ3WHJNc0Q3eFVJRGhqUWh0?=
- =?utf-8?B?ODdaVWNLL09OaGYrR2RWdUNGQlZteGp3eUdKV012TFVabW5SNXZXU1ljK1BH?=
- =?utf-8?B?ZTFSczVFNStleFlkcFIxVnNhK1pQN2dxMEE3aXo2Rzd1S1B3SDRsVGVtOGFQ?=
- =?utf-8?B?dlB4dVo2M2dhb1FqSUpVaEFJdlFwNlQ1Mldrb0oyRHhvMk9nbUUxeE5DY2U4?=
- =?utf-8?B?dnBEbEUwTFhnRURvcU1Hb0o5QkUyOGNBNFlPellCN1VNV1ZOVkVDMktTcmh2?=
- =?utf-8?B?U2ZML0hjbWM3amIrY0RYYThtaXVKQytDZVB0WmhqZHFoVVhOQjNIN0J2TWc3?=
- =?utf-8?B?aWxlUGpHV3Y0UHlpUHVUQVBGeFBkbEd5b0pldHBuQTZTblpwaGJ2WWlXcWdF?=
- =?utf-8?B?UXNEQkk3VmJtdGxVTVJCN1YzY2hoSDRmendQaC83eFBSbXdWeW1aeHplbG41?=
- =?utf-8?B?Um9kNTRFWThoNDJwbUNha1gwQmk3NVZPMk5saTNBVFBLcnU5aVR6Rklza2ZE?=
- =?utf-8?B?TkI1RW9yWFJML2hiOXdVak1GYVQvMU15L09mWlRkOW5Ob2JuN0kwRFpSbmYx?=
- =?utf-8?B?ZmZJOEVBOExEem1DOWVXZHdZQ29RQmhtY3V6OGZ0QzBjYmlmVlQ5UDFrRktT?=
- =?utf-8?B?RVhmOTMzOUxTOVAyVU0zUjM0MTIrMk91WnFqN3FZMW5JOXlvUHREZEx3T3Vh?=
- =?utf-8?B?MFp2L1laZklxN0lHU1VpQXFUaEpDbW5YTHJ5Zll1OXVrSWMraG5kaDF0M0Yr?=
- =?utf-8?B?SGYyelE1d3BXQmlYWDMrTWo5elJ6a3JvTDJoUDFWMWR6NzVtK3ZseUNxYnh2?=
- =?utf-8?B?Q3VocitWdmJkUEFIYzVNRHh4aGJJbmZkU29TTUtwd2pWNzFUVWxXT0FzQjB6?=
- =?utf-8?B?UERFNEJJK2pmME8vYkxlck9aOWtWejBwUXJTUTB4dngySFppZUFWcjNzZks2?=
- =?utf-8?B?ZkF4Rkl3cXhIZWxLVzZLdmtzV0J5TUVRMkhNUitKL0hTNmpyYnpxTk1MYm5G?=
- =?utf-8?B?NW12NFVNNTdzcWs0UHppZE1OTEVxbGFFRElTbzlESVVTYXIrSlVzdmd4Y1I0?=
- =?utf-8?B?REhtdW1TU1Z5QWlKVW5MMWR1cElTUTVGRjRBTmY0UnMvR25vc3Jpd1VrRUhD?=
- =?utf-8?B?NW85OFBOMEUrZkhYQ3hOdVkzWnJIbVRKdkVObGtYR0FXZDdEUVZlaWlpRUdY?=
- =?utf-8?B?WlZXZXprK1EzZ1hEcmFkSE56MzV6TVNHdUduY3JBUW1UYkF1ZUVTR3NHdms3?=
- =?utf-8?B?M1RrdDh3TnhaZWsrNWRaVTRDUzlJRFhmcXZlTm83MnpWdG9yQjhnV0FLZmRD?=
- =?utf-8?B?WXdneXNxd3pRMGJpV21tYXp6bE4vVFc0QnhFSTJLTGpaWm1FS3BFMkIrNUZt?=
- =?utf-8?Q?/yPcssH4bOpTh9VI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F2F7DDAE8887CF41AA0A34192CC90636@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 10 May 2022 02:24:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB25DF5F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 23:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652163649; x=1683699649;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UMoOuGqNBTp5BKUte75oUqeM8P736Bjhoh4LYu+1ej4=;
+  b=c+TktfeW9h8B3jU/GhIs/pQw6efewm85f0AlLkcz7YTVFzoKDP5pBN5t
+   K1w5bjTnVbcXncVCJEOTlBCdxo0NUaPnPnm8VNPNgZwzclX7yAhR9/an1
+   izH/jjn3Gtjz5kFytfmAgI2GYV9mJHfFkUAvQfA/3lB31W1aKV3X4AKY0
+   eM9FBBjNnJSQRmUrJVQ43HUY4IRUdLOVmUTEn+I4xdyPGTg6BgZYNsWOu
+   J5mljaYjiiNi+oXPFIu3cqvfFpTwowNeQjGwWd/DyltkgYu0lzd7JF8ji
+   k+v/MWtGR7B8WsY1hO8PA6L3fPerT/O2mVpYMsNK1K0Lq1DDV7pmG+dbC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="332312839"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="332312839"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 23:20:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="552636294"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga002.jf.intel.com with ESMTP; 09 May 2022 23:20:43 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v6 00/12] iommu: SVA and IOPF refactoring
+Date:   Tue, 10 May 2022 14:17:26 +0800
+Message-Id: <20220510061738.2761430-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0641684a-0486-4a65-7210-08da324cb909
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 06:17:12.9497
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bEeLB9ky5jc2h7k2SpLeBkM88mamvR/XvdKBxWxdbBOGfWkjjCQyuvXHKT8EKrF4oOBMCR6wU8uMkWD7KV9oww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB2369
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCBBcHIgMjQsIDIwMjIgYXQgMDU6MTE6MDNQTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gVGhlcmUgaXMgYSBidWcgaW4gdW51c2VfcHRlKCk6IHdoZW4gc3dhcCBwYWdlIGhhcHBl
-bnMgdG8gYmUgdW5yZWFkYWJsZSwNCj4gcGFnZSBmaWxsZWQgd2l0aCByYW5kb20gZGF0YSBpcyBt
-YXBwZWQgaW50byB1c2VyIGFkZHJlc3Mgc3BhY2UuICBJbiBjYXNlDQo+IG9mIGVycm9yLCBhIHNw
-ZWNpYWwgc3dhcCBlbnRyeSBpbmRpY2F0aW5nIHN3YXAgcmVhZCBmYWlscyBpcyBzZXQgdG8gdGhl
-DQo+IHBhZ2UgdGFibGUuICBTbyB0aGUgc3dhcGNhY2hlIHBhZ2UgY2FuIGJlIGZyZWVkIGFuZCB0
-aGUgdXNlciB3b24ndCBlbmQgdXANCj4gd2l0aCBhIHBlcm1hbmVudGx5IG1vdW50ZWQgc3dhcCBi
-ZWNhdXNlIGEgc2VjdG9yIGlzIGJhZC4gIEFuZCBpZiB0aGUgcGFnZQ0KPiBpcyBhY2Nlc3NlZCBs
-YXRlciwgdGhlIHVzZXIgcHJvY2VzcyB3aWxsIGJlIGtpbGxlZCBzbyB0aGF0IGNvcnJ1cHRlZCBk
-YXRhDQo+IGlzIG5ldmVyIGNvbnN1bWVkLiAgT24gdGhlIG90aGVyIGhhbmQsIGlmIHRoZSBwYWdl
-IGlzIG5ldmVyIGFjY2Vzc2VkLCB0aGUNCj4gdXNlciB3b24ndCBldmVuIG5vdGljZSBpdC4NCj4g
-DQo+IFNpZ25lZC1vZmYtYnk6IE1pYW9oZSBMaW4gPGxpbm1pYW9oZUBodWF3ZWkuY29tPg0KPiBB
-Y2tlZC1ieTogRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5jb20+DQoNCldoZW4gSSBy
-ZXByb2R1Y2VkIHRoZSBpc3N1ZSAoZ2VuZXJhdGVkIHJlYWQgZXJyb3Igd2l0aCBkbS1kdXN0KSwg
-SSBzYXcNCmluZmluaXRlIGxvb3AgaW4gdGhlIHdoaWxlIGxvb3AgaW4gc2htZW1fdW51c2VfaW5v
-ZGUoKSAoYW5kIHRoaXMgaGFwcGVucw0KZXZlbiB3aXRoIHRoaXMgcGF0Y2gpLiBJIGNvbmZpcm1l
-ZCB0aGF0IHNobWVtX3N3YXBpbl9wYWdlKCkgcmV0dXJucyAtRUlPLA0KYnV0IHNobWVtX3VudXNl
-X3N3YXBfZW50cmllcygpIGRvZXMgbm90IHJldHVybiB0aGUgZXJyb3IgdG8gdGhlIGNhbGxlcnMs
-DQpzbyB0aGUgd2hpbGUgbG9vcCBpbiBzaG1lbV91bnVzZV9pbm9kZSgpIHNlZW1zIG5vdCBicmVh
-ay4NCg0KU28gbWF5YmUgeW91IG5lZWQgbW9yZSBjb2RlIGFyb3VuZCBzaG1lbV91bnVzZV9pbm9k
-ZSgpIHRvIGhhbmRsZSB0aGUgZXJyb3I/DQoNClRoYW5rcywNCk5hb3lhIEhvcmlndWNoaQ==
+Hi folks,
+
+The former part of this series refactors the IOMMU SVA code by assigning
+an SVA type of iommu_domain to a shared virtual address and replacing
+sva_bind/unbind iommu ops with attach/detach_dev_pasid domain ops.
+
+The latter part changes the existing I/O page fault handling framework
+from only serving SVA to a generic one. Any driver or component could
+handle the I/O page faults for its domain in its own way by installing
+an I/O page fault handler.
+
+This series has been functionally tested on an x86 machine and compile
+tested for other architectures.
+
+This series is also available on github:
+[2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v6
+
+Please review and suggest.
+
+Best regards,
+baolu
+
+Change log:
+v6:
+ - Refine the SVA basic data structures.
+   Link: https://lore.kernel.org/linux-iommu/YnFv0ps0Ad8v+7uH@myrica/
+ - Refine arm smmuv3 sva domain allocation.
+ - Fix a possible lock issue.
+   Link: https://lore.kernel.org/linux-iommu/YnFydE8j8l7Q4m+b@myrica/
+
+v5:
+ - https://lore.kernel.org/linux-iommu/20220502014842.991097-1-baolu.lu@linux.intel.com/
+ - Address review comments from Jean-Philippe Brucker. Very appreciated!
+ - Remove redundant pci aliases check in
+   device_group_immutable_singleton().
+ - Treat all buses exept PCI as static in immutable singleton check.
+ - As the sva_bind/unbind() have already guaranteed sva domain free only
+   after iopf_queue_flush_dev(), remove the unnecessary domain refcount.
+ - Move domain get() out of the list iteration in iopf_handle_group().
+
+v4:
+ - https://lore.kernel.org/linux-iommu/20220421052121.3464100-1-baolu.lu@linux.intel.com/
+ - Solve the overlap with another series and make this series
+   self-contained.
+ - No objection to the abstraction of data structure during v3 review.
+   Hence remove the RFC subject prefix.
+ - Refine the immutable singleton group code according to Kevin's
+   comments.
+
+v3:
+ - https://lore.kernel.org/linux-iommu/20220410102443.294128-1-baolu.lu@linux.intel.com/
+ - Rework iommu_group_singleton_lockdown() by adding a flag to the group
+   that positively indicates the group can never have more than one
+   member, even after hot plug.
+ - Abstract the data structs used for iommu sva in a separated patches to
+   make it easier for review.
+ - I still keep the RFC prefix in this series as above two significant
+   changes need at least another round review to be finalized.
+ - Several misc refinements.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220329053800.3049561-1-baolu.lu@linux.intel.com/
+ - Add sva domain life cycle management to avoid race between unbind and
+   page fault handling.
+ - Use a single domain for each mm.
+ - Return a single sva handler for the same binding.
+ - Add a new helper to meet singleton group requirement.
+ - Rework the SVA domain allocation for arm smmu v3 driver and move the
+   pasid_bit initialization to device probe.
+ - Drop the patch "iommu: Handle IO page faults directly".
+ - Add mmget_not_zero(mm) in SVA page fault handler.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220320064030.2936936-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+Dave Jiang (1):
+  dmaengine: idxd: Separate user and kernel pasid enabling
+
+Lu Baolu (11):
+  iommu: Add pasid_bits field in struct dev_iommu
+  iommu: Add attach/detach_dev_pasid domain ops
+  iommu/sva: Basic data structures for SVA
+  iommu/vt-d: Remove SVM_FLAG_SUPERVISOR_MODE support
+  iommu/vt-d: Add SVA domain support
+  arm-smmu-v3/sva: Add SVA domain support
+  iommu/sva: Use attach/detach_pasid_dev in SVA interfaces
+  iommu: Remove SVA related callbacks from iommu ops
+  iommu: Prepare IOMMU domain for IOPF
+  iommu: Per-domain I/O page fault handling
+  iommu: Rename iommu-sva-lib.{c,h}
+
+ include/linux/intel-iommu.h                   |   9 +-
+ include/linux/iommu.h                         |  99 +++++--
+ drivers/dma/idxd/idxd.h                       |   6 +
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  19 +-
+ .../iommu/{iommu-sva-lib.h => iommu-sva.h}    |   3 -
+ drivers/dma/idxd/cdev.c                       |   4 +-
+ drivers/dma/idxd/init.c                       |  30 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 111 +++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  10 +-
+ drivers/iommu/intel/iommu.c                   |  12 +-
+ drivers/iommu/intel/svm.c                     | 146 ++++------
+ drivers/iommu/io-pgfault.c                    |  73 +----
+ drivers/iommu/iommu-sva-lib.c                 |  71 -----
+ drivers/iommu/iommu-sva.c                     | 261 ++++++++++++++++++
+ drivers/iommu/iommu.c                         | 193 +++++++------
+ drivers/iommu/Makefile                        |   2 +-
+ 16 files changed, 623 insertions(+), 426 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (91%)
+ delete mode 100644 drivers/iommu/iommu-sva-lib.c
+ create mode 100644 drivers/iommu/iommu-sva.c
+
+-- 
+2.25.1
+

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AFD5217B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951E0521AD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiEJN2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S240702AbiEJOCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243203AbiEJNVj (ORCPT
+        with ESMTP id S242911AbiEJNjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0792C183F;
-        Tue, 10 May 2022 06:15:11 -0700 (PDT)
+        Tue, 10 May 2022 09:39:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267DF291E48;
+        Tue, 10 May 2022 06:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 725C2B81DAA;
-        Tue, 10 May 2022 13:15:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E598FC385A6;
-        Tue, 10 May 2022 13:15:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DA3361768;
+        Tue, 10 May 2022 13:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B290C385C6;
+        Tue, 10 May 2022 13:29:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188507;
-        bh=VtJerBDQCYbUCgpxXLdGU8t1nlWfii6eDosdmY9hF0w=;
+        s=korg; t=1652189365;
+        bh=XvdFnLpnH8rg/tJlNoJuTp1Us8A3o+r1OR7Q0sYWAhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0mAqS3Zfdi0NS+57tmp/Q0jyInaDB6RGYUuVqrp2LMIz1SvBIXQ8mMedhHM2LajV
-         678Aw2yC1B/7sZlGdl1AegAO78Y9pz+NKDXYibSHHH39jcC77Yy4q2cDPXEygMJpZ2
-         Acjk3Zn63yMEH0xemsXLKDFsrdMkpx68Bw6c/kRA=
+        b=1N+F2RCuJBelaQffgiQQjYWsyQM5hcjr6VOr94z7rS5QvylXRUYpYAYgj5xzLiRiQ
+         my40VrjC2x8Oh2lMlhX7sICdNtV8ENAcTLiLqcKyDkEc7zSHeHiEK+ai57PQ07WJUU
+         1BEQmGkVppKNcbHUv1VsL6hJbzxOoqN5AFH3I/ds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 03/78] hamradio: remove needs_free_netdev to avoid UAF
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 5.15 027/135] ASoC: meson: Fix event generation for AUI CODEC mux
 Date:   Tue, 10 May 2022 15:06:49 +0200
-Message-Id: <20220510130732.628205315@linuxfoundation.org>
+Message-Id: <20220510130741.179125479@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Mark Brown <broonie@kernel.org>
 
-commit 81b1d548d00bcd028303c4f3150fa753b9b8aa71 upstream.
+commit fce49921a22262736cdc3cc74fa67915b75e9363 upstream.
 
-The former patch "defer 6pack kfree after unregister_netdev" reorders
-the kfree of two buffer after the unregister_netdev to prevent the race
-condition. It also adds free_netdev() function in sixpack_close(), which
-is a direct copy from the similar code in mkiss_close().
+The AIU CODEC has a custom put() operation which returns 0 when the value
+of the mux changes, meaning that events are not generated for userspace.
+Change to return 1 in this case, the function returns early in the case
+where there is no change.
 
-However, in sixpack driver, the flag needs_free_netdev is set to true in
-sp_setup(), hence the unregister_netdev() will free the netdev
-automatically. Therefore, as the sp is netdev_priv, use-after-free
-occurs.
-
-This patch removes the needs_free_netdev = true and just let the
-free_netdev to finish this deallocation task.
-
-Fixes: 0b9111922b1f ("hamradio: defer 6pack kfree after unregister_netdev")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Link: https://lore.kernel.org/r/20211111141402.7551-1-linma@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20220421123803.292063-3-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hamradio/6pack.c |    1 -
- 1 file changed, 1 deletion(-)
+ sound/soc/meson/aiu-codec-ctrl.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -311,7 +311,6 @@ static void sp_setup(struct net_device *
- {
- 	/* Finish setting up the DEVICE info. */
- 	dev->netdev_ops		= &sp_netdev_ops;
--	dev->needs_free_netdev	= true;
- 	dev->mtu		= SIXP_MTU;
- 	dev->hard_header_len	= AX25_MAX_HEADER_LEN;
- 	dev->header_ops 	= &ax25_header_ops;
+--- a/sound/soc/meson/aiu-codec-ctrl.c
++++ b/sound/soc/meson/aiu-codec-ctrl.c
+@@ -57,7 +57,7 @@ static int aiu_codec_ctrl_mux_put_enum(s
+ 
+ 	snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static SOC_ENUM_SINGLE_DECL(aiu_hdmi_ctrl_mux_enum, AIU_HDMI_CLK_DATA_CTRL,
 
 

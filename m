@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F649521C08
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDD5521B5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245134AbiEJO1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S1344039AbiEJOLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245278AbiEJN5Y (ORCPT
+        with ESMTP id S245052AbiEJNrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:57:24 -0400
+        Tue, 10 May 2022 09:47:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701F32D4B56;
-        Tue, 10 May 2022 06:39:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42CA5B3F4;
+        Tue, 10 May 2022 06:34:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09148615E9;
-        Tue, 10 May 2022 13:39:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22EBC385A6;
-        Tue, 10 May 2022 13:39:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8320F6165A;
+        Tue, 10 May 2022 13:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E53C385C2;
+        Tue, 10 May 2022 13:34:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189945;
-        bh=H80LzjsCwwDuMoTh8aPlJp2dEdjqVJunQqjAV47P7vE=;
+        s=korg; t=1652189673;
+        bh=rahknHBdjH4CipcDdIevuxQSjmiTkFWBaiwIaya1CfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ayohSOjUylXRgcTXmXLE1jrt+OORp/WrBZQpMXCYup2wirN0NzbCJAnIGXedMeF1d
-         WmsMVxKPrmgi2v4uyaUkOGY6e1K7QRxfqFHZznuzXl3yLdPA89p1cOYpTjIpYhbPJ4
-         Ma/6jBbS46EzY+Zz/ElaSnBaC3GzIDVJlXprRW8Q=
+        b=TAu2wsERomYiU9/cLKQJXTrhfhWf0D751lVQivkGm8fovvViZdBvV4iwzjvzavf/j
+         mi8FEEof6wWQ20ZqwQucWhZwK8DGrvGrLybeNJngCHPAN9BwmNVyT38+9sM+G2K7HI
+         Dv3BiI4dtNp6LCDih0Jn7WPpx8X3ycPnTxaIb1Ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.17 078/140] SUNRPC release the transport of a relocated task with an assigned transport
+        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 086/135] gpio: mvebu: drop pwm base assignment
 Date:   Tue, 10 May 2022 15:07:48 +0200
-Message-Id: <20220510130743.844609243@linuxfoundation.org>
+Message-Id: <20220510130742.878194301@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+From: Baruch Siach <baruch@tkos.co.il>
 
-commit e13433b4416fa31a24e621cbbbb39227a3d651dd upstream.
+[ Upstream commit e5f6e5d554ac274f9c8ba60078103d0425b93c19 ]
 
-A relocated task must release its previous transport.
+pwmchip_add() unconditionally assigns the base ID dynamically. Commit
+f9a8ee8c8bcd1 ("pwm: Always allocate PWM chip base ID dynamically")
+dropped all base assignment from drivers under drivers/pwm/. It missed
+this driver. Fix that.
 
-Fixes: 82ee41b85cef1 ("SUNRPC don't resend a task on an offlined transport")
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f9a8ee8c8bcd1 ("pwm: Always allocate PWM chip base ID dynamically")
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/clnt.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/gpio/gpio-mvebu.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -1065,10 +1065,13 @@ rpc_task_get_next_xprt(struct rpc_clnt *
- static
- void rpc_task_set_transport(struct rpc_task *task, struct rpc_clnt *clnt)
- {
--	if (task->tk_xprt &&
--			!(test_bit(XPRT_OFFLINE, &task->tk_xprt->state) &&
--                        (task->tk_flags & RPC_TASK_MOVEABLE)))
--		return;
-+	if (task->tk_xprt) {
-+		if (!(test_bit(XPRT_OFFLINE, &task->tk_xprt->state) &&
-+		      (task->tk_flags & RPC_TASK_MOVEABLE)))
-+			return;
-+		xprt_release(task);
-+		xprt_put(task->tk_xprt);
-+	}
- 	if (task->tk_flags & RPC_TASK_NO_ROUND_ROBIN)
- 		task->tk_xprt = rpc_task_get_first_xprt(clnt);
- 	else
+diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+index 8f429d9f3661..ad8822da7c27 100644
+--- a/drivers/gpio/gpio-mvebu.c
++++ b/drivers/gpio/gpio-mvebu.c
+@@ -871,13 +871,6 @@ static int mvebu_pwm_probe(struct platform_device *pdev,
+ 	mvpwm->chip.dev = dev;
+ 	mvpwm->chip.ops = &mvebu_pwm_ops;
+ 	mvpwm->chip.npwm = mvchip->chip.ngpio;
+-	/*
+-	 * There may already be some PWM allocated, so we can't force
+-	 * mvpwm->chip.base to a fixed point like mvchip->chip.base.
+-	 * So, we let pwmchip_add() do the numbering and take the next free
+-	 * region.
+-	 */
+-	mvpwm->chip.base = -1;
+ 
+ 	spin_lock_init(&mvpwm->lock);
+ 
+-- 
+2.35.1
+
 
 

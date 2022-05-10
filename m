@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B2A521B07
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5622521AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344267AbiEJOHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S245699AbiEJOHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244239AbiEJNpi (ORCPT
+        with ESMTP id S244142AbiEJNnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:45:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5629137C;
-        Tue, 10 May 2022 06:31:17 -0700 (PDT)
+        Tue, 10 May 2022 09:43:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321FF338B2;
+        Tue, 10 May 2022 06:31:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DBD75CE1EDE;
-        Tue, 10 May 2022 13:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DD3C385C2;
-        Tue, 10 May 2022 13:30:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC6761821;
+        Tue, 10 May 2022 13:31:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195D0C385C2;
+        Tue, 10 May 2022 13:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189458;
-        bh=vmU4qBASEUpfgc/BCPgOm30brd4+MRNEFxdubd5lS4s=;
+        s=korg; t=1652189461;
+        bh=+mJTXgsOIxd3Wmqr468P9HZLAksdzKwrV1S7ZpA+WV8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ls0fT2i50tvpTM4eQQ9yyI/HSSOWj4P14i2NpwM+9ASMIgQLmKsPBbTwZOuCGt05l
-         sANAlHEKeO1IHdCdNtvtM00iVK3/YtUyhSu7Af0f2fyptyEROhdQ0GQRkInZ71bk1S
-         eE5xUA3v7BiFAoTFZj9GRjjZ22LBx+AkTy2ilG8E=
+        b=LHJPqfXVR/fGhndkIyYAbq7tHhv4fnVbuBJzESqCGhe51aywDlAOkc27N/GdoahCS
+         6+vSAK6s8brwPt7+/3w3mR6acXGO1csridOE1DVDrmrUC+DEBSSWuLAKO9mqZoZ2DI
+         eLAG7RB7GSfmRDE2zExmZdwx5F3lp3ccPqEY1zmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tatyana Nikolova <tatyana.e.nikolova@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
+        stable@vger.kernel.org, Shiraz Saleem <shiraz.saleem@intel.com>,
         Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.15 057/135] RDMA/irdma: Flush iWARP QP if modified to ERR from RTR state
-Date:   Tue, 10 May 2022 15:07:19 +0200
-Message-Id: <20220510130742.041305605@linuxfoundation.org>
+Subject: [PATCH 5.15 058/135] RDMA/irdma: Reduce iWARP QP destroy time
+Date:   Tue, 10 May 2022 15:07:20 +0200
+Message-Id: <20220510130742.073546413@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -56,79 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
+From: Shiraz Saleem <shiraz.saleem@intel.com>
 
-commit 7b8943b821bafab492f43aafbd006b57c6b65845 upstream.
+commit 2df6d895907b2f5dfbc558cbff7801bba82cb3cc upstream.
 
-When connection establishment fails in iWARP mode, an app can drain the
-QPs and hang because flush isn't issued when the QP is modified from RTR
-state to error. Issue a flush in this case using function
-irdma_cm_disconn().
+QP destroy is synchronous and waits for its refcnt to be decremented in
+irdma_cm_node_free_cb (for iWARP) which fires after the RCU grace period
+elapses.
 
-Update irdma_cm_disconn() to do flush when cm_id is NULL, which is the
-case when the QP is in RTR state and there is an error in the connection
-establishment.
+Applications running a large number of connections are exposed to high
+wait times on destroy QP for events like SIGABORT.
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Link: https://lore.kernel.org/r/20220425181703.1634-2-shiraz.saleem@intel.com
-Signed-off-by: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
+The long pole for this wait time is the firing of the call_rcu callback
+during a CM node destroy which can be slow. It holds the QP reference
+count and blocks the destroy QP from completing.
+
+call_rcu only needs to make sure that list walkers have a reference to the
+cm_node object before freeing it and thus need to wait for grace period
+elapse. The rest of the connection teardown in irdma_cm_node_free_cb is
+moved out of the grace period wait in irdma_destroy_connection. Also,
+replace call_rcu with a simple kfree_rcu as it just needs to do a kfree on
+the cm_node
+
+Fixes: 146b9756f14c ("RDMA/irdma: Add connection manager")
+Link: https://lore.kernel.org/r/20220425181703.1634-3-shiraz.saleem@intel.com
 Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/irdma/cm.c    |   16 +++++-----------
- drivers/infiniband/hw/irdma/verbs.c |    4 ++--
- 2 files changed, 7 insertions(+), 13 deletions(-)
+ drivers/infiniband/hw/irdma/cm.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 --- a/drivers/infiniband/hw/irdma/cm.c
 +++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -3465,12 +3465,6 @@ static void irdma_cm_disconn_true(struct
+@@ -2305,10 +2305,8 @@ err:
+ 	return NULL;
+ }
+ 
+-static void irdma_cm_node_free_cb(struct rcu_head *rcu_head)
++static void irdma_destroy_connection(struct irdma_cm_node *cm_node)
+ {
+-	struct irdma_cm_node *cm_node =
+-			    container_of(rcu_head, struct irdma_cm_node, rcu_head);
+ 	struct irdma_cm_core *cm_core = cm_node->cm_core;
+ 	struct irdma_qp *iwqp;
+ 	struct irdma_cm_info nfo;
+@@ -2356,7 +2354,6 @@ static void irdma_cm_node_free_cb(struct
  	}
  
- 	cm_id = iwqp->cm_id;
--	/* make sure we havent already closed this connection */
--	if (!cm_id) {
--		spin_unlock_irqrestore(&iwqp->lock, flags);
--		return;
--	}
--
- 	original_hw_tcp_state = iwqp->hw_tcp_state;
- 	original_ibqp_state = iwqp->ibqp_state;
- 	last_ae = iwqp->last_aeq;
-@@ -3492,11 +3486,11 @@ static void irdma_cm_disconn_true(struct
- 			disconn_status = -ECONNRESET;
- 	}
+ 	cm_core->cm_free_ah(cm_node);
+-	kfree(cm_node);
+ }
  
--	if ((original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
--	     original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
--	     last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
--	     last_ae == IRDMA_AE_BAD_CLOSE ||
--	     last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset)) {
-+	if (original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
-+	    original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
-+	    last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
-+	    last_ae == IRDMA_AE_BAD_CLOSE ||
-+	    last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset || !cm_id) {
- 		issue_close = 1;
- 		iwqp->cm_id = NULL;
- 		qp->term_flags = 0;
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -1617,13 +1617,13 @@ int irdma_modify_qp(struct ib_qp *ibqp,
+ /**
+@@ -2384,8 +2381,9 @@ void irdma_rem_ref_cm_node(struct irdma_
  
- 	if (issue_modify_qp && iwqp->ibqp_state > IB_QPS_RTS) {
- 		if (dont_wait) {
--			if (iwqp->cm_id && iwqp->hw_tcp_state) {
-+			if (iwqp->hw_tcp_state) {
- 				spin_lock_irqsave(&iwqp->lock, flags);
- 				iwqp->hw_tcp_state = IRDMA_TCP_STATE_CLOSED;
- 				iwqp->last_aeq = IRDMA_AE_RESET_SENT;
- 				spin_unlock_irqrestore(&iwqp->lock, flags);
--				irdma_cm_disconn(iwqp);
- 			}
-+			irdma_cm_disconn(iwqp);
- 		} else {
- 			int close_timer_started;
+ 	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
  
+-	/* wait for all list walkers to exit their grace period */
+-	call_rcu(&cm_node->rcu_head, irdma_cm_node_free_cb);
++	irdma_destroy_connection(cm_node);
++
++	kfree_rcu(cm_node, rcu_head);
+ }
+ 
+ /**
 
 

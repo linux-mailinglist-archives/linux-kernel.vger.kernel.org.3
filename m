@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565C5521C48
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2866521BB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344259AbiEJOdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1343559AbiEJOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344252AbiEJOHr (ORCPT
+        with ESMTP id S245077AbiEJNrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:07:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA37820EE1F;
-        Tue, 10 May 2022 06:42:01 -0700 (PDT)
+        Tue, 10 May 2022 09:47:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F53198755;
+        Tue, 10 May 2022 06:34:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B4E61937;
-        Tue, 10 May 2022 13:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CCFC385C2;
-        Tue, 10 May 2022 13:41:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 258A4B81DAF;
+        Tue, 10 May 2022 13:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD97C385A6;
+        Tue, 10 May 2022 13:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190120;
-        bh=L27cyLeD7oy10xsCgYYUOc2bcZrZ4ICjLcB3pOVviB4=;
+        s=korg; t=1652189696;
+        bh=rrzejhvcQXnEC6A7XoE7Mjs1pkvzmQkXpRkj3K43Yow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NKqxTNy0XXEO9Vh9qg3chqCNsQKjvtyqhYs/sTJLaLBKAvxYDSWYZefwND+rbDq3/
-         +dAP7ur8SpXkdguf6K55OlkElA6qKqSHxdcJeZ5igYhQmo6KdyvBKC7t/96PL9jaTa
-         pvKpWz0FTTNLPs1wqPFKEKLgnyl8KMFyHym1LE/Y=
+        b=he/8xOkZh8jKHIlRNtWvleG8fd7vg2oZFJMVggDYPsrrRAYXNrhK/QoZ4pfNDAeSP
+         ZWyXuuoKBZxCT+VBaiN0LaCHWQ/ZW8ipsBOSwanNABMumuMg/gaAGqrjR/pwVPHkDn
+         zo7XoAmdAqh+2+9REVqJiQxZpWiFaK4OC+9GGOHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, pali@kernel.org,
         =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.17 127/140] PCI: aardvark: Use dev_fwnode() instead of of_node_to_fwnode(dev->of_node)
+Subject: [PATCH 5.15 135/135] PCI: aardvark: Update comment about link going down after link-up
 Date:   Tue, 10 May 2022 15:08:37 +0200
-Message-Id: <20220510130745.226483305@linuxfoundation.org>
+Message-Id: <20220510130744.266819133@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +57,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Marek Behún" <kabel@kernel.org>
 
-commit 222af78532fa299cd9b1008e49c347b7f5a45c17 upstream.
+commit 92f4ffecc4170ce29e67a1f8d51c168c3de95fb2 upstream.
 
-Use simple
-  dev_fwnode(dev)
-instead of
-  struct device_node *node = dev->of_node;
-  of_node_to_fwnode(node)
-especially since the node variable is not used elsewhere in the function.
+Update the comment about what happens when link goes down after we have
+checked for link-up. If a PIO request is done while link-down, we have
+a serious problem.
 
-Link: https://lore.kernel.org/r/20220110015018.26359-9-kabel@kernel.org
+Link: https://lore.kernel.org/r/20220110015018.26359-23-kabel@kernel.org
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 --- a/drivers/pci/controller/pci-aardvark.c
 +++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1294,7 +1294,6 @@ static struct msi_domain_info advk_msi_d
- static int advk_pcie_init_msi_irq_domain(struct advk_pcie *pcie)
- {
- 	struct device *dev = &pcie->pdev->dev;
--	struct device_node *node = dev->of_node;
- 	phys_addr_t msi_msg_phys;
+@@ -998,8 +998,12 @@ static bool advk_pcie_valid_device(struc
+ 		return false;
  
- 	mutex_init(&pcie->msi_used_lock);
-@@ -1313,7 +1312,7 @@ static int advk_pcie_init_msi_irq_domain
- 		return -ENOMEM;
- 
- 	pcie->msi_domain =
--		pci_msi_create_irq_domain(of_node_to_fwnode(node),
-+		pci_msi_create_irq_domain(dev_fwnode(dev),
- 					  &advk_msi_domain_info,
- 					  pcie->msi_inner_domain);
- 	if (!pcie->msi_domain) {
+ 	/*
+-	 * If the link goes down after we check for link-up, nothing bad
+-	 * happens but the config access times out.
++	 * If the link goes down after we check for link-up, we have a problem:
++	 * if a PIO request is executed while link-down, the whole controller
++	 * gets stuck in a non-functional state, and even after link comes up
++	 * again, PIO requests won't work anymore, and a reset of the whole PCIe
++	 * controller is needed. Therefore we need to prevent sending PIO
++	 * requests while the link is down.
+ 	 */
+ 	if (!pci_is_root_bus(bus) && !advk_pcie_link_up(pcie))
+ 		return false;
 
 

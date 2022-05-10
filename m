@@ -2,146 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D4E522683
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAB0522687
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiEJVzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 17:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
+        id S235549AbiEJV4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 17:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbiEJVzs (ORCPT
+        with ESMTP id S235185AbiEJV4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 17:55:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388D1032;
-        Tue, 10 May 2022 14:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652219745; x=1683755745;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4RYB0zZZfnXkXzP1aYf9qSZ/Jnp/XkShxgoTSmMnvzw=;
-  b=Rd5njsS9DhNw8tTR2B+f2fqzeYk5IYP5qXLz+AoceXSbCYSuLp5bpolG
-   s4yKlG212wxA7usuR2Togvbsex5p5O/gVOu11dq72/2oftpoWOV1y8m1b
-   8f9NUWolrEAHGOl3mcOaX42wWVG9sfwlENBDagLseR3xQCJ8HfMRO+Dpg
-   YeVQLz5u/ZZWd5WapMf1rfzYlruv1zeF3t6hWmr5rHY6RKBNxK8tzqkoq
-   NULu8oMkHDVe3uumpT+VYD0LDnmHRZe7DM+XkxsgunZsK7hxw6/RGP66z
-   wZ+2/SHCrxkTUXet9LJdcjvFPbHS+9jQjr5/Sfh1rs+ibZC4laoeRoQt2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250046667"
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="250046667"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 14:55:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,215,1647327600"; 
-   d="scan'208";a="565861866"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 10 May 2022 14:55:42 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noXpV-000IQc-Cl;
-        Tue, 10 May 2022 21:55:41 +0000
-Date:   Wed, 11 May 2022 05:55:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        gregkh@linuxfoundation.org, christian.koenig@amd.com,
-        sumit.semwal@linaro.org, hridya@google.com, daniel.vetter@ffwll.ch,
-        tjmercier@google.com
-Cc:     kbuild-all@lists.01.org, linaro-mm-sig@lists.linaro.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH V2] dmabuf: ensure unique directory name for dmabuf stats
-Message-ID: <202205110511.E0d8TXXC-lkp@intel.com>
-References: <1652191562-18700-1-git-send-email-quic_charante@quicinc.com>
+        Tue, 10 May 2022 17:56:13 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF41957117
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:56:10 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id m1so409188wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IwUgKUFNj7ibkuKWy6cspfPFQL3X6FyIq81DUZlFReI=;
+        b=pvu4vmnNkxBfNPaw9v92a2w+TVqfwi+iTgvjgFvjq+ssgXnL2/XxuczeCjzFigw6Fp
+         LdrwiJrm5va3fTljcIrhm2cCN2U3mHlAeGm/YCKUXs8GdTX9I68G+Bkv1+NDR1Vt5YAL
+         b0Oy+hcWXfNh68+frvkkZEUFC4PBzALS5U5cfl6+gErj5JV6cqdOWZypd5vUtHNf1ZvG
+         S5ld+Bo59W0iXbrlJP/mnDfnhgKqL6sJExvTb1S/4mzhTBYEDX1kSPUfTU+4U7XvOULp
+         BlWx/yzcaO3KNO9uZIsiptBfq34GgjqYlMOzrHkqYyBggfOuj6Q3k2CYVGzEXWLPerlF
+         PpIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IwUgKUFNj7ibkuKWy6cspfPFQL3X6FyIq81DUZlFReI=;
+        b=3/ZD2lqeAj5/vFYCA00393LGCFYrnUdBC00jfr7Lt6TkNDMT9hh38pVaW63U9QAwBu
+         QKqmrssd2C9pLB4MXkPw/QfdkzKXzs2miWvgimmqOx01Za+ipt3VJFOYOZgCDFnMLzSM
+         jnVK8fOCa+cuW533TI+pVTOvBN1ZIjgNblM3NN8/V2BNzQkL53oSpbFPom8ttjAhtRcR
+         I4E6Y2x3X+B2Ea+eyLk5ahc4qVHtp76tcU2TNkb74dbRT6vDVFVCWihCHYIUFGmwGiir
+         Y4SOzBT9hz8e/sRzkpBw5RkK3zZiKLAUTE76aOakL/eD4rFHl0VysxBKis0/vk6UhJo0
+         /ZiA==
+X-Gm-Message-State: AOAM5314BtxRD2O0lnNLqW308eRk3ghLl+PnVO3Q5DPHQktyDJeet7VV
+        HLIHTQ/4onTJEyyR6d2xkRggj6B15udO2/E433lrCg==
+X-Google-Smtp-Source: ABdhPJyvhf5tHo+7ymkHhZKRFq0olhspXHd8enDR9DXvVol++Jwbk6xZofLsCZBaS03E9VdsgNBSy5whbtz0QVbHtl8=
+X-Received: by 2002:a05:6000:154a:b0:20c:7e65:c79e with SMTP id
+ 10-20020a056000154a00b0020c7e65c79emr20365907wry.582.1652219768969; Tue, 10
+ May 2022 14:56:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652191562-18700-1-git-send-email-quic_charante@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510001807.4132027-1-yosryahmed@google.com>
+ <20220510001807.4132027-2-yosryahmed@google.com> <Ynqyh+K1tMyNCTUW@slm.duckdns.org>
+ <CAJD7tkZVXJY3s2k8M4pcq+eJVD+aX=iMDiDKtdE=j0_q+UWQzA@mail.gmail.com>
+ <YnrEDfZs1kuB1gu5@slm.duckdns.org> <CAJD7tkahC1e-_K0xJMu-xXwd8WNVzYDRgJFua9=JhNRq7b+G8A@mail.gmail.com>
+ <YnrSrKFTBn3IyUfa@slm.duckdns.org>
+In-Reply-To: <YnrSrKFTBn3IyUfa@slm.duckdns.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 10 May 2022 14:55:32 -0700
+Message-ID: <CAJD7tkbeZPH9UJXtGeopPnTSVPYN-GzzM51SE_QNuLmiaVNpeA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/9] bpf: introduce CGROUP_SUBSYS_RSTAT
+ program type
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Charan,
+On Tue, May 10, 2022 at 2:01 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Tue, May 10, 2022 at 01:43:46PM -0700, Yosry Ahmed wrote:
+> > I assume if we do this optimization, and have separate updated lists
+> > for controllers, we will still have a "core" updated list that is not
+> > tied to any controller. Is this correct?
+>
+> Or we can create a dedicated updated list for the bpf progs, or even
+> multiple for groups of them and so on.
+>
+> > If yes, then we can make the interface controller-agnostic (a global
+> > list of BPF flushers). If we do the optimization later, we tie BPF
+> > stats to the "core" updated list. We can even extend the userland
+> > interface then to allow for controller-specific BPF stats if found
+> > useful.
+>
+> We'll need that anyway as cpustats are tied to the cgroup themselves rather
+> than the cpu controller.
+>
+> > If not, and there will only be controller-specific updated lists then,
+> > then we might need to maintain a "core" updated list just for the sake
+> > of BPF programs, which I don't think would be favorable.
+>
+> If needed, that's fine actually.
+>
+> > What do you think? Either-way, I will try to document our discussion
+> > outcome in the commit message (and maybe the code), so that
+> > if-and-when this optimization is made, we can come back to it.
+>
+> So, the main focus is keeping the userspace interface as simple as possible
+> and solving performance issues on the rstat side. If we need however many
+> updated lists to do that, that's all fine. FWIW, the experience up until now
+> has been consistent with the assumptions that the current implementation
+> makes and I haven't seen real any world cases where the shared updated list
+> are problematic.
+>
 
-Thank you for the patch! Perhaps something to improve:
+Thanks again for your insights and time!
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.18-rc6 next-20220510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+That's great to hear. I am all in for making the userspace interface
+simpler. I will rework this patch series so that the BPF programs just
+attach to "rstat" and send a V1.
+Any other concerns you have that you think I should address in V1?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Charan-Teja-Kalla/dmabuf-ensure-unique-directory-name-for-dmabuf-stats/20220510-221009
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9be9ed2612b5aedb52a2c240edb1630b6b743cb6
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220511/202205110511.E0d8TXXC-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1bc947824de94b4d4a87c48772c0d36872eaf731
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Charan-Teja-Kalla/dmabuf-ensure-unique-directory-name-for-dmabuf-stats/20220510-221009
-        git checkout 1bc947824de94b4d4a87c48772c0d36872eaf731
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/dma-buf/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/dma-buf/dma-buf-sysfs-stats.c: In function 'dma_buf_stats_setup':
->> drivers/dma-buf/dma-buf-sysfs-stats.c:196:43: warning: format '%lu' expects argument of type 'long unsigned int', but argument 6 has type 's64' {aka 'long long int'} [-Wformat=]
-     196 |                                    "%lu-%lu", file_inode(dmabuf->file)->i_ino,
-         |                                         ~~^
-         |                                           |
-         |                                           long unsigned int
-         |                                         %llu
-     197 |                                    atomic64_add_return(1, &unique_id));
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                    |
-         |                                    s64 {aka long long int}
-
-
-vim +196 drivers/dma-buf/dma-buf-sysfs-stats.c
-
-   170	
-   171	int dma_buf_stats_setup(struct dma_buf *dmabuf)
-   172	{
-   173		struct dma_buf_sysfs_entry *sysfs_entry;
-   174		int ret;
-   175		static atomic64_t unique_id = ATOMIC_INIT(0);
-   176	
-   177		if (!dmabuf || !dmabuf->file)
-   178			return -EINVAL;
-   179	
-   180		if (!dmabuf->exp_name) {
-   181			pr_err("exporter name must not be empty if stats needed\n");
-   182			return -EINVAL;
-   183		}
-   184	
-   185		sysfs_entry = kzalloc(sizeof(struct dma_buf_sysfs_entry), GFP_KERNEL);
-   186		if (!sysfs_entry)
-   187			return -ENOMEM;
-   188	
-   189		sysfs_entry->kobj.kset = dma_buf_per_buffer_stats_kset;
-   190		sysfs_entry->dmabuf = dmabuf;
-   191	
-   192		dmabuf->sysfs_entry = sysfs_entry;
-   193	
-   194		/* create the directory for buffer stats */
-   195		ret = kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype, NULL,
- > 196					   "%lu-%lu", file_inode(dmabuf->file)->i_ino,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Thanks.
+>
+> --
+> tejun

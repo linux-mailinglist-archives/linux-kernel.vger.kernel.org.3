@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DCD5214EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEF0521560
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241580AbiEJMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S241695AbiEJMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241582AbiEJMPy (ORCPT
+        with ESMTP id S241318AbiEJMaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:15:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D95933A3A;
-        Tue, 10 May 2022 05:11:57 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyGzl38wHzGpcX;
-        Tue, 10 May 2022 20:09:07 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
- 2022 20:11:54 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next v2] ext4: fix warning in ext4_handle_inode_extension
-Date:   Tue, 10 May 2022 20:25:45 +0800
-Message-ID: <20220510122545.1770410-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 10 May 2022 08:30:08 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF9116D4BC;
+        Tue, 10 May 2022 05:26:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyHMJ38cxz4xXS;
+        Tue, 10 May 2022 22:26:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652185564;
+        bh=xFfKRkicEM6exIkb81xPoFhftB5Z/tdYHdSeBEndofw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=od9YBjg5qYWzXZGUTgNUeqqookvMyd5Rs9zDevTmNJqf4+a9mKCd1gEcdLwUXU/dm
+         c9Ee6RQX7AM8YhRlKoZqFLHcAfsIWHL3pEw+ZEFYBHdPpMCAuFHFiDqmtfgVb+VgUU
+         eL/BrZbXLSXGn+TOPeWFpCOlhI+9xN4TOI+fqtJi88qU8dg89TItmVq1DYY1YsH5dd
+         6gpg7iboY0B4ZImLOs7MIZygWluc1dqPG/fGKKyO22vgQOOxIaVn3Qf/odbK1iolux
+         ufHgC47Gy7BMnXbr/svrdlEfzdMzlc4eOJTEjvgc8YRFSf90IRsnY/aUx2QEIbOJOR
+         sLwr/A4l2aqZQ==
+Date:   Tue, 10 May 2022 22:26:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Zev Weiss <zev@bewilderbeest.net>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hwmon-staging tree
+Message-ID: <20220510222603.0d675ce2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LZSeDj+9=VIS2/G0KGzZcCM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We got issue as follows:
-EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
-EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
-EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
-EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
-Modules linked in:
-CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
-RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
-RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
-RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
-RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
-RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
-R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
-R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
-FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- do_iter_readv_writev+0x2e5/0x360
- do_iter_write+0x112/0x4c0
- do_pwritev+0x1e5/0x390
- __x64_sys_pwritev2+0x7e/0xa0
- do_syscall_64+0x37/0x50
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+--Sig_/LZSeDj+9=VIS2/G0KGzZcCM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Above issue may happen as follows:
-Assume
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=4096
+Hi all,
 
-step 1: set inode->i_isize = 8192
-ext4_setattr
-  if (attr->ia_size != inode->i_size)
-    EXT4_I(inode)->i_disksize = attr->ia_size;
-    rc = ext4_mark_inode_dirty
-       ext4_reserve_inode_write
-          ext4_get_inode_loc
-            __ext4_get_inode_loc
-              sb_getblk --> return -ENOMEM
-   ...
-   if (!error)  ->will not update i_size
-     i_size_write(inode, attr->ia_size);
-Now:
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=8192
+After merging the hwmon-staging tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-step 2: Direct write 4096 bytes
-ext4_file_write_iter
- ext4_dio_write_iter
-   iomap_dio_rw ->return error
- if (extend)
-   ext4_handle_inode_extension
-     WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
-->Then trigger warning.
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_wmi_reg_write':
+nct6775-platform.c:(.text.nct6775_wmi_reg_write+0x38): undefined reference =
+to `.nct6775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_wmi_reg_read':
+nct6775-platform.c:(.text.nct6775_wmi_reg_read+0x38): undefined reference t=
+o `.nct6775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_resume':
+nct6775-platform.c:(.text.nct6775_resume+0x61c): undefined reference to `.n=
+ct6775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_platform_probe':
+nct6775-platform.c:(.text.nct6775_platform_probe+0x14c): undefined referenc=
+e to `.nct6775_probe'
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_reg_read':
+nct6775-platform.c:(.text.nct6775_reg_read+0x5c): undefined reference to `.=
+nct6775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_reg_write':
+nct6775-platform.c:(.text.nct6775_reg_write+0x5c): undefined reference to `=
+.nct6775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_beep_enable=
++0x28): undefined reference to `nct6775_show_beep'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_beep_enable=
++0x30): undefined reference to `nct6775_store_beep'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
+alarm+0x28): undefined reference to `nct6775_show_alarm'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
+beep+0x28): undefined reference to `nct6775_show_beep'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
+beep+0x30): undefined reference to `nct6775_store_beep'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
+alarm+0x28): undefined reference to `nct6775_show_alarm'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
+beep+0x28): undefined reference to `nct6775_show_beep'
+ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
+beep+0x30): undefined reference to `nct6775_store_beep'
+ld: drivers/hwmon/nct6775-i2c.o: in function `.nct6775_i2c_read':
+nct6775-i2c.c:(.text.nct6775_i2c_read+0x108): undefined reference to `.nct6=
+775_reg_is_word_sized'
+ld: drivers/hwmon/nct6775-i2c.o: in function `.nct6775_i2c_probe':
+nct6775-i2c.c:(.text.nct6775_i2c_probe+0x134): undefined reference to `.nct=
+6775_probe'
 
-To solve above issue, when ext4_reserve_inode_write failed we abort jbd2
-instead of only record error information.
-This modification scheme is based on Jan Kara's suggestion:
-"Well, firstly, errors=continue was always the best effort. There are no
-guarantees which failures we are able to withstand and which not.
-Generally, I think we try to withstand on-disk filesystem inconsistency but
-not inconsistency coming from programming errors or other external factors
-like out-of-memory conditions. Secondly, we already do abort the journal
-when e.g. jbd2_journal_get_write_access() fails (although that generally
-means some internal inconsistency) or when say revoke handling fails to
-allocate memory for a revoke record. So it won't be a new thing. Thirdly,
-and perhaps most importantly, you have found and fixed just one fairly
-innocent problem happening due to in memory inode state getting
-inconsistent after we fail to record the inode in the journal. There are
-almost 80 callsites of ext4_mark_inode_dirty() and honestly I suspect that
-e.g. inconsistent states resulting from extent tree manipulations being
-aborted in the middle due to ext4_ext_dirty() failing due to ENOMEM will
-also trigger all sorts of "interesting" behavior. So that's why I'd rather
-abort the journal than try to continue when we almost certainly now we
-cannot."
+Probably caused by commit
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/inode.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+  a2105efee6e7 ("hwmon: (nct6775) Split core and platform driver")
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 987ea77e672d..0a30661953ef 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -5735,10 +5735,10 @@ int
- ext4_reserve_inode_write(handle_t *handle, struct inode *inode,
- 			 struct ext4_iloc *iloc)
- {
--	int err;
-+	int err = -EIO;;
- 
- 	if (unlikely(ext4_forced_shutdown(EXT4_SB(inode->i_sb))))
--		return -EIO;
-+		goto out;
- 
- 	err = ext4_get_inode_loc(inode, iloc);
- 	if (!err) {
-@@ -5750,7 +5750,9 @@ ext4_reserve_inode_write(handle_t *handle, struct inode *inode,
- 			iloc->bh = NULL;
- 		}
- 	}
--	ext4_std_error(inode->i_sb, err);
-+out:
-+	if (err)
-+		ext4_abort(inode->i_sb, -err, "Detect reserve inode write failed");
- 	return err;
- }
- 
--- 
-2.31.1
+I have reverted that commit for today - and the following commits
 
+  4dcbcf34a249 ("hwmon: (nct6775) add ASUS PRO H410T / PRIME H410M-R / ROG =
+X570-E GAMING WIFI II")
+  58f1d9ebfce6 ("hwmon: (nct6775) Add i2c driver")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LZSeDj+9=VIS2/G0KGzZcCM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ6WdsACgkQAVBC80lX
+0Gxnbgf8DeH4ri0xSEjzqTkdAlLkOJTKpmQKtA8693I0kY8sYxTVbWBqqkwRotPl
+fZmotek3SavgJRo/3a6csiCZmXcaVrXD2JvktRO69Vm3W1GaVx8JJYLp7lp+SoOe
+WWRL9dPX5907KXILDZ1uJ0nG7JXybF/qp84OHK5XUNKxDt0v8hLfpz0ZABjk6ffp
+vuuGkP69ectDffz5St0r2uNM+Qs40JeNwNvReVZPnLEY2VxEcKDjLy5SxhXyVO5u
+e7W4gxVZtqQ7zJbDKZAaS+e0FoTagYwVE8W0/d3xEAiKVHUGNj8q1GvErcojBEje
+zdCNgeaDZnmN+01Ju9wTqBabxwIVsA==
+=M9LF
+-----END PGP SIGNATURE-----
+
+--Sig_/LZSeDj+9=VIS2/G0KGzZcCM--

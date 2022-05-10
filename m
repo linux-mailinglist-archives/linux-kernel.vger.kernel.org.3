@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B826521B05
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CA7521C01
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344125AbiEJOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S1344255AbiEJO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244125AbiEJNpI (ORCPT
+        with ESMTP id S244286AbiEJNwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:45:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7092887A1D;
-        Tue, 10 May 2022 06:31:15 -0700 (PDT)
+        Tue, 10 May 2022 09:52:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A246C0F4;
+        Tue, 10 May 2022 06:38:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3EB35CE1EF3;
-        Tue, 10 May 2022 13:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B23FC385C2;
-        Tue, 10 May 2022 13:31:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91098B81DB2;
+        Tue, 10 May 2022 13:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1261C385C2;
+        Tue, 10 May 2022 13:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189470;
-        bh=P3SVQNOO3B7N/QZLCcWPzgOahP2/LyoDyJ/f3OPaNKs=;
+        s=korg; t=1652189861;
+        bh=jFjwf+37Eb9UmLxCksgbMDhGLmrjgVyM4X2iBi+3J54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q3i++jFZ9yrmkW3Zj/uvk9aU+sUeN5kYaKkte2xrZLn2peb+WYLvZtFcz067VXMFw
-         IEcotpl9A1W5dVwrs5FqdMO9ryQ/r/jBe6edMhM+n2IgilSaLQBhnGI6qaie1lUu6i
-         ToGdWGUVb8ReRyBvqb3cdTn3bVd/w8CaDBnF31C8=
+        b=hth/wUcKhjtpZu0NGSzFQkQOO0I3ca6nbpalDEMbHYXIA7ZDXLIg0t3QGEalsDC6w
+         YuVo6h6tMP8pxdFD/Tq8jNfcC8vxqBgkiWbt4raPsVQAk0kJ4TxasE2AZAyqkpupA2
+         fwc0dFBZSoMFJ+vck3WIOyLOsy2hl13Ki3l5C3k4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 061/135] net: ethernet: mediatek: add missing of_node_put() in mtk_sgmii_init()
+        stable@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.17 053/140] gpio: visconti: Fix fwnode of GPIO IRQ
 Date:   Tue, 10 May 2022 15:07:23 +0200
-Message-Id: <20220510130742.158023778@linuxfoundation.org>
+Message-Id: <20220510130743.137492573@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 
-commit ff5265d45345d01fefc98fcb9ae891b59633c919 upstream.
+commit 171865dab096da1ab980a32eeea5d1b88cd7bc50 upstream.
 
-The node pointer returned by of_parse_phandle() with refcount incremented,
-so add of_node_put() after using it in mtk_sgmii_init().
+The fwnode of GPIO IRQ must be set to its own fwnode, not the fwnode of the
+parent IRQ. Therefore, this sets own fwnode instead of the parent IRQ fwnode to
+GPIO IRQ's.
 
-Fixes: 9ffee4a8276c ("net: ethernet: mediatek: Extend SGMII related functions")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220428062543.64883-1-yangyingliang@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 2ad74f40dacc ("gpio: visconti: Add Toshiba Visconti GPIO support")
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mediatek/mtk_sgmii.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpio/gpio-visconti.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -26,6 +26,7 @@ int mtk_sgmii_init(struct mtk_sgmii *ss,
- 			break;
+--- a/drivers/gpio/gpio-visconti.c
++++ b/drivers/gpio/gpio-visconti.c
+@@ -130,7 +130,6 @@ static int visconti_gpio_probe(struct pl
+ 	struct gpio_irq_chip *girq;
+ 	struct irq_domain *parent;
+ 	struct device_node *irq_parent;
+-	struct fwnode_handle *fwnode;
+ 	int ret;
  
- 		ss->regmap[i] = syscon_node_to_regmap(np);
-+		of_node_put(np);
- 		if (IS_ERR(ss->regmap[i]))
- 			return PTR_ERR(ss->regmap[i]);
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+@@ -150,14 +149,12 @@ static int visconti_gpio_probe(struct pl
  	}
+ 
+ 	parent = irq_find_host(irq_parent);
++	of_node_put(irq_parent);
+ 	if (!parent) {
+ 		dev_err(dev, "No IRQ parent domain\n");
+ 		return -ENODEV;
+ 	}
+ 
+-	fwnode = of_node_to_fwnode(irq_parent);
+-	of_node_put(irq_parent);
+-
+ 	ret = bgpio_init(&priv->gpio_chip, dev, 4,
+ 			 priv->base + GPIO_IDATA,
+ 			 priv->base + GPIO_OSET,
+@@ -180,7 +177,7 @@ static int visconti_gpio_probe(struct pl
+ 
+ 	girq = &priv->gpio_chip.irq;
+ 	girq->chip = irq_chip;
+-	girq->fwnode = fwnode;
++	girq->fwnode = of_node_to_fwnode(dev->of_node);
+ 	girq->parent_domain = parent;
+ 	girq->child_to_parent_hwirq = visconti_gpio_child_to_parent_hwirq;
+ 	girq->populate_parent_alloc_arg = visconti_gpio_populate_parent_fwspec;
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68135217FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170C2521982
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244074AbiEJNce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S245061AbiEJNrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240821AbiEJNXc (ORCPT
+        with ESMTP id S243758AbiEJNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:23:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6FC1C15C2;
-        Tue, 10 May 2022 06:17:14 -0700 (PDT)
+        Tue, 10 May 2022 09:32:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A3A2CCD09;
+        Tue, 10 May 2022 06:22:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 15294CE1EE5;
-        Tue, 10 May 2022 13:17:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B385C385C9;
-        Tue, 10 May 2022 13:17:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9483CB81DA2;
+        Tue, 10 May 2022 13:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06434C385A6;
+        Tue, 10 May 2022 13:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188623;
-        bh=beJbuLc5DeQE1QzkilhzXFk8FrAnqajPtypHf3GrpYA=;
+        s=korg; t=1652188917;
+        bh=2SQP/iK9dFo1azXQPmUtMwnMxA2HAIdd4EY0EdaBOnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QG9OWtC4PDtqTE/8hOKUhRFSSyr814Camv9iA2kL2vbRU70ivOjRKLUCaXM5NvTxb
-         Y70QNvRgBCLi9pPULSlXi03G/Fy/ejIVDB42bTHPDnHtC8jQqgsJosLpVrSKMN3PJZ
-         hDRqFhnmL+ZhznA1XmY5Ukq9slV3FD/pjmG8WPxE=
+        b=JKhtsD0tfcQOv9znnTJDubt0y3miVaRJLUdiWPpvIqeLUtRlwGSUdrrwlL8fg6uWn
+         T4dzhkDLSyCYjHC+O5G2VtilSawxoucM+VHEWkhJlpSnSaajAByYvXUeSB/2NYaiLA
+         fFO1Nh+Iqd9BA2BVKW/kU6RQ8Onrl6Y62p1/ZQfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4.14 67/78] hwmon: (adt7470) Fix warning on module removal
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 68/88] can: grcan: grcan_close(): fix deadlock
 Date:   Tue, 10 May 2022 15:07:53 +0200
-Message-Id: <20220510130734.514033328@linuxfoundation.org>
+Message-Id: <20220510130735.711739117@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,57 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 7b2666ce445c700b8dcee994da44ddcf050a0842 upstream.
+commit 47f070a63e735bcc8d481de31be1b5a1aa62b31c upstream.
 
-When removing the adt7470 module, a warning might be printed:
+There are deadlocks caused by del_timer_sync(&priv->hang_timer) and
+del_timer_sync(&priv->rr_timer) in grcan_close(), one of the deadlocks
+are shown below:
 
-do not call blocking ops when !TASK_RUNNING; state=1
-set at [<ffffffffa006052b>] adt7470_update_thread+0x7b/0x130 [adt7470]
+   (Thread 1)              |      (Thread 2)
+                           | grcan_reset_timer()
+grcan_close()              |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | grcan_initiate_running_reset()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-This happens because adt7470_update_thread() can leave the kthread in
-TASK_INTERRUPTIBLE state when the kthread is being stopped before
-the call of set_current_state(). Since kthread_exit() might sleep in
-exit_signals(), the warning is printed.
-Fix that by using schedule_timeout_interruptible() and removing
-the call of set_current_state().
-This causes TASK_INTERRUPTIBLE to be set after kthread_should_stop()
-which might cause the kthread to exit.
+We hold priv->lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler also need
+priv->lock in position (2) of thread 2. As a result, grcan_close()
+will block forever.
 
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Fixes: 93cacfd41f82 (hwmon: (adt7470) Allow faster removal)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Link: https://lore.kernel.org/r/20220407101312.13331-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain the
+needed lock.
+
+Link: https://lore.kernel.org/all/20220425042400.66517-1-duoming@zju.edu.cn
+Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
+Cc: stable@vger.kernel.org
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/adt7470.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/grcan.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/hwmon/adt7470.c
-+++ b/drivers/hwmon/adt7470.c
-@@ -33,6 +33,7 @@
- #include <linux/kthread.h>
- #include <linux/slab.h>
- #include <linux/util_macros.h>
-+#include <linux/sched.h>
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1117,8 +1117,10 @@ static int grcan_close(struct net_device
  
- /* Addresses to scan */
- static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
-@@ -273,11 +274,10 @@ static int adt7470_update_thread(void *p
- 		adt7470_read_temperatures(client, data);
- 		mutex_unlock(&data->lock);
- 
--		set_current_state(TASK_INTERRUPTIBLE);
- 		if (kthread_should_stop())
- 			break;
- 
--		schedule_timeout(msecs_to_jiffies(data->auto_update_interval));
-+		schedule_timeout_interruptible(msecs_to_jiffies(data->auto_update_interval));
+ 	priv->closing = true;
+ 	if (priv->need_txbug_workaround) {
++		spin_unlock_irqrestore(&priv->lock, flags);
+ 		del_timer_sync(&priv->hang_timer);
+ 		del_timer_sync(&priv->rr_timer);
++		spin_lock_irqsave(&priv->lock, flags);
  	}
- 
- 	return 0;
+ 	netif_stop_queue(dev);
+ 	grcan_stop_hardware(dev);
 
 

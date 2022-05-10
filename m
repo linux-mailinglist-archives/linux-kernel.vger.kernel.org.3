@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278DD52206D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60BA522087
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345774AbiEJQCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S238406AbiEJQCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346666AbiEJPxE (ORCPT
+        with ESMTP id S1346588AbiEJPxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:53:04 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1845E22BF3
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:48:35 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id bs17so3927567qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:48:34 -0700 (PDT)
+        Tue, 10 May 2022 11:53:21 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163EE56C1D;
+        Tue, 10 May 2022 08:48:35 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id t16so13812425qtr.9;
+        Tue, 10 May 2022 08:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D+Ob9aaMTI9Q+iaXKEuKQQeHui5qUx1+hsZMR4tLjS0=;
-        b=m3JS2xWyHZGT8NFfxmxtIl4Kh3WtP3p6ktBysoXoKHQZfpMSS9mj954iRRts2BK+4x
-         5V7E5hhsNujN1HE8zQf3BHFx1jVQxVL+bxJuXYr+VOSXa6/Z7UImjZDP5QW4s4KLQSGK
-         O7ntbMP8KnCG3UuHo9UfUeBGDeg2ZmRlt27poMwOoedmk9qHCjOAiyBFhNS+6u5OfNiB
-         x8kBJJnNjkDuLTj3HJOhxJF0WYU/EflANRB7UiVs3ebeAqc3iROH9kbT7WxXa7cJSARi
-         bfohBsS4MHhavuITe9Vnw034NHl85wD+fvOAN3sngzOFJ9q5K+SKxhlLW1RwJcdoNJWh
-         MBoQ==
+        bh=JaQCzndoIKElsDsvqhkhCl2RygfACvXHBtQpId5Vc1c=;
+        b=i71gtagyKGiWXzRNxnk9QZMeUToM3U4cmBzQ6dtU9BxKztB+WIf2q/eJVMGYw31RtO
+         /lvkG7Xj2fzKeg7tfEjHvb8mDOvF4wCbpGVUcGgfmpgS+CTjQG0oIvzto6d7BgdQyNwo
+         8CvMuz0CBBr7zWNnwCwhnlaD5nQ2YSeZ7DDJrrZOFzL/2yC7HgmATq1jPpK6Wc0zlkcI
+         EgAocPHMnzFLYrWp4zGkL52i7DWwype3EbKydFGJ3N3wKMtRZ6bV8rDSy9nhdokf0VDB
+         u4gJJXOFFKbA7fIncH6nCuLNFpvlvwAL7TP+HNqegef5vggAeAVZVtTqD0pHAwE+rKF1
+         wjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D+Ob9aaMTI9Q+iaXKEuKQQeHui5qUx1+hsZMR4tLjS0=;
-        b=rv1DyD3ZvkLqjVqXfWnuZrFE12RkR97Ghgfhjcqare3woqIwrChOGQ5tELlzPVSS9i
-         uLXsGNNtBl3aMNWhpui99aVtbS7ubreNu+kX2Lvzem8iDQDVpetn5r/0iyz510xstmmd
-         etIRLIewxo/jvrsA35rFLSfTKS8NQv7m94+Nwc0VNHJ2Ad6u6YcV2ddR0THb/NUAcfZ/
-         3Lb9w4DN/Y21t2GQmmqLqe3KRB05AESwjH2LJwuO4SDZAD4R3ZgumVq3yPeRkB6cWGdh
-         /SJbzotk3KBmD689xOPbB2vQDbG47UCk1YXHnuAnDMrOg6Z5+7YpJ7q/kP8QfMUCYsO6
-         qOig==
-X-Gm-Message-State: AOAM53178kEBuoCGs+/29ZygyRm0NoXwO/CTXPIIRHx3YXTVUoHmcZXs
-        4PGDYu6o+T1sT09UmHicMck=
-X-Google-Smtp-Source: ABdhPJy7WcqEGMFnf1b1ICGoUibKPJ7NRXwYXnzdxR/WUgi4c3o3Cpj0wm14DTQWFGpYYDNwuZqdgA==
-X-Received: by 2002:a05:620a:4142:b0:6a0:4a07:2027 with SMTP id k2-20020a05620a414200b006a04a072027mr14025416qko.517.1652197713811;
-        Tue, 10 May 2022 08:48:33 -0700 (PDT)
+        bh=JaQCzndoIKElsDsvqhkhCl2RygfACvXHBtQpId5Vc1c=;
+        b=sez4mh09uZczc80EcUH823hn3jySeaka8EBU18ueCQqD8fPkZ9HwYsf5f9EqIDnoSS
+         T82SImACg7pUEbUOWvPPSdWlBNYPzUr+Vigg8JVzZhgKhbLSOVX4s2DQYD+x8PUtiO0X
+         G+5YnbUeAb/azpbQKKfmdf0sP7w71AuylIjl9fyhn7woRE2v5X/Q8zUM8yX3N7lNSAIw
+         d0B8UDqwmNbDMink8MkmxwdFlhNPhTu9rkmsRiBjxnj/n9GF4QJ5zQpdOh+9xYXBBrBc
+         /u8oLE0GyjWw0YnKOVYq2qabTxJscRWCl79h1/bjp4cUqevNwIxOJz50wSy/U1jzDmLE
+         Zk/Q==
+X-Gm-Message-State: AOAM530cXxFdRf+s7R1KxztvKVfmfFwPJIxawjol6X26SpjL1k22F28H
+        hKlDjBvOWhcg7g19lQQp+58=
+X-Google-Smtp-Source: ABdhPJxuPGmpsFsy5UzCltnN+iZxpIXNeP9GnzMmanpplRZXVgVBhEq1tu6pOlBma+K3eeXlFr3gAQ==
+X-Received: by 2002:a05:622a:cc:b0:2f1:fc74:c7a6 with SMTP id p12-20020a05622a00cc00b002f1fc74c7a6mr20139605qtw.387.1652197715031;
+        Tue, 10 May 2022 08:48:35 -0700 (PDT)
 Received: from localhost ([98.242.65.84])
-        by smtp.gmail.com with ESMTPSA id j133-20020a37a08b000000b0069fc13ce1ddsm8907813qke.14.2022.05.10.08.48.33
+        by smtp.gmail.com with ESMTPSA id g25-20020a05620a109900b0069fc13ce1e3sm8619248qkk.20.2022.05.10.08.48.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:48:33 -0700 (PDT)
+        Tue, 10 May 2022 08:48:34 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         David Laight <David.Laight@ACULAB.COM>,
@@ -61,18 +61,13 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 20/22] sched/topology: replace cpumask_weight() with cpumask_weight_eq() where appropriate
-Date:   Tue, 10 May 2022 08:47:48 -0700
-Message-Id: <20220510154750.212913-21-yury.norov@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 21/22] cpufreq: use cpumask_weight_gt() in policy_is_shared()
+Date:   Tue, 10 May 2022 08:47:49 -0700
+Message-Id: <20220510154750.212913-22-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220510154750.212913-1-yury.norov@gmail.com>
 References: <20220510154750.212913-1-yury.norov@gmail.com>
@@ -88,47 +83,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace cpumask_weight() with cpumask_weight_eq(..., 1) because it
-may return earlier.
+cpumask_weight_gt() is better than cpumask_weight() because it may
+return earlier depending on condition.
 
-CC: Ben Segall <bsegall@google.com>
-CC: Daniel Bristot de Oliveira <bristot@redhat.com>
-CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Juri Lelli <juri.lelli@redhat.com>
-CC: Mel Gorman <mgorman@suse.de>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Steven Rostedt <rostedt@goodmis.org>
-CC: Valentin Schneider <vschneid@redhat.com>
-CC: Vincent Guittot <vincent.guittot@linaro.org>
+CC: Rafael J. Wysocki <rafael@kernel.org>
+CC: Viresh Kumar <viresh.kumar@linaro.org>
+CC: linux-pm@vger.kernel.org
 CC: linux-kernel@vger.kernel.org
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/sched/topology.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/cpufreq.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 05b6c2ad90b9..860137913b18 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -168,7 +168,7 @@ static const unsigned int SD_DEGENERATE_GROUPS_MASK =
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index d5595d57f4e5..865cc9e23518 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -214,7 +214,7 @@ static inline bool policy_is_inactive(struct cpufreq_policy *policy)
  
- static int sd_degenerate(struct sched_domain *sd)
+ static inline bool policy_is_shared(struct cpufreq_policy *policy)
  {
--	if (cpumask_weight(sched_domain_span(sd)) == 1)
-+	if (cpumask_weight_eq(sched_domain_span(sd), 1))
- 		return 1;
+-	return cpumask_weight(policy->cpus) > 1;
++	return cpumask_weight_gt(policy->cpus, 1);
+ }
  
- 	/* Following flags need at least 2 groups */
-@@ -1999,7 +1999,7 @@ void sched_update_numa(int cpu, bool online)
- 	 * Scheduler NUMA topology is updated when the first CPU of a
- 	 * node is onlined or the last CPU of a node is offlined.
- 	 */
--	if (cpumask_weight(cpumask_of_node(node)) != 1)
-+	if (!cpumask_weight_eq(cpumask_of_node(node), 1))
- 		return;
- 
- 	sched_reset_numa();
+ #ifdef CONFIG_CPU_FREQ
 -- 
 2.32.0
 

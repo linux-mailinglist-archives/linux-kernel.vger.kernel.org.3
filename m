@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEBF521A34
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBA45217FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244085AbiEJNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S243871AbiEJNcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244333AbiEJNh3 (ORCPT
+        with ESMTP id S242920AbiEJNXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:37:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C26462CC6;
-        Tue, 10 May 2022 06:25:36 -0700 (PDT)
+        Tue, 10 May 2022 09:23:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EE71CD26B;
+        Tue, 10 May 2022 06:17:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8528161767;
-        Tue, 10 May 2022 13:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7A3C385C2;
-        Tue, 10 May 2022 13:25:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28CE9615DD;
+        Tue, 10 May 2022 13:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308F3C385A6;
+        Tue, 10 May 2022 13:17:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189134;
-        bh=fzdfAEKxwWwnKcFkBTlhyxorVAZZr97R3k+ylvtGsGQ=;
+        s=korg; t=1652188638;
+        bh=BQFoZ5VBAeVocPILsY8HgUmVw/RANqQGMeh9+kxbws4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GKfwDitnJC4RGyGEFaWdZRl1zUuE1rc1lViTW/OSC6i03yP3Um2UqpqSSeY68vMN8
-         HCxZxCAM1tWc203k3VtW7pkTxQEiicBMwN1cEVg4vJF+0TIs/jMQz9mKBfyceGIjii
-         Ksbx0aosQX0t2hPTlE0AUTMiRAKGDVXv056muEPg=
+        b=r1+1lXt0XyqhOZajeRTvpt8eeZq4940ZS5uym9IQd1fAczo3091EJjersw5I9+ljS
+         U6T0vZwm8kKDYlwlHDvw7ci0sYOVVLWoXbmHWoOp76NX3wslxSysbc+bKE+rCuFt2W
+         jKgRpFXuF7iML8ekaSYA8NOBHonHWzTfT3ucqFZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zihao Wang <wzhd@ustc.edu>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 03/70] ALSA: hda/realtek: Add quirk for Yoga Duet 7 13ITL6 speakers
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Doug Porter <dsp@fb.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 36/78] tcp: fix potential xmit stalls caused by TCP_NOTSENT_LOWAT
 Date:   Tue, 10 May 2022 15:07:22 +0200
-Message-Id: <20220510130732.964782467@linuxfoundation.org>
+Message-Id: <20220510130733.604544525@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +58,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zihao Wang <wzhd@ustc.edu>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 3b79954fd00d540677c97a560622b73f3a1f4e28 upstream.
+[ Upstream commit 4bfe744ff1644fbc0a991a2677dc874475dd6776 ]
 
-Lenovo Yoga Duet 7 13ITL6 has Realtek ALC287 and built-in
-speakers do not work out of the box. The fix developed for
-Yoga 7i 14ITL5 also enables speaker output for this model.
+I had this bug sitting for too long in my pile, it is time to fix it.
 
-Signed-off-by: Zihao Wang <wzhd@ustc.edu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220424084120.74125-1-wzhd@ustc.edu
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks to Doug Porter for reminding me of it!
+
+We had various attempts in the past, including commit
+0cbe6a8f089e ("tcp: remove SOCK_QUEUE_SHRUNK"),
+but the issue is that TCP stack currently only generates
+EPOLLOUT from input path, when tp->snd_una has advanced
+and skb(s) cleaned from rtx queue.
+
+If a flow has a big RTT, and/or receives SACKs, it is possible
+that the notsent part (tp->write_seq - tp->snd_nxt) reaches 0
+and no more data can be sent until tp->snd_una finally advances.
+
+What is needed is to also check if POLLOUT needs to be generated
+whenever tp->snd_nxt is advanced, from output path.
+
+This bug triggers more often after an idle period, as
+we do not receive ACK for at least one RTT. tcp_notsent_lowat
+could be a fraction of what CWND and pacing rate would allow to
+send during this RTT.
+
+In a followup patch, I will remove the bogus call
+to tcp_chrono_stop(sk, TCP_CHRONO_SNDBUF_LIMITED)
+from tcp_check_space(). Fact that we have decided to generate
+an EPOLLOUT does not mean the application has immediately
+refilled the transmit queue. This optimistic call
+might have been the reason the bug seemed not too serious.
+
+Tested:
+
+200 ms rtt, 1% packet loss, 32 MB tcp_rmem[2] and tcp_wmem[2]
+
+$ echo 500000 >/proc/sys/net/ipv4/tcp_notsent_lowat
+$ cat bench_rr.sh
+SUM=0
+for i in {1..10}
+do
+ V=`netperf -H remote_host -l30 -t TCP_RR -- -r 10000000,10000 -o LOCAL_BYTES_SENT | egrep -v "MIGRATED|Bytes"`
+ echo $V
+ SUM=$(($SUM + $V))
+done
+echo SUM=$SUM
+
+Before patch:
+$ bench_rr.sh
+130000000
+80000000
+140000000
+140000000
+140000000
+140000000
+130000000
+40000000
+90000000
+110000000
+SUM=1140000000
+
+After patch:
+$ bench_rr.sh
+430000000
+590000000
+530000000
+450000000
+450000000
+350000000
+450000000
+490000000
+480000000
+460000000
+SUM=4680000000  # This is 410 % of the value before patch.
+
+Fixes: c9bee3b7fdec ("tcp: TCP_NOTSENT_LOWAT socket option")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: Doug Porter <dsp@fb.com>
+Cc: Soheil Hassas Yeganeh <soheil@google.com>
+Cc: Neal Cardwell <ncardwell@google.com>
+Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ include/net/tcp.h     |  1 +
+ net/ipv4/tcp_input.c  | 12 +++++++++++-
+ net/ipv4/tcp_output.c |  1 +
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8969,6 +8969,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
- 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x3820, "Yoga Duet 7 13ITL6", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
- 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 4602959b58a1..181db7dab176 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -585,6 +585,7 @@ void tcp_synack_rtt_meas(struct sock *sk, struct request_sock *req);
+ void tcp_reset(struct sock *sk);
+ void tcp_skb_mark_lost_uncond_verify(struct tcp_sock *tp, struct sk_buff *skb);
+ void tcp_fin(struct sock *sk);
++void tcp_check_space(struct sock *sk);
+ 
+ /* tcp_timer.c */
+ void tcp_init_xmit_timers(struct sock *);
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 9382caeb721a..f5cc025003cd 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5114,7 +5114,17 @@ static void tcp_new_space(struct sock *sk)
+ 	sk->sk_write_space(sk);
+ }
+ 
+-static void tcp_check_space(struct sock *sk)
++/* Caller made space either from:
++ * 1) Freeing skbs in rtx queues (after tp->snd_una has advanced)
++ * 2) Sent skbs from output queue (and thus advancing tp->snd_nxt)
++ *
++ * We might be able to generate EPOLLOUT to the application if:
++ * 1) Space consumed in output/rtx queues is below sk->sk_sndbuf/2
++ * 2) notsent amount (tp->write_seq - tp->snd_nxt) became
++ *    small enough that tcp_stream_memory_free() decides it
++ *    is time to generate EPOLLOUT.
++ */
++void tcp_check_space(struct sock *sk)
+ {
+ 	if (sock_flag(sk, SOCK_QUEUE_SHRUNK)) {
+ 		sock_reset_flag(sk, SOCK_QUEUE_SHRUNK);
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 83c0e859bb33..1a5c42c67d42 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -81,6 +81,7 @@ static void tcp_event_new_data_sent(struct sock *sk, const struct sk_buff *skb)
+ 
+ 	NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPORIGDATASENT,
+ 		      tcp_skb_pcount(skb));
++	tcp_check_space(sk);
+ }
+ 
+ /* SND.NXT, if window was not shrunk or the amount of shrunk was less than one
+-- 
+2.35.1
+
 
 

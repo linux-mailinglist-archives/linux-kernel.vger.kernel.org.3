@@ -2,97 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674AB521EF3
+	by mail.lfdr.de (Postfix) with ESMTP id 0D374521EF2
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345930AbiEJPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S1345865AbiEJPjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346015AbiEJPii (ORCPT
+        with ESMTP id S1346027AbiEJPii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 11:38:38 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B41F8C64
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:58 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso2360254pjw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/E2oYMHtBAv9GRmZnfohgrg/949ahcguOuaoSrbKbFI=;
-        b=RDmrB2J1ZPEIKprdrdCO4avF6oVrb5+pne/vzaqtN87noNp1Bli0oHQ6wyNpTU5vI1
-         0SMhWzqr/HweH8BysNB5VTufUNTaKfODRGH5FgOUYQ1X4JaIF/BwdanaQDrV2rglyxPt
-         gIewzpg+83SMO+qXQynhd74vUUH+dm9cIht1XWcryYKFAbDvU8Uilwfs2axnl1zXzElJ
-         NXAYgg1A06xTdfzeiA3A8G57Mz1A8mJIf/qsKD98jkERgTPWi9bW4xtie1blxVu3ulTS
-         9zMUXo4w1IAjkCcy0283xKmVQIlCE5QKfr5XSqXAddvBxly0Fow8UPJhqaWohu3WG3Qs
-         30Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/E2oYMHtBAv9GRmZnfohgrg/949ahcguOuaoSrbKbFI=;
-        b=ZSYfG7EAqzh/cu9K6ud4fziFp8lJM7OxLW1d2vB5F/3ulmM91ieK/6CsWbXdO5zxGI
-         R6BEvxGkZBUBT7ySJEGgsPWmNMTQXlcuWIldIrxfjtgVdFrAM6BqRSkETosvDgKVzbWw
-         UwPudO0M8otwCSttPysZuu8GAVMOPEvzUoThrAuqhaXQesW5fP74twqg/NlJY/jIxqqz
-         BK5XoAUxlMfTrQIqpnuivmhgb0LN6NfCbfn4V+7z2+DN0aiG7xfps1NOtZCCrpWGE+If
-         Xv5nFBPUrUMewQAl7+bK63TgA8/SOFLOGu/BJ3u3ZUESQp5Jm0KDcE1CLaA+YadbmbDL
-         eTQQ==
-X-Gm-Message-State: AOAM531WMq7gcVpLQRDDg98MiXXGrvLO2jfuOh9rPhiveGpXZd9dzJpk
-        dJLe8zwk2UML55f1R/cN7g==
-X-Google-Smtp-Source: ABdhPJy9vXUe8rOvHkj/a1GsFzkDy1LxLZuiQxGOh9KaM/XcRQNRmQ/qpQDd7DGC190YEyfTcsaVTA==
-X-Received: by 2002:a17:90b:4f41:b0:1de:bd14:7721 with SMTP id pj1-20020a17090b4f4100b001debd147721mr149484pjb.9.1652196838221;
-        Tue, 10 May 2022 08:33:58 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id cd10-20020a056a00420a00b0050dc76281d0sm11104248pfb.170.2022.05.10.08.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:33:57 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
-        tanureal@opensource.cirrus.com, rf@opensource.cirrus.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, oder_chiou@realtek.com
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH 6/6] ASoC: wm8903: Fix the error handling of wm8903_i2c_probe()
-Date:   Tue, 10 May 2022 23:32:51 +0800
-Message-Id: <20220510153251.1741210-7-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220510153251.1741210-1-zheyuma97@gmail.com>
-References: <20220510153251.1741210-1-zheyuma97@gmail.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9D38B09F;
+        Tue, 10 May 2022 08:34:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B61E60AF0;
+        Tue, 10 May 2022 15:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C76C385A6;
+        Tue, 10 May 2022 15:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652196839;
+        bh=pgb8769OYxRhML/WwKBmoyYizEniG9tvEh7SwUZMywI=;
+        h=In-Reply-To:References:Cc:From:To:Subject:Date:From;
+        b=iXE5LLq9iG+srf2kxMaLw6s9YbZsMkQkjosCYhdc9RPoF+dvJpDXaHj3W5S3Jc/RB
+         fGcEWhBqe0H8MarAeNkp395L/lCjJWh2yFP3mLKVF3FNH/+2jMm/v/IpoALT52BN1E
+         R8u/EnVAWB0zpw1qfmStZP2lVX0ZaILfdj8jG4LgwME3UJSkFcAmyx1uURSAFwP4wB
+         WAQo4Qr0eyaLj6GildfaOzvkrt52ORyfXxihwvLzxZ+X+KSuXgGYBgEh8IC8mVh1QE
+         XsvX7jdJzncFDLrpWwAnfH/03Tjz1LiPD2KuE74ZlW6TX/TxN8nVkORDAB9mAnEIJL
+         Fn4xTcRWa4Rnw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Ynp/124xVt+lUa6f@lunn.ch>
+References: <20220510142247.16071-1-wanjiabing@vivo.com> <165219411356.3924.11722336879963021691@kwain> <Ynp/124xVt+lUa6f@lunn.ch>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+From:   Antoine Tenart <atenart@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v2 net] net: phy: mscc: Add error check when __phy_read() failed
+Message-ID: <165219683693.3924.12337336334738761045@kwain>
+Date:   Tue, 10 May 2022 17:33:56 +0200
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should goto label 'err' when failing to request the irq.
+Quoting Andrew Lunn (2022-05-10 17:08:07)
+>=20
+> But i doubt this impacts real users. MDIO tends to either work or not
+> work at all. And not working is pretty noticeable, and nobody has
+> reported issues.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- sound/soc/codecs/wm8903.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Right. On top of that there are other calls to __phy_read in this driver
+not checking the returned value. Plus all __phy_write calls. If that was
+found by code inspection I would suggest to improve the whole driver and
+not this function alone.
 
-diff --git a/sound/soc/codecs/wm8903.c b/sound/soc/codecs/wm8903.c
-index ddcef11dce7c..3c95c2aea515 100644
---- a/sound/soc/codecs/wm8903.c
-+++ b/sound/soc/codecs/wm8903.c
-@@ -2131,7 +2131,7 @@ static int wm8903_i2c_probe(struct i2c_client *i2c)
- 		if (ret != 0) {
- 			dev_err(wm8903->dev, "Failed to request IRQ: %d\n",
- 				ret);
--			return ret;
-+			goto err;
- 		}
- 
- 		/* Enable write sequencer interrupts */
--- 
-2.25.1
-
+Thanks,
+Antoine

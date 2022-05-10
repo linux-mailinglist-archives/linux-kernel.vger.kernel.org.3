@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE985521955
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A719D521A89
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343978AbiEJNsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S245344AbiEJOBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243844AbiEJNcS (ORCPT
+        with ESMTP id S245160AbiEJNif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD502D2E3F;
-        Tue, 10 May 2022 06:22:36 -0700 (PDT)
+        Tue, 10 May 2022 09:38:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D484226266E;
+        Tue, 10 May 2022 06:27:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 61A30CE1EED;
-        Tue, 10 May 2022 13:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 764E3C385C2;
-        Tue, 10 May 2022 13:22:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A895B81DA8;
+        Tue, 10 May 2022 13:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9997CC385A6;
+        Tue, 10 May 2022 13:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188953;
-        bh=2mI/zjP+CAsjMl5kh45R2T1s5t3QVcMCqLJriNcVJ8w=;
+        s=korg; t=1652189261;
+        bh=arbyPiAbdTcFiXGN12PlCAgCG+susy9IbWNZhb1R+Hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TSVJWKtMJlidNMN+Z5oMC+h0uPzt5bRBAA5mT+vPIq/kxuET6TxHj9texg6yhPJJA
-         4QijNiSp5Vh2U+Ih0ND+aMptvrRwsecGpezfuBiMv76TNS0GR+vGAv1sr+xtNawRBV
-         G3Ah+qDmHUxy6juR/zBFG1LOo7gZynaIZvyQN2a4=
+        b=pnZJmGpcDikHpvVlhLQYvBdMSsj3BmSY2c6vmp2ptzv8yZDPkx4gsUhiNZ586m8X/
+         IFZq9LsbCoIsf7ZYi6OmBS2x7bEHvMXRPudAVJUsd0oGz4JJdU7CMhpvSD87PArmNi
+         0qhLJwIaq79we/2NQ0PDR6lJKLEJRQt43314hkf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jan=20H=C3=B6ppner?= <hoeppner@linux.ibm.com>,
-        Stefan Haberland <sth@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.4 16/52] s390/dasd: Fix read for ESE with blksize < 4k
-Date:   Tue, 10 May 2022 15:07:45 +0200
-Message-Id: <20220510130730.332743043@linuxfoundation.org>
+        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 27/70] can: isotp: remove re-binding of bound socket
+Date:   Tue, 10 May 2022 15:07:46 +0200
+Message-Id: <20220510130733.665257760@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Höppner <hoeppner@linux.ibm.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit cd68c48ea15c85f1577a442dc4c285e112ff1b37 upstream.
+commit 72ed3ee9fa0b461ad086403a8b5336154bd82234 upstream.
 
-When reading unformatted tracks on ESE devices, the corresponding memory
-areas are simply set to zero for each segment. This is done incorrectly
-for blocksizes < 4096.
+As a carry over from the CAN_RAW socket (which allows to change the CAN
+interface while mantaining the filter setup) the re-binding of the
+CAN_ISOTP socket needs to take care about CAN ID address information and
+subscriptions. It turned out that this feature is so limited (e.g. the
+sockopts remain fix) that it finally has never been needed/used.
 
-There are two problems. First, the increment of dst is done using the
-counter of the loop (off), which is increased by blksize every
-iteration. This leads to a much bigger increment for dst as actually
-intended. Second, the increment of dst is done before the memory area
-is set to 0, skipping a significant amount of bytes of memory.
+In opposite to the stateless CAN_RAW socket the switching of the CAN ID
+subscriptions might additionally lead to an interrupted ongoing PDU
+reception. So better remove this unneeded complexity.
 
-This leads to illegal overwriting of memory and ultimately to a kernel
-panic.
-
-This is not a problem with 4k blocksize because
-blk_queue_max_segment_size is set to PAGE_SIZE, always resulting in a
-single iteration for the inner segment loop (bv.bv_len == blksize). The
-incorrectly used 'off' value to increment dst is 0 and the correct
-memory area is used.
-
-In order to fix this for blksize < 4k, increment dst correctly using the
-blksize and only do it at the end of the loop.
-
-Fixes: 5e2b17e712cf ("s390/dasd: Add dynamic formatting support for ESE volumes")
-Cc: stable@vger.kernel.org # v5.3+
-Signed-off-by: Jan Höppner <hoeppner@linux.ibm.com>
-Reviewed-by: Stefan Haberland <sth@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220505141733.1989450-4-sth@linux.ibm.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220422082337.1676-1-socketcan@hartkopp.net
+Cc: stable@vger.kernel.org
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/block/dasd_eckd.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ net/can/isotp.c |   22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -3228,12 +3228,11 @@ static int dasd_eckd_ese_read(struct das
- 				cqr->proc_bytes = blk_count * blksize;
- 				return 0;
- 			}
--			if (dst && !skip_block) {
--				dst += off;
-+			if (dst && !skip_block)
- 				memset(dst, 0, blksize);
--			} else {
-+			else
- 				skip_block--;
--			}
-+			dst += blksize;
- 			blk_count++;
- 		}
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1144,6 +1144,11 @@ static int isotp_bind(struct socket *soc
+ 
+ 	lock_sock(sk);
+ 
++	if (so->bound) {
++		err = -EINVAL;
++		goto out;
++	}
++
+ 	/* do not register frame reception for functional addressing */
+ 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
+ 		do_rx_reg = 0;
+@@ -1154,10 +1159,6 @@ static int isotp_bind(struct socket *soc
+ 		goto out;
  	}
+ 
+-	if (so->bound && addr->can_ifindex == so->ifindex &&
+-	    rx_id == so->rxid && tx_id == so->txid)
+-		goto out;
+-
+ 	dev = dev_get_by_index(net, addr->can_ifindex);
+ 	if (!dev) {
+ 		err = -ENODEV;
+@@ -1184,19 +1185,6 @@ static int isotp_bind(struct socket *soc
+ 
+ 	dev_put(dev);
+ 
+-	if (so->bound && do_rx_reg) {
+-		/* unregister old filter */
+-		if (so->ifindex) {
+-			dev = dev_get_by_index(net, so->ifindex);
+-			if (dev) {
+-				can_rx_unregister(net, dev, so->rxid,
+-						  SINGLE_MASK(so->rxid),
+-						  isotp_rcv, sk);
+-				dev_put(dev);
+-			}
+-		}
+-	}
+-
+ 	/* switch to new settings */
+ 	so->ifindex = ifindex;
+ 	so->rxid = rx_id;
 
 

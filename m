@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D17A5217B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A7D521690
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbiEJN2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S242369AbiEJNPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243069AbiEJNVX (ORCPT
+        with ESMTP id S242311AbiEJNPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE547ACC;
-        Tue, 10 May 2022 06:14:39 -0700 (PDT)
+        Tue, 10 May 2022 09:15:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E963BBCC;
+        Tue, 10 May 2022 06:11:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 47608CE1EE2;
-        Tue, 10 May 2022 13:14:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E762C385C2;
-        Tue, 10 May 2022 13:14:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72CEEB81DA0;
+        Tue, 10 May 2022 13:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BD1C385A6;
+        Tue, 10 May 2022 13:11:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188476;
-        bh=3RK9xplvXFsEAKF5zctZjPsYO9ZyP3rOjYPdHd2dmZc=;
+        s=korg; t=1652188264;
+        bh=OxnQB7/QxrTZahRDC9oFBGORMX0uRlChmyDd5jW8Gq4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0uL73WDExHRnoe/Wk7d1yX6K7HRgPs59kOJxH7uJNSvQNm4WOlLuXonjhtbcoFQYp
-         hn0Etd5Ubol1/zp5b6w5dPe4J2/VviP8dhR1yAsR6ZOlVthJ3/X4MBDQDyPVx45En9
-         sanQzQP+OAn56qlnb8LuFbnTxMcad76/I/rwZ8yk=
+        b=2sBGzvDH8t2qMxrt0hx72zyVQED9xinlleXNpn8tUVwDL8Z1J7HPzcLP8c5QJeNz7
+         f5GCRzadnzHeMq1E85Nh0gzFThPnGBmQIzeUvAuLe65DzlDus+EGUiu4bso36Hq/kH
+         jpBzCF/dltKnoVy1cNQnl8OA1hNvIdSj2x4UwD4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
         Dan Vacura <w36195@motorola.com>, stable <stable@kernel.org>
-Subject: [PATCH 4.14 20/78] usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
+Subject: [PATCH 4.9 16/66] usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
 Date:   Tue, 10 May 2022 15:07:06 +0200
-Message-Id: <20220510130733.128584169@linuxfoundation.org>
+Message-Id: <20220510130730.241763536@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,7 +78,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/gadget/configfs.c
 +++ b/drivers/usb/gadget/configfs.c
-@@ -1411,6 +1411,8 @@ static void configfs_composite_unbind(st
+@@ -1409,6 +1409,8 @@ static void configfs_composite_unbind(st
  	usb_ep_autoconfig_reset(cdev->gadget);
  	spin_lock_irqsave(&gi->spinlock, flags);
  	cdev->gadget = NULL;

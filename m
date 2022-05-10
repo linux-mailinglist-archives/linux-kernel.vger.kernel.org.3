@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B2552255B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DED52255E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbiEJUVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S232924AbiEJUVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiEJUUx (ORCPT
+        with ESMTP id S232317AbiEJUV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:20:53 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF61A20822E
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:20:49 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d22so17739044plr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VPY+BPFQANz3gDy7cqE3RCNN6lWRUXJ8ern2JoTstfU=;
-        b=jXJ6JFzMblllvK795NI3FvQqpQcwPkVl0bVhyMK3o6LmyhiyVnc9pM+SKsWNtbwkrb
-         vXm0gGlSLp7eTZ8a3YevY+oHmXKB8W/ilZrxw5RUlRCGLC2N3HG9SVP/c97aedgjRwhp
-         wWaIxviwceQPsCLv0sWmrBE0Tj9PqDc3LgbWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VPY+BPFQANz3gDy7cqE3RCNN6lWRUXJ8ern2JoTstfU=;
-        b=0yupmZWdfOUYysICp4SixvWlWYLAuWwFgPsMleDI5YJgc6nK9Bx9T2RaHyOs9Vqu33
-         vnjcooikQcGS253Qn/5bhOJARr3aTO+AohErl1y9g+LLzmdqII01aTW1kfyptnY418bS
-         0BeoYnZwIfY7EiqYjx/r5X6vU6+LqHFUCyH3b/0CtsNtY7q8df4DmxjR2RI5edauZsvD
-         BnW3qGMglM6ytaXhwwEtq3NcA1l+aroXJua8G1DWsLjzVossC70gnCz6SmqPqHCyXroD
-         +kendQXHI09UCN6If2pCjE/4BxKdLyqxBPTCvj0f+9jpADJ/Q3JTtdd7qdG1J8MDZy9Q
-         qD+Q==
-X-Gm-Message-State: AOAM530cLfOcQ0otTB5haCFZno9b1nRMHeMmt28S2yMteOQ+22ytNbrO
-        b7aHHIBURvcEjmJpOsWkBJnarg==
-X-Google-Smtp-Source: ABdhPJxDdK9krQAGRnUj2ALxtk0356084bzaUSCApoi5YQd/8+Z41ynrHVmWGvv4Q3NHHnQBRhfzLA==
-X-Received: by 2002:a17:90b:4b01:b0:1dc:7405:dd62 with SMTP id lx1-20020a17090b4b0100b001dc7405dd62mr1604206pjb.160.1652214049398;
-        Tue, 10 May 2022 13:20:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090a644b00b001d95cdb62d4sm2256217pjm.33.2022.05.10.13.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 13:20:48 -0700 (PDT)
-Date:   Tue, 10 May 2022 13:20:48 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] niu: Add "overloaded" struct page union member
-Message-ID: <202205101318.4980180F9@keescook>
-References: <20220509222334.3544344-1-keescook@chromium.org>
- <YnoT+cBTNnPzzg8H@infradead.org>
- <202205100849.58D2C81@keescook>
- <YnqgjVoMDu5v9PNG@casper.infradead.org>
+        Tue, 10 May 2022 16:21:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188ED1B3BB9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:21:26 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1noWM9-00045f-Qa; Tue, 10 May 2022 22:21:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1noWM9-001YX0-QC; Tue, 10 May 2022 22:21:16 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1noWM7-008sln-PZ; Tue, 10 May 2022 22:21:15 +0200
+Date:   Tue, 10 May 2022 22:21:11 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        nfraprado@collabora.com
+Subject: Re: [PATCH 1/2] pwm: pwm-mediatek: Add support for MediaTek Helio
+ X10 MT6795
+Message-ID: <20220510202111.lbdtqr3i6i3m4hmb@pengutronix.de>
+References: <20220503105405.54832-1-angelogioacchino.delregno@collabora.com>
+ <20220503105405.54832-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wdtfek4vpxlvgeau"
 Content-Disposition: inline
-In-Reply-To: <YnqgjVoMDu5v9PNG@casper.infradead.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220503105405.54832-2-angelogioacchino.delregno@collabora.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 06:27:41PM +0100, Matthew Wilcox wrote:
-> On Tue, May 10, 2022 at 08:50:47AM -0700, Kees Cook wrote:
-> > On Tue, May 10, 2022 at 12:27:53AM -0700, Christoph Hellwig wrote:
-> > > On Mon, May 09, 2022 at 03:23:33PM -0700, Kees Cook wrote:
-> > > > The randstruct GCC plugin gets upset when it sees struct addresspace
-> > > > (which is randomized) being assigned to a struct page (which is not
-> > > > randomized):
-> > > 
-> > > Well, the right fix here is to remove this abuse from the driver, not
-> > > to legitimize it as part of a "driver" patch touching a core mm header
-> > 
-> > Right, I didn't expect anyone to like the new "overloaded" member.
-> > Mainly I'd just like to understand how niu _should_ be fixed. Is using
-> > the "private" member the correct thing here?
-> 
-> Well ... no.  We're not entirely set up yet to go to the good answer
-> that means we don't have to touch this driver again, and yet we're also
-> in a situation where we'll need to touch this driver at some point in
-> order to get rid of the way it abuses struct page before we can get to
-> our good place.
-> 
-> The eventual good answer is that we declare a driver-private memdesc
-> variant that has a ->link, ->base ->refcount and ->pfn (maybe it has more
-> than that; I'd have to really understand this driver to be completely
-> certain about what it needs).  Or perhaps there's a better way to handle
-> driver-allocated memory for this kind of networking card that this driver
-> should be converted to use.
-> 
-> I haven't looked into this case deeply enough to have strong thoughts
-> about how we should handle it, both now and in the glorious future.
 
-Okay, in the meantime, I'll just add a casting wrapper with a big
-comment to explain what I understand about it with some pointers back to
-this and prior threads. :)
+--wdtfek4vpxlvgeau
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Tue, May 03, 2022 at 12:54:04PM +0200, AngeloGioacchino Del Regno wrote:
+> The MediaTek Helio X10 MT6795 SoC has 7 PWMs: add a compatible string
+> to use the right match data.
+>=20
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 
--- 
-Kees Cook
+LGTM
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wdtfek4vpxlvgeau
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJ6yTQACgkQwfwUeK3K
+7AnFkgf8CEb9HpPafjms8PISGpb1A+Q2khebLOLn50vUSlGgw0nQa+4pZESMHZyC
+h0hs5fyOboYaGCZ5Lbl2+u9weIDwOo8kWR4juafflr+yrSUmU7/SvUm6whOhwKyM
+4WGSasaDyyaI5Tu5V4AxjG9Uktc7l3LKdG6RsbXmh+pxsYR84faCAztr8fsJ8CnV
+YBJLqFDts+Zv8xO77mQY+b2v6v9cmee6iDc7hNQl9Lcxd2iZ/xsJu89Polf+B6bx
+iChumB+l6opA0uI0qWXBA7/AfZPDg4tGVG824HdpzSGranGnVRVZqWq6a1BY+jtd
+khpkFUchFBNgTRsi7ey7QPBwFLq4gg==
+=UxND
+-----END PGP SIGNATURE-----
+
+--wdtfek4vpxlvgeau--

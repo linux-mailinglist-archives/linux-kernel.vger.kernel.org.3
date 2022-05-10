@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6344A52197B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C44521A88
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244816AbiEJNrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S244668AbiEJN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243905AbiEJNcU (ORCPT
+        with ESMTP id S244927AbiEJNiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F73185C81;
-        Tue, 10 May 2022 06:23:34 -0700 (PDT)
+        Tue, 10 May 2022 09:38:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20B1737B1;
+        Tue, 10 May 2022 06:26:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05241CE1EED;
-        Tue, 10 May 2022 13:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1906CC385A6;
-        Tue, 10 May 2022 13:23:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08D4F6170D;
+        Tue, 10 May 2022 13:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA80C385CB;
+        Tue, 10 May 2022 13:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189011;
-        bh=x1FETPDPkJpjC9YoWTr5LayCUINKYrtnh9VD5X3xMck=;
+        s=korg; t=1652189199;
+        bh=D8r2jFoTEUVlsyCv66uIxzQz4KMltHDjNuYGVD5H6EE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KUZgqiqoPt+QZLu7a9TMadVrq50tJT4Z11FCIDiUNujeTE1wrd7hkm5cExHsv+VqN
-         Jc5F17M3c49XmZ5e+sRuT3JuOAjeGrL63XkDgRPZJa9lAfwP/Tq2MVofYc45XAbyp9
-         we946+GsK/zor7svAh1Y+kuh0dQxxtDUSkcnm0jI=
+        b=gld/VLoWvEY26mu/aoeFOsiyl4oTLHHRN4/zwHm1H6N2dTP93fCMavxUq6s0fcKPy
+         vw2NXWkUv+x2TuO+oqr10es0AY5cc9owj4mjjy58nwJuIBBllZ4dBt/Qq1Y3sovNi8
+         H94O1C+4qWaoqGJ7QUC0DNbUlXIfnSfIteHMgBCs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
-        Philip Yang <philip.yang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 5.4 34/52] drm/amdkfd: Use drm_priv to pass VM from KFD to amdgpu
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.10 44/70] NFSv4: Dont invalidate inode attributes on delegation return
 Date:   Tue, 10 May 2022 15:08:03 +0200
-Message-Id: <20220510130730.850542876@linuxfoundation.org>
+Message-Id: <20220510130734.150568877@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
-References: <20220510130729.852544477@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Kuehling <Felix.Kuehling@amd.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit b40a6ab2cf9213923bf8e821ce7fa7f6a0a26990 upstream.
+commit 00c94ebec5925593c0377b941289224469e72ac7 upstream.
 
-amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu needs the drm_priv to allow mmap
-to access the BO through the corresponding file descriptor. The VM can
-also be extracted from drm_priv, so drm_priv can replace the vm parameter
-in the kfd2kgd interface.
+There is no need to declare attributes such as the ctime, mtime and
+block size invalid when we're just returning a delegation, so it is
+inappropriate to call nfs_post_op_update_inode_force_wcc().
+Instead, just call nfs_refresh_inode() after faking up the change
+attribute. We know that the GETATTR op occurs before the DELEGRETURN, so
+we are safe when doing this.
 
-Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Reviewed-by: Philip Yang <philip.yang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-[This is a partial cherry-pick of the upstream commit.]
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Fixes: 0bc2c9b4dca9 ("NFSv4: Don't discard the attributes returned by asynchronous DELEGRETURN")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ fs/nfs/nfs4proc.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -951,11 +951,15 @@ int amdgpu_amdkfd_gpuvm_acquire_process_
- 					   struct dma_fence **ef)
- {
- 	struct amdgpu_device *adev = get_amdgpu_device(kgd);
--	struct drm_file *drm_priv = filp->private_data;
--	struct amdgpu_fpriv *drv_priv = drm_priv->driver_priv;
--	struct amdgpu_vm *avm = &drv_priv->vm;
-+	struct amdgpu_fpriv *drv_priv;
-+	struct amdgpu_vm *avm;
- 	int ret;
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -369,6 +369,14 @@ static void nfs4_setup_readdir(u64 cooki
+ 	kunmap_atomic(start);
+ }
  
-+	ret = amdgpu_file_to_fpriv(filp, &drv_priv);
-+	if (ret)
-+		return ret;
-+	avm = &drv_priv->vm;
++static void nfs4_fattr_set_prechange(struct nfs_fattr *fattr, u64 version)
++{
++	if (!(fattr->valid & NFS_ATTR_FATTR_PRECHANGE)) {
++		fattr->pre_change_attr = version;
++		fattr->valid |= NFS_ATTR_FATTR_PRECHANGE;
++	}
++}
 +
- 	/* Already a compute VM? */
- 	if (avm->process_info)
- 		return -EINVAL;
+ static void nfs4_test_and_free_stateid(struct nfs_server *server,
+ 		nfs4_stateid *stateid,
+ 		const struct cred *cred)
+@@ -6464,7 +6472,9 @@ static void nfs4_delegreturn_release(voi
+ 		pnfs_roc_release(&data->lr.arg, &data->lr.res,
+ 				 data->res.lr_ret);
+ 	if (inode) {
+-		nfs_post_op_update_inode_force_wcc(inode, &data->fattr);
++		nfs4_fattr_set_prechange(&data->fattr,
++					 inode_peek_iversion_raw(inode));
++		nfs_refresh_inode(inode, &data->fattr);
+ 		nfs_iput_and_deactive(inode);
+ 	}
+ 	kfree(calldata);
 
 

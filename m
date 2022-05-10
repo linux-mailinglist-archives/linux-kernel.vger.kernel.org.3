@@ -2,78 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACFA522675
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC5952267B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 23:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiEJVoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 17:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S230448AbiEJVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 17:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiEJVom (ORCPT
+        with ESMTP id S229475AbiEJVvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 17:44:42 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E549824F0E2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:44:40 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 202so82610pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cRkXCipLYoGVSRY+467ehg8YbVI5Lg2aleUDMTOtglI=;
-        b=gkquX5jr5crJurXv6r1mqypG/v1im8FoW2UmMwNgahqH7DSboWozm0zeWC+m4/oMwh
-         gK42fID95D8RAHLKKBCASyeAlvplf7CA04EIuwb6+5Xh039SeDjsYID/k9ORMcYJHthx
-         O/nO0MfK3kWmDMZ8LxUsQ9lQEKUwrZyNMD+s7JCsYO79fjBSq0d0qaxZXNVaTE+d33KT
-         XD2t927t9Kd/z+WVmTEk5zDDzUXGdovX4ngAweWuS3tqDW0BZiUG+VXSSm3LqFTp4jkt
-         ss9ZUWMAp27gq1ahPjZkuSK3p+WpoCOwAUjs01Zo27+5MSYtW1DVPBLc74b61GOQemNi
-         76OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=cRkXCipLYoGVSRY+467ehg8YbVI5Lg2aleUDMTOtglI=;
-        b=4UZYgPROyZK+wxLUYcQ9cqGuM24TThWtMgkD3PiwviNqFeh92+7uFF0/uLK6s6u4YZ
-         s7X09u65J7yycRAQcBSI73cJHf3FQepyNAh9aTEztHTu0JddirgjF2gUa2b/kU7fSRor
-         mY28W1cB2700a9uTdk9udrcYJsTNrN/Qh0wHruP3yzWgQ2vqkBDtHVXJ6eDeDuvTpFY2
-         1p4MWGawC3PMvsQXpTWmlVSEDczieCKuolND4V74xHO8G0TjY3X5u4GLpysd/QcWS7lu
-         z6R+lFVtwt30uka6oglOHwpW8ciOzxO5MkWWUkNRMp73DRjCS1I58GQRH876OoQFM7V6
-         5tYQ==
-X-Gm-Message-State: AOAM530aQvDAQ2IvrzI7TSkYH+upsGW0Yuh24kAqUtviKnE6WL50myhL
-        3nSssZ0W1tLrlVgio5vqrhs=
-X-Google-Smtp-Source: ABdhPJyqcP+dGUm0MoBmIVRxS1p6FG2rnL9SGbry6JzBovjsPiYSoAwGpXONEDwrBpaDkRsPULHBqQ==
-X-Received: by 2002:a63:88c8:0:b0:3ab:1871:13b4 with SMTP id l191-20020a6388c8000000b003ab187113b4mr18513536pgd.85.1652219080430;
-        Tue, 10 May 2022 14:44:40 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:c98a:65b0:edca:b69a])
-        by smtp.gmail.com with ESMTPSA id n24-20020a056a0007d800b0050dc7628150sm37511pfu.42.2022.05.10.14.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 14:44:40 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 10 May 2022 14:44:38 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        John Dias <joaodias@google.com>,
-        Tim Murray <timmurray@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Martin Liu <liumartin@google.com>
-Subject: Re: [PATCH v3] mm: don't be stuck to rmap lock on reclaim path
-Message-ID: <YnrcxjN9SRgHS05s@google.com>
-References: <20220510171100.48500-1-minchan@kernel.org>
- <Ynqr57CVLPOqwhZa@cmpxchg.org>
+        Tue, 10 May 2022 17:51:43 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C16E517E3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:51:42 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 400D72C046F;
+        Tue, 10 May 2022 21:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652219500;
+        bh=cBvSinLe5Zk/AJFgIIikXUlgXVxVp2m/UQR/YawRuxU=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=bFMk8dFNrZPEJbRJWgXCFnCcN86CNGz36beJqOowRTPNZNDBI8vUJrOiTH/aY7J6X
+         0VL5LWKP7bGZCnyxvfmzpvEvf3ohgXLy3dRFtLwLvG1BBrTeMfD2I2TqJZWg6J+b1R
+         MfTpoVsAGFu9obQmossG7TGxlpoj4J2jtDTWbgJ4l5ele8uaxM0u0pMHtWwIelgXxd
+         bpIsFuOalkDz1g8+yvzQSOfSoOQWsBGtg9jkJ61qfw180203u1IKWsQsX4qURnFm4I
+         4kVsrKcwQGYMgJP6Pt6H0mEcTs5UAIcJgh3by4EqTUBD0vePOOM0am7ZuliMdItDnk
+         G/Zm/PdtxUEzg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627ade6c0001>; Wed, 11 May 2022 09:51:40 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 11 May 2022 09:51:39 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Wed, 11 May 2022 09:51:39 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Topic: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Thread-Index: AQHYX3HqbCVddS0CWEWMkXLyqck2rq0POn2AgAittYA=
+Date:   Tue, 10 May 2022 21:51:39 +0000
+Message-ID: <8f6272ce-0d25-3a1e-f71e-66444a94a2d4@alliedtelesis.co.nz>
+References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
+ <20220504044624.951841-2-chris.packham@alliedtelesis.co.nz>
+ <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
+In-Reply-To: <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F219E25187B3064EA53D5932D5CA8077@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynqr57CVLPOqwhZa@cmpxchg.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=Zpg9Uwi24b-cIoSFnZQA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,49 +89,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 02:16:07PM -0400, Johannes Weiner wrote:
-> Hi Minchan,
-> 
-> The patch looks reasonable to me, but one thing stands out:
-> 
-> On Tue, May 10, 2022 at 10:11:00AM -0700, Minchan Kim wrote:
-> > @@ -1391,6 +1391,10 @@ static enum page_references folio_check_references(struct folio *folio,
-> >  	if (vm_flags & VM_LOCKED)
-> >  		return PAGEREF_ACTIVATE;
-> >  
-> > +	/* page_referenced didn't work due to lock contention */
-> > +	if (referenced_ptes == -1)
-> > +		return PAGEREF_KEEP;
-> > +
-> >  	if (referenced_ptes) {
-> >  		/*
-> >  		 * All mapped folios start out with page table
-> 
-> This means contended inactive pages get rotated.
-> 
-> > @@ -2492,7 +2496,7 @@ static void shrink_active_list(unsigned long nr_to_scan,
-> >  		}
-> >  
-> >  		if (folio_referenced(folio, 0, sc->target_mem_cgroup,
-> > -				     &vm_flags)) {
-> > +				     &vm_flags) > 0) {
-> >  			/*
-> >  			 * Identify referenced, file-backed active pages and
-> >  			 * give them one more trip around the active list. So
-> 
-> This means contended active pages do NOT get rotated.
-> 
-> It's a bit of an arbitrary choice what to do with reclaim candidates
-> for which you can get no reference information, but staying consistent
-> is likely a good idea. My preference would be to just rotate contended
-> pages throughout rather than risk dropping the workingset on the floor.
-> 
-> 		/* Referenced or rmap lock contention: rotate */
-> 		if (folio_referenced() != 0) {
-> 			...
-> 
-> What do you think?
-
-Sure, it's good start before adding more heuristic later.
-
-Thanks for the review. I will post v4.
+DQpPbiA1LzA1LzIyIDIxOjE5LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPj4gKy8gew0K
+Pj4gKwltb2RlbCA9ICJNYXJ2ZWxsIEFDNSBTb0MiOw0KPj4gKwljb21wYXRpYmxlID0gIm1hcnZl
+bGwsYWM1IjsNCj4gTWlzc2luZyBib2FyZCBiaW5kaW5ncyBwYXRjaC4NCj4NCldoZXJlIGRvIHRo
+ZXNlIHVzdWFsbHkgZW5kIHVwPyBJIGNhbid0IHNlZSBhbnkgb2YgdGhlIG90aGVyIE1hcnZlbGwg
+DQpib2FyZHMgaGF2aW5nIGJpbmRpbmdzICh3aGljaCBtaWdodCBiZSB3aHkgeW91J3JlIHRlbGxp
+bmcgbWUgbm90IHRvIGFkZCANCm5ldyBib2FyZHMvU29DcyB3aXRob3V0IGl0KS7CoCBUaGVyZSdz
+IG9uZSBlbnRyeSBpbiANCkRvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9ib2FyZCBi
+dXQgdGhhdCBzZWVtcyBtb3JlIHJlbGF0ZWQgdG8gDQpzb21lIGJvYXJkIHNwZWNpZmljIG1pc2Mg
+ZGV2aWNlcy4=

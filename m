@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2F55222B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623E45222C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348233AbiEJReP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S1348295AbiEJRfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245083AbiEJReN (ORCPT
+        with ESMTP id S239114AbiEJRfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:34:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFFB2BF332;
-        Tue, 10 May 2022 10:30:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12A84B81E74;
-        Tue, 10 May 2022 17:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A9A39C385C9;
-        Tue, 10 May 2022 17:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652203812;
-        bh=ZqJI+Ky/W416jqB8rjrXqQ8wZtVnl7Mpn4gSi6p96W8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YLwSVKC4MnOlb+ZejszvnwwO8SI3BeZ43DUrI93rA8VY9B73CHR5d9hqvTWxKDHt4
-         IAT4mt0vVOYe7A/z+0MdHVYnyULKDYS6c05yzaK68okZYCEDKS/kcwxGoh6gLDj9uR
-         Y6GfJHYmfPIhng7bgH0JMF5onGwyiC8JumF8DBVVESLSohJ1QgiM3ql/djXO9tqzL6
-         LPgnMc2Vr/pOpuIFZxHT+YUyHRSp1UR3TbymLEQBXuIv+ZqqJqrME+Bwf1hPRlgq9t
-         8oukD6VQKewm0TwMz+xOOdauCVvxije+NRVeEnretlxee1w+43PYt09z69ZjCk7TXL
-         uIiHHvxJajlPg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C37EF03876;
-        Tue, 10 May 2022 17:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 May 2022 13:35:30 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECCC40E5B
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:31:20 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id hf18so14095993qtb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0iY23zFExaBL60617nuIY2YUPps8RPXgyzTZFJOKDcA=;
+        b=g6+UAI3/t5qZDSi024NMaSQW9L1woLMbAa8zYqN9d6WnrslvlGDfqNkkgLr3snUKtq
+         5d9SMcLKaL/sqsEKckXJORH48a4ImkyIW/S4Kj6a5dEvU55+H4/0k2lIE2zwLBATCRud
+         WexDhY4FRVJWO8Kk4gnubeld01Mz4LyUTAJTySPyaHuxIB2BXBwNWvnQanz01cz1wi2K
+         zSzTFqibTRMbbCCK7FWBy0jVq+BU3pbfY/DYDnyhZ4GZTL1IRSb2d7ub5JyaorbYSgEP
+         nJv5P65erTue4oIdoxVge8N8ts/BSe+JeEzEbvKDJCipWqe/0FoGcYZ6oKpK8ap+NF/k
+         5kZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0iY23zFExaBL60617nuIY2YUPps8RPXgyzTZFJOKDcA=;
+        b=s1Wz8ERIvu5RcMf08SiwfRI7uFOND/J/aoYdn8m5ZqBhmX7C6FTTKIo52IHjirXmwY
+         Xtf+LUD6+t/NkiH+DO6aCRh6ykJXYG8qjRIoYZwwZcYMakgFZ66ylCu3yYAKe6MdP4FH
+         zIFHyXuA/29LP547H3766OFULbZhgKBT77Kz6ym7hKgqS+F97kvfnP/sD2bVR/e9vQEU
+         EzuQXWdHz9I0flc2AZkp8GRTnRN5d1ZfoZnkW3TYbYDYkRQpcR8TEy/z78wNJd2m2Vt8
+         rILUCV5SgVwEXLOrAoFpPPEaMPg31cJ1d5c3OvAbbSXHdZpvTqpci4esNje36ZAtyW2w
+         NM/g==
+X-Gm-Message-State: AOAM532lqaehN6SoqBi6Qx8N8VQg73Pf7spcz/KqsQGZhpH+Yf5UAKvi
+        DscKTlwCOjjrv8fwpN7SS7x7DootkOCo2Q==
+X-Google-Smtp-Source: ABdhPJzIphDLwXNNwnWOU9HcLMnKXbbHnEPAd9b4DF6Hhn7oxdik8+xWMeo59u5F3o8KH4j873bs1Q==
+X-Received: by 2002:a05:622a:1713:b0:2f3:dc97:eb24 with SMTP id h19-20020a05622a171300b002f3dc97eb24mr9109511qtk.547.1652203880008;
+        Tue, 10 May 2022 10:31:20 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id i6-20020a05620a150600b0069ff8ebec64sm8490411qkk.103.2022.05.10.10.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 10:31:19 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, schnelle@linux.ibm.com,
+        David.Laight@ACULAB.COM, macro@orcam.me.uk,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH 0/8] Utilize iomap interface for PC104 and friends
+Date:   Tue, 10 May 2022 13:30:52 -0400
+Message-Id: <cover.1652201921.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Modify some code in sysctl_net_core.c
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165220381256.21854.15122506494053007856.git-patchwork-notify@kernel.org>
-Date:   Tue, 10 May 2022 17:30:12 +0000
-References: <1652153703-22729-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1652153703-22729-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        lixuefeng@loongson.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+PC104 cards and similar devices do not need to access I/O ports directly
+via inb()/outb() and can instead use the more typical I/O memory
+ioread8()/iowrite8() accessor calls by first calling ioport_map(). This
+patchset converts the relevant PC104/ISA card drivers to do such. With
+these drivers now utilizing I/O memory accessor calls, work can be done
+to consolidate some similar devices (e.g. 104-idio-16, pci-idio-16,
+etc.) into a unified driver in a future patchset.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This patchset spawned from a suggestion made in another thread titled
+"gpio: add HAS_IOPORT dependencies":
+https://lore.kernel.org/all/c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com/
 
-On Tue, 10 May 2022 11:35:01 +0800 you wrote:
-> Tiezhu Yang (2):
->   net: sysctl: Use SYSCTL_TWO instead of &two
->   bpf: Print some info if disable bpf_jit_enable failed
-> 
->  net/core/sysctl_net_core.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+William Breathitt Gray (8):
+  counter: 104-quad-8: Utilize iomap interface
+  gpio: 104-dio-48e: Utilize iomap interface
+  gpio: 104-idi-48: Utilize iomap interface
+  gpio: 104-idio-16: Utilize iomap interface
+  gpio: gpio-mm: Utilize iomap interface
+  gpio: ws16c48: Utilize iomap interface
+  iio: adc: stx104: Utilize iomap interface
+  iio: dac: cio-dac: Utilize iomap interface
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] net: sysctl: Use SYSCTL_TWO instead of &two
-    https://git.kernel.org/bpf/bpf-next/c/f922c8972fb5
-  - [bpf-next,v2,2/2] bpf: Print some info if disable bpf_jit_enable failed
-    https://git.kernel.org/bpf/bpf-next/c/174efa781165
+ drivers/counter/104-quad-8.c    | 169 +++++++++++++++++---------------
+ drivers/gpio/gpio-104-dio-48e.c |  63 ++++++------
+ drivers/gpio/gpio-104-idi-48.c  |  27 ++---
+ drivers/gpio/gpio-104-idio-16.c |  33 ++++---
+ drivers/gpio/gpio-gpio-mm.c     |  43 ++++----
+ drivers/gpio/gpio-ws16c48.c     |  65 ++++++------
+ drivers/iio/adc/stx104.c        |  56 ++++++-----
+ drivers/iio/dac/cio-dac.c       |  14 +--
+ 8 files changed, 248 insertions(+), 222 deletions(-)
 
-You are awesome, thank you!
+
+base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.3
 

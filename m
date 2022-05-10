@@ -2,151 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5D752258D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBD9522592
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiEJUdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S231750AbiEJUfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234304AbiEJUcz (ORCPT
+        with ESMTP id S229680AbiEJUfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:32:55 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B68B255089;
-        Tue, 10 May 2022 13:32:50 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id w17-20020a17090a529100b001db302efed6so136188pjh.4;
-        Tue, 10 May 2022 13:32:50 -0700 (PDT)
+        Tue, 10 May 2022 16:35:00 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C06E166898;
+        Tue, 10 May 2022 13:34:59 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2fb965b34easo693977b3.1;
+        Tue, 10 May 2022 13:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m2zZRYMCn2b2gDLpYI5z0secDrQJa1a/mRP4v8GDdaI=;
-        b=WFhOORKCopujXevIEId5Pou5+f06pmdKjIe9jKkQl6fsJfPMy2ZxbNmrBw/2Yml9o9
-         MoS9B2R084AHZT40mOyNfmDmn+do82XYuo+DrjNwUZHbtLDt+HC6/KCbTs9BsGY6xLZI
-         02uFB4QsRjxxaDGTmrwBMMkq6RjAyY0qzhY4N4Mw5ltluWRLsQzPevqYMNIuYFXmQLsh
-         YWBRKj8FxJM0bvYtfLdWexGP2Bqn9TXxRkyBrizdT9yvs5VQeu45FQcNdzUG/IQ7j7qe
-         vdGuWvwsWudDK5+hkjCfIuu6aksOU7DDtw5iskC+jRcQQO/3xQzqGFyK7G+O0uHJ33/N
-         jaIg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mOqaTjkCFCgM5f1lVX6xovUQRBRtPNlk9IhOikeuQsU=;
+        b=e6Qj1JXV1RcOtmCFTlKdcpj8Zodefpq/nyiOWt8wTkWgF5SOxB71c47flNRRwLvibw
+         gLegr683+PLeeR/wm1o6QcaaCCmwk5Z1LQ8U+ZMAXx9VuddJ2WH4cMXa7Ds46WRXfwia
+         ycFnXZnxh01/ZdxxO5l/prRV5d2vA9iCynslpQixgPNaElSrwdVHE7foCEJOGSXNz2TN
+         4cBKg6qMce29ASHzF9L37tCJPMsm+wGxM8DJqiDNOPXKvYzJa+8KAxQofqgklV0hlTnz
+         OI31hpSwTLtV8S6or51Q0CvlAopFHDbA9qq/UN//1C8T3l+33+BV2t7S+WqO94bnv6B9
+         ErWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m2zZRYMCn2b2gDLpYI5z0secDrQJa1a/mRP4v8GDdaI=;
-        b=nYihOBs5PHcxP3gjWk/Bwyil6FzW8Ipv+VnxV6azvyku6gwFNfeV8ulNOmdOMEmpxW
-         IKLVLphxXzyIGuTEhUpdGCFJPsX+9VJr1fBxhRKo5cvpAha7U09y6ZfGv9LbGDRVJcDi
-         F/L2USaLs7PJRGEbuRIAqq75Kqnev5CIjDS7n/dgKdgHpUtzsVgnibMsiuaDiVbpM8Ik
-         okv3OT5ZZU9Lts/5uB4VBOfnP3Sux4Byt0QGfOysSafNm36ibkIbOMwNZAYHzgCt93cu
-         oMNmOdhq60RaLVP/XbPdD97ZAMIZ9QpsE7qmnYrWHorb9PMS9jKRIw520oqi78OK5xCS
-         cnoA==
-X-Gm-Message-State: AOAM532WlywxE2be9cQv4eysDE9/7FSpL1+GZfuyS/qnBtipVIhuE0Kt
-        yF0QG/K6NKmrFg7yju8rys4=
-X-Google-Smtp-Source: ABdhPJyF3jtsrDiJCOCcE0BCnoWu8584chaVsDcym+NHrrec7AOOrK4v54yoEsWhmn+5HTcoIBdieA==
-X-Received: by 2002:a17:903:2312:b0:15e:a6c8:a313 with SMTP id d18-20020a170903231200b0015ea6c8a313mr22095118plh.122.1652214770262;
-        Tue, 10 May 2022 13:32:50 -0700 (PDT)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id v17-20020a1709028d9100b0015e8d4eb1d4sm58898plo.30.2022.05.10.13.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 13:32:49 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, songliubraving@fb.com, riel@surriel.com,
-        willy@infradead.org, ziy@nvidia.com, tytso@mit.edu,
-        akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v4 PATCH 8/8] mm: mmap: register suitable readonly file vmas for khugepaged
-Date:   Tue, 10 May 2022 13:32:22 -0700
-Message-Id: <20220510203222.24246-9-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20220510203222.24246-1-shy828301@gmail.com>
-References: <20220510203222.24246-1-shy828301@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mOqaTjkCFCgM5f1lVX6xovUQRBRtPNlk9IhOikeuQsU=;
+        b=6QgVHfOBpZB9cnOlSDit+dTueXYOjW+PYbl1a0L+ZDSCAgLmJEKxpE2pmZ7gr0qHjz
+         TDmAsEQTAwO0/FTF0A5+ZdEcMCcA+1P74FW3fbJTwu/Vs38tMnX19iSDFsRheikIanzR
+         aae1DckCmfeSZ3t0ixupjB+ySOdoohHqBtEKRDGfARdvgL+FVpTl5kMs9LGHGtK7CyDU
+         kZuCll+HAqwm43c+dVB3E+eU2hMNF0y8bulQzW2kromGdUIXsaR9FQvJN0UHR3e1xMPN
+         7z1XpH6N7ryMUHFQ+nAi1ftZo/WHcaL7pRI1og25Yiv266VZEi0bE9vkSKjNkl/0APdS
+         wxrQ==
+X-Gm-Message-State: AOAM530ynckeutcyQBbzxUEUHc14K0VD9CvTPvjiiTM9j8QSUnK0JxXb
+        zBNMfhJcTfraW+H38dpvprWkCRLXkcmadFi6nFo=
+X-Google-Smtp-Source: ABdhPJxLli407szPqhh4GzJpHiOoYmJ6y/3dUelcbAu8IjmlU1gPxx1E561uKHvq/mCxCVbx+FQbRIf6D5B6B98NjA4=
+X-Received: by 2002:a81:2006:0:b0:2f8:1e04:5e56 with SMTP id
+ g6-20020a812006000000b002f81e045e56mr21996707ywg.39.1652214897574; Tue, 10
+ May 2022 13:34:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 10 May 2022 21:34:21 +0100
+Message-ID: <CADVatmOK41UB0dNQim7h5LwL3DaG4RWQ8zMge9WKn18c_jJa=w@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/88] 4.19.242-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The readonly FS THP relies on khugepaged to collapse THP for suitable
-vmas.  But the behavior is inconsistent for "always" mode (https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/).
+Hi Greg,
 
-The "always" mode means THP allocation should be tried all the time and
-khugepaged should try to collapse THP all the time. Of course the
-allocation and collapse may fail due to other factors and conditions.
+On Tue, May 10, 2022 at 2:18 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.242 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
 
-Currently file THP may not be collapsed by khugepaged even though all
-the conditions are met. That does break the semantics of "always" mode.
+Just some initial report for you,
 
-So make sure readonly FS vmas are registered to khugepaged to fix the
-break.
+I just moved to gcc-12 and many mips builds are failing with errors like:
+arch/mips/lantiq/prom.c: In function 'plat_mem_setup':
+arch/mips/lantiq/prom.c:82:30: error: comparison between two arrays
+[-Werror=array-compare]
+   82 |         else if (__dtb_start != __dtb_end)
 
-Registering suitable vmas in common mmap path, that could cover both
-readonly FS vmas and shmem vmas, so removed the khugepaged calls in
-shmem.c.
+It will need d422c6c0644b ("MIPS: Use address-of operator on section
+symbols")  for all branches upto v5.10-stable.
 
-Still need to keep the khugepaged call in vma_merge() since vma_merge()
-is called in a lot of places, for example, madvise, mprotect, etc.
 
-Reported-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: Vlastmil Babka <vbabka@suse.cz>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- mm/mmap.c  | 6 ++++++
- mm/shmem.c | 4 ----
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 34ff1600426c..6d7a6c7b50bb 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2745,6 +2745,12 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		i_mmap_unlock_write(vma->vm_file->f_mapping);
- 	}
- 
-+	/*
-+	 * vma_merge() calls khugepaged_enter_vma() either, the below
-+	 * call covers the non-merge case.
-+	 */
-+	khugepaged_enter_vma(vma, vma->vm_flags);
-+
- 	/* Once vma denies write, undo our temporary denial count */
- unmap_writable:
- 	if (file && vm_flags & VM_SHARED)
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 89f6f4fec3f9..67a3f3b05fb2 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -34,7 +34,6 @@
- #include <linux/export.h>
- #include <linux/swap.h>
- #include <linux/uio.h>
--#include <linux/khugepaged.h>
- #include <linux/hugetlb.h>
- #include <linux/fs_parser.h>
- #include <linux/swapfile.h>
-@@ -2232,7 +2231,6 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
- 
- 	file_accessed(file);
- 	vma->vm_ops = &shmem_vm_ops;
--	khugepaged_enter_vma(vma, vma->vm_flags);
- 	return 0;
- }
- 
-@@ -4133,8 +4131,6 @@ int shmem_zero_setup(struct vm_area_struct *vma)
- 	vma->vm_file = file;
- 	vma->vm_ops = &shmem_vm_ops;
- 
--	khugepaged_enter_vma(vma, vma->vm_flags);
--
- 	return 0;
- }
- 
 -- 
-2.26.3
-
+Regards
+Sudip

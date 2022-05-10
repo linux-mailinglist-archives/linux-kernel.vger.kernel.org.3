@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D798A521BCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9F3521C0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343961AbiEJOUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S245281AbiEJO2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiEJNrP (ORCPT
+        with ESMTP id S245384AbiEJN5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A946562CE7;
-        Tue, 10 May 2022 06:34:41 -0700 (PDT)
+        Tue, 10 May 2022 09:57:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA50BA99A;
+        Tue, 10 May 2022 06:39:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ACB4B81D24;
-        Tue, 10 May 2022 13:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBA1C385A6;
-        Tue, 10 May 2022 13:34:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2FC9615E9;
+        Tue, 10 May 2022 13:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28F3C385A6;
+        Tue, 10 May 2022 13:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189679;
-        bh=uXVUgdg7ZHr2bztvi9Su39/YGXsR1PEpjkKu/jWDzMA=;
+        s=korg; t=1652189955;
+        bh=Npll0bIzELg7Cimq0/UJWbziWMNdzG1D97DZlEZJQ9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y9OgO4gtHOPnQNbZ1tLKAMcEi5TX9u02j1ErA5Ml3Xgt8efpp1SdjFJHjTtF7Zie8
-         I/8wWpX81kycpBZez2Kimg0oD3EI7VB9hsPZxMn0oMd/f9SxcLeP3Qp4uAJcJ7Sr7k
-         zBbHGLasBQIgYS2X6h544IznQ4vVqBdVoyxZqtV0=
+        b=YNPHuRS+t372bNTfwy4zOjxVLZ8zFoE5/0Z2FXbxZ/QpC72NhgruVcTqF0Tmzbk44
+         sO5+vX0bHG2GqIPepGobegzw8lzPLTn/96WmCyQtW4/IjmJaUNJB80treqwBlRZLdN
+         cLFj25D3SRCqMgdsTR7oDuBRQJFGsH6IpYFfPeu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 088/135] fbdev: Make fb_release() return -ENODEV if fbdev was unregistered
+        stable@vger.kernel.org,
+        Tatyana Nikolova <tatyana.e.nikolova@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.17 080/140] RDMA/irdma: Flush iWARP QP if modified to ERR from RTR state
 Date:   Tue, 10 May 2022 15:07:50 +0200
-Message-Id: <20220510130742.935517350@linuxfoundation.org>
+Message-Id: <20220510130743.901483246@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
 
-[ Upstream commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a ]
+commit 7b8943b821bafab492f43aafbd006b57c6b65845 upstream.
 
-A reference to the framebuffer device struct fb_info is stored in the file
-private data, but this reference could no longer be valid and must not be
-accessed directly. Instead, the file_fb_info() accessor function must be
-used since it does sanity checking to make sure that the fb_info is valid.
+When connection establishment fails in iWARP mode, an app can drain the
+QPs and hang because flush isn't issued when the QP is modified from RTR
+state to error. Issue a flush in this case using function
+irdma_cm_disconn().
 
-This can happen for example if the registered framebuffer device is for a
-driver that just uses a framebuffer provided by the system firmware. In
-that case, the fbdev core would unregister the framebuffer device when a
-real video driver is probed and ask to remove conflicting framebuffers.
+Update irdma_cm_disconn() to do flush when cm_id is NULL, which is the
+case when the QP is in RTR state and there is an error in the connection
+establishment.
 
-The bug has been present for a long time but commit 27599aacbaef ("fbdev:
-Hot-unplug firmware fb devices on forced removal") unmasked it since the
-fbdev core started unregistering the framebuffers' devices associated.
-
-Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
-Reported-by: Maxime Ripard <maxime@cerno.tech>
-Reported-by: Junxiao Chang <junxiao.chang@intel.com>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220502135014.377945-1-javierm@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
+Link: https://lore.kernel.org/r/20220425181703.1634-2-shiraz.saleem@intel.com
+Signed-off-by: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbmem.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/infiniband/hw/irdma/cm.c    |   16 +++++-----------
+ drivers/infiniband/hw/irdma/verbs.c |    4 ++--
+ 2 files changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 0371ad233fdf..8e38a7a5cf2f 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1436,7 +1436,10 @@ fb_release(struct inode *inode, struct file *file)
- __acquires(&info->lock)
- __releases(&info->lock)
- {
--	struct fb_info * const info = file->private_data;
-+	struct fb_info * const info = file_fb_info(file);
-+
-+	if (!info)
-+		return -ENODEV;
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -3465,12 +3465,6 @@ static void irdma_cm_disconn_true(struct
+ 	}
  
- 	lock_fb_info(info);
- 	if (info->fbops->fb_release)
--- 
-2.35.1
-
+ 	cm_id = iwqp->cm_id;
+-	/* make sure we havent already closed this connection */
+-	if (!cm_id) {
+-		spin_unlock_irqrestore(&iwqp->lock, flags);
+-		return;
+-	}
+-
+ 	original_hw_tcp_state = iwqp->hw_tcp_state;
+ 	original_ibqp_state = iwqp->ibqp_state;
+ 	last_ae = iwqp->last_aeq;
+@@ -3492,11 +3486,11 @@ static void irdma_cm_disconn_true(struct
+ 			disconn_status = -ECONNRESET;
+ 	}
+ 
+-	if ((original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
+-	     original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
+-	     last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
+-	     last_ae == IRDMA_AE_BAD_CLOSE ||
+-	     last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset)) {
++	if (original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
++	    original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
++	    last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
++	    last_ae == IRDMA_AE_BAD_CLOSE ||
++	    last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset || !cm_id) {
+ 		issue_close = 1;
+ 		iwqp->cm_id = NULL;
+ 		qp->term_flags = 0;
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -1620,13 +1620,13 @@ int irdma_modify_qp(struct ib_qp *ibqp,
+ 
+ 	if (issue_modify_qp && iwqp->ibqp_state > IB_QPS_RTS) {
+ 		if (dont_wait) {
+-			if (iwqp->cm_id && iwqp->hw_tcp_state) {
++			if (iwqp->hw_tcp_state) {
+ 				spin_lock_irqsave(&iwqp->lock, flags);
+ 				iwqp->hw_tcp_state = IRDMA_TCP_STATE_CLOSED;
+ 				iwqp->last_aeq = IRDMA_AE_RESET_SENT;
+ 				spin_unlock_irqrestore(&iwqp->lock, flags);
+-				irdma_cm_disconn(iwqp);
+ 			}
++			irdma_cm_disconn(iwqp);
+ 		} else {
+ 			int close_timer_started;
+ 
 
 

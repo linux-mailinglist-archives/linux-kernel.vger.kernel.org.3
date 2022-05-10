@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E95520D31
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64A3520D37
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiEJF0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 01:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S236727AbiEJFet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 01:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiEJF0i (ORCPT
+        with ESMTP id S234605AbiEJFep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 01:26:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8BBE24313A
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 22:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652160160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dSBUCgbnrXyS4xiqIulcu9NB35K8gsqks7zGiCMctnI=;
-        b=eMvvOnxZVju0Qn/r4vabodhWw/ZaQUWPlheooLgW4Uq1uxgnqxIOgToaP+fJm2ivnrSVaw
-        bKpcOF7G3sr9Q7yZXi/KiFROxmY5k3Xlopim1Pot1sZ7wC0vJvexaa1vro+iggkJ8qzTDi
-        EF6obd0htx4l9Ck1LEbEGT84OgYHLpE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-IYrWemIDNhe_Nvw0FaHRNw-1; Tue, 10 May 2022 01:22:39 -0400
-X-MC-Unique: IYrWemIDNhe_Nvw0FaHRNw-1
-Received: by mail-wr1-f71.google.com with SMTP id l7-20020adfa387000000b0020acc61dbaeso6622495wrb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 22:22:39 -0700 (PDT)
+        Tue, 10 May 2022 01:34:45 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF63B3ED11
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 22:30:48 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n18so15815355plg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 22:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mZBTRCetz4f8JjwfC8Y2BGBpMlfsgeXFFqeHVV3ckOA=;
+        b=jw/srrS0ZfUDJ8keMulrQPjAw7MT4o+47nOXcHWUxrKOxQL4O5nQUr8Kq49LQ0Go5D
+         GrF0x3TZyChuMYBM+dernNDY1QslDGXEUP4tf3snZB+mX21Uo52ie19mIBalAUtYUg3M
+         qhweROzoXjmE6g2BeBbrhYwjGoE/1KMVDw9p9WnfJ+66cqDUbDLFO0F+n/6+fJHuWotA
+         z1tLeE/ziJT0rDUi/yB9NEIKjB+Mst4G6oQatN7f3fjAjdLqqN2Yq/ieWMyUntP4pOoj
+         d8zPL+Mg+sQd2L3/rEbvDTc84woLxjljrLXTFFSYSeBRC//k1HtKA5sd7BqbqNgmZ2wR
+         Tkng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dSBUCgbnrXyS4xiqIulcu9NB35K8gsqks7zGiCMctnI=;
-        b=6CMSH9B1RvH31Ek0WIBIH8XzdOwNXtr6IZRycJEtsOK+Eu7/7zYPLeKZ5m+wp21ei2
-         Z/hO4Lf89cGhr92ObGrFnRjulwUkzvmauCiPZleTUUNLNm8sVcN6jb4qziiMzhYWw+Mt
-         QecpEVeokxEdVxtK20qnZRZvHpojfKkAlHagimFvrCeBgWoj8bDdb04RV1IVlQu4O40J
-         2Ckp3hhgErxTMD2am8mwGDx16UuK7Ximkz5O+dDc88L/sDIALLS26hXz5LQSFsjUPmA3
-         7pBLqxwJtJbr/BhYdRNmD/wbC3fqH+X4UbEKnnE+xMak1kxfDfqeVKslmcuZEUI/OZ7X
-         aAyg==
-X-Gm-Message-State: AOAM530kkSVBRkGCIpPSGObvAPSy0xUW7RmjOVBL+YQPo0yxFcYwPaU9
-        lhRkd+sfDb5VcLZ+Njyh9DEMlkoWVP2aTrscj9x41XT+w11hmyaRc5B0ohzti4cv+7DzsY4PTuH
-        CbB9yzfNd9NB2Rw3xQylX5ZBo
-X-Received: by 2002:a05:600c:378b:b0:394:3894:3a65 with SMTP id o11-20020a05600c378b00b0039438943a65mr19610050wmr.18.1652160158269;
-        Mon, 09 May 2022 22:22:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwhdbrn6t2cTRanVgLinK3hRXX7cC5Jz0nyau26pq9cmJz/uWA/9EYU3xUh3J1fN8kX9UjBNA==
-X-Received: by 2002:a05:600c:378b:b0:394:3894:3a65 with SMTP id o11-20020a05600c378b00b0039438943a65mr19610035wmr.18.1652160158047;
-        Mon, 09 May 2022 22:22:38 -0700 (PDT)
-Received: from redhat.com ([2.55.130.230])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056000100f00b0020c5253d8d9sm12974968wrx.37.2022.05.09.22.22.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mZBTRCetz4f8JjwfC8Y2BGBpMlfsgeXFFqeHVV3ckOA=;
+        b=8Et4mFxGBkCe3juOG12N8AlH2AsHae5Y2QR7ocJnYpwD7e2EmNAc0jzMa5P+fkqQQ7
+         IA91mKSjHBYX1j+07glUDFJH4e/9gyW+bMv5apaI1B2DpU4rADfD6Ej9Ur45O1sgoChI
+         7nbj47+vFJOvqAqDFcW95Vjbh37gWC+mCgGgVa4zGCsA+sKuNlKKIW2PziD1Ib/pQvIg
+         9C9A1vFv+1z+/bDR63UTCKa9Te6S8NCe0BIJW8n9W+2nohZj74YBGBKb0HyPX9qIo3Ce
+         Ccx2SfVLBMgKYYpyFw3Sj83AnBHt2Fp9J3RwJtr1iZ7YwirG5/K84sDm5J8kIMdelo3B
+         ehsw==
+X-Gm-Message-State: AOAM531xlPY7ibj7Mosj5FLtSf+W1Sq/ybhuXM0tTznSryMawwPI0Pzs
+        LZj4BDfl9/rvpE2N/KDfMQ==
+X-Google-Smtp-Source: ABdhPJww23i8t0fb9Ibrlq2hy+Be5xXcM/Aqi2CmI/X1KigvrQ83dU1sRY+YbgPQjrmP6cYYQBxZ2g==
+X-Received: by 2002:a17:902:e5c7:b0:15e:9bba:d4dc with SMTP id u7-20020a170902e5c700b0015e9bbad4dcmr18989466plf.95.1652160648124;
+        Mon, 09 May 2022 22:30:48 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id 205-20020a6219d6000000b0050dc762814bsm9676527pfz.37.2022.05.09.22.30.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 22:22:37 -0700 (PDT)
-Date:   Tue, 10 May 2022 01:22:34 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     jasowang@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_net: Remove unused case in virtio_skb_set_hash()
-Message-ID: <20220510012221-mutt-send-email-mst@kernel.org>
-References: <20220509131432.16568-1-tangbin@cmss.chinamobile.com>
+        Mon, 09 May 2022 22:30:47 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v2] ASoC: tlv320adcx140: Register a callback to disable the regulator_disable
+Date:   Tue, 10 May 2022 13:30:31 +0800
+Message-Id: <20220510053031.1685337-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509131432.16568-1-tangbin@cmss.chinamobile.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:14:32PM +0800, Tang Bin wrote:
-> In this function, "VIRTIO_NET_HASH_REPORT_NONE" is included
-> in "default", so it canbe removed.
-> 
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+The driver should register a callback that will deal with the disabling
+when it fails to probe.
 
-What's the point of this?
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+Changes in v2:
+    - Generate the patch based on the latest source tree
+---
+ sound/soc/codecs/tlv320adcx140.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-> ---
->  drivers/net/virtio_net.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 87838cbe3..b3e5d8637 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1172,7 +1172,6 @@ static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
->  	case VIRTIO_NET_HASH_REPORT_IPv6_EX:
->  		rss_hash_type = PKT_HASH_TYPE_L3;
->  		break;
-> -	case VIRTIO_NET_HASH_REPORT_NONE:
->  	default:
->  		rss_hash_type = PKT_HASH_TYPE_NONE;
->  	}
-> -- 
-> 2.20.1.windows.1
-> 
-> 
+diff --git a/sound/soc/codecs/tlv320adcx140.c b/sound/soc/codecs/tlv320adcx140.c
+index 0b06fbb14171..b55f0b836932 100644
+--- a/sound/soc/codecs/tlv320adcx140.c
++++ b/sound/soc/codecs/tlv320adcx140.c
+@@ -1083,6 +1083,13 @@ static const struct of_device_id tlv320adcx140_of_match[] = {
+ MODULE_DEVICE_TABLE(of, tlv320adcx140_of_match);
+ #endif
+ 
++static void adcx140_disable_regulator(void *arg)
++{
++	struct adcx140_priv *adcx140 = arg;
++
++	regulator_disable(adcx140->supply_areg);
++}
++
+ static int adcx140_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct adcx140_priv *adcx140;
+@@ -1112,6 +1119,10 @@ static int adcx140_i2c_probe(struct i2c_client *i2c)
+ 			dev_err(adcx140->dev, "Failed to enable areg\n");
+ 			return ret;
+ 		}
++
++		ret = devm_add_action_or_reset(&i2c->dev, adcx140_disable_regulator, adcx140);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	adcx140->regmap = devm_regmap_init_i2c(i2c, &adcx140_i2c_regmap);
+-- 
+2.25.1
 

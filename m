@@ -2,132 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1AD522145
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E316522148
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347435AbiEJQfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S1347449AbiEJQge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347410AbiEJQfm (ORCPT
+        with ESMTP id S1347450AbiEJQgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:35:42 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C144D61A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:31:44 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1780267wmn.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:31:44 -0700 (PDT)
+        Tue, 10 May 2022 12:36:03 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CD4F455
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso185921697b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mWGzBUsWBBDH/P677svrWdBEwqX8mcCwwVWbeqZWyLM=;
-        b=mp+dUgzLD4/aCLY9HUnigMrWJJnPCtVY67VICGXnZi/Ibm1aI1RupWH/WFm4Lg3DJc
-         RHYE3K/zWkzGzTb8icJxuI3AmVLYGdHmc2Tsz01br4rDumBHHB7NU4wwJJeuCTjpGBRn
-         Nc9cKW2K1z+tZC/9zPq2EZMm1DmD0HqLGz/K4PM5Wuc0iP5RlnzGg/KtjsBo92nP3Mbk
-         YTlR52T2RPBol7QG5IrBEmxdc2rk8APC9ILl8VPnqJRu+johonHlBafRa5R8NTv7bkDx
-         Ev98I0OgfHTQ4J2Sl3E4B+P6BwRATwJhRcHISuWvL9xe2LloKFDByHLMbA9IloQNDRRp
-         TM0Q==
+        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
+        b=S93KyGQn2wdSML11sOCTMuFkKrJFU5aOaCEo6hMoFsAJapfw/z68o2XJdecid4v+1w
+         5imt+0Tx2VA5Vu0BuP+ng9175P6tfMna5xwMriqyMcXBC32q4QI/s621h3BBgi6KDzQ/
+         /mQP6iTHWSiLU05VebTJQUvcyuU6PXOilhDXPEdxHnmozF0thna7eLKi30v72QlorLwf
+         yPSDt66K84FKyGuXD21ARYWgDIwrbqtGdsAPXhF+f5BYkS98SXfMzv6eHtmi8Ufq/HLP
+         TE++Ad09hh94UwED/ms3PenfmiGwBKBz78O+UiOdC1lROufFPAfZ3ZnlrVlCIlyg5IUl
+         uIXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mWGzBUsWBBDH/P677svrWdBEwqX8mcCwwVWbeqZWyLM=;
-        b=bFxi85mQc/EAyiXtmK2viPNZ3fizma/6pfM2i/cm31rMRbdLO+eWeitKVzlUKhH0r8
-         TY0YuyZqtxmQ0MPmM8pNf6cjEyMqYU2dIrzNP7zmc9lUeHHQ961LHm+3pUnP0RHCs77a
-         T+gqj3HiWJPpt/elYjPOWgfeVlwl3SjZKDl65lS9/BmySSJR2Yc2ftsrvhnxVk8ghoLK
-         AzVDr8tG4TfZFFSsQc5vzaUVLheuBhWVHorxlqYWvY9J5e1Cxq5gLUxWWaQgcGS61FdI
-         2HV66JVPKwd7b+u4FbHTyus9GpSilm/jBxGfTna4xgvkEo2dr4/OxJfWBWH3pds3Pq83
-         I/7g==
-X-Gm-Message-State: AOAM530cfQg/HNN7BweFTDKFP8JOzzA35uyFMEYo1lR1TR1u0ieBDokN
-        0ilL+Aiq+Fz36ZVPe/a1s2QV9YFD5GW+CFHMMuckAA==
-X-Google-Smtp-Source: ABdhPJzQtKdjWFU8w2Qsa+cEZtvGNo/+m/RKVZhKkEZcyeqc6UGOm2ftqsMkQI0qDdQfORovWRe/wzgyIxFX1xZN6Kw=
-X-Received: by 2002:a05:600c:1d08:b0:394:54ee:c994 with SMTP id
- l8-20020a05600c1d0800b0039454eec994mr782732wms.137.1652200302633; Tue, 10 May
- 2022 09:31:42 -0700 (PDT)
+        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
+        b=TDn1HY9qLyG/0jkuEkyp7m0LY0OiyLrTqd2pBJPqKbbuC27Qsgi2BkIeo7iChXWE5c
+         Sc2bmPQ3lCT94EFS8hy3DD/h9rpU7rOEycJl7o8JStMjsDiHkJgGx1tIBR8ZrbNBJDFT
+         xQ4iz+XlJg4/MN+KXTiq4fnLlfK4hTbhQVgSa70dJUHr/aKFYOW8KvvBXsKqR4sKdvrV
+         /AIHlWfAVfX+WHFeMC0lFyOhA1TgilkG/80IzWTt0xrbcTg/tQJrrFdCOTbkiPYXmhiS
+         v6S6hR5zT0ALo7C6xuSJ23LYfN4DvNu/jjQgN6j9A0kbZ5oIUEf5cN1ll1iEWTrSBL0T
+         FX0g==
+X-Gm-Message-State: AOAM533VsI3k0XBjTpLeE1hdJTbdB0rSDai7WRx6j2Cu7NA1G8sEVEhq
+        P/Hf0KvmwL4sJE2lpdty1jn6Y6c5rc6/y+rEIRHkPg==
+X-Google-Smtp-Source: ABdhPJyXHvPFrLpD9JHZCeHuyGvGIXtbfBGwcobE9WuG1B4tDoKEOWroGcOYYXCzJn0wqwei/jnuhTj3Vn3KvonB3oQ=
+X-Received: by 2002:a81:6cc3:0:b0:2f7:cc1f:b52d with SMTP id
+ h186-20020a816cc3000000b002f7cc1fb52dmr20616990ywc.293.1652200321217; Tue, 10
+ May 2022 09:32:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510154750.212913-1-yury.norov@gmail.com> <20220510154750.212913-8-yury.norov@gmail.com>
-In-Reply-To: <20220510154750.212913-8-yury.norov@gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 10 May 2022 22:01:30 +0530
-Message-ID: <CAAhSdy0=g1pp+VgV2=1-3t_u32nX6xx=zmMuVQBd-zyFtQ983A@mail.gmail.com>
-Subject: Re: [PATCH 07/22] risc-v: replace bitmap_weight with bitmap_empty in riscv_fill_hwcap()
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-2-surenb@google.com>
+ <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
+In-Reply-To: <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 10 May 2022 09:31:50 -0700
+Message-ID: <CAJuCfpEt9SSrELZzfmcqJ7JL_nEzWGz-YE9GRUZTjU5unqQjQg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 9:18 PM Yury Norov <yury.norov@gmail.com> wrote:
+On Tue, May 10, 2022 at 6:06 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> bitmap_empty() is better than bitmap_weight() because it may return
-> earlier, and improves on readability.
+> On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
+> > With the oom-killer being able to operate on locked pages, exit_mmap
+> > does not need to ensure that oom_reap_task_mm is done before it can
+> > proceed. Instead it can rely on mmap_lock write lock to prevent
+> > oom-killer from operating on the vma tree while it's freeing page
+> > tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
+> > and then take mmap_lock write lock before freeing page tables.
 >
-> CC: Albert Ou <aou@eecs.berkeley.edu>
-> CC: Anup Patel <anup@brainfault.org>
-> CC: Atish Patra <atishp@atishpatra.org>
-> CC: Jisheng Zhang <jszhang@kernel.org>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Tsukasa OI <research_trasio@irq.a4lg.com>
-> CC: linux-riscv@lists.infradead.org
-> CC: linux-kernel@vger.kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> The changelog is rather light on nasty details which might be good but
+> for the sake of our future us let's be more verbose so that we do not
+> have to reinvent the prior history each time we are looking into this
+> code. I would go with something like this instead:
+> "
+> The primary reason to invoke the oom reaper from the exit_mmap path used
+> to be a prevention of an excessive oom killing if the oom victim exit
+> races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
+> and exit_mmap run concurrently") for more details. The invocation has
+> moved around since then because of the interaction with the munlock
+> logic but the underlying reason has remained the same (see 27ae357fa82b
+> ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+>
+> Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
+> delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
+> any blocking operation before the memory is unmapped by exit_mmap so
+> the oom reaper invocation can be dropped. The unmapping part can be done
+> with the non-exclusive mmap_sem and the exclusive one is only required
+> when page tables are freed.
+>
+> Remove the oom_reaper from exit_mmap which will make the code easier to
+> read. This is really unlikely to make any observable difference although
+> some microbenchmarks could benefit from one less branch that needs to be
+> evaluated even though it almost never is true.
+> "
 
-Looks good to me.
+Looks great! Thanks for collecting all the history. Will update the description.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+>
+> One minor comment below. Other than that \o/ this is finally going away.
+> I strongly suspect that the history of this code is a nice example about how
+> over optimizing code can cause more harm than good.
+>
+> Acked-by: Michal Hocko <mhocko@suse.com>
 
-Regards,
-Anup
+Thanks.
 
-> ---
->  arch/riscv/kernel/cpufeature.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
 >
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..f0298d756f66 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -206,11 +206,10 @@ void __init riscv_fill_hwcap(void)
->                 else
->                         elf_hwcap = this_hwcap;
+> Thanks!
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/oom.h |  2 --
+> >  mm/mmap.c           | 25 ++++++-------------------
+> >  mm/oom_kill.c       |  2 +-
+> >  3 files changed, 7 insertions(+), 22 deletions(-)
+> >
+> [...]
+> > @@ -3138,6 +3121,10 @@ void exit_mmap(struct mm_struct *mm)
+> >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
+> >       unmap_vmas(&tlb, vma, 0, -1);
+> > +     mmap_read_unlock(mm);
+> > +     /* Set MMF_OOM_SKIP to disregard this mm from further consideration.*/
+> > +     set_bit(MMF_OOM_SKIP, &mm->flags);
 >
-> -               if (bitmap_weight(riscv_isa, RISCV_ISA_EXT_MAX))
-> -                       bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-> -               else
-> +               if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
->                         bitmap_copy(riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-> -
-> +               else
-> +                       bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
->         }
+> I think that it would be slightly more readable to add an empty line
+> above and below of this. Also the comment would be more helpful if it
+> explaind what the further consideration actually means. I would go with
 >
->         /* We don't support systems with F but without D, so mask those out
+>         /*
+>          * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+>          * because the memory has been already freed. Do not bother
+>          * checking mm_is_oom_victim because setting a bit
+>          * unconditionally is just cheaper.
+>          */
+>
+
+Ack.
+
+> > +     mmap_write_lock(mm);
+> >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
+> >       tlb_finish_mmu(&tlb);
+>
 > --
-> 2.32.0
->
+> Michal Hocko
+> SUSE Labs

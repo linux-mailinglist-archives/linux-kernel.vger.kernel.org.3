@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769F3521A78
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D885219DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245075AbiEJN5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S245013AbiEJNvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245132AbiEJNid (ORCPT
+        with ESMTP id S243078AbiEJNeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:38:33 -0400
+        Tue, 10 May 2022 09:34:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358DF24641E;
-        Tue, 10 May 2022 06:27:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F41238D69;
+        Tue, 10 May 2022 06:24:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5BD260C1C;
-        Tue, 10 May 2022 13:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2AB8C385C2;
-        Tue, 10 May 2022 13:27:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AB1E6176A;
+        Tue, 10 May 2022 13:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D28C385C2;
+        Tue, 10 May 2022 13:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189236;
-        bh=+/EhKZa3yEyfTWZOBmz0ERD1LfPtR3Iv1x4ZFPnLAPQ=;
+        s=korg; t=1652189068;
+        bh=1AXQ3dyomRPqn7p9wxP3qVn0xywkRsSkCHmDBhRbD88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ql9zqslUmRXTKxP7M+0x7Dl2Xc0YxhMEKIyovckFY2yTH6oamVNy+9UTDbXKp0Iqz
-         cAnpOb6/BATeE+0WNkiKwhnEtR82Yq64Fe9WZqWvF9MBaop+avDgce2s2EB/ubS8e1
-         4YLeEFGTTERvpbUrfhSREhVlzxdkkxg2ExuPWFNo=
+        b=mR39yUCGfHhdKmrRPzTHQAZcOlOF9pmMnLep2NVCUHPkyiPYNxQbWdMw3vzUO2zuP
+         nQ790U/u//8oC5btO3M+Xj7d8j7bS121bSo+K1EuQB8Xl4X2jaes9bhB88/GbMPmg7
+         Cr93ImOTezltL939pqMNBoH933sSiwrdfdOgU1E4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 55/70] smsc911x: allow using IRQ0
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.4 45/52] ALSA: pcm: Fix races among concurrent prealloc proc writes
 Date:   Tue, 10 May 2022 15:08:14 +0200
-Message-Id: <20220510130734.476379981@linuxfoundation.org>
+Message-Id: <20220510130731.171954555@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
-References: <20220510130732.861729621@linuxfoundation.org>
+In-Reply-To: <20220510130729.852544477@linuxfoundation.org>
+References: <20220510130729.852544477@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 5ef9b803a4af0f5e42012176889b40bb2a978b18 upstream.
+commit 69534c48ba8ce552ce383b3dfdb271ffe51820c3 upstream.
 
-The AlphaProject AP-SH4A-3A/AP-SH4AD-0A SH boards use IRQ0 for their SMSC
-LAN911x Ethernet chip, so the networking on them must have been broken by
-commit 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
-which filtered out 0 as well as the negative error codes -- it was kinda
-correct at the time, as platform_get_irq() could return 0 on of_irq_get()
-failure and on the actual 0 in an IRQ resource.  This issue was fixed by
-me (back in 2016!), so we should be able to fix this driver to allow IRQ0
-usage again...
+We have no protection against concurrent PCM buffer preallocation
+changes via proc files, and it may potentially lead to UAF or some
+weird problem.  This patch applies the PCM open_mutex to the proc
+write operation for avoiding the racy proc writes and the PCM stream
+open (and further operations).
 
-When merging this to the stable kernels, make sure you also merge commit
-e330b9a6bb35 ("platform: don't return 0 from platform_get_irq[_byname]()
-on error") -- that's my fix to platform_get_irq() for the DT platforms...
-
-Fixes: 965b2aa78fbc ("net/smsc911x: fix irq resource allocation failure")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Link: https://lore.kernel.org/r/656036e4-6387-38df-b8a7-6ba683b16e63@omp.ru
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220322170720.3529-5-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+[OP: backport to 5.4: adjusted context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/smsc/smsc911x.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/pcm_memory.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/smsc/smsc911x.c
-+++ b/drivers/net/ethernet/smsc/smsc911x.c
-@@ -2422,7 +2422,7 @@ static int smsc911x_drv_probe(struct pla
- 	if (irq == -EPROBE_DEFER) {
- 		retval = -EPROBE_DEFER;
- 		goto out_0;
--	} else if (irq <= 0) {
-+	} else if (irq < 0) {
- 		pr_warn("Could not allocate irq resource\n");
- 		retval = -ENODEV;
- 		goto out_0;
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -133,19 +133,20 @@ static void snd_pcm_lib_preallocate_proc
+ 	size_t size;
+ 	struct snd_dma_buffer new_dmab;
+ 
++	mutex_lock(&substream->pcm->open_mutex);
+ 	if (substream->runtime) {
+ 		buffer->error = -EBUSY;
+-		return;
++		goto unlock;
+ 	}
+ 	if (!snd_info_get_line(buffer, line, sizeof(line))) {
+ 		snd_info_get_str(str, line, sizeof(str));
+ 		size = simple_strtoul(str, NULL, 10) * 1024;
+ 		if ((size != 0 && size < 8192) || size > substream->dma_max) {
+ 			buffer->error = -EINVAL;
+-			return;
++			goto unlock;
+ 		}
+ 		if (substream->dma_buffer.bytes == size)
+-			return;
++			goto unlock;
+ 		memset(&new_dmab, 0, sizeof(new_dmab));
+ 		new_dmab.dev = substream->dma_buffer.dev;
+ 		if (size > 0) {
+@@ -153,7 +154,7 @@ static void snd_pcm_lib_preallocate_proc
+ 						substream->dma_buffer.dev.dev,
+ 						size, &new_dmab) < 0) {
+ 				buffer->error = -ENOMEM;
+-				return;
++				goto unlock;
+ 			}
+ 			substream->buffer_bytes_max = size;
+ 		} else {
+@@ -165,6 +166,8 @@ static void snd_pcm_lib_preallocate_proc
+ 	} else {
+ 		buffer->error = -EINVAL;
+ 	}
++ unlock:
++	mutex_unlock(&substream->pcm->open_mutex);
+ }
+ 
+ static inline void preallocate_info_init(struct snd_pcm_substream *substream)
 
 

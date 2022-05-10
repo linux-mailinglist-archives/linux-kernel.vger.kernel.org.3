@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07ED5216D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F5952177A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242642AbiEJNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S243190AbiEJN02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242415AbiEJNQy (ORCPT
+        with ESMTP id S243560AbiEJNWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:16:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6424A3F5;
-        Tue, 10 May 2022 06:12:42 -0700 (PDT)
+        Tue, 10 May 2022 09:22:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECCA53A44;
+        Tue, 10 May 2022 06:16:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A2B4615E7;
-        Tue, 10 May 2022 13:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1689AC385A6;
-        Tue, 10 May 2022 13:12:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C65B81DA3;
+        Tue, 10 May 2022 13:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCD2C385A6;
+        Tue, 10 May 2022 13:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188361;
-        bh=0w0xQr+Pu/llxYWRbwOnMuOVCGxAkws6yzESbdnf+gk=;
+        s=korg; t=1652188576;
+        bh=JJe8sEvxS5e9xUkxokihEGFI8ATuPtWVWFYdW0GQdmI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uMhlJlV6p1JpvMMq39i5uwcfNkHpvxRsO3+v8g/U06F1PlNvydiiaGg865dEHbp73
-         Ax0HMy1H1/TvYETDtbzidRHrv2glUPkZB0PREkOamwi5WUvH5/O3CwVIfEz4H3y/HN
-         6AOfG0ahNAh7Kil8sbGOf/rf6WK5j0v3it26NcCU=
+        b=tMRrb0d1sEUFRA2c4bvzVkRGuxfwxmAiFSHYXdoy+YR+LOHTTBmgJGMPgrJ7Twxuo
+         vPJEEjpx+/GG1lk0Pf4XWRQZ6dOUvnX/NF+9qkWrMZ4icaTZqp9D0fcF6dhO2XrVic
+         jd0+YVmK9+Ilu9WCEl+6bT4g6428c/UMQwIpfykU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 48/66] firewire: remove check of list iterator against head past the loop body
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 4.14 52/78] tty: n_gsm: fix incorrect UA handling
 Date:   Tue, 10 May 2022 15:07:38 +0200
-Message-Id: <20220510130731.175393079@linuxfoundation.org>
+Message-Id: <20220510130734.079029094@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,140 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 9423973869bd4632ffe669f950510c49296656e0 upstream.
+commit ff9166c623704337bd6fe66fce2838d9768a6634 upstream.
 
-When list_for_each_entry() completes the iteration over the whole list
-without breaking the loop, the iterator value will be a bogus pointer
-computed based on the head element.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.4.2 states that any received unnumbered
+acknowledgment (UA) with its poll/final (PF) bit set to 0 shall be
+discarded. Currently, all UA frame are handled in the same way regardless
+of the PF bit. This does not comply with the standard.
+Remove the UA case in gsm_queue() to process only UA frames with PF bit set
+to 1 to abide the standard.
 
-While it is safe to use the pointer to determine if it was computed
-based on the head element, either with list_entry_is_head() or
-&pos->member == head, using the iterator variable after the loop should
-be avoided.
-
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer to point to the found element [1].
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Link: https://lore.kernel.org/r/20220409041243.603210-3-o-takashi@sakamocchi.jp
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-20-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firewire/core-transaction.c |   30 ++++++++++++++++--------------
- drivers/firewire/sbp2.c             |   13 +++++++------
- 2 files changed, 23 insertions(+), 20 deletions(-)
+ drivers/tty/n_gsm.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/firewire/core-transaction.c
-+++ b/drivers/firewire/core-transaction.c
-@@ -86,24 +86,25 @@ static int try_cancel_split_timeout(stru
- static int close_transaction(struct fw_transaction *transaction,
- 			     struct fw_card *card, int rcode)
- {
--	struct fw_transaction *t;
-+	struct fw_transaction *t = NULL, *iter;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&card->lock, flags);
--	list_for_each_entry(t, &card->transaction_list, link) {
--		if (t == transaction) {
--			if (!try_cancel_split_timeout(t)) {
-+	list_for_each_entry(iter, &card->transaction_list, link) {
-+		if (iter == transaction) {
-+			if (!try_cancel_split_timeout(iter)) {
- 				spin_unlock_irqrestore(&card->lock, flags);
- 				goto timed_out;
- 			}
--			list_del_init(&t->link);
--			card->tlabel_mask &= ~(1ULL << t->tlabel);
-+			list_del_init(&iter->link);
-+			card->tlabel_mask &= ~(1ULL << iter->tlabel);
-+			t = iter;
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1825,7 +1825,6 @@ static void gsm_queue(struct gsm_mux *gs
+ 		gsm_response(gsm, address, UA);
+ 		gsm_dlci_close(dlci);
+ 		break;
+-	case UA:
+ 	case UA|PF:
+ 		if (cr == 0 || dlci == NULL)
  			break;
- 		}
- 	}
- 	spin_unlock_irqrestore(&card->lock, flags);
- 
--	if (&t->link != &card->transaction_list) {
-+	if (t) {
- 		t->callback(card, rcode, NULL, 0, t->callback_data);
- 		return 0;
- 	}
-@@ -938,7 +939,7 @@ EXPORT_SYMBOL(fw_core_handle_request);
- 
- void fw_core_handle_response(struct fw_card *card, struct fw_packet *p)
- {
--	struct fw_transaction *t;
-+	struct fw_transaction *t = NULL, *iter;
- 	unsigned long flags;
- 	u32 *data;
- 	size_t data_length;
-@@ -950,20 +951,21 @@ void fw_core_handle_response(struct fw_c
- 	rcode	= HEADER_GET_RCODE(p->header[1]);
- 
- 	spin_lock_irqsave(&card->lock, flags);
--	list_for_each_entry(t, &card->transaction_list, link) {
--		if (t->node_id == source && t->tlabel == tlabel) {
--			if (!try_cancel_split_timeout(t)) {
-+	list_for_each_entry(iter, &card->transaction_list, link) {
-+		if (iter->node_id == source && iter->tlabel == tlabel) {
-+			if (!try_cancel_split_timeout(iter)) {
- 				spin_unlock_irqrestore(&card->lock, flags);
- 				goto timed_out;
- 			}
--			list_del_init(&t->link);
--			card->tlabel_mask &= ~(1ULL << t->tlabel);
-+			list_del_init(&iter->link);
-+			card->tlabel_mask &= ~(1ULL << iter->tlabel);
-+			t = iter;
- 			break;
- 		}
- 	}
- 	spin_unlock_irqrestore(&card->lock, flags);
- 
--	if (&t->link == &card->transaction_list) {
-+	if (!t) {
-  timed_out:
- 		fw_notice(card, "unsolicited response (source %x, tlabel %x)\n",
- 			  source, tlabel);
---- a/drivers/firewire/sbp2.c
-+++ b/drivers/firewire/sbp2.c
-@@ -421,7 +421,7 @@ static void sbp2_status_write(struct fw_
- 			      void *payload, size_t length, void *callback_data)
- {
- 	struct sbp2_logical_unit *lu = callback_data;
--	struct sbp2_orb *orb;
-+	struct sbp2_orb *orb = NULL, *iter;
- 	struct sbp2_status status;
- 	unsigned long flags;
- 
-@@ -446,17 +446,18 @@ static void sbp2_status_write(struct fw_
- 
- 	/* Lookup the orb corresponding to this status write. */
- 	spin_lock_irqsave(&lu->tgt->lock, flags);
--	list_for_each_entry(orb, &lu->orb_list, link) {
-+	list_for_each_entry(iter, &lu->orb_list, link) {
- 		if (STATUS_GET_ORB_HIGH(status) == 0 &&
--		    STATUS_GET_ORB_LOW(status) == orb->request_bus) {
--			orb->rcode = RCODE_COMPLETE;
--			list_del(&orb->link);
-+		    STATUS_GET_ORB_LOW(status) == iter->request_bus) {
-+			iter->rcode = RCODE_COMPLETE;
-+			list_del(&iter->link);
-+			orb = iter;
- 			break;
- 		}
- 	}
- 	spin_unlock_irqrestore(&lu->tgt->lock, flags);
- 
--	if (&orb->link != &lu->orb_list) {
-+	if (orb) {
- 		orb->callback(orb, &status);
- 		kref_put(&orb->kref, free_orb); /* orb callback reference */
- 	} else {
 
 

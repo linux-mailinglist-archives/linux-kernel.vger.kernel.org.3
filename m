@@ -2,297 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987E7520E9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DD4520EBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiEJHho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S232789AbiEJHk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240764AbiEJHYC (ORCPT
+        with ESMTP id S240832AbiEJHYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:24:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BDD2A2F64;
-        Tue, 10 May 2022 00:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652167206; x=1683703206;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1oUzNl2kKxZxIV2MU2eVqII16unBBqXxxaYXqeHjiIA=;
-  b=au9CZbOvaGZnzkHTJtwDu/hHiZg3hj0h6PuqAC0CfpnbU3yEX6kzoh8x
-   IyEKHDwHBcFhsMPakGu4i+NvZCqcV+3sVh1dwHLX/JsRuYejnr8Ee1nuq
-   YvIMXdpFcJoTZctM5kY3NVWdtj4XHDXgdryf5YU3wU9vD9gTZdjN5uoWq
-   Uoj0EVMJORxDVWYcvXeE3SvpuHh/CViFDWBlAjQYxvCDGDLkENzgIiN4l
-   Z/Ak8q4sotwzn2ZENbn5+JcO1iQ55H5D9ZIB5PYeFm6g3GeAryh2FPWHJ
-   b15pE/JwYTtboqO/yYqRB0fHvoDByf1MIydSX6mVKZ0AzC9fBBBvsdBxZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="249190357"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="249190357"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 00:20:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="565502557"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga007.jf.intel.com with ESMTP; 10 May 2022 00:20:05 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 10 May 2022 00:20:04 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 10 May 2022 00:20:04 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 10 May 2022 00:20:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iQGQb2D1iKZ0S4jmykmEd7tlWrVN9Po55pQADjUed6GjrnGhU53W38FZyIHV7lmZdsgxdHfh+Ifp/DGtY9k6kw7knLoE5cKmZWK40NO1tcpSh+dCK4FXBc+3tFRoh16z2j4o82+0exm9W8UPYiZLVLab7HyFllphOzCKUjGcVrZgq5D/UXXAP5kviSCsqnk8A5v1MIzjJYHf1Mgr6ZNn4i/yNmwUki9JSrz+EftQ7qvt1qiKF7SsVxTibA/fAfRuZ+iQFAqXYYHQFpGpEYgPr7z3rkWFByA1xzl4lZfvgeEilos44VZcC2GmRlUdtAv+u2Ck+Wg3W5uAwt1J2Cvj7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l1IE7I/AmGtLNrLYQL90ND8SWIWPiZvIspdtsY/QTeU=;
- b=T+8cVycc+bT+50+PelsuHlqyCQqPaRhuvOE5YJ91BChLbqkNRtbvEaGdTkYAHvaiJfphXVN+FdPCt16bpFC5Y4wNpVe4m4/NGk0UGBKjzjXehkQjQfEwNuJih7mPXmkToKqNDBfYvTC6z+i1oVuWs+kYGfCJwRfcfjQTq0OVhh2P4ZP8f868joUNYxxFLAu6A0eiHucJXIY7eucUTw4jvnw28d+UNQrfCMlDwKDubBsxrM1r70oJrxtgvHQUKV+wCxktTk/+cBAFlkkaR1AEsy4bmp46cevi9r3HueKSp6Xx+6eTSF3Mir8Zjn+OD42AG3Kk6CJ3FUFUljS/boVMlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3180.namprd11.prod.outlook.com (2603:10b6:5:9::13) by
- PH0PR11MB5144.namprd11.prod.outlook.com (2603:10b6:510:3e::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.21; Tue, 10 May 2022 07:20:03 +0000
-Received: from DM6PR11MB3180.namprd11.prod.outlook.com
- ([fe80::b1fa:393c:9fb6:6871]) by DM6PR11MB3180.namprd11.prod.outlook.com
- ([fe80::b1fa:393c:9fb6:6871%5]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 07:20:03 +0000
-Message-ID: <8401c328-ed67-8d5e-4ba2-b487f256e139@intel.com>
-Date:   Tue, 10 May 2022 09:19:56 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/4] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        <dri-devel@lists.freedesktop.org>,
-        "Daniel Vetter" <daniel.vetter@intel.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
- <20220505220413.365977-1-javierm@redhat.com>
- <753d0350-42dc-389b-b10b-4533ddcf32ac@intel.com>
- <1f788b8f-0bea-1818-349e-b1bc907bf251@redhat.com>
- <a339df59-9e00-c7cb-e33d-2ac626443639@intel.com>
- <3b7fe4fe-fdec-cef2-4e0e-309d9dc4a8af@redhat.com>
- <b5ab1c49-04e7-36c3-677d-2989b79e50ca@suse.de>
- <2bf27b09-0896-1849-254f-d5b19abdc892@redhat.com>
- <fc3e8a40-664f-07ae-7474-c0412a1ab1b5@intel.com>
- <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <1c36d431-d5c0-7278-c9e0-61867e9dc174@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0444.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a9::17) To DM6PR11MB3180.namprd11.prod.outlook.com
- (2603:10b6:5:9::13)
+        Tue, 10 May 2022 03:24:42 -0400
+X-Greylist: delayed 54674 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 May 2022 00:20:42 PDT
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B043F114B;
+        Tue, 10 May 2022 00:20:41 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D47EC200006;
+        Tue, 10 May 2022 07:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652167240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VjBiSLomRv6igpU/Mg7hyx/ooaQxfzOs4t2cLH5GZqQ=;
+        b=GZD+MUXvtDVmMeq9rB9ZWTd8LjsAooTVD8g2VaUvTXAtdU9p1bTGy9pLj7kaBuNkC4zC8O
+        DcmPNlqqrJNEamDk19Mk++jhe0I+GvOM7QssuBd9z5OlJag/a8Phf0E2hfx2QZ5XE9MHrf
+        LTGkccHPkYj9Ke/HNMl+UdP+alY5h17cd4GPjJbuc0EkbIqhxYyC3A6voiJsvSV6lpDILH
+        jqLOq0ZRSJz++ooNH4aYGPTCETp9qA2BUzAib6hUCd/L5Sbmdfn7EhErjrFLatHH6kaLDK
+        CXScBTWv690FfMbnUNZVdqOiCJ1GMZ81GziK5+KDeNVCEmBpiGc2ndCK/B+COQ==
+Date:   Tue, 10 May 2022 09:20:35 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 0/3] add dynamic PCI device of_node creation for overlay
+Message-ID: <20220510092035.79164930@xps-bootlin>
+In-Reply-To: <e6828dce-3e10-779e-4d12-67e7bdfd0f73@gmail.com>
+References: <20220427094502.456111-1-clement.leger@bootlin.com>
+        <96db62bb-18be-f44a-6f53-05b22319f23a@gmail.com>
+        <20220509141634.16158c38@xps-bootlin>
+        <f9b0cbf1-dde2-ff97-cca0-5d2895734f91@gmail.com>
+        <20220509180917.0f0ae851@xps-bootlin>
+        <e6828dce-3e10-779e-4d12-67e7bdfd0f73@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a059ad8d-8d9a-4a38-90e3-08da32558002
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5144:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR11MB514487221247EADA285B2C27EBC99@PH0PR11MB5144.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ph6a6FzJfiW93ew8hSkhYlegwmMO+uiuMOUklOzmmKtXWS5XwEeVdpyvudqLaVsLWJoJAFuhdYh57Y54/R3XlKgpx+y+tnCBgZFHGQI7oA4fLthNUls1eht80QqeLT7Q2Mr5tkEeEm+Yoynscn1yC0sLDbmny6hLGWgibxlRvXHjQB7qQyPmquqH+dHRGVMLUHRhJsvt2Y14Ymm5TppP8hL/wG+SGz//HRl6tSyf0rzAH3NutagPVTjtk5nUm23vO+XB+ytMRj3oBUgLBEr5EWi5H0iAh6etAqIyjgmcuX0+9iEbQs+O1DpoHZIZauHVngJcswJAsR6yXHvVRX02tfWcm7qIiff58Sc9uVddnBglYqfvSh5ypFjPPFlLCFG211UN/R+Ff5IJuIQ4NvtrdfE7xSgQmFxJZ6Xq0G+Yteh+/5Aw/QNRpzYBC/j7tEWOSqy6BEbH5WYYRd4vdLiFvqbJFJr/H+mfTPmBh4j2zoQe2QgszDX9SRRB+Oycjb5BhyIPVYabdtE2X+caSwsgmXsYplIoBdKsQcjOr6qi+JsYOTDLuFxYsoURrUGNamFkPLNrfWr2NSjtsupS9sewzn/D6CpYYTG9QQOrjQ1pDkRQ3dNQM+0tPBklIjDrUmWt1r8Av8KiJn5wuphBZzWpyzawbuREVJzsQrA7PelFclY+9lNfKO8g71/tk40hcPHeGMneGjOckns74phPz9nP0OMQALFn0ojBiuAxY7pl5tpYmi7DkXaF8NzEqxPV9OegvgoQ+CtDIHiYXSCqU+MFyFB1uDCoT8Nf78+tyY5ShcQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3180.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(110136005)(6666004)(36756003)(316002)(54906003)(2616005)(31686004)(6506007)(186003)(83380400001)(107886003)(82960400001)(4326008)(8676002)(66946007)(6512007)(31696002)(66476007)(66556008)(26005)(8936002)(86362001)(53546011)(38100700002)(36916002)(508600001)(2906002)(44832011)(6486002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEhIaHozeFlNMmhKRTRGb2FkMzcrVE1UdUp6QndIMDgrUWFHSWp0MExveW5S?=
- =?utf-8?B?bExIZUc0bVVOTmV6VVZOMldzclQ0THhtUG5GMXJ5dXV2UGE4L3pEOEU5amtp?=
- =?utf-8?B?NEpoQlZ5a2UxOUs1dStrb0o2WXhJRlBXN1p5Wk4zZGFHbzl5Vmg2QmM5Y0hG?=
- =?utf-8?B?T0JVeU1qWE5QenVuTU85b3A2OHBBZDhzSWZvVHJ2WEgrNW5zOURObWthd3dO?=
- =?utf-8?B?TFZIMzIzK0JXNy9Gd3AxbEtLUkxteU0xR3FFQ3ZKczZsYktJdW9vSFpGbGJY?=
- =?utf-8?B?Q2FGNVZVaVhQTmlEaFBkaWhiOUlKVXZxODEvbGpxbWk0WVZBRDB2N00rY29a?=
- =?utf-8?B?Qi9GbzhxUHBUOU44YU5pbXkyTVpvcWgxUStPbmx5bDlYQ3FRdXBFdG9qUHh5?=
- =?utf-8?B?aExnMkRsVTJ2NE56RkRkK2phdG5ZQlZqcHllTDM5alFTOUJwazAvMExYUUpP?=
- =?utf-8?B?TkF2QkpMSTc1QXJkTHV2U3Rua2JlcTdPZlF1MU4zUjg5ZENqcEk0eVhlajVJ?=
- =?utf-8?B?cGxPSFl2YThHTFhJTnN3YzhFOTErRitkS3VUME1EZW1NaE5rcDA4YWlueUcx?=
- =?utf-8?B?VzFYTysraDNpdzFLQUxTdVdqa3VVY1VLS1MxcHZTaUU5V0FxZDc2dHpsZDFJ?=
- =?utf-8?B?eERDWit5S0N1ZS9qWUE5dms0bkY1cTFpSFFXS0hiRmhUNU9pbVc4Wmd0aElk?=
- =?utf-8?B?NGUwd0hZZ3FWOG1mY3FsRzg2b1AzOUlobDRrYzJyUjcxVEJDUFl1VzkrQ1RC?=
- =?utf-8?B?UUl5VFVPcVRHMDFJbkQyZVgraDEzQlM2WjF0b2pKS25zSmFYc0Z4WW9qL0Fp?=
- =?utf-8?B?RlZRbSt2cGZCbGxyeGdDbjEwZTVzWnMrNkx6RlZ5Y1RnaklDNE9PVFNyRFhq?=
- =?utf-8?B?Zjk0NnVQeHRrcjBmb0tmTkZ6NDdPRVlXR2VTTkFBS3FSWUVDeE14ZnJCNUJh?=
- =?utf-8?B?bGx2UGZDUWYvVVgxZUE1YUp4bzM3RURON1JuS05DZ2tSRW9ldVozaXZNbU96?=
- =?utf-8?B?SFd5Q1NqR1FqWkVTRXFZVDgzdUd4eUpwZS9SakhTbXJacFdTSDZhbytlUkhH?=
- =?utf-8?B?Y1RCUkE1UFA2em1MSkU0MzRxbVd3RXBNUTlzZjZZUzU2c1Fod0gyeVpyOThK?=
- =?utf-8?B?UFhKaWVqTnY2QzQ2bnhHME54Rld0YUFRM2p2eFQybW9ZdUY1NXVKQ21vZTRm?=
- =?utf-8?B?blUxSHBSTnQyTDBxbzR3TmpycGVVeTJVcWlyU0R5TWlqMDNzekdmTVZqRTIw?=
- =?utf-8?B?dC90alVQeEpqSGZPTGlMdkRDMzFYYjM3QjgwWFcvVWRvUVA0RisrYTMzMVFo?=
- =?utf-8?B?bDgyU3BoZDgwRHRmSjZBL1VDNFE2czkwUnlja1kzY205ZVk3Q1R4SmVrOWVu?=
- =?utf-8?B?YWx6bDBOcktpeldWS3puaHpWMVorZkxQQkNya2M1SVYrY3JxbGl5M3crVE5L?=
- =?utf-8?B?Q1ZiZStqeUNvMUZ2V1gyY29WZDlPRktCS2lDdGxHbVV3OE90QzRIdnNWeWt1?=
- =?utf-8?B?TGRXd0R2Uy9XZTFZYU04TzZIM2pMdTNIV1RjYzYyZnZadjBUNW5ERG1vb2ll?=
- =?utf-8?B?THN6eFBsN2xQbTBaRnYwVU9TOEZud1JvZXpWbjg1U1JGS0JPT0xzRGszV0Zi?=
- =?utf-8?B?TXgyNzVOS1NyaUljL0FYdkNVRUttUFZhQStwN1FjTWlVaEVhc0IyTnJrRklW?=
- =?utf-8?B?YVBYQWN6Nll6RXJDZkgzTW5GdFA4Sk5rNFZDVGtOaWloZXpkZU92N3JFR1hW?=
- =?utf-8?B?TTREQnpUdWFGOGEwT1ZoOTZFTzduR05jSXc0VXRNeDQva1duMkdGbHFuTFg5?=
- =?utf-8?B?eFdpVlNyMHAxd1dCaW5GTmhxbElsdlV1cGxBaU1tU0RodGlIMkFPYTVJdGp0?=
- =?utf-8?B?Tm5yVEFQMW1ZMGJhNmpXcTRMdHFDcEZYZW13SzRET25wK1Rab1Yzb1JQdnUw?=
- =?utf-8?B?RVgxSEpkeTBwSTRMZXo1REwwcm4wbGNFVElvd2NKd09XY1pRb0xKNmVvbno2?=
- =?utf-8?B?aHNac2J1QXlCRjRPOUx1VW1zOVk2ZDNINnpyMjBmZ2Y0eDZ0VEdHdXVUaW1N?=
- =?utf-8?B?UEgrenNEWFo3N1k4dkZ0cTlPdEJqZkVyWTZyemJVanowcW5Od3crY2JDa2w5?=
- =?utf-8?B?dlBxSVdURG52a0VSL0RlQ1h1RWpWY1c2Sm13cXY3eXRZTXgxaThmNWd3OU9Y?=
- =?utf-8?B?czFOR2FmclVIMTVLWis4UHRlOVVBUFhUR1pCZE1HOTE2NGh3TEhoMmMzRTg2?=
- =?utf-8?B?L1llU1AzTVpGamRQYVppY2ZWMDlyUE4zM3BHanQ1RWtGQlBkejlTUWU3bEVP?=
- =?utf-8?B?blVFdE45NzVseWRxZVBlK1NFS1hBTkFwQ3RmQjRPeFUrQWd2Nkg3TThoYlpT?=
- =?utf-8?Q?F49DQZ+6YDFSB3vE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a059ad8d-8d9a-4a38-90e3-08da32558002
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3180.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 07:20:03.0263
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YRUXWRo74ykg5Y91rHXWHHbilROf+/V+XDEoZ3+3EbcqWSiY9j0S/4bvG/pr+cej21WBUuGxja0uXAuMfoWMkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5144
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Mon, 9 May 2022 15:07:18 -0500,
+Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
 
+> > Ok, that is actually possible on a system that is given a
+> > device-tree by the bootloader. But on a system that is desrcibed
+> > using ACPI (such as the x86), this is much more difficult (at least
+> > to my knowledge)... We want this feature to be easy to use for the
+> > end user. Adding such configuration which also differs between
+> > various architecture is clearly not so easy to setup. =20
+>=20
+> Are you trying to make your card work on any ACPI based system (x86,
+> x86-64, etc)?  Or do you have a specific model of computer that you
+> want to make this work on for a specific customer or appliance?
 
-On 10.05.2022 00:42, Javier Martinez Canillas wrote:
-> On 5/10/22 00:22, Andrzej Hajda wrote:
->
-> [snip]
->
->>>    static void drm_fbdev_fb_destroy(struct fb_info *info)
->>>    {
->>> +       if (info->cmap.len)
->>> +               fb_dealloc_cmap(&info->cmap);
->>> +
->>>           drm_fbdev_release(info->par);
->>> +       framebuffer_release(info);
->> I would put drm_fbdev_release at the beginning - it cancels workers
->> which could expect cmap to be still valid.
->>
-> Indeed, you are correct again. [0] is the final version of the patch I've
-> but don't have an i915 test machine to give it a try. I'll test tomorrow
-> on my test systems to verify that it doesn't cause any regressions since
-> with other DRM drivers.
->
-> I think that besides this patch, drivers shouldn't need to call to the
-> drm_fb_helper_fini() function directly. Since that would be called during
-> drm_fbdev_fb_destroy() anyways.
->
-> We should probably remove that call in all drivers and make this helper
-> function static and just private to drm_fb_helper functions.
->
-> Or am I missing something here ?
+There is no particular appliance/architecture targeted. This card should
+work with any system that can support PCIe.
 
-This is question for experts :)
-I do not know what are user API/ABI expectations regarding removal of 
-fbdev driver, I wonder if they are documented somewhere :)
-Apparently we have some process of 'zombification'  here - we need to 
-remove the driver without waiting for userspace closing framebuffer(???) 
-(to unbind ops-es and remove references to driver related things), but 
-we need to leave some structures to fool userspace, 'info' seems to be 
-one of them.
-So I guess there should be something called on driver's _remove path, 
-and sth on destroy path.
+>=20
+> If for many arbitrary systems, can you limit it to one architecture
+> or sub-architecture?
 
-Regards
-Andrzej
+Previous answer does rule out this one.
 
->
-> [0]:
->  From 5170cafcf2936da8f1c53231e3baa7d7a2b16c61 Mon Sep 17 00:00:00 2001
-> From: Javier Martinez Canillas <javierm@redhat.com>
-> Date: Tue May 10 00:39:55 2022 +0200
-> Subject: [RFT PATCH] drm/fb-helper: Don't deallocate fb colormap and free fb info
->   too early
->
-> Currently these are done in drm_fb_helper_fini() but this helper is called
-> by drivers in their .remove callback, which could lead to a use-after-free
-> if a process has opened the emulated fbdev node while a driver is removed.
->
-> For example, in i915 driver the call chain during remove is the following:
->
-> struct pci_driver i915_pci_driver = {
-> ...
->          .remove = i915_pci_remove,
-> ...
-> };
->
-> i915_pci_remove
->    i915_driver_remove
->      intel_modeset_driver_remove_noirq
->        intel_fbdev_fini
->          intel_fbdev_destroy
->            drm_fb_helper_fini
->              framebuffer_release
->
-> Later the process will close the fbdev node file descriptor leading to the
-> mentioned use-after-free bug in drm_fbdev_fb_destroy(), due the following:
->
-> drm_fbdev_fb_destroy
->    drm_fbdev_release(info->par); <-- info was already freed on .remove
->
-> To prevent that, let's move the framebuffer_release() call to the end of
-> the drm_fbdev_fb_destroy() function.
->
-> Also, the call to fb_dealloc_cmap() in drm_fb_helper_fini() is too early
-> and is more correct to do it in drm_fbdev_fb_destroy() as well. After a
-> call to drm_fbdev_release() has been made.
->
-> Reported-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
->   drivers/gpu/drm/drm_fb_helper.c | 9 +++------
->   1 file changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index d265a73313c9..7288fbd26bcc 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -627,12 +627,6 @@ void drm_fb_helper_fini(struct drm_fb_helper *fb_helper)
->   	cancel_work_sync(&fb_helper->resume_work);
->   	cancel_work_sync(&fb_helper->damage_work);
->   
-> -	info = fb_helper->fbdev;
-> -	if (info) {
-> -		if (info->cmap.len)
-> -			fb_dealloc_cmap(&info->cmap);
-> -		framebuffer_release(info);
-> -	}
->   	fb_helper->fbdev = NULL;
->   
->   	mutex_lock(&kernel_fb_helper_lock);
-> @@ -2112,6 +2106,9 @@ static void drm_fbdev_release(struct drm_fb_helper *fb_helper)
->   static void drm_fbdev_fb_destroy(struct fb_info *info)
->   {
->   	drm_fbdev_release(info->par);
-> +	if (info->cmap.len)
-> +		fb_dealloc_cmap(&info->cmap);
-> +	framebuffer_release(info);
->   }
->   
->   static int drm_fbdev_fb_mmap(struct fb_info *info, struct vm_area_struct *vma)
+>=20
+> >=20
+> > Moreover, since the PCI is meant to be "Plug and Play", such
+> > configuration would completely break that. If the user switches the
+> > PCIe card from one slot to another, the bootloader configuration
+> > will need to be modified. This seems a big no way for me (and for
+> > the user). =20
+>=20
+> Yes.  I was envisioning the pre-bootloader, bootloader, or Linux
+> pre-boot shim dynamically determining the slot containing the card,
+> and applying the overlay devicetree to the base devicetree,
+> retargeting the overlay to the proper location, before the Linux boot.
+
+Ok, this is however not doable on many already existing platforms since
+it would require to adapt this system for whatever bootloader is
+present on the platform. Moreover, AFAIK some platforms bootchain (x86)
+are hardly modifiable.
+
+>=20
+> The base devicetree would be for a specific type of machine or family
+> of machines, just as is the case for all devicetree based systems.
+>=20
+> >  =20
+> >>
+> >> The other big issue is mixing ACPI and devicetree on a single
+> >> system. Historically, the Linux devicetree community has not been
+> >> receptive to the ides of that mixture.  Your example might be a
+> >> specific case where the two can be isolated from each other, or
+> >> maybe not.  (For disclosure, I am essentially ACPI ignorant.)  I
+> >> suspect that mixing ACPI and devicetree is a recipe for disaster
+> >> in the general case. =20
+> >=20
+> > Agreed, on that fact, it did raised some eyebrows, and it was for
+> > that specific concern that initially, I proposed the fwnode
+> > solution. Honestly, the fwnode conversion represent a lot of work
+> > (hundreds of lines easily) + requires a conversion of all the
+> > subsystem that are not fwnode ready (spoiler: almost all of them
+> > are not ready).=20
+> >=20
+> > After implementing Rob's solution, the device-tree overlay really
+> > seems the cleaner to me and requires much less modifications.
+> >  =20
+> >>
+> >> More to come later as I finish reading through the various
+> >> threads. =20
+> >=20
+> > Ok, thanks for your time ! =20
+>=20
+> Your welcome.  I'll keep looking deeper into the previous threads.
+>=20
+> -Frank
+>=20
+> >=20
+> > Cl=C3=A9ment
+> >  =20
+> >>
+> >> -Frank =20
+> >=20
+> > . =20
+>=20
 

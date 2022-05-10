@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6E552182C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AA4521685
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242821AbiEJNdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S242299AbiEJNPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbiEJNZT (ORCPT
+        with ESMTP id S242279AbiEJNO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:19 -0400
+        Tue, 10 May 2022 09:14:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A6C229FE4;
-        Tue, 10 May 2022 06:18:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1211A39B8C;
+        Tue, 10 May 2022 06:10:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2966C61707;
-        Tue, 10 May 2022 13:18:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287F8C385C6;
-        Tue, 10 May 2022 13:18:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3F62612E4;
+        Tue, 10 May 2022 13:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E35C385C2;
+        Tue, 10 May 2022 13:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188707;
-        bh=splPW+3YbvYkpcz/Ca/ySeLcEBXwqBz273Zt3NCyp9o=;
+        s=korg; t=1652188258;
+        bh=hnQrCi18EPXnNAEpTvcEcN8OpIE6HhfqnRYesWkdhVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ywogkjinJCNj7GgfueQOsV1UWDDLv7M8kOWeV66Npusm7shtMUqld8CsggwwnN6Gc
-         GRqjLOaLlLGA+4snt4wir9GlVwYCAtXiYpPQryM3+nEdPqr3a725bu93s1KQiykD3j
-         SKrhIovTB5eqv4RlnMci8aW2602hVRMWoDxUKj0o=
+        b=BOsvCImA0BTyja897BPuf/ruCyajaEe42bHjDtIQ4HGiqlSY5g+4nF69k4C84H+Et
+         0zhvGojwKB/E8eXnoNDvzj4RFWOIqANqbTQes6MM5f1EiOlOc7hRQ533gRPa/e5C37
+         9NTWyn4P0EiH8YPCKQu8BlJonaUNgNaMl0S/7Db8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH 4.19 18/88] serial: 8250: Also set sticky MCR bits in console restoration
-Date:   Tue, 10 May 2022 15:07:03 +0200
-Message-Id: <20220510130734.276790150@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH 4.9 14/66] usb: misc: fix improper handling of refcount in uss720_probe()
+Date:   Tue, 10 May 2022 15:07:04 +0200
+Message-Id: <20220510130730.185569358@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 6e6eebdf5e2455f089ccd000754a0deaeb79af82 upstream.
+commit 0a96fa640dc928da9eaa46a22c46521b037b78ad upstream.
 
-Sticky MCR bits are lost in console restoration if console suspending
-has been disabled.  This currently affects the AFE bit, which works in
-combination with RTS which we set, so we want to make sure the UART
-retains control of its FIFO where previously requested.  Also specific
-drivers may need other bits in the future.
+usb_put_dev shouldn't be called when uss720_probe succeeds because of
+priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
+before destroy_priv in uss720_disconnect because usb_put_dev is in
+destroy_priv.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: 4516d50aabed ("serial: 8250: Use canary to restart console after suspend")
-Cc: stable@vger.kernel.org # v4.0+
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204181518490.9383@angie.orcam.me.uk
+Fix this by moving priv->usbdev = NULL after usb_put_dev.
+
+Fixes: dcb4b8ad6a44 ("misc/uss720: fix memory leak in uss720_probe")
+Cc: stable <stable@kernel.org>
+Reviewed-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220407024001.11761-1-hbh25y@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_port.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/misc/uss720.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -3273,7 +3273,7 @@ static void serial8250_console_restore(s
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -87,6 +87,7 @@ static void destroy_priv(struct kref *kr
  
- 	serial8250_set_divisor(port, baud, quot, frac);
- 	serial_port_out(port, UART_LCR, up->lcr);
--	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
-+	serial8250_out_MCR(up, up->mcr | UART_MCR_DTR | UART_MCR_RTS);
+ 	dev_dbg(&priv->usbdev->dev, "destroying priv datastructure\n");
+ 	usb_put_dev(priv->usbdev);
++	priv->usbdev = NULL;
+ 	kfree(priv);
  }
  
- /*
+@@ -750,7 +751,6 @@ static int uss720_probe(struct usb_inter
+ 	parport_announce_port(pp);
+ 
+ 	usb_set_intfdata(intf, pp);
+-	usb_put_dev(usbdev);
+ 	return 0;
+ 
+ probe_abort:
+@@ -770,7 +770,6 @@ static void uss720_disconnect(struct usb
+ 	if (pp) {
+ 		priv = pp->private_data;
+ 		usbdev = priv->usbdev;
+-		priv->usbdev = NULL;
+ 		priv->pp = NULL;
+ 		dev_dbg(&intf->dev, "parport_remove_port\n");
+ 		parport_remove_port(pp);
 
 

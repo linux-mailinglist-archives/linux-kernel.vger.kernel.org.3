@@ -2,137 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98380521669
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A035521A7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241127AbiEJNKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S244727AbiEJOBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237826AbiEJNKD (ORCPT
+        with ESMTP id S245188AbiEJNih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:10:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9D51FCEC;
-        Tue, 10 May 2022 06:06:04 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 80D4A1F8C5;
-        Tue, 10 May 2022 13:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652187963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h/N9r55RmDL/P9k3rTsZHZPvN6mp52YHLJIGiCPRLKk=;
-        b=HFVf+OtUg9TYMgd3f48zTa9GREuZx+/CvV/j811tjcwFhT7hKlvedqhIzE4vCon9BCMCLb
-        vGCdo0xzZU9i6gOEGqX05QMZv6nmFYoJ7qE4LQL54vqsPW73edif4xO7s7P+/YQJJvq6l3
-        3+B2mCNHrrvRCUpgP+rhMkzTiotdB38=
-Received: from suse.cz (unknown [10.100.201.86])
+        Tue, 10 May 2022 09:38:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3C69BAFB;
+        Tue, 10 May 2022 06:28:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DDF572C141;
-        Tue, 10 May 2022 13:06:02 +0000 (UTC)
-Date:   Tue, 10 May 2022 15:05:59 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
-        brauner@kernel.org, hch@infradead.org, oleg@redhat.com,
-        david@redhat.com, jannh@google.com, shakeelb@google.com,
-        peterx@redhat.com, jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
-Message-ID: <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
-References: <20220510030014.3842475-1-surenb@google.com>
- <20220510030014.3842475-2-surenb@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7915E60C1C;
+        Tue, 10 May 2022 13:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F017C385A6;
+        Tue, 10 May 2022 13:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652189306;
+        bh=RIK5MElVo47bD1tsF8v3qbeY9yUwA6PQltPBj+Q7u+4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Xqh8t/4yAmj0UYS4Hkyzqc1UM2pMLiPaRPjac926nj0xUGZ7Las/95tVWamyGT8lH
+         TzGP0LAgGdL/vaLLsXoNs0q4PtwPQbJaJoM4CY8nOJirCM+b3Npt+Cx93w3OThfUtQ
+         8qs73cre/D/iGigSd+C9OlTkuYGaQFnxS+ysHgNs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 5.15 001/135] MIPS: Fix CP0 counter erratum detection for R4k CPUs
+Date:   Tue, 10 May 2022 15:06:23 +0200
+Message-Id: <20220510130740.437799575@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510030014.3842475-2-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
-> With the oom-killer being able to operate on locked pages, exit_mmap
-> does not need to ensure that oom_reap_task_mm is done before it can
-> proceed. Instead it can rely on mmap_lock write lock to prevent
-> oom-killer from operating on the vma tree while it's freeing page
-> tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
-> and then take mmap_lock write lock before freeing page tables.
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-The changelog is rather light on nasty details which might be good but
-for the sake of our future us let's be more verbose so that we do not
-have to reinvent the prior history each time we are looking into this
-code. I would go with something like this instead:
-"
-The primary reason to invoke the oom reaper from the exit_mmap path used
-to be a prevention of an excessive oom killing if the oom victim exit
-races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
-and exit_mmap run concurrently") for more details. The invocation has
-moved around since then because of the interaction with the munlock
-logic but the underlying reason has remained the same (see 27ae357fa82b
-("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+commit f0a6c68f69981214cb7858738dd2bc81475111f7 upstream.
 
-Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
-delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
-any blocking operation before the memory is unmapped by exit_mmap so
-the oom reaper invocation can be dropped. The unmapping part can be done
-with the non-exclusive mmap_sem and the exclusive one is only required
-when page tables are freed.
+Fix the discrepancy between the two places we check for the CP0 counter
+erratum in along with the incorrect comparison of the R4400 revision
+number against 0x30 which matches none and consistently consider all
+R4000 and R4400 processors affected, as documented in processor errata
+publications[1][2][3], following the mapping between CP0 PRId register
+values and processor models:
 
-Remove the oom_reaper from exit_mmap which will make the code easier to
-read. This is really unlikely to make any observable difference although
-some microbenchmarks could benefit from one less branch that needs to be
-evaluated even though it almost never is true.
-"
+  PRId   |  Processor Model
+---------+--------------------
+00000422 | R4000 Revision 2.2
+00000430 | R4000 Revision 3.0
+00000440 | R4400 Revision 1.0
+00000450 | R4400 Revision 2.0
+00000460 | R4400 Revision 3.0
 
-One minor comment below. Other than that \o/ this is finally going away.
-I strongly suspect that the history of this code is a nice example about how
-over optimizing code can cause more harm than good.
+No other revision of either processor has ever been spotted.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+Contrary to what has been stated in commit ce202cbb9e0b ("[MIPS] Assume
+R4000/R4400 newer than 3.0 don't have the mfc0 count bug") marking the
+CP0 counter as buggy does not preclude it from being used as either a
+clock event or a clock source device.  It just cannot be used as both at
+a time, because in that case clock event interrupts will be occasionally
+lost, and the use as a clock event device takes precedence.
 
-Thanks!
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/oom.h |  2 --
->  mm/mmap.c           | 25 ++++++-------------------
->  mm/oom_kill.c       |  2 +-
->  3 files changed, 7 insertions(+), 22 deletions(-)
-> 
-[...]
-> @@ -3138,6 +3121,10 @@ void exit_mmap(struct mm_struct *mm)
->  	/* update_hiwater_rss(mm) here? but nobody should be looking */
->  	/* Use -1 here to ensure all VMAs in the mm are unmapped */
->  	unmap_vmas(&tlb, vma, 0, -1);
-> +	mmap_read_unlock(mm);
-> +	/* Set MMF_OOM_SKIP to disregard this mm from further consideration.*/
-> +	set_bit(MMF_OOM_SKIP, &mm->flags);
+Compare against 0x4ff in `can_use_mips_counter' so that a single machine
+instruction is produced.
 
-I think that it would be slightly more readable to add an empty line
-above and below of this. Also the comment would be more helpful if it
-explaind what the further consideration actually means. I would go with
 
-	/*
-	 * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-	 * because the memory has been already freed. Do not bother
-	 * checking mm_is_oom_victim because setting a bit
-	 * unconditionally is just cheaper.
-	 */
+[1] "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0", MIPS
+    Technologies Inc., May 10, 1994, Erratum 53, p.13
 
-> +	mmap_write_lock(mm);
->  	free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
->  	tlb_finish_mmu(&tlb);
+[2] "MIPS R4400PC/SC Errata, Processor Revision 1.0", MIPS Technologies
+    Inc., February 9, 1994, Erratum 21, p.4
 
--- 
-Michal Hocko
-SUSE Labs
+[3] "MIPS R4400PC/SC Errata, Processor Revision 2.0 & 3.0", MIPS
+    Technologies Inc., January 24, 1995, Erratum 14, p.3
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: ce202cbb9e0b ("[MIPS] Assume R4000/R4400 newer than 3.0 don't have the mfc0 count bug")
+Cc: stable@vger.kernel.org # v2.6.24+
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/include/asm/timex.h |    8 ++++----
+ arch/mips/kernel/time.c       |   11 +++--------
+ 2 files changed, 7 insertions(+), 12 deletions(-)
+
+--- a/arch/mips/include/asm/timex.h
++++ b/arch/mips/include/asm/timex.h
+@@ -40,9 +40,9 @@
+ typedef unsigned int cycles_t;
+ 
+ /*
+- * On R4000/R4400 before version 5.0 an erratum exists such that if the
+- * cycle counter is read in the exact moment that it is matching the
+- * compare register, no interrupt will be generated.
++ * On R4000/R4400 an erratum exists such that if the cycle counter is
++ * read in the exact moment that it is matching the compare register,
++ * no interrupt will be generated.
+  *
+  * There is a suggested workaround and also the erratum can't strike if
+  * the compare interrupt isn't being used as the clock source device.
+@@ -63,7 +63,7 @@ static inline int can_use_mips_counter(u
+ 	if (!__builtin_constant_p(cpu_has_counter))
+ 		asm volatile("" : "=m" (cpu_data[0].options));
+ 	if (likely(cpu_has_counter &&
+-		   prid >= (PRID_IMP_R4000 | PRID_REV_ENCODE_44(5, 0))))
++		   prid > (PRID_IMP_R4000 | PRID_REV_ENCODE_44(15, 15))))
+ 		return 1;
+ 	else
+ 		return 0;
+--- a/arch/mips/kernel/time.c
++++ b/arch/mips/kernel/time.c
+@@ -141,15 +141,10 @@ static __init int cpu_has_mfc0_count_bug
+ 	case CPU_R4400MC:
+ 		/*
+ 		 * The published errata for the R4400 up to 3.0 say the CPU
+-		 * has the mfc0 from count bug.
++		 * has the mfc0 from count bug.  This seems the last version
++		 * produced.
+ 		 */
+-		if ((current_cpu_data.processor_id & 0xff) <= 0x30)
+-			return 1;
+-
+-		/*
+-		 * we assume newer revisions are ok
+-		 */
+-		return 0;
++		return 1;
+ 	}
+ 
+ 	return 0;
+
+

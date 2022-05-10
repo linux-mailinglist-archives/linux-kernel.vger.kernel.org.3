@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0F8521DC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD299521DCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345426AbiEJPP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S244831AbiEJPPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345216AbiEJPPB (ORCPT
+        with ESMTP id S1345220AbiEJPPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:15:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF51F26C4E6
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:49:35 -0700 (PDT)
+        Tue, 10 May 2022 11:15:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC226C4EF;
+        Tue, 10 May 2022 07:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E83361978
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 14:49:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43120C385A6;
-        Tue, 10 May 2022 14:49:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F6F9CE1F33;
+        Tue, 10 May 2022 14:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BFFC385C9;
+        Tue, 10 May 2022 14:49:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652194174;
-        bh=okWehPSv94o5n4/YHnWsmeTik2HBIjXblj7tJPWDO9E=;
+        s=k20201202; t=1652194177;
+        bh=Te2sD/cDnoun0AwDA9vgLsTlUYlmrjjvVc6ECCVxxpU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=t1SxeHdp7fQWC9lw9euzejlkdo37j7bMZVQAqq6jmXaUhqFbk4GkvQ5QjwxGzYmbs
-         cCIAKfAM0tpqpEpqA+GHIiC3DsaQBYnQekmQctwNx0OvP6jsUj3S8AL4OCmjAZD1Zb
-         zVccDEt4TFv3t5ci7d+G7qPcint0YWkIMm7XRljq59e8WUPV72vqKZVdTH93os0mgw
-         ME7Saj6J6c2hpxBhDV8nXLXH2I8Bm8vY+b5AqZ4MAEPuqTsZe3FpxFNYDgkM/kIkQL
-         TsU+oe8eDEQEW03XmGau/8vqaS1rSwkVAPUpPBKgJ9ccxRUlJTxSJVviLw5yhA8kb0
-         TYECMedw9XmNQ==
+        b=hIU0MLSy0U+hyR4yUULyOPI3PieQ6tkGZURG/I4Dz+y3wN7FQMcaIjyArGXSlH501
+         i4OI+tJXfFqeHf+KdssFjQadGcCfVK4Hz8qRXku6q2hrQARzijqwkZOX1HxcDXriCS
+         MK17vqz9geYAtwDWTZJJnhMh+lq0G2kBjoVzZJz9yt7UodOZEAjDxPl9cwSvW6JASA
+         OUymGcyaf3i8CuAShTtf+yD2elx0XdAHUX6K+29C+SHNqhk7TOYyv8GdARoHhVgGNT
+         Gn1WPVdEzE34Ma+a8+yt/nXgSziTHn1SMqjrDIcq3csEopB/qWro43E3uw3G7ZkI9E
+         pbekd+u8gNhsA==
 From:   Mark Brown <broonie@kernel.org>
-To:     yangyingliang@huawei.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski@linaro.org, lgirdwood@gmail.com,
-        s.nawrocki@samsung.com
-In-Reply-To: <20220510124749.2663874-1-yangyingliang@huawei.com>
-References: <20220510124749.2663874-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next] ASoC: samsung: spdif: remove unnecessary check of mem_res
-Message-Id: <165219417300.388769.4515467081124288900.b4-ty@kernel.org>
-Date:   Tue, 10 May 2022 15:49:33 +0100
+To:     Xiubo.Lee@gmail.com, alsa-devel@alsa-project.org, perex@perex.cz,
+        krzk+dt@kernel.org, shengjiu.wang@nxp.com, lgirdwood@gmail.com,
+        nicoleotsuka@gmail.com, festevam@gmail.com,
+        devicetree@vger.kernel.org, shengjiu.wang@gmail.com,
+        robh+dt@kernel.org, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1652087663-1908-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1652087663-1908-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH 1/2] ASoC: fsl_micfil: Add support for i.MX8MPlus
+Message-Id: <165219417472.388769.13970240077661005048.b4-ty@kernel.org>
+Date:   Tue, 10 May 2022 15:49:34 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,11 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 20:47:49 +0800, Yang Yingliang wrote:
-> The resource is checked in probe function, so there is
-> no need do this check in remove function.
+On Mon, 9 May 2022 17:14:22 +0800, Shengjiu Wang wrote:
+> On i.MX8Plus there are two updates for micfil module.
 > 
+> One is that the output format is S32_LE, only the 24 more
+> significative bits have information, the other bits are always
+> zero. Add 'formats' variable in soc data to distinguish the
+> format on different platform.
+> Another is that the fifo depth is 32 entries.
 > 
+> [...]
 
 Applied to
 
@@ -67,8 +74,10 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: samsung: spdif: remove unnecessary check of mem_res
-      commit: 9d62ba94266be3ddc864348a4df7e54f5562f0d5
+[1/2] ASoC: fsl_micfil: Add support for i.MX8MPlus
+      commit: cb05dac1bc34ad701972503ca1a75b51ae4478ff
+[2/2] ASoC: dt-bindings: fsl,micfil: Add compatible string for imx8mp
+      commit: 7b46eb1bf9534a75ff072a01e774b79e6a17cfdd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

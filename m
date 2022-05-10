@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDDD521EEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A703B521EEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242851AbiEJPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S1345938AbiEJPis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346042AbiEJPhz (ORCPT
+        with ESMTP id S1346047AbiEJPh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:37:55 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA8113CA0A
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:35 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x23so15234080pff.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:35 -0700 (PDT)
+        Tue, 10 May 2022 11:37:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3CE1D5275
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:43 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 204so12448323pfx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XUdUcfiagybpsQd1lg5V2fMeg0EXQcI6829QJGv7lks=;
-        b=QvY4Ezq+fW8krO2OWe5Wx3kco/r+crV5eM0nwCM02Ofn4Qg7Qa2uUWgmNMxQvf5GzW
-         3CzrriRzkyIZP7KTfQXKpPH9KBtIOOG+se2tgtqH2+kiz+C3iWntyhUedg7hWyIz8SVn
-         CR5CehLZ40IueILzP+w0dBR9okD5t4jqeBp1EDIFQ/5nNqsRQGQ8VEAiTzcqzyxV7lYh
-         MVfjVZJGo2NFi/rVHK8xAmFW/go+ywwLx8oT3BCVmYdwYXrhT4+aO9JMjp8b5ZjkemnO
-         MDvf3sHPZt94kiWUkzQ2CB5ZDwFdU1ioPbjUkZBZrd41klzat64x5r/Ow1WM8drWNvBR
-         zffw==
+        bh=sDdu0AZ+jhN6LtNsF/DsY4tnnS9mzbYgTFP2SBX4foc=;
+        b=DjyipPBYQ6Mz0BJ2YvmmPz0cPF4YSA0a+fMtYgqkJ77LqbIEqTP2yuaOxzXI8J7Puz
+         YzVfttMONRDIJC1uBKKFmiOMdzXhIY9xzklKp1v6OLrinXC4FwDdGdvem9IooJboBvQy
+         GK3dj2Q+gZYRcoEU7Z7AiRFj/wT5y5HMn74dI7mKWcCAPxzbxqc3nUTTc71NsoQZPHgZ
+         jysRaf4Dr0FqZBFsUbvMJw3fhoye8auxXOIELHpDwhvf02EHOeW5Hk0Jq5xfIZZk+ghD
+         6oQdmho2n+LrTWDfHjY0tktn7MLxE9rfJyCILgySVpSsBEMTM2+WKb/gJpGdMt1NhQz/
+         LdOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XUdUcfiagybpsQd1lg5V2fMeg0EXQcI6829QJGv7lks=;
-        b=qSKR0s1lK/pjX4lzwPEtXoo/xw7YpoqLAiv0vc/NLbem4kkjWGwZC6U6NAH0ic7IeZ
-         hTPGa+SdbN6P+Mbxz00ogZ8Vg82gJLudWiqHCf4xM7kmE+XAoVF+noQIpKv6EWh24hLy
-         TDc/CNLBM4hyXykYnWrsEQ1amjAF6JGDx7NdetVexH/MrNfUIbC7xHYSCfCpFOXGyJOp
-         FwOET6GEfMpwdc0E8vZzzg8Qmpo/9lBMzyMy9YxBjnYxE0L8YEV4WtFBgsEq5a/bSyXX
-         5MZRxQIdb1roogvqKyNidMFQdq5bktp+Sdudnj/AclreZ1Mi4CTQl4C103SgCKvgeA+X
-         jcvw==
-X-Gm-Message-State: AOAM5333Uyn6vHjmd/WiiLZ+ncD3NFXFxJ90x+1crcSRiVpOwqhCVwbL
-        wnLVdlsFRLvKIXIIUu+C9g==
-X-Google-Smtp-Source: ABdhPJz6N6qu89EDF0qEJaevMwCr86YbRgvjBFpTUFU7LzuQoM3gKa7lp4Q1bFnsxtUTB5NhIbzAfg==
-X-Received: by 2002:a62:d0c5:0:b0:50d:a467:3cc8 with SMTP id p188-20020a62d0c5000000b0050da4673cc8mr21129069pfg.81.1652196814749;
-        Tue, 10 May 2022 08:33:34 -0700 (PDT)
+        bh=sDdu0AZ+jhN6LtNsF/DsY4tnnS9mzbYgTFP2SBX4foc=;
+        b=xMO04qA3ohBHg79TE+UeEyVMxbQLNtFB1Ri6FnarLlHH+KNs2CMeCpRpfFzfusiw+R
+         Lj2vjsAHL2SbatYHCQ1xlDe/oOKnx8Kya4QmKKmMIp+GCezHeq415fplLRdb6FyTLJOl
+         qCilNJWBaTS+Ye6OOFK12TgnKecHpPMIdC9dHvaX+5jDdqvN2m4InEKQtG1ClqTxwDAN
+         ackI/CXncE/AcMDgEVyDq2SDDePce6rjhJdyAvitKydS9NlRK4ahVLcAgfGlP66CQ3Lu
+         /NIp4bFj7jMHWP1rM5Go/9DTvmWJgjnVUdQSEB/ENojeJ6cwIsyPegAw1tcwGoEOV+D9
+         wpKA==
+X-Gm-Message-State: AOAM533LPEBlk8+fz/5TIz/J53apfHlUe71V2O88IV/2ug6y+SBEV77M
+        ZwMfv797Z/fB75PpN+d/Wg==
+X-Google-Smtp-Source: ABdhPJw4MmnXegA0D1ntyoBvAJlyQNEK5XXB9HZ+vF5ceB7uq8uJuv4AGpKomxKh2ohAEsSAha8rIQ==
+X-Received: by 2002:a63:fd51:0:b0:3c1:977e:1fed with SMTP id m17-20020a63fd51000000b003c1977e1fedmr16894976pgj.246.1652196822757;
+        Tue, 10 May 2022 08:33:42 -0700 (PDT)
 Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id cd10-20020a056a00420a00b0050dc76281d0sm11104248pfb.170.2022.05.10.08.33.27
+        by smtp.gmail.com with ESMTPSA id cd10-20020a056a00420a00b0050dc76281d0sm11104248pfb.170.2022.05.10.08.33.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:33:34 -0700 (PDT)
+        Tue, 10 May 2022 08:33:42 -0700 (PDT)
 From:   Zheyu Ma <zheyuma97@gmail.com>
 To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
         tanureal@opensource.cirrus.com, rf@opensource.cirrus.com,
@@ -55,9 +55,9 @@ To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
         tiwai@suse.com, oder_chiou@realtek.com
 Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
         linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH 3/6] ASoC: rt5645: Fix the error handling of rt5645_i2c_probe()
-Date:   Tue, 10 May 2022 23:32:48 +0800
-Message-Id: <20220510153251.1741210-4-zheyuma97@gmail.com>
+Subject: [PATCH 4/6] ASoC: tas571x: Fix the error handling of tas571x_i2c_probe()
+Date:   Tue, 10 May 2022 23:32:49 +0800
+Message-Id: <20220510153251.1741210-5-zheyuma97@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220510153251.1741210-1-zheyuma97@gmail.com>
 References: <20220510153251.1741210-1-zheyuma97@gmail.com>
@@ -78,31 +78,33 @@ when failing at probing.
 
 Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 ---
- sound/soc/codecs/rt5645.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/tas571x.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
-index 1518eb7e9201..ccdea234a3ba 100644
---- a/sound/soc/codecs/rt5645.c
-+++ b/sound/soc/codecs/rt5645.c
-@@ -3943,7 +3943,7 @@ static int rt5645_i2c_probe(struct i2c_client *i2c)
- 		ret = PTR_ERR(regmap);
- 		dev_err(&i2c->dev, "Failed to allocate temp register map: %d\n",
- 			ret);
--		return ret;
-+		goto err_enable;
+diff --git a/sound/soc/codecs/tas571x.c b/sound/soc/codecs/tas571x.c
+index dd289774efb2..7b599664db20 100644
+--- a/sound/soc/codecs/tas571x.c
++++ b/sound/soc/codecs/tas571x.c
+@@ -833,7 +833,8 @@ static int tas571x_i2c_probe(struct i2c_client *client)
+ 	if (IS_ERR(priv->pdn_gpio)) {
+ 		dev_err(dev, "error requesting pdn_gpio: %ld\n",
+ 			PTR_ERR(priv->pdn_gpio));
+-		return PTR_ERR(priv->pdn_gpio);
++		ret = PTR_ERR(priv->pdn_gpio);
++		goto disable_regs;
  	}
  
- 	/*
-@@ -3974,7 +3974,7 @@ static int rt5645_i2c_probe(struct i2c_client *i2c)
- 		ret = PTR_ERR(rt5645->regmap);
- 		dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
- 			ret);
--		return ret;
-+		goto err_enable;
- 	}
- 
- 	regmap_write(rt5645->regmap, RT5645_RESET, 0);
+ 	priv->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+@@ -841,7 +842,8 @@ static int tas571x_i2c_probe(struct i2c_client *client)
+ 	if (IS_ERR(priv->reset_gpio)) {
+ 		dev_err(dev, "error requesting reset_gpio: %ld\n",
+ 			PTR_ERR(priv->reset_gpio));
+-		return PTR_ERR(priv->reset_gpio);
++		ret = PTR_ERR(priv->reset_gpio);
++		goto disable_regs;
+ 	} else if (priv->reset_gpio) {
+ 		/* pulse the active low reset line for ~100us */
+ 		usleep_range(100, 200);
 -- 
 2.25.1
 

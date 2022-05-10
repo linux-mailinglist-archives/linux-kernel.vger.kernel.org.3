@@ -2,175 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9413E520C6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904F4520C72
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbiEJDxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        id S234313AbiEJDyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiEJDxQ (ORCPT
+        with ESMTP id S231679AbiEJDyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:53:16 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8893ED33
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:49:18 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id p4so18490718edx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 20:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=csH2b0yln8VJjIPZKUY8Qo0Oj23Oo4VsNy+UnhWpwO0=;
-        b=oYECvY6qXcMfackrkGXaEF2Uh8uHzvWghh2G/m/tPRNi9b9hcdKAzXapnkBfurvbuY
-         cQk/LXQg4Z0ssHXJbTax12Vpmb8NOErMzH+BaeZdW79uWkpm8VtbWCTuTP6+XBtrszqm
-         My2e+l5cAmZyvF0loTH1IJeyRjko0Bh2atekA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=csH2b0yln8VJjIPZKUY8Qo0Oj23Oo4VsNy+UnhWpwO0=;
-        b=XsfWnVgTn4snQdirKqo/MBsWp2Qu/kftX9d1mHyevDS5ffQyJxj2BP9sqRItH90iPd
-         QpjS6RK1LS8ZUHnG9Z9hV8P/+hh9LFpqzXcq+CNwzdGKaXqP4Iyak6DEOmV4PMyGiv2Q
-         HfN3S//sFx1mwcGW/6PoEMncgwf6YXiELRIKsX8QQenh3s0hA+tVEzbb2Oqxi2Pb9sYE
-         l7CfBfduQ4TGR97bxeopNZoJMqYKuUj6STSTbyl/uvSkq2qVZbaVpr3iZUDWebcsK4H8
-         Dn6IlBjfLEY4Mfs2S1GiD7hpU8pRIB5keS3sUxOddrISi6VnZ8iomxsMSsNn2vb0SGP8
-         hG4Q==
-X-Gm-Message-State: AOAM531Ngjnb4Re1IBkmNosLu3FG4GzzcyGVEWCMwn3rCtBTWrvGgVCs
-        Prt8nsc7ghsNDLOZpVKZIfgfd/EUH+iA9Ie/q4AFSNdY4zspzpJF
-X-Google-Smtp-Source: ABdhPJwob4/gCvx9CBCx7p8HvSC7iJaxs4G3456S0eeE4V5/ze1040Hv+xp4UizOuDERM7sfMDPdbXRTbaFZ5ah5tNU=
-X-Received: by 2002:a05:6402:5ca:b0:423:f330:f574 with SMTP id
- n10-20020a05640205ca00b00423f330f574mr20595539edx.116.1652154556554; Mon, 09
- May 2022 20:49:16 -0700 (PDT)
+        Mon, 9 May 2022 23:54:50 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C1825EE;
+        Mon,  9 May 2022 20:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652154649; x=1683690649;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nbv7UmfdXbcrW16GgE7aK/oiYQcXbQEJkwqMj9eP0Gk=;
+  b=VN66fcUAuPw9/X30HQc+PRR5L9T5PszsN4qaW3da7zwQSGb/mRJCwDbH
+   1S7kuTEbKa5ynqqt4eEjIALDqO33K8I+oBHgPQrmajVCyV5jpfVqXNR44
+   AY/jAVx/IPJuOgarMjxZpJguUVUgznfJI+c2yVK+ghHIWw/ketP7neKVS
+   zvlBZrfpoAlq4Niua/fSrLSKC+wBjsAN6lmaM1VYllS1Q8wGZUqWoZA99
+   Z0zf16LOWYE3azd8lGtUfR8ybfNJNoSdyn/GPEGXuCbRGGss26WEjPSr5
+   WXeJzQWl+8gOaIT5sc912Idq4lim2GcD2VfDSn8SVZ53b56F//mCl+xqY
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266837547"
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="266837547"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:50:49 -0700
+X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
+   d="scan'208";a="602270857"
+Received: from embargo.jf.intel.com ([10.165.9.183])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:50:48 -0700
+From:   Yang Weijiang <weijiang.yang@intel.com>
+To:     pbonzini@redhat.com
+Cc:     likexu@tencent.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Yang Weijiang <weijiang.yang@intel.com>
+Subject: [PATCH] KVM: selftests: x86: Skip unsupported test when Arch LBR is available
+Date:   Mon,  9 May 2022 23:50:28 -0400
+Message-Id: <20220510035028.21042-1-weijiang.yang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
-In-Reply-To: <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 10 May 2022 05:49:04 +0200
-Message-ID: <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 at 14:48, Christian Brauner <brauner@kernel.org> wrote:
+On Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
+so skip invalid format test if it's running on these platforms.
+Opportunistically change the file name to reflect the tests actually
+carried out.
 
-> One comment about this. We really need to have this interface support
-> giving us mount options like "relatime" back in numeric form (I assume
-> this will be possible.). It is royally annoying having to maintain a
-> mapping table in userspace just to do:
->
-> relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
-> ro       -> MS_RDONLY/MOUNT_ATTR_RDONLY
->
-> A library shouldn't be required to use this interface. Conservative
-> low-level software that keeps its shared library dependencies minimal
-> will need to be able to use that interface without having to go to an
-> external library that transforms text-based output to binary form (Which
-> I'm very sure will need to happen if we go with a text-based
-> interface.).
+Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+---
+ tools/testing/selftests/kvm/Makefile                     | 2 +-
+ .../x86_64/{vmx_pmu_msrs_test.c => vmx_pmu_caps_test.c}  | 9 +++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+ rename tools/testing/selftests/kvm/x86_64/{vmx_pmu_msrs_test.c => vmx_pmu_caps_test.c} (88%)
 
-Agreed.
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 681b173aa87c..9a1a84803b01 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -81,7 +81,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xapic_state_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xss_msr_test
+ TEST_GEN_PROGS_x86_64 += x86_64/debug_regs
+ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
+-TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
++TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_caps_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+similarity index 88%
+rename from tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
+rename to tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+index 2454a1f2ca0c..977c268a6ad4 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+@@ -107,8 +107,13 @@ int main(int argc, char *argv[])
+ 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
+ 
+ 	/* testcase 3, check invalid LBR format is rejected */
+-	ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
+-	TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
++	/* Note, on Arch LBR capable platforms, LBR_FMT in perf capability msr is 0x3f,
++	 * so skip below test if running on these platforms. */
++	if (host_cap.lbr_format != PMU_CAP_LBR_FMT) {
++		ret = _vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
++		TEST_ASSERT(ret == 0, "Bad PERF_CAPABILITIES didn't fail.");
++	}
+ 
++	printf("Completed pmu capability tests successfully.\n");
+ 	kvm_vm_free(vm);
+ }
+-- 
+2.27.0
 
->   This pattern of requesting the size first by passing empty arguments,
->   then allocating the buffer and then passing down that buffer to
->   retrieve that value is really annoying to use and error prone (I do
->   of course understand why it exists.).
->
->   For real xattrs it's not that bad because we can assume that these
->   values don't change often and so the race window between
->   getxattr(GET_SIZE) and getxattr(GET_VALUES) often doesn't matter. But
->   fwiw, the post > pre check doesn't exist for no reason; we do indeed
->   hit that race.
-
-That code is wrong.  Changing xattr size is explicitly documented in
-the man page as a non-error condition:
-
-       If size is specified as zero, these calls return the  current  size  of
-       the  named extended attribute (and leave value unchanged).  This can be
-       used to determine the size of the buffer that should be supplied  in  a
-       subsequent  call.   (But, bear in mind that there is a possibility that
-       the attribute value may change between the two calls,  so  that  it  is
-       still necessary to check the return status from the second call.)
-
->
->   In addition, it is costly having to call getxattr() twice. Again, for
->   retrieving xattrs it often doesn't matter because it's not a super
->   common operation but for mount and other info it might matter.
-
-You don't *have* to retrieve the size, it's perfectly valid to e.g.
-start with a fixed buffer size and double the size until the result
-fits.
-
-> * Would it be possible to support binary output with this interface?
->   I really think users would love to have an interfact where they can
->   get a struct with binary info back.
-
-I think that's bad taste.   fsinfo(2) had the same issue.  As well as
-mount(2) which still interprets the last argument as a binary blob in
-certain cases (nfs is one I know of).
-
->   Especially for some information at least. I'd really love to have a
->   way go get a struct mount_info or whatever back that gives me all the
->   details about a mount encompassed in a single struct.
-
-If we want that, then can do a new syscall with that specific struct
-as an argument.
-
->   Callers like systemd will have to parse text and will end up
->   converting everything from text into binary anyway; especially for
->   mount information. So giving them an option for this out of the box
->   would be quite good.
-
-What exactly are the attributes that systemd requires?
-
->   Interfaces like statx aim to be as fast as possible because we exptect
->   them to be called quite often. Retrieving mount info is quite costly
->   and is done quite often as well. Maybe not for all software but for a
->   lot of low-level software. Especially when starting services in
->   systemd a lot of mount parsing happens similar when starting
->   containers in runtimes.
-
-Was there ever a test patch for systemd using fsinfo(2)?  I think not.
-
-Until systemd people start to reengineer the mount handing to allow
-for retrieving a single mount instead of the complete mount table we
-will never know where the performance bottleneck lies.
-
->
-> * If we decide to go forward with this interface - and I think I
->   mentioned this in the lsfmm session - could we please at least add a
->   new system call? It really feels wrong to retrieve mount and other
->   information through the xattr interfaces. They aren't really xattrs.
-
-I'd argue with that statement.  These are most definitely attributes.
-As for being extended, we'd just extended the xattr interface...
-
-Naming aside... imagine that read(2) has always been used to retrieve
-disk data, would you say that reading data from proc feels wrong?
-And in hindsight, would a new syscall for the purpose make any sense?
-
-Thanks,
-Miklos

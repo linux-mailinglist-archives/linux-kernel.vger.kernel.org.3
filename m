@@ -2,165 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1964520B62
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298EC520B66
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiEJCnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 22:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S234884AbiEJCo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 22:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiEJCnC (ORCPT
+        with ESMTP id S234866AbiEJCoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 22:43:02 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF5126FA75;
-        Mon,  9 May 2022 19:39:06 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id q10so2043490oia.9;
-        Mon, 09 May 2022 19:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0TJE3soHGSdE4vXRalpTFyRINoVkfWSDyUf+84IPxcA=;
-        b=j1bjjKPyf9bI/7ZWrEwZGQ4/btT480+G1mnQIekw2/bTxIorN8YGN0f5TPFBmjYkIu
-         hghPkwH+WGhYd46jPY4O9nnItELx4MAPrFbf55A+m9SyHUZ85A0dJDeOWlX4t0Ey1QFM
-         cHWS5LqY+TW7jGW7Vws42a7yORMYQ5UN8JcaGdxVlr+WIizlwChcM1/EcjRZhEgS1gGD
-         UScOxG+g71aCD+suUf450a0p3zmVPiSKw19hxxrRWNojx0QrcCl8jQ9VKJ+ZxRPUjNF1
-         a2DhL6/LjGYq4PeRvFNxApx8lR9ZKb4s/aK3Pb/V+b3TrPXWksE0FM+ewWqr3hIMSBCY
-         iXuA==
+        Mon, 9 May 2022 22:44:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 999679154C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652150458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=btuSt+eTiboN9EpYdhYjr//P8XlvonQ50rzV3e6NBaU=;
+        b=TO1hx16UrxNuTF9+7/yp8CLSgdweQ7od1U6ld1WcSQifyBN6pkzb+0CzjKXQDnyLQIHkQV
+        GLWW/+hdzOXs1Vs+M0MvYWh1LQsG6h7/8cy/4a8npCwLqINVvqcVr13NttE7fOCJp3Tpd+
+        XZqqhXMnTvpKKv41fZw9xXyVohUVz9g=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-jXuMnlcDMfSuyUWjFhGkdw-1; Mon, 09 May 2022 22:40:57 -0400
+X-MC-Unique: jXuMnlcDMfSuyUWjFhGkdw-1
+Received: by mail-lj1-f198.google.com with SMTP id x4-20020a05651c104400b0024f253d777fso4684099ljm.16
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 19:40:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=0TJE3soHGSdE4vXRalpTFyRINoVkfWSDyUf+84IPxcA=;
-        b=rJ3GDENH3a5DY0F++C8fri/+aWq0SU7Ko0agontbdRHhPZd40raM73AXvmsK+U+PaA
-         ybxm2ssdpzqZ/rLWIscb3Xf+glmbl/gzU13Edaj8IKXPSNGfO0E9KgEqYiZNxmTwU53/
-         YCcmlnBX7SiLM3rMpNKhYWbYC2Xb+O5T7O2idmCXKoTxCOKYfMtrOwGBasfXtnCQrQt0
-         ZY8XwnIFDIMVowknV408oeXCm0i0hYyERCu95ChMh91He5l8zhZRqVbBccrNLWwC+6a6
-         OC9kvUMk27JnIqeWwAWvwPQlMjeefznhhjRx+nOcR11yWNbZrQ7usXgDiLAUMnA+Qg1/
-         AdXA==
-X-Gm-Message-State: AOAM5308KJX4Re5L8b1x4N4exFGsmNwRrMiY0mUGKFdCqNpQWIyzcmG7
-        oklq/Hb2Rlco9dZSWkAetAc=
-X-Google-Smtp-Source: ABdhPJxHyAfggEAnG6BCXmnjSIm/DK8GKp/ispG/khJMmxwwer6e5otQ8/MOGWAvi3w0y6aA1YmT/Q==
-X-Received: by 2002:a54:4198:0:b0:326:5a5f:8ff7 with SMTP id 24-20020a544198000000b003265a5f8ff7mr12454819oiy.268.1652150345941;
-        Mon, 09 May 2022 19:39:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t35-20020a05680815a300b0032617532120sm4907984oiw.48.2022.05.09.19.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 19:39:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 9 May 2022 19:39:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: acpi_power_meter: fix style issue
-Message-ID: <20220510023903.GA1567190@roeck-us.net>
-References: <20220509063010.3878134-1-clabbe@baylibre.com>
- <20220509063010.3878134-2-clabbe@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=btuSt+eTiboN9EpYdhYjr//P8XlvonQ50rzV3e6NBaU=;
+        b=uw7dDhx8KmzPv2+IgCtDJMha9nvAM76aEGJimrLX8+Ltqpz7ntj1/D+BLc4E8gjFdU
+         GlEe+bvfK6Hr81tr1GdyZWVPmfPK13X+NoJrGNekoQ4F9VrtN6R4lUWcfjq1826x5Eff
+         q84yAACKDcD3P1/t+F84Y+pdm2uePnQdc1do2+kAaGIGifFyQK2VUkRJjnXspLhqMyqf
+         jR+2W6sJLFvsWY3U8r20bdlWEkRvcKpGGwiTQwvgd9lrzQQhAPkzgtELATcw7CRU875a
+         1xFFQXipORMoyaf2FsTyKwIANUKpW2ZzWVXNpbVfmk1KCrsqBhZBACRWQBwB8uaHi29Z
+         7HwA==
+X-Gm-Message-State: AOAM53006bARnKEaIsR9Nr1eqoqF75BQXi7hA3ULp7aXH4+BGuOTT4g4
+        BZveukXzJ3YSOD83iagpBhZpQpywRFjVl+gCxskPrHdaqnqXJopPCHlELKjJbT+324U70+xd+Ht
+        AKB2DcReWFGgeXENM3NYRl20dGKFBroyKmYHoICkw
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr14762567lfj.587.1652150455983;
+        Mon, 09 May 2022 19:40:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx466G++VqLk0Dv1De6DAfZjSjfHh3BKVNXytAvyofCCuDsxodfSwD1fVt/PLRyuQ58RkwsIcxETi0sYcfjero=
+X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
+ h16-20020a19ca50000000b00471f556092bmr14762559lfj.587.1652150455802; Mon, 09
+ May 2022 19:40:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509063010.3878134-2-clabbe@baylibre.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220508163317.204673-1-elic@nvidia.com> <20220508163317.204673-2-elic@nvidia.com>
+In-Reply-To: <20220508163317.204673-2-elic@nvidia.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 10 May 2022 10:40:44 +0800
+Message-ID: <CACGkMEs35nLewkMzP0p4mBHtiYb0DQaMmnG_EEpUad18ygnqxg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Si-Wei Liu <si-wei.liu@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 06:30:09AM +0000, Corentin Labbe wrote:
-> Fix style issues found by checkpatch.
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+On Mon, May 9, 2022 at 12:33 AM Eli Cohen <elic@nvidia.com> wrote:
+>
+> In vdpa_nl_cmd_dev_get_doit(), ff the call to genlmsg_reply() fails we
 
-Applied to hwmon-next.
+I guess you mean "if" here?
 
-Thanks,
-Guenter
+> must not call nlmsg_free() since this is done inside genlmsg_reply().
+>
+> Fix it.
+>
+> Fixes: bc0d90ee021f ("vdpa: Enable user to query vdpa device info")
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
+
+Other than the above typo.
+
+Acked-by: Jason Wang <jasowang@redhat.com>
 
 > ---
->  drivers/hwmon/acpi_power_meter.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> index c405a5869581..d2545a1be9fc 100644
-> --- a/drivers/hwmon/acpi_power_meter.c
-> +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -481,7 +481,7 @@ static struct sensor_template meter_attrs[] = {
->  	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
->  	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
->  	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
-> -		set_avg_interval, 0),
-> +			   set_avg_interval, 0),
->  	{},
->  };
->  
-> @@ -530,6 +530,7 @@ static void remove_domain_devices(struct acpi_power_meter_resource *resource)
->  
->  	for (i = 0; i < resource->num_domain_devices; i++) {
->  		struct acpi_device *obj = resource->domain_devices[i];
+>  drivers/vdpa/vdpa.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> index 2b75c00b1005..fac89a0d8178 100644
+> --- a/drivers/vdpa/vdpa.c
+> +++ b/drivers/vdpa/vdpa.c
+> @@ -756,14 +756,19 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
+>                 goto mdev_err;
+>         }
+>         err = vdpa_dev_fill(vdev, msg, info->snd_portid, info->snd_seq, 0, info->extack);
+> -       if (!err)
+> -               err = genlmsg_reply(msg, info);
+> +       if (err)
+> +               goto mdev_err;
 > +
->  		if (!obj)
->  			continue;
->  
-> @@ -580,7 +581,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
->  	}
->  
->  	resource->holders_dir = kobject_create_and_add("measures",
-> -					&resource->acpi_dev->dev.kobj);
-> +						       &resource->acpi_dev->dev.kobj);
->  	if (!resource->holders_dir) {
->  		res = -ENOMEM;
->  		goto exit_free;
-> @@ -590,7 +591,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
->  
->  	for (i = 0; i < pss->package.count; i++) {
->  		struct acpi_device *obj;
-> -		union acpi_object *element = &(pss->package.elements[i]);
-> +		union acpi_object *element = &pss->package.elements[i];
->  
->  		/* Refuse non-references */
->  		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
-> @@ -603,7 +604,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
->  			continue;
->  
->  		res = sysfs_create_link(resource->holders_dir, &obj->dev.kobj,
-> -				      kobject_name(&obj->dev.kobj));
-> +					kobject_name(&obj->dev.kobj));
->  		if (res) {
->  			acpi_dev_put(obj);
->  			resource->domain_devices[i] = NULL;
-> @@ -788,7 +789,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
->  	str = &resource->model_number;
->  
->  	for (i = 11; i < 14; i++) {
-> -		union acpi_object *element = &(pss->package.elements[i]);
-> +		union acpi_object *element = &pss->package.elements[i];
->  
->  		if (element->type != ACPI_TYPE_STRING) {
->  			res = -EINVAL;
-> @@ -868,8 +869,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
->  	if (!device)
->  		return -EINVAL;
->  
-> -	resource = kzalloc(sizeof(struct acpi_power_meter_resource),
-> -			   GFP_KERNEL);
-> +	resource = kzalloc(sizeof(*resource), GFP_KERNEL);
->  	if (!resource)
->  		return -ENOMEM;
->  
-> @@ -884,7 +884,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
->  	if (res)
->  		goto exit_free;
->  
-> -	resource->trip[0] = resource->trip[1] = -1;
-> +	resource->trip[0] = -1;
-> +	resource->trip[1] = -1;
->  
->  	res = setup_attrs(resource);
->  	if (res)
+> +       err = genlmsg_reply(msg, info);
+> +       put_device(dev);
+> +       mutex_unlock(&vdpa_dev_mutex);
+> +       return err;
+> +
+>  mdev_err:
+>         put_device(dev);
+>  err:
+>         mutex_unlock(&vdpa_dev_mutex);
+> -       if (err)
+> -               nlmsg_free(msg);
+> +       nlmsg_free(msg);
+>         return err;
+>  }
+>
+> --
+> 2.35.1
+>
+

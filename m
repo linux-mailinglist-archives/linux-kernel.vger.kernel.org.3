@@ -2,232 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733B25227AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6BA5227AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237882AbiEJXbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S237727AbiEJXeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiEJXbg (ORCPT
+        with ESMTP id S233707AbiEJXeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:31:36 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5FEAA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:31:34 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id bo5so480186pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fi2XWZRiKG8R44JA1gyWZVRd9uVzp+b2EIhv+c2c8l4=;
-        b=daMLt6RwVmSTYqST1VgoWQAqKYEkpL6JH/mgdIrY9J9RlIBlGx5J18pgdxeVhAT51q
-         B1Qzih1qJ88fUPbO9n0bFHQAl10/uHoiAoSoEKC2WdBuQPyMS0jUS6F6vO009HFbFM7R
-         lsNs1t9FcZ9+uli78UzHHgS5kz2dV56JeVDtsJH16TIaC/3qjuPFpig8rMnPEjPhzA1q
-         g/5iUvSk6JFhWP4oJdrRaLWRdnw3roKfwUJS2h6M0chCKReDkzoKyB4bDWNMSunbfcIL
-         5XemXTHIaEPxFkvdhteyaTKl1sNWTAI8mW9Q4uCO0YPb/5/Vf4mn2gRhKMF3gOc2BUlh
-         bkYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=fi2XWZRiKG8R44JA1gyWZVRd9uVzp+b2EIhv+c2c8l4=;
-        b=xTsQrrkypvTCC/3RqXCiFWDaRLOpC/AELJlJOIbW+DlnAe0lwXTLP27rMGrPGazMTr
-         i+quXz+JXi8OV6FXbMT8eAhacG2UvupigS/YiU4/VAtNkkxrVvzge6xkJtlT+8c4RFmN
-         JOK39YcWTP8yvZwP7lj9Fz1AvbNfnimIT5Abfv+H04xD8R92XVhy0se5/AjnriMa5qk+
-         hVta1sNXC0E1XQo9r9CJttAka4u3f0f5WTYBi6nqOAUzvAWlDHTk5PlTYLyd+C7knrnU
-         FcYBKWUtOB5+LF7bZTJVgXSTex1qx3dut2aw/bVKX0dFtv64n3B5KhXRE7AcvhI5Gwwj
-         lUqg==
-X-Gm-Message-State: AOAM530HcnHz4NbCx/NJa9z6Shv5L3XDRSfYRno9NmFfhD6sp5RrBBdl
-        xwaevjUCZLi8jKqjljVqtTg=
-X-Google-Smtp-Source: ABdhPJxhcy+qVFIs4/FlGIm+uBUr5exz2tDeB3rAyEeMMkubJAQ0OJg8ALIK0cB2aH+6+mGDz7OYXQ==
-X-Received: by 2002:a63:747:0:b0:3d4:8682:ca7e with SMTP id 68-20020a630747000000b003d48682ca7emr4853580pgh.137.1652225493460;
-        Tue, 10 May 2022 16:31:33 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:c98a:65b0:edca:b69a])
-        by smtp.gmail.com with ESMTPSA id m8-20020a6545c8000000b003c14af5062csm260945pgr.68.2022.05.10.16.31.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 16:31:33 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 10 May 2022 16:31:31 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <Ynr10y6pkH6WwbQo@google.com>
-References: <20220510211743.95831-1-minchan@kernel.org>
- <857d21da-5de2-fa3e-b1ce-41cc1cfb0191@nvidia.com>
+        Tue, 10 May 2022 19:34:07 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A031D89D0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:34:03 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 200C52C0657;
+        Tue, 10 May 2022 23:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1652225641;
+        bh=pEijhn9eERaj4leQyzVR/sA/f6Z3kGiEnt1U9Xqng6g=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=iHsfCwQkd+iq3mfrSsPa0lg9PpYh2fTo1YhnqarbEYecxWk+n49Xx0T8oy7SomgND
+         fezQH2bXfP2veiN4Jt1wOicFS7rKUqbadWM3EhhNalPbi3OxHESz0WoTLP1ypHzgLO
+         4IzlCTsnvnzARyfR9NRDoFy46FfJ8T7b21PPB+TV1/a3HimqXY/ukkSIMZMt5piIzN
+         NSlpQmWv/bBdY9shBpWgakKdWjn/u9WgWLGrdSLJESusoZggNq4Gh4kOQWnWBWIcct
+         KoZI/vVvt7pkD1f8cLGst+RcGL9u/R75nQjPg7F5NCY/9n88/2FI/hD4wbydQ5NH7E
+         Ab0WLR1jlDeWA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627af6690001>; Wed, 11 May 2022 11:34:01 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Wed, 11 May 2022 11:34:00 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.033; Wed, 11 May 2022 11:34:00 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>
+CC:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: gpio: gpio-mvebu: convert txt binding to
+ YAML
+Thread-Topic: [PATCH] dt-bindings: gpio: gpio-mvebu: convert txt binding to
+ YAML
+Thread-Index: AQHYZFKD08/UItmbQ0e7wNBkJKoFaK0XVTaAgACl1AA=
+Date:   Tue, 10 May 2022 23:34:00 +0000
+Message-ID: <df1a4c3a-4ee7-0acf-218e-b9045bade3fa@alliedtelesis.co.nz>
+References: <20220510094404.1020307-1-chris.packham@alliedtelesis.co.nz>
+ <6db35313-5dcd-c9f2-724c-d157a835c9fc@linaro.org>
+In-Reply-To: <6db35313-5dcd-c9f2-724c-d157a835c9fc@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F215A4E264D1944CB2489D15F9053F0C@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <857d21da-5de2-fa3e-b1ce-41cc1cfb0191@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=62ntRvTiAAAA:8 a=gEfo2CItAAAA:8 a=pGLkceISAAAA:8 a=KKAkSRfTAAAA:8 a=cD6PzjWv8RQsPuYjsZYA:9 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=sptkURWiP4Gy88Gu7hUp:22 a=cvBusfyB2V15izCimMoJ:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-On Tue, May 10, 2022 at 03:56:37PM -0700, John Hubbard wrote:
-> On 5/10/22 14:17, Minchan Kim wrote:
-> > Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
-> > so current is_pinnable_page could miss CMA pages which has MIGRATE_
-> > ISOLATE. It ends up pinning CMA pages as longterm at pin_user_pages
-> > APIs so CMA allocation keep failed until the pin is released.
-> > 
-> > 
-> >       CPU 0                                   CPU 1 - Task B
-> > 
-> > cma_alloc
-> > alloc_contig_range
-> > 					pin_user_pages_fast(FOLL_LONGTERM)
-> > change pageblock as MIGRATE_ISOLATE
-> > 					internal_get_user_pages_fast
-> >                                          lockless_pages_from_mm
-> >                                          gup_pte_range
-> >                                          try_grab_folio
-> >                                          is_pinnable_page
-> >                                            return true;
-> >                                          So, pinned the page successfully.
-> > page migration failure with pinned page
-> > 					..
-> >                                          .. After 30 sec
-> > 					unpin_user_page(page)
-> > 
-> > CMA allocation succeeded after 30 sec.
-> 
-> Hi Minchan,
-> 
-> Thanks for spelling out how this works, that really speeds up the
-> review and helps others quickly learn what is going on with the code.
-> 
-> For my own information, mainly: where is CMA blocking, so that
-> it waits (apparently) for the during of the pin, before proceeding?
-> (Or is the caller retrying?)
-
-It would fail the cma_alloc in the first place since it couldn't
-migrate page out due to the elevated refcount and cma_allc would
-proceed next pageblocks to keep pages migrated out but it ends up
-failing the cma allocation because the user tries to allocate
-entire CMA pageblocks, not part of them so one of the pinned page
-make the cma allocation failure. Since then, user(e.g., dmabuf)
-could retry a few more times but it keeps failed until Task B
-release the refcount of the page.
-
-> 
-> I noticed a few minor points but was too slow to reply, notes below:
-> 
-> > 
-> > The CMA allocation path protects the migration type change race
-> > using zone->lock but what GUP path need to know is just whether the
-> > page is on CMA area or not rather than exact migration type.
-> > Thus, we don't need zone->lock but just checks migration type in
-> > either of (MIGRATE_ISOLATE and MIGRATE_CMA).
-> > 
-> > Adding the MIGRATE_ISOLATE check in is_pinnable_page could cause
-> > rejecting of pinning pages on MIGRATE_ISOLATE pageblocks even
-> > though it's neither CMA nor movable zone if the page is temporarily
-> > unmovable. However, such a migration failure by unexpected temporal
-> > refcount holding is general issue, not only come from MIGRATE_ISOLATE
-> > and the MIGRATE_ISOLATE is also transient state like other temporal
-> > elevated refcount problem.
-> > 
-> > Cc: David Hildenbrand <david@redhat.com>
-> > Signed-off-by: Minchan Kim <minchan@kernel.org>
-> > ---
-> > * from v3 - https://lore.kernel.org/all/20220509153430.4125710-1-minchan@kernel.org/
-> >    * Fix typo and adding more description - akpm
-> > 
-> > * from v2 - https://lore.kernel.org/all/20220505064429.2818496-1-minchan@kernel.org/
-> >    * Use __READ_ONCE instead of volatile - akpm
-> > 
-> > * from v1 - https://lore.kernel.org/all/20220502173558.2510641-1-minchan@kernel.org/
-> >    * fix build warning - lkp
-> >    * fix refetching issue of migration type
-> >    * add side effect on !ZONE_MOVABLE and !MIGRATE_CMA in description - david
-> > 
-> >   include/linux/mm.h | 15 +++++++++++++--
-> >   1 file changed, 13 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 6acca5cecbc5..cbf79eb790e0 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -1625,8 +1625,19 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
-> >   #ifdef CONFIG_MIGRATION
-> >   static inline bool is_pinnable_page(struct page *page)
-> >   {
-> > -	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
-> > -		is_zero_pfn(page_to_pfn(page));
-> > +#ifdef CONFIG_CMA
-> > +	/*
-> > +	 * use volatile to use local variable mt instead of
-> > +	 * refetching mt value.
-> > +	 */
-> 
-> This comment is stale and should therefore be deleted.
-
-Yeah.
-
-> 
-> > +	int __mt = get_pageblock_migratetype(page);
-> > +	int mt = __READ_ONCE(__mt);
-> 
-> Although I saw the email discussion about this in v2, that discussion
-> didn't go far enough. It started with "don't use volatile", and went
-> on to "try __READ_ONCE() instead", but it should have continued on
-> to "you don't need this at all".
-
-That's really what I want to hear from experts so wanted to learn
-"Why". How could we prevent refetching of the mt if we don't use
-__READ_ONCE or volatile there?
-
-> 
-> Because you don't. There is nothing you are racing with, and adding
-> __READ_ONCE() in order to avoid a completely not-going-to-happen
-> compiler re-invocation of a significant code block is just very wrong.
-> 
-> So let's just let it go entirely. :)
-
-Yeah, once it's clear for everyone, I am happy to remove the
-unnecessary lines.
-
-> 
-> > +
-> > +	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
-> 
-> MIGRATE_ISOLATE is not always defined, and must therefore be protected
-> with a check on CONFIG_MEMORY_ISOLATION...oh never mind, I see in
-> mm/Kconfig:
-> 
-> config CMA
-> 	...
-> 	select MEMORY_ISOLATION
-> 
-> ...so that's OK. What a tangled web, I wonder if enum migratetype
-> really needs to be sliced up like that, but that's a separate topic.
-> 
-> > +		return false;
-> > +#endif
-> > +
-> > +	return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
-> 
-> And actually this area is getting rather nested with the various ifdefs,
-> and it is probably time to refactor them a bit, considering the above
-> point about MIGRATE_ISOLATE. I had something in mind (which is why I
-> delayed my feedback), along the lines of merging _ISOLATE and _CMA and
-> the ifdefs. But it's just a fine point and not critical of course, just
-> a thought.
-
-Glad to hear someone is looking that.
+DQpPbiAxMS8wNS8yMiAwMTo0MCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMTAv
+MDUvMjAyMiAxMTo0NCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IENvbnZlcnQgdGhlIGV4aXN0
+aW5nIGRldmljZSB0cmVlIGJpbmRpbmcgdG8gWUFNTCBmb3JtYXQuDQo+Pg0KPj4gVGhlIG9sZCBi
+aW5kaW5nIGxpc3RlZCB0aGUgaW50ZXJydXB0LWNvbnRyb2xsZXIgYW5kIHJlbGF0ZWQgcHJvcGVy
+dGllcw0KPj4gYXMgcmVxdWlyZWQgYnV0IHRoZXJlIGFyZSBzdWZmaWNpZW50bHkgbWFueSBleGlz
+dGluZyB1c2FnZXMgd2l0aG91dCBpdA0KPj4gdGhhdCB0aGUgWUFNTCBiaW5kaW5nIGRvZXMgbm90
+IG1ha2UgdGhlIGludGVycnVwdCBwcm9wZXJ0aWVzIHJlcXVpcmVkLg0KPj4NCj4+IFRoZSBvZmZz
+ZXQgYW5kIG1hcnZlbGwscHdtLW9mZnNldCBwcm9wZXJ0aWVzIHdlcmVuJ3QgaW4gdGhlIG9sZCBi
+aW5kaW5nDQo+PiBhbmQgYXJlIGFkZGVkIHRvIHRoZSBZQU1MIGJpbmRpbmcuIFRoZSBvZmZzZXQg
+cHJvcGVydHkgaXMgcmVxdWlyZWQgd2hlbg0KPj4gdGhlIG1hcnZlbGwsYXJtYWRhLThrLWdwaW8g
+Y29tcGF0aWJsZSBpcyB1c2VkLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0g
+PGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+IC0tLQ0KPj4gICAuLi4vZGV2
+aWNldHJlZS9iaW5kaW5ncy9ncGlvL2dwaW8tbXZlYnUudHh0ICAgfCAgOTMgLS0tLS0tLS0tLS0N
+Cj4+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvZ3Bpby9ncGlvLW12ZWJ1LnlhbWwgIHwgMTQ3
+ICsrKysrKysrKysrKysrKysrKw0KPj4gICBNQUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4+ICAgMyBmaWxlcyBjaGFuZ2VkLCAxNDggaW5zZXJ0
+aW9ucygrKSwgOTQgZGVsZXRpb25zKC0pDQo+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZ3Bpby9ncGlvLW12ZWJ1LnR4dA0KPj4gICBjcmVh
+dGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2dwaW8vZ3Bp
+by1tdmVidS55YW1sDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy9ncGlvL2dwaW8tbXZlYnUudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL2dwaW8vZ3Bpby1tdmVidS50eHQNCj4+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
+NA0KPj4gaW5kZXggMGZjNjcwMGVkODAwLi4wMDAwMDAwMDAwMDANCj4+IC0tLSBhL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9ncGlvL2dwaW8tbXZlYnUudHh0DQo+PiArKysgL2Rl
+di9udWxsDQo+PiBAQCAtMSw5MyArMCwwIEBADQo+PiAtKiBNYXJ2ZWxsIEVCVSBHUElPIGNvbnRy
+b2xsZXINCj4+IC0NCj4+IC1SZXF1aXJlZCBwcm9wZXJ0aWVzOg0KPj4gLQ0KPj4gLS0gY29tcGF0
+aWJsZSA6IFNob3VsZCBiZSAibWFydmVsbCxvcmlvbi1ncGlvIiwgIm1hcnZlbGwsbXY3ODIwMC1n
+cGlvIiwNCj4+IC0gICJtYXJ2ZWxsLGFybWFkYXhwLWdwaW8iIG9yICJtYXJ2ZWxsLGFybWFkYS04
+ay1ncGlvIi4NCj4+IC0NCj4+IC0gICAgIm1hcnZlbGwsb3Jpb24tZ3BpbyIgc2hvdWxkIGJlIHVz
+ZWQgZm9yIE9yaW9uLCBLaXJrd29vZCwgRG92ZSwNCj4+IC0gICAgRGlzY292ZXJ5IChleGNlcHQg
+TVY3ODIwMCkgYW5kIEFybWFkYSAzNzAuICJtYXJ2ZWxsLG12NzgyMDAtZ3BpbyINCj4+IC0gICAg
+c2hvdWxkIGJlIHVzZWQgZm9yIHRoZSBEaXNjb3ZlcnkgTVY3ODIwMC4NCj4+IC0NCj4+IC0gICAg
+Im1hcnZlbCxhcm1hZGF4cC1ncGlvIiBzaG91bGQgYmUgdXNlZCBmb3IgYWxsIEFybWFkYSBYUCBT
+b0NzDQo+PiAtICAgIChNVjc4MjMwLCBNVjc4MjYwLCBNVjc4NDYwKS4NCj4+IC0NCj4+IC0gICAg
+Im1hcnZlbGwsYXJtYWRhLThrLWdwaW8iIHNob3VsZCBiZSB1c2VkIGZvciB0aGUgQXJtYWRhIDdL
+IGFuZCA4Sw0KPj4gLSAgICBTb0NzIChlaXRoZXIgZnJvbSBBUCBvciBDUCksIHNlZQ0KPj4gLSAg
+ICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL21hcnZlbGwvYXA4MHgtc3lz
+dGVtLWNvbnRyb2xsZXIudHh0DQo+PiAtICAgIGZvciBzcGVjaWZpYyBkZXRhaWxzIGFib3V0IHRo
+ZSBvZmZzZXQgcHJvcGVydHkuDQo+PiAtDQo+PiAtLSByZWc6IEFkZHJlc3MgYW5kIGxlbmd0aCBv
+ZiB0aGUgcmVnaXN0ZXIgc2V0IGZvciB0aGUgZGV2aWNlLiBPbmx5IG9uZQ0KPj4gLSAgZW50cnkg
+aXMgZXhwZWN0ZWQsIGV4Y2VwdCBmb3IgdGhlICJtYXJ2ZWxsLGFybWFkYXhwLWdwaW8iIHZhcmlh
+bnQNCj4+IC0gIGZvciB3aGljaCB0d28gZW50cmllcyBhcmUgZXhwZWN0ZWQ6IG9uZSBmb3IgdGhl
+IGdlbmVyYWwgcmVnaXN0ZXJzLA0KPj4gLSAgb25lIGZvciB0aGUgcGVyLWNwdSByZWdpc3RlcnMu
+IE5vdCB1c2VkIGZvciBtYXJ2ZWxsLGFybWFkYS04ay1ncGlvLg0KPj4gLQ0KPj4gLS0gaW50ZXJy
+dXB0czogVGhlIGxpc3Qgb2YgaW50ZXJydXB0cyB0aGF0IGFyZSB1c2VkIGZvciBhbGwgdGhlIHBp
+bnMNCj4+IC0gIG1hbmFnZWQgYnkgdGhpcyBHUElPIGJhbmsuIFRoZXJlIGNhbiBiZSBtb3JlIHRo
+YW4gb25lIGludGVycnVwdA0KPj4gLSAgKGV4YW1wbGU6IDEgaW50ZXJydXB0IHBlciA4IHBpbnMg
+b24gQXJtYWRhIFhQLCB3aGljaCBtZWFucyA0DQo+PiAtICBpbnRlcnJ1cHRzIHBlciBiYW5rIG9m
+IDMyIEdQSU9zKS4NCj4+IC0NCj4+IC0tIGludGVycnVwdC1jb250cm9sbGVyOiBpZGVudGlmaWVz
+IHRoZSBub2RlIGFzIGFuIGludGVycnVwdCBjb250cm9sbGVyDQo+PiAtDQo+PiAtLSAjaW50ZXJy
+dXB0LWNlbGxzOiBzcGVjaWZpZXMgdGhlIG51bWJlciBvZiBjZWxscyBuZWVkZWQgdG8gZW5jb2Rl
+IGFuDQo+PiAtICBpbnRlcnJ1cHQgc291cmNlLiBTaG91bGQgYmUgdHdvLg0KPj4gLSAgVGhlIGZp
+cnN0IGNlbGwgaXMgdGhlIEdQSU8gbnVtYmVyLg0KPj4gLSAgVGhlIHNlY29uZCBjZWxsIGlzIHVz
+ZWQgdG8gc3BlY2lmeSBmbGFnczoNCj4+IC0gICAgYml0c1szOjBdIHRyaWdnZXIgdHlwZSBhbmQg
+bGV2ZWwgZmxhZ3M6DQo+PiAtICAgICAgMSA9IGxvdy10by1oaWdoIGVkZ2UgdHJpZ2dlcmVkLg0K
+Pj4gLSAgICAgIDIgPSBoaWdoLXRvLWxvdyBlZGdlIHRyaWdnZXJlZC4NCj4+IC0gICAgICA0ID0g
+YWN0aXZlIGhpZ2ggbGV2ZWwtc2Vuc2l0aXZlLg0KPj4gLSAgICAgIDggPSBhY3RpdmUgbG93IGxl
+dmVsLXNlbnNpdGl2ZS4NCj4+IC0NCj4+IC0tIGdwaW8tY29udHJvbGxlcjogbWFya3MgdGhlIGRl
+dmljZSBub2RlIGFzIGEgZ3BpbyBjb250cm9sbGVyDQo+PiAtDQo+PiAtLSBuZ3Bpb3M6IG51bWJl
+ciBvZiBHUElPcyB0aGlzIGNvbnRyb2xsZXIgaGFzDQo+PiAtDQo+PiAtLSAjZ3Bpby1jZWxsczog
+U2hvdWxkIGJlIHR3by4gVGhlIGZpcnN0IGNlbGwgaXMgdGhlIHBpbiBudW1iZXIuIFRoZQ0KPj4g
+LSAgc2Vjb25kIGNlbGwgaXMgcmVzZXJ2ZWQgZm9yIGZsYWdzLCB1bnVzZWQgYXQgdGhlIG1vbWVu
+dC4NCj4+IC0NCj4+IC1PcHRpb25hbCBwcm9wZXJ0aWVzOg0KPj4gLQ0KPj4gLUluIG9yZGVyIHRv
+IHVzZSB0aGUgR1BJTyBsaW5lcyBpbiBQV00gbW9kZSwgc29tZSBhZGRpdGlvbmFsIG9wdGlvbmFs
+DQo+PiAtcHJvcGVydGllcyBhcmUgcmVxdWlyZWQuDQo+PiAtDQo+PiAtLSBjb21wYXRpYmxlOiBN
+dXN0IGNvbnRhaW4gIm1hcnZlbGwsYXJtYWRhLTM3MC1ncGlvIg0KPj4gLQ0KPj4gLS0gcmVnOiBh
+biBhZGRpdGlvbmFsIHJlZ2lzdGVyIHNldCBpcyBuZWVkZWQsIGZvciB0aGUgR1BJTyBCbGluaw0K
+Pj4gLSAgQ291bnRlciBvbi9vZmYgcmVnaXN0ZXJzLg0KPj4gLQ0KPj4gLS0gcmVnLW5hbWVzOiBN
+dXN0IGNvbnRhaW4gYW4gZW50cnkgInB3bSIgY29ycmVzcG9uZGluZyB0byB0aGUNCj4+IC0gIGFk
+ZGl0aW9uYWwgcmVnaXN0ZXIgcmFuZ2UgbmVlZGVkIGZvciBQV00gb3BlcmF0aW9uLg0KPj4gLQ0K
+Pj4gLS0gI3B3bS1jZWxsczogU2hvdWxkIGJlIHR3by4gVGhlIGZpcnN0IGNlbGwgaXMgdGhlIEdQ
+SU8gbGluZSBudW1iZXIuIFRoZQ0KPj4gLSAgc2Vjb25kIGNlbGwgaXMgdGhlIHBlcmlvZCBpbiBu
+YW5vc2Vjb25kcy4NCj4+IC0NCj4+IC0tIGNsb2NrczogTXVzdCBiZSBhIHBoYW5kbGUgdG8gdGhl
+IGNsb2NrIGZvciB0aGUgR1BJTyBjb250cm9sbGVyLg0KPj4gLQ0KPj4gLUV4YW1wbGU6DQo+PiAt
+DQo+PiAtCQlncGlvMDogZ3Bpb0BkMDAxODEwMCB7DQo+PiAtCQkJY29tcGF0aWJsZSA9ICJtYXJ2
+ZWxsLGFybWFkYXhwLWdwaW8iOw0KPj4gLQkJCXJlZyA9IDwweGQwMDE4MTAwIDB4NDA+LA0KPj4g
+LQkJCSAgICA8MHhkMDAxODgwMCAweDMwPjsNCj4+IC0JCQluZ3Bpb3MgPSA8MzI+Ow0KPj4gLQkJ
+CWdwaW8tY29udHJvbGxlcjsNCj4+IC0JCQkjZ3Bpby1jZWxscyA9IDwyPjsNCj4+IC0JCQlpbnRl
+cnJ1cHQtY29udHJvbGxlcjsNCj4+IC0JCQkjaW50ZXJydXB0LWNlbGxzID0gPDI+Ow0KPj4gLQkJ
+CWludGVycnVwdHMgPSA8MTY+LCA8MTc+LCA8MTg+LCA8MTk+Ow0KPj4gLQkJfTsNCj4+IC0NCj4+
+IC0JCWdwaW8xOiBncGlvQDE4MTQwIHsNCj4+IC0JCQljb21wYXRpYmxlID0gIm1hcnZlbGwsYXJt
+YWRhLTM3MC1ncGlvIjsNCj4+IC0JCQlyZWcgPSA8MHgxODE0MCAweDQwPiwgPDB4MTgxYzggMHgw
+OD47DQo+PiAtCQkJcmVnLW5hbWVzID0gImdwaW8iLCAicHdtIjsNCj4+IC0JCQluZ3Bpb3MgPSA8
+MTc+Ow0KPj4gLQkJCWdwaW8tY29udHJvbGxlcjsNCj4+IC0JCQkjZ3Bpby1jZWxscyA9IDwyPjsN
+Cj4+IC0JCQkjcHdtLWNlbGxzID0gPDI+Ow0KPj4gLQkJCWludGVycnVwdC1jb250cm9sbGVyOw0K
+Pj4gLQkJCSNpbnRlcnJ1cHQtY2VsbHMgPSA8Mj47DQo+PiAtCQkJaW50ZXJydXB0cyA9IDw4Nz4s
+IDw4OD4sIDw4OT47DQo+PiAtCQkJY2xvY2tzID0gPCZjb3JlY2xrIDA+Ow0KPj4gLQkJfTsNCj4+
+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZ3Bpby9ncGlv
+LW12ZWJ1LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZ3Bpby9ncGlv
+LW12ZWJ1LnlhbWwNCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+PiBpbmRleCAwMDAwMDAwMDAw
+MDAuLjg0YjcyZTUwNjUyNg0KPj4gLS0tIC9kZXYvbnVsbA0KPj4gKysrIGIvRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2dwaW8vZ3Bpby1tdmVidS55YW1sDQo+PiBAQCAtMCwwICsx
+LDE0NyBAQA0KPj4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1Ig
+QlNELTItQ2xhdXNlKQ0KPj4gKyVZQU1MIDEuMg0KPj4gKy0tLQ0KPj4gKyRpZDogaHR0cDovL3Nj
+YW5tYWlsLnRydXN0d2F2ZS5jb20vP2M9MjA5ODgmZD0xZXY2NHBhRUtGN28zeVRWb0ZfZmdpVkJr
+ZVVpMF9EZzNZUWk0SlB0cEEmdT1odHRwJTNhJTJmJTJmZGV2aWNldHJlZSUyZW9yZyUyZnNjaGVt
+YXMlMmZncGlvJTJmZ3Bpby1tdmVidSUyZXlhbWwlMjMNCj4+ICskc2NoZW1hOiBodHRwOi8vc2Nh
+bm1haWwudHJ1c3R3YXZlLmNvbS8/Yz0yMDk4OCZkPTFldjY0cGFFS0Y3bzN5VFZvRl9mZ2lWQmtl
+VWkwX0RnM1lCeHRNRHVxdyZ1PWh0dHAlM2ElMmYlMmZkZXZpY2V0cmVlJTJlb3JnJTJmbWV0YS1z
+Y2hlbWFzJTJmY29yZSUyZXlhbWwlMjMNCj4+ICsNCj4+ICt0aXRsZTogTWFydmVsbCBFQlUgR1BJ
+TyBjb250cm9sbGVyDQo+PiArDQo+PiArbWFpbnRhaW5lcnM6DQo+PiArICAtIFRoaWVycnkgUmVk
+aW5nIDx0aGllcnJ5LnJlZGluZ0BnbWFpbC5jb20+DQo+PiArICAtIExlZSBKb25lcyA8bGVlLmpv
+bmVzQGxpbmFyby5vcmc+DQo+PiArDQo+PiArcHJvcGVydGllczoNCj4+ICsgIGNvbXBhdGlibGU6
+DQo+PiArICAgIG9uZU9mOg0KPj4gKyAgICAgIC0gZW51bToNCj4+ICsgICAgICAgICAgLSBtYXJ2
+ZWxsLG9yaW9uLWdwaW8NCj4+ICsgICAgICAgICAgLSBtYXJ2ZWxsLG12NzgyMDAtZ3Bpbw0KPj4g
+KyAgICAgICAgICAtIG1hcnZlbGwsYXJtYWRhLTM3MC1ncGlvDQo+IEl0J3MgZXhwZWN0ZWQgdG8g
+aGF2ZSBvcmlvbiBmYWxsYmFjaywgc28gdGhpcyBkb2VzIG5vdCBsb29rIGNvcnJlY3QuDQpFeGNl
+cHQgZm9yIG1hcnZlbGwsYXJtYWRhLThrLWdwaW8uIEknbGwgbG9vayBpbiB0byBob3cgdG8gY2Fw
+dHVyZSB0aGF0Lg0KPg0KPj4gKyAgICAgICAgICAtIG1hcnZlbGwsYXJtYWRheHAtZ3Bpbw0KPj4g
+KyAgICAgICAgICAtIG1hcnZlbGwsYXJtYWRhLThrLWdwaW8NCj4+ICsgICAgICAtIGl0ZW1zOg0K
+Pj4gKyAgICAgICAgICAtIGNvbnN0OiBtYXJ2ZWxsLGFybWFkYS0zNzAtZ3Bpbw0KPj4gKyAgICAg
+ICAgICAtIGNvbnN0OiBtYXJ2ZWxsLG9yaW9uLWdwaW8NCj4+ICsNCj4+ICsgICAgZGVzY3JpcHRp
+b246IHwNCj4+ICsgICAgICAibWFydmVsbCxvcmlvbi1ncGlvIiBzaG91bGQgYmUgdXNlZCBmb3Ig
+T3Jpb24sIEtpcmt3b29kLCBEb3ZlLCBEaXNjb3ZlcnkNCj4+ICsgICAgICAoZXhjZXB0IE1WNzgy
+MDApIGFuZCBBcm1hZGEgMzcwLiAibWFydmVsbCxtdjc4MjAwLWdwaW8iIHNob3VsZCBiZSB1c2Vk
+DQo+PiArICAgICAgZm9yIHRoZSBEaXNjb3ZlcnkgTVY3ODIwMC4NCj4+ICsNCj4+ICsgICAgICAi
+bWFydmVsLGFybWFkYXhwLWdwaW8iIHNob3VsZCBiZSB1c2VkIGZvciBhbGwgQXJtYWRhIFhQIFNv
+Q3MgKE1WNzgyMzAsDQo+PiArICAgICAgTVY3ODI2MCwgTVY3ODQ2MCkuDQo+PiArDQo+PiArICAg
+ICAgIm1hcnZlbGwsYXJtYWRhLThrLWdwaW8iIHNob3VsZCBiZSB1c2VkIGZvciB0aGUgQXJtYWRh
+IDdLIGFuZCA4SyBTb0NzDQo+PiArICAgICAgKGVpdGhlciBmcm9tIEFQIG9yIENQKSwgc2VlDQo+
+PiArICAgICAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9tYXJ2ZWxsL2Fw
+ODB4LXN5c3RlbS1jb250cm9sbGVyLnR4dA0KPj4gKyAgICAgIGZvciBzcGVjaWZpYyBkZXRhaWxz
+IGFib3V0IHRoZSBvZmZzZXQgcHJvcGVydHkuDQo+IFdoeSBoYXZpbmcgdGhlIGRlc2NyaXB0aW9u
+PyBUaGUgdXNhZ2Ugc2hvdWxkIGJlIG9idmlvdXMgZnJvbSB0aGUgc2NoZW1hLA0KPiBzbyB3aGF0
+IGlzIHNvIHNwZWNpYWwgaGVyZT8NCg0KSSBmb3VuZCB0aGUgbWFwcGluZyBvZiBTb0NzIHRvIGNv
+bXBhdGlibGUgYSBiaXQgbm9uLW9idmlvdXMgc28gSSBrZXB0IA0KaXQuIFRoZSBpbi10cmVlIGR0
+cyBmaWxlcyBkb24ndCBhY3R1YWxseSBmb2xsb3cgd2hhdCdzIGRvY3VtZW50ZWQgDQooYXJtYWRh
+LXhwLSouZHRzaSBkb24ndCB1c2UgIm1hcnZlbCxhcm1hZGF4cC1ncGlvIikuDQoNCj4+ICsNCj4+
+ICsgIHJlZzoNCj4+ICsgICAgZGVzY3JpcHRpb246IHwNCj4+ICsgICAgICBBZGRyZXNzIGFuZCBs
+ZW5ndGggb2YgdGhlIHJlZ2lzdGVyIHNldCBmb3IgdGhlIGRldmljZS4gT25seSBvbmUgZW50cnkN
+Cj4+ICsgICAgICBpcyBleHBlY3RlZCwgZXhjZXB0IGZvciB0aGUgIm1hcnZlbGwsYXJtYWRheHAt
+Z3BpbyIgdmFyaWFudCBmb3Igd2hpY2gNCj4+ICsgICAgICB0d28gZW50cmllcyBhcmUgZXhwZWN0
+ZWQ6IG9uZSBmb3IgdGhlIGdlbmVyYWwgcmVnaXN0ZXJzLCBvbmUgZm9yIHRoZQ0KPj4gKyAgICAg
+IHBlci1jcHUgcmVnaXN0ZXJzLg0KPiBUaGlzIG5lZWRzIGFsc28gZW50cnkgaW4gYWxsT2Ygd2l0
+aCBwZXItdmFyaWFudCBjb25zdHJhaW50cy4NCj4NCj4+IE5vdCB1c2VkIGZvciBtYXJ2ZWxsLGFy
+bWFkYS04ay1ncGlvLg0KPj4gKw0KPj4gKyAgICAgIEFuIGFkZGl0aW9uYWwgcmVnaXN0ZXIgc2V0
+IGlzIG5lZWRlZCwgZm9yIHRoZSBHUElPIEJsaW5rDQo+PiArICAgICAgQ291bnRlciBvbi9vZmYg
+cmVnaXN0ZXJzLg0KPj4gKyAgICBtaW5JdGVtczogMQ0KPj4gKyAgICBtYXhJdGVtczogMg0KPiBQ
+V00/IHRoZSAicmVnIiBhYm92ZSB3YXMgc2F5aW5nIGFib3V0IHBlci1jcHUgcmVnaXN0ZXJzLCBz
+byB0aGlzIGlzDQo+IGNvbmZ1c2luZy4gSSB1bmRlcnN0YW5kIG9sZCBiaW5kaW5ncyB3cm90ZSBp
+dCBsaWtlIHRoYXQsIHNvIG1heWJlIGl0DQo+IHNob3VsZCBiZSBmaXhlZCBub3cuDQoNCkkgbWVy
+Z2VkIHR3byBzZWN0aW9ucyBmcm9tIHRoZSBvbGQgYmluZGluZ3MuIE9uIHRoZSBBcm1hZGFYUCB0
+aGUgMm5kIA0KZW50cnkgaXMgZG9jdW1lbnRlZCBhcyBmb3IgdGhlIHBlci1DUFUgcmVnaXN0ZXJz
+IGFuZCBhcHBlYXJzIHRvIGJlIA0KbWFuZGF0b3J5LiBGb3IgdGhlIG90aGVycyB0aGUgMm5kIGVu
+dHJ5IGlzIG9wdGlvbmFsIGFuZCBpcyBmb3IgdGhlIHB3bSANCmZ1bmN0aW9uLiBCdXQgYXMgbm90
+ZWQgYWJvdmUgdGhlIGluLXRyZWUgZHRzIGZpbGVzIGRvbid0IGFjdHVhbGx5IHVzZSANCnRoZSBh
+cm1hZGF4cCBjb21wYXRpYmxlIHNvIHRoaXMgbWlnaHQgYmUgd3JvbmcgaW4gdGhlIG9sZCBiaW5k
+aW5nLg0KDQo+DQo+IEFueXdheSwgeW91IG5lZWQgdG8gZGVzY3JpYmUgdGhlIGl0ZW1zIGFuZCB0
+aGVuIGFwcGx5IGNvbnN0cmFpbnRzIGluIGFsbE9mLg0KPg0KPj4gKw0KPj4gKyAgcmVnLW5hbWVz
+Og0KPj4gKyAgICBkZXNjcmlwdGlvbjoNCj4+ICsgICAgICBNdXN0IGNvbnRhaW4gYW4gZW50cnkg
+InB3bSIgY29ycmVzcG9uZGluZyB0byB0aGUNCj4+ICsgICAgICBhZGRpdGlvbmFsIHJlZ2lzdGVy
+IHJhbmdlIG5lZWRlZCBmb3IgUFdNIG9wZXJhdGlvbi4NCj4+ICsgICAgbWluSXRlbXM6IDENCj4+
+ICsgICAgbWF4SXRlbXM6IDINCj4+ICsNCj4+ICsgIG9mZnNldDoNCj4+ICsgICAgJHJlZjogL3Nj
+aGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+PiArICAgIGRlc2NyaXB0aW9u
+OiBPZmZzZXQgaW4gdGhlIHJlZ2lzdGVyIG1hcCBmb3IgdGhlIGdwaW8gcmVnaXN0ZXJzIChpbiBi
+eXRlcykNCj4+ICsNCj4+ICsgIGludGVycnVwdHM6DQo+PiArICAgIGRlc2NyaXB0aW9uOiB8DQo+
+PiArICAgICAgVGhlIGxpc3Qgb2YgaW50ZXJydXB0cyB0aGF0IGFyZSB1c2VkIGZvciBhbGwgdGhl
+IHBpbnMgbWFuYWdlZCBieSB0aGlzDQo+PiArICAgICAgR1BJTyBiYW5rLiBUaGVyZSBjYW4gYmUg
+bW9yZSB0aGFuIG9uZSBpbnRlcnJ1cHQgKGV4YW1wbGU6IDEgaW50ZXJydXB0DQo+PiArICAgICAg
+cGVyIDggcGlucyBvbiBBcm1hZGEgWFAsIHdoaWNoIG1lYW5zIDQgaW50ZXJydXB0cyBwZXIgYmFu
+ayBvZiAzMg0KPj4gKyAgICAgIEdQSU9zKS4NCj4+ICsgICAgbWluSXRlbXM6IDENCj4+ICsgICAg
+bWF4SXRlbXM6IDQNCj4+ICsNCj4+ICsgIGludGVycnVwdC1jb250cm9sbGVyOiB0cnVlDQo+PiAr
+DQo+PiArICAiI2ludGVycnVwdC1jZWxscyI6DQo+PiArICAgIGNvbnN0OiAyDQo+PiArDQo+PiAr
+ICBncGlvLWNvbnRyb2xsZXI6IHRydWUNCj4+ICsNCj4+ICsgIG5ncGlvczoNCj4+ICsgICAgZGVz
+Y3JpcHRpb246DQo+PiArICAgICAgbnVtYmVyIG9mIEdQSU9zIHRoaXMgY29udHJvbGxlciBoYXMN
+Cj4gU2tpcCBkZXNjcmlwdGlvbiwgaXQncyBvYnZpb3VzIGZyb20gZ2VuZXJpYyBiaW5kaW5ncy4N
+Cj4NCj4+ICsgICAgbWluaW11bTogMQ0KPj4gKyAgICBtYXhpbXVtOiAzMg0KPj4gKw0KPj4gKyAg
+IiNncGlvLWNlbGxzIjoNCj4+ICsgICAgY29uc3Q6IDINCj4+ICsNCj4+ICsgIG1hcnZlbGwscHdt
+LW9mZnNldDoNCj4+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMv
+dWludDMyDQo+PiArICAgIGRlc2NyaXB0aW9uOiBPZmZzZXQgaW4gdGhlIHJlZ2lzdGVyIG1hcCBm
+b3IgdGhlIHB3bSByZWdpc3RlcnMgKGluIGJ5dGVzKQ0KPiBJdCdzIHRoZSBzYW1lIGFzIG9mZnNl
+dC4gV2h5IGFsbG93aW5nIGJvdGg/IElzbid0IG9uZSBkZXByZWNhdGVkPw0KQXMgbWVudGlvbmVk
+IHNlcGFyYXRlbHkuIFRoaXMgaXMgZm9yIHRoZSBwd20gZnVuY3Rpb24gd2hpY2ggaXMgZGlmZmVy
+ZW50IA0KdG8gdGhlIG90aGVyIG9mZnNldC4NCj4+ICsNCj4+ICsgICIjcHdtLWNlbGxzIjoNCj4+
+ICsgICAgZGVzY3JpcHRpb246DQo+PiArICAgICAgVGhlIGZpcnN0IGNlbGwgaXMgdGhlIEdQSU8g
+bGluZSBudW1iZXIuIFRoZSBzZWNvbmQgY2VsbCBpcyB0aGUgcGVyaW9kDQo+PiArICAgICAgaW4g
+bmFub3NlY29uZHMuDQo+PiArICAgIGNvbnN0OiAyDQo+PiArDQo+PiArICBjbG9ja3M6DQo+PiAr
+ICAgIG1pbkl0ZW1zOiAxDQo+PiArICAgIG1heEl0ZW1zOiAyDQo+IFRoaXMgc2hvdWxkIGJlIHN0
+cmljdGx5IGRlZmluZWQsIGVpdGhlciBoZXJlIG9yIHBlciB2YXJpYW50Lg0KV2lsbCB1cGRhdGUN
+Cj4+ICsNCj4+ICtyZXF1aXJlZDoNCj4+ICsgIC0gY29tcGF0aWJsZQ0KPj4gKyAgLSBncGlvLWNv
+bnRyb2xsZXINCj4+ICsgIC0gbmdwaW9zDQo+PiArICAtICIjZ3Bpby1jZWxscyINCj4+ICsNCj4+
+ICtpZjoNCj4gV2l0aGluIGFsbE9mIHBsZWFzZS4NCj4NCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5
+c3p0b2Y=

@@ -2,116 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDD3520EC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C993520EC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbiEJHkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 03:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S234377AbiEJHov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 03:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237566AbiEJHer (ORCPT
+        with ESMTP id S235358AbiEJHoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 03:34:47 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88663C4;
-        Tue, 10 May 2022 00:30:49 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id c1so12612082qkf.13;
-        Tue, 10 May 2022 00:30:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fo4vqfFCJO4dTHiOSh+MRYxkxA7rYkGYBM5+Lz22icc=;
-        b=UmHxso13IjA2mku/Wdk9OREuCmAPbFw8jsknirIOP2QD28XmEtmJt011uwZQMmvpWX
-         wWsbWOAfazYENaIupnmB/qIofJCbG7tjRFfqORL4rYtBP7VIRHCj2SFH8W4EJ3VboBff
-         TjH61ml9Ie/cRZPJ/rUccOpePBe1RfR5JJnXaF0IP7u3obuOcLGp2kwWbEYDtvsZwZDj
-         Ayn5yjIjIMPlSlN+meU6fF7ZlWhUfr2iJSPuoqEVYJc0Jj7s3Xz1a3ZUi8dGfcplXT0O
-         IGfSAMfja7add+Mvf1bczSvxrUY0MCa9yocszK5DCpvTjkSK79gaFxAd37S0uR4J8lu8
-         bqtg==
-X-Gm-Message-State: AOAM531P1HvNxvvJeIOtjhS0CN6g81HqZ+XO8IVwLw968c33pi7bzbJ1
-        oGY4VyYVnzLHsz39mUgY7iWD/jwYiB1SWQ==
-X-Google-Smtp-Source: ABdhPJwkyLSyTz8gcaU5Rrfg9AccMe3UotI70OHAP75AaOkkcAQ8pnq1Lg8wwSSqfr4iXa3SZIj5MQ==
-X-Received: by 2002:a37:5e82:0:b0:69f:529c:4d39 with SMTP id s124-20020a375e82000000b0069f529c4d39mr14302377qkb.440.1652167847953;
-        Tue, 10 May 2022 00:30:47 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id o28-20020a05620a0d5c00b0069fc167df92sm8045726qkl.82.2022.05.10.00.30.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 00:30:47 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f7c57ee6feso169876417b3.2;
-        Tue, 10 May 2022 00:30:47 -0700 (PDT)
-X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
- s12-20020a819b0c000000b002f4c5227d3cmr17920371ywg.316.1652167847192; Tue, 10
- May 2022 00:30:47 -0700 (PDT)
+        Tue, 10 May 2022 03:44:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8672B3F7D;
+        Tue, 10 May 2022 00:35:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1A7A91FA40;
+        Tue, 10 May 2022 07:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652168112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1XmhHsmMxly2ssjXZq07GT+YLgJJKJCm1DDtateBDTk=;
+        b=IJuN4UGrs9rc2dJVVBhsa1bjZ3T3IclRPChNG+pU/f0P5j2jhqhJdBv6iHyS8YLVKXrX9O
+        IgR+SAlvxejrlifKj7vvU9VRi+tTDzUTwOLC8ZzoO9LJStWIqpcJbGIH0Mg8qtBSPfOOXE
+        DtIELQ9PZ5agpNUPUxAzWBC7OuPsRuE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652168112;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1XmhHsmMxly2ssjXZq07GT+YLgJJKJCm1DDtateBDTk=;
+        b=Hky868WPFR6DQGfmlvXKlSdXSBp6m/eni1+ZiF8ZqPIJzJCqTRAyxT9iOGNx5/1MoEmPNW
+        oW/SwcsdgAngRzDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFBA313AA5;
+        Tue, 10 May 2022 07:35:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xutPNa8VemJXeQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 10 May 2022 07:35:11 +0000
+Message-ID: <0da1c63b-5cc3-7fc9-1fb4-fdc385539bbc@suse.cz>
+Date:   Tue, 10 May 2022 09:35:11 +0200
 MIME-Version: 1.0
-References: <2b7d411b4a7913335082c858cb0d63b9e4bf7c5b.1652103920.git.geert+renesas@glider.be>
- <20fd1a74-c0f5-d8e9-4903-b74c185d5aa3@kernel.org>
-In-Reply-To: <20fd1a74-c0f5-d8e9-4903-b74c185d5aa3@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 10 May 2022 09:30:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVXHSnOOnn3jchezQc+bsPYTnSPuw_rOe+pyskAVaQGnQ@mail.gmail.com>
-Message-ID: <CAMuHMdVXHSnOOnn3jchezQc+bsPYTnSPuw_rOe+pyskAVaQGnQ@mail.gmail.com>
-Subject: Re: [PATCH] memory: OMAP_GPMC should depend on ARCH_OMAP2PLUS || ARCH_K3
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220404200250.321455-1-shy828301@gmail.com>
+ <627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz>
+ <CAHbLzkrZb6r1r6xFaEFvvJzwvVgDgeZWfjhq-SFu_mQZ0j5tTQ@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more
+ consistent
+In-Reply-To: <CAHbLzkrZb6r1r6xFaEFvvJzwvVgDgeZWfjhq-SFu_mQZ0j5tTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+On 5/9/22 22:34, Yang Shi wrote:
+> On Mon, May 9, 2022 at 9:05 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 4/4/22 22:02, Yang Shi wrote:
+>> >  include/linux/huge_mm.h        | 14 ++++++++++++
+>> >  include/linux/khugepaged.h     | 59 ++++++++++++---------------------------------------
+>> >  include/linux/sched/coredump.h |  3 ++-
+>> >  kernel/fork.c                  |  4 +---
+>> >  mm/huge_memory.c               | 15 ++++---------
+>> >  mm/khugepaged.c                | 76 +++++++++++++++++++++++++++++++++++++-----------------------------
+>> >  mm/mmap.c                      | 14 ++++++++----
+>> >  mm/shmem.c                     | 12 -----------
+>> >  8 files changed, 88 insertions(+), 109 deletions(-)
+>>
+>> Resending my general feedback from mm-commits thread to include the
+>> public ML's:
+>>
+>> There's modestly less lines in the end, some duplicate code removed,
+>> special casing in shmem.c removed, that's all good as it is. Also patch 8/8
+>> become quite boring in v3, no need to change individual filesystems and also
+>> no hook in fault path, just the common mmap path. So I would just handle
+>> patch 6 differently as I just replied to it, and acked the rest.
+>>
+>> That said it's still unfortunately rather a mess of functions that have
+>> similar names. transhuge_vma_enabled(vma). hugepage_vma_check(vma),
+>> transparent_hugepage_active(vma), transhuge_vma_suitable(vma, addr)?
+>> So maybe still some space for further cleanups. But the series is fine as it
+>> is so we don't have to wait for it now.
+> 
+> Yeah, I agree that we do have a lot thp checks. Will find some time to
+> look into it deeper later.
 
-On Tue, May 10, 2022 at 9:22 AM Roger Quadros <rogerq@kernel.org> wrote:
-> On 09/05/2022 16:48, Geert Uytterhoeven wrote:
-> > The Texas Instruments OMAP General Purpose Memory Controller (GPMC) is
-> > only present on TI OMAP2/3/4/5, AM33xx, AM43x, DRA7xx, TI81xx, and K3
-> > SoCs.  Hence add a dependency on ARCH_OMAP2PLUS || ARCH_K3, to prevent
-> > asking the user about this driver when configuring a kernel without
-> > OMAP2+ or K3 SoC family support.
-> >
-> > Fixes: be34f45f0d4aa91c ("memory: omap-gpmc: Make OMAP_GPMC config visible and selectable")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks.
 
-> > --- a/drivers/memory/Kconfig
-> > +++ b/drivers/memory/Kconfig
-> > @@ -105,6 +105,7 @@ config TI_EMIF
-> >  config OMAP_GPMC
-> >       tristate "Texas Instruments OMAP SoC GPMC driver"
-> >       depends on OF_ADDRESS
-> > +     depends on ARCH_OMAP2PLUS || ARCH_K3 || COMPILE_TEST
-> >       select GPIOLIB
-> >       help
-> >         This driver is for the General Purpose Memory Controller (GPMC)
->
-> Is there any possibility that CONFIG_IRQ_DOMAIN is not set while both
-> OF_ADDRESS and COMPILE_TEST are set?
->
-> That particular case will lead to build failures.
->
-> e.g.
-> https://krzk.eu/#/builders/63/builds/162
+>>
+>> We could also consider that the tracking of which mm is to be scanned is
+>> modelled after ksm which has its own madvise flag, but also no "always"
+>> mode. What if for THP we only tracked actual THP madvised mm's, and in
+>> "always" mode just scanned all vm's, would that allow ripping out some code
+>> perhaps, while not adding too many unnecessary scans? If some processes are
+> 
+> Do you mean add all mm(s) to the scan list unconditionally? I don't
+> think it will scale.
 
-So it needs an additional dependency on IRQ_DOMAIN.
-That is a pre-existing problem, not caused by my patch (which adds
-more dependencies, and doesn't remove any).
+It might be interesting to find out how many mm's (percentage of all mm's)
+are typically in the list with "always" enabled. I wouldn't be surprised if
+it was nearly all of them. Having at least one large enough anonymous area
+sounds like something all processes would have these days?
 
-Gr{oetje,eeting}s,
+>> being scanned without any effect, maybe track success separately, and scan
+>> them less frequently etc. That could be ultimately more efficinet than
+>> painfully tracking just *eligibility* for scanning in "always" mode?
+> 
+> Sounds like we need a couple of different lists, for example, inactive
+> and active? And promote or demote mm(s) between the two lists? TBH I
+> don't see too many benefits at the moment. Or I misunderstood you?
 
-                        Geert
+Yeah, something like that. It would of course require finding out whether
+khugepaged is consuming too much cpu uselessly these days while not
+processing fast enough mm's where it succeeds more.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>>
+>> Even more radical thing to consider (maybe that's a LSF/MM level topic, too
+>> bad :) is that we scan pagetables in ksm, khugepaged, numa balancing, soon
+>> in MGLRU, and I probably forgot something else. Maybe time to think about
+>> unifying those scanners?
+> 
+> We do have pagewalk (walk_page_range()) which is used by a couple of
+> mm stuff, for example, mlock, mempolicy, mprotect, etc. I'm not sure
+> whether it is feasible for khugepaged, ksm, etc, or not since I didn't
+> look that hard. But I agree it should be worth looking at.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+pagewalk is a framework to simplify writing code that processes page tables
+for a given one-off task, yeah. But this would be something a bit different,
+e.g. a kernel thread that does the sum of what khugepaged/ksm/etc do. Numa
+balancing uses task_work instead of kthread so that would require
+consideration on which mechanism the unified daemon would use.
+
+>>
+>>
+

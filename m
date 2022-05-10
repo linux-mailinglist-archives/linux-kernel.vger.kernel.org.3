@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043A252273A
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96BA52273B
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237532AbiEJWub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:50:31 -0400
+        id S236976AbiEJWui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:50:38 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiEJWuV (ORCPT
+        with ESMTP id S237370AbiEJWu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:50:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C1B24E023;
-        Tue, 10 May 2022 15:50:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FCEBB82004;
-        Tue, 10 May 2022 22:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9148BC385D0;
-        Tue, 10 May 2022 22:50:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="m2qHVslI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652223014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9+CqMPmHp+6ac0+Sm4AN/wwxvPotPYL1MZ4jUenJ3jE=;
-        b=m2qHVslIkinT8gFrhEc7CNtoppYkDVjiQ3rO6iYQ6YJew5wu6LSGAGEaXRrd5QgJkHVOBF
-        anEbwNAgvrudnrfVYIVe3wP5vg2QbT0O1n7SBZESlRh8ozDaOcB3+yLvA6YYCuuRtRRwtf
-        xrlfj/bNgWVvcYsI99nBRYDpJBV4CWs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e7faad4f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 10 May 2022 22:50:14 +0000 (UTC)
-Date:   Wed, 11 May 2022 00:50:11 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Simo Sorce <simo@redhat.com>
-Cc:     dodis@cs.nyu.edu, tytso@mit.edu, nadiah@cs.ucsd.edu,
-        noahsd@gmail.com, tessaro@cs.washington.edu,
-        torvalds@linux-foundation.org, jeanphilippe.aumasson@gmail.com,
-        jann@thejh.net, keescook@chromium.org, gregkh@linuxfoundation.org,
-        peter@cryptojedi.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "D. J. Bernstein" <djb@cr.yp.to>
-Subject: Re: is "premature next" a real world rng concern, or just an
- academic exercise?
-Message-ID: <YnrsI3wdrbnW7gjS@zx2c4.com>
-References: <YmlMGx6+uigkGiZ0@zx2c4.com>
- <Ym3ZM1P+uYYABtRm@mit.edu>
- <Ym5sICj5iBMn2w/E@zx2c4.com>
- <CAMvzKsiA52Si=PzOJXYwGSA1WUz-1S0A8cpgRJWDzpMkfFbX+Q@mail.gmail.com>
- <CAMvzKsiMY_+8HZqeFqD3tR65a3-JB0LG=+0jBBy1zF4GanrsGA@mail.gmail.com>
- <YnqDC25iR8mcL3XB@zx2c4.com>
- <20220510185123.80607.qmail@cr.yp.to>
- <YnrGYMyEL8qPMRGt@zx2c4.com>
- <5b63a8a37b415db66ffe6b660859e3900c054909.camel@redhat.com>
+        Tue, 10 May 2022 18:50:26 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B4524EA0C
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:22 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id x52so377986pfu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LQpLllgONrrjRjbzd5pzMpCmxzKfwBycUBev+97SkuU=;
+        b=z21WwdqiIt7hG8RyC6XRgynBysMtLb4WUdBq3R4mmAUOSwun5PMZQV8A2j2dARpDOT
+         lTWlb2Q289lKNj9oFMH0leEp9HAZhnc5PB6nP7hBYlQXjuW4WWPesoYdraA+4V1cmudM
+         JF9pRhLXnLDbWBmT23bGm95w+YUBPdsOj6HR+L26np4nwSk/TSVATtQjZwXua5OSHTKe
+         E6QtZ1Kxqa03O4vR1utHDoIooL1Ybic431X/sxQ4I/RMNae5TtJSFyLoac/lb89gRQ0T
+         XcDSk6R5x6PR4MlsAHjnvkfqanFlo3rlsbFEjf52HzO4yUiY3cVlbsSP5gMqEA5vFdEJ
+         UyeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LQpLllgONrrjRjbzd5pzMpCmxzKfwBycUBev+97SkuU=;
+        b=lPnyO30vQCcmREmlYGXtrKG5dTDbschA0nciguYALc8H39j9D8Sc3T0I7DE8OP4AFI
+         DE090a5WnRjYPJ9vu+ZZk+DXDiMOhccuK75rJ3SvIahlZsTUCzX/4RYW89C95gA4kgW/
+         bqmhKVEF2z2eneb0oZUsnzMxixexwEKELE0Qxng8QrGXFlYUBh0FrgW2KnW8vVuKU62U
+         ZUUqif0r/FcIF4WggeCIF5ZEb4Zxqj2swIWl7lDv0u1AphScEWgIwkQcV/EI1K4q7rWJ
+         SRztVKzso+lgUHC0Kha0+ENbuf9PcQKHLa/eR5JiJsXiJbABPmHfzgVRCCaHUHoHnYZM
+         FGdg==
+X-Gm-Message-State: AOAM53026fwEpqi5hUVA1bPxxwVvpTOxetv8QCoUIORQAnTllJQ7P22U
+        m6hkL5hL1d5EAI55y1MAfjVCoLe0PQXukw==
+X-Google-Smtp-Source: ABdhPJwki9DMZm5zvN7+V4rQQ7syaEnadJxZTu4l9mmW5NhMxkDW4LiJFBV8Wl+u9JHhr/3ILqfxGA==
+X-Received: by 2002:a05:6a00:1991:b0:50e:697:53f9 with SMTP id d17-20020a056a00199100b0050e069753f9mr22516734pfl.22.1652223021711;
+        Tue, 10 May 2022 15:50:21 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id x12-20020a62860c000000b0050dc762818fsm74576pfd.105.2022.05.10.15.50.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 15:50:21 -0700 (PDT)
+Message-ID: <7c5a9967-b5b6-50f3-2492-cbcdffa24080@linaro.org>
+Date:   Tue, 10 May 2022 15:50:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5b63a8a37b415db66ffe6b660859e3900c054909.camel@redhat.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] exfat: check if cluster num is valid
+Content-Language: en-US
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
+References: <20220418173923.193173-1-tadeusz.struk@linaro.org>
+ <CAKYAXd_9BT7je6-UHgDYCY-WD2maxYtam0_En8pgS_FiwRJP9Q@mail.gmail.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <CAKYAXd_9BT7je6-UHgDYCY-WD2maxYtam0_En8pgS_FiwRJP9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simo,
+Hi Jeon,
+On 4/21/22 22:54, Namjae Jeon wrote:
+>> Call Trace:
+>>   __dump_stack lib/dump_stack.c:77 [inline]
+>>   dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
+>>   print_address_description+0x81/0x3c0 mm/kasan/report.c:233
+>>   __kasan_report mm/kasan/report.c:419 [inline]
+>>   kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
+>>   __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
+>>   exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
+>>   exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
+>>   __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
+>>   exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
+>>   exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
+>>   notify_change+0xb76/0xe10 fs/attr.c:336
+>>   do_truncate+0x1ea/0x2d0 fs/open.c:65
+> Could you please share how to reproduce this ?
 
-On Tue, May 10, 2022 at 05:33:34PM -0400, Simo Sorce wrote:
-> On Tue, 2022-05-10 at 22:09 +0200, Jason A. Donenfeld wrote:
-> > For 5.19 (or at this point, more likely 5.20), there's a userspace
-> > notifier in store, maybe, if I can figure out how to do it right.
-> > There's a pretty bikesheddy thread here on what shape that interface
-> > should take: https://lore.kernel.org/lkml/YnA5CUJKvqmXJxf2@zx2c4.com/
-> > But basically there are some details about how an async interface should
-> > work, and what the virtual hardware future, if any, looks like for a
-> > memory mapped race-free polling interface. Plus some considerations on
-> > how much we should care etc.
-> 
-> Perhaps it might be simpler to add an "epoch" number or similar exposed
-> [...]
+Sorry, I missed this.
+The reproducer [1] can be found on the syzbot report website [2]
 
-Could you send these ideas to the bikeshed thread that I linked rather
-than this premature next one. I think it'd be a good idea to keep Alex
-and Lennart looped in to that discussion, since they represent userspace
-projects that probably care about it, and not bog this one down with
-systems programming things pretty far from premature next threat model
-stuff. It's a bikeshed thing, after all...
-
+[1] https://syzkaller.appspot.com/text?tag=ReproC&x=1353dfdf700000
+[2] https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
+-- 
 Thanks,
-Jason
+Tadeusz

@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79985521059
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9422A52105C
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238455AbiEJJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S238474AbiEJJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238442AbiEJJNo (ORCPT
+        with ESMTP id S238442AbiEJJOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:13:44 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670202555BA
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:09:48 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p12so14441150pfn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XSWbv+Ep/+Movyv6deaCjO1wiUE43cnYmOPnE+KhShY=;
-        b=InV8ymO/0KYq9HcbHPDzUpNCNY2tYQsq9hirMYdloDuxo6cf1pmiZ4s95TKpKxDEcb
-         aToeQIuxQ+lqIYo5EPxdXoEEB3gw4t/q9aLkS7CBbxXq72/nwbAlod397u/fG+q2k3YZ
-         VUHOVvkCCPVxJ//otLXECEBR9BTzlaRbFzQN8RvONDRstQAA4sIbVdfp0WMhQ6J2zpVr
-         CcDT95pgoPn6/34BaRT7OechnYzMknBbMd4YOPvHxtSo6vdjvmtIZe5KZHabrfiOJinA
-         Ucbbds97FV5W7f5LnN9uG6/GwHbyN05B7rK0MXV5N9FEDIB7wweTlUJkkrKWRuCimOOF
-         QZ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XSWbv+Ep/+Movyv6deaCjO1wiUE43cnYmOPnE+KhShY=;
-        b=Nl6qyA5brAG6fijy6dJKJlIbkSJw00JPdtd0IMOmNbdwi/FohpXQVU9ON5uZIjMLQZ
-         fxIYzMHgOAwrrqSkBulwwK9Ty9LpCFC+FagFGox3p88Z5RTwHP+4c8RICGdwclfRlr3e
-         K5/6ATUSP6Wy8WZV5LPbeRbX8OTpdtJecFvIYW/QIP1p2sVeNYy1WZnogXqqr+9PWwcc
-         Ewz7cJhtnPqQN2Zu80IWdzdPkmolTnupt8HIyIDczenh0eigcKYJLpM6l/QleHm9z2Mz
-         lHYj+Wz6ejfXJwKJ198nlawUeFEYQf4+dWt9bM9XrubDbVV+dakUG0zUqNzdGDgqf6HS
-         LVWA==
-X-Gm-Message-State: AOAM532qYlT35pKlPZVXLWkfm1Rmgur+yU+VMu1IV7vzsjFjW/e3kQeZ
-        2LGKqbNPVAKUMfCU3zrLld5YBQ==
-X-Google-Smtp-Source: ABdhPJwXu+6bfJ2FOMd/hrpU0J6EJlp4sESW0BPiddeP9MlZQt9lZsG0xZQKTVaKRYINu2N3ZA+IGg==
-X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id e131-20020a636989000000b003c23c19d661mr16214262pgc.352.1652173787953;
-        Tue, 10 May 2022 02:09:47 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id c17-20020a63ef51000000b003c2f9540127sm9896907pgk.93.2022.05.10.02.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 02:09:47 -0700 (PDT)
-Date:   Tue, 10 May 2022 14:39:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jiabing Wan <wanjiabing@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: mediatek: Fix potential deadlock problem in
- mtk_cpufreq_set_target
-Message-ID: <20220510090945.qhqomdqemrtrqdyo@vireshk-i7>
-References: <20220510080136.11950-1-wanjiabing@vivo.com>
- <20220510081232.4u25qgryszzqblho@vireshk-i7>
- <61a4b23f-9740-6fb4-abd0-640d3353e788@vivo.com>
- <20220510085050.tza6rjvdkjsrhrjv@vireshk-i7>
- <340a3029-1ab1-0e64-0c18-bb2464614919@vivo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <340a3029-1ab1-0e64-0c18-bb2464614919@vivo.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 10 May 2022 05:14:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447942555BB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 688AD614E1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 267ACC385A6;
+        Tue, 10 May 2022 09:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652173817;
+        bh=GXpVDYbkF84LLdJ5bx4YwYoSn9Krmcs/u8uVEyFBHiY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oLb653JNx2KBVbvxGYK7oIFvppbFBTPIYSJD85hFi0sCGzZ1akOP6cPOLeqVNVLjf
+         GLBNMceSMifw+ciRgtuIiZn0keibYMP1pMVYnR8HY4fjLkGHijzfBfdPgUWwDBn4b9
+         0/3/bvyL6OXPJgxD5cn7/81QNgOSCuEXc+ceYs8g7dGbVfE04bi2zMd2Gs7DGNDWkc
+         6fYkMlfUr9ckP7s1qG1kHlkcT3c+wVO5K2B5vS7zwIL2kAlgi2mu6phelLWTwM6mVZ
+         uVvdtlvolPNog6AqZ+S11H1LQsVrxO5YHSTo/n0do/5r45zuhHxbk4qC+56zWo55qN
+         58h8zSW774MTg==
+Date:   Tue, 10 May 2022 18:10:12 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-Id: <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
+In-Reply-To: <20220509142203.6c4f2913@gandalf.local.home>
+References: <YmFXrBG5AmX3+4f8@lakrids>
+        <20220421100639.03c0d123@gandalf.local.home>
+        <YmF0xYpTMoWOIl00@lakrids>
+        <20220421114201.21228eeb@gandalf.local.home>
+        <YmGF/OpIhAF8YeVq@lakrids>
+        <20220421130648.56b21951@gandalf.local.home>
+        <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
+        <20220422114541.34d71ad9@gandalf.local.home>
+        <YmLlmaXF00hPkOID@lakrids>
+        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
+        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
+        <20220509142203.6c4f2913@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,37 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-05-22, 16:58, Jiabing Wan wrote:
-> Yes, I write this line by hand.
-> There must be something wrong when copying the subject line.
+Hi Steve,
+
+On Mon, 9 May 2022 14:22:03 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Thu, 5 May 2022 12:15:38 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> Maybe I should find some tools in git to avoid it in the future.
+> > OK. But my interest is that the ftrace on arm64 can provide a limited
+> > access to registers via pt_regs or not. I don't mind the contained values
+> > so much because in the most case, 'users' will (most likely) access to the
+> > ARGs via BPF or tracefs (and we can just warn users if they try to access
+> > the registers which is not saved.) But if the arm64 ftrace only provides
+> > a special data structure, arch-independent code must have 2 different access
+> > code. That is inefficient. That is my concern.
+> > IOW, I'm interested in interface abstraction.
+> 
+> Note, ftrace now has a ftrace_regs structure that is passed to the
+> callbacks for the function tracer.
+> 
+> It then has an arch dependent helper function ftrace_get_regs(fregs), that
+> returns a pt_regs from the fregs only if the fregs has a full pt_regs to
+> return. If not, it returns NULL.
+>
+> This was suggested by both Peter Zijlstra and Thomas Gleixner when I
+> introduced FTRACE_WITH_ARGS, where all functions can now get the arguments
+> from fregs, but not the full pt_regs.
 
-Add this to ~/.gitconfig
+Hmm, I thought the ftrace_get_regs() is the all-or-nothing interface, or
+is there any way to get the arguments from fregs?
 
-[pretty]
-	fixes = Fixes: %h (\"%s\")
+> If a ftrace_ops has the REGS flag set
+> (using ftrace_regs_caller), the ftrace_get_regs(fregs) will return the
+> pt_regs, or it will return NULL if ftrace_regs_caller was not used.
+> 
+> This way the same parameter can provide full pt_regs or a subset, and have
+> an generic interface to tell the difference.
 
-And then just do:
+If it can provide a partial (subset of) pt_regs, that could be good for me
+too, since at least kprobe-events on ftrace can check the traced register
+is in the subset or not and reject it if it doesn't saved.
 
-$ git log --pretty=fixes c210063b40ac
-
-It shall give you:
-
-Fixes: c210063b40ac ("cpufreq: mediatek: Add opp notification support")
-Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
-Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
-Fixes: f126fbadce92 ("cpufreq: mediatek: Unregister platform device on exit")
-Fixes: a3b8d1b12c6b ("cpufreq: mediatek: Fix NULL pointer dereference in mediatek-cpufreq")
-Fixes: ffa7bdf7f344 ("cpufreq: mediatek: Make sram regulator optional")
-
-and other patches as we did git log.
-
-OR
-
-Else you could do something like this to just see one commit:
-
-$ git show -s  --pretty=oneline --pretty=fixes c210063b40ac
+Thank you,
 
 -- 
-viresh
+Masami Hiramatsu <mhiramat@kernel.org>

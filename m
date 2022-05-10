@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4E3521C14
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A97F521B33
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344385AbiEJO3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S243636AbiEJOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245177AbiEJN77 (ORCPT
+        with ESMTP id S244932AbiEJNrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:59:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABE7D80B6;
-        Tue, 10 May 2022 06:39:46 -0700 (PDT)
+        Tue, 10 May 2022 09:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62A820F4EB;
+        Tue, 10 May 2022 06:32:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FA83B81DC2;
-        Tue, 10 May 2022 13:39:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C66C385C2;
-        Tue, 10 May 2022 13:39:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CAC561763;
+        Tue, 10 May 2022 13:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C89C385C6;
+        Tue, 10 May 2022 13:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189984;
-        bh=P3SVQNOO3B7N/QZLCcWPzgOahP2/LyoDyJ/f3OPaNKs=;
+        s=korg; t=1652189564;
+        bh=jBq/EknjBntilCntOj42EHjlRuD4uZ+6hFXb03kR5Rw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uC4PtlPVj4QyvDETPKifX85FTa2NH7ErvFWSIuOy3WBF+NGHwER358DoxcKZZm+di
-         7XCl07GZOft2L3KksaKrpDpZHBaWL49Ptt2wtpNK7PCo2cyoLRU7XuOK+n9S9nk7Hq
-         v4la2gK1JMc8hjFWEwOyoGctzg2BMUZ77SgHhsXA=
+        b=hYzQA1Muuq2n1pupq925hTy3jan/qBOKEq/a5ANdDjU01fTNtqGD0eU57DSBj63nH
+         8IMg+1bzoaX0t9Q7w2d9WwSs9z2fvZQPAWQMI5vYVBlybExtVs3O0pKGPr/nACOJUv
+         1ZjuGpExDnVLKiZyzAJ4841+dhgaGr3EZPLyR+gM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 084/140] net: ethernet: mediatek: add missing of_node_put() in mtk_sgmii_init()
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 092/135] net/mlx5e: Lag, Dont skip fib events on current dst
 Date:   Tue, 10 May 2022 15:07:54 +0200
-Message-Id: <20220510130744.013145208@linuxfoundation.org>
+Message-Id: <20220510130743.050495077@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +56,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-commit ff5265d45345d01fefc98fcb9ae891b59633c919 upstream.
+[ Upstream commit 4a2a664ed87962c4ddb806a84b5c9634820bcf55 ]
 
-The node pointer returned by of_parse_phandle() with refcount incremented,
-so add of_node_put() after using it in mtk_sgmii_init().
+Referenced change added check to skip updating fib when new fib instance
+has same or lower priority. However, new fib instance can be an update on
+same dst address as existing one even though the structure is another
+instance that has different address. Ignoring events on such instances
+causes multipath LAG state to not be correctly updated.
 
-Fixes: 9ffee4a8276c ("net: ethernet: mediatek: Extend SGMII related functions")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220428062543.64883-1-yangyingliang@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Track 'dst' and 'dst_len' fields of fib event fib_entry_notifier_info
+structure and don't skip events that have the same value of that fields.
+
+Fixes: ad11c4f1d8fd ("net/mlx5e: Lag, Only handle events from highest priority multipath entry")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mediatek/mtk_sgmii.c |    1 +
- 1 file changed, 1 insertion(+)
+ .../net/ethernet/mellanox/mlx5/core/lag_mp.c  | 20 +++++++++++--------
+ .../net/ethernet/mellanox/mlx5/core/lag_mp.h  |  2 ++
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -26,6 +26,7 @@ int mtk_sgmii_init(struct mtk_sgmii *ss,
- 			break;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
+index 9d50b9c2db5e..81786a9a424c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
+@@ -100,10 +100,12 @@ static void mlx5_lag_fib_event_flush(struct notifier_block *nb)
+ 	flush_workqueue(mp->wq);
+ }
  
- 		ss->regmap[i] = syscon_node_to_regmap(np);
-+		of_node_put(np);
- 		if (IS_ERR(ss->regmap[i]))
- 			return PTR_ERR(ss->regmap[i]);
+-static void mlx5_lag_fib_set(struct lag_mp *mp, struct fib_info *fi)
++static void mlx5_lag_fib_set(struct lag_mp *mp, struct fib_info *fi, u32 dst, int dst_len)
+ {
+ 	mp->fib.mfi = fi;
+ 	mp->fib.priority = fi->fib_priority;
++	mp->fib.dst = dst;
++	mp->fib.dst_len = dst_len;
+ }
+ 
+ struct mlx5_fib_event_work {
+@@ -116,10 +118,10 @@ struct mlx5_fib_event_work {
+ 	};
+ };
+ 
+-static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+-				     unsigned long event,
+-				     struct fib_info *fi)
++static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev, unsigned long event,
++				     struct fib_entry_notifier_info *fen_info)
+ {
++	struct fib_info *fi = fen_info->fi;
+ 	struct lag_mp *mp = &ldev->lag_mp;
+ 	struct fib_nh *fib_nh0, *fib_nh1;
+ 	unsigned int nhs;
+@@ -133,7 +135,9 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
  	}
+ 
+ 	/* Handle multipath entry with lower priority value */
+-	if (mp->fib.mfi && mp->fib.mfi != fi && fi->fib_priority >= mp->fib.priority)
++	if (mp->fib.mfi && mp->fib.mfi != fi &&
++	    (mp->fib.dst != fen_info->dst || mp->fib.dst_len != fen_info->dst_len) &&
++	    fi->fib_priority >= mp->fib.priority)
+ 		return;
+ 
+ 	/* Handle add/replace event */
+@@ -149,7 +153,7 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+ 
+ 			i++;
+ 			mlx5_lag_set_port_affinity(ldev, i);
+-			mlx5_lag_fib_set(mp, fi);
++			mlx5_lag_fib_set(mp, fi, fen_info->dst, fen_info->dst_len);
+ 		}
+ 
+ 		return;
+@@ -179,7 +183,7 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+ 	}
+ 
+ 	mlx5_lag_set_port_affinity(ldev, MLX5_LAG_NORMAL_AFFINITY);
+-	mlx5_lag_fib_set(mp, fi);
++	mlx5_lag_fib_set(mp, fi, fen_info->dst, fen_info->dst_len);
+ }
+ 
+ static void mlx5_lag_fib_nexthop_event(struct mlx5_lag *ldev,
+@@ -220,7 +224,7 @@ static void mlx5_lag_fib_update(struct work_struct *work)
+ 	case FIB_EVENT_ENTRY_REPLACE:
+ 	case FIB_EVENT_ENTRY_DEL:
+ 		mlx5_lag_fib_route_event(ldev, fib_work->event,
+-					 fib_work->fen_info.fi);
++					 &fib_work->fen_info);
+ 		fib_info_put(fib_work->fen_info.fi);
+ 		break;
+ 	case FIB_EVENT_NH_ADD:
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.h b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.h
+index e8380eb0dd6a..b3a7f18b9e30 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.h
+@@ -18,6 +18,8 @@ struct lag_mp {
+ 	struct {
+ 		const void        *mfi; /* used in tracking fib events */
+ 		u32               priority;
++		u32               dst;
++		int               dst_len;
+ 	} fib;
+ 	struct workqueue_struct   *wq;
+ };
+-- 
+2.35.1
+
 
 

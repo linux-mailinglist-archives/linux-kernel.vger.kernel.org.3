@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCCC520D93
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296D2520DA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 08:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiEJGJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 02:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S237010AbiEJGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 02:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiEJGJS (ORCPT
+        with ESMTP id S236489AbiEJGS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 02:09:18 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C02A3BCA;
-        Mon,  9 May 2022 23:05:22 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id x52so14082967pfu.11;
-        Mon, 09 May 2022 23:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TYoKj9SDisXrVyQgu04AJWDh/BOmuXH5bGQRnrO9Pis=;
-        b=oQ/LZEgPh8pL3Yje1n48XirpOlJKdNHpFt623KQmdcuNvr4b+e/Uh6TOS3zOH3c7cv
-         N6OoGy+XjY1RKdcxwxmOy6C4jzd1EplkjBuIk2mfY8N0aor+f+wULGjIfSdeqXItp8b+
-         mAZrQb9k4aQFnhdDjsytrENDEBXlmsVY8ndB6UNAFO2lmrNDa5U7lMFVFMKcomG4Mo5O
-         fxfkpbbxpotlML+SH8TGvEPkf0IBiCW720DQWcxJ9uC4Rz3ByYzdyawgxa7ujW8guBZ4
-         DhtvOpvw2jGpQd32I4afEkoDja9YdsNHXmKpbKTzqihpUZpASaqvNczTtcNxrl8mpOe6
-         j8jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TYoKj9SDisXrVyQgu04AJWDh/BOmuXH5bGQRnrO9Pis=;
-        b=bcwbIPLsyuDJ15zx/DfRLjwn1nppVCIDFQsqfqN+r5V0vX35kiuAi6lxwQt0ny7paj
-         jc/SqpDX/WwkrwybBiSmGzUpcufGfd15YH7q9TKT0xVD6Wrp2t/vprYGMzAZQfx6ief3
-         qkomFQNAaMrjjCrmKSomnAUPoU1/mZYs8BG3ueOE4/8TihscIgxCIY1EykJVib1EL71m
-         ZDdWqA4JSBPnyW6HZabvKkKX5KejXu2aYf/675TId/aHmkdT3YTgbSj31UNaUn4C9s2d
-         +iIloWo1w1vqpXYNcVJYqeZndQvHSPhjw6b7R+VS8/NvFk/lr3ltwt1mfHBHa4QcBqBv
-         l24g==
-X-Gm-Message-State: AOAM531AMA2G9ZG70B67KMDXVk3PETCalhv3NRJwE18lQIKpEMs5YWgi
-        D+kf/emwSCyvCPNMrOpo/BQo+ygq7S5WZ+Ezn/g=
-X-Google-Smtp-Source: ABdhPJxl63vrCxM265OPPN2Xh/ht3Cuahd9Pze0ZH3b+3PqglcSrmqe8alm8j7HXbuOXdaxvwDZSUda8R+JsSjw5RkQ=
-X-Received: by 2002:a63:84c8:0:b0:3c6:4013:9e90 with SMTP id
- k191-20020a6384c8000000b003c640139e90mr15689360pgd.415.1652162722100; Mon, 09
- May 2022 23:05:22 -0700 (PDT)
+        Tue, 10 May 2022 02:18:26 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680CA2317EE;
+        Mon,  9 May 2022 23:14:28 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeae3.dynamic.kabel-deutschland.de [95.90.234.227])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5908D61E6478B;
+        Tue, 10 May 2022 08:14:26 +0200 (CEST)
+Message-ID: <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+Date:   Tue, 10 May 2022 08:14:25 +0200
 MIME-Version: 1.0
-References: <20220509134629.440965-1-Qing-wu.Li@leica-geosystems.com.cn> <20220509134629.440965-4-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20220509134629.440965-4-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Alexandru Ardelean <ardeleanalex@gmail.com>
-Date:   Tue, 10 May 2022 09:05:10 +0300
-Message-ID: <CA+U=DsoRpNZY08R8vZSF9Wq1MUCq=U7ohUE9YSXF2GZeGFr7Qg@mail.gmail.com>
-Subject: Re: [PATCH V1 3/5] iio: accel: bmi088: Add support for bmi090l accel
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        mchehab+huawei@kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory
+ controller
+Content-Language: en-US
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20220510031056.1657-1-ctcchien@nuvoton.com>
+ <20220510031056.1657-3-ctcchien@nuvoton.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220510031056.1657-3-ctcchien@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 4:46 PM LI Qingwu
-<Qing-wu.Li@leica-geosystems.com.cn> wrote:
->
-> Add supports for BMI090L, it's a high-performance Inertial
-> Measurement Unit, with an accelerometer and gyroscope.
-> The commit adds the accelerometer driver for the SPI interface.
-> The gyroscope part is already supported by the BMG160 driver.
-> Same as BMI088, BMI090L have the range of +/-3, 6, 12, and 24g.
->
+Dear Medad,
 
-Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 
-> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Thank you for your patch.
+
+Am 10.05.22 um 05:10 schrieb Medad CChien:
+> Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+> 
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  drivers/iio/accel/bmi088-accel-core.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
-> index ac8acf6e2ff0..44cbe098c093 100644
-> --- a/drivers/iio/accel/bmi088-accel-core.c
-> +++ b/drivers/iio/accel/bmi088-accel-core.c
-> @@ -442,6 +442,13 @@ static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
->                 .num_channels = ARRAY_SIZE(bmi088_accel_channels),
->                 .scale_table = {{0, 598}, {0, 1196}, {0, 2393}, {0, 4785}},
->         },
-> +       [2] = {
-> +               .name = "bmi090l-accel",
-> +               .chip_id = 0x1A,
-> +               .channels = bmi088_accel_channels,
-> +               .num_channels = ARRAY_SIZE(bmi088_accel_channels),
-> +               .scale_table = {{0, 897}, {0, 1795}, {0, 3590}, {0, 7179}},
-> +       },
->  };
->
->  static const struct iio_info bmi088_accel_info = {
-> --
-> 2.25.1
->
+>   .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++++++
+>   1 file changed, 61 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> new file mode 100644
+> index 000000000000..6f37211796a3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Memory Controller
+> +
+> +maintainers:
+> +  - Medad CChien <ctcchien@nuvoton.com>
+
+Just a side note, that in my experience functional like 
+<linux-npcm-memory-controller@nuvoton.com> instead of personal addresses 
+are useful, as you can configure on your side, who to deliver messages 
+to. For example, if you are on sick leave or vacation, you just 
+configure to deliver the message to a colleague of yours (or they get 
+messages in the first place anyway).
+
+Maybe you can bring that up at Nuvoton.
+
+[…]
+
+
+Kind regards,
+
+Paul

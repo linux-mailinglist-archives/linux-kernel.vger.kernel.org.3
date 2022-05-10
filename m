@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7F4521B29
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9B6521BFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243084AbiEJOIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S1344486AbiEJO0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiEJNq6 (ORCPT
+        with ESMTP id S244264AbiEJNzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:46:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035971668A9;
-        Tue, 10 May 2022 06:31:58 -0700 (PDT)
+        Tue, 10 May 2022 09:55:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4068A2AC6CF;
+        Tue, 10 May 2022 06:38:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94141615C8;
-        Tue, 10 May 2022 13:31:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F63C385C9;
-        Tue, 10 May 2022 13:31:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D164BB81DC3;
+        Tue, 10 May 2022 13:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD09C385A6;
+        Tue, 10 May 2022 13:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189517;
-        bh=FxIhdZqIw91pbHMbO5gwTOdjHrJnWK2rh0Rb9gXuISc=;
+        s=korg; t=1652189911;
+        bh=DHz9FBVHZk9j/KZCg+ljNfPo6VkSfiVP4tnwrZI+KG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xAPJySPr6EtALD/+BYtvt8CrDwPN+AbI4mviagNSf1NbljVeOtIS8EyrS4wXQrQJh
-         /aCih0Lqxg93q92/G7zHakuKngqbHA5o71ShJeVCieKDHPkKZmXrW5PigV4ciXMitW
-         UPfUJn2SHVEQ0ULk0v3AT1FQKYWJ7H/QCxQCLSAQ=
+        b=XyCWqhDSRaxFRzto4oWei3wu+WnaAcKa9wOyiw8yz5UqBPBPmhSmFFHW51WdmXhJK
+         GS2BcoWpVS2wLR6BmMXLSztdy+Y+UFSSbKqu6qF+eX2QfirhcjpwKKPMJ5lt9ufXQq
+         K5HY/UTY8MLFMAAE7NKa8kJ9vQAtpzftE00Wtuu4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.15 075/135] selftests: mirror_gre_bridge_1q: Avoid changing PVID while interface is operational
-Date:   Tue, 10 May 2022 15:07:37 +0200
-Message-Id: <20220510130742.563598393@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.17 068/140] net/mlx5e: Fix the calling of update_buffer_lossy() API
+Date:   Tue, 10 May 2022 15:07:38 +0200
+Message-Id: <20220510130743.563654473@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Mark Zhang <markzhang@nvidia.com>
 
-commit 3122257c02afd9f199a8fc84ae981e1fc4958532 upstream.
+commit c4d963a588a6e7c4ef31160e80697ae8e5a47746 upstream.
 
-In emulated environments, the bridge ports enslaved to br1 get a carrier
-before changing br1's PVID. This means that by the time the PVID is
-changed, br1 is already operational and configured with an IPv6
-link-local address.
+The arguments of update_buffer_lossy() is in a wrong order. Fix it.
 
-When the test is run with netdevs registered by mlxsw, changing the PVID
-is vetoed, as changing the VID associated with an existing L3 interface
-is forbidden. This restriction is similar to the 8021q driver's
-restriction of changing the VID of an existing interface.
-
-Fix this by taking br1 down and bringing it back up when it is fully
-configured.
-
-With this fix, the test reliably passes on top of both the SW and HW
-data paths (emulated or not).
-
-Fixes: 239e754af854 ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1q")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Link: https://lore.kernel.org/r/20220502084507.364774-1-idosch@nvidia.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 88b3d5c90e96 ("net/mlx5e: Fix port buffers cell size value")
+Signed-off-by: Mark Zhang <markzhang@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-@@ -61,9 +61,12 @@ setup_prepare()
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/port_buffer.c
+@@ -309,8 +309,8 @@ int mlx5e_port_manual_buffer_config(stru
+ 		if (err)
+ 			return err;
  
- 	vrf_prepare
- 	mirror_gre_topo_create
-+	# Avoid changing br1's PVID while it is operational as a L3 interface.
-+	ip link set dev br1 down
- 
- 	ip link set dev $swp3 master br1
- 	bridge vlan add dev br1 vid 555 pvid untagged self
-+	ip link set dev br1 up
- 	ip address add dev br1 192.0.2.129/28
- 	ip address add dev br1 2001:db8:2::1/64
- 
+-		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, port_buff_cell_sz,
+-					  xoff, &port_buffer, &update_buffer);
++		err = update_buffer_lossy(max_mtu, curr_pfc_en, prio2buffer, xoff,
++					  port_buff_cell_sz, &port_buffer, &update_buffer);
+ 		if (err)
+ 			return err;
+ 	}
 
 

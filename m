@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD5E521BB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C1A521C38
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343889AbiEJOUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S1344914AbiEJOcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245081AbiEJNrV (ORCPT
+        with ESMTP id S1343751AbiEJOHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:21 -0400
+        Tue, 10 May 2022 10:07:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1D2317DB;
-        Tue, 10 May 2022 06:35:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8311F63B1;
+        Tue, 10 May 2022 06:41:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B476188A;
-        Tue, 10 May 2022 13:35:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16495C385C2;
-        Tue, 10 May 2022 13:35:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B0961937;
+        Tue, 10 May 2022 13:41:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCB4C385C9;
+        Tue, 10 May 2022 13:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189702;
-        bh=Rkh+144k4iUlSkLpEIMZg4P+EkOe9XVhs9V5XUEYbCo=;
+        s=korg; t=1652190074;
+        bh=g9pNUFd+Po/y6lsMmMGBAgpvwsInn4kXThXwqDSMj9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VGMWmPLPQUE9XHLvq+kpBVf1REtMVgoHgeCbmIrAgjsJQSxI/IdRiMjWoIYZvsjjS
-         Sh7xHuq4tayMOeH7ap56iZf1nK2WyNJQ4RG4JmFlB65MS1qCQvT2EvnTtrxQxXQR1z
-         f3g0KqInqLT0xpOnVpuOyjollxsasa/7J+XzR82U=
+        b=eb0fJ5eiAmGokXWf/PUS9yYj/qkvc6keF8z4ktI5zXBxmOVEsDJCjMQuy8HymgblG
+         ab4j+PqwH+IzXPABD6KyxZGUsn5aLZ+AKAToiBmEuP7Ra2pFzYU4mSZcvpRguGiLwi
+         6npyBnBCAKAGssmUiC7lPun3b/n5DVybd2vwdh7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 127/135] PCI: aardvark: Add support for ERR interrupt on emulated bridge
+        stable@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 119/140] selftest/vm: verify mmap addr in mremap_test
 Date:   Tue, 10 May 2022 15:08:29 +0200
-Message-Id: <20220510130744.041648273@linuxfoundation.org>
+Message-Id: <20220510130745.005993511@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,103 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 
-commit 3ebfefa396ebee21061fd5fa36073368ed2cd467 upstream.
+[ Upstream commit 9c85a9bae267f6b5e5e374d0d023bbbe9db096d3 ]
 
-ERR interrupt is triggered when corresponding bit is unmasked in both ISR0
-and PCI_EXP_DEVCTL registers. Unmasking ERR bits in PCI_EXP_DEVCTL register
-is not enough. This means that currently the ERR interrupt is never
-triggered.
+Avoid calling mmap with requested addresses that are less than the
+system's mmap_min_addr.  When run as root, mmap returns EACCES when
+trying to map addresses < mmap_min_addr.  This is not one of the error
+codes for the condition to retry the mmap in the test.
 
-Unmask ERR bits in ISR0 register at driver probe time. ERR interrupt is not
-triggered until ERR bits are unmasked also in PCI_EXP_DEVCTL register,
-which is done by AER driver. So it is safe to unconditionally unmask all
-ERR bits in aardvark probe.
+Rather than arbitrarily retrying on EACCES, don't attempt an mmap until
+addr > vm.mmap_min_addr.
 
-Aardvark HW sets PCI_ERR_ROOT_AER_IRQ to zero and when corresponding bits
-in ISR0 and PCI_EXP_DEVCTL are enabled, the HW triggers a generic interrupt
-on GIC. Chain this interrupt to PCIe interrupt 0 with
-generic_handle_domain_irq() to allow processing of ERR interrupts.
+Add a munmap call after an alignment check as the mappings are retained
+after the retry and can reach the vm.max_map_count sysctl.
 
-Link: https://lore.kernel.org/r/20220110015018.26359-14-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220420215721.4868-1-sidhartha.kumar@oracle.com
+Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |   35 +++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vm/mremap_test.c | 29 ++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -98,6 +98,10 @@
- #define PCIE_MSG_PM_PME_MASK			BIT(7)
- #define PCIE_ISR0_MASK_REG			(CONTROL_BASE_ADDR + 0x44)
- #define     PCIE_ISR0_MSI_INT_PENDING		BIT(24)
-+#define     PCIE_ISR0_CORR_ERR			BIT(11)
-+#define     PCIE_ISR0_NFAT_ERR			BIT(12)
-+#define     PCIE_ISR0_FAT_ERR			BIT(13)
-+#define     PCIE_ISR0_ERR_MASK			GENMASK(13, 11)
- #define     PCIE_ISR0_INTX_ASSERT(val)		BIT(16 + (val))
- #define     PCIE_ISR0_INTX_DEASSERT(val)	BIT(20 + (val))
- #define     PCIE_ISR0_ALL_MASK			GENMASK(31, 0)
-@@ -778,11 +782,15 @@ advk_pci_bridge_emul_base_conf_read(stru
- 	case PCI_INTERRUPT_LINE: {
- 		/*
- 		 * From the whole 32bit register we support reading from HW only
--		 * one bit: PCI_BRIDGE_CTL_BUS_RESET.
-+		 * two bits: PCI_BRIDGE_CTL_BUS_RESET and PCI_BRIDGE_CTL_SERR.
- 		 * Other bits are retrieved only from emulated config buffer.
- 		 */
- 		__le32 *cfgspace = (__le32 *)&bridge->conf;
- 		u32 val = le32_to_cpu(cfgspace[PCI_INTERRUPT_LINE / 4]);
-+		if (advk_readl(pcie, PCIE_ISR0_MASK_REG) & PCIE_ISR0_ERR_MASK)
-+			val &= ~(PCI_BRIDGE_CTL_SERR << 16);
-+		else
-+			val |= PCI_BRIDGE_CTL_SERR << 16;
- 		if (advk_readl(pcie, PCIE_CORE_CTRL1_REG) & HOT_RESET_GEN)
- 			val |= PCI_BRIDGE_CTL_BUS_RESET << 16;
- 		else
-@@ -808,6 +816,19 @@ advk_pci_bridge_emul_base_conf_write(str
- 		break;
+diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
+index 58775dab3cc6..380a4593dbd6 100644
+--- a/tools/testing/selftests/vm/mremap_test.c
++++ b/tools/testing/selftests/vm/mremap_test.c
+@@ -65,6 +65,35 @@ enum {
+ 	.expect_failure = should_fail				\
+ }
  
- 	case PCI_INTERRUPT_LINE:
-+		/*
-+		 * According to Figure 6-3: Pseudo Logic Diagram for Error
-+		 * Message Controls in PCIe base specification, SERR# Enable bit
-+		 * in Bridge Control register enable receiving of ERR_* messages
-+		 */
-+		if (mask & (PCI_BRIDGE_CTL_SERR << 16)) {
-+			u32 val = advk_readl(pcie, PCIE_ISR0_MASK_REG);
-+			if (new & (PCI_BRIDGE_CTL_SERR << 16))
-+				val &= ~PCIE_ISR0_ERR_MASK;
-+			else
-+				val |= PCIE_ISR0_ERR_MASK;
-+			advk_writel(pcie, val, PCIE_ISR0_MASK_REG);
-+		}
- 		if (mask & (PCI_BRIDGE_CTL_BUS_RESET << 16)) {
- 			u32 val = advk_readl(pcie, PCIE_CORE_CTRL1_REG);
- 			if (new & (PCI_BRIDGE_CTL_BUS_RESET << 16))
-@@ -1457,6 +1478,18 @@ static void advk_pcie_handle_int(struct
- 	isr1_mask = advk_readl(pcie, PCIE_ISR1_MASK_REG);
- 	isr1_status = isr1_val & ((~isr1_mask) & PCIE_ISR1_ALL_MASK);
- 
-+	/* Process ERR interrupt */
-+	if (isr0_status & PCIE_ISR0_ERR_MASK) {
-+		advk_writel(pcie, PCIE_ISR0_ERR_MASK, PCIE_ISR0_REG);
++/* Returns mmap_min_addr sysctl tunable from procfs */
++static unsigned long long get_mmap_min_addr(void)
++{
++	FILE *fp;
++	int n_matched;
++	static unsigned long long addr;
 +
-+		/*
-+		 * Aardvark HW returns zero for PCI_ERR_ROOT_AER_IRQ, so use
-+		 * PCIe interrupt 0
-+		 */
-+		if (generic_handle_domain_irq(pcie->irq_domain, 0) == -EINVAL)
-+			dev_err_ratelimited(&pcie->pdev->dev, "unhandled ERR IRQ\n");
++	if (addr)
++		return addr;
++
++	fp = fopen("/proc/sys/vm/mmap_min_addr", "r");
++	if (fp == NULL) {
++		ksft_print_msg("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
++			strerror(errno));
++		exit(KSFT_SKIP);
 +	}
 +
- 	/* Process MSI interrupts */
- 	if (isr0_status & PCIE_ISR0_MSI_INT_PENDING)
- 		advk_pcie_handle_msi(pcie);
++	n_matched = fscanf(fp, "%llu", &addr);
++	if (n_matched != 1) {
++		ksft_print_msg("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
++			strerror(errno));
++		fclose(fp);
++		exit(KSFT_SKIP);
++	}
++
++	fclose(fp);
++	return addr;
++}
++
+ /*
+  * Returns false if the requested remap region overlaps with an
+  * existing mapping (e.g text, stack) else returns true.
+-- 
+2.35.1
+
 
 

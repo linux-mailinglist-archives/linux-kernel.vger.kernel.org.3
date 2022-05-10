@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA425218E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931065218F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244150AbiEJNle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S243746AbiEJNlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243561AbiEJN1A (ORCPT
+        with ESMTP id S243792AbiEJN11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF85F23886F;
-        Tue, 10 May 2022 06:20:00 -0700 (PDT)
+        Tue, 10 May 2022 09:27:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F592BFBD2;
+        Tue, 10 May 2022 06:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55381616D0;
-        Tue, 10 May 2022 13:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622B9C385CD;
-        Tue, 10 May 2022 13:19:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69891616D0;
+        Tue, 10 May 2022 13:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692BAC385C2;
+        Tue, 10 May 2022 13:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188799;
-        bh=zWF1IvJ/JqDFFxzMfKbdnAuJ8RlHsywurthgCDlnSU4=;
+        s=korg; t=1652188830;
+        bh=shvRf/SMuN2C4qkWzfKRtwCcm8FwCj/TkpyfwJJHOXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L6BAKxqUURjclWGw+kk4K+/5pcaMlrfSWjzQd6AzVk3K9/yIEAxik5HrJVYetXmF4
-         ki8YuVHraIGJ8B7DMH5r8q0gNTE1h9PKidgUEISJaY0f8nor4HklOLzetw9bqrUb1y
-         BIm7VVCXx89azVw/4HXa1AUdAzDUbB/NMvS7Tmz0=
+        b=K7/1MzhBWasnG0x0neMk/JjVomEb3rB51EEpTGNxDIRUKn3mLQg0x2ubdBUrJd8lg
+         1HTtC3yJ+wvEEbyXDjxO0JXoeEYnfTmMUwnjx//p0QAHtvYmOSXzrdtLgPAmEZOYip
+         0AVGvhK7au0C9OuLWSUuImVvSvX+Ai7G3OTFeSdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 22/88] mtd: rawnand: fix ecc parameters for mt7622
-Date:   Tue, 10 May 2022 15:07:07 +0200
-Message-Id: <20220510130734.392563510@linuxfoundation.org>
+Subject: [PATCH 4.19 23/88] USB: Fix xhci event ring dequeue pointer ERDP update issue
+Date:   Tue, 10 May 2022 15:07:08 +0200
+Message-Id: <20220510130734.420598020@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
 References: <20220510130733.735278074@linuxfoundation.org>
@@ -55,97 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuanhong Guo <gch981213@gmail.com>
+From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 
-[ Upstream commit 9fe4e0d3cbfe90152137963cc024ecb63db6e8e6 ]
+[ Upstream commit e91ac20889d1a26d077cc511365cd7ff4346a6f3 ]
 
-According to the datasheet, mt7622 only has 5 ECC capabilities instead
-of 7, and the decoding error register is arranged  as follows:
-+------+---------+---------+---------+---------+
-| Bits |  19:15  |  14:10  |   9:5   |   4:0   |
-+------+---------+---------+---------+---------+
-| Name | ERRNUM3 | ERRNUM2 | ERRNUM1 | ERRNUM0 |
-+------+---------+---------+---------+---------+
-This means err_mask should be 0x1f instead of 0x3f and the number of
-bits shifted in mtk_ecc_get_stats should be 5 instead of 8.
+In some situations software handles TRB events slower than adding TRBs.
+If the number of TRB events to be processed in a given interrupt is exactly
+the same as the event ring size 256, then the local variable
+"event_ring_deq" that holds the initial dequeue position is equal to
+software_dequeue after handling all 256 interrupts.
 
-This commit introduces err_shift for the difference in this register
-and fix other existing parameters.
+It will cause driver to not update ERDP to hardware,
 
-Public MT7622 reference manual can be found on [0] and the info this
-commit is based on is from page 656 and page 660.
+Software dequeue pointer is out of sync with ERDP on interrupt exit.
+On the next interrupt, the event ring may full but driver will not
+update ERDP as software_dequeue is equal to ERDP.
 
-[0]: https://wiki.banana-pi.org/Banana_Pi_BPI-R64#Documents
+[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
+[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
+[  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
+[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
+[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
+[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
+[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
 
-Fixes: 98dea8d71931 ("mtd: nand: mtk: Support MT7622 NAND flash controller.")
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220402160315.919094-1-gch981213@gmail.com
+Hardware ERDP is updated mid event handling if there are more than 128
+events in an interrupt (half of ring size).
+Fix this by updating the software local variable at the same time as
+hardware ERDP.
+
+[commit message rewording -Mathias]
+
+Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220408134823.2527272-2-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/mtk_ecc.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/usb/host/xhci-ring.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mtd/nand/raw/mtk_ecc.c b/drivers/mtd/nand/raw/mtk_ecc.c
-index 6432bd70c3b3..9e4a78a80802 100644
---- a/drivers/mtd/nand/raw/mtk_ecc.c
-+++ b/drivers/mtd/nand/raw/mtk_ecc.c
-@@ -51,6 +51,7 @@
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index f5bd91752f2d..e18b675fb7af 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2848,6 +2848,8 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 		if (event_loop++ < TRBS_PER_SEGMENT / 2)
+ 			continue;
+ 		xhci_update_erst_dequeue(xhci, event_ring_deq);
++		event_ring_deq = xhci->event_ring->dequeue;
++
+ 		event_loop = 0;
+ 	}
  
- struct mtk_ecc_caps {
- 	u32 err_mask;
-+	u32 err_shift;
- 	const u8 *ecc_strength;
- 	const u32 *ecc_regs;
- 	u8 num_ecc_strength;
-@@ -84,7 +85,7 @@ static const u8 ecc_strength_mt2712[] = {
- };
- 
- static const u8 ecc_strength_mt7622[] = {
--	4, 6, 8, 10, 12, 14, 16
-+	4, 6, 8, 10, 12
- };
- 
- enum mtk_ecc_regs {
-@@ -229,7 +230,7 @@ void mtk_ecc_get_stats(struct mtk_ecc *ecc, struct mtk_ecc_stats *stats,
- 	for (i = 0; i < sectors; i++) {
- 		offset = (i >> 2) << 2;
- 		err = readl(ecc->regs + ECC_DECENUM0 + offset);
--		err = err >> ((i % 4) * 8);
-+		err = err >> ((i % 4) * ecc->caps->err_shift);
- 		err &= ecc->caps->err_mask;
- 		if (err == ecc->caps->err_mask) {
- 			/* uncorrectable errors */
-@@ -453,6 +454,7 @@ EXPORT_SYMBOL(mtk_ecc_get_parity_bits);
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
- 	.err_mask = 0x3f,
-+	.err_shift = 8,
- 	.ecc_strength = ecc_strength_mt2701,
- 	.ecc_regs = mt2701_ecc_regs,
- 	.num_ecc_strength = 20,
-@@ -463,6 +465,7 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
- 	.err_mask = 0x7f,
-+	.err_shift = 8,
- 	.ecc_strength = ecc_strength_mt2712,
- 	.ecc_regs = mt2712_ecc_regs,
- 	.num_ecc_strength = 23,
-@@ -472,10 +475,11 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
- };
- 
- static const struct mtk_ecc_caps mtk_ecc_caps_mt7622 = {
--	.err_mask = 0x3f,
-+	.err_mask = 0x1f,
-+	.err_shift = 5,
- 	.ecc_strength = ecc_strength_mt7622,
- 	.ecc_regs = mt7622_ecc_regs,
--	.num_ecc_strength = 7,
-+	.num_ecc_strength = 5,
- 	.ecc_mode_shift = 4,
- 	.parity_bits = 13,
- 	.pg_irq_sel = 0,
 -- 
 2.35.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDB6521C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4E3521C14
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243502AbiEJOeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S1344385AbiEJO3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344173AbiEJOHk (ORCPT
+        with ESMTP id S245177AbiEJN77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:07:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D81FE1D8;
-        Tue, 10 May 2022 06:41:57 -0700 (PDT)
+        Tue, 10 May 2022 09:59:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABE7D80B6;
+        Tue, 10 May 2022 06:39:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 289FE61932;
-        Tue, 10 May 2022 13:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C50C385C2;
-        Tue, 10 May 2022 13:41:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FA83B81DC2;
+        Tue, 10 May 2022 13:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C66C385C2;
+        Tue, 10 May 2022 13:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190116;
-        bh=Wqyx8+KUJrqQW5ZQlScnzLnnSc5goRnS75MkHenOtkk=;
+        s=korg; t=1652189984;
+        bh=P3SVQNOO3B7N/QZLCcWPzgOahP2/LyoDyJ/f3OPaNKs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFHCgR+ebBhA35Zwpn7cjalTHD/32cM+KXm/By09MJrFnc56YFie1HNq2FHGCEpqc
-         bwwoxd+1gImgV3G/1C0fZONHKqiuOWyCLeAok9dNhDbpTOr3gnJ0CTcMy+seb/CSdV
-         23ZgyghAPB7rlV+1Cm6ueGIxJlLd2/g4AeAn9Krw=
+        b=uC4PtlPVj4QyvDETPKifX85FTa2NH7ErvFWSIuOy3WBF+NGHwER358DoxcKZZm+di
+         7XCl07GZOft2L3KksaKrpDpZHBaWL49Ptt2wtpNK7PCo2cyoLRU7XuOK+n9S9nk7Hq
+         v4la2gK1JMc8hjFWEwOyoGctzg2BMUZ77SgHhsXA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.17 083/140] NFSv4: Dont invalidate inode attributes on delegation return
-Date:   Tue, 10 May 2022 15:07:53 +0200
-Message-Id: <20220510130743.985788053@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.17 084/140] net: ethernet: mediatek: add missing of_node_put() in mtk_sgmii_init()
+Date:   Tue, 10 May 2022 15:07:54 +0200
+Message-Id: <20220510130744.013145208@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -54,51 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 00c94ebec5925593c0377b941289224469e72ac7 upstream.
+commit ff5265d45345d01fefc98fcb9ae891b59633c919 upstream.
 
-There is no need to declare attributes such as the ctime, mtime and
-block size invalid when we're just returning a delegation, so it is
-inappropriate to call nfs_post_op_update_inode_force_wcc().
-Instead, just call nfs_refresh_inode() after faking up the change
-attribute. We know that the GETATTR op occurs before the DELEGRETURN, so
-we are safe when doing this.
+The node pointer returned by of_parse_phandle() with refcount incremented,
+so add of_node_put() after using it in mtk_sgmii_init().
 
-Fixes: 0bc2c9b4dca9 ("NFSv4: Don't discard the attributes returned by asynchronous DELEGRETURN")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 9ffee4a8276c ("net: ethernet: mediatek: Extend SGMII related functions")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220428062543.64883-1-yangyingliang@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mediatek/mtk_sgmii.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -363,6 +363,14 @@ static void nfs4_setup_readdir(u64 cooki
- 	kunmap_atomic(start);
- }
+--- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+@@ -26,6 +26,7 @@ int mtk_sgmii_init(struct mtk_sgmii *ss,
+ 			break;
  
-+static void nfs4_fattr_set_prechange(struct nfs_fattr *fattr, u64 version)
-+{
-+	if (!(fattr->valid & NFS_ATTR_FATTR_PRECHANGE)) {
-+		fattr->pre_change_attr = version;
-+		fattr->valid |= NFS_ATTR_FATTR_PRECHANGE;
-+	}
-+}
-+
- static void nfs4_test_and_free_stateid(struct nfs_server *server,
- 		nfs4_stateid *stateid,
- 		const struct cred *cred)
-@@ -6556,7 +6564,9 @@ static void nfs4_delegreturn_release(voi
- 		pnfs_roc_release(&data->lr.arg, &data->lr.res,
- 				 data->res.lr_ret);
- 	if (inode) {
--		nfs_post_op_update_inode_force_wcc(inode, &data->fattr);
-+		nfs4_fattr_set_prechange(&data->fattr,
-+					 inode_peek_iversion_raw(inode));
-+		nfs_refresh_inode(inode, &data->fattr);
- 		nfs_iput_and_deactive(inode);
+ 		ss->regmap[i] = syscon_node_to_regmap(np);
++		of_node_put(np);
+ 		if (IS_ERR(ss->regmap[i]))
+ 			return PTR_ERR(ss->regmap[i]);
  	}
- 	kfree(calldata);
 
 

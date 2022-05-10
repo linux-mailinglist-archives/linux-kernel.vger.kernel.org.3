@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D625227C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908735227D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238564AbiEJXqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S237165AbiEJXvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238462AbiEJXp4 (ORCPT
+        with ESMTP id S238650AbiEJXvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:45:56 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC27B28716
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:45:55 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id w17-20020a17090a529100b001db302efed6so504651pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:45:55 -0700 (PDT)
+        Tue, 10 May 2022 19:51:08 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC034BBD
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:51:06 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dk23so811595ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:51:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=QoqmhoJVijxJEwqA6DH3wPhDIm10VpX5UsNvXVMmXaw=;
-        b=CZaKyY51AyEq0wEP49YMgPJQn7JQeY/jnsqcUl4i6IKFgfdtTE3Hn8aD+P3ovp1tKT
-         Se7jJ6ELuMBQol0V8Y+hy5iia9eRuGm/BhbHPvqMJOhjmRf4PWDYPmnPyF/i5SlTU9o1
-         FgFS9q7alymdBOHPZ0025vQoTCX59MhS/gNrFwWM+KmWqgu/T/qjXTpgRRQc5TIn6oPc
-         q4fhyzjwrnA8llH+ALICTvBIRmkT8EZja0ZAOLRyDbD36XpoHVbqfUN3HPhb8wCFmHi3
-         IgCA+9GBww59wUku55apPIa7HKFjCQAsfB2IsSBB4VG3IFZ9TgOp5Pi5g4PbsR7OLwBo
-         FH3Q==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s7uQP88rm2fFVrAVhakdMnaytPLChwV+spwEqxpvxKE=;
+        b=Wvb2Yr5ntSMikIY6rsVTXCZINVsgnvf5OHdXaS5WophjI51WFvB8FsxEaYv1RdGkSy
+         ORGLa02GFQN4jWiwyp35UkGxqCVY8hbh1eV9xU7ToJNJzjVWjhEYOqjgamybrHXG8cWb
+         TwhAiglLuZCkojR6K6YA46HDyLB6G+PqIX51A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QoqmhoJVijxJEwqA6DH3wPhDIm10VpX5UsNvXVMmXaw=;
-        b=K2IL+dc6/8u92jQJ9/YIKqnLG1SAoUecRkyl/Q3NWCkhdM5lhiWXb86TFKwkrTyeXx
-         SAx+yJ3OWXPbjz3osyrqXyLntkj95+a/DRoBJ6pqOItHyM3JTmb2RgZewjEjlhSDda74
-         ej+Gx4DIt0v4NXwTG3gLFM/ZU5nDXaI/HYdR6BBdkf5erm9T/KzOx7FBQZwmSUpVUmMO
-         ib//RQjHY39L/zpvctkt95jxRwfKi1bJKeL3LFmtorU86bByxa6JYlVRXYprAAOSjboe
-         uOW78ucpvwzGP3FXFouT2i9mqR6FMVqeMgOSzUtiTR19MbPbWJh2RfJDqrnuW98eYqDB
-         Ejig==
-X-Gm-Message-State: AOAM530EB1ia2ozDAd2VA6XWoxwwFlmKhpfW/w2YyEijs+lBfJxKm38m
-        3/NXBUaS5goP2n0meQNvq/b+BQ==
-X-Google-Smtp-Source: ABdhPJx/WVHQXojCsdNzfIEY9IGkVQnnK/pBHDnL2wt68lS7jDgOHsrhTO/9FLmQSAktIOY4VL0TPA==
-X-Received: by 2002:a17:902:864b:b0:15e:f9e0:20ca with SMTP id y11-20020a170902864b00b0015ef9e020camr16873731plt.122.1652226355057;
-        Tue, 10 May 2022 16:45:55 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d14-20020a621d0e000000b0050dc76281b0sm107617pfd.138.2022.05.10.16.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 16:45:54 -0700 (PDT)
-Date:   Tue, 10 May 2022 23:45:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Shannon Zhao <shannon.zhao@linux.alibaba.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com,
-        linux-kernel@vger.kernel.org, yijunzhu@linux.alibaba.com
-Subject: Re: [PATCH] KVM: SVM: Set HWCR[TscFreqSel] to host's value
-Message-ID: <Ynr5L7+OJ23tEowC@google.com>
-References: <1652169227-38383-1-git-send-email-shannon.zhao@linux.alibaba.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s7uQP88rm2fFVrAVhakdMnaytPLChwV+spwEqxpvxKE=;
+        b=Ckr/oAopa5bSoeXJqoyulslxH+djRGFZbxuN40BWu+WjRH/Oakd5UTwbMH22ZpBOAM
+         8TmQnaJInlBmNS0nyjoT6uWxniUcJKne+tXzNnerYu5IFsZVtRSBhihKpI5aKPgS8D+i
+         xaWTJNLy66MW8OAx3z3V1/Y9n6GnmYOy4S7xTpLqE61RAuuNUTznrvbScbTQOo7IwoDf
+         mAN//hync4XJOdYfFJbEXM7QLV/EG3n9pR4xaRM0GOe25BzT278YhPxqo40wZzXaq0ef
+         gZgbTVQox0oEwoOhOr/sVPAChbhKltyrEOuSNcX7fmetxkV7pT9asQTS/7GNP76qDtjX
+         d1pg==
+X-Gm-Message-State: AOAM530fEGGmC35pe4lcktD7CzeKLm98IKvwensZO1jrWEmXTtf9SXDm
+        8Y+7KL1Osy4qg5mvfa1wPQZLuRC4QwqXJwgH8Uo=
+X-Google-Smtp-Source: ABdhPJw+ugHRqxStretNwNvarui/uKm3TAJX7RIiDeuHhwFPKMIMGQXKsW2BdO0sDqdzjqAOL5gpqA==
+X-Received: by 2002:a17:906:a08b:b0:6cf:65bc:e7de with SMTP id q11-20020a170906a08b00b006cf65bce7demr22538398ejy.220.1652226664704;
+        Tue, 10 May 2022 16:51:04 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id f10-20020a50fe0a000000b0042617ba63a4sm257686edt.46.2022.05.10.16.51.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 16:51:04 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so314622wmz.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:51:03 -0700 (PDT)
+X-Received: by 2002:a1c:4c06:0:b0:394:65c4:bd03 with SMTP id
+ z6-20020a1c4c06000000b0039465c4bd03mr2167400wmf.8.1652226663399; Tue, 10 May
+ 2022 16:51:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1652169227-38383-1-git-send-email-shannon.zhao@linux.alibaba.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220510082351-mutt-send-email-mst@kernel.org>
+ <CAHk-=wjPR+bj7P1O=MAQWXp0Mx2hHuNQ1acn6gS+mRo_kbo5Lg@mail.gmail.com> <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
+In-Reply-To: <YnrxTMVRtDnGA/EK@dev-arch.thelio-3990X>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 10 May 2022 16:50:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
+Message-ID: <CAHk-=wgAk3NEJ2PHtb0jXzCUOGytiHLq=rzjkFKfpiuH-SROgA@mail.gmail.com>
+Subject: Re: [GIT PULL] virtio: last minute fixup
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mie@igel.co.jp
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022, Shannon Zhao wrote:
-> KVM sets CPUID.80000007H:EDX[8] to 1, but not set HWCR[TscFreqSel].
-> This will cause guest kernel printing below log on AMD platform even
-> though the hardware TSC exactly counts with P0 frequency.
-> "[Firmware Bug]: TSC doesn't count with P0 frequency!"
-> 
-> Fix it by setting HWCR[TscFreqSel] to host's value to indicate whether
-> the TSC increments at the P0 frequency.
+On Tue, May 10, 2022 at 4:12 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> For what it's worth, as someone who is frequently tracking down and
+> reporting issues, a link to the mailing list post in the commit message
+> makes it much easier to get these reports into the right hands, as the
+> original posting is going to have all relevant parties in one location
+> and it will usually have all the context necessary to triage the
+> problem.
 
-I don't think this is safe.  The APM says
+Honestly, I think such a thing would be trivial to automate with
+something like just a patch-id lookup, rather than a "Link:".
 
-  Some HWCR bits are implementation specific, and are described in the BIOS and
-  Kernel Developer’s Guide (BKDG) or Processor Programming Reference Manual
-  applicable to your product. Implementation specific HWCR bits are not listed below.
+And such a lookup model ("where was this patch posted") would work for
+<i>any</i> patch (and often also find previous unmodified versions of
+it when it has been posted multiple times).
 
-and then omits bit 24.  One thought to handle this would be to let userspace
-write all the non-architectural bits, then userspace can set the magic,
-non-architectural bits based on CPUID and vCPU FMS.
+I suspect that most of the building blocks of such automation
+effectively already exists, since I think the lore infrastructure
+already integrates with patchwork, and patchwork already has a "look
+up by patch id".
 
-> Signed-off-by: Shannon Zhao <shannon.zhao@linux.alibaba.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 7e45d03..fb4bb51 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1139,6 +1139,11 @@ static void __svm_vcpu_reset(struct kvm_vcpu *vcpu)
->  	svm_init_osvw(vcpu);
->  	vcpu->arch.microcode_version = 0x01000065;
->  	svm->tsc_ratio_msr = kvm_default_tsc_scaling_ratio;
-> +	/* 
-> +	 * TSC frequency select is HWCR[24], set it to host's value to indicate
+Wouldn't it be cool if you had some webby interface to just go from
+commit SHA1 to patch ID to a lore.kernel.org lookup of where said
+patch was done?
 
-This really should get a #define in msr-index.h, but maybe that's "impossible"
-because it's not an architectural bit.
+Of course, I personally tend to just search by the commit contents
+instead, which works just about as well. If the first line of the
+commit isn't very unique, add a "f:author" to the search.
 
-> +	 * whether the TSC increments at the P0 frequency. 
-> +	 */
-> +	vcpu->arch.msr_hwcr = native_read_msr(MSR_K7_HWCR) & BIT_ULL(24);
+IOW, I really don't find much value in the "Link to original
+submission", because that thing is *already* trivial to find, and the
+lore search is actually better in many ways (it also tends to find
+people *reporting* that commit, which is often what you really want -
+the reason you're doing the search is that there's something going on
+with it).
 
-This will break live save/restore, a.k.a. live migration.  KVM doesn't allow
-writes to MSR_K7_HWCR to set anything other than bit 18, even if the write comes
-from userspace.
+My argument here really is that "find where this commit was posted" is
 
->  
->  	if (sev_es_guest(vcpu->kvm))
->  		sev_es_vcpu_reset(svm);
-> -- 
-> 1.8.3.1
-> 
+ (a) not generally the most interesting thing
+
+ (b) doesn't even need that "Link:" line.
+
+but what *is* interesting, and where the "Link:" line is very useful,
+is finding where the original problem that *caused* that patch to be
+posted in the first place.
+
+Yes, obviously you can find that original problem by searching too if
+the commit message has enough other information.
+
+For example, if there is an oops quoted in the commit message, I have
+personally searched for parts of that kind of information to find the
+original report and discussion.
+
+So that whole "searching is often an option" is true for pretty much
+_any_ Link:, but I think that for the whole "original submission" it's
+so mindless and can be automated that it really doesn't add much real
+value at all.
+
+                Linus

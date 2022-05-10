@@ -2,194 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30158520B99
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95358520B9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 04:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbiEJDCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S235037AbiEJDDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbiEJDCP (ORCPT
+        with ESMTP id S234394AbiEJDDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:02:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A3D2286FCD
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 19:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652151498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VfThjiwVEwPrOow8FSqurh9iv72UgtJ9TH9+GAaixz4=;
-        b=SGkZRnLFbjyjLBrAyFRfUq25Pl9i5j2VAJ9O2R9Z1YdqMLl0hvqX0iW9qP12RsRXqg9YLw
-        AHfOlA03P9RBPJ7mh8Vt9FYRDgOLtIh4vLLpnnsnYkGUaYPMNY7Oy27Jr9eqxkDF3MOBnO
-        n2nUa1tp5onmaHEa48CiixRtLofczqw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-ANsr0xFJNlum0wru0cPDWQ-1; Mon, 09 May 2022 22:58:13 -0400
-X-MC-Unique: ANsr0xFJNlum0wru0cPDWQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0B8129AB41E;
-        Tue, 10 May 2022 02:58:12 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C15B940D2829;
-        Tue, 10 May 2022 02:58:07 +0000 (UTC)
-Date:   Tue, 10 May 2022 10:58:01 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Message-ID: <YnnUuZve2b2LmInc@T590>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
- <9c833e12-fd09-fe7d-d4f2-e916c6ce4524@kernel.dk>
+        Mon, 9 May 2022 23:03:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6325C1C1942;
+        Mon,  9 May 2022 19:59:43 -0700 (PDT)
+X-UUID: 67b005a93e734020aee11b9840fc7204-20220510
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:5edfce57-5e5a-4737-8d9f-d898acc07003,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:33e532b3-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 67b005a93e734020aee11b9840fc7204-20220510
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2121007293; Tue, 10 May 2022 10:59:38 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 10 May 2022 10:59:36 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 10 May 2022 10:59:36 +0800
+Message-ID: <e8124721a4ecd591ffea2c4d70853c1f89c83975.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>, <cw00.choi@samsung.com>,
+        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
+        <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 10 May 2022 10:59:36 +0800
+In-Reply-To: <94efefab-918d-2367-4b74-076dd6f23936@gmail.com>
+References: <20220425125546.4129-1-johnson.wang@mediatek.com>
+         <20220425125546.4129-2-johnson.wang@mediatek.com>
+         <94efefab-918d-2367-4b74-076dd6f23936@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c833e12-fd09-fe7d-d4f2-e916c6ce4524@kernel.dk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 10:09:10AM -0600, Jens Axboe wrote:
-> On 5/9/22 3:23 AM, Ming Lei wrote:
-> > This is the driver part of userspace block driver(ubd driver), the other
-> > part is userspace daemon part(ubdsrv)[1].
-> > 
-> > The two parts communicate by io_uring's IORING_OP_URING_CMD with one
-> > shared cmd buffer for storing io command, and the buffer is read only for
-> > ubdsrv, each io command is indexed by io request tag directly, and
-> > is written by ubd driver.
-> > 
-> > For example, when one READ io request is submitted to ubd block driver, ubd
-> > driver stores the io command into cmd buffer first, then completes one
-> > IORING_OP_URING_CMD for notifying ubdsrv, and the URING_CMD is issued to
-> > ubd driver beforehand by ubdsrv for getting notification of any new io request,
-> > and each URING_CMD is associated with one io request by tag.
-> > 
-> > After ubdsrv gets the io command, it translates and handles the ubd io
-> > request, such as, for the ubd-loop target, ubdsrv translates the request
-> > into same request on another file or disk, like the kernel loop block
-> > driver. In ubdsrv's implementation, the io is still handled by io_uring,
-> > and share same ring with IORING_OP_URING_CMD command. When the target io
-> > request is done, the same IORING_OP_URING_CMD is issued to ubd driver for
-> > both committing io request result and getting future notification of new
-> > io request.
-> > 
-> > Another thing done by ubd driver is to copy data between kernel io
-> > request and ubdsrv's io buffer:
-> > 
-> > 1) before ubsrv handles WRITE request, copy the request's data into
-> > ubdsrv's userspace io buffer, so that ubdsrv can handle the write
-> > request
-> > 
-> > 2) after ubsrv handles READ request, copy ubdsrv's userspace io buffer
-> > into this READ request, then ubd driver can complete the READ request
-> > 
-> > Zero copy may be switched if mm is ready to support it.
-> > 
-> > ubd driver doesn't handle any logic of the specific user space driver,
-> > so it should be small/simple enough.
-> 
-> This is pretty interesting! Just one small thing I noticed, since you
-> want to make sure batching is Good Enough:
-> 
-> > +static blk_status_t ubd_queue_rq(struct blk_mq_hw_ctx *hctx,
-> > +		const struct blk_mq_queue_data *bd)
-> > +{
-> > +	struct ubd_queue *ubq = hctx->driver_data;
-> > +	struct request *rq = bd->rq;
-> > +	struct ubd_io *io = &ubq->ios[rq->tag];
-> > +	struct ubd_rq_data *data = blk_mq_rq_to_pdu(rq);
-> > +	blk_status_t res;
-> > +
-> > +	if (ubq->aborted)
-> > +		return BLK_STS_IOERR;
-> > +
-> > +	/* this io cmd slot isn't active, so have to fail this io */
-> > +	if (WARN_ON_ONCE(!(io->flags & UBD_IO_FLAG_ACTIVE)))
-> > +		return BLK_STS_IOERR;
-> > +
-> > +	/* fill iod to slot in io cmd buffer */
-> > +	res = ubd_setup_iod(ubq, rq);
-> > +	if (res != BLK_STS_OK)
-> > +		return BLK_STS_IOERR;
-> > +
-> > +	blk_mq_start_request(bd->rq);
-> > +
-> > +	/* mark this cmd owned by ubdsrv */
-> > +	io->flags |= UBD_IO_FLAG_OWNED_BY_SRV;
-> > +
-> > +	/*
-> > +	 * clear ACTIVE since we are done with this sqe/cmd slot
-> > +	 *
-> > +	 * We can only accept io cmd in case of being not active.
-> > +	 */
-> > +	io->flags &= ~UBD_IO_FLAG_ACTIVE;
-> > +
-> > +	/*
-> > +	 * run data copy in task work context for WRITE, and complete io_uring
-> > +	 * cmd there too.
-> > +	 *
-> > +	 * This way should improve batching, meantime pinning pages in current
-> > +	 * context is pretty fast.
-> > +	 */
-> > +	task_work_add(ubq->ubq_daemon, &data->work, TWA_SIGNAL);
-> > +
-> > +	return BLK_STS_OK;
-> > +}
-> 
-> It'd be better to use bd->last to indicate what kind of signaling you
-> need here. TWA_SIGNAL will force an immediate transition if the app is
-> running in userspace, which may not be what you want. Also see:
-> 
-> https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.19/io_uring&id=e788be95a57a9bebe446878ce9bf2750f6fe4974
-> 
-> But regardless of signaling needed, you don't need it except if bd->last
-> is true. Would need a commit_rqs() as well, but that's trivial.
+Hi Chanwoo,
 
-Good point, I think we may add non-last request via task_work_add(TWA_NONE),
-and only notify via TWA_SIGNAL_NO_IPI for bd->last.
+On Mon, 2022-05-09 at 21:09 +0900, Chanwoo Choi wrote:
+> Hi,
+> 
+> On 22. 4. 25. 21:55, Johnson Wang wrote:
+> > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+> > 
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > ---
+> >   .../bindings/interconnect/mediatek,cci.yaml   | 139
+> > ++++++++++++++++++
+> >   1 file changed, 139 insertions(+)
+> >   create mode 100644
+> > Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > new file mode 100644
+> > index 000000000000..e5221e17d11b
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> > @@ -0,0 +1,139 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!z6ogArqzuIzPR3TYO1aW-Z-scpuZJxIriWMofdfnvrKTXAYBBLZeitAPIKyZayMYZGsR$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!z6ogArqzuIzPR3TYO1aW-Z-scpuZJxIriWMofdfnvrKTXAYBBLZeitAPIKyZa9f2pALd$
+> >  
+> > +
+> > +title: MediaTek Cache Coherent Interconnect (CCI) frequency and
+> > voltage scaling
+> > +
+> > +maintainers:
+> > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> 
+> Why did you add your author information?
+> Please add your author information.
+
+Sorry, I don't really understand what you mean.
+Could you please explain your advice again?
+
+The author of this driver is 'Jia-Wei Chang'.
+We have added author information to the driver code and this binding
+document as above.
 
 > 
-> More importantly, what prevents ubq->ubq_daemon from going away after
-> it's been assigned? I didn't look at the details, but is this relying on
-> io_uring being closed to cancel pending requests? That should work, but
+> And add this dt-binding information to MAINTAINERS
+> as following: because I cannot catch the later patch
+> of modification.
+> 
+> cwchoi00@chanwoo:~/kernel/linux.chanwoo$ d
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cdb85e8..a11e9c1947b7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5698,6 +5698,7 @@ L:        linux-pm@vger.kernel.org
+>   S:     Maintained
+>   T:     git
+> git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+>   F:     Documentation/devicetree/bindings/devfreq/
+> +F:     Documentation/devicetree/bindings/interconnect/mediatek,cci.y
+> aml
+>   F:     drivers/devfreq/
+>   F:     include/linux/devfreq.h
+>   F:     include/trace/events/devfreq.h
+> 
 
-I think no way can prevent ubq->ubq_daemon from being killed by 'kill -9',
-even though ubdsrv has handled SIGTERM. That is why I suggest to add
-one service for removing all ubd devices before shutdown:
+I will add it in the next version.
 
-https://github.com/ming1/ubdsrv/blob/devel/README
-
-All the commands of UBD_IO_FETCH_REQ or UBD_IO_COMMIT_AND_FETCH_REQ have
-been submitted to driver, I understand io_uring can't cancel them,
-please correct me if it is wrong.
-
-One solution I thought of is to use one watchdog to check if ubq->ubq_daemon
-is dead, then abort whole device if yes. Or any suggestion?
-
-> we need some way to ensure that ->ubq_daemon is always valid here.
-
-Good catch.
-
-get_task_struct() should be used for assigning ubq->ubq_daemon.
-
-
-
-thanks,
-Ming
+BRs,
+Johnson Wang
+> 
+> > +
+> > +description: |
+> > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine
+> > used by
+> > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
+> > voltage in
+> > +  hardware. It can also optimize the voltage to reduce the power
+> > consumption.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8183-cci
+> > +      - mediatek,mt8186-cci
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description:
+> > +          The multiplexer for clock input of CPU cluster.
+> > +      - description:
+> > +          A parent of "cpu" clock which is used as an intermediate
+> > clock source
+> > +          when the original CPU is under transition and not stable
+> > yet.
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: cci
+> > +      - const: intermediate
+> > +
+> > +  operating-points-v2: true
+> > +  opp-table: true
+> > +
+> > +  proc-supply:
+> > +    description:
+> > +      Phandle of the regulator for CCI that provides the supply
+> > voltage.
+> > +
+> > +  sram-supply:
+> > +    description:
+> > +      Phandle of the regulator for sram of CCI that provides the
+> > supply
+> > +      voltage. When it presents, the cci devfreq driver needs to
+> > do
+> > +      "voltage tracking" to step by step scale up/down Vproc and
+> > Vsram to fit
+> > +      SoC specific needs. When absent, the voltage scaling flow is
+> > handled by
+> > +      hardware, hence no software "voltage tracking" is needed.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - clocks
+> > +  - clock-names
+> > +  - operating-points-v2
+> > +  - proc-supply
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/mt8183-clk.h>
+> > +    cci: cci {
+> > +        compatible = "mediatek,mt8183-cci";
+> > +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+> > +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
+> > +        clock-names = "cci", "intermediate";
+> > +        operating-points-v2 = <&cci_opp>;
+> > +        proc-supply = <&mt6358_vproc12_reg>;
+> > +    };
+> > +
+> > +    cci_opp: opp-table-cci {
+> > +        compatible = "operating-points-v2";
+> > +        opp-shared;
+> > +        opp2_00: opp-273000000 {
+> > +            opp-hz = /bits/ 64 <273000000>;
+> > +            opp-microvolt = <650000>;
+> > +        };
+> > +        opp2_01: opp-338000000 {
+> > +            opp-hz = /bits/ 64 <338000000>;
+> > +            opp-microvolt = <687500>;
+> > +        };
+> > +        opp2_02: opp-403000000 {
+> > +            opp-hz = /bits/ 64 <403000000>;
+> > +            opp-microvolt = <718750>;
+> > +        };
+> > +        opp2_03: opp-463000000 {
+> > +            opp-hz = /bits/ 64 <463000000>;
+> > +            opp-microvolt = <756250>;
+> > +        };
+> > +        opp2_04: opp-546000000 {
+> > +            opp-hz = /bits/ 64 <546000000>;
+> > +            opp-microvolt = <800000>;
+> > +        };
+> > +        opp2_05: opp-624000000 {
+> > +            opp-hz = /bits/ 64 <624000000>;
+> > +            opp-microvolt = <818750>;
+> > +        };
+> > +        opp2_06: opp-689000000 {
+> > +            opp-hz = /bits/ 64 <689000000>;
+> > +            opp-microvolt = <850000>;
+> > +        };
+> > +        opp2_07: opp-767000000 {
+> > +            opp-hz = /bits/ 64 <767000000>;
+> > +            opp-microvolt = <868750>;
+> > +        };
+> > +        opp2_08: opp-845000000 {
+> > +            opp-hz = /bits/ 64 <845000000>;
+> > +            opp-microvolt = <893750>;
+> > +        };
+> > +        opp2_09: opp-871000000 {
+> > +            opp-hz = /bits/ 64 <871000000>;
+> > +            opp-microvolt = <906250>;
+> > +        };
+> > +        opp2_10: opp-923000000 {
+> > +            opp-hz = /bits/ 64 <923000000>;
+> > +            opp-microvolt = <931250>;
+> > +        };
+> > +        opp2_11: opp-962000000 {
+> > +            opp-hz = /bits/ 64 <962000000>;
+> > +            opp-microvolt = <943750>;
+> > +        };
+> > +        opp2_12: opp-1027000000 {
+> > +            opp-hz = /bits/ 64 <1027000000>;
+> > +            opp-microvolt = <975000>;
+> > +        };
+> > +        opp2_13: opp-1092000000 {
+> > +            opp-hz = /bits/ 64 <1092000000>;
+> > +            opp-microvolt = <1000000>;
+> > +        };
+> > +        opp2_14: opp-1144000000 {
+> > +            opp-hz = /bits/ 64 <1144000000>;
+> > +            opp-microvolt = <1025000>;
+> > +        };
+> > +        opp2_15: opp-1196000000 {
+> > +            opp-hz = /bits/ 64 <1196000000>;
+> > +            opp-microvolt = <1050000>;
+> > +        };
+> > +    };
+> 
+> 
 

@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A44A52230F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA73522314
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344641AbiEJRtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S1348391AbiEJRuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241692AbiEJRtO (ORCPT
+        with ESMTP id S1348388AbiEJRuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:49:14 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ADA28E4FF
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:45:16 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso19183296fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:45:16 -0700 (PDT)
+        Tue, 10 May 2022 13:50:01 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6EC2495E
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:46:03 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id m190so20528076ybf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=8K1zkhTCYeR9WcVMzPAvt0Uq64CTD5BQFWDSVQ6PKj0=;
-        b=a1yGwtdIAQwDX4lYDbGgLXBT/rSwyOK44saKPh2C4pHNvAzvA4vsxiVA/fztJliTTw
-         ZcDD7oDWPo/GPQ48ugUfDSKWkDJK/J0aMDY/168wDKgVBel9S+p+rc9Mlun/kAiI6FRz
-         LUBcvjnVNajpFpk0PYTjD/ZFgFRWS8eTClIrg=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=USKL8Y19KqC+rb8HxxibZ/ziwBl0bjEQ9bCbRDbs4dY=;
+        b=Na6mrteQccHCP7U30nd7OtddNhTuGW0K47wW1pKjMGoecxxqIzG44JSq2j5t4OsRTN
+         9gzGvVxFHArI4Bf3+xa6A81h/WJOXt/sLBa6eWnbgJS5qcDJUrB7yRUmcEYXm4LBXBs6
+         WhC1cBxlIsZ9Txh8uVegN+fd4LgdxrfqhZQ45tgFiHOkWwUBI6IiBqCo4DhePU3cTgMC
+         QhM8CWzfrly2xXw9mKc0hJsG5YuziBwShFkv0+M3EZz7PCV2HK8dSGmAP0SZbn1cNTEb
+         oR8h6JCwGeyhSsbu4q+SZ6TYNQdRid09212wts6XVO6vgtcFBW7dYoSwMEV9yXeO7wE6
+         60vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=8K1zkhTCYeR9WcVMzPAvt0Uq64CTD5BQFWDSVQ6PKj0=;
-        b=eOBPNybSH6VmOLxK5OyZh/FeP2Tc4fSlJArc2k1jNH5S+dNpfzF5A3n//MPMW4wSUT
-         MHue8RQbs5zjr3Qt6nnXmg6zqF3tkO+93Q9UkP4iZ+s0fOmVcvdNHGlk6THdpPNIHMFo
-         2C9AWuc3Jfqbmyts8x/HMuImdOgVauaeuCGoFTfwt5qKl+1Gbz/UryjktjVh1DsUePWl
-         Y1OSDTOfsECJgs+PSA+i+r9elY1+tEh5VIPxTYFycxano1aV6Udt4knCAlIXmbrGo1/W
-         AintKCZ1Pc8b1ZTYXL3JmXKQ32kAMWBuVc94GAEV8OEpCwKy6Qhd5fl7r7WZ7S5KtvMf
-         GekQ==
-X-Gm-Message-State: AOAM530QylSDgxlR6Cyate5CDe6zLq0UjzHql3nxvyuNms0AqUlcwYrq
-        eL0f573aOy+FKMtY2RKw5WAjzIbdCW2loSthuxQCCs5ramA=
-X-Google-Smtp-Source: ABdhPJy80Xq7GF6UWv/g20SQkjrDeaebSEqjwH+sR/FQ/xgRHKGaXoYZV6goWF42ZNdxqDsVe76SnL/yqAh7k4QNyRY=
-X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
- n14-20020a056870558e00b000e1db7c26aamr699120oao.63.1652204716102; Tue, 10 May
- 2022 10:45:16 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 10 May 2022 10:45:15 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=USKL8Y19KqC+rb8HxxibZ/ziwBl0bjEQ9bCbRDbs4dY=;
+        b=l3DJZOplJNsP/F60quGZaRpRdBZB3oSgRdUfftCeAAedYMyIIga/avvKuwiqge1gj0
+         0oYEsW4YOORbiLGaD0NTKn22kDnxqd4qDPGMQzyY9NPTQ8uFiRXOwYMnfbyO9YGXZmP3
+         kEytWl/Yp+37ffMAgtZpNfkqF5+5EZvkeWcrNpIw/SaQOPw2jOC74xZd7Gv5wTfjX+lz
+         FTE6bYa2JDoa3FAhZv+YOZELB1fXMtoEQfiRkIs751fjN3Q5qETlu8TaMk7a+IaaZlU+
+         yVDmNmqEQtAklX4WsAFO0v4kBCq4BqYLoGVqXxe+z12OGXSa4FILsBkmxPaQ2PJmPu9V
+         bElQ==
+X-Gm-Message-State: AOAM531gk/qwHAVoaumIiALfdOHpvelmDpqeA4RBjgnxER+qhIjBuYf5
+        8olNbUcVxMQPl3QjJ33pHpUa4dCzcUYTdyXrFFo4/Q==
+X-Google-Smtp-Source: ABdhPJxSrH6rUPLDlUdWCz3K2tIpkc7vtxnvQU1l092FHrC6aIIK41/xPVl/NXH/I/PIq3Snct+s+fgKx3qBZxqVW3g=
+X-Received: by 2002:a25:b4d:0:b0:64b:11cb:2e43 with SMTP id
+ 74-20020a250b4d000000b0064b11cb2e43mr4127229ybl.175.1652204762789; Tue, 10
+ May 2022 10:46:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220505104024.v4.2.I71176ebf7e5aebddb211f00e805b32c08376d1be@changeid>
-References: <20220505104024.v4.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
- <20220505104024.v4.2.I71176ebf7e5aebddb211f00e805b32c08376d1be@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 10 May 2022 10:45:15 -0700
-Message-ID: <CAE-0n51VpM-sw+1MLqtx+-YSa9ayQX+=tgZ7zLfnMEa5+742oQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sc7180: Add mrbland dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+References: <20220510165216.3577068-1-robdclark@gmail.com>
+In-Reply-To: <20220510165216.3577068-1-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 10 May 2022 20:45:51 +0300
+Message-ID: <CAA8EJprS_Jk_Wowz-nK1nnYF1UUb-4SYUPhsF_qB4rL4GUPygA@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm: Fix fb plane offset calculation
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,80 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Joseph S. Barrera III (2022-05-05 10:41:13)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-> new file mode 100644
-> index 000000000000..e1c1ea09b690
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
-> @@ -0,0 +1,352 @@
-[...]
-> +
-> +&ap_tp_i2c {
-> +       status = "disabled";
-> +};
-> +
-> +&backlight {
-> +       pwms = <&cros_ec_pwm 0>;
-> +};
-> +
-> +&camcc {
-> +       status = "okay";
-> +};
-> +
-> +&dsi0 {
-> +
-> +       panel: panel@0 {
+On Tue, 10 May 2022 at 19:52, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> The offset got dropped by accident.
+>
+> Fixes: d413e6f97134 ("drm/msm: Drop msm_gem_iova()")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-Can we have a note here like in the bridge chip dtsi files that says the
-compatible is filled in per board?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-		/* Compatible will be filled in per-board */
+> ---
+>  drivers/gpu/drm/msm/msm_fb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
+> index 362775ae50af..4269da268a4a 100644
+> --- a/drivers/gpu/drm/msm/msm_fb.c
+> +++ b/drivers/gpu/drm/msm/msm_fb.c
+> @@ -118,7 +118,7 @@ uint32_t msm_framebuffer_iova(struct drm_framebuffer *fb,
+>                 struct msm_gem_address_space *aspace, int plane)
+>  {
+>         struct msm_framebuffer *msm_fb = to_msm_framebuffer(fb);
+> -       return msm_fb->iova[plane];
+> +       return msm_fb->iova[plane] + fb->offsets[plane];
 
-> +               reg = <0>;
-> +               enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
-> +               pinctrl-names = "default";
-> +               pinctrl-0 = <&vdd_reset_1800>;
-> +               avdd-supply = <&avdd_lcd>;
-> +               avee-supply = <&avee_lcd>;
-> +               pp1800-supply = <&v1p8_mipi>;
-> +               pp3300-supply = <&pp3300_dx_edp>;
-> +               backlight = <&backlight>;
-> +               rotation = <270>;
-> +
-> +               ports {
-> +                       #address-cells = <1>;
-> +                       #size-cells = <0>;
-> +                       port@0 {
-> +                               reg = <0>;
-> +                               panel_in: endpoint {
-> +                                       remote-endpoint = <&dsi0_out>;
-> +                               };
-> +                       };
-> +               };
-> +       };
-> +
-[...]
-> +
-> +/* PINCTRL - board-specific pinctrl */
-> +
-> +&tlmm {
-> +       gpio-line-names = "HUB_RST_L",
-> +                         "AP_RAM_ID0",
-[..]
-> +       avee_lcd_en: avee-lcd_en {
+Nit: can we push fb->offsets handling into msm_framebuffer_prepare()
+instead? Then the msm_framebuffer_iova() would become trivial?
 
-Same underscore comment as patch #1
+>  }
+>
+>  struct drm_gem_object *msm_framebuffer_bo(struct drm_framebuffer *fb, int plane)
+> --
+> 2.35.1
+>
 
-> +               pinmux {
-> +                       pins = "gpio21";
-> +                       function = "gpio";
-> +               };
-> +
-> +               pinconf {
-> +                       pins = "gpio21";
-> +                       drive-strength = <2>;
-> +                       bias-disable;
-> +               };
-> +       };
-> +
+
+-- 
+With best wishes
+Dmitry

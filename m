@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8636352185B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4465216D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243400AbiEJNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S235168AbiEJNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242910AbiEJNZQ (ORCPT
+        with ESMTP id S242423AbiEJNP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:25:16 -0400
+        Tue, 10 May 2022 09:15:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3784EA3E;
-        Tue, 10 May 2022 06:18:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471963D1C6;
+        Tue, 10 May 2022 06:11:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8372561661;
-        Tue, 10 May 2022 13:18:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86DC4C385C6;
-        Tue, 10 May 2022 13:18:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9295615C5;
+        Tue, 10 May 2022 13:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8ED5C385C2;
+        Tue, 10 May 2022 13:11:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188683;
-        bh=LlaNvZNC6zMQ2YYn7Jimy2RhtIUwN/GT9NAOZ5adIg8=;
+        s=korg; t=1652188294;
+        bh=0Zsa4+gxXS41nEdbiCUhpnQgdG82KClTrqpYIttuWFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OrlYIN9EZU5fud9CsrLxlldCb8RrgthmD4zIvY/8AaSy4BmJERlEY5047BtiQJK3O
-         luXpBNs0/BmNMpVJ2z7vDLAZRloFCLznZkosmGYCEa7W4FX2Gxsa1DgF3mCmJ4L3bz
-         F38nUWfA/0XdonQ3jGhfjQzAjGG5EqZ6rb2WvAko=
+        b=ILdDDkXTGli8ZQxqk01FG7UOio1gzve9BcSymazzbub1xzZhPxOvcNFXZ0QGDnpJw
+         rA6AID+cxFD1fQ2yrgxcGt3q08/ulWhNvMI6Q3J04W9OL/demMbgwEJLfQCW/4FJ2+
+         PEwPiYIUeAxqTj1CJNYV2EXX4rPzt59v5HBBizY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 4.19 10/88] iio: dac: ad5446: Fix read_raw not returning set value
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 4.9 05/66] USB: quirks: add STRING quirk for VCOM device
 Date:   Tue, 10 May 2022 15:06:55 +0200
-Message-Id: <20220510130734.044592292@linuxfoundation.org>
+Message-Id: <20220510130729.920049390@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,33 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Hennerich <michael.hennerich@analog.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 89a01cd688d3c0ac983ef0b0e5f40018ab768317 upstream.
+commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
 
-read_raw should return the un-scaled value.
+This has been reported to stall if queried
 
-Fixes: 5e06bdfb46e8b ("staging:iio:dac:ad5446: Return cached value for 'raw' attribute")
-Signed-off-by: Michael Hennerich <michael.hennerich@analog.com>
-Reviewed-by: Nuno Sá <nuno.sa@analog.com>
-Link: https://lore.kernel.org/r/20220406105620.1171340-1-michael.hennerich@analog.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/dac/ad5446.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/iio/dac/ad5446.c
-+++ b/drivers/iio/dac/ad5446.c
-@@ -171,7 +171,7 @@ static int ad5446_read_raw(struct iio_de
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -328,6 +328,9 @@ static const struct usb_device_id usb_qu
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
  
- 	switch (m) {
- 	case IIO_CHAN_INFO_RAW:
--		*val = st->cached_val;
-+		*val = st->cached_val >> chan->scan_type.shift;
- 		return IIO_VAL_INT;
- 	case IIO_CHAN_INFO_SCALE:
- 		*val = st->vref_mv;
++	/* VCOM device */
++	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
++
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49385217C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884DE5217F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243144AbiEJN2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S243809AbiEJNcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243230AbiEJNVk (ORCPT
+        with ESMTP id S242662AbiEJNU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7B62C13E8;
-        Tue, 10 May 2022 06:15:17 -0700 (PDT)
+        Tue, 10 May 2022 09:20:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10F325473B;
+        Tue, 10 May 2022 06:13:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A42EB81DAD;
-        Tue, 10 May 2022 13:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12861C385C9;
-        Tue, 10 May 2022 13:15:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3E007CE1EE3;
+        Tue, 10 May 2022 13:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAADC385A6;
+        Tue, 10 May 2022 13:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188513;
-        bh=MuIvfaTM07t+T9RBGkEc4AaN7NAIGZmeD96/gTWB/1E=;
+        s=korg; t=1652188408;
+        bh=SkicZJaon+6r860YY3xSembF7T/c32xtoZ769rYVxNU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LxheHAH5OvLh5grDvSURsNXmd1UHsw586bmqKiyDt6f/H4hfBJBHt4HhKiV9Og+Zz
-         7bwoAWYcH+Y3T7EI/E+AmDtWdIZ2fTmvnvKJq3DGUwo5mOMVNUAgw4k/KmU/WAuZoz
-         VWTEQdZQNZ9NzxTLxCvw2NzwXX0L6uHh22BR/6t8=
+        b=TTr3NiaPyhCjCrBJezyDgGYx7pZ462xw7tvfE3qG6T5ABq3aIzgEBXAEZstohHPPb
+         fZK7Cn6sdCx3cpiYmC6KVDIggaKuczCO1Htpi5+sV01rPpHaZvqU0arjS+LhCxV/7C
+         48j2DZyQjs4krdpR+T0Zl7PMlt772PRTbDgxEImw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pengcheng Yang <yangpc@wangsu.com>,
-        Julian Anastasov <ja@ssi.bg>,
-        Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 31/78] ipvs: correctly print the memory size of ip_vs_conn_tab
+Subject: [PATCH 4.9 27/66] pinctrl: pistachio: fix use of irq_of_parse_and_map()
 Date:   Tue, 10 May 2022 15:07:17 +0200
-Message-Id: <20220510130733.457399420@linuxfoundation.org>
+Message-Id: <20220510130730.560236635@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
-References: <20220510130732.522479698@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pengcheng Yang <yangpc@wangsu.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit eba1a872cb73314280d5448d934935b23e30b7ca ]
+[ Upstream commit 0c9843a74a85224a89daa81fa66891dae2f930e1 ]
 
-The memory size of ip_vs_conn_tab changed after we use hlist
-instead of list.
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return an negative value.
 
-Fixes: 731109e78415 ("ipvs: use hlist instead of list")
-Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
-Acked-by: Julian Anastasov <ja@ssi.bg>
-Acked-by: Simon Horman <horms@verge.net.au>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: cefc03e5995e ("pinctrl: Add Pistachio SoC pin control driver")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Link: https://lore.kernel.org/r/20220424031430.3170759-1-lv.ruyi@zte.com.cn
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/ipvs/ip_vs_conn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/pinctrl-pistachio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index 620c865c230b..1ecce76bc266 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -1432,7 +1432,7 @@ int __init ip_vs_conn_init(void)
- 	pr_info("Connection hash table configured "
- 		"(size=%d, memory=%ldKbytes)\n",
- 		ip_vs_conn_tab_size,
--		(long)(ip_vs_conn_tab_size*sizeof(struct list_head))/1024);
-+		(long)(ip_vs_conn_tab_size*sizeof(*ip_vs_conn_tab))/1024);
- 	IP_VS_DBG(0, "Each connection entry needs %zd bytes at least\n",
- 		  sizeof(struct ip_vs_conn));
+diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
+index b2b7e238bda9..fc8c57527fb7 100644
+--- a/drivers/pinctrl/pinctrl-pistachio.c
++++ b/drivers/pinctrl/pinctrl-pistachio.c
+@@ -1374,10 +1374,10 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
+ 		}
+ 
+ 		irq = irq_of_parse_and_map(child, 0);
+-		if (irq < 0) {
+-			dev_err(pctl->dev, "No IRQ for bank %u: %d\n", i, irq);
++		if (!irq) {
++			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
+ 			of_node_put(child);
+-			ret = irq;
++			ret = -EINVAL;
+ 			goto err;
+ 		}
  
 -- 
 2.35.1

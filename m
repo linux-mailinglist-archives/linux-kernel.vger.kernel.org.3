@@ -2,99 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AF652142A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E23521426
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241231AbiEJLvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S241210AbiEJLuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241237AbiEJLvC (ORCPT
+        with ESMTP id S241206AbiEJLuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:51:02 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAB0229FCE
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:47:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id kq17so32390697ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:47:04 -0700 (PDT)
+        Tue, 10 May 2022 07:50:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4797D1FE3C0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:46:42 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g23so19656740edy.13
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
-        b=Cq0YVifZjAg/L4a+qlOkNkDWcHo+balp673bgz2Xzq8NYuyUWd4UIlNecRZHOmOZtL
-         WITd7u5+Q3fwt/lMny//WQLUUvidBhKfkO/Jl2oNOUFBqFEwcFcey9lf7Y1aelLuySDz
-         FKzgrBUKgHOFhkT5RWUHKLhJIy72//L2kETTY=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9fc4DPby0hC3+wp0CTHo7fj7huwHR34h2xJeQIEyKY8=;
+        b=LAg58hFgcQjOa7ynGutntPZJEMGXJv1Et0eD5ui2671PeMFEwvfqHdTYnBM6eokYMd
+         wRRV60rb7iWB+41Zdm/YyBL2KjKJ3ioaF1MQla/cPHcGqKe+DFvjBtAU1fIeRJmlaV0O
+         S1gvtmfVIXm7lA7YgPfB2iU8+O07RiPWmNR1/vx+JunEEFPKt0GmmmI0Fc1Io2IRepQ9
+         1hrwRAluEvpYkHiPmWlFDNdwrJWD2/4WE0mIi2WE1LAjY79s4sThtMu5+EhAY2XbZHUh
+         2vpYeQ9oq77QfD/mShfKO5/b9WcogCTUqzJgpkDCshB8Jpc8P2oXpSDBmaYonMxFdJ3E
+         F5Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
-        b=m+c5gomGNatNKLxQj/PA8TBCdMkyGWDxoDgCuc/LJmpnvHowwMPB6r3o/UefNXMymR
-         ja+JwtWP8OJtnLka1FGGeKTtc3FNTskJgzK0cCTMJgFTBDkow57ZJTUOumbfZRtuDwRt
-         yYtzsi8+/nsRFaxif/AGIaa4Zyg9onk1K3FHz0reDLUpnNCqpCHq4rA5hSzHPxqWDQPs
-         Bj4w6fytQyLixUPhGO6ZkSw9EBBXU3E3CRuuysbTFpGYSGHX2KfyQijU5U8PF8r0ypjs
-         J5wkD3iQ2JL397ACMEFI8Z7NXYAGxBEeKQOiJWZX4uHLqx4i2Ks29OVPSr0jh9L9cu2L
-         zR3Q==
-X-Gm-Message-State: AOAM533cWYFbfyc8P+MyWjqkCdw1QXVIwm0ECDVk+EFUAg/FJn28CBOr
-        e6hd/NuCjhkzeJBhZSeC1o+ucQ==
-X-Google-Smtp-Source: ABdhPJwH5mhjRvh6ubT75T74jcRYxHqZKy0ovowvflSqOUgy8E1RfmWmmzchzDbkunBXYV3eG+hSPw==
-X-Received: by 2002:a17:906:d554:b0:6f5:2242:a499 with SMTP id cr20-20020a170906d55400b006f52242a499mr18119410ejc.488.1652183223425;
-        Tue, 10 May 2022 04:47:03 -0700 (PDT)
-Received: from cloudflare.com (79.184.139.106.ipv4.supernova.orange.pl. [79.184.139.106])
-        by smtp.gmail.com with ESMTPSA id lr9-20020a170906fb8900b006f3ef214dd9sm5997773ejb.63.2022.05.10.04.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:47:02 -0700 (PDT)
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Date:   Tue, 10 May 2022 13:45:38 +0200
-In-reply-to: <20220424154028.1698685-5-xukuohai@huawei.com>
-Message-ID: <87ee11obih.fsf@cloudflare.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9fc4DPby0hC3+wp0CTHo7fj7huwHR34h2xJeQIEyKY8=;
+        b=vVngJPRvytPkGqRIR8csjWjYUr/XlJuWMNbqN89CA+/EVVe07luE0rKSPL2kwipLxV
+         Gbc7emroo67CMsDZCyWZ9w5yiIiccNU8vGCv/OQ9QPjZpRlSymwQ6ph06ZOfm2bR9QVk
+         +RD0VhF8p9j16MiVcigmXMXCDym0v1pdMScAjHxPE+lHfwzJwy42Wc2w3J465QFj0oLS
+         O8PvUrrWbESpXHAjVb0PnNyngEYk7gH97jaGvCoSgHPlwVohMWa4rJopvi5LKtA6ylMR
+         YnJV5wYMrbmIexc4xFsOayoeMXbpRzq5TZqtkicVcPjVwRb2ODVZw2PBgkve97FQrfLC
+         Iwyg==
+X-Gm-Message-State: AOAM530HqP1PhXwjQ3aJTCz1eCGI654E7oHrm6AdvrZZIWixOUTyQKsF
+        5J5BZw6IoZwwWGi0WHKie8WCxw==
+X-Google-Smtp-Source: ABdhPJzXElWmmblik/m1NRxWy3j+yFO70xDN/HGVqbxKjXrf0egxTRK9s5LgEDH6z4dYkGjxH8UvPQ==
+X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id ds1-20020a0564021cc100b004132b12fc49mr22408384edb.118.1652183200869;
+        Tue, 10 May 2022 04:46:40 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q23-20020a1709060f9700b006f3ef214dbdsm5972294ejj.35.2022.05.10.04.46.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 04:46:40 -0700 (PDT)
+Message-ID: <fde74400-34aa-df80-5af5-cb4ee89c8e6f@linaro.org>
+Date:   Tue, 10 May 2022 13:46:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/2] arm64: dts: marvell: add support for Methode eDPU
+Content-Language: en-US
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Andrew Lunn <andrew@lunn.ch>,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        shawnguo@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        kostap@marvell.com, devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>
+References: <20220509110028.144226-1-robert.marko@sartura.hr>
+ <20220509110028.144226-2-robert.marko@sartura.hr>
+ <8e22cbf7-eee1-0ec7-10f9-3839ec80dfbf@linaro.org>
+ <CA+HBbNE1w5w6c8MwMuSwCFzjnyKOQ7Y0MV4bPijJW3rekWLo4w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CA+HBbNE1w5w6c8MwMuSwCFzjnyKOQ7Y0MV4bPijJW3rekWLo4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,105 +84,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
-> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
-> it to replace nop with jump, or replace jump with nop.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
-> ---
->  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 8ab4035dea27..3f9bdfec54c4 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bpf.h>
-> +#include <linux/memory.h>
->  #include <linux/filter.h>
->  #include <linux/printk.h>
->  #include <linux/slab.h>
-> @@ -18,6 +19,7 @@
->  #include <asm/cacheflush.h>
->  #include <asm/debug-monitors.h>
->  #include <asm/insn.h>
-> +#include <asm/patching.h>
->  #include <asm/set_memory.h>
->  
->  #include "bpf_jit.h"
-> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->  {
->  	return vfree(addr);
->  }
-> +
-> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
-> +			     void *addr, u32 *insn)
-> +{
-> +	if (!addr)
-> +		*insn = aarch64_insn_gen_nop();
-> +	else
-> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
-> +						    (unsigned long)addr,
-> +						    type);
-> +
-> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
-> +}
-> +
-> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
-> +		       void *old_addr, void *new_addr)
-> +{
-> +	int ret;
-> +	u32 old_insn;
-> +	u32 new_insn;
-> +	u32 replaced;
-> +	enum aarch64_insn_branch_type branch_type;
-> +
-> +	if (!is_bpf_text_address((long)ip))
-> +		/* Only poking bpf text is supported. Since kernel function
-> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
-> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+On 10/05/2022 13:41, Robert Marko wrote:
+> On Tue, May 10, 2022 at 12:20 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 09/05/2022 13:00, Robert Marko wrote:
+>>> Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
+>>>
+>>> They feature the same CPU, RAM, and storage as well as the form factor.
+>>>
+>>> However, eDPU only has one SFP slot plus a copper G.hn port.
+>>>
+>>> In order to reduce duplication, split the uDPU DTS into a common one.
+>>>
+>>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+>>> ---
+>>>  arch/arm64/boot/dts/marvell/Makefile          |   1 +
+>>>  .../boot/dts/marvell/armada-3720-eDPU.dts     |  14 ++
+>>>  .../boot/dts/marvell/armada-3720-uDPU.dts     | 148 +---------------
+>>>  .../boot/dts/marvell/armada-3720-uDPU.dtsi    | 163 ++++++++++++++++++
+>>>  4 files changed, 179 insertions(+), 147 deletions(-)
+>>>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-uDPU.dtsi
+>>>
+>>> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+>>> index 1c794cdcb8e6..104d7d7e8215 100644
+>>> --- a/arch/arm64/boot/dts/marvell/Makefile
+>>> +++ b/arch/arm64/boot/dts/marvell/Makefile
+>>> @@ -1,6 +1,7 @@
+>>>  # SPDX-License-Identifier: GPL-2.0
+>>>  # Mvebu SoC Family
+>>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
+>>> +dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
+>>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
+>>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
+>>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
+>>> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>> new file mode 100644
+>>> index 000000000000..6b573a6854cc
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>> @@ -0,0 +1,14 @@
+>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "armada-3720-uDPU.dtsi"
+>>> +
+>>> +/ {
+>>> +     model = "Methode eDPU Board";
+>>> +     compatible = "methode,edpu", "marvell,armada3720";
+>>
+>> You need also bindings for the board compatible. Someone should convert
+>> the Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt to YAML.
+> 
+> Ok, I can convert the SoC compatibles at least for now.
+> Any advice you can give me on how the handle the Espressobin boards
+> having multiple board-specific compatibles?
+> For example, Espressobin V7 has:
+> "globalscale,espressobin-v7", "globalscale,espressobin"
+> 
 
-Nit: s/funcitons/functions/
+Documentation/devicetree/bindings/arm/fsl.yaml
 
-> +		 * called after a failed poke with ftrace. In this case, there
-> +		 * is probably something wrong with fentry, so there is nothing
-> +		 * we can do here. See register_fentry, unregister_fentry and
-> +		 * modify_fentry for details.
-> +		 */
-> +		return -EINVAL;
-> +
-> +	if (poke_type == BPF_MOD_CALL)
-> +		branch_type = AARCH64_INSN_BRANCH_LINK;
-> +	else
-> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	mutex_lock(&text_mutex);
-> +	if (aarch64_insn_read(ip, &replaced)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	if (replaced != old_insn) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+>>
+>>> +};
+>>> +> +  sfp_eth1: sfp-eth1 {
+>>
+>> Generic node names, please.
+> 
+> Can you give me an example of what would be appropriate here because the SFP
+> bindings example utilizes the same naming scheme as used here?
 
-Nit: No need for the explicit cast to void *. Type already matches.
+"sfp" if you have only one sfp node.
 
-> +out:
-> +	mutex_unlock(&text_mutex);
-> +	return ret;
-> +}
+> 
+>>
+>>> +             compatible = "sff,sfp";
+>>> +             i2c-bus = <&i2c1>;
+>>> +             los-gpio = <&gpiosb 7 GPIO_ACTIVE_HIGH>;
+>>> +             mod-def0-gpio = <&gpiosb 8 GPIO_ACTIVE_LOW>;
+>>> +             tx-disable-gpio = <&gpiosb 9 GPIO_ACTIVE_HIGH>;
+>>> +             tx-fault-gpio = <&gpiosb 10 GPIO_ACTIVE_HIGH>;
+>>> +             maximum-power-milliwatt = <3000>;
+>>> +     };
+>>> +};
+>>> +
+>>> +&sdhci0 {
+>>> +     status = "okay";
+>>> +     bus-width = <8>;
+>>> +     mmc-ddr-1_8v;
+>>> +     mmc-hs400-1_8v;
+>>> +     marvell,pad-type = "fixed-1-8v";
+>>> +     non-removable;
+>>> +     no-sd;
+>>> +     no-sdio;
+>>> +};
+>>> +
+>>> +&spi0 {
+>>> +     status = "okay";
+>>> +     pinctrl-names = "default";
+>>> +     pinctrl-0 = <&spi_quad_pins>;
+>>> +
+>>> +     spi-flash@0 {
+>>
+>> Run dtbs_check and fix the errors.
+> 
+> Ok, will split the DTSI and eDPU commits and fixup nodes in between.
+>>
+>>> +             compatible = "jedec,spi-nor";
+>>> +             reg = <0>;
+>>> +             spi-max-frequency = <54000000>;
+>>> +
+>>> +             partitions {
+>>> +                     compatible = "fixed-partitions";
+>>> +                     #address-cells = <1>;
+>>> +                     #size-cells = <1>;
+>>> +                     /* only bootloader is located on the SPI */
+>>> +                     partition@0 {
+>>> +                             label = "firmware";
+>>> +                             reg = <0x0 0x180000>;
+>>> +                     };
+>>> +
+>>> +                     partition@180000 {
+>>> +                             label = "u-boot-env";
+>>> +                             reg = <0x180000 0x10000>;
+>>> +                     };
+>>> +             };
+>>> +     };
+>>> +};
+>>> +
+>>> +&pinctrl_nb {
+>>> +     i2c2_recovery_pins: i2c2-recovery-pins {
+>>> +             groups = "i2c2";
+>>> +             function = "gpio";
+>>> +     };
+>>> +};
+>>> +
+>>> +&i2c1 {
+>>> +     status = "okay";
+>>> +     pinctrl-names = "default", "recovery";
+>>> +     pinctrl-0 = <&i2c2_pins>;
+>>> +     pinctrl-1 = <&i2c2_recovery_pins>;
+>>> +     /delete-property/mrvl,i2c-fast-mode;
+>>> +     scl-gpios = <&gpionb 2 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>> +     sda-gpios = <&gpionb 3 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>> +
+>>> +     nct375@48 {
+>>
+>> Generic node names, representing class of a device.
+> Ok, will rename in v2.
+>>
+>>> +             status = "okay";
+>>
+>> OK status is by default, why do you need it? Also, it goes as last property.
+> 
+> It's not needed, I have not changed any nodes, they are just
+> copy/paste during the DTS split.
+> Will drop it in v2.
+> 
 
+Hm, but the node names were different in original DTS, so this is not a
+simple split. In such case better to correct coding styles in one patch
+(node names, status etc) and then perform the split. The split should
+create the same output DTB, which is not the case here.
+
+Best regards,
+Krzysztof

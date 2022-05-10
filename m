@@ -2,141 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0D6521055
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79985521059
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238437AbiEJJM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S238455AbiEJJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbiEJJMz (ORCPT
+        with ESMTP id S238442AbiEJJNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:12:55 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0C12555B8;
-        Tue, 10 May 2022 02:08:59 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id o11so13048058qtp.13;
-        Tue, 10 May 2022 02:08:59 -0700 (PDT)
+        Tue, 10 May 2022 05:13:44 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670202555BA
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:09:48 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id p12so14441150pfn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 02:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=D8Qz/xvrsWKKpXL9RLp/nvSMlMtetnF+P9aicmm6cuo=;
-        b=LXGst13RLeQoCnT/V5H/Yibwn3XE5hfpV+SYcB+jBsH2oKzLLpgX2juQOvjPJFtRdR
-         wQtlW2PLGPabzn4MzarVdysE1DHIPC3bYOKsJYHeT2yIij7XndAMSXok1l3rQhjA9EKO
-         SzPiiOK+kbhXSFFuf3d2qvOAkQhvMWW5nUe8IKBZex6cc/LRXg2nuaW3Ci8SyK1P4TfJ
-         Yw1NXjz2DT8+FJD3ruvFEtWD83Bx/2EcAitvJnS7msvmhCagDsTOLYH+xiMpMXDvBK9+
-         LJhApIdKp5eizrUXkWFKTngbgDeT7Bqc5V1bic11LialdJKJvB7mBg6+2j50eLAafcik
-         vnYQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XSWbv+Ep/+Movyv6deaCjO1wiUE43cnYmOPnE+KhShY=;
+        b=InV8ymO/0KYq9HcbHPDzUpNCNY2tYQsq9hirMYdloDuxo6cf1pmiZ4s95TKpKxDEcb
+         aToeQIuxQ+lqIYo5EPxdXoEEB3gw4t/q9aLkS7CBbxXq72/nwbAlod397u/fG+q2k3YZ
+         VUHOVvkCCPVxJ//otLXECEBR9BTzlaRbFzQN8RvONDRstQAA4sIbVdfp0WMhQ6J2zpVr
+         CcDT95pgoPn6/34BaRT7OechnYzMknBbMd4YOPvHxtSo6vdjvmtIZe5KZHabrfiOJinA
+         Ucbbds97FV5W7f5LnN9uG6/GwHbyN05B7rK0MXV5N9FEDIB7wweTlUJkkrKWRuCimOOF
+         QZ+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=D8Qz/xvrsWKKpXL9RLp/nvSMlMtetnF+P9aicmm6cuo=;
-        b=Nq7+xFma/xcAfbpSPWKTzMqzKWOaTpB7e8laHDLdDSe+/oPmV2iQ5NCPxS5pcpsR5Z
-         V/CPtuzbpPww6tZDthqZAVQVuolLGAcvjeHXMU37OTLug0Yxmzh0KgP3eaoIsbeEhbMn
-         YcMdkW976i1ij9diVDS3YAu8/9h3hWGxvcOFFRW8TcK/AsS5dGBq+g5QXrzSaEbrSuZU
-         FTzksgWyUg4hIKHQ82ey9cv66lP9O6PtfZ6bU3q6gpQyxRrn2xmwHqWbXJTDqIRQI7na
-         W9cTcDwNBXIYoR8771uI8OUvFafjdkIAq2noM99VV0LQQViZ/BUBBHOCtmivP635P/IN
-         zsqw==
-X-Gm-Message-State: AOAM531CLkckdqgWVXyeZzdtJiPWupUZWn0WaIZGlDAdH175QlGNyS5m
-        pv2pwjD9oNzs/XXSrK6EHY6mSAKrVvR3L9wIoGGTmfw3Snk=
-X-Google-Smtp-Source: ABdhPJz3WyqGc1yRJ+ONjj33N+wEbfAaxiSWmGK8cUyyTFgyM2FuaQpxls2+tDG9GY10TJTPgS3GMDbRHgQ8oHdXaaA=
-X-Received: by 2002:a05:622a:4d1:b0:2f3:d1c7:b31f with SMTP id
- q17-20020a05622a04d100b002f3d1c7b31fmr12895238qtx.163.1652173738572; Tue, 10
- May 2022 02:08:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XSWbv+Ep/+Movyv6deaCjO1wiUE43cnYmOPnE+KhShY=;
+        b=Nl6qyA5brAG6fijy6dJKJlIbkSJw00JPdtd0IMOmNbdwi/FohpXQVU9ON5uZIjMLQZ
+         fxIYzMHgOAwrrqSkBulwwK9Ty9LpCFC+FagFGox3p88Z5RTwHP+4c8RICGdwclfRlr3e
+         K5/6ATUSP6Wy8WZV5LPbeRbX8OTpdtJecFvIYW/QIP1p2sVeNYy1WZnogXqqr+9PWwcc
+         Ewz7cJhtnPqQN2Zu80IWdzdPkmolTnupt8HIyIDczenh0eigcKYJLpM6l/QleHm9z2Mz
+         lHYj+Wz6ejfXJwKJ198nlawUeFEYQf4+dWt9bM9XrubDbVV+dakUG0zUqNzdGDgqf6HS
+         LVWA==
+X-Gm-Message-State: AOAM532qYlT35pKlPZVXLWkfm1Rmgur+yU+VMu1IV7vzsjFjW/e3kQeZ
+        2LGKqbNPVAKUMfCU3zrLld5YBQ==
+X-Google-Smtp-Source: ABdhPJwXu+6bfJ2FOMd/hrpU0J6EJlp4sESW0BPiddeP9MlZQt9lZsG0xZQKTVaKRYINu2N3ZA+IGg==
+X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id e131-20020a636989000000b003c23c19d661mr16214262pgc.352.1652173787953;
+        Tue, 10 May 2022 02:09:47 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id c17-20020a63ef51000000b003c2f9540127sm9896907pgk.93.2022.05.10.02.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 02:09:47 -0700 (PDT)
+Date:   Tue, 10 May 2022 14:39:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jiabing Wan <wanjiabing@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Fix potential deadlock problem in
+ mtk_cpufreq_set_target
+Message-ID: <20220510090945.qhqomdqemrtrqdyo@vireshk-i7>
+References: <20220510080136.11950-1-wanjiabing@vivo.com>
+ <20220510081232.4u25qgryszzqblho@vireshk-i7>
+ <61a4b23f-9740-6fb4-abd0-640d3353e788@vivo.com>
+ <20220510085050.tza6rjvdkjsrhrjv@vireshk-i7>
+ <340a3029-1ab1-0e64-0c18-bb2464614919@vivo.com>
 MIME-Version: 1.0
-References: <20220509120337.92472-1-cw00.choi@samsung.com> <CAGXv+5Fp0c23=4C8QG6AcDS9furMqJhfrUF1Hj0RyBHebvCy6w@mail.gmail.com>
-In-Reply-To: <CAGXv+5Fp0c23=4C8QG6AcDS9furMqJhfrUF1Hj0RyBHebvCy6w@mail.gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Tue, 10 May 2022 18:08:22 +0900
-Message-ID: <CAGTfZH1yujq-aWUkJMf37e53Gf=tSn=9LExnQgKw=qAFnim2hA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] PM / devfreq: Add cpu based scaling support to
- passive governor
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
-        hsinyi@chromium.org, Saravana Kannan <saravanak@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <340a3029-1ab1-0e64-0c18-bb2464614919@vivo.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+On 10-05-22, 16:58, Jiabing Wan wrote:
+> Yes, I write this line by hand.
+> There must be something wrong when copying the subject line.
+> 
+> Maybe I should find some tools in git to avoid it in the future.
 
-On Tue, May 10, 2022 at 6:00 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Mon, May 9, 2022 at 8:03 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
-> >
-> > The devfreq passive governor has already supported the devfreq parent device
-> > for coupling the frequency change if some hardware have the constraints
-> > such as power sharing and so on.
-> >
-> > Add cpu based scaling support to passive governor with required-opp property.
-> > It uses the cpufreq notifier to catch the frequency change timing of cpufreq
-> > and get the next frequency according to new cpu frequency by using required-opp
-> > property. It is based on patch[1] and then just code clean-up by myself.
-> >
-> > Make the common code for both passive_devfreq and passive_cpufreq
-> > parent type to remove the duplicate code.
-> >
-> > [1] [RFC,v2] PM / devfreq: Add cpu based scaling support to passive_governor
-> > - https://lore.kernel.org/patchwork/patch/1101049/
-> >
-> > Changes from v2:
-> > : https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
-> > - Drop the following patch ("PM / devfreq: passive: Update frequency when start governor")
-> > - Move p_data->this initialization into cpufreq_passive_regiser_notifier()
-> >
-> > Changes from v1:
-> > : https://patchwork.kernel.org/project/linux-pm/cover/20210617060546.26933-1-cw00.choi@samsung.com/
-> > - Rename cpu_data variable to parent_cpu_data to avoid build fail
-> > - Use for_each_possible_cpu macro when register cpufreq transition notifier
-> > - Add missing exception handling when cpufreq_passive_register_notifier is failed
-> > - Keep cpufreq_policy for posible cpus instead of NR_CPU in order to avoid
-> >   the memory waste when NR_CPU is too high.
-> > - Add reviewed-by tag of Matthias Kaehlcke for patch1
-> >
-> >
-> > Chanwoo Choi (3):
-> >   PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
-> >   PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
-> >   PM / devfreq: passive: Keep cpufreq_policy for possible cpus
-> >
-> > Saravana Kannan (1):
-> >   PM / devfreq: Add cpu based scaling support to passive governor
->
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->
-> on next-20220509 in conjunction with the MediaTek cpufreq [1], CCI devfreq [2]
-> & SVS [3] series, as well as some fix-ups [4]. AFAICT the CCI devfreq device
-> is reacting and making frequency changes.
->
->
-> Regards
-> ChenYu
->
-> [1] https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
-> [2] https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
-> [3] https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
-> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+Add this to ~/.gitconfig
 
-Thanks for your test.
+[pretty]
+	fixes = Fixes: %h (\"%s\")
+
+And then just do:
+
+$ git log --pretty=fixes c210063b40ac
+
+It shall give you:
+
+Fixes: c210063b40ac ("cpufreq: mediatek: Add opp notification support")
+Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+Fixes: f126fbadce92 ("cpufreq: mediatek: Unregister platform device on exit")
+Fixes: a3b8d1b12c6b ("cpufreq: mediatek: Fix NULL pointer dereference in mediatek-cpufreq")
+Fixes: ffa7bdf7f344 ("cpufreq: mediatek: Make sram regulator optional")
+
+and other patches as we did git log.
+
+OR
+
+Else you could do something like this to just see one commit:
+
+$ git show -s  --pretty=oneline --pretty=fixes c210063b40ac
 
 -- 
-Best Regards,
-Chanwoo Choi
+viresh

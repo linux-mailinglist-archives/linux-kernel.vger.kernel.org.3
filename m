@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6D65217DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FD25219BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243255AbiEJN3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S244600AbiEJNvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242964AbiEJNWq (ORCPT
+        with ESMTP id S243437AbiEJNa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:22:46 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22171A90DB;
-        Tue, 10 May 2022 06:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652188620; x=1683724620;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8pp90tvf8kTP0zWhyfPDbb/zxfLJMKZ53ILcrsvHuto=;
-  b=HeP2VqwUlh1WZpJDAKL4lIzcejYDPwSN/ELGD1RwvP/ZAmWTFtUnSmcJ
-   JUjQQSCQ2DlbMCYchglOHqZouX+Vl3GQAilgkYbk8puCVr1XIVdgom4ZJ
-   E8f6jq00I3A8ws8YLKkEUCU4OWEwgE+qzBmbwCRFm6i7fU2ziNc1E8GlO
-   nur7byJkEjt28jcy+8GCiW0H2VpcOURo3xSFCTyhlPc14VfQINrH6W4bL
-   BVw1DlPQaYrenYA0LxyGTLObUO/I3dXK8/yer0Ow3ncL4NgcC42rM9zSk
-   8Xx7RMgr8MxqQz3838czQxyNoNO/3VINDWIpJjn8x5wzbYrHgBeKEJ0eV
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="172695912"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 May 2022 06:16:45 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 10 May 2022 06:16:45 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 10 May 2022 06:16:43 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
-        <conor.dooley@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v2 2/2] MAINTAINERS: add PolarFire SoC's RTC
-Date:   Tue, 10 May 2022 14:21:17 +0100
-Message-ID: <20220510132116.506572-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510132116.506572-1-conor.dooley@microchip.com>
-References: <20220510132116.506572-1-conor.dooley@microchip.com>
+        Tue, 10 May 2022 09:30:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DBD2C7A79
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:21:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92242B81DA5
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAD3C385CB
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 13:21:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dcXNmMLx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652188893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h9LpMP7cxeGbwoT+ipVaVjALSaR2sJ6nkC0H4Oa3Mw0=;
+        b=dcXNmMLxnhTLkfi2DTDokR6/h/sjWXYVnDOD4siwdvURNrzhdQRgFVXM8qTWJqICLDev5K
+        n985MjDsKxaUkK5oaz6Lclymodqq8TL0M7uZdo7WwD57FsU6G5jy+CGuf9EsCrZNY0LCAX
+        ahXFYvHqHz4S4bSX5SFFyQObhZhI8tM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0bd28c5a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 10 May 2022 13:21:32 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] random: use proper jiffies comparison macro
+Date:   Tue, 10 May 2022 15:21:20 +0200
+Message-Id: <20220510132120.102800-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an entry for PolarFire SoC's RTC drver to the existing support
-for PolarFire SoC.
+This expands to exactly the same code that it replaces, but makes things
+consistent by using the same macro for jiffy comparisons throughout.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/random.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..625d735f6a24 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16952,6 +16952,7 @@ L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 2f8559122dfa..b1ef334ed263 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -325,7 +325,7 @@ static bool crng_has_old_seed(void)
+ 			interval = max_t(unsigned int, CRNG_RESEED_START_INTERVAL,
+ 					 (unsigned int)uptime / 2 * HZ);
+ 	}
+-	return time_after(jiffies, READ_ONCE(base_crng.birth) + interval);
++	return time_is_before_jiffies(READ_ONCE(base_crng.birth) + interval);
+ }
  
+ /*
 -- 
-2.36.1
+2.35.1
 

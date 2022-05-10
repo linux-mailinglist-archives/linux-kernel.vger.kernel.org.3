@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE769521B61
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F505521B5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343769AbiEJOLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S1343853AbiEJOLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245026AbiEJNrM (ORCPT
+        with ESMTP id S245031AbiEJNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 09:47:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060D462204;
-        Tue, 10 May 2022 06:33:45 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816162208;
+        Tue, 10 May 2022 06:33:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADFCBB81DA2;
-        Tue, 10 May 2022 13:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25086C385C2;
-        Tue, 10 May 2022 13:33:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9436B615C8;
+        Tue, 10 May 2022 13:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4ACC385A6;
+        Tue, 10 May 2022 13:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189622;
-        bh=DMggDDOU+eaxJXc5upw4OUuvsOsb/HcMaUf15fpdsdo=;
+        s=korg; t=1652189629;
+        bh=GaadsnEVgOBwmSGgZMElmngR/kp17Tr9tsbHmaKPN6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jUSfYKACQsJihtwQvQKZzNCieFChRhsv0rikk3pg57SM1g64MqIlyt53KgbKLYko+
-         D4L+7jbzEHVbw/1FqPUwnNgudPPB/17yVSIOa5H2VbdRbGIvdUDIgcW6rj9nZ3U7ip
-         o4QjP0DwBAzMiQDzdveJ2W22Sze47cU+rxdT/s68=
+        b=QXXobOMDEMzlA72i9xJp+JvuCdbvgrh3GPH5vKA2NdScQJCGPL1FcUZqmxy+rRx+6
+         sDAzZB346zs+tbkX7gUUuvAMy4QFYXgAKQ6y8OExBEgz5lT2IUmJRz1U1LI+uC3hHa
+         vd+BDGr18/+aKDUs81TDXnmj8vjyAUMEE0yyRpFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, pali@kernel.org,
         =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 110/135] PCI: aardvark: Comment actions in driver remove method
-Date:   Tue, 10 May 2022 15:08:12 +0200
-Message-Id: <20220510130743.561084013@linuxfoundation.org>
+Subject: [PATCH 5.15 111/135] PCI: aardvark: Disable bus mastering when unbinding driver
+Date:   Tue, 10 May 2022 15:08:13 +0200
+Message-Id: <20220510130743.589769176@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
 References: <20220510130740.392653815@linuxfoundation.org>
@@ -57,35 +57,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pali Rohár <pali@kernel.org>
 
-commit a4ca7948e1d47275f8f3e5023243440c40561916 upstream.
+commit a46f2f6dd4093438d9615dfbf5c0fea2a9835dba upstream.
 
-Add two more comments into the advk_pcie_remove() method.
+Ensure that after driver unbind PCIe cards are not able to forward
+memory and I/O requests in the upstream direction.
 
-Link: https://lore.kernel.org/r/20211130172913.9727-6-kabel@kernel.org
+Link: https://lore.kernel.org/r/20211130172913.9727-7-kabel@kernel.org
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/controller/pci-aardvark.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
 --- a/drivers/pci/controller/pci-aardvark.c
 +++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1681,11 +1681,13 @@ static int advk_pcie_remove(struct platf
+@@ -1679,6 +1679,7 @@ static int advk_pcie_remove(struct platf
+ {
+ 	struct advk_pcie *pcie = platform_get_drvdata(pdev);
  	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
++	u32 val;
  	int i;
  
-+	/* Remove PCI bus with all devices */
- 	pci_lock_rescan_remove();
- 	pci_stop_root_bus(bridge->bus);
+ 	/* Remove PCI bus with all devices */
+@@ -1687,6 +1688,11 @@ static int advk_pcie_remove(struct platf
  	pci_remove_root_bus(bridge->bus);
  	pci_unlock_rescan_remove();
  
-+	/* Remove IRQ domains */
++	/* Disable Root Bridge I/O space, memory space and bus mastering */
++	val = advk_readl(pcie, PCIE_CORE_CMD_STATUS_REG);
++	val &= ~(PCI_COMMAND_IO | PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
++	advk_writel(pcie, val, PCIE_CORE_CMD_STATUS_REG);
++
+ 	/* Remove IRQ domains */
  	advk_pcie_remove_msi_irq_domain(pcie);
  	advk_pcie_remove_irq_domain(pcie);
- 
 
 

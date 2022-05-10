@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B09F521B5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11020521C29
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343582AbiEJOK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        id S1344714AbiEJObm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245045AbiEJNrN (ORCPT
+        with ESMTP id S244421AbiEJOF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A432F38D;
-        Tue, 10 May 2022 06:34:15 -0700 (PDT)
+        Tue, 10 May 2022 10:05:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AA3980B0;
+        Tue, 10 May 2022 06:40:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE64615C8;
-        Tue, 10 May 2022 13:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1066EC385A6;
-        Tue, 10 May 2022 13:34:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 990B061937;
+        Tue, 10 May 2022 13:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDC5C385A6;
+        Tue, 10 May 2022 13:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189654;
-        bh=WppGhgcPB+6oY6QJ8p+yvs4P6oEjc6aM7RIGjBre9Pc=;
+        s=korg; t=1652190047;
+        bh=9NrCYKuMIeM6+E1m5dJvPZmAeiaDUQmMNN6EQ1MT4B8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2k1cwXWIwixpC9nV8dLlKRIvRlglzc1+ei2RrgTaD6gsm5y8746bwdUvxjuSVsWU2
-         GfYJ5UwPk7i4OqoQmNIQF8IOjnrsSfWrrsK0Puoc4cb3r/ZG085KKLu+/RsVo3oe55
-         GqGpR94bD5U6qrn0uUpPQF4WKCs53L0GM4rD0Kq8=
+        b=ztsWNtEL2BpIoHP2DDiVNrQjrKGHvNYR3/NbUkfrdqkx0eTNY2vez9w39TvmyyA1c
+         pE7UZTOguUvfZevGLDQZLyuRo0660dfLMOLr139qYkRdwMWn2wSnOuVzPq/iVE5QQC
+         08nFfjp6jxnm+CVUpk8Bx5FcEjEqoNdk2RSqbn5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.15 119/135] PCI: aardvark: Check return value of generic_handle_domain_irq() when processing INTx IRQ
+        stable@vger.kernel.org, John Sperbeck <jsperbeck@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Hillf Danton <hdanton@sina.com>, kvm@vger.kernel.org,
+        Peter Gonda <pgonda@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 111/140] KVM: SEV: Mark nested locking of vcpu->lock
 Date:   Tue, 10 May 2022 15:08:21 +0200
-Message-Id: <20220510130743.812198606@linuxfoundation.org>
+Message-Id: <20220510130744.776874332@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +59,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Peter Gonda <pgonda@google.com>
 
-commit 51f96e287c6f003d3bb29672811c757c5fbf0028 upstream.
+[ Upstream commit 0c2c7c069285374fc8feacddc0498f8ab7627117 ]
 
-It is possible that we receive spurious INTx interrupt. Check for the
-return value of generic_handle_domain_irq() when processing INTx IRQ.
+svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
+source and target vcpu->locks. Unfortunately there is an 8 subclass
+limit, so a new subclass cannot be used for each vCPU. Instead maintain
+ownership of the first vcpu's mutex.dep_map using a role specific
+subclass: source vs target. Release the other vcpu's mutex.dep_maps.
 
-Link: https://lore.kernel.org/r/20220110015018.26359-6-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b56639318bb2b ("KVM: SEV: Add support for SEV intra host migration")
+Reported-by: John Sperbeck<jsperbeck@google.com>
+Suggested-by: David Rientjes <rientjes@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Hillf Danton <hdanton@sina.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
+
+Message-Id: <20220502165807.529624-1-pgonda@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kvm/svm/sev.c | 42 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 38 insertions(+), 4 deletions(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1429,7 +1429,9 @@ static void advk_pcie_handle_int(struct
- 		advk_writel(pcie, PCIE_ISR1_INTX_ASSERT(i),
- 			    PCIE_ISR1_REG);
- 
--		generic_handle_domain_irq(pcie->irq_domain, i);
-+		if (generic_handle_domain_irq(pcie->irq_domain, i) == -EINVAL)
-+			dev_err_ratelimited(&pcie->pdev->dev, "unexpected INT%c IRQ\n",
-+					    (char)i + 'A');
- 	}
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index e5cecd4ad2d4..76e6411d4dde 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1590,24 +1590,51 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+ 	atomic_set_release(&src_sev->migration_in_progress, 0);
  }
  
++/* vCPU mutex subclasses.  */
++enum sev_migration_role {
++	SEV_MIGRATION_SOURCE = 0,
++	SEV_MIGRATION_TARGET,
++	SEV_NR_MIGRATION_ROLES,
++};
+ 
+-static int sev_lock_vcpus_for_migration(struct kvm *kvm)
++static int sev_lock_vcpus_for_migration(struct kvm *kvm,
++					enum sev_migration_role role)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	unsigned long i, j;
++	bool first = true;
+ 
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+-		if (mutex_lock_killable(&vcpu->mutex))
++		if (mutex_lock_killable_nested(&vcpu->mutex, role))
+ 			goto out_unlock;
++
++		if (first) {
++			/*
++			 * Reset the role to one that avoids colliding with
++			 * the role used for the first vcpu mutex.
++			 */
++			role = SEV_NR_MIGRATION_ROLES;
++			first = false;
++		} else {
++			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
++		}
+ 	}
+ 
+ 	return 0;
+ 
+ out_unlock:
++
++	first = true;
+ 	kvm_for_each_vcpu(j, vcpu, kvm) {
+ 		if (i == j)
+ 			break;
+ 
++		if (first)
++			first = false;
++		else
++			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
++
++
+ 		mutex_unlock(&vcpu->mutex);
+ 	}
+ 	return -EINTR;
+@@ -1617,8 +1644,15 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	unsigned long i;
++	bool first = true;
+ 
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
++		if (first)
++			first = false;
++		else
++			mutex_acquire(&vcpu->mutex.dep_map,
++				      SEV_NR_MIGRATION_ROLES, 0, _THIS_IP_);
++
+ 		mutex_unlock(&vcpu->mutex);
+ 	}
+ }
+@@ -1726,10 +1760,10 @@ int svm_vm_migrate_from(struct kvm *kvm, unsigned int source_fd)
+ 		charged = true;
+ 	}
+ 
+-	ret = sev_lock_vcpus_for_migration(kvm);
++	ret = sev_lock_vcpus_for_migration(kvm, SEV_MIGRATION_SOURCE);
+ 	if (ret)
+ 		goto out_dst_cgroup;
+-	ret = sev_lock_vcpus_for_migration(source_kvm);
++	ret = sev_lock_vcpus_for_migration(source_kvm, SEV_MIGRATION_TARGET);
+ 	if (ret)
+ 		goto out_dst_vcpu;
+ 
+-- 
+2.35.1
+
 
 

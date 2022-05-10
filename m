@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87B4521C95
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A35521CAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346539AbiEJOnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
+        id S1345000AbiEJOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345157AbiEJOlD (ORCPT
+        with ESMTP id S1345770AbiEJOmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:41:03 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD042F7367;
-        Tue, 10 May 2022 06:57:45 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id c11so23920688wrn.8;
-        Tue, 10 May 2022 06:57:45 -0700 (PDT)
+        Tue, 10 May 2022 10:42:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8272FBBD9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:59:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z19so20127976edx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 06:59:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=svE7D7raICTcswKmlZyGfw+j5n0q0z/eO2/j4YJcVVE=;
+        b=clYZ3E4PvpwShzWS+GRxHqDLlGwakjZVKIZjvmSaSq5b2DQ3XbXuI4cyHQMt/rkvxY
+         B9mmnwhRmMOgcJxs3bSN4ijt0M8+R1GpNSbuhMokBi9fFy6dz135FUS7fdJDcIS4/uI4
+         2csnOogXyyHMwyTdp70YzxUkRZEkh4OCOG/8cKafwuRA4BceeqLLOHeTMgipUwpTD0Gl
+         p3lsVcwhQNRvrxpSaxe3QxrZcS3L2U47OvrmUv+b5qjE9JmhOteyRNMWU+HVuqCDRLQL
+         d0eQ4XDLPswOvFGVHc6vvIIL0/60PB7/UFzFCyTyewA8tglFrQppwZnIcufd1WKkmeYW
+         NLEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kLUsJJIOjnBzu7Fn+p8pQABeh5O/fVn3NLgRAHyO7K0=;
-        b=rVD9dGOLZ+KIygSPWyoOgiNbqk5Y7O5EI5WSPu309CM/BWGmLBiQqPVs+eT+pcOZ3M
-         /304vDKX7fLNVfp26psi7TsjMF+5mF3LZcp7Z9ZaTBhYGuYCyglaU+ww/WKlwa2L7uO4
-         jLHRe1P98OQpTcGQACbdmc8g04qJjk4cWPAmSiRX69E7MmDeWBhe1+mwAzxbiKqdLSTy
-         0KGdTOLpxx9nUIMslBX2OzZqkBHcjHv56G6KXtv/Z+vrD7PNRtw6rWxnXRyomEVlSyTT
-         cSXDSHxYPQuQJTj8Qf1JZIrS47rV0zTaqtn/3leQ7D9JK2CyJcFugN6i5E15r3YfnF2U
-         jANg==
-X-Gm-Message-State: AOAM532F5qv0uzP+f5GfeZivy8wsu1/L6KBLGhJcK1LN7CAs367+09+5
-        8KjMvvLMvKFmcO4RUZeWuVux920EV81iAI8m/QQ=
-X-Google-Smtp-Source: ABdhPJyXdjBKuRq72cBtrrUEpYnydXQDURkv81nEvnDJ+fmifrl92MntG3s+vyJ2HAL1KwM4b7mJ6Nl9QX59icqFeWU=
-X-Received: by 2002:a05:6000:2a7:b0:20c:4d42:189b with SMTP id
- l7-20020a05600002a700b0020c4d42189bmr18882068wry.16.1652191053526; Tue, 10
- May 2022 06:57:33 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=svE7D7raICTcswKmlZyGfw+j5n0q0z/eO2/j4YJcVVE=;
+        b=3oV4V/DKjh6rMWOPyBSU1jnqXvkf6Iuv/KXvtCIvpS3z8CaBu8bNMgHn0mo4z7tANB
+         gbYK+LiQyWMFZRBuWJxmtLpd1H//yyotz4Gf4IljnB8AGXCYVxcR0PAQJ86zDmFXLv74
+         aLuFO1vbYLE5JsvzWFOXrOrVwjCpdWS/wrgjtTY9o27Wi2rV/vOBwnlaY8waxX66o9A+
+         HvnIsJXH4Mp+AIGeCYXAidok7CQr7AT73VcDFoRDGnZNJdsO9Lr6eTB60uKkW5hFKHpN
+         Fg8YSo2kEfFpgbiylQcjTgTozOunWCtNXTcGvVvy/B4dXQWXitpKQgjjmxYTIjE9vapF
+         nPkg==
+X-Gm-Message-State: AOAM533s+4gMBTc9RZsHmiuWFcZh4nunQA2ELYTpiOoH33ZwNg35VqR+
+        UKL41nSZjXp1zkwMYrSlTi32dg==
+X-Google-Smtp-Source: ABdhPJwNYcAh0SYi4grd77JDHU1ZiH4pCjfhn2XQt9Yp0qugct3X74wDvVvnd+WAg0WonxkQqGd9dA==
+X-Received: by 2002:aa7:d459:0:b0:427:bd8f:61f8 with SMTP id q25-20020aa7d459000000b00427bd8f61f8mr23743119edr.157.1652191146619;
+        Tue, 10 May 2022 06:59:06 -0700 (PDT)
+Received: from [192.168.0.253] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b006fb6d9d25bfsm781919eja.22.2022.05.10.06.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 06:59:06 -0700 (PDT)
+Message-ID: <5ca7ddc9-dfe6-a897-a0b7-09d04316cf28@linaro.org>
+Date:   Tue, 10 May 2022 15:59:05 +0200
 MIME-Version: 1.0
-References: <20220509121958.3976-1-harini.katakam@xilinx.com> <19e704ace63483a765a3298610218c5d110bb0e4.camel@redhat.com>
-In-Reply-To: <19e704ace63483a765a3298610218c5d110bb0e4.camel@redhat.com>
-From:   Harini Katakam <harinik@xilinx.com>
-Date:   Tue, 10 May 2022 19:27:22 +0530
-Message-ID: <CAFcVECJuB-F8=Gh3=jQsGhWwnNK2=-KvzzQ4MQQGCPoypiSXOQ@mail.gmail.com>
-Subject: Re: [PATCH] net: macb: Increment rx bd head after allocating skb and buffer
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Harini Katakam <harini.katakam@xilinx.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        David Miller <davem@davemloft.net>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>, dumazet@google.com,
-        netdev <netdev@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-next: manual merge of the mvebu tree with the arm-soc tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20220510094102.099d5e54@canb.auug.org.au>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220510094102.099d5e54@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+On 10/05/2022 01:41, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the mvebu tree got a conflict in:
+> 
+>   arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
+> 
+> between commit:
+> 
+>   2f00bb4a69c7 ("arm64: dts: marvell: align SPI NOR node name with dtschema")
+> 
+> from the arm-soc tree and commit:
+> 
+>   5e9b59bd3737 ("arm64: dts: uDPU: update partition table")
+> 
+> from the mvebu tree.
+> 
+> I fixed it up (I just used the former) and can carry the fix as
+> necessary.
 
-On Tue, May 10, 2022 at 6:54 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> Hello,
->
-> On Mon, 2022-05-09 at 17:49 +0530, Harini Katakam wrote:
-> > In gem_rx_refill rx_prepared_head is incremented at the beginning of
-> > the while loop preparing the skb and data buffers. If the skb or data
-> > buffer allocation fails, this BD will be unusable BDs until the head
-> > loops back to the same BD (and obviously buffer allocation succeeds).
-> > In the unlikely event that there's a string of allocation failures,
-> > there will be an equal number of unusable BDs and an inconsistent RX
-> > BD chain. Hence increment the head at the end of the while loop to be
-> > clean.
-> >
-> > Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> > Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
->
-> This looks like targeting the "net" tree, please repost adding a
-> suitable Fixes tag.
+Thanks Stephen, that's the correct resolution.
 
-Thanks for the review. This behavior would theoretically have been the
-same since
-GEM RX path handling was introduced ~9 yrs ago but I'm not sure since I cannot
-reproduce. Probably this?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/ethernet/cadence?id=4df95131ea803bcb94f472d465c73ed57015c470
-Also, this patch can't be backported to stable branches so far back
-since the driver
-files have changed. It can also be queued for net-next instead.
+Arnd, Olof,
 
-Regards,
-Harini
+This conflict will come to you when Gregory sends Marvel SoC pull request.
+
+The correct resolution is to take my commit 2f00bb4a69c7 ("arm64: dts:
+marvell: align SPI NOR node name with dtschema"), so the node name
+should be "flash", not "spi-flash".
+
+Best regards,
+Krzysztof

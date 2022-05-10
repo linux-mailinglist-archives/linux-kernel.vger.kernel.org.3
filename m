@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D6E521B62
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E75F521C32
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245716AbiEJOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S1344675AbiEJObf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245043AbiEJNrN (ORCPT
+        with ESMTP id S244622AbiEJOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:13 -0400
+        Tue, 10 May 2022 10:04:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCC7E080;
-        Tue, 10 May 2022 06:34:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7980A0;
+        Tue, 10 May 2022 06:40:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C43B3B81DA8;
-        Tue, 10 May 2022 13:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058B1C385A6;
-        Tue, 10 May 2022 13:34:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77CFBB81038;
+        Tue, 10 May 2022 13:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D83C385A6;
+        Tue, 10 May 2022 13:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189648;
-        bh=pVaz+wkZjguHefPMnnE6xU5RTtQ+84NCQi/e2p+M3vg=;
+        s=korg; t=1652190041;
+        bh=JLqwSEOcIWigLI0SHDOYihooy4qv25j0tvogRuqMs6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RHPJCorqp93eQiVRGxvr/HHAhG8y+HTVG+eh2++TFlP/EpjIkpMzJK2AcN5uvk/0A
-         1lOsygwHsD2bwpGmlDUmZ0vH+eMmlaO1YQU1BMjHl2r1p0msGM6LzOm2oj0+9FhId8
-         3Q6Wp13wLdhkYEX75QwaEG/e5VLUBhdXavmxM44E=
+        b=UE8JDWbGJJ8vpHBk74xaTUIlbk4faL+d+xNcFzevtaz3cT7dUQBMWdWiSZcKnAumv
+         7lymna1gxr5GTSh7gSLYPRglSTML5Jt7A9re2Q+SHri7MuoXp3hjAXlkBu2//XN7Fa
+         2RB5jH7avqGg/s+VE4qZT1dgUf4FF7yZ15QN472o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.15 117/135] PCI: aardvark: Replace custom PCIE_CORE_INT_* macros with PCI_INTERRUPT_*
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 109/140] fbdev: Make fb_release() return -ENODEV if fbdev was unregistered
 Date:   Tue, 10 May 2022 15:08:19 +0200
-Message-Id: <20220510130743.756175307@linuxfoundation.org>
+Message-Id: <20220510130744.720335167@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-commit 1d86abf1f89672a70f2ab65f6000299feb1f1781 upstream.
+[ Upstream commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a ]
 
-Header file linux/pci.h defines enum pci_interrupt_pin with corresponding
-PCI_INTERRUPT_* values.
+A reference to the framebuffer device struct fb_info is stored in the file
+private data, but this reference could no longer be valid and must not be
+accessed directly. Instead, the file_fb_info() accessor function must be
+used since it does sanity checking to make sure that the fb_info is valid.
 
-Link: https://lore.kernel.org/r/20220110015018.26359-2-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This can happen for example if the registered framebuffer device is for a
+driver that just uses a framebuffer provided by the system firmware. In
+that case, the fbdev core would unregister the framebuffer device when a
+real video driver is probed and ask to remove conflicting framebuffers.
+
+The bug has been present for a long time but commit 27599aacbaef ("fbdev:
+Hot-unplug firmware fb devices on forced removal") unmasked it since the
+fbdev core started unregistering the framebuffers' devices associated.
+
+Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
+Reported-by: Maxime Ripard <maxime@cerno.tech>
+Reported-by: Junxiao Chang <junxiao.chang@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220502135014.377945-1-javierm@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/video/fbdev/core/fbmem.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -38,10 +38,6 @@
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX_EN			BIT(6)
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHCK			BIT(7)
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHCK_RCV			BIT(8)
--#define     PCIE_CORE_INT_A_ASSERT_ENABLE			1
--#define     PCIE_CORE_INT_B_ASSERT_ENABLE			2
--#define     PCIE_CORE_INT_C_ASSERT_ENABLE			3
--#define     PCIE_CORE_INT_D_ASSERT_ENABLE			4
- /* PIO registers base address and register offsets */
- #define PIO_BASE_ADDR				0x4000
- #define PIO_CTRL				(PIO_BASE_ADDR + 0x0)
-@@ -961,7 +957,7 @@ static int advk_sw_pci_bridge_init(struc
- 	bridge->conf.pref_mem_limit = cpu_to_le16(PCI_PREF_RANGE_TYPE_64);
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 00f0f282e7a1..10a9369c9dea 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1438,7 +1438,10 @@ fb_release(struct inode *inode, struct file *file)
+ __acquires(&info->lock)
+ __releases(&info->lock)
+ {
+-	struct fb_info * const info = file->private_data;
++	struct fb_info * const info = file_fb_info(file);
++
++	if (!info)
++		return -ENODEV;
  
- 	/* Support interrupt A for MSI feature */
--	bridge->conf.intpin = PCIE_CORE_INT_A_ASSERT_ENABLE;
-+	bridge->conf.intpin = PCI_INTERRUPT_INTA;
- 
- 	/* Aardvark HW provides PCIe Capability structure in version 2 */
- 	bridge->pcie_conf.cap = cpu_to_le16(2);
+ 	lock_fb_info(info);
+ 	if (info->fbops->fb_release)
+-- 
+2.35.1
+
 
 

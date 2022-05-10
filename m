@@ -2,121 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890E6520AB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3132520AC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiEJBgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S234292AbiEJBjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiEJBgT (ORCPT
+        with ESMTP id S232601AbiEJBjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:36:19 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B369286FCE;
-        Mon,  9 May 2022 18:32:22 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 24A1WFPx029254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 9 May 2022 21:32:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1652146337; bh=kNxC32quScbCpNyL/wTfsRZfYUcVDoGEmAnwF+CO/RI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=QxJmGfW7e1IqMYLGQvzKg6+7ZkT0OwGyjZIbR34a/I8eBprlhA99gR0O0BEp3S9Ri
-         QSxzKJONeuCwz07zjjnp7xXUyxbrw2mbXLk0OH60YANQzrSVgVJF5eD+RBMAgsUUWA
-         T4G0Ty0kWJ5uuh0PXPt33QGdcwH53U3XMtVJjXWc8ULr3+AvIz6Pgz0xZXQIBzluR2
-         CIrOokyPfzdv2U5lw9a5ZDaB9QcvNSQAyRc/2bz9cP7uvQJlW99OnxvoL7KA5YnM+l
-         HDoK6memNQg7ocJ1IS4F2j1RZyXyb9B99SqHCgp+0Poku2gzFpHznTQ3ugVllQKfHb
-         ErvwvUo9JMGBw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 5B4DC15C3F0A; Mon,  9 May 2022 21:32:15 -0400 (EDT)
-Date:   Mon, 9 May 2022 21:32:15 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com, 42.hyeyoo@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <YnnAnzPFZZte/UR8@mit.edu>
-References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
- <YnmCE2iwa0MSqocr@mit.edu>
- <YnmVgVQ7usoXnJ1N@mit.edu>
- <20220510003213.GD6047@X58A-UD3R>
+        Mon, 9 May 2022 21:39:03 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B783B286FD1;
+        Mon,  9 May 2022 18:35:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCo8IMN_1652146499;
+Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCo8IMN_1652146499)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 09:35:01 +0800
+Message-ID: <3c29b307-5af5-41f0-f97c-c9929f616f53@linux.alibaba.com>
+Date:   Tue, 10 May 2022 09:35:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510003213.GD6047@X58A-UD3R>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/3] mm: change huge_ptep_clear_flush() to return the
+ original pte
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     "dalias@libc.org" <dalias@libc.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ysato@users.sourceforge.jp" <ysato@users.sourceforge.jp>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
+ <012a484019e7ad77c39deab0af52a6755d8438c8.1652002221.git.baolin.wang@linux.alibaba.com>
+ <Ynek+b3k6PVN3x7J@FVFYT0MHHV2J.usts.net>
+ <bf627d1a-42f8-77f3-6ac2-67edde2feb8a@linux.alibaba.com>
+ <d5055b48-d722-e03d-fc32-16fd76e3fa22@csgroup.eu>
+ <a6cc9765-1d8c-b725-978f-53f226d2fbb9@linux.alibaba.com>
+ <de7ca6bf-6a82-acba-df63-ee78eee6ee2c@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <de7ca6bf-6a82-acba-df63-ee78eee6ee2c@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:32:13AM +0900, Byungchul Park wrote:
-> Yes, right. DEPT has never been optimized. It rather turns on
-> CONFIG_LOCKDEP and even CONFIG_PROVE_LOCKING when CONFIG_DEPT gets on
-> because of porting issue. I have no choice but to rely on those to
-> develop DEPT out of tree. Of course, that's what I don't like.
 
-Sure, but blaming the overhead on unnecessary CONFIG_PROVE_LOCKING
-overhead can explain only a tiny fraction of the slowdown.  Consider:
-if time to first test (time to boot the kernel, setup the test
-environment, figure out which tests to run, etc.) is 12 seconds w/o
-LOCKDEP, 49 seconds with LOCKDEP/PROVE_LOCKING and 602 seconds with
-DEPT, you can really only blame 37 seconds out of the 602 seconds of
-DEPT on unnecessary PROVE_LOCKING overhead.
 
-So let's assume we can get rid of all of the PROVE_LOCKING overhead.
-We're still talking about 12 seconds for time-to-first test without
-any lock debugging, versus ** 565 ** seconds for time-to-first test
-with DEPT.  That's a factor of 47x for DEPT sans LOCKDEP overhead,
-compared to a 4x overhead for PROVE_LOCKING.
+On 5/10/2022 4:02 AM, Mike Kravetz wrote:
+> On 5/9/22 01:46, Baolin Wang wrote:
+>>
+>>
+>> On 5/9/2022 1:46 PM, Christophe Leroy wrote:
+>>>
+>>>
+>>> Le 08/05/2022 à 15:09, Baolin Wang a écrit :
+>>>>
+>>>>
+>>>> On 5/8/2022 7:09 PM, Muchun Song wrote:
+>>>>> On Sun, May 08, 2022 at 05:36:39PM +0800, Baolin Wang wrote:
+>>>>>> It is incorrect to use ptep_clear_flush() to nuke a hugetlb page
+>>>>>> table when unmapping or migrating a hugetlb page, and will change
+>>>>>> to use huge_ptep_clear_flush() instead in the following patches.
+>>>>>>
+>>>>>> So this is a preparation patch, which changes the
+>>>>>> huge_ptep_clear_flush()
+>>>>>> to return the original pte to help to nuke a hugetlb page table.
+>>>>>>
+>>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>>>> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
+>>>>>
+>>>>> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+>>>>
+>>>> Thanks for reviewing.
+>>>>
+>>>>>
+>>>>> But one nit below:
+>>>>>
+>>>>> [...]
+>>>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>>>> index 8605d7e..61a21af 100644
+>>>>>> --- a/mm/hugetlb.c
+>>>>>> +++ b/mm/hugetlb.c
+>>>>>> @@ -5342,7 +5342,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct
+>>>>>> *mm, struct vm_area_struct *vma,
+>>>>>>             ClearHPageRestoreReserve(new_page);
+>>>>>>             /* Break COW or unshare */
+>>>>>> -        huge_ptep_clear_flush(vma, haddr, ptep);
+>>>>>> +        (void)huge_ptep_clear_flush(vma, haddr, ptep);
+>>>>>
+>>>>> Why add a "(void)" here? Is there any warning if no "(void)"?
+>>>>> IIUC, I think we can remove this, right?
+>>>>
+>>>> I did not meet any warning without the casting, but this is per Mike's
+>>>> comment[1] to make the code consistent with other functions casting to
+>>>> void type explicitly in hugetlb.c file.
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/all/495c4ebe-a5b4-afb6-4cb0-956c1b18d0cc@oracle.com/
+>>>>
+>>>
+>>> As far as I understand, Mike said that you should be accompagnied with a
+>>> big fat comment explaining why we ignore the returned value from
+>>> huge_ptep_clear_flush(). >
+>>> By the way huge_ptep_clear_flush() is not declared 'must_check' so this
+>>> cast is just visual polution and should be removed.
+>>>
+>>> In the meantime the comment suggested by Mike should be added instead.
+>> Sorry for my misunderstanding. I just follow the explicit void casting like other places in hugetlb.c file. And I am not sure if it is useful adding some comments like below, since we did not need the original pte value in the COW case mapping with a new page, and the code is more readable already I think.
+>>
+>> Mike, could you help to clarify what useful comments would you like? and remove the explicit void casting? Thanks.
+>>
+> 
+> Sorry for the confusion.
+> 
+> In the original commit, it seemed odd to me that the signature of the
+> function was changing and there was not an associated change to the only
+> caller of the function.  I did suggest casting to void or adding a comment.
+> As Christophe mentions, the cast to void is not necessary.  In addition,
+> there really isn't a need for a comment as the calling code is not changed.
 
-> Plus, for now, I'm focusing on removing false positives. Once it's
-> considered settled down, I will work on performance optimizaition. But
-> it should still keep relying on Lockdep CONFIGs and adding additional
-> overhead on it until DEPT can be developed in the tree.
+OK. Will drop the casting in next version.
 
-Well, please take a look at the false positive which I reported.  I
-suspect that in order to fix that particular false positive, we'll
-either need to have a way to disable DEPT on waiting on all page/folio
-dirty bits, or it will need to treat pages from different inodes
-and/or address spaces as being entirely separate classes, instead of
-collapsing all inode dirty bits, and all of various inode's mutexes
-(such as ext4's i_data_sem) as being part of a single object class.
+> 
+> The original version of the commit without either is actually preferable.
+> The commit message does say this is a preparation patch and the return
+> value will be used in later patches.
 
-> DEPT is tracking way more objects than Lockdep so it's inevitable to be
-> slower, but let me try to make it have the similar performance to
-> Lockdep.
-
-In order to eliminate some of these false positives, I suspect it's
-going to increase the number of object classes that DEPT will need to
-track even *more*.  At which point, the cost/benefit of DEPT may get
-called into question, especially if all of the false positives can't
-be suppressed.
-
-					- Ted
+OK. Thanks Mike for making me clear. Also thanks to Muchun and Christophe.

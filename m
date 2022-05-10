@@ -2,103 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F65522694
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415B6522695
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 00:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbiEJWA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 18:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S231475AbiEJWDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 18:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiEJWAx (ORCPT
+        with ESMTP id S229608AbiEJWDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 18:00:53 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39891CB3F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:00:51 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CE7B82C0538;
-        Tue, 10 May 2022 22:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1652220047;
-        bh=phHLbe8Oyxwe+Av7s89xoak9cOF7wZxvdY/6IMgP9DA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=PS5DIVqv8v+6gDDcRLM58PSLzue4awydqpSqSBzuaUwLjInKRKRtrs+cvmeg+QJ5k
-         uX+h8n8xCQKH8E+yLcb1DwxCXTdfpYEtFQiXyFc2jw1zab4h2a4pljEXd0UYoICcPY
-         Kzbsw5191D9BdYGY1Z78BOIruXGQJp1ORL41wgb+YYa6f6X/lQKeXy5PyTloOlmmeb
-         xwJxUvCtEcrzv5tIvtALwMoIwpZ8fxpy18Vyde/RQOTnuRjBhKWZ5sOse2mL6PWgk5
-         Y2B+eswshaD4QM0DsD3AlNAjrf1Xo96OxPKX7st0ehUl/DA2m4/sFX0cXCqntPDy2M
-         9GTgcrlrKwqmA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B627ae08f0001>; Wed, 11 May 2022 10:00:47 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 11 May 2022 10:00:47 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Wed, 11 May 2022 10:00:47 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "kostap@marvell.com" <kostap@marvell.com>,
-        "robert.marko@sartura.hr" <robert.marko@sartura.hr>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Topic: [PATCH v5 1/2] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Index: AQHYX3HqbCVddS0CWEWMkXLyqck2rq0POn2AgAittYCAAAKMAA==
-Date:   Tue, 10 May 2022 22:00:46 +0000
-Message-ID: <71e28c27-d876-9177-3251-92d0063c4dd6@alliedtelesis.co.nz>
-References: <20220504044624.951841-1-chris.packham@alliedtelesis.co.nz>
- <20220504044624.951841-2-chris.packham@alliedtelesis.co.nz>
- <dcc80690-c159-99f8-4686-536b9e87eb69@linaro.org>
- <8f6272ce-0d25-3a1e-f71e-66444a94a2d4@alliedtelesis.co.nz>
-In-Reply-To: <8f6272ce-0d25-3a1e-f71e-66444a94a2d4@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9F1A20137601FA4CAF6598F4E522340D@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 10 May 2022 18:03:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FC96239D8D
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 15:03:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6DCF12FC;
+        Tue, 10 May 2022 15:03:44 -0700 (PDT)
+Received: from [10.57.4.48] (unknown [10.57.4.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA8943F5A1;
+        Tue, 10 May 2022 15:03:42 -0700 (PDT)
+Message-ID: <0505936e-3746-4623-a967-103a0158bfbd@arm.com>
+Date:   Tue, 10 May 2022 23:03:40 +0100
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10 a=UhUHEfIMftsWJk1-XO0A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+Content-Language: en-US
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com, Xuewen Yan <xuewen.yan94@gmail.com>
+References: <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
+ <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
+ <20220426092142.lppfj5eqgt3d24nb@airbuntu>
+ <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
+ <20220427105844.otru4yohja4s23ye@wubuntu>
+ <CAB8ipk-QAE2_J_kpUVRcq-4KJ0cSGc1JT2oQhdzvrjDu25HsRQ@mail.gmail.com>
+ <20220503144352.lxduzhl6jq6xdhw2@airbuntu>
+ <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
+ <20220510145625.t5py7atlhgojsfyf@wubuntu>
+ <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
+ <20220510184436.fdgzzcfqqevinx5p@wubuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220510184436.fdgzzcfqqevinx5p@wubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxMS8wNS8yMiAwOTo1MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4NCj4gT24gNS8wNS8y
-MiAyMToxOSwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4+PiArLyB7DQo+Pj4gK8KgwqDC
-oCBtb2RlbCA9ICJNYXJ2ZWxsIEFDNSBTb0MiOw0KPj4+ICvCoMKgwqAgY29tcGF0aWJsZSA9ICJt
-YXJ2ZWxsLGFjNSI7DQo+PiBNaXNzaW5nIGJvYXJkIGJpbmRpbmdzIHBhdGNoLg0KPj4NCj4gV2hl
-cmUgZG8gdGhlc2UgdXN1YWxseSBlbmQgdXA/IEkgY2FuJ3Qgc2VlIGFueSBvZiB0aGUgb3RoZXIg
-TWFydmVsbCANCj4gYm9hcmRzIGhhdmluZyBiaW5kaW5ncyAod2hpY2ggbWlnaHQgYmUgd2h5IHlv
-dSdyZSB0ZWxsaW5nIG1lIG5vdCB0byANCj4gYWRkIG5ldyBib2FyZHMvU29DcyB3aXRob3V0IGl0
-KS7CoCBUaGVyZSdzIG9uZSBlbnRyeSBpbiANCj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
-bmRpbmdzL2JvYXJkIGJ1dCB0aGF0IHNlZW1zIG1vcmUgcmVsYXRlZCB0byANCj4gc29tZSBib2Fy
-ZCBzcGVjaWZpYyBtaXNjIGRldmljZXMuDQpBaCBJIGp1c3QgZm91bmQgDQpEb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvYXJtL21hcnZlbGwvYXJtYWRhLTdrLThrLnlhbWwuIEkgY2Fu
-IA0KcHV0IHNvbWV0aGluZyBuZXh0IHRvIHRoYXQu
+
+
+On 5/10/22 19:44, Qais Yousef wrote:
+> On 05/10/22 18:44, Lukasz Luba wrote:
+> 
+> [...]
+> 
+>> To properly answer this question we probably have to analyze the timings
+>> and this update path - how often it is actually called. Keep in mind
+>> we are going to solve CPU capacity inversion for RT class, which
+>> contains latency sensitive tasks. In this approach the information
+> 
+> This was an attempt for a generic inversion detection. We update
+> rq->cpu_capacity which is used by capacity_of() in the same path.
+
+True, but this is a CFS 'world' and the update path is part of load
+balance. Your proposed code which sets the new
+'rq->cpu_capacity_inverted' is run there, which might have some
+delays.
+
+> 
+> I didn't feel brave to write a quick patch in the topology code, but we can
+> certainly do the detection there in topology_update_thermal_pressure().
+
+Looks better, since that code path is called when we get instantaneous
+information about CPU freq reduction. I'm afraid that again this
+approach might be blocked due to 'khz' calling ratio of that code and we
+'must not' use this.
+
+> 
+>> about HW status is coming from this CFS load balance path.
+>> What if that load balance is not called that often as RT might require?
+>> What if there is a light load on CPUs, but GPU caused them to throttle,
+>> reducing capacity by a decent chunk e.g. 50%?
+>> That would translate to some RT periodic task which takes 2ms every
+>> 8ms to take 4ms, while maybe on other less power hungry CPU it could
+>> take 3ms.
+>>
+>> The usage of thermal_load_avg() in the scale_rt_capacity() looks OK
+>> for the CFS, but might not be from the RT class point of view.
+>> The RT class might want to realize faster that CPUs have changed the
+>> capacity.
+>> Maybe it's OK with that patch [1] and boot config shifter=-5, but in
+>> default boot config for shifter=0 we can suffer for hundreds of ms
+>> running on lower capacity cpu (which is quite high number of frames
+>> nowadays).
+>>
+>> Without a research and experiments data I'm afraid this is too
+>> big step to make, with this CFS load balance path.
+> 
+> I think Xuewen didn't want to use thermal_load_avg(), and that's the question
+> I deferred.
+
+Your code snipped might have similar penalty, since you populate
+information about that CPU inversion at 'some point in time'.
+My point is: that 'point in time' is not well defined, since it's
+CFS load balance. I'm afraid that RT class deserves something better
+defined (predictable, repeatable, reliable, short, etc.)
+
+> 
+>>
+>>>
+>>>>
+>>>>> +
+>>>>> +               rq->cpu_capacity_inverted = 0;
+>>>>> +
+>>>>> +               for_each_possible_cpu(cpu) {
+>>>>> +                       unsigned long cap = arch_scale_cpu_capacity(cpu);
+>>>>> +
+>>>>> +                       if (capacity_orig <= cap)
+>>>>> +                               continue;
+>>
+>> The search loop here assumes that other CPUs (fortunately not in the
+>> same freq domain) don't suffer due to reduced capacity. This might be
+>> not true - when we have ~1 Watt budget for all CPUs in the system and
+>> single big core can use 3-4W at max or single mid core ~1.2W.
+
+s/1.2W/1-2W
+
+> 
+> I defined capacity inversion against capacity_orig. IMHO that's the sensible
+> definition to make.
+> 
+> Would be good to hear more/other suggestions.
+
+Capacity of other CPU might also be reduced and capacity_orig is not
+reflecting that. My gut feeling tells me that this capacity_orig
+assumption might be too optimistic for some platforms.
+
+It's the same old question: how good the model should be.
+We want to 'model' the reality (CPUs slows down), how good the
+model should be in this RT world use case - I don't know w/o
+experiments.
+
+I don't even know how often this new variable
+'rq->cpu_capacity_inverted' gets updated and what is the time diff to
+the last update of the raw thermal pressure variable. You said that code
+is 'completely untested'. So it's unknown delay for now - but belongs to
+similar class as thermal_load_avg(), but the 2nd is known. I have
+shared plots with raw signal vs. PELT-like delays. We at least know
+the delays, e.g. ~200ms to reach raw value, but how that impacts RT
+world - I have no experiment results from real apps (i.e. w/ audio or
+display threads).
+
+> 
+>>
+>>>>> +
+>>>>> +                       if (cap > inv_cap) {
+>>>>> +                               rq->cpu_capacity_inverted = inv_cap;
+>>>>> +                               break;
+>>>>> +                       }
+>>>>> +               }
+>>>>> +
+>>>>> +       }
+>>>>>
+>>>>>           sdg->sgc->capacity = capacity;
+>>>>>           sdg->sgc->min_capacity = capacity;
+>>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+>>>>> index 8dccb34eb190..bfe84c870bf9 100644
+>>>>> --- a/kernel/sched/sched.h
+>>>>> +++ b/kernel/sched/sched.h
+>>>>> @@ -992,6 +992,7 @@ struct rq {
+>>>>>
+>>>>>           unsigned long           cpu_capacity;
+>>>>>           unsigned long           cpu_capacity_orig;
+>>>>> +       unsigned long           cpu_capacity_inverted;
+>>>>>
+>>>>>           struct callback_head    *balance_callback;
+>>>>>
+>>>>> @@ -2807,6 +2808,11 @@ static inline unsigned long capacity_orig_of(int cpu)
+>>>>>           return cpu_rq(cpu)->cpu_capacity_orig;
+>>>>>    }
+>>>>>
+>>>>> +static inline unsigned long cpu_in_capacity_inversion(int cpu)
+>>>>> +{
+>>>>> +       return cpu_rq(cpu)->cpu_capacity_inverted;
+>>>>> +}
+>>>>> +
+>>>>>    /**
+>>>>>     * enum cpu_util_type - CPU utilization type
+>>>>>     * @FREQUENCY_UTIL:    Utilization used to select frequency
+>>>>>
+>>>>>
+>>>>> --->8---
+>>>>
+>>>> The patch is amazing for me, and the complexity is not too high. Would
+>>>> you please push the patch?
+>>>> I think the idea is yours, I don't want to use it as my patch v2.
+>>>
+>>> I'd be happy to add a commit message so that you can include it in your v2.
+>>>
+>>> First, I'd like to hear from Vincent and Lukasz they're happy with this
+>>> approach.
+>>>
+>>> I've been trying to think how we can do this generically but can't find an
+>>> alternative to the extra loop or additional fallback_cpu_mask. Maybe the mask
+>>> is okay if we protect it with sched_asymmetric_cpucapacity static key..
+>>>
+>>
+>> I'm sorry Qais, I see that you are trying to bring this
+>> real-CPU-capacity information into RT, but the source and quality of
+>> this information IMO might matter. I cannot help you w/o experiment
+>> results of your proposed approach.
+> 
+> The question I was posing here is whether to handle thermal only in inversion
+> case as I was suggesting or do better. We are still trickling through the
+> details, but first, I wanted to make sure there's no objection to this
+> direction (detect inversion and bail out in rt_task_fits_capacity() for cpus in
+> capacity inversion).
+
+IMO how you detect that inversion and at which point in time is part of
+the scope.
+
+I would vote for using that thermal update code path + compare other
+CPUs real capacity not capacity_orig to detect inversion.

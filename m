@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB56521C0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63425521BC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344141AbiEJO15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S1344100AbiEJOVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245361AbiEJN5f (ORCPT
+        with ESMTP id S245056AbiEJNrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:57:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF1C8FD41;
-        Tue, 10 May 2022 06:39:11 -0700 (PDT)
+        Tue, 10 May 2022 09:47:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B9D62228;
+        Tue, 10 May 2022 06:34:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3373B81D24;
-        Tue, 10 May 2022 13:39:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AF7C385A6;
-        Tue, 10 May 2022 13:39:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F8E615C8;
+        Tue, 10 May 2022 13:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875CDC385C6;
+        Tue, 10 May 2022 13:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189948;
-        bh=KROBn0sVKqejLhXC5hNUtuLqTsLA0EpNTTg+h0Jc3Nc=;
+        s=korg; t=1652189675;
+        bh=RLyNoQNOmM9xMZnoCOq8AlJ7PyO3h9xDoQNgVeLXbmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TFEy2P+nLad7HdDsyo9zq70Qo/+orj97S/1ltdL7L2oM0dkBW8xFt7EvuOr0UP+ph
-         JScF+fPyMbf0bnoK3Ag39FPWFwW0EXAu0c43Jf8HZQeeiy8cFji/9wmnWgpdeXHqEh
-         Rnk5LcPMYTXlNrr4BHYlKGXxDakNSSQJt4BtKy+A=
+        b=OqpipXpTrV6A1QwkqAABhbjWGBsMxuZ/nCpu+pl3JbbixvPZphKp/b2IOCJu3Y8/S
+         a2qce5gdgBr7KqXq9nDL3pCHFH686CTOyk1F3VG3cRxbgqAaSquwsfVRCkovzVV8Hl
+         8xt+l+gtt9mMGquGP3Q4Rb0/Ft1duFagFnK/GSdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.17 079/140] RDMA/siw: Fix a condition race issue in MPA request processing
+        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 087/135] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
 Date:   Tue, 10 May 2022 15:07:49 +0200
-Message-Id: <20220510130743.873150359@linuxfoundation.org>
+Message-Id: <20220510130742.906909195@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cheng Xu <chengyou@linux.alibaba.com>
+From: Sandipan Das <sandipan.das@amd.com>
 
-commit ef91271c65c12d36e4c2b61c61d4849fb6d11aa0 upstream.
+[ Upstream commit 5a1bde46f98b893cda6122b00e94c0c40a6ead3c ]
 
-The calling of siw_cm_upcall and detaching new_cep with its listen_cep
-should be atomistic semantics. Otherwise siw_reject may be called in a
-temporary state, e,g, siw_cm_upcall is called but the new_cep->listen_cep
-has not being cleared.
+On some x86 processors, CPUID leaf 0xA provides information
+on Architectural Performance Monitoring features. It
+advertises a PMU version which Qemu uses to determine the
+availability of additional MSRs to manage the PMCs.
 
-This fixes a WARN:
+Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
+the same, the kernel constructs return values based on the
+x86_pmu_capability irrespective of the vendor.
 
-  WARNING: CPU: 7 PID: 201 at drivers/infiniband/sw/siw/siw_cm.c:255 siw_cep_put+0x125/0x130 [siw]
-  CPU: 2 PID: 201 Comm: kworker/u16:22 Kdump: loaded Tainted: G            E     5.17.0-rc7 #1
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-  Workqueue: iw_cm_wq cm_work_handler [iw_cm]
-  RIP: 0010:siw_cep_put+0x125/0x130 [siw]
-  Call Trace:
-   <TASK>
-   siw_reject+0xac/0x180 [siw]
-   iw_cm_reject+0x68/0xc0 [iw_cm]
-   cm_work_handler+0x59d/0xe20 [iw_cm]
-   process_one_work+0x1e2/0x3b0
-   worker_thread+0x50/0x3a0
-   ? rescuer_thread+0x390/0x390
-   kthread+0xe5/0x110
-   ? kthread_complete_and_exit+0x20/0x20
-   ret_from_fork+0x1f/0x30
-   </TASK>
+This leaf and the additional MSRs are not supported on AMD
+and Hygon processors. If AMD PerfMonV2 is detected, the PMU
+version is set to 2 and guest startup breaks because of an
+attempt to access a non-existent MSR. Return zeros to avoid
+this.
 
-Fixes: 6c52fdc244b5 ("rdma/siw: connection management")
-Link: https://lore.kernel.org/r/d528d83466c44687f3872eadcb8c184528b2e2d4.1650526554.git.chengyou@linux.alibaba.com
-Reported-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
-Signed-off-by: Cheng Xu <chengyou@linux.alibaba.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
+Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+Message-Id: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/siw/siw_cm.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/x86/kvm/cpuid.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/infiniband/sw/siw/siw_cm.c
-+++ b/drivers/infiniband/sw/siw/siw_cm.c
-@@ -968,14 +968,15 @@ static void siw_accept_newconn(struct si
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 5f1d4a5aa871..b17c9b00669e 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -725,6 +725,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		union cpuid10_eax eax;
+ 		union cpuid10_edx edx;
  
- 		siw_cep_set_inuse(new_cep);
- 		rv = siw_proc_mpareq(new_cep);
--		siw_cep_set_free(new_cep);
--
- 		if (rv != -EAGAIN) {
- 			siw_cep_put(cep);
- 			new_cep->listen_cep = NULL;
--			if (rv)
-+			if (rv) {
-+				siw_cep_set_free(new_cep);
- 				goto error;
-+			}
- 		}
-+		siw_cep_set_free(new_cep);
- 	}
- 	return;
++		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
++			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			break;
++		}
++
+ 		perf_get_x86_pmu_capability(&cap);
  
+ 		/*
+-- 
+2.35.1
+
 
 

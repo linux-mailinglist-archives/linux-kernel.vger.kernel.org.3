@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8E35210D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED525210D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 11:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbiEJJaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 05:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S238745AbiEJJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 05:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiEJJaV (ORCPT
+        with ESMTP id S236548AbiEJJa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 05:30:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0FE1D6743;
-        Tue, 10 May 2022 02:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652174784; x=1683710784;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Mp9jZr1YvFw211l0xlD/9OlTIu1yhkTn88WExDooEHI=;
-  b=MROg9lb+7nRv7fJYO3KJ5DPhWBDpyrIsoWyXWp5tFmDJOu/hjSzt3IK2
-   gCzimgSVMgJMSKHBCUC+JKCADJx5FHjRccr1oAQ2OrASAMkL4NAVwTGpr
-   bdJ9S8pey+c8oa1Y0agQ67INLOsXPgVS1AQYyn9gSSAfneP98swD2/tHW
-   EkWKFeAISXGPGAuCJ9D5IEZ7JjbmV8FxcdRvuEGJ02MWMgoQz8bW/qN30
-   XDa5sCMeX0q/28nxxutIN67cHmp7oVCEcVRMFEc05Cwxqtoss7sTEvWZb
-   SoficRH40apV6N6DHV+XLZ0ZCRavUE9ghHBEU1tDP27i1M/5DyZ5oRdwN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="332353868"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="332353868"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 02:26:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="623388039"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 May 2022 02:26:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noM8K-000He2-Tq;
-        Tue, 10 May 2022 09:26:20 +0000
-Date:   Tue, 10 May 2022 17:25:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] x86/kvm: handle the failure of __pv_cpu_mask allocation
-Message-ID: <202205101754.d5Mxymtk-lkp@intel.com>
-References: <1650620846-12092-1-git-send-email-wanpengli@tencent.com>
+        Tue, 10 May 2022 05:30:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2FD4269EDD;
+        Tue, 10 May 2022 02:27:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86A8112FC;
+        Tue, 10 May 2022 02:27:00 -0700 (PDT)
+Received: from [10.57.80.111] (unknown [10.57.80.111])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FB2F3F66F;
+        Tue, 10 May 2022 02:26:58 -0700 (PDT)
+Message-ID: <3b07bd45-42e7-0298-70d5-60d950e27304@arm.com>
+Date:   Tue, 10 May 2022 10:26:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650620846-12092-1-git-send-email-wanpengli@tencent.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V3] arm64: perf: Retain PMCR.X of PMCR_EL0 during reset
+Content-Language: en-GB
+To:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>,
+        will@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1652117330-21976-1-git-send-email-quic_c_spathi@quicinc.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1652117330-21976-1-git-send-email-quic_c_spathi@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +49,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wanpeng,
+On 2022-05-09 18:28, Srinivasarao Pathipati wrote:
+> Preserve the bit PMCR.X of PMCR_EL0 during PMU reset to export
+> PMU events. as it could be set before PMU initialization.
 
-I love your patch! Perhaps something to improve:
+Reiterating my previous comment, if there are use-cases for enabling the 
+event export bus under Linux, then it makes most sense to have an option 
+to enable the event export bus. It shouldn't have to depend on whatever 
+the bootloader may or may not have done.
 
-[auto build test WARNING on kvm/master]
-[also build test WARNING on tip/master linus/master linux/master v5.18-rc6 next-20220509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+What would it even mean to preserve a value of 0 instead of resetting it 
+to 0?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wanpeng-Li/x86-kvm-handle-the-failure-of-__pv_cpu_mask-allocation/20220422-175106
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
-config: i386-randconfig-a004-20220502 (https://download.01.org/0day-ci/archive/20220510/202205101754.d5Mxymtk-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/329f0c869cf176505509f65e95e47999a9e97b3b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wanpeng-Li/x86-kvm-handle-the-failure-of-__pv_cpu_mask-allocation/20220422-175106
-        git checkout 329f0c869cf176505509f65e95e47999a9e97b3b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+Thanks,
+Robin.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/kvm.c:49:20: warning: 'orig_apic' defined but not used [-Wunused-variable]
-      49 | static struct apic orig_apic;
-         |                    ^~~~~~~~~
-
-
-vim +/orig_apic +49 arch/x86/kernel/kvm.c
-
-    48	
-  > 49	static struct apic orig_apic;
-    50	static int kvmapf = 1;
-    51	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Exporting events could result in additional power consumption
+> so making it configurable.
+> 
+> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
+> ---
+> Changes since V2:
+> 	Done below changes as per Will's comments
+> 	- enabling pmcr_x now configurable with kernel parameters and
+> 	  by default it is disabled.
+> 	
+> Changes since V1:
+> 	- Preserving only PMCR_X bit as per Robin Murphy's comment.
+> ---
+>   Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+>   arch/arm64/kernel/perf_event.c                  | 13 +++++++++++++
+>   2 files changed, 17 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index de3da15..cf3410e 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5150,6 +5150,10 @@
+>   			Useful for devices that are detected asynchronously
+>   			(e.g. USB and MMC devices).
+>   
+> +	retain_pmcr_x
+> +			[KNL] Retain export bit of PMCR_EL0 that is getting reset
+> +			during pmu reset.
+> +
+>   	retain_initrd	[RAM] Keep initrd memory after extraction
+>   
+>   	rfkill.default_state=
+> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+> index cb69ff1..1ac251f 100644
+> --- a/arch/arm64/kernel/perf_event.c
+> +++ b/arch/arm64/kernel/perf_event.c
+> @@ -34,6 +34,7 @@
+>   #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_ACCESS		0xEC
+>   #define ARMV8_THUNDER_PERFCTR_L1I_CACHE_PREF_MISS		0xED
+>   
+> +static int export_pmu_events  __read_mostly;
+>   /*
+>    * ARMv8 Architectural defined events, not all of these may
+>    * be supported on any given implementation. Unsupported events will
+> @@ -1025,6 +1026,14 @@ static int armv8pmu_filter_match(struct perf_event *event)
+>   	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
+>   }
+>   
+> +static int __init retain_pmcr_x(char *str)
+> +{
+> +	export_pmu_events = 1;
+> +	return 0;
+> +}
+> +
+> +early_param("retain_pmcr_x", retain_pmcr_x);
+> +
+>   static void armv8pmu_reset(void *info)
+>   {
+>   	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
+> @@ -1047,6 +1056,10 @@ static void armv8pmu_reset(void *info)
+>   	if (armv8pmu_has_long_event(cpu_pmu))
+>   		pmcr |= ARMV8_PMU_PMCR_LP;
+>   
+> +	/* Preserve PMCR_X to export PMU events */
+> +	if (export_pmu_events)
+> +		pmcr |= (armv8pmu_pmcr_read() & ARMV8_PMU_PMCR_X);
+> +
+>   	armv8pmu_pmcr_write(pmcr);
+>   }
+>   

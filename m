@@ -2,176 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C022520BE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6C2520BF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235310AbiEJDWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S235314AbiEJD1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiEJDW2 (ORCPT
+        with ESMTP id S230317AbiEJD1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:22:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700926D850
-        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652152712; x=1683688712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OYaAN5a3Kfmzv5oJlrWJDy/JU2MFH7fgQw9HBiFSkPU=;
-  b=GRYqxZlGcXTYLWIPQVAEBP+KDk0m0Z6HeIf0tHSYoLy0gUClAeMypEtC
-   7nrHwF2yoXXh1vEjO0ARdiErSpYrN613jFDkdUaenbR1k+CxjPpQBJYRs
-   tSnLIBKZltOJ07u0nZoXfa4sy3Bpjk6JcysCaI4ea3MAeYa2ujqDENEV8
-   DzeIVQxSPKL4836kPNpf4OepWVrxyz7E3N56/cADLxN7gfc9pn1EfbJMN
-   70PjU4KYqpdEEj0PRYzHEL32s3Zc4y2im+gLi4M9n2D7I8e0PPEHSatPz
-   FD71XsIfEupFo8dda6VatLya5VLMLAwmgl5oaK2w+DSp1oLM+tQyRJXXH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="268909761"
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="268909761"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 20:18:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,213,1647327600"; 
-   d="scan'208";a="696885038"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 May 2022 20:18:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1noGOL-000HEg-LP;
-        Tue, 10 May 2022 03:18:29 +0000
-Date:   Tue, 10 May 2022 11:18:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 223/289] mm/nommu.c:579:9: error: implicit
- declaration of function 'vma_mas_store'; did you mean 'mas_store'?
-Message-ID: <202205101156.5sB7PhaF-lkp@intel.com>
+        Mon, 9 May 2022 23:27:11 -0400
+X-Greylist: delayed 166 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 20:23:13 PDT
+Received: from p3plwbeout23-04.prod.phx3.secureserver.net (p3plsmtp23-04-2.prod.phx3.secureserver.net [68.178.252.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537F3B54B
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 20:23:13 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.141])
+        by :WBEOUT: with ESMTP
+        id oGQBnPPDPXwYxoGQCnr98K; Mon, 09 May 2022 20:20:24 -0700
+X-CMAE-Analysis: v=2.4 cv=N9vsq0xB c=1 sm=1 tr=0 ts=6279d9f8
+ a=bheWAUFm1xGnSTQFbH9Kqg==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=oZkIemNP1mAA:10
+ a=m0AoEl9UtWfG1dJMmG4A:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  oGQBnPPDPXwYx
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp03.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1noGQB-0003JY-7R; Tue, 10 May 2022 04:20:23 +0100
+Message-ID: <1dff431e-f51d-edb0-5abc-353ceeef50ed@squashfs.org.uk>
+Date:   Tue, 10 May 2022 04:20:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: squashfs performance regression and readahea
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Xiongwei Song <sxwjean@gmail.com>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Song, Xiongwei" <Xiongwei.Song@windriver.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "squashfs-devel@lists.sourceforge.net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        open list <linux-kernel@vger.kernel.org>
+References: <PH0PR11MB519282C2834C7BB7B5431F34ECC79@PH0PR11MB5192.namprd11.prod.outlook.com>
+ <Ynfzh2ifG85MZEoN@casper.infradead.org>
+ <CAJMQK-jNYoJVqsri4REV=E3bG8AS7T82HrVSAUPzbUiWask01A@mail.gmail.com>
+ <CAJMQK-i3OQxcG7=LzTG4k70BP0j6PstWw0C45xcEi6iVLn_2ag@mail.gmail.com>
+ <CAEVVKH-m+3+xJMbM1vRM3d=AaPSv2xg4Qx8_WPw_29JByONS8A@mail.gmail.com>
+ <YnkVaGB74xqWJqdG@casper.infradead.org>
+ <13af40a9-6b60-6875-8326-0827e34182d5@squashfs.org.uk>
+ <YnnPYD+VtQB6hlnL@casper.infradead.org>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <YnnPYD+VtQB6hlnL@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfE4OojHQqKeUWqDeUgXnELl39/Zvj8pNo3AAivap8TE3326ePWGy3LQRV90EjUwMMsjNDuG+CkILOJQ/UR0bt7sMNhOlHJXjZDU0pWgMBVncYEi5+59N
+ 9QbT5u8ofvg+CB5HoKcp/kGfM1yMJBAWNbrCDpv6S4mwvNa/kAvVbe81l4n01i8NcvmDm4ra+K5TUslGG6NuDvFx5cWQYaVchNs=
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   2a9491e94405acaf36dbb0a2fee06a42630f263d
-commit: 9d00916d98443bef124029e1df960a91579c406b [223/289] mm: remove rb tree.
-config: sh-buildonly-randconfig-r003-20220509 (https://download.01.org/0day-ci/archive/20220510/202205101156.5sB7PhaF-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=9d00916d98443bef124029e1df960a91579c406b
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 9d00916d98443bef124029e1df960a91579c406b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
+On 10/05/2022 03:35, Matthew Wilcox wrote:
+> On Tue, May 10, 2022 at 02:11:41AM +0100, Phillip Lougher wrote:
+>> On 09/05/2022 14:21, Matthew Wilcox wrote:
+>>> On Mon, May 09, 2022 at 08:43:45PM +0800, Xiongwei Song wrote:
+>>>> Hi Hsin-Yi and Matthew,
+>>>>
+>>>> With the patch from the attachment on linux 5.10, ran the command as I
+>>>> mentioned earlier,
+>>>> got the results below:
+>>>> 1:40.65 (1m + 40.65s)
+>>>> 1:10.12
+>>>> 1:11.10
+>>>> 1:11.47
+>>>> 1:11.59
+>>>> 1:11.94
+>>>> 1:11.86
+>>>> 1:12.04
+>>>> 1:12.21
+>>>> 1:12.06
+>>>>
+>>>> The performance has improved obviously, but compared to linux 4.18, the
+>>>> performance is not so good.
+>>>>
+>>>> Moreover, I wanted to test on linux 5.18. But I think I should revert
+>>>> 9eec1d897139 ("squashfs: provide backing_dev_info in order to disable
+>>>> read-ahead"),
+>>>> right?  Otherwise, the patch doesn't work?
+>>>
+>>> I've never seen patch 9eec1d897139 before.  If you're going to point
+>>> out bugs in my code, at least have the decency to cc me on it.  It
+>>> should never have gone in, and should be reverted so the problem can
+>>> be fixed properly.
+>>
+>> You are not in charge of what patches goes into Squashfs, that is my
+>> perogative as maintainer of Squashfs.
+> 
+> I think you mean 'prerogative'.  And, no, your filesystem is not your
+> little fiefdom, it's part of a collaborative effort.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This isn't a spelling contest, and if that's the best you can do you
+have already failed.
 
-All errors (new ones prefixed by >>):
+Be carefull here also, I have been maintainer of Squashfs for 20 years,
+and was kernel maintainer for both Ubuntu and Redhat for 10 years, and
+so I am experienced member of the community.
 
-   mm/nommu.c: In function 'add_vma_to_mm':
->> mm/nommu.c:579:9: error: implicit declaration of function 'vma_mas_store'; did you mean 'mas_store'? [-Werror=implicit-function-declaration]
-     579 |         vma_mas_store(vma, &mas);
-         |         ^~~~~~~~~~~~~
-         |         mas_store
-   mm/nommu.c: In function 'delete_vma_from_mm':
->> mm/nommu.c:615:9: error: implicit declaration of function 'vma_mas_remove' [-Werror=implicit-function-declaration]
-     615 |         vma_mas_remove(vma, &mas);
-         |         ^~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+You reply is bordering on offensive and arrogant, especially considering
+it is unwarranted.  I did not set out to offend you, and I don't
+appreciate it.
+
+About 8 years ago I decided to refrain from active involvement in the
+kernel community, because I decided the level of discourse was
+disgusting, and I had enough of it.
+
+I poped up now to defend my approval of the Huawei patch.  I am *quite*
+happy not to have any more involvement until necessary.
+
+So having said what I want to say, I will leave it at that. You have
+just proved why I have minimised my involvement.
+
+No doubt you'll throw your toys out the pram, but, I'm no
+longer listening so don't bother.
 
 
-vim +579 mm/nommu.c
+>> That patch (by Huawei) fixes the performance regression in Squashfs
+>> by disabling readahead, and it is good workaround until something
+>> better.
+> 
+> You *didn't even report the problem to me*.  How can it be fixed if I'm
+> not aware of it?
+> 
 
-   547	
-   548	/*
-   549	 * add a VMA into a process's mm_struct in the appropriate place in the list
-   550	 * and tree and add to the address space's page tree also if not an anonymous
-   551	 * page
-   552	 * - should be called with mm->mmap_lock held writelocked
-   553	 */
-   554	static void add_vma_to_mm(struct mm_struct *mm, struct vm_area_struct *vma)
-   555	{
-   556		struct address_space *mapping;
-   557		struct vm_area_struct *prev;
-   558		MA_STATE(mas, &mm->mm_mt, vma->vm_start, vma->vm_end);
-   559	
-   560		BUG_ON(!vma->vm_region);
-   561	
-   562		mm->map_count++;
-   563		vma->vm_mm = mm;
-   564	
-   565		/* add the VMA to the mapping */
-   566		if (vma->vm_file) {
-   567			mapping = vma->vm_file->f_mapping;
-   568	
-   569			i_mmap_lock_write(mapping);
-   570			flush_dcache_mmap_lock(mapping);
-   571			vma_interval_tree_insert(vma, &mapping->i_mmap);
-   572			flush_dcache_mmap_unlock(mapping);
-   573			i_mmap_unlock_write(mapping);
-   574		}
-   575	
-   576		prev = mas_prev(&mas, 0);
-   577		mas_reset(&mas);
-   578		/* add the VMA to the tree */
- > 579		vma_mas_store(vma, &mas);
-   580		__vma_link_list(mm, vma, prev);
-   581	}
-   582	
-   583	/*
-   584	 * delete a VMA from its owning mm_struct and address space
-   585	 */
-   586	static void delete_vma_from_mm(struct vm_area_struct *vma)
-   587	{
-   588		int i;
-   589		struct address_space *mapping;
-   590		struct mm_struct *mm = vma->vm_mm;
-   591		struct task_struct *curr = current;
-   592		MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
-   593	
-   594		mm->map_count--;
-   595		for (i = 0; i < VMACACHE_SIZE; i++) {
-   596			/* if the vma is cached, invalidate the entire cache */
-   597			if (curr->vmacache.vmas[i] == vma) {
-   598				vmacache_invalidate(mm);
-   599				break;
-   600			}
-   601		}
-   602	
-   603		/* remove the VMA from the mapping */
-   604		if (vma->vm_file) {
-   605			mapping = vma->vm_file->f_mapping;
-   606	
-   607			i_mmap_lock_write(mapping);
-   608			flush_dcache_mmap_lock(mapping);
-   609			vma_interval_tree_remove(vma, &mapping->i_mmap);
-   610			flush_dcache_mmap_unlock(mapping);
-   611			i_mmap_unlock_write(mapping);
-   612		}
-   613	
-   614		/* remove from the MM's tree and list */
- > 615		vma_mas_remove(vma, &mas);
-   616		__vma_unlink_list(mm, vma);
-   617	}
-   618	
+There was a email discussion last year, which I responded to, and got
+ignored.  I will find it out tomorrow, perhaps.  But I will probably
+not bother, because life is too short.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers
+
+Phillip

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F59252168E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ECC52179D
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242404AbiEJNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S242766AbiEJN2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242318AbiEJNPc (ORCPT
+        with ESMTP id S243059AbiEJNVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:15:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B8A369CD;
-        Tue, 10 May 2022 06:11:16 -0700 (PDT)
+        Tue, 10 May 2022 09:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1732C13CF;
+        Tue, 10 May 2022 06:14:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B976ACE1EE2;
-        Tue, 10 May 2022 13:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D0EC385D3;
-        Tue, 10 May 2022 13:11:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 222AE61663;
+        Tue, 10 May 2022 13:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2023FC385A6;
+        Tue, 10 May 2022 13:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188273;
-        bh=xNaN2J7XaIrUH2DW0OpIFN3289nXX4c1YssyrcL1db8=;
+        s=korg; t=1652188485;
+        bh=2g/WMPTJPer4iFcfPM0Og5LI/Edv3RTtBnSON5Vy+tU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pw8pOGGubpV+CxEvoWX0cVWgJtpVS7YE+kuPgt8Dk4IDVeNQrTqnb9gjYLkrHBWOE
-         8Id6VIzafnH5/GB0Bi4MZlUUP1A0A018j+sk4QDu/a7TyDrKUw+6Sv3z1XiVDdVV6N
-         F0pXuCp7Ho6BsJ5+37i7FhiIdckUMzRnQ4mYQwS4=
+        b=mu89ZQwzxn4VSJL2tcS6r5iZyi9WN42JcBa426/WVpmGp9UHej3XxFndybDCEw5UN
+         TQ67k0DHxrEZ/Mru14TDQeGADVtC/gmTTUwgezpqEfdOvc445v0qy2+oRuB7w6nftg
+         dAY/+w8MlKCkCT2N/ON+R2iHrfoFBCQ/yX7i2atA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 19/66] hex2bin: make the function hex_to_bin constant-time
+Subject: [PATCH 4.14 23/78] hex2bin: make the function hex_to_bin constant-time
 Date:   Tue, 10 May 2022 15:07:09 +0200
-Message-Id: <20220510130730.327688811@linuxfoundation.org>
+Message-Id: <20220510130733.218279755@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,7 +47,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,7 +88,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/include/linux/kernel.h
 +++ b/include/linux/kernel.h
-@@ -530,7 +530,7 @@ static inline char *hex_byte_pack_upper(
+@@ -582,7 +582,7 @@ static inline char *hex_byte_pack_upper(
  	return buf;
  }
  
@@ -99,7 +99,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
 --- a/lib/hexdump.c
 +++ b/lib/hexdump.c
-@@ -24,15 +24,33 @@ EXPORT_SYMBOL(hex_asc_upper);
+@@ -25,15 +25,33 @@ EXPORT_SYMBOL(hex_asc_upper);
   *
   * hex_to_bin() converts one hex digit to its actual value or -1 in case of bad
   * input.

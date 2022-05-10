@@ -2,272 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742F1520CF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70427520CF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 06:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiEJEdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 00:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S234060AbiEJEiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 00:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiEJEbm (ORCPT
+        with ESMTP id S236476AbiEJEhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 00:31:42 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10867201305;
-        Mon,  9 May 2022 21:27:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 72AF23200950;
-        Tue, 10 May 2022 00:27:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 10 May 2022 00:27:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652156840; x=
-        1652243240; bh=VLsWJyEUbg/8yUBVhrHDqMU773zHuqBYYMQbxj0NaOo=; b=o
-        V7gqoi+ehEUTdy8ZZYz5zncHlJ3l9M1p/oOgjHQoaRKZXN1uwPycOF5r9kzOw2KZ
-        FRYn5EqYqPdpchvASgC/mSRHPUPg0LBVpuqsRtpMpTfm8qfZ1f5ksNSZZEyA7VB9
-        xQ8KD9OESVVk8Z2Lohbr3YpExGYmqz/uINoM8ktrUnTW+7cvjuv5idMuova15JxA
-        EqqeixS4eSZxIQJIfZ/vpWpVu+KrxQqNr0fX1OEGrcmZ40Io8gVobg7CiuTYoPrH
-        rfl8NviSHB0Shkbhj5LV8wCXSK+QDgxr66qJbXNjZ8f415XVwgMkQ3KUvJCxGEGd
-        IHmGMjJ8qcyVyDvPuIRUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652156840; x=1652243240; bh=VLsWJyEUbg/8y
-        UBVhrHDqMU773zHuqBYYMQbxj0NaOo=; b=fCSx/1cUCCFmuBH/kO+KYeB/Acl0X
-        SBbnBRAvVXjLUnvhS8i7ijN0tcwktpTWC1Vdqf0uwbDR9CHl6xisIh2ofI9RDoVF
-        9FFtSI36X9x1MuN7s699uW2Kt1UxafTzxjA1LOwcztWUWJOYEYykAO9xwFI9ZZDS
-        6yJ0Xb7rMCFCbfpXMHeQVrS0w6RJTeyZ0gToPkx0uu51HGDEx9Aev1jrpDtqDGxN
-        T7aYesVlzdwXzllwWht7MyD4L7gscjdWepCIu5PSzAbwQ+A9lWhovTfP5HSb/Oc4
-        bdQ+9NVZ3YNg0bETNs7nqv/a6xid9hLZraavC0Ojrhcq8906eGeCXLM7A==
-X-ME-Sender: <xms:qOl5Yqcj1r23I3_rE_dB3jYvIsDcpuUupXzAe7fbNaDW2Wa701nNCg>
-    <xme:qOl5YkNUHzC67NXDMBEaZtC5bp0kO0cJP2JWhY3jaMqdNS7fVFpKRft8WtdpNPVg7
-    NemAwO7-I6v>
-X-ME-Received: <xmr:qOl5YrhqL2LB8QJ82oMF6nKeFPSHojMr3wJXasFclQLYk2pXdSHohlF4XTWinsAcMf2q4uEWQEwactreklAzJGxE3_ce_Z201xJgDAeIn972Hqgvy-GD>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgdekgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkuffhvfevffgjfhgtfggggfesthekredttderjeenucfhrhhomhepkfgrnhcu
-    mfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhnvghtqeenucggtffrrghtthgvrhhnpe
-    eivdehhfehtdffjeehlefhheekudetteegueeuteetvdeuheeufeeuveduuedvudenucff
-    ohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomheprhgrvhgvnhesthhhvghmrgifrdhnvght
-X-ME-Proxy: <xmx:qOl5Yn8slZ7gfKeILPaISn5mCOXMvbBHZuHwrOq11OLpogEYnxRlIA>
-    <xmx:qOl5YmvQ1e7TQldTAXzNW6D_q2-Qh90AIoG8DEVbbvPswF1HHQacQg>
-    <xmx:qOl5YuF71DehJYxFljPazxGlTBbuJIUrwHlPg2WAaVO8V40j1-4f7g>
-    <xmx:qOl5YmEVmyG4GSl2J9Hpy7PejmHo7fUp8jGymNNJqSpgIHlpiJKxKQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 May 2022 00:27:14 -0400 (EDT)
-Message-ID: <8ab7f51cf18ba62e3f5bfdf5d9933895413f4806.camel@themaw.net>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-From:   Ian Kent <raven@themaw.net>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Date:   Tue, 10 May 2022 12:27:10 +0800
-In-Reply-To: <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
-         <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
-         <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 10 May 2022 00:37:15 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F221A075C
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 21:32:23 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id p1so6212910uak.1
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 21:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Wbz24k8xjmUuPLei/zNpZK/WIYdnk4llOYq685eLRM=;
+        b=mDcPIbNuXIE/Aw2IWNYjGS7CWMKV0V9DdkVv1Z1/BFInvc7e3cabhTTCMRHlVVYDJZ
+         cOsJxOGaAuBSMIF1Iv2dLL5gm8PRTUzihr6m5RhpaRr3+jfgaS5PeN392GfwVFpJmlE2
+         wqPNo0ugnwx5jL8LvzPat3rJlRAFcu7D7S4mYlXKk96tKy6jr+VzrxEDnl0/n+HQ0DQZ
+         RQSFTG+t5tOAwlHduWOXZSJojiZXx9thViC30HpODEGL4n+K/0p+GQeOmMHYKHu9hGAw
+         F+ryed9WgCX8HL275PrtaKxA87B/lt9FldnyMCjYSm4FzBcThnpp9Z+w9D5lKhOb4/Z3
+         XTOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Wbz24k8xjmUuPLei/zNpZK/WIYdnk4llOYq685eLRM=;
+        b=Of0cf4swJgBuavLhLSZCcI1HtqYYMXntA+hPlPEpVP6vf50uQJ0bJSS2/lnxBzvxrE
+         g9o2ShlnwLpWfxeeR7eXOAd3FBO3jpquRnBv5yCBKFqDeIcC2e/DezPdteV8xfT4eMk/
+         ro6zlt0C56xD1HUwtmdQPXLJ1IM4cJAgX9kr5dW1b7pUXJvd2IWVJYvlZWwNuiWJmiuu
+         L+aMbo6asHAzyUb7K9aOCsYfYovlPJ2eYcib/Wh8xt4BlDoYS9G/RKj9jpEaEQf2520H
+         YWC+cL5BUVM9UPjfAYLVNFvKoSTrXfk4+eLKxSUHCixxzUAF6oZYvtpyAAZ/hR+Uc1Sf
+         P+6A==
+X-Gm-Message-State: AOAM5318Z1QTXvr7rDcq4qMiSiRLzpxOLo7LmB09l4V4IeLhPllo7ZQ0
+        caalxLmTt8z8NkFFdQXhEMhyBmwEJv/VUB73Tq8LCQ==
+X-Google-Smtp-Source: ABdhPJzmAbcvtr7lvEBP2nq942xQKZnM9LB74EU0RWqE9iN+VKrVLJmSJEkkdmrV8hpcWwDxVKgXa5pXtn9yyRA+FcU=
+X-Received: by 2002:ab0:7643:0:b0:362:833d:5bfb with SMTP id
+ s3-20020ab07643000000b00362833d5bfbmr11063151uaq.4.1652157141544; Mon, 09 May
+ 2022 21:32:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+ <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com>
+ <CAAPL-u-r2Pc_MaHQmKKNH_icAa_fH1COWb5qSPpr8xffREQ_cQ@mail.gmail.com> <87tua3h5r1.fsf@nvdebian.thelocal>
+In-Reply-To: <87tua3h5r1.fsf@nvdebian.thelocal>
+From:   Wei Xu <weixugc@google.com>
+Date:   Mon, 9 May 2022 21:32:10 -0700
+Message-ID: <CAAPL-u-0HwL6p1SA73LPfFyywG55QqE9O+q=83fhShoJAVVxyQ@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 05:49 +0200, Miklos Szeredi wrote:
-> On Mon, 9 May 2022 at 14:48, Christian Brauner <brauner@kernel.org>
-> wrote:
-> 
-> > One comment about this. We really need to have this interface
-> > support
-> > giving us mount options like "relatime" back in numeric form (I
-> > assume
-> > this will be possible.). It is royally annoying having to maintain
-> > a
-> > mapping table in userspace just to do:
-> > 
-> > relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
-> > ro       -> MS_RDONLY/MOUNT_ATTR_RDONLY
-> > 
-> > A library shouldn't be required to use this interface. Conservative
-> > low-level software that keeps its shared library dependencies
-> > minimal
-> > will need to be able to use that interface without having to go to
-> > an
-> > external library that transforms text-based output to binary form
-> > (Which
-> > I'm very sure will need to happen if we go with a text-based
-> > interface.).
-> 
-> Agreed.
-> 
-> >   This pattern of requesting the size first by passing empty
-> > arguments,
-> >   then allocating the buffer and then passing down that buffer to
-> >   retrieve that value is really annoying to use and error prone (I
-> > do
-> >   of course understand why it exists.).
-> > 
-> >   For real xattrs it's not that bad because we can assume that
-> > these
-> >   values don't change often and so the race window between
-> >   getxattr(GET_SIZE) and getxattr(GET_VALUES) often doesn't matter.
-> > But
-> >   fwiw, the post > pre check doesn't exist for no reason; we do
-> > indeed
-> >   hit that race.
-> 
-> That code is wrong.  Changing xattr size is explicitly documented in
-> the man page as a non-error condition:
-> 
->        If size is specified as zero, these calls return the  current 
-> size  of
->        the  named extended attribute (and leave value unchanged). 
-> This can be
->        used to determine the size of the buffer that should be
-> supplied  in  a
->        subsequent  call.   (But, bear in mind that there is a
-> possibility that
->        the attribute value may change between the two calls,  so 
-> that  it  is
->        still necessary to check the return status from the second
-> call.)
-> 
-> > 
-> >   In addition, it is costly having to call getxattr() twice. Again,
-> > for
-> >   retrieving xattrs it often doesn't matter because it's not a
-> > super
-> >   common operation but for mount and other info it might matter.
-> 
-> You don't *have* to retrieve the size, it's perfectly valid to e.g.
-> start with a fixed buffer size and double the size until the result
-> fits.
-> 
-> > * Would it be possible to support binary output with this
-> > interface?
-> >   I really think users would love to have an interfact where they
-> > can
-> >   get a struct with binary info back.
-> 
-> I think that's bad taste.   fsinfo(2) had the same issue.  As well as
-> mount(2) which still interprets the last argument as a binary blob in
-> certain cases (nfs is one I know of).
-> 
-> >   Especially for some information at least. I'd really love to have
-> > a
-> >   way go get a struct mount_info or whatever back that gives me all
-> > the
-> >   details about a mount encompassed in a single struct.
-> 
-> If we want that, then can do a new syscall with that specific struct
-> as an argument.
-> 
-> >   Callers like systemd will have to parse text and will end up
-> >   converting everything from text into binary anyway; especially
-> > for
-> >   mount information. So giving them an option for this out of the
-> > box
-> >   would be quite good.
-> 
-> What exactly are the attributes that systemd requires?
+On Thu, May 5, 2022 at 5:19 PM Alistair Popple <apopple@nvidia.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> [...]
+>
+> >> >
+> >> >
+> >> > Tiering Hierarchy Initialization
+> >> > `=============================='
+> >> >
+> >> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> >> >
+> >> > A device driver can remove its memory nodes from the top tier, e.g.
+> >> > a dax driver can remove PMEM nodes from the top tier.
+> >>
+> >> With the topology built by firmware we should not need this.
+>
+> I agree that in an ideal world the hierarchy should be built by firmware based
+> on something like the HMAT. But I also think being able to override this will be
+> useful in getting there. Therefore a way of overriding the generated hierarchy
+> would be good, either via sysfs or kernel boot parameter if we don't want to
+> commit to a particular user interface now.
+>
+> However I'm less sure letting device-drivers override this is a good idea. How
+> for example would a GPU driver make sure it's node is in the top tier? By moving
+> every node that the driver does not know about out of N_TOPTIER_MEMORY? That
+> could get messy if say there were two drivers both of which wanted their node to
+> be in the top tier.
 
-It's been a while since I worked on this so my response might not
-be too accurrate now.
+The suggestion is to allow a device driver to opt out its memory
+devices from the top-tier, not the other way around.
 
-Monitoring the mount table is used primarily to identify a mount
-started and mount completion.
+I agree that the kernel should still be responsible for the final
+node-tier assignment by taking into account all factors: the firmware
+tables, device driver requests, and user-overrides (kernel argument or
+sysfs).
 
-Mount table entry identification requires several fields.
-
-But, in reality, once a direct interface is available it should be
-possible to work out what is actually needed and that will be a
-rather subset of a mountinfo table entry.
-
-> 
-> >   Interfaces like statx aim to be as fast as possible because we
-> > exptect
-> >   them to be called quite often. Retrieving mount info is quite
-> > costly
-> >   and is done quite often as well. Maybe not for all software but
-> > for a
-> >   lot of low-level software. Especially when starting services in
-> >   systemd a lot of mount parsing happens similar when starting
-> >   containers in runtimes.
-> 
-> Was there ever a test patch for systemd using fsinfo(2)?  I think
-> not.
-
-Mmm ... I'm hurt you didn't pay any attention to what I did on this
-during the original fsinfo() discussions.
-
-> 
-> Until systemd people start to reengineer the mount handing to allow
-> for retrieving a single mount instead of the complete mount table we
-> will never know where the performance bottleneck lies.
-
-We didn't need the systemd people to do this only review and contribute
-to the pr for the change and eventually merge it.
-
-What I did on this showed that using fsinfo() allone about halved the
-CPU overhead (from around 4 processes using about 80%) and once the
-mount notifications was added too it went down to well under 10% per
-process. The problem here was systemd is quite good at servicing events
-and reducing event processing overhead meant more events would then be
-processed. Utilizing the mount notifications queueing was the key to
-improving this and that was what I was about to work on at the end.
-
-But everything stopped before the work was complete.
-
-As I said above it's been a long time since I looked at the systemd
-work and it definitely was a WIP so "what you see is what you get"
-at https://github.com/raven-au/systemd/commits/. It looks like the
-place to look to get some idea of what was being done is branch
-notifications-devel or notifications-rfc-pr. Also note that this
-uses the libmount fsinfo() infrastrucure that was done by Karal Zak
-(and a tiny bit by me) at the time.
-
-> 
-> > 
-> > * If we decide to go forward with this interface - and I think I
-> >   mentioned this in the lsfmm session - could we please at least
-> > add a
-> >   new system call? It really feels wrong to retrieve mount and
-> > other
-> >   information through the xattr interfaces. They aren't really
-> > xattrs.
-> 
-> I'd argue with that statement.  These are most definitely attributes.
-> As for being extended, we'd just extended the xattr interface...
-> 
-> Naming aside... imagine that read(2) has always been used to retrieve
-> disk data, would you say that reading data from proc feels wrong?
-> And in hindsight, would a new syscall for the purpose make any sense?
-> 
-> Thanks,
-> Miklos
-
+> > I agree. But before we have such a firmware, the kernel needs to do
+> > its best to initialize memory tiers.
+> >
+> > Given that we know PMEM is slower than DRAM, but a dax device might
+> > not be PMEM, a better place to set the tier for PMEM nodes can be the
+> > ACPI code, e.g. acpi_numa_memory_affinity_init() where we can examine
+> > the ACPI_SRAT_MEM_NON_VOLATILE bit.
+> >
+> >> >
+> >> > The kernel builds the memory tiering hierarchy and per-node demotion
+> >> > order tier-by-tier starting from N_TOPTIER_MEMORY.  For a node N, the
+> >> > best distance nodes in the next lower tier are assigned to
+> >> > node_demotion[N].preferred and all the nodes in the next lower tier
+> >> > are assigned to node_demotion[N].allowed.
+> >>
+> >> I'm not sure whether it should be allowed to demote to multiple lower
+> >> tiers. But it is totally fine to *NOT* allow it at the moment. Once we
+> >> figure out a good way to define demotion targets, it could be extended
+> >> to support this easily.
+> >
+> > You mean to only support MAX_TIERS=2 for now.  I am fine with that.
+> > There can be systems with 3 tiers, e.g. GPU -> DRAM -> PMEM, but it is
+> > not clear yet whether we want to enable transparent memory tiering to
+> > all the 3 tiers on such systems.
+>
+> At some point I think we will need to deal with 3 tiers but I'd be ok with
+> limiting it to 2 for now if it makes things simpler.
+>
+> - Alistair
+>
+> >> >
+> >> > node_demotion[N].preferred can be empty if no preferred demotion node
+> >> > is available for node N.
+> >> >
+> >> > If the userspace overrides the tiers via the memory_tiers sysfs
+> >> > interface, the kernel then only rebuilds the per-node demotion order
+> >> > accordingly.
+> >> >
+> >> > Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
+> >> > memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
+> >> > node.
+> >> >
+> >> >
+> >> > Memory Allocation for Demotion
+> >> > `============================'
+> >> >
+> >> > When allocating a new demotion target page, both a preferred node
+> >> > and the allowed nodemask are provided to the allocation function.
+> >> > The default kernel allocation fallback order is used to allocate the
+> >> > page from the specified node and nodemask.
+> >> >
+> >> > The memopolicy of cpuset, vma and owner task of the source page can
+> >> > be set to refine the demotion nodemask, e.g. to prevent demotion or
+> >> > select a particular allowed node as the demotion target.
+> >> >
+> >> >
+> >> > Examples
+> >> > `======'
+> >> >
+> >> > * Example 1:
+> >> >   Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
+> >> >
+> >> >   Node 0 has node 2 as the preferred demotion target and can also
+> >> >   fallback demotion to node 3.
+> >> >
+> >> >   Node 1 has node 3 as the preferred demotion target and can also
+> >> >   fallback demotion to node 2.
+> >> >
+> >> >   Set mempolicy to prevent cross-socket demotion and memory access,
+> >> >   e.g. cpuset.mems=0,2
+> >> >
+> >> > node distances:
+> >> > node   0    1    2    3
+> >> >    0  10   20   30   40
+> >> >    1  20   10   40   30
+> >> >    2  30   40   10   40
+> >> >    3  40   30   40   10
+> >> >
+> >> > /sys/devices/system/node/memory_tiers
+> >> > 0-1
+> >> > 2-3
+> >> >
+> >> > N_TOPTIER_MEMORY: 0-1
+> >> >
+> >> > node_demotion[]:
+> >> >   0: [2], [2-3]
+> >> >   1: [3], [2-3]
+> >> >   2: [],  []
+> >> >   3: [],  []
+> >> >
+> >> > * Example 2:
+> >> >   Node 0 & 1 are DRAM nodes.
+> >> >   Node 2 is a PMEM node and closer to node 0.
+> >> >
+> >> >   Node 0 has node 2 as the preferred and only demotion target.
+> >> >
+> >> >   Node 1 has no preferred demotion target, but can still demote
+> >> >   to node 2.
+> >> >
+> >> >   Set mempolicy to prevent cross-socket demotion and memory access,
+> >> >   e.g. cpuset.mems=0,2
+> >> >
+> >> > node distances:
+> >> > node   0    1    2
+> >> >    0  10   20   30
+> >> >    1  20   10   40
+> >> >    2  30   40   10
+> >> >
+> >> > /sys/devices/system/node/memory_tiers
+> >> > 0-1
+> >> > 2
+> >> >
+> >> > N_TOPTIER_MEMORY: 0-1
+> >> >
+> >> > node_demotion[]:
+> >> >   0: [2], [2]
+> >> >   1: [],  [2]
+> >> >   2: [],  []
+> >> >
+> >> >
+> >> > * Example 3:
+> >> >   Node 0 & 1 are DRAM nodes.
+> >> >   Node 2 is a PMEM node and has the same distance to node 0 & 1.
+> >> >
+> >> >   Node 0 has node 2 as the preferred and only demotion target.
+> >> >
+> >> >   Node 1 has node 2 as the preferred and only demotion target.
+> >> >
+> >> > node distances:
+> >> > node   0    1    2
+> >> >    0  10   20   30
+> >> >    1  20   10   30
+> >> >    2  30   30   10
+> >> >
+> >> > /sys/devices/system/node/memory_tiers
+> >> > 0-1
+> >> > 2
+> >> >
+> >> > N_TOPTIER_MEMORY: 0-1
+> >> >
+> >> > node_demotion[]:
+> >> >   0: [2], [2]
+> >> >   1: [2], [2]
+> >> >   2: [],  []
+> >> >
+> >> >
+> >> > * Example 4:
+> >> >   Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
+> >> >
+> >> >   All nodes are top-tier.
+> >> >
+> >> > node distances:
+> >> > node   0    1    2
+> >> >    0  10   20   30
+> >> >    1  20   10   30
+> >> >    2  30   30   10
+> >> >
+> >> > /sys/devices/system/node/memory_tiers
+> >> > 0-2
+> >> >
+> >> > N_TOPTIER_MEMORY: 0-2
+> >> >
+> >> > node_demotion[]:
+> >> >   0: [],  []
+> >> >   1: [],  []
+> >> >   2: [],  []
+> >> >
+> >> >
+> >> > * Example 5:
+> >> >   Node 0 is a DRAM node with CPU.
+> >> >   Node 1 is a HBM node.
+> >> >   Node 2 is a PMEM node.
+> >> >
+> >> >   With userspace override, node 1 is the top tier and has node 0 as
+> >> >   the preferred and only demotion target.
+> >> >
+> >> >   Node 0 is in the second tier, tier 1, and has node 2 as the
+> >> >   preferred and only demotion target.
+> >> >
+> >> >   Node 2 is in the lowest tier, tier 2, and has no demotion targets.
+> >> >
+> >> > node distances:
+> >> > node   0    1    2
+> >> >    0  10   21   30
+> >> >    1  21   10   40
+> >> >    2  30   40   10
+> >> >
+> >> > /sys/devices/system/node/memory_tiers (userspace override)
+> >> > 1
+> >> > 0
+> >> > 2
+> >> >
+> >> > N_TOPTIER_MEMORY: 1
+> >> >
+> >> > node_demotion[]:
+> >> >   0: [2], [2]
+> >> >   1: [0], [0]
+> >> >   2: [],  []
+> >> >
+> >> > -- Wei

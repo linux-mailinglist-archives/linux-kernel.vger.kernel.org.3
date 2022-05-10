@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFBC5217FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FBA5217C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243512AbiEJNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S237996AbiEJN2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243188AbiEJNVi (ORCPT
+        with ESMTP id S243231AbiEJNVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:21:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319BE5AEF9;
-        Tue, 10 May 2022 06:15:07 -0700 (PDT)
+        Tue, 10 May 2022 09:21:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16DF2C3345;
+        Tue, 10 May 2022 06:15:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9C68B81DA3;
-        Tue, 10 May 2022 13:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0ECC385A6;
-        Tue, 10 May 2022 13:15:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90E66B81DA6;
+        Tue, 10 May 2022 13:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2EEC385A6;
+        Tue, 10 May 2022 13:15:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188501;
-        bh=yLrBDSoik5lYxYHt4/zuvrMAWSDosPSALRSAGfIGK3E=;
+        s=korg; t=1652188504;
+        bh=rBjHofO1WNs/cYxljno5UdrSN3KrNADHJN7VZG+ibug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HlJzecGdyOsWmuwWW+doDjwGyTHPIcNu6yFeqUCQw+L80XfG5Ypt1CipEasrfDnqr
-         aOU29uzA/TZMZZTc9zG4I/2bYy3cJajyH3VF8/q4B2Xw7uR8QYEGcfqwqKlLnCZCeB
-         wBgHhnS43X4VW8R6DvMxI8syoLCVvfO1xVTvbBdw=
+        b=RAHxRnG4wkEDLVkRZwvDGbtqyTol01tUXpRAq45vnLqH8ZzwHtrJKjmOhIkOc3RBa
+         JrLbFEM/oaOzjZXY96MLOVOiBU7sRPLBehPGqKKDPd6gCODv2KAtwxdOhR3slB2QTT
+         nGD5veBV7ijpYt14uKYHePOW2YG7BlfFz5dpd7IU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 28/78] phy: samsung: exynos5250-sata: fix missing device put in probe error paths
-Date:   Tue, 10 May 2022 15:07:14 +0200
-Message-Id: <20220510130733.368696836@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 29/78] ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
+Date:   Tue, 10 May 2022 15:07:15 +0200
+Message-Id: <20220510130733.398424783@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
 References: <20220510130732.522479698@linuxfoundation.org>
@@ -56,74 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5c8402c4db45dd55c2c93c8d730f5dfa7c78a702 ]
+[ Upstream commit 0f83e6b4161617014017a694888dd8743f46f071 ]
 
-The actions of of_find_i2c_device_by_node() in probe function should be
-reversed in error paths by putting the reference to obtained device.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220407091857.230386-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: fd1c07861491 ("ARM: OMAP4: Fix the init code to have OMAP4460 errata available in DT build")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Message-Id: <20220309104302.18398-1-linmq006@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/samsung/phy-exynos5250-sata.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/arm/mach-omap2/omap4-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 7960c69d09a6..2c39d2fd3cd8 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -202,20 +202,21 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	sata_phy->phyclk = devm_clk_get(dev, "sata_phyctrl");
- 	if (IS_ERR(sata_phy->phyclk)) {
- 		dev_err(dev, "failed to get clk for PHY\n");
--		return PTR_ERR(sata_phy->phyclk);
-+		ret = PTR_ERR(sata_phy->phyclk);
-+		goto put_dev;
- 	}
+diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+index e5dcbda20129..7fff67ea7bcd 100644
+--- a/arch/arm/mach-omap2/omap4-common.c
++++ b/arch/arm/mach-omap2/omap4-common.c
+@@ -342,10 +342,12 @@ void __init omap_gic_of_init(void)
  
- 	ret = clk_prepare_enable(sata_phy->phyclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable source clk\n");
--		return ret;
-+		goto put_dev;
- 	}
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-gic");
+ 	gic_dist_base_addr = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!gic_dist_base_addr);
  
- 	sata_phy->phy = devm_phy_create(dev, NULL, &exynos_sata_phy_ops);
- 	if (IS_ERR(sata_phy->phy)) {
--		clk_disable_unprepare(sata_phy->phyclk);
- 		dev_err(dev, "failed to create PHY\n");
--		return PTR_ERR(sata_phy->phy);
-+		ret = PTR_ERR(sata_phy->phy);
-+		goto clk_disable;
- 	}
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-twd-timer");
+ 	twd_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!twd_base);
  
- 	phy_set_drvdata(sata_phy->phy, sata_phy);
-@@ -223,11 +224,18 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	phy_provider = devm_of_phy_provider_register(dev,
- 					of_phy_simple_xlate);
- 	if (IS_ERR(phy_provider)) {
--		clk_disable_unprepare(sata_phy->phyclk);
--		return PTR_ERR(phy_provider);
-+		ret = PTR_ERR(phy_provider);
-+		goto clk_disable;
- 	}
- 
- 	return 0;
-+
-+clk_disable:
-+	clk_disable_unprepare(sata_phy->phyclk);
-+put_dev:
-+	put_device(&sata_phy->client->dev);
-+
-+	return ret;
- }
- 
- static const struct of_device_id exynos_sata_phy_of_match[] = {
+ skip_errata_init:
 -- 
 2.35.1
 

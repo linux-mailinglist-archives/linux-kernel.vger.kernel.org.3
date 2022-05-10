@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E77521648
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D69552164A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242232AbiEJNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S241482AbiEJNHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242182AbiEJNGh (ORCPT
+        with ESMTP id S242201AbiEJNGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:06:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE49F261962;
-        Tue, 10 May 2022 06:02:37 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KyJ6C6MhQzGpkL;
-        Tue, 10 May 2022 20:59:47 +0800 (CST)
+        Tue, 10 May 2022 09:06:38 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D02026195A;
+        Tue, 10 May 2022 06:02:38 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KyJ852rZWz1JBxP;
+        Tue, 10 May 2022 21:01:25 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 10 May 2022 21:02:35 +0800
+ 15.1.2375.24; Tue, 10 May 2022 21:02:36 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
@@ -30,9 +30,9 @@ From:   Yu Kuai <yukuai3@huawei.com>
 To:     <jack@suse.cz>, <paolo.valente@linaro.org>, <axboe@kernel.dk>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH -next 1/2] block, bfq: protect 'bfqd->queued' by 'bfqd->lock'
-Date:   Tue, 10 May 2022 21:16:28 +0800
-Message-ID: <20220510131629.1964415-2-yukuai3@huawei.com>
+Subject: [PATCH -next 2/2] block, bfq: make bfq_has_work() more accurate
+Date:   Tue, 10 May 2022 21:16:29 +0800
+Message-ID: <20220510131629.1964415-3-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220510131629.1964415-1-yukuai3@huawei.com>
 References: <20220510131629.1964415-1-yukuai3@huawei.com>
@@ -52,41 +52,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If bfq_schedule_dispatch() is called from bfq_idle_slice_timer_body(),
-then 'bfqd->queued' is read without holding 'bfqd->lock'. This is
-wrong since it can be wrote concurrently.
+bfq_has_work() is using busy_queues currently, which is not accurate
+because bfq_queue is busy doesn't represent that it has requests. Since
+bfqd aready has a counter 'queued' to record how many requests are in
+bfq, use it instead of busy_queues.
 
-Fix the problem by holding 'bfqd->lock' for bfq_schedule_dispatch(),
-like everywhere else.
+Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus the
+lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/bfq-iosched.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ block/bfq-iosched.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 272d48d8f326..61750696e87f 100644
+index 61750696e87f..1d2f8110c26b 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -456,6 +456,8 @@ static struct bfq_io_cq *bfq_bic_lookup(struct request_queue *q)
-  */
- void bfq_schedule_dispatch(struct bfq_data *bfqd)
- {
-+	lockdep_assert_held(&bfqd->lock);
-+
- 	if (bfqd->queued != 0) {
- 		bfq_log(bfqd, "schedule dispatch");
- 		blk_mq_run_hw_queues(bfqd->queue, true);
-@@ -6898,8 +6900,8 @@ bfq_idle_slice_timer_body(struct bfq_data *bfqd, struct bfq_queue *bfqq)
- 	bfq_bfqq_expire(bfqd, bfqq, true, reason);
+@@ -5063,11 +5063,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
+ 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
  
- schedule_dispatch:
--	spin_unlock_irqrestore(&bfqd->lock, flags);
- 	bfq_schedule_dispatch(bfqd);
-+	spin_unlock_irqrestore(&bfqd->lock, flags);
+ 	/*
+-	 * Avoiding lock: a race on bfqd->busy_queues should cause at
++	 * Avoiding lock: a race on bfqd->queued should cause at
+ 	 * most a call to dispatch for nothing
+ 	 */
+ 	return !list_empty_careful(&bfqd->dispatch) ||
+-		bfq_tot_busy_queues(bfqd) > 0;
++		READ_ONCE(bfqd->queued);
  }
  
- /*
+ static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
 -- 
 2.31.1
 

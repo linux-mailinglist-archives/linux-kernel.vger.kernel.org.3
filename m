@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31216521B60
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99764521C09
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343830AbiEJOLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S1343974AbiEJO1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245030AbiEJNrM (ORCPT
+        with ESMTP id S245281AbiEJN5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:12 -0400
+        Tue, 10 May 2022 09:57:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4311C62206;
-        Tue, 10 May 2022 06:33:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBF2CCD09;
+        Tue, 10 May 2022 06:39:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F36C9B81D24;
-        Tue, 10 May 2022 13:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47290C385A6;
-        Tue, 10 May 2022 13:33:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF9DCB81DC2;
+        Tue, 10 May 2022 13:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1A6C385C2;
+        Tue, 10 May 2022 13:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189625;
-        bh=bzqli6wHMqa6fSFnhXTYiXjyfTUibBvqBc9rZjwUU/k=;
+        s=korg; t=1652189942;
+        bh=ja0ijxZvm9OzHxdtl9DZF2+y3dpt4d6NdYljy+53o+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TN9I64OxK0O1Gza6+51K46mKvgDfjkQpslvkMOSMTeVnvAw28hxLvXak/MAxl5zC5
-         sM6wPAsmRJIFspd2mwZLJr13djCeI352ZmwR/zJCGrIZSD/BiS29VeN4pIMDvUNiEf
-         YK9IaZx8FHsgpI0rvxBR2MwOlR1Wnp7zVC25tlsI=
+        b=lWbEHJ03GTOzja3lGEZSz2lkJq34tDHCpAR27U+q9jtcPIOPdYytgS36CNF+0OdCK
+         do5A1ZkQOTXp8urPKlB0kV/TVdh002WPi8yEYE+/UeHe1/ReVxW3XADSHgnpA/zwB5
+         YJYJ2LjV5BRP54myWh4PbArg1ZEMM9n44UXgnsgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 084/135] drm/amdgpu: dont set s3 and s0ix at the same time
-Date:   Tue, 10 May 2022 15:07:46 +0200
-Message-Id: <20220510130742.821409946@linuxfoundation.org>
+        stable@vger.kernel.org, Hui Wang <hui.wang@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 077/140] ALSA: hda/realtek: Fix mute led issue on thinkpad with cs35l41 s-codec
+Date:   Tue, 10 May 2022 15:07:47 +0200
+Message-Id: <20220510130743.816837722@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Hui Wang <hui.wang@canonical.com>
 
-commit eac4c54bf7f17fb4681b85e5fe383b74d6261a2b upstream.
+commit a6ac60b36dade525c13c5bb0838589619533efb7 upstream.
 
-This makes it clearer which codepaths are in use specifically in
-one state or the other.
+The quirk ALC287_FIXUP_CS35L41_I2C_2 needs to chain the quirk
+ALC269_FIXUP_THINKPAD_ACPI, otherwise the mute led will not work if a
+thinkpad machine applies that quirk.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+And it will be safe if non-thinkpad machines apply that quirk since
+hda_fixup_thinkpad_acpi() will check and return in this case.
+
+Fixes: ae7abe36e352e ("ALSA: hda/realtek: Add CS35L41 support for Thinkpad laptops")
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+Link: https://lore.kernel.org/r/20220422073937.10073-1-hui.wang@canonical.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2250,9 +2250,9 @@ static int amdgpu_pmops_suspend(struct d
- 
- 	if (amdgpu_acpi_is_s0ix_active(adev))
- 		adev->in_s0ix = true;
--	adev->in_s3 = true;
-+	else
-+		adev->in_s3 = true;
- 	r = amdgpu_device_suspend(drm_dev, true);
--	adev->in_s3 = false;
- 	if (r)
- 		return r;
- 	if (!adev->in_s0ix)
-@@ -2269,6 +2269,8 @@ static int amdgpu_pmops_resume(struct de
- 	r = amdgpu_device_resume(drm_dev, true);
- 	if (amdgpu_acpi_is_s0ix_active(adev))
- 		adev->in_s0ix = false;
-+	else
-+		adev->in_s3 = false;
- 	return r;
- }
- 
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8759,6 +8759,8 @@ static const struct hda_fixup alc269_fix
+ 	[ALC287_FIXUP_CS35L41_I2C_2] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = cs35l41_fixup_i2c_two,
++		.chained = true,
++		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
+ 	},
+ 	[ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED] = {
+ 		.type = HDA_FIXUP_VERBS,
 
 

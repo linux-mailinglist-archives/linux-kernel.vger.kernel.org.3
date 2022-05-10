@@ -2,170 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6CD5214D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6691B5214CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241103AbiEJMM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S241527AbiEJMKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiEJMMz (ORCPT
+        with ESMTP id S241342AbiEJMKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:12:55 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB832238D4F
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:08:57 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 615831A005D;
-        Tue, 10 May 2022 14:08:56 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CE76B1A0056;
-        Tue, 10 May 2022 14:08:55 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 99A48180031E;
-        Tue, 10 May 2022 20:08:54 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: fsl_ssi: Add support multi fifo script
-Date:   Tue, 10 May 2022 19:56:48 +0800
-Message-Id: <1652183808-3745-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 08:10:03 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122AD4BFFE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:06:05 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id k126so10050372wme.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:06:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oWkJBDkeq4gmtzRx6NRpFA5vku8/WyRK30dRLyQT1IE=;
+        b=PMx3kpP5QtnuG3tHlO7CN/Gk4d74GFdWXB8ooztEhHRCs3ZJ8IM0IHuzldPIQFgmzQ
+         E/ZHIcOVBdU9uUt3xPemFPxJ5m+V/CRWsRhh/Mny2hOs8j2F32a9kxTwb6hYTQkahf/Q
+         SESYpg/i6i5JUV6RLTeR/xPSNZfLvyJVMhw8MVzxoYyFE5y6yYlx36SEyWruleFIV1D1
+         KWE20LvKALDAD/nkb5XoIOK5RimNSXgQCxWAynYVJf/rG1eeKK0gnRgdxDXDPVCMVq4S
+         0k9Ss6ijr37Jg4awdSWeNezXx/DlH3pSKyz8EWazKLNYGAlWV/zQ9pO1P4qEk9b+Kqlz
+         tm5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oWkJBDkeq4gmtzRx6NRpFA5vku8/WyRK30dRLyQT1IE=;
+        b=61j1Aay4JiiTU87gW8ayOCbX6aJ1HPExjj0aw6JcpNx6hYSM/o0Cfnv0nihztytOGI
+         RS3VS1+p2FiO8my7M5MYqX3QQdTptPQA00WPZ1bf64/AKeEEy4ijYGKOGLddb3XQJQM0
+         cV8ITY72ga/IqOlCm5OhGjUzkbUqoIpmASajpSpaw24Lz6bPmjRrNBOLTlKfdsPu6Nuh
+         PxtE16tszZlmu+CkvmhQ+w1K+U9YOxTFNhrPlnKI+boGl3sjdvF4odYvLjSi3miHd+Qv
+         V9LkBs0OreixO4cmGsNZFFz4AI7iNnJUYpQlMN00ZyAB/ItcIbtDHN7C/S5wRUSB04+f
+         /htA==
+X-Gm-Message-State: AOAM531dpCiEYFlzqcIq6jsWomPgi97ugs3AwHcEd/QKdEQwnAJuyI57
+        njLU3ImfKERiCtJhBimMcs9OsA==
+X-Google-Smtp-Source: ABdhPJwYZ0Hktb2zNUP5lRgXdG7rmgEEjw7X5eDkkAryniMAlYDvefufUgYH3YSyJVGF5eFjAw9png==
+X-Received: by 2002:a05:600c:4ed1:b0:394:8352:3ea1 with SMTP id g17-20020a05600c4ed100b0039483523ea1mr15503780wmq.153.1652184362787;
+        Tue, 10 May 2022 05:06:02 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:640f:aa66:3ec8:cbb6])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05600c3ac300b00394586f696dsm2361872wms.11.2022.05.10.05.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 05:06:02 -0700 (PDT)
+Date:   Tue, 10 May 2022 14:05:56 +0200
+From:   Marco Elver <elver@google.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH 1/3] kasan: update documentation
+Message-ID: <YnpVJJz9IKyvBfFI@elver.google.com>
+References: <5bd58ebebf066593ce0e1d265d60278b5f5a1874.1652123204.git.andreyknvl@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5bd58ebebf066593ce0e1d265d60278b5f5a1874.1652123204.git.andreyknvl@google.com>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With dual fifo enabled, the case that recording mono sound
-in the background, playback mono sound twice in parallal,
-at second time playback sound may distort, the possible
-reason is using dual fifo to playback mono sound is not
-recommended.
+On Mon, May 09, 2022 at 09:07PM +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Do assorted clean-ups and improvements to KASAN documentation, including:
+> 
+> - Describe each mode in a dedicated paragraph.
+> - Split out a Support section that describes in details which compilers,
+>   architectures and memory types each mode requires/supports.
+> - Capitalize the first letter in the names of each KASAN mode.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-This patch is to provide a option to use multi fifo script,
-which can be dynamically configured as one fifo or two fifo
-mode.
+Reviewed-by: Marco Elver <elver@google.com>
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- sound/soc/fsl/fsl_ssi.c | 34 ++++++++++++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+But see comment below.
 
-diff --git a/sound/soc/fsl/fsl_ssi.c b/sound/soc/fsl/fsl_ssi.c
-index ca30a4ede076..84cb36d9dfea 100644
---- a/sound/soc/fsl/fsl_ssi.c
-+++ b/sound/soc/fsl/fsl_ssi.c
-@@ -40,6 +40,7 @@
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
-+#include <linux/dma/imx-dma.h>
- 
- #include <sound/core.h>
- #include <sound/pcm.h>
-@@ -214,6 +215,7 @@ struct fsl_ssi_soc_data {
-  * @synchronous: Use synchronous mode - both of TX and RX use STCK and SFCK
-  * @use_dma: DMA is used or FIQ with stream filter
-  * @use_dual_fifo: DMA with support for dual FIFO mode
-+ * @use_dyna_fifo: DMA with support for multi FIFO script
-  * @has_ipg_clk_name: If "ipg" is in the clock name list of device tree
-  * @fifo_depth: Depth of the SSI FIFOs
-  * @slot_width: Width of each DAI slot
-@@ -243,6 +245,7 @@ struct fsl_ssi_soc_data {
-  * @dma_maxburst: Max number of words to transfer in one go. So far,
-  *                this is always the same as fifo_watermark.
-  * @ac97_reg_lock: Mutex lock to serialize AC97 register access operations
-+ * @audio_config: configure for dma multi fifo script
-  */
- struct fsl_ssi {
- 	struct regmap *regs;
-@@ -255,6 +258,7 @@ struct fsl_ssi {
- 	bool synchronous;
- 	bool use_dma;
- 	bool use_dual_fifo;
-+	bool use_dyna_fifo;
- 	bool has_ipg_clk_name;
- 	unsigned int fifo_depth;
- 	unsigned int slot_width;
-@@ -287,6 +291,7 @@ struct fsl_ssi {
- 	u32 dma_maxburst;
- 
- 	struct mutex ac97_reg_lock;
-+	struct sdma_peripheral_config audio_config[2];
- };
- 
- /*
-@@ -643,7 +648,7 @@ static int fsl_ssi_startup(struct snd_pcm_substream *substream,
- 	 * task from fifo0, fifo1 would be neglected at the end of each
- 	 * period. But SSI would still access fifo1 with an invalid data.
- 	 */
--	if (ssi->use_dual_fifo)
-+	if (ssi->use_dual_fifo || ssi->use_dyna_fifo)
- 		snd_pcm_hw_constraint_step(substream->runtime, 0,
- 					   SNDRV_PCM_HW_PARAM_PERIOD_SIZE, 2);
- 
-@@ -802,6 +807,7 @@ static int fsl_ssi_hw_params(struct snd_pcm_substream *substream,
- {
- 	bool tx2, tx = substream->stream == SNDRV_PCM_STREAM_PLAYBACK;
- 	struct fsl_ssi *ssi = snd_soc_dai_get_drvdata(dai);
-+	struct fsl_ssi_regvals *vals = ssi->regvals;
- 	struct regmap *regs = ssi->regs;
- 	unsigned int channels = params_channels(hw_params);
- 	unsigned int sample_size = params_width(hw_params);
-@@ -856,6 +862,28 @@ static int fsl_ssi_hw_params(struct snd_pcm_substream *substream,
- 	tx2 = tx || ssi->synchronous;
- 	regmap_update_bits(regs, REG_SSI_SxCCR(tx2), SSI_SxCCR_WL_MASK, wl);
- 
-+	if (ssi->use_dyna_fifo) {
-+		if (channels == 1) {
-+			ssi->audio_config[0].n_fifos_dst = 1;
-+			ssi->audio_config[1].n_fifos_src = 1;
-+			vals[RX].srcr &= ~SSI_SRCR_RFEN1;
-+			vals[TX].stcr &= ~SSI_STCR_TFEN1;
-+			vals[RX].scr  &= ~SSI_SCR_TCH_EN;
-+			vals[TX].scr  &= ~SSI_SCR_TCH_EN;
-+		} else {
-+			ssi->audio_config[0].n_fifos_dst = 2;
-+			ssi->audio_config[1].n_fifos_src = 2;
-+			vals[RX].srcr |= SSI_SRCR_RFEN1;
-+			vals[TX].stcr |= SSI_STCR_TFEN1;
-+			vals[RX].scr  |= SSI_SCR_TCH_EN;
-+			vals[TX].scr  |= SSI_SCR_TCH_EN;
-+		}
-+		ssi->dma_params_tx.peripheral_config = &ssi->audio_config[0];
-+		ssi->dma_params_tx.peripheral_size = sizeof(ssi->audio_config[0]);
-+		ssi->dma_params_rx.peripheral_config = &ssi->audio_config[1];
-+		ssi->dma_params_rx.peripheral_size = sizeof(ssi->audio_config[1]);
-+	}
-+
- 	return 0;
- }
- 
-@@ -1353,7 +1381,7 @@ static int fsl_ssi_imx_probe(struct platform_device *pdev,
- 	ssi->dma_params_rx.addr = ssi->ssi_phys + REG_SSI_SRX0;
- 
- 	/* Use even numbers to avoid channel swap due to SDMA script design */
--	if (ssi->use_dual_fifo) {
-+	if (ssi->use_dual_fifo || ssi->use_dyna_fifo) {
- 		ssi->dma_params_tx.maxburst &= ~0x1;
- 		ssi->dma_params_rx.maxburst &= ~0x1;
- 	}
-@@ -1446,6 +1474,8 @@ static int fsl_ssi_probe_from_dt(struct fsl_ssi *ssi)
- 	if (ssi->use_dma && !ret && dmas[2] == IMX_DMATYPE_SSI_DUAL)
- 		ssi->use_dual_fifo = true;
- 
-+	if (ssi->use_dma && !ret && dmas[2] == IMX_DMATYPE_MULTI_SAI)
-+		ssi->use_dyna_fifo = true;
- 	/*
- 	 * Backward compatible for older bindings by manually triggering the
- 	 * machine driver's probe(). Use /compatible property, including the
--- 
-2.17.1
+> ---
+>  Documentation/dev-tools/kasan.rst | 143 ++++++++++++++++++------------
+>  1 file changed, 87 insertions(+), 56 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+> index 7614a1fc30fa..aca219ed1198 100644
+> --- a/Documentation/dev-tools/kasan.rst
+> +++ b/Documentation/dev-tools/kasan.rst
+> @@ -4,39 +4,76 @@ The Kernel Address Sanitizer (KASAN)
+>  Overview
+>  --------
+>  
+> -KernelAddressSANitizer (KASAN) is a dynamic memory safety error detector
+> -designed to find out-of-bound and use-after-free bugs. KASAN has three modes:
+> +Kernel Address Sanitizer (KASAN) is a dynamic memory safety error detector
+> +designed to find out-of-bounds and use-after-free bugs.
+>  
+> -1. generic KASAN (similar to userspace ASan),
+> -2. software tag-based KASAN (similar to userspace HWASan),
+> -3. hardware tag-based KASAN (based on hardware memory tagging).
+> +KASAN has three modes:
+>  
+> -Generic KASAN is mainly used for debugging due to a large memory overhead.
+> -Software tag-based KASAN can be used for dogfood testing as it has a lower
+> -memory overhead that allows using it with real workloads. Hardware tag-based
+> -KASAN comes with low memory and performance overheads and, therefore, can be
+> -used in production. Either as an in-field memory bug detector or as a security
+> -mitigation.
+> +1. Generic KASAN
+> +2. Software Tag-Based KASAN
+> +3. Hardware Tag-Based KASAN
+>  
+> -Software KASAN modes (#1 and #2) use compile-time instrumentation to insert
+> -validity checks before every memory access and, therefore, require a compiler
+> -version that supports that.
+> +Generic KASAN, enabled with CONFIG_KASAN_GENERIC, is the mode intended for
+> +debugging, similar to userspace ASan. This mode is supported on many CPU
+> +architectures, but it has significant performance and memory overheads.
+>  
+> -Generic KASAN is supported in GCC and Clang. With GCC, it requires version
+> -8.3.0 or later. Any supported Clang version is compatible, but detection of
+> -out-of-bounds accesses for global variables is only supported since Clang 11.
+> +Software Tag-Based KASAN or SW_TAGS KASAN, enabled with CONFIG_KASAN_SW_TAGS,
+> +can be used for both debugging and dogfood testing, similar to userspace HWASan.
+> +This mode is only supported for arm64, but its moderate memory overhead allows
+> +using it for testing on memory-restricted devices with real workloads.
+>  
+> -Software tag-based KASAN mode is only supported in Clang.
+> +Hardware Tag-Based KASAN or HW_TAGS KASAN, enabled with CONFIG_KASAN_HW_TAGS,
+> +is the mode intended to be used as an in-field memory bug detector or as a
+> +security mitigation. This mode only works on arm64 CPUs that support MTE
+> +(Memory Tagging Extension), but it has low memory and performance overheads and
+> +thus can be used in production.
+>  
+> -The hardware KASAN mode (#3) relies on hardware to perform the checks but
+> -still requires a compiler version that supports memory tagging instructions.
+> -This mode is supported in GCC 10+ and Clang 12+.
+> +For details about the memory and performance impact of each KASAN mode, see the
+> +descriptions of the corresponding Kconfig options.
+>  
+> -Both software KASAN modes work with SLUB and SLAB memory allocators,
+> -while the hardware tag-based KASAN currently only supports SLUB.
+> +The Generic and the Software Tag-Based modes are commonly referred to as the
+> +software modes. The Software Tag-Based and the Hardware Tag-Based modes are
+> +referred to as the tag-based modes.
+>  
+> -Currently, generic KASAN is supported for the x86_64, arm, arm64, xtensa, s390,
+> -and riscv architectures, and tag-based KASAN modes are supported only for arm64.
+> +Support
+> +-------
+> +
+> +Architectures
+> +~~~~~~~~~~~~~
+> +
+> +Generic KASAN is supported on x86_64, arm, arm64, powerpc, riscv, s390, and
+> +xtensa, and the tag-based KASAN modes are supported only on arm64.
+> +
+> +Compilers
+> +~~~~~~~~~
+> +
+> +Software KASAN modes use compile-time instrumentation to insert validity checks
+> +before every memory access and thus require a compiler version that provides
+> +support for that. The Hardware Tag-Based mode relies on hardware to perform
+> +these checks but still requires a compiler version that supports the memory
+> +tagging instructions.
+> +
+> +Generic KASAN requires GCC version 8.3.0 or later
+> +or any Clang version supported by the kernel.
+> +
+> +Software Tag-Based KASAN requires GCC 11+
+> +or any Clang version supported by the kernel.
+> +
+> +Hardware Tag-Based KASAN requires GCC 10+ or Clang 12+.
+> +
+> +Memory types
+> +~~~~~~~~~~~~
+> +
+> +Generic KASAN supports finding bugs in all of slab, page_alloc, vmap, vmalloc,
+> +stack, and global memory.
+> +
+> +Software Tag-Based KASAN supports slab, page_alloc, vmalloc, and stack memory.
+> +
+> +Hardware Tag-Based KASAN supports slab, page_alloc, and non-executable vmalloc
+> +memory.
+> +
+> +For slab, both software KASAN modes support SLUB and SLAB allocators, while
+> +Hardware Tag-Based KASAN only supports SLUB.
+>  
+>  Usage
+>  -----
+> @@ -45,13 +82,13 @@ To enable KASAN, configure the kernel with::
+>  
+>  	  CONFIG_KASAN=y
+>  
+> -and choose between ``CONFIG_KASAN_GENERIC`` (to enable generic KASAN),
+> -``CONFIG_KASAN_SW_TAGS`` (to enable software tag-based KASAN), and
+> -``CONFIG_KASAN_HW_TAGS`` (to enable hardware tag-based KASAN).
+> +and choose between ``CONFIG_KASAN_GENERIC`` (to enable Generic KASAN),
+> +``CONFIG_KASAN_SW_TAGS`` (to enable Software Tag-Based KASAN), and
+> +``CONFIG_KASAN_HW_TAGS`` (to enable Hardware Tag-Based KASAN).
+>  
+> -For software modes, also choose between ``CONFIG_KASAN_OUTLINE`` and
+> +For the software modes, also choose between ``CONFIG_KASAN_OUTLINE`` and
+>  ``CONFIG_KASAN_INLINE``. Outline and inline are compiler instrumentation types.
+> -The former produces a smaller binary while the latter is 1.1-2 times faster.
+> +The former produces a smaller binary while the latter is up to 2 times faster.
+>  
+>  To include alloc and free stack traces of affected slab objects into reports,
+>  enable ``CONFIG_STACKTRACE``. To include alloc and free stack traces of affected
+> @@ -146,7 +183,7 @@ is either 8 or 16 aligned bytes depending on KASAN mode. Each number in the
+>  memory state section of the report shows the state of one of the memory
+>  granules that surround the accessed address.
+>  
+> -For generic KASAN, the size of each memory granule is 8. The state of each
+> +For Generic KASAN, the size of each memory granule is 8. The state of each
+>  granule is encoded in one shadow byte. Those 8 bytes can be accessible,
+>  partially accessible, freed, or be a part of a redzone. KASAN uses the following
+>  encoding for each shadow byte: 00 means that all 8 bytes of the corresponding
+> @@ -181,14 +218,14 @@ By default, KASAN prints a bug report only for the first invalid memory access.
+>  With ``kasan_multi_shot``, KASAN prints a report on every invalid access. This
+>  effectively disables ``panic_on_warn`` for KASAN reports.
+>  
+> -Alternatively, independent of ``panic_on_warn`` the ``kasan.fault=`` boot
+> +Alternatively, independent of ``panic_on_warn``, the ``kasan.fault=`` boot
+>  parameter can be used to control panic and reporting behaviour:
+>  
+>  - ``kasan.fault=report`` or ``=panic`` controls whether to only print a KASAN
+>    report or also panic the kernel (default: ``report``). The panic happens even
+>    if ``kasan_multi_shot`` is enabled.
+>  
+> -Hardware tag-based KASAN mode (see the section about various modes below) is
+> +Hardware Tag-Based KASAN mode (see the section about various modes below) is
+>  intended for use in production as a security mitigation. Therefore, it supports
+>  additional boot parameters that allow disabling KASAN or controlling features:
+>  
+> @@ -250,49 +287,46 @@ outline-instrumented kernel.
+>  Generic KASAN is the only mode that delays the reuse of freed objects via
+>  quarantine (see mm/kasan/quarantine.c for implementation).
+>  
+> -Software tag-based KASAN
+> +Software Tag-Based KASAN
+>  ~~~~~~~~~~~~~~~~~~~~~~~~
+>  
+> -Software tag-based KASAN uses a software memory tagging approach to checking
+> +Software Tag-Based KASAN uses a software memory tagging approach to checking
+>  access validity. It is currently only implemented for the arm64 architecture.
+>  
+> -Software tag-based KASAN uses the Top Byte Ignore (TBI) feature of arm64 CPUs
+> +Software Tag-Based KASAN uses the Top Byte Ignore (TBI) feature of arm64 CPUs
+>  to store a pointer tag in the top byte of kernel pointers. It uses shadow memory
+>  to store memory tags associated with each 16-byte memory cell (therefore, it
+>  dedicates 1/16th of the kernel memory for shadow memory).
+>  
+> -On each memory allocation, software tag-based KASAN generates a random tag, tags
+> +On each memory allocation, Software Tag-Based KASAN generates a random tag, tags
+>  the allocated memory with this tag, and embeds the same tag into the returned
+>  pointer.
+>  
+> -Software tag-based KASAN uses compile-time instrumentation to insert checks
+> +Software Tag-Based KASAN uses compile-time instrumentation to insert checks
+>  before each memory access. These checks make sure that the tag of the memory
+>  that is being accessed is equal to the tag of the pointer that is used to access
+> -this memory. In case of a tag mismatch, software tag-based KASAN prints a bug
+> +this memory. In case of a tag mismatch, Software Tag-Based KASAN prints a bug
+>  report.
+>  
+> -Software tag-based KASAN also has two instrumentation modes (outline, which
+> +Software Tag-Based KASAN also has two instrumentation modes (outline, which
+>  emits callbacks to check memory accesses; and inline, which performs the shadow
+>  memory checks inline). With outline instrumentation mode, a bug report is
+>  printed from the function that performs the access check. With inline
+>  instrumentation, a ``brk`` instruction is emitted by the compiler, and a
+>  dedicated ``brk`` handler is used to print bug reports.
+>  
+> -Software tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
+> +Software Tag-Based KASAN uses 0xFF as a match-all pointer tag (accesses through
+>  pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
+>  reserved to tag freed memory regions.
+>  
+> -Software tag-based KASAN currently only supports tagging of slab, page_alloc,
+> -and vmalloc memory.
+> -
+> -Hardware tag-based KASAN
+> +Hardware Tag-Based KASAN
+>  ~~~~~~~~~~~~~~~~~~~~~~~~
+>  
+> -Hardware tag-based KASAN is similar to the software mode in concept but uses
+> +Hardware Tag-Based KASAN is similar to the software mode in concept but uses
+>  hardware memory tagging support instead of compiler instrumentation and
+>  shadow memory.
+>  
+> -Hardware tag-based KASAN is currently only implemented for arm64 architecture
+> +Hardware Tag-Based KASAN is currently only implemented for arm64 architecture
+>  and based on both arm64 Memory Tagging Extension (MTE) introduced in ARMv8.5
+>  Instruction Set Architecture and Top Byte Ignore (TBI).
+>  
+> @@ -302,21 +336,18 @@ access, hardware makes sure that the tag of the memory that is being accessed is
+>  equal to the tag of the pointer that is used to access this memory. In case of a
+>  tag mismatch, a fault is generated, and a report is printed.
+>  
+> -Hardware tag-based KASAN uses 0xFF as a match-all pointer tag (accesses through
+> +Hardware Tag-Based KASAN uses 0xFF as a match-all pointer tag (accesses through
+>  pointers with the 0xFF pointer tag are not checked). The value 0xFE is currently
+>  reserved to tag freed memory regions.
+>  
+> -Hardware tag-based KASAN currently only supports tagging of slab, page_alloc,
+> -and VM_ALLOC-based vmalloc memory.
+> -
+> -If the hardware does not support MTE (pre ARMv8.5), hardware tag-based KASAN
+> +If the hardware does not support MTE (pre ARMv8.5), Hardware Tag-Based KASAN
+>  will not be enabled. In this case, all KASAN boot parameters are ignored.
+>  
+>  Note that enabling CONFIG_KASAN_HW_TAGS always results in in-kernel TBI being
+>  enabled. Even when ``kasan.mode=off`` is provided or when the hardware does not
+>  support MTE (but supports TBI).
+>  
+> -Hardware tag-based KASAN only reports the first found bug. After that, MTE tag
+> +Hardware Tag-Based KASAN only reports the first found bug. After that, MTE tag
+>  checking gets disabled.
+>  
+>  Shadow memory
+> @@ -414,15 +445,15 @@ generic ``noinstr`` one.
+>  Note that disabling compiler instrumentation (either on a per-file or a
+>  per-function basis) makes KASAN ignore the accesses that happen directly in
+>  that code for software KASAN modes. It does not help when the accesses happen
+> -indirectly (through calls to instrumented functions) or with the hardware
+> -tag-based mode that does not use compiler instrumentation.
+> +indirectly (through calls to instrumented functions) or with Hardware
+> +Tag-Based KASAN, which does not use compiler instrumentation.
+>  
+>  For software KASAN modes, to disable KASAN reports in a part of the kernel code
+>  for the current task, annotate this part of the code with a
+>  ``kasan_disable_current()``/``kasan_enable_current()`` section. This also
+>  disables the reports for indirect accesses that happen through function calls.
+>  
+> -For tag-based KASAN modes (include the hardware one), to disable access
+> +For tag-based KASAN modes (include the Hardware one), to disable access
 
+The changes related to capitalization appear weird here. At least in
+this case, it starts with "tag-based" (lower case) and then in braces
+".. the Hardware one". This does not look like correct English.
+
+The "hardware" here is not part of a name, so no need for
+capitalization. And "tag-based" can also stay lower case, since it is
+not part of a name either, but an adjective to "KASAN".
+
+Or you rewrite the sentence.
+
+>  checking, use ``kasan_reset_tag()`` or ``page_kasan_tag_reset()``. Note that
+>  temporarily disabling access checking via ``page_kasan_tag_reset()`` requires
+>  saving and restoring the per-page KASAN tag via
+> -- 
+> 2.25.1
+> 

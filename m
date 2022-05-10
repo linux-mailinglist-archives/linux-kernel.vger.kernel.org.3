@@ -2,198 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFC1520D1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09D5520D21
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbiEJFDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 01:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S236654AbiEJFKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 01:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236526AbiEJFDq (ORCPT
+        with ESMTP id S232976AbiEJFKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 01:03:46 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EED21C94FB;
-        Mon,  9 May 2022 21:59:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MJcAEY4fo11UdncVUGoIs308jdQoi6mKqFHplOdw9JdqHZ7WxorjIXi3GR9WLrGA7I1wg8aLJdLZQYYB/hjlOSKKWhgL+WiuADsGaRvAqHySbMJQW6qGmz6rq1hMi0FiP+eCqyXd7yu1dxrpAWXqaXNiPvhsu+ViEMtUt/C0xXQJ82/1gVyhFTk/QzBYSckTOuNMbuvZ0Xl9fqv0mklBAZKPIPjAy/mBcRbBA2c5NTT51Q5bnuVcIZLeFiN71AAUbmxjJcBWTCX7wUALmV8yNR1rQOEiq9dpnoqu49GROnjYhwm9UdxUoyzEb5u4sI05QsJ7n4DoGPg8oE+qVI12Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vFlBi/trKjkTAk8NaGVwVUkfN4gjyEXu75T2tY1+JT4=;
- b=gD6X8sXmdiC4lGdgNiEZqtCKjffZzfAC8i6BotgEacPJ59oPc+JWHLcuIJUAU9InFj4s8qlFn52sXMTFfjEwOq1/dY9Qp3mL0SLbBgY144Cw7dxEuxM5SpsCPTISXQQ+AE1X5mdS4JpmAGugFXtLN3VVuBIe4FGFFNIOSqBINx4J3IWMSQGemVpXPwVh3uF4OIWhmpy3sExqcO44ETvPuC/avsbo1fwM0LHw3uCWGsyiftdd4gQ4cNkBrGkp3mAuW2e1kJykr562wMTwC8oRbuPrkiszNgc8/IfQHMEofnSqrcANeNBpeIIYbrHvCin5mvQxNbWSu+bG/RUSSApWAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vFlBi/trKjkTAk8NaGVwVUkfN4gjyEXu75T2tY1+JT4=;
- b=R3j3BBVusRJTTuGhA/P7+srsaFyRq9NK/tRAS3TNVQmzyaRNWMtvibDfULjFkibkgnotAaa5M9u5ot0pb26zIYIX/8w17sqRv1fHEZ3Z02mRezHM1DwuNDgZOM+re6B7sIlysFDPuUQ/NhZkfdTh+kQ3lobxFbCsAQjpBVKIrAc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
- by BN8PR12MB2897.namprd12.prod.outlook.com (2603:10b6:408:99::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Tue, 10 May
- 2022 04:59:47 +0000
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::8d3b:6561:8563:4f1b]) by PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::8d3b:6561:8563:4f1b%9]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 04:59:46 +0000
-Message-ID: <246a7466-dc61-0186-2ff2-77fe37e73c06@amd.com>
-Date:   Tue, 10 May 2022 10:29:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [tip: perf/core] kvm: x86/cpuid: Fix CPUID leaf 0xA
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-tip-commits@vger.kernel.org,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        pbonzini@redhat.com, x86@kernel.org, linux-kernel@vger.kernel.org
-References: <165126412838.4207.9648561218200979307.tip-bot2@tip-bot2>
- <YnlOMDv5lMw2kGVb@zn.tnic>
-From:   Sandipan Das <sandipan.das@amd.com>
-In-Reply-To: <YnlOMDv5lMw2kGVb@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0004.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::12) To PH7PR12MB5712.namprd12.prod.outlook.com
- (2603:10b6:510:1e3::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3beca310-5eb7-4408-ebe4-08da3241e746
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2897:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB28976D6FFFF277F720263B138BC99@BN8PR12MB2897.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PY7lmNmWw0m2WTSdArQOvN4obj8+lhZKbhWOMrANFUPwfNldNgUqxRYL6m0SyYNxTK9+1upsYnNnL44GU4Hsali9VeheZHDMP+D8NgNk0lnqmdxxLETMb4oLVcC15aBGjycb10VVxo3E5lxlJ/moB9XbOTSadBEisqqgYHCpT6DI64bkuRZcAmFs/dfHGVa7lsZa9j1m/bAZ8o4u7p+mu3LC9e80XJCKP1aZ6jWSg71uT3VSb6uvSvsHxHf2wMHG/ECkW7L0291f32S/recydIGqufBC634w7UGCV/QbEslxcGam8NIFIg+f3B1uTLOhNWrelqhqp+NtYpZegw9JVVENkNcLrVuuQEXGzv+f4IR3T58kHMPzd0qo7OViWSeaaBVK4GfoMkc9n9MDbOzbUAcB/x/BbKtSg8ZsQ6Lk6J3bZ5/6eTrekn3ry7xhsNsbAi9bdpaW0PnC033DraSGrKPcfO2daP+Vgdh0Mr0YeTP9W5yAvobP0Iz9VTArRxZxQgt9EmjeXgYC0HSp07ChpqbUbrb3RXS7Pts42opar3aq2nYF/Wk7zszHKtuauHGh6S9BY3rhpOVw32xYZvtZVR+1OhPYreUJ6B/lwS2DMXhujk7mZ5T6eCWOHcGQPOKD7piOTeBtEVF4c5mYMniyA/QAsuEWXQmkr7GdIYwMdTUNODik1KM+rovVFnCIi21q1dxKvgWWt8hgyReFA8YlgWyBYbM+W1+77KQuzqkn6yTv18uFlsi+2/DsD7KS7O9GZHNn1m77OfZXBmJ2vfv8N/4TBu5Nynwaf56GjlhPgNo9PKi520qxfPaLuGvIS+gmm4crw9nvMBlNSN8VgvZnOLBFdPd2Bt8GJDRW9Q5W1bg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(31696002)(2616005)(53546011)(83380400001)(36756003)(8936002)(66946007)(4326008)(6916009)(66476007)(54906003)(8676002)(66556008)(31686004)(38100700002)(26005)(6512007)(316002)(6486002)(966005)(508600001)(2906002)(5660300002)(186003)(6666004)(6506007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGpjV1VndnlkazlZeUJKNHZqbWFoUHlPcUV0RmtkUFdVVERRdjVuL2ROQUxQ?=
- =?utf-8?B?b01IWHJ4NUNCb05mVFB2MUFEazBOb2pDS244OEwzMkxzdE5jWGdLY0dVaHND?=
- =?utf-8?B?RjhHZjhzY0lMbkFGRmxtS015bXAyR1FSVVY4NnhSRUFqZ09za3ZEQ0ZUbWZE?=
- =?utf-8?B?Y3ZNdTZzU0dzZzhBWHE0UWxSUHB2bnpBQmtpTkR4djd2dXFRT0lYWDdDMEhj?=
- =?utf-8?B?TnJYeE5XZk5MM3B0Z2ZDMXJ0YmRTbWRyaVpQdUpNZmx0V3RFekY2NHQ4Rnh4?=
- =?utf-8?B?TldQdDRHZy9SWWRMVkF1dDlkL3FKdXROM3N1OXNpL3RFeElPM0pjZ0xpQStj?=
- =?utf-8?B?Y3RXbXlZcEdPek5ESkxUdGlNQ0N6bjNsZzFJTGRycjdLSVZnd1lnTnZhZ3Zj?=
- =?utf-8?B?OSs0MUlWcTFPSytrY3FYd1l6Z2RreVpCR21HaUVISnN1OUFSN2JKUmZiYnpL?=
- =?utf-8?B?SnBaNW90VGFEcERIS1FaVVVEWEw4SkNUakZ4SFlUeEowZ1RZMUZ4Y3JnTnho?=
- =?utf-8?B?RXNPVkZkOG0rL0Qvbzc3S0lhaHBlM2c2a3BFci9qNmtPK1prbXM5SHpTRFdG?=
- =?utf-8?B?SkFsVmFzT011OCtNR2h4eERINWlBQ1ozYTZoVEVzRjFPdSszdVdXejR0VENn?=
- =?utf-8?B?bFA5NUlwR3BlRlp6TW9raGdoZGVnb3diek1ZTjNHMFFLSmh0bFBTVGFCa2Zh?=
- =?utf-8?B?T1d1V1l5cVVCQWNmNmRuMno4UjUrRjdrdC9QMTFlK0NQMUUvVFRWVVBKVGFP?=
- =?utf-8?B?OWFBQTRPOERkcU1OdERpQjF2OWszV3d4UktLSTZ1dlFPdk40T2VJZktXY3ZN?=
- =?utf-8?B?UFIxbG5idktYZkU0ZUtUQ1YxVkFocVRFOGIxajlqVmIvY00vdE9ESEFLbFBn?=
- =?utf-8?B?aGlBR3BlZnVLNjJzZXIvQkFxREE2eDlTUTNGQkFjSkNBRWNuVWtONnZLbExP?=
- =?utf-8?B?ZGRjNmF5VTg1V0w2NksrM2NvcWt4cVpOUUY4ZnRtQ05tcWVVRUYxdkhyUnpO?=
- =?utf-8?B?dkhpQ25nQi82Tk5tYjV2MkdYdzE3ZzlINzRGZGc0RUJRMmJqa3p0UnF5dHFL?=
- =?utf-8?B?dC9YMFlKOEZBeVNXblFzdlpJZU55S3lERVdEd3huK1oyNzRSOUExVHVrY25N?=
- =?utf-8?B?OTc0MU1PZ1ZGQzlIODBhVDVscTFjK1FuZldMa0UrSkFLU3grL0pLS29XUTBr?=
- =?utf-8?B?VkpOVTh2N0J6K3pxdktOb1JJS0tPUnE0SStnckJKL0RYaWRiam1Jclk2NjBC?=
- =?utf-8?B?SUtVZHJaSGIwWjJsWEpneXFTeHhkb0wrUFF1VGFkUUk4SkhnWEpPYXhsbzNU?=
- =?utf-8?B?NldCWHJiQ0ZCUnU5V1JwMHJXUGZ2RFA5bm5ZMDd6bTJjK1lOVnZkSFFSMDBv?=
- =?utf-8?B?bDByWDRHYmlycVVjT0tTSWJKQVllMGxjZlBaTXh2dUVnRmptTXZubnEyMnpi?=
- =?utf-8?B?aVdRWjIwU0MwUC9KVDl3bU54TzVxdUFmSnJLWktuQ0tmSzJLSnFibHBuMm9q?=
- =?utf-8?B?WEd1QXh5V2k1cHpkamhGRVFGamNnUWNoYTQrT1ZKckJud2xwYVZsWlZHWUZJ?=
- =?utf-8?B?eTZtQkgzc0ZkNWpMQUovM3NGc2tFUWViMlRNZ0dqWGk1S25OU1BVZmxRRkV3?=
- =?utf-8?B?ZUVuWTNZVGxaR0IxMVlEWmpOelY2dk5qVURHTDQzZFhQSzByQlkrZ3dCSE1O?=
- =?utf-8?B?My9iUTc2ZjVTZ0t6dkx2UlpVYWV2N01TT3dSYzVBcGQ3MDJaNlVSbUU5RXBI?=
- =?utf-8?B?RnFDNU9rTHBiWEtRYkwzYzNKWER0OXJyZHpUTzgzSmQ4T0hJcXpLSDYrRTVK?=
- =?utf-8?B?M3dsc29NS05GRmVnLzQ1Z1hnbHErbXp2QXYrTWVPa0w5REVVREJabjNNczht?=
- =?utf-8?B?RTF4WFZtemlLQzBMYjk3M3FaZklHWUFoQ1hUVHZEQjJsZnZ6Slc2RzdGdGdk?=
- =?utf-8?B?VkIyRlFHR2FKUGVXbnZqYTV5WGUzSmgydzBaUzQvMU1xS2dUdUZibE9lKytq?=
- =?utf-8?B?SFhMcFJpNW5uL0hvUmdtWWFZM0Y3Q24zQjk1bXRuaDBWSk1rQmZRUjgvMkZq?=
- =?utf-8?B?T2FOb2VNY3lHcVBkMnhxaUovWFREVXB0Wlh4Y1pkbEhWRzZ2RS93aGsyWk5I?=
- =?utf-8?B?VkFIdG95NlBiQkc4aXZySUcxdHpvOFVtc1hENzdSMXdaSFdLVWJFNW9tVGda?=
- =?utf-8?B?cGRJRHBDalcwbTFDMHBYZVEwMU9seDNJTmN1T1J3SHUrUTErYlBuYk9NSXpi?=
- =?utf-8?B?c3pSS3YwYnN6VEMrMGJJRXRyYmZSZS9Za08vWlkzOWs0NkxJQk9BZFRtR0pa?=
- =?utf-8?B?Qm1CZktjbS9PR2J0TnVFTkVnRnAvY2dPMTFncUtLdytDbFZrQmpVZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3beca310-5eb7-4408-ebe4-08da3241e746
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 04:59:46.4231
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DlDfAD7b+XwACC3C+kerOUkeKr9QO6UZvj3oYCGALSPhpQ10SNo/i218hiHj3dy+gtuzVnNNzDmwmTqWiIks2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2897
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 01:10:06 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13869232779;
+        Mon,  9 May 2022 22:06:07 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24A4cQAk020354;
+        Tue, 10 May 2022 05:06:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=Y1KfjmGhhSYAr8guizGm45XQlWDCQy09ghm/+4OkzjY=;
+ b=GiEQG3JK4C4J1L8ilnLdEImdsSn0gnogO/dXvTUO0ZetVQOZWsVUOVu4cfM36UmEg0rB
+ mEDCQYxpu1LZ8FG0ZflGebHyM3Ewz68IFRzYRbYCjuxyOyJOQ17laB2U3boxomWZKcJw
+ r7PRRkUDXU0d6r3yAlpuqDOLey+A7CrLFnv0rxOyZPwBne4ZGJGpChU79Fd2EkHEu1sn
+ Md/fASGG5rdoVXqeJU52y2P03Wb71LPL5Wy+nATh68W0rGb1E0HrTyIUS07HR8QCez+W
+ jUxjudGdxys51pmbpnAOCzk4L2sJ6JW4VLqq7Hkt95TlwqWzO9ktLMoFkY2wJ25dRx1p lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyfk0ssay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 05:06:01 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24A4ear0025092;
+        Tue, 10 May 2022 05:06:01 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyfk0ssa5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 05:06:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24A537XT001636;
+        Tue, 10 May 2022 05:05:58 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fwg1j3f08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 05:05:58 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24A55ewK35193162
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 05:05:40 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F21C52050;
+        Tue, 10 May 2022 05:05:56 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.28.175])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3618252051;
+        Tue, 10 May 2022 05:05:55 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [powerpc]Kernel crash while running xfstests (generic/250)
+ [next-20220404]
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <B34CE5E9-8635-4DF0-AC0D-FB887462DFD6@linux.ibm.com>
+Date:   Tue, 10 May 2022 10:35:53 +0530
+Cc:     dm-devel@redhat.com, riteshh@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <838D9600-D92F-4AD9-9E97-0116E2C01654@linux.ibm.com>
+References: <A3B628C9-A20B-4621-BC8C-C79B270297E1@linux.ibm.com>
+ <B34CE5E9-8635-4DF0-AC0D-FB887462DFD6@linux.ibm.com>
+To:     linux-block@vger.kernel.org, snitzer@redhat.com
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cG5qL99cVGOmas-zKOfarxXZEISLQ0va
+X-Proofpoint-ORIG-GUID: kqywdsARjZjTGXm3kGfc3Ps007M1rEAM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-09_06,2022-05-09_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ impostorscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205100020
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
 
-On 5/9/2022 10:54 PM, Borislav Petkov wrote:
-> On Fri, Apr 29, 2022 at 08:28:48PM -0000, tip-bot2 for Sandipan Das wrote:
->> The following commit has been merged into the perf/core branch of tip:
->>
->> Commit-ID:     fafd15ab6dc1fdfff66908e6d9231b124e1875cf
->> Gitweb:        https://git.kernel.org/tip/fafd15ab6dc1fdfff66908e6d9231b124e1875cf
->> Author:        Sandipan Das <sandipan.das@amd.com>
->> AuthorDate:    Thu, 21 Apr 2022 11:16:59 +05:30
->> Committer:     Peter Zijlstra <peterz@infradead.org>
->> CommitterDate: Fri, 29 Apr 2022 11:06:27 +02:00
->>
->> kvm: x86/cpuid: Fix CPUID leaf 0xA
->>
->> On some x86 processors, CPUID leaf 0xA provides information
->> on Architectural Performance Monitoring features. It
->> advertises a PMU version which Qemu uses to determine the
->> availability of additional MSRs to manage the PMCs.
->>
->> Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
->> the same, the kernel constructs return values based on the
->> x86_pmu_capability irrespective of the vendor.
->>
->> This leaf and the additional MSRs are not supported on AMD
->> processors. If PerfMonV2 is detected, the PMU version is
->> set to 2 and guest startup breaks because of an attempt to
->> access a non-existent MSR. Return zeros to avoid this.
->>
->> Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
->> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
->> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Link: https://lkml.kernel.org/r/54bc7fe4cadf6bdef823bab1fba43d4891d2e1a9.1650515382.git.sandipan.das@amd.com
->> ---
->>  arch/x86/kvm/cpuid.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index b24ca7f..ae1d963 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -887,6 +887,12 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>  		union cpuid10_eax eax;
->>  		union cpuid10_edx edx;
->>  
->> +		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
->> +		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
->> +			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->> +			break;
->> +		}
->> +
-> 
-> This is all fine and dandy but this patch in tip conflicts with the very
-> similar patch of yours:
-> 
->   5a1bde46f98b ("kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU")
-> 
-> which is already upstream.
-> 
-> So which is it? Should we zap this version in tip instead?
-> 
 
-Please remove this patch and keep commit 5a1bde46f98b instead.
+> On 07-Apr-2022, at 10:19 AM, Sachin Sant <sachinp@linux.ibm.com> =
+wrote:
+>=20
+>=20
+>> On 04-Apr-2022, at 5:04 PM, Sachin Sant <sachinp@linux.ibm.com> =
+wrote:
+>>=20
+>> While running xfstests(ext4 or XFS as fs) on a Power10 LPAR booted =
+with today=E2=80=99s
+>> next (5.18.0-rc1-next-20220404) following crash is seen.=20
+>>=20
+>> This problem was possibly introduced with 5.17.0-next-20220330.=20
+>> Git bisect leads me to following patch
+>> commit 1d158814db8e7b3cbca0f2c8d9242fbec4fbc57e
+>>   dm: conditionally enable BIOSET_PERCPU_CACHE for dm_io bioset
+>>=20
+>=20
+> Continue to see this problem with latest next.=20
 
-- Sandipan
+I can still recreate this issue against latest linux-next build.
+
+[ 1536.883400] Buffer I/O error on dev dm-0, logical block 10485497, =
+async page read
+[ 1536.936018] XFS (dm-0): Unmounting Filesystem
+[ 1536.938849] XFS (dm-0): Mounting V5 Filesystem
+[ 1536.946007] XFS (dm-0): Ending clean mount
+[ 1536.947926] xfs filesystem being mounted at /mnt/scratch supports =
+timestamps until 2038 (0x7fffffff)
+[ 1537.052850] XFS (dm-0): Unmounting Filesystem
+[ 1537.083979] BUG: Unable to handle kernel data access at =
+0x5deadbeef0000122
+[ 1537.083982] Faulting instruction address: 0xc00000000015b0bc
+[ 1537.083984] Oops: Kernel access of bad area, sig: 11 [#1]
+[ 1537.084000] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
+pSeries
+[ 1537.084006] Modules linked in: dm_snapshot(E) dm_bufio(E) loop(E) =
+dm_flakey(E) xfs(E) dm_mod(E) nft_fib_inet(E) nft_fib_ipv4(E) =
+nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) =
+nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) =
+nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) rfkill(E) ip_set(E) =
+nf_tables(E) bonding(E) tls(E) libcrc32c(E) nfnetlink(E) sunrpc(E) =
+nd_pmem(E) nd_btt(E) dax_pmem(E) pseries_rng(E) papr_scm(E) libnvdimm(E) =
+vmx_crypto(E) ext4(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) =
+crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) ibmveth(E) =
+scsi_transport_srp(E) fuse(E) [last unloaded: scsi_debug]
+[ 1537.084056] CPU: 10 PID: 970489 Comm: dmsetup Tainted: G            E =
+    5.18.0-rc6-next-20220509 #2
+[ 1537.084061] NIP:  c00000000015b0bc LR: c00000000015afe8 CTR: =
+c000000000753bb0
+[ 1537.084064] REGS: c0000000211fb610 TRAP: 0380   Tainted: G            =
+E      (5.18.0-rc6-next-20220509)
+[ 1537.084068] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  =
+CR: 24024824  XER: 20040000
+[ 1537.084078] CFAR: c00000000015aff0 IRQMASK: 0=20
+[ 1537.084078] GPR00: c00000000015afe8 c0000000211fb8b0 c000000002a7cf00 =
+0000000000000000=20
+[ 1537.084078] GPR04: c0000000f98a1378 0000000000000000 c0000000f5043b50 =
+c00000043463e280=20
+[ 1537.084078] GPR08: c00000043463e280 5deadbeef0000100 5deadbeef0000122 =
+c00800000214dcb0=20
+[ 1537.084078] GPR12: c000000000753bb0 c000000abfff1700 0000000155ee0b60 =
+00007fffa7c29da8=20
+[ 1537.084078] GPR16: 00007fffa7c29da8 00007fffa7c29da8 00007fffa7c63670 =
+0000000000000000=20
+[ 1537.084078] GPR20: 00007fffa7c33388 00007fffa7c62040 0000000155ee0b90 =
+0000000000000131=20
+[ 1537.084078] GPR24: c0000000025adb68 ffffffffffffffff c0000000025adb30 =
+c000000103a5e000=20
+[ 1537.084078] GPR28: c000000002a23ce8 c0000000f98a1378 0000000000000017 =
+0000000000000000=20
+[ 1537.084117] NIP [c00000000015b0bc] =
+__cpuhp_state_remove_instance+0x19c/0x2c0
+[ 1537.084125] LR [c00000000015afe8] =
+__cpuhp_state_remove_instance+0xc8/0x2c0
+[ 1537.084130] Call Trace:
+[ 1537.084131] [c0000000211fb8b0] [c00000000015afe8] =
+__cpuhp_state_remove_instance+0xc8/0x2c0 (unreliable)
+[ 1537.084138] [c0000000211fb920] [c000000000753c14] =
+bioset_exit+0x64/0x280
+[ 1537.084144] [c0000000211fb9c0] [c008000002137744] =
+cleanup_mapped_device+0x4c/0x1c0 [dm_mod]
+[ 1537.084155] [c0000000211fba00] [c008000002137a60] =
+__dm_destroy+0x1a8/0x360 [dm_mod]
+[ 1537.084163] [c0000000211fbaa0] [c0080000021445c0] =
+dev_remove+0x1b8/0x290 [dm_mod]
+[ 1537.084172] [c0000000211fbb30] [c00800000214488c] =
+ctl_ioctl+0x1f4/0x7d0 [dm_mod]
+[ 1537.084181] [c0000000211fbd40] [c008000002144e88] =
+dm_ctl_ioctl+0x20/0x40 [dm_mod]
+[ 1537.084190] [c0000000211fbd60] [c00000000055ff28] =
+sys_ioctl+0xf8/0x190
+[ 1537.084195] [c0000000211fbdb0] [c00000000003377c] =
+system_call_exception+0x17c/0x350
+[ 1537.084200] [c0000000211fbe10] [c00000000000c54c] =
+system_call_common+0xec/0x270
+[ 1537.084205] --- interrupt: c00 at 0x7fffa7529210
+[ 1537.084208] NIP:  00007fffa7529210 LR: 00007fffa7c26824 CTR: =
+0000000000000000
+[ 1537.084211] REGS: c0000000211fbe80 TRAP: 0c00   Tainted: G            =
+E      (5.18.0-rc6-next-20220509)
+[ 1537.084215] MSR:  800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24004484  XER: 00000000
+[ 1537.084224] IRQMASK: 0=20
+[ 1537.084224] GPR00: 0000000000000036 00007fffc7448c30 00007fffa7607300 =
+0000000000000003=20
+[ 1537.084224] GPR04: 00000000c138fd04 0000000155ee0b60 0000000000000004 =
+00007fffa7c33f98=20
+[ 1537.084224] GPR08: 0000000000000003 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 1537.084224] GPR12: 0000000000000000 00007fffa7d0fa80 0000000155ee0b60 =
+00007fffa7c29da8=20
+[ 1537.084224] GPR16: 00007fffa7c29da8 00007fffa7c29da8 00007fffa7c63670 =
+0000000000000000=20
+[ 1537.084224] GPR20: 00007fffa7c33388 00007fffa7c62040 0000000155ee0b90 =
+0000000155ee02e0=20
+[ 1537.084224] GPR24: 00007fffa7c29da8 00007fffa7c29da8 00007fffa7c29da8 =
+00007fffa7c29da8=20
+[ 1537.084224] GPR28: 0000000000000001 00007fffa7c29da8 0000000000000000 =
+00007fffa7c29da8=20
+[ 1537.084261] NIP [00007fffa7529210] 0x7fffa7529210
+[ 1537.084263] LR [00007fffa7c26824] 0x7fffa7c26824
+[ 1537.084265] --- interrupt: c00
+[ 1537.084267] Instruction dump:
+[ 1537.084270] 60000000 7f69db78 7f83e040 7c7f07b4 7bea1f24 419cffb4 =
+eae10028 eb210038=20
+[ 1537.084276] eb610048 e93d0000 e95d0008 2fa90000 <f92a0000> 419e0008 =
+f9490008 3d405dea=20
+[ 1537.084284] ---[ end trace 0000000000000000 ]---
+[ 1537.106557]=20
+[ 1538.106559] Kernel panic - not syncing: Fatal exception
+
+- Sachin
+

@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8A521C4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD740521AF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbiEJOeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S245320AbiEJOGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244728AbiEJOIG (ORCPT
+        with ESMTP id S244578AbiEJNmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:08:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4E523E28C;
-        Tue, 10 May 2022 06:42:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D41AB81D24;
-        Tue, 10 May 2022 13:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA87DC385A6;
-        Tue, 10 May 2022 13:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190136;
-        bh=0T9G6o0zL4mfgca2SDq0wxe6BxWXo299ohe6/PGho10=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zq9lgm7xBo1JA66VoiLWc5b3pBzchM5eIuQWqxPB3a9DXKn98FrBOahPrEVLkWAuw
-         3YqeqIQT2G+AV9H+SPFynj5bwte+8eofI0OPIf2oaMKEJzpBEtdFEd+oig41wgs0Zr
-         OAe0sEoBs58/dnYaRK845bwXEKC3MAbjiBKnDLfg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pali@kernel.org,
-        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.17 140/140] PCI: aardvark: Update comment about link going down after link-up
-Date:   Tue, 10 May 2022 15:08:50 +0200
-Message-Id: <20220510130745.588250738@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 10 May 2022 09:42:01 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB92CBE72;
+        Tue, 10 May 2022 06:30:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VCrRO54_1652189383;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VCrRO54_1652189383)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 21:29:46 +0800
+Date:   Tue, 10 May 2022 21:29:42 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        yinxin.x@bytedance.com, zhangjiachen.jaycee@bytedance.com,
+        zhujia.zj@bytedance.com
+Subject: Re: [PATCH v11 06/22] cachefiles: enable on-demand read mode
+Message-ID: <YnpoxvLk3us94C9I@B-P7TQMD6M-0146.local>
+Mail-Followup-To: David Howells <dhowells@redhat.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
+        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        yinxin.x@bytedance.com, zhangjiachen.jaycee@bytedance.com,
+        zhujia.zj@bytedance.com
+References: <20220509074028.74954-7-jefflexu@linux.alibaba.com>
+ <20220509074028.74954-1-jefflexu@linux.alibaba.com>
+ <3509457.1652187396@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3509457.1652187396@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,38 +62,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Marek Behún" <kabel@kernel.org>
+On Tue, May 10, 2022 at 01:56:36PM +0100, David Howells wrote:
+> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> 
+> > Enable on-demand read mode by adding an optional parameter to the "bind"
+> > command.
+> > 
+> > On-demand mode will be turned on when this parameter is "ondemand", i.e.
+> > "bind ondemand". Otherwise cachefiles will work in the original mode.
+> > 
+> > Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> 
+> Acked-by: David Howells <dhowells@redhat.com>
 
-commit 92f4ffecc4170ce29e67a1f8d51c168c3de95fb2 upstream.
+Thank you very much, David! Thanks for your so much time and patience!
 
-Update the comment about what happens when link goes down after we have
-checked for link-up. If a PIO request is done while link-down, we have
-a serious problem.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-23-kabel@kernel.org
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/pci/controller/pci-aardvark.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -998,8 +998,12 @@ static bool advk_pcie_valid_device(struc
- 		return false;
- 
- 	/*
--	 * If the link goes down after we check for link-up, nothing bad
--	 * happens but the config access times out.
-+	 * If the link goes down after we check for link-up, we have a problem:
-+	 * if a PIO request is executed while link-down, the whole controller
-+	 * gets stuck in a non-functional state, and even after link comes up
-+	 * again, PIO requests won't work anymore, and a reset of the whole PCIe
-+	 * controller is needed. Therefore we need to prevent sending PIO
-+	 * requests while the link is down.
- 	 */
- 	if (!pci_is_root_bus(bus) && !advk_pcie_link_up(pcie))
- 		return false;
-
-
+Many thanks!
+Gao Xiang

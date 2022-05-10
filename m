@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB19521E38
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC0E521E64
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345732AbiEJP1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S244010AbiEJP2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345926AbiEJP1Z (ORCPT
+        with ESMTP id S1345741AbiEJP11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:27:25 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDFEE86
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:17:25 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id a10so1386739ioe.9
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2B5Vkl7TFzY6huBpLT1bUz9mIIjjQyx9+L3zupaHP/E=;
-        b=kUfXtfH9Zonopkyd79eaW/m77x8S8R7qo80V2tCzd9JOlsQ06sdS6sGJbzM+8yjoY9
-         m+XmvO2xJeWlqHJCjJolAYENtfzZsaFEyw9wyzc8MkO4WDZFWa314wUPVIzlmiJZcjA8
-         VQfnOVy24KVA3D8ezVnljqbKm7hf45os3aX2XsnlqxxgyVXhS8VR8x3BgIl/nQZJLwgg
-         vgmojE5RPPTRhLfcnOtVuaoWLYWu1oWkbxVCczSja7blDxGU7Atw8m9rLXFuPyURmTzS
-         0YcR8UNLAn6IeEZCHKZIato4Lg8ssgcXXg7k19XYrjBpJCes/KX4bqJTTHAgv6h0dS8s
-         Qn0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2B5Vkl7TFzY6huBpLT1bUz9mIIjjQyx9+L3zupaHP/E=;
-        b=s+vDTC5WpJ/Hw0iXP/cnN9PfuL4VwDZNeq7Ck6WazV92QtdA5I9IC8GrbjhMb3R6d0
-         GE9nVErgJyyHPdhkZB4wXvdZXMaRtOthEDrUpCvtZALvBVTcXbgEHf/ztry+dA2vIGcR
-         EEnID4wf4E8ItlcoIbSfbCQVnmWnkW5dSgvEXXhYzFouzgE0oV4Henup1jAeKXXF6GlH
-         0B37xM8nI9rwWD3e9vSVsLAHg40ZVFHAm058+eZ9VTUoC+eTJKQfhk9qGX7vCE679Dge
-         kO1kFte4KK5VMP/GPb48hKAORWE5pbjYcoXGmV6cRFHKPvS+vXAQoptZhHqZ3Ar6hQGt
-         W4ww==
-X-Gm-Message-State: AOAM5333SDWJwoa7FmgBldDOj5e0TGbzEGKOheIdNHQRbQ39XDTqQbqo
-        934giW41HEvGVtGqE9IPOwUlojCZw8EHeECRTPilBQ==
-X-Google-Smtp-Source: ABdhPJxNspW+ngbi0U/I2ZjEzZydwyZIbEbjDc4pUkE02twM2tokN7gph1uMIPpmqO4/YO1WsuVpjI+o2sl2PzHACAA=
-X-Received: by 2002:a05:6638:3288:b0:32b:5f8e:19f1 with SMTP id
- f8-20020a056638328800b0032b5f8e19f1mr10407822jav.248.1652195845296; Tue, 10
- May 2022 08:17:25 -0700 (PDT)
+        Tue, 10 May 2022 11:27:27 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656876252;
+        Tue, 10 May 2022 08:17:43 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60048)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRcL-00D06M-QG; Tue, 10 May 2022 09:17:41 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37644 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRcK-00D119-OQ; Tue, 10 May 2022 09:17:41 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220505182645.497868-10-ebiederm@xmission.com>
+        <20220510142202.GB23277@redhat.com>
+Date:   Tue, 10 May 2022 10:17:32 -0500
+In-Reply-To: <20220510142202.GB23277@redhat.com> (Oleg Nesterov's message of
+        "Tue, 10 May 2022 16:23:18 +0200")
+Message-ID: <87ee11wh6b.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220322105857.1107016-1-robert.marko@sartura.hr> <b183f838-359c-752a-dd23-9bd1a160eee5@linaro.org>
-In-Reply-To: <b183f838-359c-752a-dd23-9bd1a160eee5@linaro.org>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Tue, 10 May 2022 17:17:14 +0200
-Message-ID: <CA+HBbNHJtHexMHUiZ8d-OStCP57nbDXhQtgL+hvjQkA2FFsXZg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: uDPU: update partition table
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1noRcK-00D119-OQ;;;mid=<87ee11wh6b.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/Y8vXvnEYjPf/cn2xYcSjvlg/Nnds05MI=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 394 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (2.9%), b_tie_ro: 10 (2.5%), parse: 0.92
+        (0.2%), extract_message_metadata: 3.1 (0.8%), get_uri_detail_list:
+        1.13 (0.3%), tests_pri_-1000: 4.3 (1.1%), tests_pri_-950: 1.30 (0.3%),
+        tests_pri_-900: 1.05 (0.3%), tests_pri_-90: 141 (35.7%), check_bayes:
+        139 (35.3%), b_tokenize: 7 (1.8%), b_tok_get_all: 9 (2.2%),
+        b_comp_prob: 2.4 (0.6%), b_tok_touch_all: 117 (29.8%), b_finish: 1.04
+        (0.3%), tests_pri_0: 209 (53.1%), check_dkim_signature: 0.51 (0.1%),
+        check_dkim_adsp: 2.7 (0.7%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
+        3.0 (0.7%), tests_pri_500: 10 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 10/12] ptrace: Don't change __state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 3:56 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+Oleg Nesterov <oleg@redhat.com> writes:
+
+> On 05/05, Eric W. Biederman wrote:
+>>
+>>  static void ptrace_unfreeze_traced(struct task_struct *task)
+>>  {
+>> -	if (READ_ONCE(task->__state) != __TASK_TRACED)
+>> -		return;
+>> -
+>> -	WARN_ON(!task->ptrace || task->parent != current);
+>> +	unsigned long flags;
+>>  
+>>  	/*
+>> -	 * PTRACE_LISTEN can allow ptrace_trap_notify to wake us up remotely.
+>> -	 * Recheck state under the lock to close this race.
+>> +	 * The child may be awake and may have cleared
+>> +	 * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
+>> +	 * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
+>>  	 */
+>> -	spin_lock_irq(&task->sighand->siglock);
+>> -	if (READ_ONCE(task->__state) == __TASK_TRACED) {
+>> +	if (lock_task_sighand(task, &flags)) {
 >
-> On 22/03/2022 11:58, Robert Marko wrote:
-> > Partition currently called "uboot" does not only contain U-boot, but
-> > rather it contains TF-A, U-boot and U-boot environment.
-> >
-> > So, to avoid accidentally deleting the U-boot environment which is
-> > located at 0x180000 split the partition.
-> >
-> > "uboot" is not the correct name as you can't boot these boards with U-boot
-> > only, TF-A must be present as well, so rename the "uboot" partition to
-> > "firmware".
-> >
-> > While we are here, describe the NOR node as "spi-flash@0" instead of
-> > "m25p80@0" which is the old SPI-NOR driver name.
+> But I still think that a lockless
 >
-> This patch was applied, but it was never tested with dtbs_check (nor
-> rebased on my cleanups). spi-flash is still wrong.
-
-Hi Krzysztof, sorry for that, I did run dtbs_check on it but there is
-a whole forest of
-warnings about schemas not being matched as most of the bindings are
-still plaintext
-and I missed this.
-
-I did correct this to flash@0 in the eDPU series that was sent out today.
-Regards,
-Robert
+> 	if (!(task->jobctl & JOBCTL_PTRACE_FROZEN))
+> 		return;
 >
-> Best regards,
-> Krzysztof
+> check at the start of ptrace_unfreeze_traced() makes sense to avoid
+> lock_task_sighand() if possible.
+>
+> And ptrace_resume() can probably clear JOBCTL_PTRACE_FROZEN along with
+> JOBCTL_TRACED to make this optimization work better. The same for
+> ptrace_signal_wake_up().
 
+What do you have that suggests that taking siglock there is a problem?
 
+What you propose will definitely work as an incremental change, and
+in an incremental change we can explain why doing the stupid simple
+thing is not good enough.
 
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+I am not really opposed on any grounds except that simplicity is good,
+and hard to get wrong.
+
+Eric
+

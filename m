@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECFA52194E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59915217EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244112AbiEJNpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S243306AbiEJNac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243776AbiEJNcO (ORCPT
+        with ESMTP id S243106AbiEJNW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:14 -0400
+        Tue, 10 May 2022 09:22:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A46F2CE23B;
-        Tue, 10 May 2022 06:22:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F4553A76;
+        Tue, 10 May 2022 06:17:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37550B81B32;
-        Tue, 10 May 2022 13:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF17C385C2;
-        Tue, 10 May 2022 13:22:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEE3BB81DA4;
+        Tue, 10 May 2022 13:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D73C385C6;
+        Tue, 10 May 2022 13:17:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188923;
-        bh=U8Zm7efx3T0aiQjtxjiMAYBYCBxvU/eYBJxGPuCrtAE=;
+        s=korg; t=1652188629;
+        bh=PpHB42D2WhzR1hdSa3ILbnlTtl5eQexm51QPCFTqxsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/brdoGmMwnwi3Ev6YwP1gmQlIlHbRqo7xqIYykXsEFgn2tNmDMRYRxbLch+3VHiE
-         HwBRVG7LxDDGUK8q7iooWB4F7/kCwMagirPuNBUQ9+hbLiINFg7cWjlRpbF1i58k4j
-         18r6eyT9emqnHaLI/DoQCYLsbxWpBlvrZHO/x594=
+        b=cMSn5tESh7Lmo5WWSamzIqIijcZr5nuU9+Kt+WK9tuf0+4sVKdcttPsEw6NDmMHP5
+         bmDWp5js6Vd7yQsK9i0yL9W5lZp+n6MYYVO5UQwHt9EXVRXw/ESvPuholaeuRS1IuC
+         PQx+RrYssTdk/FNs3XN8KKRTrJCqZu/dzJBSKDnQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 70/88] nfc: replace improper check device_is_registered() in netlink related functions
+        stable@vger.kernel.org,
+        Shravya Kumbham <shravya.kumbham@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 4.14 69/78] net: emaclite: Add error handling for of_address_to_resource()
 Date:   Tue, 10 May 2022 15:07:55 +0200
-Message-Id: <20220510130735.767747407@linuxfoundation.org>
+Message-Id: <20220510130734.573146434@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,172 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Shravya Kumbham <shravya.kumbham@xilinx.com>
 
-commit da5c0f119203ad9728920456a0f52a6d850c01cd upstream.
+commit 7a6bc33ab54923d325d9a1747ec9652c4361ebd1 upstream.
 
-The device_is_registered() in nfc core is used to check whether
-nfc device is registered in netlink related functions such as
-nfc_fw_download(), nfc_dev_up() and so on. Although device_is_registered()
-is protected by device_lock, there is still a race condition between
-device_del() and device_is_registered(). The root cause is that
-kobject_del() in device_del() is not protected by device_lock.
+check the return value of of_address_to_resource() and also add
+missing of_node_put() for np and npp nodes.
 
-   (cleanup task)         |     (netlink task)
-                          |
-nfc_unregister_device     | nfc_fw_download
- device_del               |  device_lock
-  ...                     |   if (!device_is_registered)//(1)
-  kobject_del//(2)        |   ...
- ...                      |  device_unlock
-
-The device_is_registered() returns the value of state_in_sysfs and
-the state_in_sysfs is set to zero in kobject_del(). If we pass check in
-position (1), then set zero in position (2). As a result, the check
-in position (1) is useless.
-
-This patch uses bool variable instead of device_is_registered() to judge
-whether the nfc device is registered, which is well synchronized.
-
-Fixes: 3e256b8f8dfa ("NFC: add nfc subsystem core")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e0a3bc65448c ("net: emaclite: Support multiple phys connected to one MDIO bus")
+Addresses-Coverity: Event check_return value.
+Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/core.c |   29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -50,7 +50,7 @@ int nfc_fw_download(struct nfc_dev *dev,
+--- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
++++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+@@ -817,10 +817,10 @@ static int xemaclite_mdio_write(struct m
+ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
+ {
+ 	struct mii_bus *bus;
+-	int rc;
+ 	struct resource res;
+ 	struct device_node *np = of_get_parent(lp->phy_node);
+ 	struct device_node *npp;
++	int rc, ret;
  
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
+ 	/* Don't register the MDIO bus if the phy_node or its parent node
+ 	 * can't be found.
+@@ -830,8 +830,14 @@ static int xemaclite_mdio_setup(struct n
+ 		return -ENODEV;
  	}
-@@ -106,7 +106,7 @@ int nfc_dev_up(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
+ 	npp = of_get_parent(np);
+-
+-	of_address_to_resource(npp, 0, &res);
++	ret = of_address_to_resource(npp, 0, &res);
++	of_node_put(npp);
++	if (ret) {
++		dev_err(dev, "%s resource error!\n",
++			dev->of_node->full_name);
++		of_node_put(np);
++		return ret;
++	}
+ 	if (lp->ndev->mem_start != res.start) {
+ 		struct phy_device *phydev;
+ 		phydev = of_phy_find_device(lp->phy_node);
+@@ -840,6 +846,7 @@ static int xemaclite_mdio_setup(struct n
+ 				 "MDIO of the phy is not registered yet\n");
+ 		else
+ 			put_device(&phydev->mdio.dev);
++		of_node_put(np);
+ 		return 0;
  	}
-@@ -154,7 +154,7 @@ int nfc_dev_down(struct nfc_dev *dev)
  
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
+@@ -852,6 +859,7 @@ static int xemaclite_mdio_setup(struct n
+ 	bus = mdiobus_alloc();
+ 	if (!bus) {
+ 		dev_err(dev, "Failed to allocate mdiobus\n");
++		of_node_put(np);
+ 		return -ENOMEM;
  	}
-@@ -218,7 +218,7 @@ int nfc_start_poll(struct nfc_dev *dev,
  
- 	device_lock(&dev->dev);
+@@ -866,6 +874,7 @@ static int xemaclite_mdio_setup(struct n
+ 	lp->mii_bus = bus;
  
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -257,7 +257,7 @@ int nfc_stop_poll(struct nfc_dev *dev)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -302,7 +302,7 @@ int nfc_dep_link_up(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -346,7 +346,7 @@ int nfc_dep_link_down(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -412,7 +412,7 @@ int nfc_activate_target(struct nfc_dev *
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -458,7 +458,7 @@ int nfc_deactivate_target(struct nfc_dev
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -505,7 +505,7 @@ int nfc_data_exchange(struct nfc_dev *de
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		kfree_skb(skb);
- 		goto error;
-@@ -562,7 +562,7 @@ int nfc_enable_se(struct nfc_dev *dev, u
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -611,7 +611,7 @@ int nfc_disable_se(struct nfc_dev *dev,
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (dev->shutting_down) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -1139,6 +1139,7 @@ int nfc_register_device(struct nfc_dev *
- 			dev->rfkill = NULL;
- 		}
- 	}
-+	dev->shutting_down = false;
- 	device_unlock(&dev->dev);
- 
- 	rc = nfc_genl_device_added(dev);
-@@ -1171,12 +1172,10 @@ void nfc_unregister_device(struct nfc_de
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
- 	}
-+	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
- 
- 	if (dev->ops->check_presence) {
--		device_lock(&dev->dev);
--		dev->shutting_down = true;
--		device_unlock(&dev->dev);
- 		del_timer_sync(&dev->check_pres_timer);
- 		cancel_work_sync(&dev->check_pres_work);
- 	}
+ 	rc = of_mdiobus_register(bus, np);
++	of_node_put(np);
+ 	if (rc) {
+ 		dev_err(dev, "Failed to register mdio bus.\n");
+ 		goto err_register;
 
 

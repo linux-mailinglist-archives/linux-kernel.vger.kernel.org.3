@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F7F521C3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B09F521B5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344697AbiEJObk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S1343582AbiEJOK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244729AbiEJOEq (ORCPT
+        with ESMTP id S245045AbiEJNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:04:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0623D980B5;
-        Tue, 10 May 2022 06:40:45 -0700 (PDT)
+        Tue, 10 May 2022 09:47:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A432F38D;
+        Tue, 10 May 2022 06:34:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B46F3615C8;
-        Tue, 10 May 2022 13:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1605C385A6;
-        Tue, 10 May 2022 13:40:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE64615C8;
+        Tue, 10 May 2022 13:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1066EC385A6;
+        Tue, 10 May 2022 13:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190044;
-        bh=5RCcXThUFzSNyUhsvTR0v2sb3kkSfTl2uoQ6d7Azquw=;
+        s=korg; t=1652189654;
+        bh=WppGhgcPB+6oY6QJ8p+yvs4P6oEjc6aM7RIGjBre9Pc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRUKDYTMlQxAnyykIKvmtdSCB7yreCHQEHiWt0eJ/c7P9ldoTaIek+tEn5bEQ1E2k
-         wn+rr4O1nYlatNvIvX/szPZTOSuxCc9GW9/ID/gNLEjeN6/1pRQYpJNa+hHsuWKvjK
-         Avm5/a+UICk/1vRduKFNm+j4+ZhVr3uJZF/XSZRI=
+        b=2k1cwXWIwixpC9nV8dLlKRIvRlglzc1+ei2RrgTaD6gsm5y8746bwdUvxjuSVsWU2
+         GfYJ5UwPk7i4OqoQmNIQF8IOjnrsSfWrrsK0Puoc4cb3r/ZG085KKLu+/RsVo3oe55
+         GqGpR94bD5U6qrn0uUpPQF4WKCs53L0GM4rD0Kq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 110/140] iommu/dart: Add missing module owner to ops structure
-Date:   Tue, 10 May 2022 15:08:20 +0200
-Message-Id: <20220510130744.748791643@linuxfoundation.org>
+        stable@vger.kernel.org, pali@kernel.org,
+        =?UTF-8?q?Marek=20Beh=FAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 119/135] PCI: aardvark: Check return value of generic_handle_domain_irq() when processing INTx IRQ
+Date:   Tue, 10 May 2022 15:08:21 +0200
+Message-Id: <20220510130743.812198606@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 2ac2fab52917ae82cbca97cf6e5d2993530257ed ]
+commit 51f96e287c6f003d3bb29672811c757c5fbf0028 upstream.
 
-This is required to make loading this as a module work.
+It is possible that we receive spurious INTx interrupt. Check for the
+return value of generic_handle_domain_irq() when processing INTx IRQ.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Fixes: 46d1fb072e76 ("iommu/dart: Add DART iommu driver")
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-Link: https://lore.kernel.org/r/20220502092238.30486-1-marcan@marcan.st
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110015018.26359-6-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/apple-dart.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/controller/pci-aardvark.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 6c111bd8283d..68821f86b063 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -782,6 +782,7 @@ static const struct iommu_ops apple_dart_iommu_ops = {
- 	.get_resv_regions = apple_dart_get_resv_regions,
- 	.put_resv_regions = generic_iommu_put_resv_regions,
- 	.pgsize_bitmap = -1UL, /* Restricted during dart probe */
-+	.owner = THIS_MODULE,
- };
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -1429,7 +1429,9 @@ static void advk_pcie_handle_int(struct
+ 		advk_writel(pcie, PCIE_ISR1_INTX_ASSERT(i),
+ 			    PCIE_ISR1_REG);
  
- static irqreturn_t apple_dart_irq(int irq, void *dev)
--- 
-2.35.1
-
+-		generic_handle_domain_irq(pcie->irq_domain, i);
++		if (generic_handle_domain_irq(pcie->irq_domain, i) == -EINVAL)
++			dev_err_ratelimited(&pcie->pdev->dev, "unexpected INT%c IRQ\n",
++					    (char)i + 'A');
+ 	}
+ }
+ 
 
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336A1521901
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD3D52174E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244284AbiEJNlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S238558AbiEJNZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243246AbiEJN0j (ORCPT
+        with ESMTP id S243339AbiEJNVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:26:39 -0400
+        Tue, 10 May 2022 09:21:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAC72317D5;
-        Tue, 10 May 2022 06:19:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97EE32079;
+        Tue, 10 May 2022 06:15:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F070661665;
-        Tue, 10 May 2022 13:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0984DC385C2;
-        Tue, 10 May 2022 13:19:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 543CD6166C;
+        Tue, 10 May 2022 13:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E6FC385A6;
+        Tue, 10 May 2022 13:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188752;
-        bh=7QJDgg4sfkmypf0Qd7Xo9nYtMAuC3p7KgxsYAL5z3QI=;
+        s=korg; t=1652188538;
+        bh=36p3854PZ7hZDvZb9kEHObmWlzU8+m1CZyy2hKINlLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eFWStOnhkuznbzJ7SfP5P2BDM+i4qKRLp13n4IcZMEVW60LzQaKh6Le0tDF25lXj5
-         9T8q6apHiYZYoBGvj92HlSQl8kplq/nAk35ehMSvslJEzrm0ioyj3gePc7NtAAJDkz
-         snNA3ewKZe/NLYORXs67RWl9dD29NgMbnxxH5kN4=
+        b=vota2cn3Cti+vFYbuuK+5xm1ZLLaURGuXJ28YEiZ30tcQezkY+o4Q+zHIl8PTUrEp
+         C+ZfQ975EhQvXMBzolupieVEVvs3tux7EO2F85vSjSF8rKiNx2aZpsgkZe7eRf15Xd
+         MMkS75dmHLY20GbfpXry8i2m5MM1xnMZEBU9lg/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 33/88] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
-Date:   Tue, 10 May 2022 15:07:18 +0200
-Message-Id: <20220510130734.707839964@linuxfoundation.org>
+Subject: [PATCH 4.14 33/78] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
+Date:   Tue, 10 May 2022 15:07:19 +0200
+Message-Id: <20220510130733.515442574@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -101,10 +101,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
-index 2a94240eac36..82d96441e64d 100644
+index 1a1128355d86..169819263c0b 100644
 --- a/net/sctp/sm_sideeffect.c
 +++ b/net/sctp/sm_sideeffect.c
-@@ -473,6 +473,10 @@ void sctp_generate_reconf_event(struct timer_list *t)
+@@ -456,6 +456,10 @@ void sctp_generate_reconf_event(unsigned long data)
  		goto out_unlock;
  	}
  

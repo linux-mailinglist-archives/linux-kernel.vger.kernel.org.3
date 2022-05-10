@@ -2,97 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5903522074
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D36522075
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346986AbiEJQDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S1347112AbiEJQDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347678AbiEJP56 (ORCPT
+        with ESMTP id S1347807AbiEJP6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:57:58 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4B137BFC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:50:51 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id j10-20020a17090a94ca00b001dd2131159aso2397581pjw.0
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:50:51 -0700 (PDT)
+        Tue, 10 May 2022 11:58:05 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22673554B1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:03 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id f4so18961437iov.2
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HPEV8t7jSxF/R5wTa8pBC5XtbUyCWP3bZNNHdlQWnUs=;
-        b=mPax2Elz/ydEtyd6iMyTyMpV7MjOnqrmn0tJyEuV7p8EwcqHHocAkg5aJC6Be4rkXM
-         CGesdkXTN7ozO1xNN/gixirXA3OEw1iTlRvxlj7Y/cr+3EJ2X3CWnbwC4Q2fTW07S+7c
-         8SsqtqT9vF9l67g+AiD+hOwoYFSxj3+I4cdhc=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WOUz2WsmdgX6LeN+LrF3txVAnT8hFkZ8ulMV7CFBOqM=;
+        b=XTCkuhyrI12mXoibtavSh6cqwdk4FerubUN/RyfF6NFULIGnuGEkqPOOM8I2zwQ+o0
+         Q6t7+QE88n3MP1KIW2iOswY+eCBI2ZUBLChS/bwADArGE4WFf2CAE10R0h7xDZu1KZTV
+         gm2knkXa/E9lbuTqeJjwbg1h+Du01PqftXDYQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HPEV8t7jSxF/R5wTa8pBC5XtbUyCWP3bZNNHdlQWnUs=;
-        b=CBLE6Pg0bPb/92vlOa5maUv9hVSkfM4ZR9C3bnBOZrKxG7671A6wGNJOIvEPiJ9a7o
-         HzumO3jjSU0bHaOfkjygrgiCHfZc1YZWpIKNLwzyxWBeTRISYxCjwHf9siFmetLhtt5d
-         /wYY7/Klk89zwBNUNmhJhdwN1z/x8uxx/TLJXNH+/xiLirKlkfL7lfbeMwdGty0IZ08v
-         ma7cWbuAKhfNO3GbB/gu42/RpkplHOwLln5ojuwBSbIfHOEQ+lOC3QBltLZzLRcRgmHi
-         mbRBVSumG2FteqMGieen3RHWimKjdYqLDhaK2zetsYJxfeqtUycDXjxHqIwYxCRjFJ88
-         Wr2g==
-X-Gm-Message-State: AOAM5316fA0Rj7SM9pGfAEignVKH0s9WgO9qeJBSpisTftporBycpPMb
-        lOFU9MX3RJKGCMig44EuuyL0FQ==
-X-Google-Smtp-Source: ABdhPJzJ61GrS1rxWQD481NZXRytu8/Kix6yH+jgxvnppV/676fdcePFo/cIUerrTCnluyiEXgcWpA==
-X-Received: by 2002:a17:903:213:b0:15f:4ea:cd63 with SMTP id r19-20020a170903021300b0015f04eacd63mr13256429plh.68.1652197848816;
-        Tue, 10 May 2022 08:50:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v22-20020a636116000000b003c14af505fdsm10713363pgb.21.2022.05.10.08.50.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:50:48 -0700 (PDT)
-Date:   Tue, 10 May 2022 08:50:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Du Cheng <ducheng2@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] niu: Add "overloaded" struct page union member
-Message-ID: <202205100849.58D2C81@keescook>
-References: <20220509222334.3544344-1-keescook@chromium.org>
- <YnoT+cBTNnPzzg8H@infradead.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WOUz2WsmdgX6LeN+LrF3txVAnT8hFkZ8ulMV7CFBOqM=;
+        b=HttIj2m4TVXVINAR6kXVpXiXG4f2Kd5J0FZxf1/PMDoeu22sGhRUonFVRiJ7nS6yyF
+         lB6oa7NBVWnU8SITdX7kkHxCm3P5fXelI5UOswzVvD+m6HR5H5njTj2UVgigLNHuwDN0
+         uCyTkoAS2AMgMk3f/B4xsqYCbROS3G8W/inRqsyyrhzSkuD702HeiEHkGpxuWSi0ZOZl
+         1ofGDsukyn07sPspCrLpbkBlTs8TzuvLBUhqaoFvkFx4WlI9UA4ffldnpBTpv2C+rZaM
+         kkUvcGxF5vS+mbmUo4XsVcQx2R/klHJFlVzuN+0zDrGHxTyKWWonIjUj812yjmkeW/rQ
+         k45w==
+X-Gm-Message-State: AOAM532SmR5Zjeck6DktRwU2+cOZjOKozKGYW3sFK8STXor9bYVnHmfA
+        75v6wulbYmj/mXVmSKcbbY5k7A==
+X-Google-Smtp-Source: ABdhPJyKMFN44LVscpOAtyLyGGeKIRdp+9zY59CqwUYms2hhDMiEHT2+QMZC1z4qTekEb3cR4IgqdQ==
+X-Received: by 2002:a02:aa94:0:b0:32a:e769:af1 with SMTP id u20-20020a02aa94000000b0032ae7690af1mr9721447jai.0.1652197862793;
+        Tue, 10 May 2022 08:51:02 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cp20-20020a056638481400b0032b75b98013sm4455954jab.148.2022.05.10.08.51.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 08:51:02 -0700 (PDT)
+Subject: Re: [PATCH 3/3] mm: delete unused MMF_OOM_VICTIM flag
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220510030014.3842475-1-surenb@google.com>
+ <20220510030014.3842475-3-surenb@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <008de890-7fe1-aeae-345e-0cd3fcd32352@linuxfoundation.org>
+Date:   Tue, 10 May 2022 09:51:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnoT+cBTNnPzzg8H@infradead.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220510030014.3842475-3-surenb@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:27:53AM -0700, Christoph Hellwig wrote:
-> On Mon, May 09, 2022 at 03:23:33PM -0700, Kees Cook wrote:
-> > The randstruct GCC plugin gets upset when it sees struct addresspace
-> > (which is randomized) being assigned to a struct page (which is not
-> > randomized):
+On 5/9/22 9:00 PM, Suren Baghdasaryan wrote:
+> With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
+> now unused and can be removed.
 > 
-> Well, the right fix here is to remove this abuse from the driver, not
-> to legitimize it as part of a "driver" patch touching a core mm header
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>   include/linux/oom.h            | 9 ---------
+>   include/linux/sched/coredump.h | 1 -
+>   mm/oom_kill.c                  | 4 +---
+>   3 files changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/oom.h b/include/linux/oom.h
+> index 6cdf0772dbae..25990e9d9e15 100644
+> --- a/include/linux/oom.h
+> +++ b/include/linux/oom.h
+> @@ -77,15 +77,6 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
+>   	return tsk->signal->oom_mm;
+>   }
+>   
+> -/*
+> - * Use this helper if tsk->mm != mm and the victim mm needs a special
+> - * handling. This is guaranteed to stay true after once set.
+> - */
+> -static inline bool mm_is_oom_victim(struct mm_struct *mm)
+> -{
+> -	return test_bit(MMF_OOM_VICTIM, &mm->flags);
+> -}
+> -
+>   /*
+>    * Checks whether a page fault on the given mm is still reliable.
+>    * This is no longer true if the oom reaper started to reap the
+> diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
+> index 4d9e3a656875..746f6cb07a20 100644
+> --- a/include/linux/sched/coredump.h
+> +++ b/include/linux/sched/coredump.h
+> @@ -70,7 +70,6 @@ static inline int get_dumpable(struct mm_struct *mm)
+>   #define MMF_UNSTABLE		22	/* mm is unstable for copy_from_user */
+>   #define MMF_HUGE_ZERO_PAGE	23      /* mm has ever used the global huge zero page */
+>   #define MMF_DISABLE_THP		24	/* disable THP for all VMAs */
+> -#define MMF_OOM_VICTIM		25	/* mm is the oom victim */
+>   #define MMF_OOM_REAP_QUEUED	26	/* mm was queued for oom_reaper */
+>   #define MMF_MULTIPROCESS	27	/* mm is shared between processes */
+>   /*
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index 36355b162727..11291b99599f 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -732,10 +732,8 @@ static void mark_oom_victim(struct task_struct *tsk)
+>   		return;
+>   
+>   	/* oom_mm is bound to the signal struct life time. */
+> -	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm)) {
+> +	if (!cmpxchg(&tsk->signal->oom_mm, NULL, mm))
+>   		mmgrab(tsk->signal->oom_mm);
+> -		set_bit(MMF_OOM_VICTIM, &mm->flags);
+> -	}
+>   
+>   	/*
+>   	 * Make sure that the task is woken up from uninterruptible sleep
+> 
 
-Right, I didn't expect anyone to like the new "overloaded" member.
-Mainly I'd just like to understand how niu _should_ be fixed. Is using
-the "private" member the correct thing here?
+Thank you for working on the new tests and cleanups.
 
-> that doesn't even cc the mm list.
+This series needs a cover-letter that explains why this series is needed
+that includes the information from this last patch.
 
-Oops, yes, sorry.
+Please send v2 with a proper cover letter starting with why this series
+is necessary. If you did that, it would have reviewers job is lot easier.
 
--- 
-Kees Cook
+Also it appears you are combining new tests with cleanup patches. I think
+patches 2/3 and 3/3 can be a separate series and the new test can be a
+separate patch.
+
+thanks,
+-- Shuah

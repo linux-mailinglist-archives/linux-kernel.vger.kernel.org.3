@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C755522286
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A72E522287
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348055AbiEJR3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S1348082AbiEJR3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348051AbiEJR2g (ORCPT
+        with ESMTP id S239763AbiEJR3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:28:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6191F2725C7;
-        Tue, 10 May 2022 10:24:38 -0700 (PDT)
-Message-ID: <20220510171003.952873904@linutronix.de>
+        Tue, 10 May 2022 13:29:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A3E274A17;
+        Tue, 10 May 2022 10:24:39 -0700 (PDT)
+Message-ID: <20220510171254.404209482@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652203476;
+        s=2020; t=1652203477;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=alg1dNfGEF+UOGYgEKRiNxEU+zRiaszEcPcnlg5R3MM=;
-        b=BMaj/bpbL4Tw5Ilj60CSGtOwaLOhirzsmKAjz2IXttl+NeBDtggpYOZ7aQIyqSqesNudvl
-        zuStG1X0AXo4PKpXyUVpIzOuItLUCbINkpH8TCnJjaEDLkv+jOh+CJJyPTrxDu4GBLuTig
-        TPxmGcftrtNghR7rtG7UgGIs6k7m66+fAajw/NQaHkpNE1OM9p1eZAa8KQRKTGbNw6KVkD
-        74dPMeLHa2Fxb9YHzM3WR7ER2fH8bYaZv5seTD9bKWgcPZkqhXIYiAzzrzmNZ5pjhdbRFw
-        ouHXG1tE/yvUev1TiV01O3BbrTTHdtprzIr/Syx2ggviM7vofV6DIGt5X4zDGg==
+         references:references; bh=9ZBYMn5JK9NT2hXnoRLG41C7P6wsZJcG6P5zJpEcwcc=;
+        b=ZrF35wz3d1IwjqnW8hvsTLFJIp0UVR4JKmJN7aGCPwfAnHO3zIC4KlLnxDhUE5ZIPGu823
+        IMbAretMTPr4yiC4f7hJIZo2+EqGWNhuaboLbTYLbJmz5YreZPb/8nI7MBkHYCMI4x+wHc
+        kqacTLz0jy9cc9+E/aHoP9zap6HuE5qSAv4ZDbAIisZlGGnqD7orbssL3lsZMmGYvaBhjL
+        09gvoyrJN5OjVUfcW8bn5Y2mGmyrwb0ZTXaQ9dcgMr4I/54ayZnfSkKwAcLYmhUIobgIeo
+        g0MGOfTdbGRti83T8N+G/D4o0K4n1N86mLcOxTIDbOez6ZRT5Hhv4FTaVGFwaA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652203476;
+        s=2020e; t=1652203477;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=alg1dNfGEF+UOGYgEKRiNxEU+zRiaszEcPcnlg5R3MM=;
-        b=JKhTDxs/J2Eem6MIBktADzgxHhZ4QGoep8I1yCzEmmlEr11hrjeyvX6Q86UHSS3qmue4mA
-        49U7Jb2/VqcTY7BQ==
+         references:references; bh=9ZBYMn5JK9NT2hXnoRLG41C7P6wsZJcG6P5zJpEcwcc=;
+        b=4m8KuB/iijC4gAnMT9YrUI4kvS86rf4kJH/bDhk35WfeANF3hexuH9Mz/oxcQd7GA3BXsN
+        7/r25WVKRZ2SLIBA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-spdx@vger.kernel.org
-Subject: [patch 00/10] clocksource/drivers: Convert to SPDX identifiers
+Cc:     linux-spdx@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
+Subject: [patch 01/10] clocksource/drivers/bcm_kona: Convert to SPDX identifier
+References: <20220510171003.952873904@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Date:   Tue, 10 May 2022 19:24:35 +0200 (CEST)
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 10 May 2022 19:24:37 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -53,14 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Q29udmVydCB0aGUgcmVtYWluaW5nIGhvbGRvdXRzIHRvIFNQRFggaWRlbnRpZmllcnMgb25lIGJ5
-IG9uZS4KClRoZSBleGlzdGluZyBsaWNlbnNlIGluZm9ybWF0aW9uIGhhcyBiZWVuIGFuYWx5emVk
-IGFuZCByZXBsYWNlZCBieSB0aGUKY29ycmVzcG9uZGluZyBTUERYIGlkZW50aWZpZXJzLgoKVGhh
-bmtzLAoKCXRnbHgKLS0tCiBiY21fa29uYV90aW1lci5jICAgICAgfCAgIDE0ICsrLS0tLS0tLS0t
-LS0tCiBqY29yZS1waXQuYyAgICAgICAgICAgfCAgICA1ICstLS0tCiBtaXBzLWdpYy10aW1lci5j
-ICAgICAgfCAgICA5ICsrLS0tLS0tLQogdGltZXItYXJtYWRhLTM3MC14cC5jIHwgICAgNSArLS0t
-LQogdGltZXItZGlnaWNvbG9yLmMgICAgIHwgICAgNSArLS0tLQogdGltZXItbHBjMzJ4eC5jICAg
-ICAgIHwgICAgNiArLS0tLS0KIHRpbWVyLW9yaW9uLmMgICAgICAgICB8ICAgIDUgKy0tLS0KIHRp
-bWVyLXBpc3RhY2hpby5jICAgICB8ICAgIDUgKy0tLS0KIHRpbWVyLXN1bjRpLmMgICAgICAgICB8
-ICAgIDUgKy0tLS0KIHRpbWVyLXN1bjVpLmMgICAgICAgICB8ICAgIDUgKy0tLS0KIDEwIGZpbGVz
-IGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDUyIGRlbGV0aW9ucygtKQoKCgoK
+The license information clearly states GPL version 2 only. The extra text
+which excludes warranties is a transcript of the corresponding GPLv2 clause
+11, which is explicitely referenced for details.
+
+So the SPDX identifier covers it completely.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ray Jui <rjui@broadcom.com>
+Cc: Scott Branden <sbranden@broadcom.com>
+Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
+Cc: linux-spdx@vger.kernel.org
+---
+ drivers/clocksource/bcm_kona_timer.c |   14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+--- a/drivers/clocksource/bcm_kona_timer.c
++++ b/drivers/clocksource/bcm_kona_timer.c
+@@ -1,15 +1,5 @@
+-/*
+- * Copyright (C) 2012 Broadcom Corporation
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License as
+- * published by the Free Software Foundation version 2.
+- *
+- * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+- * kind, whether express or implied; without even the implied warranty
+- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- */
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2012 Broadcom Corporation
+ 
+ #include <linux/init.h>
+ #include <linux/irq.h>
+

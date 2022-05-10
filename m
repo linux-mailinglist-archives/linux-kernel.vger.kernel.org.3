@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4156520C38
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934E1520C39
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 05:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235728AbiEJDmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 23:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S235734AbiEJDmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 23:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiEJDkh (ORCPT
+        with ESMTP id S235727AbiEJDkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 23:40:37 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4425017CC9E;
-        Mon,  9 May 2022 20:35:10 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axythn3XliaKoPAA--.50059S4;
-        Tue, 10 May 2022 11:35:05 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] bpf: Print some info if disable bpf_jit_enable failed
-Date:   Tue, 10 May 2022 11:35:03 +0800
-Message-Id: <1652153703-22729-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1652153703-22729-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1652153703-22729-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Axythn3XliaKoPAA--.50059S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrW7KF43Cw4UAF45CryrCrg_yoW8XrWfpr
-        48Jr92krZ0q34xG39rAFnIqr13trWDXF17Cr97Ca1av3WDZr9rJrs5KryUKanF9rWqga43
-        Zr4IyF9rCaykK37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0
-        owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
-        UjIFyTuYvjfUbyxRDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 9 May 2022 23:40:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E83A1AF11;
+        Mon,  9 May 2022 20:36:07 -0700 (PDT)
+X-UUID: 997e40054d824b18a0d998b419c6c56e-20220510
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:8f55eb27-f67a-449c-9bfd-f3b5ec79c8bb,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:227234b3-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 997e40054d824b18a0d998b419c6c56e-20220510
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1199608047; Tue, 10 May 2022 11:36:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 10 May 2022 11:36:02 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 10 May 2022 11:36:02 +0800
+Message-ID: <0fed7d2383c1b8367d22fe4f2cccf91b207e14e5.camel@mediatek.com>
+Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
+ cells
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Date:   Tue, 10 May 2022 11:36:02 +0800
+In-Reply-To: <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
+References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
+         <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+         <YgY3qvAy5lW1tEdG@kroah.com>
+         <6e26f483-f4b6-0d0f-7cca-cfa19a39b10a@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A user told me that bpf_jit_enable can be disabled on one system, but he
-failed to disable bpf_jit_enable on the other system:
+On Wed, 2022-02-16 at 17:38 +0800, Macpaul Lin wrote:
+> 
+> On 2/11/22 6:17 PM, Greg Kroah-Hartman wrote:
+> > On Fri, Jan 28, 2022 at 02:29:01PM +0800, Chunfeng Yun wrote:
+> > > Add efuse node and cells used by t-phy to fix the bit shift issue
+> > > 
+> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > ---
+> > > v2: use hw auto load for u2phy which has no this issue
+> > > 
+> > > Note:
+> > > 
+> > >   depend on the reviewing patch:
+> > > 
+> > > [v9,3/3] arm64: dts: Add mediatek SoC mt8195 and evaluation board
+> > > 
+https://urldefense.com/v3/__https://patchwork.kernel.org/patch/12711296__;!!CTRNKA9wMg0ARbw!0Jg8kLN4kBw0LcbiAH1HYTq2uQ5VwiD-CE8yoFBD7oApn8YNSdmVpwSdY1q2C7LvY6c$
+> > 
+> > As I don't have that in my tree, I can only take the first 2
+> > patches
+> > here now, thanks.
+> > 
+> > greg k-h
+> > 
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > 
 
-  # echo 0 > /proc/sys/net/core/bpf_jit_enable
-  bash: echo: write error: Invalid argument
+Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-No useful info is available through the dmesg log, a quick analysis shows
-that the issue is related with CONFIG_BPF_JIT_ALWAYS_ON.
+This patch has been
+tested with:
+ - "for-next" branch in MediaTek tree [1].
 
-When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set
-to 1 and setting any other value than that will return failure.
+https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git 
+ - added more debug log to confirm efuse probing status at my local.
+  -
+If probe success, it won't show any log.
 
-It is better to print some info to tell the user if disable bpf_jit_enable
-failed.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- net/core/sysctl_net_core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index cf00dd7..ca4527f 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -266,6 +266,8 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
- 					   loff_t *ppos)
- {
- 	int ret, jit_enable = *(int *)table->data;
-+	int min = *(int *)table->extra1;
-+	int max = *(int *)table->extra2;
- 	struct ctl_table tmp = *table;
- 
- 	if (write && !capable(CAP_SYS_ADMIN))
-@@ -283,6 +285,10 @@ static int proc_dointvec_minmax_bpf_enable(struct ctl_table *table, int write,
- 			ret = -EPERM;
- 		}
- 	}
-+
-+	if (write && ret && min == max)
-+		pr_info_once("CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set to 1.\n");
-+
- 	return ret;
- }
- 
--- 
-2.1.0
+Thanks
+Macpaul Lin
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2AF521879
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C245521798
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244071AbiEJNgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S243005AbiEJN16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243297AbiEJN0l (ORCPT
+        with ESMTP id S242809AbiEJNVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:26:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C6B232769;
-        Tue, 10 May 2022 06:19:21 -0700 (PDT)
+        Tue, 10 May 2022 09:21:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2D22BAE6D;
+        Tue, 10 May 2022 06:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B3D63CE1E73;
-        Tue, 10 May 2022 13:19:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C558EC385C2;
-        Tue, 10 May 2022 13:19:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5254B81CE7;
+        Tue, 10 May 2022 13:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AAAC385A6;
+        Tue, 10 May 2022 13:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188758;
-        bh=QEzRlUyLSoDv4DWhDKqvVYlRLMcPMdP6GZmiGW4LfwI=;
+        s=korg; t=1652188429;
+        bh=MKudbu7vHv3XJ8MbvM3xZDs4i7yKHou2tCtg+kv73Gc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ayIaR8IZ/xyMkmWz8qocvLhyPaWpptbgxqThCxPOsR01q+Tw+3WQKUXUOF7aGzuKR
-         RrXQ0zs7PAM2Nqt4MUCMqphu/qW6n8DMrKQ7Uav0rsWjvte/xnEtoeyi6bSp0LuwGQ
-         dPdCwN2XsS34rPsByT4Wock5aAe6VYXdfrfyVATk=
+        b=WLxXs2SbKJHRWhr3pgJmM7Ji48XnkAQdPXe17c45sg7gPTx3jNWhvPIZG+nkUoIht
+         nwnlEyAC/t2HVPGdSWSrSbFNCQPugbo71XeUhLQARL92wvJOO6qhY2jmGrpOidhnL+
+         iSHLdkD68a7rv7Z+Tkx/1vkqHpl6S6oJXEp4lzrc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 35/88] pinctrl: pistachio: fix use of irq_of_parse_and_map()
-Date:   Tue, 10 May 2022 15:07:20 +0200
-Message-Id: <20220510130734.765287522@linuxfoundation.org>
+Subject: [PATCH 4.9 31/66] clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
+Date:   Tue, 10 May 2022 15:07:21 +0200
+Message-Id: <20220510130730.679342061@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +49,43 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 0c9843a74a85224a89daa81fa66891dae2f930e1 ]
+[ Upstream commit f58ca215cda1975f77b2b762903684a3c101bec9 ]
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Fixes: cefc03e5995e ("pinctrl: Add Pistachio SoC pin control driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Link: https://lore.kernel.org/r/20220424031430.3170759-1-lv.ruyi@zte.com.cn
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 7a6fca879f59 ("clk: sunxi: Add driver for A80 MMC config clocks/resets")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/20220421134308.2885094-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-pistachio.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clk/sunxi/clk-sun9i-mmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
-index 0d7d379e9bb8..fb7340ad15b3 100644
---- a/drivers/pinctrl/pinctrl-pistachio.c
-+++ b/drivers/pinctrl/pinctrl-pistachio.c
-@@ -1374,10 +1374,10 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
- 		}
+diff --git a/drivers/clk/sunxi/clk-sun9i-mmc.c b/drivers/clk/sunxi/clk-sun9i-mmc.c
+index f69f9e8c6f38..7e9d1624032f 100644
+--- a/drivers/clk/sunxi/clk-sun9i-mmc.c
++++ b/drivers/clk/sunxi/clk-sun9i-mmc.c
+@@ -117,6 +117,8 @@ static int sun9i_a80_mmc_config_clk_probe(struct platform_device *pdev)
+ 	spin_lock_init(&data->lock);
  
- 		irq = irq_of_parse_and_map(child, 0);
--		if (irq < 0) {
--			dev_err(pctl->dev, "No IRQ for bank %u: %d\n", i, irq);
-+		if (!irq) {
-+			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
- 			of_node_put(child);
--			ret = irq;
-+			ret = -EINVAL;
- 			goto err;
- 		}
- 
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!r)
++		return -EINVAL;
+ 	/* one clock/reset pair per word */
+ 	count = DIV_ROUND_UP((resource_size(r)), SUN9I_MMC_WIDTH);
+ 	data->membase = devm_ioremap_resource(&pdev->dev, r);
 -- 
 2.35.1
 

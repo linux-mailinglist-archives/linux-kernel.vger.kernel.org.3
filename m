@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2F5522243
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA3D522249
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347927AbiEJRYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S1347933AbiEJRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbiEJRY3 (ORCPT
+        with ESMTP id S1347919AbiEJRZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:24:29 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE2F268652
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:20:32 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id 3so8838125ily.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qBpP6H1QXIcItowN4taveL7xKKbFDSnKJ/RJbBSFPLc=;
-        b=Lt7mUYnnSclD1NWgc2asYmgfRPG7Azod9mS1i2Jh8ultjaohoNhp9mUqvPMvwKfeFX
-         +3lH2aXb4zAOEjHUEIh/QVpMfpb9lKwD1l33mRtYpWmJOuh9xpwJWcEVBzirx6yRiesk
-         WDtra/VPQTon4LSEOjPwOfjDj5UL5OodfpB/IY8DYaUQSBbceMfgj7BfdTiPDcbWkcll
-         t5vePG3fWKJma1cjQnbkPeCrEoMcTseLIfxwK+ZqjFpnr0DHujza42/uicb0xoV9VzGW
-         pTeZVOaE5ChLPaILdSZp6y/jgaoW5QXbz0KwNageXa1xo4t9su4rAvd/x9qBn+UIntVt
-         3dog==
+        Tue, 10 May 2022 13:25:06 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED123A1BB;
+        Tue, 10 May 2022 10:21:02 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id m25so19250828oih.2;
+        Tue, 10 May 2022 10:21:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qBpP6H1QXIcItowN4taveL7xKKbFDSnKJ/RJbBSFPLc=;
-        b=XcdGTK5NSZrP8BRWtIvbxicU8U7aQ8CnFkpBye5ssuBbPW8Du7LnlcF+aWY13q2y2a
-         6ejC20kbazbn5t4ShFSPJkRf4aSoj9GDuJBVApE9VGkgoQoR1M/YlXgv7Gws/9rbbCjS
-         X3NEgOxwGc1+KXWjTzYxcsYXbHnT2Ih20YJIsvvDelQgacNfDrm/JpuJBfdntnMZBbr8
-         wUQbXdeQYPZozHVa4aFYi3g6HZCze4WcZgpXX/gNVw7pzBCAcBebQzWNMRULAPY7JgnS
-         xX+YWFGF+PlqjCVVn1DkuG7A/QOzZc2E39luBaTZX5iYn0vWlOhmuDqzYBe/oFGWYqBb
-         hjPw==
-X-Gm-Message-State: AOAM533z9cATzjlHLYepb6GFRftUb1A4IR/PjDIc8tZ8CRb4y+uWBY+m
-        ygBLRkubTTzo9KS2//e7lwjqTCIlKO5ylYyHkYg=
-X-Google-Smtp-Source: ABdhPJwf74Pk1zAv2/dFYx/EPtp9CNrSoRlsl9nMcl48xPvVRkR3cgKz4KPOSlSBn0J9kL7SbZSWcNRZLopRSf3Quhc=
-X-Received: by 2002:a92:3609:0:b0:2c6:3595:2a25 with SMTP id
- d9-20020a923609000000b002c635952a25mr9876403ila.233.1652203231521; Tue, 10
- May 2022 10:20:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oMzOMHbyZL+xpBkMzkSynF3FtiNncyHat+FTsJFqJKY=;
+        b=nUGKxNtgHCDrU71KcwAm30zju4pEzV5nStIzllUQkojE+80dALxFEmXsA+VLOZhvNK
+         UjV7QleQsyoZAyiHtzGRl8JzUqyIGu/3cffKSsm7B44yU+N8YAJaV3MqkeVl6Tkup1yg
+         bo2Et7zSbJcI5Tgx0b0QYusJBTpOE7Lr5YkyO+cnHkRQxhsH8tH1A3qz9oqOlOIaBkJm
+         C072Ukn9Tld1m7aN2X+YxeZJuIQaFXQykBTYUg+lheV++IXS48z+PFH8/QH7KW6Cxihu
+         bGjmb3iHzonnkhw1lJcJh068X/e6PGQsge7mLvkMQllCL3Xk9g1LfQ+tjggPMm8RCdSm
+         MBXg==
+X-Gm-Message-State: AOAM531uWK1G9HK5dK+zn+i2yosbLquqwzZTdwMbnL5QK5AaR3+jiFaq
+        gjhIz9HYXTjW5mNkosXPUQ==
+X-Google-Smtp-Source: ABdhPJznU/OK4X6N6Bam1z+KQxPFq1bK52J+cIR4GOgkdzKpqKmgFPS7YZjpDW22cMbMfK7vuKe6Lw==
+X-Received: by 2002:aca:502:0:b0:2cd:c24:278f with SMTP id 2-20020aca0502000000b002cd0c24278fmr539112oif.150.1652203262272;
+        Tue, 10 May 2022 10:21:02 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i9-20020a4aab09000000b0035eb4e5a6ccsm6343573oon.34.2022.05.10.10.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 10:21:01 -0700 (PDT)
+Received: (nullmailer pid 2231680 invoked by uid 1000);
+        Tue, 10 May 2022 17:21:01 -0000
+Date:   Tue, 10 May 2022 12:21:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, hsinyi@chromium.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v10 2/4] dt-bindings: arm: mediatek: Add mt8186 pericfg
+ compatible
+Message-ID: <Ynqe/d2+UT1V8Y+3@robh.at.kernel.org>
+References: <20220510075233.5426-1-allen-kh.cheng@mediatek.com>
+ <20220510075233.5426-3-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <5bd58ebebf066593ce0e1d265d60278b5f5a1874.1652123204.git.andreyknvl@google.com>
- <47afaecec29221347bee49f58c258ac1ced3b429.1652123204.git.andreyknvl@google.com>
- <YnpTJR177vJ5G+HW@elver.google.com>
-In-Reply-To: <YnpTJR177vJ5G+HW@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 10 May 2022 19:20:20 +0200
-Message-ID: <CA+fCnZcCOFR-E_HFjgpz1GqPbtnothC1+cTK6Nu2fOua_1-iuQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kasan: clean-up kconfig options descriptions
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510075233.5426-3-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 1:57 PM Marco Elver <elver@google.com> wrote:
->
-> > -       Currently CONFIG_KASAN_GENERIC doesn't work with CONFIG_DEBUG_SLAB
-> > -       (the resulting kernel does not boot).
-> > +       (Incompatible with CONFIG_DEBUG_SLAB: the kernel does not boot.)
->
-> Why aren't they made mutually exclusive via Kconfig constraints? Does it
-> work these days?
->
-> Either KASAN_GENERIC and KASAN_SW_TAGS do "depends on !DEBUG_SLAB ||
-> COMPILE_TEST", or DEBUG_SLAB does "depends on !(KASAN_GENERIC || KASAN_SW_TAGS) || COMPILE_TEST".
->
-> I feel DEBUG_SLAB might not be used very much these days, so perhaps
-> DEBUG_SLAB should add the constraint, also given KASAN is the better
-> debugging aid.
+On Tue, 10 May 2022 15:52:31 +0800, Allen-KH Cheng wrote:
+> Add mt8186 pericfg compatible to binding document.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-They are made exclusive: it's the KASAN option that depends on
-!DEBUG_SLAB. And KASAN_HW_TAGS doesn't have this note, as it doesn't
-work with SLAB at all at the moment. Moving the constraint to
-DEBUG_SLAB might make sense, but let's keep this patchset as a
-non-functional change. Thanks!
+Acked-by: Rob Herring <robh@kernel.org>

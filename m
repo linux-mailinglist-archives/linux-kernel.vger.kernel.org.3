@@ -2,93 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F7552141D
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AF652142A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbiEJLso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S241231AbiEJLvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbiEJLsk (ORCPT
+        with ESMTP id S241237AbiEJLvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:48:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11144250E8A;
-        Tue, 10 May 2022 04:44:42 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxutgpUHpiPAkQAA--.54769S2;
-        Tue, 10 May 2022 19:44:41 +0800 (CST)
-From:   Mao Bibo <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: smp: optimization for flush_tlb_mm when exiting
-Date:   Tue, 10 May 2022 19:44:41 +0800
-Message-Id: <20220510114441.2959886-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Tue, 10 May 2022 07:51:02 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAB0229FCE
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:47:05 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id kq17so32390697ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
+        b=Cq0YVifZjAg/L4a+qlOkNkDWcHo+balp673bgz2Xzq8NYuyUWd4UIlNecRZHOmOZtL
+         WITd7u5+Q3fwt/lMny//WQLUUvidBhKfkO/Jl2oNOUFBqFEwcFcey9lf7Y1aelLuySDz
+         FKzgrBUKgHOFhkT5RWUHKLhJIy72//L2kETTY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
+        b=m+c5gomGNatNKLxQj/PA8TBCdMkyGWDxoDgCuc/LJmpnvHowwMPB6r3o/UefNXMymR
+         ja+JwtWP8OJtnLka1FGGeKTtc3FNTskJgzK0cCTMJgFTBDkow57ZJTUOumbfZRtuDwRt
+         yYtzsi8+/nsRFaxif/AGIaa4Zyg9onk1K3FHz0reDLUpnNCqpCHq4rA5hSzHPxqWDQPs
+         Bj4w6fytQyLixUPhGO6ZkSw9EBBXU3E3CRuuysbTFpGYSGHX2KfyQijU5U8PF8r0ypjs
+         J5wkD3iQ2JL397ACMEFI8Z7NXYAGxBEeKQOiJWZX4uHLqx4i2Ks29OVPSr0jh9L9cu2L
+         zR3Q==
+X-Gm-Message-State: AOAM533cWYFbfyc8P+MyWjqkCdw1QXVIwm0ECDVk+EFUAg/FJn28CBOr
+        e6hd/NuCjhkzeJBhZSeC1o+ucQ==
+X-Google-Smtp-Source: ABdhPJwH5mhjRvh6ubT75T74jcRYxHqZKy0ovowvflSqOUgy8E1RfmWmmzchzDbkunBXYV3eG+hSPw==
+X-Received: by 2002:a17:906:d554:b0:6f5:2242:a499 with SMTP id cr20-20020a170906d55400b006f52242a499mr18119410ejc.488.1652183223425;
+        Tue, 10 May 2022 04:47:03 -0700 (PDT)
+Received: from cloudflare.com (79.184.139.106.ipv4.supernova.orange.pl. [79.184.139.106])
+        by smtp.gmail.com with ESMTPSA id lr9-20020a170906fb8900b006f3ef214dd9sm5997773ejb.63.2022.05.10.04.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 04:47:02 -0700 (PDT)
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-5-xukuohai@huawei.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Date:   Tue, 10 May 2022 13:45:38 +0200
+In-reply-to: <20220424154028.1698685-5-xukuohai@huawei.com>
+Message-ID: <87ee11obih.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxutgpUHpiPAkQAA--.54769S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XryDWFyDur17Ww17Cw1Dtrb_yoWkXFXEyw
-        sIgwn5Gryrtw1Iv3yxWr4fWF909wsY9F1v9r9Fgr9Iy3s8tr1UZaykur97XrZ5XrZYvFZ5
-        Jr9xJryUAay2qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxkYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
-        B8BUUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When process exits or execute new binary, it will call function
-exit_mmap with old mm, there is such function call trace:
-  exit_mmap(struct mm_struct *mm)
-      --> tlb_finish_mmu(&tlb, 0, -1)
-         --> arch_tlb_finish_mmu(tlb, start, end, force)
-	    --> tlb_flush_mmu(tlb);
-               --> tlb_flush(struct mmu_gather *tlb)
-                  --> flush_tlb_mm(tlb->mm)
+On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
+> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+> it to replace nop with jump, or replace jump with nop.
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
+> ---
+>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 8ab4035dea27..3f9bdfec54c4 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bpf.h>
+> +#include <linux/memory.h>
+>  #include <linux/filter.h>
+>  #include <linux/printk.h>
+>  #include <linux/slab.h>
+> @@ -18,6 +19,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/debug-monitors.h>
+>  #include <asm/insn.h>
+> +#include <asm/patching.h>
+>  #include <asm/set_memory.h>
+>  
+>  #include "bpf_jit.h"
+> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
+>  {
+>  	return vfree(addr);
+>  }
+> +
+> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+> +			     void *addr, u32 *insn)
+> +{
+> +	if (!addr)
+> +		*insn = aarch64_insn_gen_nop();
+> +	else
+> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+> +						    (unsigned long)addr,
+> +						    type);
+> +
+> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+> +}
+> +
+> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+> +		       void *old_addr, void *new_addr)
+> +{
+> +	int ret;
+> +	u32 old_insn;
+> +	u32 new_insn;
+> +	u32 replaced;
+> +	enum aarch64_insn_branch_type branch_type;
+> +
+> +	if (!is_bpf_text_address((long)ip))
+> +		/* Only poking bpf text is supported. Since kernel function
+> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
 
-It is not necessary to flush tlb since oldmm is not used anymore
-by the process, there is similar operations on IA64/ARM64 etc,
-this patch adds such optimization on MIPS.
+Nit: s/funcitons/functions/
 
-Signed-off-by: Mao Bibo <maobibo@loongson.cn>
----
- arch/mips/kernel/smp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> +		 * called after a failed poke with ftrace. In this case, there
+> +		 * is probably something wrong with fentry, so there is nothing
+> +		 * we can do here. See register_fentry, unregister_fentry and
+> +		 * modify_fentry for details.
+> +		 */
+> +		return -EINVAL;
+> +
+> +	if (poke_type == BPF_MOD_CALL)
+> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+> +	else
+> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	mutex_lock(&text_mutex);
+> +	if (aarch64_insn_read(ip, &replaced)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	if (replaced != old_insn) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
 
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 1986d1309410..1d93b85271ba 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -518,6 +518,12 @@ static inline void smp_on_each_tlb(void (*func) (void *info), void *info)
- 
- void flush_tlb_mm(struct mm_struct *mm)
- {
-+	if (!mm)
-+		return;
-+
-+	if (atomic_read(&mm->mm_users) == 0)
-+		return;		/* happens as a result of exit_mmap() */
-+
- 	preempt_disable();
- 
- 	if (cpu_has_mmid) {
--- 
-2.27.0
+Nit: No need for the explicit cast to void *. Type already matches.
+
+> +out:
+> +	mutex_unlock(&text_mutex);
+> +	return ret;
+> +}
 

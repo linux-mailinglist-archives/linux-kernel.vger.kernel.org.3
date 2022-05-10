@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C25E5217F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20EF5217EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbiEJNcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S243343AbiEJNah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242537AbiEJNUk (ORCPT
+        with ESMTP id S243104AbiEJNWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:20:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817C02B94DD;
-        Tue, 10 May 2022 06:13:37 -0700 (PDT)
+        Tue, 10 May 2022 09:22:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB7B1B1844;
+        Tue, 10 May 2022 06:17:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C89AB81DA2;
-        Tue, 10 May 2022 13:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86086C385C2;
-        Tue, 10 May 2022 13:13:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD536B81DA0;
+        Tue, 10 May 2022 13:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E03C385C2;
+        Tue, 10 May 2022 13:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188415;
-        bh=a7Xdftnirl6+Yv0iDfdH+DVaKQCBSHUCUNchi72cbcw=;
+        s=korg; t=1652188626;
+        bh=6TDfajJ8pBMh+JcLy099ip64RR+pHVaqJxecjE9Erfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zGj1bxOCJV1qKKzuBMykOFgUcP9l8aeS5nPfXTmzW3cFzrVGOdzvsOOmAe7ZO73al
-         dPD4tIxQdXXKnfxMr6x7jsBwr8ts3oeyiNS8QoI8JBp8QDpJHlXSDlWl+WcirBIMmP
-         oxJL2Y4RnQBV+b3vPgI6YGdbDCqc2EHC8xj5uKsY=
+        b=oc6aaJWka96HAvjG6Qu/8EPCrlPllO5wZ5EqWVPJp0EGR5uUJNueAerEbxBv2us0m
+         L9SyeQgH6pgeZ9KVD9C38bSM91qKAvMiuErDzhMc6YQUNWIuUHQUPOKsf/1chDfazH
+         fTYkuW7ZK7pvxeHbNbedoEFRp9Vhm28TjQwCWy5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 64/66] net: ipv6: ensure we call ipv6_mc_down() at most once
+        stable@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.14 68/78] ASoC: dmaengine: Restore NULL prepare_slave_config() callback
 Date:   Tue, 10 May 2022 15:07:54 +0200
-Message-Id: <20220510130731.641665189@linuxfoundation.org>
+Message-Id: <20220510130734.543705295@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,95 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: j.nixdorf@avm.de <j.nixdorf@avm.de>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
+commit 660564fc9a92a893a14f255be434f7ea0b967901 upstream.
 
-There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
-either the network device is actually going down, or IPv6 was disabled
-on the interface.
+As pointed out by Sascha Hauer, this patch changes:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        <do nothing>
+to:
+if (pmc->config && !pcm->config->prepare_slave_config)
+        snd_dmaengine_pcm_prepare_slave_config()
 
-If either of them stays down while the other is toggled, we repeatedly
-call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
-calling the corresponding ipv6_mc_up() in between. This will cause a
-new entry in idev->mc_tomb to be allocated for each multicast group
-the interface is subscribed to, which in turn leaks one struct ifmcaddr6
-per nontrivial multicast group the interface is subscribed to.
+This breaks the drivers that do not need a call to
+dmaengine_slave_config(). Drivers that still need to call
+snd_dmaengine_pcm_prepare_slave_config(), but have a NULL
+pcm->config->prepare_slave_config should use
+snd_dmaengine_pcm_prepare_slave_config() as their prepare_slave_config
+callback.
 
-The following reproducer will leak at least $n objects:
-
-ip addr add ff2e::4242/32 dev eth0 autojoin
-sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
-for i in $(seq 1 $n); do
-	ip link set up eth0; ip link set down eth0
-done
-
-Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
-sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
-can also be used to create a nontrivial idev->mc_list, which will the
-leak objects with the right up-down-sequence.
-
-Based on both sources for NETDEV_DOWN events the interface IPv6 state
-should be considered:
-
- - not ready if the network interface is not ready OR IPv6 is disabled
-   for it
- - ready if the network interface is ready AND IPv6 is enabled for it
-
-The functions ipv6_mc_up() and ipv6_down() should only be run when this
-state changes.
-
-Implement this by remembering when the IPv6 state is ready, and only
-run ipv6_mc_down() if it actually changed from ready to not ready.
-
-The other direction (not ready -> ready) already works correctly, as:
-
- - the interface notification triggered codepath for NETDEV_UP /
-   NETDEV_CHANGE returns early if ipv6 is disabled, and
- - the disable_ipv6=0 triggered codepath skips fully initializing the
-   interface as long as addrconf_link_ready(dev) returns false
- - calling ipv6_mc_up() repeatedly does not leak anything
-
-Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-[jnixdorf: context updated for bpo to v4.9/v4.14]
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
+Fixes: 9a1e13440a4f ("ASoC: dmaengine: do not use a NULL prepare_slave_config() callback")
+Reported-by: Sascha Hauer <sha@pengutronix.de>
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220421125403.2180824-1-codrin.ciubotariu@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/addrconf.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ sound/soc/soc-generic-dmaengine-pcm.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3539,6 +3539,7 @@ static int addrconf_ifdown(struct net_de
- 	struct list_head del_list;
- 	int _keep_addr;
- 	bool keep_addr;
-+	bool was_ready;
- 	int state, i;
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -98,10 +98,10 @@ static int dmaengine_pcm_hw_params(struc
  
- 	ASSERT_RTNL();
-@@ -3602,7 +3603,10 @@ restart:
+ 	memset(&slave_config, 0, sizeof(slave_config));
  
- 	addrconf_del_rs_timer(idev);
+-	if (pcm->config && pcm->config->prepare_slave_config)
+-		prepare_slave_config = pcm->config->prepare_slave_config;
+-	else
++	if (!pcm->config)
+ 		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
++	else
++		prepare_slave_config = pcm->config->prepare_slave_config;
  
--	/* Step 2: clear flags for stateless addrconf */
-+	/* Step 2: clear flags for stateless addrconf, repeated down
-+	 *         detection
-+	 */
-+	was_ready = idev->if_flags & IF_READY;
- 	if (!how)
- 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
- 
-@@ -3689,7 +3693,7 @@ restart:
- 	if (how) {
- 		ipv6_ac_destroy_dev(idev);
- 		ipv6_mc_destroy_dev(idev);
--	} else {
-+	} else if (was_ready) {
- 		ipv6_mc_down(idev);
- 	}
- 
+ 	if (prepare_slave_config) {
+ 		ret = prepare_slave_config(substream, params, &slave_config);
 
 

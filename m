@@ -2,76 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810C45223FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436875223E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348822AbiEJS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S1348177AbiEJS33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349045AbiEJS1U (ORCPT
+        with ESMTP id S236729AbiEJS3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:27:20 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0F414CB68;
-        Tue, 10 May 2022 11:23:21 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso14881fac.1;
-        Tue, 10 May 2022 11:23:21 -0700 (PDT)
+        Tue, 10 May 2022 14:29:24 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD362A76B4
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:26 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d5so24974748wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 11:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i/K+z4FbavDUp9taCkfXpbx13rVcW3GTSvwjLfREXAU=;
+        b=Tty5wMz7Ghu646JswlNLX+XwgMjXTrtdIAnTGLzWswd7pJqjghhee9uTTrSBkA1mS5
+         TASpWLvrSWJ0o/VmKB1zZ2EKL7bj0qTC3lvVRuamF3i9rZ6kaQX5QDmWCn9TRCB5uXkV
+         r8gOHaTXenDSj1D57niaR5CpxS9xrrcL40YA8vpjqNI+g1gL5pCdsCqYcSLce1I6fc3z
+         kWNzuDcKIBDb+SwqrxV9F0c+DchRf6wXrjkpR+hTKigiASG8TQ/T4toShl24UGOGYEeY
+         ZEnNjV6vVbfPH9Mde3cglN60wQIz6IJ5FIeBa8eN2oVUv11BpQol0cmvcrU6FhcjdmJZ
+         DX4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j6VUj9Lojhw3KHnOTn3bbGkCrGpPROOfMwN16uub3uA=;
-        b=fYXOE74xEJwI3g61z2Z96/F8SG9Y4J9X3dAkF2y0Y8G7ccZd7ZjbiqCnvn46qo6Xen
-         zUrQR/PAD5qBWdFuykJ9nVRie7cAJYRkJGCfdzmHSmA1Di6a0LEY/OrnMuwoys12+T0J
-         s0/LNBfQ23+Z9nG01JZVk3oJ5jZBqAISzB8X/VID3sy8ZG59du6FuQAP+MIksz+bpqEQ
-         TGv11iCEnokHLsjNuG0ygBo8oMRIAVUtyUe1OKF8rWI3BIQYK42s6FG/sCYdieVDJ5b1
-         SwwZhgSEqCFQuDenpeN+fQ3zGFIHzyI0V6hGZbdycCoKaUQJbmaZ9BuqXhRyk1HR69jH
-         43hw==
-X-Gm-Message-State: AOAM530fvr0V8cjm9APgbtiZG7p45ox2jrAmMLJ94fL95qdpekDJS9sK
-        GgBAZiSJi1TjAICSDdtttZPil76BpQ==
-X-Google-Smtp-Source: ABdhPJwI6HZZicgtT7n4tnN+YTEXRTNNsEMQBJKkWbmNeJZz/g6ItcbzCpRTBS5ZEPqb8fgrNUKVSw==
-X-Received: by 2002:a05:6871:887:b0:ed:4b3b:2bc4 with SMTP id r7-20020a056871088700b000ed4b3b2bc4mr790934oaq.278.1652207001018;
-        Tue, 10 May 2022 11:23:21 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m13-20020a9d400d000000b006060322126bsm5874079ote.59.2022.05.10.11.23.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 11:23:20 -0700 (PDT)
-Received: (nullmailer pid 2333804 invoked by uid 1000);
-        Tue, 10 May 2022 18:23:19 -0000
-Date:   Tue, 10 May 2022 13:23:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for
- "st,stm32mp1-rcc-secure"
-Message-ID: <YnqtlwXwKgrvngGf@robh.at.kernel.org>
-References: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i/K+z4FbavDUp9taCkfXpbx13rVcW3GTSvwjLfREXAU=;
+        b=5z9SmtLRslT6/RDcnMmxFZZh6SQ27vxizL0jkDGsInCXaDYycSYbfmyhyM2m6FXNyd
+         Y9FWxBXyW0TeJCv7h1FzV0+2Ni06iem3MX5nz+MECtI+drDPjeZthTYMWit4zvhq4VAn
+         9oz96Umv+tSqYXDXrOGoiW1ilXicH/Nl6tcnLVaU7q/Do2s9/Fu0gVji5e3pIXAtz3SC
+         vjtko5FaSPNwFsNdH5ifLDinEsr+z8CsgYuPW1GHmr7iPJRLsRRGr1Rob6ohcZZpwQr1
+         01RfYQ3BLiFVp/3yjS1EItZd5Xz7xv5hoMyxZfgyfagAJWsEtKzNY9G+zxraoVH6gblP
+         ePGw==
+X-Gm-Message-State: AOAM533MI/Jr+uOUFXcwfJ51Tb/bS43KQEKtyB4tRmJLbNQCUsREbLgC
+        wu13TywlrxWCqUvB4VsNbPwdAJs0EXK/Yy6yg8IP6w==
+X-Google-Smtp-Source: ABdhPJyzA6ZqMl9aS9nV7QUKqV1oRP2aghQEHWBX7a2slUyqZ51MHrel4plITu1M0/TnH8bx25zFuopsJMSrkMAFd0g=
+X-Received: by 2002:a5d:630d:0:b0:20a:e1a3:8018 with SMTP id
+ i13-20020a5d630d000000b0020ae1a38018mr19695063wru.489.1652207124680; Tue, 10
+ May 2022 11:25:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220510001807.4132027-1-yosryahmed@google.com> <20220510001807.4132027-9-yosryahmed@google.com>
+In-Reply-To: <20220510001807.4132027-9-yosryahmed@google.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 10 May 2022 11:25:13 -0700
+Message-ID: <CA+khW7i1Pcc9_bfxVhtzGQkevmodie7=M-57ScMqUyw5U=KW4A@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 8/9] bpf: Introduce cgroup iter
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:46:58PM +0200, Alexandre Torgue wrote:
-> For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
-> required properties.
-> 
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+On Mon, May 9, 2022 at 5:18 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> From: Hao Luo <haoluo@google.com>
+>
+> Introduce a new type of iter prog: cgroup. Unlike other bpf_iter, this
+> iter doesn't iterate a set of kernel objects. Instead, it is supposed to
+> be parameterized by a cgroup id and prints only that cgroup. So one
+> needs to specify a target cgroup id when attaching this iter. The target
+> cgroup's state can be read out via a link of this iter.
+>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  include/linux/bpf.h            |   2 +
+>  include/uapi/linux/bpf.h       |   6 ++
+>  kernel/bpf/Makefile            |   2 +-
+>  kernel/bpf/cgroup_iter.c       | 148 +++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |   6 ++
+>  5 files changed, 163 insertions(+), 1 deletion(-)
+>  create mode 100644 kernel/bpf/cgroup_iter.c
+>
 
-Assuming this works in arm-soc tree,
+Thanks Yosry for posting this patch! Dear reviewers, this is v2 of the
+cgroup_iter change I sent previously at
 
-Acked-by: Rob Herring <robh@kernel.org>
+https://lore.kernel.org/bpf/20220225234339.2386398-9-haoluo@google.com/
+
+v1 - > v2:
+- Getting the cgroup's reference at the time at attaching, instead of
+at the time when iterating. (Yonghong) (context [1])
+- Remove .init_seq_private and .fini_seq_private callbacks for
+cgroup_iter. They are not needed now. (Yonghong)
+
+[1] https://lore.kernel.org/bpf/f780fc3a-dbc2-986c-d5a0-6b0ef1c4311f@fb.com/
+
+Hao

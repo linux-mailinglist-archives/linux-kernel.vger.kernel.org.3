@@ -2,526 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAD3520F3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0297C520F40
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 09:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237633AbiEJIBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S237616AbiEJIBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237563AbiEJIAl (ORCPT
+        with ESMTP id S237543AbiEJIA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:00:41 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64301E21A0;
-        Tue, 10 May 2022 00:56:43 -0700 (PDT)
-X-UUID: 6a2d6fb6ce50449fbbb8d80d84b9d196-20220510
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:c3acdfbc-3544-456e-91ba-762b048185d4,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:47
-X-CID-INFO: VERSION:1.1.4,REQID:c3acdfbc-3544-456e-91ba-762b048185d4,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:22,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:47
-X-CID-META: VersionHash:faefae9,CLOUDID:6c2c3fb3-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:3223872f77b2,Recheck:0,SF:28|100|17|19|48|101,TC:nil,Content:0,EDM:-3,
-        File:nil,QS:0,BEC:nil
-X-UUID: 6a2d6fb6ce50449fbbb8d80d84b9d196-20220510
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1119141881; Tue, 10 May 2022 15:56:41 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 10 May 2022 15:56:39 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 10 May 2022 15:56:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 10 May 2022 15:56:39 +0800
-Message-ID: <6614cd3783666caa529106464e7684caf16d6582.camel@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <tinghan.shen@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
-        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Tue, 10 May 2022 15:56:38 +0800
-In-Reply-To: <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-References: <20220510064603.15920-1-zhiyong.tao@mediatek.com>
-         <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 10 May 2022 04:00:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8AE1E251D;
+        Tue, 10 May 2022 00:56:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D240F21B2F;
+        Tue, 10 May 2022 07:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652169409; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZUtK17hBNi/Td6QjHwkqgCi5bgm/d69DDW/g/56M8s=;
+        b=Vz2UetjMX1QNQkhz/4lkCD4aJvTxtPPvFqqVkjpDar6JysSHDsVhT+r5olJ2KnUmt/iv/w
+        4l6bjj1ncF7O39Y9TNILbvo9iUBkARApAyGxeXQhwFjPDmsE9SblErbd8a7hDeJoffNvug
+        U7qB1rd6+qUR+Q708VLARz5TRFOyk5c=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ABC412C141;
+        Tue, 10 May 2022 07:56:49 +0000 (UTC)
+Date:   Tue, 10 May 2022 09:56:49 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [RFC] sched,livepatch: call klp_try_switch_task in __cond_resched
+Message-ID: <YnoawYtoCSvrK7lb@alley>
+References: <20220507174628.2086373-1-song@kernel.org>
+ <YnkuFrm1YR46OFx/@alley>
+ <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9C7DF147-5112-42E7-9F7C-7159EFDFB766@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-10 at 14:46 +0800, Zhiyong Tao wrote:
-> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+On Mon 2022-05-09 16:22:11, Song Liu wrote:
 > 
-
-I think "From: ..." can be removed?
-
-> The commit adds mt6366 binding document.
 > 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->  .../bindings/regulator/mt6366-regulator.yaml  | 405
-> ++++++++++++++++++
->  1 file changed, 405 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
+> > On May 9, 2022, at 8:07 AM, Petr Mladek <pmladek@suse.com> wrote:
+> > 
+> > On Sat 2022-05-07 10:46:28, Song Liu wrote:
+> >> Busy kernel threads may block the transition of livepatch. Call
+> >> klp_try_switch_task from __cond_resched to make the transition easier.
+> > 
+> > Do you have some numbers how this speeds up the transition
+> > and how it slows down the scheduler, please?
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/mt6366-
-> regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6366-
-> regulator.yaml
-> new file mode 100644
-> index 000000000000..1f125f5ba860
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/mt6366-
-> regulator.yaml
-> @@ -0,0 +1,405 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/mt6366-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MT6366 Regulator from MediaTek Integrated
-> +
-> +maintainers:
-> +  - Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> +
+> We don’t have number on how much this would slow down the scheduler. 
+> For the transition, we see cases where the transition cannot finish
+> with in 60 seconds (how much "kpatch load" waits by default). 
 
-Hsing-Hsing is not responsible for regulator, so I think you can add
-you as the maintainers.
+60s might be too low limit, see below.
 
-> +description: |
-> +  List of regulators provided by this controller. It is named
-> +  according to its regulator type, buck_<name> and ldo_<name>.
-> +  MT6366 regulators node should be sub node of the MT6397 MFD node.
-> +
-> +patternProperties:
-> +  "^buck_v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(ibr|rf12|usb|camio|efuse|xo22)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(ibr|rf12|usb|camio|efuse|xo22)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(rfck|emc|a12|a09|ufs|bbck)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(rfck|emc|a12|a09|ufs|bbck)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vsram_(proc2|others|md|proc1|others_sshub)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vsram_(proc2|others|md|proc1|others_sshub)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(fe|bif|io)28$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(fe|bif|io)28$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(aud|io|aux|rf|m)18$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(aud|io|aux|rf|m)18$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vsim[12]$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vsim[12]$"
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +    unevaluatedProperties: false
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pmic {
-> +      regulators {
-> +        mt6366_vdram1_reg: buck_vdram1 {
-> +            regulator-name = "vdram1";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <2087500>;
-> +            regulator-ramp-delay = <12500>;
-> +            regulator-enable-ramp-delay = <0>;
-> +            regulator-always-on;
-> +            regulator-allowed-modes = <0 1>;
+> > cond_resched() is typically called in cycles with many interactions
+> > where the task might spend a lot of time. There are two possibilities.
+> > cond_resched() is called in:
+> > 
+> >   + livepatched function
+> > 
+> >     In this case, klp_try_switch_task(current) will always fail.
+> >     And it will non-necessarily slow down every iteration by
+> >     checking the very same stack.
+> > 
+> > 
+> >   + non-livepatched function
+> > 
+> >     In this case, the transition will succeed on the first attempt.
+> >     OK, but it would succeed also without that patch. The task would
+> >     most likely sleep in this cond_resched() so that it might
+> >     be successfully transitioned on the next occasion.
+> 
+> We are in the non-live patched case. But the transition didn’t happen
+> in time, because the kernel thread doesn’t go to sleep. While there is
+> clearly something weird with this thread, we think live patch should 
+> work because the thread does call cond_resched from time to time. 
 
-should be two space instead of 4 space?
-mt6366_vdram1_reg: buck_vdram1 {
-  regulator-name = "vdram1";
-  ...
-};
+I guess that it goes to sleep. Otherwise it would trigger soft lockup
+report if you have the watchdog enabled.
 
-There is the same issue for this example.
+IMHO, the problem is that klp_transition_work_fn() tries the
+transition "only" once per second, see
 
-> +        };
-> +        mt6366_vcore_reg: buck_vcore {
-> +            regulator-name = "vcore";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <200>;
-> +            regulator-always-on;
-> +            regulator-allowed-modes = <0 1>;
-> +        };
-> +       mt6366_vproc11_reg: buck_vproc11 {
+void klp_try_complete_transition(void)
+{
+[...]
+		schedule_delayed_work(&klp_transition_work,
+				      round_jiffies_relative(HZ));
+[...]
+}
 
-one more space before mt6366_vproc11_reg?
+It means that there are "only" 60 attempts to migrate the busy process.
+It fails when the process is in the running state or sleeping in a
+livepatched function. There is a _non-zero_ chance of a bad luck.
 
-> +            regulator-name = "vproc11";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <200>;
-> +            regulator-always-on;
-> +            regulator-allowed-modes = <0 1>;
-> +        };
-> +        mt6366_vproc12_reg: buck_vproc12 {
-> +            regulator-name = "vproc12";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <200>;
-> +            regulator-always-on;
-> +            regulator-allowed-modes = <0 1>;
-> +        };
-> +        mt6366_vgpu_reg: buck_vgpu {
-> +            regulator-name = "vgpu";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <200>;
-> +            regulator-allowed-modes = <0 1>;
-> +        };
-> +        mt6366_vs2_reg: buck_vs2 {
-> +            regulator-name = "vs2";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <2087500>;
-> +            regulator-ramp-delay = <12500>;
-> +            regulator-enable-ramp-delay = <0>;
-> +            regulator-always-on;
-> +        };
-> +       mt6366_vmodem_reg: buck_vmodem {
+It would be great to measure how long it will take to complete
+the transition if you remove the limit 60s.
 
-ditto.
 
-> +            regulator-name = "vmodem";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <900>;
-> +            regulator-always-on;
-> +            regulator-allowed-modes = <0 1>;
-> +        };
-> +        mt6366_vs1_reg: buck_vs1 {
-> +            regulator-name = "vs1";
-> +            regulator-min-microvolt = <1000000>;
-> +            regulator-max-microvolt = <2587500>;
-> +            regulator-ramp-delay = <12500>;
-> +            regulator-enable-ramp-delay = <0>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vdram2_reg: ldo_vdram2 {
-> +            regulator-name = "vdram2";
-> +            regulator-min-microvolt = <600000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <3300>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vsim1_reg: ldo_vsim1 {
-> +            regulator-name = "vsim1";
-> +            regulator-min-microvolt = <1700000>;
-> +            regulator-max-microvolt = <3100000>;
-> +            regulator-enable-ramp-delay = <540>;
-> +        };
-> +        mt6366_vibr_reg: ldo_vibr {
-> +            regulator-name = "vibr";
-> +            regulator-min-microvolt = <1200000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-enable-ramp-delay = <60>;
-> +        };
-> +        mt6366_vrf12_reg: ldo_vrf12 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vrf12";
-> +            regulator-min-microvolt = <1200000>;
-> +            regulator-max-microvolt = <1200000>;
-> +            regulator-enable-ramp-delay = <120>;
-> +        };
-> +        mt6366_vio18_reg: ldo_vio18 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vio18";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <2700>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vusb_reg: ldo_vusb {
-> +            regulator-name = "vusb";
-> +            regulator-min-microvolt = <3000000>;
-> +            regulator-max-microvolt = <3100000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vcamio_reg: ldo_vcamio {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vcamio";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <325>;
-> +        };
-> +        mt6366_vcamd_reg: ldo_vcamd {
-> +            regulator-name = "vcamd";
-> +            regulator-min-microvolt = <900000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <325>;
-> +        };
-> +        mt6366_vcn18_reg: ldo_vcn18 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vcn18";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vfe28_reg: ldo_vfe28 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vfe28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <2800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vsram_proc11_reg: ldo_vsram_proc11 {
-> +            regulator-name = "vsram_proc11";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <240>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vcn28_reg: ldo_vcn28 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vcn28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <2800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vsram_others_reg: ldo_vsram_others {
-> +            regulator-name = "vsram_others";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <240>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vsram_gpu_reg: ldo_vsram_gpu {
-> +            regulator-name = "vsram_gpu";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <240>;
-> +        };
-> +        mt6366_vxo22_reg: ldo_vxo22 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vxo22";
-> +            regulator-min-microvolt = <2200000>;
-> +            regulator-max-microvolt = <2200000>;
-> +            regulator-enable-ramp-delay = <120>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vefuse_reg: ldo_vefuse {
-> +            regulator-name = "vefuse";
-> +            regulator-min-microvolt = <1700000>;
-> +            regulator-max-microvolt = <1900000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vaux18_reg: ldo_vaux18 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vaux18";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vmch_reg: ldo_vmch {
-> +            regulator-name = "vmch";
-> +            regulator-min-microvolt = <2900000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-enable-ramp-delay = <60>;
-> +        };
-> +        mt6366_vbif28_reg: ldo_vbif28 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vbif28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <2800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vsram_proc12_reg: ldo_vsram_proc12 {
-> +            regulator-name = "vsram_proc12";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +            regulator-ramp-delay = <6250>;
-> +            regulator-enable-ramp-delay = <240>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vcama1_reg: ldo_vcama1 {
-> +            regulator-name = "vcama1";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <3000000>;
-> +            regulator-enable-ramp-delay = <325>;
-> +        };
-> +        mt6366_vemc_reg: ldo_vemc {
-> +            regulator-name = "vemc";
-> +            regulator-min-microvolt = <2900000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-enable-ramp-delay = <60>;
-> +        };
-> +        mt6366_vio28_reg: ldo_vio28 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vio28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <2800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_va12_reg: ldo_va12 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "va12";
-> +            regulator-min-microvolt = <1200000>;
-> +            regulator-max-microvolt = <1200000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +            regulator-always-on;
-> +        };
-> +        mt6366_vrf18_reg: ldo_vrf18 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vrf18";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-enable-ramp-delay = <120>;
-> +        };
-> +        mt6366_vcn33_bt_reg: ldo_vcn33_bt {
-> +            regulator-name = "vcn33_bt";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3500000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vcn33_wifi_reg: ldo_vcn33_wifi {
-> +            regulator-name = "vcn33_wifi";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3500000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vcama2_reg: ldo_vcama2 {
-> +            regulator-name = "vcama2";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <3000000>;
-> +            regulator-enable-ramp-delay = <325>;
-> +        };
-> +        mt6366_vmc_reg: ldo_vmc {
-> +            regulator-name = "vmc";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-enable-ramp-delay = <60>;
-> +        };
-> +        mt6366_vldo28_reg: ldo_vldo28 {
-> +            regulator-name = "vldo28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <3000000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vaud28_reg: ldo_vaud28 {
-> +            compatible = "regulator-fixed";
-> +            regulator-name = "vaud28";
-> +            regulator-min-microvolt = <2800000>;
-> +            regulator-max-microvolt = <2800000>;
-> +            regulator-enable-ramp-delay = <270>;
-> +        };
-> +        mt6366_vsim2_reg: ldo_vsim2 {
-> +            regulator-name = "vsim2";
-> +            regulator-min-microvolt = <1700000>;
-> +            regulator-max-microvolt = <3100000>;
-> +            regulator-enable-ramp-delay = <540>;
-> +        };
-> +        mt6366_vcore_sshub_reg: buck_vcore_sshub {
-> +            regulator-name = "vcore_sshub";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +        };
-> +        mt6366_vsram_others_sshub_reg: ldo_vsram_others_sshub {
-> +            regulator-name = "vsram_others_sshub";
-> +            regulator-min-microvolt = <500000>;
-> +            regulator-max-microvolt = <1293750>;
-> +        };
-> +      };
-> +    };
-> +...
+Anyway, the limit 60s looks like a bad idea to me. It is too low.
+For example, we do not use any limit at all in SUSE products.
+And the only report was that some thread from a 3rd party
+module could not be migrated. It was stuck with a livepatched
+function on the stack. The kthread had really problematic
+design. I am afraid that even this patch would not help
+in that case.
 
+
+Now, back to the limit. There are basically two problems when
+the transition takes too long:
+
+    + It blocks another transition. But the frequency of new
+      livepatches it typically counted in days or even weeks.
+
+
+    + It means that a process is running the buggy/vulnerable
+      code longer time. But few hours should be acceptable
+      given how long it takes to prepare the livepatch.
+
+      Also it looks better to have 99.9% of processes running
+      the fixed code that revert the fix just because a single
+      process needs longer time to get transitioned.
+
+
+I could imagine that there really is a process that is almost
+impossible to livepatch. It might get worse on NO_HZ system.
+The question is it happens in the real life.
+
+I would personally start with prolonging or removing the limit.
+
+Best Regards,
+Petr

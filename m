@@ -2,95 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DE752245E
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA4522424
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 20:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349096AbiEJSwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 14:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S1348972AbiEJSeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 14:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245507AbiEJSwC (ORCPT
+        with ESMTP id S245346AbiEJSeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 14:52:02 -0400
-X-Greylist: delayed 570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 May 2022 11:52:00 PDT
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DBD3983A;
-        Tue, 10 May 2022 11:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1652207619; bh=eEMgZINYQ44NSW+OonRUpyj7F/sW+A2Jm9uwvNs8jr4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TpcJSDuUmNMt953JxafvbVtrBCNZSU4KFNH9R8LcqVbMEE+jS9t3DgO4EfiTJqEuC
-         SWookCL89KKFGsLJgBkvA8SkmjY45ISwAbh+e05CR5NXVurAFn3Td1rNJZ13LqAXmH
-         ennypFhlKI5SbA0jLm73qNQFdA5nwIQ9HnCjy1H/19WKXLucwLIXtsliXXHt3iaj89
-         CLm7sk43uszo2mxV1b7yYbK/P1m+a49N2es95no7t+lXhz5Ri66w7YuIBFFGMAoKPv
-         LcC9K62uyZnFUWZNAO9+A/unxjlImu1OZ4MmL5BY9WAebqdwj8DNsOTue3iqZfrw6M
-         VOOGrb60PUIsQ==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 444E73B24F0;
-        Tue, 10 May 2022 18:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1652207619; bh=eEMgZINYQ44NSW+OonRUpyj7F/sW+A2Jm9uwvNs8jr4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TpcJSDuUmNMt953JxafvbVtrBCNZSU4KFNH9R8LcqVbMEE+jS9t3DgO4EfiTJqEuC
-         SWookCL89KKFGsLJgBkvA8SkmjY45ISwAbh+e05CR5NXVurAFn3Td1rNJZ13LqAXmH
-         ennypFhlKI5SbA0jLm73qNQFdA5nwIQ9HnCjy1H/19WKXLucwLIXtsliXXHt3iaj89
-         CLm7sk43uszo2mxV1b7yYbK/P1m+a49N2es95no7t+lXhz5Ri66w7YuIBFFGMAoKPv
-         LcC9K62uyZnFUWZNAO9+A/unxjlImu1OZ4MmL5BY9WAebqdwj8DNsOTue3iqZfrw6M
-         VOOGrb60PUIsQ==
-Received: from [192.168.1.102] (mobile-access-5672eb-224.dhcp.inet.fi [86.114.235.224])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mleia.com (Postfix) with ESMTPSA id A13493B2450;
-        Tue, 10 May 2022 18:33:38 +0000 (UTC)
-Message-ID: <dfb390de-28eb-c56e-0283-c3202fab3891@mleia.com>
-Date:   Tue, 10 May 2022 21:33:34 +0300
+        Tue, 10 May 2022 14:34:01 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE3458E79;
+        Tue, 10 May 2022 11:34:00 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id s14so17513043plk.8;
+        Tue, 10 May 2022 11:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Cc7nynWlTk1v/xeUbUkmBnrl/rco57CYRTC5cF6QRvc=;
+        b=ogrxbrE8ZkyEP865XaKeZApT2CTGltGBi0Vn3SjMIm99uiYupCY8gK/f1B3ohxg9x1
+         JSJgV/L6tSEGJim3zIdU7dop2a7pHqN08UOaW4+urgBuwgVH8xuJ9SfwdKsCz+rD8b1a
+         HfJExzyJErTjM0LmDUoXxY13aDo0oRdzb9zPwfRB6u9NX/CEOLQeg22MV9dpngtqYiH9
+         wsKy9Jn2XX4AMtMPpvLQrnpbxyF/D0bypA6cbvkrPGTQ1V01yE19gGiuGerv4FlW0Qrz
+         ikmq22DzzUaj8R81SQ2yUAfmuNd5Ht+Q9DHOqiEPtmRIOaKUk9FvCNFpZu17NDO4e4Bg
+         HcYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Cc7nynWlTk1v/xeUbUkmBnrl/rco57CYRTC5cF6QRvc=;
+        b=ByiRnv8/hz/YEGX6Mq28zO6SwkMND36ODIUZEWhhaT780hWnT5nszDYtmPWgLY1Sw4
+         LMnd81UPcX8Y915w9T7zscypvKoQla/VkOCmDM0T7ZZG7FDoorGOaaHxp0NXWWTkH3gq
+         eAO6Dw4U/SaxXYe1Hydyda3bybEE9KukbJosJfi/1TY/1Ou/MAPJyNbes3UZbbRdka41
+         4r8KW896NNdKHN+jiatnzB83HPtQkmmaA6c+wOSGZ9Y9k5ZnRtkag/trZdbMMuDEqKCA
+         WnYhquD+DuWdGw4F+IZXMSHV3SdQk/4M1mqFq9W/3Z8+gkUOv24I3Y0Vuzb4oVKjdXdW
+         Et9Q==
+X-Gm-Message-State: AOAM532F/EMoHq0w08IJfwzoNd1uQXNQNdLfxF7qWGUPucQ66Unb2MCF
+        L+U1xyDwOMk2mHH5vQAdPwk=
+X-Google-Smtp-Source: ABdhPJwp4Z3szAvMOkABhiTNw7zYEvOFOCAJrTCspf9qrS1tibYC4dx9SsLljh55ERZHr9s9l/a1Yg==
+X-Received: by 2002:a17:90a:694d:b0:1dc:e471:1a71 with SMTP id j13-20020a17090a694d00b001dce4711a71mr1237367pjm.65.1652207639849;
+        Tue, 10 May 2022 11:33:59 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:6c64])
+        by smtp.gmail.com with ESMTPSA id o19-20020a17090a421300b001d9738fdf2asm2141992pjg.37.2022.05.10.11.33.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 11:33:59 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 10 May 2022 08:33:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 6/9] cgroup: add v1 support to
+ cgroup_get_from_id()
+Message-ID: <YnqwFuhncWiR3rjq@slm.duckdns.org>
+References: <20220510001807.4132027-1-yosryahmed@google.com>
+ <20220510001807.4132027-7-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [patch 06/10] clocksource/drivers/lpc32xx: Convert to SPDX
- identifier
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-spdx@vger.kernel.org, Joachim Eastwood <manabian@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220510171003.952873904@linutronix.de>
- <20220510171254.717233312@linutronix.de>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20220510171254.717233312@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20220510_183339_301208_64D1F334 
-X-CRM114-Status: UNSURE (   8.32  )
-X-CRM114-Notice: Please train this message. 
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510001807.4132027-7-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/22 20:24, Thomas Gleixner wrote:
-> The license information clearly states GPL version 2 only. The extra text
-> which excludes warranties is an excerpt of the corresponding GPLv2 clause
-> 11.
+On Tue, May 10, 2022 at 12:18:04AM +0000, Yosry Ahmed wrote:
+> The current implementation of cgroup_get_from_id() only searches the
+> default hierarchy for the given id. Make it compatible with cgroup v1 by
+> looking through all the roots instead.
 > 
-> So the SPDX identifier covers it completely.
+> cgrp_dfl_root should be the first element in the list so there shouldn't
+> be a performance impact for cgroup v2 users (in the case of a valid id).
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Joachim Eastwood <manabian@gmail.com>
-> Cc: Vladimir Zapolskiy <vz@mleia.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  kernel/cgroup/cgroup.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index af703cfcb9d2..12700cd21973 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -5970,10 +5970,16 @@ void cgroup_path_from_kernfs_id(u64 id, char *buf, size_t buflen)
+>   */
+>  struct cgroup *cgroup_get_from_id(u64 id)
+>  {
+> -	struct kernfs_node *kn;
+> +	struct kernfs_node *kn = NULL;
+>  	struct cgroup *cgrp = NULL;
+> +	struct cgroup_root *root;
+> +
+> +	for_each_root(root) {
+> +		kn = kernfs_find_and_get_node_by_id(root->kf_root, id);
+> +		if (kn)
+> +			break;
+> +	}
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+I can't see how this can work. You're smashing together separate namespaces
+and the same IDs can exist across multiple of these hierarchies. You'd need
+a bigger surgery to make this work for cgroup1 which would prolly involve
+complications around 32bit ino's and file handle support too, which I'm not
+likely to ack, so please give it up on adding these things to cgroup1.
 
---
-Best wishes,
-Vladimir
+Nacked-by: Tejun Heo <tj@kernel.org>
+
+Thanks.
+
+-- 
+tejun

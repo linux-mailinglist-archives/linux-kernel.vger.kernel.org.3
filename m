@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1FC52195A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6B0521700
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244170AbiEJNpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S243073AbiEJNWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243781AbiEJNcO (ORCPT
+        with ESMTP id S242876AbiEJNVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:32:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B652CF2A5;
-        Tue, 10 May 2022 06:22:08 -0700 (PDT)
+        Tue, 10 May 2022 09:21:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CB72BF30C;
+        Tue, 10 May 2022 06:13:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1151DB81DA6;
-        Tue, 10 May 2022 13:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677F6C385A6;
-        Tue, 10 May 2022 13:22:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBC4D615FA;
+        Tue, 10 May 2022 13:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C661CC385A6;
+        Tue, 10 May 2022 13:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188925;
-        bh=tUBIoF9N6X0NiJbBCmDtbiWMfzpX2+Dhrt4Z/jqBemM=;
+        s=korg; t=1652188438;
+        bh=mUVSaLcs7LePPpfEVIoSnmJu+fY7to4k78o+0jb0k2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFXi+tnl5mOV/uP2yeRlbQkNL3HvIK2c0ilH/W0uuB7c8bx5dqGEvdPyYGZrg7APc
-         dVKe+zQuLdmXbuPrnXNaYYHlQyQXJ2dH/rMM+CVJmGAhOk9VZmhQiWD+bg7guBDqN/
-         2ffXZMpmtb1BNmtvT+tVmOiatHuPHHrBTfjLu/Mw=
+        b=V6Mqgj+qX8krci74d+W4KQOu7m7SpEeq7oQHj7pr56VkedCi85sVpbb0D3dVfFhNy
+         NrISkv7pScSEQneqrjfk/cBmIyK5eYtolS+VIZhV8THNTNexjyzFKlvM4t0rNv6447
+         evatSqMjmMx6uNL7kPe+kMg+p/CxDTfSZCCUWNuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 71/88] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 4.9 66/66] dm: interlock pending dm_io and dm_wait_for_bios_completion
 Date:   Tue, 10 May 2022 15:07:56 +0200
-Message-Id: <20220510130735.795322640@linuxfoundation.org>
+Message-Id: <20220510130731.702590252@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
+References: <20220510130729.762341544@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,113 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Mike Snitzer <snitzer@redhat.com>
 
-commit d270453a0d9ec10bb8a802a142fb1b3601a83098 upstream.
+commit 9f6dc633761006f974701d4c88da71ab68670749 upstream.
 
-There are destructive operations such as nfcmrvl_fw_dnld_abort and
-gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
-gpio and so on could be destructed while the upper layer functions such as
-nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
-to double-free, use-after-free and null-ptr-deref bugs.
+Commit d208b89401e0 ("dm: fix mempool NULL pointer race when
+completing IO") didn't go far enough.
 
-There are three situations that could lead to double-free bugs.
+When bio_end_io_acct ends the count of in-flight I/Os may reach zero
+and the DM device may be suspended. There is a possibility that the
+suspend races with dm_stats_account_io.
 
-The first situation is shown below:
+Fix this by adding percpu "pending_io" counters to track outstanding
+dm_io. Move kicking of suspend queue to dm_io_dec_pending(). Also,
+rename md_in_flight_bios() to dm_in_flight_bios() and update it to
+iterate all pending_io counters.
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |  nfcmrvl_nci_unregister_dev
- release_firmware()           |   nfcmrvl_fw_dnld_abort
-  kfree(fw) //(1)             |    fw_dnld_over
-                              |     release_firmware
-  ...                         |      kfree(fw) //(2)
-                              |     ...
-
-The second situation is shown below:
-
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |
- mod_timer                    |
- (wait a time)                |
- fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
-   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
-    release_firmware          |    fw_dnld_over
-     kfree(fw) //(1)          |     release_firmware
-     ...                      |      kfree(fw) //(2)
-
-The third situation is shown below:
-
-       (Thread 1)               |       (Thread 2)
-nfcmrvl_nci_recv_frame          |
- if(..->fw_download_in_progress)|
-  nfcmrvl_fw_dnld_recv_frame    |
-   queue_work                   |
-                                |
-fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
- fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
-  release_firmware              |   fw_dnld_over
-   kfree(fw) //(1)              |    release_firmware
-                                |     kfree(fw) //(2)
-
-The firmware struct is deallocated in position (1) and deallocated
-in position (2) again.
-
-The crash trace triggered by POC is like below:
-
-BUG: KASAN: double-free or invalid-free in fw_dnld_over
-Call Trace:
-  kfree
-  fw_dnld_over
-  nfcmrvl_nci_unregister_dev
-  nci_uart_tty_close
-  tty_ldisc_kill
-  tty_ldisc_hangup
-  __tty_hangup.part.0
-  tty_release
-  ...
-
-What's more, there are also use-after-free and null-ptr-deref bugs
-in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
-set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
-then, we dereference firmware, gpio or the members of priv->fw_dnld in
-nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
-
-This patch reorders destructive operations after nci_unregister_device
-in order to synchronize between cleanup routine and firmware download
-routine.
-
-The nci_unregister_device is well synchronized. If the device is
-detaching, the firmware download routine will goto error. If firmware
-download routine is executing, nci_unregister_device will wait until
-firmware download routine is finished.
-
-Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: d208b89401e0 ("dm: fix mempool NULL pointer race when completing IO")
+Cc: stable@vger.kernel.org
+Co-developed-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Reviewed-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/nfcmrvl/main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/dm.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/nfc/nfcmrvl/main.c
-+++ b/drivers/nfc/nfcmrvl/main.c
-@@ -194,6 +194,7 @@ void nfcmrvl_nci_unregister_dev(struct n
- {
- 	struct nci_dev *ndev = priv->ndev;
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -2027,6 +2027,8 @@ static int dm_wait_for_completion(struct
+ 	}
+ 	finish_wait(&md->wait, &wait);
  
-+	nci_unregister_device(ndev);
- 	if (priv->ndev->nfc_dev->fw_download_in_progress)
- 		nfcmrvl_fw_dnld_abort(priv);
- 
-@@ -202,7 +203,6 @@ void nfcmrvl_nci_unregister_dev(struct n
- 	if (gpio_is_valid(priv->config.reset_n_io))
- 		gpio_free(priv->config.reset_n_io);
- 
--	nci_unregister_device(ndev);
- 	nci_free_device(ndev);
- 	kfree(priv);
++	smp_rmb(); /* paired with atomic_dec_return in end_io_acct */
++
+ 	return r;
  }
+ 
 
 

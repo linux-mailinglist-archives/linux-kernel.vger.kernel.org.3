@@ -2,242 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A1C5221E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046315221E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347748AbiEJRCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S1347766AbiEJRC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237785AbiEJRCS (ORCPT
+        with ESMTP id S1347749AbiEJRCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:02:18 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121082A4A26
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:58:20 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id y74so17502833vsy.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:58:20 -0700 (PDT)
+        Tue, 10 May 2022 13:02:21 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F4C2A4A16
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 09:58:23 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AFEAdv023623;
+        Tue, 10 May 2022 16:58:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=QhbFTsSTYocstSQ2FI2SHnc5LkA0ciVPInZsj7Hihqk=;
+ b=NFswB4Mud9WqAe2nN+gF+KuKXcLnBSSE+5lsjspZX2w/ggYFwJT6tWoI0kuSC+soxIg8
+ bmJkfeL+gMC185Luc/gE6WDBmfsn290WC554kdW8lZkBDD2kdY5HyJsF4eTofArIzJCr
+ 8OYKLKBOdM2tgZpp7zSoqu10rde9LazKgh8s3BC2V42eZvTPVmT11JZ3IgR19hhf9WPp
+ 79BYxH2zlcrA1F/XLmtoeL+5D8ZWpDA3Fo82cioyfcm58/zr0cgf3XDUNB9T3BUHijpD
+ Ju5LQ2PGxJ/P9VQfH8crwGZVlrocY5aqoXraO+ee/xs9V6iZo24OJCuIE7nEH6w2NPTW yA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fwgcsqf00-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 16:58:12 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24AGtdos040529;
+        Tue, 10 May 2022 16:58:11 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fwf739b6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 16:58:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qa5qpHazSIXXcAcdso8RsHcsrC18QzTM65icSvogLcvTfNMf0lExh9P4Rei0GrG4mMTBTzGgr1K67yueB3vO3lm4F0JM/5nsFDS3+N6gViy1TEySwLVwnaJtVlBNvCIihkl2ezqIqnjRx6CzxWehJ1ZRnvheIL7Y5I9AjOf6O5mc18C0eDN5TPbU/gGybFS3UXagA4hSixUaI3fjSZG1yqSR/+s12VRVbrEAn0R0tHaU4/NrNv8xZOE7iOA04bE2J9lJEFIXXDkEipRCc/obHGN0T2CrpEIkZDNGINkd91IvNKsJHDGo4IwmJiV0kTVt3rahoBCfdSn23GLZaXcpHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QhbFTsSTYocstSQ2FI2SHnc5LkA0ciVPInZsj7Hihqk=;
+ b=jKzVZxY8dtMDDBDPBDeh1MeoooUYNz70aDCAnyIVUW1R9aiWw3soiOdMXbau+6txZLcDFY7HW+Xwoflal8aT/MjR6b5dFP8ZcXDOURlZcf/ToAD5pnJkut2FaKwYNFYN2leEirfveUVmpyMbZOF06iCmGWvWBQQ/qBmiGbNps612PLzEdhZllJL9vuyEKVeZYpZmQoiDqCSHP+TOERN3K3kJ2lxEkTbYw4RC14MfDRRqxzGHdk7pliTduQam5VANF1DPid6IeFlfpfWAaQgz1UyhC+XcJvRx6uh7EH4Z4Q1IDv0KqjZOvK1/+8/bN9jEclT9Pyo9ZrTlkQYt3VCYBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yBZ8yzXWBGsOpOpeLa5W0W9gRThAtsIA/zK3DproKJI=;
-        b=SC248B+drte04xKdlQ70/zo28TnMIDVRKbL6KdxKVvaTy+BJw6zg7/mjEXaavzrMmj
-         1JPdB5mZLYfVCMfUys8sAc1VSknImedaRwvCFYWR7QglbUeYtJwgU88cZ9KbJgKgHQU4
-         8azFzw1r/SamSGo2j/cf8Kk+jUSConbdAdQoh2O0kfmIsBMFaVG87w1CWx7/tgjje34H
-         OCcmQ1XISmveOhDYocRsXWU+5HTir+riALOgCy+DzwqA+0UrUDbr1ATTezC5coRfvtKy
-         mzZl2m+DSXh1EKdRX3r0aV5XtvIN8kTKYAum+qzE4F/daR2EWznYHnilxlp/r9++r+Dv
-         n1uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yBZ8yzXWBGsOpOpeLa5W0W9gRThAtsIA/zK3DproKJI=;
-        b=Lac1Mlc0aGcwkJnU16qIDXZluW2wjEiDZvSKYnBbcI3rphvt5A3FMexDs8acenbIRV
-         g3hgg9Az54tR5bfL+2De/TYz3z403PCNJI3Ikw02ESJKfIZHCyHx+nwwu78qa8Ro+boN
-         NSUX7zFDzBAG/vcJEdrN36mqPZQjwy3vVd2faYkApohVxGyGISRHHh+Y+oG5eLY6AwBF
-         Fcd1MvKIJ5nPaCJyvDcur47AapN1ZlgNDX2T9PQHmc5JwQKcjdVve2Lj9bt1RIL/pfP0
-         PzssOWhmrPsHzg5eXMd3UqFNef0pTmF4Jf4Z+GpgMM9L71BCgU1JaxPc9u3e0tKWcRNY
-         ouQw==
-X-Gm-Message-State: AOAM531wEFJc1ngsxs9JIKy2fpg1e+/1vLp85y1JiXniYMappegphWdi
-        MA6po56lBRCnkX4rZdXfAWt/wyzDt0cMONBI4d9P/Q==
-X-Google-Smtp-Source: ABdhPJwoFonBDxjusEqLqiTK0uVTTNt5Xf4FZQwxFLlkjsdpB74jRGEf2PVrPcKre2Q7qsqcT2Rww1gU6SvfHRGAcp8=
-X-Received: by 2002:a05:6102:244d:b0:32c:dfc4:d818 with SMTP id
- g13-20020a056102244d00b0032cdfc4d818mr12312772vss.74.1652201898969; Tue, 10
- May 2022 09:58:18 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QhbFTsSTYocstSQ2FI2SHnc5LkA0ciVPInZsj7Hihqk=;
+ b=CXdhpGCW4pY/YUYPwOkz4IQT7CyxP/G1nxoHyg+g7ryq3m+2+s1DeZsvPccbo9fhMA2a+6nzdtTmHyx8aIGPgOgTBOzNLhDwC/XSzXC8B92TTW4SYfZzaHTc/THz4Y6sUra/C9wnspNQX7UokaXMeN7r//5g3bOHgFJVRYyHeNk=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM8PR10MB5432.namprd10.prod.outlook.com (2603:10b6:8:3b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Tue, 10 May
+ 2022 16:58:09 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::318c:d02:2280:c2c]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::318c:d02:2280:c2c%7]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 16:58:09 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     SeongJae Park <sj@kernel.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
+Thread-Topic: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
+Thread-Index: AQHYX1NhZKDMPG7C/keyeY6aTlfpJ60X9VOAgABXgoCAABK3AA==
+Date:   Tue, 10 May 2022 16:58:09 +0000
+Message-ID: <20220510165758.3ahwumv77adq6jzc@revolver>
+References: <20220504010716.661115-10-Liam.Howlett@oracle.com>
+ <20220510103747.151886-1-sj@kernel.org>
+ <20220510155059.yaxjjxjwnbmzoyux@revolver>
+In-Reply-To: <20220510155059.yaxjjxjwnbmzoyux@revolver>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 914ea64d-fbac-484e-0f55-08da32a642e6
+x-ms-traffictypediagnostic: DM8PR10MB5432:EE_
+x-microsoft-antispam-prvs: <DM8PR10MB543203998DAFABA08BC035A4FDC99@DM8PR10MB5432.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zuHMwORJ4gqTbbpW3MZleQ+UDTFCS/WQTLsdgF/loDLVVGAvW7FVrV8IRy/HMdDpryRhJ1TQ76Et2HNx5qKKuLONVoNbu/0rFoWfSBKK94uiwiwCNfG2BDoVzOBr4d3Bn7v+IHQAntRYI3/CuiMpG89NrO/yBsh1cqYXYsR/3+OCJaFG78rR2j2uXpy/aj2tyzA779kgHxE9yqQJcaxrixng4FPZ/oXzAxH//FC/hsQXI5zi5T95MXKnrGtc0E4u05sBTlrjpC9I+1WyHPsPUysBmHzUFczfMXxVMUCq5rXjoClpA2Cx4xVPVJS7VDC3L8PakP2k5WksoAfU19H96D67yvBjUV/Z7m/VLNtAQ/YZFsg2w3hy71MJN1CGpRUx62fgWezVaHRTygsZaSIVPdY9g1DAqFX+XCpFhIALGNWlyKpNWoqNm50vVauIJ8nnKidDsl39fVRgtMVkkdvHCgQaQQkY8+xAPuDZMtGJlaXTncmMMqmwHqsUeI1I+vZQ9AdcZiCVpEKL4UIPCO4JGItdzYDbEk1lSLB8aP6xRJpm8vonCo3BOoTBGZGJgOxBvYGsiuEdowq/9TUCdRVsU7TfX/46dKdxk1OxfwyyIc9qJMUPszAGJXqM8SBR62fEH0bhcWUXWh4f4CQNTcjZitH444QSengQI39hyAVPQ8m1pQpZR9/dB26DNmpYJQCjMms0sriPsUD4zyP6v3nxXo8XnUvHgxRliIdt9zNxpP+2c7qNAOqeArafKJOG3fRquIIwzalQkvQgwvUBTN1pkb2zvko3e0qN8g8Er8ceuSs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(122000001)(9686003)(6512007)(6486002)(6506007)(33716001)(186003)(26005)(508600001)(71200400001)(110136005)(966005)(38070700005)(38100700002)(66446008)(64756008)(83380400001)(1076003)(5660300002)(8936002)(66946007)(66556008)(76116006)(66476007)(2906002)(44832011)(91956017)(316002)(8676002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yG9+oz9j+tMuYRTfdu6noqEX6YMY01+yYwS3lK3VVMKZgS7qsVjgKUCUl/hu?=
+ =?us-ascii?Q?8fIpMSZBRsWL3KipPHnP1dI7fNzDs5GmA82ARGOTcjNohTFSIv4jmKCRjNHr?=
+ =?us-ascii?Q?j4lUlGeISdclnQyXNP+5Cx6QZ6bzFageQ02VMWt1d4sunNwUk1+RtOg+Vzng?=
+ =?us-ascii?Q?or/9isrhFRllrT3ZdOd+uJYbzIe+vszpN8Y0E070dbG+Vq5S0qwNzjSg8MDv?=
+ =?us-ascii?Q?yfL82lIjGkIta4Qya6z2fhuqm2EbLrZevHjw/fZkXzVG6PoFNjqiBibfX6Xz?=
+ =?us-ascii?Q?dk5cP3V+Vj1OL10rk6jcLAhjCw12c5Oac5Vb7QJfYQhsaf8b4nTrZAY8bZTl?=
+ =?us-ascii?Q?67191fV18uoVAh6qGWwp0k0ngHRkQtGhexxehG6peyGVxZ6z/c2rT9W572vu?=
+ =?us-ascii?Q?DkVEEk71xL7zMGGTehp42RJhWTo8GXtYaN0WFZttc9owTDMusKVtIu0ZdnFn?=
+ =?us-ascii?Q?PBiVQ7Yj4/XlMyMjIIcxrAJ9Xp05nr6FcfrcVC7jXP8o7NbIREshwQl0E2bJ?=
+ =?us-ascii?Q?Q79FxGKMw5YTG7dHA3OaySF3WSWPg1XsfWIEYRsySHFF/6SZExmo2Hjb9LfR?=
+ =?us-ascii?Q?TbZrBtEIkzwH5/n5LFW4/S4GKddVU6ttIdDfZfBusNs4f1oiWQ21+t3HkvF0?=
+ =?us-ascii?Q?H27FDpcE5yJHeFCrt4TQDxkqbXOzGFxa1OktGq7psIWbqHoms3s40FnZqHHC?=
+ =?us-ascii?Q?DpMm73nROrLEFpE4VjdPqrKiuwdC6Xis1WGAXglWxa/x0fMGamFpJ+t23V8+?=
+ =?us-ascii?Q?iNRHaLaeLd7jlr4btY8iC6R4/Dq3MpSkOneuntxLPCftaNNSjkTb21m3QoDG?=
+ =?us-ascii?Q?8/s7S0Hcu0d/AlABLJu23Rneuhx/zDnry9xpLK2PMxZ1LL0lTVnhUBG0E6G0?=
+ =?us-ascii?Q?YrVTJY+QiXXhNnLO/thknNHGuNTxv6XAESzS7zZ1zguWbRw9u3+xOmGZaMYN?=
+ =?us-ascii?Q?+DsgEFkwIIOcUTmi59Nv1DSA10rwqFBIUBtTnKeY9xUiMX2UYiGbuUGGxNt9?=
+ =?us-ascii?Q?ngEYGAHipjsbEo7n8edu4DLCMMu6I+8YgaKYt+p5n/sO9Y8rZQ5NxQ4SYA1V?=
+ =?us-ascii?Q?gVPkrzOrepMRgikIz6s3zfpe3gGyws9SzXNEHh3c/IEYn/wzoHH/tVuYvvS7?=
+ =?us-ascii?Q?MDqBjiYFUhVnzeOMFCnDIDY6lCkINxl+11ZSZ8TN/IeCNcnzTX6dMPRdwNQn?=
+ =?us-ascii?Q?gRl+35S5yKl2JDwVba2o3oPBBxlCxuGG55gFbLRj60KlY5tHy8T74SaBsEO7?=
+ =?us-ascii?Q?5ah+SKNyC/mbcHO4y4y18rjRn0lZT5s5q8B3cDxYKITEEYYSD8TraSI7NuIz?=
+ =?us-ascii?Q?35pBD08SIg/7eaN2wOpDjsV9KpItPdzlWZmcE6j7rKhQRU4FKaoNHqikDyld?=
+ =?us-ascii?Q?qYZa/u2AK4CPm8AmIckuL/SiAJvvY0CWVm5C0s7uJE9kNQU6ucKm3schyBWL?=
+ =?us-ascii?Q?Ncy3f9J4JGxKaNOKPLHBVk7voV7dgFLSeXsTErYE+1WnbGbF06S29YeLOF5f?=
+ =?us-ascii?Q?3vWB1dnQ33fDS+q9r6qV/W+toiZfHXDp3g3Mb+Csu3xCyt0m7WPRzUhDStQA?=
+ =?us-ascii?Q?612vjzp2ITyqXVMf46W35BKdie9nT13o0NKSdqfc1a6oJBlOiPCI118FV8N0?=
+ =?us-ascii?Q?DbqJvpdKTmbDQfLevRNQ+lr8mI46fzOpTKq4N1FszWF8qB2RfiwbTWfCtJ0X?=
+ =?us-ascii?Q?eL2CgEJTwMb/QcuwbxqH0LP/MXtu5EuQ76AAjmGc4V1Fy+XOxEQczH3Pci0n?=
+ =?us-ascii?Q?XCMDIawrkXVf0FruaZLI5hMYgceI0Co=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B2E1B544CA2A1C48870317B89C526B2C@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220505043846.3165303-1-irogers@google.com> <87b89e2c-da5c-52c3-40dc-448e874cb5d8@linux.intel.com>
- <CAP-5=fVHhWu1uJHnTfFYWvM02_F-bFBZaaOYo8zPRiA=ODRxGQ@mail.gmail.com>
- <12c03e85-cb48-d264-5f04-e9bf9faaf739@linux.intel.com> <CAP-5=fW9Cp3ShO=tTQddDWXz+nrSip99HrNW7Wv5_Qsy1UT7bw@mail.gmail.com>
- <83417b72-4872-072a-2328-a88d2bb90858@linux.intel.com> <CAP-5=fXnYUnbT89q9W0Ax3d-26jbL5Mcd7O5X=JcXq9FnOUm7Q@mail.gmail.com>
- <0c8da8b4-4f77-4329-9e63-721d05fd258d@linux.intel.com>
-In-Reply-To: <0c8da8b4-4f77-4329-9e63-721d05fd258d@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 10 May 2022 09:58:07 -0700
-Message-ID: <CAP-5=fUwSkikUiLpXURYKM4FEf=0zMW9a3Q5h8=Wg08ht5KXHw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf evlist: Keep topdown counters in weak group
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 914ea64d-fbac-484e-0f55-08da32a642e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 16:58:09.4367
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sRyHq90jSSRRMlPOp3kgrf3BLQT6NSH0zkdIZ6B73UEadSG5QiAuETLDETLTWHpYbLFAIbqaIfSayvc0gXPK+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR10MB5432
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-10_04:2022-05-09,2022-05-10 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ suspectscore=0 phishscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205100073
+X-Proofpoint-GUID: 9FB0vjQKS6K8JnxpUHguu79NzTBW2vqP
+X-Proofpoint-ORIG-GUID: 9FB0vjQKS6K8JnxpUHguu79NzTBW2vqP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 9, 2022 at 2:01 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
-> On 5/9/2022 1:28 PM, Ian Rogers wrote:
-> > On Thu, May 5, 2022 at 12:44 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 5/5/2022 2:31 PM, Ian Rogers wrote:
-> >>>>> So I think fixing all of these should be a follow up. I am working to
-> >>>>> get access to an Alderlake system, could we land this first?
-> >>>>>
-> >>>> I think we can use pmu_name to replace the "cpu" to fix the issue for
-> >>>> the hybrid platform. For a hybrid platform, the pmu_name is either
-> >>>> cpu_atom or cpu_core.
-> >>>>
-> >>>> Besides, the topdown events may have a PMU prefix, e.g.,
-> >>>> cpu_core/topdown-be-bound/. The strcasecmp may not work well for this case.
-> >>>>
-> >>>> How about the below patch?
-> >>>> If it's OK for you, could you please merge it into your V2 patch set?
-> >>>> I can do the test on a ADL system.
-> >>>>
-> >>>> diff --git a/tools/perf/arch/x86/util/evsel.c
-> >>>> b/tools/perf/arch/x86/util/evsel.c
-> >>>> index 40b171de2086..551ae2bab70e 100644
-> >>>> --- a/tools/perf/arch/x86/util/evsel.c
-> >>>> +++ b/tools/perf/arch/x86/util/evsel.c
-> >>>> @@ -33,11 +33,12 @@ void arch_evsel__fixup_new_cycles(struct
-> >>>> perf_event_attr *attr)
-> >>>>
-> >>>>     bool arch_evsel__must_be_in_group(const struct evsel *evsel)
-> >>>>     {
-> >>>> -       if ((evsel->pmu_name && strcmp(evsel->pmu_name, "cpu")) ||
-> >>>> -           !pmu_have_event("cpu", "slots"))
-> >>>> +       const char *pmu_name = evsel->pmu_name ? evsel->pmu_name : "cpu";
-> >>>> +
-> >>>> +       if (!pmu_have_event(pmu_name, "slots"))
-> >>>>                   return false;
-> >>> Hmm. The idea with this test is to see if the architecture supports
-> >>> topdown events before going further. There's a similar test in all the
-> >>> arch_evlist functions. I think with cpu_core this needs to become:
-> >>>
-> >>
-> >> The case is a little bit different here. For the arch_evlist functions,
-> >> the input is the evlist, not the specific evsel. So we have to check all
-> >> the possible PMU names which are "cpu" and "cpu_core". Then we decide
-> >> whether going further.
-> >>
-> >> The input of the evsel__must_be_in_group() is the evsel. The PMU name is
-> >> stored in the evsel->pmu_name. I don't think we need to check all the
-> >> possible PMU names. Using evsel->pmu_name should be good enough.
-> >>
-> >>> if (!pmu_have_event("cpu", "slots") && !pmu_have_event("cpu_core", "slots") )
-> >>>
-> >>> But we should add a helper function for this. It is odd to have this
-> >>> change supporting Alderlake but the existing evlist work not. Perhaps
-> >>> we should just wait until Zhengjun's patches land.
-> >>
-> >> Yes, a helper function is good for the arch_evlist functions. But I
-> >> don't think this patch needs the helper function. Zhengjun's patches are
-> >> to fix the other topdown issues on ADL. There is no dependency between
-> >> this patch and zhengjun's patches.
-> >>
-> >> Thanks,
-> >> Kan
-> >
-> > TL;DR I think we can move forward with landing these patches to fix Icelake.
->
-> This patch doesn't work with the hybrid platform for sure. I can send
-> you a fix for the hybrid part if you prefer this way? Then I guess you
-> may append it as the patch 3 for V2.
->
-> Besides the hybrid thing, the patch set also has other two issues I
-> mentioned in the previous reply.
-> - I don't think the strcasecmp() can handle the case like
-> cpu/topdown-bad-spec/ or cpu/slots/. It should be an issue for both
-> hybrid and non-hybrid platforms.
-> - It's better not to use non-architecture events, e.g., baclears.any,
-> ARITH.DIVIDER_ACTIVE, even in the test case. The non-architecture events
-> may be disappear in the future platforms. If so, you have to update the
-> test case again for the future platforms.
-> IMHO, I don't think the patch set is ready.
+* Liam R. Howlett <Liam.Howlett@Oracle.com> [220510 08:50]:
+> * SeongJae Park <sj@kernel.org> [220510 03:37]:
+> > Hi Liam,
+> >=20
+> > On Wed, 4 May 2022 01:07:52 +0000 Liam Howlett <liam.howlett@oracle.com=
+> wrote:
+> >=20
+> > > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> > >=20
+> > > Start tracking the VMAs with the new maple tree structure in parallel=
+ with
+> > > the rb_tree.  Add debug and trace events for maple tree operations an=
+d
+> > > duplicate the rb_tree that is created on forks into the maple tree.
+> > >=20
+> > > The maple tree is added to the mm_struct including the mm_init struct=
+,
+> > > added support in required mm/mmap functions, added tracking in kernel=
+/fork
+> > > for process forking, and used to find the unmapped_area and checked
+> > > against what the rbtree finds.
+> > >=20
+> > > This also moves the mmap_lock() in exit_mmap() since the oom reaper c=
+all
+> > > does walk the VMAs.  Otherwise lockdep will be unhappy if oom happens=
+.
+> > >=20
+> > > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > ---
+> > >  arch/x86/kernel/tboot.c     |   1 +
+> > >  drivers/firmware/efi/efi.c  |   1 +
+> > >  include/linux/mm.h          |   2 +
+> > >  include/linux/mm_types.h    |   3 +
+> > >  include/trace/events/mmap.h |  73 ++++++++
+> > >  kernel/fork.c               |  20 ++-
+> > >  mm/init-mm.c                |   2 +
+> > >  mm/mmap.c                   | 323 +++++++++++++++++++++++++++++++++-=
+--
+> > >  8 files changed, 396 insertions(+), 29 deletions(-)
+> > >=20
+> > [...]
+> > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > index d7e120ad5825..e777da0132f6 100644
+> > > --- a/mm/mmap.c
+> > > +++ b/mm/mmap.c
+> > [...]
+> > > @@ -680,6 +744,56 @@ static void __vma_link_file(struct vm_area_struc=
+t *vma)
+> > >  	}
+> > >  }
+> > > =20
+> > > +/*
+> > > + * vma_mas_store() - Store a VMA in the maple tree.
+> > > + * @vma: The vm_area_struct
+> > > + * @mas: The maple state
+> > > + *
+> > > + * Efficient way to store a VMA in the maple tree when the @mas has =
+already
+> > > + * walked to the correct location.
+> > > + *
+> > > + * Note: the end address is inclusive in the maple tree.
+> > > + */
+> > > +inline void vma_mas_store(struct vm_area_struct *vma, struct ma_stat=
+e *mas)
+> > > +{
+> > > +	trace_vma_store(mas->tree, vma);
+> > > +	mas_set_range(mas, vma->vm_start, vma->vm_end - 1);
+> > > +	mas_store_prealloc(mas, vma);
+> > > +}
+> > > +
+> > > +/*
+> > > + * vma_mas_remove() - Remove a VMA from the maple tree.
+> > > + * @vma: The vm_area_struct
+> > > + * @mas: The maple state
+> > > + *
+> > > + * Efficient way to remove a VMA from the maple tree when the @mas h=
+as already
+> > > + * been established and points to the correct location.
+> > > + * Note: the end address is inclusive in the maple tree.
+> > > + */
+> > > +static inline void vma_mas_remove(struct vm_area_struct *vma, struct=
+ ma_state *mas)
+> > > +{
+> > > +	trace_vma_mas_szero(mas->tree, vma->vm_start, vma->vm_end - 1);
+> > > +	mas->index =3D vma->vm_start;
+> > > +	mas->last =3D vma->vm_end - 1;
+> > > +	mas_store_prealloc(mas, NULL);
+> > > +}
+> >=20
+> > Above two functions were defined in internal.h in v8[1], but moved to m=
+map.c in
+> > this version.  As mmap.c is compiled when CONFIG_MMU, build fails when =
+the
+> > config is not set as below:
+> >=20
+> >     .../mm/nommu.c: In function 'add_vma_to_mm':
+> >     .../mm/nommu.c:575:2: error: implicit declaration of function 'vma_=
+mas_store'; did you mean 'mas_store'? [-Werror=3Dimplicit-function-declarat=
+ion]
+> >       575 |  vma_mas_store(vma, &mas);
+> >           |  ^~~~~~~~~~~~~
+> >           |  mas_store
+> >     .../mm/nommu.c: In function 'delete_vma_from_mm':
+> >     .../mm/nommu.c:599:2: error: implicit declaration of function 'vma_=
+mas_remove' [-Werror=3Dimplicit-function-declaration]
+> >       599 |  vma_mas_remove(vma, &mas);
+> >           |  ^~~~~~~~~~~~~~
+> >=20
+> > Was there a reason to move these definitions?  I confirmed moving the
+> > definition back to internal.h fixes this issue, but I'm unsure if that'=
+s the
+> > right solution.
+> >=20
+> > [1] https://lore.kernel.org/linux-mm/20220426150616.3937571-10-Liam.How=
+lett@oracle.com/
+> >=20
+>=20
+> I moved the functions as they were dropped elsewhere for cleanup.  I did
+> check my m68k buildroot, but the buildroot seems to have not pulled the
+> new code - it clones the repo externally.  I just changed the branch to
+> use mm-unstable and that is indeed failing as you see above.  Your fix
+> is correct - and I believe it also means I need to leave the damon
+> change the way it is now.
+>=20
 
-So all the stated objections are that I'm checking cpu/slots/ for an
-indication of topdown support and this doesn't work for hybrid? This
-is identical to the arch evlist code:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/arch/x86/util/evlist.c?h=perf/core#n10
-both in the functions arch_evlist__add_default_attrs and
-arch_evlist__leader (one I wrote and one I didn't). So the patch set
-isn't ready because I haven't fixed alderlake, but alderlake already
-isn't working? And there is no example of how to make this work for
-alderlake. So basically your ask is that I bring up alderlake. I think
-this is stretching things for a patch fixing icelake. The value here
-is in fixing icelake and alderlake will have to be the next problem.
-
-> >
-> > For Alderlake/hybrid we have a problem. To determine what happens with
-> > grouping we need to know does the CPU have topdown events? This is a
-> > runtime question for doing perf_event_open and so an arch test and
-> > weak symbol are appropriate. For Icelake we are determining the
-> > presence of topdown events by looking at the special PMU cpu. For
-> > Alderlake the same information can be found by looking at the PMUs
-> > cpu_core and cpu_atom, but how to discover those PMU names?
->
-> The PMU name can be retrieved either from the event list or perf command.
-> For the non-hybrid, the PMU name is hard code to "cpu" for the core
-> events. So users/event files don't need to specify the PMU name.
-> For the hybrid platform, a PMU name is required and stored in the
-> evsel->pmu_name. If the evsel->pmu_name is NULL, we can assume that it's
-> a non-hybrid PMU, CPU.
-
-This doesn't make sense. Hybrid implies more than 1 CPU type, how can
-more than one be the same as 1 type to be used for the PMU? Again, you
-are asking I make all the alderlake logic work and I think that should
-be follow up. As shown above the arch evlist code also needs fixing as
-follow up.
-
-Thanks,
-Ian
-
-> > It is
-> > already somewhat concerning that we've hard coded "cpu" and we don't
-> > want to have an ever growing list of PMU names.
-> >
-> > We have similarly hard coded "cpu" in the topology code here:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/cputopo.c?h=tmp.perf/core#n18
-> > Is this unreasonable given cpu is already supposed to be ABI stable:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/Documentation/ABI/stable/sysfs-devices-system-cpu?h=tmp.perf/core
->
-> I don't think there is a stable ABI for a PMU name.
-> The PMU name may be changed generation by generation because of the
-> different micro arch. We will try our best to keep it unchanged in X86
-> but it's not guaranteed especially when the hybrid is introduced.
->
->
-> >
-> > It is hard to say what the right hybrid fix is here. I should get a
-> > system I can poke shortly. I'd also like to compare what's in sysfs
-> > for Alderlake with ARM's big.little approach. I can imagine we need a
-> > function that returns a list of CPU like PMUs for probing. Ideally we
-> > could work this out from sysfs and use some stable ABI.
-> >
->
-> I don't think there is a standard PMU naming rule for all the ARCHs. For
-> X86, it may be possible. You can assume that the name like "cpu" or
-> "cpu_*" are for core PMUs. But for other ARCH e.g., ARM, AFAIK, they use
-> a quite different naming rule.
->
->
-> Thanks,
-> Kan
+I recall now that I wanted to have the function traced.  Moving it to
+the c file allowed me to add tracepoints pretty easily.  Having it in
+the header does not work as it will redefine the tracepoints many times
+and cause a bit of a mess.  I don't love putting the tracepoint as is in
+another function but I think I will have to move to this method.  On the
+plus side, the open-coded modifications to the maple tree may be able to
+use the tracepoints then.

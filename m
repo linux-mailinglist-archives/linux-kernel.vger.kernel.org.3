@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE506521355
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9482D521357
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 13:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240750AbiEJLRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 07:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S235477AbiEJLRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 07:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbiEJLRJ (ORCPT
+        with ESMTP id S240796AbiEJLRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 07:17:09 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BEA21F1E4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 04:13:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VCr6xmA_1652181187;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCr6xmA_1652181187)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 10 May 2022 19:13:08 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org, mike.kravetz@oracle.com,
-        akpm@linux-foundation.org
-Cc:     songmuchun@bytedance.com, willy@infradead.org,
-        anshuman.khandual@arm.com, christophe.leroy@csgroup.eu,
-        baolin.wang@linux.alibaba.com,
+        Tue, 10 May 2022 07:17:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6D52A472C;
+        Tue, 10 May 2022 04:13:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F516B81CC4;
+        Tue, 10 May 2022 11:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB68C385C2;
+        Tue, 10 May 2022 11:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652181205;
+        bh=WNU4ksjN/LVTrVzbET1InUKC36Ei8bhbRLGGDvnxB/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eKuwKInN6cyg3p8dTsDyoNtNUIAwmO24ivvGGZ0aZ5d+HUIhatW76h6J/wOrLIaA6
+         zmHRyIkMg8GIzh2IF05y8JetF0nEHbT6y4it+zGUrRjfsOC8nKvC0MaEeNJtjXuTLv
+         suErUe8cBgwAmPH23mzDcO1w5nUumSj7FNUzajxecqbmGZzv1FB6cYi+TQBSh7pVkQ
+         ifnw+3pNGC4dXmtlirlECzCy7L7cLWiwFhvSnaLaE8tZnDItFrFOgiPBdHyyqM+/ds
+         zpJmcQ5iMmtdY+Id2qwqbF/fcKTXRpDUjmjM3VlORmglIBCLcoSSqBKRKWtddJw2wC
+         QLKl1nqC6JZBw==
+Date:   Tue, 10 May 2022 12:13:19 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Besar Wicaksono <bwicaksono@nvidia.com>,
+        catalin.marinas@arm.com, mark.rutland@arm.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH 2/2] arm64/hugetlb: Implement arm64 specific huge_ptep_get()
-Date:   Tue, 10 May 2022 19:12:53 +0800
-Message-Id: <de94fc10e396668537909b71939aff6fd2579dfb.1652180088.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
-References: <cover.1652180088.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-tegra@vger.kernel.org, thanu.rangarajan@arm.com,
+        Michael.Williams@arm.com, treding@nvidia.com, jonathanh@nvidia.com,
+        vsethi@nvidia.com, Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 0/2] perf: ARM CoreSight PMU support
+Message-ID: <20220510111318.GD27557@willie-the-truck>
+References: <20220509002810.12412-1-bwicaksono@nvidia.com>
+ <20220509092843.GB26264@willie-the-truck>
+ <2e5e09f9-b71b-d936-e291-db8f94554b18@arm.com>
+ <20220510110742.ievkihggndpms3fn@bogus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510110742.ievkihggndpms3fn@bogus>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we use huge_ptep_get() to get the pte value of a hugetlb page,
-however it will only return one specific pte value for the CONT-PTE
-or CONT-PMD size hugetlb on ARM64 system, which can contain seravel
-continuous pte or pmd entries with same page table attributes. And it
-will not take into account the subpages' dirty or young bits of a
-CONT-PTE/PMD size hugetlb page.
+On Tue, May 10, 2022 at 12:07:42PM +0100, Sudeep Holla wrote:
+> On Mon, May 09, 2022 at 11:02:23AM +0100, Suzuki K Poulose wrote:
+> > Cc: Mike Williams, Mathieu Poirier
+> > On 09/05/2022 10:28, Will Deacon wrote:
+> > > On Sun, May 08, 2022 at 07:28:08PM -0500, Besar Wicaksono wrote:
+> > > >   arch/arm64/configs/defconfig                  |    1 +
+> > > >   drivers/perf/Kconfig                          |    2 +
+> > > >   drivers/perf/Makefile                         |    1 +
+> > > >   drivers/perf/coresight_pmu/Kconfig            |   10 +
+> > > >   drivers/perf/coresight_pmu/Makefile           |    7 +
+> > > >   .../perf/coresight_pmu/arm_coresight_pmu.c    | 1317 +++++++++++++++++
+> > > >   .../perf/coresight_pmu/arm_coresight_pmu.h    |  147 ++
+> > > >   .../coresight_pmu/arm_coresight_pmu_nvidia.c  |  300 ++++
+> > > >   .../coresight_pmu/arm_coresight_pmu_nvidia.h  |   17 +
+> > > >   9 files changed, 1802 insertions(+)
+> > > 
+> > > How does this interact with all the stuff we have under
+> > > drivers/hwtracing/coresight/?
+> > 
+> > Absolutely zero, except for the name. The standard
+> > is named "CoreSight PMU" which is a bit unfortunate,
+> > given the only link, AFAIU, with the "CoreSight" architecture
+> > is the Lock Access Register(LAR). For reference, the
+> > drivers/hwtracing/coresight/ is purely "CoreSight" self-hosted
+> > tracing and the PMU is called "cs_etm" (expands to coresight etm).
+> > Otherwise the standard doesn't have anything to do with what
+> > exists already in the kernel.
 
-So the huge_ptep_get() is inconsistent with huge_ptep_get_and_clear(),
-which already takes account the dirty or young bits for any subpages
-in this CONT-PTE/PMD size hugetlb [1]. Meanwhile we can miss dirty or
-young flags statistics for hugetlb pages with current huge_ptep_get(),
-such as the gather_hugetlb_stats() function, and CONT-PTE/PMD hugetlb
-monitoring with DAMON.
+That's... a poor naming choice! But good, if it's entirely separate then I
+don't have to worry about that. Just wanted to make sure we're not going to
+get tangled up in things like ROM tables and Coresight power domains for
+these things.
 
-Thus define an ARM64 specific  huge_ptep_get() implementation, that will
-take into account any subpages' dirty or young bits for CONT-PTE/PMD size
-hugetlb page, for those functions that want to check the dirty and young
-flags of a hugetlb page.
+> > One potential recommendation for the name is, "Arm PMU"  (The ACPI table is
+> > named Arm PMU Table). But then that could be clashing with the armv8_pmu
+> > :-(.
+> > 
+> > Some of the other options are :
+> > 
+> > "Arm Generic PMU"
+> > "Arm Uncore PMU"
+> 
+> I wasn't sure on this if there is any restriction on usage of this on Arm
+> and hence didn't make the suggestion. But if allowed, this would be my
+> choice too.
 
-[1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
+We'd taken to calling them "System" PMUS in the past, so maybe just stick
+with that? I think "Uncore" is Intel terminology so it's probably best to
+avoid it for non-Intel parts.
 
-Suggested-by: Muchun Song <songmuchun@bytedance.com>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- arch/arm64/include/asm/hugetlb.h |  2 ++
- arch/arm64/mm/hugetlbpage.c      | 24 ++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 616b2ca..1fd2846 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -44,6 +44,8 @@ extern pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
- #define __HAVE_ARCH_HUGE_PTE_CLEAR
- extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 			   pte_t *ptep, unsigned long sz);
-+#define __HAVE_ARCH_HUGE_PTEP_GET
-+extern pte_t huge_ptep_get(pte_t *ptep);
- extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
- 				 pte_t *ptep, pte_t pte, unsigned long sz);
- #define set_huge_swap_pte_at set_huge_swap_pte_at
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index be5e2f3..8fb0198 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -158,6 +158,30 @@ static inline int num_contig_ptes(unsigned long size, size_t *pgsize)
- 	return contig_ptes;
- }
- 
-+pte_t huge_ptep_get(pte_t *ptep)
-+{
-+	int ncontig, i;
-+	size_t pgsize;
-+	pte_t orig_pte = ptep_get(ptep);
-+
-+	if (!pte_present(orig_pte) || !pte_cont(orig_pte))
-+		return orig_pte;
-+
-+	ncontig = num_contig_ptes(page_size(pte_page(orig_pte)), &pgsize);
-+
-+	for (i = 0; i < ncontig; i++, ptep++) {
-+		pte_t pte = ptep_get(ptep);
-+
-+		if (pte_dirty(pte))
-+			orig_pte = pte_mkdirty(orig_pte);
-+
-+		if (pte_young(pte))
-+			orig_pte = pte_mkyoung(orig_pte);
-+	}
-+
-+	return orig_pte;
-+}
-+
- /*
-  * Changing some bits of contiguous entries requires us to follow a
-  * Break-Before-Make approach, breaking the whole contiguous set
--- 
-1.8.3.1
-
+Will

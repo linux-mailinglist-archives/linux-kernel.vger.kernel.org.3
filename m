@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289B1521ACA
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC8B521944
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242589AbiEJOEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S243705AbiEJNmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244773AbiEJNmI (ORCPT
+        with ESMTP id S243122AbiEJN2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:42:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301AE6C0F6;
-        Tue, 10 May 2022 06:30:31 -0700 (PDT)
+        Tue, 10 May 2022 09:28:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAED2528B;
+        Tue, 10 May 2022 06:20:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E406181B;
-        Tue, 10 May 2022 13:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6436CC385A6;
-        Tue, 10 May 2022 13:30:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EACC5616D0;
+        Tue, 10 May 2022 13:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078CBC385C2;
+        Tue, 10 May 2022 13:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189429;
-        bh=g61op7ZwhDPVP/2KksLP31NrhdNotYN2BThA5StsoMo=;
+        s=korg; t=1652188853;
+        bh=TrEdLr6RrI2ecmeFH2LJ1ZCxHozPoF75vuqC83vbSXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xx74pf/g8WlazmaPNJIKWHGatsAOoqs89VyCIwHYMbaBv+eYLDgLNJxCzUXKqTbCI
-         E3W6o263vw6+kVoJIJEzmTxeqbM+jYqokr6zqmgoZaCaOfkGsD4+I4xDLdQ8c+nA1t
-         EdFfdCZEyKVHs+HH7b5M/r+MDk/qtcBN97JKYW2Q=
+        b=Yj6R58hsLUT2Po8b8oyfEw4jldaJLvYIXX5AtOBF9dBfKWbYEU2EUlA/tWc49slS1
+         UJFgZWRc+JzKmTM01nCXQC7TutdQaD/QaI9TIu/brmGU1hm/CE+o6e1uQzIcMcJk91
+         e5UP4FMFeach8jjT0HxqlZ4p7LtllbyIYIIP1dpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
-        Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.15 049/135] net/mlx5e: Dont match double-vlan packets if cvlan is not set
-Date:   Tue, 10 May 2022 15:07:11 +0200
-Message-Id: <20220510130741.805647965@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 27/88] ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
+Date:   Tue, 10 May 2022 15:07:12 +0200
+Message-Id: <20220510130734.535705606@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
+References: <20220510130733.735278074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vlad Buslov <vladbu@nvidia.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit ada09af92e621ab500dd80a16d1d0299a18a1180 upstream.
+[ Upstream commit 0f83e6b4161617014017a694888dd8743f46f071 ]
 
-Currently, match VLAN rule also matches packets that have multiple VLAN
-headers. This behavior is similar to buggy flower classifier behavior that
-has recently been fixed. Fix the issue by matching on
-outer_second_cvlan_tag with value 0 which will cause the HW to verify the
-packet doesn't contain second vlan header.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Fixes: 699e96ddf47f ("net/mlx5e: Support offloading tc double vlan headers match")
-Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fd1c07861491 ("ARM: OMAP4: Fix the init code to have OMAP4460 errata available in DT build")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Message-Id: <20220309104302.18398-1-linmq006@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm/mach-omap2/omap4-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -2291,6 +2291,17 @@ static int __parse_cls_flower(struct mlx
- 				 match.key->vlan_priority);
+diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+index 7074cfd1ff41..79a1e4c51e3d 100644
+--- a/arch/arm/mach-omap2/omap4-common.c
++++ b/arch/arm/mach-omap2/omap4-common.c
+@@ -318,10 +318,12 @@ void __init omap_gic_of_init(void)
  
- 			*match_level = MLX5_MATCH_L2;
-+
-+			if (!flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CVLAN) &&
-+			    match.mask->vlan_eth_type &&
-+			    MLX5_CAP_FLOWTABLE_TYPE(priv->mdev,
-+						    ft_field_support.outer_second_vid,
-+						    fs_type)) {
-+				MLX5_SET(fte_match_set_misc, misc_c,
-+					 outer_second_cvlan_tag, 1);
-+				spec->match_criteria_enable |=
-+					MLX5_MATCH_MISC_PARAMETERS;
-+			}
- 		}
- 	} else if (*match_level != MLX5_MATCH_NONE) {
- 		/* cvlan_tag enabled in match criteria and
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-gic");
+ 	gic_dist_base_addr = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!gic_dist_base_addr);
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-twd-timer");
+ 	twd_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!twd_base);
+ 
+ skip_errata_init:
+-- 
+2.35.1
+
 
 

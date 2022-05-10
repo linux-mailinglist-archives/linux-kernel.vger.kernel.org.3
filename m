@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFB6521BF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B826521B05
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344369AbiEJO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S1344125AbiEJOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbiEJNwx (ORCPT
+        with ESMTP id S244125AbiEJNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:52:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29706C0D0;
-        Tue, 10 May 2022 06:38:15 -0700 (PDT)
+        Tue, 10 May 2022 09:45:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7092887A1D;
+        Tue, 10 May 2022 06:31:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CB38615E9;
-        Tue, 10 May 2022 13:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C61C385A6;
-        Tue, 10 May 2022 13:37:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3EB35CE1EF3;
+        Tue, 10 May 2022 13:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B23FC385C2;
+        Tue, 10 May 2022 13:31:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189858;
-        bh=BEL/QK5o7Uyv5QUi+azeEgIO671K4UQlx+HYxKtUE/8=;
+        s=korg; t=1652189470;
+        bh=P3SVQNOO3B7N/QZLCcWPzgOahP2/LyoDyJ/f3OPaNKs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nzIP0O5utaP2SNA0m63pxgLNYwLNiCfA3Q5Sjd60BHwOOUrGnODU8eLWYhta+l3zX
-         RZBLSqJusZV2aHqvts/ozhSHHf2OBkIXJ+6+jesabWZvej1Hh/Go0YQDzVRt5RIje6
-         RiWLr4GyKI/BqVWNPMONdyYrk5sjbFvvfye7y3Sw=
+        b=q3i++jFZ9yrmkW3Zj/uvk9aU+sUeN5kYaKkte2xrZLn2peb+WYLvZtFcz067VXMFw
+         IEcotpl9A1W5dVwrs5FqdMO9ryQ/r/jBe6edMhM+n2IgilSaLQBhnGI6qaie1lUu6i
+         ToGdWGUVb8ReRyBvqb3cdTn3bVd/w8CaDBnF31C8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.17 052/140] NFC: netlink: fix sleep in atomic bug when firmware download timeout
-Date:   Tue, 10 May 2022 15:07:22 +0200
-Message-Id: <20220510130743.109408814@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 061/135] net: ethernet: mediatek: add missing of_node_put() in mtk_sgmii_init()
+Date:   Tue, 10 May 2022 15:07:23 +0200
+Message-Id: <20220510130742.158023778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 4071bf121d59944d5cd2238de0642f3d7995a997 upstream.
+commit ff5265d45345d01fefc98fcb9ae891b59633c919 upstream.
 
-There are sleep in atomic bug that could cause kernel panic during
-firmware download process. The root cause is that nlmsg_new with
-GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
-handler. The call trace is shown below:
+The node pointer returned by of_parse_phandle() with refcount incremented,
+so add of_node_put() after using it in mtk_sgmii_init().
 
-BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
-Call Trace:
-kmem_cache_alloc_node
-__alloc_skb
-nfc_genl_fw_download_done
-call_timer_fn
-__run_timers.part.0
-run_timer_softirq
-__do_softirq
-...
-
-The nlmsg_new with GFP_KERNEL parameter may sleep during memory
-allocation process, and the timer handler is run as the result of
-a "software interrupt" that should not call any other function
-that could sleep.
-
-This patch changes allocation mode of netlink message from GFP_KERNEL
-to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
-flag makes memory allocation operation could be used in atomic context.
-
-Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
-Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220504055847.38026-1-duoming@zju.edu.cn
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 9ffee4a8276c ("net: ethernet: mediatek: Extend SGMII related functions")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220428062543.64883-1-yangyingliang@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/netlink.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_sgmii.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/nfc/netlink.c
-+++ b/net/nfc/netlink.c
-@@ -1244,7 +1244,7 @@ int nfc_genl_fw_download_done(struct nfc
- 	struct sk_buff *msg;
- 	void *hdr;
+--- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+@@ -26,6 +26,7 @@ int mtk_sgmii_init(struct mtk_sgmii *ss,
+ 			break;
  
--	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
- 	if (!msg)
- 		return -ENOMEM;
- 
-@@ -1260,7 +1260,7 @@ int nfc_genl_fw_download_done(struct nfc
- 
- 	genlmsg_end(msg, hdr);
- 
--	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
-+	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
- 
- 	return 0;
- 
+ 		ss->regmap[i] = syscon_node_to_regmap(np);
++		of_node_put(np);
+ 		if (IS_ERR(ss->regmap[i]))
+ 			return PTR_ERR(ss->regmap[i]);
+ 	}
 
 

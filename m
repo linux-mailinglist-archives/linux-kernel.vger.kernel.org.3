@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A147C520AA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97159520AAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 03:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbiEJBbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 9 May 2022 21:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S234227AbiEJBct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 9 May 2022 21:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbiEJBbh (ORCPT
+        with ESMTP id S231250AbiEJBcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 9 May 2022 21:31:37 -0400
-Received: from out199-14.us.a.mail.aliyun.com (out199-14.us.a.mail.aliyun.com [47.90.199.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8F9154B0C;
-        Mon,  9 May 2022 18:27:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VCo8GaE_1652146048;
-Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCo8GaE_1652146048)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 10 May 2022 09:27:31 +0800
-Message-ID: <86671cb8-51e7-0e8e-430a-a325887391b3@linux.alibaba.com>
-Date:   Tue, 10 May 2022 09:28:08 +0800
+        Mon, 9 May 2022 21:32:48 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C664828202F
+        for <linux-kernel@vger.kernel.org>; Mon,  9 May 2022 18:28:52 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id m23so19097175ljb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 09 May 2022 18:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KvsYgset45myBW8qA4NZQkt2vsRPsWbkOZTPZ8B0QZs=;
+        b=EJOcwMNhJhZ5IsTE/SrqEyOG5DXsWPDja6JwALHOzhsywHYbKQfw/yAL1WPXwHr8Oq
+         PtBWNPli66lh/BLwgJ9RITIj9y61VbJQItVH58HAsfRMXdMOiAAWo69fPdIo+55RVm5r
+         rrN93WjCILcdpaVFwbK4ochwIDbMVqJQaLrzNZ1btEdbnlTEPzjJmWjI7GN1dbdvZTkx
+         TsQOL7eHqN6VOc35W4SJgeqVtcS++l2vHczg5UwUoSVCJMIJZmeu4Ur/5vsEP/OV4zPn
+         mMBwBe7o/iiNW6fySALgeIXM2wcioj1jV2t+vWSLDQ1eTBk0HLFG/YkCvHly6om3nVJ/
+         SX7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KvsYgset45myBW8qA4NZQkt2vsRPsWbkOZTPZ8B0QZs=;
+        b=isqb07/vFd8qnECrKC0yHSADLeIANskmNLU5xv3SuSRgraI5B9MkNDICRVgBCushkS
+         y++1Ut1MXD4+Sf6WW0h+fm82DANpO7IvVIjeK9DwxRX9O6WZQq1eWPun3fLBF1VqiEbV
+         4Kx42xCUzdqB+7ghiUZexifMSaCoznXqFwjok1eU0SfOOhleLe+uumQ0X3QiW5eDvh30
+         MmZZuK4ZEP1OoUHLmp9r8bGA3AnU3FlU+c8a5XBaHNvCnzpd/aj54549mjgnSz5HlLHJ
+         xTjuBryM6+JnUZTQXuhA/ZOoX3XLCfZEevLTUJdlMJi+WxXDz8x/EcWGT7tKNv55D+vn
+         mUmQ==
+X-Gm-Message-State: AOAM530hq4oGCUFG9/Zrrq+MHtDezJHCx0p3QpnyVvlqd/aOweem4SuI
+        DHrHe16ZQk/CFnFkX4Fnj1DU4kp7NsUSnjwq
+X-Google-Smtp-Source: ABdhPJwqvBmGPTHTUUieU71G7SakyCdLYM2OuHn7lGWU7+9YrHtQfGQgAp3pviejLtX6pl5FP/Q/mA==
+X-Received: by 2002:a05:651c:a09:b0:250:628a:e7d0 with SMTP id k9-20020a05651c0a0900b00250628ae7d0mr12506962ljq.66.1652146131132;
+        Mon, 09 May 2022 18:28:51 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id l26-20020ac24a9a000000b0047255d21130sm2115301lfp.95.2022.05.09.18.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 18:28:50 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id A08D6104ADF; Tue, 10 May 2022 04:30:38 +0300 (+03)
+Date:   Tue, 10 May 2022 04:30:38 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+Message-ID: <20220510013038.ggubvsrwf7pyoamk@box.shutemov.name>
+References: <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+ <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+ <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+ <d53696f85ada39a91a3685c61d177c582810772e.camel@intel.com>
+ <d63d2774-c44d-27da-74b6-550935a196fd@intel.com>
+ <dca06ffa36abe9989f0a7abaeafc83c1a7250651.camel@intel.com>
+ <20220507004236.5p5dyksftge7wwr3@black.fi.intel.com>
+ <45d184273f1950320843f6696eb3071f7d354fd3.camel@intel.com>
+ <20220509120927.7rg6v5pyc3f4pxsh@box.shutemov.name>
+ <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-To:     Peter Xu <peterx@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        akpm@linux-foundation.org, catalin.marinas@arm.com,
-        will@kernel.org, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <20220429220214.4cfc5539@thinkpad>
- <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
- <20220502160232.589a6111@thinkpad>
- <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
- <20220503120343.6264e126@thinkpad>
- <927dfbf4-c899-b88a-4d58-36a637d611f9@oracle.com>
- <YnlEQvipCM6hnIYT@xz-m1.local>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YnlEQvipCM6hnIYT@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75d4755c9a376df2e98a267e10e60da3bd178b17.camel@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 10, 2022 at 11:54:12AM +1200, Kai Huang wrote:
+> On Mon, 2022-05-09 at 15:09 +0300, Kirill A. Shutemov wrote:
+> > On Mon, May 09, 2022 at 03:37:22PM +1200, Kai Huang wrote:
+> > > On Sat, 2022-05-07 at 03:42 +0300, Kirill A. Shutemov wrote:
+> > > > On Fri, May 06, 2022 at 12:11:03PM +1200, Kai Huang wrote:
+> > > > > Kirill, what's your opinion?
+> > > > 
+> > > > I said before that I think DMA API is the right tool here.
+> > > > 
+> > > > Speculation about future of DMA in TDX is irrelevant here. If semantics
+> > > > change we will need to re-evaluate all users. VirtIO uses DMA API and it
+> > > > is conceptually the same use-case: communicate with the host.
+> > > 
+> > > Virtio is designed for device driver to use, so it's fine to use DMA API. And
+> > > real DMA can happen to the virtio DMA buffers.  Attestation doesn't have such
+> > > assumption.
+> > 
+> > Whether attestation driver uses struct device is implementation detail.
+> > I don't see what is you point.
+> 
+> No real DMA is involved in attestation.
 
+As with VirtIO. So what?
 
-On 5/10/2022 12:41 AM, Peter Xu wrote:
-> On Fri, May 06, 2022 at 12:07:13PM -0700, Mike Kravetz wrote:
->> On 5/3/22 03:03, Gerald Schaefer wrote:
->>> On Tue, 3 May 2022 10:19:46 +0800
->>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
->>>> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
-> 
-> [...]
-> 
->>>> Please see previous code, we'll use the original pte value to check if
->>>> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs
->>>> is set noop_dirty_folio().
->>>>
->>>> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
->>>
->>> Uh, ok, that wouldn't work on s390, but we also don't have
->>> CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
->>> I guess we will be fine (for now).
->>>
->>> Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
->>> would work on a potential hugetlb *pte, directly de-referencing it
->>> instead of using huge_ptep_get().
->>>
->>> The !pte_none(*pte) check at the beginning would be broken in the
->>> hugetlb case for s390 (not sure about other archs, but I think s390
->>> might be the only exception strictly requiring huge_ptep_get()
->>> for de-referencing hugetlb *pte pointers).
-> 
-> We could have used is_vm_hugetlb_page(vma) within the helper so as to
-> properly use either generic pte or hugetlb version of pte fetching.  We may
-> want to conditionally do set_[huge_]pte_at() too at the end.
-> 
-> I could prepare a patch for that even if it's not really anything urgently
-> needed. I assume that won't need to block this patchset since we need the
-> pteval for pte_dirty() check anyway and uffd-wp definitely needs it too.
-
-OK. Thanks Peter.
+-- 
+ Kirill A. Shutemov

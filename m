@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D39522056
+	by mail.lfdr.de (Postfix) with ESMTP id 0695B522055
 	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347145AbiEJQBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S1347087AbiEJQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347233AbiEJPwG (ORCPT
+        with ESMTP id S1347234AbiEJPwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 10 May 2022 11:52:06 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD391838C
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:47:54 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z126so13503210qkb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:47:54 -0700 (PDT)
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9C18E34
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:47:56 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id t16so13810793qtr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:47:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lf0sqMsn4LVEaqO+/Mf4ulUWX6BR8I9KEfQxFM/4vLM=;
-        b=nhrJAj6iv3QwxvBUpUIwmUeMUAPBIx+S0N3/McdT4LHu1yx/BTzdrWjwvDvGmNVjIW
-         nqJcoqPlJ9+U+5MVk95f7hGwRnh6giR+mZCRwI4QUmFghsCTMCtmO/Nt25ajv0VWAOaG
-         LcCNkqJvp14ZFwdZaml2mCdJV7TiB57zggAOMnW8aqlpavQguQni/e3BzcaXBrOdXhtd
-         7GjpzK8l+taK7daFK2ZapD6DmKoyu5nOAd/ReXIo75lKbZzVERnoHJSOXPFYry4vJBlw
-         w6RVu1avd6DcGREID9d0R7xlB9vZwYpp2UOAdt3Ea9rnZx8kkIy28vc8Yy4TA7qi6Xr6
-         nWAw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pU7kC1SMo4mlTP7fmR59ozkw+4jH/4NJrCGuFJdf6A4=;
+        b=jeTHL+zkb3ae98nnxoN+7AqqNSKIUvIKbCWy+KKPO0Yy+e0/IyD3M34Wwav9VY1MqP
+         qBtHfminh+20L3UJ7VVq6aII3BSzarzWFYYI7OVAvt/38fBzk2Sj1ujp/Gqfvf4NmXRy
+         HlohiNCPcThYZxFcUkOF3g0Imw0+5WTe7k0AUNXstVavNcPvzbP1hoHfGqYsWW7MEt8W
+         dDl/3v4Lqf0fmdzWHiAjG2zocG+y6zMvXRrjwN64xPnmf1YdjS2EwK4u++MG6hvtG8XA
+         BmSmG3hQvIkRhuqg3H3SPE5VwjKil3ri3u6auyhPuo5T7/ZWE9oDA+/k3R+Va+ocz6aP
+         VZTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lf0sqMsn4LVEaqO+/Mf4ulUWX6BR8I9KEfQxFM/4vLM=;
-        b=VelYSi+qnkqvjdkB9wHSk3SoCSYgCaXp9Gr21ba1tX6Qvurz7znwVTYBW9GEqCucG1
-         Ya+ucfXhtIIL7lbIjuhihb2RXth1wBTXICL5wXBtXCKM4ocknaCQxggYJYQHw6U7U9Rv
-         q8P1ycURy+z4miHWg5tNcr7RFNqFiseV66L+CgxEeGUr0DZUZhvLFppa3tK0pZ/dNSUl
-         LalMgpFXJDsSmWr4CqUK0ETJ3n3jej1tfjGjwmxXp5n6r0thtPMOgWxA1KvXJhZDGS8U
-         bPDwzR641XBi7A6v+nSqm2+JB3jDPlMkW6C2nwAyYb38b8jsWjgeRJQ/066tezOeNhHd
-         ZcRw==
-X-Gm-Message-State: AOAM533e+9a+NSClpOSqVM1X4ouGX6sZue/YoiApLo28rXoDBkPTY198
-        4j2pvOPyPIqQzjjcmASUa5Y=
-X-Google-Smtp-Source: ABdhPJy2XYghV8P8cUK1PQFS3/qFKu/G7Xlsa7dtAwRUGhoeETEpo+eK+nSokvA7Ncxx7GIqbwcWrg==
-X-Received: by 2002:a05:620a:b43:b0:6a0:92b9:8199 with SMTP id x3-20020a05620a0b4300b006a092b98199mr7317034qkg.710.1652197673669;
-        Tue, 10 May 2022 08:47:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pU7kC1SMo4mlTP7fmR59ozkw+4jH/4NJrCGuFJdf6A4=;
+        b=rJ9ngJ7YveZCG19/bjz20JbBmqH6KWdLGbVX5DaMI1zpPcFFhwHbZ+PzdcA8Jk5VMV
+         00qt5Apc9YV3iFZKNrYuwrlLhcL32CpotJLQNLQFOF//1S2EjEu4mrwWhG0wyrA9Byem
+         rIbtT1dhrWCGZ8utrbjDIFOdeZc7yGTCvfM0FdXw9hJPb6uY6XLBjHMsjO0fmbXXEiKI
+         j7wSpsrWyH/Fa1tADDrJG719ajWKJRdmeNxWEsQdKi3EwmvVseW3BqwzSyOrwxetqbVm
+         ybChyx7botsZIGz2sIzisVUmRvnGY9L5E1dmUpvEh8EJDcpPAe0XQCXVWNqxWS34Ldm2
+         NMSg==
+X-Gm-Message-State: AOAM530QO6vwpW4wRM5mNhkwj9DGPYi4hKbCESf3A7CZGQIu4zuqxcln
+        LmxU1Z3uWvDvlQhSnYLIQcc=
+X-Google-Smtp-Source: ABdhPJy2pJ02ApIgBhzwy2wz2hCj3CKDavdxJ7zOVAt2upsy4uouBW6BbQL5+JNwjE1EnvY1ZSwPkQ==
+X-Received: by 2002:a05:622a:587:b0:2f3:ced4:60ba with SMTP id c7-20020a05622a058700b002f3ced460bamr15492635qtb.493.1652197675159;
+        Tue, 10 May 2022 08:47:55 -0700 (PDT)
 Received: from localhost ([98.242.65.84])
-        by smtp.gmail.com with ESMTPSA id x9-20020ac84d49000000b002f39b99f677sm9647065qtv.17.2022.05.10.08.47.52
+        by smtp.gmail.com with ESMTPSA id d16-20020ac851d0000000b002f39b99f6bbsm9527839qtn.85.2022.05.10.08.47.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 08:47:53 -0700 (PDT)
+        Tue, 10 May 2022 08:47:54 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         David Laight <David.Laight@ACULAB.COM>,
@@ -61,90 +61,172 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 00/21] add coccinelle scripts for {bitmap,cpumask,nodes}_empty()
-Date:   Tue, 10 May 2022 08:47:28 -0700
-Message-Id: <20220510154750.212913-1-yury.norov@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, cocci@inria.fr
+Subject: [PATCH 01/22] introduce bitmap.cocci
+Date:   Tue, 10 May 2022 08:47:29 -0700
+Message-Id: <20220510154750.212913-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220510154750.212913-1-yury.norov@gmail.com>
+References: <20220510154750.212913-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this series:
- - introduce bitmap.cocci, cpumask.cocci and nodemask.cocci;
- - add checks for cases where bitmap_weight() may be replaced with one of
-   "empty, full, gt, lt, ge, le or eq" versions; and
- - address issued found with those scripts.
+Using bitmap_weight() to compare weight of bitmap against a number or
+expression is common but wrong pattern. The more efficient way is to
+use bitmap_weight_{empty,full,gt,lt,ge,le,eq} as appropriate.
 
-On top of next-2022-05-06.
+This patch adds cocci script to test sources for this.
 
-Yury Norov (22):
-  introduce bitmap.cocci
-  introduce cpumask.cocci
-  introduce nodemask.cocci
-  ice: use bitmap_empty() in ice_vf_has_no_qs_ena()
-  iio: replace bitmap_weight with bitmap_weitght_{eq,le} where
-    appropriate
-  octeontx2: use bitmap_empty() instead of bitmap_weight()
-  risc-v: replace bitmap_weight with bitmap_empty in riscv_fill_hwcap()
-  bitops: introduce MANY_BITS() macro
-  qed: replace bitmap_weight() with MANY_BITS()
-  net/mlx5e: simplify mlx5e_set_fecparam()
-  KVM: x86: hyper-v: replace bitmap_weight() with hweight64()
-  ia64: cleanup remove_siblinginfo()
-  x86: smp: move cpumask_weight() out of for-loop in remove_siblinginfo
-  x86: smp: use cpumask_weight_eq() in remove_siblinginfo
-  net/mlx5: use cpumask_weight_gt() in irq_pool_request_irq()
-  x86/tsc: use cpumask_weight_gt() in loop_timeout()
-  sched/core: fix opencoded cpumask_any_but() in
-    sched_core_cpu_{starting,deactivate}
-  sched/core: remove unneeded cpumask_weight in
-    sched_core_cpu_{starting,deactivate}
-  sched/core: replace cpumask_weight() with cpumask_weight_eq() where
-    appropriate
-  sched/topology: replace cpumask_weight() with cpumask_weight_eq where
-    appropriate
-  cpufreq: use cpumask_weight_gt() in policy_is_shared()
-  clockevents: use cpumask_weight_eq() in tick_cleanup_dead_cpu()
+Because for short bitmaps there's no performance adwantage of conditional
+bitmap_weight over regular one, and because readability of latter
+may be considered better, bitmap_weight_{gt,lt,ge,le,eq} cases are
+marked with WARNING.
 
- MAINTAINERS                                   |   3 +
- arch/ia64/kernel/smpboot.c                    |   4 -
- arch/riscv/kernel/cpufeature.c                |   7 +-
- arch/x86/kernel/smpboot.c                     |   7 +-
- arch/x86/kernel/tsc_sync.c                    |   2 +-
- arch/x86/kvm/hyperv.c                         |   4 +-
- arch/xtensa/kernel/traps.c                    |   5 +-
- drivers/iio/adc/ad_sigma_delta.c              |   2 +-
- drivers/iio/industrialio-buffer.c             |   2 +-
- drivers/net/ethernet/intel/ice/ice_vf_lib.c   |   4 +-
- .../net/ethernet/marvell/octeontx2/af/cgx.c   |   6 +-
- .../net/ethernet/marvell/octeontx2/af/rpm.c   |   2 +-
- .../ethernet/mellanox/mlx5/core/en_ethtool.c  |   4 +-
- .../mellanox/mlx5/core/irq_affinity.c         |   2 +-
- drivers/net/ethernet/qlogic/qed/qed_dev.c     |   3 +-
- include/linux/bitops.h                        |   3 +
- include/linux/cpufreq.h                       |   2 +-
- include/linux/log2.h                          |   2 +-
- kernel/sched/core.c                           |  47 +++-----
- kernel/sched/topology.c                       |   4 +-
- kernel/time/clockevents.c                     |   2 +-
- scripts/coccinelle/api/bitmap.cocci           | 104 ++++++++++++++++++
- scripts/coccinelle/api/cpumask.cocci          |  51 +++++++++
- scripts/coccinelle/api/nodemask.cocci         |  51 +++++++++
- 24 files changed, 256 insertions(+), 67 deletions(-)
+CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+CC: Julia Lawall <Julia.Lawall@inria.fr>
+CC: Nicolas Palix <nicolas.palix@imag.fr>
+CC: linux-kernel@vger.kernel.org
+CC: cocci@inria.fr
+CC: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ MAINTAINERS                         |   1 +
+ scripts/coccinelle/api/bitmap.cocci | 104 ++++++++++++++++++++++++++++
+ 2 files changed, 105 insertions(+)
  create mode 100644 scripts/coccinelle/api/bitmap.cocci
- create mode 100644 scripts/coccinelle/api/cpumask.cocci
- create mode 100644 scripts/coccinelle/api/nodemask.cocci
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f57e6d38a542..17fd10824636 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3523,6 +3523,7 @@ F:	lib/find_bit.c
+ F:	lib/find_bit_benchmark.c
+ F:	lib/nodemask.c
+ F:	lib/test_bitmap.c
++F:	scripts/coccinelle/api/bitmap.cocci
+ F:	tools/include/linux/bitmap.h
+ F:	tools/include/linux/find.h
+ F:	tools/lib/bitmap.c
+diff --git a/scripts/coccinelle/api/bitmap.cocci b/scripts/coccinelle/api/bitmap.cocci
+new file mode 100644
+index 000000000000..24ff1809ba1f
+--- /dev/null
++++ b/scripts/coccinelle/api/bitmap.cocci
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/// Use bitmap_empty rather than bitmap_weight() == 0 etc
++///
++// Confidence: High
++// Copyright: (C) 2022 Yury Norov
++// URL: http://coccinelle.lip6.fr/
++// Comments:
++// Options: --no-includes --include-headers
++
++virtual org
++virtual report
++virtual context
++virtual patch
++
++@rfull depends on !patch@
++position p;
++expression E1, E2;
++binary operator cmp = {==, !=, <};
++@@
++
++ bitmap_weight(E1,E2) cmp@p E2
++
++@script:python depends on report@
++p << rfull.p;
++@@
++
++coccilib.report.print_report(p[0], "ERROR: use bitmap_full()")
++
++@script:python depends on org@
++p << rfull.p;
++@@
++
++@rempty1 depends on !patch@
++position p;
++statement S;
++@@
++
++ if (bitmap_weight@p(...)) S
++
++@script:python depends on report@
++p << rempty1.p;
++@@
++
++for p0 in p:
++        coccilib.report.print_report(p0, "ERROR: use !bitmap_empty()")
++
++@script:python depends on org@
++p << rempty1.p;
++@@
++
++@rempty depends on !patch@
++position p;
++@@
++
++	bitmap_weight@p(...) == 0
++
++@script:python depends on report@
++p << rempty.p;
++@@
++
++for p0 in p:
++        coccilib.report.print_report(p0, "ERROR: use bitmap_empty()")
++
++@script:python depends on org@
++p << rempty.p;
++@@
++
++@not_rempty depends on !patch@
++position p;
++@@
++
++ bitmap_weight(...) @p> 0
++
++@script:python depends on report@
++p << not_rempty.p;
++@@
++
++for p0 in p:
++        coccilib.report.print_report(p0, "ERROR: use \"!bitmap_empty()\"")
++
++@script:python depends on org@
++p << not_rempty.p;
++@@
++
++
++@rcmp depends on !patch@
++expression exp;
++binary operator cmp = {>, <, >=, <=, ==, !=};
++position p;
++@@
++
++ bitmap_weight(...) cmp@p exp
++
++@script:python depends on report@
++p << rcmp.p;
++@@
++
++for p0 in p:
++        coccilib.report.print_report(p0,
++		"WARNING: use bitmap_weight_{gt,lt,ge,le,eq} as appropriate")
++
++@script:python depends on org@
++p << rcmp.p;
++@@
 -- 
 2.32.0
 

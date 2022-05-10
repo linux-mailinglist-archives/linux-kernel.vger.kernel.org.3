@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD6C52188F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3240D521A5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244725AbiEJNh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S245106AbiEJN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243852AbiEJN1b (ORCPT
+        with ESMTP id S245118AbiEJNic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:27:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E372C13FF;
-        Tue, 10 May 2022 06:20:38 -0700 (PDT)
+        Tue, 10 May 2022 09:38:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC46245611;
+        Tue, 10 May 2022 06:27:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95113B81B32;
-        Tue, 10 May 2022 13:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B084C385C2;
-        Tue, 10 May 2022 13:20:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0F57CE1EDE;
+        Tue, 10 May 2022 13:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE414C385C6;
+        Tue, 10 May 2022 13:27:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188836;
-        bh=xcXfCRcoyhfyUlxipCdVEsXYo0JlNezMMEx8Crxqedw=;
+        s=korg; t=1652189227;
+        bh=IWBx+5sO3Vp2iBsahPhayhdg6TUAZM8E8BQ3PDzgWgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzcBvZqfEb90xGACMiLCFEWj/6qjA6SEuGP1DGWxVTCaPouZeGdIvj1uOzTe4w22U
-         ziv9600r7Uwi9DDIRBGi/PBt9NxbqsU4/ikhFHnBtEvNIfg3i5jbSk+rhdAJXXXqzT
-         F9XqBCDlex2eBShzri5KQdPco4IjtHmrlvIDAhSc=
+        b=o1j2iIujho08PF6DqqogWkkKeGYkFitKx+FgCxlo5ZtYvIR6FBP3tPU/QMUj3UXGt
+         IIcvv7dCVU2s+Uoo960eXhCp3voMAXvjInZVmMy74oKydzesRBu9HagFeBj5/VH4D2
+         pS6j8GYhxSOHh4oWs6iuLBpG3ZTo66zSapvPSztI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 60/88] ALSA: fireworks: fix wrong return count shorter than expected by 4 bytes
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 26/70] can: grcan: grcan_close(): fix deadlock
 Date:   Tue, 10 May 2022 15:07:45 +0200
-Message-Id: <20220510130735.485052969@linuxfoundation.org>
+Message-Id: <20220510130733.634427211@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.861729621@linuxfoundation.org>
+References: <20220510130732.861729621@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit eb9d84b0ffe39893cb23b0b6712bbe3637fa25fa upstream.
+commit 47f070a63e735bcc8d481de31be1b5a1aa62b31c upstream.
 
-ALSA fireworks driver has a bug in its initial state to return count
-shorter than expected by 4 bytes to userspace applications when handling
-response frame for Echo Audio Fireworks transaction. It's due to missing
-addition of the size for the type of event in ALSA firewire stack.
+There are deadlocks caused by del_timer_sync(&priv->hang_timer) and
+del_timer_sync(&priv->rr_timer) in grcan_close(), one of the deadlocks
+are shown below:
 
-Fixes: 555e8a8f7f14 ("ALSA: fireworks: Add command/response functionality into hwdep interface")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Link: https://lore.kernel.org/r/20220424102428.21109-1-o-takashi@sakamocchi.jp
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+   (Thread 1)              |      (Thread 2)
+                           | grcan_reset_timer()
+grcan_close()              |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | grcan_initiate_running_reset()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
+
+We hold priv->lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler also need
+priv->lock in position (2) of thread 2. As a result, grcan_close()
+will block forever.
+
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain the
+needed lock.
+
+Link: https://lore.kernel.org/all/20220425042400.66517-1-duoming@zju.edu.cn
+Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
+Cc: stable@vger.kernel.org
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/firewire/fireworks/fireworks_hwdep.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/grcan.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/firewire/fireworks/fireworks_hwdep.c
-+++ b/sound/firewire/fireworks/fireworks_hwdep.c
-@@ -35,6 +35,7 @@ hwdep_read_resp_buf(struct snd_efw *efw,
- 	type = SNDRV_FIREWIRE_EVENT_EFW_RESPONSE;
- 	if (copy_to_user(buf, &type, sizeof(type)))
- 		return -EFAULT;
-+	count += sizeof(type);
- 	remained -= sizeof(type);
- 	buf += sizeof(type);
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1113,8 +1113,10 @@ static int grcan_close(struct net_device
  
+ 	priv->closing = true;
+ 	if (priv->need_txbug_workaround) {
++		spin_unlock_irqrestore(&priv->lock, flags);
+ 		del_timer_sync(&priv->hang_timer);
+ 		del_timer_sync(&priv->rr_timer);
++		spin_lock_irqsave(&priv->lock, flags);
+ 	}
+ 	netif_stop_queue(dev);
+ 	grcan_stop_hardware(dev);
 
 

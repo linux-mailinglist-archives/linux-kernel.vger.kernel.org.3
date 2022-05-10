@@ -2,177 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B465520F52
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7FC520F56
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 10:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiEJIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 04:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S237779AbiEJIGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 04:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235701AbiEJIFL (ORCPT
+        with ESMTP id S235701AbiEJIFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 04:05:11 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2054.outbound.protection.outlook.com [40.107.21.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EAF27154;
-        Tue, 10 May 2022 01:01:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kWZFk7q0EJL4FBPJuhqDUW0GsMotki/vYb5trantBxGtNHSlej3oX7JK/aWsNAtea8FChdsoPIgoHlc6G5F8PRAGT+fj4QxRUF06f0RxbX2d6cQsa1DgXQEKSd6UN4hDSo7lujv+HxKGepkO4ZGBl+4+pO0zAGrzWFIsOWb5GyOpDcX2I9oVRtZFtgfm4C/m/Vu4YW0THVO1MTlhjSEPVQiCJzUkys4xi0lMPYYrSOZZUZ/dxpPMOJgqTV1D7cOAZPmLMCvcIrk7JR/K8BRGxRgBCezqVDH8OfexAzV643a0wD9iC5o40cbt3eOun7P88uoyBkLmrwN3aKetSZ1Lzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=irmghXwUcEGZT2RaCJUif28z8Bm89JpgqyhRZxDBJz4=;
- b=MNgW9mvov/pwJdUMfAg2KBOGEXYt0jfto8AbF+7B9YEuDHAQpyfJx4TkC1u6p+ERsX0vo5AOeiUN6mJIMkis14kzs6zJFbEkqjz/+dOvZ4953tniLdLmFkHOI+lBMsh/DUSUDMZ1yMSaNZN5vg9ogPO1HNGlB8c5MEJokv4tU6Bg45qFkVgBFsMsorw5u3dPURP7x3TtqZqjPbNEXSA1xKPL7sswQxdGo2QNRAScCJbsZLPLeI1GdqRQRzD9m3RAvXAn2fBz/rrQqBptZVvBg7DBGMbv8/Un29thrhCcPTSiYuGkZ8ySTPlW6GrtQ5EqWKolsGeEpU/m/FygxwWY0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=technica-engineering.de; dmarc=pass action=none
- header.from=technica-engineering.de; dkim=pass
- header.d=technica-engineering.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=technica-engineering.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=irmghXwUcEGZT2RaCJUif28z8Bm89JpgqyhRZxDBJz4=;
- b=doBb2ySLdVYYcVTk4JX9mShJs6i8Cu3S+K2FNwKAqVq2y95FRf0WlmxARhlRqj8nPwOu5Cj6ia0PrTjE/mdZIxEOy6ynbwCf5G0cikPTOQuNZNAnnfQtX0bJwpRbTKlrkJrylaWsaSizGf2PD30GmsGN2qcGhFBIhwX7OOri2nY=
-Received: from AM9PR08MB6788.eurprd08.prod.outlook.com (2603:10a6:20b:30d::24)
- by AS8PR08MB6757.eurprd08.prod.outlook.com (2603:10a6:20b:39e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Tue, 10 May
- 2022 08:01:07 +0000
-Received: from AM9PR08MB6788.eurprd08.prod.outlook.com
- ([fe80::8443:249b:921d:345a]) by AM9PR08MB6788.eurprd08.prod.outlook.com
- ([fe80::8443:249b:921d:345a%5]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 08:01:07 +0000
-From:   Carlos Fernandez <carlos.fernandez@technica-engineering.de>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Carlos Fernandez <carlos.escuin@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v2] net: macsec: retrieve the XPN attributes before
- offloading
-Thread-Topic: [PATCH net v2] net: macsec: retrieve the XPN attributes before
- offloading
-Thread-Index: AQHYYTfXh/kHUW8MQEKwzGN89ZB7660Xt3SAgAANtKg=
-Date:   Tue, 10 May 2022 08:01:07 +0000
-Message-ID: <AM9PR08MB6788116C170D7127F77AC864DBC99@AM9PR08MB6788.eurprd08.prod.outlook.com>
-References: <20220506105540.9868-1-carlos.fernandez@technica-engineering.de>
- <0b66ddcc8428231632e7e1050045b2c282dc92d7.camel@redhat.com>
-In-Reply-To: <0b66ddcc8428231632e7e1050045b2c282dc92d7.camel@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 7e036b78-4d82-93c5-310a-05d4b1189314
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=technica-engineering.de;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6d372d07-e359-4e72-2e26-08da325b3d47
-x-ms-traffictypediagnostic: AS8PR08MB6757:EE_
-x-microsoft-antispam-prvs: <AS8PR08MB6757A0F2B95217846B5B5C85DBC99@AS8PR08MB6757.eurprd08.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZzzqGWF7rOs1u2kKkjSfVdDZ80pVUyO/sfnj4Qu36PmwtvIPkyc+G2YkbdO3+uZIOtf9kkl0iJZyHTpq1Do8W2Py00hEPWkd2W8bWBVL46k0AdGG7JbuLFdQlA63rGM+PkWOlxHeLDAAjylL86kZMPiHCiQ83GE7sZXTYukwTw0AmopakrAMGpUEUctdIcIZoOPboaflpKeI2qnGPYB8JNS750BVBO6t2z20gPLxksnJ69dM9Hk0mO3YuwjyOkqxwFV1sJ2/vGPfFuwzNUA8lK6brxu3iEu/OEM/4Vf/oQSOPHKsNnmci83Rnnzs2w4r4MGpzOyaKfX6E/6Hiyj09fVTIH37YAIB/0DdtixoOhPsrLRrMIHQjOHG3jvX53ufbiPHw9m4i1ICFkutBNF+LEQQjWOmTHW/cc8W88AfYQVFnNVRVrIIDGiwWT5aEnRLY2uRrqdi3YUuhJoiPIjmbtRHu64h8BRET9KYcDlxTc6N5eFLyxfhx7vB0U4XZoNrymIGwaP6fyLBkn1pnNE2dxqt53UTHH5PvOtusz0uo/H0HOQ1wVMG1e4hyuqmM314hXrGHy9b1F2f2rSOKdhyHz5r6L4S8RgeUyUxDKBB6kq4klHyh5k+9KBZr79+/EMVBM8mEvp2SvJRb0aRJ2FrYDomUpY7c5cg+RUUTtlbcMPdcsGTEwI9uwfSu99vLL+Iw6wDUqW1ttLwZ1mYHenAkA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6788.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(55016003)(71200400001)(52536014)(33656002)(8676002)(66556008)(66946007)(64756008)(66446008)(66476007)(122000001)(91956017)(76116006)(110136005)(86362001)(316002)(9686003)(5660300002)(38100700002)(38070700005)(26005)(6506007)(53546011)(7696005)(186003)(2906002)(44832011)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TR1VMRird4c/GssphRsUarDS79TsLskvdSp1HqeO3E3kJaz3t24bST95H4g2?=
- =?us-ascii?Q?LDmwm5vjV087UKDz1Tao1/h4VgzxLZ2uuBhAxpSk3i377eIFRVCpFFUQarpF?=
- =?us-ascii?Q?ZRp2FZm9mSkaUzifRKWJupk0lYCUi5yOejnJj6TAnikZ5yrBBa9UDNhB6+UC?=
- =?us-ascii?Q?ABP4jXYla+nI27ZplS3bac/rMBT0HcxbUm3nzgnK6sNi7DXf3tS8JwohVwb4?=
- =?us-ascii?Q?teNFocnfCnnF+n9klSgZ++TVyGdJNAPrSanUzHAbgSAY2eaoeXM+R1XjAHHX?=
- =?us-ascii?Q?aUMZPHUX8C2OYaAKXElS6wFh6b/NTGac5JGXemG4YAID0esUc+DzeEX8qMxU?=
- =?us-ascii?Q?wTRohCsgQmPXwhnCYCUhwy9uaillUlOuTurdqsXstmu7aq8clb1CFbzVqI/Z?=
- =?us-ascii?Q?pZvzKcQG3UHvlswu27EaZIM4FBlWJ4xZuBPKGXGbaALFUHzxWeqUAysHO4S5?=
- =?us-ascii?Q?ITW0K1uGeC/iGiNz9ybfvBwQzrYtBnsAGhMHdefwBzuelXCkahRluA7i6Obn?=
- =?us-ascii?Q?EduZAhs8iRJMy0GNAi97v4DGdeMykXeU84lFilbuG5CYhSK8D42fK5yPLz5k?=
- =?us-ascii?Q?IGUjdzjLT4Bzq73VAJqXuHLvj70xJM8Ab+prIxGOpf+gWi2sBd+MH1ghWWDH?=
- =?us-ascii?Q?oUXoegkfiy4kGR0+biJleVH6oSxpbAAn3JrS4U6zRMrGcqSHsuLUsWfe3YH4?=
- =?us-ascii?Q?NtxJqYY+siN34/3P5p1UDi5dkr7FB8h5CG63Rw79RpFCLfgr1+XuZK6od3hZ?=
- =?us-ascii?Q?wEkybj4Y9Ro72AZkLBdIBzVvwh+cTStXovcjr25uxOJFJEPrus0Io3WGAERy?=
- =?us-ascii?Q?jG9SkUhxlV88VjSAO0Ym+m1zhcCqDx9Ol/8sxuFu6CDIS9B391JqVLI7HgO2?=
- =?us-ascii?Q?xfn8S8Y1F1ZJkfxMxTQYTNt82h5EbG4wxB+qOT1uj84PVREXxENQdtcHgR23?=
- =?us-ascii?Q?ZOPCHMxQ7tpynai96VwfeJT03wc5L7sXAX88niyS9twK2bgFLzJ27qkl3uI1?=
- =?us-ascii?Q?5GLVJk1gpY7nJF/mMLAoQEgV6/FeV+qe9uOHXEPeKSX3tRl5K9coLTh6wodz?=
- =?us-ascii?Q?0MT6cldazjHEoSOzGdmjArXFJ56DadYer0UUMsqvTJIL6sp2FyafgVnPhSlu?=
- =?us-ascii?Q?sA1wpR42OtUakMZVI5tdzkZMczPOKnLCbgxZd1oz+5ZPyEESIXeC4ZEW5GVW?=
- =?us-ascii?Q?KZY6HZOovfnqx/0DexT1eWAIDnlf0jFJf3NcWGkoAt6FR1ta9OgV4OsKO5Xt?=
- =?us-ascii?Q?qEd+J2mjgWqjJz+8/bTPj9w0+u1MaoTG8lBL/VqxiwAeUEH1IYLVwAhcQb4n?=
- =?us-ascii?Q?WjZj/sT0h9VIqckmog2dO2ERZCTteHX2HQdp7H8kY8UQQHhTUqY0Ft3BRMoV?=
- =?us-ascii?Q?rQWFyShM57NSehS6/unCrsh/KkVeht5S/8pw3kY4y0OvI8NMwbU5gIUngtYZ?=
- =?us-ascii?Q?mtL4kLxGuysdZR5AylnemcKjemK9GotfyLrcA568X940qdcjAFlA3bN4c3vf?=
- =?us-ascii?Q?WQMVCMuIvReb4YjwMj3wFAz23toYMvyxcY1Mrre1yVgc4lhPdGfc8glWe2yd?=
- =?us-ascii?Q?AqbFIMZrGYbxd28WCZYOQpOiEBfqXV0+TopONTQHKbSCdrfv3sLVWFsFPNZB?=
- =?us-ascii?Q?IaX1uPQhj18nRi8c6n1oXaW4IjiTHIRGsD0zaTGdIphYUUh4MlMfIfnaJCH7?=
- =?us-ascii?Q?T3sm0AcQqonLeCNhc4gHWAaF+gBoMybK25BLE+GTij69SLIgkDEbyqhTFGqJ?=
- =?us-ascii?Q?o7Bd2HjEYGXo4NaeZ8PlJHHJw3eGzhHCpt7TFzqRl2FOS6UcbEUs?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 10 May 2022 04:05:45 -0400
+Received: from out28-123.mail.aliyun.com (out28-123.mail.aliyun.com [115.124.28.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F8C457BA;
+        Tue, 10 May 2022 01:01:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07439848|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0389675-0.00112187-0.959911;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.NhGh97t_1652169688;
+Received: from SunxiBot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.NhGh97t_1652169688)
+          by smtp.aliyun-inc.com(11.95.168.178);
+          Tue, 10 May 2022 16:01:29 +0800
+From:   Michael Wu <michael@allwinnertech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, john@metanate.com,
+        axboe@kernel.dk, quic_pkondeti@quicinc.com, wcheng@codeaurora.org,
+        quic_ugoswami@quicinc.com, andrew_gabbasov@mentor.com,
+        plr.vincent@gmail.com
+Cc:     gustavoars@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+Subject: [PATCH] usb: f_fs: Fix crash during gadget function switching
+Date:   Tue, 10 May 2022 16:01:05 +0800
+Message-Id: <20220510080105.126146-1-michael@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-X-OriginatorOrg: technica-engineering.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR08MB6788.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d372d07-e359-4e72-2e26-08da325b3d47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2022 08:01:07.7209
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1f04372a-6892-44e3-8f58-03845e1a70c1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7ejDH1wIzi058hO9dtFQRPAvOir95SfC4S9z+r1G5ZzqKEFLG7LZosoFHhdZ3diOAk2RK66wY1VyVboA6IVmB51TtlVSW/qpfA4uhHBWyFWvueypGbxGCO+Da9vc2L+CaXNQ0Dh5TvsWTxuOP6ov0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6757
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Paolo,
+On arm64 android12 and possibly other platforms, during the usb gadget
+function switching procedure (e.g. from mtp to midi), a synchronization
+issue could occur, which causes an use-after-free panic as shown below:
 
-I'll redo the patch and send it again.
-About the changes between the previous patch, there're only changes on the =
-description and format of the patch, but none on the code side, maybe refer=
-encing them is irrelevant.
+[  119.787946][    T1] init: Control message: Processed ctl.start for 'adbd' from pid: 395 (system_server)
+[  119.790006][   T32] android_work: sent uevent USB_STATE=DISCONNECTED
+[  119.805457][ T2309] usercopy: Kernel memory exposure attempt detected from SLUB object 'kmalloc-512' (offset 0, size 1802201963)!
+[  119.819368][ T2309] ------------[ cut here ]------------
+[  119.825359][ T2309] kernel BUG at mm/usercopy.c:99!
+[  119.830868][ T2309] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[  119.837843][ T2309] Modules linked in: sunxi_usbc ohci_sunxi ehci_sunxi sunxi_hci mali_kbase(O) sunxi_rfkill
+[  119.848904][ T2309] CPU: 3 PID: 2309 Comm: MtpServer Tainted: G           O      5.4.125+ #9
+[  119.858411][ T2309] Hardware name: sun50iw9 (DT)
+[  119.863615][ T2309] pstate: 60400005 (nZCv daif +PAN -UAO)
+[  119.869790][ T2309] pc : usercopy_abort+0x90/0x94
+[  119.875078][ T2309] lr : usercopy_abort+0x90/0x94
+[  119.880357][ T2309] sp : ffffffc019e13ad0
+[  119.884858][ T2309] x29: ffffffc019e13ae0 x28: 0000000000000000
+[  119.891601][ T2309] x27: ffffff8030e7c030 x26: 0000000000000000
+[  119.898347][ T2309] x25: 0000000000000001 x24: ffffff806e25bd30
+[  119.905092][ T2309] x23: 000000006b6b6b6b x22: ffffff807c804680
+[  119.911838][ T2309] x21: ffffff8041410200 x20: 0000000000000001
+[  119.918581][ T2309] x19: 000000006b6b6b6b x18: ffffffc019e05058
+[  119.925326][ T2309] x17: 0000000000000000 x16: 00000000000002e3
+[  119.932073][ T2309] x15: 0000000000000000 x14: 0000000000000010
+[  119.938820][ T2309] x13: ffffffc0103972c0 x12: 0000000000000001
+[  119.945565][ T2309] x11: 0000000000000000 x10: 0000000000000002
+[  119.952311][ T2309] x9 : 54fea1fa84857d00 x8 : 54fea1fa84857d00
+[  119.959056][ T2309] x7 : 0000000000000001 x6 : 0000000000000000
+[  119.965801][ T2309] x5 : ffffff807f3a9038 x4 : 0000000000000000
+[  119.972546][ T2309] x3 : 0000000000000000 x2 : ffffff807f3a8f40
+[  119.979293][ T2309] x1 : ffffffc0114e94de x0 : 000000000000006d
+[  119.986038][ T2309] Call trace:
+[  119.989569][ T2309]  usercopy_abort+0x90/0x94
+[  119.994466][ T2309]  __check_heap_object+0x16c/0x188
+[  120.000041][ T2309]  __check_object_size+0x120/0x210
+[  120.005620][ T2309]  ffs_epfile_io+0x574/0x6bc
+[  120.010612][ T2309]  ffs_epfile_read_iter+0x10c/0x198
+[  120.016284][ T2309]  __vfs_read+0x178/0x1e0
+[  120.020980][ T2309]  vfs_read+0x1d0/0x284
+[  120.025481][ T2309]  ksys_read+0x74/0xe0
+[  120.029884][ T2309]  __arm64_sys_read+0x1c/0x28
+[  120.034977][ T2309]  el0_svc_common+0xb8/0x1cc
+[  120.039967][ T2309]  el0_svc_compat_handler+0x1c/0x28
+[  120.045649][ T2309]  el0_svc_compat+0x8/0x24
+[  120.050453][ T2309] Code: f90003e4 aa0803e1 aa0903e4 97fa0fa9 (d4210000)
+[  120.058109][ T2309] ---[ end trace a246be823ca7d164 ]---
+[  120.064073][ T2309] Kernel panic - not syncing: Fatal exception
+[  120.070723][ T2309] SMP: stopping secondary CPUs
+[  120.076030][ T2309] Kernel Offset: disabled
+[  120.080757][ T2309] CPU features: 0x00010002,20002004
+[  120.086438][ T2309] Memory Limit: none
+[  120.090657][ T2309] ---[ end Kernel panic - not syncing: Fatal exception ]---
 
-________________________________________
-From: Paolo Abeni <pabeni@redhat.com>
-Sent: Tuesday, May 10, 2022 9:09 AM
-To: Carlos Fernandez; Carlos Fernandez; davem@davemloft.net; edumazet@googl=
-e.com; kuba@kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.or=
-g
-Subject: Re: [PATCH net v2] net: macsec: retrieve the XPN attributes before=
- offloading
+Two processes P1 and P2 engaged in the switching procedure:
+- P1 (e.g. MtpServer) calls 'ffs_epfile_io' (alias 'C'),
+- P2 (e.g. usb@1.0-service) calls 'ffs_epfile_io_complete' (alias 'A')
+  and the 'ffs_func_unbind' (alias 'B').
 
-CAUTION: This email originated from outside of the organization. Do not cli=
-ck links or open attachments unless you recognize the sender and know the c=
-ontent is safe.
+P1                               P2
+|                                |
+|             configfs_write_file|
+|       gadget_dev_desc_UDC_store|
+|               unregister_gadget|
+|    usb_gadget_unregister_driver|
+|        usb_gadget_remove_driver|
+|                                |
+|                                |________________________________________
+|                                |                                        |
+|           usb_gadget_disconnect|                                        |
+|                sunxi_udc_pullup|                                        |
+|            sunxi_udc_set_pullup|                                        |
+|   configfs_composite_disconnect|                                        |
+|            composite_disconnect|                                        |
+|                    reset_config|                                        |
+|                ffs_func_disable|                                        |
+|                ffs_func_set_alt|                                        |
+|            ffs_func_eps_disable|                                        |
+|                  usb_ep_disable|                                        |
+|            sunxi_udc_ep_disable|                                        |
+|                  sunxi_udc_nuke|               configfs_composite_unbind|
+|                  sunxi_udc_done|                                        |
+|                                |                                        |
+|ffs_epfile_read_iter            |                     purge_configs_funcs|
+|                                |                                        |
+|                     complete   |                                        |
+|ffs_epfile_io [C] <------------ |ffs_epfile_io_complete [A]              |
+|      +                         |                                        |
+|      +                                                                  |
+|      +                                                                  |
+|      +                  [1] complete                                    |
+|      +++++++++++++++++++++++++++++++++++++++++++++++> ffs_func_unbind[B]|
+|                                                                         |
 
-Hello,
+On gadget switching, 'A' will raise a completion, which wakes up 'P1' to
+resume 'C'. Then 'C' references 'ep->status' for branch jumping etc.
+On the other path, 'B' keeps running and exec 'kfree(func->eps)', which
+actually free 'ep->status' referenced by 'C'.
 
-On Fri, 2022-05-06 at 12:55 +0200, Carlos Fernandez wrote:
-> When MACsec offloading is used with XPN, before mdo_add_rxsa
-> and mdo_add_txsa functions are called, the key salt is not
-> copied to the macsec context struct. Offloaded phys will need
-> this data when performing offloading.
->
-> Fix by copying salt and id to context struct before calling the
-> offloading functions.
->
-> Fixes: 48ef50fa866a ("macsec: Netlink support of XPN cipher suites")
->
-> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de=
->
+This leads to the panic: `usercopy: Kernel memory exposure attempt detected
+from SLUB object 'kmalloc-512' (offset 0, size 1802201963)!`
 
-I'm sorry for nit-picking, but you must avoid empty lines between the
-the 'Fixes' and the 'Signed-off-by' tags (or any other tag).
+To fix this issue, we add a completion[1] to ensure that 'C' completes
+before 'B'.
 
-Additionnaly you should include a summary of the changes WRT the
-previous patch version, see e.g. commit cec16052d5a7.
+Signed-off-by: Michael Wu <michael@allwinnertech.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-The patch contents looks good, but it's better if you address the
-above, thanks!
-
-Paolo
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 4585ee3a444a8..c3e918cd00170 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -124,6 +124,7 @@ struct ffs_ep {
+ 	u8				num;
+ 
+ 	int				status;	/* P: epfile->mutex */
++	void				*context;
+ };
+ 
+ struct ffs_epfile {
+@@ -246,6 +247,7 @@ ffs_sb_create_file(struct super_block *sb, const char *name, void *data,
+ 
+ DEFINE_MUTEX(ffs_lock);
+ EXPORT_SYMBOL_GPL(ffs_lock);
++DECLARE_COMPLETION(io_done);
+ 
+ static struct ffs_dev *_ffs_find_dev(const char *name);
+ static struct ffs_dev *_ffs_alloc_dev(void);
+@@ -711,6 +713,8 @@ static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
+ 	if (req->context) {
+ 		struct ffs_ep *ep = _ep->driver_data;
+ 		ep->status = req->status ? req->status : req->actual;
++		if (ep->status == -ESHUTDOWN)
++			ep->context = &io_done;
+ 		complete(req->context);
+ 	}
+ }
+@@ -1094,6 +1098,10 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 						     &io_data->data);
+ 		else
+ 			ret = ep->status;
++
++		if (ep->status == -ESHUTDOWN && ep->context)
++			complete(ep->context);
++
+ 		goto error_mutex;
+ 	} else if (!(req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC))) {
+ 		ret = -ENOMEM;
+@@ -3607,6 +3615,12 @@ static void ffs_func_unbind(struct usb_configuration *c,
+ 	/* cleanup after autoconfig */
+ 	spin_lock_irqsave(&func->ffs->eps_lock, flags);
+ 	while (count--) {
++		if (ep->status == -ESHUTDOWN && ep->context) {
++			spin_unlock_irqrestore(&func->ffs->eps_lock, flags);
++			wait_for_completion(ep->context);
++			spin_lock_irqsave(&func->ffs->eps_lock, flags);
++		}
++
+ 		if (ep->ep && ep->req)
+ 			usb_ep_free_request(ep->ep, ep->req);
+ 		ep->req = NULL;
+-- 
+2.29.0
 

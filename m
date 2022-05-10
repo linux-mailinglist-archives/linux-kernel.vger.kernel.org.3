@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822EB521B90
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E304521B82
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245343AbiEJORO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S1343813AbiEJOQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244796AbiEJNrB (ORCPT
+        with ESMTP id S1343711AbiEJNsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:47:01 -0400
+        Tue, 10 May 2022 09:48:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B076195BE1;
-        Tue, 10 May 2022 06:32:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56772D9EFA;
+        Tue, 10 May 2022 06:36:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE375615C8;
-        Tue, 10 May 2022 13:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF981C385A6;
-        Tue, 10 May 2022 13:32:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E966618CF;
+        Tue, 10 May 2022 13:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33039C385C2;
+        Tue, 10 May 2022 13:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189524;
-        bh=/jM/xkpLU4pNVj7m9v810zL6YmMq+x9MUFy1AJ5qtFc=;
+        s=korg; t=1652189805;
+        bh=7EOlkagCuaSCpsJRB/bfcScFi2TgH0RRwlzbd6ObCfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z5dYnDvL2tF5DuYGaVu0i82736BLzs2IQPd7M212cHJ9Mg2+WOfDXn/l27sqviXnp
-         GPJyBPUu1TWE2am2V3x1X8P2za4gCSnMFQQSr0Plkk+ml5g1Fo+LWisTQrgnm4VAle
-         3CueQFoZllMt9nRSLxJAQA/ktffTKXq7TRymxHjQ=
+        b=SH/4e6y/z52RDM+H9Q5YNYT4b+dDWDILmQ1dIdlGcX4oIqS8wxJUcmwUnAyHDEsPg
+         HJX4lzPkHHkoqwg9zwexfZUIpOz/y29GI55kaOCHylxEBAPbz/7F2Ow5F83/cBHkld
+         6vyxM3C1CALFM21/hCtqXXzoUAf0wNdWwlTOQMpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Puyou Lu <puyou.lu@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH 5.15 041/135] gpio: pca953x: fix irq_stat not updated when irq is disabled (irq_mask not set)
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.17 033/140] btrfs: skip compression property for anything other than files and dirs
 Date:   Tue, 10 May 2022 15:07:03 +0200
-Message-Id: <20220510130741.579131175@linuxfoundation.org>
+Message-Id: <20220510130742.563550943@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
-References: <20220510130740.392653815@linuxfoundation.org>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+References: <20220510130741.600270947@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +54,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Puyou Lu <puyou.lu@gmail.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit dba785798526a3282cc4d0f0ea751883715dbbb4 upstream.
+commit 4b73c55fdebd8939f0f6000921075f7f6fa41397 upstream.
 
-When one port's input state get inverted (eg. from low to hight) after
-pca953x_irq_setup but before setting irq_mask (by some other driver such as
-"gpio-keys"), the next inversion of this port (eg. from hight to low) will not
-be triggered any more (because irq_stat is not updated at the first time). Issue
-should be fixed after this commit.
+The compression property only has effect on regular files and directories
+(so that it's propagated to files and subdirectories created inside a
+directory). For any other inode type (symlink, fifo, device, socket),
+it's pointless to set the compression property because it does nothing
+and ends up unnecessarily wasting leaf space due to the pointless xattr
+(75 or 76 bytes, depending on the compression value). Symlinks in
+particular are very common (for example, I have almost 10k symlinks under
+/etc, /usr and /var alone) and therefore it's worth to avoid wasting
+leaf space with the compression xattr.
 
-Fixes: 89ea8bbe9c3e ("gpio: pca953x.c: add interrupt handling capability")
-Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+For example, the compression property can end up on a symlink or character
+device implicitly, through inheritance from a parent directory
+
+  $ mkdir /mnt/testdir
+  $ btrfs property set /mnt/testdir compression lzo
+
+  $ ln -s yadayada /mnt/testdir/lnk
+  $ mknod /mnt/testdir/dev c 0 0
+
+Or explicitly like this:
+
+  $ ln -s yadayda /mnt/lnk
+  $ setfattr -h -n btrfs.compression -v lzo /mnt/lnk
+
+So skip the compression property on inodes that are neither a regular
+file nor a directory.
+
+CC: stable@vger.kernel.org # 5.4+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-pca953x.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/btrfs/props.c |   43 +++++++++++++++++++++++++++++++++++++++++++
+ fs/btrfs/props.h |    1 +
+ fs/btrfs/xattr.c |    3 +++
+ 3 files changed, 47 insertions(+)
 
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -762,11 +762,11 @@ static bool pca953x_irq_pending(struct p
- 	bitmap_xor(cur_stat, new_stat, old_stat, gc->ngpio);
- 	bitmap_and(trigger, cur_stat, chip->irq_mask, gc->ngpio);
+--- a/fs/btrfs/props.c
++++ b/fs/btrfs/props.c
+@@ -21,6 +21,7 @@ struct prop_handler {
+ 			size_t len);
+ 	int (*apply)(struct inode *inode, const char *value, size_t len);
+ 	const char *(*extract)(struct inode *inode);
++	bool (*ignore)(const struct btrfs_inode *inode);
+ 	int inheritable;
+ };
  
-+	bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
+@@ -74,6 +75,28 @@ int btrfs_validate_prop(const struct btr
+ 	return handler->validate(inode, value, value_len);
+ }
+ 
++/*
++ * Check if a property should be ignored (not set) for an inode.
++ *
++ * @inode:     The target inode.
++ * @name:      The property's name.
++ *
++ * The caller must be sure the given property name is valid, for example by
++ * having previously called btrfs_validate_prop().
++ *
++ * Returns:    true if the property should be ignored for the given inode
++ *             false if the property must not be ignored for the given inode
++ */
++bool btrfs_ignore_prop(const struct btrfs_inode *inode, const char *name)
++{
++	const struct prop_handler *handler;
 +
- 	if (bitmap_empty(trigger, gc->ngpio))
- 		return false;
++	handler = find_prop_handler(name, NULL);
++	ASSERT(handler != NULL);
++
++	return handler->ignore(inode);
++}
++
+ int btrfs_set_prop(struct btrfs_trans_handle *trans, struct inode *inode,
+ 		   const char *name, const char *value, size_t value_len,
+ 		   int flags)
+@@ -316,6 +339,22 @@ static int prop_compression_apply(struct
+ 	return 0;
+ }
  
--	bitmap_copy(chip->irq_stat, new_stat, gc->ngpio);
--
- 	bitmap_and(cur_stat, chip->irq_trig_fall, old_stat, gc->ngpio);
- 	bitmap_and(old_stat, chip->irq_trig_raise, new_stat, gc->ngpio);
- 	bitmap_or(new_stat, old_stat, cur_stat, gc->ngpio);
++static bool prop_compression_ignore(const struct btrfs_inode *inode)
++{
++	/*
++	 * Compression only has effect for regular files, and for directories
++	 * we set it just to propagate it to new files created inside them.
++	 * Everything else (symlinks, devices, sockets, fifos) is pointless as
++	 * it will do nothing, so don't waste metadata space on a compression
++	 * xattr for anything that is neither a file nor a directory.
++	 */
++	if (!S_ISREG(inode->vfs_inode.i_mode) &&
++	    !S_ISDIR(inode->vfs_inode.i_mode))
++		return true;
++
++	return false;
++}
++
+ static const char *prop_compression_extract(struct inode *inode)
+ {
+ 	switch (BTRFS_I(inode)->prop_compress) {
+@@ -336,6 +375,7 @@ static struct prop_handler prop_handlers
+ 		.validate = prop_compression_validate,
+ 		.apply = prop_compression_apply,
+ 		.extract = prop_compression_extract,
++		.ignore = prop_compression_ignore,
+ 		.inheritable = 1
+ 	},
+ };
+@@ -362,6 +402,9 @@ static int inherit_props(struct btrfs_tr
+ 		if (!h->inheritable)
+ 			continue;
+ 
++		if (h->ignore(BTRFS_I(inode)))
++			continue;
++
+ 		value = h->extract(parent);
+ 		if (!value)
+ 			continue;
+--- a/fs/btrfs/props.h
++++ b/fs/btrfs/props.h
+@@ -15,6 +15,7 @@ int btrfs_set_prop(struct btrfs_trans_ha
+ 		   int flags);
+ int btrfs_validate_prop(const struct btrfs_inode *inode, const char *name,
+ 			const char *value, size_t value_len);
++bool btrfs_ignore_prop(const struct btrfs_inode *inode, const char *name);
+ 
+ int btrfs_load_inode_props(struct inode *inode, struct btrfs_path *path);
+ 
+--- a/fs/btrfs/xattr.c
++++ b/fs/btrfs/xattr.c
+@@ -408,6 +408,9 @@ static int btrfs_xattr_handler_set_prop(
+ 	if (ret)
+ 		return ret;
+ 
++	if (btrfs_ignore_prop(BTRFS_I(inode), name))
++		return 0;
++
+ 	trans = btrfs_start_transaction(root, 2);
+ 	if (IS_ERR(trans))
+ 		return PTR_ERR(trans);
 
 

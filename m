@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9F3521C0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7F4521BCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245281AbiEJO2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S1344602AbiEJOWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245384AbiEJN5f (ORCPT
+        with ESMTP id S245060AbiEJNrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA50BA99A;
-        Tue, 10 May 2022 06:39:16 -0700 (PDT)
+        Tue, 10 May 2022 09:47:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B535271DA1;
+        Tue, 10 May 2022 06:34:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2FC9615E9;
-        Tue, 10 May 2022 13:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28F3C385A6;
-        Tue, 10 May 2022 13:39:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70D8DB81D24;
+        Tue, 10 May 2022 13:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D62C385A6;
+        Tue, 10 May 2022 13:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189955;
-        bh=Npll0bIzELg7Cimq0/UJWbziWMNdzG1D97DZlEZJQ9U=;
+        s=korg; t=1652189682;
+        bh=p02favSh34gZ7SnATdPQxE9+DHKE8XXIFTE9gvxO68Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YNPHuRS+t372bNTfwy4zOjxVLZ8zFoE5/0Z2FXbxZ/QpC72NhgruVcTqF0Tmzbk44
-         sO5+vX0bHG2GqIPepGobegzw8lzPLTn/96WmCyQtW4/IjmJaUNJB80treqwBlRZLdN
-         cLFj25D3SRCqMgdsTR7oDuBRQJFGsH6IpYFfPeu0=
+        b=opbniN2aVlG+aJVOV7mn7TPc/eSMa27fVtQyoW0n7zE5riZAR4yPPuwc/fBCpKyGN
+         9wFu2ysNPGirrTs8JpxW9Zaddo/VpoMKNfXkrgnA1viodPjFxHhwXhWhmvrNhk+ZNx
+         aReR6jdn5raeUdoOnlcvFsSGqnDgIxmcqVGmJp6k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tatyana Nikolova <tatyana.e.nikolova@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.17 080/140] RDMA/irdma: Flush iWARP QP if modified to ERR from RTR state
-Date:   Tue, 10 May 2022 15:07:50 +0200
-Message-Id: <20220510130743.901483246@linuxfoundation.org>
+        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 089/135] net/mlx5: Fix slab-out-of-bounds while reading resource dump menu
+Date:   Tue, 10 May 2022 15:07:51 +0200
+Message-Id: <20220510130742.964343543@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +56,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
+From: Aya Levin <ayal@nvidia.com>
 
-commit 7b8943b821bafab492f43aafbd006b57c6b65845 upstream.
+[ Upstream commit 7ba2d9d8de96696c1451fee1b01da11f45bdc2b9 ]
 
-When connection establishment fails in iWARP mode, an app can drain the
-QPs and hang because flush isn't issued when the QP is modified from RTR
-state to error. Issue a flush in this case using function
-irdma_cm_disconn().
+Resource dump menu may span over more than a single page, support it.
+Otherwise, menu read may result in a memory access violation: reading
+outside of the allocated page.
+Note that page format of the first menu page contains menu headers while
+the proceeding menu pages contain only records.
 
-Update irdma_cm_disconn() to do flush when cm_id is NULL, which is the
-case when the QP is in RTR state and there is an error in the connection
-establishment.
+The KASAN logs are as follows:
+BUG: KASAN: slab-out-of-bounds in strcmp+0x9b/0xb0
+Read of size 1 at addr ffff88812b2e1fd0 by task systemd-udevd/496
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Link: https://lore.kernel.org/r/20220425181703.1634-2-shiraz.saleem@intel.com
-Signed-off-by: Tatyana Nikolova <tatyana.e.nikolova@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CPU: 5 PID: 496 Comm: systemd-udevd Tainted: G    B  5.16.0_for_upstream_debug_2022_01_10_23_12 #1
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x57/0x7d
+ print_address_description.constprop.0+0x1f/0x140
+ ? strcmp+0x9b/0xb0
+ ? strcmp+0x9b/0xb0
+ kasan_report.cold+0x83/0xdf
+ ? strcmp+0x9b/0xb0
+ strcmp+0x9b/0xb0
+ mlx5_rsc_dump_init+0x4ab/0x780 [mlx5_core]
+ ? mlx5_rsc_dump_destroy+0x80/0x80 [mlx5_core]
+ ? lockdep_hardirqs_on_prepare+0x286/0x400
+ ? raw_spin_unlock_irqrestore+0x47/0x50
+ ? aomic_notifier_chain_register+0x32/0x40
+ mlx5_load+0x104/0x2e0 [mlx5_core]
+ mlx5_init_one+0x41b/0x610 [mlx5_core]
+ ....
+The buggy address belongs to the object at ffff88812b2e0000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 4048 bytes to the right of
+ 4096-byte region [ffff88812b2e0000, ffff88812b2e1000)
+The buggy address belongs to the page:
+page:000000009d69807a refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88812b2e6000 pfn:0x12b2e0
+head:000000009d69807a order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x8000000000010200(slab|head|zone=2)
+raw: 8000000000010200 0000000000000000 dead000000000001 ffff888100043040
+raw: ffff88812b2e6000 0000000080040000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88812b2e1e80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88812b2e1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88812b2e1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                                 ^
+ ffff88812b2e2000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88812b2e2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+Fixes: 12206b17235a ("net/mlx5: Add support for resource dump")
+Signed-off-by: Aya Levin <ayal@nvidia.com>
+Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/cm.c    |   16 +++++-----------
- drivers/infiniband/hw/irdma/verbs.c |    4 ++--
- 2 files changed, 7 insertions(+), 13 deletions(-)
+ .../mellanox/mlx5/core/diag/rsc_dump.c        | 31 +++++++++++++++----
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
---- a/drivers/infiniband/hw/irdma/cm.c
-+++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -3465,12 +3465,6 @@ static void irdma_cm_disconn_true(struct
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c b/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c
+index ed4fb79b4db7..75b6060f7a9a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/diag/rsc_dump.c
+@@ -31,6 +31,7 @@ static const char *const mlx5_rsc_sgmt_name[] = {
+ struct mlx5_rsc_dump {
+ 	u32 pdn;
+ 	struct mlx5_core_mkey mkey;
++	u32 number_of_menu_items;
+ 	u16 fw_segment_type[MLX5_SGMT_TYPE_NUM];
+ };
+ 
+@@ -50,21 +51,37 @@ static int mlx5_rsc_dump_sgmt_get_by_name(char *name)
+ 	return -EINVAL;
+ }
+ 
+-static void mlx5_rsc_dump_read_menu_sgmt(struct mlx5_rsc_dump *rsc_dump, struct page *page)
++#define MLX5_RSC_DUMP_MENU_HEADER_SIZE (MLX5_ST_SZ_BYTES(resource_dump_info_segment) + \
++					MLX5_ST_SZ_BYTES(resource_dump_command_segment) + \
++					MLX5_ST_SZ_BYTES(resource_dump_menu_segment))
++
++static int mlx5_rsc_dump_read_menu_sgmt(struct mlx5_rsc_dump *rsc_dump, struct page *page,
++					int read_size, int start_idx)
+ {
+ 	void *data = page_address(page);
+ 	enum mlx5_sgmt_type sgmt_idx;
+ 	int num_of_items;
+ 	char *sgmt_name;
+ 	void *member;
++	int size = 0;
+ 	void *menu;
+ 	int i;
+ 
+-	menu = MLX5_ADDR_OF(menu_resource_dump_response, data, menu);
+-	num_of_items = MLX5_GET(resource_dump_menu_segment, menu, num_of_records);
++	if (!start_idx) {
++		menu = MLX5_ADDR_OF(menu_resource_dump_response, data, menu);
++		rsc_dump->number_of_menu_items = MLX5_GET(resource_dump_menu_segment, menu,
++							  num_of_records);
++		size = MLX5_RSC_DUMP_MENU_HEADER_SIZE;
++		data += size;
++	}
++	num_of_items = rsc_dump->number_of_menu_items;
++
++	for (i = 0; start_idx + i < num_of_items; i++) {
++		size += MLX5_ST_SZ_BYTES(resource_dump_menu_record);
++		if (size >= read_size)
++			return start_idx + i;
+ 
+-	for (i = 0; i < num_of_items; i++) {
+-		member = MLX5_ADDR_OF(resource_dump_menu_segment, menu, record[i]);
++		member = data + MLX5_ST_SZ_BYTES(resource_dump_menu_record) * i;
+ 		sgmt_name =  MLX5_ADDR_OF(resource_dump_menu_record, member, segment_name);
+ 		sgmt_idx = mlx5_rsc_dump_sgmt_get_by_name(sgmt_name);
+ 		if (sgmt_idx == -EINVAL)
+@@ -72,6 +89,7 @@ static void mlx5_rsc_dump_read_menu_sgmt(struct mlx5_rsc_dump *rsc_dump, struct
+ 		rsc_dump->fw_segment_type[sgmt_idx] = MLX5_GET(resource_dump_menu_record,
+ 							       member, segment_type);
  	}
++	return 0;
+ }
  
- 	cm_id = iwqp->cm_id;
--	/* make sure we havent already closed this connection */
--	if (!cm_id) {
--		spin_unlock_irqrestore(&iwqp->lock, flags);
--		return;
--	}
--
- 	original_hw_tcp_state = iwqp->hw_tcp_state;
- 	original_ibqp_state = iwqp->ibqp_state;
- 	last_ae = iwqp->last_aeq;
-@@ -3492,11 +3486,11 @@ static void irdma_cm_disconn_true(struct
- 			disconn_status = -ECONNRESET;
- 	}
+ static int mlx5_rsc_dump_trigger(struct mlx5_core_dev *dev, struct mlx5_rsc_dump_cmd *cmd,
+@@ -168,6 +186,7 @@ static int mlx5_rsc_dump_menu(struct mlx5_core_dev *dev)
+ 	struct mlx5_rsc_dump_cmd *cmd = NULL;
+ 	struct mlx5_rsc_key key = {};
+ 	struct page *page;
++	int start_idx = 0;
+ 	int size;
+ 	int err;
  
--	if ((original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
--	     original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
--	     last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
--	     last_ae == IRDMA_AE_BAD_CLOSE ||
--	     last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset)) {
-+	if (original_hw_tcp_state == IRDMA_TCP_STATE_CLOSED ||
-+	    original_hw_tcp_state == IRDMA_TCP_STATE_TIME_WAIT ||
-+	    last_ae == IRDMA_AE_RDMAP_ROE_BAD_LLP_CLOSE ||
-+	    last_ae == IRDMA_AE_BAD_CLOSE ||
-+	    last_ae == IRDMA_AE_LLP_CONNECTION_RESET || iwdev->rf->reset || !cm_id) {
- 		issue_close = 1;
- 		iwqp->cm_id = NULL;
- 		qp->term_flags = 0;
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -1620,13 +1620,13 @@ int irdma_modify_qp(struct ib_qp *ibqp,
+@@ -189,7 +208,7 @@ static int mlx5_rsc_dump_menu(struct mlx5_core_dev *dev)
+ 		if (err < 0)
+ 			goto destroy_cmd;
  
- 	if (issue_modify_qp && iwqp->ibqp_state > IB_QPS_RTS) {
- 		if (dont_wait) {
--			if (iwqp->cm_id && iwqp->hw_tcp_state) {
-+			if (iwqp->hw_tcp_state) {
- 				spin_lock_irqsave(&iwqp->lock, flags);
- 				iwqp->hw_tcp_state = IRDMA_TCP_STATE_CLOSED;
- 				iwqp->last_aeq = IRDMA_AE_RESET_SENT;
- 				spin_unlock_irqrestore(&iwqp->lock, flags);
--				irdma_cm_disconn(iwqp);
- 			}
-+			irdma_cm_disconn(iwqp);
- 		} else {
- 			int close_timer_started;
+-		mlx5_rsc_dump_read_menu_sgmt(dev->rsc_dump, page);
++		start_idx = mlx5_rsc_dump_read_menu_sgmt(dev->rsc_dump, page, size, start_idx);
  
+ 	} while (err > 0);
+ 
+-- 
+2.35.1
+
 
 

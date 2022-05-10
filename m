@@ -2,155 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1023F52158A
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BE652158E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241558AbiEJMjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S241690AbiEJMjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241110AbiEJMjV (ORCPT
+        with ESMTP id S241848AbiEJMjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:39:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD12A2A9CE7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 05:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652186122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KAQGt/RronM2MwKu2wT61Gar8OOVM6I6Ip3NAsTYhRo=;
-        b=E0J6XMFQEObfdm7tbLVsEWV2bkGrhA+CRQcZ7k7QOQ8A75tsXvwu5PWp1LvWH4KnOvheMw
-        aTppLTLbA4nAX1DgYaOu/vrWC+SpZiNKRUW4mnv2FlkVKwrhQ61VHAe7ZgmjaZ6gw0e2Iw
-        gwMe7Cv/tBQa6coDuQJ7VVSL4+yvQCU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-g2GRWnOBOiO81XZFgG9qpA-1; Tue, 10 May 2022 08:35:17 -0400
-X-MC-Unique: g2GRWnOBOiO81XZFgG9qpA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 10 May 2022 08:39:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9A02B1640;
+        Tue, 10 May 2022 05:35:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2139E803D45;
-        Tue, 10 May 2022 12:35:17 +0000 (UTC)
-Received: from ws.net.home (unknown [10.36.112.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 89779400E115;
-        Tue, 10 May 2022 12:35:14 +0000 (UTC)
-Date:   Tue, 10 May 2022 14:35:12 +0200
-From:   Karel Zak <kzak@redhat.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-Message-ID: <20220510123512.h6jjqgowex6gnjh5@ws.net.home>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
- <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyHZC5WCjz4xbN;
+        Tue, 10 May 2022 22:35:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652186132;
+        bh=MLWzkWE0Q+XzgwkdnYJywkMBFuvMtuO7i/ibU6SGfDo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VfHL2M6dK1qr2xB7cfAHy6zIG40UaooA2Nr4BQ0zRCE0fsXdkis0XiST1KqaH1AFv
+         VCA1osVkxA8/Sp90FDIwDZPYuRIfg0VPovqHoYzRS1wrnRQdeR5ABtks+LAKFRlQB2
+         BGIJ7qhBmjNVNJZTiWnFKlUkJweE6KLz536Hr6ZET7NjiPtn0v9rRZLBXVUQw5uwgI
+         pWLyog8f/42bnA3inytUYppBdWdKCPdGyQZLpMknTHvzwnQKotsCqWrPn2g/Rj0aKo
+         wtiFnFlASvSdBkvMFQE7MQjaG4QuU+qYcLKxcb5Se6PA+8W9S/4pCSCYk6HiUctc4H
+         SeHflxOUaGlSw==
+Date:   Tue, 10 May 2022 22:35:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm tree with the mm-hotfixes tree
+Message-ID: <20220510223530.67d9a27f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/aVcrujEU3rvicBxN0Eaj.x3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 02:48:15PM +0200, Christian Brauner wrote:
-> One comment about this. We really need to have this interface support
-> giving us mount options like "relatime" back in numeric form (I assume
-> this will be possible.). It is royally annoying having to maintain a
-> mapping table in userspace just to do:
-> 
-> relatime -> MS_RELATIME/MOUNT_ATTR_RELATIME
-> ro	 -> MS_RDONLY/MOUNT_ATTR_RDONLY
-> 
-> A library shouldn't be required to use this interface. Conservative
-> low-level software that keeps its shared library dependencies minimal
-> will need to be able to use that interface without having to go to an
-> external library that transforms text-based output to binary form (Which
-> I'm very sure will need to happen if we go with a text-based
-> interface.).
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sounds like David's fsinfo() :-)
+Hi all,
 
-We need an interface where the kernel returns a consistent mount table    
-entry (more syscalls to get more key=value could be a way how to get
-inconsistent data).                                              
+Today's linux-next merge of the akpm tree got a conflict in:
 
-IMHO all the attempts to make a trivial interface will be unsuccessful
-because the mount table is complex (tree) and mixes strings, paths,
-and flags. We will always end with a complex interface or complex
-strings (like the last xatts attempt). There is no 3rd path to go ...
+  tools/testing/selftests/vm/Makefile
 
-The best would be simplified fsinfo() where userspace defines
-a request (wanted "keys"), and the kernel fills a buffer with data
-separated by some header metadata struct. In this case, the kernel can
-return strings and structs with binary data.  
+between commit:
 
+  e33ebf536f3e ("selftests: vm: Makefile: rename TARGETS to VMTARGETS")
 
-I'd love something like:
+from the mm-hotfixes tree and patch:
 
-ssize_t sz;
-fsinfo_query query[] = {
-    { .request = FSINFO_MOUNT_PATH },
-    { .request = FSINFO_PROPAGATION },
-    { .request = FSINFO_CHILDREN_IDS },
-};
+  "kselftest/vm: override TARGETS from arguments"
 
-sz = fsinfo(dfd, "", AT_EMPTY_PATH,
-                &query, ARRAY_SIZE(query),
-                buf, sizeof(buf));
+from the akpm tree.
 
-for (p = buf; p < buf + sz; ) {
-{
-    fsinfo_entry *e = (struct fsinfo_entry) p;
-    char *data = p + sizeof(struct fsinfo_entry);
+I fixed it up the obvious way and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-    switch(e->request) {
-    case FSINFO_MOUNT_PATH:
-        printf("mountpoint %s\n", data);
-        break;
-    case FSINFO_PROPAGATION:
-        printf("propagation %x\n", (uintptr_t) data);
-        break;
-    case FSINFO_CHILDREN_IDS:
-        fsinfo_child *x = (fsinfo_child *) data;
-        for (i = 0; i < e->count; i++) {
-            printf("child: %d\n", x[i].mnt_id);
-        }
-        break;
-    ...
-    }
+--=20
+Cheers,
+Stephen Rothwell
 
-    p += sizeof(struct fsinfo_entry) + e->len;
-}
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ6XBIACgkQAVBC80lX
+0GzvEQgAnc3P1NsJcmx90FSEyN4Bt9kdiHCK64Mrb0Q/Pw3sRdGglvI02hnvQ0mM
+fnPUuyo8yzLpUiq7T47xL4/Hsb1uQUfej4gTOnnq9rPvpOCAa9zr3UpkelKp6x96
+OYzD5hTBQNo1r8qZX/NxZkHFLRjtr4QNGHgvD4dAOt4ALpi9P4WkjF2gnnIAxw7N
+x8pJDMcqQkdkLIUtSYR2gDVXmR9uQZ8ec35xTrVa4TxCnhTjvU8s7xUXHpYzs7b6
+dVY/nsDgJotLPHqb8K6UNr5GNrRekybSXdXkVXADzDlz6dH1cWVLq/hQfrXTyU3E
+9ldmn+8Kx7SL8pBYOhhO/bYpeywFcg==
+=7Ooe
+-----END PGP SIGNATURE-----
 
-... my two cents :-)
-
-    Karel
-
--- 
- Karel Zak  <kzak@redhat.com>
- http://karelzak.blogspot.com
-
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3--

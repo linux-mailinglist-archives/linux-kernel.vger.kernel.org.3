@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F945521D3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0CD521D42
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344963AbiEJPAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S1345343AbiEJPAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345257AbiEJO7y (ORCPT
+        with ESMTP id S1345197AbiEJPAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:59:54 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72121496BE;
-        Tue, 10 May 2022 07:21:17 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r192so10588463pgr.6;
-        Tue, 10 May 2022 07:21:17 -0700 (PDT)
+        Tue, 10 May 2022 11:00:35 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF61271B7
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:22:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x88so4464588pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C/+VFEBe/LSPrTXVeYivM+3OUMTgtuIGywMyZxhof3k=;
-        b=O6L52kFHagR46TJPmGCxbhTD7MAV7fRTV88+fu1qZh1PExXXRlTvUD8pwrqgsK1CoA
-         6pQrsxXG/Ex/lsGUHN7nwxR1VOR5hGDzwetXGkCxfKRcJ+DgqVj1KspjlaUIBg7bB8oU
-         tHB4VF8+qxlxUsBuPiYrg8ijAOb31n+sx64wgYOpqZEImZl2QiXSbMeqP9wyRe1jTKmi
-         jsv7v1eED4sOxITiEBM8h8d7xZkNV2jNcnGFeFBwN1QJdS/7yhUfYf3ZmEVvM+UmfMps
-         QBcfB7v6uPUEldWhB0LYC/mu6FWEIC2mA3hgWxuXXeF0c9jwq475Wsqqrv+oAnvkzf8H
-         cEKA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=96fSaQwSEKdzhJug6s/ISEl8NYk3c2RDSas8DqlcA5w=;
+        b=g574joSyahf6XWUX/Lnob9ZLo6UrKXwHHmmJyn3M7gflnngYL0fXMZ1GNnLQlZNRnO
+         lk1H5/5/wVOIblC31ckvcokOutL/YExJkjcuVR3T2aK7vXTFv5WsT2sm9GnRnSlUwAJL
+         GIXZOHO5Rk8fbMXWLU/J8pwIFvck+ueAanIhtgjqHd90RDfeuHLW5zqqUefkfxGxXWdQ
+         Yr2E5nzKPeusenjIgtCSSq6YxaNo97VjySQmB21ZsX7DbJSOQynOuVzf49YfJJhkCQVS
+         7sh9FDYfv60HN0muf43DXOEQ7EI1i4Qkdr0Dq7qcDTmuP6SDwupLx+btugKqr0WD9g9p
+         1iwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C/+VFEBe/LSPrTXVeYivM+3OUMTgtuIGywMyZxhof3k=;
-        b=NfpKqL8H6F4iV5AX+/AJ+bjMyRXcalGu/biMl81nPLmvxofNgChXW+UAnsh323iiie
-         20ZrZ+A+sBQkVxHWIfe/SBHSoWUu3/cuIRUObX+NBOZvaJuOUrNrrVM/sek7XpFWuCJb
-         n1S9J4GgDlXMmfYhZu531VMrSOwW45Cuix4rUYih5NaNWC6FPyBhojFKyq9XXJ8msfhc
-         YF+lG2xptaPAcHmZoPBblqdxTVgBzHW2aHQGJvpn09Xe9DUmjXV9anPCbkuw1esQSUjc
-         cWmGnnIdicVBm+g+L7s3PobLWPU+MLDKlyrAYZS7y25E01bkMgcH3aOb++l3OMM3IPF8
-         jcxA==
-X-Gm-Message-State: AOAM533/ZcRjYZbt24rGqXmt5Qiguwe9150rHTnwhzTU154F4vHyygkx
-        DDcP94WHyCAHwdUGIw5q52U=
-X-Google-Smtp-Source: ABdhPJy97bolhJvIHOqV7+NcNzzrZ2GCZ5C6CuQaXVigvumxvAKUDd/RIyzO41HHMysQeVCx64xC2Q==
-X-Received: by 2002:a05:6a00:1acf:b0:50e:1872:c6b1 with SMTP id f15-20020a056a001acf00b0050e1872c6b1mr20763004pfv.76.1652192476948;
-        Tue, 10 May 2022 07:21:16 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:0:6c3c:3386:3925:381a])
-        by smtp.gmail.com with ESMTPSA id s16-20020a62e710000000b0050dc76281d8sm11031647pfh.178.2022.05.10.07.21.15
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=96fSaQwSEKdzhJug6s/ISEl8NYk3c2RDSas8DqlcA5w=;
+        b=77aJjPkR5yTsazI8pd3zSgQlsnsaIcLE2yD32fhDLX+tB9GF0nXqLt6kZL+FbLi6l5
+         XbyFBbKvRu9GPyLqIOszXBPFdXF+hqN50spO13ycoM957BsNIciHAVGd/P6fsCsYXDxG
+         SwXs6uoKMEolCBsswmrnRXglJjOMkfVIwlBnfnDThZtGgKkIFOOrBDFvmGLbpdtj+Eux
+         ATVkE9ObqNrt5DUi3q2zgyupMLaaqIMxhjPEaPNLl8V/LAqc3KxBkM3X2E4usqrqGmP1
+         uCCHI5TMBzEdDSp1lfaJSUVi6gJCymgUax5rh3sz3zVcmv3H+UJsc0CAE+kFWvtbUGF4
+         MxYQ==
+X-Gm-Message-State: AOAM532KlKVZwNDjAb73fwigc15D5AW3dQYzOxCcl/UH5TwOSd3GYrDK
+        E38kW25PiImdxw5prcxe7grAxw==
+X-Google-Smtp-Source: ABdhPJx7PsVQomRvckqYDAybqAGOiMLH95hlWgarTNYXO+eMC+95JlU0QlBLIWIa984tkMCt6p0LIg==
+X-Received: by 2002:a17:90b:3e84:b0:1dc:5942:af0e with SMTP id rj4-20020a17090b3e8400b001dc5942af0emr235327pjb.61.1652192535114;
+        Tue, 10 May 2022 07:22:15 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170902bd0600b0015e8d4eb265sm2088260pls.175.2022.05.10.07.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 07:21:16 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        vkuznets@redhat.com, konrad.wilk@oracle.com, hch@lst.de,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com
-Subject: [PATCH] swiotlb: Max mapping size takes min align mask into account
-Date:   Tue, 10 May 2022 10:21:09 -0400
-Message-Id: <20220510142109.777738-1-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 10 May 2022 07:22:14 -0700 (PDT)
+Date:   Tue, 10 May 2022 14:22:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Ynp1E73OZtXudLUH@google.com>
+References: <YmwZYEGtJn3qs0j4@zn.tnic>
+ <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
+ <Ymw9UZDpXym2vXJs@zn.tnic>
+ <YmxKqpWFvdUv+GwJ@google.com>
+ <YmxRnwSUBIkOIjLA@zn.tnic>
+ <Ymxf2Jnmz5y4CHFN@google.com>
+ <YmxlHBsxcIy8uYaB@zn.tnic>
+ <YmxzdAbzJkvjXSAU@google.com>
+ <Ym0GcKhPZxkcMCYp@zn.tnic>
+ <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,51 +101,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+On Sat, Apr 30, 2022, Jon Kohler wrote:
+> 
+> > On Apr 30, 2022, at 5:50 AM, Borislav Petkov <bp@alien8.de> wrote:
+> > So let me try to understand this use case: you have a guest and a bunch
+> > of vCPUs which belong to it. And that guest gets switched between those
+> > vCPUs and KVM does IBPB flushes between those vCPUs.
+> > 
+> > So either I'm missing something - which is possible - but if not, that
+> > "protection" doesn't make any sense - it is all within the same guest!
+> > So that existing behavior was silly to begin with so we might just as
+> > well kill it.
+> 
+> Close, its not 1 guest with a bunch of vCPU, its a bunch of guests with
+> a small amount of vCPUs, thats the small nuance here, which is one of 
+> the reasons why this was hard to see from the beginning. 
+> 
+> AFAIK, the KVM IBPB is avoided when switching in between vCPUs
+> belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
+> have one VM highly oversubscribed to the host and you wouldn’t see
+> either the KVM IBPB or the switch_mm IBPB. All good. 
 
-swiotlb_find_slots() skips slots according to io tlb aligned mask
-calculated from min aligned mask and original physical address
-offset. This affects max mapping size. The mapping size can't
-achieve the IO_TLB_SEGSIZE * IO_TLB_SIZE when original offset is
-non-zero. This will cause system boot up failure in Hyper-V
-Isolation VM where swiotlb force is enabled. Scsi layer use return
-value of dma_max_mapping_size() to set max segment size and it
-finally calls swiotlb_max_mapping_size(). Hyper-V storage driver
-sets min align mask to 4k - 1. Scsi layer may pass 256k length of
-request buffer with 0~4k offset and Hyper-V storage driver can't
-get swiotlb bounce buffer via DMA API. Swiotlb_find_slots() can't
-find 256k length bounce buffer with offset. Make swiotlb_max_mapping
-_size() take min align mask into account.
-
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
- kernel/dma/swiotlb.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 73a41cec9e38..0d6684ca7eab 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -743,7 +743,18 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t paddr, size_t size,
- 
- size_t swiotlb_max_mapping_size(struct device *dev)
- {
--	return ((size_t)IO_TLB_SIZE) * IO_TLB_SEGSIZE;
-+	int min_align_mask = dma_get_min_align_mask(dev);
-+	int min_align = 0;
-+
-+	/*
-+	 * swiotlb_find_slots() skips slots according to
-+	 * min align mask. This affects max mapping size.
-+	 * Take it into acount here.
-+	 */
-+	if (min_align_mask)
-+		min_align = roundup(min_align_mask, IO_TLB_SIZE);
-+
-+	return ((size_t)IO_TLB_SIZE) * IO_TLB_SEGSIZE - min_align;
- }
- 
- bool is_swiotlb_active(struct device *dev)
--- 
-2.25.1
-
+No, KVM does not avoid IBPB when switching between vCPUs in a single VM.  Every
+vCPU has a separate VMCS/VMCB, and so the scenario described above where a single
+VM has a bunch of vCPUs running on a limited set of logical CPUs will emit IBPB
+on every single switch.

@@ -2,45 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFDF521DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8328521DE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345482AbiEJPT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S1345401AbiEJPTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345238AbiEJPTH (ORCPT
+        with ESMTP id S242423AbiEJPTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:19:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F049703C1;
-        Tue, 10 May 2022 07:56:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BC0113D5;
-        Tue, 10 May 2022 07:56:48 -0700 (PDT)
-Received: from bogus (unknown [10.57.0.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54C773F73D;
-        Tue, 10 May 2022 07:56:46 -0700 (PDT)
-Date:   Tue, 10 May 2022 15:56:40 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "erhard_f@mailbox.org" <erhard_f@mailbox.org>
-Subject: Re: [PATCH] mailbox: pcc: Fix an invalid-load caught by the address
- sanitizer
-Message-ID: <20220510145640.xx2b3umlrylorxgs@bogus>
-References: <20220509141716.1270-1-mario.limonciello@amd.com>
- <20220510144656.nxbayvxdfcia3ykm@bogus>
- <BL1PR12MB5157994820103C599B3E2565E2C99@BL1PR12MB5157.namprd12.prod.outlook.com>
+        Tue, 10 May 2022 11:19:18 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058F86B7F7;
+        Tue, 10 May 2022 07:57:04 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id q10so3649167oia.9;
+        Tue, 10 May 2022 07:57:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ap6ylfqMwi8yDjngmCG5tOOg9ip9yvHb2ovQ9serW2k=;
+        b=OAHZpNCNMld0FzItCwZfLElCHHUZdZKqhVCokAKEWCc/cz53lkjT7jNRgQAm6pgPHg
+         RCpSnuI03UhRSJLzChdJRPfZISeQsYFBVHpxLmEZp5elx3ybi1iMCPhiJnAJBXSrw0Zs
+         ToNDcBJnVL6GXsYvC9h9pjdqBsfWum6yRPYvBrUdWNeET8wVpj7ts/dqdKDbMxU6qRUi
+         roSqh4oqCK6vqKbgjMq/O+NORC9HC2xjzQa8wdGwgdixmYqKOZ0tQIkR9Dh7lSJRXc6/
+         2EHgZrdOHHQbDPSrFdCNPCWfpWi4Pkm627nZnLeTpk8oq6gAIsn3LPvhQbtKzYMuKgc0
+         i9Lg==
+X-Gm-Message-State: AOAM530CAh6/Nd9hjZVUXXGYMV2iHIrxUHrz9LTzRwRVMxlxl6qnn3Sv
+        xrdSWyRcujZQ8IBYQFsC7svhgAcvDg==
+X-Google-Smtp-Source: ABdhPJyNR1Dzo0YBqlKSswmacA759cXut1FMrzx83tJFzR+WrBQuB/xMR6Bvv+0cKGWRDkahD6/RYw==
+X-Received: by 2002:a05:6808:d54:b0:326:d355:69c0 with SMTP id w20-20020a0568080d5400b00326d35569c0mr227188oik.121.1652194623263;
+        Tue, 10 May 2022 07:57:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k22-20020a4a8516000000b0035eb4e5a6b0sm2711967ooh.6.2022.05.10.07.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 07:57:02 -0700 (PDT)
+Received: (nullmailer pid 1994439 invoked by uid 1000);
+        Tue, 10 May 2022 14:57:02 -0000
+Date:   Tue, 10 May 2022 09:57:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for
+ "st,stm32mp1-rcc-secure"
+Message-ID: <Ynp9Pu+ZqjaBu8ne@robh.at.kernel.org>
+References: <20220509134658.16267-1-alexandre.torgue@foss.st.com>
+ <1652123805.754133.27398.nullmailer@robh.at.kernel.org>
+ <ddd5d5b2-32a5-6464-80a6-0054c376dd96@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BL1PR12MB5157994820103C599B3E2565E2C99@BL1PR12MB5157.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ddd5d5b2-32a5-6464-80a6-0054c376dd96@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,60 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 02:49:12PM +0000, Limonciello, Mario wrote:
-> [Public]
+On Tue, May 10, 2022 at 09:47:05AM +0200, Alexandre TORGUE wrote:
+> Hi Rob
 > 
-> > -----Original Message-----
-> > From: Sudeep Holla <sudeep.holla@arm.com>
-> > Sent: Tuesday, May 10, 2022 09:47
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > Cc: Jassi Brar <jassisinghbrar@gmail.com>; Sudeep Holla
-> > <sudeep.holla@arm.com>; linux-acpi@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [PATCH] mailbox: pcc: Fix an invalid-load caught by the address
-> > sanitizer
+> On 5/9/22 21:16, Rob Herring wrote:
+> > On Mon, 09 May 2022 15:46:58 +0200, Alexandre Torgue wrote:
+> > > For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
+> > > required properties.
+> > > 
+> > > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> > > 
 > > 
-> > On Mon, May 09, 2022 at 09:17:16AM -0500, Mario Limonciello wrote:
-> > > `pcc_mailbox_probe` doesn't initialize all memory that has been allocated
-> > > before the first time that one of it's members `txdone_irq` may be
-> > > accessed.
-> > >
-> > > This leads to a an invalid load any time that this member is accessed:
-> > > [    2.429769] UBSAN: invalid-load in drivers/mailbox/pcc.c:684:22
-> > > [    2.430324] UBSAN: invalid-load in drivers/mailbox/mailbox.c:486:12
-> > > [    4.276782] UBSAN: invalid-load in drivers/acpi/cppc_acpi.c:314:45
-> > >
-> > > Link:
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugz
-> > illa.kernel.org%2Fshow_bug.cgi%3Fid%3D215587&amp;data=05%7C01%7Cm
-> > ario.limonciello%40amd.com%7C2a6407ffdf5944577aee08da3293f29b%7C3dd
-> > 8961fe4884e608e11a82d994e183d%7C0%7C0%7C637877908262860256%7CUn
-> > known%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6
-> > Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=lTXBFYCNnM
-> > Pt6KnL34rQWXT%2BZvdEwvmIdMWGI%2BfluCo%3D&amp;reserved=0
-> > > Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into
-> > pcc_mbox_probe")
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > > 
-> > Thanks for catching and fixing this.
+> > yamllint warnings/errors:
 > > 
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > dtschema/dtc warnings/errors:
+> > Error: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts:27.33-34 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1401: dt_binding_check] Error 2
 > > 
-> > --
-> > Regards,
-> > Sudeep
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://patchwork.ozlabs.org/patch/
+> > 
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit.
+> > 
 > 
-> I'll take the credit for fixing, but I realized I forgot to add a link and attribution 
-> to the original reporter.  Here are some more tags to add:
->
+> I just updated dtschema and yamllint seems to be well installed. I don't see
+> the see above. I wrote this patch on top of my stm32-next tree. Do I have to
+> send it directly to arm-soc in order to be merged on top of my latest
+> pull-request ?
 
-Ah OK. Not sure if the tools pick up the tags added like this. If not
-better to post a version with all tags added which makes it easy to apply.
-I see the reporter has tested it as well, so guess tested-by can be added
-as well.
+That appears to be header related AFAICT. Maybe you have header changes 
+in your tree. The issue this is fixing is in your tree, so it should be 
+applied there.
 
-> Reported-by: erhard_f@mailbox.org
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215587
-
--- 
-Regards,
-Sudeep
+Rob

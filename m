@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B38521C28
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259EE521C1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245326AbiEJOai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S1344084AbiEJO3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245232AbiEJOBi (ORCPT
+        with ESMTP id S245149AbiEJOCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 10:01:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6032DE5AF;
-        Tue, 10 May 2022 06:40:09 -0700 (PDT)
+        Tue, 10 May 2022 10:02:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590F22DFF45;
+        Tue, 10 May 2022 06:40:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B67C615E9;
-        Tue, 10 May 2022 13:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9C2C385A6;
-        Tue, 10 May 2022 13:40:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0FA2B81D24;
+        Tue, 10 May 2022 13:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A67C385A6;
+        Tue, 10 May 2022 13:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652190008;
-        bh=ua4e5e6fbblInnUUSmuoBmW26eIac4y0SgyHapvsN7g=;
+        s=korg; t=1652190011;
+        bh=5FHKqCevaZ4Z6CAFDYNCySqWPWHqfsu1Z0kLppqCT9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wi191bMv3OWoEeqJfM74LPlM0rdv7udUJo3yHVMW6lxhYFJlBATVsFJx6KBhM6/k9
-         GD+c7yqDZZ6TgezYMqdUMJgKidKrcbqhvW+G+nYrC2Gc7ixZUDUbhvk2Hp3XKL2B0M
-         pxgxtMrqsNrRAbE/NUCmi95gploNlkLAsIC9QcLI=
+        b=cddB+MWVm1qFeXQHy8NKx1LrhOz3zg8QYVFl3BWFQ8rGjaqv6D1dwa4woOf0kjkn9
+         AEKKULVvFycjoo67qiGcYFDGphw0FhGRYioj4d0aJMOGXuXj0Nlrm9cBdp2RGmwS63
+         zO/sG1CpPAjy8AjqLDNGxqIuYTDX8asyHw+lbSi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
+        stable@vger.kernel.org,
+        Andy Gospodarek <andrew.gospodarek@broadcom.com>,
         Michael Chan <michael.chan@broadcom.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 100/140] bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
-Date:   Tue, 10 May 2022 15:08:10 +0200
-Message-Id: <20220510130744.465061244@linuxfoundation.org>
+Subject: [PATCH 5.17 101/140] bnxt_en: Fix unnecessary dropping of RX packets
+Date:   Tue, 10 May 2022 15:08:11 +0200
+Message-Id: <20220510130744.493573240@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
 References: <20220510130741.600270947@linuxfoundation.org>
@@ -55,76 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Somnath Kotur <somnath.kotur@broadcom.com>
+From: Michael Chan <michael.chan@broadcom.com>
 
-commit 13ba794397e45e52893cfc21d7a69cb5f341b407 upstream.
+commit 195af57914d15229186658ed26dab24b9ada4122 upstream.
 
-bnxt_open() can fail in this code path, especially on a VF when
-it fails to reserve default rings:
+In bnxt_poll_p5(), we first check cpr->has_more_work.  If it is true,
+we are in NAPI polling mode and we will call __bnxt_poll_cqs() to
+continue polling.  It is possible to exhanust the budget again when
+__bnxt_poll_cqs() returns.
 
-bnxt_open()
-  __bnxt_open_nic()
-    bnxt_clear_int_mode()
-    bnxt_init_dflt_ring_mode()
+We then enter the main while loop to check for new entries in the NQ.
+If we had previously exhausted the NAPI budget, we may call
+__bnxt_poll_work() to process an RX entry with zero budget.  This will
+cause packets to be dropped unnecessarily, thinking that we are in the
+netpoll path.  Fix it by breaking out of the while loop if we need
+to process an RX NQ entry with no budget left.  We will then exit
+NAPI and stay in polling mode.
 
-RX rings would be set to 0 when we hit this error path.
-
-It is possible for a subsequent bnxt_open() call to potentially succeed
-with a code path like this:
-
-bnxt_open()
-  bnxt_hwrm_if_change()
-    bnxt_fw_init_one()
-      bnxt_fw_init_one_p3()
-        bnxt_set_dflt_rfs()
-          bnxt_rfs_capable()
-            bnxt_hwrm_reserve_rings()
-
-On older chips, RFS is capable if we can reserve the number of vnics that
-is equal to RX rings + 1.  But since RX rings is still set to 0 in this
-code path, we may mistakenly think that RFS is supported for 0 RX rings.
-
-Later, when the default RX rings are reserved and we try to enable
-RFS, it would fail and cause bnxt_open() to fail unnecessarily.
-
-We fix this in 2 places.  bnxt_rfs_capable() will always return false if
-RX rings is not yet set.  bnxt_init_dflt_ring_mode() will call
-bnxt_set_dflt_rfs() which will always clear the RFS flags if RFS is not
-supported.
-
-Fixes: 20d7d1c5c9b1 ("bnxt_en: reliably allocate IRQ table on reset to avoid crash")
-Signed-off-by: Somnath Kotur <somnath.kotur@broadcom.com>
+Fixes: 389a877a3b20 ("bnxt_en: Process the NQ under NAPI continuous polling.")
+Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
 Signed-off-by: Michael Chan <michael.chan@broadcom.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
 --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
 +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -10938,7 +10938,7 @@ static bool bnxt_rfs_capable(struct bnxt
+@@ -2678,6 +2678,10 @@ static int bnxt_poll_p5(struct napi_stru
+ 			u32 idx = le32_to_cpu(nqcmp->cq_handle_low);
+ 			struct bnxt_cp_ring_info *cpr2;
  
- 	if (bp->flags & BNXT_FLAG_CHIP_P5)
- 		return bnxt_rfs_supported(bp);
--	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp))
-+	if (!(bp->flags & BNXT_FLAG_MSIX_CAP) || !bnxt_can_reserve_rings(bp) || !bp->rx_nr_rings)
- 		return false;
- 
- 	vnics = 1 + bp->rx_nr_rings;
-@@ -13194,10 +13194,9 @@ static int bnxt_init_dflt_ring_mode(stru
- 		goto init_dflt_ring_err;
- 
- 	bp->tx_nr_rings_per_tc = bp->tx_nr_rings;
--	if (bnxt_rfs_supported(bp) && bnxt_rfs_capable(bp)) {
--		bp->flags |= BNXT_FLAG_RFS;
--		bp->dev->features |= NETIF_F_NTUPLE;
--	}
++			/* No more budget for RX work */
++			if (budget && work_done >= budget && idx == BNXT_RX_HDL)
++				break;
 +
-+	bnxt_set_dflt_rfs(bp);
-+
- init_dflt_ring_err:
- 	bnxt_ulp_irq_restart(bp, rc);
- 	return rc;
+ 			cpr2 = cpr->cp_ring_arr[idx];
+ 			work_done += __bnxt_poll_work(bp, cpr2,
+ 						      budget - work_done);
 
 

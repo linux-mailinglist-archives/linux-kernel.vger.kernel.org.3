@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449D4522083
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BBB52208B
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 18:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347086AbiEJQER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 12:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S1346947AbiEJQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 12:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347617AbiEJQBy (ORCPT
+        with ESMTP id S1347295AbiEJQBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 12:01:54 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7412369B68
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 08:55:59 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24A4ORnt025518;
-        Tue, 10 May 2022 10:55:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=O1r9WJZyt40J+0RN2MRQFBgLwHBs+wtdx2VZZTMOA2A=;
- b=CVcITX6N0CRWVmiJUDSnVYOMs6Lic7jKw1euRSpw3XSCYU53hvq0D9UTTG3ycB3Xnhem
- qyccSf+nLzQw7wskSleQ59j2QHSO4TD22VYfEknaZp6UVDlADCETZ4IyoyaGKM1h3GeQ
- q+GVpu4VzYFi1vsU8OA6s4/nlUzexeBsfTTi6SAee131jWhY5GJsLOoZwxbCoREQNQmM
- FVTy59HCPcN5z+P/BwX+irnOV9Jt0EsSzUkun+fHfCC1f7SIdnnnDgDcaGzEOCYrEHCA
- ni2/v4c9Jdbz6eEqJ0qYYL3rx5GF3kcqPThF77+Vk3h/vXY7pD6lzhOdMQDWJD2IUpKj 1w== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3fwp6152tt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 10 May 2022 10:55:13 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
- 2022 16:55:11 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Tue, 10 May 2022 16:55:11 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 60264475;
-        Tue, 10 May 2022 15:55:11 +0000 (UTC)
-Date:   Tue, 10 May 2022 15:55:11 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
-        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <oder_chiou@realtek.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/6] ASoC: cs35l36: Fix the error handling of
- cs35l36_i2c_probe()
-Message-ID: <20220510155511.GD38351@ediswmail.ad.cirrus.com>
-References: <20220510153251.1741210-1-zheyuma97@gmail.com>
- <20220510153251.1741210-3-zheyuma97@gmail.com>
+        Tue, 10 May 2022 12:01:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD0A5798B;
+        Tue, 10 May 2022 08:55:09 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KyMxC4NGXz67Pn6;
+        Tue, 10 May 2022 23:52:15 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 17:55:06 +0200
+Received: from [10.47.91.186] (10.47.91.186) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 16:55:05 +0100
+Message-ID: <b1081013-2cd9-f223-8125-d7e51d784f90@huawei.com>
+Date:   Tue, 10 May 2022 16:55:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220510153251.1741210-3-zheyuma97@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: YLx8iFfdTQRK9C8syZN8cmNWTsNgy7H0
-X-Proofpoint-ORIG-GUID: YLx8iFfdTQRK9C8syZN8cmNWTsNgy7H0
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Nick Forrington <nick.forrington@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        "Will Deacon" <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Leo Yan" <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <YnqJwMfi/bcDmN4H@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <YnqJwMfi/bcDmN4H@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.186]
+X-ClientProxiedBy: lhreml705-chm.china.huawei.com (10.201.108.54) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:32:47PM +0800, Zheyu Ma wrote:
-> The driver should goto label 'err' when failing at regmap_read().
+On 10/05/2022 16:50, Arnaldo Carvalho de Melo wrote:
+> Em Tue, May 10, 2022 at 11:47:38AM +0100, Nick Forrington escreveu:
+>> Add Performance Monitoring Unit event data for the Arm CPUs listed
+>> below.
+>>
+>> Changesets are dependent due to incremental updates to the common events
+>> file and mapfile.csv.
+>>
+>> Data is sourced fromhttps://github.com/ARM-software/data
+> Waiting for reviews to merge this.
 > 
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+I'll have a closer look this week.
+
+@Nick, Just curious, do you have some tool/script to convert from the 
+JSON format @ https://github.com/ARM-software/data/blob/master/pmu/ to 
+the "linux" format?
 
 Thanks,
-Charles
+John
+

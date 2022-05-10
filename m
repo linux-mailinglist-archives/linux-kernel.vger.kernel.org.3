@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6456521D84
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEBA521D87
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 17:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345658AbiEJPKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 11:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S1345474AbiEJPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 11:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345559AbiEJPJu (ORCPT
+        with ESMTP id S1345593AbiEJPKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 11:09:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0054B1EC
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652193694; x=1683729694;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N8drDJX7EjyPxyYIr/6B3eFepmHr9YPwLFJHcd7Dioo=;
-  b=DC2cWzhaCxZJlXxKxTHswoa4WmFs258/mAjaknvrwPsIL83RN2PulNsB
-   1cawQyuqP38szuzZV2ykYKajk+i+Mpuizs+anH33Zge3aCcq+HJd/s0qw
-   6HJmtiDZrIMMNpwKksst09eNvL6hbJoUSbMjJZj91FF3HY4k8NzHZjnLo
-   qNYejGL355n7/mmfuooB1BQaipeFR2nyIm7hPoRC29Fd790nuSmcPFTcJ
-   UmCGS578UGsmckV8Tzhs7zr0EdlJ8jfBPogGs0yLytTxqZ9iJrXhYdQH1
-   ExvzConkZ0F3JIFHjPuYQAQDSnOkHWTB1NAojYxswYiConrmgLpoalYc0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="266982132"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="266982132"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:41:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="565671977"
-Received: from fangy-mobl.ger.corp.intel.com (HELO [10.252.50.83]) ([10.252.50.83])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 07:41:09 -0700
-Message-ID: <12bebc80-b792-5739-0d9d-ef1466a9b2aa@linux.intel.com>
-Date:   Tue, 10 May 2022 16:41:00 +0200
+        Tue, 10 May 2022 11:10:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A83C663FF
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:41:49 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id d6so20282411ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 07:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q0kIV1SwXQMNPqOufG4oNCm/OKmJd8Pq9VuUM/8qF2c=;
+        b=iH3GtIL3/HqFhI5vcBNrLNm4DRccYURKHIqy8W7HZ/otX11R9Ov4rZTaAVltaR0Mva
+         80FE8kcPQSs8h8JSbjpouDxLkQTv+hMaf/4Y2m1lh8xn4wzs5s4/MBy4c2DwoScw3e+o
+         E+MdKVSqLPJ9pFE7K2Y3sfcRJNwtl4QfNG+Pw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q0kIV1SwXQMNPqOufG4oNCm/OKmJd8Pq9VuUM/8qF2c=;
+        b=6tpH4lVR8LsI69UO8LB/k4+wD6GJcM3g5SpRTwpnCH6//kvqIQ3qMHQYhw85AFnm5i
+         JwF4XcOGTr68kfAhIT88p3qfiVP6E5Y6TvFpE3EuCnxiPRPxBJGo7WumlVIA5GTvuDSd
+         /njzIyUqucinBcOgJ4dQUJAoXMXuQK9UGv8C9lzQ/i8kXpmFEQh5Xcfk2Jlc8Z/LQ7to
+         JBKDxm1vtM2iqH1YTbAUOmMdKFl8TQZLWVfWIVhv8R/1DApCesemU5Im6+qxT05kEHai
+         vwjfDh2TgJS1O8MAG2Egr98bArAelybLTPHBBaux82Bf5r/n3QHYky3RwkONel0M7T5Y
+         +T8g==
+X-Gm-Message-State: AOAM530yuO6rGVzeUrpPe3eMBvpbGoNOynCHPHovaKqXzX5Jz1RNPPcZ
+        PGl0KmOO+4Jct0/dFXjoUkBfLmTLPKoyrt6NLHsvuA==
+X-Google-Smtp-Source: ABdhPJwxFcHy0kTOLumVuIloHjeYzOBbRfxZpYeVUtm6nIVeD33bgE9YLgFuNW1UMgkcJZ3m/B9WcMJWOK6pK3hy5q0=
+X-Received: by 2002:a05:6402:5ca:b0:423:f330:f574 with SMTP id
+ n10-20020a05640205ca00b00423f330f574mr23198373edx.116.1652193707637; Tue, 10
+ May 2022 07:41:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: Linux regressions report for mainline [2022-05-09] (was: Linux
- 5.18-rc6)
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <20220509124815.vb7d2xj5idhb2wq6@wittgenstein>
+ <CAJfpegveWaS5pR3O1c_7qLnaEDWwa8oi26x2v_CwDXB_sir1tg@mail.gmail.com>
+ <20220510115316.acr6gl5ayqszada6@wittgenstein> <CAJfpegtVgyumJiFM_ujjuRTjg07vwOd4h9AT+mbh+n1Qn-LqqA@mail.gmail.com>
+ <20220510141932.lth3bryefbl6ykny@wittgenstein>
+In-Reply-To: <20220510141932.lth3bryefbl6ykny@wittgenstein>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 10 May 2022 16:41:35 +0200
+Message-ID: <CAJfpegt94fP-_eDAk=_C=24ahCtjQ4vhh8Xg+SrZbwPHs1waLA@mail.gmail.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
- <165209064657.193515.10163777181547077546@leemhuis.info>
- <CAHk-=wj0gHsG6iw3D8ufptm9a_dvTSqrrOFY9WopObbYbyuwnA@mail.gmail.com>
- <54664f6a-b046-1330-e794-cb533e942a94@redhat.com>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-In-Reply-To: <54664f6a-b046-1330-e794-cb533e942a94@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Op 09-05-2022 om 21:04 schreef Hans de Goede:
-> Hi,
->
-> On 5/9/22 19:20, Linus Torvalds wrote:
->> On Mon, May 9, 2022 at 3:47 AM Regzbot (on behalf of Thorsten
->> Leemhuis) <regressions@leemhuis.info> wrote:
->>> Hi Linus! Here's a quick compilation of open reports about regressions in
->>> 5.18-rc that I'm currently aware of; most of the reports are quite
->>> recent and there afaics is nothing that looks particularly worrisome.
->> Well, the Intel GPU issue seems likely to cause problems for lots of people:
->>
->>> [ *NEW* ] drm/i915: BYT rendering broken due to "Remove short-term pins from execbuf, v6"
->>> -----------------------------------------------------------------------------------------
->>> https://linux-regtracking.leemhuis.info/regzbot/regression/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
->>> https://lore.kernel.org/dri-devel/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
->>>
->>> By Hans de Goede; 0 days ago; 2 activities, latest 0 days ago.
->>> Introduced in b5cfe6f7a6e1 (v5.18-rc1)
->>>
->>> Recent activities from: Tvrtko Ursulin (1), Hans de Goede (1)
->> Although it looks possible that it mainly affects old chipsets (ie the
->> two reports are for a Bay Trail chip and a Core 2 Duo chip - I have no
->> idea how they compare).
->>
->> That probably means there are a lot of machines out there, but likely
->> not the kind that most kernel developers will be testing, so not a ton
->> of reports until it hits distro kernels etc.
->>
->> It looks like Maarten is already involved.
-> This is being tracked here:
-> https://gitlab.freedesktop.org/drm/intel/-/issues/5806
->
-> I've just tested a patch from Maarten which fixes things for me,
-> so hopefully we can get this resolved soon.
->
-> Regards,
->
-> Hans
->
-Hey,
+On Tue, 10 May 2022 at 16:19, Christian Brauner <brauner@kernel.org> wrote:
 
-I'm still waiting on feedback on the last patch there, can you test it?
+> Fwiw, turning this around: unifying semantically distinct interfaces
+> because of syntactical similarities is bad. Moving them into a
+> syntactically equivalent system call that expresses the difference in
+> semantics in its name is good.
 
-That should be the real fix most likely, waiting for binding to complete before using the vma.
+You are ignoring the arguments against fragmentation.
 
-~Maarten
+You are also ignoring the fact that semantically the current xattr
+interface is already fragmented.   Grep for "strncmp(name, XATTR_" in
+fs/xattr.c.
 
+We don't have getsecurityxattr(), getuserxattr(), gettrustedxattr()
+and getsystemxattr().  It would be crazy.   Adding getfsxattr()  would
+be equally crazy.  getxattr() pretty much describes the semantics of
+all of these things.
+
+Thanks,
+Miklos

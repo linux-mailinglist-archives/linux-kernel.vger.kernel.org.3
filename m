@@ -2,194 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EAE5211EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F237C5211F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 12:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiEJKSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 06:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S239671AbiEJKTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 06:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbiEJKS2 (ORCPT
+        with ESMTP id S239649AbiEJKTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 06:18:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73212AC0D4
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:14:30 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l18so31896000ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 03:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dbb/ygIPwle8pAxWJvLtaKiiriFkDuqy8P36ttqmEG8=;
-        b=yycP2wQZ9HF/b/5FrlR8y2OYTYX3t/FNxIguneIPCWzzxuMa0ywg/+isW+/xZ0N47N
-         ftjZJcdDRDFJt1uCggycsLqPYeBjkUN247gzZUe+mmvza6I/+tCsx32K2B9ZCr3V9yF6
-         RKrYdcQT01qPTOa5mRH+Po281aWca4Ubd245sIIXjuRV7GQt03eS85g1ST1oyMq9hc8O
-         fDegD87KKu4LBgM39oiCem643VRaY9frJPO784Rv7P/OOIklEqi9CCoMsaGLPvvAIAwK
-         Si7cnMCsNwVQqMN4rRFLobj8ZoLw1qSoG04rGJKd4aktEiJJNk5jvixFdKG+0fFl6ZpQ
-         lDBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dbb/ygIPwle8pAxWJvLtaKiiriFkDuqy8P36ttqmEG8=;
-        b=7cGf+pv445rKewlKFsZfMfyTJeL/dVmme5SsMcIzGz0t4G5ofpEbfw22StkBsNTlcf
-         u7cXeqJiG/p+581C9IMHdZXLKtbVImJGWGIqAYxJWSWsWlp0t27O3Fhz+zZA/9voPchS
-         V7W6mJu88Hlr1EZalrEP7+9IkSKedGFJ01VBiR9YnCMrL8XpjoMfMwoB/qIEsy7+vubJ
-         DD6lpPJBo1uxynHHv3Q8XzAx+A6qm4BUgHd00cbIOhI4yiWuEKSEImg1YLuwQ4Dlwu94
-         GIar2ajOTYdWNEqxkAuuZC0n32IUK03x1m+Bf8eXfuHYD2d4hzL4RBUQPrYbvFJXoAIL
-         iV5A==
-X-Gm-Message-State: AOAM533mt76DMW2hTMlieJ2sb4ZnihQwvRFr05Uuh6ia/gvsmz0vZEfm
-        SENDlu/FCJB++2jZMkf0BPDB+g==
-X-Google-Smtp-Source: ABdhPJydVj8m9S+WzagJO2lkw35EdeHC09Xmn2fKUVMjIUdi8GsSf/3KkrMZdALGKxBPh4z0+VaMZw==
-X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id nb10-20020a1709071c8a00b006e92a0dd7b7mr18248840ejc.572.1652177669239;
-        Tue, 10 May 2022 03:14:29 -0700 (PDT)
-Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709064a0100b006f3ef214db4sm5972354eju.26.2022.05.10.03.14.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 03:14:28 -0700 (PDT)
-Message-ID: <ece7675a-a386-0a16-a087-2469758917f7@linaro.org>
-Date:   Tue, 10 May 2022 12:14:26 +0200
+        Tue, 10 May 2022 06:19:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3AB2AC0D0;
+        Tue, 10 May 2022 03:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652177710; x=1683713710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mm3Wzebclb3e6JX7+dRypp1DwInebPhxa0hyqQTCYhk=;
+  b=kDGssBIhxnWy2DXf8j0c2X8wVfKkSXxXqZ7yYTzBcqD2P0Tg9txmiNMz
+   VqNxgErH5B2HXSK0zFOgoq4539PYN6R8UM2OTLM2W3NjUHYlTVn1qm0Ud
+   jE9zG/DMPLpppZHy/oOiknyZFUUy956EyEQ4fKaeYkL+XlJ0fTpGuRNxG
+   oF1d2/2WNkkY5j7xuwzArZbWKV54G333bWTMD9ubt9B+5M1oywgvnAhd0
+   8VVPN3aSykZssT5DvLiOaB2W5MT1KWRjBSC78M7bo9pBN83K8QBnshfo8
+   qsxre1K6aUbtZ3QqC9QQ61kzxi07fze+IFYBvB9Hd2if5WsGLTnFV6c0f
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="256865436"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="256865436"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:15:09 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="635878530"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 03:15:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1noMtO-00EIEX-Bb;
+        Tue, 10 May 2022 13:14:58 +0300
+Date:   Tue, 10 May 2022 13:14:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jie.deng@intel.com,
+        jsd@semihalf.com, lukas.bulwahn@gmail.com, olof@lixom.net,
+        arnd@arndb.de, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] i2c: npcm: Handle spurious interrupts
+Message-ID: <Yno7IaBNnR5U2GuF@smile.fi.intel.com>
+References: <20220510091654.8498-1-warp5tw@gmail.com>
+ <20220510091654.8498-8-warp5tw@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
-Content-Language: en-US
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
-        tinghan.shen@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220510064603.15920-1-zhiyong.tao@mediatek.com>
- <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510091654.8498-8-warp5tw@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 08:46, Zhiyong Tao wrote:
-> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+On Tue, May 10, 2022 at 05:16:52PM +0800, Tyrone Ting wrote:
+> From: Tali Perry <tali.perry1@gmail.com>
 > 
-> The commit adds mt6366 binding document.
-
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
+> On some platforms in rare cases (1 to 100,000 transactions),
+> the i2c gets a spurious interrupt which means that we enter an interrupt
+> but in the interrupt handler we don't find any status bit that points to
+> the reason we got this interrupt.
 > 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->  .../bindings/regulator/mt6366-regulator.yaml  | 405 ++++++++++++++++++
->  1 file changed, 405 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
+> This may be a case of a rare HW issue or signal integrity issue that is
+> still under investigation.
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
-> new file mode 100644
-> index 000000000000..1f125f5ba860
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
+> In order to overcome this we are doing the following:
+> 1. Disable incoming interrupts in master mode only when slave mode is not
+>    enabled.
+> 2. Clear end of busy (EOB) after every interrupt.
+> 3. Clear other status bits (just in case since we found them cleared)
+> 4. Return correct status during the interrupt that will finish the
+>    transaction.
+> 
+> On next xmit transaction if the bus is still busy the master will issue a
+> recovery process before issuing the new transaction.
 
-Filename with vendor, so "mediatek,mt6366-regulator.yaml"
+...
 
-> @@ -0,0 +1,405 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/mt6366-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MT6366 Regulator from MediaTek Integrated
-> +
-> +maintainers:
-> +  - Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> +
-> +description: |
-> +  List of regulators provided by this controller. It is named
-> +  according to its regulator type, buck_<name> and ldo_<name>.
-> +  MT6366 regulators node should be sub node of the MT6397 MFD node.
-> +
+> +	/* clear status bits for spurious interrupts */
 
-Missing properties node, missing compatible. How is it supposed to
-match? If you plan to use it as part of other binding, please send
-entire patchset (including the binding which uses this one).
+Clear
 
-In current form this looks untestable, unusable.
+...
 
-> +patternProperties:
-> +  "^buck_v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$"
-> +
-> +    unevaluatedProperties: false
+> +	/*
+> +	 * if irq is not one of the above, make sure EOB is disabled and all
 
-Put this one after $ref (other places as well). Makes it more readable.
+If
 
-> +
-> +  "^ldo_v(ibr|rf12|usb|camio|efuse|xo22)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(ibr|rf12|usb|camio|efuse|xo22)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(rfck|emc|a12|a09|ufs|bbck)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(rfck|emc|a12|a09|ufs|bbck)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$":
+> +	 * status bits are cleared.
+> +	 */
 
-No underscores in node names.
+...
 
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vsram_(proc2|others|md|proc1|others_sshub)$":
+> +		/* verify no status bits are still set after bus is released */
 
-No underscores in node names, in all places.
+Verify
 
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vsram_(proc2|others|md|proc1|others_sshub)$"
-> +
-> +    unevaluatedProperties: false
-> +
+...
 
-Best regards,
-Krzysztof
+> +	/* check HW is OK: SDA and SCL should be high at this point. */
+
+Check
+
+...
+
+> +	if ((npcm_i2c_get_SDA(&bus->adap) == 0) ||
+> +	    (npcm_i2c_get_SCL(&bus->adap) == 0)) {
+
+This fits one line
+
+> +		dev_err(bus->dev, "I2C%d init fail: lines are low", bus->num);
+> +		dev_err(bus->dev, "SDA=%d SCL=%d", npcm_i2c_get_SDA(&bus->adap),
+> +			npcm_i2c_get_SCL(&bus->adap));
+
+No '\n' at the end of each?!
+
+> +		return -ENXIO;
+> +	}
+
+...
+
+> +	/* clear status bits for spurious interrupts */
+
+Clear
+
+...
+
+> +	/* after any xfer, successful or not, stall and EOB must be disabled */
+
+After
+
+...
+
+Maybe you chose the small letter for one-liner comments, but I see even in the
+original code the inconsistent style. Please, add an explanation to the cover
+letter and follow it, assuming you add the patch at the end of the series that
+makes comment style consistent (for the one-liners, for the multi-line comments
+we have a clear understanding about the style).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

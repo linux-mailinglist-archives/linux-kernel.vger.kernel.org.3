@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E1F52190C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E251952180E
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241317AbiEJNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S241495AbiEJNdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242086AbiEJN3P (ORCPT
+        with ESMTP id S242610AbiEJNYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:29:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764449FAC;
-        Tue, 10 May 2022 06:21:12 -0700 (PDT)
+        Tue, 10 May 2022 09:24:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3869C54682;
+        Tue, 10 May 2022 06:17:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F7EAB81038;
-        Tue, 10 May 2022 13:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2188C385A6;
-        Tue, 10 May 2022 13:21:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9665B81D0D;
+        Tue, 10 May 2022 13:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480B8C385C2;
+        Tue, 10 May 2022 13:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188867;
-        bh=Ym8GxnnVBZBQ9TUgzbGFvGfJY+zRyIlodEKpAVlkL4o=;
+        s=korg; t=1652188644;
+        bh=hwo8XwOH5FAgJgZVLngvecjaImRzHhr+s7d0muU2US0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R2u4rOw1J1BCb0iZbJo4D65R6KdzDOLdH3rGkwlHgoiuwUN7TZvujDHm/K07XBvSZ
-         HVtveP2ghbb2zAha5HJdBVB5H14kIi/fsZ4P88vOZOIldHhEdwHiMjIX9SHsBYqQ4E
-         HUoB+gp7a0tQ9xI80DBMCyOjsJhJ/MsRdaSDy8yE=
+        b=CSo6ah9Z8Gy7ErJvooKELAVbAUxLxHBP6mkiawZSdhXOemdOFlF5Hm7twqYGRJ/9U
+         BSHxs3aJvnAQJPh09ewvQ6W0LVSF0RcHYxXLddIjTGmEpzcOYB8cuY0jSE4dWl2NhS
+         TozF/WwX74ayDd8Oc4ezFlpm34INgmSKAshHxG98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.19 74/88] ASoC: dmaengine: Restore NULL prepare_slave_config() callback
+        stable@vger.kernel.org, Vasant Hegde <vasant.hegde@amd.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 73/78] kvm: x86/cpuid: Only provide CPUID leaf 0xA if host has architectural PMU
 Date:   Tue, 10 May 2022 15:07:59 +0200
-Message-Id: <20220510130735.882469436@linuxfoundation.org>
+Message-Id: <20220510130734.690549554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130733.735278074@linuxfoundation.org>
-References: <20220510130733.735278074@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+From: Sandipan Das <sandipan.das@amd.com>
 
-commit 660564fc9a92a893a14f255be434f7ea0b967901 upstream.
+[ Upstream commit 5a1bde46f98b893cda6122b00e94c0c40a6ead3c ]
 
-As pointed out by Sascha Hauer, this patch changes:
-if (pmc->config && !pcm->config->prepare_slave_config)
-        <do nothing>
-to:
-if (pmc->config && !pcm->config->prepare_slave_config)
-        snd_dmaengine_pcm_prepare_slave_config()
+On some x86 processors, CPUID leaf 0xA provides information
+on Architectural Performance Monitoring features. It
+advertises a PMU version which Qemu uses to determine the
+availability of additional MSRs to manage the PMCs.
 
-This breaks the drivers that do not need a call to
-dmaengine_slave_config(). Drivers that still need to call
-snd_dmaengine_pcm_prepare_slave_config(), but have a NULL
-pcm->config->prepare_slave_config should use
-snd_dmaengine_pcm_prepare_slave_config() as their prepare_slave_config
-callback.
+Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
+the same, the kernel constructs return values based on the
+x86_pmu_capability irrespective of the vendor.
 
-Fixes: 9a1e13440a4f ("ASoC: dmaengine: do not use a NULL prepare_slave_config() callback")
-Reported-by: Sascha Hauer <sha@pengutronix.de>
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220421125403.2180824-1-codrin.ciubotariu@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This leaf and the additional MSRs are not supported on AMD
+and Hygon processors. If AMD PerfMonV2 is detected, the PMU
+version is set to 2 and guest startup breaks because of an
+attempt to access a non-existent MSR. Return zeros to avoid
+this.
+
+Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
+Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+Message-Id: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-generic-dmaengine-pcm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kvm/cpuid.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/sound/soc/soc-generic-dmaengine-pcm.c
-+++ b/sound/soc/soc-generic-dmaengine-pcm.c
-@@ -91,10 +91,10 @@ static int dmaengine_pcm_hw_params(struc
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 7e1ab0e0f3f2..fd1eb8600ccf 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -517,6 +517,11 @@ static inline int __do_cpuid_ent(struct kvm_cpuid_entry2 *entry, u32 function,
+ 		union cpuid10_eax eax;
+ 		union cpuid10_edx edx;
  
- 	memset(&slave_config, 0, sizeof(slave_config));
++		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
++			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			break;
++		}
++
+ 		perf_get_x86_pmu_capability(&cap);
  
--	if (pcm->config && pcm->config->prepare_slave_config)
--		prepare_slave_config = pcm->config->prepare_slave_config;
--	else
-+	if (!pcm->config)
- 		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
-+	else
-+		prepare_slave_config = pcm->config->prepare_slave_config;
- 
- 	if (prepare_slave_config) {
- 		ret = prepare_slave_config(substream, params, &slave_config);
+ 		/*
+-- 
+2.35.1
+
 
 

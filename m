@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9C652279B
-	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B67522792
+	for <lists+linux-kernel@lfdr.de>; Wed, 11 May 2022 01:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiEJX2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 19:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S238077AbiEJX1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 19:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbiEJX2T (ORCPT
+        with ESMTP id S237993AbiEJX1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 19:28:19 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3861A5DE41
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 16:28:13 -0700 (PDT)
-Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
-        by 156.147.23.51 with ESMTP; 11 May 2022 08:28:11 +0900
-X-Original-SENDERIP: 156.147.1.151
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.151 with ESMTP; 11 May 2022 08:28:11 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Wed, 11 May 2022 08:26:33 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, torvalds@linux-foundation.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH RFC v6 00/21] DEPT(Dependency Tracker)
-Message-ID: <20220510232633.GA18445@X58A-UD3R>
-References: <CAHk-=whnPePcffsNQM+YSHMGttLXvpf8LbBQ8P7HEdqFXaV7Lg@mail.gmail.com>
- <1651795895-8641-1-git-send-email-byungchul.park@lge.com>
- <YnYd0hd+yTvVQxm5@hyeyoo>
- <20220509001637.GA6047@X58A-UD3R>
- <20220509164712.746e236b@gandalf.local.home>
- <20220509233838.GC6047@X58A-UD3R>
- <20220510101254.33554885@gandalf.local.home>
+        Tue, 10 May 2022 19:27:09 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECE4340F9;
+        Tue, 10 May 2022 16:27:08 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id p4so539978qtq.12;
+        Tue, 10 May 2022 16:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RxqE5ZJWuzRnOKii1KyY4gqmrmpnlt//j5R303qeipM=;
+        b=KH33irEqLvUWALSUZFHF9bWSTnxx+Mrv458SV9MPHb64vxmRcUYD6tlPk4cHEO85Is
+         3XyrWcEEG1IHlF3hszvonfGXocIOokZXJ/uaMKrJaJC2jXNtAq2LdEOjDNpu4vnkqF8x
+         Bu+dMRCij/GS6GaOgrp6kOUdCN6C4Ia7Fxdnx1rQ4MrOdoVs3vtfxd8BR+YNW3pMxkfj
+         UJiOlXeH6j+HC24getmLeJ0x8gcXce40unAAdwjzFI6u5sQIHxj+AyclnhZKRkY7+GVx
+         ymOg/wR82FkDdzfWaEHrm2ns51X92tCD+zSprB4swzOAbO7YCDBZRtObaaHDuW1x4a6m
+         G2xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RxqE5ZJWuzRnOKii1KyY4gqmrmpnlt//j5R303qeipM=;
+        b=UZP+KExPg4Pi+uSUhLiO+tPzKYD0Nqn0YYvOpv4XY8plNwCc7WWJP2P22qoQUfH8+y
+         fVpRyBRU5O9l50wxF3RQCfdioOtoHuCShm2d+If8GH47gz4rYndSPJd9SF2k0hGgHkjW
+         ERJnbEaISLL29DsaR3brD996MBRvbeVn8jx/qHgYyAd6UkjhAl45FMXUosC1dP+DOkKa
+         +nUbYrM9U04rEN6Fq9BEWjzpSucjLc35zowg7f/n7ngBqqQT6BxpJSwPABsd4uZEOjDW
+         tpiYDIMjdK3YPursAi8w5snShpTlty3viIOmiFAQzN32YIW9B0OVrurNSX39z8PNIjII
+         fixw==
+X-Gm-Message-State: AOAM531+eUUbqTVkdCFGeF70r8b8din5Y0MEGz/7SvNPJcG1CakGxuNF
+        j6qM1WROxXOhm5ySYF27MxxZNt/F+g==
+X-Google-Smtp-Source: ABdhPJxgDV7qCRup0DaOlqWibc0Iavyobr4jEzrOaIuzZ+nbAc/aQDkROUeW2jgxBWp2OqIprLSXSg==
+X-Received: by 2002:ac8:5745:0:b0:2f3:e231:bc12 with SMTP id 5-20020ac85745000000b002f3e231bc12mr5893406qtx.291.1652225227371;
+        Tue, 10 May 2022 16:27:07 -0700 (PDT)
+Received: from bytedance (ec2-52-72-174-210.compute-1.amazonaws.com. [52.72.174.210])
+        by smtp.gmail.com with ESMTPSA id z21-20020ac87115000000b002f39b99f6adsm188086qto.71.2022.05.10.16.27.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 16:27:06 -0700 (PDT)
+Date:   Tue, 10 May 2022 16:27:02 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC v1 net-next 0/4] net: Qdisc backpressure
+ infrastructure
+Message-ID: <20220510232702.GA11259@bytedance>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
+ <2dbd5e38-b748-0c16-5b8b-b32bc0cc43b0@gmail.com>
+ <20220510230347.GA11152@bytedance>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510101254.33554885@gandalf.local.home>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220510230347.GA11152@bytedance>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 10:12:54AM -0400, Steven Rostedt wrote:
-> On Tue, 10 May 2022 08:38:38 +0900
-> Byungchul Park <byungchul.park@lge.com> wrote:
-> 
-> > Yes, I was talking about A and L'.
-> > 
-> > > detect that regardless of L. A nested lock associates the the nesting with  
-> > 
-> > When I checked Lockdep code, L' with depth n + 1 and L' with depth n
-> > have different classes in Lockdep.
-> 
-> If that's the case, then that's a bug in lockdep.
+On Tue, May 10, 2022 at 04:03:47PM -0700, Peilin Ye wrote:
+> This RFC does not cover EDT though, since it does not use Qdisc watchdog
+> or friends.
 
-Yes, agree. I should've said 'Lockdep doesn't detect it currently.'
-rather than 'Lockdep can't detect it.'.
+Sorry, there is a call to qdisc_watchdog_schedule_range_ns() in
+sch_fq.c.  I will learn more about how sch_fq is implemented.
 
-I also think we make it for this case by fixing the bug in Lockdep.
+Thanks,
+Peilin Ye
 
-> > 
-> > That's why I said Lockdep cannot detect it. By any chance, has it
-> > changed so as to consider this case? Or am I missing something?
-> 
-> No, it's not that lockdep cannot detect it, it should detect it. If it is
-> not detecting it, then we need to fix that.
-
-Yes.
-
-	Byungchul
-> 
-> -- Steve

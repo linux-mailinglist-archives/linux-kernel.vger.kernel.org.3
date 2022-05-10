@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467E3521C11
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C9B521B06
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 16:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242979AbiEJO2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 10:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S1344200AbiEJOHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 10:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245531AbiEJN6A (ORCPT
+        with ESMTP id S243493AbiEJNpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:58:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168C18B0B8;
-        Tue, 10 May 2022 06:39:31 -0700 (PDT)
+        Tue, 10 May 2022 09:45:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB7953E00;
+        Tue, 10 May 2022 06:31:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD66CB81DC2;
-        Tue, 10 May 2022 13:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21114C385A6;
-        Tue, 10 May 2022 13:39:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AF50FCE1E67;
+        Tue, 10 May 2022 13:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AD9C385A6;
+        Tue, 10 May 2022 13:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652189968;
-        bh=ZS4YX0gYWuUArXMDi1K/gNPON1wBSM2zlX0d9VfYLWk=;
+        s=korg; t=1652189449;
+        bh=H80LzjsCwwDuMoTh8aPlJp2dEdjqVJunQqjAV47P7vE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FqM4/exug2zj0F5SeOvRLTWVPBSC17XIiO78jbQFYwZU9EuE4NWRtpLCsKHUvIdAV
-         ztF7Bc7YMgfhVPbhZ2KFan77+FgqSKrYkmiNrXKfz8M5CJCqkxvD5MYy5ld2NavYDu
-         V0SN0vMnlWMG+eDBDbkfxlpSyPSV69ExH8toTEC8=
+        b=LRkMMc+wdA/W2MWEkG5pbb3oUOT4QwisVbUVSSNmzb2ZAb2x9V/DOgmbAA2bWDJXD
+         lEufoEC+Zor5MphOVwTnQ6sWop1VeCmn3ouo8Y0TY9oRRo2QDXi4tWy1c994IZWWVf
+         wb2hzlof7LTcJwtEITlQbC2kNScVBSiHD/byUg20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.17 046/140] can: isotp: remove re-binding of bound socket
-Date:   Tue, 10 May 2022 15:07:16 +0200
-Message-Id: <20220510130742.939072513@linuxfoundation.org>
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.15 055/135] SUNRPC release the transport of a relocated task with an assigned transport
+Date:   Tue, 10 May 2022 15:07:17 +0200
+Message-Id: <20220510130741.984760719@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
-References: <20220510130741.600270947@linuxfoundation.org>
+In-Reply-To: <20220510130740.392653815@linuxfoundation.org>
+References: <20220510130740.392653815@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-commit 72ed3ee9fa0b461ad086403a8b5336154bd82234 upstream.
+commit e13433b4416fa31a24e621cbbbb39227a3d651dd upstream.
 
-As a carry over from the CAN_RAW socket (which allows to change the CAN
-interface while mantaining the filter setup) the re-binding of the
-CAN_ISOTP socket needs to take care about CAN ID address information and
-subscriptions. It turned out that this feature is so limited (e.g. the
-sockopts remain fix) that it finally has never been needed/used.
+A relocated task must release its previous transport.
 
-In opposite to the stateless CAN_RAW socket the switching of the CAN ID
-subscriptions might additionally lead to an interrupted ongoing PDU
-reception. So better remove this unneeded complexity.
-
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/all/20220422082337.1676-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 82ee41b85cef1 ("SUNRPC don't resend a task on an offlined transport")
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c |   22 +++++-----------------
- 1 file changed, 5 insertions(+), 17 deletions(-)
+ net/sunrpc/clnt.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1146,6 +1146,11 @@ static int isotp_bind(struct socket *soc
- 
- 	lock_sock(sk);
- 
-+	if (so->bound) {
-+		err = -EINVAL;
-+		goto out;
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -1065,10 +1065,13 @@ rpc_task_get_next_xprt(struct rpc_clnt *
+ static
+ void rpc_task_set_transport(struct rpc_task *task, struct rpc_clnt *clnt)
+ {
+-	if (task->tk_xprt &&
+-			!(test_bit(XPRT_OFFLINE, &task->tk_xprt->state) &&
+-                        (task->tk_flags & RPC_TASK_MOVEABLE)))
+-		return;
++	if (task->tk_xprt) {
++		if (!(test_bit(XPRT_OFFLINE, &task->tk_xprt->state) &&
++		      (task->tk_flags & RPC_TASK_MOVEABLE)))
++			return;
++		xprt_release(task);
++		xprt_put(task->tk_xprt);
 +	}
-+
- 	/* do not register frame reception for functional addressing */
- 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
- 		do_rx_reg = 0;
-@@ -1156,10 +1161,6 @@ static int isotp_bind(struct socket *soc
- 		goto out;
- 	}
- 
--	if (so->bound && addr->can_ifindex == so->ifindex &&
--	    rx_id == so->rxid && tx_id == so->txid)
--		goto out;
--
- 	dev = dev_get_by_index(net, addr->can_ifindex);
- 	if (!dev) {
- 		err = -ENODEV;
-@@ -1186,19 +1187,6 @@ static int isotp_bind(struct socket *soc
- 
- 	dev_put(dev);
- 
--	if (so->bound && do_rx_reg) {
--		/* unregister old filter */
--		if (so->ifindex) {
--			dev = dev_get_by_index(net, so->ifindex);
--			if (dev) {
--				can_rx_unregister(net, dev, so->rxid,
--						  SINGLE_MASK(so->rxid),
--						  isotp_rcv, sk);
--				dev_put(dev);
--			}
--		}
--	}
--
- 	/* switch to new settings */
- 	so->ifindex = ifindex;
- 	so->rxid = rx_id;
+ 	if (task->tk_flags & RPC_TASK_NO_ROUND_ROBIN)
+ 		task->tk_xprt = rpc_task_get_first_xprt(clnt);
+ 	else
 
 

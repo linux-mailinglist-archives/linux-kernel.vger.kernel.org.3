@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D77521688
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DEB521745
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 15:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242372AbiEJNPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 09:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S242677AbiEJNYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 09:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbiEJNPW (ORCPT
+        with ESMTP id S243058AbiEJNVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 09:15:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B29C3EAAF;
-        Tue, 10 May 2022 06:11:12 -0700 (PDT)
+        Tue, 10 May 2022 09:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FD32C13C2;
+        Tue, 10 May 2022 06:14:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D807B81D7C;
-        Tue, 10 May 2022 13:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95164C385C2;
-        Tue, 10 May 2022 13:11:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C4E61668;
+        Tue, 10 May 2022 13:14:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0256FC385C2;
+        Tue, 10 May 2022 13:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652188269;
-        bh=DGQ7jVZyhgmwAFlPWHfag//rhR+MqULuSCpSlE56/uk=;
+        s=korg; t=1652188482;
+        bh=/4tIIjSnRVWb5mqxn4GkUSAWWT+Y1OQB5JP/Vz1OeYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dLFANLw4naMY1XtmE7pDyu5YmhlxgEXmgcdsjTBldIOrSa4eQHOkef2W6PNSsZIE+
-         X7BbVK/7YM3781+ZJNzOkTuriX1xgiAQPnXX915KHCyV0c52JnlXXkxJA2za6dQVrw
-         DPL/4/gMW/xhR4awGfj1Y2NU0ry8H2fQ2QmE2R/k=
+        b=jENOjyM4Po7rqwxvL/8pyilayNTUKbBNnQ2V8oioxxxP3hR+aX7m6Co+BUIJQyL/N
+         l5rgfPAVyEt2/iCwqXf37INh3GbCxSN1X6S2Q8lYeBORnhIsdKFHIWzkHPr1pQi9AA
+         RzPMOy57vkgu9RQgByhzfuLWFUyuHB+IsVxXMJNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
         stable <stable@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH 4.9 18/66] serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+Subject: [PATCH 4.14 22/78] serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
 Date:   Tue, 10 May 2022 15:07:08 +0200
-Message-Id: <20220510130730.299292864@linuxfoundation.org>
+Message-Id: <20220510130733.189588990@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510130729.762341544@linuxfoundation.org>
-References: <20220510130729.762341544@linuxfoundation.org>
+In-Reply-To: <20220510130732.522479698@linuxfoundation.org>
+References: <20220510130732.522479698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,7 +82,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/tty/serial/8250/8250_pci.c
 +++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -2915,7 +2915,7 @@ enum pci_board_num_t {
+@@ -2668,7 +2668,7 @@ enum pci_board_num_t {
  	pbn_panacom2,
  	pbn_panacom4,
  	pbn_plx_romulus,
@@ -91,7 +91,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	pbn_oxsemi,
  	pbn_oxsemi_1_4000000,
  	pbn_oxsemi_2_4000000,
-@@ -3479,10 +3479,10 @@ static struct pciserial_board pci_boards
+@@ -3184,10 +3184,10 @@ static struct pciserial_board pci_boards
  	* signal now many ports are available
  	* 2 port 952 Uart support
  	*/
@@ -104,7 +104,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		.uart_offset	= 0x200,
  		.first_offset	= 0x1000,
  	},
-@@ -4430,7 +4430,7 @@ static struct pci_device_id serial_pci_t
+@@ -4039,7 +4039,7 @@ static const struct pci_device_id serial
  	*/
  	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
  		PCI_ANY_ID, PCI_ANY_ID, 0, 0,

@@ -2,149 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8330B522305
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD4F522309
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 19:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348369AbiEJRox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 13:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S1346581AbiEJRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 13:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348360AbiEJRot (ORCPT
+        with ESMTP id S241938AbiEJRrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 13:44:49 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D443212082
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:40:49 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id q8so19291051oif.13
-        for <linux-kernel@vger.kernel.org>; Tue, 10 May 2022 10:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=UKufSQs9qr2bj9JxpR70M2MLmSNQQ67hZiGFvmJhYoc=;
-        b=mdY/If8uRLEfI44R6YGWNOJxV4pcVZkV2cqgKl6mPn2qSRu9ZEv1lEWDIFC2daiykt
-         2e1RiT9qD3sYV5V/WfZx0zxgjzmxv1dsDsRhjJ9fNdW9WfpT/PoLmKh1gugpSSvyB9OS
-         r5ivIcCI5Z4QdKRZvhVb8GLWcVU4lgDzVyo9E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=UKufSQs9qr2bj9JxpR70M2MLmSNQQ67hZiGFvmJhYoc=;
-        b=Wu/U97UAd+4xzZEP+PoUIGb1Jkx9e6V7SQcYTDRo7S5a/3bjno/k5V2o8k6dazItsu
-         sILw/4Pdpjra8wINYTSvsJvUpwiPmp4Mz8kRjTZ4e6kUyyQR6T2T9Va55YOIYPjUbFsB
-         AgXk6XCUo1CwX6dhxQMLIWv0igg1iXAbHseSCjF5yYG9NjagN9cBOynPp0n6nOJzSo92
-         4Gptfp6+EXG3WCz5IOjSxKL9h4OoyJaK6BDrze5DQLJG7EOSwiINvSdtHPicuiaqBy1C
-         Gb9ybdiME29lP08aTworExCj1fTdayoOnraBs6rYQ0dztqhi8zU4EW8gRK77eL2Fatlf
-         hSqw==
-X-Gm-Message-State: AOAM532qSKkpOD8gRUZ0OI8Mm9jy/njLzTUnbS9djKq7HeNfyMcDwv9k
-        25KbI80ujlFzN2NKJ0IUEaoZwr5oD3uwV+X96YDJxA==
-X-Google-Smtp-Source: ABdhPJz95HjcXUXoUbA/7guupIrd/nNtcSppXPf36HaH/0UjgRjU1DiKnHjuUteekXQ3UkimNseRwGrch2RzwVkttFo=
-X-Received: by 2002:a05:6808:14c2:b0:326:c129:d308 with SMTP id
- f2-20020a05680814c200b00326c129d308mr576354oiw.193.1652204449230; Tue, 10 May
- 2022 10:40:49 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 10 May 2022 10:40:48 -0700
+        Tue, 10 May 2022 13:47:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478A6267C0C;
+        Tue, 10 May 2022 10:43:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EA9DF1F8C6;
+        Tue, 10 May 2022 17:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652204622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u1whn4lbU6iVVflTZcVGrO43VdILAmiKvJmX0VyooKo=;
+        b=MGKHbxCeHphlHKb4O8pw0mUgVlGBvE/udt9yYT5XSXjFAViZaUhM99PfoAdSQqPaGswXyF
+        Y5tmVVRjt3whErQQNDqDMNCmjEYAHz7dQPvG3ur4lGFo6+2ZZSaXikho387KG2m1BDY84b
+        aY1Pxop+HSelwIr3m8X26Ice7l9tYKI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A60C913AC1;
+        Tue, 10 May 2022 17:43:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rf3CJk6kemLFIgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 10 May 2022 17:43:42 +0000
+Date:   Tue, 10 May 2022 19:43:41 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        David Vernet <void@manifault.com>, tj@kernel.org,
+        roman.gushchin@linux.dev, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, cgroups@vger.kernel.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Chris Down <chris@chrisdown.name>
+Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
+ test_memcg_low()
+Message-ID: <20220510174341.GC24172@blackbody.suse.cz>
+References: <20220423155619.3669555-1-void@manifault.com>
+ <20220423155619.3669555-3-void@manifault.com>
+ <20220427140928.GD9823@blackbody.suse.cz>
+ <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
+ <20220429092620.GA23621@blackbody.suse.cz>
+ <20220506164015.fsdsuv226nhllos5@dev0025.ash9.facebook.com>
+ <Ynkum8DeJIAtGi9y@cmpxchg.org>
+ <20220509174424.e43e695ffe0f7333c187fba8@linux-foundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20220505104024.v4.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
-References: <20220505104024.v4.1.Id769ddc5dbf570ccb511db96da59f97d08f75a9c@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 10 May 2022 10:40:48 -0700
-Message-ID: <CAE-0n511S7dNPetX0dHp2RSPUZQjwGtXM8nMTF0bf03JjbPwfg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] arm64: dts: qcom: sc7180: Add wormdingler dts files
-To:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220509174424.e43e695ffe0f7333c187fba8@linux-foundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Joseph S. Barrera III (2022-05-05 10:41:12)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-> new file mode 100644
-> index 000000000000..e947e01d0b3b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-> @@ -0,0 +1,417 @@
-[...]
-> +
-> +/* PINCTRL - board-specific pinctrl */
-> +
-> +&tlmm {
-> +       gpio-line-names = "HUB_RST_L",
-[...]
-> +
-> +       vdd_reset_1800: vdd-reset-1800 {
-> +               pinmux {
-> +                       pins = "gpio87";
-> +                       function = "gpio";
-> +               };
-> +
-> +               pinconf {
-> +                       pins = "gpio87";
-> +                       drive-strength = <2>;
-> +                       bias-disable;
-> +               };
-> +       };
-> +
-> +       avdd_lcd_en: avdd-lcd-en {
-> +               pinmux {
-> +                       pins = "gpio88";
-> +                       function = "gpio";
-> +               };
-> +
-> +               pinconf {
-> +                       pins = "gpio88";
-> +                       drive-strength = <2>;
-> +                       bias-disable;
-> +               };
-> +       };
-> +
-> +       avee_lcd_en: avee-lcd_en {
+Hello all.
 
-avee-lcd-en
+On Mon, May 09, 2022 at 05:44:24PM -0700, Andrew Morton <akpm@linux-foundation.org> wrote:
+> So I think we're OK with [2/5] now.  Unless there be objections, I'll
+> be looking to get this series into mm-stable later this week.
 
-No underscores in node names please.
+I'm sorry, I think the current form of the test reveals an unexpected
+behavior of reclaim and silencing the test is not the way to go.
+Although, I may be convinced that my understanding is wrong.
 
-> +               pinmux {
-> +                       pins = "gpio21";
-> +                       function = "gpio";
-> +               };
-> +
-> +               pinconf {
-> +                       pins = "gpio21";
-> +                       drive-strength = <2>;
-> +                       bias-disable;
-> +               };
-> +       };
 
-Are these supposed to be sorted by node name? Or gpio number? Please do
-one of those.
+On Mon, May 09, 2022 at 11:09:15AM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> My understanding of the issue you're raising, Michal, is that
+> protected siblings start with current > low, then get reclaimed
+> slightly too much and end up with current < low. This results in a
+> tiny bit of float that then gets assigned to the low=0 sibling; 
 
-> +
-> +       mipi_1800_en: mipi-1800-en {
-> +               pinmux {
-> +                       pins = "gpio86";
-> +                       function = "gpio";
-> +               };
-> +
-> +               pinconf {
-> +                       pins = "gpio86";
-> +                       drive-strength = <2>;
-> +                       bias-disable;
-> +               };
-> +       };
-> +};
+Up until here, we're on the same page.
+
+> when that sibling gets reclaimed regardless, it sees a low event.
+> Correct me if I missed a detail or nuance here.
+
+Here, I'd like to stress that the event itself is just a messenger (whom
+my original RFC patch attempted to get rid of). The problem is that if
+the sibling with recursive protection is active enough to claim it, it's
+effectively stolen from the passive sibling. See the comparison of
+'precious' vs 'victim' in [1].
+
+> But unused float going to siblings is intentional. This is documented
+> in point 3 in the comment above effective_protection(): if you use
+> less than you're legitimately claiming, the float goes to your
+> siblings.
+
+The problem is how the unused protection came to be (voluntarily not
+consumed vs reclaimed).
+
+> So the problem doesn't seem to be with low accounting and
+> event generation, but rather it's simply overreclaim.
+
+Exactly.
+
+> It's conceivable to make reclaim more precise and then tighten up the
+> test. But right now, David's patch looks correct to me.
+
+The obvious fix is at the end of this message, it resolves the case I
+posted earlier (with memory_recursiveprot), however, it "breaks"
+memory.events:low accounting inside recursive children, hence I'm not
+considering it finished. (I may elaborate on the breaking case if
+interested, I also need to look more into that myself).
+
+
+On Fri, May 06, 2022 at 09:40:15AM -0700, David Vernet <void@manifault.com> wrote:
+> If you look at how much memory A/B/E gets at the end of the reclaim,
+> it's still far less than 1MB (though should it be 0?).
+
+This selftest has two ±equal workloads in siblings, however, if their
+activity varies, it can end up even opposite (the example [1]).
+
+> This definitely sounds to me like a useful testcase to add, and I'm
+> happy to do so in a follow-on patch. If we added this, do you think
+> we need to keep the check for memory.low events for the memory.low ==
+> 0 child in the overcommit testcase?
+
+I think it's still useful, to check the behavior when inherited vs
+explicit siblings coexist under protected parent.
+Actually, the second case of all siblings having the inherited
+(implicit) protection is also interesting (it seems that's that I'm
+seeing in my tests with the attached patch).
+
++Cc: Chris, who reasoned about the SWAP_CLUSTER_MAX rounding vs too high
+priority (too low numerically IIUC) [2].
+
+Michal
+
+[1] https://lore.kernel.org/r/20220325103118.GC2828@blackbody.suse.cz/
+[2] https://lore.kernel.org/all/20190128214213.GB15349@chrisdown.name/
+
+--- 8< ---
+From e18caf7a5a1b0f39185fbdc11e4034def42cde88 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+Date: Tue, 10 May 2022 18:48:31 +0200
+Subject: [RFC PATCH] mm: memcg: Do not overreclaim SWAP_CLUSTER_MAX from
+ protected memcg
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This was observed with memcontrol selftest/new LTP test but can be also
+reproduced in simplified setup of two siblings:
+
+	`parent .low=50M
+	  ` s1	.low=50M  .current=50M+ε
+	  ` s2  .low=0M   .current=50M
+
+The expectation is that s2/memory.events:low will be zero under outer
+reclaimer since no protection should be given to cgroup s2 (even with
+memory_recursiveprot).
+
+However, this does not happen. The apparent reason is that when s1 is
+considered for (proportional) reclaim the scanned proportion is rounded
+up to SWAP_CLUSTER_MAX and slightly over-proportional amount is
+reclaimed. Consequently, when the effective low value of s2 is
+calculated, it observes unclaimed parent's protection from s1
+(ε-SWAP_CLUSTER_MAX in theory) and effectively appropriates it.
+
+What is worse, when the sibling s2 has more (memory) greedy workload, it
+can repeatedly "steal" the protection from s1 and the distribution ends
+up with s1 mostly reclaimed despite explicit prioritization over s2.
+
+Simply fix it by _not_ rounding up to SWAP_CLUSTER_MAX. This would have
+saved us ~5 levels of reclaim priority. I.e. we may be reclaiming from
+protected memcgs at relatively low priority _without_ counting any
+memory.events:low (due to overreclaim). Now, if the moderated scan is
+not enough, we must bring priority to zero to open protected reserves.
+And that's correct, we want to be explicit when reclaiming those.
+
+
+Fixes: 8a931f801340 ("mm: memcontrol: recursive memory.low protection")
+Fixes: 9783aa9917f8 ("mm, memcg: proportional memory.{low,min} reclaim")
+Reported-by: Richard Palethorpe <rpalethorpe@suse.com>
+Link: https://lore.kernel.org/all/20220321101429.3703-1-rpalethorpe@suse.com/
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ mm/vmscan.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 1678802e03e7..cd760842b9ad 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2798,13 +2798,6 @@ static void get_scan_count(struct lruvec *lruvec, struct scan_control *sc,
+ 
+ 			scan = lruvec_size - lruvec_size * protection /
+ 				(cgroup_size + 1);
+-
+-			/*
+-			 * Minimally target SWAP_CLUSTER_MAX pages to keep
+-			 * reclaim moving forwards, avoiding decrementing
+-			 * sc->priority further than desirable.
+-			 */
+-			scan = max(scan, SWAP_CLUSTER_MAX);
+ 		} else {
+ 			scan = lruvec_size;
+ 		}
+-- 
+2.35.3
+
+

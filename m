@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1148E5225D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910935225DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 22:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiEJUqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 16:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S230472AbiEJUtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 16:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiEJUql (ORCPT
+        with ESMTP id S229625AbiEJUtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 16:46:41 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A02985A9;
-        Tue, 10 May 2022 13:46:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id i19so147269eja.11;
-        Tue, 10 May 2022 13:46:40 -0700 (PDT)
+        Tue, 10 May 2022 16:49:39 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A128ED16;
+        Tue, 10 May 2022 13:49:38 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id n8so258078qke.11;
+        Tue, 10 May 2022 13:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KKWBQ2F+cxIhz54zwjRVpvTlbyC6XpVNbax5yXJJLBo=;
-        b=JBftJ5ZMCuQ8xAg+YdJkAjkvM+FeExP3AJf6FXHcwU2uWLR6K0Axnpkkhct8StnC4k
-         MSySaTtFA5TbRUX7BDb5sz1U6nUsyzQWwNkpvacKzgyZprQZv5cxo602YTKiRUNZejrM
-         T2NJlQDJhrDq2XmRa90t91v6VnZFoNyS2Ahzj6q/uWy6tWsu3fqkW2EraMSfv8EztS2/
-         +wPScn5huYl8TeLozSTPIX4AI2rNCBKPQC2vQ+gwAf41sLCkeasbKgcz4mPHSqSUSqQ+
-         qqnF5vIPd2HXtCgo+4HA3TTRCUEQOsBaClvKW8aldWSLUS9oF8IH45FcYA7XVvlTg4aF
-         MOgQ==
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=1QtSHWSt2P70HyR6hX4k2G7pqEyPFZ8xAGoNFzir3SQ=;
+        b=YkGu5LR6Wft8MV6XPCrLi+3vMPkMsQLNUSMRBHgn9q+e2mm8xFcXvnGtIt2T1e4MJC
+         iHfHS4sZXCZ3FPZ6JGkMtumQPnzwZtsqey7J1ss75J1a4S/aUPstkYqxDlJuTYQTjrnX
+         KnBRu+ligRRIe+4XkdqZT2OcuSn2kg0xcBfG9e62d29uJRMmV3ED3WrKd91MtY05Sznv
+         qSHFpuKTaEosSYo2d71XApai830knTGk6g4lgJbpgIcyk8jynIQflDLSd1DJdImkGEuK
+         HyUW7qvMcXveRP9dBHbaT+J8AgKV3S0+ULVJgjcHCL+8PZdturN0ECq4g62VeLvpM8HC
+         40Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KKWBQ2F+cxIhz54zwjRVpvTlbyC6XpVNbax5yXJJLBo=;
-        b=Zkv+4lUhogny19E4txhYYhMQUoyAgsjvQf3T/6Oj7b7PGzXSYplyY9Ix5GTcaQweHw
-         pR5Ueh8QKI+wwRM95zDttmKAqWDWZZFG2m71IIFqlDbboT10B0nSl96T6Ujf3jgE0jjc
-         SGVBZsBswCWW9npj+rSjFD2/ei5ejPS5ndYKlEMjGZnhOsxnCMDDPtXMHgj0nO0DKh1z
-         HAxcyYXM1aYMjdPHItFVofKXYi5HtRDXx+5oW66glwSOk1k/MFHVMlfMSpbqwDmvnd+y
-         4z/OOVw+CNh+3GWOYY6b+ebFwOQscbMArEbsVDhUAzlvU7ai/hSTwBZsgsJmQ6opmYkj
-         zGKQ==
-X-Gm-Message-State: AOAM532VDX1zB4JWajzlJhgLPteS8bxhTEFHAYh0yxvlGtOegoGBeW5W
-        7dWRCWArezywmD1IBte6zJRN8AQdWdb9MtQcuEE=
-X-Google-Smtp-Source: ABdhPJyFeVAtJNETUs8yE74umx1PP8VfPhg1EerOmcjyJsAlhL/X7I/mRXACEHM16D6tEH7cmHUtlFE8/hQ5eSM7xpg=
-X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id
- bh14-20020a170906a0ce00b006d1cb303b3bmr21485466ejb.582.1652215598472; Tue, 10
- May 2022 13:46:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220509205815.GA1885269@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220509205815.GA1885269@paulmck-ThinkPad-P17-Gen-1>
-From:   Uladzislau Rezki <urezki@gmail.com>
-Date:   Tue, 10 May 2022 22:46:27 +0200
-Message-ID: <CA+KHdyUqYM9oGfuUy_NE+jZ+mge7Up9cXn74TtHP=QnMfqTkew@mail.gmail.com>
-Subject: Re: And speaking of avoiding inconveniencing users...
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     RCU <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=1QtSHWSt2P70HyR6hX4k2G7pqEyPFZ8xAGoNFzir3SQ=;
+        b=bpewXv6NiZipaKR6yYMGgfCP62J211trxM34DrIfyMcNkJ/yBT2PpPKjGGBAwo4Jl0
+         wE1adh2ScN6Wf+rz6/4JPA9Bi3Bd4K1uGamq30Yadq+YiQbrETXXRMjoze2BInCkCIZK
+         SLtJvv++3wBgL1fZBthxZSSfO9aINC7R2qXmYfnhhDvoG0eC1SeiyylKH7U3MXTb2KFM
+         UVKjYaU/DmeDPHNyG5LEbuBvuAd+qkLtT20T0vSSPK7n3uwPnaumb4ZHFV0jbZDoC4C7
+         Qi+rWKue0YI9lgJhdMaWs4EGrwqG68h/k/2v6vcmxJ8hUpmHEwG+WI4V44FzSVvKPajd
+         uSFw==
+X-Gm-Message-State: AOAM533UNkbTNLZoapyLVe7oDPeS3rxcpU6W18Zox9RfPahfYLEx6Tq5
+        gNIdjOc+EB7goM0lv6UlQoo9Yj0dN4toz2PLRNI=
+X-Google-Smtp-Source: ABdhPJz8+eivJDtoj2avoAWtwcGjdnjIg9IX86Y4q1sdxJbBIpePbMx3np/zn4peC2vhdB8GKcxtwQ==
+X-Received: by 2002:ae9:c313:0:b0:69d:7664:e51d with SMTP id n19-20020ae9c313000000b0069d7664e51dmr16826896qkg.199.1652215777600;
+        Tue, 10 May 2022 13:49:37 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id y188-20020a37afc5000000b0069fc13ce22fsm9200337qke.96.2022.05.10.13.49.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 13:49:37 -0700 (PDT)
+Message-ID: <627acfe1.1c69fb81.98150.f640@mx.google.com>
+Date:   Tue, 10 May 2022 13:49:37 -0700 (PDT)
+X-Google-Original-Date: Tue, 10 May 2022 20:49:35 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220510130741.600270947@linuxfoundation.org>
+Subject: RE: [PATCH 5.17 000/140] 5.17.7-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -65,122 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Paul.
+On Tue, 10 May 2022 15:06:30 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.17.7 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 12 May 2022 13:07:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Indeed the changed switched to 21 seconds. What is about just set the
-60 000 for !ANDROID?
+5.17.7-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-default 60000 if !ANDROID
-
-On Mon, May 9, 2022 at 10:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> Hello, Uladzislau,
->
-> And I wasn't paying attention when reviewing this patch:
->
-> 084e1c049a8e ("rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT")
->
-> Distros specifying 60 seconds for the stall timeout get hit with a silent
-> change to 21 seconds for the expedited stall timeout.
->
-> Unless you tell me otherwise, I will merge the following diff into the
-> above commit.  So please let me know if this will cause any problems.
->
->                                                         Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-> index 1d863b04727c3..794837eb519b9 100644
-> --- a/Documentation/RCU/stallwarn.rst
-> +++ b/Documentation/RCU/stallwarn.rst
-> @@ -166,10 +166,12 @@ CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
->  --------------------------------
->
->         Same as the CONFIG_RCU_CPU_STALL_TIMEOUT parameter but only for
-> -       the expedited grace period. This parameter defines the period of
-> -       time that RCU will wait from the beginning of an expedited grace
-> -       period until it issues an RCU CPU stall warning. This time period
-> -       is normally 20 milliseconds on Android devices.
-> +       the expedited grace period. This parameter defines the period
-> +       of time that RCU will wait from the beginning of an expedited
-> +       grace period until it issues an RCU CPU stall warning. This time
-> +       period is normally 20 milliseconds on Android devices.  A zero
-> +       value causes the CONFIG_RCU_CPU_STALL_TIMEOUT value to be used,
-> +       after conversion to milliseconds.
->
->         This configuration parameter may be changed at runtime via the
->         /sys/module/rcupdate/parameters/rcu_exp_cpu_stall_timeout, however
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 34d44648f3f5d..ca9db809beda3 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4936,6 +4936,9 @@
->                         and the maximum allowed value is 21000
->                         milliseconds. Please note that this value is
->                         adjusted to an arch timer tick resolution.
-> +                       Setting this to zero causes the value from
-> +                       rcupdate.rcu_cpu_stall_timeout to be used (after
-> +                       conversion from seconds to milliseconds).
->
->         rcupdate.rcu_expedited= [KNL]
->                         Use expedited grace-period primitives, for
-> diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-> index 39dd4b9d647f8..9b64e55d4f615 100644
-> --- a/kernel/rcu/Kconfig.debug
-> +++ b/kernel/rcu/Kconfig.debug
-> @@ -85,15 +85,16 @@ config RCU_CPU_STALL_TIMEOUT
->  config RCU_EXP_CPU_STALL_TIMEOUT
->         int "Expedited RCU CPU stall timeout in milliseconds"
->         depends on RCU_STALL_COMMON
-> -       range 1 21000
-> +       range 0 21000
->         default 20 if ANDROID
-> -       default 21000 if !ANDROID
-> -
-> +       default 0 if !ANDROID
->         help
->           If a given expedited RCU grace period extends more than the
->           specified number of milliseconds, a CPU stall warning is printed.
->           If the RCU grace period persists, additional CPU stall warnings
-> -         are printed at more widely spaced intervals.
-> +         are printed at more widely spaced intervals.  A value of zero
-> +         says to use the RCU_CPU_STALL_TIMEOUT value converted from
-> +         seconds to milliseconds.
->
->  config RCU_TRACE
->         bool "Enable tracing for RCU"
-> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-> index 0a25a4ea6eef8..2464b0eccfd02 100644
-> --- a/kernel/rcu/tree_stall.h
-> +++ b/kernel/rcu/tree_stall.h
-> @@ -31,15 +31,17 @@ int rcu_exp_jiffies_till_stall_check(void)
->         int exp_stall_delay_delta = 0;
->         int till_stall_check;
->
-> -       /*
-> -        * Limit check must be consistent with the Kconfig limits for
-> -        * CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
-> -        * The minimum clamped value is "2UL", because at least one full
-> -        * tick has to be guaranteed.
-> -        */
-> +       // Zero says to use rcu_cpu_stall_timeout, but in milliseconds.
-> +       if (!cpu_stall_timeout)
-> +               cpu_stall_timeout = jiffies_to_msecs(rcu_jiffies_till_stall_check());
-> +
-> +       // Limit check must be consistent with the Kconfig limits for
-> +       // CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
-> +       // The minimum clamped value is "2UL", because at least one full
-> +       // tick has to be guaranteed.
->         till_stall_check = clamp(msecs_to_jiffies(cpu_stall_timeout), 2UL, 21UL * HZ);
->
-> -       if (jiffies_to_msecs(till_stall_check) != cpu_stall_timeout)
-> +       if (cpu_stall_timeout && jiffies_to_msecs(till_stall_check) != cpu_stall_timeout)
->                 WRITE_ONCE(rcu_exp_cpu_stall_timeout, jiffies_to_msecs(till_stall_check));
->
->  #ifdef CONFIG_PROVE_RCU
-
-
-
--- 
-Uladzislau Rezki

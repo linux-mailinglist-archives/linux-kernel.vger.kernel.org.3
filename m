@@ -2,131 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E564520D5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBE1520D62
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 07:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiEJF6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 01:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S236894AbiEJF7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 01:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiEJF5s (ORCPT
+        with ESMTP id S233186AbiEJF7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 01:57:48 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBC5224A6D;
-        Mon,  9 May 2022 22:53:49 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CBB235C006F;
-        Tue, 10 May 2022 01:53:45 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 10 May 2022 01:53:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-transfer-encoding:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1652162025; x=1652248425; bh=UqqeRMS++PzTUoENYIQlHrxmX
-        YanHi9usrhTSkqWRBY=; b=Fu5cIkJEtzgBvV4/XqoZGzxI90Syy2eSStFQG1Bmq
-        Qzq44qis4oBKK2+44MGfoT6zBG6iuJojCb9ybGYa/X0Fd7wSElE4XRd10wKPRs7e
-        hgcvXNoNSmtzgJKAfbBtMElDOT90E7i8ZaxIBTB0BJ1p1OxaWTGpWnyoXfWfdoig
-        v5JwOom18HqfihBQaBs07kKWXJsqznNkms+5qGr7lnnjt0Rv4WKqZY1ALCPE3qI/
-        yGXKoUuwtYgsNnGnUAMtKLOleMEPe5UeKpffnO6dIWL591ktA3+OlrdTuJhZXp0m
-        k+3mPuIPvMCyuv1IQYUQVqTlz2httcefLpnfpFxWDGPcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652162025; x=1652248425; bh=UqqeRMS++PzTU
-        oENYIQlHrxmXYanHi9usrhTSkqWRBY=; b=UNhVoXCIlaYSssxxJzv6+gTP356lr
-        Csm5VdK7uurne8gjADzemSPIgvtaCwsX1FnCjOEp9wJJ01+pvQTyzw6swj9hBm5e
-        cy5Wag2OIi7CDRmQiZloVmbYMGYbyGI4ybtqBdLjiw7P52vN2ceC4IIoNfEox06K
-        AhtG2y/AP8xJ5eceuv8OMO5mXYknc5JH/reD5GY/jIbO6SXIChJNM4hnszow95Mu
-        A3es01Y1zA/qbaWa+fJ3s7YGEp8fsRi6u0PRpyQE13rLgKNQchtx8P51KqXV+mfc
-        n01FF91bK6IShsyjj6LUjWwc9svBLo7MoM7Vao+pwMnW47TmZyS9aZDNw==
-X-ME-Sender: <xms:6P15YkrgxmXL_bXGwWaviRm6XMrjlcrEGve3UktMb3qDyOWmAUlQQA>
-    <xme:6P15YqoXXjsH1mhaSUmAo7NmhlzgdAZdWW6iTxC68WM-y23AT6nuBQxIN87lVOYC0
-    o26TOUlt7PVw-D5QP8>
-X-ME-Received: <xmr:6P15YpMnawRru0JeWelMLekRPpbjZr4ov6wddhSKU6xp3Qq0HZi6f7hdVP4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeflohhs
-    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
-    cuggftrfgrthhtvghrnhepgeeihfevvdeklefggfejjeeugfduudeggffhjeehkeegheel
-    tddujeffjeekheefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgh
-X-ME-Proxy: <xmx:6P15Yr5XlWFiPj7CElVzyH11o3VZ_PStgxAdue3cQ9JFb6bMNDIQBg>
-    <xmx:6P15Yj7U1pxqEu9m3udW9TVyeeMicQbdOEYiPoTkPJHdB-P4BtAR-A>
-    <xmx:6P15YriuNrhSSJ4-FJxKRUHsGVzrMhlxgebD2OHXvogbusUlZ4rP8w>
-    <xmx:6f15YjpPFIJVuv2qe1NIoT3pZ-4kd4TVf1sNI3LTismj8jORQoLtJg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 May 2022 01:53:42 -0400 (EDT)
-Date:   Mon, 9 May 2022 22:53:41 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Gaelan Steele <gbs@canishe.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Julian Merkle <me@jvmerkle.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v6 18/23] docs: add Rust documentation
-Message-ID: <Ynn95Sv91TzD4HdT@localhost>
-References: <20220507052451.12890-1-ojeda@kernel.org>
- <20220507052451.12890-19-ojeda@kernel.org>
- <875ymecp6f.fsf@meer.lwn.net>
- <0716311E-FD5A-489A-A17D-C427C1A0EE4E@canishe.com>
+        Tue, 10 May 2022 01:59:19 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9268B291CCB;
+        Mon,  9 May 2022 22:55:22 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeae3.dynamic.kabel-deutschland.de [95.90.234.227])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 8353A61E6478B;
+        Tue, 10 May 2022 07:55:19 +0200 (CEST)
+Message-ID: <76bc568e-4b3e-135c-5a5b-34a7dce42498@molgen.mpg.de>
+Date:   Tue, 10 May 2022 07:55:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0716311E-FD5A-489A-A17D-C427C1A0EE4E@canishe.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] Bluetooth: Fix Adv Monitor msft_add/remove_monitor_sync()
+Content-Language: en-US
+To:     Manish Mandlik <mmandlik@google.com>
+Cc:     marcel@holtmann.org, luiz.dentz@gmail.com,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220509140403.1.I28d2ec514ad3b612015b28b8de861b8955033a19@changeid>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220509140403.1.I28d2ec514ad3b612015b28b8de861b8955033a19@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:14:54PM -0700, Gaelan Steele wrote:
-> 
-> 
-> > On May 9, 2022, at 3:32 PM, Jonathan Corbet <corbet@lwn.net> wrote:
-> > 
-> >> +It is convenient to instruct editors/IDEs to format while typing,
-> >> +when saving or at commit time. However, if for some reason reformatting
-> >> +the entire kernel Rust sources is needed at some point, the following can be
-> >> +run::
-> >> +
-> >> +	make LLVM=1 rustfmt
-> > 
-> > I will ask whether we want this, though. Why would anybody want to
-> > mass-reformat the entire body of kernel code? This seems like something
-> > that would generate an endless stream of "helpful" patches and a lot of
-> > churn.
-> 
-> That would only happen if the code diverged from rustfmt’s output in the
-> first place. Generally, in Rust projects, the source tree is always kept
-> formatted with rustfmt - so running `make LLVM=1 rustfmt` would only
-> ever touch code that you’d just changed. 
+Dear Manish,
 
-Exactly. This is convenient for the same reason doing a project-wide
-`cargo fmt` is useful in Rust projects: you can do all your editing,
-then format your code before committing.
+
+Thank you for your patch.
+
+Am 09.05.22 um 23:05 schrieb Manish Mandlik:
+> Do not call skb_pull() in msft_add_monitor_sync() as
+> msft_le_monitor_advertisement_cb() expects 'status' to be
+> part of the skb.
+
+Please reflow for 75 characters per line.
+
+> Same applies for msft_remove_monitor_sync().
+
+Was this found by code review, or were there noticeable problems? If the 
+later, please add a note, how to reproduce it.
+
+Also, maybe also add a Fixes tag, referencing the commit introducing the 
+problem.
+
+
+Kind regards,
+
+Paul
+
+
+> Signed-off-by: Manish Mandlik <mmandlik@google.com>
+> ---
+> 
+>   net/bluetooth/msft.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> index f43994523b1f..9990924719aa 100644
+> --- a/net/bluetooth/msft.c
+> +++ b/net/bluetooth/msft.c
+> @@ -387,7 +387,6 @@ static int msft_remove_monitor_sync(struct hci_dev *hdev,
+>   		return PTR_ERR(skb);
+>   
+>   	status = skb->data[0];
+> -	skb_pull(skb, 1);
+>   
+>   	msft_le_cancel_monitor_advertisement_cb(hdev, status, hdev->msft_opcode,
+>   						skb);
+> @@ -506,7 +505,6 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
+>   		return PTR_ERR(skb);
+>   
+>   	status = skb->data[0];
+> -	skb_pull(skb, 1);
+>   
+>   	msft_le_monitor_advertisement_cb(hdev, status, hdev->msft_opcode, skb);
+>   

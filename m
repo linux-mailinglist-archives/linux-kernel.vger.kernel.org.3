@@ -2,116 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5BC521500
-	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F218521508
+	for <lists+linux-kernel@lfdr.de>; Tue, 10 May 2022 14:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241624AbiEJMS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 10 May 2022 08:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S241614AbiEJMTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 10 May 2022 08:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241592AbiEJMSS (ORCPT
+        with ESMTP id S239373AbiEJMTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 10 May 2022 08:18:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1B244F2E;
-        Tue, 10 May 2022 05:14:20 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6756A21B7F;
-        Tue, 10 May 2022 12:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652184859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z0qCXGbgchboCgbitrJZObbFnXC/YqP7fhEXmnIw2vY=;
-        b=OcxDFXmKKoVdDJUxSKREkD35h3cfh7L/UHzdGP/cbflejeipwrciY4AbOjnQu6DKNCs7aq
-        Tea2QFXBj209QcyaHp7BuefH2IIusivsxr3vlgfi6p9lZaMFpVOppWn8lIP/+rweBZrcrm
-        +Lwt8IUC7jK6VwI0ouYkElgPt01wPwE=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 552522C141;
-        Tue, 10 May 2022 12:14:16 +0000 (UTC)
-Date:   Tue, 10 May 2022 14:14:16 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
- trylock on panic path
-Message-ID: <YnpXGOXicwdy1E6n@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-6-gpiccoli@igalia.com>
+        Tue, 10 May 2022 08:19:21 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8561E2498BC;
+        Tue, 10 May 2022 05:15:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id A67173200974;
+        Tue, 10 May 2022 08:15:20 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 10 May 2022 08:15:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1652184920; x=
+        1652271320; bh=achtEq3Cjhbongjo3uD3uyw7O+KFl9lQyt1JsKzzN88=; b=r
+        7RvBjWT2rLKDHkgw3b/hLu48nmCJjXdaUeTXT10M4FXaGTH3Q9XaraDGukECmtzr
+        Qr7kHqX+lxkTPYUoJ9qT6j7DJ1BHvih/Goss4lrMs8Gz8VU+vW1/Hgl6ZpegcJME
+        uv4WAbv8RlybSwcNreZtrmh4vs5d78viUhzmzG8ajuEWzNWhORD6GBPqOuhGuDih
+        qszKB4jBSwFP8i6CFjFt7kZ874SLQBqKOzIdTUgH7kFZhNRjd6MbFG/NTa775T6X
+        myRhMQD/7Sxh2f47b1wJw6Vr/ADBALL+35S9A+74Wpyw6vn8lHyRj9dHGMG/fUUo
+        p8mT40ag/ea2Efc0dLlBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1652184920; x=1652271320; bh=achtEq3Cjhbon
+        gjo3uD3uyw7O+KFl9lQyt1JsKzzN88=; b=zeTgWOxUR22vwa7ctidfg86lI0BDa
+        O500IUA3WuzpV8qXvoh4dxqvdJLKT9FIDtt2q5BIkLq2stngz6zihM0lazY7ORmX
+        bVszK/D6IL6JxA6nyp/DjmitRuZeBshvhkULSc2/19DwYPzDzwieGAcSl7eKSKma
+        xhv6UZsvlEPOLY8Rtd7Kdae3heI7kdwyPLUQOwI8YrB+vczkJ7AgwWJhLsfBpibk
+        G+zLL9d1StKaB3KVQlhgh+/Q3Bp9HtS//1RVL0lGb+HmBMTtDmQm/9MjD3ei8l8p
+        J3Y30Nzy3GP/n6vCPh1bwh4OLm5mUA9cLC6gdN9SySzPbXRw9t6TcE+Ow==
+X-ME-Sender: <xms:V1d6YiGPA2aL9IrydBC-vVK62kv3mMCGZSImj8G4L_lkus_iBphqeg>
+    <xme:V1d6YjWzfXqqX_iJfm1FzP9hw56mS5HH0Or51ixSSPCaJkGkiiOWgLvV0C6AY9qDS
+    fedStZoojYeOYtbk38>
+X-ME-Received: <xmr:V1d6YsJDwzhjkKKQCZdXJp4x7FoEf7n3WljBJAC3xl10WhvPP5bnLzLqSTRMDNM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedugdeghecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
+    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:V1d6YsGRv5Fivm4p8AY0TK4e2V9KV-AEOpvNF2-LR7nIPfQvPQ1T0g>
+    <xmx:V1d6YoU5tCPDP285gee4ErT-UGcGiIuktU8-LiwgwaRt_WDTFMzsFg>
+    <xmx:V1d6YvOX7Pz8prr9gr1r0H2NE0cB0y5DfPqJY3xV8MezUo-X8Jog-g>
+    <xmx:WFd6YmwH4J7ecfXEDHLs4jLBcikDzBX43G6sR7NDyvLnfcnkJatWVw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 10 May 2022 08:15:18 -0400 (EDT)
+Message-ID: <21bb46ea-6a36-b426-2ca9-4471af5879a1@flygoat.com>
+Date:   Tue, 10 May 2022 13:15:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-6-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] irqchip/loongson-liointc: 4 cores correspond to different
+ interrupt status registers
+Content-Language: en-GB
+To:     Haoran Jiang <jianghaoran@kylinos.cn>, chenhuacai@kernel.org
+Cc:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20220510055303.1907165-1-jianghaoran@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-27 19:48:59, Guilherme G. Piccoli wrote:
-> The pvpanic driver relies on panic notifiers to execute a callback
-> on panic event. Such function is executed in atomic context - the
-> panic function disables local IRQs, preemption and all other CPUs
-> that aren't running the panic code.
-> 
-> With that said, it's dangerous to use regular spinlocks in such path,
-> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
-> This patch fixes that by replacing regular spinlocks with the trylock
-> safer approach.
 
-It seems that the lock is used just to manipulating a list. A super
-safe solution would be to use the rcu API: rcu_add_rcu() and
-list_del_rcu() under rcu_read_lock(). The spin lock will not be
-needed and the list will always be valid.
 
-The advantage would be that it will always call members that
-were successfully added earlier. That said, I am not familiar
-with pvpanic and am not sure if it is worth it.
+在 2022/5/10 6:53, Haoran Jiang 写道:
+> According to the loongson cpu manual,different cpu cores
+> correspond to different interrupt status registers
+NAK!
 
-> It also fixes an old comment (about a long gone framebuffer code) and
-> the notifier priority - we should execute hypervisor notifiers early,
-> deferring this way the panic action to the hypervisor, as expected by
-> the users that are setting up pvpanic.
+It is intentional to do so.
 
-This should be done in a separate patch. It changes the behavior.
-Also there might be a discussion whether it really should be
-the maximal priority.
+The per-core ISR register is broken on 3B1500. So we use general ISR 
+register here.
+The per-core variable is left for LS2K.
 
-Best Regards,
-Petr
+Thanks
+- Jiaxun
+>
+> Signed-off-by: Haoran Jiang <jianghaoran@kylinos.cn>
+> ---
+>   drivers/irqchip/irq-loongson-liointc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index 649c58391618..f4e015b50af0 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -195,7 +195,7 @@ static int __init liointc_of_init(struct device_node *node,
+>   		}
+>   
+>   		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+> -			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+> +			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS + i*8;
+>   	}
+>   
+>   	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+
